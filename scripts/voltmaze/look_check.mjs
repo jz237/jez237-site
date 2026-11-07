@@ -48,7 +48,7 @@ try {
   // tuning: VM_OVR='{"0":{"keyI":0.6}}' overrides LOOKS entries before the shots
   if (process.env.VM_OVR) await page.evaluate((o) => { const vm = window.__vm; for (const k in o) Object.assign(vm.LOOKS[k], o[k]); vm.R.lookI = -1; }, JSON.parse(process.env.VM_OVR));
   const setup = (o) => page.evaluate(async (o) => {
-    const vm = window.__vm, { makeWorld } = await import('./js/sim.js?v=6'), { Autopilot } = await import('./js/ai.js?v=6'), { TYPICAL_UP } = await import('./js/config.js?v=6');
+    const vm = window.__vm, { makeWorld } = await import('./js/sim.js?v=7'), { Autopilot } = await import('./js/ai.js?v=7'), { TYPICAL_UP } = await import('./js/config.js?v=7');
     const W = makeWorld({ sector: o.s, seed: o.seed, room: o.room, boss: o.boss, lives: 9, up: TYPICAL_UP[o.s], noTut: true });
     vm.G.W = W; vm.G.state = 'play'; vm.G.mode = 'campaign'; vm.G.ai = new Autopilot(o.s, 'demo'); vm.G.screen = null;
     vm.G.run = { score: 0, lives: 9, up: TYPICAL_UP[o.s], salvage: 0, start: o.s, newMedals: [], diff: 'normal' };
@@ -78,7 +78,7 @@ try {
       await setup({ s: look, seed: 3, room: 0 });
       await tick(2);
       await page.evaluate(async ({ list }) => {
-        const vm = window.__vm, R = vm.R, MD = await import('./js/models.js?v=6'), { BOSSES } = await import('./js/config.js?v=6');
+        const vm = window.__vm, R = vm.R, MD = await import('./js/models.js?v=7'), { BOSSES } = await import('./js/config.js?v=7');
         vm.G.state = 'gallery';
         window.__hid = ['wallI', 'stripI', 'baseI', 'fieldI', 'sealI', 'liftDoorI', 'postI', 'capI', 'doorPostI', 'doorLampI', 'corrI', 'chevI', 'railI', 'railPostI', 'spill', 'ringI'].filter((k) => R[k]);
         for (const k of window.__hid) R[k].visible = false;
@@ -146,7 +146,7 @@ try {
       if (st.mode !== 'playthrough' || st.screen === 'results') break;
       if (st.state !== 'play') await sleep(250);   // let the between-sector timers run
     }
-    await page.evaluate(async () => { const vm = window.__vm; vm.toTitle(); vm.startEndless(); const { Autopilot } = await import('./js/ai.js?v=6'); vm.G.ai = new Autopilot(0, 'demo'); vm.G.W.lives = 30; });
+    await page.evaluate(async () => { const vm = window.__vm; vm.toTitle(); vm.startEndless(); const { Autopilot } = await import('./js/ai.js?v=7'); vm.G.ai = new Autopilot(0, 'demo'); vm.G.W.lives = 30; });
     for (let i = 0; i < 80; i++) await page.evaluate(() => { const vm = window.__vm; for (let k = 0; k < 30; k++) { vm.G.timeScale = 6; vm.tick(1); } });
     const after = await page.evaluate(() => ({ p: window.__vm.R.r.info.programs.length, floor: window.__vm.G.W.floor }));
     console.log(`fast autoplay ${((Date.now() - T) / 1000).toFixed(0)} s (endless floor ${after.floor + 1}): shader programs ${before} -> ${after.p}`);

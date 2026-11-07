@@ -211,6 +211,26 @@ table.hs td:last-child { text-align: right; color: var(--volt); }
 }
 @media (max-height: 760px) { #title .mbtn small { display: none; } #title .mbtn small#med-sub { display: inline; } .ver { margin: 4px 0 8px; } }
 @media (max-height: 500px) { #hud .panel { padding: 5px 9px; } .big { font-size: 19px; } #minimap { width: 90px; height: 72px; } #tut { bottom: 20%; font-size: 13px; } #bossbar { top: 86px; } #banner { top: 30%; } #banner .b1 { font-size: 34px; } }
+/* ---------------------------------------------------------------- round 2 UI: pause dim, banner scrim, popup outline, results hero score */
+#pause { background: rgba(2, 4, 8, .6); }
+body:has(#pause:not(.hidden)) #tut, body:has(#pause:not(.hidden)) #caption, body:has(#pause:not(.hidden)) #popups, body:has(#results:not(.hidden)) #tut, body:has(#upgrades:not(.hidden)) #tut { visibility: hidden; }
+#banner { padding: 12px 0 15px; background: linear-gradient(90deg, rgba(2, 4, 8, 0), rgba(2, 4, 8, .66) 16%, rgba(2, 4, 8, .66) 84%, rgba(2, 4, 8, 0)); }
+.pop { text-shadow: -1.5px -1.5px 0 #000, 1.5px -1.5px 0 #000, -1.5px 1.5px 0 #000, 1.5px 1.5px 0 #000, 0 0 3px #000, 0 2px 8px #000; }
+#res-stats .stat.hero { flex-direction: column; align-items: center; gap: 2px; padding: 8px 0 12px; border-bottom-color: rgba(127, 216, 255, .25); }
+#res-stats .stat.hero b { font-family: 'Saira Condensed', 'Chakra Petch', sans-serif; font-weight: 800; font-size: clamp(40px, 9vw, 64px); line-height: 1; color: var(--amber); text-shadow: 0 0 22px rgba(255, 179, 71, .35); }
+#res-stats .stat.tally { animation: tallyIn .35s ease-out both; }
+@keyframes tallyIn { from { opacity: 0; transform: translateX(-14px); } }
+#up-title .rank { display: inline-block; vertical-align: middle; margin-left: 10px; padding: 2px 10px; border-radius: 8px; font-size: .62em; letter-spacing: .08em; border: 2px solid currentColor; color: #9fb3c8; background: rgba(0, 0, 0, .35); }
+#up-title .rank.rS { color: #ffd34d; box-shadow: 0 0 16px rgba(255, 211, 77, .35); }
+#up-title .rank.rA { color: #5dff8a; }
+#up-title .rank.rB { color: #7fd8ff; }
+@media (max-height: 500px) { #res-stats .stat.hero { flex-direction: row; align-items: center; justify-content: space-between; padding: 2px 0 4px; } #res-stats .stat.hero b { font-size: 30px; } }
+@media (prefers-reduced-motion: reduce) { #res-stats .stat.tally { animation: none; } }
+body:has(#options:not(.hidden)) #tut, body:has(#options:not(.hidden)) #caption { visibility: hidden; }
+/* r2 fx: the boss bar's damage trail (drains after each hit) */
+#bossbar .bar { position: relative; }
+#bossbar .bar i { position: relative; z-index: 1; }
+#bossbar .bar .trail { position: absolute; left: 0; top: 0; height: 100%; width: 100%; background: linear-gradient(90deg, #fff1d6, #ffd9a8); opacity: .85; transition: width .55s cubic-bezier(.5, 0, .9, .6) .38s; }
 </style>
 </head>
 <body>
@@ -391,6 +411,6 @@ addEventListener('error', (e) => window.__vmErrors.push(String(e.message || e)))
 addEventListener('unhandledrejection', (e) => window.__vmErrors.push('rejection: ' + String(e.reason && e.reason.message || e.reason)));
 (() => { const ce = console.error; console.error = (...a) => { window.__vmErrors.push(a.map(String).join(' ')); ce.apply(console, a); }; })();
 </script>
-<script type="module" src="js/main.js?v=6"></script>
+<script type="module" src="js/main.js?v=7"></script>
 </body>
 </html>

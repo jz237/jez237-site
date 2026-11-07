@@ -9,8 +9,8 @@
 //                    Attention is limited: the busier the screen near it, the likelier a threat is noticed
 //                    only much later (miss0 + missK per threat in view, missT s late).
 //   profile 'demo' : quick and sharp, sees everything: the attract mode and the AI playthrough
-import { F, ENEMY } from './config.js?v=6';
-import { laneDist, wrapL, laneOf } from './sim.js?v=6';
+import { F, ENEMY } from './config.js?v=7';
+import { laneDist, wrapL, laneOf } from './sim.js?v=7';
 
 export const PROFILES = {
   human: { react: 0.35, jit: 0.1, late: 0.15, lateT: 0.28, notice: 1, miss0: 0.1, missK: 0.03, missT: [0.5, 1.3], track: 4, depth: 0.72, fireP: 0.86, purgeP: 0.6, hopP: 0.55, margin: 0.22, wander: 0.18, slip: 0.06 },

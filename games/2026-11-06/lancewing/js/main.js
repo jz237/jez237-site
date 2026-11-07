@@ -1,14 +1,14 @@
 // Lancewing 2026 - game flow: title (version, difficulty, global boards), campaign, endless, local and online
 // co-op, upgrades, results with initials, instant replay, pause, options, attract demo and AI playthrough.
-import { VERSION, SECTORS, STEP, F, WAVES, UPGRADES, UP_KEYS, UP_COST, SALVAGE_DIV, MEDALS, parTime, TYPICAL_UP, START_LIVES, BOSSES, DIFFICULTY, DIFF_KEYS, POWERUPS, ENEMY } from './config.js?v=6';
-import { makeWorld, step, drainEvents, waveLabel, isBossWave, dX, applyClaim, cloneWorld } from './sim.js?v=6';
-import { Autopilot } from './ai.js?v=6';
-import { Renderer, pickQuality, CALM } from './render.js?v=6';
-import { Audio } from './audio.js?v=6';
-import { Input } from './input.js?v=6';
-import { Scores, NO_POST, posted } from './scores.js?v=6';
-import { Recorder, Replay } from './replay.js?v=6';
-import { Online, ROOM, randomCode, cleanCode } from './online.js?v=6';
+import { VERSION, SECTORS, STEP, F, WAVES, UPGRADES, UP_KEYS, UP_COST, SALVAGE_DIV, MEDALS, parTime, TYPICAL_UP, START_LIVES, BOSSES, DIFFICULTY, DIFF_KEYS, POWERUPS, ENEMY } from './config.js?v=7';
+import { makeWorld, step, drainEvents, waveLabel, isBossWave, dX, applyClaim, cloneWorld } from './sim.js?v=7';
+import { Autopilot } from './ai.js?v=7';
+import { Renderer, pickQuality, CALM } from './render.js?v=7';
+import { Audio } from './audio.js?v=7';
+import { Input } from './input.js?v=7';
+import { Scores, NO_POST, posted } from './scores.js?v=7';
+import { Recorder, Replay } from './replay.js?v=7';
+import { Online, ROOM, randomCode, cleanCode } from './online.js?v=7';
 
 const $ = (id) => document.getElementById(id);
 const params = new URLSearchParams(location.search);
@@ -270,7 +270,7 @@ function banner(a, b, t = 2.2) {
   el.classList.remove('hidden', 'go'); void el.offsetWidth; el.classList.add('go');
   G.bannerT = t;
 }
-function caption(text, t = 4) { const el = $('caption'); el.textContent = text; el.classList.remove('hidden'); G.capT = t; }
+function caption(text, t = 4) { const el = $('caption'); el.textContent = text; el.classList.remove('hidden', 'dc'); G.capT = t; }
 const PP = { x: 0, y: 0, z: 0 };
 const POPS = [];   // recent popups: a new one that would land on top of another stacks above it
 function popup(text, x, y, color, big) {
@@ -348,6 +348,7 @@ function handleEvents(list, W, live) {
   for (const e of list) {
     R.onEvent(e, W);
     const pos = e.x !== undefined ? toPos(e.x, e.y || 0) : null;
+    if (e.k === 'death' && live) deathCaption(W, e);
     switch (e.k) {
       case 'flap': if (e.pid) A.play('flap', { ...pos, vol: 0.42, gap: 0.06, vary: 0.18 }); break;
       case 'land': if (e.pl && e.v > 3) A.play('land', { ...pos, vol: Math.min(0.6, 0.15 + e.v * 0.04), gap: 0.12 }); break;
@@ -407,10 +408,44 @@ function handleEvents(list, W, live) {
       case 'over': break;
       default: break;
     }
+    feelEvent(e, W, live);
   }
 }
 const toPos = (x, y) => { const th = x / F.R; return { x: Math.sin(th) * F.R, y, z: Math.cos(th) * F.R }; };
 function slowmo(scale, t, pts) { if (G.mode === 'title') return; G.timeScale = scale; G.slowT = t; A.setRate(Math.max(0.6, scale + 0.2)); if (pts && (G.mode === 'demo' || G.mode === 'playthrough')) R.frameShot(pts, t + 0.4); }
+// hit-stop: the presentation loop holds the sim for a few frames (no steps are taken, so the tick sequence and the recorded
+// inputs are exactly what they would be without it). Never online (the host keeps its cadence) or on the title.
+function hitStop(t) { if (G.mode === 'online' || G.mode === 'title' || G.state !== 'play') return; G.stopT = Math.max(G.stopT || 0, t); }
+// game feel on top of handleEvents' cases (kept out of their lines): hit-stop on your own unhorse, a boss hit and a weak point
+// breaking, and the boss reveal shot that follows the boss itself (it replaces the fixed 12 m frame the 'boss' case set)
+function feelEvent(e, W, live) {
+  if (!live) return;
+  if (e.k === 'unhorse') { if (e.pid) hitStop(0.055); }
+  else if (e.k === 'bosshit') hitStop(0.06);
+  else if (e.k === 'wpdown') hitStop(0.07);
+  else if (e.k === 'boss') bossReveal(W, e);
+}
+// the sim reads a flap as a press EDGE, so a tap pressed and released inside a hit-stop would never reach a step: latch it
+// while the sim is held and hand it to the first step after (it is recorded like any input, replays stay exact)
+const stopFlap = new Set();
+function holdSim(dt) {
+  if (stopFlap.size && stopFlap.W !== G.W) stopFlap.clear();   // never carried into another run
+  if (!(G.stopT > 0)) return;
+  if (G.state === 'play') {
+    G.W.players.forEach((p, i) => { if (!((i === 0 && G.ai) || (i === 1 && G.ai2)) && I.control(p.id, G.W.coop).flap) { stopFlap.add(p.id); stopFlap.W = G.W; } });
+    G.acc -= dt * G.timeScale;
+  }
+  G.stopT -= dt;
+}
+{ const ctl = I.control.bind(I); I.control = (pid = 1, coop = false) => { const o = ctl(pid, coop); if (stopFlap.size && !(G.stopT > 0) && stopFlap.W === G.W && stopFlap.delete(pid)) o.flap = true; return o; }; }
+// boss reveal: the shot follows the boss itself (its live x / height) while it rises into view, not a fixed 12 m
+function bossReveal(W, e) {
+  const B = W.boss;
+  if (!B) { R.frameShot([[e.x, 12]], 1.6); return; }
+  const lift = { leviathan: 2.5, colossus: 6 }[B.key] || 1;
+  const pt = { get 0() { return (W.boss || B).x; }, get 1() { return Math.min(21, Math.max(5, (W.boss || B).y + lift)); } };
+  R.frameShot([pt], 2);
+}
 function queueClip(W, kind) { if (G.mode === 'online') return; G.pendingClip = { n: W.n, kind, at: W.n + Math.round(1.6 / STEP) }; }
 function captureClip(W) { const q = G.pendingClip; if (q && W.n >= q.at) { const c = REC.clip(q.n); if (c) { c.kind = q.kind; G.clip = c; } G.pendingClip = null; } }
 
@@ -494,7 +529,7 @@ function renderUpgrades(picks) {
   $('upgrid').innerHTML = UP_KEYS.map((k) => {
     const U = UPGRADES[k], lv = G.run.up[k] || 0, max = lv >= U.max, cost = UP_COST[lv];
     const poor = !max && G.run.salvage < cost, pick = picks && picks[k];
-    return `<button class="upg ${max ? 'max' : ''} ${poor && !pick ? 'poor' : ''} ${pick ? 'pick' : ''}" data-up="${k}" style="--uc:${U.color}"><i>${U.icon}</i><b>${U.name}</b><span class="lvl">${Array.from({ length: U.max }, (_, i) => `<em class="${i < lv ? 'on' : ''}"></em>`).join('')}</span><small>${U.desc}</small><span class="cost">${pick ? 'AUTOPILOT PICK' + (pick > 1 ? ' ×' + pick : '') : max ? 'FITTED' : cost + ' SALVAGE'}</span></button>`;
+    return `<button class="upg ${max ? 'max' : ''} ${poor && !pick ? 'poor' : ''} ${pick ? 'pick' : ''}" data-up="${k}" style="--uc:${U.color}"><i>${U.icon}</i><b>${U.name}</b><span class="lvl">${Array.from({ length: U.max }, (_, i) => `<em class="${i < lv ? 'on' : ''}"></em>`).join('')}</span><small>${U.desc}</small><span class="cost">${pick ? 'AUTOPILOT PICK' + (pick > 1 ? ' ×' + pick : '') : max ? 'FITTED' : cost + ' SALVAGE' + (poor ? ` · NEED ${(cost - G.run.salvage).toLocaleString()} MORE` : '')}</span></button>`;
   }).join('');
 }
 function buy(k) {
@@ -516,8 +551,8 @@ function results(W, title, sub) {
   const st = [['SCORE', W.score.toLocaleString()]];
   if (W.mode === 'endless') st.push(['WAVES HELD', W.waveN], ['TIME', fmtT(W.fightT)]);
   else st.push(['SECTOR TIME', fmtT(W.secT)]);
-  st.push(['RIDERS UNHORSED', W.stats.kills], ['EMBER CORES', `${W.stats.cores} (best chain ×${W.stats.bestChain})`], ['STORMHUNTERS', W.stats.hunters], ['LIVES LOST', W.stats.deaths]);
-  $('res-stats').innerHTML = st.map(([a, b]) => `<div class="stat"><span>${a}</span><b>${b}</b></div>`).join('');
+  st.push(['RIDERS UNHORSED', W.stats.kills], ['EMBER CORES', `${W.stats.cores}${W.stats.bestChain > 1 ? ` (best chain ×${W.stats.bestChain})` : ''}`], ['STORMHUNTERS', W.stats.hunters], ['LIVES LOST', W.stats.deaths]);
+  $('res-stats').innerHTML = st.map(([a, b]) => `<div class="stat"><span>${a}</span><b>${b}</b></div>`).join('') + causeRow(W);
   const got = G.run ? G.run.newMedals : [];
   $('res-medals').innerHTML = got.map((id) => { const m = MEDALS.find((q) => q.id === id); return `<span class="medal on new">🏅 ${m.name} · S${m.sector + 1}</span>`; }).join('');
   $('res-btns').querySelector('[data-act="replay"]').classList.toggle('hidden', !G.clip);
@@ -783,6 +818,85 @@ function updateWarnings(W) {
   for (let i = n; i < WM.length; i++) WM[i].style.display = 'none';
 }
 
+// ------------------------------------------------------------------ round 2 UI: death causes, duel cues, pause state
+// [short label for the results row, caption at the moment of death, tip on the results card]
+const HAZ_TIP = 'Every hazard is telegraphed: a violet ! or a glowing line marks it before it strikes. Clear that spot early.';
+const CAUSE = {
+  sea: ['THE SEA', 'FELL INTO THE SEA', 'Flap before you sink: the sea takes you the moment you drop below the low ledges.'],
+  lance: ['LANCES', 'UNHORSED', 'The higher lance tip wins and a level one just clangs. Climb above a rider before you meet it (green ▲ over a rider = you win).'],
+  hunter: ['STORMHUNTER', 'RAMMED BY THE STORMHUNTER', 'Meet the Stormhunter head-on and a little higher, or keep out of its line.'],
+  boss: ['BOSS', 'CRUSHED BY THE BOSS', 'Strike the weak points from above and keep clear of the body between attacks.'],
+  shard: ['SHARDS', 'HIT BY CRYSTAL SHARDS', 'Shards fly in a fan along the glowing line: dodge sideways out of it, not along it.'],
+  orb: ['ORBS', 'CAUGHT BY AN ORB', 'Pop orbs with your lance from above, or outrun them until they fade.'],
+  blob: ['MOLTEN DROPS', 'HIT BY MOLTEN DROPS', HAZ_TIP], ice: ['FALLING ICE', 'HIT BY FALLING ICE', HAZ_TIP],
+  spout: ['SPOUTS', 'CAUGHT IN A SPOUT', HAZ_TIP], bolt: ['LIGHTNING', 'STRUCK BY LIGHTNING', HAZ_TIP], arc: ['STORM ARCS', 'CAUGHT IN A STORM ARC', HAZ_TIP],
+  beam: ['BEAMS', 'CAUGHT IN A BEAM', HAZ_TIP], slam: ['SLAMS', 'CRUSHED BY A SLAM', HAZ_TIP], gust: ['GUSTS', 'THROWN BY A GUST', HAZ_TIP], breach: ['BREACHES', 'CAUGHT IN A BREACH', HAZ_TIP],
+};
+const causeOf = (c) => CAUSE[c] || [String(c || 'hit').toUpperCase(), 'HIT BY ' + String(c || 'a hazard').toUpperCase(), HAZ_TIP];
+function deathCaption(W, e) {
+  if (G.mode === 'demo' || G.mode === 'playthrough') return;
+  if (G.mode === 'online' && e.pid !== myPlayer(W).id) return;
+  const C = causeOf(e.cause);
+  let txt = e.cause === 'lance' ? `UNHORSED BY A ${e.by && ENEMY[e.by] ? ENEMY[e.by].name : 'RIDER'} · ITS LANCE WAS HIGHER` : C[1];
+  if (W.coop && G.mode !== 'online') txt = `P${e.pid} · ` + txt;
+  caption(txt, 3.2);
+  $('caption').classList.add('dc');
+}
+// the results card: what took your lives, and one tip for the biggest cause
+function causeRow(W) {
+  const c = W.stats && W.stats.cause;
+  if (!c || !W.stats.deaths) return '';
+  const list = Object.entries(c).filter(([, n]) => n > 0).sort((a, b) => b[1] - a[1]);
+  if (!list.length) return '';
+  const row = list.map(([k, n]) => `${causeOf(k)[0]} ${n}`).join(' · ');
+  return `<div class="stat lw-cause"><span>LIVES LOST TO</span><b>${row}</b></div><div class="lw-ctip">${causeOf(list[0][0])[2]}</div>`;
+}
+// duel cue: over the (up to 4) nearest riders, is your lance tip higher? ▲ win, = clang, ▼ lose; a shield when a shieldbearer faces you
+const DM = [];
+const DUEL_R2 = 8 * 8;
+// mirrors sim.js lanceBonus (read-only copy, kept here so this block adds no second sim.js?v= import line)
+const lanceBonus = (W, p) => 0.12 * (W.up.reach || 0) + (p.pw && p.pw.lance ? 0.35 : 0);
+let duelBox = null;
+function duelMarks(W) {
+  if (!duelBox) { duelBox = document.createElement('div'); duelBox.id = 'duels'; $('ui').insertBefore(duelBox, $('warns')); }
+  const me = myPlayer(W);
+  let n = 0;
+  if (me && me.alive && G.state === 'play' && G.mode !== 'demo' && G.mode !== 'playthrough') {
+    const near = [];
+    for (const r of W.riders) {
+      if (!r.alive) continue;
+      const dx = dX(me.x, r.x), dy = r.y - me.y, d2 = dx * dx + dy * dy;
+      if (d2 < DUEL_R2) near.push([d2, r, dx]);
+    }
+    near.sort((a, b) => a[0] - b[0]);
+    const lb = lanceBonus(W, me);
+    for (const [, r, dx] of near) {
+      if (n >= 4) break;
+      R.project(r.x, r.y + 2.7, PE);
+      if (PE.z > 1 || PE.x < 0 || PE.x > innerWidth || PE.y < 0 || PE.y > innerHeight) continue;
+      const s = Math.sign(dx || me.face);
+      const front = r.type === 'shieldbearer' && r.face === -s;
+      const d = me.y + lb - r.y, need = front ? ENEMY.shieldbearer.margin : F.dead;
+      const cls = d > need ? 'win' : d < -F.dead ? 'lose' : 'even';
+      let el = DM[n];
+      if (!el) { el = document.createElement('div'); duelBox.appendChild(el); DM.push(el); }
+      const key = cls + (front ? 's' : '');
+      if (el.dataset.k !== key) { el.dataset.k = key; el.className = 'dm ' + cls; el.innerHTML = (front ? '<i class="sh"></i>' : '') + (cls === 'win' ? '▲' : cls === 'lose' ? '▼' : '='); }
+      el.style.transform = `translate(${PE.x.toFixed(1)}px, ${PE.y.toFixed(1)}px) translate(-50%, -100%)`;
+      el.style.display = '';
+      n++;
+    }
+  }
+  for (let i = n; i < DM.length; i++) if (DM[i].style.display !== 'none') DM[i].style.display = 'none';
+}
+// body classes for the overlay CSS: paused (dims the scene, hides tips / markers / touch controls) and live play
+let uiPaused = null, uiLive = null;
+function uiState() {
+  const p = G.state === 'paused' || G.state === 'paused-online', l = G.state === 'play' || G.state === 'paused-online';
+  if (p !== uiPaused) { uiPaused = p; document.body.classList.toggle('lw-paused', p); }
+  if (l !== uiLive) { uiLive = l; document.body.classList.toggle('lw-live', l); }
+}
+
 // ------------------------------------------------------------------ the frame
 let lastT = performance.now();
 function frame(now) {
@@ -794,6 +908,7 @@ function frame(now) {
 }
 function tickFrame(dt, draw = true) {
   I.pollPads();
+  uiState();
   perf(dt);
   if (G.slowT > 0) { G.slowT -= dt; if (G.slowT <= 0) { G.timeScale = 1; A.setRate(1); } }
   if (G.state === 'play' || G.state === 'paused-online') playStep(dt);
@@ -835,6 +950,7 @@ function ambience(W, menu) {
 }
 function playStep(dt) {
   const W = G.W;
+  holdSim(dt);   // hit-stop: hold the sim (presentation only)
   G.acc += dt * G.timeScale;
   let n = 0;
   const online = G.mode === 'online', guest = online && !NET.host;
@@ -864,6 +980,7 @@ function playStep(dt) {
   captureClip(W);
   updateHud(W);
   updateWarnings(W);
+  duelMarks(W);
   if (G.mode === 'demo') { G.demoT += dt; if (G.demoT > 95) W.over = true; }
   if (G.mode === 'demo' || G.mode === 'playthrough') demoCaptions(W);
   if (W.over && (G.state === 'play' || G.state === 'paused-online')) { G.state = 'ended'; setTimeout(() => { if (G.W === W && G.state === 'ended') onWorldOver(W); }, G.mode === 'demo' ? 1500 : 1300); }
@@ -988,7 +1105,7 @@ async function boot() {
   $('loading').style.opacity = '0';
   setTimeout(() => $('loading').remove(), 700);
   toTitle();
-  if (params.has('test')) { const m = await import('./tests.js?v=6'); m.runTests(window.__lw); }
+  if (params.has('test')) { const m = await import('./tests.js?v=7'); m.runTests(window.__lw); }
   else if (params.has('playthrough')) { A.unlock(); startPlaythrough(); }
   else if (params.has('endless') && G.autopilot) { A.unlock(); startEndless(); }
   else if (G.autopilot) { A.unlock(); startCampaign(+params.get('sector') || 0); }

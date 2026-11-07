@@ -3,9 +3,9 @@
 // AI shop order, and a sector that ends in game over is retried with fresh lives. For the demo autopilot
 // (the one the playthrough uses) and the human-like one. Fails if the demo autopilot can't finish.
 //   node scripts/voltmaze/autopilot_check.mjs [runs=3] [maxTries=3]
-import { makeWorld, step, drainEvents, STEP } from '../../games/2026-11-06/voltmaze/js/sim.js?v=6';
-import { Autopilot } from '../../games/2026-11-06/voltmaze/js/ai.js?v=6';
-import { SECTORS, START_LIVES, UPGRADES, UP_COST, SALVAGE } from '../../games/2026-11-06/voltmaze/js/config.js?v=6';
+import { makeWorld, step, drainEvents, STEP } from '../../games/2026-11-06/voltmaze/js/sim.js?v=7';
+import { Autopilot } from '../../games/2026-11-06/voltmaze/js/ai.js?v=7';
+import { SECTORS, START_LIVES, UPGRADES, UP_COST, SALVAGE } from '../../games/2026-11-06/voltmaze/js/config.js?v=7';
 
 const runs = +(process.argv[2] || 3), maxTries = +(process.argv[3] || 3);
 // keep in step with AI_SHOP in js/main.js

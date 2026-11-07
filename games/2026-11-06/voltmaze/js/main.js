@@ -1,14 +1,14 @@
 // Voltmaze 2026 — game flow, menus, HUD, minimap, the facility AI's (rare) voice, the demo director
 // and the frame loop.
-import { VERSION, SECTORS, STEP, F, ROOM, RAMP, UPGRADES, UP_KEYS, UP_COST, SALVAGE, MEDALS, parTime, TYPICAL_UP, START_LIVES, BOSSES, DIFFICULTY, DIFF_KEYS, POWERUPS, ENEMY, empMax, SEEKER } from './config.js?v=6';
-import { makeWorld, step, drainEvents, roomLabel, routeSide, angDiff, SIDES, DELTA, wallDist, cloneWorld } from './sim.js?v=6';
-import { Autopilot } from './ai.js?v=6';
-import { Renderer, pickQuality, CALM, LOOKS } from './render.js?v=6';
-import { Audio } from './audio.js?v=6';
-import { Input } from './input.js?v=6';
-import { Scores, NO_POST } from './scores.js?v=6';
-import { Recorder, Replay } from './replay.js?v=6';
-import { Online, ROOM as NET_ROOM, randomCode, cleanCode } from './online.js?v=6';
+import { VERSION, SECTORS, STEP, F, ROOM, RAMP, UPGRADES, UP_KEYS, UP_COST, SALVAGE, MEDALS, parTime, TYPICAL_UP, START_LIVES, BOSSES, DIFFICULTY, DIFF_KEYS, POWERUPS, ENEMY, empMax, SEEKER } from './config.js?v=7';
+import { makeWorld, step, drainEvents, roomLabel, routeSide, angDiff, SIDES, DELTA, wallDist, cloneWorld } from './sim.js?v=7';
+import { Autopilot } from './ai.js?v=7';
+import { Renderer, pickQuality, CALM, LOOKS } from './render.js?v=7';
+import { Audio } from './audio.js?v=7';
+import { Input } from './input.js?v=7';
+import { Scores, NO_POST } from './scores.js?v=7';
+import { Recorder, Replay } from './replay.js?v=7';
+import { Online, ROOM as NET_ROOM, randomCode, cleanCode } from './online.js?v=7';
 
 const $ = (id) => document.getElementById(id);
 const params = new URLSearchParams(location.search);
@@ -26,6 +26,7 @@ const store = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } ca
 const medals = new Set(load('vm.medals.v1', []));
 const best = load('vm.best.v1', {});
 const bestSc = load('vm.bestsc.v1', {});   // best score earned inside each sector, per difficulty
+const bestRank = load('vm.rank.v1', {});   // best sector RANK (S/A/B/C), per difficulty
 let reach = load('vm.reach.v1', 0);
 const applyCalm = () => { CALM.on = settings.flash === 'reduced'; };
 applyCalm();
@@ -82,7 +83,7 @@ function goBack() {
   if (prev) show(prev, false); else if (G.state === 'paused') show('pause', false); else toTitle();
 }
 let selEl = null;
-function setSel(el) { if (selEl) selEl.classList.remove('sel'); selEl = el; if (el) el.classList.add('sel'); }
+function setSel(el) { if (selEl) selEl.classList.remove('sel'); selEl = el; if (el) { el.classList.add('sel'); try { if (I.lastKind !== 'touch') el.scrollIntoView({ block: 'nearest' }); } catch (e) { /* keyboard/pad focus below the fold on short phones */ } } }
 function navigate(dir) {
   if (!G.screen) return;
   const items = [...$(G.screen).querySelectorAll('.mbtn:not(.hidden):not([disabled]), .sec:not([disabled]), .upg, .seg button, [data-tab], [data-hd], [data-tt], [data-td]')].filter((e) => e.offsetParent);
@@ -107,13 +108,15 @@ function navigate(dir) {
 }
 
 // ------------------------------------------------------------------ title + scenic background
+// the title's BEST line: the campaign and endless boards at the chosen difficulty
+function titleBest() { const d = settings.diff, f = (m) => Math.max(boardOf(m, d).best(), 0).toLocaleString(); return `BEST ${f('campaign')} · ENDLESS ${f('endless')} · ${DL(d)}`; }
 function toTitle() {
   NET.close(); stopPlay(); clearPopups(); G.popW = null;
   clearTimeout(G.ptT);
   G.state = 'title'; G.mode = 'title'; G.idleT = 0;
   hideScreens(); show('title', false);
   $('ver').textContent = VERSION;
-  $('title-best').textContent = `BEST ${Math.max(boardOf('campaign', settings.diff).best(), 0).toLocaleString()} · ${DL(settings.diff)}`;
+  $('title-best').textContent = titleBest();
   $('diff-desc').textContent = DIFFICULTY[settings.diff].desc;
   syncSegs();
   $('med-sub').textContent = `${medals.size} / ${MEDALS.length}`;
@@ -274,11 +277,41 @@ function updateHud(W) {
     const bn = BOSSES[b.key].name + (heads ? ` · ${heads} HEADS LEFT` : b.stun > 0 ? ' · VENTS OPEN · 2X DAMAGE' : b.plates ? ' · SHOOT BETWEEN PLATES' : '');
     if (G.hudCache['boss-name'] !== bn) { setText('boss-name', bn); fitBossLabel(); }
     $('bossbar').querySelector('i').style.width = Math.max(0, (b.hp / b.max) * 100).toFixed(1) + '%';
+    bossTrail(Math.max(0, (b.hp / b.max) * 100));
   }
   drawMap(W);
 }
 // the sector map: rooms you have been in, rooms you have seen through a door, the lift, where you are
 const mapC = $('minimap'), mapX = mapC.getContext('2d');
+// the boss bar's damage trail: a pale chunk that holds for a moment after each hit, then drains to the new level (CSS transition with a delay)
+function bossTrail(pct) {
+  const bar = $('bossbar').querySelector('.bar');
+  if (!bar) return;
+  let t = bar.querySelector('.trail');
+  if (!t) { t = document.createElement('b'); t.className = 'trail'; bar.appendChild(t); t._p = -1; }
+  if (Math.abs(pct - t._p) < 0.05) return;
+  t.style.transition = pct > t._p ? 'none' : ''; // a fresh boss (or a heal) fills at once; damage drains
+  t.style.width = pct.toFixed(1) + '%'; t._p = pct;
+}
+// a boss hit: a white-hot flash at the impact (particles only; the boss and robot materials are untouched) and a flash on the bar
+function bossHitFx(e) {
+  R.fx.sparks(e.x, 1.6, e.z, { n: e.crit ? 10 : 6, speed: 3, s: 0.42, life: 0.22, r: 1, g: 1, b: 0.92, vy: 1 });
+  R.fx.fire(e.x, 1.6, e.z, { n: e.crit ? 3 : 1, s: e.crit ? 0.9 : 0.6, sp: 0.4, life: 0.22 });
+  const i = $('bossbar').querySelector('.bar i');
+  if (i && i.animate && !CALM.on) i.animate([{ filter: 'brightness(2.4) saturate(.6)' }, { filter: 'none' }], { duration: e.crit ? 260 : 170, easing: 'ease-out' });
+}
+// LIFT ONLINE after a boss kill waits until the wreck has burned out (~1.4 s) instead of covering the death
+function liftBanner(W) {
+  if (!(W.room && W.room.boss)) { banner('LIFT ONLINE', 'STEP ON THE PAD', 2.6); return; }
+  // a pause (or a hidden online tab) inside that window holds the banner until play resumes instead of dropping it
+  const rm = W.room;
+  const later = () => {
+    if (G.W !== W || W.room !== rm || W.phase === 'liftup') return;
+    if (G.state === 'play') banner('LIFT ONLINE', 'STEP ON THE PAD', 2.6);
+    else if (G.state === 'paused' || G.state === 'paused-online') setTimeout(later, 300);
+  };
+  setTimeout(later, 1400);
+}
 function drawMap(W) {
   const G2 = W.grid, rm = W.room;
   // portrait phones turn the camera 90° (west at the top, north on the right): the map turns with it
@@ -367,6 +400,21 @@ const TUT = {
   mortar: () => `A <b>MORTAR</b> lobs mines over the walls: an orange ring shows where. Shoot a mine to set it off near robots.`,
   reinf: () => `Security sends <b>REINFORCEMENTS</b> while a room is live: a red flare marks where each one warps in. Clear the room or move on.`,
 };
+// one-time prompts for EMP, power-ups and dash (presentation only: no sim grace; once per browser, vm.tut.v1)
+const tutOnce = load('vm.tut.v1', {});
+const OB = {
+  emp: () => `You carry <b>EMP</b> charges: press ${keyName('emp')} to wipe out every robot and bolt near you. A charge comes back every third room cleared.`,
+  dash: () => `<b>DASH JETS</b> fitted: while running, press ${{ key: '<kbd>SHIFT</kbd>', pad: '<kbd>LB</kbd> / <kbd>RB</kbd>', touch: 'the <kbd>DASH</kbd> button' }[I.lastKind] || '<kbd>SHIFT</kbd>'} to dash through bolts.`,
+  pu: () => `A <b>POWER-UP</b> dropped where that robot fell: run over it to grab it before it fades.`,
+};
+function onboard(W, what) {
+  if ((G.mode !== 'campaign' && G.mode !== 'endless') || W.demo || G.tutT > 0) return;
+  const p = W.players[0];
+  const key = what === 'drop' ? 'pu' : (W.up.dash > 0 && !tutOnce.dash) ? 'dash' : (p && p.emp > 0 && W.stats.rooms >= 2 && !tutOnce.emp) ? 'emp' : null;
+  if (!key || tutOnce[key]) return;
+  tutOnce[key] = 1; store('vm.tut.v1', tutOnce);
+  const el = $('tut'); el.innerHTML = OB[key](); el.classList.remove('hidden'); G.tutT = 5.5;
+}
 function tutorial(key) {
   if (G.mode === 'demo' || G.mode === 'playthrough' || !TUT[key]) return;
   // the reinforcement hint once a session (every new world would otherwise repeat it each sector)
@@ -386,6 +434,7 @@ function handleEvents(list, W, live) {
         if (e.boss) { A.playMusic('boss'); }
         else if (e.first && W.mode === 'endless' && W.floor > 0) { R.setLook(W.k); A.playMusic(SECTORS[W.k].music); }
         G.hudCache = {};
+        if (live) onboard(W, 'room');
         break;
       case 'roomexit': if (!e.cleared && live && W.room.total > 0) caption('MOVING ON', 1.2); break;
       case 'roomclear': if (live) { popup(`ROOM CLEAR +${e.bonus}`, W.players[0].x, W.players[0].z, '#5dff8a', true); A.play('roomclear', { vol: 0.8 }); } break;
@@ -402,7 +451,7 @@ function handleEvents(list, W, live) {
       case 'kill': {
         const k = BOOM[e.type] || 1;
         R.breakRobot(e.id, { k });
-        if (e.by !== 'expire') { R.fx.explode(e.x, 0.8, e.z, k, { metal: true, color: L.flash }); R.shake(0.12 * k); A.play(k > 1.2 ? 'boomM' : 'boomS', { ...pos, vol: 0.8, gap: 0.03 }); A.play('debris', { ...pos, vol: 0.4, gap: 0.08 }); }
+        if (e.by !== 'expire') { R.fx.explode(e.x, 0.8, e.z, k, { metal: true, color: L.flash, rock: false, smoke: 0.45 }); R.shake(0.12 * k); A.play(k > 1.2 ? 'boomM' : 'boomS', { ...pos, vol: 0.8, gap: 0.03 }); A.play('debris', { ...pos, vol: 0.4, gap: 0.08 }); }
         else R.fx.sparks(e.x, 1.2, e.z, { n: 8 });
         if (live && e.pts) popup(`${e.pts}${e.by === 'wall' || e.by === 'crash' || e.by === 'bolt' || e.by === 'mine' ? ' LURED' : ''}`, e.x, e.z, e.by === 'shot' || e.by === 'emp' ? null : '#7fd8ff');
         break;
@@ -430,7 +479,7 @@ function handleEvents(list, W, live) {
       case 'dash': A.play('dash', { ...pos, vol: 0.6 }); R.fx.dust(e.x, 0.1, e.z, { n: 6, s0: 0.4, s1: 1.4, life: 0.8, a: 0.3 }); if (live) demoNote('AUTOPILOT · DASH JETS: slipping through the bolts'); break;
       case 'pickup': A.play('pickup', { ...pos, vol: 0.9 }); if (live) { popup(POWERUPS[e.kind].name, e.x, e.z, '#' + POWERUPS[e.kind].color.toString(16).padStart(6, '0'), true); demoNote(`AUTOPILOT · grabbed ${POWERUPS[e.kind].name}`); } break;
       case 'pwend': A.play('pwend', { vol: 0.5 }); break;
-      case 'drop': A.play('drop', { ...pos, vol: 0.6 }); break;
+      case 'drop': A.play('drop', { ...pos, vol: 0.6 }); if (live) onboard(W, 'drop'); break;
       case 'mortar': A.play('mortar', { ...pos, vol: 0.7 }); break;
       case 'mineland': A.play('mineland', { ...pos, vol: 0.5 }); R.fx.dust(e.x, 0.1, e.z, { n: 3, s0: 0.3, s1: 1, life: 0.8, a: 0.3 }); break;
       case 'minebeep': A.play('beep', { ...pos, vol: 0.6, gap: 0.05 }); break;
@@ -443,7 +492,7 @@ function handleEvents(list, W, live) {
       case 'bossin': {
         const D = BOSSES[e.key];
         banner(D.name, W.mode === 'endless' ? `FLOOR ${W.floor + 1} · LIFT GUARD` : `SECTOR ${W.sector + 1} · LIFT GUARD`, 3);
-        A.play('bossroar', { ...pos, vol: 1, gap: 0 }); R.frameShot([[e.x, e.z]], 2.0); R.shake(0.4);
+        A.play('bossroar', { ...pos, vol: 1, gap: 0 }); R.frameShot([[e.x, e.z]], 2.0, 10); R.shake(0.4);
         say('boss', { key: true, delay: 1.2 });
         break;
       }
@@ -452,16 +501,16 @@ function handleEvents(list, W, live) {
       case 'stomp': case 'slam': A.play(e.k, { ...pos, vol: 1 }); R.shake(0.5); R.shock(e.x, e.z, 0.8); R.quake(e.x, e.z, e.k === 'stomp' ? 1 : 0.8); R.fx.dust(e.x, 0.2, e.z, { n: 16, s0: 1, s1: 3, life: 2, a: 0.4, jit: 4 }); if (live) rumble(0.6, 0.5, 220); break;
       case 'bosscrash': A.play('slam', { ...pos, vol: 1 }); R.shake(0.6); R.fx.sparks(e.x, 1.5, e.z, { n: 30, speed: 8 }); if (live) caption('IT HIT THE PILLAR · STUNNED · DOUBLE DAMAGE', 2); break;
       case 'vents': if (live) caption('VENTS OPEN · DOUBLE DAMAGE', 1.4); break;
-      case 'bosshit': R.fx.sparks(e.x, 1.6, e.z, { n: e.crit ? 10 : 5, speed: 5 }); A.play('bosshit', { ...pos, vol: 0.45, gap: 0.05 }); break;
+      case 'bosshit': R.fx.sparks(e.x, 1.6, e.z, { n: e.crit ? 10 : 5, speed: 5 }); bossHitFx(e); A.play('bosshit', { ...pos, vol: 0.45, gap: 0.05 }); break;
       case 'headhit': R.fx.sparks(e.x, 1.9, e.z, { n: 5 }); A.play('bosshit', { ...pos, vol: 0.4, gap: 0.05 }); break;
       case 'headdown': R.fx.explode(e.x, 1.9, e.z, 1.4, { metal: true }); R.shake(0.3); A.play('boomM', { ...pos, vol: 0.9 }); if (live) popup('HEAD DOWN', e.x, e.z, '#ffb347', true); break;
       case 'bossphase': A.play('bossroar', { ...pos, vol: 0.9 }); R.shake(0.45); R.flashScreen(0.25, 0xffb347); if (live) caption(`${BOSSES[e.key].name} · PHASE ${e.phase + 1}`, 2.2); break;
       case 'bossdown':
-        R.fx.explode(e.x, 2, e.z, 3, { metal: true }); setTimeout(() => R.fx.explode(e.x + 1, 2.5, e.z - 0.5, 2.4, { metal: true }), 350); setTimeout(() => R.fx.explode(e.x - 1, 1.5, e.z + 0.6, 2.6, { metal: true }), 700);
+        R.bossWreck(e.x, e.z); R.fx.explode(e.x, 2, e.z, 3, { metal: true }); setTimeout(() => R.fx.explode(e.x + 1, 2.5, e.z - 0.5, 2.4, { metal: true }), 350); setTimeout(() => R.fx.explode(e.x - 1, 1.5, e.z + 0.6, 2.6, { metal: true }), 700);
         R.shake(1); R.flashScreen(0.6, 0xffe0b0); A.play('boomL', { ...pos, vol: 1, gap: 0 });
         if (live) { R.frameShot([[e.x, e.z]], 2.2); slowmo(0.3, 1.5, 'bossdown'); rumble(1, 1, 600); say('bossdown', { key: true, delay: 1.4 }); if (G.mode !== 'online') { G.pendingClip = { n: W.n, kind: 'boss' }; if (window.__vm.onKey) window.__vm.onKey(W, 'boss'); } }
         break;
-      case 'lift': A.play('lift', { vol: 0.9 }); if (live) { banner('LIFT ONLINE', 'STEP ON THE PAD', 2.6); } break;
+      case 'lift': A.play('lift', { vol: 0.9 }); if (live) { liftBanner(W); } break;
       case 'liftup': A.play('liftup', { vol: 1 }); if (live) banner(W.mode === 'endless' ? 'GOING DOWN' : 'SECTOR CLEAR', W.mode === 'endless' ? `FLOOR ${W.floor + 2}` : SECTORS[W.sector].name, 2.4); break;
       case 'floor': R.setLook(W.k); A.playMusic(SECTORS[W.k].music); if (live) banner(`FLOOR ${e.floor + 1}`, SECTORS[W.k].name, 2.6); break;
       case 'upgrade': if (live) caption(`FLOOR BONUS · ${UPGRADES[e.up].name} ${e.lv}`, 3); A.play('upgrade', { vol: 0.7 }); break;
@@ -508,6 +557,7 @@ function slowmo(scale, t, why) { G.timeScale = scale; G.slowT = t; A.setRate(Mat
 function onWorldOver(W) {
   if (G.mode === 'demo') { if (G.demoI % 2 === 0) toTitle(); else startDemo(); return; }
   A.stopLoops();
+  runTally(W);
   if (G.mode === 'online') { results(W, W.result === 'clear' ? 'SECTOR CLEAR' : 'CONTAINED', 'CO-OP'); return; }
   if (G.mode === 'playthrough') { playthroughNext(W); return; }
   if (W.mode === 'endless') { A.sting('over'); say('gameover', { key: true, delay: 1 }); results(W, 'CONTAINED', `ENDLESS FACILITY · FLOOR ${W.floor + 1} · ${W.depth} ROOMS`); return; }
@@ -531,6 +581,8 @@ function onWorldOver(W) {
     G.run.score = W.score; G.run.lives = W.lives + 1;
     G.run.salvage += Math.floor((W.score - G.run.score0) / SALVAGE);
     G.run.lastTime = t; G.run.got = got;
+    G.run.rank = sectorRank(W);
+    if (!bestRank[k] || RANKS.indexOf(G.run.rank) < RANKS.indexOf(bestRank[k])) { bestRank[k] = G.run.rank; store('vm.rank.v1', bestRank); }
     if (s >= SECTORS.length - 1) { say('champion', { key: true, delay: 2.5 }); results(W, 'FACILITY BREACHED', 'ALL FIVE SECTORS CLEARED'); }
     else upgrades(W);
     return;
@@ -573,7 +625,7 @@ function playthroughNext(W) {
 function upgrades(W) {
   G.state = 'upgrade'; setHud(false);
   G.run.picks = null;
-  $('up-title').textContent = `SECTOR ${W.sector + 1} CLEAR`;
+  $('up-title').innerHTML = `SECTOR ${W.sector + 1} CLEAR <span class="rank r${G.run.rank}" title="${rankWhy(W)}">RANK ${G.run.rank}</span>`;
   const nb = G.run.newBest || {}, rec = [nb.time && 'BEST TIME', nb.score && 'BEST SECTOR SCORE'].filter(Boolean).join(' + ');
   $('up-sub').textContent = `${fmtT(G.run.lastTime)} · ${G.run.secScore.toLocaleString()} PTS${rec ? ' · NEW ' + rec : ''} · ${G.run.got.length ? 'MEDAL: ' + G.run.got.map((id) => MEDALS.find((m) => m.id === id).name).join(', ') : 'SPEND SALVAGE ON YOUR SUIT'}`;
   $('up-replay').classList.toggle('hidden', !G.clip);
@@ -604,14 +656,49 @@ function buy(k) {
   renderUpgrades();
   if (sel) setSel(document.querySelector(`[data-up="${sel}"]`));
 }
+// sector RANK from the cleared sector's own stats (presentation only): no deaths, par time and no skipped rooms each count
+const RANKS = ['S', 'A', 'B', 'C'];
+function sectorRank(W) {
+  const d = W.stats.deaths, t = W.secT, par = parTime(W.sector);
+  const p = (d === 0 ? 2 : d <= 1 ? 1 : 0) + (t <= par ? 2 : t <= par * 1.3 ? 1 : 0) + (W.stats.skipped === 0 ? 1 : 0);
+  return p >= 5 ? 'S' : p >= 3 ? 'A' : p >= 1 ? 'B' : 'C';
+}
+function rankWhy(W) { return `${W.stats.deaths} lives lost · ${fmtT(W.secT)} (par ${fmtT(parTime(W.sector))}) · ${W.stats.skipped} rooms skipped`; }
+// run totals: every campaign / AI playthrough sector builds a fresh world, so the run's stats add up here (once per world)
+function runTally(W) {
+  if (!G.run || W.mode !== 'campaign' || (G.mode !== 'campaign' && G.mode !== 'playthrough') || G.run.tallied === W) return;
+  G.run.tallied = W;
+  const t = G.run.tot ||= { n: 0, secs: 0, kills: 0, lured: 0, cleared: 0, rooms: 0, deaths: 0, clears: 0, first: W.sector, last: W.sector };
+  t.n++; t.secs += W.secT; t.kills += W.stats.kills; t.lured += W.stats.lured; t.cleared += W.stats.cleared; t.rooms += W.stats.rooms; t.deaths += W.stats.deaths;
+  if (W.result === 'clear') t.clears++;
+  t.first = Math.min(t.first, W.sector); t.last = Math.max(t.last, W.sector);
+}
+// the results score counts up to its value (the text always ends on the exact score)
+function tallyScore(el, score) {
+  clearInterval(G.tallyI);
+  if (!el || score <= 0) return;
+  const t0 = performance.now(), dur = 900;
+  el.textContent = '0';
+  G.tallyI = setInterval(() => {
+    const k = Math.min(1, (performance.now() - t0) / dur);
+    el.textContent = Math.round(score * (1 - (1 - k) ** 3)).toLocaleString();
+    if (k >= 1) clearInterval(G.tallyI);
+  }, 40);
+}
+function runTotals(W) { const t = G.run && G.run.tot; return t && G.run.tallied === W && t.n > 1 ? t : null; }
 function results(W, title, sub) {
   G.state = 'results'; setHud(false);
   $('res-title').textContent = title; $('res-sub').textContent = sub + ' · ' + DL(W.diff);
   const st = [['SCORE', W.score.toLocaleString()]];
+  const tot = runTotals(W);
+  if (tot) st.push(['RUN TIME', `${fmtT(tot.secs)} <small>S${tot.first + 1}-S${tot.last + 1} · ${tot.clears} CLEARED</small>`], ['ROBOTS DESTROYED', tot.kills], ['LURED INTO WALLS AND FIRE', tot.lured], ['ROOMS CLEARED', `${tot.cleared} / ${tot.rooms}`], ['LIVES LOST', tot.deaths]);
+  else {
   if (W.mode === 'endless') st.push(['DEEPEST FLOOR', W.floor + 1], ['ROOMS', W.depth]);
   else st.push(['SECTOR TIME', fmtT(W.secT)]);
   st.push(['ROBOTS DESTROYED', W.stats.kills], ['LURED INTO WALLS AND FIRE', W.stats.lured], ['ROOMS CLEARED', `${W.stats.cleared} / ${W.stats.rooms}`], ['LIVES LOST', W.stats.deaths]);
-  $('res-stats').innerHTML = st.map(([a, b]) => `<div class="stat"><span>${a}</span><b>${b}</b></div>`).join('');
+  }
+  $('res-stats').innerHTML = st.map(([a, b], i) => i ? `<div class="stat tally" style="animation-delay:${(0.35 + i * 0.12).toFixed(2)}s"><span>${a}</span><b>${b}</b></div>` : `<div class="stat hero"><span>${a}</span><b>${b}</b></div>`).join('');
+  tallyScore($('res-stats').querySelector('.hero b'), W.score);
   const got = G.run ? G.run.newMedals : [];
   $('res-medals').innerHTML = got.map((id) => { const m = MEDALS.find((q) => q.id === id); return `<span class="medal on new">🏅 ${m.name} · S${m.sector + 1}</span>`; }).join('');
   $('res-btns').querySelector('[data-act="replay"]').classList.toggle('hidden', !G.clip);
@@ -767,7 +854,7 @@ for (const inp of document.querySelectorAll('[data-set]')) {
 function syncSegs() { for (const s of document.querySelectorAll('.seg')) for (const b of s.children) b.classList.toggle('on', String(settings[s.dataset.opt]) === b.dataset.v); }
 function applySettings() {
   if ($('diff-desc')) $('diff-desc').textContent = DIFFICULTY[settings.diff].desc;
-  if (G.state === 'title') $('title-best').textContent = `BEST ${Math.max(boardOf('campaign', settings.diff).best(), 0).toLocaleString()} · ${DL(settings.diff)}`;
+  if (G.state === 'title') $('title-best').textContent = titleBest();
   A.vol.music = settings.music / 100 * 0.8; A.vol.sfx = settings.sfx / 100; A.vol.voice = settings.voice / 100; A.applyVolumes();
   if (settings.talk === 'off') A.hush();
   applyCalm();
@@ -779,7 +866,7 @@ function buildSectors() {
   $('secgrid').innerHTML = SECTORS.map((s, i) => {
     const open = i <= reach;
     const m = MEDALS.filter((q) => q.sector === i).map((q) => (medals.has(q.id) ? '★' : '☆')).join('');
-    return `<button class="sec" data-sector="${i}" ${open ? '' : 'disabled'}><b>SECTOR ${i + 1} · ${BOSSES[s.boss].name}</b><span>${s.name}</span><small>${open ? (best[bestKey(settings.diff, i)] ? 'BEST ' + fmtT(best[bestKey(settings.diff, i)]) + ' · ' + (bestSc[bestKey(settings.diff, i)] || 0).toLocaleString() + ' PTS · ' + DL(settings.diff) : 'NOT CLEARED YET') : 'LOCKED'}</small><div class="md">${m}</div></button>`;
+    return `<button class="sec" data-sector="${i}" ${open ? '' : 'disabled'}><b>SECTOR ${i + 1} · ${BOSSES[s.boss].name}</b><span>${s.name}</span><small>${open ? (best[bestKey(settings.diff, i)] ? 'BEST ' + fmtT(best[bestKey(settings.diff, i)]) + ' · ' + (bestSc[bestKey(settings.diff, i)] || 0).toLocaleString() + ' PTS' + (bestRank[bestKey(settings.diff, i)] ? ' · RANK ' + bestRank[bestKey(settings.diff, i)] : '') + ' · ' + DL(settings.diff) : 'NOT CLEARED YET') : 'LOCKED'}</small><div class="md">${m}</div></button>`;
   }).join('');
 }
 function buildMedals() {
@@ -858,7 +945,7 @@ document.addEventListener('visibilitychange', () => {
 let bgWorker = null;
 function bgTicks(on) {
   if (on && !bgWorker) {
-    try { bgWorker = new Worker(new URL('./tick.js?v=6', import.meta.url)); bgWorker.onmessage = bgTick; } catch (e) { bgWorker = null; console.warn('background tick', e); return; }
+    try { bgWorker = new Worker(new URL('./tick.js?v=7', import.meta.url)); bgWorker.onmessage = bgTick; } catch (e) { bgWorker = null; console.warn('background tick', e); return; }
   }
   if (bgWorker) bgWorker.postMessage(on ? 25 : 0);
 }
@@ -910,8 +997,8 @@ function tickFrame(dt) {
   // on a small screen a banner gets out of the way as soon as a robot takes aim
   if (G.bannerT > 0.3 && G.state === 'play' && G.W && (innerWidth < 900 || innerHeight < 560) && G.W.robots.some((e) => e.aimT > 0)) G.bannerT = 0.3;
   if (G.bannerT > 0) { G.bannerT -= dt; if (G.bannerT <= 0) $('banner').classList.add('hidden'); }
-  if (G.tutT > 0) { G.tutT -= dt; if (G.tutT <= 0) $('tut').classList.add('hidden'); }
-  if (G.capT > 0) { G.capT -= dt; if (G.capT <= 0) $('caption').classList.add('hidden'); }
+  if (G.tutT > 0 && G.state !== 'paused') { G.tutT -= dt; if (G.tutT <= 0) $('tut').classList.add('hidden'); }
+  if (G.capT > 0 && G.state !== 'paused') { G.capT -= dt; if (G.capT <= 0) $('caption').classList.add('hidden'); }
 }
 function playStep(dt) {
   const W = G.W;
@@ -1062,7 +1149,7 @@ async function boot() {
   $('loading').style.opacity = '0';
   setTimeout(() => $('loading').remove(), 700);
   toTitle();
-  if (params.has('test')) { const m = await import('./tests.js?v=6'); m.runTests(window.__vm); }
+  if (params.has('test')) { const m = await import('./tests.js?v=7'); m.runTests(window.__vm); }
   else if (params.has('playthrough')) { A.unlock(); startPlaythrough(); }
   else if (G.autopilot) { A.unlock(); if (params.has('endless')) startEndless(); else startCampaign(+params.get('sector') || 0); }
   else if (params.has('room') && !params.has('sector') && isNaN(+params.get('room'))) { act('online'); $('join-code').value = cleanCode(params.get('room')); }

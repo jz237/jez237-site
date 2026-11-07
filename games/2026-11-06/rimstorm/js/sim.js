@@ -5,7 +5,7 @@
 //
 // A web is a ring (closed) or a strip (open) of lanes running from the near rim (d = 0) to the far end of
 // the tube (d = 1). A lane coordinate puts lane i's centre on the integer i and its borders on i +- 0.5.
-import { F, STEP, SECTORS, WEBS, SHAPES, rampAt, rampLevel, endlessLevel, ENDLESS, ENDLESS_SHAPES, ENEMY, BOSSES, BOSS_KEYS, SCORE, START_LIVES, INTRO, introduced, DIFFICULTY, applyDiff, POWERUPS, PW_KEYS, DROP } from './config.js?v=6';
+import { F, STEP, SECTORS, WEBS, SHAPES, rampAt, rampLevel, endlessLevel, ENDLESS, ENDLESS_SHAPES, ENEMY, BOSSES, BOSS_KEYS, SCORE, START_LIVES, INTRO, introduced, DIFFICULTY, applyDiff, POWERUPS, PW_KEYS, DROP } from './config.js?v=7';
 export { STEP };
 
 const TAU = Math.PI * 2;

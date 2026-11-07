@@ -136,6 +136,21 @@ everything. Par times (`PAR` in config.js) = the demo autopilot's median sector 
 - A grabbing rider stays on the Rimrunner during the drag (render only: the sim already removed it, so nothing changes in replays).
 - The attract demo ends at 100 s from main.js without setting `W.over` (nothing outside `step()` touches the world).
 
+## Round 2 UI (presentation only; sim.js / ai.js / sim config untouched, replays bit exact)
+- Boss bar hides while the boss is `dying`; the plate is two lines (`.bn` name + phase, `.bh` hint), so it never wraps to an orphan word;
+  the `phase` event no longer shows a caption (the plate carries the phase).
+- Results: `#res-hero` is the score as the hero number with a comparison against this device's best on the same board (`runBoard(W)`).
+- Pause: `body.rs-hold` (set every frame while `paused` / `paused-online`) dims the scene behind any open card and hides `#touch`.
+- HUD `#medtrack`: UNBROKEN / AIM % / PAR delta while the sector can still earn medals (campaign, not Easy, from web 1, no continues).
+  Chip classes: `ok`, `got` (already earned, gold), `lost` (struck: a death or past par, cannot come back), `low` (aim under the
+  mark, can still recover). Phone landscape keeps the boss plate on one line (`.bh` inline). The pounce tip says AMBER in colour-safe.
+- Options: TELEGRAPHS (`settings.tell` std | safe -> `R.tellSafe`: pounce / grab amber, harmless landing blue instead of red / green;
+  strip colour is a uniform) and PAINT (`settings.suit`, `SUITS` in main.js: cobalt / jade / violet / gold / obsidian / arctic at
+  0 / 3 / 6 / 9 / 12 / 15 medals -> `R.suit`; the player views are rebuilt, models are cached per colour, programs stay 51).
+- DAILY CHALLENGE (title button): `dailyCfg(day)` = FNV of `rimstorm:YYYY-MM-DD` -> seed, sector = seed % 5, Hard, `TYPICAL_UP[sector]`;
+  `G.mode = 'daily'`, board `rimstorm-2026-daily-YYYYMMDD` (`dailyBoard(day)`), results DAILY CLEARED / DAILY OVER, no medals, bests,
+  checkpoint or shop. Hooks: `__rs.startDaily()`, `__rs.dailyCfg()`, `__rs.dailyBoard()`.
+
 ## Scores
 
 Global boards on the site's game-scores worker: `rimstorm-2026[-easy|-hard|-nightmare]` and `rimstorm-2026-endless[-easy|-hard|-nightmare]`,

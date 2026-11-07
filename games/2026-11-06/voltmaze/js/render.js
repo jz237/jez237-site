@@ -6,12 +6,12 @@
 // Fixed light pools (only intensities change) and a warm-up that compiles everything at load.
 // Nothing here changes the world.
 import * as THREE from '../vendor/three.module.min.js';
-import { Post } from './post.js?v=6';
-import * as TX from './textures.js?v=6';
-import * as MD from './models.js?v=6';
-import { FX, CALM } from './fx.js?v=6';
-import { F, ROOM, ENEMY, BOSSES, POWERUPS, ATTACK, PW_KEYS, SEEKER, BURST_A } from './config.js?v=6';
-import { WK, inZone, beamLen } from './sim.js?v=6';
+import { Post } from './post.js?v=7';
+import * as TX from './textures.js?v=7';
+import * as MD from './models.js?v=7';
+import { FX, CALM } from './fx.js?v=7';
+import { F, ROOM, ENEMY, BOSSES, POWERUPS, ATTACK, PW_KEYS, SEEKER, BURST_A } from './config.js?v=7';
+import { WK, inZone, beamLen } from './sim.js?v=7';
 
 export { CALM };
 const { RW, RH, wallT: WT, door: DOOR } = ROOM;
@@ -42,7 +42,7 @@ export const LOOKS = [
     haze: 0xbfe4ff, hazeK: 0.11, dust: 0xd0e4f0, dustLight: 1.2, env: [0xdff4ff, 0x4a7090, 0x0a141c], bolt: 0xff6a3a, shot: 0x9ff4ff, bloom: 0.8, flash: 0xe8f4ff, envI: 0.7, depth: 7, shaft: 0xbfe8ff, shaftK: 0.06, up: 0 },
   { key: 'foundry', floor: 'plate', tint: 0xffffff, rough: 1, metal: 0.6, outer: 0x2a2420, wall: 0x5a4a3e, base: 0x2a221c, field: 0xffa040, seal: 0xff3a2a, accent: 0xff7a2a,
     fog: 0x1a0d06, fogD: 0.018, keyC: 0xffd2a0, keyI: 1.2, keyDir: [0.4, 1, -0.4], hemi: [0x6a4032, 0x150a05, 0.45], fill: 0xff6a1a, fillI: 0.45, exposure: 1.0, grade: [1.06, 0.98, 0.9],
-    haze: 0xff9a50, hazeK: 0.06, dust: 0x5a4a40, dustLight: 1.0, env: [0xff9a4a, 0x3a2418, 0x080504], bolt: 0xffe04a, shot: 0x8fe8ff, bloom: 0.95, flash: 0xffc890, envI: 0.8, depth: 9, shaft: 0xffb070, shaftK: 0.05, up: 1 },
+    haze: 0xff9a50, hazeK: 0.06, dust: 0x5a4a40, dustLight: 1.0, env: [0xff9a4a, 0x3a2418, 0x080504], bolt: 0xff4a9a, shot: 0x8fe8ff, bloom: 0.95, flash: 0xffc890, envI: 0.8, depth: 9, shaft: 0xffb070, shaftK: 0.05, up: 1 },
   { key: 'server', floor: 'panel', tint: 0xffffff, rough: 1, metal: 0.3, outer: 0x101318, wall: 0x232c3a, base: 0x10141a, field: 0x3cc8ff, seal: 0xff4a6a, accent: 0x3cc8ff,
     fog: 0x030812, fogD: 0.02, keyC: 0xb0d0ff, keyI: 1.1, keyDir: [-0.3, 1, 0.3], hemi: [0x40608a, 0x05070a, 0.45], fill: 0x3cb8ff, fillI: 0.5, exposure: 1.2, grade: [0.94, 1.0, 1.07],
     haze: 0x3ca8ff, hazeK: 0.05, dust: 0x5a6070, dustLight: 0.8, env: [0x9fd0ff, 0x1a2a40, 0x020304], bolt: 0xff6a2a, shot: 0xffe08a, bloom: 0.9, flash: 0xcfe8ff, envI: 0.85, depth: 8, shaft: 0x7fc8ff, shaftK: 0.04, up: 0 },
@@ -208,7 +208,7 @@ const N_WALL = 72, N_FIELD = 64, N_POST = 160, N_SPILL = 120;
 // models are drawn a little larger than their collision size so they read at phone size
 const HERO_S = 1.22, ROBOT_S = 1.18;
 // every robot class has its own colour: a soft ring on the floor under it, readable at a glance
-const CLS = { sentry: 0xffd24a, patroller: 0xff8a3a, marksman: 0xff3a5a, aegis: 0x6ab8ff, mortar: 0xffa040, ripper: 0xff4ad8, twin: 0x5affe0, drone: 0xdfe8ff };
+const CLS = { sentry: 0xffe23a, patroller: 0xff7418, marksman: 0xff2a3a, aegis: 0x6ab8ff, mortar: 0x9a4aff, ripper: 0xff5ae0, twin: 0x2affb0, drone: 0xeaf2ff };
 
 export class Renderer {
   constructor(canvas, q) {
@@ -684,6 +684,9 @@ export class Renderer {
     this.ringMat = new THREE.MeshBasicMaterial({ map: this.T.ring, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, color: 0xffffff });
     this.ringI = inst(hg, this.ringMat, 40);
     this.ringI.instanceColor = new THREE.InstancedBufferAttribute(new Float32Array(40 * 3), 3);
+    // the suits' own ground rings (same material and layout as the class rings, so no new shader program)
+    this.youRingI = inst(hg, this.ringMat, 2);
+    this.youRingI.instanceColor = new THREE.InstancedBufferAttribute(new Float32Array(2 * 3), 3);
     // mines: a disc with a lamp
     const mg = new THREE.CylinderGeometry(0.28, 0.32, 0.12, 14);
     this.mineMat = new THREE.MeshStandardMaterial({ color: 0x3a3a3a, roughness: 0.4, metalness: 0.8 });
@@ -713,6 +716,7 @@ export class Renderer {
     const ag = new THREE.PlaneGeometry(1, 1); ag.rotateX(-Math.PI / 2); ag.translate(0.5, 0, 0);
     this.aims = [];
     for (let i = 0; i < 36; i++) { const m = new THREE.Mesh(ag, this.aimMat.clone()); m.visible = false; m.renderOrder = 3; m.frustumCulled = false; this.scene.add(m); this.aims.push(m); }
+    this.makeAimGlints();
   }
   makeArcs() {
     this.arcs = [];
@@ -820,6 +824,7 @@ export class Renderer {
       nr++;
     }
     this.ringI.count = nr; this.ringI.instanceMatrix.needsUpdate = true; if (this.ringI.instanceColor) this.ringI.instanceColor.needsUpdate = true;
+    this.syncYouRings(W, t);
     this.syncBoss(W, dt);
     this.syncSeeker(W, dt);
     this.syncShots(W);
@@ -932,6 +937,7 @@ export class Renderer {
   }
   syncBoss(W, dt) {
     const B = W.boss;
+    if (!B && this.wreckHold(W, dt)) return;
     if (!B) { if (this.bv) this.bv.g.visible = false; for (const h of this.views.heads) h.g.visible = false; for (const p of this.views.plates) p.g.visible = false; this.beam.visible = this.beamCore.visible = false; return; }
     const v = this.bossView(B.key), t = this.time;
     v.g.visible = true;
@@ -1074,15 +1080,61 @@ export class Renderer {
       const len = rayLen(walls, e.x, e.z, Math.cos(e.aimA), Math.sin(e.aimA), e.type === 'ripper' ? 6 : 24);
       m.visible = true; m.position.set(e.x, 0.05, e.z); m.rotation.set(0, -e.aimA, 0); m.scale.set(len, 1, e.type === 'ripper' ? 0.9 : locked ? 0.09 : 0.05);
       m.material.color.copy(_c.set(e.type === 'ripper' ? 0xff9a3a : L.seal).multiplyScalar((0.6 + f * 2.2) * (locked ? 1.6 + Math.sin(this.time * 40) * 0.5 : 1)));
+      this.aimRed(m, e, f, locked);
       // a burst: fainter lines for the extra bolts either side
       for (let k = 1; k < (e.burstN || 1) && a < this.aims.length; k++) {
         const q = this.aims[a++], ang = e.aimA + (k % 2 ? 1 : -1) * Math.ceil(k / 2) * BURST_A;
         const l2 = rayLen(walls, e.x, e.z, Math.cos(ang), Math.sin(ang), 24);
         q.visible = true; q.position.set(e.x, 0.05, e.z); q.rotation.set(0, -ang, 0); q.scale.set(l2, 1, locked ? 0.06 : 0.035);
         q.material.color.copy(m.material.color).multiplyScalar(0.6);
+        q.material.blending = m.material.blending; q.material.opacity = m.material.opacity * 0.75;
       }
     }
     for (let i = a; i < this.aims.length; i++) this.aims[i].visible = false;
+    this.endAimGlints();
+  }
+  // aim telegraphs that read on bright floors: a solid red line (normal blending, so a pale floor cannot wash it out)
+  // and a red star glinting at the muzzle that grows through the aim and flickers once the aim locks
+  makeAimGlints() {
+    const g = new THREE.PlaneGeometry(1, 1);
+    this.glintMat = new THREE.MeshBasicMaterial({ color: 0xffffff, toneMapped: false, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false });
+    this.glints = [];
+    for (let i = 0; i < 32; i++) { const m = new THREE.Mesh(g, this.glintMat.clone()); m.visible = false; m.renderOrder = 6; m.frustumCulled = false; this.scene.add(m); this.glints.push(m); }
+    this.nGlint = 0;
+  }
+  aimRed(m, e, f, locked) {
+    const M = m.material;
+    if (e.type === 'ripper') { M.blending = THREE.AdditiveBlending; M.opacity = 1; return; }
+    const k = (0.9 + f * 1.1) * (locked ? 1.35 + Math.sin(this.time * 40) * 0.35 : 1) * (CALM.on ? 0.8 : 1);
+    M.blending = THREE.NormalBlending; M.opacity = 0.62 + f * 0.38; m.scale.z *= 1.8;
+    M.color.setRGB(1.4 * k, 0.04 * k, 0.035 * k);
+    // the muzzle glint: two crossed bars facing the camera
+    if (this.nGlint + 2 > this.glints.length) return;
+    const ca = Math.cos(e.aimA), sa = Math.sin(e.aimA), r = (e.r || 0.5) + 0.25, y = e.type === 'drone' ? 1.5 : 1.0;
+    const s = (0.7 + f * 1.0) * (locked ? 1.25 + Math.sin(this.time * 40) * 0.25 : 1), spin = this.time * 2.5 + (+e.id || 0);
+    for (let j = 0; j < 2; j++) {
+      const q = this.glints[this.nGlint++], Q = q.material;
+      q.visible = true; q.position.set(e.x + ca * r, y, e.z + sa * r);
+      q.quaternion.copy(this.camera.quaternion); q.rotateZ(spin + j * Math.PI / 2);
+      q.scale.set(s * (j ? 0.75 : 1), s * 0.16, 1);
+      Q.color.setRGB(2.6 * k, (locked ? 0.3 : 0.06) * k, (locked ? 0.25 : 0.05) * k);
+    }
+  }
+  endAimGlints() {
+    for (let i = this.nGlint; i < this.glints.length; i++) this.glints[i].visible = false;
+    this.nGlint = 0;
+  }
+  // the player's ground ring: cyan (partner lime), flickers while invulnerable after a respawn
+  syncYouRings(W, t) {
+    let n = 0;
+    (W.players || []).forEach((p, i) => {
+      if (!p.alive || n >= 2) return;
+      const k = (p.inv > 0 ? 0.55 + 0.75 * (0.5 + 0.5 * Math.sin(t * 18)) : 1.05) * (CALM.on ? 0.7 : 1), rr = 1.55;
+      _m.compose(_p.set(p.x, 0.035, p.z), _q.identity(), _s.set(rr, 1, rr)); this.youRingI.setMatrixAt(n, _m);
+      this.youRingI.setColorAt(n, _c.setHex(i === 1 ? 0xb4ff4a : 0x38e8ff).multiplyScalar(k));
+      n++;
+    });
+    this.youRingI.count = n; this.youRingI.instanceMatrix.needsUpdate = true; if (this.youRingI.instanceColor) this.youRingI.instanceColor.needsUpdate = true;
   }
   syncPickups(W, t) {
     const seen = new Set();
@@ -1249,7 +1301,34 @@ export class Renderer {
     const tall = this.portrait;
     return this.fit(tall ? 1.12 : 0.97, tall ? Math.PI / 2 : 0, tall ? 50 : 40, tall ? 0.74 : 0.8, RW + 0.9, RH + 0.9);
   }
-  frameShot(pts, dur) { this.shot = { pts, t: dur }; }
+  // a boss kill: the sim drops the boss at once, so keep its view as a burning wreck for ~1.5 s (presentation only)
+  bossWreck(x, z) { if (this.bv) this.wreck = { t: 1.6, x, z, y: this.bv.g.position.y, tilt: 0, room: null }; }
+  wreckHold(W, dt) {
+    const k = this.wreck;
+    if (!k || !this.bv) return false;
+    if (k.room === null) k.room = W.room;
+    if (k.t <= 0 || k.room !== W.room) { this.wreck = null; return false; }
+    k.t -= dt;
+    const v = this.bv, g = v.g, f = 1 - Math.max(0, k.t) / 1.6;
+    g.visible = true;
+    g.position.set(k.x + (Math.random() - 0.5) * 0.12 * (1 - f), k.y - f * f * 1.1, k.z);
+    g.rotation.z = Math.sin(f * 1.4) * 0.18; g.rotation.x = f * 0.1;
+    if (v.eyeMat) v.eyeMat.color.copy(v.eyeBase).multiplyScalar(Math.max(0, 0.6 - f) * (Math.random() < 0.3 ? 2 : 0.4));
+    for (const h of this.views.heads) h.g.visible = false;
+    for (const p of this.views.plates) p.g.visible = false;
+    this.beam.visible = this.beamCore.visible = false;
+    if (Math.random() < dt * (CALM.on ? 8 : 16)) this.fx.fire(k.x + (Math.random() - 0.5) * 2.4, 1.2 + Math.random() * 1.2, k.z + (Math.random() - 0.5) * 2.4, { n: 2, s: 1.1, sp: 0.6, life: 0.6 });
+    if (Math.random() < dt * 6) this.fx.dust(k.x + (Math.random() - 0.5) * 2, 1.8, k.z + (Math.random() - 0.5) * 2, { n: 1, s0: 1, s1: 3.2, life: 2, vy: 1.2, up: 0.8, k: 0.35, a: 0.45 });
+    if (k.t <= 0) { g.visible = false; g.rotation.x = g.rotation.z = 0; }
+    return true;
+  }
+  frameShot(pts, dur, wide) { this.shot = { pts, t: dur, wide }; }
+  // a boss intro: pulled back and lower, so the boss reads as a silhouette against the room
+  wideShot(want, cx, cz, span, tall) {
+    if (tall) { want.pos.set(cx + span * 1.6, span * 1.25, cz); want.fov = 52; }
+    else { want.pos.set(cx, span * 0.8, cz + span * 1.35); want.fov = 40; }
+    want.look.set(cx, 1.3, cz); want.speed = 5;
+  }
   // o: { me: {x,z} or null, cine, shake, snap }
   updateCamera(dt, o = {}) {
     let want;
@@ -1264,6 +1343,7 @@ export class Renderer {
       const tall = this.portrait;
       want = tall ? { pos: new THREE.Vector3(cx + span * 1.0, span * 1.5, cz), look: new THREE.Vector3(cx, 0.4, cz), fov: 48, speed: 5 }
         : { pos: new THREE.Vector3(cx, span * 1.2, cz + span * 1.0), look: new THREE.Vector3(cx, 0.6, cz), fov: 42, speed: 5 };
+      if (this.shot.wide) this.wideShot(want, cx, cz, this.shot.wide, tall);
     } else if (o.W && o.W.phase === 'liftup' && o.W.room && o.W.room.boss) {
       // riding the lift: the camera drops in close and rises with the platform
       const y = this.lift.g.position.y;

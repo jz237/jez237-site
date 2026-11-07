@@ -5,7 +5,7 @@
 // that the world board is read, cleaned and sorted, and that the local table carries on when offline.
 // Nothing here reaches the network: fetch is replaced before the module loads.
 //   node scripts/voltmaze/scores_check.mjs
-const MOD = '../../games/2026-11-06/voltmaze/js/scores.js?v=6';
+const MOD = '../../games/2026-11-06/voltmaze/js/scores.js?v=7';
 let fails = 0, nImport = 0;
 const ok = (c, msg) => { console.log(`${c ? 'PASS' : 'FAIL'}  ${msg}`); if (!c) fails++; };
 

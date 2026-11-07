@@ -6,8 +6,8 @@
 //   profile 'human': ~0.35 s reaction with scatter, sometimes late, a limited aim swing, tracks only
 //                    the nearest few threats, misses things behind it, the odd poor choice
 //   profile 'demo' : quick, accurate, uses EMP and dash well: the attract mode and the AI playthrough
-import { F, ROOM, ENEMY, SEEKER, ATTACK, BOSSES, STEP } from './config.js?v=6';
-import { wallNear, los, routeSide, inZone, angDiff, nearestWall, atkOf } from './sim.js?v=6';
+import { F, ROOM, ENEMY, SEEKER, ATTACK, BOSSES, STEP } from './config.js?v=7';
+import { wallNear, los, routeSide, inZone, angDiff, nearestWall, atkOf } from './sim.js?v=7';
 
 const PROFILES = {
   human: { react: 0.35, jit: 0.1, late: 0.14, lateT: 0.25, slew: 5.5, aim: 0.05, drift: 0.035, track: 7, blind: 0.35, fireRange: 16, greed: 0.75, leaveAt: 0.7, empP: 0.55, dashP: 0.35, noise: 0.18, margin: 1.0 },

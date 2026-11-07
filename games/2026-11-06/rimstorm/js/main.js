@@ -1,13 +1,13 @@
 // Rimstorm 2026 — game flow, menus, HUD, commentary, demo director and the frame loop.
-import { VERSION, SECTORS, STEP, F, WEBS, UPGRADES, UP_KEYS, UP_COST, MEDALS, parTime, AIM_MEDAL, TYPICAL_UP, START_LIVES, BOSSES, DIFFICULTY, DIFF_KEYS, POWERUPS, ENEMY, AI_SHOP, SALVAGE_MEDAL, salvageFor } from './config.js?v=6';
-import { makeWorld, step, drainEvents, webLabel, isBossWeb, bossKey, cloneWorld } from './sim.js?v=6';
-import { Autopilot } from './ai.js?v=6';
-import { Renderer, pickQuality, CALM } from './render.js?v=6';
-import { Audio } from './audio.js?v=6';
-import { Input } from './input.js?v=6';
-import { Scores, NO_POST } from './scores.js?v=6';
-import { Recorder, Replay, worldSig } from './replay.js?v=6';
-import { Online, ROOM, randomCode, cleanCode } from './online.js?v=6';
+import { VERSION, SECTORS, STEP, F, WEBS, UPGRADES, UP_KEYS, UP_COST, MEDALS, parTime, AIM_MEDAL, TYPICAL_UP, START_LIVES, BOSSES, DIFFICULTY, DIFF_KEYS, POWERUPS, ENEMY, AI_SHOP, SALVAGE_MEDAL, salvageFor } from './config.js?v=7';
+import { makeWorld, step, drainEvents, webLabel, isBossWeb, bossKey, cloneWorld } from './sim.js?v=7';
+import { Autopilot } from './ai.js?v=7';
+import { Renderer, pickQuality, CALM } from './render.js?v=7';
+import { Audio } from './audio.js?v=7';
+import { Input } from './input.js?v=7';
+import { Scores, NO_POST } from './scores.js?v=7';
+import { Recorder, Replay, worldSig } from './replay.js?v=7';
+import { Online, ROOM, randomCode, cleanCode } from './online.js?v=7';
 
 const $ = (id) => document.getElementById(id);
 const params = new URLSearchParams(location.search);
@@ -18,6 +18,8 @@ const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const settings = { music: 50, sfx: 90, voice: 100, talk: 'on', flash: reduceMotion ? 'reduced' : 'full', shake: '1', rumble: 'on', touch: 'auto', quality: 'auto', netRoute: '0', diff: 'normal', sens: '1' };
 try { Object.assign(settings, JSON.parse(localStorage.getItem(SKEY) || '{}')); } catch { /* defaults */ }
 if (!DIFFICULTY[settings.diff]) settings.diff = 'normal';
+if (settings.tell !== 'safe') settings.tell = 'std';   // telegraph colours: red / green or colour-safe
+if (typeof settings.suit !== 'string') settings.suit = 'cobalt';   // Rimrunner paint scheme (unlocked by medals)
 const saveSettings = () => { try { localStorage.setItem(SKEY, JSON.stringify(settings)); } catch { /* private mode */ } };
 const load = (k, d) => { try { const v = JSON.parse(localStorage.getItem(k)); return v ?? d; } catch { return d; } };
 const store = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch { /* private mode */ } };
@@ -39,6 +41,17 @@ function boardOf(mode, diff = 'normal') {
   return BOARDS[key] || (BOARDS[key] = new Scores(key));
 }
 const HS = boardOf('campaign');
+// DAILY CHALLENGE: the same seeded sector for everyone today (UTC), on Hard with TYPICAL_UP, one world board per day;
+// no medals, bests, checkpoint or shop come from it (the normal score service and NO_POST rules apply)
+const today = () => new Date().toISOString().slice(0, 10);
+function dailyCfg(day = today()) {
+  let h = 2166136261;
+  for (const c of 'rimstorm:' + day) { h ^= c.charCodeAt(0); h = Math.imul(h, 16777619); }
+  const seed = h >>> 1, sector = seed % SECTORS.length;
+  return { day, seed, sector, diff: 'hard', up: { ...TYPICAL_UP[sector] } };
+}
+const dailyBoard = (day = today()) => { const key = 'rimstorm-2026-daily-' + day.replace(/-/g, ''); return BOARDS[key] || (BOARDS[key] = new Scores(key)); };
+const runBoard = (W) => (G.mode === 'daily' && G.run && G.run.daily ? dailyBoard(G.run.daily) : boardOf(W.mode, W.diff));
 const DL = (d) => (DIFFICULTY[d] || DIFFICULTY.normal).label;
 const bestKey = (diff, i) => (diff === 'normal' ? 's' + i : diff + ':s' + i);
 const REC = new Recorder();
@@ -73,7 +86,10 @@ function show(id, push = true) {
   if (push && G.screen && G.screen !== id) G.back.push(G.screen);
   for (const s of SCREENS) $(s).classList.toggle('hidden', s !== id);
   G.screen = id;
-  // the first VISIBLE button (a hidden CONTINUE on a cleared run's results must never take a pad's A press)
+  if (id === 'options') { syncSuits(); syncSegs(); }
+  if (id === 'title') dailySub();   // today's sector stays right across a UTC midnight
+  // the first VISIBLE button in document order (a hidden CONTINUE on a cleared run's results must never take a pad's A press);
+  // the shop starts on its first upgrade, never on NEXT SECTOR (a mashed A must not skip the shop); results / END RUN pick explicitly or first
   if (id) { const first = [...$(id).querySelectorAll('.mbtn, .sec:not([disabled]), .upg')].find((e) => e.offsetParent && !e.disabled); setSel(first || null); }
 }
 function hideScreens() { for (const s of SCREENS) $(s).classList.add('hidden'); G.screen = null; G.back = []; }
@@ -82,7 +98,7 @@ function goBack() {
   if (prev) show(prev, false); else if (G.state === 'paused') show('pause', false); else toTitle();
 }
 let selEl = null;
-function setSel(el) { if (selEl) selEl.classList.remove('sel'); selEl = el; if (el) el.classList.add('sel'); }
+function setSel(el) { if (selEl) selEl.classList.remove('sel'); selEl = el; if (el) { el.classList.add('sel'); try { if (I.lastKind !== 'touch') el.scrollIntoView({ block: 'nearest' }); } catch (e) { /* keyboard/pad focus below the fold on short phones */ } } }
 function navigate(dir) {
   if (!G.screen) return;
   const items = [...$(G.screen).querySelectorAll('.mbtn:not(.hidden):not([disabled]), .sec:not([disabled]), .upg, .seg button, [data-tab], [data-hd]')].filter((e) => e.offsetParent);
@@ -171,6 +187,16 @@ function beginSector(s, web = 0, score = G.run.score) {
   banner(`SECTOR ${s + 1}`, `${SECTORS[s].name} · ${SECTORS[s].place.toUpperCase()}`, 3);
   if (s > 0) say('s' + (s + 1), { key: true, delay: 1.2 });
 }
+function startDaily() {
+  const c = dailyCfg();
+  G.run = { score: 0, lives: START_LIVES + DIFFICULTY[c.diff].lives, up: c.up, salvage: 0, start: c.sector, newMedals: [], diff: c.diff, continues: 0, daily: c.day };
+  const W = makeWorld({ mode: 'campaign', sector: c.sector, seed: c.seed, up: c.up, lives: G.run.lives, score: 0, web: 0, diff: c.diff });
+  G.run.sector = c.sector; G.run.score0 = 0; G.run.full = false; G.run.check = null;
+  G.mode = 'daily';
+  enterPlay(W);
+  banner('DAILY CHALLENGE', `${c.day} · SECTOR ${c.sector + 1} · ${SECTORS[c.sector].name} · HARD`, 3.2);
+  say('begin', { key: true, delay: 0.8 });
+}
 // AI PLAYTHROUGH: the demo autopilot plays the whole campaign, picks its own upgrades between sectors
 // and retries a sector if it runs out of Rimrunners. Nothing it does counts for scores or medals.
 function startPlaythrough() {
@@ -227,7 +253,7 @@ function enterPlay(W) {
   buildStrip(W);
   G.idleT = 0;
   // know the world board before the run ends, so the initials entry only shows for a real top-10 score
-  if (G.mode === 'campaign' || G.mode === 'endless') boardOf(W.mode, W.diff).fresh();
+  if (G.mode === 'campaign' || G.mode === 'endless' || G.mode === 'daily') runBoard(W).fresh();
 }
 
 // ------------------------------------------------------------------ HUD
@@ -253,7 +279,7 @@ function setHTML(id, v) { if (G.hudCache[id] !== v) { G.hudCache[id] = v; $(id).
 const myPlayer = (W) => (G.mode === 'online' && !NET.host ? W.players[1] : W.players[0]);
 function updateHud(W) {
   setText('score', W.score.toLocaleString());
-  const board = boardOf(W.mode, W.diff);
+  const board = runBoard(W);
   setText('hiscore', Math.max(board.best(), W.score).toLocaleString());
   setText('hi-lbl', W.mode === 'endless' ? 'BEST DESCENT' : 'BEST');
   const me = myPlayer(W);
@@ -280,25 +306,43 @@ function updateHud(W) {
   }
   const left = W.spawnQ.length + W.enemies.length;
   setText('chain', W.phase === 'dive' ? 'DIVE' : isBossWeb(W) ? '' : `${left} TO CLEAR`);
+  medalTrack(W);
   const b = W.boss;
-  $('bossbar').classList.toggle('hidden', !b || b.state === 'in');
+  $('bossbar').classList.toggle('hidden', !b || b.state === 'in' || b.state === 'dying');
   if (b) {
     let extra = '';
     if (b.heads.length && b.heads.some((h) => h.hp > 0)) extra = ` · HEADS ${b.heads.filter((h) => h.hp > 0).length}`;
     else if (b.segs && b.segs.some((x) => x > 0)) extra = ' · SHOOT THROUGH THE GAPS';
     else if (b.eye) extra = b.eye.open ? ' · THE EYE IS OPEN' : ' · WAIT FOR THE EYE';
-    setText('boss-name', BOSSES[b.key].name + (b.phase > 1 ? ` · PHASE ${b.phase}` : '') + extra);
+    // name + phase on one line, the hint on its own line (no orphan word when the plate wraps)
+    setHTML('boss-name', `<span class="bn">${BOSSES[b.key].name + (b.phase > 1 ? ` · PHASE ${b.phase}` : '')}</span>` + (extra ? `<span class="bh">${extra.slice(3)}</span>` : ''));
     $('bossbar').querySelector('i').style.width = Math.max(0, (b.hp / b.max) * 100).toFixed(1) + '%';
   }
+}
+
+// live medal tracker on the HUD: UNBROKEN / DEAD EYE / PAR delta while this sector can still earn medals (reads W, never changes it)
+function medalTrack(W) {
+  const s = W.sector;
+  if (G.mode !== 'campaign' || W.mode !== 'campaign' || W.diff === 'easy' || !G.run || !G.run.full || G.run.continues) { setHTML('medtrack', ''); return; }
+  // 'lost' (struck through) only for what cannot come back (a death, past par); aim below the mark can still recover ('low')
+  const chip = (id, ok, txt, st = ok ? 'ok' : 'lost') => `<b class="${medals.has(id) ? 'got ' : ''}${st}">${txt}</b>`;
+  const acc = W.stats.shots > 0 ? W.stats.hits / W.stats.shots : 0, aimOk = acc >= AIM_MEDAL;
+  const r = parTime(s) - W.secT, a = r >= 0 ? Math.floor(r) : Math.ceil(-r);
+  const pt = `${r < 0 ? '+' : '−'}${Math.floor(a / 60)}:${String(a % 60).padStart(2, '0')}`;
+  setHTML('medtrack', chip(`s${s}clean`, W.stats.deaths === 0, 'UNBROKEN') + chip(`s${s}aim`, aimOk, `AIM ${Math.round(acc * 100)}%`, aimOk ? 'ok' : 'low') + chip(`s${s}par`, r >= 0, `PAR ${pt}`));
 }
 
 // banners, captions, popups, tutorial prompts
 function banner(a, b, t = 2.2) {
   const el = $('banner');
   el.querySelector('.b1').textContent = a; el.querySelector('.b2').textContent = b || '';
-  el.classList.remove('hidden', 'go'); void el.offsetWidth; el.classList.add('go');
+  el.classList.remove('hidden', 'go', 'bk', 'bi'); void el.offsetWidth; el.classList.add('go');
   G.bannerT = t;
 }
+// boss title card ('bi') and boss kill ('bk'): the same banner with a plate behind the title and a big second line
+function bossBanner(cls, a, b, t) { banner(a, b, t); $('banner').classList.add(cls); }
+// the boss bar pulses on every hit (restarts its animation)
+function bossPulse() { const el = $('bossbar'); el.classList.remove('hitp'); void el.offsetWidth; el.classList.add('hitp'); }
 function caption(text, t = 4) { const el = $('caption'); el.textContent = text; el.classList.remove('hidden'); G.capT = t; }
 const P = { x: 0, y: 0, z: 0 };
 function popup(text, lane, d, color, big) {
@@ -326,7 +370,7 @@ const TUT = {
   // touch gets a short version: on a phone held sideways the box has only the strip beside the web
   controls: () => (I.lastKind === 'touch' ? 'Drag a thumb left and right to slide along the rim: it <b>fires</b> while it is down. Enemies climb toward you from the far end. <b>PURGE</b> wipes the web once per web.'
     : `Slide along the rim with ${keyName('move')} and fire down your lane with ${keyName('fire')}. Enemies climb toward you from the far end. <b>PURGE</b> (${keyName('purge')}) wipes the web once per web.`),
-  rim: () => `An enemy reached the <b>RIM</b>: it hunts you along the edge. When your lane flares <b>RED</b> it is about to <b>POUNCE</b> onto you: slide away or get into its lane and shoot it first.`,
+  rim: () => `An enemy reached the <b>RIM</b>: it hunts you along the edge. When your lane flares <b>${settings.tell === 'safe' ? 'AMBER' : 'RED'}</b> it is about to <b>POUNCE</b> onto you: slide away or get into its lane and shoot it first.`,
   dive: () => `<b>DIVE!</b> You fly down the tube to the next web. Crystal <b>SPINES</b> left in a lane will wreck you: shoot them away or slide out of their lane.`,
   lancer: () => `A <b>LANCER</b>. Its lance glows, then it fires a slow bolt up its lane: shoot the bolt down or slide aside.`,
   spinewright: () => `A <b>SPINEWRIGHT</b> lays a crystal spine as it climbs. Chip it down before the dive, or remember which lane it is in.`,
@@ -419,7 +463,7 @@ function handleEvents(list, W, live) {
       case 'pwend': if (live && mine(e)) A.play('pwend', { vol: 0.5, gap: 0.2 }); break;
       case 'web':
         if (live) {
-          if (e.boss) banner('WARNING', `${BOSSES[bossKey(W)].name} IS RISING`, 2.6);
+          if (e.boss) bossBanner('bi', BOSSES[bossKey(W)].name, 'WARNING · A GUARDIAN IS RISING', 3.2);
           else banner(e.label, (W.mode === 'endless' ? `${W.R.count} CLIMBERS · ${SECTORS[W.k].name}` : `${SECTORS[W.sector].name} · ${W.R.count} CLIMBERS`) + (W.def && W.def.rot ? ' · THE WEB TURNS' : '') + (W.def && W.def.breathe ? ' · THE WEB BREATHES' : ''), 1.8);
           A.play('web', { vol: 0.7, gap: 0 });
           if (G.run && W.mode === 'campaign') G.run.check = { web: W.web, score: W.score };
@@ -436,13 +480,13 @@ function handleEvents(list, W, live) {
         if (live) say('boss', { key: true, delay: 0.5 });
         break;
       case 'bossfight': if (live && G.mode === 'demo') caption(`DEMO · ${BOSSES[e.key].name}: the autopilot hunts the openings`, 3); break;
-      case 'bosshit': A.play('bosshit', { vol: 0.4, gap: 0.05 }); break;
+      case 'bosshit': A.play('bosshit', { vol: 0.4, gap: 0.05 }); if (live) bossPulse(); break;
       case 'clank': case 'refract': A.play('clank', { vol: 0.3, gap: 0.06 }); break;
       case 'seg': A.play('boomS', { vol: 0.7, gap: 0.05 }); if (live) rumble(0.2, 0.2, 80); break;
       case 'headdown': A.play('boomM', { vol: 0.9, gap: 0 }); if (live) caption('A HEAD IS DOWN', 1.5); break;
       case 'regrow': if (live) caption('THE HEADS GROW BACK', 1.8); break;
       case 'eyeopen': A.play('reflect', { vol: 0.5, gap: 0.2, rate: 0.7 }); break;
-      case 'phase': A.play('phase', { vol: 1, gap: 0 }); R.trauma = Math.min(1, R.trauma + 0.3); if (live) caption(`${BOSSES[e.key].name} · PHASE ${e.phase}`, 2.5); break;
+      case 'phase': A.play('phase', { vol: 1, gap: 0 }); R.trauma = Math.min(1, R.trauma + 0.3); break; // the boss plate shows the phase
       case 'pull': A.play('pull', { vol: 0.8, gap: 0 }); if (live) caption('GRAVITY PULL: FIGHT IT', 2); break;
       case 'crush': A.play('crush', { vol: 1, gap: 0 }); if (live) rumble(1, 1, 500); break;
       case 'bosskill':
@@ -452,7 +496,7 @@ function handleEvents(list, W, live) {
         if (live) {
           rumble(0.8, 0.8, 700);
           if (G.mode !== 'online') G.pendingClip = { n: W.n, kind: 'boss', sig: worldSig(W) };
-          banner(`${BOSSES[e.key].name} DESTROYED`, `+${e.pts.toLocaleString()}`, 2.6);
+          bossBanner('bk', `${BOSSES[e.key].name} DESTROYED`, `+${e.pts.toLocaleString()}`, 2.8);
           say('bossdown', { key: true, delay: 0.8 });
           if (W.mode === 'campaign') A.sting('clear'); else setTimeout(() => { if (G.W === W) A.playMusic(SECTORS[W.k].music); }, 2500);
         }
@@ -470,6 +514,7 @@ function onWorldOver(W) {
   A.stopLoops(); I.releaseLock();
   if (G.mode === 'online') { results(W, W.result === 'clear' ? 'SECTOR CLEAR' : 'THE WEB FELL', 'CO-OP'); return; }
   if (G.mode === 'playthrough') { playthroughNext(W); return; }
+  if (G.mode === 'daily') { A.sting(W.result === 'clear' ? 'clear' : 'over'); say(W.result === 'clear' ? 'bossdown' : 'gameover', { key: true, delay: 1 }); results(W, W.result === 'clear' ? 'DAILY CLEARED' : 'DAILY OVER', `DAILY ${G.run.daily} · SECTOR ${W.sector + 1} · ${webLabel(W)}`); return; }
   if (W.mode === 'endless') { A.sting('over'); say('gameover', { key: true, delay: 1 }); results(W, 'DESCENT OVER', `${webLabel(W)} · ${fmtT(W.fightT)} DOWN THE TUBES`); return; }
   const s = W.sector;
   if (W.result === 'clear') {
@@ -577,6 +622,7 @@ function results(W, title, sub, banked = false) {
   if (W.mode === 'endless') st.push(['WEBS CLEARED', W.webN], ['TIME', fmtT(W.fightT)]);
   else st.push(['SECTOR TIME', fmtT(W.secT)]);
   st.push(['ENEMIES DESTROYED', W.stats.kills], ['ACCURACY', `${Math.round((100 * W.stats.hits) / Math.max(1, W.stats.shots))}%`], ['RIMRUNNERS LOST', W.stats.deaths], ['PURGES USED', W.stats.purges]);
+  resHero(W); st.shift();
   $('res-stats').innerHTML = st.map(([a, b]) => `<div class="stat"><span>${a}</span><b>${b}</b></div>`).join('');
   const got = G.run ? G.run.newMedals : [];
   $('res-medals').innerHTML = got.map((id) => { const m = MEDALS.find((q) => q.id === id); return `<span class="medal on new">🏅 ${m.name} · S${m.sector + 1}</span>`; }).join('');
@@ -595,7 +641,7 @@ function results(W, title, sub, banked = false) {
   const canCont = W.mode === 'campaign' && W.result !== 'clear' && G.mode === 'campaign' && G.run && G.run.check;
   $('res-cont').classList.toggle('hidden', !canCont);
   if (canCont) $('cont-sub').textContent = `${W.web >= WEBS ? 'The boss' : 'Web ' + (G.run.check.web + 1)} of sector ${W.sector + 1} with ${START_LIVES} Rimrunners, score back to ${G.run.check.score.toLocaleString()}`;
-  const board = boardOf(W.mode, W.diff);
+  const board = runBoard(W);
   G.board = board; G.ini = null;
   $('ini-wrap').classList.add('hidden');
   if (G.mode !== 'online' && G.mode !== 'playthrough' && board.qualifies(W.score)) {
@@ -610,6 +656,17 @@ function results(W, title, sub, banked = false) {
   // a pad's A / ENTER on the results: CONTINUE after a fall, NEXT SECTOR for the co-op host, otherwise FINISH
   // (FINISH posts the initials: the d-pad is busy typing them, so A must land on it)
   setSel(canCont ? $('res-cont') : netNext ? $('res-net') : $('res-btns').querySelector('[data-act="done"]'));
+}
+// results: the score as the hero number with a comparison against this device's best on the same board
+function resHero(W) {
+  const solo = G.mode !== 'online' && G.mode !== 'playthrough';
+  const prev = solo ? runBoard(W).best() : 0;
+  let cmp = '', cls = '';
+  if (solo && prev > 0 && W.score > prev) { cmp = `NEW BEST · +${(W.score - prev).toLocaleString()} OVER ${prev.toLocaleString()}`; cls = 'up'; }
+  else if (solo && prev > 0) { cmp = W.score === prev ? 'TIED YOUR BEST' : `YOUR BEST ${prev.toLocaleString()} · ${(prev - W.score).toLocaleString()} SHORT`; }
+  else if (solo && W.score > 0) { cmp = 'FIRST SCORE ON THIS BOARD'; cls = 'up'; }
+  $('res-hero').className = cls;
+  $('res-hero').innerHTML = `<span>${W.mode === 'endless' ? 'DESCENT SCORE' : 'SCORE'}</span><b>${W.score.toLocaleString()}</b>` + (cmp ? `<i>${cmp}</i>` : '');
 }
 function renderIni() { const b = $('ini').children; for (let i = 0; i < 3; i++) { b[i].textContent = G.ini.chars[i]; b[i].className = i === G.ini.i ? 'cur' : ''; } }
 async function postScore() { if (G.ini) { const q = G.ini; G.ini = null; $('ini-wrap').classList.add('hidden'); await G.board.submit(q.chars.join(''), q.score, q.level, q.extra); } }
@@ -764,6 +821,7 @@ function act(a) {
   switch (a) {
     case 'campaign': A.play('uiok', { gap: 0 }); startCampaign(+params.get('sector') || 0); break;
     case 'endless': A.play('uiok', { gap: 0 }); startEndless(); break;
+    case 'daily': A.play('uiok', { gap: 0 }); startDaily(); break;
     case 'playthrough': A.play('uiok', { gap: 0 }); startPlaythrough(); break;
     case 'sectors': buildSectors(); show('sectors'); break;
     case 'online': show('online'); netStatus(''); $('room-wrap').classList.add('hidden'); $('net-go').classList.add('hidden'); syncSegs(); break;
@@ -808,6 +866,35 @@ for (const inp of document.querySelectorAll('[data-set]')) {
   inp.value = settings[inp.dataset.set];
   inp.addEventListener('input', () => { settings[inp.dataset.set] = +inp.value; saveSettings(); applySettings(); });
 }
+// Rimrunner paint schemes, unlocked by medals (render only: MD.rimrunner takes the colours, same shader programs)
+const SUITS = [
+  { id: 'cobalt', name: 'COBALT', need: 0, color: 0x2f8cff, accent: 0x9fe8ff },
+  { id: 'jade', name: 'JADE', need: 3, color: 0x1fb87a, accent: 0xa4ffd8 },
+  { id: 'violet', name: 'VIOLET', need: 6, color: 0x7a4dff, accent: 0xd9c2ff },
+  { id: 'gold', name: 'GOLD', need: 9, color: 0xd9a21f, accent: 0xfff0a8 },
+  { id: 'obsidian', name: 'OBSIDIAN', need: 12, color: 0x2a303c, accent: 0x7fe0ff },
+  { id: 'arctic', name: 'ARCTIC', need: 15, color: 0xdfe9f5, accent: 0x8fe0ff },
+];
+const hex6 = (c) => '#' + c.toString(16).padStart(6, '0');
+const suitOf = (id) => SUITS.find((s) => s.id === id && medals.size >= s.need) || SUITS[0];
+function syncSuits() {
+  const el = $('suits'); if (!el) return;
+  if (!el.children.length) el.innerHTML = SUITS.map((s) => `<button data-v="${s.id}" style="--sc:${hex6(s.color)};--sa:${hex6(s.accent)}"><i></i></button>`).join('');
+  for (const b of el.children) {
+    const s = SUITS.find((q) => q.id === b.dataset.v), open = medals.size >= s.need;
+    b.disabled = !open; b.title = open ? s.name : `${s.name} · ${s.need} MEDALS`; b.setAttribute('aria-label', open ? `${s.name} paint` : `${s.name} paint, locked until ${s.need} medals`);
+  }
+  const cur = suitOf(settings.suit), nx = SUITS.find((s) => medals.size < s.need);
+  settings.suit = cur.id;
+  $('suit-name').textContent = cur.name + (nx ? ` · ${nx.name} AT ${nx.need} MEDALS (YOU HAVE ${medals.size})` : ' · EVERY SCHEME OPEN');
+}
+// a new paint scheme: drop the built Rimrunner views so the renderer rebuilds them in the new colours (cached per colour, same programs)
+function applySuit() {
+  const s = suitOf(settings.suit);
+  if (R.suit && R.suit.color === s.color && R.suit.accent === s.accent) return;
+  R.suit = s;
+  if (R.views && R.views.p) { for (const v of R.views.p.values()) R.root.remove(v.g); R.views.p.clear(); }
+}
 function syncSegs() { for (const s of document.querySelectorAll('.seg')) for (const b of s.children) b.classList.toggle('on', String(settings[s.dataset.opt]) === b.dataset.v); }
 function applySettings() {
   if ($('diff-desc')) $('diff-desc').textContent = DIFFICULTY[settings.diff].desc;
@@ -816,6 +903,7 @@ function applySettings() {
   if (settings.talk === 'off') A.hush();
   I.sens = +settings.sens || 1;
   applyCalm();
+  syncSuits(); applySuit(); R.tellSafe = settings.tell === 'safe';
   if (G.state === 'play') setHud(true);
 }
 applySettings();
@@ -894,7 +982,7 @@ document.addEventListener('visibilitychange', () => {
 let bgWorker = null;
 function bgTicks(on) {
   if (on && !bgWorker) {
-    try { bgWorker = new Worker(new URL('./tick.js?v=6', import.meta.url)); bgWorker.onmessage = bgTick; } catch (e) { bgWorker = null; console.warn('background tick', e); return; }
+    try { bgWorker = new Worker(new URL('./tick.js?v=7', import.meta.url)); bgWorker.onmessage = bgTick; } catch (e) { bgWorker = null; console.warn('background tick', e); return; }
   }
   if (bgWorker) bgWorker.postMessage(on ? 25 : 0); // 40 ticks a second: a snapshot every second tick = 20 a second
 }
@@ -943,6 +1031,7 @@ function frame(now) {
 function tickFrame(dt) {
   I.pollPads();
   perf(dt);
+  document.body.classList.toggle('rs-hold', G.state === 'paused' || G.state === 'paused-online');
   if (G.slowT > 0) { G.slowT -= dt; if (G.slowT <= 0) { G.timeScale = 1; A.setRate(1); } }
   if (G.state === 'play' || G.state === 'paused-online') playStep(dt);
   else if (G.state === 'replay') replayStep(dt);
@@ -1074,13 +1163,17 @@ function placeBoard() {
 addEventListener('resize', placeBoard);
 placeBoard();
 
+Object.assign(window.__rs, { startDaily, dailyCfg, dailyBoard });
+function dailySub() { const c = dailyCfg(); $('daily-sub').textContent = `Today: sector ${c.sector + 1}, ${SECTORS[c.sector].name}, on Hard · same for everyone`; }
+dailySub();
+
 // ------------------------------------------------------------------ boot
 async function boot() {
   try { R.warmUp(); } catch (e) { console.warn('warm-up', e); }
   $('loading').style.opacity = '0'; $('loading').classList.add('gone'); // fading out: taps go through at once
   setTimeout(() => $('loading').remove(), 700);
   toTitle();
-  if (params.has('test')) { const m = await import('./tests.js?v=6'); m.runTests(window.__rs); }
+  if (params.has('test')) { const m = await import('./tests.js?v=7'); m.runTests(window.__rs); }
   else if (params.has('playthrough')) { A.unlock(); startPlaythrough(); }
   else if (G.autopilot) { A.unlock(); if (params.has('endless')) startEndless(); else startCampaign(+params.get('sector') || 0); }
   else if (params.has('room')) { act('online'); $('join-code').value = cleanCode(params.get('room')); }

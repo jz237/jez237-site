@@ -3,9 +3,10 @@
 // FIXED pool of flash lights (only their intensity changes, never their number or visibility).
 // Purely visual (uses Math.random), never touches the simulation.
 import * as THREE from '../vendor/three.module.min.js';
-import { rockGeometry } from './models.js?v=6';
+import { rockGeometry } from './models.js?v=7';
 
 export const CALM = { on: false };
+const _pc = new THREE.Color();
 
 const PVERT = /* glsl */ `
 attribute float aSize; attribute float aAlpha; attribute vec3 aColor; attribute float aRot;
@@ -88,7 +89,8 @@ export class FX {
     // debris: instanced rock chips + metal shards
     this.debrisN = q.debris;
     this.rockI = new THREE.InstancedMesh(rockGeometry(3, 0.7), new THREE.MeshStandardMaterial({ color: 0x9a968f, roughness: 0.95 }), this.debrisN);
-    this.metalI = new THREE.InstancedMesh(new THREE.BoxGeometry(1, 0.12, 0.6), new THREE.MeshStandardMaterial({ color: 0x55585e, roughness: 0.4, metalness: 0.9 }), this.debrisN);
+    // metal shards: thin torn triangular plates of hull, bright steel with a hot glow (only values, same program)
+    this.metalI = new THREE.InstancedMesh(new THREE.CylinderGeometry(0.62, 0.62, 0.08, 3).scale(1, 1, 0.55), new THREE.MeshStandardMaterial({ color: 0x4e535b, roughness: 0.32, metalness: 0.9, emissive: 0x5a2006, envMapIntensity: 0.6 }), this.debrisN);
     for (const m of [this.rockI, this.metalI]) { m.castShadow = true; m.receiveShadow = true; m.frustumCulled = false; m.instanceMatrix.setUsage(THREE.DynamicDrawUsage); scene.add(m); }
     this.deb = { rock: [], metal: [] };
     for (let i = 0; i < this.debrisN; i++) { this.deb.rock.push({ life: 0 }); this.deb.metal.push({ life: 0 }); }
@@ -168,6 +170,21 @@ export class FX {
     void g;
     this.dust(x, y, z, { n: Math.round(5 + size * 4), s0: 0.6 + size * 0.3, s1: 2.2 + size * 1.4, life: 2.2 + size * 0.6, vy: 0.2, up: 0.6, jit: 2 + size, a: 0.4, k: o.smoke ?? 0.55, drag: 1, grav: 0.05, spread: 0.6 + size * 0.4 });
     this.ring(x, y, z, 1.6 + size * 2.2, o.ringColor || 0xffc890);
+    if (o.shards) this.slag(x, y, z, size, o.vx);
+  }
+  // machine wreckage: extra torn hull shards plus long-lived hot slag sparks that arc and fall (no rock chips)
+  slag(x, y, z, size, vx) {
+    this.debris(x, y, z, { metal: true, n: Math.round(2 + size * 3), speed: 7 + size * 2, size: 0.18 + size * 0.06, vx, trail: false });
+    this.sparks(x, y, z, { n: Math.round(8 + size * 8), speed: 5 + size * 2.5, s: 0.34, life: 1.1, grav: 4, vx, r: 1, g: 0.58, b: 0.22 });
+    this.sparks(x, y, z, { n: Math.round(4 + size * 3), speed: 10 + size * 3, s: 0.16, life: 0.45, grav: 0.5, vx, r: 0.85, g: 0.95, b: 1 });
+  }
+  // a pop that keeps a minimum size on screen, for kills deep in the tube (dist = distance from the camera)
+  pop(x, y, z, dist, color = 0xffa060) {
+    const c = _pc.set(color), s = Math.max(0, dist) * 0.16;
+    if (s < 5) return;
+    this.fireP.add({ x, y, z, vx: 0, vy: 0, vz: 0, s0: s * 0.55, s1: s * 1.25, max: 0.32, a: CALM.on ? 0.45 : 0.95, r: c.r * 2.6 + 0.3, g: c.g * 2.4 + 0.25, b: c.b * 2 + 0.2, drag: 0, grav: 0, fade: 0.8, vr: 0 });
+    this.fireP.add({ x, y, z, vx: 0, vy: 0, vz: 0, s0: s * 0.25, s1: s * 0.5, max: 0.2, a: 1, r: 3, g: 2.8, b: 2.4, drag: 0, grav: 0, fade: 0.9, vr: 0 });
+    this.ring(x, y, z, s * 0.9, color, 0.45);
   }
 
   clear() {

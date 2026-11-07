@@ -4,12 +4,12 @@
 // spire and its lightning, telegraph ribbons for every hazard and boss attack, HDR post with bloom.
 // Nothing here changes the world.
 import * as THREE from '../vendor/three.module.min.js';
-import { Post } from './post.js?v=6';
-import * as TX from './textures.js?v=6';
-import * as MD from './models.js?v=6';
-import { FX, CALM } from './fx.js?v=6';
-import { F, POWERUPS, BOSSES, HUNTER, LAYOUT } from './config.js?v=6';
-import { weakPos } from './sim.js?v=6';
+import { Post } from './post.js?v=7';
+import * as TX from './textures.js?v=7';
+import * as MD from './models.js?v=7';
+import { FX, CALM } from './fx.js?v=7';
+import { F, POWERUPS, BOSSES, HUNTER, LAYOUT } from './config.js?v=7';
+import { weakPos } from './sim.js?v=7';
 
 export { CALM };
 const RR = F.R, H = F.H;
@@ -643,6 +643,7 @@ export class Renderer {
       if (!V) { V = this.riderView('player', false, p.id); this.views.p.set(p.id, V); }
       V.outer.visible = p.alive && !(p.inv > 0 && Math.floor(p.inv * 10) % 2 === 0 && p.inv < F.inv - 0.2);
       if (p.alive) this.animRider(V, p, dt, t);
+      this.hitFlash(V, p.alive ? p.hitT : 0, dt, 0.13);   // players: not on their own win (0.12) - only real knocks
       const LL = this.lanceLights[p.id - 1];
       if (LL) { if (p.alive) { toWorld(p.x + p.face * 2.1, p.y + F.lanceH, LL.position, 0.6); LL.intensity = 6 + Math.sin(t * 9) * 1.5; LL.color.set(this.suit[p.id - 1].accent); } else LL.intensity = 0; }
     });
@@ -654,9 +655,11 @@ export class Renderer {
       const s = Math.min(1, V.born / 0.35);
       V.v.g.scale.setScalar(0.3 + 0.7 * s);
       this.animRider(V, r, dt, t);
+      this.hitFlash(V, r.hitT, dt);
     }
     for (const [id, V] of this.views.r) if (!seen.has(id)) { this.scene.remove(V.outer); this.views.r.delete(id); }
     // ghosts: unhorsed riders tumbling away
+    for (const G of this.ghosts) if (G.v.flashOn) this.flashView(G.v, false);
     this.ghosts = this.ghosts.filter((G) => {
       G.t += dt; G.vy -= 14 * dt; G.x += G.vx * dt; G.y += G.vy * dt; G.spin += dt * G.w;
       this.place(G.outer, G.x, G.y, G.face);
@@ -671,8 +674,11 @@ export class Renderer {
     this.syncPickups(W, t);
     this.syncHunter(W, dt, t);
     this.syncBoss(W, dt, t);
+    if (this.bossV && W.boss) this.hitFlash(this.bossV, W.boss.hitT, dt);
     this.syncHaz(W, dt, t);
     this.syncShots(W);
+    this.syncBooms(W);
+    this.markWeak(W, t);
     // the spire crown pulses before lightning
     let charge = 0;
     for (const h of W.haz) if (h.k === 'bolt' && h.t < h.T) charge = Math.max(charge, h.t / h.T);
@@ -853,21 +859,21 @@ export class Renderer {
     switch (e.k) {
       case 'unhorse': {
         P(e.x, e.y + 1.2); fx.sparks(_v.x, _v.y, _v.z, { n: 30, speed: 9, r: 1, g: 0.85, b: 0.5 }); fx.debris(_v.x, _v.y, _v.z, { metal: true, n: 8, speed: 6, size: 0.3, trail: true }); fx.flash(_v.x, _v.y, _v.z, 30, 0xffc080, 0.3);
-        this.shock(e.x, e.y + 1, 0.6); this.trauma = Math.min(1, this.trauma + 0.25);
+        this.shock(e.x, e.y + 1, 0.6); this.trauma = Math.min(1, this.trauma + (e.pid ? 0.45 : 0.3));
         const V = this.views.r.get(e.id);
         if (V) { this.views.r.delete(e.id); this.ghosts.push({ outer: V.outer, v: V.v, x: e.x, y: e.y, vx: e.vx * 0.5 + (Math.random() - 0.5) * 4, vy: 5, face: V.face, spin: 0, w: (Math.random() < 0.5 ? -1 : 1) * 5, t: 0, split: true }); }
         break;
       }
       case 'flee': case 'drown': { const V = this.views.r.get(e.id); if (V) { this.views.r.delete(e.id); this.ghosts.push({ outer: V.outer, v: V.v, x: e.x, y: e.y || 0, vx: 0, vy: e.k === 'flee' ? 14 : -2, face: V.face, spin: 0, w: 0, t: 0.9 }); } break; }
-      case 'clang': P(e.x, e.y); fx.sparks(_v.x, _v.y, _v.z, { n: e.soft ? 8 : 22, speed: e.soft ? 4 : 8, r: 1, g: 0.9, b: 0.6 }); if (!e.soft) { fx.flash(_v.x, _v.y, _v.z, 14, 0xfff0c0, 0.15); this.trauma = Math.min(1, this.trauma + 0.15); } break;
+      case 'clang': P(e.x, e.y); fx.sparks(_v.x, _v.y, _v.z, { n: e.soft ? 8 : 22, speed: e.soft ? 4 : 8, r: 1, g: 0.9, b: 0.6 }); if (!e.soft) { fx.flash(_v.x, _v.y, _v.z, 14, 0xfff0c0, 0.15); this.trauma = Math.min(1, this.trauma + 0.28); } break;
       case 'death': {
         P(e.x, e.y + 1); fx.explode(_v.x, _v.y, _v.z, 1.4, { metal: true, color: 0xffa060 }); this.trauma = Math.min(1, this.trauma + 0.6); this.shock(e.x, e.y + 1, 1);
         const V = this.views.p.get(e.pid);
         if (V && e.cause !== 'sea') { const v = MD.lancer('player', { ...this.suit[e.pid - 1] }); const outer = new THREE.Group(); outer.matrixAutoUpdate = false; outer.add(v.g); this.scene.add(outer); this.ghosts.push({ outer, v, x: e.x, y: e.y, vx: (e.vx || 0) * 0.4, vy: 4, face: V.face, spin: 0, w: 6, t: 0, split: true }); }
-        this.flashScreen(0.35, 0xff5a3a);
+        this.flashScreen(0.75, 0xff3a24, 1.1); this.hurtT = 1;
         break;
       }
-      case 'armor': P(e.x, e.y + 1); fx.sparks(_v.x, _v.y, _v.z, { n: 18, speed: 6, r: 0.6, g: 0.85, b: 1 }); this.ring3(e.x, e.y + 1, 2.2, 0x7fd8ff); this.trauma = Math.min(1, this.trauma + 0.3); this.flashScreen(0.18, 0x7fd8ff); break;
+      case 'armor': P(e.x, e.y + 1); fx.sparks(_v.x, _v.y, _v.z, { n: 18, speed: 6, r: 0.6, g: 0.85, b: 1 }); this.ring3(e.x, e.y + 1, 2.2, 0x7fd8ff); this.trauma = Math.min(1, this.trauma + 0.3); this.flashScreen(0.45, 0x7fd8ff, 1.6); this.hurtT = Math.max(this.hurtT || 0, 0.5); break;
       case 'splash': P(e.x, 0, 0); fx.splash(_v.x, 0, _v.z, e.big ? 1.6 : 1); break;
       case 'collect': P(e.x, e.y); fx.fire(_v.x, _v.y, _v.z, { n: 8, s: 0.7, sp: 0.4 }); fx.sparks(_v.x, _v.y, _v.z, { n: 14, speed: 5, r: 1, g: 0.7, b: 0.3 }); this.ring3(e.x, e.y, 1.6, 0xffa040); break;
       case 'hatch': P(e.x, e.y); fx.flash(_v.x, _v.y, _v.z, 10, 0xff7a2a, 0.5); break;
@@ -886,7 +892,7 @@ export class Renderer {
       case 'gust': this.shock(e.x, e.y, 1.4); this.ring3(e.x, e.y, 6, 0xd8e8ff); break;
       case 'bosshit': P(e.x, e.y); fx.sparks(_v.x, _v.y, _v.z, { n: 36, speed: 10, r: 1, g: 0.8, b: 0.5 }); fx.flash(_v.x, _v.y, _v.z, 40, 0xffd0a0, 0.25); this.shock(e.x, e.y, 0.9); this.trauma = Math.min(1, this.trauma + 0.35); break;
       case 'wpdown': P(e.x, e.y); fx.explode(_v.x, _v.y, _v.z, 2, { metal: true }); this.trauma = Math.min(1, this.trauma + 0.6); this.flashScreen(0.25, 0xffe0c0); break;
-      case 'bossdown': { const B = W.boss; if (B) for (let i = 0; i < 5; i++) setTimeout(() => { P(B.x + (Math.random() - 0.5) * 6, B.y + Math.random() * 3); fx.explode(_v.x, _v.y, _v.z, 2.6, { metal: true }); this.trauma = Math.min(1, this.trauma + 0.5); }, i * 260); this.flashScreen(0.4, 0xffffff); break; }
+      case 'bossdown': this.bossFinale(e, W); break;
       case 'hunterdown': P(e.x, e.y + 0.8); fx.explode(_v.x, _v.y, _v.z, 2, { metal: true, color: 0xff6a40 }); this.trauma = Math.min(1, this.trauma + 0.5); break;
       case 'crumble': P(e.x, e.y - 0.5); fx.debris(_v.x, _v.y, _v.z, { n: 20, speed: 4, size: 0.4, sp: 3 }); fx.dust(_v.x, _v.y, _v.z, { n: 14, s0: 1.2, s1: 4, life: 3, spread: 5 }); break;
       case 'shatter': P(e.x, e.y); if (e.kind === 'blob') fx.fire(_v.x, _v.y, _v.z, { n: 8, s: 0.8 }); else fx.sparks(_v.x, _v.y, _v.z, { n: 14, speed: 6, r: e.kind === 'orb' ? 0.7 : 0.8, g: e.kind === 'orb' ? 0.4 : 0.95, b: 1 }); if (e.sea) fx.splash(_v.x, 0, _v.z, 0.6); break;
@@ -900,6 +906,69 @@ export class Renderer {
       case 'summon': P(e.x, e.y + 2); fx.flash(_v.x, _v.y, _v.z, 20, this.look.accent, 0.4); break;
       default: break;
     }
+  }
+  // boss kill finale: a long white-gold flash, accent shockwaves and a chain of big blasts timed on the WORLD clock
+  // (W.t), so pause, slow-mo and hit-stop hold them (they used real-time setTimeout before). No new lights: fx.flash uses the pool.
+  bossFinale(e, W) {
+    const B = W.boss, fx = this.fx, x = B ? B.x : e.x, y = B ? Math.max(B.y, 1) : (e.y || 8), acc = this.look.accent;
+    toWorld(x, y, _v); fx.explode(_v.x, _v.y, _v.z, 3.4, { metal: true }); fx.flash(_v.x, _v.y, _v.z, 90, 0xfff0d0, 0.6);
+    fx.sparks(_v.x, _v.y, _v.z, { n: 60, speed: 14, r: 1, g: 0.85, b: 0.55 });
+    this.shock(x, y, 1.8); this.ring3(x, Math.max(0.3, y - 1), 7, acc); this.trauma = Math.min(1, this.trauma + 0.7);
+    this.flashScreen(0.85, 0xfff4e0, 0.75);
+    this.booms = (this.booms || []).filter((b) => b.W === W);
+    const t0 = W.t;
+    for (let i = 0; i < 6; i++) this.booms.push({ W, at: t0 + 0.18 + i * 0.24, x: x + (Math.random() - 0.5) * 7, y: y + (Math.random() - 0.3) * 4, s: 2.4 + i * 0.25, last: i === 5 });
+  }
+  syncBooms(W) {
+    if (!this.booms || !this.booms.length) return;
+    const fx = this.fx;
+    this.booms = this.booms.filter((b) => {
+      if (b.W !== W) return false;   // another world is drawn now (a new scene, an instant replay): drop them
+      if (W.t < b.at) return true;
+      toWorld(b.x, b.y, _v); fx.explode(_v.x, _v.y, _v.z, b.s, { metal: true }); fx.flash(_v.x, _v.y, _v.z, 50, this.look.accent, 0.35);
+      this.trauma = Math.min(1, this.trauma + 0.45); this.shock(b.x, b.y, b.last ? 1.6 : 0.8);
+      if (b.last) { this.ring3(b.x, Math.max(0.3, b.y - 1), 9, this.look.accent); this.flashScreen(0.6, this.look.accent, 1.2); }
+      return false;
+    });
+  }
+  // a short white flash when the sim sets a fresh hitT (clang, lost duel, weak point struck): the view's meshes swap to one
+  // glow material for 0.09 s (MeshBasic like every glow part = an already warmed program, nothing compiles)
+  hitFlash(V, h, dt, min = 0) {
+    const fresh = V.hitP !== undefined && h > V.hitP + 0.01 && h >= min; V.hitP = h;
+    if (fresh) V.flashT = CALM.on ? 0.05 : 0.09;
+    V.flashT = Math.max(0, (V.flashT || 0) - dt);
+    this.flashView(V.v, V.flashT > 0);
+  }
+  flashView(v, on) {   // the state lives on the model (v) so a ghost (unhorsed, tumbling) can be put back
+    if (on === !!v.flashOn) return;
+    v.flashOn = on;
+    // instanced / skinned / morphing meshes would need their own variant of the glow program (a runtime compile): never swapped
+    if (!v.mats) { v.mats = []; v.g.traverse((o) => { if (o.isMesh && !o.isInstancedMesh && !o.isSkinnedMesh && !o.isBatchedMesh && !o.morphTargetInfluences) v.mats.push([o, o.material]); }); }
+    const fm = MD.glow(0xfff2dc, CALM.on ? 0.8 : 1.2);
+    for (const [o, m] of v.mats) o.material = on ? fm : m;
+  }
+  // live boss weak points: a pulsing camera-facing ring round each one that can be struck now (own small pool, the same
+  // additive MeshBasic program as the sea rings)
+  markWeak(W, t) {
+    if (!this.wpMarks) {
+      const g = new THREE.RingGeometry(0.88, 1, 36);
+      this.wpMarks = [];
+      for (let i = 0; i < 4; i++) { const m = new THREE.Mesh(g, new THREE.MeshBasicMaterial({ color: 0xffd060, transparent: true, depthWrite: false, depthTest: false, blending: THREE.AdditiveBlending, toneMapped: false })); m.visible = false; m.renderOrder = 4; m.frustumCulled = false; this.scene.add(m); this.wpMarks.push(m); }
+    }
+    const B = W.boss; let n = 0;
+    if (B && B.st === 'fight' && B.pts) for (const q of B.pts) {
+      if (n >= this.wpMarks.length) break;
+      if (!(q.hp > 0 && q.on)) continue;
+      const [x, y] = weakPos(B, q);
+      if (y < -0.4) continue;
+      const m = this.wpMarks[n++], pu = 0.5 + 0.5 * Math.sin(t * 6 + q.i);
+      toWorld(x, y, m.position, 1.4);
+      m.quaternion.copy(this.camera.quaternion);
+      m.scale.setScalar(clamp(q.r || 0.8, 0.55, 1.1) * (1.05 + pu * 0.3));
+      m.material.color.set(this.look.accent).multiplyScalar(0.3 + pu * 0.6);
+      m.visible = true;
+    }
+    if (this.wpMarks) for (let i = n; i < this.wpMarks.length; i++) this.wpMarks[i].visible = false;
   }
   ring3(x, y, r, color) { toWorld(x, y, _v, 0.8); this.fx.ring(_v.x, _v.y, _v.z, r, color); }
 
@@ -948,7 +1017,7 @@ export class Renderer {
     this.camPos.set(s * (RR + this.camD), this.camY + 5.2, c * (RR + this.camD));
     this.camLook.set(s * (RR - 3), this.camY, c * (RR - 3));
     this.trauma = Math.max(0, this.trauma - dt * 1.7);
-    const sh = this.trauma * this.trauma * (o.shake ?? 1) * 0.45;
+    const sh = (this.trauma * this.trauma * 0.45 + this.trauma * 0.22) * (o.shake ?? 1);   // linear term: small hits (clang, unhorse) still move the frame a few px
     const cam = this.camera;
     cam.position.copy(this.camPos);
     if (sh > 0) { cam.position.x += (Math.random() - 0.5) * sh; cam.position.y += (Math.random() - 0.5) * sh; cam.position.z += (Math.random() - 0.5) * sh; }
@@ -967,7 +1036,7 @@ export class Renderer {
     return out;
   }
   shock(x, y, k = 1) { this.shocks.push({ x, y, t: 0, max: 0.55, k }); if (this.shocks.length > 6) this.shocks.shift(); }
-  flashScreen(a, color = 0xffffff) { _c.set(color); this.flash.set(_c.r, _c.g, _c.b, Math.max(this.flash.w, a * (CALM.on ? 0.25 : 0.55))); }
+  flashScreen(a, color = 0xffffff, decay = 3) { const w = a * (CALM.on ? 0.25 : 0.55); if (w >= this.flash.w) this.flashK = decay; _c.set(color); this.flash.set(_c.r, _c.g, _c.b, Math.max(this.flash.w, w)); }
 
   render(dt, p = {}) {
     this.time += dt;
@@ -992,7 +1061,7 @@ export class Renderer {
     }
     for (const c of this.cols) if (c.visible) c.material.uniforms.uTime.value = t;
     this.halo.rotation.z = t * 0.2;
-    this.flash.w = Math.max(0, this.flash.w - dt * 3);
+    this.flash.w = Math.max(0, this.flash.w - dt * (this.flashK || 3)); this.hurtT = Math.max(0, (this.hurtT || 0) - dt * 1.4);
     const shocks = [];
     for (const s of this.shocks) {
       s.t += dt;
@@ -1004,7 +1073,7 @@ export class Renderer {
     this.shocks = this.shocks.filter((s) => s.t < s.max);
     const L = this.look;
     this.post.render(this.scene, this.camera, {
-      bloom: L.bloom * (p.bloom ?? 1), threshold: 1.1, exposure: L.exposure * (p.exposure ?? 1), chroma: 0.0016 + (p.slow ? 0.003 : 0), time: t, desat: (p.desat || 0) + (p.slow ? 0.25 : 0), fade: p.fade || 0, vignette: p.slow ? 0.6 : 0.42,
+      bloom: L.bloom * (p.bloom ?? 1), threshold: 1.1, exposure: L.exposure * (p.exposure ?? 1), chroma: 0.0016 + (p.slow ? 0.003 : 0), time: t, desat: (p.desat || 0) + (p.slow ? 0.25 : 0), fade: p.fade || 0, vignette: (p.slow ? 0.6 : 0.42) + (this.hurtT || 0) * (CALM.on ? 0.1 : 0.3),
       flash: this.flash, tint: p.slow ? _tint.set(L.grade[0] * 0.95, L.grade[1] * 0.92, L.grade[2] * 1.15) : _tint.set(...L.grade), shocks, lens: [],
     });
   }

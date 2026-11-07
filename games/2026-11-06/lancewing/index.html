@@ -252,6 +252,21 @@ table.hs tr.me td { color: #fff; background: rgba(255, 179, 71, .1); }
   .card > .btns:last-child { position: sticky; bottom: -12px; padding: 8px 0 10px; margin-bottom: -10px; background: linear-gradient(180deg, rgba(8, 10, 15, 0), rgba(8, 10, 15, .95) 30%); }
   #res-cont-row, #res-btns { margin-top: 7px !important; }
 }
+/* round 2 UI: death cause caption + results row, duel cues over nearby riders, pause scrim, shop shortfall */
+#caption.dc { font-size: 13px; letter-spacing: .1em; color: #ffe1d8; background: rgba(48, 8, 4, .74); border-color: rgba(255, 106, 64, .7); }
+.stat.lw-cause { grid-column: 1 / -1; gap: 12px; align-items: baseline; }
+.stat.lw-cause span { white-space: nowrap; }
+.stat.lw-cause b { font-size: 12px; letter-spacing: .06em; text-align: right; }
+.lw-ctip { grid-column: 1 / -1; padding: 7px 0 3px; font-family: system-ui, sans-serif; font-size: 12px; line-height: 1.4; color: #c9d4e0; }
+#duels { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+body:not(.lw-live) #duels { display: none; }
+.dm { position: absolute; left: 0; top: 0; display: flex; align-items: center; justify-content: center; gap: 3px; min-width: 21px; height: 20px; padding: 0 5px; border-radius: 6px; font: 700 13px/1 system-ui, sans-serif; background: rgba(4, 8, 12, .66); border: 1px solid currentColor; will-change: transform; }
+.dm.win { color: #6cf59a; } .dm.even { color: #ffc861; } .dm.lose { color: #ff6b5e; }
+.dm .sh { width: 9px; height: 11px; background: #c9d0da; border-radius: 2px 2px 50% 50%; }
+body.lw-paused #gl { filter: brightness(.42) saturate(.6); }
+body.lw-paused #tut, body.lw-paused #warns, body.lw-paused #duels, body.lw-paused #popups, body.lw-paused #touch, body.lw-paused #tb-pause, body.lw-paused #caption { visibility: hidden; }
+.upg.poor { opacity: .5; filter: saturate(.45); }
+.upg.poor.sel, .upg.poor:hover { opacity: .75; }
 @media (max-height: 520px) and (min-width: 640px) {
   #results .card { width: min(880px, 96vw); display: grid; grid-template-columns: 1fr 1fr; gap: 0 22px; align-items: start; }
   #res-stats { grid-template-columns: 1fr; }
@@ -446,6 +461,6 @@ addEventListener('error', (e) => window.__lwErrors.push(String(e.message || e)))
 addEventListener('unhandledrejection', (e) => window.__lwErrors.push('rejection: ' + String(e.reason && e.reason.message || e.reason)));
 (() => { const ce = console.error; console.error = (...a) => { window.__lwErrors.push(a.map(String).join(' ')); ce.apply(console, a); }; })();
 </script>
-<script type="module" src="js/main.js?v=6"></script>
+<script type="module" src="js/main.js?v=7"></script>
 </body>
 </html>

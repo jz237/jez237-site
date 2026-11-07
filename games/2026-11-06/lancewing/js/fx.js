@@ -3,7 +3,7 @@
 // heightAt(x, z) gives the ledge top under a point, or -1 over the open sea.
 // Purely visual (uses Math.random), never touches the simulation.
 import * as THREE from '../vendor/three.module.min.js';
-import { rockGeometry } from './models.js?v=6';
+import { rockGeometry } from './models.js?v=7';
 
 export const CALM = { on: false };
 
@@ -147,7 +147,7 @@ export class FX {
       Object.assign(d, { x: x + (Math.random() - 0.5) * (o.sp ?? 0.6), y: y + Math.random() * 0.4, z: z + (Math.random() - 0.5) * (o.sp ?? 0.6),
         vx: Math.cos(a) * sp * 0.8 + (o.vx || 0), vy: 2 + Math.random() * sp, vz: Math.sin(a) * sp * 0.5,
         rx: Math.random() * 6, ry: Math.random() * 6, wx: (Math.random() - 0.5) * 14, wy: (Math.random() - 0.5) * 14,
-        s: (o.size ?? 0.18) * (0.4 + Math.random() * 1.2), life: 3 + Math.random() * 2.5, bounces: 0, trail: o.trail ? 0.6 + Math.random() : 0 });
+        s: (o.size ?? 0.18) * (0.4 + Math.random() * 1.2), life: 3 + Math.random() * 2.5, bounces: 0, trail: o.trail ? 0.25 + Math.random() * 0.3 : 0 });
     }
   }
   flash(x, y, z, intensity, color = 0xffa060, dur = 0.35) {
@@ -219,7 +219,7 @@ export class FX {
           if (d.vy < -1.2 && d.bounces < 3) { d.vy *= -0.35; d.vx *= 0.6; d.vz *= 0.6; d.wx *= 0.5; d.wy *= 0.5; d.bounces++; if (d.bounces === 1) this.dust(d.x, g, d.z, { n: 1, s0: 0.3, s1: 1.1, life: 1.6, vy: 0.3, up: 0.4, jit: 0.6, a: 0.35 }); }
           else { d.vy = 0; d.vx *= 0.8; d.vz *= 0.8; d.wx *= 0.8; d.wy *= 0.8; }
         }
-        if (d.trail > 0 && d.life > 2) { d.trail -= dt; if (Math.random() < 0.5) this.dustP.add({ x: d.x, y: d.y, z: d.z, vx: 0, vy: 0.3, vz: 0, s0: 0.3, s1: 1.2, max: 1.4, a: 0.35, r: 0.15, g: 0.14, b: 0.13, drag: 1, grav: -0.2, fade: 0.7 }); }
+        if (d.trail > 0 && d.life > 2) { d.trail -= dt; if (Math.random() < 0.5) { const c = this.dustColor; this.dustP.add({ x: d.x, y: d.y, z: d.z, vx: 0, vy: 0.3, vz: 0, s0: 0.22, s1: 0.6, max: 0.7, a: 0.28, r: c.r * 0.45, g: c.g * 0.45, b: c.b * 0.45, drag: 1, grav: -0.2, fade: 0.7 }); } }   // short smoke in the sector's dust colour
         const sc = d.s * Math.min(1, d.life / 0.6);
         this._e.set(d.rx, d.ry, 0); this._q.setFromEuler(this._e); this._s.set(sc, sc, sc); this._p.set(d.x, d.y, d.z);
         this._m.compose(this._p, this._q, this._s);

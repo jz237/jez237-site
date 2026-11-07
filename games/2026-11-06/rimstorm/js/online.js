@@ -4,8 +4,8 @@
 // second. The guest steers its own Rimrunner locally (so moving never lags) and reports where it is, the
 // shots it fires and its PURGE / HOP presses; the host re-creates those, so every hit and every death is
 // decided in one place. The relay overwrites the keys t, from, role and start.mode: none are used here.
-import { adoptWeb, purge, laneDist, laneOf } from './sim.js?v=6';
-import { PW_KEYS, ENEMY_KEYS, F } from './config.js?v=6';
+import { adoptWeb, purge, laneDist, laneOf } from './sim.js?v=7';
+import { PW_KEYS, ENEMY_KEYS, F } from './config.js?v=7';
 
 export const PROTOCOL = 1;
 const RELAY = 'wss://steel-duel-online.jez237.workers.dev';

@@ -2,11 +2,11 @@
 // every sector and in ENDLESS DESCENT; (2) a cloned world fed the same inputs stays identical; (3) every
 // death and boss kill recorded with the Recorder replays bit for bit from its saved clip.
 //   node scripts/rimstorm/determinism.mjs [seeds=6]
-import { makeWorld, step, drainEvents, STEP, cloneWorld } from '../../games/2026-11-06/rimstorm/js/sim.js?v=6';
-import { Autopilot } from '../../games/2026-11-06/rimstorm/js/ai.js?v=6';
-import { TYPICAL_UP, WEBS } from '../../games/2026-11-06/rimstorm/js/config.js?v=6';
-import { Recorder, Replay } from '../../games/2026-11-06/rimstorm/js/replay.js?v=6';
-import { hashW } from '../../games/2026-11-06/rimstorm/js/tests.js?v=6';
+import { makeWorld, step, drainEvents, STEP, cloneWorld } from '../../games/2026-11-06/rimstorm/js/sim.js?v=7';
+import { Autopilot } from '../../games/2026-11-06/rimstorm/js/ai.js?v=7';
+import { TYPICAL_UP, WEBS } from '../../games/2026-11-06/rimstorm/js/config.js?v=7';
+import { Recorder, Replay } from '../../games/2026-11-06/rimstorm/js/replay.js?v=7';
+import { hashW } from '../../games/2026-11-06/rimstorm/js/tests.js?v=7';
 
 const seeds = +(process.argv[2] || 6);
 let bad = 0;

@@ -6,8 +6,8 @@
 //   profile 'human': ~0.35 s reaction with scatter, sometimes late, a thumb that can only swing the stick
 //                    so fast, the odd missed beat, sees only nearby threats
 //   profile 'demo' : quick and sharp: the attract mode and the AI playthrough
-import { F, ENEMY, HUNTER, DROP, BOSSES } from './config.js?v=6';
-import { dX, inHazard, lanceBonus, bossBodies, weakPos, ledgeUnder } from './sim.js?v=6';
+import { F, ENEMY, HUNTER, DROP, BOSSES } from './config.js?v=7';
+import { dX, inHazard, lanceBonus, bossBodies, weakPos, ledgeUnder } from './sim.js?v=7';
 
 const PROFILES = {
   human: { react: 0.35, jit: 0.1, late: 0.15, lateT: 0.25, track: 20, maxTrack: 4, steer: 5.5, miss: 0.07, margin: 0.55, fear: 1, greed: 1, beatCD: 0.14, slop: 0.35, panic: 0.06, view: 0.12, rescue: 0.25, rescueMiss: 0.3, rescueLate: 0.4, rescuePlan: 0.06 },

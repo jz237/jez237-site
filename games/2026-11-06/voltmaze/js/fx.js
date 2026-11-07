@@ -2,7 +2,7 @@
 // debris that bounces on the real ground, shock rings, scorch marks and a few flash lights.
 // Purely visual (uses Math.random), never touches the simulation.
 import * as THREE from '../vendor/three.module.min.js';
-import { rockGeometry } from './models.js?v=6';
+import { rockGeometry } from './models.js?v=7';
 
 export const CALM = { on: false };
 
@@ -173,7 +173,8 @@ export class FX {
     if (o.rock !== false) this.debris(x, y, z, { n: Math.round(5 + size * 5), speed: 4 + size * 2, size: 0.12 + size * 0.06, vx: o.vx });
     const nearGround = y - g < 2.5;
     if (nearGround) {
-      this.dust(x, g + 0.2, z, { n: Math.round(8 + size * 8), s0: 1 + size * 0.6, s1: 3 + size * 2.2, life: 4 + size * 1.5, vy: 0.6, up: 1.4, jit: 2.5 + size, a: 0.55, drag: 0.9, grav: 0.02, spread: 1 + size * 0.5 });
+      const sm = o.smoke ?? 1; // < 1 thins the hanging dust cloud (robot kills)
+      this.dust(x, g + 0.2, z, { n: Math.round((8 + size * 8) * sm), s0: 1 + size * 0.6, s1: (3 + size * 2.2) * (0.6 + 0.4 * sm), life: (4 + size * 1.5) * (0.35 + 0.65 * sm), vy: 0.6, up: 1.4, jit: 2.5 + size, a: 0.55 * (0.6 + 0.4 * sm), drag: 0.9, grav: 0.02, spread: 1 + size * 0.5 });
       this.ring(x, g, z, 2 + size * 2.5);
       if (o.scorch !== false) this.scorch(x, z, 0.8 + size * 0.6);
     } else this.dust(x, y, z, { n: Math.round(4 + size * 3), s0: 0.8, s1: 2.6 + size, life: 2.5, vy: 0, up: 0.5, jit: 2, a: 0.3, k: 0.5, drag: 1, grav: 0.3 });

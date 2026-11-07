@@ -2,9 +2,9 @@
 // to show them off, the demo autopilot): does it play with intent and reach the boss inside its 95 s?
 // Prints per sector: time to the boss, boss down, deaths, kills / lured, dashes, EMPs, pickups, rooms.
 //   node scripts/voltmaze/demo_check.mjs [seeds=4]
-import { makeWorld, step, drainEvents, STEP } from '../../games/2026-11-06/voltmaze/js/sim.js?v=6';
-import { Autopilot } from '../../games/2026-11-06/voltmaze/js/ai.js?v=6';
-import { TYPICAL_UP, RAMP, SECTORS } from '../../games/2026-11-06/voltmaze/js/config.js?v=6';
+import { makeWorld, step, drainEvents, STEP } from '../../games/2026-11-06/voltmaze/js/sim.js?v=7';
+import { Autopilot } from '../../games/2026-11-06/voltmaze/js/ai.js?v=7';
+import { TYPICAL_UP, RAMP, SECTORS } from '../../games/2026-11-06/voltmaze/js/config.js?v=7';
 
 const seeds = +(process.argv[2] || 4);
 const LIMIT = 95;

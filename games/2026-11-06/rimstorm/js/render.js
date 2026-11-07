@@ -5,11 +5,11 @@
 // molten core, ice moon, black hole with lensing), every enemy, boss and effect from the simulation, and
 // HDR post. Nothing here changes the world. The light count never changes after boot.
 import * as THREE from '../vendor/three.module.min.js';
-import { Post } from './post.js?v=6';
-import * as TX from './textures.js?v=6';
-import * as MD from './models.js?v=6';
-import { FX, CALM } from './fx.js?v=6';
-import { SHAPES, BOSSES, POWERUPS, F, BOSS_KEYS } from './config.js?v=6';
+import { Post } from './post.js?v=7';
+import * as TX from './textures.js?v=7';
+import * as MD from './models.js?v=7';
+import { FX, CALM } from './fx.js?v=7';
+import { SHAPES, BOSSES, POWERUPS, F, BOSS_KEYS } from './config.js?v=7';
 
 export { CALM };
 export const TUBE = { R: 10, DEPTH: 64, FAR: 0.58 };
@@ -36,10 +36,10 @@ export const LOOKS = [
   { key: 'abyss', rail: 0x3fffc0, lane: 0x4a7a80, laneEm: 0x021210, rib: 0x2c4a50, fog: 0x01121a, fogD: 0.014, sky: 0x000608, key: 0x9fe8ff, keyI: 1.2, keyDir: [-0.2, 1, 0.3], hemi: [0x2a6a7a, 0x020606, 0.45], fill: 0x3fffc0, fillI: 0.6,
     throat: 0x3fffc0, exposure: 1.2, bloom: 0.6, grade: [0.92, 1.02, 1.06], shot: 0xbfffe8, bolt: 0xff5a8a, dust: 0x5a8a90, dustLight: 1.2, lamp: 0x3fffc0, lampI: 80 },
   { key: 'core', rail: 0xff8a3a, lane: 0x6a4a3a, laneEm: 0x1a0602, rib: 0x4a3024, fog: 0x2a0c04, fogD: 0.011, sky: 0x0a0202, key: 0xffc890, keyI: 1.3, keyDir: [0.3, -0.6, 0.5], hemi: [0x803a20, 0x200804, 0.5], fill: 0xff5a1a, fillI: 0.55,
-    throat: 0xff6a1a, exposure: 1.0, bloom: 0.6, grade: [1.06, 0.98, 0.9], shot: 0x9fe8ff, bolt: 0xffe07a, dust: 0x8a6a5a, dustLight: 1.5, lamp: 0xff6a1a, lampI: 90 },
+    throat: 0xff6a1a, exposure: 1.0, bloom: 0.6, grade: [1.06, 0.98, 0.9], shot: 0x9fe8ff, bolt: 0xff4fd8, dust: 0x8a6a5a, dustLight: 1.5, lamp: 0xff6a1a, lampI: 58, throatK: 0.42 },
   { key: 'moon', rail: 0xbfe8ff, lane: 0x9ab8d0, laneEm: 0x060c14, rib: 0x8094a8, fog: 0x1a2a3e, fogD: 0.0075, sky: 0x060a14, key: 0xe8f4ff, keyI: 2.6, keyDir: [-0.5, 0.6, 0.6], hemi: [0xa0c0e8, 0x283040, 0.6], fill: 0x8fb8ff, fillI: 0.7,
     throat: 0xbfe8ff, exposure: 1.0, bloom: 0.55, grade: [0.96, 1.0, 1.06], shot: 0xffd27a, bolt: 0xff5a5a, dust: 0xb0c4d8, dustLight: 1.6, lamp: 0x9fd0ff, lampI: 60 },
-  { key: 'horizon', rail: 0xc09aff, lane: 0x5a5070, laneEm: 0x08040e, rib: 0x4a4060, fog: 0x06040c, fogD: 0.0038, sky: 0x000000, key: 0xffd8b0, keyI: 1.8, keyDir: [0.2, 0.4, -0.8], hemi: [0x6a58a0, 0x0a0610, 0.45], fill: 0xffa060, fillI: 1.0,
+  { key: 'horizon', rail: 0xc09aff, lane: 0x5a5070, laneEm: 0x08040e, rib: 0x4a4060, fog: 0x06040c, fogD: 0.0038, sky: 0x000000, key: 0xffd8b0, keyI: 0.85, keyDir: [0.2, 0.4, -0.8], laneEnv: 0.4, laneR: 0.6, hemi: [0x6a58a0, 0x0a0610, 0.45], fill: 0xffa060, fillI: 1.0,
     throat: 0xc09aff, exposure: 1.1, bloom: 0.6, grade: [1.0, 0.97, 1.06], shot: 0xffd27a, bolt: 0x7af0ff, dust: 0x7a70a0, dustLight: 1.3, lamp: 0xc09aff, lampI: 70 },
 ];
 
@@ -586,10 +586,10 @@ export class Renderer {
     this.key.color.set(L.key); this.key.intensity = L.keyI; this.key.position.set(...L.keyDir).normalize().multiplyScalar(80);
     this.hemi.color.set(L.hemi[0]); this.hemi.groundColor.set(L.hemi[1]); this.hemi.intensity = L.hemi[2];
     this.fill.color.set(L.fill); this.fill.intensity = L.fillI; this.fill.position.set(-L.keyDir[0], -L.keyDir[1], 0.4);
-    this.laneMat.color.set(L.lane); this.laneMat.emissive.set(L.laneEm);
+    this.laneMat.color.set(L.lane); this.laneMat.emissive.set(L.laneEm); this.laneMat.envMapIntensity = L.laneEnv ?? 0.85; this.laneMat.roughness = L.laneR ?? 0.46;
     this.ribMat.color.set(L.rib);
     this.glowMat.color.copy(hdr(L.rail, 2.2));
-    this.throatMat.uniforms.uColor.value.copy(hdr(L.throat, 0.9));
+    this.throatMat.uniforms.uColor.value.copy(hdr(L.throat, L.throatK ?? 0.9));
     for (const l of this.lamps) { l.color.set(L.lamp); l.intensity = L.lampI * 0.35; }
     this.shotMat.color.copy(hdr(L.shot, 5));
     this.boltMat.color.copy(hdr(L.bolt, 5));
@@ -689,6 +689,18 @@ export class Renderer {
       m.material = c;
     });
     v.flashK = 0;
+  }
+  // boss hit punch: the core flashes hot white and kicks back down the tube for a moment (render only)
+  bossHitLook(V, dt) {
+    // a punch left over from the killing blow must not carry into the next boss
+    if (this.punchV !== V) { this.punchV = V; this.bossPunch = 0; }
+    const p = this.bossPunch || 0;
+    if (p <= 0) return;
+    this.bossPunch = Math.max(0, p - dt * 7);
+    const k = p * p;
+    this.setFlash(V.core, Math.max(V.core.flashK || 0, k * (CALM.on ? 0.25 : 0.55)));
+    V.core.g.position.z -= k * 1.6;
+    V.core.g.scale.multiplyScalar(1 + k * 0.06);
   }
   setFlash(v, k) {
     if (!v.flashMats || Math.abs(k - (v.flashK || 0)) < 0.01) return;
@@ -925,6 +937,7 @@ export class Renderer {
       V.core.core.scale.setScalar((open ? 1.15 : 0.95) + Math.sin(t * 6) * 0.04 + B.hitT * 2);
     }
     this.setFlash(V.core, Math.pow(Math.min(1, Math.max(0, B.hitT) / 0.15), 6) * 0.14);
+    this.bossHitLook(V, dt);
     // armour segments, one per lane, turning with B.rot
     if (V.segs.length) V.segs.forEach((sv, i) => {
       const alive = B.segs[i] > 0;
@@ -994,13 +1007,13 @@ export class Renderer {
     if (B && B.cur && !B.cur.passive && B.cur.lanes) for (const Ln of B.cur.lanes) this.strip(Ln, 0, B.d, B.cur.kind === 'pull' ? 0xb08aff : 0xff8a3a, B.cur.kind === 'pull' ? 3 : 1, B.cur.t / B.cur.T, 0.85);
     if (B && B.pull) this.strip(B.pull.lane, 0, 1, 0xb08aff, 3, 1, 0.8);
     // rim riders about to grab: their lane flickers red at the rim
-    for (const e of W.enemies) if (e.rim && e.grabT > 0) this.strip(Math.round(e.lane), 0, 0.12, 0xff3a2a, 2, 1, 0.8);
+    for (const e of W.enemies) if (e.rim && e.grabT > 0) this.strip(Math.round(e.lane), 0, 0.12, this.tellSafe ? 0xffc21a : 0xff3a2a, 2, 1, 0.8);
     for (const e of W.enemies) {
       if (e.hp <= 0 || !(e.tell > 0)) continue;
       if (e.type === 'mite' && e.d < 0.1) this.strip(Math.round(e.lane), 0, 0.14, 0x5ae8ff, 1, 1, 0.75);
       // a pounce: the Rimrunner's own lane flares red and fills as the crouch runs out
-      else if (e.fl && e.pounce) this.strip(Math.round(e.fl.b), 0, 0.24, 0xff2412, 1, 1 - Math.max(0, e.tell) / Math.max(0.05, e.tellT || 0.5), 0.95);
-      else if (e.fl && e.d < 0.12) this.strip(Math.round(e.fl.b), 0, 0.12, 0x7dff6a, 1, 1, 0.6);
+      else if (e.fl && e.pounce) this.strip(Math.round(e.fl.b), 0, 0.24, this.tellSafe ? 0xffc21a : 0xff2412, 1, 1 - Math.max(0, e.tell) / Math.max(0.05, e.tellT || 0.5), 0.95);
+      else if (e.fl && e.d < 0.12) this.strip(Math.round(e.fl.b), 0, 0.12, this.tellSafe ? 0x4f7bff : 0x7dff6a, 1, 1, 0.6);
     }
     void me;
   }
@@ -1049,11 +1062,27 @@ export class Renderer {
   }
   burst(c, d, size, o = {}) {
     const w = this.worldAt(c, d, 0.6, _wb);
-    this.fx.explode(w.x, w.y, w.z, size, { metal: true, color: o.color, ringColor: o.ring, smoke: o.smoke });
+    this.fx.explode(w.x, w.y, w.z, size, { metal: true, rock: false, shards: true, color: o.color, ringColor: o.ring, smoke: o.smoke });
     if (o.shock !== false) this.shock(w, size * 0.6);
     this.trauma = Math.min(1, this.trauma + (o.shake ?? 0.12 * size));
   }
   sparksAt(c, d, o = {}) { const w = this.worldAt(c, d, o.lift ?? 0.6, _wb); this.fx.sparks(w.x, w.y, w.z, o); }
+  // a kill deep in the tube still pops on screen: a flare that keeps a minimum on-screen size
+  farPop(c, d, color) {
+    if (d < 0.35) return;
+    const w = this.worldAt(c, d, 0.6, _wb);
+    this.fx.pop(w.x, w.y, w.z, w.distanceTo(this.camera.position), color);
+  }
+  // a boss hit: hot sparks, a flash light at the core, a punch on the core and a pulse on the HUD bar
+  bossHitFx(e) {
+    this.sparksAt(e.lane, e.d, { n: 16, speed: 9, r: 1, g: 0.8, b: 0.5 });
+    this.sparksAt(e.lane, e.d, { n: 6, speed: 4, s: 0.4, life: 0.9, grav: 3, r: 1, g: 0.55, b: 0.2 });
+    const w = this.worldAt(e.lane, e.d, 0.6, _wb);
+    this.fx.flash(w.x, w.y, w.z, 22, 0xffd0a0, 0.18);
+    this.fx.pop(w.x, w.y, w.z, w.distanceTo(this.camera.position) * 0.7, 0xffc080);
+    this.bossPunch = 1; this.bossHits = (this.bossHits || 0) + 1;
+    this.trauma = Math.min(1, this.trauma + 0.08);
+  }
   onEvent(e, W) {
     const L = this.look;
     switch (e.k) {
@@ -1062,6 +1091,7 @@ export class Renderer {
         const size = { splitter: 1.2, hopper: 1.0, spinewright: 1.4, mite: 0.8, lancer: 1.3, shocker: 1.3, mirror: 1.2 }[e.type] || 1;
         if (v) { this.breakApart(v, { max: 14 }); this.views.e.delete(e.id); }
         this.burst(e.lane, e.d, size, { color: e.type === 'mite' ? 0x9fe8ff : 0xffa060 });
+        this.farPop(e.lane, e.d, e.type === 'mite' ? 0x9fe8ff : 0xffb070);
         break;
       }
       case 'hit': this.sparksAt(e.lane, e.d, { n: 8, speed: 6, r: 1, g: 0.85, b: 0.6 }); break;
@@ -1090,7 +1120,7 @@ export class Renderer {
         break;
       }
       case 'zap': this.sparksAt(e.lane, 0.05, { n: 14, speed: 6, r: 0.6, g: 0.9, b: 1 }); break;
-      case 'bosshit': this.sparksAt(e.lane, e.d, { n: 6, speed: 7, r: 1, g: 0.8, b: 0.5 }); break;
+      case 'bosshit': this.bossHitFx(e); break;
       case 'clank': case 'refract': this.sparksAt(e.lane, e.d, { n: 5, speed: 5, r: 0.7, g: 0.8, b: 1 }); break;
       case 'seg': this.burst(e.lane, e.d, 1.2, { color: 0x9fe8ff }); break;
       case 'headdown': this.burst(e.lane, e.d, 1.8, { color: 0x7dffd8 }); break;
@@ -1098,7 +1128,7 @@ export class Renderer {
         const V = this.bossV;
         if (V) { this.breakApart(V.core, { max: 40, power: 2 }); for (const s of V.segs) if (s.g.visible) this.breakApart(s, { max: 4, power: 1.6 }); for (const h of V.heads) if (h.g.visible) this.breakApart(h, { max: 8, power: 1.6 }); this.bossV = null; this.glowSprite.visible = false; }
         const w = _wb.set(0, 0, -e.d * DEPTH); this.root.localToWorld(w);
-        for (let i = 0; i < 4; i++) this.fx.explode(w.x + (Math.random() - 0.5) * 6, w.y + (Math.random() - 0.5) * 6, w.z + (Math.random() - 0.5) * 4, 4, { metal: true });
+        for (let i = 0; i < 4; i++) this.fx.explode(w.x + (Math.random() - 0.5) * 6, w.y + (Math.random() - 0.5) * 6, w.z + (Math.random() - 0.5) * 4, 4, { metal: true, rock: false, shards: true });
         this.shock(w, 3); this.flashScreen(0.5, 0xffe0b0); this.trauma = 1;
         break;
       }
@@ -1123,6 +1153,26 @@ export class Renderer {
   setScale(s) { if (Math.abs(s - this.scale) < 0.02) return; this.scale = s; this.resize(); }
   get portrait() { return this.camera.aspect < 0.85; }
   frameShot(c, d, dur) { this.shot = { c, d, t: dur }; }
+  // boss fights: while the boss rises the camera swings toward the tube axis and looks at it (a title shot),
+  // then it stays pushed in a little so the boss fills more of the frame; sets this.bossFov (added to the fov)
+  bossCam(W, P, pos, look, ux, uy, tall) {
+    const B = W.boss; this.bossFov = 0;
+    if (!B || B.state === 'dying') return;
+    const bz = -B.d * DEPTH;
+    if (B.state === 'in') {
+      const f = Math.min(1, Math.max(0, (1.3 - B.d) / Math.max(0.05, 1.3 - (B.d0 ?? 1))));
+      const sm = (a, b, x) => { const u = Math.min(1, Math.max(0, (x - a) / (b - a))); return u * u * (3 - 2 * u); };
+      const k = sm(0, 0.15, f) * (1 - sm(0.82, 1, f)) * 0.8;
+      pos.lerp(_dv.set(P.x * 0.45 + ux * 2.2, P.y * 0.45 + uy * 2.2, P.z + (tall ? 20 : 13)), k);
+      look.lerp(_dl.set(0, 0, bz), k);
+      this.bossFov = -(tall ? 8 : 12) * k;
+      return;
+    }
+    // in the fight: lean the view toward the boss and narrow the lens a little
+    // (portrait keeps its lens: the whole web just fits a tall screen, a narrower fov cuts off the far rim lanes)
+    look.lerp(_dl.set(0, 0, bz), tall ? 0.1 : 0.16);
+    this.bossFov = tall ? 0 : -7;
+  }
   // o: { W, me (player) or null, cine, shake }
   updateCamera(dt, o = {}) {
     const W = o.W, tall = this.portrait;
@@ -1159,6 +1209,8 @@ export class Renderer {
         look.lerp(_dl.set(0, 0, P.z - 40), k);
         fov += 6 + 10 * k; speed = 8;
       }
+      this.bossFov = 0; if (W.phase !== 'dive') this.bossCam(W, P, pos, look, ux, uy, tall);
+      fov += this.bossFov;
       if (this.shot && this.shot.t > 0) {
         this.shot.t -= dt;
         const S = this.lanePt(this.shot.c, this.shot.d, _lp3);
