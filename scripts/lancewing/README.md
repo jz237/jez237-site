@@ -1,0 +1,90 @@
+# Lancewing 2026 tools
+
+Game: `games/2026-11-06/lancewing/` (three.js r181 vendored, plain ES modules, no build step).
+Every local import carries the same `?v=N` (now `?v=5`, version 1.0.0 on the title); bump them all together, plus `js/main.js?v=` in index.html and `V` in js/audio.js.
+The Node scripts load the game through `_game.mjs`, which reads the version from main.js, so they never need editing after a bump.
+
+| Script | What it does |
+| --- | --- |
+| `smoke.mjs [runs=3] [profile=demo] [difficulty=normal]` | The autopilot plays every sector (4 waves + boss) from wave 1 with the typical upgrades, two chained campaigns from sector 1 to the sector 5 boss (lives/score carry over, salvage buys upgrades, failed sectors are retried), ENDLESS SKIES for 10 minutes and a local co-op sector. Fails on exceptions, NaN, a wave stuck for 5 minutes or a campaign that never finishes. About 5 s. |
+| `determinism.mjs [seeds=6]` | Same seed + same inputs twice (solo and co-op, waves and bosses), a structuredClone'd world carrying on bit for bit, instant replays of a death and a boss kill reproduced exactly, and no Math.random in the sim. |
+| `replay_check.mjs [seeds=10]` | Exact instant replays: autopilot runs (solo + local co-op, every sector, waves + bosses) recorded with the game's `Recorder`; every death and boss kill is cut into a clip like main.js does (1.6 s after) and re-run twice with `Replay`. Must match the live run on EVERY tick of the clip (state hash) and the whole world (JSON) at the key tick and the clip end. Last run (stage 6): 44 / 44 bit-exact, 26 074 ticks compared. ~2 s. |
+| `online_check.mjs [relay=ws://127.0.0.1:8781] [seconds=40] [lags=0,40,80]` | Online co-op in Node (no browser) against a LOCAL relay only: host + guest with the game's own online.js, the main.js play loop in real time, autopilots on both. Code room + quick match (`LW-XXXX` / `LW-Q-XXXXX`), unknown code refused, start config intact, 20 Hz snapshots under the relay's 48 000-char limit, wave / score / lives in step, guest rider + riders within ~0.6 m at 80 ms each way, guest duels count on the host, a guest sea death costs a shared life and respawns (the host's own deaths in that window are counted, not assumed zero), leaving is noticed. |
+| `flow_check.mjs [baseUrl] [relay]` | Playwright + headless Edge (shared lock, ~3 min): every meta system in the real page. World boards (title tabs, difficulty, HIGH SCORES), a real game over -> initials -> exactly one POST `{initials, score, level, extra}` (score requests are answered by Playwright, nothing reaches the real boards; webdriver is hidden only for this), local table under `lw.hs.*`, offline fallback, NO_POST for `?noscores/demo/playthrough/fixed/autoplay/test`, a sector clear (medals by the rules, best time + score, unlock, shop buy, NEXT SECTOR), instant replay from the results, the attract demo (starts by itself, shop interlude with lit picks, boss segment, any key / the eaten click), AI PLAYTHROUGH (the whole of sector 1, then shop picks, no medals, RETRY), local co-op (split keyboard, two gamepads), gamepad menus / START / rumble on + off, a gamepad-only game over (A ignored for the first moment, d-pad edits the initials, A steps through the letters and saves, A on CONTINUE FROM CHECKPOINT continues), Esc in OPTIONS back to PAUSE, Esc stopping the AI PLAYTHROUGH, mashed flap keys ignored as the results open, touch portrait + landscape (FLAP, drag steer, pause, phone vibration, HUD fits, title board on phones), options persisting under `lw.`, online co-op with two pages on the local relay at 0 and 80 ms (room code, `?room=` link, START, sync, leave). `ONLY=scores,nopost,clear,demo,playthrough,coop,pad,touch,options,online`. Screenshots `sys_*.png` in the work folder. |
+| `ramp_check.mjs [trials=100] [sectors=1,2,3,4,5] [profile=human] [difficulty=normal[,hard,easy,nightmare]] [--report]` | The difficulty measurement. The HUMAN-LIKE autopilot (`ai.js` profile `human`: ~0.35 s reaction with +-0.1 s scatter, 15 % of looks 0.25 s late, a stick that swings at most 5.5/s, 7 % missed beats, sloppy beat timing, tracks only the 4 nearest riders within 20 m, the odd panic pick, a sea reflex only 0.25 s after dropping below 2.6 m - 30 % of the time 0.4 s later - while its planner assumes a quicker one, so it sometimes dives too deep and drowns; the `demo` profile keeps an instant reflex) plays each sector from wave 1 with the starting lives and `TYPICAL_UP`, one child process per sector x difficulty, all in parallel (100 trials x 5 sectors ~25 s incl. the checkpoint runs). Prints per sector the clear rate against the target and per wave: tries, deaths and hits per try in the run, the edge (riders unhorsed per hit taken), riders in the air avg / max, the same wave flown from a FRESH checkpoint start (full lives: deaths per try, clear %, seconds) and the top causes of death. Also checks that every telegraph (rider portals, hazards, boss attacks incl. the orb / summon charge rings, spouts, spire bolts, stormcaller arcs, crumbling ledges, the Stormhunter) is at least the RAMP warning time and never under MIN_WARN, that no non-bonus wave is quiet (< 1.6 riders in the air on average) and that the fresh death curve has no spike (a checkpoint more than max(0.3, 40 %) deadlier than the next). Exit 1 when NORMAL / HARD are more than 8 points off target, EASY sector 1 is under 95 %, or a telegraph / quiet / spike check fails. Tuning aid: `LW_PATCH='{"RAMP":{"4":{"bossHP":1.2}}}'` deep-merges into the config.js exports for that run only; `LW_NOFRESH=1` skips the checkpoint runs. `runSector()` is exported (par_times uses it). |
+| `console_check.mjs [baseUrl] [relay=ws://127.0.0.1:8781] [shotDir]` | Playwright + headless Edge (shared lock, ~40 s): the `?test=1` self-test (13 checks), `?fixed` frames of sector 1 (riders up every 5 s), every sector, four bosses, a real game over with the initials prompt, phone portrait + landscape (screenshots `tune_*.png`), the attract demo starting by itself after ~12 s, `?autoplay` playing the campaign, `?playthrough` from the sector 1 boss through the refit screen into sector 2, the real-time title with the world board (board GETs answered with sample rows), and two online pages on the LOCAL relay (host, `?room=` join, START, both arenas run). Shader programs must stay at the boot count. FAILS on any console error or any score POST (all intercepted). `ONLY=test,frames,demo,autoplay,playthrough,title,online`. |
+| `perf_check.mjs [baseUrl] [quality=high]` | Playwright + headless Edge (shared lock, ~25 s). Headless frame times are not real fps, so it checks what headless can show: shader programs stay at the boot count (28) through every sector's waves, all five boss fights, local co-op, ENDLESS SKIES, the attract demo and an instant replay; the first 90 drawn frames after each scene change are timed one by one (a frame over 60 ms and 6x the median is flagged LONG, with whether a program was compiled); CPU per frame split into the sim and sim + render submit (median / p95), draw calls and triangles per scene. Last run: 28 programs throughout, sim 0.02-0.05 ms, sim + render 0.6-1.1 ms, worst first frame 22 ms (no compile), 183-456 draw calls. |
+| `autopilot_check.mjs [campaigns=8] [difficulty=normal]` | Chained campaigns the way the game runs them, for the `demo` and `human` autopilots: sector 1 to the sector 5 boss, lives + score carried, +1 life per sector, salvage spent in main.js's AI shop order, and after a game over CONTINUE FROM CHECKPOINT (same wave, full lives, score 0). Prints where the first game over came, continues needed, game-over spots, lives / score / upgrades at each sector start. FAILS on a stuck wave, NaN, a demo campaign needing > 3 continues (> 1 on average) or a human one that cannot finish in 40. Last run (stage 6, 8 each): demo 8/8 finished, 7 without a game over (max 1 continue); human 8/8 finished, first game over in S2-S4, ~7 continues on average (the Leviathan and S5 W1 are the usual walls). |
+| `programs_check.mjs [maxSimMinutes=26]` | Playwright + headless Edge (shared lock, < 8 min): the AI PLAYTHROUGH flies all five sectors in `?fixed` mode, rendering every frame; samples `renderer.info.programs` every 10 s of game time and FAILS if the count ever grows after boot (a runtime shader compile = a freeze on phones), or on console errors. Last run: 28 programs from boot to the sector 5 boss. |
+| `gen_audio.py [credits\|music\|sfx\|voice\|all] [--only a,b] [--force]` | ElevenLabs generation (Python, stdlib only): 8 music tracks (title, s1-s5, boss, clear fanfare) + the `over` sting, 46 SFX, 12 herald voice lines (one premade voice). Reads `ELEVENLABS_API_KEY` from the Windows user environment through PowerShell, never prints or stores it; checks credits first and refuses below 15 % left; at most 2 requests in flight, 429/5xx back off. Raw clips go to `D:/Projects/.tmp/arcade-trio-work/lancewing/audio-raw` (or `LW_RAW`); existing files are skipped unless `--force`. |
+| `process_audio.py <game folder> [a,b]` | ffmpeg + numpy (run with plain `python`, numpy is in the user site): trims leading/trailing silence, peak-normalises one-shots (-1.5 dBFS), high-passes the frequent low sounds so phones hear them (flap, land, collect...), crossfades seamless loops (wind, surf, rush, hunterloop), loudness-normalises music (-16 LUFS) into `audio/`, `music/`, `voice/`. |
+
+Difficulty lives in one table: `RAMP` in `js/config.js` (per sector `[first wave, last wave]`, interpolated per wave; `spoutW` / `boltW` = first wave index with that hazard;
+`surv` = how long a survival wave lasts, `survCap` = riders added to `active` during it; `bossHP` / `bossRate` per sector). Every value only rises (or for warn / gap / react / coreT
+only falls) from one wave to the next across the whole campaign (the self-test checks it). ENDLESS SKIES walks the same curve via `endlessLevel()` / `rampLevel()`.
+Difficulty levels (`DIFFICULTY`, `applyDiff()`): easy / normal / hard / nightmare, score x0.6 / 1 / 1.5 / 2.2, warnings never below `MIN_WARN` (0.45 s). Each factor multiplies the RAMP value;
+`k[sector]` says how strongly the level bites in that sector (factor m becomes 1 + (m - 1) * k), `kb` the same for the boss fights, `active` is applied as is, `lives` / `armor` are added.
+Lives: 4 (`START_LIVES`), +1 per sector clear, +1 every 80 000 points (`SCORE.lifeEvery`, x the score factor); upgrades: salvage = sector score / 110 (`SALVAGE_DIV`), about one or two a sector.
+
+| Sector (RAMP first -> last wave) | spd | riders | in the air | gap s | warn s | react s | skill | aggr | boss HP / rate |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 Sunset Ruins | 0.84-0.86 | 7-8 | 3 | 1.8-1.6 | 1.2-1.1 | 0.45 | 0.37-0.40 | 0.60-0.64 | 1.0 / 1.2 |
+| 2 Crystal Caverns | 0.86-0.90 | 8 | 3 | 1.6-1.5 | 1.06-0.97 | 0.45-0.42 | 0.40-0.42 | 0.64-0.66 | 1.0 / 1.1 |
+| 3 Sky Foundry | 0.92-0.98 | 8-9 | 3-4 | 1.5-1.42 | 0.94-0.86 | 0.42-0.38 | 0.42-0.48 | 0.66-0.70 | 2.8 / 1.5 |
+| 4 Aurora Glacier | 0.98-1.03 | 9-10 | 4 | 1.42-1.35 | 0.82-0.74 | 0.38-0.34 | 0.54-0.58 | 0.72-0.78 | 1.0 / 2.3 |
+| 5 Eclipse Citadel | 1.03-1.05 | 10 | 5 | 1.35-1.25 | 0.70-0.60 | 0.34-0.31 | 0.58-0.60 | 0.78-0.82 | 1.0 / 1.25 |
+
+Measured (stage 6, final; human-like autopilot from each sector's first wave with 4 lives and `TYPICAL_UP`):
+
+| Difficulty | S1 | S2 | S3 | S4 | S5 | target |
+| --- | --- | --- | --- | --- | --- | --- |
+| NORMAL (100 trials) | 88 % | 65 % | 44 % | 33 % | 18 % | 85 / 65 / 45 / 30 / 18 |
+| HARD (200 trials) | 73 % | 45 % | 26 % | 10 % | 4 % | 70 / 45 / 25 / 12 / 5 |
+| EASY (100) | 99 % | 99 % | 89 % | 53 % | 50 % | 95+ in S1 |
+| NIGHTMARE (100, 3 lives) | 28 % | 7 % | 5 % | 1 % | 0 % | report only |
+
+HARD with only 60 trials lands 75 / 40 / 27 / 17 / 2 and its spike test can trip on sampling noise (a fresh-checkpoint value from 60 tries
+moves by +-0.25); run HARD with 200 trials to judge spikes.
+HARD `k` = [1.2, 0.75, 0.95, 1.4, 0.95], `kb` = [0, 0.6, 0, 0, 0.95]; `summonAdd` 1 on HARD / NIGHTMARE (the Leviathan calls a pack of 3 instead of a pair).
+
+NORMAL deaths per try from a fresh checkpoint start (bonus core-rush waves left out), no spikes:
+S1 0.25 0.24 0.47 B 0.58 · S2 0.79 0.60 0.55 0.66 B 0.74 · S3 0.81 0.96 1.03 B 0.92 · S4 0.86 1.23 0.96 1.38 B 1.18 · S5 1.41 1.48 1.24 1.32 B 1.41.
+Riders in the air on average per normal wave: about 2 in sector 1 rising to 3 in sector 5 (max 4-7). Every telegraph is at least the RAMP warning time (portals exactly 1.0x).
+Boss fights (stage 6, human-like bot, NORMAL, median length / deaths per try): Iron Gale 31 s / 0.62, Crystal Wyvern 31 s / 0.74 (10 hits, was 6 = 20 s),
+Forge Colossus 46 s / 1.10, Glacier Leviathan 58 s / 1.33 (two breaches a round, 6 hits, summons a pair; was 117 s), Eclipse Sovereign 45 s / 1.37.
+Par times (`PAR` in config.js, re-measured in stage 6 with `D:/Projects/.tmp/arcade-trio-work/lancewing/par_times.mjs`): 2:30 / 2:40 / 2:30 / 2:50 / 2:25.
+
+Results screen: on a campaign game over CONTINUE FROM CHECKPOINT is the primary button (keyboard / pad focus lands on it); END RUN saves the score
+and goes to the title. While the initials are open, pad A / START, Enter and Space save them (a player who changed a letter steps to the next one
+first), B goes back a letter; confirm keys are ignored for 0.9 s after the results open (the flap button is usually still held). Control tips show once
+per visit and move to the top of the screen whenever they would cover your rider.
+
+Page hooks (`window.__lw`): `tick(n, dt = 1/60, draw = true)` (draw = false runs the game without rendering, only the last frame draws), `bests()` (best times / scores / reach / medals), `boardNames()`, `demoShop()`, `posted` (boards this page posted to), `auto(profile)` also marks the run as autopilot (no initials, medals or bests). `?autoplay` (demo autopilot plays the campaign; `&endless` for ENDLESS SKIES), `?sector=N`, `?wave=N` (0-3 waves, 4 = boss), `?seed=N`,
+`?fixed` (no RAF; drive frames with `__lw.tick(n)`), `?test=1`, `?demo` (attract demo after 1 s), `?playthrough`, `?relay=ws://127.0.0.1:8781` (local relay),
+`?netlag=ms`, `?room=CODE`, `?noscores`, `?q=high|medium|low`, `?unlock` (all sectors in sector select).
+`__lw.startCampaign(s, { wave, coop })`, `__lw.startEndless()`, `__lw.startDemo()`, `__lw.startPlaythrough()`, `__lw.auto(profile)` (autopilot flies rider 1), `__lw.W` (live world),
+`__lw.toTitle()`, `__lw.pause()`, `__lw.act(name)`, `__lw.R` (renderer), `__lw.A` (audio), `__lw.G` (game state).
+
+Scores: `js/scores.js`, boards `lancewing-2026[-easy|-hard|-nightmare]` and `lancewing-2026-endless[-easy|-hard|-nightmare]` on
+`https://game-scores.jez237.workers.dev/scores/<board>`, POST body `{ initials, score, level, extra }` (extra = `S3 WAVE 2`, `ALL CLEAR`, `WAVE 12`, `+ CO-OP`).
+Never posted with ?test / ?autoplay / ?fixed / ?noscores / ?demo / ?playthrough or a WebDriver browser; the attract demo, the AI playthrough, online co-op and any run
+the autopilot flew (`__lw.auto`) never ask for initials. Local tables `lw.hs.<board>`, initials `lw.initials` (default from the site-wide `jez237_initials`).
+Saved progress: `lw.settings.v1` (options), `lw.medals.v1`, `lw.best.v1` / `lw.bestsc.v1` (best sector time / score per difficulty, solo runs from wave 1), `lw.reach.v1` (sector select).
+Medals (15, config.js `MEDALS`): per sector a deathless clear, a clear with no core re-igniting and a clear under par (`PAR` 2:30 / 2:40 / 2:30 / 2:50 / 2:25);
+Normal or harder, flown from wave 1, never for an autopilot run.
+
+Online: rooms `LW-XXXX` / `LW-Q-XXXXX` on the Steel Duel relay (the orchestrator adds `LW` to its lobby filter). Local test: copy
+`games/2026-06-14/steel-duel/worker` to the work folder (`D:/Projects/.tmp/arcade-trio-work/lancewing/relay`), run `D:/Projects/.tmp/descent2-site/node_modules/.bin/wrangler dev --local --port 8781 --ip 127.0.0.1` there,
+then `node scripts/lancewing/online_check.mjs` or open two pages with `?relay=ws://127.0.0.1:8781` (`&netlag=80` adds 80 ms each way, `&room=CODE` opens the join screen).
+Host-authoritative: the host runs the arena and sends ~20 Hz snapshots; the guest flies its own rider (sent 30 Hz), dead-reckons everything else
+between snapshots (`guestLocal` in sim.js, 0.25 s max), claims its own sea deaths / hazard hits; the host judges the guest's duels.
+
+Audio (`js/audio.js`): `SFX` / `VOICE` / `MUSIC` list the shipped files. Effects are positioned with PannerNodes (listener on the camera);
+ambient beds (`A.setBed`: storm wind louder up high, surf louder near the sea, the rush of a fast dive) and the Stormhunter's engine loop
+(`A.loop` / `A.setLoop`) are driven every frame by `ambience()` in main.js. Voice lines go through ONE gate, `say()` in main.js: key lines
+only (run start / sector intro, boss, boss down, sector clear, last life, game over, new record, champion), colour lines wait 26 s; the
+NARRATION option (`settings.talk`) turns them off; the music ducks under a line. Sector clear plays the `clear` fanfare, game over the `over` sting.
+
+Work-folder helpers (`D:/Projects/.tmp/arcade-trio-work/lancewing/`): `final_shots.mjs` (final_*.png screenshots + tip-vs-rider and phone layout probes,
+takes the Edge lock), `boss_len2.mjs [profile] [trials] [diff]` (boss fight lengths / deaths / causes; `SECS=4`, `LW_PATCH` aware), `par_times.mjs`,
+`sweep.mjs`, `dbg_sea.mjs`, `serve.py` (no-cache static server: `python serve.py 8771`), `relay/` (local Steel Duel relay copy).

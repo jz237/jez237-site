@@ -1,0 +1,1128 @@
+// Lancewing renderer. The sim's 2D slice (x round the ring, y up) is bent onto a cylinder of radius F.R round
+// the storm spire; the camera orbits outside the ring and follows the player, so play is 2.5D but everything
+// is real 3D: skyrays and their lancers, floating rock ledges with each sector's stone, the storm sea, the
+// spire and its lightning, telegraph ribbons for every hazard and boss attack, HDR post with bloom.
+// Nothing here changes the world.
+import * as THREE from '../vendor/three.module.min.js';
+import { Post } from './post.js?v=5';
+import * as TX from './textures.js?v=5';
+import * as MD from './models.js?v=5';
+import { FX, CALM } from './fx.js?v=5';
+import { F, POWERUPS, BOSSES, HUNTER, LAYOUT } from './config.js?v=5';
+import { weakPos } from './sim.js?v=5';
+
+export { CALM };
+const RR = F.R, H = F.H;
+const clamp = (v, a, b) => (v < a ? a : v > b ? b : v);
+const hdr = MD.hdr;
+const _v = new THREE.Vector3(), _v2 = new THREE.Vector3(), _v3 = new THREE.Vector3(), _m = new THREE.Matrix4(), _c = new THREE.Color(), _tint = new THREE.Vector3(), _q = new THREE.Quaternion(), _s = new THREE.Vector3(), _e = new THREE.Euler();
+const UP = new THREE.Vector3(0, 1, 0);
+// sim (x, y) -> world, at radius RR + dr
+export function toWorld(x, y, out = new THREE.Vector3(), dr = 0) { const th = x / RR; return out.set(Math.sin(th) * (RR + dr), y, Math.cos(th) * (RR + dr)); }
+const tangent = (x, out) => { const th = x / RR; return out.set(Math.cos(th), 0, -Math.sin(th)); };
+const radial = (x, out) => { const th = x / RR; return out.set(Math.sin(th), 0, Math.cos(th)); };
+function mkr(seed) { let s = seed | 0; return () => { s = (s + 0x6D2B79F5) | 0; let t = Math.imul(s ^ (s >>> 15), s | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
+const hash3 = (x, y, z) => { const s = Math.sin(x * 12.9898 + y * 78.233 + z * 37.719) * 43758.5453; return s - Math.floor(s); };
+function vnoise(x, y, z) {
+  const xi = Math.floor(x), yi = Math.floor(y), zi = Math.floor(z), fx = x - xi, fy = y - yi, fz = z - zi;
+  const u = fx * fx * (3 - 2 * fx), v = fy * fy * (3 - 2 * fy), w = fz * fz * (3 - 2 * fz);
+  const L = (a, b, t) => a + (b - a) * t;
+  const c = (i, j, k) => hash3(xi + i, yi + j, zi + k);
+  return L(L(L(c(0, 0, 0), c(1, 0, 0), u), L(c(0, 1, 0), c(1, 1, 0), u), v), L(L(c(0, 0, 1), c(1, 0, 1), u), L(c(0, 1, 1), c(1, 1, 1), u), v), w);
+}
+
+export function pickQuality(name) {
+  const mobile = matchMedia('(pointer:coarse)').matches || /Android|iPhone|iPad/i.test(navigator.userAgent);
+  const tiers = {
+    high: { name: 'high', dpr: Math.min(devicePixelRatio || 1, 2), shadow: 2048, msaa: true, bloomLevels: 5, tex: 1024, dust: 2000, sparks: 1500, debris: 200, flashLights: 4, props: 1, waves: 1 },
+    medium: { name: 'medium', dpr: Math.min(devicePixelRatio || 1, 1.6), shadow: 2048, msaa: true, bloomLevels: 4, tex: 1024, dust: 1300, sparks: 1000, debris: 130, flashLights: 3, props: 0.8, waves: 1 },
+    low: { name: 'low', dpr: 1, shadow: 1024, msaa: false, bloomLevels: 3, tex: 512, dust: 700, sparks: 500, debris: 70, flashLights: 2, props: 0.5, waves: 0 },
+  };
+  return tiers[name] || (mobile ? tiers.medium : tiers.high);
+}
+
+// ------------------------------------------------------------------ sector looks
+export const LOOKS = [
+  // 1 SUNSET RUINS: a low gold sun over a storm sea at dusk, rose clouds, warm haze
+  { key: 'ruins', sky: [0x1a2850, 0xb0606a, 0xffb070], sun: 0xffd0a0, sunDir: [-0.5, 0.09, -0.86], sunDisc: 1, keyI: 3.4, hemi: [0x7a90d0, 0x5a3a30, 0.72], fill: 0xff8a5a, fillI: 0.5,
+    fog: 0x9a6a66, fogD: 0.0068, exposure: 1.05, bloom: 0.8, grade: [1.05, 0.99, 0.93], sea: [0x0a1624, 0x2a3c50, 0xf0d8c0, 0x000000], rock: 'ruins', top: 'pavers', topTint: 0xd8c8b0,
+    accent: 0xffb347, spire: 0xffc890, dust: 0xa89080, dustLight: 1.2, env: [0xffb070, 0x5a5a8a, 0x2a2020], amb: 'embers', cloud: [0xffa080, 0x3a3050], stars: 0, rune: 0xffa040 },
+  // 2 CRYSTAL CAVERNS: bioluminescent sea cliffs under a teal night, a pale moon, glowing plankton in the swell
+  { key: 'caverns', sky: [0x020812, 0x04222c, 0x0a4a52], sun: 0xb8fff4, sunDir: [0.35, 0.5, -0.78], sunDisc: 1, keyI: 2.0, hemi: [0x3aa8b0, 0x0a2422, 0.95], fill: 0x30ffc8, fillI: 0.75,
+    fog: 0x08323a, fogD: 0.0105, exposure: 1.3, bloom: 0.95, grade: [0.94, 1.03, 1.03], sea: [0x021412, 0x0a3a38, 0x9affe8, 0x14d8a8], rock: 'caverns', top: 'rock', topTint: 0x9ab8c0,
+    accent: 0x40ffd0, spire: 0x60fff0, dust: 0x507a78, dustLight: 0.9, env: [0x80fff0, 0x1a5a54, 0x020606], amb: 'spores', cloud: [0x1a5a62, 0x04141a], stars: 1, rune: 0x40ffd0 },
+  // 3 SKY FOUNDRY: forge platforms under a smoke-dark sky lit orange from below, sparks everywhere
+  { key: 'foundry', sky: [0x120e0d, 0x3a1c12, 0xb8541a], sun: 0xffd0a0, sunDir: [0.45, 0.4, -0.8], sunDisc: 0, keyI: 2.7, hemi: [0x8a7c7a, 0x3a1406, 0.62], fill: 0xff6a1a, fillI: 0.95,
+    fog: 0x3a2016, fogD: 0.0094, exposure: 1.0, bloom: 0.85, grade: [1.04, 0.98, 0.92], sea: [0x0c0806, 0x30201a, 0xffb070, 0x4a1400], rock: 'foundry', top: 'plate', topTint: 0xb8b0a8,
+    accent: 0xff7a2a, spire: 0xff8a40, dust: 0x5a4a40, dustLight: 1.0, env: [0xff7a2a, 0x3a2418, 0x080504], amb: 'sparks', cloud: [0x7a4024, 0x1a120e], stars: 0, rune: 0xff6a1a },
+  // 4 AURORA GLACIER: ice ledges under a starry night, green and violet aurora, snow drifting
+  { key: 'glacier', sky: [0x030820, 0x0e2a54, 0x3a7090], sun: 0xd8ecff, sunDir: [-0.4, 0.42, -0.8], sunDisc: 1, keyI: 2.7, hemi: [0x8ab0e8, 0x30404c, 0.82], fill: 0x60ffb0, fillI: 0.5,
+    fog: 0x1c3450, fogD: 0.0088, exposure: 1.1, bloom: 0.8, grade: [0.95, 1.0, 1.07], sea: [0x061424, 0x284a66, 0xe8f4ff, 0x000000], rock: 'glacier', top: 'rock', topTint: 0xe8f2ff,
+    accent: 0x8ae8ff, spire: 0xa8ffe0, dust: 0xc0d0e0, dustLight: 1.3, env: [0xc0e8ff, 0x2a4a6a, 0x04080c], amb: 'snow', cloud: [0x4a6a8a, 0x0a1a2a], aurora: 1, stars: 1, rune: 0x8ae8ff },
+  // 5 ECLIPSE CITADEL: a black sun with a burning corona over an obsidian citadel, violet haze
+  { key: 'eclipse', sky: [0x050308, 0x1c1028, 0x4a2a40], sun: 0xffc070, sunDir: [0.2, 0.3, -0.93], sunDisc: 2, keyI: 3.5, hemi: [0xa090d8, 0x463448, 1.75], fill: 0xc890ff, fillI: 1.4,
+    fog: 0x24182e, fogD: 0.0092, exposure: 1.38, bloom: 0.95, grade: [1.0, 0.97, 1.05], sea: [0x0a0814, 0x2a2042, 0xd8c4ff, 0x140828], rock: 'eclipse', top: 'panel', topTint: 0xd8d0e0,
+    accent: 0xc080ff, spire: 0xffc070, dust: 0x40384a, dustLight: 0.8, env: [0xffc070, 0x2a1a40, 0x020104], amb: 'ash', cloud: [0x4a2a58, 0x0a0610], stars: 1, rune: 0xc080ff },
+];
+
+// ------------------------------------------------------------------ shaders
+const SKY_VERT = /* glsl */ `varying vec3 vD; void main(){ vD = normalize(position); vec4 p = projectionMatrix * modelViewMatrix * vec4(position, 1.0); gl_Position = p.xyww; }`;
+const SKY_FRAG = /* glsl */ `
+uniform vec3 uTop, uMid, uLow, uSun, uSunDir, uCloudA, uCloudB; uniform float uFlash, uTime, uDisc, uAurora, uStars;
+varying vec3 vD;
+float h2(vec2 p){ return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
+float n2(vec2 p){ vec2 i = floor(p), f = fract(p); f = f*f*(3.0-2.0*f); return mix(mix(h2(i), h2(i+vec2(1,0)), f.x), mix(h2(i+vec2(0,1)), h2(i+vec2(1,1)), f.x), f.y); }
+float fb(vec2 p){ float s = 0.0, a = 0.5; for (int i = 0; i < 5; i++){ s += a * n2(p); p *= 2.07; a *= 0.5; } return s; }
+void main(){
+  vec3 d = normalize(vD);
+  float h = d.y;
+  vec3 c = mix(uLow, uMid, smoothstep(-0.04, 0.2, h));
+  c = mix(c, uTop, smoothstep(0.2, 0.7, h));
+  vec3 sdir = normalize(uSunDir);
+  float sd = max(0.0, dot(d, sdir));
+  // the sky brightens toward the sun all the way down to the horizon
+  c += uSun * pow(sd, 4.0) * 0.18 * (1.0 - smoothstep(0.1, 0.8, h));
+  if (uStars > 0.5) {
+    vec2 sc = vec2(atan(d.x, d.z), asin(clamp(h, -1.0, 1.0))) * 160.0;
+    vec2 ci = floor(sc);
+    float st = step(0.9965, h2(ci)) * smoothstep(0.06, 0.35, h);
+    float tw = 0.55 + 0.45 * sin(uTime * 1.7 + h2(ci + 7.0) * 40.0);
+    float fall = 1.0 - smoothstep(0.08, 0.5, length(fract(sc) - 0.5));
+    c += vec3(0.85, 0.9, 1.0) * st * tw * fall * 1.6;
+  }
+  if (uDisc > 1.5) {
+    // the black sun: a dark disc, a burning ring and long shimmering corona rays
+    float r = acos(clamp(dot(d, sdir), -1.0, 1.0));
+    vec3 up = abs(sdir.y) > 0.9 ? vec3(1.0, 0.0, 0.0) : vec3(0.0, 1.0, 0.0);
+    vec3 ax = normalize(cross(sdir, up)), ay = cross(ax, sdir);
+    float ang = atan(dot(d, ay), dot(d, ax));
+    float rays = 0.55 + 0.45 * n2(vec2(ang * 9.0, uTime * 0.15)) + 0.35 * n2(vec2(ang * 23.0, -uTime * 0.2));
+    c += uSun * (exp(-pow((r - 0.07) * 70.0, 2.0)) * 7.0 + exp(-(r - 0.07) * 7.0) * 0.9 * rays * step(0.07, r) + exp(-r * 2.2) * 0.12);
+    c = mix(c, vec3(0.004, 0.002, 0.006), smoothstep(0.069, 0.064, r));
+  } else if (uDisc > 0.5) {
+    c += uSun * (smoothstep(0.9993, 0.9997, sd) * 14.0 + pow(sd, 260.0) * 2.5 + pow(sd, 24.0) * 0.45 + pow(sd, 5.0) * 0.12);
+  } else {
+    // no sun disc: a glow on the horizon from the fires below
+    c += uSun * pow(sd, 6.0) * 0.1 + uLow * exp(-max(h, 0.0) * 9.0) * 0.45;
+  }
+  // a hazy band along the horizon
+  c = mix(c, uLow * 1.08 + uSun * pow(sd, 3.0) * 0.1, exp(-abs(h) * 16.0) * 0.45);
+  // two drifting cloud layers, edges lit by the sun
+  vec2 cp = d.xz / max(0.1, h + 0.22) * 1.3;
+  float n1 = fb(cp + vec2(uTime * 0.010, uTime * 0.004));
+  float n2v = fb(cp * 2.2 - vec2(uTime * 0.016, 0.0) + 13.0);
+  float band = smoothstep(-0.06, 0.18, h) * (1.0 - smoothstep(0.42, 0.85, h));
+  float cl = smoothstep(0.46, 0.8, n1) * band;
+  float cl2 = smoothstep(0.55, 0.85, n2v) * band * 0.6;
+  vec3 cc = mix(uCloudB, uCloudA, smoothstep(0.0, 0.45, h) * 0.6 + pow(sd, 2.0) * 0.6);
+  float lit = pow(sd, 6.0) * (1.0 - smoothstep(0.62, 0.82, n1));
+  c = mix(c, cc + uSun * lit * 0.6, cl * 0.82);
+  c = mix(c, cc * 0.9 + uSun * pow(sd, 8.0) * 0.4, cl2 * 0.5);
+  if (uAurora > 0.5) {
+    float az = atan(d.x, d.z);
+    float a = sin(az * 3.0 + uTime * 0.07 + fb(d.xz * 3.0 + uTime * 0.02) * 4.0);
+    float curtain = smoothstep(0.2, 0.36, h) * (1.0 - smoothstep(0.42, 0.78, h)) * (0.5 + 0.5 * a);
+    float rays = 0.6 + 0.4 * sin(az * 90.0 + fb(vec2(az * 8.0, uTime * 0.1)) * 6.0);
+    c += (vec3(0.15, 1.0, 0.55) * 0.6 + vec3(0.55, 0.2, 0.95) * 0.25 * smoothstep(0.35, 0.6, h)) * curtain * rays * (1.0 - cl * 0.7);
+  }
+  c += vec3(0.6, 0.65, 1.0) * uFlash * smoothstep(-0.1, 0.5, h);
+  gl_FragColor = vec4(c, 1.0);
+}`;
+const SEA_VERT = /* glsl */ `
+uniform float uTime, uWaves; varying vec3 vW; varying float vH;
+float wave(vec2 p, vec2 d, float f, float s){ return sin(dot(p, d) * f + uTime * s); }
+void main(){
+  vec3 p = position;
+  vec4 w = modelMatrix * vec4(p, 1.0);
+  float h = (wave(w.xz, vec2(0.8, 0.6), 0.22, 1.1) * 0.45 + wave(w.xz, vec2(-0.5, 0.86), 0.35, 1.7) * 0.25 + wave(w.xz, vec2(0.2, -0.98), 0.6, 2.3) * 0.12) * uWaves;
+  w.y += h; vH = h; vW = w.xyz;
+  gl_Position = projectionMatrix * viewMatrix * w;
+}`;
+const SEA_FRAG = /* glsl */ `
+uniform vec3 uDeep, uShallow, uFoam, uGlow, uSkyLow, uSkyMid, uSun, uSunDir, uFogC; uniform float uTime, uFogD, uFlash;
+varying vec3 vW; varying float vH;
+float h2(vec2 p){ return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
+float n2(vec2 p){ vec2 i = floor(p), f = fract(p); f = f*f*(3.0-2.0*f); return mix(mix(h2(i), h2(i+vec2(1,0)), f.x), mix(h2(i+vec2(0,1)), h2(i+vec2(1,1)), f.x), f.y); }
+float rip(vec2 p, float det){ return n2(p * 0.18 + uTime * 0.05) * 1.6 + det * (n2(p * 0.6 + uTime * 0.25) + 0.5 * n2(p * 1.7 - uTime * 0.4)); }
+void main(){
+  vec3 toC = cameraPosition - vW;
+  float dist = length(toC);
+  vec3 V = toC / dist;
+  vec2 p = vW.xz;
+  float det = 1.0 - smoothstep(35.0, 150.0, dist);
+  float e = 0.35;
+  float a0 = rip(p, det), ax = rip(p + vec2(e, 0.0), det), az = rip(p + vec2(0.0, e), det);
+  vec3 N = normalize(vec3((a0 - ax) * 1.3, 1.0, (a0 - az) * 1.3));
+  float fres = clamp(0.03 + 0.97 * pow(1.0 - max(0.0, dot(N, V)), 5.0), 0.0, 0.92);
+  vec3 col = mix(uDeep, uShallow, clamp(vH * 0.6 + 0.4, 0.0, 1.0) * 0.6);
+  vec3 R = reflect(-V, N);
+  vec3 sky = mix(uSkyLow, uSkyMid, smoothstep(0.0, 0.45, R.y));
+  col = mix(col, sky, fres);
+  float sd = max(0.0, dot(R, normalize(uSunDir)));
+  col += uSun * (pow(sd, mix(80.0, 500.0, det)) * mix(1.4, 3.2, det) + pow(sd, 12.0) * 0.12);
+  float foam = smoothstep(0.78, 0.98, vH * 0.9 + n2(p * 3.1 + uTime * 0.6) * 0.25 * det) * det;
+  col = mix(col, uFoam * 0.6, foam * 0.35);
+  float gl = n2(p * 0.35 - uTime * 0.12) * n2(p * 0.9 + uTime * 0.2);
+  col += uGlow * (0.12 + 0.8 * smoothstep(0.25, 0.6, gl)) * (0.6 + foam) * 0.6;
+  col += vec3(0.6, 0.65, 1.0) * uFlash * 0.3;
+  float f = 1.0 - exp(-pow(dist * uFogD, 2.0));
+  col = mix(col, uFogC, clamp(f, 0.0, 1.0));
+  gl_FragColor = vec4(col, 1.0);
+}`;
+// glowing additive ribbons (telegraphs, lightning, beams): uK = brightness, dashed when uDash > 0
+const RIB_VERT = /* glsl */ `attribute float aU; varying float vU; varying vec2 vUv; void main(){ vU = aU; vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }`;
+const RIB_FRAG = /* glsl */ `
+uniform vec3 uColor; uniform float uK, uDash, uTime;
+varying float vU; varying vec2 vUv;
+void main(){
+  float edge = clamp(1.0 - abs(vUv.y * 2.0 - 1.0), 0.0, 1.0);   // clamped: pow() of a hair below zero is NaN and NaN blooms into a white blot
+  float a = edge * sqrt(edge) * (0.6 + 0.4 * edge);
+  if (uDash > 0.0) a *= step(0.45, fract(vU * uDash - uTime * 3.0));
+  gl_FragColor = vec4(uColor * a * uK, 1.0);
+}`;
+const COL_VERT = /* glsl */ `varying vec2 vUv; varying vec3 vN, vV, vW;
+void main(){ vUv = uv; vN = normalize(normalMatrix * normal); vec4 mv = modelViewMatrix * vec4(position, 1.0); vV = -mv.xyz; vW = (modelMatrix * vec4(position, 1.0)).xyz; gl_Position = projectionMatrix * mv; }`;
+// a column of light (rider forming): brightest through its middle, rippling upward, no seam
+const COL_FRAG = /* glsl */ `
+uniform vec3 uColor; uniform float uK, uTime;
+varying vec2 vUv; varying vec3 vN, vV, vW;
+void main(){
+  float f = abs(dot(normalize(vN), normalize(vV)));
+  float s = 0.6 + 0.4 * sin(vUv.y * 22.0 - uTime * 9.0 + sin(vUv.x * 18.849) * 1.5);
+  float top = 1.0 - smoothstep(0.65, 1.0, vUv.y);
+  gl_FragColor = vec4(uColor * pow(f, 1.8) * s * top * uK * 0.55, 1.0);
+}`;
+// a sea spout: a translucent churning water column with foam streaks racing upward
+const SPOUT_FRAG = /* glsl */ `
+uniform vec3 uColor, uDeep; uniform float uK, uTime;
+varying vec2 vUv; varying vec3 vN, vV, vW;
+float h2(vec2 p){ return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
+float n2(vec2 p){ vec2 i = floor(p), f = fract(p); f = f*f*(3.0-2.0*f); return mix(mix(h2(i), h2(i+vec2(1,0)), f.x), mix(h2(i+vec2(0,1)), h2(i+vec2(1,1)), f.x), f.y); }
+void main(){
+  float f = abs(dot(normalize(vN), normalize(vV)));
+  float st = n2(vec2((vW.x - vW.z) * 1.4, vW.y * 0.45 - uTime * 5.0)) * 0.65 + n2(vec2((vW.x + vW.z) * 3.1, vW.y * 1.2 - uTime * 7.0)) * 0.35;
+  float top = 1.0 - smoothstep(0.7, 1.0, vUv.y);
+  vec3 col = mix(uDeep, uColor, clamp(0.35 + st * 0.7 + (1.0 - f) * 0.35, 0.0, 1.0));
+  float a = clamp((0.02 + (1.0 - f) * 0.26 + smoothstep(0.52, 0.85, st) * 0.32) * top * uK, 0.0, 0.7);
+  gl_FragColor = vec4(col, a);
+}`;
+
+// a camera-facing strip along a path in sim coordinates
+class Ribbon {
+  constructor(scene, n = 32, color = 0xff4a3a) {
+    this.n = n;
+    const g = new THREE.BufferGeometry();
+    this.pos = new Float32Array(n * 2 * 3);
+    const uv = new Float32Array(n * 2 * 2), au = new Float32Array(n * 2), idx = [];
+    for (let i = 0; i < n; i++) { uv.set([i / (n - 1), 0, i / (n - 1), 1], i * 4); au[i * 2] = au[i * 2 + 1] = i / (n - 1); if (i < n - 1) idx.push(i * 2, i * 2 + 1, i * 2 + 2, i * 2 + 1, i * 2 + 3, i * 2 + 2); }
+    g.setAttribute('position', new THREE.BufferAttribute(this.pos, 3).setUsage(THREE.DynamicDrawUsage));
+    g.setAttribute('uv', new THREE.BufferAttribute(uv, 2));
+    this.au = new THREE.BufferAttribute(au, 1);
+    g.setAttribute('aU', this.au);
+    g.setIndex(idx);
+    g.boundingSphere = new THREE.Sphere(new THREE.Vector3(), 1e5);
+    this.mat = new THREE.ShaderMaterial({ vertexShader: RIB_VERT, fragmentShader: RIB_FRAG, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, side: THREE.DoubleSide,
+      uniforms: { uColor: { value: new THREE.Color(color) }, uK: { value: 1 }, uDash: { value: 0 }, uTime: { value: 0 } } });
+    this.mesh = new THREE.Mesh(g, this.mat);
+    this.mesh.frustumCulled = false; this.mesh.visible = false; this.mesh.renderOrder = 4;
+    scene.add(this.mesh);
+    this.t = 0; this.max = 0; this.k = 1; this.used = false;
+  }
+  // pts: [[x, y], ...] in sim coords (any count, resampled to n), w = width in metres, dr = radial offset
+  set(pts, w, dr = 0.6) {
+    const n = this.n, P = this.pos;
+    for (let i = 0; i < n; i++) {
+      const f = (i / (n - 1)) * (pts.length - 1), a = Math.floor(f), b = Math.min(pts.length - 1, a + 1), t = f - a;
+      const x = pts[a][0] + (pts[b][0] - pts[a][0]) * t, y = pts[a][1] + (pts[b][1] - pts[a][1]) * t;
+      // direction along the path, in sim space
+      const j0 = Math.max(0, a), j1 = Math.min(pts.length - 1, j0 + 1);
+      let dx = pts[j1][0] - pts[j0][0], dy = pts[j1][1] - pts[j0][1];
+      const l = Math.hypot(dx, dy) || 1; dx /= l; dy /= l;
+      // the side vector is perpendicular to the path within the playfield
+      const sx = -dy * w * 0.5, sy = dx * w * 0.5;
+      toWorld(x + sx, y + sy, _v, dr); P[i * 6] = _v.x; P[i * 6 + 1] = _v.y; P[i * 6 + 2] = _v.z;
+      toWorld(x - sx, y - sy, _v, dr); P[i * 6 + 3] = _v.x; P[i * 6 + 4] = _v.y; P[i * 6 + 5] = _v.z;
+    }
+    this.mesh.geometry.attributes.position.needsUpdate = true;
+    this.mesh.visible = true;
+  }
+  hide() { this.mesh.visible = false; this.used = false; }
+}
+// a jagged lightning path between two sim points
+function boltPath(x0, y0, x1, y1, n = 18, jit = 0.9) {
+  const pts = [];
+  for (let i = 0; i < n; i++) { const t = i / (n - 1), j = i === 0 || i === n - 1 ? 0 : (Math.random() - 0.5) * jit * 2 * Math.sin(t * Math.PI); pts.push([x0 + (x1 - x0) * t + j, y0 + (y1 - y0) * t + j * 0.4]); }
+  return pts;
+}
+
+// ------------------------------------------------------------------ the renderer
+export class Renderer {
+  constructor(canvas, q) {
+    this.q = q;
+    const r = new THREE.WebGLRenderer({ canvas, antialias: false, powerPreference: 'high-performance', stencil: false });
+    r.setPixelRatio(q.dpr);
+    r.shadowMap.enabled = true;
+    r.shadowMap.type = THREE.PCFSoftShadowMap;
+    r.outputColorSpace = THREE.LinearSRGBColorSpace;
+    r.toneMapping = THREE.NoToneMapping;
+    this.r = r;
+    this.scale = 1;
+    this.scene = new THREE.Scene();
+    this.camera = new THREE.PerspectiveCamera(40, innerWidth / innerHeight, 0.3, 1200);
+    this.post = new Post(r, q);
+    this.T = TX.sprites();
+    this.pm = new THREE.PMREMGenerator(r);
+    this.envs = [];
+    MD.materials(null, TX.grimeTex(), TX.stripeTex(), TX.panelNormal(q.tex >= 1024 ? 512 : 256), q.name === 'high');
+    this.suit = [{ armor: 0xc4ccd8, cloth: 0x1f4fb8, accent: 0x7fe0ff, hide: 0x5e6c7a }, { armor: 0xd8c8a8, cloth: 0xa82424, accent: 0xffc860, hide: 0x6e5e52 }];
+    this.time = 0; this.trauma = 0;
+    this.flash = new THREE.Vector4(1, 1, 1, 0);
+    this.shocks = [];
+    this.lookI = -1; this.look = LOOKS[0];
+    this.camTh = 0; this.camY = 12; this.camD = 34; this.camPos = new THREE.Vector3(0, 14, 50); this.camLook = new THREE.Vector3(0, 12, 0); this.camFov = 40;
+    this.shot = null;
+    this.lights();
+    this.buildSky();
+    this.buildSea();
+    this.fx = new FX(this.scene, this.T, { dust: q.dust, sparks: q.sparks, debris: q.debris, flashLights: q.flashLights }, (x, z) => this.heightAt(x, z));
+    this.views = { r: new Map(), p: new Map(), c: new Map(), pk: new Map() };
+    this.ghosts = [];
+    this.ledgeSets = []; this.rockSets = []; this.ledges = null; this.W = null;
+    this.ribbons = []; for (let i = 0; i < 28; i++) this.ribbons.push(new Ribbon(this.scene));
+    this.flashes = [];   // lightning ribbons fading out
+    this.makeColumns();
+    this.makeShots();
+    this.makeSpire();
+    this.hunterV = null; this.bossV = null; this.bossKey = null;
+    this.resize();
+    addEventListener('resize', () => this.resize());
+    this.setLook(0);
+  }
+
+  // ---------------------------------------------------------------- lights, sky, sea, environment
+  lights() {
+    const k = new THREE.DirectionalLight(0xffffff, 3);
+    k.castShadow = true;
+    k.shadow.mapSize.set(this.q.shadow, this.q.shadow);
+    const c = k.shadow.camera;
+    c.left = -26; c.right = 26; c.top = 22; c.bottom = -18; c.near = 1; c.far = 140;
+    k.shadow.bias = -0.0004; k.shadow.normalBias = 0.04;
+    this.scene.add(k, k.target);
+    this.key = k;
+    this.hemi = new THREE.HemisphereLight(0xffffff, 0x222222, 0.5);
+    this.fill = new THREE.DirectionalLight(0xffffff, 0.4);
+    this.scene.add(this.hemi, this.fill);
+    // FIXED light pools: the light count never changes after boot (that would recompile every material)
+    this.lightPool = [];
+    for (let i = 0; i < 6; i++) { const l = new THREE.PointLight(0xffffff, 0, 26, 1.8); l.position.set(0, -50, 0); this.scene.add(l); this.lightPool.push(l); }
+    this.lanceLights = [];
+    for (let i = 0; i < 2; i++) { const l = new THREE.PointLight(0x9fe8ff, 0, 8, 2); l.position.set(0, -50, 0); this.scene.add(l); this.lanceLights.push(l); }
+  }
+  buildSky() {
+    this.skyMat = new THREE.ShaderMaterial({ vertexShader: SKY_VERT, fragmentShader: SKY_FRAG, side: THREE.BackSide, depthWrite: false,
+      uniforms: { uTop: { value: new THREE.Color() }, uMid: { value: new THREE.Color() }, uLow: { value: new THREE.Color() }, uSun: { value: new THREE.Color() }, uSunDir: { value: new THREE.Vector3() },
+        uCloudA: { value: new THREE.Color() }, uCloudB: { value: new THREE.Color() }, uFlash: { value: 0 }, uTime: { value: 0 }, uDisc: { value: 1 }, uAurora: { value: 0 }, uStars: { value: 0 } } });
+    this.sky = new THREE.Mesh(new THREE.SphereGeometry(900, 32, 16), this.skyMat);
+    this.sky.frustumCulled = false; this.sky.renderOrder = -10;
+    this.scene.add(this.sky);
+    this.scene.fog = new THREE.FogExp2(0x000000, 0.01);
+  }
+  buildSea() {
+    this.seaMat = new THREE.ShaderMaterial({ vertexShader: SEA_VERT, fragmentShader: SEA_FRAG,
+      uniforms: { uTime: { value: 0 }, uWaves: { value: 1 }, uDeep: { value: new THREE.Color() }, uShallow: { value: new THREE.Color() }, uFoam: { value: new THREE.Color() }, uGlow: { value: new THREE.Color() },
+        uSkyLow: { value: new THREE.Color() }, uSkyMid: { value: new THREE.Color() }, uSun: { value: new THREE.Color() }, uSunDir: { value: new THREE.Vector3() }, uFogC: { value: new THREE.Color() }, uFogD: { value: 0.01 }, uFlash: { value: 0 } } });
+    const g = new THREE.CircleGeometry(520, 160, 0, Math.PI * 2);
+    g.rotateX(-Math.PI / 2);
+    // more vertices near the ring for the swell
+    const sea = new THREE.Mesh(g, this.seaMat);
+    sea.position.y = -0.15; sea.frustumCulled = false;
+    this.sea = sea;
+    this.scene.add(sea);
+    const near = new THREE.Mesh(new THREE.RingGeometry(2, 70, 96, 24), this.seaMat);
+    near.rotation.x = -Math.PI / 2; near.position.y = -0.1; near.frustumCulled = false;
+    this.scene.add(near);
+  }
+  envFor(i) {
+    if (this.envs[i]) return this.envs[i];
+    const L = LOOKS[i], s = new THREE.Scene();
+    s.add(new THREE.Mesh(new THREE.SphereGeometry(10, 32, 16), new THREE.ShaderMaterial({ side: THREE.BackSide, uniforms: { a: { value: new THREE.Color(L.env[0]) }, b: { value: new THREE.Color(L.env[1]) }, c: { value: new THREE.Color(L.env[2]) } },
+      vertexShader: 'varying vec3 vP; void main(){ vP = position; gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }',
+      fragmentShader: 'uniform vec3 a,b,c; varying vec3 vP; void main(){ vec3 d = normalize(vP); vec3 col = mix(c, b, smoothstep(-0.2, 0.3, d.y)); col += a * pow(max(0.0, d.y), 6.0) * 2.5; gl_FragColor = vec4(col, 1.0); }' })));
+    for (let k = 0; k < 5; k++) {
+      const m = new THREE.Mesh(new THREE.PlaneGeometry(3, 1), new THREE.MeshBasicMaterial({ color: hdr(L.env[0], 4), side: THREE.DoubleSide }));
+      const a = (k / 5) * Math.PI * 2; m.position.set(Math.cos(a) * 8, 4 + (k % 2) * 2, Math.sin(a) * 8); m.lookAt(0, 0, 0); s.add(m);
+    }
+    this.envs[i] = this.pm.fromScene(s, 0.03).texture;
+    return this.envs[i];
+  }
+  heightAt(x, z) {
+    const r = Math.hypot(x, z);
+    if (Math.abs(r - RR) > 2.4 || !this.W) return -1;
+    let sx = Math.atan2(x, z) * RR; if (sx < 0) sx += F.C;
+    let best = -1;
+    for (const L of this.W.ledges) { if (L.st === 2) continue; let d = Math.abs(((sx - L.x) % F.C + F.C * 1.5) % F.C - F.C / 2); if (d < L.w && L.y > best) best = L.y; }
+    return best;
+  }
+
+  // ---------------------------------------------------------------- sector set: ledges, spire colours, scenery
+  setLook(i) {
+    i = ((i % 5) + 5) % 5;
+    if (i === this.lookI) return;
+    this.lookI = i;
+    const L = this.look = LOOKS[i];
+    const env = this.envFor(i);
+    this.scene.environment = env;
+    const u = this.skyMat.uniforms;
+    u.uTop.value.set(L.sky[0]); u.uMid.value.set(L.sky[1]); u.uLow.value.set(L.sky[2]); u.uSun.value.set(L.sun); u.uSunDir.value.set(...L.sunDir).normalize();
+    u.uCloudA.value.set(L.cloud[0]); u.uCloudB.value.set(L.cloud[1]); u.uDisc.value = L.sunDisc; u.uAurora.value = L.aurora ? 1 : 0; u.uStars.value = L.stars ? 1 : 0;
+    const s = this.seaMat.uniforms;
+    s.uDeep.value.set(L.sea[0]); s.uShallow.value.set(L.sea[1]); s.uFoam.value.set(L.sea[2]); s.uGlow.value.set(L.sea[3]).multiplyScalar(0.6); s.uSkyLow.value.set(L.sky[2]).lerp(_c.set(L.fog), 0.35); s.uSkyMid.value.set(L.sky[1]).lerp(_c.set(L.sky[0]), 0.3);
+    s.uSun.value.set(L.sun); s.uSunDir.value.set(...L.sunDir).normalize(); s.uFogC.value.set(L.fog); s.uFogD.value = L.fogD * 0.8;
+    this.scene.fog.color.set(L.fog); this.scene.fog.density = L.fogD;
+    this.key.color.set(L.sun); this.key.intensity = L.keyI;
+    this.hemi.color.set(L.hemi[0]); this.hemi.groundColor.set(L.hemi[1]); this.hemi.intensity = L.hemi[2];
+    this.fill.color.set(L.fill); this.fill.intensity = L.fillI; this.fill.position.set(-L.sunDir[0], 0.6, -L.sunDir[2]);
+    this.fx.setLook(L);
+    this.crownMat.color.copy(hdr(L.spire, 3.2));
+    this.spireRune.color.copy(hdr(L.rune, 2.2));
+    for (const S of this.ledgeSets) if (S) S.visible = false;
+    if (!this.ledgeSets[i]) this.ledgeSets[i] = this.buildLedgeSet(i);
+    this.ledgeSets[i].visible = true;
+    this.ledges = this.ledgeSets[i];
+    const rk = this.rockSets[i], sm = this.spireMat;
+    if (sm.map !== rk.map) { const first = !sm.map; sm.map = rk.map; sm.normalMap = rk.normalMap; sm.roughnessMap = rk.roughnessMap; if (first) sm.needsUpdate = true; }
+    sm.color.set(L.key === 'glacier' ? 0xc8d8e8 : L.key === 'ruins' ? 0xc0a898 : 0xa8a0a0);
+
+    for (const S of this.scenery || []) if (S) S.visible = false;
+    if (!this.scenery) this.scenery = [];
+    if (!this.scenery[i]) this.scenery[i] = this.buildScenery(i);
+    this.scenery[i].visible = true;
+    this.amb = L.amb;
+  }
+  buildLedgeSet(i) {
+    const L = LOOKS[i], grp = new THREE.Group();
+    const rock = TX.rockSet(L.rock, this.q.tex >= 1024 ? 512 : 256);
+    this.rockSets[i] = rock;
+    const rockMat = new THREE.MeshStandardMaterial({ map: rock.map, normalMap: rock.normalMap, roughnessMap: rock.roughnessMap, roughness: 1, metalness: 0.05, color: 0xffffff, envMapIntensity: 0.6 });
+    const topSet = L.top === 'rock' ? rock : TX.floorSet(L.top, this.q.tex >= 1024 ? 1024 : 512);
+    const topMat = new THREE.MeshStandardMaterial({ map: topSet.map, normalMap: topSet.normalMap, roughnessMap: topSet.roughnessMap, roughness: 1, metalness: L.top === 'plate' ? 0.6 : 0.08, color: L.topTint, envMapIntensity: 0.8 });
+    const trimMat = MD.paint(L.key === 'foundry' ? 0x6a5a4a : L.key === 'eclipse' ? 0xd8a84a : 0x9a8a78, 0.5, L.key === 'ruins' ? 0.1 : 0.7);
+    const runeMat = MD.glow(L.accent, 2.4);
+    LAYOUT[i].forEach(([f, y, w], k) => {
+      const lg = new THREE.Group();
+      const geo = ledgeGeometry(f * F.C, y, w, i * 31 + k * 7);
+      const m = new THREE.Mesh(twoGroups(geo), [rockMat, topMat]);
+      m.castShadow = true; m.receiveShadow = true;
+      lg.add(m);
+      // a carved lip along the outer edge with a few runes, and sector dressing
+      const rnd = mkr(i * 97 + k * 13);
+      const lip = new THREE.Mesh(arcBox(f * F.C, y + 0.09, w * 0.96, 0.18, 0.22, 2.15), trimMat); lip.castShadow = true; lip.receiveShadow = true; lg.add(lip);
+      const nR = Math.max(1, Math.round(w / 2));
+      for (let j = 0; j < nR; j++) { const x = f * F.C + (j - (nR - 1) / 2) * 1.8; const rm = new THREE.Mesh(MD.GEO.box(0.5, 0.06, 0.06), runeMat); toWorld(x, y + 0.2, rm.position, 2.27); rm.lookAt(toWorld(x, y + 0.2, _v, 10)); lg.add(rm); }
+      this.dress(lg, L.key, f * F.C, y, w, rnd);
+      mergeByMaterial(lg);
+      lg.userData = { id: k, y0: 0 };
+      grp.add(lg);
+    });
+    this.scene.add(grp);
+    return grp;
+  }
+  // per-sector props on and under a ledge
+  dress(g, key, x0, y, w, rnd) {
+    const P = this.q.props;
+    const put = (geo, mat, x, yy, dr, rx = 0, ry = 0, rz = 0, s = 1) => { const m = new THREE.Mesh(geo, mat); toWorld(x, yy, m.position, dr); m.rotation.set(rx, ry + x / RR, rz); m.scale.setScalar(s); m.castShadow = true; m.receiveShadow = true; g.add(m); return m; };
+    const stone = MD.paint(0xb8a890, 0.85, 0.02), iron = MD.paint(0x3a3430, 0.5, 0.85), ice = MD.paint(0xd8eef8, 0.12, 0.05), obs = MD.paint(0x0e0c12, 0.2, 0.6), gold = MD.paint(0xd8a84a, 0.28, 1);
+    const n = Math.max(1, Math.round(w * 0.5 * P));
+    for (let i = 0; i < n; i++) {
+      const x = x0 + (rnd() - 0.5) * w * 1.7, dr = -1.6 + rnd() * 0.6;
+      if (key === 'ruins') {
+        // broken columns at the back edge
+        const h = 1.2 + rnd() * 2.6;
+        put(MD.GEO.cyl(0.34, 0.38, h, 14), stone, x, y + h / 2, dr);
+        put(MD.GEO.box(1.0, 0.25, 1.0), stone, x, y + 0.12, dr);
+        if (rnd() < 0.5) put(MD.GEO.box(0.9, 0.3, 0.9), stone, x, y + h + 0.15, dr, 0, 0, rnd() * 0.4);
+      } else if (key === 'caverns') {
+        for (let k = 0; k < 3; k++) put(MD.GEO.cyl(0.0, 0.16 + rnd() * 0.12, 0.8 + rnd() * 1.4, 6), MD.glow(0x40ffd0, 2 + rnd() * 2), x + (rnd() - 0.5), y + 0.5, dr + rnd() * 0.5, (rnd() - 0.5) * 0.6, 0, (rnd() - 0.5) * 0.6);
+      } else if (key === 'foundry') {
+        put(MD.GEO.box(0.5, 2.4, 0.5), iron, x, y + 1.2, dr);
+        put(MD.GEO.cyl(0.45, 0.3, 0.4, 12), iron, x, y + 2.5, dr);
+        put(MD.GEO.cyl(0.36, 0.36, 0.06, 12), MD.glow(0xff7a2a, 4), x, y + 2.72, dr);
+      } else if (key === 'glacier') {
+        put(MD.GEO.cyl(0.0, 0.3 + rnd() * 0.3, 1.5 + rnd() * 2.2, 7), ice, x, y + 0.9, dr, 0, 0, (rnd() - 0.5) * 0.3);
+      } else {
+        put(MD.GEO.cyl(0.0, 0.35, 2.5 + rnd() * 2.5, 5), obs, x, y + 1.6, dr, 0, 0, (rnd() - 0.5) * 0.25);
+        put(MD.GEO.tor(0.4, 0.04, 16, 6), gold, x, y + 1.2, dr - 0.1, 0, Math.PI / 2, 0);
+      }
+    }
+    // things hanging under the ledge
+    for (let i = 0; i < Math.round(2 * P); i++) {
+      const x = x0 + (rnd() - 0.5) * w * 1.2, dr = (rnd() - 0.5) * 2.5;
+      if (key === 'caverns') put(MD.GEO.cyl(0.18, 0.0, 1.2 + rnd(), 6), MD.glow(0x60e8ff, 2.5), x, y - 2.2 - rnd() * 1.5, dr);
+      else if (key === 'glacier') put(MD.GEO.cyl(0.22, 0.0, 1.5 + rnd() * 1.5, 6), ice, x, y - 2.0 - rnd(), dr);
+      else if (key === 'foundry') { for (let k = 0; k < 6; k++) put(MD.GEO.tor(0.14, 0.04, 8, 6), iron, x, y - 1.3 - k * 0.24, dr, 0, k % 2 ? 0 : Math.PI / 2, 0); }
+    }
+  }
+  buildScenery(i) {
+    const L = LOOKS[i], g = new THREE.Group(), rnd = mkr(500 + i * 17);
+    const rock = TX.rockSet(L.rock, 256);
+    const mat = new THREE.MeshStandardMaterial({ map: rock.map, normalMap: rock.normalMap, roughness: 0.95, metalness: 0.05, color: L.topTint });
+    // distant floating islands round the ring, in an instanced mesh
+    const N = Math.round(40 * this.q.props);
+    const I = new THREE.InstancedMesh(islandGeometry(i * 7 + 3), mat, N);
+    for (let k = 0; k < N; k++) {
+      const a = rnd() * Math.PI * 2, r = 60 + rnd() * 140, s = 3 + rnd() * 12;
+      _v.set(Math.sin(a) * r, 6 + rnd() * 50, Math.cos(a) * r);
+      _e.set(rnd() * 0.3, rnd() * 6, rnd() * 0.3); _q.setFromEuler(_e); _s.set(s, s * (0.5 + rnd() * 0.6), s);
+      I.setMatrixAt(k, _m.compose(_v, _q, _s));
+    }
+    I.receiveShadow = true;
+    g.add(I);
+    // sea stacks rising from the water
+    const M = Math.round(24 * this.q.props);
+    const J = new THREE.InstancedMesh(MD.GEO.cyl(0.6, 1, 1, 9), mat, M);
+    for (let k = 0; k < M; k++) {
+      const a = rnd() * Math.PI * 2, r = 36 + rnd() * 70, h = 6 + rnd() * 24, s = 2 + rnd() * 4;
+      _v.set(Math.sin(a) * r, h / 2 - 1, Math.cos(a) * r); _e.set(0, rnd() * 6, (rnd() - 0.5) * 0.15); _q.setFromEuler(_e); _s.set(s, h, s);
+      J.setMatrixAt(k, _m.compose(_v, _q, _s));
+    }
+    J.castShadow = false; J.receiveShadow = true;
+    g.add(J);
+    this.scene.add(g);
+    return g;
+  }
+  makeSpire() {
+    const g = new THREE.Group();
+    const pts = [];
+    for (let i = 0; i <= 40; i++) { const t = i / 40; pts.push(new THREE.Vector2(3.5 * Math.pow(1 - t, 0.85) + 0.8 + Math.sin(t * 23) * 0.18 + (i % 5 === 0 ? 0.22 : 0), -4 + t * 50)); }
+    const geo = new THREE.LatheGeometry(pts, 44);
+    const p = geo.attributes.position, uv = geo.attributes.uv;
+    for (let i = 0; i < p.count; i++) {
+      const x = p.getX(i), y = p.getY(i), z = p.getZ(i), a = Math.atan2(z, x) + y * 0.05, r = Math.hypot(x, z) * (0.8 + vnoise(x * 0.5, y * 0.25, z * 0.5) * 0.36 + vnoise(x * 2.2, y * 1.4, z * 2.2) * 0.08);
+      p.setXYZ(i, Math.cos(a) * r, y, Math.sin(a) * r);
+      uv.setXY(i, uv.getX(i) * 6, uv.getY(i) * 12);
+    }
+    geo.computeVertexNormals();
+    this.spireMat = new THREE.MeshStandardMaterial({ color: 0xa8a0a0, roughness: 1, metalness: 0.05, envMapIntensity: 0.5 });
+    const sp = new THREE.Mesh(geo, this.spireMat); sp.castShadow = false; sp.receiveShadow = true;
+    g.add(sp);
+    // carved rune bands that glow in the sector's colour
+    this.spireRune = new THREE.MeshBasicMaterial({ color: 0xffffff, toneMapped: false });
+    const iron = MD.paint(0x3a3430, 0.4, 0.9);
+    for (const [y, k] of [[6, 0], [17, 1], [27, 0], [36, 1], [43, 0]]) {
+      const t = (y + 4) / 50, r = 3.5 * Math.pow(1 - t, 0.85) + 0.8;
+      const band = new THREE.Mesh(new THREE.TorusGeometry(r * 0.98, 0.07, 6, 48), this.spireRune); band.position.y = y; band.rotation.x = Math.PI / 2; g.add(band);
+      const rim = new THREE.Mesh(new THREE.TorusGeometry(r * 1.01, 0.16, 8, 48), iron); rim.position.y = y + (k ? 0.35 : -0.35); rim.rotation.x = Math.PI / 2; g.add(rim);
+    }
+    // rune stones round the base
+    for (let k = 0; k < 8; k++) { const a = (k / 8) * Math.PI * 2; const m = new THREE.Mesh(MD.GEO.box(0.5, 1.6, 0.18), this.spireRune); m.position.set(Math.cos(a) * 4.05, 1.5 + (k % 2) * 0.6, Math.sin(a) * 4.05); m.rotation.y = -a; m.scale.set(0.6, 1, 0.4); g.add(m); }
+    // the crown: a cage of iron prongs holding a storm crystal, a slow halo
+    this.crownMat = new THREE.MeshBasicMaterial({ color: 0xffffff, toneMapped: false });
+    const crown = new THREE.Mesh(new THREE.OctahedronGeometry(1.5, 0), this.crownMat); crown.position.y = 49.6; crown.scale.set(1, 1.6, 1); g.add(crown);
+    for (let k = 0; k < 5; k++) {
+      const a = (k / 5) * Math.PI * 2, pr = new THREE.Mesh(new THREE.ConeGeometry(0.22, 5.5, 6), iron);
+      pr.position.set(Math.cos(a) * 1.9, 48.2, Math.sin(a) * 1.9); pr.rotation.set(Math.sin(a) * 0.32, 0, -Math.cos(a) * 0.32); g.add(pr);
+    }
+    for (let k = 0; k < 3; k++) { const ring = new THREE.Mesh(new THREE.TorusGeometry(2.6 + k * 0.9, 0.12, 8, 40), iron); ring.position.y = 46 + k * 1.3; ring.rotation.x = Math.PI / 2 + k * 0.2; g.add(ring); }
+    mergeByMaterial(g);
+    const halo = new THREE.Mesh(new THREE.TorusGeometry(4.6, 0.06, 6, 64), this.spireRune); halo.position.y = 49.6; halo.rotation.x = Math.PI / 2 - 0.25; g.add(halo); this.halo = halo;
+    this.crown = crown;
+    this.spire = g;
+    this.scene.add(g);
+  }
+  makeColumns() {
+    // spout columns (water) and rider-forming columns (light), both additive, both pooled
+    const geo = new THREE.CylinderGeometry(1, 1, 1, 20, 1, true); geo.translate(0, 0.5, 0);
+    this.cols = [];
+    for (let i = 0; i < 10; i++) {
+      const mat = new THREE.ShaderMaterial({ vertexShader: COL_VERT, fragmentShader: COL_FRAG, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, side: THREE.DoubleSide,
+        uniforms: { uColor: { value: new THREE.Color(0xbfe8ff) }, uK: { value: 1 }, uTime: { value: 0 } } });
+      const m = new THREE.Mesh(geo, mat); m.visible = false; m.frustumCulled = false; m.renderOrder = 3;
+      this.scene.add(m); this.cols.push(m);
+    }
+    this.spouts = [];
+    for (let i = 0; i < 6; i++) {
+      const mat = new THREE.ShaderMaterial({ vertexShader: COL_VERT, fragmentShader: SPOUT_FRAG, transparent: true, depthWrite: false, side: THREE.DoubleSide,
+        uniforms: { uColor: { value: new THREE.Color(0xd8ecff) }, uDeep: { value: new THREE.Color(0x203040) }, uK: { value: 1 }, uTime: { value: 0 } } });
+      const m = new THREE.Mesh(geo, mat); m.visible = false; m.frustumCulled = false; m.renderOrder = 3;
+      this.scene.add(m); this.spouts.push(m);
+    }
+    const ringGeo = new THREE.RingGeometry(0.7, 1, 40); ringGeo.rotateX(-Math.PI / 2);
+    this.rings = [];
+    for (let i = 0; i < 12; i++) { const m = new THREE.Mesh(ringGeo, new THREE.MeshBasicMaterial({ color: 0xff5a3a, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, toneMapped: false })); m.visible = false; m.renderOrder = 3; this.scene.add(m); this.rings.push(m); }
+  }
+  makeShots() {
+    const mk = (geo, mat, n) => { const I = new THREE.InstancedMesh(geo, mat, n); I.count = 0; I.frustumCulled = false; I.instanceMatrix.setUsage(THREE.DynamicDrawUsage); this.scene.add(I); return I; };
+    this.shotI = {
+      shard: mk(new THREE.OctahedronGeometry(0.45, 0), new THREE.MeshBasicMaterial({ color: hdr(0x7ff0ff, 4), toneMapped: false }), 40),
+      blob: mk(new THREE.IcosahedronGeometry(0.55, 1), new THREE.MeshBasicMaterial({ color: hdr(0xff7a2a, 5), toneMapped: false }), 40),
+      ice: mk(new THREE.ConeGeometry(0.35, 1.4, 6), new THREE.MeshStandardMaterial({ color: 0xd8f0ff, roughness: 0.1, metalness: 0.1, emissive: 0x2a6a8a }), 40),
+      orb: mk(new THREE.SphereGeometry(0.6, 16, 12), new THREE.MeshBasicMaterial({ color: hdr(0xa060ff, 3.5), toneMapped: false }), 40),
+    };
+  }
+  takeRibbon() { for (const r of this.ribbons) if (!r.used) { r.used = true; return r; } return null; }
+  takeCol() { for (const c of this.cols) if (!c.visible) return c; return null; }
+  takeSpout() { for (const c of this.spouts) if (!c.visible) return c; return null; }
+  takeRing() { for (const c of this.rings) if (!c.visible) return c; return null; }
+
+  // ---------------------------------------------------------------- views
+  riderView(kind, elite, pid) {
+    const o = pid ? { ...this.suit[pid - 1] } : { elite };
+    const v = MD.lancer(pid ? 'player' : kind, o);
+    const outer = new THREE.Group();
+    outer.matrixAutoUpdate = false;
+    outer.add(v.g);
+    this.scene.add(outer);
+    return { outer, v, turn: 1, face: 1, kind, pid, t: Math.random() * 10, bank: 0, lvx: 0, roll: 0.2 };
+  }
+  // place a model at sim (x, y) facing face (+1 along the ring / -1 back); mirrored so its right side always faces the camera
+  place(outer, x, y, sx, dr = 0) {
+    tangent(x, _v); radial(x, _v2);
+    _v.multiplyScalar(sx);
+    _m.makeBasis(_v, UP, _v2);
+    toWorld(x, y, _v3, dr);
+    _m.setPosition(_v3);
+    outer.matrix.copy(_m);
+    outer.matrixWorldNeedsUpdate = true;
+  }
+  animRider(V, b, dt, t) {
+    const v = V.v;
+    // a quick turn when the facing flips
+    if (b.face !== V.face) { V.face = b.face; }
+    V.turn += clamp(V.face - V.turn, -dt * 11, dt * 11);
+    const sx = Math.abs(V.turn) < 0.12 ? Math.sign(V.turn || 1) * 0.12 : V.turn;
+    this.place(V.outer, b.x, b.y, sx);
+    const air = b.on < 0;
+    const acc = (b.vx - V.lvx) / Math.max(dt, 1e-3); V.lvx = b.vx;
+    V.bank += (clamp(-acc * 0.012 * Math.sign(V.turn), -0.4, 0.4) - V.bank) * Math.min(1, dt * 5);
+    V.roll += ((air ? 0.34 : 0.1) - V.roll) * Math.min(1, dt * 5);
+    v.g.rotation.set((air ? V.bank : 0) + V.roll, -0.34, air ? clamp(b.vy * 0.035, -0.4, 0.32) : 0, 'YXZ');
+    // wing beats
+    let a, tip;
+    const k = b.beat;
+    if (!air) { a = 0.3 + Math.sin(t * 2 + V.t) * 0.04; tip = 0.9; }
+    else if (b.gliding) { a = -0.05 + Math.sin(t * 2 + V.t) * 0.04; tip = -0.05; }
+    else if (k < 0.13) { const f = k / 0.13; a = 1.0 - f * 1.6; tip = 0.6 - f * 1.0; }
+    else if (k < 0.45) { const f = (k - 0.13) / 0.32, e = f * f * (3 - 2 * f); a = -0.6 + e * 0.78; tip = -0.4 + e * 0.55; }
+    else { a = 0.18 + Math.sin(t * 3.2 + V.t) * 0.12; tip = 0.12 + Math.sin(t * 3.2 + V.t - 0.8) * 0.18; }
+    if (v.wingR) { v.wingR.rotation.x = -a; v.wingL.rotation.x = a; v.tipR.rotation.x = -tip; v.tipL.rotation.x = tip; }
+    if (v.tail) { v.tail.rotation.y = Math.sin(t * 2.6 + V.t) * 0.12; v.tail.rotation.z = air ? clamp(-b.vy * 0.03, -0.3, 0.3) : 0.15; v.tail2.rotation.y = Math.sin(t * 2.6 + V.t - 0.9) * 0.25; }
+    if (v.head) v.head.rotation.z = Math.sin(t * 1.7 + V.t) * 0.05;
+    if (v.mount) v.mount.position.y = air ? 0 : Math.abs(Math.sin(b.run * 2.2)) * 0.06 * Math.min(1, Math.abs(b.vx) / 2);
+    if (v.torso) v.torso.rotation.z = air ? clamp(b.vy * 0.02, -0.15, 0.15) : 0;
+    if (v.tip) v.tip.scale.setScalar(1 + Math.sin(t * 9 + V.t) * 0.12);
+  }
+  sync(W, dt) {
+    this.W = W;
+    const t = this.time;
+    // ledges: cracking, falling, rebuilt
+    if (this.ledges) for (const lg of this.ledges.children) {
+      const L = W.ledges[lg.userData.id];
+      if (!L) { lg.visible = false; continue; }
+      if (L.st === 0) { lg.visible = true; lg.position.set(0, 0, 0); lg.userData.fall = 0; }
+      else if (L.st === 1) { lg.visible = true; const s = 0.04 + (L.t / L.T) * 0.12; lg.position.set((Math.random() - 0.5) * s, (Math.random() - 0.5) * s, (Math.random() - 0.5) * s); }
+      else { lg.userData.fall = (lg.userData.fall || 0) + dt; lg.position.y = -lg.userData.fall * lg.userData.fall * 9; lg.visible = lg.userData.fall < 1.8; }
+    }
+    // players and riders
+    const seen = new Set();
+    W.players.forEach((p) => {
+      let V = this.views.p.get(p.id);
+      if (!V) { V = this.riderView('player', false, p.id); this.views.p.set(p.id, V); }
+      V.outer.visible = p.alive && !(p.inv > 0 && Math.floor(p.inv * 10) % 2 === 0 && p.inv < F.inv - 0.2);
+      if (p.alive) this.animRider(V, p, dt, t);
+      const LL = this.lanceLights[p.id - 1];
+      if (LL) { if (p.alive) { toWorld(p.x + p.face * 2.1, p.y + F.lanceH, LL.position, 0.6); LL.intensity = 6 + Math.sin(t * 9) * 1.5; LL.color.set(this.suit[p.id - 1].accent); } else LL.intensity = 0; }
+    });
+    for (const r of W.riders) {
+      seen.add(r.id);
+      let V = this.views.r.get(r.id);
+      if (!V) { V = this.riderView(r.type, r.elite, 0); this.views.r.set(r.id, V); V.born = 0; }
+      V.born += dt;
+      const s = Math.min(1, V.born / 0.35);
+      V.v.g.scale.setScalar(0.3 + 0.7 * s);
+      this.animRider(V, r, dt, t);
+    }
+    for (const [id, V] of this.views.r) if (!seen.has(id)) { this.scene.remove(V.outer); this.views.r.delete(id); }
+    // ghosts: unhorsed riders tumbling away
+    this.ghosts = this.ghosts.filter((G) => {
+      G.t += dt; G.vy -= 14 * dt; G.x += G.vx * dt; G.y += G.vy * dt; G.spin += dt * G.w;
+      this.place(G.outer, G.x, G.y, G.face);
+      G.v.g.rotation.set(G.spin * 0.6, -0.3, G.spin, 'YXZ');
+      // break apart: the knight is thrown clear of the saddle and tumbles on his own
+      if (G.split && G.v.rider) { const k = G.t; G.v.rider.position.set(-0.06 - k * 1.4, 0.86 + k * 2.4 - k * k * 4.5, k * 0.6); G.v.rider.rotation.set(k * 2, 0, k * 6); }
+      if (G.y < 0.2 && !G.splashed) { G.splashed = true; toWorld(G.x, 0, _v); this.fx.splash(_v.x, 0, _v.z, 1.2); }
+      if (G.t > 2.2 || G.y < -6) { this.scene.remove(G.outer); return false; }
+      return true;
+    });
+    this.syncCores(W, dt, t);
+    this.syncPickups(W, t);
+    this.syncHunter(W, dt, t);
+    this.syncBoss(W, dt, t);
+    this.syncHaz(W, dt, t);
+    this.syncShots(W);
+    // the spire crown pulses before lightning
+    let charge = 0;
+    for (const h of W.haz) if (h.k === 'bolt' && h.t < h.T) charge = Math.max(charge, h.t / h.T);
+    this.crown.scale.setScalar(1 + charge * 0.6 + Math.sin(t * 2) * 0.05);
+    const CL = this.lightPool[0];
+    CL.position.set(0, 49.5, 0); CL.intensity = 40 + charge * 400; CL.distance = 60; CL.color.set(this.look.spire);
+  }
+  syncCores(W, dt, t) {
+    const seen = new Set();
+    for (const c of W.cores) {
+      seen.add(c.id);
+      let V = this.views.c.get(c.id);
+      if (!V) { V = MD.core(); this.scene.add(V.g); this.views.c.set(c.id, V); }
+      toWorld(c.x, c.y, V.g.position);
+      const urg = c.rush ? 0 : clamp((c.t - (c.T - 3)) / 3, 0, 1);
+      V.cage.rotation.y += dt * (1.2 + urg * 5);
+      const pulse = 1 + urg * 0.5 * (0.5 + 0.5 * Math.sin(t * (6 + urg * 16)));
+      V.crystal.scale.set(pulse, 1.6 * pulse, pulse);
+      V.heart.scale.setScalar(1 + urg * 1.2);
+      V.g.scale.setScalar(c.st === 'form' ? 1 + c.fT * 1.4 : 1);
+      V.g.visible = !(c.rush && c.t > 18 && Math.floor(t * 8) % 2);
+    }
+    for (const [id, V] of this.views.c) if (!seen.has(id)) { this.scene.remove(V.g); this.views.c.delete(id); }
+  }
+  syncPickups(W, t) {
+    const seen = new Set();
+    for (const q of W.pickups) {
+      seen.add(q.id);
+      let V = this.views.pk.get(q.id);
+      if (!V) { V = MD.pickup(POWERUPS[q.kind].color); this.scene.add(V.g); this.views.pk.set(q.id, V); }
+      toWorld(q.x, q.y + Math.sin(t * 2.2 + q.id) * 0.25, V.g.position);
+      V.ring.rotation.y = t * 1.6; V.ring.rotation.x = t * 0.7;
+      V.g.visible = q.life - q.t > 3 || Math.floor(t * 6) % 2 === 0;
+    }
+    for (const [id, V] of this.views.pk) if (!seen.has(id)) { this.scene.remove(V.g); this.views.pk.delete(id); }
+  }
+  syncHunter(W, dt, t) {
+    const h = W.hunter;
+    if (!h) { if (this.hunterV) this.hunterV.outer.visible = false; return; }
+    if (!this.hunterV) { const v = MD.hunter(); const outer = new THREE.Group(); outer.matrixAutoUpdate = false; outer.add(v.g); this.scene.add(outer); this.hunterV = { v, outer, turn: h.face }; }
+    const V = this.hunterV;
+    V.outer.visible = true;
+    V.turn += clamp(h.face - V.turn, -dt * 8, dt * 8);
+    this.place(V.outer, h.x, h.y, Math.abs(V.turn) < 0.12 ? Math.sign(V.turn || 1) * 0.12 : V.turn);
+    V.v.g.rotation.set(0, -0.25, clamp(h.vy * 0.05, -0.5, 0.5), 'YXZ');
+    const a = Math.sin(t * 16) * 0.5;
+    V.v.wingR.rotation.x = -a; V.v.wingL.rotation.x = a;
+    V.v.tail.rotation.y = Math.sin(t * 5) * 0.2;
+    V.v.eye.scale.setScalar(1 + Math.sin(t * 20) * 0.2);
+  }
+  syncBoss(W, dt, t) {
+    const B = W.boss;
+    if (!B) { if (this.bossV) { this.scene.remove(this.bossV.outer); this.bossV = null; } return; }
+    if (!this.bossV || this.bossV.key !== B.key) {
+      if (this.bossV) this.scene.remove(this.bossV.outer);
+      const v = MD.boss(B.key), outer = new THREE.Group(); outer.matrixAutoUpdate = false; outer.add(v.g); this.scene.add(outer);
+      v.g.scale.setScalar({ sovereign: 1.4, wyvern: 1.18, gale: 1.05 }[B.key] || 1);
+      this.bossV = { v, outer, key: B.key, turn: B.face };
+      if (B.key === 'leviathan') { outer.matrix.identity(); outer.matrixWorldNeedsUpdate = true; for (const s of v.segs) s.matrixAutoUpdate = false; }
+    }
+    const V = this.bossV, v = V.v;
+    const hit = B.hitT > 0 ? 1 + B.hitT * 0.15 : 1;
+    if (B.key === 'leviathan') {
+      B.seg.forEach((s, i) => {
+        const m = v.segs[i]; if (!m) return;
+        const prev = B.seg[Math.max(0, i - 1)], next = B.seg[Math.min(B.seg.length - 1, i + 1)];
+        let dx = ((prev.x - next.x + F.C * 1.5) % F.C) - F.C / 2, dy = prev.y - next.y;
+        if (i === 0) { dx = ((s.x - next.x + F.C * 1.5) % F.C) - F.C / 2; dy = s.y - next.y; }
+        const l = Math.hypot(dx, dy) || 1;
+        tangent(s.x, _v).multiplyScalar(dx / l).addScaledVector(UP, dy / l).normalize();
+        radial(s.x, _v2);
+        _v3.crossVectors(_v2, _v).normalize();
+        _m.makeBasis(_v, _v3, _v2); toWorld(s.x, s.y, _v3); _m.setPosition(_v3);
+        m.matrix.copy(_m); m.matrixWorldNeedsUpdate = true;
+        m.visible = s.y > -3.5;
+      });
+      v.pts.forEach((g, i) => { g.visible = B.pts[i] && B.pts[i].hp > 0; g.scale.setScalar(hit * (1 + Math.sin(t * 6 + i) * 0.08)); });
+      return;
+    }
+    const mirror = B.key !== 'colossus';
+    V.turn += clamp((mirror ? B.face : 1) - V.turn, -dt * 4, dt * 4);
+    this.place(V.outer, B.x, B.y, Math.abs(V.turn) < 0.1 ? Math.sign(V.turn || 1) * 0.1 : V.turn);
+    v.g.rotation.set(0, B.key === 'colossus' ? 0 : -0.2, B.key === 'colossus' ? 0 : clamp(B.vy * 0.04, -0.3, 0.3), 'YXZ');
+    if (B.st === 'down') { v.g.rotation.z += B.t * 0.1; }
+    const flap = B.key === 'colossus' ? 0 : Math.sin(t * (B.key === 'gale' ? 2.2 : 3)) * (B.key === 'sovereign' ? 0.25 : 0.4);
+    if (v.wingR) { v.wingR.rotation.x = -flap; v.wingL.rotation.x = flap; }
+    if (v.tipR) { v.tipR.rotation.x = -flap * 0.6; v.tipL.rotation.x = flap * 0.6; }
+    if (v.tail) v.tail.rotation.y = Math.sin(t * 1.5) * 0.15;
+    v.pts.forEach((g, i) => {
+      const q = B.pts[i];
+      if (!q) return;
+      g.visible = q.hp > 0 && (q.on || B.key === 'gale');
+      if (B.key === 'gale' && q.core) g.visible = q.on && q.hp > 0;
+      g.scale.setScalar(q.on ? hit * (1 + Math.sin(t * 5 + i) * 0.06) : 1);
+    });
+    if (v.hatch) { const open = B.pts.some((q) => q.core && q.on); v.hatch.rotation.x += ((open ? -1.6 : 0) - v.hatch.rotation.x) * Math.min(1, dt * 3); v.hatch.position.z = open ? 1.2 : 0; }
+    if (B.key === 'colossus' && v.armR) {
+      const c = B.cur, raise = c && c.kind === 'slam' ? (c.t < c.T ? Math.min(1, c.t / (c.T * 0.7)) : Math.max(0, 1 - (c.t - c.T) * 4)) : 0;
+      v.armR.rotation.x = 0; v.armR.rotation.z = raise * 2.2;
+      v.armL.rotation.z = -Math.sin(t * 0.8) * 0.1;
+      if (v.head) v.head.rotation.y = Math.sin(t * 0.5) * 0.3;
+    }
+    if (v.halo) { v.halo.position.set(0, 2.2, -2.4); v.halo.rotation.set(0, Math.PI / 2, 0); v.halo.scale.setScalar(1 + Math.sin(t) * 0.04); }
+    V.outer.visible = !(B.st === 'shift' && B.stT > 0.4 && B.stT < 1.4);
+  }
+  syncHaz(W, dt, t) {
+    for (const r of this.ribbons) if (r.used && !r.fade) r.hide();
+    for (const c of this.cols) c.visible = false;
+    for (const c of this.spouts) c.visible = false;
+    for (const c of this.rings) c.visible = false;
+    const blink = 0.55 + 0.45 * Math.sin(t * 22);
+    for (const h of W.haz) {
+      const pre = h.t < h.T, f = pre ? h.t / h.T : 0, act = !pre && h.t < h.T + h.A;
+      if (h.k === 'spout') {
+        const rg = this.takeRing(); if (rg) { toWorld(h.x, 0.1, rg.position); rg.scale.setScalar(h.w * (1 + f * 0.6)); rg.visible = true; rg.material.color.setRGB(1, 0.5 + f * 0.4, 0.4).multiplyScalar(pre ? 1.5 * blink : 0.6); }
+        if (pre && Math.random() < dt * 30) { toWorld(h.x + (Math.random() - 0.5) * h.w * 2, 0.1, _v); this.fx.dust(_v.x, 0.1, _v.z, { n: 1, s0: 0.3, s1: 1, life: 0.6, vy: 1 + f * 3, up: 1, jit: 0.4, a: 0.5, k: 1.4, grav: 2 }); }
+        if (act) { const c = this.takeSpout(); if (c) { toWorld(h.x, -0.2, c.position); const grow = Math.min(1, (h.t - h.T) / 0.25), fade = Math.min(1, (h.T + h.A - h.t) / 0.3); c.scale.set(h.w * (0.8 + 0.2 * grow), h.top * grow + 0.5, h.w * (0.8 + 0.2 * grow)); const u = c.material.uniforms; u.uColor.value.set(this.look.sea[2]).lerp(_c.set(0xf4f8ff), 0.55); u.uDeep.value.set(this.look.sea[1]).lerp(_c.set(this.look.fog), 0.3); u.uK.value = fade; u.uTime.value = t; c.visible = true; } if (Math.random() < dt * 40) { toWorld(h.x, h.top * Math.random(), _v); this.fx.splash(_v.x, _v.y, _v.z, 0.25); } }
+      } else if (h.k === 'bolt') {
+        if (pre) { const r = this.takeRibbon(); if (r) { r.set([[h.x, H], [h.x, h.bot]], h.w * 2 * (0.3 + 0.7 * f), 0.8); r.mat.uniforms.uColor.value.set(0xff4a3a); r.mat.uniforms.uK.value = 0.35 + f * 0.6 * blink; r.mat.uniforms.uDash.value = 0; } }
+      } else if (h.k === 'arc') {
+        if (pre) { const r = this.takeRibbon(); if (r) { r.set([[h.x, h.y], [h.x + h.dx, h.y + h.dy]], 0.12 + f * 0.25, 0.8); r.mat.uniforms.uColor.value.set(0xffd040); r.mat.uniforms.uK.value = 0.6 + f * blink; r.mat.uniforms.uDash.value = 6; r.mat.uniforms.uTime.value = t; } }
+        else if (act && Math.random() < dt * 30) this.lightning([[h.x, h.y], [h.x + h.dx, h.y + h.dy]], 0xbfd8ff, 0.5, 0.12);
+      } else if (h.k === 'beam') {
+        const r = this.takeRibbon();
+        if (r) { r.set([[h.x, h.y], [h.x + h.dir * h.len, h.y]], pre ? 0.15 + f * 0.2 : 1.6 + Math.sin(t * 40) * 0.2, 0.9); r.mat.uniforms.uColor.value.set(pre ? 0xff5a3a : this.bossBeamColor(W)); r.mat.uniforms.uK.value = pre ? 0.5 + f * blink : 2.5; r.mat.uniforms.uDash.value = pre ? 3 : 0; r.mat.uniforms.uTime.value = t; }
+      } else if (h.k === 'slam') {
+        const L = W.ledges[h.ledge];
+        if (L) { const r = this.takeRibbon(); if (r) { r.set([[L.x - L.w, L.y + 0.3], [L.x + L.w, L.y + 0.3]], pre ? 0.5 + f : 2.4, 1.0); r.mat.uniforms.uColor.value.set(0xff7a2a); r.mat.uniforms.uK.value = pre ? 0.4 + f * blink : 2; r.mat.uniforms.uDash.value = 0; } }
+      } else if (h.k === 'drop') {
+        if (pre) { const r = this.takeRibbon(); if (r) { r.set([[h.x, H], [h.x, 1]], 0.25 + f * 0.4, 0.7); r.mat.uniforms.uColor.value.set(h.kind === 'ice' ? 0x8ae8ff : 0xff7a2a); r.mat.uniforms.uK.value = 0.3 + f * 0.7 * blink; r.mat.uniforms.uDash.value = 5; r.mat.uniforms.uTime.value = t; } }
+      } else if (h.k === 'line') {
+        if (pre) { const r = this.takeRibbon(); if (r) { const pts = h.sea ? [[h.x, 0.3], [h.x + h.dx, 0.3]] : [[h.x, h.y], [h.x + h.dx, h.y + h.dy]]; r.set(pts, 0.3 + f * 0.5, 1.0); r.mat.uniforms.uColor.value.set(h.sea ? 0x8ae8ff : 0xff3a2a); r.mat.uniforms.uK.value = 0.5 + f * blink; r.mat.uniforms.uDash.value = 4; r.mat.uniforms.uTime.value = t; } }
+      } else if (h.k === 'charge') {
+        // a boss gathering orbs or calling a rider: a ring that closes in on it
+        const B = W.boss;
+        if (pre && B) { const r = this.takeRibbon(); if (r) { const cy = h.kind === 'summon' ? clamp(B.y + 2, 3, H - 3) : B.y + 0.4, rad = 1.2 + 4.2 * (1 - f), pts = []; for (let i = 0; i <= 20; i++) { const a = (i / 20) * Math.PI * 2 + t * 1.5; pts.push([B.x + Math.cos(a) * rad, cy + Math.sin(a) * rad]); } r.set(pts, 0.16 + f * 0.32, 1.2); r.mat.uniforms.uColor.value.set(h.kind === 'summon' ? 0xffc040 : 0xb070ff); r.mat.uniforms.uK.value = 0.5 + f * blink; r.mat.uniforms.uDash.value = 6; r.mat.uniforms.uTime.value = t; } }
+      } else if (h.k === 'gust') {
+        if (pre && Math.random() < dt * 24) { const s = Math.random() < 0.5 ? -1 : 1; toWorld(h.x + s * h.r * Math.random(), h.y + (Math.random() - 0.5) * 6, _v); this.fx.dust(_v.x, _v.y, _v.z, { n: 1, s0: 0.3, s1: 1.2, life: 0.6, vy: 0, up: 0.2, jit: 0.5, a: 0.3, k: 1.3, grav: 0 }); }
+      }
+    }
+    // forming riders: a rune and a growing column of light
+    for (const P of W.portals) {
+      const f = P.t / P.T;
+      const rg = this.takeRing(); if (rg) { toWorld(P.x, P.y + 0.06, rg.position); rg.scale.setScalar(1.3); rg.visible = true; rg.material.color.set(this.look.accent).multiplyScalar(0.6 + f * 1.4); }
+      const c = this.takeCol(); if (c) { toWorld(P.x, P.y, c.position); c.scale.set(0.5 + f * 0.4, 1 + f * 4, 0.5 + f * 0.4); c.material.uniforms.uColor.value.set(this.look.accent); c.material.uniforms.uK.value = 0.4 + f * 1.2; c.material.uniforms.uTime.value = t; c.visible = true; }
+    }
+    for (const c of W.cores) if (c.st === 'form') { const col = this.takeCol(); if (col) { toWorld(c.x, c.y - 0.4, col.position); col.scale.set(0.7, 1 + c.fT * 5, 0.7); col.material.uniforms.uColor.value.set(0xff7a2a); col.material.uniforms.uK.value = 1.2; col.material.uniforms.uTime.value = t; col.visible = true; } }
+    // lightning flashes fade
+    this.flashes = this.flashes.filter((L) => { L.t -= dt; L.r.mat.uniforms.uK.value = L.k * Math.max(0, L.t / L.max) * (0.6 + Math.random() * 0.4); if (L.t <= 0) { L.r.fade = false; L.r.hide(); return false; } return true; });
+  }
+  bossBeamColor(W) { return W.boss && W.boss.key === 'leviathan' ? 0x8ae8ff : W.boss && W.boss.key === 'sovereign' ? 0xc080ff : W.boss && W.boss.key === 'colossus' ? 0xff8a30 : 0x7ff0ff; }
+  lightning(pts, color = 0xd8e8ff, w = 0.5, dur = 0.25) {
+    const r = this.takeRibbon(); if (!r) return;
+    const path = [];
+    for (let i = 0; i < pts.length - 1; i++) { const seg = boltPath(pts[i][0], pts[i][1], pts[i + 1][0], pts[i + 1][1], 14, 0.8); if (i) seg.shift(); path.push(...seg); }
+    r.set(path, w, 0.9);
+    r.mat.uniforms.uColor.value.set(color); r.mat.uniforms.uDash.value = 0; r.mat.uniforms.uK.value = 4;
+    r.fade = true;
+    this.flashes.push({ r, t: dur, max: dur, k: 4 });
+  }
+  syncShots(W) {
+    for (const k in this.shotI) this.shotI[k].count = 0;
+    const t = this.time;
+    for (const s of W.shots) {
+      const I = this.shotI[s.kind]; if (!I || I.count >= 40) continue;
+      toWorld(s.x, s.y, _v);
+      _e.set(t * 3, t * 2, s.kind === 'ice' ? Math.PI : 0); _q.setFromEuler(_e);
+      if (s.kind === 'ice') _q.identity().setFromEuler(_e.set(Math.PI, 0, 0));
+      _s.setScalar(s.kind === 'orb' ? 1 + Math.sin(t * 8 + s.id) * 0.12 : 1);
+      I.setMatrixAt(I.count++, _m.compose(_v, _q, _s));
+    }
+    for (const k in this.shotI) this.shotI[k].instanceMatrix.needsUpdate = true;
+  }
+
+  // ---------------------------------------------------------------- visual reactions to sim events
+  onEvent(e, W) {
+    const fx = this.fx, P = (x, y, dr = 0.3) => toWorld(x, y, _v, dr);
+    switch (e.k) {
+      case 'unhorse': {
+        P(e.x, e.y + 1.2); fx.sparks(_v.x, _v.y, _v.z, { n: 30, speed: 9, r: 1, g: 0.85, b: 0.5 }); fx.debris(_v.x, _v.y, _v.z, { metal: true, n: 8, speed: 6, size: 0.3, trail: true }); fx.flash(_v.x, _v.y, _v.z, 30, 0xffc080, 0.3);
+        this.shock(e.x, e.y + 1, 0.6); this.trauma = Math.min(1, this.trauma + 0.25);
+        const V = this.views.r.get(e.id);
+        if (V) { this.views.r.delete(e.id); this.ghosts.push({ outer: V.outer, v: V.v, x: e.x, y: e.y, vx: e.vx * 0.5 + (Math.random() - 0.5) * 4, vy: 5, face: V.face, spin: 0, w: (Math.random() < 0.5 ? -1 : 1) * 5, t: 0, split: true }); }
+        break;
+      }
+      case 'flee': case 'drown': { const V = this.views.r.get(e.id); if (V) { this.views.r.delete(e.id); this.ghosts.push({ outer: V.outer, v: V.v, x: e.x, y: e.y || 0, vx: 0, vy: e.k === 'flee' ? 14 : -2, face: V.face, spin: 0, w: 0, t: 0.9 }); } break; }
+      case 'clang': P(e.x, e.y); fx.sparks(_v.x, _v.y, _v.z, { n: e.soft ? 8 : 22, speed: e.soft ? 4 : 8, r: 1, g: 0.9, b: 0.6 }); if (!e.soft) { fx.flash(_v.x, _v.y, _v.z, 14, 0xfff0c0, 0.15); this.trauma = Math.min(1, this.trauma + 0.15); } break;
+      case 'death': {
+        P(e.x, e.y + 1); fx.explode(_v.x, _v.y, _v.z, 1.4, { metal: true, color: 0xffa060 }); this.trauma = Math.min(1, this.trauma + 0.6); this.shock(e.x, e.y + 1, 1);
+        const V = this.views.p.get(e.pid);
+        if (V && e.cause !== 'sea') { const v = MD.lancer('player', { ...this.suit[e.pid - 1] }); const outer = new THREE.Group(); outer.matrixAutoUpdate = false; outer.add(v.g); this.scene.add(outer); this.ghosts.push({ outer, v, x: e.x, y: e.y, vx: (e.vx || 0) * 0.4, vy: 4, face: V.face, spin: 0, w: 6, t: 0, split: true }); }
+        this.flashScreen(0.35, 0xff5a3a);
+        break;
+      }
+      case 'armor': P(e.x, e.y + 1); fx.sparks(_v.x, _v.y, _v.z, { n: 18, speed: 6, r: 0.6, g: 0.85, b: 1 }); this.ring3(e.x, e.y + 1, 2.2, 0x7fd8ff); this.trauma = Math.min(1, this.trauma + 0.3); this.flashScreen(0.18, 0x7fd8ff); break;
+      case 'splash': P(e.x, 0, 0); fx.splash(_v.x, 0, _v.z, e.big ? 1.6 : 1); break;
+      case 'collect': P(e.x, e.y); fx.fire(_v.x, _v.y, _v.z, { n: 8, s: 0.7, sp: 0.4 }); fx.sparks(_v.x, _v.y, _v.z, { n: 14, speed: 5, r: 1, g: 0.7, b: 0.3 }); this.ring3(e.x, e.y, 1.6, 0xffa040); break;
+      case 'hatch': P(e.x, e.y); fx.flash(_v.x, _v.y, _v.z, 10, 0xff7a2a, 0.5); break;
+      case 'reform': case 'form': P(e.x, e.y + 1); fx.sparks(_v.x, _v.y, _v.z, { n: 16, speed: 5, r: 0.8, g: 0.8, b: 1 }); fx.flash(_v.x, _v.y, _v.z, 12, this.look.accent, 0.3); break;
+      case 'spout': P(e.x, 0, 0); fx.splash(_v.x, 0, _v.z, 2.2); this.trauma = Math.min(1, this.trauma + 0.12); break;
+      case 'bolt': {
+        this.lightning([[e.x - 2, H + 6], [e.x, H], [e.x, e.bot]], 0xe0ecff, 0.9, 0.3);
+        this.lightning([[e.x + 1, H + 3], [e.x, e.bot]], 0xb0c8ff, 0.4, 0.22);
+        P(e.x, e.bot + 0.3); fx.sparks(_v.x, _v.y, _v.z, { n: 30, speed: 10, r: 0.8, g: 0.9, b: 1 }); fx.flash(_v.x, _v.y + 2, _v.z, 60, 0xc8d8ff, 0.3);
+        if (e.bot < 0.5) fx.splash(_v.x, 0, _v.z, 1.2);
+        this.skyMat.uniforms.uFlash.value = CALM.on ? 0.2 : 0.7; this.trauma = Math.min(1, this.trauma + 0.3); this.shock(e.x, e.bot + 1, 0.8);
+        break;
+      }
+      case 'arc': this.lightning([[e.x, e.y], [e.x + e.dx, e.y + e.dy]], 0xd8e8ff, 0.6, 0.3); P(e.x + e.dx, e.y + e.dy); fx.sparks(_v.x, _v.y, _v.z, { n: 12, speed: 6, r: 0.8, g: 0.9, b: 1 }); break;
+      case 'slam': P(e.x, e.y + 0.2); fx.debris(_v.x, _v.y, _v.z, { n: 14, speed: 7, size: 0.3 }); fx.sparks(_v.x, _v.y, _v.z, { n: 30, speed: 9 }); fx.dust(_v.x, _v.y, _v.z, { n: 12, s0: 1, s1: 3.5, life: 2.4, spread: e.w * 2 }); this.trauma = Math.min(1, this.trauma + 0.5); this.shock(e.x, e.y, 1); break;
+      case 'gust': this.shock(e.x, e.y, 1.4); this.ring3(e.x, e.y, 6, 0xd8e8ff); break;
+      case 'bosshit': P(e.x, e.y); fx.sparks(_v.x, _v.y, _v.z, { n: 36, speed: 10, r: 1, g: 0.8, b: 0.5 }); fx.flash(_v.x, _v.y, _v.z, 40, 0xffd0a0, 0.25); this.shock(e.x, e.y, 0.9); this.trauma = Math.min(1, this.trauma + 0.35); break;
+      case 'wpdown': P(e.x, e.y); fx.explode(_v.x, _v.y, _v.z, 2, { metal: true }); this.trauma = Math.min(1, this.trauma + 0.6); this.flashScreen(0.25, 0xffe0c0); break;
+      case 'bossdown': { const B = W.boss; if (B) for (let i = 0; i < 5; i++) setTimeout(() => { P(B.x + (Math.random() - 0.5) * 6, B.y + Math.random() * 3); fx.explode(_v.x, _v.y, _v.z, 2.6, { metal: true }); this.trauma = Math.min(1, this.trauma + 0.5); }, i * 260); this.flashScreen(0.4, 0xffffff); break; }
+      case 'hunterdown': P(e.x, e.y + 0.8); fx.explode(_v.x, _v.y, _v.z, 2, { metal: true, color: 0xff6a40 }); this.trauma = Math.min(1, this.trauma + 0.5); break;
+      case 'crumble': P(e.x, e.y - 0.5); fx.debris(_v.x, _v.y, _v.z, { n: 20, speed: 4, size: 0.4, sp: 3 }); fx.dust(_v.x, _v.y, _v.z, { n: 14, s0: 1.2, s1: 4, life: 3, spread: 5 }); break;
+      case 'shatter': P(e.x, e.y); if (e.kind === 'blob') fx.fire(_v.x, _v.y, _v.z, { n: 8, s: 0.8 }); else fx.sparks(_v.x, _v.y, _v.z, { n: 14, speed: 6, r: e.kind === 'orb' ? 0.7 : 0.8, g: e.kind === 'orb' ? 0.4 : 0.95, b: 1 }); if (e.sea) fx.splash(_v.x, 0, _v.z, 0.6); break;
+      case 'orbpop': P(e.x, e.y); fx.sparks(_v.x, _v.y, _v.z, { n: 20, speed: 7, r: 0.8, g: 0.5, b: 1 }); break;
+      case 'land': if (e.v > 7) { P(e.x, e.y + 0.1); fx.dust(_v.x, _v.y, _v.z, { n: 4, s0: 0.5, s1: 1.8, life: 1.4, vy: 0.4, up: 0.5, jit: 2, a: 0.4 }); } break;
+      case 'skid': P(e.x, e.y + 0.1); fx.sparks(_v.x, _v.y, _v.z, { n: 6, speed: 3, down: true }); fx.dust(_v.x, _v.y, _v.z, { n: 2, s0: 0.4, s1: 1.4, life: 1, a: 0.35 }); break;
+      case 'coresink': P(e.x, 0, 0); fx.splash(_v.x, 0, _v.z, 0.5); break;
+      case 'spawn': P(e.x, e.y + 1); fx.sparks(_v.x, _v.y, _v.z, { n: 24, speed: 6, r: 0.6, g: 0.9, b: 1 }); this.ring3(e.x, e.y + 0.1, 2.5, 0x9fe8ff); break;
+      case 'pickup': P(e.x, e.y); fx.sparks(_v.x, _v.y, _v.z, { n: 20, speed: 6, r: 0.8, g: 1, b: 0.9 }); this.ring3(e.x, e.y, 2, POWERUPS[e.kind].color); break;
+      case 'breach': P(e.x, 0, 0); fx.splash(_v.x, 0, _v.z, 2.5); this.trauma = Math.min(1, this.trauma + 0.4); break;
+      case 'summon': P(e.x, e.y + 2); fx.flash(_v.x, _v.y, _v.z, 20, this.look.accent, 0.4); break;
+      default: break;
+    }
+  }
+  ring3(x, y, r, color) { toWorld(x, y, _v, 0.8); this.fx.ring(_v.x, _v.y, _v.z, r, color); }
+
+  // ---------------------------------------------------------------- camera
+  resize() {
+    const w = innerWidth, h = innerHeight;
+    this.r.setPixelRatio(this.q.dpr * this.scale);
+    this.r.setSize(w, h, false);
+    this.camera.aspect = w / h; this.camera.updateProjectionMatrix();
+    const pw = Math.round(w * this.q.dpr * this.scale), ph = Math.round(h * this.q.dpr * this.scale);
+    this.post.setSize(pw, ph);
+    for (const p of [this.fx.dustP, this.fx.fireP]) p.mat.uniforms.uScale.value = ph * 0.85;
+  }
+  setScale(s) { if (Math.abs(s - this.scale) < 0.02) return; this.scale = s; this.resize(); }
+  get portrait() { return this.camera.aspect < 0.85; }
+  frameShot(pts, dur) { this.shot = { pts, t: dur }; }
+  // o: { focus: [{x, y}], cine, shake, snap }
+  updateCamera(dt, o = {}) {
+    const tall = this.portrait;
+    let th, cy, dist, fov, speed = 3;
+    if (o.cine) {
+      this.camTh += dt * 0.05;
+      th = this.camTh; cy = 13 + Math.sin(this.time * 0.07) * 3; dist = 44; fov = tall ? 62 : 42; speed = 1.5;
+    } else if (this.shot && this.shot.t > 0) {
+      this.shot.t -= dt;
+      let sx = 0, sy = 0; const p0 = this.shot.pts[0];
+      for (const p of this.shot.pts) { sx += ((p[0] - p0[0] + F.C * 1.5) % F.C) - F.C / 2; sy += p[1]; }
+      th = (p0[0] + sx / this.shot.pts.length) / RR; cy = sy / this.shot.pts.length; dist = 17; fov = tall ? 58 : 38; speed = 5;
+    } else {
+      const f = o.focus && o.focus.length ? o.focus : [{ x: this.camTh * RR, y: 12 }];
+      const p0 = f[0];
+      let mx = 0, my = 0, spread = 0;
+      for (const p of f) { const d = ((p.x - p0.x + F.C * 1.5) % F.C) - F.C / 2; mx += d; my += p.y; spread = Math.max(spread, Math.abs(d)); }
+      mx /= f.length; my /= f.length;
+      th = (p0.x + mx) / RR;
+      cy = clamp(my * 0.75 + 4.5, 9.5, 19);   // follow high riders up so they never hide under the HUD
+      dist = (tall ? 29 : 29) + Math.max(0, spread - 8) * 1.1;
+      fov = tall ? 62 : 42;
+      speed = 4;
+    }
+    // shortest way round
+    let d = th - this.camTh; d = ((d + Math.PI * 3) % (Math.PI * 2)) - Math.PI;
+    const k = o.snap ? 1 : 1 - Math.exp(-dt * speed);
+    this.camTh += d * k; this.camY += (cy - this.camY) * k; this.camD += (dist - this.camD) * k; this.camFov += (fov - this.camFov) * k;
+    const s = Math.sin(this.camTh), c = Math.cos(this.camTh);
+    this.camPos.set(s * (RR + this.camD), this.camY + 5.2, c * (RR + this.camD));
+    this.camLook.set(s * (RR - 3), this.camY, c * (RR - 3));
+    this.trauma = Math.max(0, this.trauma - dt * 1.7);
+    const sh = this.trauma * this.trauma * (o.shake ?? 1) * 0.45;
+    const cam = this.camera;
+    cam.position.copy(this.camPos);
+    if (sh > 0) { cam.position.x += (Math.random() - 0.5) * sh; cam.position.y += (Math.random() - 0.5) * sh; cam.position.z += (Math.random() - 0.5) * sh; }
+    cam.up.set(0, 1, 0);
+    cam.lookAt(this.camLook);
+    if (cam.fov !== this.camFov) { cam.fov = this.camFov; cam.updateProjectionMatrix(); }
+    this.sky.position.copy(cam.position);
+    // the shadow camera follows the focus point
+    const L = this.look.sunDir;
+    this.key.target.position.copy(this.camLook);
+    this.key.position.set(this.camLook.x + L[0] * 60, this.camLook.y + Math.max(0.35, L[1]) * 60, this.camLook.z + L[2] * 60);
+  }
+  project(x, y, out) {
+    toWorld(x, y, _v).project(this.camera);
+    out.x = (_v.x * 0.5 + 0.5) * innerWidth; out.y = (-_v.y * 0.5 + 0.5) * innerHeight; out.z = _v.z;
+    return out;
+  }
+  shock(x, y, k = 1) { this.shocks.push({ x, y, t: 0, max: 0.55, k }); if (this.shocks.length > 6) this.shocks.shift(); }
+  flashScreen(a, color = 0xffffff) { _c.set(color); this.flash.set(_c.r, _c.g, _c.b, Math.max(this.flash.w, a * (CALM.on ? 0.25 : 0.55))); }
+
+  render(dt, p = {}) {
+    this.time += dt;
+    const t = this.time;
+    this.fx.update(dt);
+    this.skyMat.uniforms.uTime.value = t;
+    this.seaMat.uniforms.uTime.value = t;
+    const fl = this.skyMat.uniforms.uFlash.value * Math.exp(-dt * 6);
+    this.skyMat.uniforms.uFlash.value = fl; this.seaMat.uniforms.uFlash.value = fl;
+    this.hemi.intensity = this.look.hemi[2] + fl * 1.5;
+    this.spire.rotation.y = t * 0.01;
+    // ambient particles near the camera's view of the ring
+    const ax = this.camTh * RR + (Math.random() - 0.5) * 50, ay = Math.random() * 26;
+    if (Math.random() < dt * 16) {
+      toWorld(ax, ay, _v, (Math.random() - 0.5) * 8);
+      if (this.amb === 'embers' || this.amb === 'sparks') this.fx.sparks(_v.x, this.amb === 'sparks' ? 0.5 : _v.y, _v.z, { n: 1, speed: 1, vy: 2.5, s: 0.14, life: 3, g: 0.55, b: 0.2 });
+      else if (this.amb === 'snow') this.fx.dust(_v.x, _v.y, _v.z, { n: 1, s0: 0.12, s1: 0.16, life: 4, vy: -1.2, up: 0, jit: 0.6, a: 0.8, k: 1.6, grav: 0.05, drag: 0.2 });
+      else if (this.amb === 'spores') this.fx.sparks(_v.x, _v.y, _v.z, { n: 1, speed: 0.4, vy: 0.4, s: 0.12, life: 4, r: 0.3, g: 1, b: 0.85 });
+      else this.fx.dust(_v.x, _v.y, _v.z, { n: 1, s0: 0.15, s1: 0.25, life: 4, vy: -0.4, up: 0, jit: 0.4, a: 0.5, k: 0.4, grav: 0.02, drag: 0.2 });
+    }
+    for (const c of this.cols) if (c.visible) c.material.uniforms.uTime.value = t;
+    this.halo.rotation.z = t * 0.2;
+    this.flash.w = Math.max(0, this.flash.w - dt * 3);
+    const shocks = [];
+    for (const s of this.shocks) {
+      s.t += dt;
+      const f = s.t / s.max;
+      if (f >= 1) continue;
+      this.project(s.x, s.y, P0);
+      shocks.push(new THREE.Vector4(P0.x / innerWidth, 1 - P0.y / innerHeight, f * 0.3 * s.k, (1 - f) * (CALM.on ? 0.3 : 0.7) * s.k));
+    }
+    this.shocks = this.shocks.filter((s) => s.t < s.max);
+    const L = this.look;
+    this.post.render(this.scene, this.camera, {
+      bloom: L.bloom * (p.bloom ?? 1), threshold: 1.1, exposure: L.exposure * (p.exposure ?? 1), chroma: 0.0016 + (p.slow ? 0.003 : 0), time: t, desat: (p.desat || 0) + (p.slow ? 0.25 : 0), fade: p.fade || 0, vignette: p.slow ? 0.6 : 0.42,
+      flash: this.flash, tint: p.slow ? _tint.set(L.grade[0] * 0.95, L.grade[1] * 0.92, L.grade[2] * 1.15) : _tint.set(...L.grade), shocks, lens: [],
+    });
+  }
+
+  // draw one of everything once at boot so nothing compiles a shader in the middle of play
+  warmUp() {
+    const tmp = [];
+    const addTmp = (g, x) => { toWorld(x, 10, g.position); this.scene.add(g); tmp.push(g); };
+    let x = 0;
+    for (const k of ['skirmisher', 'lancer', 'reaver', 'shieldbearer', 'twinblade', 'stormcaller']) { addTmp(MD.lancer(k).g, x += 3); addTmp(MD.lancer(k, { elite: true }).g, x += 3); }
+    addTmp(MD.lancer('player', this.suit[0]).g, x += 3); addTmp(MD.lancer('player', this.suit[1]).g, x += 3);
+    addTmp(MD.hunter().g, x += 3); addTmp(MD.core().g, x += 3);
+    for (const k in POWERUPS) addTmp(MD.pickup(POWERUPS[k].color).g, x += 2);
+    for (const k of Object.keys(BOSSES)) addTmp(MD.boss(k).g, x += 8);
+    for (const k in this.shotI) { this.shotI[k].count = 1; this.shotI[k].setMatrixAt(0, _m.identity()); }
+    for (const r of this.ribbons.slice(0, 2)) r.set([[0, 5], [3, 8]], 1);
+    for (const c of [...this.cols.slice(0, 1), ...this.spouts.slice(0, 1), ...this.rings.slice(0, 1)]) c.visible = true;
+    this.fx.explode(...toWorld(2, 8, _v).toArray(), 1, { metal: true });
+    this.fx.splash(_v.x, 0, _v.z, 1);
+    this.fx.flash(_v.x, 8, _v.z, 1);
+    const pr = { bloom: 0.7, threshold: 1.2, exposure: 1, chroma: 0, time: 0, desat: 0, fade: 1, vignette: 0.4, flash: this.flash, tint: _tint.set(1, 1, 1), shocks: [], lens: [] };
+    const first = this.lookI;
+    for (let i = LOOKS.length - 1; i >= 0; i--) {
+      this.setLook(i);
+      this.r.compile(this.scene, this.camera);
+      this.post.render(this.scene, this.camera, pr);
+    }
+    if (first !== 0) this.setLook(first);
+    for (const k in this.shotI) this.shotI[k].count = 0;
+    for (const r of this.ribbons) r.hide();
+    for (const c of [...this.cols, ...this.spouts, ...this.rings]) c.visible = false;
+    for (const o of tmp) this.scene.remove(o);
+    this.fx.clear();
+    void HUNTER; void weakPos;
+  }
+}
+const P0 = { x: 0, y: 0, z: 0 };
+
+// a ledge: a box bent round the ring, top flat, the underside hanging in a jagged rock point
+function ledgeGeometry(x0, y0, w, seed) {
+  const D = 2.3, T = F.ledgeT;
+  const g = new THREE.BoxGeometry(2 * w, 1, 2 * D, Math.max(8, Math.round(w * 4)), 6, 8);
+  const p = g.attributes.position, n = g.attributes.normal, uv = g.attributes.uv;
+  const hang = 3.2 + w * 0.45;
+  for (let i = 0; i < p.count; i++) {
+    let x = p.getX(i), z = p.getZ(i);
+    const y = p.getY(i), ny = n.getY(i), nx = n.getX(i);
+    const u = x / w, v = z / D, t = y + 0.5;
+    let yy;
+    if (y > 0.499) { yy = (Math.abs(u) > 0.92 || Math.abs(v) > 0.9 ? -0.06 * vnoise(x * 3 + seed, 0, z * 3) : 0); }
+    else {
+      const prof = Math.pow(Math.max(0, 1 - u * u), 1.1) * Math.pow(Math.max(0, 1 - v * v), 0.9);
+      const nz = vnoise(x * 0.7 + seed, z * 0.7, seed * 0.3);
+      const bottom = -T - hang * prof * (0.65 + 0.7 * nz);
+      yy = bottom + (0 - bottom) * Math.pow(t, 0.9);
+      const j = (1 - t) * 0.45 + 0.08;
+      x += (vnoise(x * 1.3, y * 3 + seed, z * 1.3) - 0.5) * j * 2;
+      z += (vnoise(z * 1.3 + seed, y * 3, x * 1.3) - 0.5) * j * 2;
+    }
+    // uv in metres (top: floor tiles of TX.TILE metres; sides: rock of ~4 m)
+    if (ny > 0.5) uv.setXY(i, (x0 + x) / TX.TILE, z / TX.TILE);
+    else if (Math.abs(nx) > 0.5) uv.setXY(i, z / 4, yy / 4);
+    else uv.setXY(i, (x0 + x) / 4, yy / 4);
+    const th = (x0 + x) / RR, r = RR + z;
+    p.setXYZ(i, Math.sin(th) * r, y0 + yy, Math.cos(th) * r);
+  }
+  g.computeVertexNormals();
+  return g;
+}
+// a distant floating island: a flat-topped rock with a hanging, ragged underside
+function islandGeometry(seed) {
+  const pts = [];
+  for (let i = 0; i <= 10; i++) { const t = i / 10; pts.push(new THREE.Vector2(t < 0.15 ? 0.05 + t * 6 : 1 - Math.pow((t - 0.15) / 0.85, 1.4) * 0.97, t < 0.15 ? 0.06 : -Math.pow((t - 0.15) / 0.85, 0.9) * 1.8)); }
+  pts.reverse();
+  const g = new THREE.LatheGeometry(pts, 18);
+  const p = g.attributes.position;
+  for (let i = 0; i < p.count; i++) {
+    const x = p.getX(i), y = p.getY(i), z = p.getZ(i), k = 0.75 + vnoise(x * 1.7 + seed, y * 2.1, z * 1.7) * 0.5;
+    p.setXYZ(i, x * k, y < 0 ? y * (0.8 + vnoise(x * 3, y + seed, z * 3) * 0.5) : y + vnoise(x * 4, seed, z * 4) * 0.08, z * k);
+  }
+  g.computeVertexNormals();
+  return g;
+}
+// a thin box bent round the ring (trim)
+function arcBox(x0, y0, w, h, d, dr) {
+  const g = new THREE.BoxGeometry(2 * w, h, d, Math.max(4, Math.round(w * 2)), 1, 1);
+  const p = g.attributes.position;
+  for (let i = 0; i < p.count; i++) { const x = p.getX(i), y = p.getY(i), z = p.getZ(i); const th = (x0 + x) / RR, r = RR + dr + z; p.setXYZ(i, Math.sin(th) * r, y0 + y, Math.cos(th) * r); }
+  g.computeVertexNormals();
+  return g;
+}
+
+// ---------------------------------------------------------------- static merging: one draw call per material
+// bake each mesh's local transform into a copy of its geometry and concatenate (position, normal, uv)
+function mergeGeos(list) {
+  let n = 0;
+  const parts = list.map(([geo, mat4]) => { const g = (geo.index ? geo.toNonIndexed() : geo.clone()).applyMatrix4(mat4); n += g.attributes.position.count; return g; });
+  const pos = new Float32Array(n * 3), nor = new Float32Array(n * 3), uv = new Float32Array(n * 2);
+  let o = 0;
+  for (const g of parts) {
+    const c = g.attributes.position.count;
+    pos.set(g.attributes.position.array, o * 3);
+    if (g.attributes.normal) nor.set(g.attributes.normal.array, o * 3);
+    if (g.attributes.uv) uv.set(g.attributes.uv.array, o * 2);
+    o += c; g.dispose();
+  }
+  const out = new THREE.BufferGeometry();
+  out.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+  out.setAttribute('normal', new THREE.BufferAttribute(nor, 3));
+  out.setAttribute('uv', new THREE.BufferAttribute(uv, 2));
+  out.computeBoundingSphere();
+  return out;
+}
+// merge the single-material meshes directly under a group by material (keeps shadow flags of the first)
+function mergeByMaterial(grp) {
+  const by = new Map();
+  for (const m of [...grp.children]) {
+    if (!m.isMesh || m.isInstancedMesh || Array.isArray(m.material) || m.children.length) continue;
+    if (!by.has(m.material)) by.set(m.material, []);
+    by.get(m.material).push(m);
+  }
+  for (const [mat, list] of by) {
+    if (list.length < 2) continue;
+    const geo = mergeGeos(list.map((m) => { m.updateMatrix(); return [m.geometry, m.matrix]; }));
+    const mm = new THREE.Mesh(geo, mat); mm.castShadow = list[0].castShadow; mm.receiveShadow = list[0].receiveShadow;
+    for (const m of list) grp.remove(m);
+    grp.add(mm);
+  }
+}
+// a box bent into a ledge has 6 face groups: put the rock faces together (1 draw) and the top on its own (1 draw)
+function twoGroups(g) {
+  const idx = g.index.array, rock = [], top = [];
+  for (const gr of g.groups) { const dst = gr.materialIndex === 2 ? top : rock; for (let i = gr.start; i < gr.start + gr.count; i++) dst.push(idx[i]); }
+  g.setIndex([...rock, ...top]);
+  g.clearGroups(); g.addGroup(0, rock.length, 0); g.addGroup(rock.length, top.length, 1);
+  return g;
+}

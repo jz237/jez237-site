@@ -44,6 +44,9 @@
     'Stellar Drift':['space','#ebaf68','#9ec5eb',2],
     'SUPER STAR TREK':['trek','#e5b875','#8fbdeb',0],
     'Lunar Lander':['lander','#e7ca87','#9fc5de',0],
+    'Lancewing 2026':['lancewing','#ffb347','#ffd9a0',0],
+    'Rimstorm 2026':['rimstorm','#7fd4ff','#ffb347',0],
+    'Voltmaze 2026':['voltmaze','#7fe0ff','#ff6a4a',0],
     'Swarmbreak':['swarm','#ffb347','#7fe0ff',0],
     'Crater Runner':['craterrun','#ffb347','#9fd8ff',0],
     'Neon Qix':['qix','#e2a3e9','#7bdade',0],
@@ -172,6 +175,40 @@
       case 'helicopter': return stars+skyline(59)+group(path('M-21 2-5 0Q0-13 13-8L22 0Q24 9 11 10H-1L-8 5-23 7Z',metal,a,.5)+path('M5-8 12-7 19 0H4Z','#20445c','#b0dae3',.7)+path('M-22 5-28-5-28 8Z',b)+path('M-4 10-7 14H20M14 10v4M0-8v-7','none',metal,1.2)+group(path('M-28-15H32','none','#d1dce0',1.1),'','ca-rotor')+circle(-25,2,2,'none',b,.7),'translate(48 29)','ca-hover')+path('M65 39 82 62H40Z','#f1d99f','','','opacity=".11"')+person(63,56,.43,b)+person(73,58,.35,a);
       case 'slash': return stars+floor+repeat(3,i=>group(crystal(0,0,1,i%2?a:b),`translate(${26+i*25} ${25+(i%2)*14}) rotate(${i*25-20})`,'ca-drift'))+group(path('M15 54Q44 35 83 13','none','#e8faf6',3,'stroke-linecap="round"')+path('M15 55Q43 40 84 14','none',a,6,'opacity=".2"'),'','ca-slash')+repeat(8,i=>blink(path(`M${39+i*4} ${23+(i%3)*7}l${i%2?3:-3} -3`,'none',b,.8),-i*.16));
       case 'gravity': return stars+repeat(6,i=>path(`M${8+i*15} 8Q${15+i*12} 49 ${8+i*15} 60M8 ${9+i*10}Q49 ${5+i*7} 94 ${9+i*10}`,'none',a,.45,'opacity=".35"'))+group(ellipse(50,34,25,14,'none',b)+ellipse(50,34,14,25,'none',a),'','ca-current')+circle(50,34,8,'#142339',a,.8)+circle(48,31,3,haze)+group(circle(26,30,3,metal)+circle(74,39,2,b),'','ca-current')+blink(circle(50,34,3,'#e7dff2'));
+      case 'lancewing': {
+        const ledge=(x,y,w)=>path(`M${x} ${y}h${w}l-${w*.2} 6h-${w*.6}Z`,'#5a4038','#c99a6a',.4)+path(`M${x+1} ${y}h${w-2}`,'none',a,.6);
+        const ray=(x,y,s,col,lance,flip,lag)=>group(path('M-12 0Q-6-7 0-3Q6-7 12 0Q6 2 0 4Q-6 2-12 0Z',col,'#efe2cc',.4)+path('M0 4Q1 8 3 11','none',col,.8)+person(0,-3,.3,'#d8c49a')+path('M1-6 15-9','none',lance,.9),`translate(${x} ${y}) scale(${flip?-s:s} ${s})`,'ca-hover',`style="--lag:${lag}s"`);
+        return ellipse(70,22,30,18,haze)+circle(70,22,6,'#ffd9a0')+path('M0 50Q25 47 50 50T100 49V68H0Z','#3b4256')
+          +repeat(6,i=>group(path(`M${(i*17)%90} ${53+i*2.4}h${8+(i%3)*5}`,'none','#ffd9a0',.5,'opacity=".4"'),'','ca-glimmer',`style="--lag:${-i*.5}s"`))
+          +path('M45 52 47 14Q50 9 53 14L55 52Z','#4a3a3c','#a07a62',.5)+blink(circle(50,13,1.6,b))
+          +ledge(12,40,16)+ledge(70,36,18)+ledge(28,26,12)+ledge(62,50,14)
+          +ray(30,19,1,metal,'#fff3d6',false,0)+ray(78,30,.8,'#7a3b3b','#e0a080',true,-1.3)
+          +blink(circle(67,48,1.8,a,'#fff2c0',.5),-.8);
+      }
+      case 'rimstorm': {
+        const N=12,P=(k,r)=>{const t=k/N*Math.PI*2+Math.PI/2;return `${(50+Math.cos(t)*r*1.35).toFixed(1)} ${(30+Math.sin(t)*r).toFixed(1)}`};
+        const poly=r=>'M'+Array.from({length:N},(_,k)=>P(k,r)).join('L')+'Z';
+        const foe=(k,r,col,i)=>group(path('M-2.6 0 0-2.6 2.6 0 0 2.6Z',col,'#ffe0d0',.4),`translate(${P(k,r)})`,'ca-hover',`style="--lag:${-i*.7}s"`);
+        return stars+circle(88,62,20,'#8a5a3a','#e8b27a',.5,'opacity=".7"')+path('M66 60q20-6 40 0','none','#f0c890',.8,'opacity=".5"')
+          +path(poly(30),'#0e1f33','',1,'opacity=".8"')
+          +repeat(N,k=>path(`M${P(k,4)}L${P(k,30)}`,'none',k===0?b:a,k===0?.9:.45,'opacity=".85"'))
+          +[30,20,13,8,4].map((r,i)=>path(poly(r),'none',a,i?.4:.9,`opacity="${(1-i*.15).toFixed(2)}"`)).join('')
+          +circle(50,30,3,haze)+blink(circle(50,30,1.2,'#e6f6ff'))
+          +group(path('M50 56 50 36','none','#fff4c0',1,'stroke-dasharray="2 3"'),'','ca-glimmer')
+          +foe(0,12,'#ff5a4a',0)+foe(3,16,'#6bd88a',1)+foe(8,10,'#ff5a4a',2)+foe(10,22,'#ffb347',3)
+          +group(path('M-7 2-4-2H4L7 2 4 4H-4Z',metal,'#cfe6ff',.4)+circle(-5,2,1.1,b)+circle(5,2,1.1,b)+path('M0-2V-5','none','#e8f2ff',.8),'translate(50 57)','ca-hover');
+      }
+      case 'voltmaze': {
+        const bot=(x,y,i)=>group(circle(0,0,2.4,'#3a4048','#aab4be',.5)+circle(0,-.4,.8,'#ff4a3a')+path('M-2.2 1.6H2.2','none','#ffcf6a',.5),`translate(${x} ${y})`,'ca-hover',`style="--lag:${-i*.4}s"`);
+        const wall=d=>path(d,'none',a,1.6,'opacity=".55"')+path(d,'none','#eaffff',.5);
+        return rect(6,5,88,58,'#141c26',1.5)+repeat(10,i=>path(`M${10+i*8.4} 6V62`,'none','#223040',.4))+repeat(6,i=>path(`M7 ${10+i*9}H93`,'none','#223040',.4))
+          +group(wall('M6 5H43M57 5H94V28M94 40V63H57M43 63H6V40M6 28V5')+wall('M28 20V36H44M66 22H80M70 44V56'),'','ca-glimmer')
+          +rect(43,3.5,14,3,'#ff5a3a',.5)+rect(94.5,29,3,10,'#6bd88a',.5,'','opacity=".8"')
+          +[[20,14],[58,30],[80,16],[52,50],[78,52]].map(([x,y],i)=>bot(x,y,i)).join('')
+          +path('M58 30 37 41','none','#ff6a4a',.8,'opacity=".9" stroke-dasharray="2 2"')
+          +person(34,46,.42,b,1)
+          +group(circle(0,0,4.5,'#2a1830','#c06aff',.5)+circle(0,0,1.6,'#ff2a2a')+path('M-6-3q-3 3 0 6M6-3q3 3 0 6','none','#c08aff',.5),'translate(86 10)','ca-drift');
+      }
       case 'swarm': {
         const bot=(x,y,i)=>group(circle(0,0,2.3,'#5a2a22','#c0563a',.5)+circle(1.2,-.2,.7,'#ff4a3a')+path('M-2-2-4-4M2-2 4-4M-2 2-4 4M2 2 4 4','none','#8a94a0',.5),`translate(${x} ${y})`,'ca-hover',`style="--lag:${-i*.3}s"`);
         const surv=(x,y)=>circle(x,y,3,'none','#7dff9a',.6,'opacity=".7"')+person(x,y+2.2,.32,'#d94a3a')+blink(circle(x,y-5.5,.8,'#9dffb0'));

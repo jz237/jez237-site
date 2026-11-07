@@ -1,0 +1,302 @@
+// Online 2-player co-op over the site's duel relay (the Steel Duel room server, rooms VM-XXXX and
+// VM-Q-XXXXX for quick match). The first player in a room is p1 = the host: it runs the real facility
+// (rooms, robots, the Seeker, bosses, lives, score) and streams snapshots ~20 times a second. The guest
+// runs its own infiltrator locally (so running and aiming never lag), judges the hits it takes, and
+// reports its position, its shots and its EMPs; the host re-creates those shots so kills are decided in
+// one place. Rooms are rebuilt on the guest from the same seeded generator, so only a short room
+// descriptor travels. The relay overwrites the keys t, from, role and start.mode: never use them.
+import { adoptRoom, emp } from './sim.js?v=5';
+import { PW_KEYS, ENEMY_KEYS } from './config.js?v=5';
+const packPw = (pw) => Object.entries(pw || {}).map(([k, t]) => [PW_KEYS.indexOf(k), Math.round(t * 10) / 10]);
+const unpackPw = (a) => { const o = {}; for (const [i, t] of a || []) o[PW_KEYS[i]] = t; return o; };
+
+export const PROTOCOL = 1;
+const RELAY = 'wss://steel-duel-online.jez237.workers.dev';
+const CODE_CHARS = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+export const QUICK = 'VM-Q-';
+export const ROOM = 'VM-';
+export function randomCode(n) {
+  const b = new Uint8Array(n);
+  crypto.getRandomValues(b);
+  let s = '';
+  for (const x of b) s += CODE_CHARS[x % CODE_CHARS.length];
+  return s;
+}
+export const cleanCode = (v) => String(v || '').toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 4);
+const clamp = (v, a, b) => (v < a ? a : v > b ? b : v);
+const r2 = (v) => Math.round(v * 100) / 100;
+const r3 = (v) => Math.round(v * 1000) / 1000;
+const MST = ['fly', 'armed', 'fuse'];
+// events the guest already played itself (or that do not matter on the far side)
+const QUIET = new Set(['fire', 'brush']);
+
+// ------------------------------------------------------------------ snapshots
+export function packWorld(W, withGrid) {
+  const h = W.players[0], g = W.players[1], B = W.boss, S = W.seeker, rm = W.room;
+  return {
+    wt: r3(W.t), ph: W.phase, pt: r2(W.phaseT), lv: W.lives, sc: W.score, ov: W.over ? 1 : 0, rs: W.result, st: r2(W.secT), sn: W.seekerN,
+    rm: { key: rm.key, rx: rm.rx, ry: rm.ry, doors: rm.doors, entry: rm.entry, boss: rm.boss, first: rm.first, mode: W.mode, sector: W.sector, floor: W.floor, k: W.k, n: W.roomN, depth: W.depth, grid: withGrid ? W.grid : null },
+    rt: r2(rm.t), cl: rm.cleared, lo: rm.liftOn, tot: rm.total, sw: rm.seekWarned,
+    en: W.robots.filter((e) => e.hp > 0).map((e) => [e.id, ENEMY_KEYS.indexOf(e.type), r2(e.x), r2(e.z), r2(e.vx), r2(e.vz), e.hp, r2(e.boot), r3(e.a), r2(e.aimT), r3(e.aimA), r2(e.aimTot), r2(e.lunge), e.rage, e.pair, r2(e.hitT), e.fly, e.moving, e.burstN || 1, e.warp || 0]),
+    bo: W.bolts.map((b) => [b.id, r2(b.x), r2(b.z), r2(b.vx), r2(b.vz), b.r, b.big ? 1 : 0]),
+    mi: W.mines.map((m) => [m.id, r2(m.x), r2(m.z), r2(m.tx), r2(m.tz), r2(m.t), r2(m.T), MST.indexOf(m.state), r2(m.fuse), r2(m.sx), r2(m.sz)]),
+    zo: W.zones.map((q) => ({ ...q })),
+    pk: W.pickups.map((q) => [q.id, PW_KEYS.indexOf(q.kind), r2(q.x), r2(q.z), r2(q.life), r2(q.t)]),
+    se: S ? [r2(S.x), r2(S.z), r2(S.vx), r2(S.vz), r3(S.a), r2(S.inT), r2(S.t), S.n] : null,
+    b: B ? { key: B.key, x: r2(B.x), z: r2(B.z), vx: r2(B.vx), vz: r2(B.vz), a: r3(B.a), hp: B.hp, max: B.max, r: B.r, state: B.state, st: r2(B.st), phase: B.phase, spin: r3(B.spin), stun: r2(B.stun), hitT: r2(B.hitT), plates: B.plates, fly: B.fly,
+      heads: B.heads.map((q) => [q.i, r2(q.x), r2(q.z), q.hp, q.max, r3(q.a)]), cur: B.cur ? { kind: B.cur.kind, t: r2(B.cur.t), T: r2(B.cur.T), D: r2(B.cur.D), a: r3(B.cur.a), a0: r3(B.cur.a0 || 0), beam: r3(B.cur.beam || 0), sgn: B.cur.sgn } : null } : null,
+    p1: [r3(h.x), r3(h.z), r2(h.vx), r2(h.vz), r3(h.aim), h.alive ? 1 : 0, r2(h.inv), h.shield, h.plate, h.emp, r2(h.walk), r2(h.dashT)],
+    p2: g ? [g.alive ? 1 : 0, r2(g.x), r2(g.z), r2(g.inv), g.shield, g.plate, g.emp] : null,
+    hs: W.shots.filter((s) => s.pid === 1).map((s) => [r2(s.x), r2(s.z), r2(s.vx), r2(s.vz), r2(s.life)]),
+    pw1: packPw(h.pw), pw2: g ? packPw(g.pw) : null, up: W.up,
+    sx: [W.stats.kills, W.stats.deaths, W.stats.cleared, W.stats.rooms],
+  };
+}
+
+export function applyWorld(W, S, lead) {
+  const ext = (x, vx) => x + vx * lead;
+  W.t = S.wt + lead; W.phase = S.ph; W.phaseT = S.pt; W.lives = S.lv; W.score = S.sc; W.over = !!S.ov; W.result = S.rs; W.secT = S.st; W.seekerN = S.sn; W.up = S.up || W.up;
+  const moved = adoptRoom(W, S.rm);
+  if (S.rm.grid) W.grid = S.rm.grid;
+  W.room.t = S.rt; W.room.cleared = S.cl; W.room.liftOn = S.lo; W.room.total = S.tot; W.room.seekWarned = S.sw;
+  const old = new Map(W.robots.map((e) => [e.id, e]));
+  W.robots = S.en.map((q) => {
+    const e = old.get(q[0]) || { t: 0 };
+    const type = ENEMY_KEYS[q[1]];
+    return Object.assign(e, { id: q[0], type, x: ext(q[2], q[4]), z: ext(q[3], q[5]), vx: q[4], vz: q[5], hp: q[6], boot: q[7], a: q[8], aimT: q[9], aimA: q[10], aimTot: q[11], lunge: q[12], rage: q[13], pair: q[14], hitT: q[15], fly: q[16], moving: q[17], burstN: q[18] || 1, warp: q[19] || 0, r: R_OF[type] || 0.5, remote: true });
+  });
+  W.bolts = S.bo.map((q) => ({ id: q[0], x: ext(q[1], q[3]), z: ext(q[2], q[4]), vx: q[3], vz: q[4], r: q[5], big: q[6], life: 4, n0: 0 }));
+  W.mines = S.mi.map((q) => ({ id: q[0], x: q[1], z: q[2], tx: q[3], tz: q[4], t: q[5] + lead, T: q[6], state: MST[q[7]], fuse: q[8], sx: q[9], sz: q[10] }));
+  W.zones = S.zo;
+  W.pickups = (S.pk || []).map((q) => ({ id: q[0], kind: PW_KEYS[q[1]], x: q[2], z: q[3], life: q[4] - lead, t: q[5] }));
+  W.seeker = S.se ? { x: ext(S.se[0], S.se[2]), z: ext(S.se[1], S.se[3]), vx: S.se[2], vz: S.se[3], a: S.se[4], inT: S.se[5], t: S.se[6], n: S.se[7], v: 0 } : null;
+  if (S.b) {
+    const B = W.boss && W.boss.key === S.b.key ? W.boss : {};
+    Object.assign(B, S.b, { heads: S.b.heads.map((q) => ({ i: q[0], x: q[1], z: q[2], hp: q[3], max: q[4], a: q[5] })), t: B.t || 0 });
+    W.boss = B;
+  } else W.boss = null;
+  const h = W.players[0], q = S.p1;
+  h.remote = true;
+  h.x = q[0] + q[2] * lead; h.z = q[1] + q[3] * lead; h.vx = q[2]; h.vz = q[3]; h.aim = q[4]; h.alive = !!q[5]; h.inv = q[6]; h.shield = q[7]; h.plate = q[8]; h.emp = q[9]; h.walk = q[10]; h.dashT = q[11];
+  h.pw = unpackPw(S.pw1);
+  const me = W.players[1], m = S.p2;
+  if (me && m) {
+    // after I go down here, a snapshot sent before the host heard about it still says I'm alive:
+    // only take "alive" again once the host has shown me as down (or we are in a new room)
+    if (!me.alive && !m[0]) me.downAck = 1;
+    if (moved || (m[0] && !me.alive && me.downAck)) { // a new room, or the host brought me back
+      if (m[0] && !me.alive) W.ev.push({ k: 'respawn', pid: 2, x: m[1], z: m[2] });
+      me.alive = !!m[0]; me.x = m[1]; me.z = m[2]; me.vx = me.vz = 0; me.inv = m[3]; me.deadT = 0; me.downAck = 0;
+    }
+    if (m[4] > me.shield) me.shield = m[4];
+    me.plate = m[5]; me.emp = Math.max(0, m[6]);
+    const pw = unpackPw(S.pw2);
+    for (const k in pw) if (!me.pw[k] || pw[k] > me.pw[k] + 0.5) me.pw[k] = pw[k];
+  }
+  W.shots = W.shots.filter((s) => s.pid !== 1).concat(S.hs.map((q) => ({ id: 0, pid: 1, x: q[0] + q[2] * lead, z: q[1] + q[3] * lead, vx: q[2], vz: q[3], life: q[4] - lead, ghost: true, bounce: 0 })));
+  [W.stats.kills, W.stats.deaths, W.stats.cleared, W.stats.rooms] = S.sx;
+}
+const R_OF = { sentry: 0.5, patroller: 0.5, marksman: 0.48, aegis: 0.64, mortar: 0.62, ripper: 0.46, twin: 0.42, drone: 0.36 };
+
+// ------------------------------------------------------------------ the connection
+// hooks: status(text, kind), joined(peer), start(cfg), left(reason), chat(msg)
+export class Online {
+  constructor(hooks, opts = {}) {
+    this.h = hooks;
+    this.relay = opts.relay || RELAY;
+    this.lag = opts.lag || 0;
+    this.ws = null;
+    this.reset();
+  }
+  reset() {
+    this.role = null; this.room = null; this.intent = null; this.peer = null; this.peers = [];
+    this.rtt = 150; this.W = null; this.inbox = []; this.sendT = 0; this.lastRecv = 0; this.gridT = 0; this.lastKey = null;
+    this.events = []; this.remote = null; this.shotQ = []; this.claimQ = []; this.outShots = []; this.sent = new WeakSet();
+    this.stat = { snaps: 0, inputs: 0, shots: 0, deaths: 0 };
+    clearInterval(this.pingT); clearInterval(this.helloT); clearInterval(this.pollT);
+  }
+  get open() { return this.ws && this.ws.readyState === 1; }
+  get http() { return this.relay.replace(/^ws/, 'http'); }
+  get host() { return this.role === 'p1'; }
+
+  async rooms() { const r = await fetch(this.http + '/rooms', { cache: 'no-store' }); const d = await r.json(); return Array.isArray(d.rooms) ? d.rooms : []; }
+  async quick(me) {
+    this.h.status('Looking for a partner…', 'wait');
+    let list = [];
+    try { list = await this.rooms(); } catch { /* lobby unreachable: wait in a room */ }
+    const open = list.filter((r) => String(r.room).startsWith(QUICK)).sort((a, b) => (a.updatedAt || 0) - (b.updatedAt || 0));
+    if (open.length) { this.connect(open[0].room, 'quick', me); return; }
+    const room = QUICK + randomCode(5);
+    this.connect(room, 'quick', me);
+    this.pollT = setInterval(async () => {
+      if (this.peer || this.room !== room) { clearInterval(this.pollT); return; }
+      let l = [];
+      try { l = await this.rooms(); } catch { return; }
+      const other = l.find((r) => String(r.room).startsWith(QUICK) && r.room !== room && r.room < room);
+      if (other && !this.peer && this.room === room) this.connect(other.room, 'quick', me);
+    }, 2500);
+  }
+  connect(room, intent, me) {
+    this.close(true);
+    this.reset();
+    this.room = room; this.intent = intent; this.me = me;
+    let ws;
+    try { ws = new WebSocket(`${this.relay}/ws/${encodeURIComponent(room)}`); } catch { this.h.status('Could not reach the online server', 'error'); return; }
+    this.ws = ws;
+    ws.onopen = () => {
+      this.raw({ type: 'hello', name: me.ini || 'AGENT' });
+      this.ping();
+      this.pingT = setInterval(() => this.ping(), 2000);
+      this.helloT = setInterval(() => { if (!this.peer) this.raw({ type: 'hello', name: me.ini || 'AGENT' }); }, 50000);
+    };
+    ws.onmessage = (ev) => { if (this.ws === ws) this.recv(ev.data); };
+    ws.onerror = () => { if (this.ws === ws && !this.role) this.h.status('Could not reach the online server', 'error'); };
+    ws.onclose = () => { if (this.ws !== ws) return; this.ws = null; if (!this.role) this.h.status('Could not reach the online server', 'error'); else this.h.left('lost'); };
+  }
+  close(silent) {
+    clearInterval(this.pingT); clearInterval(this.helloT); clearInterval(this.pollT);
+    const ws = this.ws;
+    this.ws = null;
+    if (ws) { try { if (!silent && ws.readyState === 1) ws.send(JSON.stringify({ type: 'chat', k: 'bye' })); ws.close(); } catch { /* gone */ } }
+  }
+  raw(obj) {
+    if (!this.open) return;
+    const s = JSON.stringify(obj);
+    if (this.lag) { const ws = this.ws; setTimeout(() => { try { if (ws.readyState === 1) ws.send(s); } catch { /* gone */ } }, this.lag); } else this.ws.send(s);
+  }
+  ping() { this.raw({ type: 'ping', sent: performance.now() }); }
+  recv(text) {
+    let d;
+    try { d = JSON.parse(text); } catch { return; }
+    // ?netlag=ms delays both ways (pongs too, so the measured round trip and the snapshot lead see the lag)
+    if (this.lag) { setTimeout(() => this.handle(d), this.lag); return; }
+    this.handle(d);
+  }
+  handle(d) {
+    this.lastRecv = performance.now();
+    switch (d.type) {
+      case 'welcome': {
+        this.role = d.role; this.peers = d.peers || [];
+        if (d.role === 'spectator') {
+          this.close(true); this.role = null;
+          if (this.intent === 'quick') setTimeout(() => this.quick(this.me), 400); else this.h.status('That room is full', 'error');
+          return;
+        }
+        if (d.role === 'p1' && this.intent === 'join') { this.close(true); this.role = null; this.h.status(`No room with code ${this.room.slice(ROOM.length)}`, 'error'); return; }
+        if (d.role === 'p2') this.sendReady();
+        this.h.status(d.role === 'p1' ? 'waiting' : 'Connecting to your partner…', d.role === 'p1' ? 'wait' : 'info');
+        return;
+      }
+      case 'peer': {
+        const had = !!this.peer;
+        this.peers = d.peers || [];
+        const other = this.peers.find((p) => p.role === (this.role === 'p1' ? 'p2' : 'p1'));
+        if (!other && had) { this.peer = null; this.h.left('left'); return; }
+        if (other && this.role === 'p1' && !had) this.sendReady();
+        return;
+      }
+      case 'pong': {
+        const now = performance.now(), rtt = now - (+d.sent || now);
+        if (rtt > 0 && rtt < 5000) this.rtt = this.rtt * 0.7 + rtt * 0.3;
+        return;
+      }
+      case 'ready': {
+        if (d.g !== 'vm') return;
+        if (d.pv !== PROTOCOL) { this.h.status('Your partner is on a different version: refresh both pages', 'error'); return; }
+        const first = !this.peer;
+        this.peer = { ini: String(d.ini || '').replace(/[^A-Z0-9]/gi, '').slice(0, 4) };
+        if (first) { clearInterval(this.pollT); this.h.joined(this.peer); }
+        return;
+      }
+      case 'start': if (this.role === 'p2') this.h.start(d.cfg || {}); return;
+      case 'snapshot': if (this.role === 'p2') this.inbox.push(d); return;
+      case 'input': if (this.role === 'p1') this.onInput(d); return;
+      case 'chat': if (d.k === 'bye') { this.peer = null; this.h.left('left'); return; } this.h.chat(d); return;
+    }
+  }
+  sendReady() { this.raw({ type: 'ready', g: 'vm', pv: PROTOCOL, ini: this.me.ini }); }
+  sendStart(cfg) { this.raw({ type: 'start', cfg }); }
+
+  bind(W) {
+    this.W = W; this.inbox = []; this.events = []; this.shotQ = []; this.claimQ = []; this.outShots = []; this.sent = new WeakSet(); this.remote = null; this.lastKey = null; this.gridT = 0; this.finalSent = false;
+    W.net = this.host ? 'host' : 'guest';
+    if (this.host) W.players[1].remote = true; else W.players[0].remote = true;
+  }
+
+  // -------------------------------- host
+  onInput(d) {
+    this.stat.inputs++;
+    if (Array.isArray(d.s)) this.remote = { s: d.s, at: performance.now() };
+    for (const b of d.f || []) this.shotQ.push(b);
+    for (const c of d.c || []) this.claimQ.push(c);
+  }
+  hostTick(W) {
+    const g = W.players[1];
+    if (!g) return;
+    const lag = clamp(this.rtt / 2000, 0, 0.25);
+    if (this.remote && g.alive && this.remote.s[5] && W.phase === 'play' && this.remote.s[7] === W.room.key) {
+      const q = this.remote.s, age = Math.min(0.3, lag + (performance.now() - this.remote.at) / 1000);
+      g.vx = +q[2] || 0; g.vz = +q[3] || 0; g.x = (+q[0] || 0) + g.vx * age; g.z = (+q[1] || 0) + g.vz * age; g.aim = +q[4] || 0; g.walk = +q[6] || 0;
+    }
+    for (const b of this.shotQ) {
+      if (!g.alive || W.over || W.phase !== 'play') break;
+      const age = clamp(lag, 0, 0.3);
+      W.shots.push({ id: W.nextId++, pid: 2, x: +b.x + b.vx * age, z: +b.z + b.vz * age, vx: +b.vx, vz: +b.vz, life: clamp(+b.l || 0.5, 0.05, 0.9) - age, bounce: b.b | 0 });
+      this.stat.shots++;
+    }
+    this.shotQ = [];
+    for (const c of this.claimQ) {
+      if (c.dead && g.alive) {
+        g.alive = false; g.deadT = 0; W.lives = Math.max(0, W.lives - 1); W.stats.deaths++; W.lastDeathN = W.n;
+        W.ev.push({ k: 'death', pid: 2, x: g.x, z: g.z, cause: c.cause || 'hit', remote: 1, lives: W.lives });
+        this.stat.deaths++;
+      }
+      if (c.shield !== undefined) g.shield = c.shield | 0;
+      if (c.emp && g.alive) emp(W, g, true);
+    }
+    this.claimQ = [];
+  }
+  hostEvents(list) { for (const e of list) if (!QUIET.has(e.k) && !(e.pid === 2 && (e.remote || e.k === 'emp'))) this.events.push(e); }
+  hostFrame(W, dt) {
+    this.sendT -= dt; this.gridT -= dt;
+    // the world's last state (game over / sector clear) always goes out at once: the host stops stepping after it
+    const final = W.over && !this.finalSent && this.peer;
+    if (!final && (this.sendT > 0 || !this.peer)) return;
+    if (final) this.finalSent = true;
+    this.sendT = 1 / 20;
+    const withGrid = this.lastKey !== W.room.key || this.gridT <= 0;
+    if (withGrid) { this.lastKey = W.room.key; this.gridT = 2; }
+    this.raw({ type: 'snapshot', s: packWorld(W, withGrid), ev: this.events.splice(0, 80), hr: Math.round(this.rtt) });
+    this.stat.snaps++;
+  }
+
+  // -------------------------------- guest
+  guestFrame(W, dt) {
+    const me = W.players[1];
+    for (const s of W.shots) {
+      if (s.pid !== 2 || this.sent.has(s)) continue;
+      this.sent.add(s);
+      this.outShots.push({ x: r2(s.x), z: r2(s.z), vx: r2(s.vx), vz: r2(s.vz), l: r2(s.life), b: s.bounce | 0 });
+    }
+    const claims = W.claims.splice(0);
+    this.sendT -= dt;
+    if (!claims.length && !this.outShots.length && this.sendT > 0) return;
+    this.sendT = 1 / 30;
+    if (!me) return;
+    this.raw({ type: 'input', s: [r3(me.x), r3(me.z), r2(me.vx), r2(me.vz), r3(me.aim), me.alive ? 1 : 0, r2(me.walk), W.room.key], f: this.outShots, c: claims });
+    this.outShots = [];
+  }
+  guestSync(W) {
+    if (!this.inbox.length) return [];
+    const ev = [];
+    let last = null;
+    this.stat.snaps += this.inbox.length;
+    for (const m of this.inbox) { for (const e of m.ev || []) ev.push(e); last = m; }
+    this.inbox = [];
+    const lead = clamp(((+last.hr || this.rtt) / 2) / 1000, 0, 0.25);
+    applyWorld(W, last.s, lead);
+    // my own hits, deaths and EMPs already played here
+    return ev.filter((e) => !(e.pid === 2 && (e.k === 'shield' || e.k === 'death' || e.k === 'emp' || e.k === 'plate' || e.k === 'respawn')) && e.k !== 'roomenter');
+  }
+  get stale() { return this.lastRecv && performance.now() - this.lastRecv > 4000; }
+}
