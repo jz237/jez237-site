@@ -4,13 +4,13 @@
 // re-aimed every frame at the nearest flares, fires, lanterns, crystals and lava): their number never changes,
 // so no material ever recompiles mid-game.
 import * as THREE from '../vendor/three.module.min.js';
-import { T, SOLID, PHYS, TOOLS, GEMS, BIOMES } from './config.js?v=8';
-import { Cave, rockMaterial } from './cavemesh.js?v=8';
-import { rockTextures, spriteTextures, waterTextures } from './textures.js?v=8';
-import { FX, CALM } from './fx.js?v=8';
-import { Post } from './post.js?v=8';
-import * as MD from './models.js?v=8';
-import { buildDecor, bake } from './decor.js?v=8';
+import { T, SOLID, PHYS, TOOLS, GEMS, BIOMES } from './config.js?v=9';
+import { Cave, rockMaterial } from './cavemesh.js?v=9';
+import { rockTextures, spriteTextures, waterTextures } from './textures.js?v=9';
+import { FX, CALM } from './fx.js?v=9';
+import { Post } from './post.js?v=9';
+import * as MD from './models.js?v=9';
+import { buildDecor, bake } from './decor.js?v=9';
 
 export function pickQuality(name) {
   const mobile = matchMedia('(pointer:coarse)').matches || /Android|iPhone|iPad/i.test(navigator.userAgent);
@@ -176,6 +176,7 @@ export class Renderer {
     Object.assign(this.rockMat.userData.U.uGlow.value, new THREE.Color().fromArray(look.glow));
     this.rockMat.userData.U.uMoss.value.fromArray(look.mossCol || [0.1, 0.3, 0.2]);
     this.rockMat.userData.U.uCaus.value.setRGB(...(M.biome === 3 ? [0.13, 0.26, 0.3] : M.biome === 1 ? [0.08, 0.22, 0.2] : M.biome === 4 ? [0, 0, 0] : [0.05, 0.05, 0.04]));
+    this.rockMat.userData.U.uStrata.value = [1, 0.6, 0.45, 0.55, 0.85][M.biome % 5];
     this.rockMat.userData.U.uSpark.value.setRGB(...[[0.55, 0.42, 0.22], [0.25, 0.5, 0.45], [0.85, 0.7, 1.0], [0.35, 0.45, 0.5], [0.7, 0.28, 0.08]][M.biome % 5]);
     this.scene.fog.color.fromArray(look.fog); this.scene.fog.density = look.fogD;
     this.hemi.color.fromArray(look.hemiS); this.hemi.groundColor.fromArray(look.hemiG);
@@ -633,7 +634,7 @@ export class Renderer {
     const L = this.look;
     const dark = P.oil <= 0 ? 0.35 : 0;
     this.post.render(this.scene, this.camera, { bloom: L.bloom * 1.1, exposure: L.exposure * (o.exposure ?? 1), chroma: 0.0025, time: t, desat: dark + (o.desat || 0), fade: o.fade || 0, vignette: 0.55 + dark * 0.3,
-      flash: this.flashScreen, tint: tmpV2.fromArray(L.tint), shocks, lens: [], threshold: 0.95 });
+      flash: this.flashScreen, tint: tmpV2.fromArray(L.tint), shocks, lens: [], threshold: 0.95, heat: W.M && W.M.biome === 4 ? (CALM.on ? 0.35 : 1) : 0 });
   }
 
   animPlayer(W, P, dt) {

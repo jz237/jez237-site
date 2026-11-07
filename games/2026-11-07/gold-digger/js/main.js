@@ -1,15 +1,15 @@
 // Gold Digger: the game shell. Fixed-step simulation (sim.js) + renderer (render.js), level flow, the general store,
 // the journal of discoveries, tips, cinematics, the attract demo, the AI playthrough, scores and menus.
-import { VERSION, STEP, T, BIOMES, LEVELS, DEPTHS, UPGRADES, TYPICAL_UP, DIFFICULTY, MEDALS, RELICS, FOSSILS, WONDERS, NOTES, CREATURES, RANKS, START, STRATA, REWARDS, MAX_PERKS } from './config.js?v=8';
-import { makeWorld, step, drainEvents, cloneWorld, carryOut } from './sim.js?v=8';
-import { hash, findName } from './levelgen.js?v=8';
-import { Autopilot } from './ai.js?v=8';
-import { Renderer, pickQuality, LOOKS } from './render.js?v=8';
-import { CALM } from './fx.js?v=8';
-import { Audio } from './audio.js?v=8';
-import { Input } from './input.js?v=8';
-import { Scores, NO_POST } from './scores.js?v=8';
-import { Recorder, Replay } from './replay.js?v=8';
+import { VERSION, STEP, T, BIOMES, LEVELS, DEPTHS, UPGRADES, TYPICAL_UP, DIFFICULTY, MEDALS, RELICS, FOSSILS, WONDERS, NOTES, CREATURES, RANKS, START, STRATA, REWARDS, MAX_PERKS } from './config.js?v=9';
+import { makeWorld, step, drainEvents, cloneWorld, carryOut } from './sim.js?v=9';
+import { hash, findName } from './levelgen.js?v=9';
+import { Autopilot } from './ai.js?v=9';
+import { Renderer, pickQuality, LOOKS } from './render.js?v=9';
+import { CALM } from './fx.js?v=9';
+import { Audio } from './audio.js?v=9';
+import { Input } from './input.js?v=9';
+import { Scores, NO_POST } from './scores.js?v=9';
+import { Recorder, Replay } from './replay.js?v=9';
 
 const Q = new URLSearchParams(location.search);
 const $ = (id) => document.getElementById(id);
@@ -470,7 +470,7 @@ function onEvent(e) {
   }
   // HUD, journal, cinematics (not in replays)
   if (!live) return;
-  if (e.k === 'gold' || e.k === 'gem' || e.k === 'chest') { G.run.purse += e.v || 0; G.run.gold += e.v || 0; popWorld(e.x, e.y + 0.6, '+' + (e.v || 0), e.k === 'gem' ? 'c' : 'g'); bump(); }
+  if (e.k === 'gold' || e.k === 'gem' || e.k === 'chest') { G.run.purse += e.v || 0; G.run.gold += e.v || 0; popWorld(e.x, e.y + 0.6, '+' + (e.v || 0), e.k === 'gem' ? 'c' : 'g'); flyCoin(e.x, e.y + 0.3, e.k === 'gem'); }
   if (e.k === 'kill') popWorld(e.x, e.y + 0.6, 'KO', '');
   if (e.k === 'hurt') { popWorld(e.x, e.y + 1.4, '-' + e.n, 'r'); G.run.noHitLevel = false; }
   if (e.k === 'life') popBanner('EXTRA LIFE', '');
@@ -526,6 +526,23 @@ function popBanner(a, b) {
   clearTimeout(G.bannerT); G.bannerT = setTimeout(() => el.classList.add('hidden'), 2200);
 }
 function caption(t, death) { const c = $('caption'); c.textContent = t; c.className = death ? 'dc' : ''; c.classList.remove('hidden'); clearTimeout(G.capT); G.capT = setTimeout(() => c.classList.add('hidden'), 3200); }
+// a coin (or gem) flies from the pickup to the gold counter
+let flyN = 0;
+function flyCoin(x, y, gem) {
+  if (flyN > 10 || !document.body.animate) return;
+  const [sx, sy, vis] = R.toScreen(x, y); if (!vis) return;
+  const box = $('popups').getBoundingClientRect(), t = $('score').getBoundingClientRect();
+  const tx = t.left - box.left + Math.min(40, t.width * 0.5), ty = t.top - box.top + t.height / 2;
+  const mx = (sx + tx) / 2 + (Math.random() - 0.5) * 140, my = Math.min(sy, ty) - 50 - Math.random() * 70;
+  const d = document.createElement('div'); d.className = 'coinfly' + (gem ? ' gem' : ''); $('popups').appendChild(d); flyN++;
+  const a = d.animate([
+    { transform: `translate(${sx}px, ${sy}px) scale(0.5)`, opacity: 0.3 },
+    { transform: `translate(${mx}px, ${my}px) scale(1.15)`, opacity: 1, offset: 0.42 },
+    { transform: `translate(${tx}px, ${ty}px) scale(0.55)`, opacity: 0.85 },
+  ], { duration: 640 + Math.random() * 140, easing: 'cubic-bezier(.4,0,.65,1)' });
+  const done = () => { if (!d.isConnected) return; d.remove(); flyN--; bump(); };
+  a.onfinish = done; setTimeout(done, 1200);
+}
 function bump() { const s = $('score'); s.classList.add('bump'); clearTimeout(G.bumpT); G.bumpT = setTimeout(() => s.classList.remove('bump'), 160); }
 
 // ------------------------------------------------------------------ tips (first time you meet each thing)
@@ -808,7 +825,7 @@ async function boot() {
   toTitle();
   checkUnlocks(true); applyLoadout();
   $('loading').style.opacity = 0; setTimeout(() => $('loading').remove(), 700);
-  if (Q.has('test')) { const T2 = await import('./tests.js?v=8'); T2.run({ G, R, startCampaign, startEndless, toTitle, tick, makeWorld, step }); return; }
+  if (Q.has('test')) { const T2 = await import('./tests.js?v=9'); T2.run({ G, R, startCampaign, startEndless, toTitle, tick, makeWorld, step }); return; }
   if (Q.has('autoplay')) startCampaign(+(Q.get('depth') || 0), { mode: 'autoplay', auto: 'demo', level: +(Q.get('level') || 0) });
   if (Q.has('playthrough')) startCampaign(+(Q.get('depth') || 0), { mode: 'playthrough', auto: 'demo', level: +(Q.get('level') || 0) });
   requestAnimationFrame(raf);

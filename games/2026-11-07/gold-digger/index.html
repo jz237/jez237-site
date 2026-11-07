@@ -73,6 +73,8 @@ button { appearance: none; border: 0; background: none; font: inherit; color: in
 #find.note { background: linear-gradient(170deg, #efe2c4, #d8c49c); color: #3a2c18; border-color: #8a6a3a; }
 #find.note .k { color: #7a5420; } #find.note .n { color: #3a2a14; font-size: 18px; } #find.note .t { color: #3a2c18; font-size: 15px; font-style: normal; line-height: 1.5; }
 #popups { position: absolute; inset: 0; overflow: hidden; }
+.coinfly { position: absolute; left: 0; top: 0; width: 11px; height: 11px; margin: -5.5px 0 0 -5.5px; border-radius: 50%; pointer-events: none; background: radial-gradient(circle at 38% 35%, #fff8d6 0 18%, #ffc24a 40%, #a8650c 72%); box-shadow: 0 0 10px 3px rgba(255, 190, 70, 0.65); will-change: transform; }
+.coinfly.gem { background: radial-gradient(circle at 38% 35%, #f2fdff 0 18%, #7ad8ff 45%, #2a6aa0 75%); box-shadow: 0 0 10px 3px rgba(120, 210, 255, 0.65); }
 .pop { position: absolute; transform: translate(-50%, -50%); font-weight: 800; font-size: 18px; color: var(--gold); text-shadow: 0 2px 8px #000; white-space: nowrap; animation: popup 1.2s ease-out forwards; }
 .pop.g { color: #ffe9a8; } .pop.r { color: #ff8a7a; } .pop.c { color: var(--teal); }
 @keyframes popup { to { transform: translate(-50%, -170%); opacity: 0; } }
@@ -276,7 +278,7 @@ body.paused #gl { filter: brightness(.45) saturate(.6); }
   <div class="screen hidden" id="title">
     <div class="card">
       <h1 class="logo">GOLD<span>DIGGER</span></h1>
-      <div class="ver">VERSION <b id="ver">1.2.1</b> · INTO THE MOUNTAIN</div>
+      <div class="ver">VERSION <b id="ver">1.2.2</b> · INTO THE MOUNTAIN</div>
       <div class="diffrow">DIFFICULTY<div class="seg" data-opt="diff"><button data-v="easy">EASY</button><button data-v="normal">NORMAL</button><button data-v="hard">HARD</button><button data-v="nightmare">NIGHTMARE</button></div></div>
       <div id="diff-desc"></div>
       <div class="btns" id="title-btns">
@@ -427,6 +429,6 @@ addEventListener('error', (e) => window.__gdErrors.push(String(e.message || e)))
 addEventListener('unhandledrejection', (e) => window.__gdErrors.push('rejection: ' + String(e.reason && e.reason.message || e.reason)));
 (() => { const ce = console.error; console.error = (...a) => { window.__gdErrors.push(a.map(String).join(' ')); ce.apply(console, a); }; })();
 </script>
-<script type="module" src="js/main.js?v=8"></script>
+<script type="module" src="js/main.js?v=9"></script>
 </body>
 </html>

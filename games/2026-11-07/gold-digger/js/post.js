@@ -1,7 +1,7 @@
 // HDR post (shared with Asteroids 2026): scene -> MSAA half-float target -> dual-filter bloom chain -> composite with
 // shockwave refraction, chromatic aberration, ACES, grade, vignette and grain (lens slots unused here).
 import * as THREE from '../vendor/three.module.min.js';
-import { TONE, NOISE } from './shaders.js?v=8';
+import { TONE, NOISE } from './shaders.js?v=9';
 
 const VERT = /* glsl */ `varying vec2 vUv; void main(){ vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }`;
 
@@ -41,7 +41,7 @@ void main(){
 
 const COMP = /* glsl */ `
 uniform sampler2D tScene; uniform sampler2D tBloom;
-uniform float uBloom, uExposure, uChroma, uVignette, uGrain, uTime, uDesat, uFade, uAspect, uScan;
+uniform float uBloom, uExposure, uChroma, uVignette, uGrain, uTime, uDesat, uFade, uAspect, uScan, uHeat;
 uniform vec4 uFlash; uniform vec3 uTint;
 uniform vec4 uShock[6]; uniform vec4 uLens[3];
 varying vec2 vUv;
@@ -67,6 +67,15 @@ void main(){
     float r = max(length(d), 1e-4);
     float k = L.w * L.z * L.z / (r * r + L.z * L.z * 0.25);
     off -= (d / r) * min(k, r * 0.95) * vec2(1.0 / uAspect, 1.0);
+  }
+  // heat shimmer: the air just above glowing lava wavers
+  if (uHeat > 0.0) {
+    vec3 below = texture2D(tScene, uv - vec2(0.0, 0.035)).rgb + texture2D(tScene, uv - vec2(0.0, 0.08)).rgb * 0.7;
+    float hot = smoothstep(0.7, 2.6, below.r - below.b * 1.2) * uHeat;
+    if (hot > 0.0) {
+      float wv = sin(uv.y * 150.0 - uTime * 7.0 + sin(uv.x * 40.0 + uTime * 2.0) * 2.0);
+      off += vec2(wv * 0.0022, cos(uv.x * 90.0 + uTime * 5.0) * 0.001) * hot;
+    }
   }
   uv += off;
   vec2 cd = (uv - 0.5);
@@ -124,7 +133,7 @@ export class Post {
         uBloom: { value: 0.9 }, uExposure: { value: 1.0 }, uChroma: { value: 0.004 }, uVignette: { value: 0.45 },
         uGrain: { value: 0.006 }, uTime: { value: 0 }, uDesat: { value: 0 }, uFade: { value: 0 }, uAspect: { value: 1 },
         uScan: { value: 0.025 }, uFlash: { value: new THREE.Vector4(1, 1, 1, 0) }, uTint: { value: new THREE.Vector3(1, 1, 1) },
-        uShock: { value: shocks }, uLens: { value: lens },
+        uShock: { value: shocks }, uLens: { value: lens }, uHeat: { value: 0 },
       } });
     this.w = 0; this.h = 0;
   }
@@ -170,7 +179,7 @@ export class Post {
     const u = this.comp.uniforms;
     u.uBloom.value = p.bloom / this.levels; u.uExposure.value = p.exposure; u.uChroma.value = p.chroma; u.uTime.value = p.time;
     u.uDesat.value = p.desat; u.uFade.value = p.fade; u.uVignette.value = p.vignette;
-    u.uFlash.value.copy(p.flash); u.uTint.value.copy(p.tint);
+    u.uFlash.value.copy(p.flash); u.uTint.value.copy(p.tint); u.uHeat.value = p.heat || 0;
     for (let i = 0; i < 6; i++) u.uShock.value[i].copy(p.shocks[i] || ZERO4);
     for (let i = 0; i < 3; i++) u.uLens.value[i].copy(p.lens[i] || ZERO4);
     this.pass(this.comp, null);

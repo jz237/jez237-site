@@ -6,7 +6,7 @@
 // weights (gold vein, wetness, glow, rubble/cracks) that the triplanar rock shader uses.
 // Breaking a tile re-meshes only the chunks around it (a few ms).
 import * as THREE from '../vendor/three.module.min.js';
-import { T } from './config.js?v=8';
+import { T } from './config.js?v=9';
 
 export const S = 0.5;                  // sample spacing (m)
 export const Z0 = -15, Z1 = 5;         // depth range (camera side is +z)
@@ -310,7 +310,7 @@ export function rockMaterial(tex, look) {
   const U = {
     tAlb: { value: tex.alb }, tNrm: { value: tex.nrm }, uScale: { value: 0.32 }, uBump: { value: 1.25 }, uTime: { value: 0 },
     uGold: { value: new THREE.Color(1.0, 0.68, 0.22) }, uGlow: { value: new THREE.Color().fromArray(look.glow || [1, 0.4, 0.1]) },
-    uMoss: { value: new THREE.Color().fromArray(look.mossCol || [0.1, 0.3, 0.2]) }, uRubble: { value: new THREE.Color().fromArray(look.rubble || [0.5, 0.45, 0.4]) }, uCaus: { value: new THREE.Color(0, 0, 0) }, uSpark: { value: new THREE.Color(0, 0, 0) }, uLampP: { value: new THREE.Vector3(0, -999, 0) },
+    uMoss: { value: new THREE.Color().fromArray(look.mossCol || [0.1, 0.3, 0.2]) }, uRubble: { value: new THREE.Color().fromArray(look.rubble || [0.5, 0.45, 0.4]) }, uCaus: { value: new THREE.Color(0, 0, 0) }, uSpark: { value: new THREE.Color(0, 0, 0) }, uStrata: { value: 0 }, uLampP: { value: new THREE.Vector3(0, -999, 0) },
   };
   mat.userData.U = U;
   mat.onBeforeCompile = (sh) => {
@@ -321,7 +321,7 @@ export function rockMaterial(tex, look) {
     sh.fragmentShader = sh.fragmentShader
       .replace('#include <common>', `#include <common>
 uniform sampler2D tAlb; uniform sampler2D tNrm; uniform float uScale; uniform float uBump; uniform float uTime;
-uniform vec3 uGold; uniform vec3 uGlow; uniform vec3 uMoss; uniform vec3 uRubble; uniform vec3 uCaus; uniform vec3 uSpark; uniform vec3 uLampP;
+uniform vec3 uGold; uniform vec3 uGlow; uniform vec3 uMoss; uniform vec3 uRubble; uniform vec3 uCaus; uniform vec3 uSpark; uniform vec3 uLampP; uniform float uStrata;
 // light thrown off moving water: thin bright ripple lines
 float caustic(vec2 p, float t) {
   vec2 i = p; float c = 1.0;
@@ -360,6 +360,9 @@ vec3 gTW; vec4 gAlb; vec3 gNW;`)
   c = mix(c, uMoss * (0.6 + gAlb.g * 0.6), moss * smoothstep(0.3, 0.6, gAlb.g + moss * 0.3));
   c *= 1.0 - smoothstep(1.5, 1.9, code) * 0.25 * (1.0 - smoothstep(0.2, 0.6, gAlb.g));
   c *= 1.0 - wet * 0.35;
+  // sediment: soft horizontal bands that wander a little, lighter and darker layers of stone
+  float sb = sin(vWPos.y * 1.6 + gAlb.r * 2.2 + sin(vWPos.x * 0.13 + vWPos.z * 0.2) * 1.8) * 0.6 + sin(vWPos.y * 4.3 + gAlb.g * 3.0 + sin(vWPos.x * 0.31) * 1.2) * 0.4;
+  c *= 1.0 + sb * 0.14 * uStrata * (1.0 - moss);
   diffuseColor.rgb = c;
 }`)
       .replace('#include <normal_fragment_maps>', `#include <normal_fragment_maps>
@@ -411,6 +414,6 @@ roughnessFactor = mix(roughnessFactor, 0.16, vMat.y);`)
   if (code > 1.5) { float cr = smoothstep(0.86, 0.97, 1.0 - abs(sin(vWPos.x * 3.1 + vWPos.y * 2.3 + gAlb.r * 9.0))); totalEmissiveRadiance += vec3(1.0, 0.3, 0.05) * cr * smoothstep(1.5, 1.9, code) * (0.6 + 0.4 * sin(uTime * 2.4)) * 0.38; }
 }`);
   };
-  mat.customProgramCacheKey = () => 'gd-rock-4';
+  mat.customProgramCacheKey = () => 'gd-rock-5';
   return mat;
 }
