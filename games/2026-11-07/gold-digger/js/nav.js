@@ -4,8 +4,8 @@
 // physics (physics.js stepBody) from the node's centre, so the graph says exactly where a jump lands and how
 // far it falls. Walls of rubble, boulders and locked gates give "dig" edges the planner can open with the
 // pick, dynamite or a key.
-import { T, SOLID, PHYS, STEP, PICK_HP } from './config.js?v=3';
-import { tileAt, standable, solidT, climbT, makeBody, stepBody, fallHurt } from './physics.js?v=3';
+import { T, SOLID, PHYS, STEP, PICK_HP } from './config.js?v=4';
+import { tileAt, standable, solidT, climbT, makeBody, stepBody, fallHurt } from './physics.js?v=4';
 
 export const K_STAND = 1, K_CLIMB = 2, K_SWIM = 3;
 const BREAK = new Set([T.SOFT, T.HARD, T.DOOR, T.CRUMBLE, T.VEIN, T.GEMV, T.FOSSIL]);
@@ -225,6 +225,7 @@ export function validateLevel(M) {
   for (const k of M.spawns.keys) if (!ok(r, k.x, k.y)) return false;
   for (const f of M.finds) {
     if (f.kind === 'fossil') { if (!near(rk, f.x, f.y)) return false; }
+    else if (f.kind === 'cache') { if (!ok(rk, f.x, f.y + 1)) return false; }
     else if (!ok(rk, f.x, f.y)) return false;
   }
   // traps: every place you can reach (non-lethal falls allowed) must still lead to the exit

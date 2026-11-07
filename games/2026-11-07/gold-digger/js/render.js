@@ -4,13 +4,13 @@
 // re-aimed every frame at the nearest flares, fires, lanterns, crystals and lava): their number never changes,
 // so no material ever recompiles mid-game.
 import * as THREE from '../vendor/three.module.min.js';
-import { T, SOLID, PHYS, TOOLS, GEMS, BIOMES } from './config.js?v=3';
-import { Cave, rockMaterial } from './cavemesh.js?v=3';
-import { rockTextures, spriteTextures, waterTextures } from './textures.js?v=3';
-import { FX, CALM } from './fx.js?v=3';
-import { Post } from './post.js?v=3';
-import * as MD from './models.js?v=3';
-import { buildDecor } from './decor.js?v=3';
+import { T, SOLID, PHYS, TOOLS, GEMS, BIOMES } from './config.js?v=4';
+import { Cave, rockMaterial } from './cavemesh.js?v=4';
+import { rockTextures, spriteTextures, waterTextures } from './textures.js?v=4';
+import { FX, CALM } from './fx.js?v=4';
+import { Post } from './post.js?v=4';
+import * as MD from './models.js?v=4';
+import { buildDecor, bake } from './decor.js?v=4';
 
 export function pickQuality(name) {
   const mobile = matchMedia('(pointer:coarse)').matches || /Android|iPhone|iPad/i.test(navigator.userAgent);
@@ -358,6 +358,125 @@ export class Renderer {
     }
   }
 
+  // ------------------------------------------------------------------ the relic museum
+  // An old mine hall: one alcove per depth (three pedestals, that depth's fossils on the wall) and one for the
+  // Endless Deep. Found relics turn on their pedestals under a lantern; missing ones are empty plinths.
+  loadMuseum(journal, biomes) {
+    for (const c of [...this.level.children]) { this.level.remove(c); c.traverse?.((o) => { if (o.geometry && !o.geometry.userData.shared) o.geometry.dispose(); }); }
+    this.views.clear(); this.emitters = []; this.fx.clear(); this.boss = null; this.cave = null; this.M = null;
+    const look = this.look = LOOKS[0];
+    this.scene.fog.color.setRGB(0.035, 0.026, 0.02); this.scene.fog.density = 0.02;
+    this.hemi.color.setRGB(0.16, 0.12, 0.09); this.hemi.groundColor.setRGB(0.04, 0.03, 0.02);
+    this.r.setClearColor(new THREE.Color(0.035, 0.026, 0.02), 1);
+    this.fx.setLook(look);
+    const G = new THREE.Group(); this.level.add(G);
+    const stone = new THREE.MeshStandardMaterial({ map: this.tex.rock.alb, color: 0x9a8670, roughness: 0.9 });
+    this.tex.rock.alb.repeat.set(6, 2);
+    const N = 6, gap = 8;
+    const floor = new THREE.Mesh(new THREE.PlaneGeometry(N * gap + 16, 16), new THREE.MeshStandardMaterial({ map: this.tex.rock.alb, color: 0x6e5d4c, roughness: 0.95 }));
+    floor.rotation.x = -Math.PI / 2; floor.position.set((N - 1) * gap / 2, 0, -1); floor.receiveShadow = true; G.add(floor);
+    const wall = new THREE.Mesh(new THREE.PlaneGeometry(N * gap + 16, 12), stone); wall.position.set((N - 1) * gap / 2, 5, -4.6); wall.receiveShadow = true; G.add(wall);
+    const ceil = new THREE.Mesh(new THREE.PlaneGeometry(N * gap + 16, 16), stone); ceil.rotation.x = Math.PI / 2; ceil.position.set((N - 1) * gap / 2, 7.5, -1); G.add(ceil);
+    const statics = [];
+    const relicIds = [];
+    const alcoves = [];
+    for (let i = 0; i < N; i++) {
+      const ax = i * gap;
+      const frame = obj(make('timberFrame', 7.4, 7)); frame.position.set(ax, 0, -3.3); statics.push(frame);
+      const slots = [];
+      let ids;
+      if (i < 5) ids = [i * 3, i * 3 + 1, i * 3 + 2];
+      else ids = journal.endless.filter((e) => e.kind === 'relic').slice(-3).map((e) => e.id);
+      while (ids.length < 3) ids.push(-1);
+      ids.forEach((id, k) => {
+        const px = ax + (k - 1) * 2.3;
+        const ped = obj(make('pedestal')); ped.position.set(px, 0, -2.2); statics.push(ped);
+        const found = id >= 0 && (id >= 100 ? journal.endless.some((e) => e.kind === 'relic' && e.id === id) : journal.relic.includes(id));
+        let rel = null;
+        if (found) { rel = obj(make('relic', id)); rel.position.set(px, 1.05, -2.2); rel.scale.multiplyScalar(1.6); G.add(rel); }
+        else { const q = new THREE.Mesh(new THREE.PlaneGeometry(0.5, 0.5), new THREE.MeshBasicMaterial({ map: this.tex.glow, color: 0x6a5a48, transparent: true, opacity: 0.5, blending: THREE.AdditiveBlending, depthWrite: false })); q.position.set(px, 1.35, -2.2); G.add(q); }
+        slots.push({ id, found, rel, x: px });
+      });
+      if (i < 5) for (const k of [0, 1]) {
+        const fid = i * 2 + k;
+        if (!journal.fossil.includes(fid)) continue;
+        const f = obj(make('fossilSlab')); f.position.set(ax + (k ? 2.4 : -2.4), 3.9, -4.45); f.scale.setScalar(1.25); statics.push(f);
+      }
+      const ln = obj(make('lantern')); ln.position.set(ax, 6.2, -2.0); statics.push(ln);
+      const any = slots.some((s) => s.found);
+      const acc = i < 5 ? LOOKS[i].accent : [0.9, 0.8, 1];
+      alcoves.push({ x: ax, slots, any, acc, name: i < 5 ? biomes[i].name : 'THE ENDLESS DEEP' });
+      this.emitters.push({ key: 'm' + i, x: ax, y: 5.4, z: -1.5, col: any ? [1, 0.72, 0.42] : [0.5, 0.42, 0.34], int: any ? 22 : 7, range: 14, pri: 5, flick: 1 });
+      // a coloured glow behind each depth's alcove
+      const back = new THREE.Mesh(new THREE.PlaneGeometry(6.5, 6), new THREE.MeshBasicMaterial({ map: this.tex.glow, color: new THREE.Color().fromArray(acc).multiplyScalar(any ? 0.5 : 0.15), transparent: true, blending: THREE.AdditiveBlending, depthWrite: false }));
+      back.position.set(ax, 3.2, -4.4); G.add(back);
+    }
+    G.add(bake(statics));
+    this.museum = { alcoves, t: 0, camX: 0 };
+    const pl = this.player; pl.root.position.set(0, 0, 0.8); pl.root.rotation.set(0, Math.PI / 2, 0); pl.root.visible = true;
+    this.cam.x = 0; this.cam.y = 2; this.cam.d = 8;
+  }
+  museumFrame(dt, sel) {
+    const Mu = this.museum; if (!Mu) return;
+    this.time += dt; Mu.t += dt;
+    const A = Mu.alcoves[sel] || Mu.alcoves[0], t = this.time;
+    // the camera drifts to the chosen alcove; the digger walks over to look
+    Mu.camX += (A.x - Mu.camX) * (1 - Math.exp(-dt * 3));
+    const cam = this.camera;
+    cam.position.set(Mu.camX + Math.sin(t * 0.25) * 0.4, 2.0, 6.0); cam.lookAt(Mu.camX, 0.15, -2.4);
+    const pl = this.player, px = pl.root.position.x, want = A.x + 1.2;
+    const walking = Math.abs(want - px) > 0.05;
+    pl.root.position.x += Math.max(-dt * 3.5, Math.min(dt * 3.5, want - px));
+    pl.root.rotation.y += ((walking ? (want > px ? 0 : Math.PI) : Math.PI / 2) - pl.root.rotation.y) * Math.min(1, dt * 8);
+    pl.phase += dt * (walking ? 9 : 0);
+    const R = pl.rig, s = Math.sin(pl.phase) * (walking ? 0.6 : 0);
+    if (R.legL) { R.legL.rotation.z = s; R.legR.rotation.z = -s; R.armL.rotation.z = -s * 0.7; R.armR.rotation.z = s * 0.7; R.hips.position.y = 0.9 + Math.abs(Math.cos(pl.phase)) * 0.04 * (walking ? 1 : 0); }
+    for (const al of Mu.alcoves) for (const sl of al.slots) if (sl.rel) { sl.rel.rotation.y = t * 0.5 + sl.x; sl.rel.position.y = 1.08 + Math.sin(t * 1.4 + sl.x) * 0.05; if (Math.random() < dt * 1.5) this.fx.glint(sl.x + (Math.random() - 0.5) * 0.5, 1.2 + Math.random() * 0.6, -2.0, 0.6, [1, 0.9, 0.7]); }
+    // light: the lanterns (pool) and the helmet lamp as a key light on the chosen alcove
+    const L = this.pool;
+    Mu.alcoves.forEach((al, i) => { const l = L[i]; if (!l) return; l.l.position.set(al.x, 5.4, -1.2); l.l.color.setRGB(1, 0.72, 0.45); l.l.distance = 14; l.l.intensity = (al.any ? 12 : 4) * (0.92 + Math.sin(t * 6 + i) * 0.04); });
+    for (let i = Mu.alcoves.length; i < L.length; i++) L[i].l.intensity = 0;
+    for (const F of this.flashes) F.l.intensity = 0;
+    this.lamp.position.set(Mu.camX + 1.5, 6.5, 5); this.lamp.target.position.set(Mu.camX, 1, -2.5); this.lamp.intensity = 140; this.lamp.distance = 24; this.lamp.angle = 0.55;
+    this.fill.position.set(pl.root.position.x, 2, 1.5); this.fill.intensity = 6;
+    if (Math.random() < dt * 10) this.fx.dust(Mu.camX + (Math.random() - 0.5) * 8, 0.5 + Math.random() * 5, (Math.random() - 0.5) * 3, { n: 1, s0: 0.05, s1: 0.08, life: 4, vy: 0.05, up: 0.1, jit: 0.15, a: 0.5, grav: -0.01, drag: 0.2, k: 1.4 });
+    this.fx.U.uLampPos.value.copy(this.lamp.position); this.fx.U.uLampDir.value.copy(this.lamp.target.position).sub(this.lamp.position).normalize(); this.fx.U.uLampCol.value.setRGB(1, 0.85, 0.6);
+    this.fx.update(dt);
+    this.post.render(this.scene, this.camera, { bloom: 0.8, exposure: 1.2, chroma: 0.002, time: t, desat: 0, fade: 0, vignette: 0.6, flash: this.flashScreen, tint: tmpV2.set(1.04, 1, 0.95), shocks: [], lens: [], threshold: 0.95 });
+  }
+
+  // a rolled-up treasure map with a red ribbon, and the X that marks the dig spot
+  scroll() {
+    const g = new THREE.Group();
+    const paper = new THREE.MeshStandardMaterial({ color: 0xe6d3a3, roughness: 0.85 });
+    const roll = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.07, 0.46, 14), paper); roll.rotation.z = Math.PI / 2; g.add(roll);
+    const flap = new THREE.Mesh(new THREE.PlaneGeometry(0.42, 0.2), new THREE.MeshStandardMaterial({ color: 0xd9c08a, roughness: 0.9, side: THREE.DoubleSide }));
+    flap.position.set(0, -0.08, 0.06); flap.rotation.x = -0.7; g.add(flap);
+    const rib = new THREE.Mesh(new THREE.TorusGeometry(0.075, 0.014, 6, 16), new THREE.MeshStandardMaterial({ color: 0xb01818, roughness: 0.5 }));
+    rib.rotation.y = Math.PI / 2; g.add(rib);
+    const ink = new THREE.Mesh(new THREE.PlaneGeometry(0.1, 0.1), new THREE.MeshBasicMaterial({ color: 0xff3020, transparent: true, opacity: 0.85 }));
+    ink.position.set(0.1, -0.09, 0.075); ink.rotation.x = -0.7; ink.rotation.z = Math.PI / 4; g.add(ink);
+    return g;
+  }
+  xMarker() {
+    const g = new THREE.Group(), mats = [];
+    // an upright red X hovering over the spot (a flat one is lost at this camera angle)
+    const xg = new THREE.Group(); xg.position.y = 1.15; g.add(xg); g.userData.x = xg;
+    g.userData.isX = true;
+    const bar = (rz) => { const mt = new THREE.MeshBasicMaterial({ color: new THREE.Color(2.4, 0.32, 0.16), transparent: true, opacity: 0.95, depthWrite: false }); mt.userData.o = 0.95; mats.push(mt); const m = new THREE.Mesh(new THREE.BoxGeometry(0.95, 0.16, 0.06), mt); m.rotation.z = rz; m.renderOrder = 7; xg.add(m); };
+    bar(Math.PI / 4); bar(-Math.PI / 4);
+    const halo = new THREE.MeshBasicMaterial({ map: this.tex.glow, color: new THREE.Color(1.8, 0.35, 0.15), transparent: true, opacity: 0.7, blending: THREE.AdditiveBlending, depthWrite: false });
+    halo.userData.o = 0.7; mats.push(halo);
+    const h = new THREE.Mesh(new THREE.PlaneGeometry(1.5, 1.5), halo); h.position.z = -0.05; xg.add(h);
+    const glowMat = new THREE.MeshBasicMaterial({ map: this.tex.glow, color: new THREE.Color(1.6, 0.3, 0.12), transparent: true, opacity: 0.55, blending: THREE.AdditiveBlending, depthWrite: false });
+    glowMat.userData.o = 0.55; mats.push(glowMat);
+    const pool = new THREE.Mesh(new THREE.PlaneGeometry(2.2, 2.2), glowMat); pool.rotation.x = -Math.PI / 2; pool.position.y = 0.02; g.add(pool);
+    const beamMat = new THREE.MeshBasicMaterial({ map: this.tex.glow, color: new THREE.Color(1.4, 0.35, 0.15), transparent: true, opacity: 0.45, blending: THREE.AdditiveBlending, depthWrite: false });
+    beamMat.userData.o = 0.45; mats.push(beamMat);
+    const beam = new THREE.Mesh(new THREE.PlaneGeometry(1.1, 6), beamMat); beam.position.y = 2.9; beam.scale.x = 0.7; g.add(beam);
+    return { m: g, mats };
+  }
+
   // ------------------------------------------------------------------ bosses
   buildBoss(kind) {
     const m = make(kind);
@@ -407,7 +526,8 @@ export class Renderer {
       case 'crack': fx.dust(e.x, e.y, z, { n: 3, s0: 0.2, s1: 0.7, life: 1.5, vy: -1, a: 0.5 }); break;
       case 'geyser': fx.splash(e.x, e.y, z, 0.8); break;
       case 'secret': this.flash(e.x, e.y, 1.5, 6, 0xffe0a0, 1.2); break;
-      case 'find': if (!e.quiet) { for (let i = 0; i < 16; i++) fx.glint(e.x + (Math.random() - 0.5) * 1.2, e.y + Math.random() * 1.6, z + 0.6, 1.0, [1, 0.9, 0.6]); this.flash(e.x, e.y + 1, 1.2, 10, 0xfff0c0, 1.6); } break;
+      case 'find': if (e.kind === 'cache') { fx.debris(e.x, e.y + 0.5, z, { gold: true, n: 14, speed: 5, size: 0.1 }); fx.debris(e.x, e.y + 0.5, z, { n: 10, speed: 4, size: 0.15 }); this.shake(0.3); }
+        if (!e.quiet) { for (let i = 0; i < 16; i++) fx.glint(e.x + (Math.random() - 0.5) * 1.2, e.y + Math.random() * 1.6, z + 0.6, 1.0, [1, 0.9, 0.6]); this.flash(e.x, e.y + 1, 1.2, 10, 0xfff0c0, 1.6); } break;
       case 'camp': this.flash(e.x, e.y + 0.8, 1, 12, 0xff9a40, 1.2); break;
       case 'door': fx.dust(e.x, e.y, z, { n: 6, life: 2 }); break;
       case 'slam': fx.debris(e.x, e.y + 0.3, z, { n: 14, speed: 6, size: 0.22 }); fx.dust(e.x, e.y, z, { n: 12, s0: 1, s1: 3.5, life: 3.5, jit: 4, a: 0.5 }); this.shake(0.9); this.shock(e.x, e.y + 0.5, 0.7); break;
@@ -572,11 +692,23 @@ export class Renderer {
     }
     for (const f of W.finds) {
       if (f.kind === 'fossil' || f.kind === 'wonder') continue;
+      if (f.kind === 'cache') {
+        if (f.got || !W.mapFound) continue;
+        const v = view('x' + f.id, () => this.xMarker());
+        v.root.position.set(f.x, f.y + 1.08, 0.35);
+        if (v.m.userData.x) { v.m.userData.x.position.y = 1.15 + Math.sin(t * 2.6) * 0.12; v.m.userData.x.rotation.y = Math.sin(t * 1.3) * 0.35; }
+        const pulse = 0.65 + 0.35 * Math.sin(t * 4);
+        for (const m of v.mats) m.opacity = m.userData.o * pulse;
+        if (Math.random() < dt * 5) this.fx.glint(f.x + (Math.random() - 0.5) * 0.6, f.y + 1.1, 0.4, 0.5, [1, 0.35, 0.25]);
+        continue;
+      }
       if (f.got && f.kind !== 'relic') continue;
       const v = view('f' + f.id, () => {
         if (f.kind === 'relic') { const g = new THREE.Group(); const ped = obj(make('pedestal')); const rel = obj(make('relic', f.fid)); rel.position.y = 1.02; g.add(ped, rel); return { m: g, rel }; }
+        if (f.kind === 'map') return { m: this.scroll() };
         return { m: make('note') };
       });
+      if (f.kind === 'map') { v.root.position.set(f.x, f.y + 0.32 + Math.sin(t * 2.2) * 0.07, 0.15); v.root.rotation.y = t * 0.9; if (Math.random() < dt * 2.5) this.fx.glint(f.x, f.y + 0.4, 0.5, 0.5, [1, 0.85, 0.55]); continue; }
       v.root.position.set(f.x, f.y, f.kind === 'relic' ? -0.3 : 0.15);
       if (v.rel) { v.rel.visible = !f.got; v.rel.rotation.y = t * 0.6; v.rel.position.y = 1.05 + Math.sin(t * 1.6) * 0.05; if (!f.got && Math.random() < dt * 4) this.fx.glint(f.x + (Math.random() - 0.5) * 0.5, f.y + 1.1 + Math.random() * 0.5, 0.2, 0.6, [1, 0.9, 0.7]); }
     }

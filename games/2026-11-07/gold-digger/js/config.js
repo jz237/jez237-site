@@ -46,12 +46,12 @@ export const TOOLS = {
 export const RAMP = {
   //                 D1 Copper    D2 Glowroot   D3 Geode      D4 Drowned    D5 Ember
   rooms:      [[3, 2, 4, 2], [4, 2, 4, 3], [4, 3, 4, 3], [4, 3, 5, 3], [5, 3, 5, 3]],  // [w0,h0,w1,h1] rooms per level
-  bats:       [[0.0, 0.25], [0.55, 0.85], [0.85, 1.0], [1.0, 1.08], [1.08, 1.15]],     // bats per room
-  batSpeed:   [[2.6, 3.0], [3.1, 3.5], [3.6, 4.0], [4.0, 4.3], [4.35, 4.6]],
+  bats:       [[0.0, 0.25], [0.55, 0.8], [0.8, 0.92], [0.92, 1.0], [1.0, 1.08]],     // bats per room
+  batSpeed:   [[2.6, 3.0], [3.1, 3.5], [3.6, 4.0], [4.0, 4.3], [4.3, 4.45]],
   batWarn:    [[2.0, 1.8], [1.7, 1.5], [1.4, 1.2], [1.1, 0.95], [0.9, 0.7]],         // wing-unfold before a swoop
   crawlers:   [[0.15, 0.35], [0.45, 0.6], [0.75, 0.9], [0.9, 1.0], [1.0, 1.1]],
   crawlSpeed: [[0.9, 1.1], [1.1, 1.3], [1.3, 1.5], [1.5, 1.7], [1.7, 1.9]],
-  stalac:     [[0.15, 0.3], [0.4, 0.55], [0.6, 0.75], [0.75, 0.85], [0.85, 0.95]],     // falling stalactites per room
+  stalac:     [[0.15, 0.3], [0.4, 0.55], [0.6, 0.72], [0.72, 0.8], [0.8, 0.88]],     // falling stalactites per room
   stalWarn:   [[2.0, 1.8], [1.7, 1.5], [1.4, 1.2], [1.1, 0.95], [0.9, 0.7]],
   geysers:    [[0.0, 0.1], [0.2, 0.3], [0.3, 0.4], [0.4, 0.45], [0.45, 0.55]],
   geyWarn:    [[2.2, 2.0], [1.9, 1.7], [1.6, 1.4], [1.3, 1.1], [1.0, 0.75]],
@@ -64,7 +64,7 @@ export const RAMP = {
   spikes:     [[0.0, 0.1], [0.15, 0.25], [0.25, 0.35], [0.35, 0.45], [0.45, 0.55]],
   crumble:    [[0.0, 0.15], [0.2, 0.3], [0.3, 0.4], [0.4, 0.5], [0.5, 0.6]],
   crumbleT:   [[1.3, 1.2], [1.1, 1.0], [0.95, 0.85], [0.8, 0.7], [0.65, 0.55]],      // standing time before it falls
-  oilDrain:   [[0.3, 0.36], [0.46, 0.52], [0.56, 0.62], [0.64, 0.7], [0.72, 0.8]],    // per second
+  oilDrain:   [[0.3, 0.36], [0.46, 0.52], [0.56, 0.6], [0.6, 0.64], [0.66, 0.72]],    // per second
   oilCans:    [[1.0, 0.9], [0.85, 0.75], [0.7, 0.65], [0.6, 0.55], [0.5, 0.45]],     // per path room
   lava:       [[0, 0], [0, 0], [0, 0.05], [0, 0.05], [0.35, 0.5]],
   hurtMul:    [[1, 1], [1, 1], [1, 1], [1, 1.2], [1.3, 1.45]],                      // stalactite/geyser/boss damage scale
@@ -144,7 +144,7 @@ export const BOSSES = {
 // ------------------------------------------------------------------ loot and scoring
 export const LOOT = {
   gold: { v: [60, 140] }, gem: { v: [300, 900] }, bigGold: { v: [400, 700] }, chest: { v: [1500, 2500] },
-  relic: 5000, fossil: 1500, secret: 1000, wonder: 2000, note: 500, kill: { bat: 150, crawler: 200, shade: 300, eel: 250 },
+  relic: 5000, fossil: 1500, secret: 1000, wonder: 2000, note: 500, map: 400, cache: 3000, kill: { bat: 150, crawler: 200, shade: 300, eel: 250 },
   boss: 10000, levelClear: 2000, explore: 3000,  // explore bonus scales with % of the level seen
 };
 export const GEMS = [
@@ -228,5 +228,5 @@ export const MEDALS = [
   ['relics3', 'COLLECTOR', 'Find 3 relics'], ['relics15', 'MUSEUM PIECE', 'Find all 15 relics'], ['wonders', 'SIGHTSEER', 'Find 5 wonders'],
   ['secrets10', 'HOLLOW TAPPER', 'Open 10 secret rooms'], ['fossils', 'BONE DIGGER', 'Dig up 5 fossils'], ['nohit', 'UNSCATHED', 'Clear a level without a scratch'],
   ['allgold', 'NOTHING LEFT BEHIND', 'Collect every bit of gold in a level'], ['endless10', 'DEEP DIVER', 'Reach level 10 of the Endless Deep'],
-  ['rich', 'GOLD FEVER', 'Score 100,000 in one run'], ['explorer', 'CARTOGRAPHER', 'See 95% of a level'],
+  ['rich', 'GOLD FEVER', 'Score 100,000 in one run'], ['explorer', 'CARTOGRAPHER', 'See 95% of a level'], ['caches5', 'TREASURE HUNTER', 'Dig up 5 buried caches'],
 ];

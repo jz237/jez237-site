@@ -4,9 +4,9 @@
 //   'demo':  sharp and curious: hunts every relic, fossil, wonder and secret, then takes the lift down.
 // It plans over the navigation graph (nav.js), whose jumps were probed with the real physics, and replans
 // whenever the tiles change (rock broken, gates opened) or it ends up somewhere it did not expect.
-import { T, PHYS, TOOLS, STEP, SOLID } from './config.js?v=3';
-import { tileAt, solidT, fallHurt } from './physics.js?v=3';
-import { buildNav, search, pathTo, nodeAt, probeInput, K_STAND, K_CLIMB, K_SWIM } from './nav.js?v=3';
+import { T, PHYS, TOOLS, STEP, SOLID } from './config.js?v=4';
+import { tileAt, solidT, fallHurt } from './physics.js?v=4';
+import { buildNav, search, pathTo, nodeAt, probeInput, K_STAND, K_CLIMB, K_SWIM } from './nav.js?v=4';
 
 const D2 = (ax, ay, bx, by) => (ax - bx) * (ax - bx) + (ay - by) * (ay - by);
 function rngFrom(seed) { let s = seed >>> 0 || 7; return () => { s = (s + 0x6D2B79F5) >>> 0; let t = s; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
@@ -116,7 +116,11 @@ export class Autopilot {
       else if (l.k === 'flare') v = P.flares < P.flareMax ? (P.flares < 2 ? 5 : 1.5) : 0;
       if (v > 0) add('loot', l, l.x, l.y, v, 'l' + l.id);
     }
-    if (!exitOnly) for (const f of W.finds) if (!f.got) add(f.kind, f, f.x, f.y, demo ? 40 : 22, 'f' + f.id);
+    if (!exitOnly) for (const f of W.finds) {
+      if (f.got || (f.kind === 'cache' && !W.mapFound)) continue;
+      if (f.kind === 'cache') add('cache', f, f.x, f.y + 1, demo ? 45 : 24, 'f' + f.id);
+      else add(f.kind, f, f.x, f.y, demo ? 40 : 22, 'f' + f.id);
+    }
     if (!exitOnly) for (const k of W.keys) if (!k.got) add('key', k, k.x, k.y, demo ? 20 : 4, 'k' + k.id);
     for (const c of W.camps) if (!c.lit) add('camp', c, c.x, c.y, 10, 'c' + c.id);
     if (P.dyn < 1) for (const k of W.kegs) add('keg', k, k.x, k.y, 4, 'g' + k.id);
@@ -142,6 +146,13 @@ export class Autopilot {
     if (!this.plan.length) {
       // at the goal: dig a fossil, stand on the exit cage
       const g = this.goal;
+      if (g && g.kind === 'cache') {
+        // stand on the X and dig straight down
+        const dx = g.obj.x - P.x;
+        if (Math.abs(dx) > 0.22) { out.mx = Math.max(-1, Math.min(1, dx * 3)); return; }
+        out.my = -1; if (P.ground && Math.abs(P.vx) < 0.5) out.pick = true;
+        return;
+      }
       if (g && g.kind === 'fossil') {
         const fx = Math.floor(g.obj.x), fy = Math.floor(g.obj.y);
         const dx = fx + 0.5 - P.x;

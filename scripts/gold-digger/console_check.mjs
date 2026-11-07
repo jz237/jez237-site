@@ -118,6 +118,17 @@ try {
     await play(page, 60 * 8);
     await snap(page, 'playthrough_d2');
   }
+  if (want('museum')) {
+    await fixedTitle(page);
+    await ev(page, () => { window.__gd.journal.relic.push(0, 2, 5); window.__gd.journal.fossil.push(0); });
+    await page.click('#title [data-act="museum"]');
+    await ev(page, () => window.__gd.tick(120));
+    await snap(page, 'museum');
+    ok(await ev(page, () => window.__gd.G.state === 'museum' && !document.getElementById('museum').classList.contains('hidden')), 'museum: opens from the title and draws the hall');
+    await page.click('[data-act="mus-next"]'); await ev(page, () => window.__gd.tick(60));
+    await page.keyboard.press('Escape'); await ev(page, () => window.__gd.tick(10));
+    ok(await ev(page, () => window.__gd.G.state === 'title'), 'museum: walks to the next alcove and back to the title');
+  }
   if (want('title')) {
     const tp = await open();
     await tp.goto(base + '?noscores&seed=3');

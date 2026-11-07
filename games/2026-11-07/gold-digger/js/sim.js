@@ -2,11 +2,11 @@
 // checks reproduce a run exactly. No rendering, no Math.random: every random number comes from W.rs.
 // Events for sound, effects and the HUD go into W.ev and are drained by the game each frame.
 import { T, SOLID, PHYS, TOOLS, STEP, PICK_HP, BLASTABLE, LOOT, GEMS, START, LIFE_EVERY, LEVELS, DEPTHS, BIOMES, BOSSES,
-  rampAt, endlessRamp, applyDiff, DIFFICULTY } from './config.js?v=3';
-import { tileAt, solidT, makeBody, stepBody, fallHurt, boxOverlapsTile, EPS } from './physics.js?v=3';
-import { generate, bossArena, hash, findName } from './levelgen.js?v=3';
-import { validateLevel } from './nav.js?v=3';
-import { updateBoss, makeBoss, bossHit } from './boss.js?v=3';
+  rampAt, endlessRamp, applyDiff, DIFFICULTY } from './config.js?v=4';
+import { tileAt, solidT, makeBody, stepBody, fallHurt, boxOverlapsTile, EPS } from './physics.js?v=4';
+import { generate, bossArena, hash, findName } from './levelgen.js?v=4';
+import { validateLevel } from './nav.js?v=4';
+import { updateBoss, makeBoss, bossHit } from './boss.js?v=4';
 
 export { STEP };
 export const rnd = (W) => { W.rs = (W.rs + 0x6D2B79F5) >>> 0; let t = W.rs; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
@@ -373,6 +373,7 @@ function breakTile(W, x, y, how) {
   if (t === T.FOSSIL) {
     for (const f of W.finds) if (f.kind === 'fossil' && !f.got && Math.floor(f.x) === x && Math.floor(f.y) === y) gotFind(W, f, W.players[0]);
   }
+  if (t === T.SOFT) for (const f of W.finds) if (f.kind === 'cache' && !f.got && Math.floor(f.x) === x && Math.floor(f.y) === y) gotFind(W, f, W.players[0]);
   // a broken seal on a vault: the room behind is a secret
   if ((t === T.SOFT || t === T.HARD) && !W.secretAt) W.secretAt = {};
   if (t === T.SOFT || t === T.HARD || t === T.DOOR) {
@@ -474,7 +475,7 @@ function updateBats(W, dt, P) {
     } else if (b.st === 'circle') {
       b.x = b.cx + Math.sin(b.t * 2.3) * 1.6; b.y = b.cy + Math.sin(b.t * 4.6) * 0.5;
       b.vx = Math.cos(b.t * 2.3) * 3.6; b.face = Math.sign(b.vx) || 1;
-      if (b.t > 0.9 + R.batWarn * 0.75) { if (d2 < 64 && !P.dead) { b.st = 'wake'; b.t = R.batWarn * 0.45; } else { b.st = 'return'; b.t = 0; } }
+      if (b.t > Math.max(1.8, 0.9 + R.batWarn * 0.75)) { if (d2 < 64 && !P.dead) { b.st = 'wake'; b.t = R.batWarn * 0.45; } else { b.st = 'return'; b.t = 0; } }
     } else if (b.st === 'flee') {
       const ax = b.x - b.fx, ay = b.y - b.fy, l = Math.hypot(ax, ay) || 1;
       b.vx = ax / l * 4.5; b.vy = ay / l * 2 + 1; b.x += b.vx * dt; b.y += b.vy * dt; b.face = Math.sign(b.vx) || 1;
@@ -633,7 +634,14 @@ function updateZones(W, dt, P) {
 function gotFind(W, f, P) {
   if (f.got) return;
   f.got = true;
-  const pts = f.kind === 'relic' ? LOOT.relic : f.kind === 'fossil' ? LOOT.fossil : f.kind === 'wonder' ? LOOT.wonder : LOOT.note;
+  const pts = f.kind === 'relic' ? LOOT.relic : f.kind === 'fossil' ? LOOT.fossil : f.kind === 'wonder' ? LOOT.wonder : f.kind === 'map' ? LOOT.map : f.kind === 'cache' ? LOOT.cache : LOOT.note;
+  if (f.kind === 'map') W.mapFound = true;
+  if (f.kind === 'cache') {
+    // the chest bursts open where the X was
+    for (let k = 0; k < 7; k++) W.loot.push({ id: W.uid++, k: 'gold', x: f.x, y: f.y + 1, vx: rr(W, -2.8, 2.8), vy: rr(W, 4, 7.5), v: 150, fly: true, got: false, t: 0 });
+    const g = Math.floor(rnd(W) * GEMS.length);
+    W.loot.push({ id: W.uid++, k: 'gem', gem: g, x: f.x, y: f.y + 1, vx: rr(W, -1, 1), vy: 6.5, v: GEMS[g].v, fly: true, got: false, t: 0 });
+  }
   addScore(W, pts, f.x, f.y);
   W.stats.finds++;
   W.found.push({ kind: f.kind, id: f.fid });
@@ -684,7 +692,7 @@ function updatePickups(W, dt, P) {
   }
   for (const k of W.keys) if (!k.got && D2(k.x, k.y + 0.3, px, py) < 0.8) { k.got = true; P.keys.push(k.door); ev(W, 'key', { x: k.x, y: k.y }); }
   for (const f of W.finds) {
-    if (f.got || f.kind === 'fossil') continue;
+    if (f.got || f.kind === 'fossil' || f.kind === 'cache') continue;
     const r = f.kind === 'wonder' ? 4.5 : 0.85;
     if (D2(f.x, f.y + 0.4, px, py) < r * r) gotFind(W, f, P);
   }

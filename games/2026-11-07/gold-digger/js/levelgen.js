@@ -5,7 +5,7 @@
 // (mirrored at random), then hazards, creatures and loot are scattered by the RAMP numbers for this level.
 // Everything is deterministic from (seed, depth, level). Boss lairs are separate hand-shaped arenas.
 // Tile rows here are world rows: y = 0 is the bottom of the map. Templates are written top-down.
-import { T, RAMP, LEVELS, RELICS, FOSSILS, WONDERS, NOTES, GEMS, LOOT, STRATA } from './config.js?v=3';
+import { T, RAMP, LEVELS, RELICS, FOSSILS, WONDERS, NOTES, GEMS, LOOT, STRATA } from './config.js?v=4';
 
 export const RW = 16, RH = 12, BORDER = 2;
 
@@ -284,6 +284,8 @@ export const findName = (kind, id) => {
   if (kind === 'relic') return id >= 100 ? endlessRelicName(id - 100) : RELICS[id];
   if (kind === 'fossil') return FOSSILS[id % FOSSILS.length];
   if (kind === 'wonder') return id >= 100 ? endlessWonderName(id - 100) : WONDERS[id];
+  if (kind === 'map') return ['A TREASURE MAP', 'Torn from the old prospector\'s notebook. An X marks a spot not far from here.'];
+  if (kind === 'cache') return ['A BURIED CACHE', 'Somebody hid this here a long time ago, and never came back for it.'];
   return ['A NOTE', NOTES[id] || ''];
 };
 
@@ -507,6 +509,28 @@ function tryGenerate(o) {
     const a = (wonderRoom.anchors && wonderRoom.anchors[0]) || [wonderRoom.x0 + 5, wonderRoom.y0 + 3];
     M.finds.push({ kind: 'wonder', id: F.wonder, x: a[0] + 0.5, y: a[1], room: [wonderRoom.x0, wonderRoom.y0] });
   }
+  // a treasure map: the scrap lies in one room, the cache is buried under the floor of another (a soft dig spot
+  // with rock beneath, so digging it leaves a one-deep hole). Not in the first level, never in a guardian's lair.
+  if (!(o.depth === 0 && o.level === 0 && !o.endless)) {
+    const pool = [...sides.filter((c) => !c.wonder), ...path.slice(1, -1).filter((c) => c.kind !== 'camp')];
+    const spot = [];
+    for (const c of pool) for (let y = c.y0 + 3; y < c.y0 + RH - 1; y++) for (let x = c.x0 + 2; x < c.x0 + RW - 2; x++) {
+      if (x === c.x0 + 7 || x === c.x0 + 8) continue;
+      if (getT(M, x, y) !== T.AIR || getT(M, x, y + 1) !== T.AIR || getT(M, x, y + 2) !== T.AIR) continue;
+      if (getT(M, x, y - 1) !== T.ROCK || getT(M, x, y - 2) !== T.ROCK) continue;
+      if (![-1, 1].every((d) => getT(M, x + d, y) === T.AIR && getT(M, x + d, y - 1) === T.ROCK)) continue;
+      spot.push([x, y, c]);
+    }
+    if (spot.length >= 2) {
+      const [cx, cy, cr] = spot[R.int(spot.length)];
+      const others = spot.filter((s) => s[2] !== cr && Math.abs(s[0] - cx) + Math.abs(s[1] - cy) > 12);
+      const [mx, my] = others.length ? others[R.int(others.length)] : spot.find((s) => s[0] !== cx || s[1] !== cy);
+      const id = o.endless ? 100 + (o.n || 0) : o.depth * 3 + o.level;
+      setT(M, cx, cy - 1, T.SOFT);
+      M.finds.push({ kind: 'cache', id, x: cx + 0.5, y: cy - 1 });
+      M.finds.push({ kind: 'map', id, x: mx + 0.5, y: my });
+    }
+  }
   // the key for a locked vault lies in a side room or near the far end of the path
   M.keyDoors.forEach((d) => {
     const pool = sides.filter((c) => !c.wonder).length ? sides.filter((c) => !c.wonder) : path.slice(1, -1);
@@ -603,7 +627,7 @@ function tryGenerate(o) {
   };
   for (const l of M.spawns.loot) if (!l.hidden) settle(l);
   for (const k of M.spawns.keys) settle(k);
-  for (const f of M.finds) if (f.kind !== 'fossil') settle(f);
+  for (const f of M.finds) if (f.kind !== 'fossil' && f.kind !== 'cache') settle(f);
   // the explored map for the explore score
   M.seen = new Uint8Array(W * H);
   M.totalGold = M.spawns.loot.filter((l) => l.k === 'gold').length;

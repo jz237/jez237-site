@@ -1,15 +1,15 @@
 // Gold Digger: the game shell. Fixed-step simulation (sim.js) + renderer (render.js), level flow, the general store,
 // the journal of discoveries, tips, cinematics, the attract demo, the AI playthrough, scores and menus.
-import { VERSION, STEP, T, BIOMES, LEVELS, DEPTHS, UPGRADES, TYPICAL_UP, DIFFICULTY, MEDALS, RELICS, FOSSILS, WONDERS, NOTES, CREATURES, RANKS, START, STRATA } from './config.js?v=3';
-import { makeWorld, step, drainEvents, cloneWorld, carryOut } from './sim.js?v=3';
-import { hash, findName } from './levelgen.js?v=3';
-import { Autopilot } from './ai.js?v=3';
-import { Renderer, pickQuality, LOOKS } from './render.js?v=3';
-import { CALM } from './fx.js?v=3';
-import { Audio } from './audio.js?v=3';
-import { Input } from './input.js?v=3';
-import { Scores, NO_POST } from './scores.js?v=3';
-import { Recorder, Replay } from './replay.js?v=3';
+import { VERSION, STEP, T, BIOMES, LEVELS, DEPTHS, UPGRADES, TYPICAL_UP, DIFFICULTY, MEDALS, RELICS, FOSSILS, WONDERS, NOTES, CREATURES, RANKS, START, STRATA } from './config.js?v=4';
+import { makeWorld, step, drainEvents, cloneWorld, carryOut } from './sim.js?v=4';
+import { hash, findName } from './levelgen.js?v=4';
+import { Autopilot } from './ai.js?v=4';
+import { Renderer, pickQuality, LOOKS } from './render.js?v=4';
+import { CALM } from './fx.js?v=4';
+import { Audio } from './audio.js?v=4';
+import { Input } from './input.js?v=4';
+import { Scores, NO_POST } from './scores.js?v=4';
+import { Recorder, Replay } from './replay.js?v=4';
 
 const Q = new URLSearchParams(location.search);
 const $ = (id) => document.getElementById(id);
@@ -19,13 +19,13 @@ const FIXED = Q.has('fixed');
 // ------------------------------------------------------------------ settings and saves
 const settings = Object.assign({ music: 55, sfx: 85, voice: 90, talk: 'on', flash: 'full', shake: '1', tips: 'on', rumble: 'on', touch: 'auto', quality: 'auto', diff: 'normal' }, store.get('settings', {}));
 const saveSettings = () => store.set('settings', settings);
-const journal = Object.assign({ relic: [], fossil: [], wonder: [], note: [], creature: [], secret: 0, endless: [] }, store.get('journal', {}));
+const journal = Object.assign({ relic: [], fossil: [], wonder: [], note: [], creature: [], secret: 0, endless: [], cache: [] }, store.get('journal', {}));
 const saveJournal = () => store.set('journal', journal);
 let medals = store.get('medals', []);
 let reached = store.get('reached', 0);
 let bests = store.get('bests', {});
 let tipsSeen = store.get('tips', {});
-const discoveries = () => journal.relic.length + journal.fossil.length + journal.wonder.length + journal.note.length + journal.creature.length + Math.min(journal.secret, 30) + journal.endless.length;
+const discoveries = () => journal.relic.length + journal.fossil.length + journal.wonder.length + journal.note.length + journal.creature.length + Math.min(journal.secret, 30) + journal.endless.length + (journal.cache || []).length;
 const rankName = () => { let r = RANKS[0][1]; for (const [n, name] of RANKS) if (discoveries() >= n) r = name; return r; };
 
 // ------------------------------------------------------------------ setup
@@ -55,7 +55,7 @@ addEventListener('resize', resize);
 resize();
 
 // ------------------------------------------------------------------ screens
-const SCREENS = ['title', 'depths', 'shop', 'results', 'journal', 'map', 'scores', 'medals', 'options', 'help', 'pause'];
+const SCREENS = ['title', 'depths', 'shop', 'results', 'journal', 'map', 'scores', 'medals', 'options', 'help', 'pause', 'museum'];
 let screenStack = [];
 function show(name, push = false) {
   if (push && G.screen) screenStack.push(G.screen); else if (!push) screenStack = [];
@@ -63,7 +63,7 @@ function show(name, push = false) {
   for (const s of SCREENS) $(s).classList.toggle('hidden', s !== name);
   document.body.classList.toggle('paused', name === 'pause');
   if (name === 'title') refreshTitle();
-  if (name === 'journal') drawJournal();
+  if (name === 'journal') { drawJournal(); $('j-museum').classList.toggle('hidden', G.state !== 'title'); }
   if (name === 'map') drawMap();
   if (name === 'scores') drawScores();
   if (name === 'medals') drawMedals();
@@ -72,6 +72,7 @@ function show(name, push = false) {
 }
 function back() {
   A.play('uiback', { vol: 0.5 });
+  if (G.state === 'museum') { toTitle(); return; }
   const prev = screenStack.pop();
   if (prev) { G.screen = null; show(prev, false); screenStack = screenStack; return; }
   show(G.state === 'paused' ? 'pause' : 'title');
@@ -291,10 +292,37 @@ function award(k) {
   if (m) { popBanner('MEDAL', m[1]); A.play('medal'); }
 }
 
+// ------------------------------------------------------------------ the relic museum
+function openMuseum() {
+  if (G.state !== 'title') return;   // never from the pause menu: that would end the run
+  A.unlock();
+  G.state = 'museum'; G.mode = 'title'; G.museumSel = Math.min(5, reached);
+  $('hud').classList.add('hidden'); $('demo-badge').classList.add('hidden');
+  R.loadMuseum(journal, BIOMES);
+  show('museum'); drawMuseum();
+  setTimeout(drawMuseum, 0);
+  A.playMusic('title');
+}
+function museumGo(d) { G.museumSel = (G.museumSel + d + 6) % 6; A.play('uimove', { vol: 0.5 }); drawMuseum(); }
+function drawMuseum() {
+  const Mu = R.museum; if (!Mu) return;
+  const A2 = Mu.alcoves[G.museumSel];
+  const have = A2.slots.filter((s) => s.found).length;
+  const total = journal.relic.length + journal.endless.filter((e) => e.kind === 'relic').length;
+  $('mus-name').textContent = A2.name;
+  $('mus-sub').textContent = G.museumSel < 5 ? `DEPTH ${G.museumSel + 1} · ${have} OF 3 RELICS` : `THE LAST THREE RELICS FROM THE ENDLESS DEEP`;
+  $('mus-total').textContent = `${total} RELIC${total === 1 ? '' : 'S'} · ${journal.fossil.length} FOSSILS · ${journal.cache.length} CACHES`;
+  $('mus-list').innerHTML = A2.slots.map((s) => {
+    if (s.id < 0) return `<div class="jent locked"><b>EMPTY PLINTH</b><small>Dig deeper into the Endless Deep.</small></div>`;
+    const [n, t] = findName('relic', s.id);
+    return s.found ? `<div class="jent"><b>${n}</b><small>${t}</small></div>` : `<div class="jent locked"><b>? ? ?</b><small>Still somewhere in ${A2.name.toLowerCase()}. Look for a sealed vault.</small></div>`;
+  }).join('');
+}
+
 // ------------------------------------------------------------------ journal, map, scores, medals, depths
 let jTab = 'relic';
 function drawJournal() {
-  $('jsum').innerHTML = `RANK <b>${rankName()}</b> · <b>${discoveries()}</b> DISCOVERIES · <b>${journal.secret}</b> SECRET ROOMS OPENED`;
+  $('jsum').innerHTML = `RANK <b>${rankName()}</b> · <b>${discoveries()}</b> DISCOVERIES · <b>${journal.secret}</b> SECRET ROOMS OPENED · <b>${journal.cache.length}</b> CACHES DUG UP`;
   document.querySelectorAll('#jtabs button').forEach((b) => b.classList.toggle('on', b.dataset.jt === jTab));
   const g = $('jgrid'); let h = '';
   const ent = (on, name, text, tag) => `<div class="jent${on ? '' : ' locked'}"><em>${tag}</em><b>${on ? name : '? ? ?'}</b><small>${on ? text : 'Not found yet.'}</small></div>`;
@@ -321,7 +349,9 @@ function drawMap() {
   }
   const dot = (x, y, col, r = 1) => { c.fillStyle = col; c.beginPath(); c.arc(x * s, (M.h - y) * s, s * r, 0, 7); c.fill(); };
   for (const cp of W.camps) if (M.seen[Math.floor(cp.y) * M.w + Math.floor(cp.x)]) dot(cp.x, cp.y + 0.5, '#ff9a3a', 0.8);
-  for (const f of W.finds) if (!f.got && M.seen[Math.floor(f.y) * M.w + Math.floor(f.x)]) dot(f.x, f.y + 0.5, '#c08aff', 0.7);
+  for (const f of W.finds) if (!f.got && f.kind !== 'cache' && M.seen[Math.floor(f.y) * M.w + Math.floor(f.x)]) dot(f.x, f.y + 0.5, '#c08aff', 0.7);
+  const cache = W.mapFound && W.finds.find((f) => f.kind === 'cache' && !f.got);
+  if (cache) { c.strokeStyle = '#ff4a30'; c.lineWidth = Math.max(2, s * 0.4); const X = cache.x * s, Y = (M.h - cache.y - 1) * s, r = s * 1.3; c.beginPath(); c.moveTo(X - r, Y - r); c.lineTo(X + r, Y + r); c.moveTo(X + r, Y - r); c.lineTo(X - r, Y + r); c.stroke(); }
   if (M.exit && M.seen[M.exit.y * M.w + Math.floor(M.exit.x)]) dot(M.exit.x, M.exit.y + 0.5, '#7dff9a', 1);
   const P = W.players[0]; dot(P.x, P.y + 0.8, '#ffd27a', 1.1);
   const pct = W.openCells ? Math.round(W.stats.seen / W.openCells * 100) : 0;
@@ -408,9 +438,12 @@ function onFind(e) {
   run.finds = (run.finds || 0) + 1;
   if (e.id >= 100) { if (!journal.endless.find((x) => x.kind === e.kind && x.id === e.id)) { journal.endless.push({ kind: e.kind, id: e.id, name: e.name, text: e.text }); isNew = true; } }
   else if (journal[e.kind] && !journal[e.kind].includes(e.id)) { journal[e.kind].push(e.id); isNew = true; }
+  if (e.kind === 'map') isNew = false;
   saveJournal();
   if (journal.relic.length >= 3) award('relics3'); if (journal.relic.length >= 15) award('relics15'); if (journal.wonder.length >= 5) award('wonders'); if (journal.fossil.length >= 5) award('fossils');
-  const kindName = { relic: 'RELIC', fossil: 'FOSSIL', wonder: 'WONDER', note: "THE OLD PROSPECTOR'S NOTE" }[e.kind];
+  const kindName = { relic: 'RELIC', fossil: 'FOSSIL', wonder: 'WONDER', note: "THE OLD PROSPECTOR'S NOTE", map: 'TREASURE MAP', cache: 'BURIED CACHE' }[e.kind];
+  if (e.kind === 'map') { caption('X MARKS THE SPOT · CHECK YOUR MAP'); }
+  if (e.kind === 'cache' && journal.cache.length >= 5) award('caches5');
   const f = $('find');
   f.className = e.kind === 'note' ? 'note' : '';
   f.querySelector('.k').textContent = (isNew ? 'NEW ' : '') + kindName + ' FOUND';
@@ -423,7 +456,7 @@ function onFind(e) {
   if (e.kind !== 'note') A.overlay('discover', 0.85);
   if (e.kind === 'relic') { if (!run.auto || run.mode === 'playthrough') say('v_relic', 1.2); R.cinematic(e.x, e.y + 1.2, 8.5, 3.2); slowmo(0.45, 1.4); }
   if (e.kind === 'wonder') { if (!run.auto || run.mode === 'playthrough') say('v_wonder', 0.8); const room = W.finds.find((x) => x.kind === 'wonder'); R.cinematic((room && room.room ? room.room[0] + 8 : e.x), e.y + 4, 24, 5); slowmo(0.6, 2.5); }
-  if (e.kind === 'fossil') { R.cinematic(e.x, e.y + 0.5, 9, 2.5); }
+  if (e.kind === 'fossil' || e.kind === 'cache') { R.cinematic(e.x, e.y + 0.8, 9, 2.5); }
 }
 function slowmo(s, dur) { G.slow = s; G.slowT = dur; if (A.ctx) A.setRate(Math.max(0.6, s)); }
 let popN = 0;
@@ -472,6 +505,7 @@ function tips(W) {
   || tip('shade', `A <b>pale shade</b> comes for the dark. A <b>FLARE</b> melts it away.`, W.shades.some((s) => !s.dead))
   || tip('fossil', `Something is set in the rock here... dig it out with the <b>PICK</b>.`, W.finds.some((f) => f.kind === 'fossil' && !f.got && Math.hypot(f.x - P.x, f.y - P.y) < 4))
   || tip('key', `A key opens a locked gate somewhere in this level.`, P.keys.length > 0)
+  || tip('xmap', `A <b>treasure map</b>! Find the red <b>X</b>, stand on it and swing your <b>PICK</b> down (<kbd>↓</kbd> + <kbd>${k.pick}</kbd>).`, !!W.mapFound)
   || tip('map', `Press <kbd>${k.map}</kbd> for the map of everywhere your lamp has been.`, G.levelT > 50);
 }
 
@@ -492,9 +526,9 @@ function hud(W) {
   $('dyn').textContent = P.dyn; $('flr').textContent = P.flares;
   $('keyw').classList.toggle('hidden', !P.keys.length); $('keys').textContent = P.keys.length;
   $('timer').textContent = fmtT(W.t);
-  const tot = { relic: 0, fossil: 0, wonder: 0, note: 0 }, got = { relic: 0, fossil: 0, wonder: 0, note: 0 };
-  for (const f of W.finds) { tot[f.kind]++; if (f.got) got[f.kind]++; }
-  const sym = { relic: '◆', fossil: '❂', wonder: '✧', note: '✎' };
+  const tot = { relic: 0, fossil: 0, wonder: 0, note: 0, cache: 0 }, got = { relic: 0, fossil: 0, wonder: 0, note: 0, cache: 0 };
+  for (const f of W.finds) { if (!(f.kind in tot)) continue; tot[f.kind]++; if (f.got) got[f.kind]++; }
+  const sym = { relic: '◆', fossil: '❂', wonder: '✧', note: '✎', cache: '✕' };
   $('finds').innerHTML = Object.keys(tot).filter((k) => tot[k]).map((k) => `<span class="${got[k] >= tot[k] ? 'all' : ''}">${sym[k]} <b>${got[k]}/${tot[k]}</b></span>`).join('') + (W.isBoss ? '' : ` <span>SEEN <b>${W.openCells ? Math.round(W.stats.seen / W.openCells * 100) : 0}%</b></span>`);
   if (W.boss) $('bossbar').querySelector('.bar i').style.width = Math.max(0, W.boss.hp / W.boss.maxHp * 100) + '%';
   if (++hudN % 3 === 0) drawMini(W);
@@ -515,7 +549,9 @@ function drawMini(W) {
   }
   const pt = (x, y, col) => { const sx = (x - x0) * s, sy = (vh - (y - y0)) * s; if (sx < 0 || sy < 0 || sx > cv.width || sy > cv.height) return; c.fillStyle = col; c.fillRect(sx - 2, sy - 2, 4, 4); };
   if (M.exit && M.seen[M.exit.y * M.w + Math.floor(M.exit.x)]) pt(M.exit.x, M.exit.y + 0.5, '#7dff9a');
-  for (const f of W.finds) if (!f.got && M.seen[Math.floor(f.y) * M.w + Math.floor(f.x)]) pt(f.x, f.y + 0.5, '#c08aff');
+  for (const f of W.finds) if (!f.got && f.kind !== 'cache' && M.seen[Math.floor(f.y) * M.w + Math.floor(f.x)]) pt(f.x, f.y + 0.5, '#c08aff');
+  const cache = W.mapFound && W.finds.find((f) => f.kind === 'cache' && !f.got);
+  if (cache) { const sx = (cache.x - x0) * s, sy = (vh - (cache.y + 1 - y0)) * s; c.strokeStyle = '#ff4a30'; c.lineWidth = 2; c.beginPath(); c.moveTo(sx - 4, sy - 4); c.lineTo(sx + 4, sy + 4); c.moveTo(sx + 4, sy - 4); c.lineTo(sx - 4, sy + 4); c.stroke(); }
   pt(P.x, P.y + 0.8, '#ffd27a');
 }
 function touchUI() {
@@ -524,6 +560,9 @@ function touchUI() {
   $('tb-pause').classList.toggle('hidden', !(G.state === 'play' && G.mode !== 'demo'));
   $('tb-map').classList.toggle('hidden', !(G.state === 'play' && G.mode !== 'demo' && !G.W?.isBoss));
 }
+let musX = null;
+addEventListener('pointerdown', (e) => { if (G.state === 'museum' && !e.target.closest('button, .card')) musX = e.clientX; });
+addEventListener('pointerup', (e) => { if (G.state === 'museum' && musX !== null) { const dx = e.clientX - musX; if (Math.abs(dx) > 40) museumGo(dx < 0 ? 1 : -1); } musX = null; });
 I.stickUI = (s) => { const el = $('stick'); if (!s) { el.classList.remove('on'); return; } el.classList.add('on'); el.style.left = s.sx + 'px'; el.style.top = s.sy + 'px'; const i = el.querySelector('i'); i.style.transform = `translate(${s.x - s.sx}px, ${s.y - s.sy}px)`; };
 
 // ------------------------------------------------------------------ demo (attract) and AI playthrough
@@ -563,6 +602,7 @@ function tick(dt) {
   const playing = G.state === 'play' && !G.paused;
   // slow motion
   if (G.slowT > 0) { G.slowT -= dt; if (G.slowT <= 0) { G.slow = 1; if (A.ctx) A.setRate(1); } }
+  if (G.state === 'museum') { R.museumFrame(dt, G.museumSel); return; }
   if (G.replay) {
     const evs = G.replay.advance(dt * 0.6);
     for (const e of evs) { R.event(e, G.replay.W); if (SND[e.k] && SND[e.k][0] && A.ctx) A.play(SND[e.k][0], { x: e.x, y: e.y, vol: SND[e.k][1] * 0.8 }); }
@@ -604,8 +644,10 @@ function tick(dt) {
     G.idleT += dt;
     if (G.idleT > 14 && G.screen === 'title' && !Q.has('test')) startDemo();
   }
-  const titleCam = G.state === 'title' ? { x: W.M.start.x + 3, y: W.M.start.y + 1.5, d: 12 } : null;
-  R.frame(W, dt, { title: titleCam, desat: G.state === 'results' ? 0.4 : 0 });
+  // draw the world as it is NOW (the tick may have just started a new level, e.g. the demo into a guardian lair)
+  const Wn = G.W;
+  const titleCam = G.state === 'title' ? { x: Wn.M.start.x + 3, y: Wn.M.start.y + 1.5, d: 12 } : null;
+  R.frame(Wn, dt, { title: titleCam, desat: G.state === 'results' ? 0.4 : 0 });
 }
 function endDemoLevel() {
   G.state = 'between';
@@ -646,6 +688,9 @@ function act(a, el) {
     case 'endless': startEndless(); break;
     case 'playthrough': startCampaign(0, { mode: 'playthrough', auto: 'demo' }); break;
     case 'journal': show('journal', true); break;
+    case 'museum': openMuseum(); break;
+    case 'mus-prev': museumGo(-1); break;
+    case 'mus-next': museumGo(1); break;
     case 'scores': show('scores', true); break;
     case 'medals': show('medals', true); break;
     case 'options': show('options', true); break;
@@ -675,7 +720,7 @@ document.addEventListener('click', (e) => {
 });
 document.addEventListener('input', (e) => { const r = e.target.closest('[data-set]'); if (r) { settings[r.dataset.set] = +r.value; saveSettings(); applySettings(); } });
 I.on('tap', (k) => { if (k === 'pause') { if (G.state === 'play') pause(); else if (G.state === 'paused') resume(); } if (k === 'map') act('map'); });
-I.on('pause', () => { if (G.replay) { endReplay(); return; } if (G.state === 'play') pause(); else if (G.state === 'paused' && G.screen === 'pause') resume(); else if (G.screen && G.screen !== 'title' && G.screen !== 'results' && G.screen !== 'shop') back(); });
+I.on('pause', () => { if (G.state === 'museum') { toTitle(); return; } if (G.replay) { endReplay(); return; } if (G.state === 'play') pause(); else if (G.state === 'paused' && G.screen === 'pause') resume(); else if (G.screen && G.screen !== 'title' && G.screen !== 'results' && G.screen !== 'shop') back(); });
 I.on('map', () => { if (G.state === 'play' && G.mode !== 'demo') act('map'); else if (G.screen === 'map') back(); });
 I.on('any', () => { G.idleT = 0; if (G.mode === 'demo') endDemo(); });
 I.on('back', () => { if (G.screen && !['title', 'results', 'shop'].includes(G.screen)) back(); });
@@ -691,6 +736,7 @@ I.on('key', (k, e) => {
     if (k === 'Backspace') { iniPos = Math.max(0, iniPos - 1); drawIni(); return; }
   }
   if (!G.screen || G.state === 'play') return;
+  if (G.screen === 'museum') { if (k === 'ArrowLeft' || k === 'KeyA') museumGo(-1); else if (k === 'ArrowRight' || k === 'KeyD') museumGo(1); else if (k === 'Escape' || k === 'Backspace' || k === 'Enter') toTitle(); return; }
   const items = menuItems(); if (!items.length) return;
   let i = items.findIndex((b) => b.classList.contains('sel'));
   if (k === 'ArrowDown' || k === 'ArrowRight') i = (i + 1) % items.length;
@@ -706,7 +752,7 @@ async function boot() {
   applySettings();
   toTitle();
   $('loading').style.opacity = 0; setTimeout(() => $('loading').remove(), 700);
-  if (Q.has('test')) { const T2 = await import('./tests.js?v=3'); T2.run({ G, R, startCampaign, startEndless, toTitle, tick, makeWorld, step }); return; }
+  if (Q.has('test')) { const T2 = await import('./tests.js?v=4'); T2.run({ G, R, startCampaign, startEndless, toTitle, tick, makeWorld, step }); return; }
   if (Q.has('autoplay')) startCampaign(+(Q.get('depth') || 0), { mode: 'autoplay', auto: 'demo', level: +(Q.get('level') || 0) });
   if (Q.has('playthrough')) startCampaign(+(Q.get('depth') || 0), { mode: 'playthrough', auto: 'demo', level: +(Q.get('level') || 0) });
   requestAnimationFrame(raf);

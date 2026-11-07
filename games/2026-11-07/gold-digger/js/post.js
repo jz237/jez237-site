@@ -1,7 +1,7 @@
 // HDR post (shared with Asteroids 2026): scene -> MSAA half-float target -> dual-filter bloom chain -> composite with
 // shockwave refraction, chromatic aberration, ACES, grade, vignette and grain (lens slots unused here).
 import * as THREE from '../vendor/three.module.min.js';
-import { TONE, NOISE } from './shaders.js?v=3';
+import { TONE, NOISE } from './shaders.js?v=4';
 
 const VERT = /* glsl */ `varying vec2 vUv; void main(){ vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }`;
 

@@ -1,11 +1,11 @@
 // ?test=1 self-test: determinism, exact replays, level generation, the difficulty ramp, every boss can be hurt,
 // every biome renders without errors and without new shader programs after warm-up.
-import { RAMP, DEPTHS, LEVELS, rampAt, STEP, BIOMES } from './config.js?v=3';
-import { makeWorld, step, drainEvents, cloneWorld } from './sim.js?v=3';
-import { Autopilot } from './ai.js?v=3';
-import { Recorder, Replay } from './replay.js?v=3';
-import { buildNav, validateLevel } from './nav.js?v=3';
-import { bossHit } from './boss.js?v=3';
+import { RAMP, DEPTHS, LEVELS, rampAt, STEP, BIOMES } from './config.js?v=4';
+import { makeWorld, step, drainEvents, cloneWorld } from './sim.js?v=4';
+import { Autopilot } from './ai.js?v=4';
+import { Recorder, Replay } from './replay.js?v=4';
+import { buildNav, validateLevel } from './nav.js?v=4';
+import { bossHit } from './boss.js?v=4';
 
 const hashW = (W) => { const P = W.players[0]; let h = 0; const s = `${P.x.toFixed(5)}|${P.y.toFixed(5)}|${P.hp}|${P.oil.toFixed(3)}|${W.score}|${W.n}|${W.bats.map((b) => b.x.toFixed(3) + b.st).join()}|${W.loot.filter((l) => l.got).length}|${W.M.tiles.reduce((a, t, i) => (a + t * (i % 97)) | 0, 0)}`; for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) | 0; return h; };
 
@@ -63,6 +63,20 @@ export async function run(ctx) {
     const p0 = progs();
     for (const [d, l] of shots) { ctx.startCampaign(d, { level: l, auto: 'demo', seed: 12 }); for (let i = 0; i < 30; i++) ctx.tick(1 / 60); await wait(); }
     res('render: every depth and two bosses draw; no new shader programs on a second pass', progs() === p0, `${p0} programs`);
+    // treasure maps: most levels carry one, and digging the X opens the cache
+    {
+      let withMap = 0, total = 0;
+      for (let d = 0; d < DEPTHS; d++) for (let l = 0; l < LEVELS; l++) { const W = makeWorld({ seed: 77 + d * 3 + l, depth: d, level: l }); total++; if (W.finds.some((f) => f.kind === 'map') && W.finds.some((f) => f.kind === 'cache')) withMap++; }
+      const W = makeWorld({ seed: 40, depth: 1, level: 1 }), P = W.players[0], c = W.finds.find((f) => f.kind === 'cache'), m = W.finds.find((f) => f.kind === 'map');
+      P.inCage = false; W.cage.state = 'up'; P.x = m.x; P.y = m.y; for (let i = 0; i < 6; i++) { P.input = {}; step(W); }
+      P.x = c.x; P.y = c.y + 1; for (let i = 0; i < 300; i++) { P.input = { my: -1, pick: i % 20 < 2 }; step(W); } drainEvents(W);
+      res('treasure maps: most levels hide one, and digging the X opens the cache', withMap >= total - 2 && W.mapFound && c.got, `${withMap}/${total} levels`);
+    }
+    // the museum builds and draws
+    ctx.toTitle(); ctx.R.loadMuseum({ relic: [0, 4, 9], fossil: [1], endless: [], cache: [] }, BIOMES);
+    for (let i = 0; i < 20; i++) ctx.R.museumFrame(1 / 60, 1);
+    ctx.toTitle();
+    res('museum: the hall builds and draws', !!ctx.R.museum && ctx.R.museum.alcoves.length === 6, `${ctx.R.museum.alcoves.filter((a) => a.any).length} alcoves with relics`);
     res('no console errors', !(window.__gdErrors || []).length, (window.__gdErrors || []).slice(0, 3).join(' | '));
   } catch (e) { res('test run crashed', false, e.stack || e.message); }
   window.__gdTests.done = true;
