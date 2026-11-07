@@ -23,7 +23,8 @@ if (SHOP && globalThis.document && globalThis.MutationObserver) {
   new MutationObserver(changes => {
     for (const { target } of changes) {
       const seen = new Set();
-      for (const a of target.querySelectorAll?.('a.shop-link') || []) seen.has(a.href) ? a.remove() : seen.add(a.href);
+      // Only the care steps of a result; the prevention page's shopping lists keep every item.
+      for (const a of target.querySelectorAll?.('a.shop-link') || []) if (!a.closest('.prevent-shop')) seen.has(a.href) ? a.remove() : seen.add(a.href);
     }
   }).observe(document.documentElement, { childList: true, subtree: true });
 }

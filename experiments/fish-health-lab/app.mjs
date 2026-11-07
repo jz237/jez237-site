@@ -260,7 +260,7 @@ function renderResults() {
   const natural = diagnosis.naturalNote ? `<p class="natural-note">${escape(diagnosis.naturalNote)}</p>` : '';
   const couldAlso = other || natural ? `<section class="could-also"><h2 class="subheading">Could also be</h2>${other ? `<p class="could-also-hint">Tap the one that looks more like your fish.</p><div class="alternatives">${other}</div>` : ''}${natural}</section>` : '';
   const where = [ {fresh:'Freshwater',marine:'Saltwater'}[input.water], fish?.title ].filter(Boolean).join(' · ');
-  $('#results-content').innerHTML = `<h1 id="results-title" class="question-title results-title">${first ? `<span>Most likely:</span> ${escape(first.title)}` : escape(diagnosis.title)}</h1>${first ? scienceLine(first.id) : ''}<p class="question-hint result-hint">${where ? `${escape(where)} · ` : ''}${diagnosis.chosen ? 'Your pick from the look-alikes' : 'Our best guess from your answers'}—a hobby guide, not a vet.</p>${urgent}${messages}${focus}${WATER_NUDGE}${additional}${unresolved}${context}${couldAlso}<section class="care-next"><h3>Got water test results?</h3><p>Add your readings and tank details for a tailored checklist.</p><button class="button secondary" data-action="care">Add readings & tank details →</button></section><button class="text-button" data-action="case">Save my notes ↗</button>`;
+  $('#results-content').innerHTML = `<h1 id="results-title" class="question-title results-title">${first ? `<span>Most likely:</span> ${escape(first.title)}` : escape(diagnosis.title)}</h1>${first ? scienceLine(first.id) : ''}<p class="question-hint result-hint">${where ? `${escape(where)} · ` : ''}${diagnosis.chosen ? 'Your pick from the look-alikes' : 'Our best guess from your answers'}—a hobby guide, not a vet.</p>${urgent}${messages}${focus}${WATER_NUDGE}${additional}${unresolved}${context}${couldAlso}<section class="care-next"><h3>Got water test results?</h3><p>Add your readings and tank details for a tailored checklist.</p><button class="button secondary" data-action="care">Add readings & tank details →</button></section><div class="result-save"><button class="text-button" data-action="case">Save my notes ↗</button><button class="text-button" data-action="print-sheet">Print a sheet for the store ↗</button></div>`;
   goStep('results');
 }
 
@@ -443,6 +443,34 @@ function renderLibrary() {
   $('#library-grid').innerHTML = filtered.map(c => card(c)).join('') || '<p class="notice">No matching entries. Try a symptom such as “breathing,” “white” or “fin.”</p>';
 }
 
+// A one-page sheet to bring to a fish store (Jez, Nov 6 2026: "a printable 'bring this to the store'
+// sheet"): the answers and best guess from the notes, blanks for water tests, and what to bring.
+// Printed from a hidden frame, so no pop-up and nothing leaves the browser.
+function printSheet() {
+  const input = readInput(), notes = buildCase(input), store = window.FHL_SHOP?.store;
+  const number = v => String(v ?? '').trim();
+  const salt = input.water === 'marine';
+  const tests = [['Ammonia', number(input.ammonia), 'ppm'], ['Nitrite', number(input.nitrite), 'ppm'], ['Nitrate', '', 'ppm'], ['pH', number(input.ph), ''],
+    ['KH / alkalinity', '', salt ? 'dKH' : 'dKH'], ['Temperature', number(input.temperature), input.tempUnit === 'C' ? '°C' : '°F'], ...(salt ? [['Salinity', number(input.salinity), 'SG / ppt']] : [['GH', '', 'dGH']])];
+  const when = new Date().toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' });
+  const html = `<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Fish health notes</title><style>
+    body{font:12.5px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif;color:#111;margin:18mm 16mm}h1{font:700 21px Georgia,serif;margin:0 0 2px}
+    .sub{color:#444;margin:0 0 12px}h2{font:700 14px Georgia,serif;margin:16px 0 6px;border-bottom:1px solid #999;padding-bottom:2px}
+    table{border-collapse:collapse;width:100%}td,th{border:1px solid #888;padding:6px 8px;text-align:left}th{width:34%;background:#f2f2f2}td.v{height:18px}
+    pre{white-space:pre-wrap;font:12px/1.45 system-ui,sans-serif;margin:0}ul{margin:4px 0 0 18px;padding:0}.foot{margin-top:14px;color:#555;font-size:11px}
+    @page{margin:12mm}</style></head><body>
+    <h1>${escape(store?.name ? `Fish health notes for ${store.name}` : 'Fish health notes for the store')}</h1>
+    <p class="sub">${escape(when)}${store?.address ? ` · ${escape(store.address)}` : ''}${store?.phone ? ` · ${escape(store.phone)}` : ''}</p>
+    <h2>Bring with this sheet</h2><ul><li>A fresh water sample in a clean container (about a cup, from the tank or pond, not the tap)</li><li>A photo or short video of the fish, coral or invert</li><li>The names of any medicines or additives you have used</li></ul>
+    <h2>Water tests (fill in, or ask the store to test)</h2><table>${tests.map(([name, value, unit]) => `<tr><th>${escape(name)}</th><td class="v">${escape(value)}${value && unit ? ` ${escape(unit)}` : ''}</td></tr>`).join('')}</table>
+    <h2>What I saw and the guide’s best guess</h2><pre>${escape(notes)}</pre>
+    <p class="foot">A best guess from a hobby picture guide, not a vet diagnosis.</p></body></html>`;
+  const frame = Object.assign(document.createElement('iframe'), { title: 'Printable notes', srcdoc: html });
+  frame.style.cssText = 'position:fixed;width:0;height:0;border:0;opacity:0';
+  frame.addEventListener('load', () => { frame.contentWindow.focus(); frame.contentWindow.print(); setTimeout(() => frame.remove(), 60000); }, { once: true });
+  document.body.append(frame);
+}
+
 function showCase() {
   currentCase = buildCase(readInput());
   $('#case-text').value = currentCase;
@@ -585,6 +613,7 @@ document.addEventListener('click', async event => {
   if (action === 'reset') reset();
   if (action === 'case') showCase();
   if (action === 'copy-case') await copyCase();
+  if (action === 'print-sheet') printSheet();
   if (action === 'download-case') {
     const url = URL.createObjectURL(new Blob([currentCase], { type: 'text/plain;charset=utf-8' }));
     Object.assign(document.createElement('a'), { href: url, download: 'fish-health-case.txt' }).click();
@@ -635,6 +664,14 @@ $('#additional-signs').addEventListener('toggle', () => {
 goStep('welcome', false);
 // Old #ich links also start neutrally; only deliberate library links bypass Start.
 document.addEventListener('keydown', event => { if (event.key === 'Escape' && !$('#site-menu').hidden) { toggleMenu(false); $('.menu-button').focus(); } });
+// ?medicine=<id> (from a store's product page) opens the medicine check with that medicine picked.
+{
+  const params = new URLSearchParams(location.search), medicine = params.get('medicine');
+  if (medicine) {
+    extras.presetMedicine(medicine); params.delete('medicine');
+    history.replaceState(null, '', location.pathname + (params.size ? `?${params}` : '') + '#medicine');
+  }
+}
 if (HASH_VIEWS.includes(location.hash.slice(1))) switchView(location.hash.slice(1));
 else if (location.hash) history.replaceState(null, '', location.pathname + location.search);
 // Deep links from a host site's help pages (Hidden Reef Help Center, Nov 6 2026):

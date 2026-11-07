@@ -45,9 +45,15 @@ export function createExtras({ $, escape }) {
     drawWaters(); drawMedicines(); drawResidents(); drawResult();
   }
 
+  // A host store can list what each setup needs (window.FHL_SHOP.prevent[sectionId]); quiet text links.
+  const preventShop = id => {
+    const links = SHOP?.prevent?.[id] || [];
+    return links.length ? `<p class="prevent-shop"><span>What you need, from the store:</span> ${links.map(l => `<a class="shop-link" href="${escape(l.href)}">${escape(l.label)}</a>`).join(' · ')}</p>` : '';
+  };
+
   function renderPrevent() {
     if ($('#prevent-sections').childElementCount) return;
-    $('#prevent-sections').innerHTML = PREVENT_SECTIONS.map(s => `<section class="prevent-section" data-prevent="${s.id}"><div class="prevent-head"><p class="eyebrow">${escape(s.who.toUpperCase())}</p><h2>${escape(s.title)}</h2><p>${escape(s.lead)}</p></div><ol class="prevent-cards">${s.cards.map(c => { const img = preventImage(c.image); return `<li class="prevent-card"><img src="${escape(img.url)}" width="${img.width}" height="${img.height}" alt="${escape(img.alt)}" loading="lazy" decoding="async"><div><h3>${escape(c.title)}</h3><p>${escape(c.text)}</p></div></li>`; }).join('')}</ol></section>`).join('');
+    $('#prevent-sections').innerHTML = PREVENT_SECTIONS.map(s => `<section class="prevent-section" data-prevent="${s.id}"><div class="prevent-head"><p class="eyebrow">${escape(s.who.toUpperCase())}</p><h2>${escape(s.title)}</h2><p>${escape(s.lead)}</p></div><ol class="prevent-cards">${s.cards.map(c => { const img = preventImage(c.image); return `<li class="prevent-card"><img src="${escape(img.url)}" width="${img.width}" height="${img.height}" alt="${escape(img.alt)}" loading="lazy" decoding="async"><div><h3>${escape(c.title)}</h3><p>${escape(c.text)}</p></div></li>`; }).join('')}</ol>${preventShop(s.id)}</section>`).join('');
   }
 
   function handleClick(event) {
@@ -76,5 +82,8 @@ export function createExtras({ $, escape }) {
     return false;
   }
 
-  return { renderMedicine, renderPrevent, handleClick };
+  // A shop's product page links here with its medicine already picked (?medicine=copper#medicine).
+  function presetMedicine(id) { if (MEDICINES.some(m => m.id === id)) state.medicine = id; }
+
+  return { renderMedicine, renderPrevent, handleClick, presetMedicine };
 }

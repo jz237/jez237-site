@@ -336,3 +336,5 @@ dialog .quick-compare-check{font-size:16px;color:var(--ink);background:rgba(14,3
   dialog .quick-compare-check{font-size:15px}
   .quick-compare-actions .button{flex:1 1 100%}
 }
+
+.result-save{display:flex;flex-wrap:wrap;gap:6px 22px;align-items:center}
