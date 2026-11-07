@@ -78,7 +78,8 @@ for (const [orient, vp] of [['portrait', { width: 412, height: 915 }], ['landsca
       }
       // text that wraps where it should not: the sector name and the boss name
       const wrap = [];
-      for (const id of ['boss-name', 'timer', 'chain']) { const el = document.getElementById(id); if (el && el.offsetParent) { const r = el.getBoundingClientRect(), lh = parseFloat(getComputedStyle(el).lineHeight) || 16; if (r.height > lh * 1.9) wrap.push(id); } }
+      // (the boss plate's hint line sits under the name by design: measure the name itself)
+      for (const id of ['boss-name', 'timer', 'chain']) { const el0 = document.getElementById(id), el = el0 && (el0.querySelector('.bn') || el0); if (el && el0.offsetParent) { const r = el.getBoundingClientRect(), lh = parseFloat(getComputedStyle(el).lineHeight) || 16; if (r.height > lh * 1.9) wrap.push(id); } }
       return { over, wrap, far: [Math.round(far.x), Math.round(far.y)], sled: [Math.round(sled.x), Math.round(sled.y)] };
     });
     console.log(`  UI: ${ui.over.length ? 'OVERLAP ' + ui.over.join('; ') : 'nothing over the tube centre or the Rimrunner'}${ui.wrap.length ? ' · WRAPS ' + ui.wrap.join(',') : ''} (tube centre ${ui.far}, Rimrunner ${ui.sled})`);

@@ -4,9 +4,9 @@
 // accuracy, QUICKSILVER = under the par time. Medals should be earned by good, deliberate play: rare for the
 // human-like bot, common for the sniper.
 //   node scripts/rimstorm/medal_check.mjs [trials=16] [sectors=1,2,3,4,5]
-import { makeWorld, step, drainEvents, STEP, laneOf } from '../../games/2026-11-06/rimstorm/js/sim.js?v=9';
-import { Autopilot } from '../../games/2026-11-06/rimstorm/js/ai.js?v=9';
-import { SECTORS, TYPICAL_UP, parTime, AIM_MEDAL } from '../../games/2026-11-06/rimstorm/js/config.js?v=9';
+import { makeWorld, step, drainEvents, STEP, laneOf } from '../../games/2026-11-06/rimstorm/js/sim.js?v=10';
+import { Autopilot } from '../../games/2026-11-06/rimstorm/js/ai.js?v=10';
+import { SECTORS, TYPICAL_UP, parTime, AIM_MEDAL } from '../../games/2026-11-06/rimstorm/js/config.js?v=10';
 
 const trials = +(process.argv[2] || 16);
 const sectors = (process.argv[3] || '1,2,3,4,5').split(',').map((s) => +s - 1);

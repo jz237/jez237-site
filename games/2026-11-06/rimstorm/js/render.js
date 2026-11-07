@@ -5,11 +5,11 @@
 // molten core, ice moon, black hole with lensing), every enemy, boss and effect from the simulation, and
 // HDR post. Nothing here changes the world. The light count never changes after boot.
 import * as THREE from '../vendor/three.module.min.js';
-import { Post } from './post.js?v=9';
-import * as TX from './textures.js?v=9';
-import * as MD from './models.js?v=9';
-import { FX, CALM } from './fx.js?v=9';
-import { SHAPES, BOSSES, POWERUPS, F, BOSS_KEYS } from './config.js?v=9';
+import { Post } from './post.js?v=10';
+import * as TX from './textures.js?v=10';
+import * as MD from './models.js?v=10';
+import { FX, CALM } from './fx.js?v=10';
+import { SHAPES, BOSSES, POWERUPS, F, BOSS_KEYS } from './config.js?v=10';
 
 export { CALM };
 export const TUBE = { R: 10, DEPTH: 64, FAR: 0.58 };
@@ -174,7 +174,7 @@ export class Renderer {
     this.shapeKey = null;
     this.resize();
     addEventListener('resize', () => this.resize());
-    this.setLook(0);
+    this.envDefer = true; this.setLook(0);   // its lighting map comes in the warm-up (envForAsync)
     this.setWeb('circle', 0, 0);
   }
 
@@ -191,8 +191,19 @@ export class Renderer {
     this.lamps = [];
     for (let i = 0; i < 3; i++) { const l = new THREE.PointLight(0xffffff, 0, 60, 1.4); l.position.set(0, 0, -20 - i * 20); S.add(l); this.lamps.push(l); }
   }
-  envFor(i) {
+  envFor(i, s = this.envScene(i)) {
     if (this.envs[i]) return this.envs[i];
+    this.envs[i] = this.pm.fromScene(s, 0.03).texture;
+    return this.envs[i];
+  }
+  // the first look's map in the warm-up: its little scene's programs compile in the background first
+  async envForAsync(i) {
+    if (this.envs[i]) return this.envs[i];
+    const s = this.envScene(i);
+    try { await this.r.compileAsync(s, this.camera); } catch { /* falls back to compiling in fromScene */ }
+    return this.envFor(i, s);
+  }
+  envScene(i) {
     const L = LOOKS[i], s = new THREE.Scene();
     s.add(new THREE.Mesh(new THREE.SphereGeometry(10, 32, 16), new THREE.ShaderMaterial({ side: THREE.BackSide, uniforms: { a: { value: new THREE.Color(L.key) }, b: { value: new THREE.Color(L.hemi[0]) }, c: { value: new THREE.Color(L.fog) } },
       vertexShader: 'varying vec3 vP; void main(){ vP = position; gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }',
@@ -201,8 +212,7 @@ export class Renderer {
       const m = new THREE.Mesh(new THREE.PlaneGeometry(3, 1), new THREE.MeshBasicMaterial({ color: hdr(k % 2 ? L.rail : L.key, 2.2), side: THREE.DoubleSide }));
       const a = (k / 6) * TAU; m.position.set(Math.cos(a) * 8, 3 + (k % 3) * 2 - 2, Math.sin(a) * 8); m.lookAt(0, 0, 0); s.add(m);
     }
-    this.envs[i] = this.pm.fromScene(s, 0.03).texture;
-    return this.envs[i];
+    return s;
   }
 
   // ---------------------------------------------------------------- the web: lanes, rails, rim, ribs, throat
@@ -347,7 +357,7 @@ export class Renderer {
 
   // ---------------------------------------------------------------- backdrops (all built at boot, one shown)
   buildBackdrops() {
-    this.backs = [];
+    this.backs = []; this.backBuild = [];   // 1.5: each look's scenery is built when first needed (ensureBack)
     const q = this.q, S = this.scene;
     const stars = (n, r, size, seed, tint = [1, 1, 1]) => {
       const rnd = mkr(seed), pos = new Float32Array(n * 3), col = new Float32Array(n * 3);
@@ -422,7 +432,7 @@ export class Renderer {
     const look = () => { const G = new THREE.Group(), FG = new THREE.Group(); G.userData.anim = []; G.userData.far = FG; return [G, FG]; };
     // 1 ORBITAL RING: a banded gas giant with its own rings below, a hot sun, a far moon, the arc of the
     // orbital ring overhead and the web's trusses running off into space with habitat pods and beacons
-    {
+    this.backBuild.push(() => {
       const [G, FG] = look();
       sky(FG, 0x01030a, 0x1a1030, 0x2a3a6a, 3.1, { dir: [0.7, 0.4, -0.6], k: 0.8 });
       FG.add(stars(q.stars, 1500, 2.2, 11));
@@ -457,11 +467,11 @@ export class Renderer {
       [[-1, 4], [1, 7], [-1, 13], [1, 15], [-1, 18], [1, 2]].forEach(([s, i], n) => hab.setMatrixAt(n, _m.compose(_v.set(s * (TR * 1.4 + i * 9), -6.5, -18), _q.identity(), _s.set(1, 1, 1))));
       G.add(hab);
       beacons(G, bp, 0xff4a3a, 0.6);
-      this.backs.push(G);
-    }
+      return G;
+    });
     // 2 ABYSS TRENCH: black water, walls crusted with glowing colonies, smooth boulders, drifting jellies,
     // marine snow and faint light from far above
-    {
+    this.backBuild.push(() => {
       const [G, FG] = look();
       sky(FG, 0x000204, 0x001a1a, 0x0a3a44, 7.7, { dir: [0, 1, 0], k: 0.7 });
       const wall = new THREE.MeshStandardMaterial({ color: 0x22363c, map: rockSet.map, normalMap: rockSet.normalMap, roughness: 0.9, side: THREE.BackSide, emissive: 0xffffff, emissiveIntensity: 0.3, emissiveMap: spots });
@@ -479,11 +489,11 @@ export class Renderer {
       for (let i = 0; i < NJ; i++) { const a = rj() * TAU, r = TR * 1.6 + rj() * 34; jp.push([Math.cos(a) * r, Math.sin(a) * r, 10 - rj() * 140, 1.0 + rj() * 2.2, rj() * 6]); const cc = rj(); jelly.setColorAt(i, cc < 0.6 ? _c.setRGB(0.6, 1.2, 1.0) : cc < 0.85 ? _c.setRGB(0.6, 0.8, 1.4) : _c.setRGB(1.3, 0.6, 1.2)); }
       jelly.frustumCulled = false; G.add(jelly);
       G.userData.anim.push((t) => { jp.forEach((j, i) => { const b = Math.sin(t * 1.4 + j[4]) * 0.12; _e.set(Math.sin(t * 0.2 + j[4]) * 0.3, t * 0.1 + j[4], 0); _q.setFromEuler(_e); jelly.setMatrixAt(i, _m.compose(_v.set(j[0], j[1] + Math.sin(t * 0.3 + j[4]) * 2 + ((t * 0.6 + j[4] * 3) % 8), j[2]), _q, _s.set(j[3] * (1 + b), j[3] * (1 - b * 1.5), j[3] * (1 + b)))); }); jelly.instanceMatrix.needsUpdate = true; });
-      this.backs.push(G);
-    }
+      return G;
+    });
     // 3 MOLTEN CORE: dark basalt walls split by broad rivers of lava, molten falls pouring down, glowing
     // boulders and embers rising toward the furnace light at the bottom of the shaft
-    {
+    this.backBuild.push(() => {
       const [G, FG] = look();
       sky(FG, 0x0a0201, 0x3a0a02, 0xff5a10, 13.3, { dir: [0, 0, -1], k: 0.6 });
       const wall = new THREE.MeshStandardMaterial({ color: 0x2a201c, map: rockSet.map, normalMap: rockSet.normalMap, roughness: 0.88, side: THREE.BackSide, emissive: 0xffffff, emissiveIntensity: 0.55, emissiveMap: lava });
@@ -501,11 +511,11 @@ export class Renderer {
       G.userData.anim.push((t) => { em.position.y = (t * 2.5) % 20 - 10; em.rotation.z = t * 0.02; });
       const glowBall = new THREE.Sprite(new THREE.SpriteMaterial({ map: this.T.glow, color: hdr(0xff5a10, 3), transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, fog: false }));
       glowBall.position.set(0, 0, -DEPTH - 200); glowBall.scale.set(260, 260, 1); FG.add(glowBall);
-      this.backs.push(G);
-    }
+      return G;
+    });
     // 4 CRYSTAL MOON: the web hangs above a frozen moon (a curved ice plain with crystal spires), a ringed
     // planet and aurora in the sky, ice crystals around the tube and drifting snow
-    {
+    this.backBuild.push(() => {
       const [G, FG] = look();
       sky(FG, 0x02060e, 0x0a2a3a, 0x3a6a9a, 21.9, { dir: [0, 1, 0], k: 0.9 });
       FG.add(stars(Math.round(q.stars * 0.6), 1500, 1.8, 61, [0.8, 0.9, 1.1]));
@@ -547,11 +557,11 @@ export class Renderer {
       const sn = motes(Math.round(q.motes * 0.7), 26, 0xdfefff, 0.3, 77);
       G.add(sn);
       G.userData.anim.push((t) => { sn.position.y = -((t * 1.2) % 16) + 8; planet.rotation.y = t * 0.01; this.auroraMat.uniforms.uTime.value = t; });
-      this.backs.push(G);
-    }
+      return G;
+    });
     // 5 EVENT HORIZON: a black hole with a blazing accretion disc, a photon ring and twin jets (the post pass
     // bends light around it), a violet nebula, and debris spiralling in past the web
-    {
+    this.backBuild.push(() => {
       const [G, FG] = look();
       sky(FG, 0x000000, 0x1a0a2a, 0x3a1a5a, 31.7, { dir: [0, 0.2, -1], k: 0.9 });
       FG.add(stars(Math.round(q.stars * 1.2), 1500, 2.0, 81, [1, 0.95, 1.1]));
@@ -571,17 +581,37 @@ export class Renderer {
       const sw = motes(Math.round(q.motes * 0.7), 60, 0xc09aff, 0.5, 99, 2.2);
       G.add(sw);
       G.userData.anim.push((t) => { sw.rotation.z = t * 0.06; deb.rotation.z = t * 0.012; });
-      this.backs.push(G);
-    }
-    for (const G of this.backs) { G.visible = false; G.userData.far.visible = false; S.add(G, G.userData.far); }
+      return G;
+    });
+    void S;
   }
 
+  // a look's scenery (sky, planets, caverns, props: procedural textures, so not free) is built the first time it is
+  // needed; the warm-up builds only the first look's, the rest are built and their programs compiled in idle time
+  ensureBack(i, compile = false) {
+    if (this.backs[i] || !this.backBuild[i]) return this.backs[i];
+    const G = this.backBuild[i](), FG = G.userData.far;
+    G.visible = false; FG.visible = false; this.scene.add(G, FG);
+    this.backs[i] = G;
+    if (compile) {
+      // its programs compile in the background; until they are ready it stays hidden (no frame waits on a compile)
+      G.userData.ready = false;
+      G.visible = FG.visible = true;
+      const done = Promise.all([this.r.compileAsync(G, this.camera, this.scene), this.r.compileAsync(FG, this.camera, this.scene)]).catch(() => {});
+      G.visible = FG.visible = false;
+      G.userData.done = done.then(() => { G.userData.ready = true; if (this.lookI === i) G.visible = FG.visible = true; });
+    }
+    return G;
+  }
   setLook(i) {
     if (i === this.lookI) return;
     this.lookI = i; const L = this.look = LOOKS[i];
-    this.scene.environment = this.envFor(i);
+    // while the warm-up runs, looks without their own lighting map borrow the first one (same shader programs);
+    // the rest are built in idle time after the title (buildEnvsIdle)
+    this.scene.environment = this.envDefer ? this.envs[i] || this.envAny || null : this.envFor(i);
     this.scene.background = new THREE.Color(L.sky);
-    this.backs.forEach((G, k) => { G.visible = k === i; G.userData.far.visible = k === i; });
+    if (!this.backDefer || i === this.backFirst) this.ensureBack(i, this.warmed);
+    this.backs.forEach((G, k) => { if (G) { const on = k === i && G.userData.ready !== false; G.visible = on; G.userData.far.visible = on; } });
     this.scene.fog.color.set(L.fog); this.scene.fog.density = L.fogD;
     this.key.color.set(L.key); this.key.intensity = L.keyI; this.key.position.set(...L.keyDir).normalize().multiplyScalar(80);
     this.hemi.color.set(L.hemi[0]); this.hemi.groundColor.set(L.hemi[1]); this.hemi.intensity = L.hemi[2];
@@ -1254,7 +1284,7 @@ export class Renderer {
     c.lookAt(this.camLook);
     if (Math.abs(c.fov - this.camFov) > 0.01) { c.fov = this.camFov; c.updateProjectionMatrix(); }
     // backdrops ride with the camera (they are far away)
-    for (const G of this.backs) if (G.visible) G.userData.far.position.copy(c.position);
+    for (const G of this.backs) if (G && G.visible) G.userData.far.position.copy(c.position);
   }
   project(x, y, z, out) {
     _v.set(x, y, z).project(this.camera);
@@ -1322,7 +1352,22 @@ export class Renderer {
   }
 
   // draw one of everything once at boot, for every sector look, so nothing compiles a shader mid-game
-  warmUp() {
+  // the remaining looks' lighting maps, one per idle moment after the title is up (a sector that needs one sooner
+  // builds it on the spot)
+  get prepared() { return LOOKS.every((L, k) => this.envs[k] && this.backs[k] && this.backs[k].userData.ready !== false); }
+  buildEnvsIdle() {
+    const idle = (f) => (window.requestIdleCallback ? requestIdleCallback(f, { timeout: 2500 }) : setTimeout(f, 300));
+    const next = () => {
+      const i = LOOKS.findIndex((L, k) => !this.envs[k] || !this.backs[k]);
+      if (i < 0) return;
+      idle(() => {
+        if (!this.backs[i]) this.ensureBack(i, true).userData.done.then(() => idle(() => { if (!this.envs[i]) this.envFor(i); next(); }));
+        else { if (!this.envs[i]) this.envFor(i); next(); }
+      });
+    };
+    setTimeout(next, 600);
+  }
+  async warmUp() {
     const tmp = [];
     const add = (v, x) => { v.g.position.set(x, 0, -10); this.root.add(v.g); tmp.push(v.g); return v; };
     let x = -20;
@@ -1342,10 +1387,19 @@ export class Renderer {
     if (parts) for (const q of parts.slice(0, 6)) { const m = MD.partMesh(q); m.position.set(0, 0, -12); this.root.add(m); tmp.push(m); }
     const pr = { bloom: 0.7, threshold: 1.2, exposure: 1, chroma: 0, time: 0, desat: 0, fade: 1, vignette: 0.4, flash: this.flash, tint: _tint.set(1, 1, 1), shocks: [], lens: [] };
     const first = Math.max(0, this.lookI);
-    for (let i = LOOKS.length - 1; i >= 0; i--) {
-      this.lookI = -1; this.setLook(i);
-      for (const s of ['circle', 'v']) { this.setWeb(s, 0, 0); this.r.compile(this.scene, this.camera); this.post.render(this.scene, this.camera, pr); }
-    }
+    // 1.5: the shader programs compile in parallel (KHR_parallel_shader_compile through compileAsync) while the page
+    // stays responsive, then one drawn frame per look (programs already linked) fills in the rest; only the first
+    // look's lighting map is made now
+    this.envAny = await this.envForAsync(first); this.envDefer = true;
+    this.scene.environment = this.envAny;
+    this.backFirst = first; this.ensureBack(first); this.backDefer = true;
+    try {
+      for (let i = LOOKS.length - 1; i >= 0; i--) {
+        this.lookI = -1; this.setLook(i);
+        for (const s of ['circle', 'v']) { this.setWeb(s, 0, 0); try { await this.r.compileAsync(this.scene, this.camera); } catch { this.r.compile(this.scene, this.camera); } }
+        this.post.render(this.scene, this.camera, pr);
+      }
+    } finally { this.envDefer = false; this.backDefer = false; this.warmed = true; }
     this.lookI = -1; this.setLook(first);
     for (const I of [this.shotI, this.boltI, this.boltHalo, this.spineI, this.haloI]) I.count = 0;
     this.streaks.visible = false;

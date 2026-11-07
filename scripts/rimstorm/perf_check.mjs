@@ -38,6 +38,11 @@ await page.addInitScript(() => {
 });
 await page.goto(base + `?fixed&noscores&q=${q}`);
 await page.waitForFunction(() => window.__rs && window.__rs.G.state === 'title', null, { timeout: 120000 });
+// 1.5: the other sectors' scenery and lighting maps are prepared in idle time on the title: wait for that, like a
+// player looking at the title for a few seconds (a sector started sooner shows its scenery once it is compiled)
+const t0 = Date.now();
+await page.waitForFunction(() => !window.__rs.R.hasOwnProperty('prepared') && window.__rs.R.prepared !== false ? true : window.__rs.R.prepared, null, { timeout: 60000, polling: 100 });
+console.log(`idle preparation on the title: ${((Date.now() - t0) / 1000).toFixed(1)} s`);
 const boot = await page.evaluate(() => ({ ...window.__gl, prog: window.__rs.R.r.info.programs.length }));
 console.log(`after boot + warm-up: ${boot.compile} shader compiles, ${boot.link} program links, ${boot.prog} programs (quality ${q})`);
 

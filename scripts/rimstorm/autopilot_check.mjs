@@ -6,9 +6,9 @@
 // for the sharp 'demo' autopilot (attract mode, AI PLAYTHROUGH) and the 'human' one (ramp_check.mjs).
 //   node scripts/rimstorm/autopilot_check.mjs [runs=12] [difficulty=normal]
 // Exit 1 when the demo autopilot's PLAYTHROUGH fails to finish all five sectors in any run.
-import { makeWorld, step, drainEvents, STEP } from '../../games/2026-11-06/rimstorm/js/sim.js?v=9';
-import { Autopilot } from '../../games/2026-11-06/rimstorm/js/ai.js?v=9';
-import { SECTORS, START_LIVES, UPGRADES, UP_COST, AI_SHOP, salvageFor, DIFFICULTY } from '../../games/2026-11-06/rimstorm/js/config.js?v=9';
+import { makeWorld, step, drainEvents, STEP } from '../../games/2026-11-06/rimstorm/js/sim.js?v=10';
+import { Autopilot } from '../../games/2026-11-06/rimstorm/js/ai.js?v=10';
+import { SECTORS, START_LIVES, UPGRADES, UP_COST, AI_SHOP, salvageFor, DIFFICULTY } from '../../games/2026-11-06/rimstorm/js/config.js?v=10';
 
 const runs = +(process.argv[2] || 12);
 const diff = process.argv[3] || 'normal';

@@ -1,13 +1,13 @@
 // Rimstorm 2026 — game flow, menus, HUD, commentary, demo director and the frame loop.
-import { VERSION, SECTORS, STEP, F, WEBS, UPGRADES, UP_KEYS, UP_COST, MEDALS, parTime, AIM_MEDAL, TYPICAL_UP, START_LIVES, BOSSES, DIFFICULTY, DIFF_KEYS, POWERUPS, ENEMY, AI_SHOP, SALVAGE_MEDAL, salvageFor } from './config.js?v=9';
-import { makeWorld, step, drainEvents, webLabel, isBossWeb, bossKey, cloneWorld } from './sim.js?v=9';
-import { Autopilot } from './ai.js?v=9';
-import { Renderer, pickQuality, CALM } from './render.js?v=9';
-import { Audio } from './audio.js?v=9';
-import { Input } from './input.js?v=9';
-import { Scores, NO_POST } from './scores.js?v=9';
-import { Recorder, Replay, worldSig } from './replay.js?v=9';
-import { Online, ROOM, randomCode, cleanCode } from './online.js?v=9';
+import { VERSION, SECTORS, STEP, F, WEBS, UPGRADES, UP_KEYS, UP_COST, MEDALS, parTime, AIM_MEDAL, TYPICAL_UP, START_LIVES, BOSSES, DIFFICULTY, DIFF_KEYS, POWERUPS, ENEMY, AI_SHOP, SALVAGE_MEDAL, salvageFor } from './config.js?v=10';
+import { makeWorld, step, drainEvents, webLabel, isBossWeb, bossKey, cloneWorld } from './sim.js?v=10';
+import { Autopilot } from './ai.js?v=10';
+import { Renderer, pickQuality, CALM } from './render.js?v=10';
+import { Audio } from './audio.js?v=10';
+import { Input } from './input.js?v=10';
+import { Scores, NO_POST } from './scores.js?v=10';
+import { Recorder, Replay, worldSig } from './replay.js?v=10';
+import { Online, ROOM, randomCode, cleanCode } from './online.js?v=10';
 
 const $ = (id) => document.getElementById(id);
 const params = new URLSearchParams(location.search);
@@ -347,13 +347,19 @@ function medalTrack(W) {
 function banner(a, b, t = 2.2) {
   const el = $('banner');
   el.querySelector('.b1').textContent = a; el.querySelector('.b2').textContent = b || '';
-  el.classList.remove('hidden', 'go', 'bk', 'bi'); void el.offsetWidth; el.classList.add('go');
+  el.classList.remove('hidden', 'bk', 'bi'); restartAnim(el, 'go');
   G.bannerT = t;
 }
 // boss title card ('bi') and boss kill ('bk'): the same banner with a plate behind the title and a big second line
 function bossBanner(cls, a, b, t) { banner(a, b, t); $('banner').classList.add(cls); }
 // the boss bar pulses on every hit (restarts its animation)
-function bossPulse() { const el = $('bossbar'); el.classList.remove('hitp'); void el.offsetWidth; el.classList.add('hitp'); }
+function bossPulse() { restartAnim($('bossbar'), 'hitp'); }
+// restart a CSS animation without forcing a layout of the whole page (reading offsetWidth did, on every boss hit):
+// getAnimations() only brings styles up to date, then each animation is rewound
+function restartAnim(el, cls) {
+  el.classList.add(cls);
+  try { for (const a of el.getAnimations({ subtree: true })) a.currentTime = 0; } catch { /* old browsers: it plays from where it is */ }
+}
 function caption(text, t = 4) { const el = $('caption'); el.textContent = text; el.classList.remove('hidden'); G.capT = t; }
 const P = { x: 0, y: 0, z: 0 };
 function popup(text, lane, d, color, big) {
@@ -404,13 +410,15 @@ function tutorial(key, t = 6.5) {
     if (tipsSeen.has(key) || (W && (W.diff === 'hard' || W.diff === 'nightmare'))) return;
     tipsSeen.add(key); store('rs.tips.v1', [...tipsSeen]);
   }
-  const el = $('tut'); el.innerHTML = TUT[key](); el.classList.remove('hidden', 'dim'); G.tutT = t;
+  const el = $('tut'); el.innerHTML = TUT[key](); el.classList.remove('hidden', 'dim'); G.tutT = t; G.tutRect = null;
 }
 // the tip goes see-through while anything that matters (an enemy, a bolt, the boss) is behind it
 function dimTut(W) {
   const el = $('tut');
   if (!W || el.classList.contains('hidden')) return;
-  const r = el.getBoundingClientRect(), cam = R.camera;
+  // its box is read once per tip (and after a resize), not every frame: a read forces a layout when the HUD changed
+  if (!G.tutRect || G.tutRect.w !== innerWidth || G.tutRect.h !== innerHeight) { const q = el.getBoundingClientRect(); G.tutRect = { left: q.left, right: q.right, top: q.top, bottom: q.bottom, w: innerWidth, h: innerHeight }; }
+  const r = G.tutRect, cam = R.camera;
   const under = (lane, d) => { const v = R.worldAt(lane, d, 0.6).project(cam); if (v.z > 1) return false; const x = (v.x + 1) / 2 * innerWidth, y = (1 - v.y) / 2 * innerHeight; return x > r.left - 30 && x < r.right + 30 && y > r.top - 30 && y < r.bottom + 30; };
   let dim = false;
   for (const e of W.enemies) if (!dim && e.hp > 0 && under(e.lane, e.d)) dim = true;
@@ -1077,7 +1085,7 @@ document.addEventListener('visibilitychange', () => {
 let bgWorker = null;
 function bgTicks(on) {
   if (on && !bgWorker) {
-    try { bgWorker = new Worker(new URL('./tick.js?v=9', import.meta.url)); bgWorker.onmessage = bgTick; } catch (e) { bgWorker = null; console.warn('background tick', e); return; }
+    try { bgWorker = new Worker(new URL('./tick.js?v=10', import.meta.url)); bgWorker.onmessage = bgTick; } catch (e) { bgWorker = null; console.warn('background tick', e); return; }
   }
   if (bgWorker) bgWorker.postMessage(on ? 25 : 0); // 40 ticks a second: a snapshot every second tick = 20 a second
 }
@@ -1358,11 +1366,12 @@ dailySub();
 
 // ------------------------------------------------------------------ boot
 async function boot() {
-  try { R.warmUp(); } catch (e) { console.warn('warm-up', e); }
+  try { await R.warmUp(); } catch (e) { console.warn('warm-up', e); }
   $('loading').style.opacity = '0'; $('loading').classList.add('gone'); // fading out: taps go through at once
   setTimeout(() => $('loading').remove(), 700);
   toTitle();
-  if (params.has('test')) { const m = await import('./tests.js?v=9'); m.runTests(window.__rs); }
+  R.buildEnvsIdle();
+  if (params.has('test')) { const m = await import('./tests.js?v=10'); m.runTests(window.__rs); }
   else if (params.has('playthrough')) { A.unlock(); startPlaythrough(); }
   else if (G.autopilot) { A.unlock(); if (params.has('endless')) startEndless(); else startCampaign(+params.get('sector') || 0); }
   else if (params.has('room')) { act('online'); $('join-code').value = cleanCode(params.get('room')); }
