@@ -1,11 +1,41 @@
 {
   "version": 1,
   "title": "AI Discoveries, Explained",
-  "updated": "2026-11-06",
+  "updated": "2026-11-07",
   "coverageStart": "2026-09-21",
-  "coverageEnd": "2026-11-06",
+  "coverageEnd": "2026-11-07",
   "editorialNote": "Source-linked discoveries, research demonstrations, follow-ups and corrections from AI Discovery Watch. Historical milestones posted before the fresh-news brief are not included. Coverage dates are when a story was shared, not necessarily when its discovery occurred. Evidence labels reflect the linked report at that time; read later updates too.",
   "stories": [
+    {
+      "category": "Computing & engineering",
+      "evidenceKind": "proof",
+      "modelNote": "PSI’s research system used an unnamed, non-public Anthropic model to discover and formalize the proof; Lean checked it.",
+      "sources": [
+        "https://psi.inc/research/aaronson-ambainis/",
+        "https://github.com/physical-superintelligence/aaronson-ambainis"
+      ],
+      "status": "Early proof claim; Lean checking reported by the authors, not independently rerun here. Outside specialists have commented; no peer review established.",
+      "takeaway": "An AI-found proof says quantum computers cannot gain an exponential advantage in how often they read randomly chosen data when answering yes-or-no questions. This narrows when enormous quantum advantages are possible; it does not mean ordinary computers match all quantum running times. PSI’s researcher chose the problem and reviewed the AI’s proof, which builds on earlier human mathematics. Announced November 6, the proof is public and reportedly passed a computer proof checker, but broader independent review is still developing.",
+      "title": "AI finds a proof about when quantum computers can pull ahead",
+      "id": "d-1568645422891798661-ai-proof-limits-quantum-data-reading-advantage",
+      "coveredOn": "2026-11-07",
+      "context": "🔬 **AI Discovery Watch · November 7, 2026**\n\n**AI finds a proof about when quantum computers can pull ahead**\nAn AI-found proof says quantum computers cannot gain an exponential advantage in how often they read randomly chosen data when answering yes-or-no questions. This narrows when enormous quantum advantages are possible; it does not mean ordinary computers match all quantum running times. PSI’s researcher chose the problem and reviewed the AI’s proof, which builds on earlier human mathematics. Announced November 6, the proof is public and reportedly passed a computer proof checker, but broader independent review is still developing.\n\n**AI used:** PSI’s research system used an unnamed, non-public Anthropic model to discover and formalize the proof; Lean checked it.\n**Evidence:** Early proof claim; Lean checking reported by the authors, not independently rerun here. Outside specialists have commented; no peer review established.\nOriginal source: <https://psi.inc/research/aaronson-ambainis/>\nSupporting source: <https://github.com/physical-superintelligence/aaronson-ambainis>"
+    },
+    {
+      "category": "Mathematics",
+      "evidenceKind": "proof",
+      "modelNote": "GPT-6 Astra agents found the two-dimensional proof; GPT-6.1 Sol extended it to all dimensions. Claude Opus 5.5 drafted text; humans revised it.",
+      "sources": [
+        "https://arxiv.org/abs/2610.42124",
+        "https://github.com/nitromannitol/FPP-variance"
+      ],
+      "status": "Early proof; authors report complete Lean checking. Independent verification and peer review not established here.",
+      "takeaway": "Imagine crossing a landscape where each patch slows you down differently. A new AI-assisted proof tightens the limit on how unpredictable the fastest journey can be as distances increase. Posted October 30, it replaces a much longer earlier argument and extends the result beyond two dimensions. Human mathematicians directed the agents, checked the work and heavily rewrote the paper. The authors report computer-checked proofs, but this remains a preprint about idealized landscapes with no preferred direction—not every randomly weighted road network.",
+      "title": "AI helps find a simpler proof about journeys through random landscapes",
+      "id": "d-1568645766300438670-ai-simplifies-random-landscape-travel-proof",
+      "coveredOn": "2026-11-07",
+      "context": "🔬 **AI Discovery Watch · November 7, 2026**\n\n**AI helps find a simpler proof about journeys through random landscapes**\nImagine crossing a landscape where each patch slows you down differently. A new AI-assisted proof tightens the limit on how unpredictable the fastest journey can be as distances increase. Posted October 30, it replaces a much longer earlier argument and extends the result beyond two dimensions. Human mathematicians directed the agents, checked the work and heavily rewrote the paper. The authors report computer-checked proofs, but this remains a preprint about idealized landscapes with no preferred direction—not every randomly weighted road network.\n\n**AI used:** GPT-6 Astra agents found the two-dimensional proof; GPT-6.1 Sol extended it to all dimensions. Claude Opus 5.5 drafted text; humans revised it.\n**Evidence:** Early proof; authors report complete Lean checking. Independent verification and peer review not established here.\nOriginal source: <https://arxiv.org/abs/2610.42124>\nSupporting source: <https://github.com/nitromannitol/FPP-variance>"
+    },
     {
       "category": "Research in action",
       "evidenceKind": "demo",
