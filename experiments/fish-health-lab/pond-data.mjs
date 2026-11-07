@@ -89,7 +89,7 @@ export const POND_CONDITIONS = [
     // Wording when a different sign led here (Nov 6 2026 combination sweep).
     checks: { "unclear": "Pond fish that seem off after new fish went in very often have flukes or other tiny skin parasites you can’t see—watch for rubbing or flashing." },
     // Signs its own picture already shows; any other sign leads with that sign's picture.
-    shows: ["unclear"],
+    shows: [],
     clues: ['Flashing and scraping on stones, sudden darting or jumping.', 'Dull, grey, extra-slimy skin; fins clamped.'],
     distinguish: 'If you can see bugs on the skin, it’s lice. White dots are white spot.',
     avoid: 'Don’t guess the dose—know your pond volume before adding any treatment.',
@@ -137,7 +137,7 @@ export const POND_CONDITIONS = [
     changes: { 'top-up': 6 },
     check: 'Fish acting strange right after a big top-up or a storm is a water swing—chlorine or a pH crash.',
     // Signs its own picture already shows; any other sign leads with that sign's picture.
-    shows: ["flashing"],
+    shows: ["flashing", "gasping"],
     clues: ['Started within hours of topping up with the hose, or after heavy rain.', 'Fish darting, gasping or hanging still.'],
     distinguish: 'Slow trouble over days points to poor water. Gasping on hot nights is oxygen.',
     avoid: 'Don’t top up more than about 10% at a time without a dechlorinator.',
@@ -192,7 +192,7 @@ export const POND_CONDITIONS = [
     // Wording when a different sign led here (Nov 6 2026 combination sweep).
     checks: { "unclear": "Fish that hide and act jumpy after a heron, raccoon or cat has been around are often being hunted—count the fish and check for stab marks." },
     // Signs its own picture already shows; any other sign leads with that sign's picture.
-    shows: ["unclear"],
+    shows: ["missing"],
     clues: ['Fewer fish than there were, the rest hiding.', 'Stab wounds or parallel scratches across the back.'],
     distinguish: 'A round red crater is an ulcer, not a wound.',
     avoid: 'Don’t leave the edge shallow and open—a net or a deeper edge stops most herons.',

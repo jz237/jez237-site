@@ -186,7 +186,8 @@ const PLANS = {
   },
   'swim-bladder': {
     steps: ['Skip feeding for 1–2 days.', 'Then feed small amounts of a skinned, cooked pea (plant-eaters) or thawed foods—no floating dry food.', 'Lower the water level a little and keep the temperature steady so it can rest.', 'If several fish are struggling or it came on suddenly, check the water first.'],
-    marine: { steps: ['Skip feeding for 1–2 days, then feed small amounts of thawed foods.', 'Keep the water stable and the flow gentle so it can rest.', 'If several fish are struggling, check the water and oxygen first.'] },
+    marine: { steps: ['Skip feeding for 1–2 days, then feed small amounts of thawed foods.', 'Keep the water stable and the flow gentle so it can rest.', 'If several fish are struggling, check the water and oxygen first.'],
+      treatment: 'Fast 1–2 days, then small amounts of thawed foods', recovery: 'A few days to a week.' },
     treatment: 'Fast 1–2 days, then peas or thawed foods',
     recovery: 'A few days to a week; some fancy goldfish get it on and off.',
   },
@@ -247,12 +248,20 @@ export function carePlanFor(id, water, fishType = '') {
   const plan = PLANS[id];
   if (!plan) return null;
   const variant = water === 'fresh' && fishType && plan[fishType] ? plan[fishType] : water === 'marine' && plan.marine ? plan.marine : {};
+  // The one-line summary follows the fish and the tank like the steps do (Nov 6 2026 plan sweep):
+  // no salt suggestion for scaleless corys and plecos, and saltwater medicine says where it goes.
+  let treatment = variant.treatment || plan.treatment;
+  const reefUnsafe = water === 'marine' && Boolean(variant.reefUnsafe ?? plan.reefUnsafe);
+  if (['cory', 'pleco'].includes(fishType)) treatment = treatment.replace(/\s*\((or|plus) (aquarium )?salt for salt-tolerant fish\)/i, ' (no salt for corys and plecos)');
+  if (reefUnsafe && !/hospital|isolate|separate|no medicine/i.test(treatment)) treatment += ', in a hospital tank';
+  let steps = variant.steps || plan.steps;
+  if (['cory', 'pleco'].includes(fishType)) steps = steps.map(step => step.replace(/\s*;?\s*aquarium salt helps salt-tolerant fish\./i, '. Skip salt—corys and plecos don’t tolerate it.').replace(/\.\. /, '. '));
   return {
-    steps: variant.steps || plan.steps,
-    treatment: variant.treatment || plan.treatment,
+    steps,
+    treatment,
     recovery: variant.recovery || plan.recovery,
     medicated: Boolean(variant.medicated ?? plan.medicated),
-    reefUnsafe: water === 'marine' && Boolean(variant.reefUnsafe ?? plan.reefUnsafe),
+    reefUnsafe,
   };
 }
 

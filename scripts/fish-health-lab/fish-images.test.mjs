@@ -22,11 +22,13 @@ const splitReceipt = JSON.parse(readFileSync(new URL('./split-images-20261105.js
 const marineReceipt = JSON.parse(readFileSync(new URL('./marine-fish-images-20261105.json', import.meta.url)));
 const fixesReceipt = JSON.parse(readFileSync(new URL('./fixes-images-20261106.json', import.meta.url)));
 // A clean-up retake (Nov 6 2026) replaces a crop under the same id.
-const FISH_FIX = id => FIX_CROPS[id]?.set === 'fish' ? FIX_CROPS[id] : null;
+// Picture-audit redraws (Nov 6 2026, fish-images-audit-data.mjs) replace a crop under the same id, after the clean-up retakes.
+import { CROPS as AUDIT_CROPS } from '../../experiments/fish-health-lab/fish-images-audit-data.mjs';
+const FISH_FIX = id => AUDIT_CROPS[id] || (FIX_CROPS[id]?.set === 'fish' ? FIX_CROPS[id] : null);
 const expectedKey = (crops, id) => (FISH_FIX(id) || crops[id]).key;
 const fixUrl = id => FIX_IMAGE_SOURCE === 'media' ? MEDIA_BASE + FISH_FIX(id).key : localPathFor(FISH_FIX(id));
 // Saltwater dropsy with raised scales was added per fish on Nov 6 2026 (dropsy-images-20261106.json).
-const groupKey = (key, group) => key.startsWith(`experiments/fish-health-lab/${group}/${group}-`) || key.startsWith(`experiments/fish-health-lab/fixes/fish-${group}-`) || key.startsWith(`experiments/fish-health-lab/dropsy/fish-${group}-`);
+const groupKey = (key, group) => key.startsWith(`experiments/fish-health-lab/${group}/${group}-`) || key.startsWith(`experiments/fish-health-lab/fixes/fish-${group}-`) || key.startsWith(`experiments/fish-health-lab/dropsy/fish-${group}-`) || key.startsWith(`experiments/fish-health-lab/audit/fish-${group}-`);
 const freshConditions = CONDITIONS.filter(c => c.scope !== 'marine');
 const marineConditions = CONDITIONS.filter(c => c.scope !== 'fresh');
 const MARINE = FISH_TYPES.marine.map(f => f.id);
@@ -68,9 +70,10 @@ for (const group of MARINE) {
     }
     // Every crop of the group is used: 12 symptom choices, 12 results, 1 smooth growth.
     const used = new Set([...Object.values(set.signs), ...Object.values(set.conditions).flat()]);
-    assert.deepEqual([...used].filter(id => id !== `${group}-dropsy`).sort(), Object.keys(MARINE_CROPS).filter(id => id.startsWith(`${group}-`)).sort());
+    const added = [`${group}-dropsy`, `${group}-scrape`];
+    assert.deepEqual([...used].filter(id => !added.includes(id)).sort(), Object.keys(MARINE_CROPS).filter(id => id.startsWith(`${group}-`)).sort());
     assert.ok(used.has(`${group}-dropsy`));
-    assert.equal(used.size, 26);
+    assert.equal(used.size, ['clownfish', 'damsel'].includes(group) ? 27 : 26);
     // Saltwater only: freshwater lookups stay generic.
     assert.equal(imagesFor(group, 'dots', 'fresh').fishSpecific, false);
     assert.equal(fishSetFor(group, 'fresh'), null);
@@ -84,7 +87,9 @@ test('saltwater swaps: each result shows its own result picture first, the match
     assert.deepEqual(c['velvet-marine'], [`${group}-velvet`, `${group}-dust`]);
     assert.deepEqual(c.brooklynella, [`${group}-brooklynella`, `${group}-patch`]);
     assert.deepEqual(c.lymphocystis, [`${group}-lymphocystis`, `${group}-lumps`]);
-    for (const id of ['uronema', 'black-spot', 'hlle', 'flukes', 'popeye', 'septicemia', 'injury', 'normal', 'growth']) assert.deepEqual(c[id], [`${group}-${id}`]);
+    for (const id of ['uronema', 'black-spot', 'hlle', 'flukes', 'popeye', 'septicemia', 'normal', 'growth']) assert.deepEqual(c[id], [`${group}-${id}`]);
+    // Clownfish and damsels also have the audit's scrape picture (Nov 6 2026).
+    assert.deepEqual(c.injury, ['clownfish', 'damsel'].includes(group) ? [`${group}-injury`, `${group}-scrape`] : [`${group}-injury`]);
   }
   // The key problems are drawn on the fish they're known for.
   assert.match(imageFor('clownfish', 'brooklynella', 'marine').alt, /clownfish .*slime.*peeling/i);
@@ -119,9 +124,11 @@ for (const group of ['goldfish', 'community']) {
       for (const image of got.images) assert.ok(groupKey(image.key, group), image.key);
     }
     // Every crop of the group is used somewhere; nothing maps to a marine-only condition.
+    // The audit's scrape picture (Nov 6 2026) is the one crop outside the original sheet.
     const used = new Set([...Object.values(set.signs), ...Object.values(set.conditions).flat()]);
-    assert.deepEqual([...used].sort(), Object.keys(FRESH_CROPS).filter(id => id.startsWith(`${group}-`)).sort());
-    assert.equal(used.size, 24);
+    assert.deepEqual([...used].filter(id => id !== `${group}-scrape`).sort(), Object.keys(FRESH_CROPS).filter(id => id.startsWith(`${group}-`)).sort());
+    assert.ok(AUDIT_CROPS[`${group}-scrape`] && used.has(`${group}-scrape`));
+    assert.equal(used.size, 25);
     for (const id of Object.keys(set.conditions)) assert.notEqual(CONDITIONS.find(c => c.id === id)?.scope, 'marine', id);
     // Freshwater only: marine lookups stay generic.
     assert.equal(imagesFor(group, 'dots', 'marine').fishSpecific, false);
@@ -150,8 +157,9 @@ for (const [group, parent] of Object.entries(SPLIT)) {
     }
     const used = new Set([...Object.values(set.signs), ...Object.values(set.conditions).flat()]);
     for (const id of used) {
-      // Either a new crop of this group, or a published crop of the old wider set.
-      if (SPLIT_CROPS[id]) assert.ok(id.startsWith(`${group}-`) && SPLIT_CROPS[id].key.startsWith(`experiments/fish-health-lab/${group}/${group}-`), id);
+      // Either a new crop of this group, or a published crop of the old wider set (or the audit's scrape).
+      if (id === `${group}-scrape`) assert.ok(AUDIT_CROPS[id], id);
+      else if (SPLIT_CROPS[id]) assert.ok(id.startsWith(`${group}-`) && SPLIT_CROPS[id].key.startsWith(`experiments/fish-health-lab/${group}/${group}-`), id);
       else assert.ok(parent && id.startsWith(`${parent}-`) && FRESH_CROPS[id], `${group}: ${id}`);
     }
     // Every new crop of the group is used, and the re-used cells match the receipt.
@@ -216,7 +224,7 @@ test('betta set covers every symptom picture and every freshwater result', () =>
     assert.ok(got.fishSpecific && got.images.length, `betta condition ${condition.id}`);
   }
   // Every mapped crop exists in the generated data, and nothing maps to a marine-only condition.
-  for (const ids of [...Object.values(betta.signs).map(id => [id]), ...Object.values(betta.conditions)]) for (const id of ids) assert.ok(CROPS[id], id);
+  for (const ids of [...Object.values(betta.signs).map(id => [id]), ...Object.values(betta.conditions)]) for (const id of ids) assert.ok(CROPS[id] || AUDIT_CROPS[id], id);
   for (const id of Object.keys(betta.conditions)) assert.notEqual(CONDITIONS.find(c => c.id === id)?.scope, 'marine', id);
 });
 
@@ -448,11 +456,22 @@ test('clean-up retakes: each replaces a published crop under the same id, conten
   assert.ok(fish.length >= 14);
   for (const [id, entry] of fish) {
     assert.ok(CROPS[id] || FRESH_CROPS[id] || SPLIT_CROPS[id] || MARINE_CROPS[id], `${id} replaces a published crop`);
-    assert.equal(ALL_CROPS[id].key, entry.key, `${id} is used`);
+    assert.equal(ALL_CROPS[id].key, (AUDIT_CROPS[id] || entry).key, `${id} is used (or redrawn again by the picture audit)`);
     assert.ok(ALL_CROPS[id].caption || ALL_CROPS[id].alt, id);
   }
   // The shared feeding/watch steps no longer show one particular fish, and the two guppy eye pictures differ.
   for (const id of ['step-pea', 'step-watch', 'guppy-eyes', 'guppy-cloudy-eye']) assert.ok(FISH_FIX(id), id);
   assert.equal(STEP_IMAGES.pea.key, FIX_CROPS['step-pea'].key);
   assert.doesNotMatch(FIX_CROPS['step-pea'].alt + FIX_CROPS['step-watch'].alt, /platy|molly|guppy|betta|goldfish/i);
+});
+
+test('picture audit: redraws replace published crops under the same id, scrapes are new; all uploaded, unresized', async () => {
+  const receipt = JSON.parse(readFileSync(new URL('./audit-images-20261106.json', import.meta.url)));
+  assert.equal(receipt.requestedModel, 'openai/gpt-image-2.6-sunburst'); assert.equal(receipt.requestedQuality, 'medium');
+  assert.equal(receipt.assets.length, Object.keys(AUDIT_CROPS).length);
+  for (const a of receipt.assets) {
+    const e = AUDIT_CROPS[a.id]; assert.ok(e, a.id); assert.equal(e.key, a.r2Key); assert.ok(a.uploaded && !a.resized, a.id);
+    assert.ok(e.key.endsWith(`-${a.sha256.slice(0, 12)}.jpg`), a.id); assert.equal(ALL_CROPS[a.id].key, e.key, `${a.id} is used`);
+    if (!a.id.endsWith('-scrape')) assert.ok(CROPS[a.id] || FRESH_CROPS[a.id] || SPLIT_CROPS[a.id] || MARINE_CROPS[a.id] || FIX_CROPS[a.id], `${a.id} replaces a published crop`);
+  }
 });

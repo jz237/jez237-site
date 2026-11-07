@@ -37,8 +37,10 @@ test('coral, invert and pond: every sign × kind × up to three recent changes �
       runs++;
       const r = assessReef({ group, kind, sign: s.id, changes, chosen: [] }), c = r.primary;
       if (!c) continue;
-      const own = (c.weights[s.id] || 0) >= Math.max(...Object.values(c.weights)) || (c.shows || []).includes(s.id);
-      if (!own && !c.checks?.[s.id] && !CAUSE_ONLY.has(c.id)) problems.push(`${group}/${kind}/${s.id} → ${c.id}: ${c.check}`);
+      // Wording: the classic sentence is about the condition's strongest sign. Picture: `shows` lists exactly what its own picture shows.
+      const strongest = (c.weights[s.id] || 0) >= Math.max(...Object.values(c.weights));
+      const own = c.shows ? c.shows.includes(s.id) : strongest;
+      if (!strongest && !(c.shows || []).includes(s.id) && !c.checks?.[s.id] && !CAUSE_ONLY.has(c.id)) problems.push(`${group}/${kind}/${s.id} → ${c.id}: ${c.check}`);
       if (c.checks?.[s.id] && !c.reason.includes(c.checks[s.id])) problems.push(`${group} ${s.id} → ${c.id}: sign wording missing`);
       const pic = reefResultImageFor(group, c, s.id, kind), signPic = reefImageFor(group, s.id, kind, 'signs');
       if (!own && signPic && pic !== signPic) problems.push(`${group}/${kind}/${s.id} → ${c.id}: picture is not the picked sign's`);
@@ -46,4 +48,23 @@ test('coral, invert and pond: every sign × kind × up to three recent changes �
     }
   assert.ok(runs > 6000, `ran ${runs}`);
   assert.deepEqual(problems.slice(0, 20), []);
+});
+
+// "What to do now" follows the fish and the tank (Jez, Nov 6 20:12: "do one and two").
+test('care plans: no salt suggested for corys/plecos, saltwater medicine goes in a hospital tank, no goldfish advice in saltwater', async () => {
+  const { carePlanFor } = await import('../../experiments/fish-health-lab/treatments.mjs');
+  const { CONDITIONS, FISH_TYPES } = await import('../../experiments/fish-health-lab/data.mjs');
+  const problems = [];
+  for (const water of ['fresh', 'marine']) for (const fish of ['', ...FISH_TYPES[water].map(f => f.id)]) for (const c of CONDITIONS.filter(c => c.scope === 'both' || c.scope === water)) {
+    const p = carePlanFor(c.id, water, fish);
+    const text = [...p.steps, p.treatment, p.recovery];
+    for (const t of text) {
+      if (['cory', 'pleco'].includes(fish) && /\bsalt\b/i.test(t) && !/no salt|skip salt|not corys|epsom/i.test(t)) problems.push(`${fish} ${c.id}: ${t}`);
+      if (water === 'marine' && /goldfish|aquarium salt|pond salt|\bpeas?\b/i.test(t)) problems.push(`marine ${c.id}: ${t}`);
+      if (fish === 'goldfish' && /8\d\s?°F/.test(t)) problems.push(`goldfish ${c.id}: ${t}`);
+    }
+    if (p.reefUnsafe && !/hospital|isolate|separate/i.test(p.treatment)) problems.push(`marine ${c.id} summary: ${p.treatment}`);
+    if (p.reefUnsafe && /medicat|copper|praziquantel|antibacterial|formalin|chloroquine|metronidazole/i.test(p.steps.join(' ')) && !/hospital/i.test(p.steps.join(' '))) problems.push(`marine ${c.id}: medicine step without a hospital tank`);
+  }
+  assert.deepEqual(problems, []);
 });

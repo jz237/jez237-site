@@ -210,7 +210,8 @@ export const reefImageFor = (group, key, kind, section) => reefImagesFor(group, 
 export function reefResultImageFor(group, condition, sign, kind = '') {
   const own = reefImageFor(group, condition.id, kind);
   const weights = Object.values(condition.weights || {});
-  const defining = !sign || (condition.weights?.[sign] || 0) >= Math.max(...weights, 0) || (condition.shows || []).includes(sign);
+  // `shows`, when given, is the exact list of signs the result's own picture shows (picture audit, Nov 6 2026).
+  const defining = !sign || (condition.shows ? condition.shows.includes(sign) : (condition.weights?.[sign] || 0) >= Math.max(...weights, 0));
   return (!defining && reefImageFor(group, sign, kind, 'signs')) || own;
 }
 

@@ -109,6 +109,8 @@ export const REEF_CONDITIONS = [
     weights: { closed: 4, peeling: 4, unclear: 4, bleach: 2, 'zoa-melt': 2, browning: 1, anemone: 1, creeping: 1, pastel: 1 },
     changes: { alk: 4, dosing: 4 },
     check: 'With no pest in sight, an alkalinity swing is one of the most common reasons corals close up, change colour or lose flesh.',
+    // The only signs its own picture shows; any other sign leads with that sign's picture (picture audit).
+    shows: ["closed", "peeling"],
     // Wording when a different sign led here (Nov 6 2026 combination sweep).
     checks: { "unclear": "Corals that just look off with no pest in sight often come down to an alkalinity swing." },
     clues: ['Several corals look unhappy at once.', 'A missed or doubled dose, an empty dosing container or a new salt mix.'],
@@ -208,7 +210,7 @@ export const REEF_CONDITIONS = [
     changes: { 'new-coral': 2 },
     check: 'Flat tan ovals and half-moon bite marks on an acropora are flatworms (AEFW).',
     // Signs its own picture already shows; any other sign leads with that sign's picture.
-    shows: ["bites"],
+    shows: ["bites", "flatworms"],
     clues: ['Flat, tan, almost invisible ovals on the branches.', 'Half-moon bite marks and egg clusters on bare skeleton.'],
     distinguish: 'Red bugs are tiny red specks. Montipora nudibranchs are on montipora, not acropora.',
     avoid: 'Never treat pests in the display—dip the coral in a separate container.',
@@ -300,6 +302,8 @@ export const REEF_CONDITIONS = [
     weights: { deaths: 12, spines: 3, 'not-moving': 2, pale: 2, color: 1 },
     changes: { medicine: 6 },
     check: 'Inverts dying soon after a medicine or copper went in is poisoning.',
+    // The only signs its own picture shows; any other sign leads with that sign's picture (picture audit).
+    shows: ["deaths"],
     // Wording when a different sign led here (Nov 6 2026 combination sweep).
     checks: { "color": "Inverts that fade, go pale, stop moving or drop spines soon after a medicine or copper went in are being poisoned—most fish medicines are toxic to them.", "pale": "Inverts that fade, go pale, stop moving or drop spines soon after a medicine or copper went in are being poisoned—most fish medicines are toxic to them.", "not-moving": "Inverts that fade, go pale, stop moving or drop spines soon after a medicine or copper went in are being poisoned—most fish medicines are toxic to them.", "spines": "Inverts that fade, go pale, stop moving or drop spines soon after a medicine or copper went in are being poisoned—most fish medicines are toxic to them." },
     clues: ['Deaths within hours or days of dosing.', 'Several kinds of inverts affected at once.'],
@@ -312,6 +316,8 @@ export const REEF_CONDITIONS = [
     weights: { deaths: 3, 'not-moving': 3, spines: 3, pale: 2, color: 2, unclear: 2, 'molt-stuck': 1 },
     changes: { 'new-arrival': 5, swing: 4 },
     check: 'Trouble right after adding it, or after a salinity or temperature swing, is acclimation shock.',
+    // The only signs its own picture shows; any other sign leads with that sign's picture (picture audit).
+    shows: ["not-moving"],
     clues: ['Started within a day or two of being added.', 'Salinity or temperature changed fast (top-off, heater, water change).'],
     distinguish: 'Deaths after dosing point to medicine. Losses over weeks point to food or water quality.',
     avoid: 'Don’t drop new inverts straight in—drip-acclimate slowly.',
@@ -322,6 +328,8 @@ export const REEF_CONDITIONS = [
     weights: { pale: 3, deaths: 4, spines: 4, 'not-moving': 4, color: 2, unclear: 3 },
     changes: { 'water-change': 2 },
     check: 'A pale, still or struggling invert often points to low oxygen or poor water—test the water first.',
+    // The only signs its own picture shows; any other sign leads with that sign's picture (picture audit).
+    shows: ["not-moving"],
     clues: ['Several animals struggling, fish breathing fast too.', 'A pump or skimmer off, or something dead in the tank.'],
     distinguish: 'Deaths right after dosing point to medicine; right after adding it, to acclimation.',
     avoid: 'Don’t add medicine or new animals until the water tests clean.',

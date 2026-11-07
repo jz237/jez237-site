@@ -1,0 +1,778 @@
+{
+ "request": "Jez, 2026-11-06 20:12 EST: \"Very good do one and two and then publish to the lab\" (1 = visual check of every result picture).",
+ "requestedModel": "openai/gpt-image-2.6-sunburst",
+ "requestedQuality": "medium",
+ "requestedSize": "auto",
+ "aspectRatio": "4:3",
+ "reportedProviderModel": "openai/gpt-image-2.6-sunburst",
+ "backendModel": "not independently verified (provider reported gpt-image-2.6-sunburst)",
+ "sheets": {
+  "scrape": {
+   "sha256": "94afc169f049e3b48ad754dda4a38b05ed45fba33a3e57a24dce115974a1f70a",
+   "size": [
+    1448,
+    1086
+   ]
+  },
+  "redraw1": {
+   "sha256": "a9aac96f431c7cac515485fbbb7979ae9e233d04358225b0e177dccd87393a19",
+   "size": [
+    1448,
+    1086
+   ]
+  },
+  "redraw2": {
+   "sha256": "4840deabe2ded5e5323c437130d6f77c42160971f88e0a5d67a5e44b2df9bedb",
+   "size": [
+    1448,
+    1086
+   ]
+  },
+  "extra": {
+   "sha256": "b7e7f31c7e8c69a72a0bc9265e69279447fa2b60eea0df1eeb13cba462dee2f1",
+   "size": [
+    1774,
+    887
+   ],
+   "columns": 4,
+   "rows": 2
+  }
+ },
+ "skipped": {
+  "redraw2/10": "guppy cloudy eye still bulges; old crop kept",
+  "redraw1/11": "cory rubbing; redraw2/11 used",
+  "scrape/11": "second betta take",
+  "extra/5-7": "alternate takes"
+ },
+ "prompts": {
+  "scrape": "Use case: AI-illustrated visual guide that helps a beginner fishkeeper recognise what is wrong with their fish. Photorealistic educational aquarium photography, NOT cartoons, icons, vector drawings, watercolor, plastic 3D renders or poster typography. Realistic underwater macro-photography aesthetic: anatomically believable fish, natural scales, translucent fins, restrained aquarium light, softly blurred home-aquarium background. Each cell names its fish and its scene. The fish is sharp, in focus, level and natural (not twisted at odd angles), large in its cell and fully in view. The key feature in each cell must be OBVIOUS to a novice at thumbnail size, while staying believable (no horror, no gore, no giant parasites). Absolutely no text, letters, numbers, labels, logos, watermarks, arrows or symbols anywhere in the image.\nSTRICT CONTACT SHEET for cropping into twelve separate pictures: exactly FOUR equal-width columns and THREE equal-height rows, twelve equal square cells covering the complete image edge to edge. No gutters, no borders, no outer margin. Every cell is its own separate scene with its own background. Nothing crosses a cell boundary; keep the whole subject inside the central 85 percent of its cell. Never put a cell's feature into another cell. Follow the exact row-major order below.\nRow 1 column 1: a pale lavender HALFMOON BETTA in a planted freshwater home aquarium, softly blurred dark teal-green plants behind, level and calm, with ONE small fresh SCRAPE on its flank: a short shallow graze where a few scales are rubbed off, showing slightly pink skin, like it bumped sharp decor; clean edges, NOT a deep red crater, not an ulcer, no fuzz, fins intact.\nRow 1 column 2: a red-and-white COMET GOLDFISH in a planted freshwater home aquarium, softly blurred dark teal-green plants behind, level and calm, with ONE small fresh SCRAPE on its flank: a short shallow graze where a few scales are rubbed off, showing slightly pink skin, like it bumped sharp decor; clean edges, NOT a deep red crater, not an ulcer, no fuzz, fins intact.\nRow 1 column 3: a female GUPPY in a planted freshwater home aquarium, softly blurred dark teal-green plants behind, level and calm, with ONE small fresh SCRAPE on its flank: a short shallow graze where a few scales are rubbed off, showing slightly pink skin, like it bumped sharp decor; clean edges, NOT a deep red crater, not an ulcer, no fuzz, fins intact.\nRow 1 column 4: an orange PLATY in a planted freshwater home aquarium, softly blurred dark teal-green plants behind, level and calm, with ONE small fresh SCRAPE on its flank: a short shallow graze where a few scales are rubbed off, showing slightly pink skin, like it bumped sharp decor; clean edges, NOT a deep red crater, not an ulcer, no fuzz, fins intact.\nRow 2 column 1: a CARDINAL TETRA in a planted freshwater home aquarium, softly blurred dark teal-green plants behind, level and calm, with ONE small fresh SCRAPE on its flank: a short shallow graze where a few scales are rubbed off, showing slightly pink skin, like it bumped sharp decor; clean edges, NOT a deep red crater, not an ulcer, no fuzz, fins intact.\nRow 2 column 2: a GOLD BARB in a planted freshwater home aquarium, softly blurred dark teal-green plants behind, level and calm, with ONE small fresh SCRAPE on its flank: a short shallow graze where a few scales are rubbed off, showing slightly pink skin, like it bumped sharp decor; clean edges, NOT a deep red crater, not an ulcer, no fuzz, fins intact.\nRow 2 column 3: a powder-blue DWARF GOURAMI in a planted freshwater home aquarium, softly blurred dark teal-green plants behind, level and calm, with ONE small fresh SCRAPE on its flank: a short shallow graze where a few scales are rubbed off, showing slightly pink skin, like it bumped sharp decor; clean edges, NOT a deep red crater, not an ulcer, no fuzz, fins intact.\nRow 2 column 4: a blue DISCUS in a planted freshwater home aquarium, softly blurred dark teal-green plants behind, level and calm, with ONE small fresh SCRAPE on its flank: a short shallow graze where a few scales are rubbed off, showing slightly pink skin, like it bumped sharp decor; clean edges, NOT a deep red crater, not an ulcer, no fuzz, fins intact.\nRow 3 column 1: a TIGER OSCAR in a planted freshwater home aquarium, softly blurred dark teal-green plants behind, level and calm, with ONE small fresh SCRAPE on its flank: a short shallow graze where a few scales are rubbed off, showing slightly pink skin, like it bumped sharp decor; clean edges, NOT a deep red crater, not an ulcer, no fuzz, fins intact.\nRow 3 column 2: a BRONZE CORY CATFISH on sand in a planted freshwater home aquarium, softly blurred dark teal-green plants behind, level and calm, with ONE small fresh SCRAPE along its side plates: a short shallow graze where a few scales are rubbed off, showing slightly pink skin, like it bumped sharp decor; clean edges, NOT a deep red crater, not an ulcer, no fuzz, fins intact.\nRow 3 column 3: a BRISTLENOSE PLECO on driftwood in a planted freshwater home aquarium, softly blurred dark teal-green plants behind, level and calm, with ONE small fresh SCRAPE on its flank: a short shallow graze where a few scales are rubbed off, showing slightly pink skin, like it bumped sharp decor; clean edges, NOT a deep red crater, not an ulcer, no fuzz, fins intact.\nRow 3 column 4: a red VEILTAIL BETTA in a planted freshwater home aquarium, softly blurred dark teal-green plants behind, level and calm, with ONE small fresh SCRAPE on its flank: a short shallow graze where a few scales are rubbed off, showing slightly pink skin, like it bumped sharp decor; clean edges, NOT a deep red crater, not an ulcer, no fuzz, fins intact.",
+  "redraw1": "Use case: AI-illustrated visual guide that helps a beginner fishkeeper recognise what is wrong with their fish. Photorealistic educational aquarium photography, NOT cartoons, icons, vector drawings, watercolor, plastic 3D renders or poster typography. Realistic underwater macro-photography aesthetic: anatomically believable fish, natural scales, translucent fins, restrained aquarium light, softly blurred home-aquarium background. Each cell names its fish and its scene. The fish is sharp, in focus, level and natural (not twisted at odd angles), large in its cell and fully in view. The key feature in each cell must be OBVIOUS to a novice at thumbnail size, while staying believable (no horror, no gore, no giant parasites). Absolutely no text, letters, numbers, labels, logos, watermarks, arrows or symbols anywhere in the image.\nSTRICT CONTACT SHEET for cropping into twelve separate pictures: exactly FOUR equal-width columns and THREE equal-height rows, twelve equal square cells covering the complete image edge to edge. No gutters, no borders, no outer margin. Every cell is its own separate scene with its own background. Nothing crosses a cell boundary; keep the whole subject inside the central 85 percent of its cell. Never put a cell's feature into another cell. Follow the exact row-major order below.\nRow 1 column 1: a TIGER BARB just under the water surface in a planted freshwater home aquarium, softly blurred dark teal-green plants behind, mouth open at the surface gulping air, gill covers slightly lifted. Exactly one mouth at the front of the head; the gill cover sits behind the eye as a single curved plate—never a second mouth, gash or hole on the cheek.\nRow 1 column 2: a blue DISCUS just under the water surface in a planted freshwater home aquarium, softly blurred dark teal-green plants behind, mouth open at the surface gulping air, gill covers slightly lifted. Exactly one mouth at the front of the head; the gill cover sits behind the eye as a single curved plate—never a second mouth, gash or hole on the cheek.\nRow 1 column 3: a TIGER OSCAR just under the water surface in a planted freshwater home aquarium, softly blurred dark teal-green plants behind, mouth open at the surface gulping air, gill covers slightly lifted. Exactly one mouth at the front of the head; the gill cover sits behind the eye as a single curved plate—never a second mouth, gash or hole on the cheek.\nRow 1 column 4: close view of a TIGER OSCAR head in a planted freshwater home aquarium, softly blurred dark teal-green plants behind, mouth closed, its gill cover lifted a little to show bright red, inflamed gill filaments underneath the plate. Exactly one mouth at the front of the head; the gill cover sits behind the eye as a single curved plate—never a second mouth, gash or hole on the cheek.\nRow 2 column 1: close view of a BRONZE CORY CATFISH head on sand in a planted freshwater aquarium, mouth with barbels closed, its gill cover lifted a little to show bright red, inflamed gill filaments. Exactly one mouth at the front of the head; the gill cover sits behind the eye as a single curved plate—never a second mouth, gash or hole on the cheek.\nRow 2 column 2: close view of a BRISTLENOSE PLECO head on driftwood in a freshwater aquarium, its gill cover lifted a little to show bright red, inflamed gill filaments. Exactly one mouth at the front of the head; the gill cover sits behind the eye as a single curved plate—never a second mouth, gash or hole on the cheek.\nRow 2 column 3: an OCELLARIS CLOWNFISH just under the surface in a reef aquarium, softly blurred live rock and blue-white reef light behind, mouth slightly open, gill covers lifted, breathing hard. Exactly one mouth at the front of the head; the gill cover sits behind the eye as a single curved plate—never a second mouth, gash or hole on the cheek.\nRow 2 column 4: a POWDER BLUE TANG just under the surface in a reef aquarium, softly blurred live rock and blue-white reef light behind, mouth slightly open, gill covers lifted, breathing hard. Exactly one mouth at the front of the head; the gill cover sits behind the eye as a single curved plate—never a second mouth, gash or hole on the cheek.\nRow 3 column 1: a FLAME ANGELFISH just under the surface in a reef aquarium, softly blurred live rock and blue-white reef light behind, mouth slightly open, gill covers lifted, breathing hard. Exactly one mouth at the front of the head; the gill cover sits behind the eye as a single curved plate—never a second mouth, gash or hole on the cheek.\nRow 3 column 2: a BLUESTREAK CLEANER WRASSE just under the surface in a reef aquarium, softly blurred live rock and blue-white reef light behind, mouth slightly open, gill covers lifted, breathing hard. Exactly one mouth at the front of the head; the gill cover sits behind the eye as a single curved plate—never a second mouth, gash or hole on the cheek.\nRow 3 column 3: a ROYAL GRAMMA just under the surface in a reef aquarium, softly blurred live rock and blue-white reef light behind, mouth slightly open, gill covers lifted, breathing hard. Exactly one mouth at the front of the head; the gill cover sits behind the eye as a single curved plate—never a second mouth, gash or hole on the cheek.\nRow 3 column 4: a BRONZE CORY CATFISH in a planted freshwater aquarium, sharp and in focus, level, pressing and rubbing its side against a smooth rock (flashing), its body angled against the rock, sand below.",
+  "redraw2": "Use case: AI-illustrated visual guide that helps a beginner fishkeeper recognise what is wrong with their fish. Photorealistic educational aquarium photography, NOT cartoons, icons, vector drawings, watercolor, plastic 3D renders or poster typography. Realistic underwater macro-photography aesthetic: anatomically believable fish, natural scales, translucent fins, restrained aquarium light, softly blurred home-aquarium background. Each cell names its fish and its scene. The fish is sharp, in focus, level and natural (not twisted at odd angles), large in its cell and fully in view. The key feature in each cell must be OBVIOUS to a novice at thumbnail size, while staying believable (no horror, no gore, no giant parasites). Absolutely no text, letters, numbers, labels, logos, watermarks, arrows or symbols anywhere in the image.\nSTRICT CONTACT SHEET for cropping into twelve separate pictures: exactly FOUR equal-width columns and THREE equal-height rows, twelve equal square cells covering the complete image edge to edge. No gutters, no borders, no outer margin. Every cell is its own separate scene with its own background. Nothing crosses a cell boundary; keep the whole subject inside the central 85 percent of its cell. Never put a cell's feature into another cell. Follow the exact row-major order below.\nRow 1 column 1: close view of a BLACK OCELLARIS CLOWNFISH in a reef aquarium, softly blurred live rock and blue-white reef light behind, its skin and fins evenly dusted with a fine GOLD velvety DUST, mouth closed, gill cover slightly lifted. Exactly one mouth at the front of the head; the gill cover sits behind the eye as a single curved plate—never a second mouth, gash or hole on the cheek.\nRow 1 column 2: close view of a CORAL BEAUTY ANGELFISH in a reef aquarium, softly blurred live rock and blue-white reef light behind, its skin and fins evenly dusted with a fine GOLD velvety DUST, mouth closed, gill cover slightly lifted. Exactly one mouth at the front of the head; the gill cover sits behind the eye as a single curved plate—never a second mouth, gash or hole on the cheek.\nRow 1 column 3: close view of a SIX-LINE WRASSE (small slim wrasse with six blue-and-orange stripes) in a reef aquarium, softly blurred live rock and blue-white reef light behind, its skin and fins evenly dusted with a fine GOLD velvety DUST, mouth closed, gill cover slightly lifted. Exactly one mouth at the front of the head; the gill cover sits behind the eye as a single curved plate—never a second mouth, gash or hole on the cheek.\nRow 1 column 4: close view of a LAWNMOWER BLENNY resting on rock in a reef aquarium, softly blurred live rock and blue-white reef light behind, its skin evenly dusted with a fine GOLD velvety DUST, mouth closed, gill cover slightly lifted. Exactly one mouth at the front of the head; the gill cover sits behind the eye as a single curved plate—never a second mouth, gash or hole on the cheek.\nRow 2 column 1: close view of a YELLOWTAIL DAMSELFISH in a reef aquarium, softly blurred live rock and blue-white reef light behind, its skin and fins evenly dusted with a fine GOLD velvety DUST, mouth closed, gill cover slightly lifted. Exactly one mouth at the front of the head; the gill cover sits behind the eye as a single curved plate—never a second mouth, gash or hole on the cheek.\nRow 2 column 2: close view of an ORCHID DOTTYBACK (purple) in a reef aquarium, softly blurred live rock and blue-white reef light behind, its skin and fins evenly dusted with a fine GOLD velvety DUST, mouth closed, gill cover slightly lifted. Exactly one mouth at the front of the head; the gill cover sits behind the eye as a single curved plate—never a second mouth, gash or hole on the cheek.\nRow 2 column 3: a BRISTLENOSE PLECO clinging to the aquarium glass seen from the belly side, its belly round and swollen, plain even skin with no spots, no red marks.\nRow 2 column 4: an orange BETTA near the surface in a planted freshwater home aquarium, softly blurred dark teal-green plants behind, its whole body clearly TILTED over onto its side at about 60 degrees, belly turned up toward the viewer, fins drooping, unable to stay upright.\nRow 3 column 1: a BLACK MOLLY (livebearer with a sail-like dorsal fin) at the surface in a planted freshwater home aquarium, softly blurred dark teal-green plants behind, lying FLAT ON ITS SIDE floating, belly sideways, plain black body with no marks.\nRow 3 column 2: an orange PLATY in a planted freshwater home aquarium, softly blurred dark teal-green plants behind, its body swollen with ordinary scales standing raised away from the body all over like an open pine cone (dropsy)—raised scales, not spines.\nRow 3 column 3: close view of a female GUPPY head in a planted freshwater home aquarium, softly blurred dark teal-green plants behind, one eye covered by a flat milky-white film; the eye sits flush in the head, NOT bulging or protruding.\nRow 3 column 4: a BRONZE CORY CATFISH on sand in a planted freshwater aquarium, sharp, scraping its flank sideways along a flat stone, sand puffed up where it rubbed.",
+  "extra": "Use case: AI-illustrated visual guide that helps a beginner fishkeeper recognise what is wrong with their fish. Photorealistic educational aquarium photography, NOT cartoons, icons, vector drawings, watercolor, plastic 3D renders or poster typography. Realistic underwater macro-photography aesthetic: anatomically believable fish, natural scales, translucent fins, restrained aquarium light, softly blurred home-aquarium background. Each cell names its fish and its scene. The fish is sharp, in focus, level and natural (not twisted at odd angles), large in its cell and fully in view. The key feature in each cell must be OBVIOUS to a novice at thumbnail size, while staying believable (no horror, no gore, no giant parasites). Absolutely no text, letters, numbers, labels, logos, watermarks, arrows or symbols anywhere in the image.\nSTRICT CONTACT SHEET for cropping into eight separate pictures: exactly FOUR equal-width columns and TWO equal-height rows, eight equal square cells covering the complete image edge to edge. No gutters, no borders, no outer margin. Every cell is its own separate scene with its own background. Nothing crosses a cell boundary; keep the whole subject inside the central 85 percent of its cell. Follow the exact row-major order below.\nRow 1 column 1: an OCELLARIS CLOWNFISH in a reef aquarium, softly blurred live rock and blue-white reef light behind, level and calm, with ONE small fresh SCRAPE on its flank: a short shallow graze where a few scales are rubbed off showing slightly pink skin, like it bumped rockwork; clean edges, NOT a deep red crater, not an ulcer, fins intact.\nRow 1 column 2: a YELLOWTAIL DAMSELFISH (blue body, yellow tail) in a reef aquarium, softly blurred live rock and blue-white reef light behind, level and calm, with ONE small fresh SCRAPE on its flank: a short shallow graze where a few scales are rubbed off showing slightly pink skin, like it bumped rockwork; clean edges, NOT a deep red crater, not an ulcer, fins intact.\nRow 1 column 3: close side view of a female GUPPY head in a planted freshwater home aquarium, softly blurred dark teal-green plants behind, one eye covered by a thin FLAT milky-white haze like frosted glass; the eye keeps its normal size and sits flush in the head, NOT bulging, NOT domed, NOT protruding, the other features normal.\nRow 1 column 4: close side view of a red-and-white ORANDA GOLDFISH head in a planted freshwater home aquarium, softly blurred dark teal-green plants behind, one eye covered by a thin FLAT milky-white haze like frosted glass; the eye keeps its normal size and sits flush in the head, NOT bulging, NOT domed, NOT protruding, the other features normal.\nRow 2 column 1: close side view of a CARDINAL TETRA head in a planted freshwater home aquarium, softly blurred dark teal-green plants behind, one eye covered by a thin FLAT milky-white haze like frosted glass; the eye keeps its normal size and sits flush in the head, NOT bulging, NOT domed, NOT protruding, the other features normal.\nRow 2 column 2: close side view of a female GUPPY seen from the side head in a planted freshwater home aquarium, softly blurred dark teal-green plants behind, one eye covered by a thin FLAT milky-white haze like frosted glass; the eye keeps its normal size and sits flush in the head, NOT bulging, NOT domed, NOT protruding, the other features normal.\nRow 2 column 3: an OCELLARIS CLOWNFISH seen from the side in a reef aquarium, softly blurred live rock and blue-white reef light behind, level and calm, with ONE small fresh SCRAPE on its flank: a short shallow graze where a few scales are rubbed off showing slightly pink skin, like it bumped rockwork; clean edges, NOT a deep red crater, not an ulcer, fins intact.\nRow 2 column 4: a YELLOWTAIL DAMSELFISH seen from the side in a reef aquarium, softly blurred live rock and blue-white reef light behind, level and calm, with ONE small fresh SCRAPE on its flank: a short shallow graze where a few scales are rubbed off showing slightly pink skin, like it bumped rockwork; clean edges, NOT a deep red crater, not an ulcer, fins intact."
+ },
+ "assets": [
+  {
+   "id": "betta-scrape",
+   "sheet": "scrape",
+   "cell": 0,
+   "crop": [
+    0,
+    0,
+    362,
+    362
+   ],
+   "resized": false,
+   "sha256": "191ff635696ef988d0ad3d0c6361cecabd87061b8c33da175039f70b6b6f6eba",
+   "bytes": 45062,
+   "width": 362,
+   "height": 362,
+   "r2Key": "experiments/fish-health-lab/audit/fish-betta-scrape-191ff635696e.jpg",
+   "url": "https://media.jez237.com/experiments/fish-health-lab/audit/fish-betta-scrape-191ff635696e.jpg",
+   "uploaded": true
+  },
+  {
+   "id": "goldfish-scrape",
+   "sheet": "scrape",
+   "cell": 1,
+   "crop": [
+    362,
+    0,
+    724,
+    362
+   ],
+   "resized": false,
+   "sha256": "c7f57245d873e474fdb26c1dc64ab4f2632a2f22306160f2ea34914b69155ad4",
+   "bytes": 38870,
+   "width": 362,
+   "height": 362,
+   "r2Key": "experiments/fish-health-lab/audit/fish-goldfish-scrape-c7f57245d873.jpg",
+   "url": "https://media.jez237.com/experiments/fish-health-lab/audit/fish-goldfish-scrape-c7f57245d873.jpg",
+   "uploaded": true
+  },
+  {
+   "id": "guppy-scrape",
+   "sheet": "scrape",
+   "cell": 2,
+   "crop": [
+    724,
+    0,
+    1086,
+    362
+   ],
+   "resized": false,
+   "sha256": "24543e1ac06f67dad4c11cb3317faa730af4caeac7abca368ad10b58842ca147",
+   "bytes": 31664,
+   "width": 362,
+   "height": 362,
+   "r2Key": "experiments/fish-health-lab/audit/fish-guppy-scrape-24543e1ac06f.jpg",
+   "url": "https://media.jez237.com/experiments/fish-health-lab/audit/fish-guppy-scrape-24543e1ac06f.jpg",
+   "uploaded": true
+  },
+  {
+   "id": "molly-scrape",
+   "sheet": "scrape",
+   "cell": 3,
+   "crop": [
+    1086,
+    0,
+    1448,
+    362
+   ],
+   "resized": false,
+   "sha256": "77adb749afc5e0f599e5108f691fdea1a332233d3544bb0b4122e28b1852c18b",
+   "bytes": 33882,
+   "width": 362,
+   "height": 362,
+   "r2Key": "experiments/fish-health-lab/audit/fish-molly-scrape-77adb749afc5.jpg",
+   "url": "https://media.jez237.com/experiments/fish-health-lab/audit/fish-molly-scrape-77adb749afc5.jpg",
+   "uploaded": true
+  },
+  {
+   "id": "community-scrape",
+   "sheet": "scrape",
+   "cell": 4,
+   "crop": [
+    0,
+    362,
+    362,
+    724
+   ],
+   "resized": false,
+   "sha256": "bb9db6ca0b8e11ec15dabadad561a46d982d0d0ce3ec0acd69844fdd4f1b0f65",
+   "bytes": 34570,
+   "width": 362,
+   "height": 362,
+   "r2Key": "experiments/fish-health-lab/audit/fish-community-scrape-bb9db6ca0b8e.jpg",
+   "url": "https://media.jez237.com/experiments/fish-health-lab/audit/fish-community-scrape-bb9db6ca0b8e.jpg",
+   "uploaded": true
+  },
+  {
+   "id": "barb-scrape",
+   "sheet": "scrape",
+   "cell": 5,
+   "crop": [
+    362,
+    362,
+    724,
+    724
+   ],
+   "resized": false,
+   "sha256": "7e7a8d6a20d0d0327f2783677ed73e091572d3a7046f8d4f059137a080cbd590",
+   "bytes": 39509,
+   "width": 362,
+   "height": 362,
+   "r2Key": "experiments/fish-health-lab/audit/fish-barb-scrape-7e7a8d6a20d0.jpg",
+   "url": "https://media.jez237.com/experiments/fish-health-lab/audit/fish-barb-scrape-7e7a8d6a20d0.jpg",
+   "uploaded": true
+  },
+  {
+   "id": "gourami-scrape",
+   "sheet": "scrape",
+   "cell": 6,
+   "crop": [
+    724,
+    362,
+    1086,
+    724
+   ],
+   "resized": false,
+   "sha256": "a0b2d3660b2781cfa1c55def04d53d63f201846792323ed4067375d52b07dfb6",
+   "bytes": 46368,
+   "width": 362,
+   "height": 362,
+   "r2Key": "experiments/fish-health-lab/audit/fish-gourami-scrape-a0b2d3660b27.jpg",
+   "url": "https://media.jez237.com/experiments/fish-health-lab/audit/fish-gourami-scrape-a0b2d3660b27.jpg",
+   "uploaded": true
+  },
+  {
+   "id": "angelfish-scrape",
+   "sheet": "scrape",
+   "cell": 7,
+   "crop": [
+    1086,
+    362,
+    1448,
+    724
+   ],
+   "resized": false,
+   "sha256": "c7386a45562e0abb599bf41f67c4568b1544f9cffe10e9760968a4c69410737f",
+   "bytes": 54905,
+   "width": 362,
+   "height": 362,
+   "r2Key": "experiments/fish-health-lab/audit/fish-angelfish-scrape-c7386a45562e.jpg",
+   "url": "https://media.jez237.com/experiments/fish-health-lab/audit/fish-angelfish-scrape-c7386a45562e.jpg",
+   "uploaded": true
+  },
+  {
+   "id": "african-scrape",
+   "sheet": "scrape",
+   "cell": 8,
+   "crop": [
+    0,
+    724,
+    362,
+    1086
+   ],
+   "resized": false,
+   "sha256": "f7d6d625858cd8540dc072e72eb122dedd5f77a3d2abaaee825d649a876d7fac",
+   "bytes": 45703,
+   "width": 362,
+   "height": 362,
+   "r2Key": "experiments/fish-health-lab/audit/fish-african-scrape-f7d6d625858c.jpg",
+   "url": "https://media.jez237.com/experiments/fish-health-lab/audit/fish-african-scrape-f7d6d625858c.jpg",
+   "uploaded": true
+  },
+  {
+   "id": "cory-scrape",
+   "sheet": "scrape",
+   "cell": 9,
+   "crop": [
+    362,
+    724,
+    724,
+    1086
+   ],
+   "resized": false,
+   "sha256": "741309f208413d541e2c9edaf46b9047ece5b680f53f1ed75864001429cc6613",
+   "bytes": 49944,
+   "width": 362,
+   "height": 362,
+   "r2Key": "experiments/fish-health-lab/audit/fish-cory-scrape-741309f20841.jpg",
+   "url": "https://media.jez237.com/experiments/fish-health-lab/audit/fish-cory-scrape-741309f20841.jpg",
+   "uploaded": true
+  },
+  {
+   "id": "pleco-scrape",
+   "sheet": "scrape",
+   "cell": 10,
+   "crop": [
+    724,
+    724,
+    1086,
+    1086
+   ],
+   "resized": false,
+   "sha256": "7dc2a6777f62ba8eb1abd82da4cbd4fd2603e1c415642ad0c130dc26ccc665d3",
+   "bytes": 51962,
+   "width": 362,
+   "height": 362,
+   "r2Key": "experiments/fish-health-lab/audit/fish-pleco-scrape-7dc2a6777f62.jpg",
+   "url": "https://media.jez237.com/experiments/fish-health-lab/audit/fish-pleco-scrape-7dc2a6777f62.jpg",
+   "uploaded": true
+  },
+  {
+   "id": "barb-breathing",
+   "sheet": "redraw1",
+   "cell": 0,
+   "crop": [
+    0,
+    0,
+    362,
+    362
+   ],
+   "resized": false,
+   "sha256": "13614c3cce230c05e00ec22311721cdffd9f30f9f7408012151f907144c9b4fd",
+   "bytes": 41376,
+   "width": 362,
+   "height": 362,
+   "r2Key": "experiments/fish-health-lab/audit/fish-barb-breathing-13614c3cce23.jpg",
+   "url": "https://media.jez237.com/experiments/fish-health-lab/audit/fish-barb-breathing-13614c3cce23.jpg",
+   "uploaded": true
+  },
+  {
+   "id": "cichlid-breathing",
+   "sheet": "redraw1",
+   "cell": 1,
+   "crop": [
+    362,
+    0,
+    724,
+    362
+   ],
+   "resized": false,
+   "sha256": "8d7b45e388292db8f30670bdd910f08cda5d7967b87452ab96311e35bc927eb7",
+   "bytes": 51493,
+   "width": 362,
+   "height": 362,
+   "r2Key": "experiments/fish-health-lab/audit/fish-cichlid-breathing-8d7b45e38829.jpg",
+   "url": "https://media.jez237.com/experiments/fish-health-lab/audit/fish-cichlid-breathing-8d7b45e38829.jpg",
+   "uploaded": true
+  },
+  {
+   "id": "african-breathing",
+   "sheet": "redraw1",
+   "cell": 2,
+   "crop": [
+    724,
+    0,
+    1086,
+    362
+   ],
+   "resized": false,
+   "sha256": "9a33dc7779fb2b424f43e21d78ba091aabd7ec75d42c70689ca73acb32363bc1",
+   "bytes": 49257,
+   "width": 362,
+   "height": 362,
+   "r2Key": "experiments/fish-health-lab/audit/fish-african-breathing-9a33dc7779fb.jpg",
+   "url": "https://media.jez237.com/experiments/fish-health-lab/audit/fish-african-breathing-9a33dc7779fb.jpg",
+   "uploaded": true
+  },
+  {
+   "id": "african-red-gills",
+   "sheet": "redraw1",
+   "cell": 3,
+   "crop": [
+    1086,
+    0,
+    1448,
+    362
+   ],
+   "resized": false,
+   "sha256": "49970f8c3b7ed3c1b8903b5c3ac0b9220d4508eb68dc64cbc92d6e68569a12ef",
+   "bytes": 46997,
+   "width": 362,
+   "height": 362,
+   "r2Key": "experiments/fish-health-lab/audit/fish-african-red-gills-49970f8c3b7e.jpg",
+   "url": "https://media.jez237.com/experiments/fish-health-lab/audit/fish-african-red-gills-49970f8c3b7e.jpg",
+   "uploaded": true
+  },
+  {
+   "id": "catfish-red-gills",
+   "sheet": "redraw1",
+   "cell": 4,
+   "crop": [
+    0,
+    362,
+    362,
+    724
+   ],
+   "resized": false,
+   "sha256": "508bf06e9041aa5450ec25636c30b0ff0d89d3addb62c610aed492de50f7d458",
+   "bytes": 53800,
+   "width": 362,
+   "height": 362,
+   "r2Key": "experiments/fish-health-lab/audit/fish-catfish-red-gills-508bf06e9041.jpg",
+   "url": "https://media.jez237.com/experiments/fish-health-lab/audit/fish-catfish-red-gills-508bf06e9041.jpg",
+   "uploaded": true
+  },
+  {
+   "id": "pleco-red-gills",
+   "sheet": "redraw1",
+   "cell": 5,
+   "crop": [
+    362,
+    362,
+    724,
+    724
+   ],
+   "resized": false,
+   "sha256": "bf90f74da752a1b76dd9a6e1a0c885889ba3d8677cecdaba2b9f7ecd216e660d",
+   "bytes": 56995,
+   "width": 362,
+   "height": 362,
+   "r2Key": "experiments/fish-health-lab/audit/fish-pleco-red-gills-bf90f74da752.jpg",
+   "url": "https://media.jez237.com/experiments/fish-health-lab/audit/fish-pleco-red-gills-bf90f74da752.jpg",
+   "uploaded": true
+  },
+  {
+   "id": "clownfish-breathing",
+   "sheet": "redraw1",
+   "cell": 6,
+   "crop": [
+    724,
+    362,
+    1086,
+    724
+   ],
+   "resized": false,
+   "sha256": "9b44316c29e470a2b666abfb27e27c14b6f4f9c38b29358fa4951970a6cfe34b",
+   "bytes": 50718,
+   "width": 362,
+   "height": 362,
+   "r2Key": "experiments/fish-health-lab/audit/fish-clownfish-breathing-9b44316c29e4.jpg",
+   "url": "https://media.jez237.com/experiments/fish-health-lab/audit/fish-clownfish-breathing-9b44316c29e4.jpg",
+   "uploaded": true
+  },
+  {
+   "id": "tang-breathing",
+   "sheet": "redraw1",
+   "cell": 7,
+   "crop": [
+    1086,
+    362,
+    1448,
+    724
+   ],
+   "resized": false,
+   "sha256": "cf717c178a21a40724b9b8c41ed20ea1a65d2ef2f60e9c2f90c566c8d782939b",
+   "bytes": 51224,
+   "width": 362,
+   "height": 362,
+   "r2Key": "experiments/fish-health-lab/audit/fish-tang-breathing-cf717c178a21.jpg",
+   "url": "https://media.jez237.com/experiments/fish-health-lab/audit/fish-tang-breathing-cf717c178a21.jpg",
+   "uploaded": true
+  },
+  {
+   "id": "angel-breathing",
+   "sheet": "redraw1",
+   "cell": 8,
+   "crop": [
+    0,
+    724,
+    362,
+    1086
+   ],
+   "resized": false,
+   "sha256": "504ff6f2f2db6dbb15bdc831a86970ec6ec6fc5cb2150491702b9849cab85107",
+   "bytes": 54702,
+   "width": 362,
+   "height": 362,
+   "r2Key": "experiments/fish-health-lab/audit/fish-angel-breathing-504ff6f2f2db.jpg",
+   "url": "https://media.jez237.com/experiments/fish-health-lab/audit/fish-angel-breathing-504ff6f2f2db.jpg",
+   "uploaded": true
+  },
+  {
+   "id": "wrasse-breathing",
+   "sheet": "redraw1",
+   "cell": 9,
+   "crop": [
+    362,
+    724,
+    724,
+    1086
+   ],
+   "resized": false,
+   "sha256": "6ca88a7a96af37e18571bb08f827fecdc1b3c4e0f1897d805447c9ae3ac1ca88",
+   "bytes": 44904,
+   "width": 362,
+   "height": 362,
+   "r2Key": "experiments/fish-health-lab/audit/fish-wrasse-breathing-6ca88a7a96af.jpg",
+   "url": "https://media.jez237.com/experiments/fish-health-lab/audit/fish-wrasse-breathing-6ca88a7a96af.jpg",
+   "uploaded": true
+  },
+  {
+   "id": "dottyback-breathing",
+   "sheet": "redraw1",
+   "cell": 10,
+   "crop": [
+    724,
+    724,
+    1086,
+    1086
+   ],
+   "resized": false,
+   "sha256": "9ee44f36df52e1e96f0c13c791c08a32fe32d9449a439b93d1d0a2c0305fcf61",
+   "bytes": 47540,
+   "width": 362,
+   "height": 362,
+   "r2Key": "experiments/fish-health-lab/audit/fish-dottyback-breathing-9ee44f36df52.jpg",
+   "url": "https://media.jez237.com/experiments/fish-health-lab/audit/fish-dottyback-breathing-9ee44f36df52.jpg",
+   "uploaded": true
+  },
+  {
+   "id": "clownfish-velvet",
+   "sheet": "redraw2",
+   "cell": 0,
+   "crop": [
+    0,
+    0,
+    362,
+    362
+   ],
+   "resized": false,
+   "sha256": "b75dd00aaefefa3c1c6ff751b30da1011f225097e1ac87921d8daf16f9c78ee6",
+   "bytes": 44401,
+   "width": 362,
+   "height": 362,
+   "r2Key": "experiments/fish-health-lab/audit/fish-clownfish-velvet-b75dd00aaefe.jpg",
+   "url": "https://media.jez237.com/experiments/fish-health-lab/audit/fish-clownfish-velvet-b75dd00aaefe.jpg",
+   "uploaded": true
+  },
+  {
+   "id": "angel-velvet",
+   "sheet": "redraw2",
+   "cell": 1,
+   "crop": [
+    362,
+    0,
+    724,
+    362
+   ],
+   "resized": false,
+   "sha256": "4e271de59d1bf857295c5c437b5eeb4ba1b136ace059bf4216beef43ca7edead",
+   "bytes": 57411,
+   "width": 362,
+   "height": 362,
+   "r2Key": "experiments/fish-health-lab/audit/fish-angel-velvet-4e271de59d1b.jpg",
+   "url": "https://media.jez237.com/experiments/fish-health-lab/audit/fish-angel-velvet-4e271de59d1b.jpg",
+   "uploaded": true
+  },
+  {
+   "id": "wrasse-velvet",
+   "sheet": "redraw2",
+   "cell": 2,
+   "crop": [
+    724,
+    0,
+    1086,
+    362
+   ],
+   "resized": false,
+   "sha256": "f3cdc01d82a6a178af7f504c4667dabe709b321922b70685ba2870ef43a048bd",
+   "bytes": 46353,
+   "width": 362,
+   "height": 362,
+   "r2Key": "experiments/fish-health-lab/audit/fish-wrasse-velvet-f3cdc01d82a6.jpg",
+   "url": "https://media.jez237.com/experiments/fish-health-lab/audit/fish-wrasse-velvet-f3cdc01d82a6.jpg",
+   "uploaded": true
+  },
+  {
+   "id": "goby-velvet",
+   "sheet": "redraw2",
+   "cell": 3,
+   "crop": [
+    1086,
+    0,
+    1448,
+    362
+   ],
+   "resized": false,
+   "sha256": "78a022cfe0213de73e1426ee2f3c93692e0343345fa69cf956b8e685a324eb96",
+   "bytes": 60783,
+   "width": 362,
+   "height": 362,
+   "r2Key": "experiments/fish-health-lab/audit/fish-goby-velvet-78a022cfe021.jpg",
+   "url": "https://media.jez237.com/experiments/fish-health-lab/audit/fish-goby-velvet-78a022cfe021.jpg",
+   "uploaded": true
+  },
+  {
+   "id": "damsel-velvet",
+   "sheet": "redraw2",
+   "cell": 4,
+   "crop": [
+    0,
+    362,
+    362,
+    724
+   ],
+   "resized": false,
+   "sha256": "2cbface0608e302cb0f90519377abac91afb4be97e0976822389b0d2a190aaa3",
+   "bytes": 51255,
+   "width": 362,
+   "height": 362,
+   "r2Key": "experiments/fish-health-lab/audit/fish-damsel-velvet-2cbface0608e.jpg",
+   "url": "https://media.jez237.com/experiments/fish-health-lab/audit/fish-damsel-velvet-2cbface0608e.jpg",
+   "uploaded": true
+  },
+  {
+   "id": "dottyback-velvet",
+   "sheet": "redraw2",
+   "cell": 5,
+   "crop": [
+    362,
+    362,
+    724,
+    724
+   ],
+   "resized": false,
+   "sha256": "099c4b0130b9fe03da5f6c1790051d173420db8420bd49fc2aab2c59f3f25347",
+   "bytes": 53211,
+   "width": 362,
+   "height": 362,
+   "r2Key": "experiments/fish-health-lab/audit/fish-dottyback-velvet-099c4b0130b9.jpg",
+   "url": "https://media.jez237.com/experiments/fish-health-lab/audit/fish-dottyback-velvet-099c4b0130b9.jpg",
+   "uploaded": true
+  },
+  {
+   "id": "pleco-swollen",
+   "sheet": "redraw2",
+   "cell": 6,
+   "crop": [
+    724,
+    362,
+    1086,
+    724
+   ],
+   "resized": false,
+   "sha256": "26c03eca202e85807d6c5422b7bf566cde089706bd69a31806398a723fd9490a",
+   "bytes": 36765,
+   "width": 362,
+   "height": 362,
+   "r2Key": "experiments/fish-health-lab/audit/fish-pleco-swollen-26c03eca202e.jpg",
+   "url": "https://media.jez237.com/experiments/fish-health-lab/audit/fish-pleco-swollen-26c03eca202e.jpg",
+   "uploaded": true
+  },
+  {
+   "id": "betta-balance",
+   "sheet": "redraw2",
+   "cell": 7,
+   "crop": [
+    1086,
+    362,
+    1448,
+    724
+   ],
+   "resized": false,
+   "sha256": "1b57a61e27cad4c1a3e324a0529212af7abd7443f73d88143411d9b44051c596",
+   "bytes": 39550,
+   "width": 362,
+   "height": 362,
+   "r2Key": "experiments/fish-health-lab/audit/fish-betta-balance-1b57a61e27ca.jpg",
+   "url": "https://media.jez237.com/experiments/fish-health-lab/audit/fish-betta-balance-1b57a61e27ca.jpg",
+   "uploaded": true
+  },
+  {
+   "id": "molly-balance",
+   "sheet": "redraw2",
+   "cell": 8,
+   "crop": [
+    0,
+    724,
+    362,
+    1086
+   ],
+   "resized": false,
+   "sha256": "67b0825dfefaa1f161c8ef33ec4c32596c2cfc6efb775f27ba0038e8bd60a2a2",
+   "bytes": 35018,
+   "width": 362,
+   "height": 362,
+   "r2Key": "experiments/fish-health-lab/audit/fish-molly-balance-67b0825dfefa.jpg",
+   "url": "https://media.jez237.com/experiments/fish-health-lab/audit/fish-molly-balance-67b0825dfefa.jpg",
+   "uploaded": true
+  },
+  {
+   "id": "livebearer-dropsy",
+   "sheet": "redraw2",
+   "cell": 9,
+   "crop": [
+    362,
+    724,
+    724,
+    1086
+   ],
+   "resized": false,
+   "sha256": "5da1276b439570c8350e639f343dec5a90bcade06725c99e61a52e86b9e6df9c",
+   "bytes": 36009,
+   "width": 362,
+   "height": 362,
+   "r2Key": "experiments/fish-health-lab/audit/fish-livebearer-dropsy-5da1276b4395.jpg",
+   "url": "https://media.jez237.com/experiments/fish-health-lab/audit/fish-livebearer-dropsy-5da1276b4395.jpg",
+   "uploaded": true
+  },
+  {
+   "id": "catfish-flukes",
+   "sheet": "redraw2",
+   "cell": 11,
+   "crop": [
+    1086,
+    724,
+    1448,
+    1086
+   ],
+   "resized": false,
+   "sha256": "206599a27439058f535cd9040d4341ffea316b432c461e7ea0b0a475b7608744",
+   "bytes": 47955,
+   "width": 362,
+   "height": 362,
+   "r2Key": "experiments/fish-health-lab/audit/fish-catfish-flukes-206599a27439.jpg",
+   "url": "https://media.jez237.com/experiments/fish-health-lab/audit/fish-catfish-flukes-206599a27439.jpg",
+   "uploaded": true
+  },
+  {
+   "id": "clownfish-scrape",
+   "sheet": "extra",
+   "cell": 0,
+   "crop": [
+    0,
+    0,
+    444,
+    444
+   ],
+   "resized": false,
+   "sha256": "7b76774b4812342fd32cbc9074660af6b615650878618e6cc253e94922eae2f0",
+   "bytes": 51936,
+   "width": 444,
+   "height": 444,
+   "r2Key": "experiments/fish-health-lab/audit/fish-clownfish-scrape-7b76774b4812.jpg",
+   "url": "https://media.jez237.com/experiments/fish-health-lab/audit/fish-clownfish-scrape-7b76774b4812.jpg",
+   "uploaded": true
+  },
+  {
+   "id": "damsel-scrape",
+   "sheet": "extra",
+   "cell": 1,
+   "crop": [
+    444,
+    0,
+    887,
+    444
+   ],
+   "resized": false,
+   "sha256": "e1a145f786723371bfc2e7baf5e4654d1cbf815636fb1249c44c78585bc577ee",
+   "bytes": 57519,
+   "width": 443,
+   "height": 444,
+   "r2Key": "experiments/fish-health-lab/audit/fish-damsel-scrape-e1a145f78672.jpg",
+   "url": "https://media.jez237.com/experiments/fish-health-lab/audit/fish-damsel-scrape-e1a145f78672.jpg",
+   "uploaded": true
+  },
+  {
+   "id": "guppy-cloudy-eye",
+   "sheet": "extra",
+   "cell": 2,
+   "crop": [
+    887,
+    0,
+    1330,
+    444
+   ],
+   "resized": false,
+   "sha256": "527b2df590c307801fd67e8b1275b7ca2bb40f11ddc627553e207f0932ee01d3",
+   "bytes": 45826,
+   "width": 443,
+   "height": 444,
+   "r2Key": "experiments/fish-health-lab/audit/fish-guppy-cloudy-eye-527b2df590c3.jpg",
+   "url": "https://media.jez237.com/experiments/fish-health-lab/audit/fish-guppy-cloudy-eye-527b2df590c3.jpg",
+   "uploaded": true
+  },
+  {
+   "id": "goldfish-cloudy-eye",
+   "sheet": "extra",
+   "cell": 3,
+   "crop": [
+    1330,
+    0,
+    1774,
+    444
+   ],
+   "resized": false,
+   "sha256": "16e4d7106fb2c44808cc07ce07b4e7ae8851d7c7e9a2ec3af48ec22b444520a6",
+   "bytes": 57585,
+   "width": 444,
+   "height": 444,
+   "r2Key": "experiments/fish-health-lab/audit/fish-goldfish-cloudy-eye-16e4d7106fb2.jpg",
+   "url": "https://media.jez237.com/experiments/fish-health-lab/audit/fish-goldfish-cloudy-eye-16e4d7106fb2.jpg",
+   "uploaded": true
+  },
+  {
+   "id": "community-cloudy-eye",
+   "sheet": "extra",
+   "cell": 4,
+   "crop": [
+    0,
+    444,
+    444,
+    887
+   ],
+   "resized": false,
+   "sha256": "350af4a61869b5529adb5b3b9d3722c8482c133ed82aac0593d89c67e257743c",
+   "bytes": 40778,
+   "width": 444,
+   "height": 443,
+   "r2Key": "experiments/fish-health-lab/audit/fish-community-cloudy-eye-350af4a61869.jpg",
+   "url": "https://media.jez237.com/experiments/fish-health-lab/audit/fish-community-cloudy-eye-350af4a61869.jpg",
+   "uploaded": true
+  }
+ ],
+ "altCorrections": "Velvet redraws show no open gill, so their descriptions say \"fine gold dust over its body and fins\" (second visual review, Nov 6 2026)."
+}
