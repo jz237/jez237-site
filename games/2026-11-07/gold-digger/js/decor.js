@@ -249,6 +249,19 @@ export function buildDecor(M, look, W, K) {
   const wonder = M.finds.find((f) => f.kind === 'wonder');
   let wonderFx = null;
   if (wonder) wonderFx = buildWonder(wonder, M, look, K, statics, group, emitters, R);
+  // ---- eyes in the dark: something watches from the deep recesses, and blinks out when the lamp comes near
+  const eyes = [];
+  {
+    const ec = [[1, 0.55, 0.15], [0.45, 1, 0.8], [0.9, 0.6, 1], [0.55, 0.9, 1], [1, 0.4, 0.12]][biome % 5];
+    for (const [x, y] of take(Math.round(6 * dens), 9, ([x, y]) => headroom(x, y) >= 3).slice(0, 6)) {
+      const g = new THREE.Group();
+      const mat = new THREE.MeshBasicMaterial({ map: tex.spark, color: new THREE.Color(ec[0] * 1.7, ec[1] * 1.7, ec[2] * 1.7), transparent: true, opacity: 0, blending: THREE.AdditiveBlending, depthWrite: false });
+      const gap = 0.07 + R() * 0.05;
+      for (const s of [-1, 1]) { const m = new THREE.Mesh(new THREE.PlaneGeometry(0.17, 0.11), mat); m.position.x = s * gap; g.add(m); }
+      g.position.set(x + 0.2 + R() * 0.6, y + 0.5 + R() * 1.4, -2.7 - R() * 0.9); g.visible = false; group.add(g);
+      eyes.push({ g, mat, a: 0, blink: R() * 5, x: g.position.x, y: g.position.y, ph: R() * 6 });
+    }
+  }
   // bake the statics
   const baked = bake(statics);
   group.add(baked);
@@ -256,6 +269,15 @@ export function buildDecor(M, look, W, K) {
   const drips = ceils.slice(0, 30).filter(() => R() < 0.6).map(([x, y]) => ({ x: x + R(), y: y + 0.95, t: R() * 4 }));
   const update = (t, dt, P, fx) => {
     for (const m of mists) m.material.uniforms.uT.value = t;
+    for (const e of eyes) {
+      const d = Math.hypot(e.x - P.x, e.y - P.y), want = d > 7.5 && d < 24 ? 1 : 0;
+      e.a += (want - e.a) * Math.min(1, dt * (want ? 0.5 : 5));
+      e.g.visible = e.a > 0.02; if (!e.g.visible) continue;
+      e.blink -= dt; let sy = 1;
+      if (e.blink < 0) { sy = Math.max(0.06, Math.abs(e.blink + 0.08) / 0.08); if (e.blink < -0.16) e.blink = 2.5 + Math.random() * 5; }
+      e.g.scale.y = sy; e.mat.opacity = e.a * 0.85;
+      e.g.position.x = e.x + Math.sin(t * 0.35 + e.ph) * 0.06;
+    }
     for (const f of falls) { f.m.material.uniforms.uT.value = t; f.pool.scale.set(1 + Math.sin(t * 3.1 + f.x) * 0.06, 1 + Math.sin(t * 4.3 + f.x) * 0.12, 1); if (Math.abs(f.x - P.x) < 18 && Math.random() < dt * (f.lava ? 6 : 10)) { if (f.lava) fx.fire(f.x + (Math.random() - 0.5), f.y + 0.3, -2.2, { n: 1, s: 0.9, life: 0.8 }); else fx.dust(f.x + (Math.random() - 0.5), f.y + 0.3, -2.2, { n: 1, s0: 0.5, s1: 2.2, life: 2, vy: 0.6, a: 0.25, col: [0.8, 0.9, 0.95] }); } }
     if (worms) worms.material.uniforms.uT.value = t;
     for (const d of drips) {
