@@ -44,6 +44,7 @@
     'Stellar Drift':['space','#ebaf68','#9ec5eb',2],
     'SUPER STAR TREK':['trek','#e5b875','#8fbdeb',0],
     'Lunar Lander':['lander','#e7ca87','#9fc5de',0],
+    'Gold Digger':['golddigger','#ffc65a','#ffe9b0',0],
     'Lancewing 2026':['lancewing','#ffb347','#ffd9a0',0],
     'Rimstorm 2026':['rimstorm','#7fd4ff','#ffb347',0],
     'Berserk 2026':['voltmaze','#7fe0ff','#ff6a4a',0],
@@ -175,6 +176,21 @@
       case 'helicopter': return stars+skyline(59)+group(path('M-21 2-5 0Q0-13 13-8L22 0Q24 9 11 10H-1L-8 5-23 7Z',metal,a,.5)+path('M5-8 12-7 19 0H4Z','#20445c','#b0dae3',.7)+path('M-22 5-28-5-28 8Z',b)+path('M-4 10-7 14H20M14 10v4M0-8v-7','none',metal,1.2)+group(path('M-28-15H32','none','#d1dce0',1.1),'','ca-rotor')+circle(-25,2,2,'none',b,.7),'translate(48 29)','ca-hover')+path('M65 39 82 62H40Z','#f1d99f','','','opacity=".11"')+person(63,56,.43,b)+person(73,58,.35,a);
       case 'slash': return stars+floor+repeat(3,i=>group(crystal(0,0,1,i%2?a:b),`translate(${26+i*25} ${25+(i%2)*14}) rotate(${i*25-20})`,'ca-drift'))+group(path('M15 54Q44 35 83 13','none','#e8faf6',3,'stroke-linecap="round"')+path('M15 55Q43 40 84 14','none',a,6,'opacity=".2"'),'','ca-slash')+repeat(8,i=>blink(path(`M${39+i*4} ${23+(i%3)*7}l${i%2?3:-3} -3`,'none',b,.8),-i*.16));
       case 'gravity': return stars+repeat(6,i=>path(`M${8+i*15} 8Q${15+i*12} 49 ${8+i*15} 60M8 ${9+i*10}Q49 ${5+i*7} 94 ${9+i*10}`,'none',a,.45,'opacity=".35"'))+group(ellipse(50,34,25,14,'none',b)+ellipse(50,34,14,25,'none',a),'','ca-current')+circle(50,34,8,'#142339',a,.8)+circle(48,31,3,haze)+group(circle(26,30,3,metal)+circle(74,39,2,b),'','ca-current')+blink(circle(50,34,3,'#e7dff2'));
+      case 'golddigger': {
+        const stal=(x,y,h,c)=>path(`M${x-2.2} ${y}L${x} ${y+h}L${x+2.2} ${y}Z`,c);
+        return rect(0,0,100,68,'#140d08')+ellipse(52,30,46,24,'#2a1c12','','opacity=".55"')
+          +path('M0 0H100V13Q86 18 72 12T44 15T18 11T0 14Z','#3a281a','#6a4a2c',.5)
+          +path('M0 68V52Q14 47 30 51T58 48T80 52T100 49V68Z','#3a281a','#7a5634',.5)
+          +stal(14,12,6,'#4a3322')+stal(27,14,9,'#4a3322')+stal(49,13,5,'#4a3322')+stal(78,12,8,'#4a3322')+stal(90,13,4,'#4a3322')
+          +path('M63 14V50M69 14V50','none','#9a7444',1)+repeat(7,i=>path(`M63 ${17+i*5}h6`,'none','#9a7444',.8))
+          +group(rect(6,24,13,16,'none',1,'#a8adb2')+path('M8 24v16M12.5 24v16M17 24v16','none','#8a9096',.4)+path('M12.5 0V24','none','#a8adb2',.5),'','ca-hover')
+          +path('M40 39 98 22 98 52Z','#ffe2a8','','','opacity=".14"')+path('M40 39 98 30 98 44Z','#fff3d0','','','opacity=".1"')
+          +person(37,50,.55,'#b85a34')+path('M38.5 36.5h3','none','#6a4a2a',1.2)+circle(40.6,36.6,1.3,'#fff6cc')
+          +path('M33 40 28 33','none','#c8b490',.9)+path('M26.5 31.5 30 34.5','none','#d8dde2',1.2)
+          +path('M76 44 82 38 90 41 87 47Z','#5a3e26')+repeat(5,i=>circle(78+i*2.2,42+(i%2),.8,a))
+          +repeat(7,i=>blink(path(`M${72+(i*9)%24} ${26+(i*7)%20}l1.4-1.4 1.4 1.4-1.4 1.4Z`,i%3?a:b),-i*.35))
+          +circle(14,56,1.6,'#ff9a3a','','',' opacity=".8"')+group(path('M12 57q2-5 4 0','none','#ffcf70',.8),'','ca-flicker');
+      }
       case 'lancewing': {
         const ledge=(x,y,w)=>path(`M${x} ${y}h${w}l-${w*.2} 6h-${w*.6}Z`,'#5a4038','#c99a6a',.4)+path(`M${x+1} ${y}h${w-2}`,'none',a,.6);
         const ray=(x,y,s,col,lance,flip,lag)=>group(path('M-12 0Q-6-7 0-3Q6-7 12 0Q6 2 0 4Q-6 2-12 0Z',col,'#efe2cc',.4)+path('M0 4Q1 8 3 11','none',col,.8)+person(0,-3,.3,'#d8c49a')+path('M1-6 15-9','none',lance,.9),`translate(${x} ${y}) scale(${flip?-s:s} ${s})`,'ca-hover',`style="--lag:${lag}s"`);
