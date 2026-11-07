@@ -1,4 +1,4 @@
-/* Ten staged compositions; positions, silhouettes and timing differ, rather
+/* Eight active staged compositions (original numbers retained); positions, silhouettes and timing differ, rather
  * than recoloring one fireball. All use the existing bounded gas/line buffers. */
 static float bc_age(const burst_frame *f,int profile,int beat,float life){
     return (f->t-astra_chain_onset(profile,beat))/life;
@@ -11,7 +11,7 @@ static void bc_pop(burst_frame *f,burst_point c,float age,float size,int index){
         float d[3];pyro_dir(f->seed,index*17+j+221,d);
         burst_point p=bp(c.x+d[0]*size*grow*.65f,c.y+d[1]*size*grow*.65f,c.z+d[2]*size*grow*.65f);
         burst_cloud(f,p,size*(.13f+.33f*grow),heat*(.74f+.04f*j),fade*.85f);
-        if(j<3)burst_trail(f,p,bp(p.x+d[0]*size*age,p.y+d[1]*size*age,p.z+d[2]*size*age),.025f*size,heat,bp(1,.48f,.09f));
+        if(j<3)burst_trail(f,p,bp(p.x+d[0]*size*age,p.y+d[1]*size*age,p.z+d[2]*size*age),.025f*size,heat,f->palette==7?bp(.15f,.85f,1):bp(1,.48f,.09f));
     }
 }
 /* 1: a quick zigzag of tiny ignition beads, with a glowing fuse joining them. */
@@ -29,19 +29,6 @@ static void burst_split_relay(burst_frame *f){
         float r=.55f+(i/2)*.50f,sign=i%2?1:-1;
         burst_point c=bp(sign*r,sinf(i*1.7f)*.3f,(i/2-1)*.28f);
         bc_pop(f,c,bc_age(f,AB_SPLIT_RELAY,i,.30f),.55f+.09f*(i/2),i);
-    }
-}
-/* 3: blue charged housings discharge upward through a branching ladder. */
-static void burst_capacitor_ladder(burst_frame *f){
-    for(int i=0;i<8;i++){
-        float age=bc_age(f,AB_CAPACITOR_LADDER,i,.25f);if(age<0||age>=1)continue;
-        burst_point c=bp((i%2?1:-1)*.43f,(i/2-1.5f)*.62f,(br(f,i,1)-.5f)*.4f);
-        bc_pop(f,c,age,.36f,i);
-        for(int j=0;j<4;j++){
-            float d[3];pyro_dir(f->seed,i*9+j,d);
-            burst_point a=bp(c.x+d[0]*.35f,c.y+d[1]*.35f,c.z+d[2]*.35f),b=bp(c.x+d[0]*(.6f+age),c.y+d[1]*(.6f+age),c.z+d[2]*(.6f+age));
-            burst_trail(f,c,a,.052f,burst_fade(age),bp(.10f,.65f,1));burst_trail(f,a,b,.024f,burst_fade(age),bp(.65f,.35f,1));
-        }
     }
 }
 /* 4: a curved row of tanks ruptures with increasingly heavy boiling lobes. */
@@ -75,15 +62,6 @@ static void burst_shrapnel_relay(burst_frame *f){
         bc_pop(f,c,age,.32f+(i%3)*.08f,i);
         if(age>=0&&age<1)burst_shard(f,bp(c.x*(1+age),c.y+age*.7f,c.z*(1+age)),.12f,i+age*7,expf(-6*age));
     }
-}
-/* 8: eight outer nodes fire clockwise, then converge in a delayed center pop. */
-static void burst_halo_collapse(burst_frame *f){
-    for(int i=0;i<8;i++){
-        float age=bc_age(f,AB_HALO_COLLAPSE,i,.28f),a=i*.7854f,r=1.25f*(1-.7f*pyro_ramp(.4f,.85f,f->t));
-        burst_point c=bp(cosf(a)*r,sinf(a)*r*.75f,sinf(a)*r*.5f);bc_pop(f,c,age,.39f,i);
-        if(age>=0&&age<1)burst_trail(f,c,bp(c.x*.55f,c.y*.55f,c.z*.55f),.06f,burst_fade(age),bp(.15f,.85f,1));
-    }
-    bc_pop(f,bp(0,0,0),(f->t-.68f)/.32f,.85f,99);
 }
 /* 9: a low rumbling triad feeds three later, higher mushroom caps. */
 static void burst_reactor_domino(burst_frame *f){

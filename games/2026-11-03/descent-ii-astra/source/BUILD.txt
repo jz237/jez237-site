@@ -1290,3 +1290,8 @@ R59 — ten chain explosions and volatile hull fragments
 - Live explosive deaths can shed volatile components. Swept native wall queries and room-limited ship contacts stop each fragment at its first impact. The secondary effect has local flash lighting and a spatial D2 sound accent. These cosmetic effects do not apply additional gameplay damage.
 - Uses existing volumetric textures, native D2 audio samples and bounded fragment/effect buffers. No new downloadable asset parcels, recursive debris, gameplay RNG draws or changes to flight controls/demo AI.
 - Validation: all ten showcase effects, replay/seek/variation/group navigation; 47 native collision/profile checks; muted campaign demos with live wall and ship contacts; mobile preview. QA-only exports excluded from the shipping engine.
+
+R60 — curated chain effects and cool-color variants
+- Removes chain 3 (Capacitor Ladder) and 8 (Halo Collapse) from gameplay selection, preview controls and rendering. The remaining eight keep their original numbers.
+- Chain 2 (Split-Core Relay) and 6 (Engine-Pod Runaway) now use Halo Collapse's pale yellow-green fire palette, with cyan trails and native palette-driven wall lighting. Their existing timing, shapes and breakup behavior remain intact.
+- No asset downloads, gameplay, flight controls or demo AI changes. Validated the eight remaining effects, retired-ID exclusion, colors, replay/navigation and a muted live campaign run.

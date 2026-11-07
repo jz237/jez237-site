@@ -9,7 +9,7 @@ typedef struct { burst_point point; float size, angle, heat; } burst_plate;
 typedef struct {
     unsigned seed;
     float t;
-    int gas_count, line_count, plate_count;
+    int gas_count, line_count, plate_count, palette;
     burst_gas gas[PLUME_PARTS];
     burst_line lines[144];
     burst_plate plates[20];
@@ -311,8 +311,8 @@ void astra_pattern_blast(vms_vector *where,fix radius,float t,unsigned seed,int 
 {
     typedef void (*composer)(burst_frame *);
     static const composer compose[AB_COUNT]={NULL,burst_arc,burst_spall,burst_cinders,burst_ring,
-                                             burst_implosion,burst_chain,burst_bloom,burst_needles,burst_crackle,burst_petals,burst_twinjet,burst_shell,burst_cryo,burst_cross,burst_aftershock,burst_splinters,burst_thunderhead,burst_fuse_run,burst_split_relay,burst_capacitor_ladder,burst_tank_cascade,burst_armor_cookoff,burst_pod_runaway,burst_shrapnel_relay,burst_halo_collapse,burst_reactor_domino,burst_last_light};
-    if(profile<=AB_LEGACY || profile>=AB_COUNT || t<0 || t>=1 || !astra_pyro_ready())return;
+                                             burst_implosion,burst_chain,burst_bloom,burst_needles,burst_crackle,burst_petals,burst_twinjet,burst_shell,burst_cryo,burst_cross,burst_aftershock,burst_splinters,burst_thunderhead,burst_fuse_run,burst_split_relay,NULL,burst_tank_cascade,burst_armor_cookoff,burst_pod_runaway,burst_shrapnel_relay,NULL,burst_reactor_domino,burst_last_light};
+    if(profile<=AB_LEGACY || profile>=AB_COUNT || !astra_pattern_enabled(profile) || t<0 || t>=1 || !astra_pyro_ready())return;
     g3s_point view;g3_rotate_point(&view,where);
     float scale=f2fl(radius);
     float origin[]={f2fl(view.p3_x)/f2fl(Matrix_scale.x),f2fl(view.p3_y)/f2fl(Matrix_scale.y),f2fl(view.p3_z)/f2fl(Matrix_scale.z)};
@@ -320,7 +320,7 @@ void astra_pattern_blast(vms_vector *where,fix radius,float t,unsigned seed,int 
     extern int Player_is_dead,astra_preview_active;
     float distance=sqrtf(origin[0]*origin[0]+origin[1]*origin[1]+origin[2]*origin[2]);
     float visibility=(Player_is_dead||astra_preview_active)?1:.018f+.982f*pyro_ramp(scale*1.5f+3,scale*5+12,distance);
-    burst_frame f;f.seed=seed;f.t=t;f.gas_count=f.plate_count=f.line_count=0;
+    burst_frame f;f.seed=seed;f.t=t;f.palette=astra_detonations[profile].palette;f.gas_count=f.plate_count=f.line_count=0;
     compose[profile](&f);
     vms_angvec angles={fl2f((br(&f,0,86)-.5f)*.085f),fl2f((br(&f,1,86)-.5f)*.12f),fl2f((br(&f,2,86)-.5f)*.22f)};
     vms_matrix frame;vm_angles_2_matrix(&frame,&angles);

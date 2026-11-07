@@ -22,7 +22,7 @@ static void astra_preview_new(void)
     unsigned next=death_hash(random^(++preview_number*2654435761u));
     preview_seed=next==preview_seed?next^0x9e3779b9u:next;
     int requested=EM_ASM_INT(return Module.blastInspect|0;);
-    preview_profile=requested>0 && requested<AB_COUNT?requested:AB_LEGACY;
+    preview_profile=requested>0 && astra_pattern_enabled(requested)?requested:AB_LEGACY;
     preview_length=preview_profile?astra_pattern_length(preview_profile,preview_seed):
                                    5.9f+1.1f*(preview_seed&255)/255.f;
     preview_started=emscripten_get_now();astra_preview_clock=0;preview_sound=-1;

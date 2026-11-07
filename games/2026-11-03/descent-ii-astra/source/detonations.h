@@ -28,11 +28,11 @@ static const astra_detonation astra_detonations[AB_COUNT] = {
     [AB_SPLINTERS] = {2.65f, .50f, .97f, 3},
     [AB_THUNDERHEAD]={4.40f, .65f, 1.16f, 0},
     [AB_FUSE_RUN]={1.35f,.20f,.62f,0},
-    [AB_SPLIT_RELAY]={2.10f,.30f,.86f,2},
+    [AB_SPLIT_RELAY]={2.10f,.30f,.86f,7},
     [AB_CAPACITOR_LADDER]={2.65f,.35f,.76f,1},
     [AB_TANK_CASCADE]={3.40f,.40f,1.02f,3},
     [AB_ARMOR_COOKOFF]={3.65f,.40f,.95f,2},
-    [AB_POD_RUNAWAY]={4.00f,.45f,1.05f,3},
+    [AB_POD_RUNAWAY]={4.00f,.45f,1.05f,7},
     [AB_SHRAPNEL_RELAY]={2.90f,.40f,.82f,0},
     [AB_HALO_COLLAPSE]={3.50f,.40f,.90f,7},
     [AB_REACTOR_DOMINO]={4.70f,.50f,1.12f,5},
@@ -47,11 +47,13 @@ static int astra_choose_pattern(int tier, unsigned seed)
 {
     static const int impacts[] = {AB_LEGACY, AB_ARC, AB_SPALL, AB_CINDERS, AB_LEGACY, AB_NEEDLES, AB_CRACKLE, AB_CRYO, AB_CROSS};
     static const int blasts[] = {AB_LEGACY, AB_RING, AB_IMPLOSION,
-                                 AB_LEGACY, AB_CHAIN, AB_BLOOM, AB_LEGACY, AB_PETALS, AB_TWINJET, AB_SHELL, AB_AFTERSHOCK, AB_SPLINTERS, AB_THUNDERHEAD, AB_FUSE_RUN, AB_SPLIT_RELAY, AB_CAPACITOR_LADDER, AB_TANK_CASCADE, AB_ARMOR_COOKOFF, AB_POD_RUNAWAY, AB_SHRAPNEL_RELAY, AB_HALO_COLLAPSE, AB_REACTOR_DOMINO, AB_LAST_LIGHT};
+                                 AB_LEGACY, AB_CHAIN, AB_BLOOM, AB_LEGACY, AB_PETALS, AB_TWINJET, AB_SHELL, AB_AFTERSHOCK, AB_SPLINTERS, AB_THUNDERHEAD, AB_FUSE_RUN, AB_SPLIT_RELAY, AB_TANK_CASCADE, AB_ARMOR_COOKOFF, AB_POD_RUNAWAY, AB_SHRAPNEL_RELAY, AB_REACTOR_DOMINO, AB_LAST_LIGHT};
     if (tier == 2) return AB_LEGACY;
     return tier ? blasts[(seed >> 16) % (sizeof blasts / sizeof blasts[0])] : impacts[(seed >> 16) % (sizeof impacts / sizeof impacts[0])];
 }
-static int astra_is_chain(int profile){return profile>=AB_FUSE_RUN&&profile<=AB_LAST_LIGHT;}
+/* Retired chain 3/8 IDs stay reserved, but cannot be selected or rendered. */
+static int astra_pattern_enabled(int profile){return profile>=AB_LEGACY&&profile<AB_COUNT&&profile!=AB_CAPACITOR_LADDER&&profile!=AB_HALO_COLLAPSE;}
+static int astra_is_chain(int profile){return profile>=AB_FUSE_RUN&&profile<=AB_LAST_LIGHT&&astra_pattern_enabled(profile);}
 static int astra_chain_breakup(int profile){return profile==AB_ARMOR_COOKOFF||profile==AB_POD_RUNAWAY||profile==AB_SHRAPNEL_RELAY||profile==AB_LAST_LIGHT;}
 static int astra_chain_beats(int profile){static const int count[10]={7,6,8,5,8,6,9,9,6,8};return astra_is_chain(profile)?count[profile-AB_FUSE_RUN]:0;}
 static float astra_chain_onset(int profile,int beat){
