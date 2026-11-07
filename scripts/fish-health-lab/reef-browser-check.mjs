@@ -46,7 +46,8 @@ const loaded = (p, sel) => p.locator(sel).evaluateAll(async els => {
 const allLoaded = async (p, sel, n) => {
   const got = await loaded(p, sel);
   if (n !== undefined) assert.equal(got.length, n, `${sel}: ${got.length} pictures`);
-  assert.ok(got.length > 0 && got.every(([id, w]) => id && w === 362), `${sel}: ${JSON.stringify(got)}`);
+  // Crops are 362 px; picture-audit redraws from 2:1 sheets are ~444 px (unresized, Nov 6 2026).
+  assert.ok(got.length > 0 && got.every(([id, w]) => id && (w === 362 || (w >= 440 && w <= 446))), `${sel}: ${JSON.stringify(got)}`);
   return got.map(([id]) => id);
 };
 const hero = async p => (await allLoaded(p, '.reef-result .result-image img', 1))[0];
@@ -248,7 +249,8 @@ try {
       ['crab', 'molt-stuck', [], /Failed molt/, 'cond-crab-failed-molt', '9-invert-result-crab-molt'],
       ['', 'deaths', ['medicine'], /Copper or medicine poisoning/, 'cond-copper', '10-invert-result-copper'],
       ['crab', 'legs', [], /Fighting or injury/, 'cond-invert-injury', ''],
-      ['shrimp', 'pale', ['new-arrival'], /Acclimation shock/, 'cond-acclimation', ''],
+      // The result leads with the pale shrimp that was picked, not acclimation's lying-down shrimp (Nov 6 combination sweep).
+      ['shrimp', 'pale', ['new-arrival'], /Acclimation shock/, 'sign-pale', ''],
       ['snail', 'unclear', [], /Not enough food/, 'cond-snail-starvation', ''],
     ]) {
       await reefFlow(p, 'invert', kind, sign, changes);

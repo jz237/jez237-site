@@ -16,7 +16,9 @@ import { MEDIA_BASE } from './fish-images-data.mjs';
 import { CROPS as INVERT_CROPS, IMAGE_SOURCE as INVERT_IMAGE_SOURCE } from './reef-images-inverts-data.mjs';
 import { CROPS as CORAL_CROPS, IMAGE_SOURCE as CORAL_IMAGE_SOURCE } from './reef-images-corals-data.mjs';
 import { CROPS as POND_CROPS, IMAGE_SOURCE as POND_IMAGE_SOURCE } from './reef-images-pond-data.mjs';
+import { CROPS as LIB_REEF_CROPS, IMAGE_SOURCE as LIB_REEF_IMAGE_SOURCE } from './library-reef-images-data.mjs';
 import { CROPS as FIX_CROPS, IMAGE_SOURCE as FIX_IMAGE_SOURCE } from './fish-images-fixes-data.mjs';
+import { CROPS as AUDIT_CROPS, IMAGE_SOURCE as AUDIT_IMAGE_SOURCE } from './fish-images-audit-data.mjs';
 
 // 'media' = content-hashed R2 keys on media.jez237.com; 'local' = the untracked
 // preview copies (experiments/fish-health-lab/corals/x.jpg → local-images/corals/x.jpg).
@@ -25,6 +27,7 @@ const urlFor = (entry, source) => source === 'media' ? MEDIA_BASE + entry.key : 
 export const invertUrlFor = entry => urlFor(entry, INVERT_IMAGE_SOURCE);
 export const coralUrlFor = entry => urlFor(entry, CORAL_IMAGE_SOURCE);
 export const pondUrlFor = entry => urlFor(entry, POND_IMAGE_SOURCE);
+const libReefUrlFor = entry => urlFor(entry, LIB_REEF_IMAGE_SOURCE);
 // Clean-up retakes (Nov 6 2026) replace a published invert crop under the same id.
 const fixUrlFor = entry => urlFor(entry, FIX_IMAGE_SOURCE);
 const fixesFor = set => Object.fromEntries(Object.entries(FIX_CROPS).filter(([, e]) => e.set === set).map(([id, e]) => [id, { ...e, fixed: true }]));
@@ -37,7 +40,10 @@ const merged = (crops, fixes) => ({ ...crops, ...Object.fromEntries(Object.entri
 const invertFixes = fixesFor('invert'), pondFixes = fixesFor('pond');
 const invertPic = picker(merged(INVERT_CROPS, invertFixes), entry => entry.fixed ? fixUrlFor(entry) : invertUrlFor(entry), 'invert');
 const pondPic = picker(merged(POND_CROPS, pondFixes), entry => entry.fixed ? fixUrlFor(entry) : pondUrlFor(entry), 'pond');
-const coralPic = picker(CORAL_CROPS, coralUrlFor, 'coral');
+// New coral sign tiles (Nov 6 2026 logic check) use library close-ups: slow tissue loss, starved, wrong spot.
+// Picture-audit redraws (Nov 6 2026: the "won't open" hammer coral looked dead) replace a coral crop under the same id.
+const coralAudit = Object.fromEntries(Object.entries(AUDIT_CROPS).filter(([id, e]) => e.set === 'coral' && CORAL_CROPS[id]).map(([id, e]) => [id, { ...CORAL_CROPS[id], ...e, audit: true }]));
+const coralPic = picker({ ...CORAL_CROPS, ...coralAudit, ...Object.fromEntries(Object.entries(LIB_REEF_CROPS).map(([id, e]) => [id, { ...e, lib: true }])) }, entry => entry.lib ? libReefUrlFor(entry) : entry.audit ? urlFor(entry, AUDIT_IMAGE_SOURCE) : coralUrlFor(entry), 'coral');
 
 // Which crop goes where. Kind-specific keys (`crab:…`) win over the plain key.
 export const INVERT_SET = {
@@ -100,6 +106,7 @@ export const CORAL_SET = {
     'soft:slugs': 'sign-soft-slugs',
     'sps:bites': 'sign-sps-bites', 'soft:bites': 'sign-soft-bites', 'anemone:bites': 'sign-anemone-bites',
     'anemone:unclear': 'sign-anemone-unclear',
+    creeping: 'lib-stn-1', pastel: 'lib-low-nutrients-1', blasted: 'lib-flow-placement-1',
   },
   conditions: {
     bleaching: ['cond-bleaching', 'sign-lps-bleach', 'sign-anemone-bleach'],
@@ -199,6 +206,17 @@ export function reefImagesFor(group, key, kind = '', section = 'conditions') {
 }
 
 export const reefImageFor = (group, key, kind, section) => reefImagesFor(group, key, kind, section).images[0] || null;
+
+// A result's picture for the sign that led to it (Jez, Nov 6 2026 19:21: no picture of
+// something the person didn't pick). The result's own picture when it shows that sign—its
+// strongest sign, or one listed in `shows`—else the picture of the sign itself.
+export function reefResultImageFor(group, condition, sign, kind = '') {
+  const own = reefImageFor(group, condition.id, kind);
+  const weights = Object.values(condition.weights || {});
+  // `shows`, when given, is the exact list of signs the result's own picture shows (picture audit, Nov 6 2026).
+  const defining = !sign || (condition.shows ? condition.shows.includes(sign) : (condition.weights?.[sign] || 0) >= Math.max(...weights, 0));
+  return (!defining && reefImageFor(group, sign, kind, 'signs')) || own;
+}
 
 export function reefSlotsFor(group, id, kind = '') {
   const { images } = reefImagesFor(group, id, kind);
