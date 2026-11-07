@@ -1,15 +1,15 @@
 // Gold Digger: the game shell. Fixed-step simulation (sim.js) + renderer (render.js), level flow, the general store,
 // the journal of discoveries, tips, cinematics, the attract demo, the AI playthrough, scores and menus.
-import { VERSION, STEP, T, BIOMES, LEVELS, DEPTHS, UPGRADES, TYPICAL_UP, DIFFICULTY, MEDALS, RELICS, FOSSILS, WONDERS, NOTES, CREATURES, RANKS, START, STRATA, REWARDS, MAX_PERKS } from './config.js?v=11';
-import { makeWorld, step, drainEvents, cloneWorld, carryOut } from './sim.js?v=11';
-import { hash, findName } from './levelgen.js?v=11';
-import { Autopilot } from './ai.js?v=11';
-import { Renderer, pickQuality, LOOKS } from './render.js?v=11';
-import { CALM } from './fx.js?v=11';
-import { Audio } from './audio.js?v=11';
-import { Input } from './input.js?v=11';
-import { Scores, NO_POST } from './scores.js?v=11';
-import { Recorder, Replay } from './replay.js?v=11';
+import { VERSION, STEP, T, BIOMES, LEVELS, DEPTHS, UPGRADES, TYPICAL_UP, DIFFICULTY, MEDALS, RELICS, FOSSILS, WONDERS, NOTES, CREATURES, RANKS, START, STRATA, REWARDS, MAX_PERKS } from './config.js?v=12';
+import { makeWorld, step, drainEvents, cloneWorld, carryOut } from './sim.js?v=12';
+import { hash, findName } from './levelgen.js?v=12';
+import { Autopilot } from './ai.js?v=12';
+import { Renderer, pickQuality, LOOKS } from './render.js?v=12';
+import { CALM } from './fx.js?v=12';
+import { Audio } from './audio.js?v=12';
+import { Input } from './input.js?v=12';
+import { Scores, NO_POST } from './scores.js?v=12';
+import { Recorder, Replay } from './replay.js?v=12';
 
 const Q = new URLSearchParams(location.search);
 const $ = (id) => document.getElementById(id);
@@ -57,7 +57,7 @@ const I = new Input();
 const rec = new Recorder();
 const boards = {};
 const board = (endless, diff) => { const k = 'gold-digger' + (endless ? '-endless' : '') + (diff === 'normal' ? '' : '-' + diff); return boards[k] || (boards[k] = new Scores(k)); };
-const G = { state: 'title', screen: 'title', mode: 'title', W: null, run: null, acc: 0, slow: 1, slowT: 0, replay: null, clip: null, idleT: 0, demoT: 0, ap: null, paused: false, tipT: 0, findT: 0, transT: 0, levelT: 0, newMedals: [] };
+const G = { state: 'boot', screen: 'title', mode: 'title', W: null, run: null, acc: 0, slow: 1, slowT: 0, replay: null, clip: null, idleT: 0, demoT: 0, ap: null, paused: false, tipT: 0, findT: 0, transT: 0, levelT: 0, newMedals: [] };
 window.__gd = { G, R, A, I, VERSION, settings, journal };
 
 function applySettings() {
@@ -821,11 +821,12 @@ I.on('confirm', () => { const items = menuItems(); const s = items.find((b) => b
 
 // ------------------------------------------------------------------ boot
 async function boot() {
+  await R.loadDigger();
   applySettings();
   toTitle();
   checkUnlocks(true); applyLoadout();
   $('loading').style.opacity = 0; setTimeout(() => $('loading').remove(), 700);
-  if (Q.has('test')) { const T2 = await import('./tests.js?v=11'); T2.run({ G, R, startCampaign, startEndless, toTitle, tick, makeWorld, step }); return; }
+  if (Q.has('test')) { const T2 = await import('./tests.js?v=12'); T2.run({ G, R, startCampaign, startEndless, toTitle, tick, makeWorld, step }); return; }
   if (Q.has('autoplay')) startCampaign(+(Q.get('depth') || 0), { mode: 'autoplay', auto: 'demo', level: +(Q.get('level') || 0) });
   if (Q.has('playthrough')) startCampaign(+(Q.get('depth') || 0), { mode: 'playthrough', auto: 'demo', level: +(Q.get('level') || 0) });
   requestAnimationFrame(raf);

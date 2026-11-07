@@ -401,6 +401,63 @@ function buildDigger() {
   const anchor = new THREE.Object3D(); anchor.name = 'lampAnchor'; anchor.position.set(0.21, 0.215, 0); head.add(anchor);
   return K.build();
 }
+// ---- the realistic digger's gear (js/digger.js puts these on the skinned body's bones)
+// helmet: +X forward, +Y up, origin where the old head joint was (the dome sits 0.155 above it)
+function buildHelmet() {
+  const K = new Kit(), head = K.root;
+  K.add(roughen('helm', hemi(0.128, 22, 9), 0.006, 9, 2), 'gloss', C.helmet, [0, 0.155, 0], null, [1.04, 1.36, 0.98], head, { grime: 0.3, freq: 14 });
+  K.add(cyl(0.165, 0.172, 0.014, 26), 'gloss', 0x5f5939, [0, 0.152, 0], null, [1.12, 1, 1], head, { grime: 0.3, freq: 14 });
+  K.add(tor(0.133, 0.009, 26, 5), 'gloss', C.leatherDk, [0, 0.165, 0], [Math.PI / 2, 0, 0], [1.07, 1, 1], head);
+  K.add(rbox(0.2, 0.03, 0.018, 0.008), 'gloss', 0x5f5939, [0, 0.322, 0], null, 1, head);
+  K.add(tor(0.11, 0.009, 20, 5, Math.PI), 'gloss', 0x5f5939, [0, 0.16, 0], [0, 0, 0], [1.21, 1.42, 1], head);
+  K.add(rbox(0.03, 0.06, 0.05, 0.008), 'polish', C.brass, [0.135, 0.205, 0], null, 1, head);
+  K.add(cyl(0.022, 0.022, 0.055, 12), 'polish', C.brass, [0.14, 0.17, 0], null, 1, head);
+  K.add(cyl(0.026, 0.024, 0.04, 14), 'polish', C.brass, [0.158, 0.215, 0], [0, 0, Math.PI / 2], 1, head);
+  K.add(lathe('reflector', [[0.015, 0], [0.027, 0.01], [0.037, 0.022], [0.04, 0.026], [0.035, 0.026]], 18), 'polish', 0xd7b36a, [0.175, 0.215, 0], [0, 0, -Math.PI / 2], 1, head);
+  K.add(tor(0.038, 0.005, 18, 4), 'polish', C.brass, [0.2, 0.215, 0], [0, Math.PI / 2, 0], 1, head);
+  K.add(cyl(0.035, 0.035, 0.006, 18), 'lens', 0xffffff, [0.198, 0.215, 0], [0, 0, Math.PI / 2], 1, head, { own: 'lampLens' });
+  const anchor = new THREE.Object3D(); anchor.name = 'lampAnchor'; anchor.position.set(0.21, 0.215, 0); head.add(anchor);
+  return K.build();
+}
+// pickaxe: +X along the handle from the grip to the head, spike toward -Y, chisel toward +Y
+function buildPick() {
+  const K = new Kit(), pick = K.group('pick');
+  K.add(cyl(0.019, 0.022, 0.74, 10), 'rough', 0x8a6a44, [0.25, 0, 0], [0, 0, Math.PI / 2], 1, pick, { grime: 0.3, freq: 18 });
+  K.add(cyl(0.025, 0.025, 0.14, 10), 'gloss', C.leatherDk, [-0.04, 0, 0], [0, 0, Math.PI / 2], 1, pick);
+  for (let k = 0; k < 4; k++) K.add(tor(0.025, 0.004, 10, 4), 'gloss', 0x1d120b, [-0.09 + k * 0.032, 0, 0], [0, Math.PI / 2, 0], 1, pick);
+  K.add(rbox(0.07, 0.075, 0.06, 0.012), 'metal', 0x5d6168, [0.6, 0, 0], null, 1, pick);
+  K.add(cone(0.024, 0.27, 8), 'metal', C.steel, [0.62, -0.16, 0], [0, 0, Math.PI - 0.22], [1, 1, 0.85], pick);
+  K.add(cone(0.008, 0.06, 6), 'polish', 0xc8cdd2, [0.66, -0.29, 0], [0, 0, Math.PI - 0.3], 1, pick);
+  K.add(cyl(0.012, 0.03, 0.2, 4), 'metal', C.steel, [0.6, 0.13, 0], [0, Math.PI / 4, 0.12], [1, 1, 1.4], pick);
+  K.add(box(0.05, 0.012, 0.018), 'polish', 0xc8cdd2, [0.615, 0.235, 0], [0, 0, 0.12], 1, pick);
+  K.add(sph(0.012, 6, 4), 'metal', 0x3a3d42, [0.6, 0, 0.033], null, 1, pick);
+  return K.build();
+}
+// pack: +X forward (toward the wearer's back), centred on the pack
+function buildPack() {
+  const K = new Kit(), pack = K.group('pack');
+  K.add(rbox(0.15, 0.34, 0.29, 0.05), 'rough', C.canvas, [0, 0, 0], null, 1, pack);
+  K.add(rbox(0.16, 0.12, 0.3, 0.03), 'skin', 0x5d543b, [0.005, 0.13, 0], [0, 0, -0.05], 1, pack);   // (oiled leather flap: also keeps the 'skin' shader compiled from the first frame)
+  K.add(rbox(0.06, 0.13, 0.1, 0.02), 'rough', 0x5d543b, [-0.09, -0.06, 0.06], null, 1, pack);
+  for (const zz of [-0.08, 0.08]) {
+    K.add(box(0.012, 0.3, 0.03), 'gloss', C.leatherDk, [-0.078, 0, zz], null, 1, pack);
+    K.add(rbox(0.016, 0.03, 0.04, 0.005), 'metal', C.iron, [-0.084, -0.04, zz], null, 1, pack);
+  }
+  K.add(tor(0.1, 0.022, 28, 7), 'rough', C.hemp, [-0.01, -0.02, 0.165], null, 1, pack, { grime: 0.25, freq: 30 });
+  K.add(tor(0.085, 0.02, 28, 7), 'rough', 0x8f784b, [-0.01, -0.01, 0.185], [0, 0, 0.4], 1, pack, { grime: 0.25, freq: 30 });
+  K.add(tor(0.024, 0.008, 10, 5), 'rough', C.hemp, [-0.01, 0.075, 0.175], [0, Math.PI / 2, 0], 1, pack);
+  K.add(cyl(0.065, 0.065, 0.36, 14), 'rough', 0x6a3326, [-0.01, 0.22, 0], [Math.PI / 2, 0, 0], 1, pack);
+  K.add(tor(0.064, 0.008, 14, 4), 'rough', 0x37241a, [-0.01, 0.22, 0.008], [0, 0, 0], [1, 1, 1], pack);
+  for (const zz of [-0.11, 0.11]) K.add(tor(0.068, 0.009, 14, 4), 'gloss', C.leatherDk, [-0.01, 0.22, zz], null, 1, pack);
+  K.rod('rough', C.wood, [-0.1, -0.25, -0.12], [-0.11, 0.42, -0.06], 0.014, pack, 6);
+  K.add(rbox(0.07, 0.016, 0.02, 0.005), 'rough', C.wood, [-0.11, 0.43, -0.06], null, 1, pack);
+  K.add(rbox(0.012, 0.15, 0.12, 0.004), 'metal', C.steel, [-0.1, -0.3, -0.125], [0.1, 0, 0], 1, pack);
+  return K.build();
+}
+export function minerGear() {
+  const helmet = make('gearHelmet', buildHelmet), pick = make('gearPick', buildPick), pack = make('gearPack', buildPack);
+  return { helmet, pick, pack, lampLens: by(helmet, 'lampLens'), lampAnchor: by(helmet, 'lampAnchor') };
+}
 export function digger() {
   const g = make('digger', buildDigger);
   const rig = {};

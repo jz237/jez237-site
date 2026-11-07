@@ -4,13 +4,14 @@
 // re-aimed every frame at the nearest flares, fires, lanterns, crystals and lava): their number never changes,
 // so no material ever recompiles mid-game.
 import * as THREE from '../vendor/three.module.min.js';
-import { T, SOLID, PHYS, TOOLS, GEMS, BIOMES } from './config.js?v=11';
-import { Cave, rockMaterial } from './cavemesh.js?v=11';
-import { rockTextures, spriteTextures, waterTextures } from './textures.js?v=11';
-import { FX, CALM } from './fx.js?v=11';
-import { Post } from './post.js?v=11';
-import * as MD from './models.js?v=11';
-import { buildDecor, bake } from './decor.js?v=11';
+import { T, SOLID, PHYS, TOOLS, GEMS, BIOMES } from './config.js?v=12';
+import { Cave, rockMaterial } from './cavemesh.js?v=12';
+import { rockTextures, spriteTextures, waterTextures } from './textures.js?v=12';
+import { FX, CALM } from './fx.js?v=12';
+import { Post } from './post.js?v=12';
+import * as MD from './models.js?v=12';
+import { buildDecor, bake } from './decor.js?v=12';
+import { Digger, loadDiggerAsset } from './digger.js?v=12';
 
 export function pickQuality(name) {
   const mobile = matchMedia('(pointer:coarse)').matches || /Android|iPhone|iPad/i.test(navigator.userAgent);
@@ -156,6 +157,7 @@ export class Renderer {
     this.time = 0; this.shocks = [];
     this.flashScreen = new THREE.Vector4(1, 1, 1, 0);
     this.player = null;
+    this.digGltf = null;
     this.emitters = [];
     this.view = { reduced: false, shake: 1 };
   }
@@ -174,6 +176,26 @@ export class Renderer {
   flash(x, y, z, intensity, color, dur, range = 16) {
     const F = this.flashes[this.fi]; this.fi = (this.fi + 1) % this.flashes.length;
     F.l.position.set(x, y, z); F.l.color.set(color); F.l.distance = range; F.t = dur; F.max = dur; F.i0 = intensity;
+  }
+
+  // the realistic digger (a skinned, motion-captured body); the old built digger stands in if it fails to load
+  async loadDigger() {
+    try { this.digGltf = await loadDiggerAsset('assets/digger.glb?v=12'); } catch (e) { console.warn('digger asset', e); }
+  }
+  makePlayer() {
+    if (this.digGltf) {
+      const dig = new Digger(this.digGltf, MD.minerGear());
+      this.player = { root: dig.root, rig: { pick: dig.pick, lampLens: dig.lampLens, lampAnchor: dig.lampAnchor }, mats: dig.mats, dig, phase: 0, swing: 0 };
+      this.scene.add(dig.root);
+      return;
+    }
+    const d = make('digger');
+    this.player = { root: obj(d), rig: d.rig || {}, phase: 0, swing: 0 };
+    this.player.root.traverse((o) => { if (o.isMesh) { o.castShadow = true; o.receiveShadow = true; } });
+    this.scene.add(this.player.root);
+    // the materials glow red when hurt: clone so only the digger flashes
+    this.player.mats = [];
+    this.player.root.traverse((o) => { if (o.isMesh && o.material && o.material.emissive) { o.material = o.material.clone(); this.player.mats.push(o.material); } });
   }
 
   // ------------------------------------------------------------------ building a level
@@ -204,15 +226,8 @@ export class Renderer {
     this.emitters.push(...D.emitters);
     this.decor = D;
     // the digger
-    if (!this.player) {
-      const d = make('digger');
-      this.player = { root: obj(d), rig: d.rig || {}, phase: 0, swing: 0 };
-      this.player.root.traverse((o) => { if (o.isMesh) { o.castShadow = true; o.receiveShadow = true; } });
-      this.scene.add(this.player.root);
-      // the materials glow red when hurt: clone so only the digger flashes
-      this.player.mats = [];
-      this.player.root.traverse((o) => { if (o.isMesh && o.material && o.material.emissive) { o.material = o.material.clone(); this.player.mats.push(o.material); } });
-    }
+    if (!this.player) this.makePlayer();
+    if (this.loadout) this.setLoadout(this.loadout);
     // the lift cages
     this.startCage = obj(make('cage')); this.level.add(this.startCage);
     const winch = obj(make('winch')); winch.position.set(M.start.x, M.h + 0.5, -0.8); this.level.add(winch);
@@ -468,6 +483,7 @@ export class Renderer {
     }
     G.add(bake(statics));
     this.museum = { alcoves, t: 0, camX: 0 };
+    if (!this.player) this.makePlayer();
     const pl = this.player; pl.root.position.set(-3.35, 0, 0.6); pl.root.rotation.set(0, Math.PI / 2, 0); pl.root.visible = true;
     this.cam.x = 0; this.cam.y = 2; this.cam.d = 8;
   }
@@ -481,13 +497,18 @@ export class Renderer {
     Mu.camX += (A.x - Mu.camX) * (1 - Math.exp(-dt * 3));
     const cam = this.camera;
     cam.position.set(Mu.camX + Math.sin(t * 0.25) * 0.4, 2.0, 6.0); cam.lookAt(Mu.camX, 0.15, -2.4);
-    const pl = this.player, px = pl.root.position.x, want = A.x - 3.35;   // by the timber post, out of the way of the plinths
+    const pl = this.player; if (Mu.digX == null) Mu.digX = pl.root.position.x;
+    const px = Mu.digX, want = A.x - 3.35;   // by the timber post, out of the way of the plinths
     const walking = Math.abs(want - px) > 0.05;
-    pl.root.position.x += Math.max(-dt * 3.5, Math.min(dt * 3.5, want - px));
+    Mu.digX += Math.max(-dt * 3.5, Math.min(dt * 3.5, want - px)); pl.root.position.x = Mu.digX;
     pl.root.rotation.y += ((walking ? (want > px ? 0 : Math.PI) : Math.PI / 2) - pl.root.rotation.y) * Math.min(1, dt * 8);
     pl.phase += dt * (walking ? 9 : 0);
+    if (pl.dig) {
+      const nx = Mu.digX;
+      pl.dig.update(dt, { x: nx + 0.55, y: 0, z: -0.35, yaw: walking ? (want > px ? 0 : Math.PI) : 0.75, face: want > px ? 1 : -1, vx: walking ? 3.5 * Math.sign(want - px) : 0, vy: 0, ground: true, pickF: -1, throwF: -1, aim: 0 });
+    }
     const R = pl.rig, s = Math.sin(pl.phase) * (walking ? 0.6 : 0);
-    if (R.legL) { R.legL.rotation.z = s; R.legR.rotation.z = -s; R.armL.rotation.z = -s * 0.7; R.armR.rotation.z = s * 0.7; R.hips.position.y = 0.9 + Math.abs(Math.cos(pl.phase)) * 0.04 * (walking ? 1 : 0); }
+    if (!pl.dig && R.legL) { R.legL.rotation.z = s; R.legR.rotation.z = -s; R.armL.rotation.z = -s * 0.7; R.armR.rotation.z = s * 0.7; R.hips.position.y = 0.9 + Math.abs(Math.cos(pl.phase)) * 0.04 * (walking ? 1 : 0); }
     for (const al of Mu.alcoves) for (const sl of al.slots) if (sl.rel) { sl.rel.rotation.y = t * 0.5 + sl.x; sl.rel.position.y = 1.08 + Math.sin(t * 1.4 + sl.x) * 0.05; if (Math.random() < dt * 1.5) this.fx.glint(sl.x + (Math.random() - 0.5) * 0.5, 1.2 + Math.random() * 0.6, -2.0, 0.6, [1, 0.9, 0.7]); }
     // light: the lanterns (pool) and the helmet lamp as a key light on the chosen alcove
     const L = this.pool;
@@ -571,7 +592,7 @@ export class Renderer {
       case 'creak': fx.dust(e.x, e.y, z, { n: 3, s0: 0.2, s1: 0.8, life: 1, vy: -0.5, a: 0.4 }); break;
       case 'land': if (e.v > 2.5) fx.dust(e.x, e.y, z, { n: Math.min(8, Math.round(e.v)), s0: 0.3, s1: 1.4, life: 1.4, jit: 2.2, vy: 0.3, up: 0.3, a: 0.35 }); if (e.v > 5) this.kick(0.15); break;
       case 'splash': fx.splash(e.x, e.y, z, Math.min(2, e.v / 8)); break;
-      case 'hurt': this.flashScreen.set(0.9, 0.1, 0.05, CALM.on ? 0.12 : 0.25); this.shake(0.45); this.player.hurtT = 0.35; break;
+      case 'hurt': this.flashScreen.set(0.9, 0.1, 0.05, CALM.on ? 0.12 : 0.25); this.shake(0.45); this.player.hurtT = 0.35; this.player.hurtNow = true; break;
       case 'helmet': fx.sparks(e.x, e.y, z + 0.4, { n: 14, speed: 5, g: 0.9 }); this.shake(0.3); break;
       case 'death': this.shake(0.6); fx.dust(e.x, e.y, z, { n: 10, life: 2.5 }); break;
       case 'gold': for (let i = 0; i < 3; i++) fx.glint(e.x + (Math.random() - 0.5) * 0.4, e.y + 0.3 + Math.random() * 0.4, z + 0.6, 0.6); fx.sparks(e.x, e.y + 0.3, z, { n: 6, speed: 2.5, grav: 3, s: 0.1, g: 0.85, b: 0.4 }); break;
@@ -651,8 +672,23 @@ export class Renderer {
   animPlayer(W, P, dt) {
     const pl = this.player, R = pl.rig, root = pl.root;
     root.visible = !P.inCage || W.cage.y < W.M.start.y + 9;
-    root.position.set(P.x, P.y, 0);
     const climb = P.state === 'climb';
+    if (pl.dig) {
+      const M = W.M, tx = Math.floor(P.x), ty = Math.floor(P.y + 0.9);
+      const rope = M.tiles[ty * M.w + tx] === T.ROPE || M.tiles[Math.floor(P.y + 0.2) * M.w + tx] === T.ROPE;
+      pl.dig.update(dt, {
+        x: P.x, y: P.y, face: P.face, vx: P.vx, vy: P.vy, ground: !!P.ground, climb, rope, swim: !!P.inWater, dead: !!P.dead, cage: !!P.inCage,
+        pickF: P.pickT > 0 ? 1 - P.pickT / PHYS.pickT : -1, aim: P.pickAim || 0, throwF: P.throwT > 0 ? 1 - P.throwT / PHYS.throwT : -1,
+        hurt: !!pl.hurtNow, ladderX: tx + 0.5,
+      });
+      pl.hurtNow = false;
+    } else this.animOld(W, P, dt, climb);
+    this.animPlayerTail(W, P, dt, climb);
+  }
+
+  animOld(W, P, dt, climb) {
+    const pl = this.player, R = pl.rig, root = pl.root;
+    root.position.set(P.x, P.y, 0);
     // facing: left/right, or the back to the camera on a ladder
     const wantYaw = climb ? -Math.PI / 2 : (P.face > 0 ? 0 : Math.PI);
     let dy = wantYaw - root.rotation.y; while (dy > Math.PI) dy -= Math.PI * 2; while (dy < -Math.PI) dy += Math.PI * 2;
@@ -701,6 +737,10 @@ export class Renderer {
     set(R.torso, 0, 0, torso); set(R.head, 0, 0, head);
     set(R.legL, 0, 0, legL); set(R.legR, 0, 0, legR); set(R.shinL, 0, 0, shinL); set(R.shinR, 0, 0, shinR);
     set(R.armL, 0, 0, armL); set(R.armR, 0, 0, armR); set(R.foreL, 0, 0, foreL); set(R.foreR, 0, 0, foreR);
+  }
+
+  animPlayerTail(W, P, dt, climb) {
+    const pl = this.player, R = pl.rig, root = pl.root;
     // hurt flash and invulnerability blink
     pl.hurtT = Math.max(0, (pl.hurtT || 0) - dt);
     const blink = P.inv > 0 && !P.dead && Math.sin(this.time * 30) > 0;
