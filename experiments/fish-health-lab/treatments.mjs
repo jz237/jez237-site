@@ -54,7 +54,7 @@ const PLANS = {
     ],
     marine: { steps: ['Test ammonia, nitrite, pH and salinity now.', 'Do a 30–50% water change with new saltwater mixed to the same salinity and temperature as the tank. Repeat daily until ammonia and nitrite read zero.', 'Add aeration—an air stone, or point a pump or the return at the surface.', 'If ammonia or nitrite reads above zero, add a detoxifier that binds them (also medicating? check the medicine label says the two can be used together), and feed lightly for a few days.'] },
     treatment: 'Water changes, more oxygen, and a detoxifier if ammonia or nitrite shows',
-    recovery: 'Breathing often improves within hours; burned gills heal in 1–2 weeks.',
+    recovery: 'Fish usually perk up within hours to a day once the water is fixed; burned gills heal in 1–2 weeks.',
   },
   'ich-fresh': {
     steps: [

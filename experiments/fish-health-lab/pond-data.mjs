@@ -45,6 +45,10 @@ export const POND_CONDITIONS = [
     weights: { worm: 7, 'red-streaks': 1, ulcer: 1, flashing: 1 },
     changes: { 'new-fish': 3, spring: 1 },
     check: 'A thin thread sticking out of a red spot is anchor worm—very common after adding new pond fish.',
+    // Wording when a different sign led here (Nov 6 2026 combination sweep).
+    checks: { "unclear": "Fish that hide and act jumpy after a heron, raccoon or cat has been around are often being hunted—count the fish and check for stab marks." },
+    // Signs its own picture already shows; any other sign leads with that sign's picture.
+    shows: ["unclear"],
     clues: ['Thin whitish-green threads about 1 cm long, often with two egg sacs at the end.', 'A red, swollen spot where each one goes in.'],
     distinguish: 'Flat, round bugs that move are fish lice. Fluffy tufts are fungus.',
     avoid: 'Don’t yank them out—hold the fish, pull gently from the base with tweezers, and dab the spot.',
@@ -86,6 +90,10 @@ export const POND_CONDITIONS = [
     weights: { flashing: 6, unclear: 3, gasping: 2, lethargic: 1 },
     changes: { 'new-fish': 3, spring: 2 },
     check: 'Fish rubbing, jumping or looking slimy with nothing visible on them usually have flukes or other tiny skin parasites.',
+    // Wording when a different sign led here (Nov 6 2026 combination sweep).
+    checks: { "unclear": "Pond fish that seem off after new fish went in very often have flukes or other tiny skin parasites you can’t see—watch for rubbing or flashing." },
+    // Signs its own picture already shows; any other sign leads with that sign's picture.
+    shows: ["unclear"],
     clues: ['Flashing and scraping on stones, sudden darting or jumping.', 'Dull, grey, extra-slimy skin; fins clamped.'],
     distinguish: 'If you can see bugs on the skin, it’s lice. White dots are white spot.',
     avoid: 'Don’t guess the dose—know your pond volume before adding any treatment.',
@@ -106,6 +114,8 @@ export const POND_CONDITIONS = [
     weights: { gasping: 7, lethargic: 1, unclear: 1 },
     changes: { heat: 4, pump: 4, 'top-up': 1 },
     check: 'Fish gasping at the surface, especially on a hot night or with the pump off, is low oxygen.',
+    // Wording when a different sign led here (Nov 6 2026 combination sweep).
+    checks: { "lethargic": "In hot weather, fish that hang still or sit low are often short of oxygen—warm water holds less.", "unclear": "In hot weather, fish that just seem off are often short of oxygen—warm water holds less." },
     clues: ['Many fish at the surface at once, often early morning.', 'Hot, still weather, green water, or the pump or waterfall off.'],
     distinguish: 'One fish gasping while the others are fine points to gills—flukes or poor water.',
     avoid: 'Don’t wait for morning—add air now.',
@@ -116,6 +126,8 @@ export const POND_CONDITIONS = [
     weights: { unclear: 4, gasping: 3, 'red-streaks': 3, lethargic: 3, flashing: 1 },
     changes: { spring: 3, pump: 3, 'new-fish': 1 },
     check: 'Several fish hanging listless, clamped or red-finned usually points to the water—test ammonia and nitrite first.',
+    // Signs its own picture already shows; any other sign leads with that sign's picture.
+    shows: ["lethargic"],
     clues: ['Several fish off at once.', 'Spring start-up, a filter that was cleaned or stopped, lots of fish or heavy feeding.'],
     distinguish: 'Trouble right after a big top-up or storm points to a water swing. Gasping on hot nights is oxygen.',
     avoid: 'Don’t clean the filter media under the tap—rinse it in pond water so the good bacteria survive.',
@@ -126,6 +138,8 @@ export const POND_CONDITIONS = [
     weights: { gasping: 3, unclear: 3, lethargic: 2, flashing: 2, 'red-streaks': 1 },
     changes: { 'top-up': 6 },
     check: 'Fish acting strange right after a big top-up or a storm is a water swing—chlorine or a pH crash.',
+    // Signs its own picture already shows; any other sign leads with that sign's picture.
+    shows: ["flashing"],
     clues: ['Started within hours of topping up with the hose, or after heavy rain.', 'Fish darting, gasping or hanging still.'],
     distinguish: 'Slow trouble over days points to poor water. Gasping on hot nights is oxygen.',
     avoid: 'Don’t top up more than about 10% at a time without a dechlorinator.',
@@ -165,6 +179,8 @@ export const POND_CONDITIONS = [
     weights: { 'sunken-eyes': 7, gasping: 2, lethargic: 2, unclear: 1 },
     changes: { 'new-fish': 4, spring: 1 },
     check: 'Koi with sunken eyes and white-blotched gills, dying fast after new fish went in, may be KHV.',
+    // Wording when a different sign led here (Nov 6 2026 combination sweep).
+    checks: { "lethargic": "Koi sitting on the bottom soon after new fish went in can be KHV—look for sunken eyes and blotchy pale gills." },
     clues: ['Sunken eyes, pale or white-blotched gills, rough sandpaper skin.', 'Several koi sick or dying within days, often 1–3 weeks after new koi.'],
     distinguish: 'Gasping with healthy-looking gills on a hot night is low oxygen. Pale gills alone can be flukes.',
     avoid: 'Don’t move fish or water to another pond, and don’t sell or give fish away—call a koi vet today.',
@@ -197,6 +213,10 @@ export const POND_CONDITIONS = [
     weights: { lethargic: 2, unclear: 1 },
     changes: { cold: 5 },
     check: 'Fish resting on the bottom in cold water is normal winter behaviour.',
+    // Wording when a different sign led here (Nov 6 2026 combination sweep).
+    checks: { "unclear": "Pond fish that slow down and seem off in cold water are usually just going into their normal winter rest." },
+    // Signs its own picture already shows; any other sign leads with that sign's picture.
+    shows: ["unclear", "lethargic"],
     clues: ['Water under about 50 °F (10 °C).', 'All the fish together, looking healthy, just slow.'],
     distinguish: 'One fish alone with clamped fins or red marks, or any fish in warm water, is not normal.',
     avoid: 'Don’t feed protein food in cold water—stop feeding below about 50 °F (10 °C).',

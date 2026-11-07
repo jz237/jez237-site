@@ -106,7 +106,8 @@ try {
     await toResult('fresh', fish, sign, opts);
     assert.equal(await page.locator('.result-focus').getAttribute('data-result'), expected, `${fish} result`);
     assert.equal(await page.locator('.result-focus .result-image img').getAttribute('data-image-set'), fish);
-    assert.equal(await page.locator('.result-focus .result-image img').getAttribute('src'), expectedUrl(gallery[0]));
+    // "Nothing obvious" leads with the calm no-marks picture, not the gasping one (Nov 6 combination sweep).
+    assert.equal(await page.locator('.result-focus .result-image img').getAttribute('src'), expectedUrl(sign === 'unclear' ? FISH_SETS[fish].signs.unclear : gallery[0]));
     const alts = await page.locator('.could-also .alternative').evaluateAll(list => list.map(el => [el.dataset.alternative, el.querySelector('img').dataset.imageSet]));
     assert.ok(alts.length, `${fish}: no could-also cards`);
     for (const [id, set] of alts) assert.equal(set, setFor(fish, id), `${fish} could-also ${id}`);

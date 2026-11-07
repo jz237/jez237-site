@@ -107,6 +107,8 @@ export const REEF_CONDITIONS = [
     weights: { closed: 4, peeling: 4, unclear: 4, bleach: 2, 'zoa-melt': 2, browning: 1, anemone: 1, creeping: 1, pastel: 1 },
     changes: { alk: 4, dosing: 4 },
     check: 'Corals closing or losing flesh with no pest in sight often comes down to an alkalinity swing.',
+    // Wording when a different sign led here (Nov 6 2026 combination sweep).
+    checks: { "unclear": "Corals that just look off with no pest in sight often come down to an alkalinity swing." },
     clues: ['Several corals look unhappy at once.', 'A missed or doubled dose, an empty dosing container or a new salt mix.'],
     distinguish: 'A single coral with pests on it, or white flesh after a heat spike, points somewhere else. A test kit settles it.',
     avoid: 'Don’t fix a low reading in one go—change alkalinity by no more than 1 dKH a day.',
@@ -168,6 +170,8 @@ export const REEF_CONDITIONS = [
     weights: { bleach: 4, closed: 3, 'zoa-melt': 2, anemone: 2, unclear: 1, pastel: 2, blasted: 1 },
     changes: { light: 4, 'new-coral': 4 },
     check: 'Pale or white tops after a new light, a move or a new coral usually mean too much light.',
+    // Wording when a different sign led here (Nov 6 2026 combination sweep).
+    checks: { "closed": "A coral that stays shut after a new light, a move or a new coral is often getting too much light at first.", "unclear": "A coral that looks a bit off after a new light, a move or a new coral is often adjusting to too much light." },
     clues: ['Pale on top, normal color underneath or in the shade.', 'Started after a new light, a move or adding the coral.'],
     distinguish: 'Bleaching from heat whitens the whole coral. Brown color is the opposite—too little light or extra nutrients.',
     avoid: 'Don’t move it around every day—pick a lower spot and leave it.',
@@ -199,6 +203,8 @@ export const REEF_CONDITIONS = [
     kindBoost: { sps: 2 },
     changes: { 'new-coral': 2 },
     check: 'Flat tan ovals and half-moon bite marks on an acropora are flatworms (AEFW).',
+    // Signs its own picture already shows; any other sign leads with that sign's picture.
+    shows: ["bites"],
     clues: ['Flat, tan, almost invisible ovals on the branches.', 'Half-moon bite marks and egg clusters on bare skeleton.'],
     distinguish: 'Red bugs are tiny red specks. Montipora nudibranchs are on montipora, not acropora.',
     avoid: 'Never treat pests in the display—dip the coral in a separate container.',
@@ -219,6 +225,8 @@ export const REEF_CONDITIONS = [
     weights: { 'zoa-melt': 6, slugs: 4, bites: 3, closed: 2 },
     changes: { 'new-coral': 2 },
     check: 'Melting or pocked zoas usually mean zoa pox or a pest like zoa spiders.',
+    // Wording when a different sign led here (Nov 6 2026 combination sweep).
+    checks: { "slugs": "Small slugs or white egg spirals on zoas are zoa-eating nudibranchs—one of the common zoa pests." },
     clues: ['White pimple-like bumps on the polyps (pox).', 'Tiny spiders or slugs on the colony at night.'],
     distinguish: 'A whole tank of zoas closing at once points to the water or the light.',
     avoid: 'Never treat pests in the display—dip the coral in a separate container.',
@@ -239,6 +247,8 @@ export const REEF_CONDITIONS = [
     kindBoost: { anemone: 2 },
     changes: { light: 2, 'new-coral': 2 },
     check: 'An anemone that wanders, shrinks or spits food is stressed—usually light, flow or settling in.',
+    // Wording when a different sign led here (Nov 6 2026 combination sweep).
+    checks: { "unclear": "An anemone that just looks off is most often stressed by its light or flow, or is still settling in." },
     clues: ['Moves around the tank or hides under rock.', 'Shrinks, deflates or spits food out.'],
     distinguish: 'A white anemone is bleaching. Anemones deflate now and then to exchange water—that’s normal if it reinflates.',
     avoid: 'Don’t pull it off the rock, and cover pump intakes so it can’t get sucked in.',
@@ -249,6 +259,8 @@ export const REEF_CONDITIONS = [
     weights: { bites: 5, closed: 1, 'zoa-melt': 1, blasted: 1 },
     changes: { 'new-livestock': 4 },
     check: 'Chewed edges and missing bits usually mean something is picking at it.',
+    // Wording when a different sign led here (Nov 6 2026 combination sweep).
+    checks: { "closed": "A coral that stays shut after a new fish or crab went in is often being picked at—watch it around feeding time." },
     clues: ['Ragged, chewed edges or missing polyps.', 'Often after adding a new fish (angelfish, butterflyfish) or crab.'],
     distinguish: 'Half-moon bites on acropora point to flatworms. Slugs on montipora point to nudibranchs.',
     avoid: 'Don’t add more fish until you know who’s nibbling.',
@@ -282,6 +294,8 @@ export const REEF_CONDITIONS = [
     weights: { deaths: 12, spines: 3, 'not-moving': 2, pale: 2, color: 1 },
     changes: { medicine: 6 },
     check: 'Inverts dying soon after a medicine or copper went in is poisoning.',
+    // Wording when a different sign led here (Nov 6 2026 combination sweep).
+    checks: { "color": "Inverts that fade, go pale, stop moving or drop spines soon after a medicine or copper went in are being poisoned—most fish medicines are toxic to them.", "pale": "Inverts that fade, go pale, stop moving or drop spines soon after a medicine or copper went in are being poisoned—most fish medicines are toxic to them.", "not-moving": "Inverts that fade, go pale, stop moving or drop spines soon after a medicine or copper went in are being poisoned—most fish medicines are toxic to them.", "spines": "Inverts that fade, go pale, stop moving or drop spines soon after a medicine or copper went in are being poisoned—most fish medicines are toxic to them." },
     clues: ['Deaths within hours or days of dosing.', 'Several kinds of inverts affected at once.'],
     distinguish: 'Deaths after adding new animals point to acclimation shock. Many deaths with gasping fish point to oxygen.',
     avoid: 'Never dose copper or fish medicine in a tank with inverts.',
@@ -301,7 +315,7 @@ export const REEF_CONDITIONS = [
     summary: 'Low oxygen, ammonia or rotting food hits inverts fast. Something dead in the rock can crash the water.',
     weights: { pale: 3, deaths: 4, spines: 4, 'not-moving': 4, color: 2, unclear: 3 },
     changes: { 'water-change': 2 },
-    check: 'A pale, still or dying invert with no recent changes often points to low oxygen or poor water.',
+    check: 'A pale, still or struggling invert often points to low oxygen or poor water—test the water first.',
     clues: ['Several animals struggling, fish breathing fast too.', 'A pump or skimmer off, or something dead in the tank.'],
     distinguish: 'Deaths right after dosing point to medicine; right after adding it, to acclimation.',
     avoid: 'Don’t add medicine or new animals until the water tests clean.',

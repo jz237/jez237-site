@@ -174,13 +174,24 @@ export function urgencyFor(condition, input) {
   return condition.urgency || 'week';
 }
 
+// The "why" sentence follows the answer that led here: the first matching answer (exact,
+// then its base sign) with its own wording, else the condition's usual sentence.
+export function checkFor(condition, fits, signs = []) {
+  const own = condition.checks || {};
+  // An answer plus a behavior ("unclear+rubbing") wins over the answer alone.
+  for (const f of fits) for (const b of signs) if (own[`${f}+${b}`]) return own[`${f}+${b}`];
+  for (const f of fits) if (own[f]) return own[f];
+  for (const f of fits) if (own[f.split(':')[0]]) return own[f.split(':')[0]];
+  return condition.check;
+}
+
 function reasonFor(condition, input, fits) {
   const fish = fishTypeFor(input.water, input.fishType);
   const seen = fits.map(id => labelFor(id, input)).join(' + ');
   const behaviors = (input.signs || []).filter(id => BEHAVIORS.some(b => b.id === id) && (weightsFor(condition, input.water)[id] || 0) > 0).map(id => labelFor(id, input).toLowerCase());
   return [
     `You picked “${seen}”${behaviors.length ? `, plus ${behaviors.join(', ')}` : ''}.`,
-    condition.id === 'bloat' && CATFISH.includes(input.fishType) ? 'A full, soft belly in a cory or pleco is most often bloat or constipation.' : condition.id === 'dropsy' && CATFISH.includes(input.fishType) ? 'A tight, stiff swelling all over is how dropsy shows in corys and plecos—they have no scales to stick out.' : condition.check,
+    condition.id === 'bloat' && CATFISH.includes(input.fishType) ? 'A full, soft belly in a cory or pleco is most often bloat or constipation.' : condition.id === 'dropsy' && CATFISH.includes(input.fishType) ? 'A tight, stiff swelling all over is how dropsy shows in corys and plecos—they have no scales to stick out.' : checkFor(condition, fits, input.signs || []),
     fish?.boosts[condition.id] ? `It’s also common in ${fish.plural}.` : '',
     condition.id === 'bloat' && input.fishType === 'african' ? 'In African cichlids (mbuna, peacocks), swelling—especially with no appetite or white, stringy poop—is often Malawi bloat, which needs treating today. In oscars it’s more often overeating or a blockage.' : '',
   ].filter(Boolean).join(' ');
@@ -188,13 +199,18 @@ function reasonFor(condition, input, fits) {
 
 // "Nothing obvious" leads to the water as the first check. Its usual wording is about fast breathing
 // and red gills, which the person did not report (Jez, Nov 6 19:13 screenshot), so say why instead.
-const WATER_ALARMS = ['red-gills', 'gasping', 'several', 'deaths', 'collapse'];
+// Gasping or red gills keep the usual breathing wording, which then fits.
+const GILL_SIGNS = ['red-gills', 'gasping'], MANY_SIGNS = ['several', 'deaths', 'collapse'];
 function quietWater(condition, input, fits) {
-  if (condition.id !== 'water' || !fits.length || fits.some(f => f.split(':')[0] !== 'unclear') || WATER_ALARMS.some(id => (input.signs || []).includes(id))) return null;
-  const behaviors = (input.signs || []).filter(id => BEHAVIORS.some(b => b.id === id) && id !== 'unclear').map(id => labelFor(id, input).toLowerCase());
+  const signs = input.signs || [];
+  if (condition.id !== 'water' || !fits.length || fits.some(f => f.split(':')[0] !== 'unclear') || GILL_SIGNS.some(id => signs.includes(id))) return null;
+  const behaviors = signs.filter(id => BEHAVIORS.some(b => b.id === id) && id !== 'unclear').map(id => labelFor(id, input).toLowerCase());
+  const many = MANY_SIGNS.some(id => signs.includes(id));
   return {
     summary: 'When a fish is off but nothing shows on it, the water is the most common cause—and the quickest thing to check.',
-    reason: `You picked “Nothing obvious”${behaviors.length ? `, plus ${behaviors.join(', ')}` : ''}. With nothing to see on the fish, bad water—ammonia, nitrite, low oxygen or a temperature swing—is the most likely cause, and it often shows as ${behaviors.length ? 'this kind of change' : 'hiding or not eating'} before anything else. A quick test rules it in or out before you think about disease.`,
+    reason: `You picked “Nothing obvious”${behaviors.length ? `, plus ${behaviors.join(', ')}` : ''}. ${many
+      ? 'When several fish go downhill at once with nothing to see on them, bad water—ammonia, nitrite, low oxygen or a temperature swing—is by far the most likely cause. Test it now.'
+      : `With nothing to see on the fish, bad water—ammonia, nitrite, low oxygen or a temperature swing—is the most likely cause, and it often shows as ${behaviors.length ? 'this kind of change' : 'hiding or not eating'} before anything else. A quick test rules it in or out before you think about disease.`}`,
   };
 }
 

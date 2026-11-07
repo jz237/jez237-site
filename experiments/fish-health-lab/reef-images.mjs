@@ -204,6 +204,16 @@ export function reefImagesFor(group, key, kind = '', section = 'conditions') {
 
 export const reefImageFor = (group, key, kind, section) => reefImagesFor(group, key, kind, section).images[0] || null;
 
+// A result's picture for the sign that led to it (Jez, Nov 6 2026 19:21: no picture of
+// something the person didn't pick). The result's own picture when it shows that sign—its
+// strongest sign, or one listed in `shows`—else the picture of the sign itself.
+export function reefResultImageFor(group, condition, sign, kind = '') {
+  const own = reefImageFor(group, condition.id, kind);
+  const weights = Object.values(condition.weights || {});
+  const defining = !sign || (condition.weights?.[sign] || 0) >= Math.max(...weights, 0) || (condition.shows || []).includes(sign);
+  return (!defining && reefImageFor(group, sign, kind, 'signs')) || own;
+}
+
 export function reefSlotsFor(group, id, kind = '') {
   const { images } = reefImagesFor(group, id, kind);
   return REEF_SLOTS.map((slot, i) => ({ ...slot, image: images[i] || null }));

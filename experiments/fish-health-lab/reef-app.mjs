@@ -5,7 +5,7 @@ import { REEF_GROUPS, REEF_KINDS, REEF_CHANGES, REEF_CONDITIONS, REEF_LOOKALIKES
 import { REEF_LIB_INFO, ZONES, fishMap, closeupsFor } from './library-visuals.mjs';
 import { STEP_TAGS, INVERT_WARNING, reefPlanFor } from './reef-care.mjs';
 import { assessReef, reefSignsFor, reefKindFor, reefConditionFor, ALTERNATIVE_TEXT } from './reef-logic.mjs';
-import { reefImageFor, reefSlotsFor } from './reef-images.mjs';
+import { reefImageFor, reefResultImageFor, reefSlotsFor } from './reef-images.mjs';
 import { scienceLine } from './science.mjs';
 import { shopLinkFor, shopLinkHtml } from './shop-links.mjs';
 
@@ -89,14 +89,14 @@ export function createReef({ $, $$, escape, goStep, badge, autoAdvance, switchVi
 
   function alternativeCard(c) {
     const notes = [c.moreUrgent ? `<b class="alt-danger">${escape(ALTERNATIVE_TEXT.danger)}</b>` : '', c.treatmentNote === 'different' ? `<span class="alt-treatment">Different fix — check first</span>` : ''].filter(Boolean);
-    return `<div class="alternative" data-reef-alternative="${c.id}" data-more-urgent="${c.moreUrgent}"><button type="button" class="alt-pick" data-reef-choose="${c.id}" aria-label="This looks more like mine: ${escape(c.title)}">${picture(reefImageFor(state.group, c.id, state.kind), groupIcon(state.group, state.kind), { label: '', cls: 'reef-ph-thumb' })}<span class="alt-text"><strong>${escape(c.title)}</strong><small class="alt-check">${escape(c.comparisonReason)}</small>${notes.length ? `<small class="alt-note">${notes.join('')}</small>` : ''}</span></button><button type="button" class="alt-compare" data-reef-compare="${c.id}">Compare</button></div>`;
+    return `<div class="alternative" data-reef-alternative="${c.id}" data-more-urgent="${c.moreUrgent}"><button type="button" class="alt-pick" data-reef-choose="${c.id}" aria-label="This looks more like mine: ${escape(c.title)}">${picture(reefImageFor(state.group, c.id, state.kind), groupIcon(state.group, state.kind), { label: '', cls: 'reef-ph-thumb' })}<span class="alt-text"><strong>${escape(c.title)}</strong>${c.whyAlso ? `<small class="alt-why"><b>Why it could be this:</b> ${escape(c.whyAlso)}</small>` : ''}<small class="alt-check"><b>How to tell:</b> ${escape(c.comparisonReason)}</small>${notes.length ? `<small class="alt-note">${notes.join('')}</small>` : ''}</span></button><button type="button" class="alt-compare" data-reef-compare="${c.id}">Compare</button></div>`;
   }
 
   function renderResults() {
     const result = assessReef(input()), first = result.primary;
     const kind = reefKindFor(state.group, state.kind);
     const where = kind?.title || groupInfo()?.title || '';
-    const hero = first ? picture(reefImageFor(state.group, first.id, state.kind), groupIcon(state.group, state.kind)) : '';
+    const hero = first ? picture(first.chosen ? reefImageFor(state.group, first.id, state.kind) : reefResultImageFor(state.group, first, state.sign, state.kind), groupIcon(state.group, state.kind)) : '';
     const focus = first ? `<article class="result-focus reef-result" data-reef-result="${first.id}" data-urgency="${first.urgencyLevel}"><div class="result-head">${badge(first.urgencyLevel)}<p class="result-summary">${escape(first.summary)}</p></div><button type="button" class="result-image" data-reef-condition="${first.id}" aria-label="More about ${escape(first.title)}">${hero}<span>More info ↗</span></button><div class="diagnosis-reason"><strong>Why we think so</strong><p>${escape(first.reason)}</p></div>${todoCard(first)}</article>` : '<section class="notice no-diagnosis"><h2>Not enough to go on yet.</h2><p>Try the closest picture again, and test your water.</p></section>';
     const cards = result.alternatives.map(alternativeCard).join('');
     const natural = result.naturalNote ? `<p class="natural-note">${escape(result.naturalNote)}</p>` : '';

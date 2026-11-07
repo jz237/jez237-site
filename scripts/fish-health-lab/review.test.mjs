@@ -288,5 +288,51 @@ test('J2: the water guess from "Nothing obvious" explains itself without unpicke
   }
   // Real breathing or red-gill answers keep the breathing explanation.
   assert.match(assessDiagnosis({ water: 'fresh', primarySign: 'breathing', signs: ['breathing'] }).primary.reason, /Fast breathing/);
-  assert.match(assessDiagnosis({ water: 'fresh', primarySign: 'unclear', signs: ['unclear', 'red-gills'] }).primary.summary, /breathe fast/);
+  assert.match(assessDiagnosis({ water: 'fresh', primarySign: 'unclear', signs: ['unclear', 'red-gills'] }).primary.reason, /red gills/);
+});
+
+// Jez, Nov 6 19:21: "check all the combinations so that this type of mismatch does not occur".
+test('J3: results never explain or picture a sign that was not picked', async () => {
+  const { SYMPTOMS, BEHAVIORS, FISH_TYPES } = await import('../../experiments/fish-health-lab/data.mjs');
+  const { imagesFor } = await import('../../experiments/fish-health-lab/fish-images.mjs');
+  const { signImagesFor } = await import('../../experiments/fish-health-lab/choice-images.mjs');
+  const breathingWords = /fast breathing|breathe fast|fast gills/i;
+  for (const water of ['fresh', 'marine']) for (const fishType of ['', ...FISH_TYPES[water].map(f => f.id)]) for (const sign of SYMPTOMS.map(s => s.id))
+    for (const behavior of ['', ...BEHAVIORS.map(b => b.id)]) {
+      const signs = [sign, ...(behavior ? [behavior] : [])];
+      const d = assessDiagnosis({ water, fishType, primarySign: sign, visualSigns: [sign], signs });
+      for (const c of d.findings) {
+        const said = c.reason.replace(/^You (picked|said)[^.]*\.\s*/, '');
+        if (breathingWords.test(said) && !/—|especially|even before|easy to miss|watch for|check for|look for/.test(said.slice(0, said.search(breathingWords)).split(/[.]/).pop()))
+          assert.ok(['breathing', 'gasping', 'red-gills'].some(s => signs.includes(s)) || c.fits.some(f => f.startsWith('patch')), `${water} ${fishType} ${signs} → ${c.id}: ${said}`);
+      }
+      // "Nothing obvious" leading to the water shows the calm, no-marks picture of what was picked.
+      if (sign === 'unclear' && d.primary?.id === 'water' && !['gasping', 'red-gills'].includes(behavior)) {
+        const pic = imagesFor(fishType, 'water', water, [...d.primary.fits, ...(behavior ? [behavior] : [])]).images[0];
+        assert.doesNotMatch(pic.alt, /gasp|breathing hard|gills flared/i, `${water} ${fishType} ${behavior}`);
+        if (!fishType) assert.equal(pic.url, signImagesFor(water).unclear.url);
+      }
+    }
+});
+
+test('J4: coral, invert and pond results picture and explain the sign that led there', async () => {
+  const { assessReef, reefSignsFor } = await import('../../experiments/fish-health-lab/reef-logic.mjs');
+  const { REEF_KINDS, REEF_CHANGES } = await import('../../experiments/fish-health-lab/reef-data.mjs');
+  const { reefResultImageFor, reefImageFor } = await import('../../experiments/fish-health-lab/reef-images.mjs');
+  const pondHot = assessReef({ group: 'pond', kind: 'koi', sign: 'lethargic', changes: ['heat'], chosen: [] });
+  assert.equal(pondHot.primary.id, 'pond-low-oxygen');
+  assert.doesNotMatch(pondHot.primary.reason, /gasping/i);
+  assert.doesNotMatch(reefResultImageFor('pond', pondHot.primary, 'lethargic', 'koi').alt, /surface|gasp/i);
+  const shrimp = assessReef({ group: 'invert', kind: 'shrimp', sign: 'color', changes: ['medicine'], chosen: [] });
+  assert.doesNotMatch(shrimp.primary.reason, /dying/i);
+  assert.equal(reefResultImageFor('invert', shrimp.primary, 'color', 'shrimp').alt, reefImageFor('invert', 'color', 'shrimp', 'signs').alt);
+  // Every result: the explanation names the picked sign's own wording when it has one, and every look-alike explains itself.
+  for (const group of ['coral', 'invert', 'pond']) for (const kind of ['', ...(REEF_KINDS[group] || []).map(k => k.id)]) for (const s of reefSignsFor(group, kind))
+    for (const changes of [[], ...(REEF_CHANGES[group] || []).map(c => [c.id])]) {
+      const r = assessReef({ group, kind, sign: s.id, changes, chosen: [] });
+      if (!r.primary) continue;
+      if (r.primary.checks?.[s.id]) assert.ok(r.primary.reason.includes(r.primary.checks[s.id]));
+      for (const a of r.alternatives) assert.ok(a.whyAlso && a.whyAlso.length > 20, `${group} ${s.id} ${a.id}`);
+      assert.ok(reefResultImageFor(group, r.primary, s.id, kind) || !reefImageFor(group, r.primary.id, kind));
+    }
 });

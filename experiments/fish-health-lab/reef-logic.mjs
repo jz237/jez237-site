@@ -48,7 +48,7 @@ function decorate(condition, input, extra = {}) {
   return {
     ...condition,
     urgencyLevel: URGENCY[sign?.urgency]?.rank > URGENCY[condition.urgency].rank ? sign.urgency : condition.urgency,
-    reason: extra.reason || [`You picked “${sign?.title || input.sign}”${changes.length ? `, plus ${changes.join(', ')}` : ''}.`, condition.check].join(' '),
+    reason: extra.reason || [`You picked “${sign?.title || input.sign}”${changes.length ? `, plus ${changes.join(', ')}` : ''}.`, condition.checks?.[input.sign] || condition.check].join(' '),
     plan: reefPlanFor(condition.id),
     ...extra,
   };
@@ -58,6 +58,18 @@ export function reefTreatmentNote(a, b) {
   const fa = REEF_TREATMENT_FAMILY[a], fb = REEF_TREATMENT_FAMILY[b];
   if (!fa || !fb || fa === 'none' || fb === 'none') return '';
   return fa === fb ? 'same' : 'different';
+}
+
+// "Why it could be this" on a look-alike (Jez, Nov 6 2026 19:05): which answers it also fits.
+function reefAlsoReason(condition, top, input) {
+  const sign = reefSignFor(input.group, input.sign);
+  const changes = (REEF_CHANGES[input.group] || []).filter(c => input.changes?.includes(c.id) && condition.changes?.[c.id]).map(c => c.title.toLowerCase());
+  const like = top.title.replace(/\s*\(.*\)$/, '').toLowerCase();
+  const fits = sign && (condition.weights?.[input.sign] || 0) > 0
+    ? `“${sign.title}” fits this too${changes.length ? `, and so does ${changes.join(', ')}` : ''}.`
+    : `It can look a lot like ${like}${changes.length ? `, and ${changes.join(', ')} fits it too` : ''}.`;
+  const what = (condition.summary || '').match(/^[^.!?]*[.!?]/)?.[0] || '';
+  return [fits, what].filter(Boolean).join(' ');
 }
 
 function couldAlsoBe(top, ranked, input, pinned = null) {
@@ -80,7 +92,7 @@ function couldAlsoBe(top, ranked, input, pinned = null) {
   for (const [id, reason, , note] of curated) { if (id) add(reefConditionFor(id), reason); else if (calm) natural ||= note; }
   for (const other of runnersUp) add(other, reasons.get(other.id));
   const alternatives = [...out.values()].slice(0, MAX_REEF_ALTERNATIVES).map(c => ({
-    ...c, urgencyLevel: c.urgency,
+    ...c, urgencyLevel: c.urgency, whyAlso: reefAlsoReason(c, top, input),
     moreUrgent: URGENCY[c.urgency].rank > URGENCY[top.urgencyLevel].rank,
     treatmentNote: reefTreatmentNote(c.id, top.id),
   }));

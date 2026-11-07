@@ -248,7 +248,8 @@ try {
       ['crab', 'molt-stuck', [], /Failed molt/, 'cond-crab-failed-molt', '9-invert-result-crab-molt'],
       ['', 'deaths', ['medicine'], /Copper or medicine poisoning/, 'cond-copper', '10-invert-result-copper'],
       ['crab', 'legs', [], /Fighting or injury/, 'cond-invert-injury', ''],
-      ['shrimp', 'pale', ['new-arrival'], /Acclimation shock/, 'cond-acclimation', ''],
+      // The result leads with the pale shrimp that was picked, not acclimation's lying-down shrimp (Nov 6 combination sweep).
+      ['shrimp', 'pale', ['new-arrival'], /Acclimation shock/, 'sign-pale', ''],
       ['snail', 'unclear', [], /Not enough food/, 'cond-snail-starvation', ''],
     ]) {
       await reefFlow(p, 'invert', kind, sign, changes);

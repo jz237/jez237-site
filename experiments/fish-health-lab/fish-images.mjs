@@ -195,19 +195,81 @@ const genericCondition = (id, water) => {
   return leadSlot(id)?.image || choices[condition.thumb || condition.art] || choices.unclear;
 };
 
+// What a picture shows, read from its id. A result leads with the picture of the answer that
+// led to it (Jez, Nov 6 2026 19:21: "check all the combinations so that this type of mismatch
+// does not occur"): "Nothing obvious" must not show a gasping fish just because the water is
+// the best guess.
+const DEPICTS = [
+  [/-breathing$/, ['breathing', 'gasping']],
+  [/-red-gills$/, ['red-gills']],
+  [/-(dots|school-dots|ich)$/, ['dots', 'dots:white', 'dots:unclear']],
+  [/-black-spot$/, ['dots:black']],
+  [/-(dust|velvet)$/, ['dust']],
+  [/-fuzz$/, ['fuzz']],
+  [/-cotton-mouth$/, ['fuzz', 'patch', 'patch:flat']],
+  [/-patch$/, ['patch', 'patch:flat', 'patch:unclear']],
+  [/-(slime|brooklynella)$/, ['patch:slime', 'patch']],
+  [/-(hole-in-head|hlle)$/, ['patch:pits', 'patch']],
+  [/-(fins|barbels)$/, ['fins']],
+  [/-(sores|dgd|red-belly)$/, ['sores', 'sores:open', 'sores:unclear', 'lumps:inflamed']],
+  [/-uronema$/, ['sores', 'sores:open', 'sores:streaks']],
+  [/-septicemia$/, ['sores:streaks', 'sores']],
+  [/-injury$/, ['sores:scrape', 'fins']],
+  [/-(swollen|pregnant|malawi-bloat|sunken-belly)$/, ['swollen', 'swollen:flat', 'swollen:unclear']],
+  [/-dropsy$/, ['swollen:pinecone', 'pinecone', 'swollen', 'swollen:unclear']],
+  [/-(eyes|popeye)$/, ['eyes', 'eyes:bulging', 'eyes:unclear']],
+  [/-cloudy-eye$/, ['eyes:cloudy', 'eyes']],
+  [/-(balance|headstand|sinking|on-side)$/, ['balance']],
+  [/-flukes$/, ['rubbing', 'eyes:cloudy']],
+  [/-(lumps|lymphocystis)$/, ['lumps:cauliflower', 'lumps', 'lumps:unclear', 'fuzz']],
+  [/-growth$/, ['lumps:smooth']],
+  [/-(unclear|normal)$/, ['unclear']],
+];
+const depicts = (id, feature) => DEPICTS.some(([re, keys]) => re.test(id) && keys.includes(feature));
+// Results whose generic picture is only a plain sign borrow a fish that shows the disease itself.
+const GENERIC_SET = {
+  'black-spot': 'tang', hlle: 'tang', 'hole-in-head': 'angelfish', brooklynella: 'clownfish', uronema: 'damsel',
+  septicemia: { fresh: 'guppy', marine: 'clownfish' }, growth: { fresh: 'betta', marine: 'clownfish' }, flukes: { fresh: 'community', marine: 'clownfish' },
+};
+
 // Pictures for a sign ("dots") or a condition ("ich-fresh") for this fish type.
 // Returns { images, fishSpecific }: the fish's own pictures when it has a set,
-// otherwise the existing generic picture.
-export function imagesFor(fishType, key, water = 'fresh') {
+// otherwise the existing generic picture. With `features` (a result's answers: its
+// matched signs, then behaviors) the picture showing one of those answers comes first,
+// or, when none does, the picture of the answer itself (this fish's, else the generic one).
+export function imagesFor(fishType, key, water = 'fresh', features = null) {
   const set = fishSetFor(fishType, water);
-  const ids = set ? (set.conditions[key] || (set.signs[key] ? [set.signs[key]] : [])) : [];
-  const own = ids.map(crop).filter(Boolean);
-  if (own.length) return { images: own, fishSpecific: true };
-  const generic = CONDITIONS.some(c => c.id === key) ? genericCondition(key, water) : signImagesFor(water)[key];
-  return { images: generic ? [generic] : [], fishSpecific: false };
+  const condition = CONDITIONS.find(c => c.id === key);
+  let ids = set ? (set.conditions[key] || (set.signs[key] ? [set.signs[key]] : [])) : [];
+  const fishSpecific = ids.length > 0;
+  if (!ids.length && condition && features?.length && GENERIC_SET[key]) { // results only; the library keeps its generic pictures
+    const pick = GENERIC_SET[key], other = FISH_SETS[typeof pick === 'string' ? pick : pick[water]];
+    if (other && other.water === water) ids = other.conditions[key] || [];
+  }
+  let images = ids.map(crop).filter(Boolean);
+  if (!images.length) {
+    const generic = condition ? genericCondition(key, water) : signImagesFor(water)[key];
+    images = generic ? [generic] : [];
+    ids = images.length ? [`generic-${condition ? condition.thumb || condition.art : key}`] : [];
+  }
+  if (condition && features?.length && images.length) {
+    for (const feature of features) {
+      const at = ids.findIndex(id => depicts(id, feature));
+      if (at >= 0) return { images: [images[at], ...images.filter((_, i) => i !== at)], fishSpecific };
+    }
+    // A closer-look answer ("patch:slime") may be pictured under another result in this fish's set.
+    const pool = set ? [...new Set([...Object.values(set.conditions).flat(), ...Object.values(set.signs)])] : [];
+    const closer = features[0].includes(':') ? pool.find(id => depicts(id, features[0])) : null;
+    if (closer && crop(closer)) return { images: [crop(closer), ...images], fishSpecific };
+    const base = features[0].split(':')[0];
+    const own = set?.signs[base] ? crop(set.signs[base]) : null;
+    const answer = own || signImagesFor(water)[base];
+    if (answer) return { images: [answer, ...images], fishSpecific };
+  }
+  return { images, fishSpecific };
 }
 
-export const imageFor = (fishType, key, water) => imagesFor(fishType, key, water).images[0] || null;
+export const imageFor = (fishType, key, water, features = null) => imagesFor(fishType, key, water, features).images[0] || null;
 
 // Fish-type step pictures (healthy fish). "other" is the shared Not sure choice.
 // Guppy and angelfish/discus keep the published livebearer and cichlid tiles.

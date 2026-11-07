@@ -143,12 +143,14 @@ export const URGENCY = {
 export const CONDITIONS = [
   {
     id: 'water', title: 'Ammonia/nitrite burn or low oxygen', scope: 'both', kind: 'Water problem', art: 'breathing', urgency: 'today',
-    summary: 'The most common reason fish suddenly struggle. Bad water or low oxygen burns the gills and makes fish breathe fast.',
+    summary: 'The most common reason fish suddenly struggle. Bad water or low oxygen stresses fish fast—breathing, balance and appetite can all go off.',
     hint: 'Fast breathing, red gills or several fish affected at once.',
     weights: { breathing: 5, unclear: 4, balance: 2, appetite: 1, 'red-gills': 5, several: 3, gasping: 4, collapse: 2, deaths: 3 },
     clues: ['Fast breathing, gasping at the surface or hanging near the filter outlet.', 'Red or inflamed gills, or several fish acting off at the same time—often after a new setup, overfeeding or a filter problem.'],
     distinguish: 'Gill flukes and velvet can also cause fast breathing. Test the water first—it’s quick and rules the most common cause in or out.',
     check: 'Fast breathing is most often a water or oxygen problem, especially with red gills or more than one fish affected.',
+    // Wording when the result came from a different answer (Nov 6 2026 combination sweep).
+    checks: { "balance": "Losing balance—tilting, sinking or struggling to stay upright—often starts with bad water or low oxygen, especially when it comes on suddenly." },
     avoid: 'Don’t add medicine until you’ve tested the water. Don’t replace all your filter media at once.',
     source: ['management'],
     tips: { goldfish: 'Goldfish are messy and need big, regular water changes—overstocking is a common cause.', molly: 'Mollies “shimmy” (wobble in place with clamped fins) when the water is dirty or too soft—test and change water.' },
@@ -191,6 +193,8 @@ export const CONDITIONS = [
     clues: ['A very fine dusting rather than obvious salt-grain dots.', 'Clamped fins, rubbing, fast breathing.'],
     distinguish: 'Ich grains are bigger and more separate. Natural shimmer follows the scales and lighting.',
     check: 'A fine gold-brown dust, especially with clamped fins or fast breathing, is classic velvet.',
+    // Wording when the result came from a different answer (Nov 6 2026 combination sweep).
+    checks: { "breathing": "Fast breathing with clamped fins is a classic early velvet sign—the gold dust itself is easy to miss, so shine a flashlight from the side." },
     avoid: 'Don’t wait for it to “clear up”—velvet gets worse quickly.', source: ['parasites'],
     tips: { betta: 'Bettas get velvet a lot. Shine a torch from the side to see the gold dust.' },
   },
@@ -201,7 +205,9 @@ export const CONDITIONS = [
     weights: { dust: 6, breathing: 4, gasping: 4, deaths: 3, several: 2, appetite: 1, clamped: 1 },
     clues: ['A fine dusting or dull sheen, though it may be hard to see.', 'Fast breathing and sudden losses are big warning signs.'],
     distinguish: 'Marine ich has bigger, separate spots. Low oxygen and gill flukes also cause fast breathing.',
-    check: 'A fine dust plus fast breathing on a saltwater fish is a strong velvet warning.',
+    check: 'A fine dust on a saltwater fish—usually with fast breathing—is a strong velvet warning.',
+    // Wording when the result came from a different answer (Nov 6 2026 combination sweep).
+    checks: { "breathing": "Fast breathing on a saltwater fish is a strong velvet warning, even before any dust shows." },
     avoid: 'Don’t wait for obvious spots. Never put copper in a reef display.', source: ['parasites'],
     tips: { clownfish: 'Clowns get velvet too; if it’s slime and peeling skin rather than dust, think Brooklynella.' },
   },
@@ -223,6 +229,8 @@ export const CONDITIONS = [
     clues: ['Pale skin or mouth lesions, or a pale “saddle” across the back.', 'Fins fraying from the edges; it can spread through a tank fast in warm water.'],
     distinguish: 'True fungus has fluffy outward threads. Fin rot is usually slower and follows dirty water.',
     check: 'Flat pale patches—especially a saddle on the back or a white mouth—are classic columnaris.',
+    // Wording when the result came from a different answer (Nov 6 2026 combination sweep).
+    checks: { "fins": "Fins that fall apart fast, with pale or white edges, can be columnaris rather than ordinary fin rot—especially in livebearers.", "fuzz": "A fuzzy-looking white patch, especially on the mouth, is often columnaris rather than true fungus.", "patch:slime": "Pale, slimy or peeling patches that spread fast can be columnaris." },
     avoid: 'Don’t raise the heat—columnaris loves warm water.', source: ['bacteria'],
     tips: { guppy: 'Guppies, mollies and platies are very prone to columnaris.', molly: 'Mollies, platies and guppies are very prone to columnaris.' },
   },
@@ -246,6 +254,8 @@ export const CONDITIONS = [
     clues: ['Red, open sores, often with missing scales.', 'May start as a red spot and get bigger.'],
     distinguish: 'Red streaks in the fins point to septicemia. A single scrape after a fight is an injury.',
     check: 'Open red sores are most often bacterial ulcers.',
+    // Wording when the result came from a different answer (Nov 6 2026 combination sweep).
+    checks: { "lumps:inflamed": "A red, inflamed lump is often a bacterial infection under the skin, and it can open into an ulcer." },
     avoid: 'Don’t use human skin creams or random leftover antibiotics.', source: ['bacteria', 'management'],
     tips: {
       goldfish: 'Goldfish and koi are prone to ulcers (Aeromonas)—check the water first.',
@@ -270,7 +280,7 @@ export const CONDITIONS = [
     weights: { swollen: 3, 'swollen:pinecone': 9, 'swollen:flat': 1, pinecone: 9, appetite: 1, balance: 1 },
     clues: ['A swollen body; seen from above, the scales stick out like a pinecone.', 'Often lethargic, not eating, sometimes bulging eyes.'],
     distinguish: 'A swollen belly without pineconing is more often bloat, constipation or eggs.',
-    check: 'Pinecone scales on a swollen fish are the classic sign of dropsy.',
+    check: 'Pinecone scales—usually on a swollen body—are the classic sign of dropsy.',
     avoid: 'Don’t leave it in the main tank—move it out.', source: ['management', 'bacteria'],
     tips: { betta: 'Bettas are prone to dropsy; catching it early gives the best chance.' },
   },
@@ -334,6 +344,8 @@ export const CONDITIONS = [
     clues: ['Flashing or scratching on rocks, fast gill movement.', 'Extra slime, faded colours; in saltwater, cloudy eyes.'],
     distinguish: 'Bad water causes similar scratching and breathing. Test first.',
     check: 'Scratching plus fast gills or extra slime is classic flukes.',
+    // Wording when the result came from a different answer (Nov 6 2026 combination sweep).
+    checks: { "eyes": "On a saltwater fish, cloudy eyes—especially with scratching or rubbing—are a classic sign of skin flukes.", "eyes:cloudy": "On a saltwater fish, cloudy eyes—especially with scratching or rubbing—are a classic sign of skin flukes.", "patch:slime": "Extra slime or a cloudy coat on the skin, especially with scratching or fast gills, is classic flukes.", "breathing": "Fast gills, especially with scratching or flashing, are classic gill flukes.", "unclear+rubbing": "Scratching or flashing with nothing else to see on the fish is classic flukes.", "unclear": "Flukes are too small to see, so a fish that’s off with no marks can have them—watch for scratching, flashing or fast gills." },
     avoid: 'Don’t pick a medicine just because a fish scratched once.', source: ['parasites'],
     tips: { goldfish: 'Goldfish and koi often carry flukes—worth treating new arrivals.', angelfish: 'Angelfish and discus often carry gill flukes—fast breathing with one gill held shut is a clue.', wrasse: 'Wrasses are fluke-prone; treat in a hospital tank.', goby: 'Gobies and blennies can carry flukes—treat in a hospital tank.' },
   },
@@ -346,6 +358,8 @@ export const CONDITIONS = [
     clues: ['Rough, white or pink nodules bunched into cauliflower-like clusters.', 'Usually on fins; the fish acts normally.'],
     distinguish: 'A single smooth lump is more like a cyst or tumor. Fluffy threads are fungus.',
     check: 'Cauliflower-like white clusters are the classic look of lymphocystis.',
+    // Wording when the result came from a different answer (Nov 6 2026 combination sweep).
+    checks: { "fuzz": "Cottony or cauliflower-like white growths on a saltwater fish are most often lymphocystis." },
     avoid: 'Don’t cut or scrape off the growths, and don’t use ich medicine on them.', source: ['growths', 'management'],
     tips: { angel: 'Marine angels and butterflyfish get lymphocystis often; it usually clears with good water and food.' },
   },
@@ -382,6 +396,8 @@ export const CONDITIONS = [
     clues: ['Red, deep or ragged sores that grow day by day.', 'Pale patches that turn into ulcers.'],
     distinguish: 'Brooklynella shows more slime and peeling than deep sores. A single scrape is an injury.',
     check: 'Deep red sores on a saltwater fish that keep growing are a classic Uronema warning.',
+    // Wording when the result came from a different answer (Nov 6 2026 combination sweep).
+    checks: { "patch": "On a saltwater fish—especially damsels and chromis—a pale patch can be the start of Uronema, which turns into deep red sores fast.", "patch:flat": "On a saltwater fish—especially damsels and chromis—a pale patch can be the start of Uronema, which turns into deep red sores fast." },
     avoid: 'Don’t wait to see if it heals on its own.', source: ['parasites'],
     tips: { damsel: 'Chromis and damsels are very prone to Uronema.' },
   },
@@ -393,6 +409,8 @@ export const CONDITIONS = [
     clues: ['Thick white slime, skin that looks like it’s peeling off.', 'Fast breathing and loss of appetite; can kill in days.'],
     distinguish: 'Marine velvet is a fine dust. Uronema makes deep red sores.',
     check: 'Thick slime and peeling skin—especially on a clownfish—is classic Brooklynella.',
+    // Wording when the result came from a different answer (Nov 6 2026 combination sweep).
+    checks: { "breathing": "In a clownfish, fast breathing is an early Brooklynella warning—check for thick slime or peeling skin.", "patch": "A pale or cloudy patch on a saltwater fish—especially a clownfish—can be Brooklynella; watch for thick slime or peeling skin.", "patch:flat": "A pale or cloudy patch on a saltwater fish—especially a clownfish—can be Brooklynella; watch for thick slime or peeling skin." },
     avoid: 'Don’t wait—this one moves fast.', source: ['parasites'],
     tips: { clownfish: 'Clownfish are the classic Brooklynella fish—check every clown in the tank.' },
   },
@@ -415,6 +433,8 @@ export const CONDITIONS = [
     clues: ['Small pits or holes on the face, spreading along the line on the side of the body.', 'The fish usually acts normally.'],
     distinguish: 'Fresh red sores are Uronema or ulcers; peeling slime is Brooklynella.',
     check: 'Pits on the head and along the side line are classic HLLE.',
+    // Wording when the result came from a different answer (Nov 6 2026 combination sweep).
+    checks: { "patch": "Pale, eroding patches on the head or along the side of a tang or angelfish are classic HLLE." },
     avoid: 'Don’t rush in with medicine—fix diet and environment.', source: ['management'],
     tips: { tang: 'Tangs are prone to HLLE—lots of seaweed and a big tank help.', angel: 'Large angels get HLLE; improve diet and reduce carbon dust.' },
   },

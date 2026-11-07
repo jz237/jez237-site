@@ -234,7 +234,10 @@ function todoCard(condition, water, tip = '', fish = null) {
 }
 
 function findingCard(c, input, lead) {
-  const image = resultThumbnail(c, input.water), own = imagesFor(input.fishType, c.id, input.water);
+  // The result picture shows the answer that led here (its matched signs, then behaviors).
+  const behaviors = (input.signs || []).filter(id => BEHAVIORS.some(b => b.id === id));
+  // A look-alike the person picked ("looks more like mine") shows its own picture.
+  const image = (c.chosen ? null : imageFor(currentFish(), c.id, input.water, [...(c.fits || []), ...behaviors])) || resultThumbnail(c, input.water), own = imagesFor(input.fishType, c.id, input.water);
   const ready = (own.fishSpecific ? own.images.length : 0) + slotsFor(c.id).filter(s => s.image).length;
   const fish = fishTypeFor(input.water, input.fishType);
   return `<article class="${lead ? 'result-focus' : 'additional-finding'}" data-result="${c.id}" data-urgency="${c.urgencyLevel}">${lead ? '' : `<p class="eyebrow">ALSO LIKELY</p><h2>${escape(c.title)}</h2>`}<div class="result-head">${badge(c.urgencyLevel)}<p class="result-summary">${escape(c.summary)}</p></div><button type="button" class="result-image" data-condition="${c.id}" aria-label="More about ${escape(c.title)}"><img src="${image.url}" width="${image.width || 362}" height="${image.height || 362}" alt="${escape(image.alt)}" data-image-set="${setAttr(input.fishType, input.water, c.id)}"><span>${ready ? `${ready} picture${ready === 1 ? '' : 's'}` : 'More info'} ↗</span></button><div class="diagnosis-reason"><strong>Why we think so</strong><p>${escape(c.reason)}</p></div>${todoCard(c, input.water, c.tip, fish)}</article>`;
