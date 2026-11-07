@@ -40,7 +40,7 @@ export function treatmentGuideFor(id, water) {
 // "What to do now" plans. Treatment types, never doses: amounts always come from
 // the product label. Saltwater plans that use copper, formalin, chloroquine,
 // praziquantel or antibiotics are flagged not reef-safe (treat in a separate tank).
-const HOSPITAL = 'Move the fish to a hospital (quarantine) tank with a heater and air stone.';
+const HOSPITAL = 'Move the fish to a hospital (quarantine) tank with a heater and air stone—bare bottom, one hiding spot and, ideally, a sponge filter that has been running in your main tank.';
 const MARINE_HOSPITAL = 'Move the fish to a bare hospital tank—never medicate a reef display.';
 const TEST = 'Test ammonia and nitrite, then do a 25–30% water change.';
 
@@ -50,10 +50,11 @@ const PLANS = {
       'Test ammonia, nitrite and pH now.',
       'Do a 30–50% water change with dechlorinated, temperature-matched water (saltwater: salinity-matched). Repeat daily until ammonia and nitrite read zero.',
       'Add aeration—an air stone or point the filter outlet at the surface.',
-      'Add a water conditioner/detoxifier that binds ammonia and nitrite, and feed lightly for a few days.',
+      'If ammonia or nitrite reads above zero, add a detoxifier that binds them (also medicating? check the medicine label says the two can be used together), and feed lightly for a few days.',
     ],
-    treatment: 'Water changes, more oxygen and an ammonia/nitrite detoxifier',
-    recovery: 'Breathing often improves within hours; burned gills heal in 1–2 weeks.',
+    marine: { steps: ['Test ammonia, nitrite, pH and salinity now.', 'Do a 30–50% water change with new saltwater mixed to the same salinity and temperature as the tank. Repeat daily until ammonia and nitrite read zero.', 'Add aeration—an air stone, or point a pump or the return at the surface.', 'If ammonia or nitrite reads above zero, add a detoxifier that binds them (also medicating? check the medicine label says the two can be used together), and feed lightly for a few days.'] },
+    treatment: 'Water changes, more oxygen, and a detoxifier if ammonia or nitrite shows',
+    recovery: 'Fish usually perk up within hours to a day once the water is fixed; burned gills heal in 1–2 weeks.',
   },
   'ich-fresh': {
     steps: [
@@ -63,6 +64,8 @@ const PLANS = {
       'Add an ich medication, or aquarium salt for fish that tolerate it (not corys, plecos, loaches or other scaleless fish).',
       'Keep treating for 3 days after the last spot has gone.',
     ],
+    // Goldfish are coldwater fish: a gentler heat step (matches the goldfish temperature range).
+    goldfish: { steps: ['Treat the whole tank—every fish has been exposed.', `${TEST} Vacuum the gravel to remove fallen cysts.`, 'Raise the temperature slowly, by a few degrees, to no more than about 75 °F (24 °C), and add extra aeration.', 'Add an ich medication, or aquarium salt (goldfish tolerate it).', 'Keep treating for 3 days after the last spot has gone.'] },
     treatment: 'Gradual heat + an ich medication (or aquarium salt for salt-tolerant fish)',
     recovery: 'Usually 1–2 weeks.', medicated: true,
   },
@@ -80,10 +83,13 @@ const PLANS = {
     steps: [
       'Dim the tank lights or turn them off for a few days—velvet needs light.',
       `${TEST} Add aeration.`,
-      'Treat the whole tank with a velvet or copper-based medication and raise the temperature a little.',
+      'Treat the whole tank with a velvet medication (copper-based ones only in a hospital tank—copper harms plants, shrimp, snails and sensitive fish) and raise the temperature a little.',
       'Keep treating for about a week after the dust has gone.',
     ],
-    treatment: 'Darkness + a velvet/copper medication for the whole tank',
+    // Corys and plecos: copper kills them (matches the medicine check).
+    cory: { steps: ['Dim the tank lights or turn them off for a few days—velvet needs light.', `${TEST} Add aeration.`, 'Treat the whole tank with a velvet medication labelled safe for scaleless fish—never copper with corys or plecos.', 'Keep treating for about a week after the dust has gone.'], treatment: 'Darkness + a scaleless-safe velvet medication (no copper)' },
+    pleco: { steps: ['Dim the tank lights or turn them off for a few days—velvet needs light.', `${TEST} Add aeration.`, 'Treat the whole tank with a velvet medication labelled safe for scaleless fish—never copper with corys or plecos.', 'Keep treating for about a week after the dust has gone.'], treatment: 'Darkness + a scaleless-safe velvet medication (no copper)' },
+    treatment: 'Darkness + a velvet medication (copper only in a hospital tank)',
     recovery: 'About 1–2 weeks.', medicated: true,
   },
   'velvet-marine': {
@@ -100,7 +106,7 @@ const PLANS = {
     steps: [
       'Look for the cause—fungus grows on injuries, dead tissue and leftover food.',
       `${TEST} Remove uneaten food.`,
-      'Treat with an antifungal (for example methylene blue or a fungus remedy). Aquarium salt helps salt-tolerant fish.',
+      'Treat with a fungus remedy (antifungal). Methylene blue only in a hospital tank or as a short bath—it harms the filter and plants. Aquarium salt helps salt-tolerant fish.',
       'Move a badly affected fish to a hospital tank if it is spreading.',
     ],
     treatment: 'An antifungal medication (plus salt for salt-tolerant fish)',
@@ -141,19 +147,34 @@ const PLANS = {
   },
   dropsy: {
     steps: [HOSPITAL, 'Test the main tank water and do a water change.', 'Treat with an antibacterial medication or medicated food; Epsom salt in the hospital tank can help reduce swelling.', 'Be prepared: dropsy is often hard to cure once the scales stick out.'],
-    marine: { steps: [MARINE_HOSPITAL, 'Test the display water and do a water change.', 'Treat in the hospital tank with an antibacterial medication or medicated food.', 'Be prepared: dropsy is often hard to cure once the scales stick out.'], reefUnsafe: true },
+    marine: { steps: [MARINE_HOSPITAL, 'Test the display water and do a water change.', 'Treat in the hospital tank with an antibacterial medication or medicated food.', 'Be prepared: dropsy is often hard to cure once the scales stick out.'], treatment: 'Isolate + antibacterial food or medication', reefUnsafe: true },
+    cory: { steps: [HOSPITAL, 'Test the main tank water and do a water change.', 'Treat with an antibacterial medication or medicated food labelled safe for scaleless fish.', 'Be prepared: once a cory or pleco is swollen tight all over, dropsy is often hard to cure.'], treatment: 'Isolate + scaleless-safe antibacterial food or medication', recovery: 'Days to weeks; many don’t recover once the swelling is tight all over.' },
+    pleco: { steps: [HOSPITAL, 'Test the main tank water and do a water change.', 'Treat with an antibacterial medication or medicated food labelled safe for scaleless fish.', 'Be prepared: once a cory or pleco is swollen tight all over, dropsy is often hard to cure.'], treatment: 'Isolate + scaleless-safe antibacterial food or medication', recovery: 'Days to weeks; many don’t recover once the swelling is tight all over.' },
     treatment: 'Isolate + antibacterial food or medication (Epsom salt for swelling)',
     recovery: 'Days to weeks; many fish don’t recover once pineconing is advanced.', medicated: true,
   },
   bloat: {
     steps: ['Skip feeding for 1–2 days.', 'Then feed small amounts of a skinned, cooked pea (plant-eaters) or thawed foods like daphnia.', 'Soak dry food before feeding from now on.', 'Look from above each day—if the scales start to stick out, treat it as dropsy.'],
     marine: { steps: ['Skip feeding for 1–2 days.', 'Then feed small amounts of thawed, varied foods.', 'Look from above each day—if the scales start to stick out, treat it as dropsy.'] },
+    // African cichlids: swelling is often Malawi bloat, which needs treating today.
+    african: {
+      // One sequence, no either/or branches that can both apply (Astra round 5).
+      steps: [
+        'Act today—in African cichlids (mbuna, peacocks) swelling can be Malawi bloat, which moves fast.',
+        `${HOSPITAL} Stop feeding, and test the main tank water.`,
+        'Watch it closely for 1–2 days. If it gets worse—swelling more, stops eating, white stringy poop, fast breathing—get help from a fish vet or an experienced fish store (Malawi bloat is usually treated with metronidazole).',
+        'Afterwards, feed smaller meals. Mbuna: a lower-protein, plant-based diet. Oscars: swelling is more often overeating or a blockage—keep their usual diet, just less of it.',
+      ],
+      treatment: 'Hospital tank, a fast and close watching; get help if it gets worse', recovery: 'Days to 2 weeks if caught early; it can be fatal once the fish stops eating.',
+    },
+    cory: { steps: ['Skip feeding for 1–2 days.', 'Then feed small amounts of sinking foods and thawed daphnia or bloodworm.', 'Look from above each day—if it becomes swollen tight and stiff all over, treat it as dropsy.'] },
+    pleco: { steps: ['Skip feeding for 1–2 days.', 'Then feed blanched vegetables (zucchini, peas) and sinking wafers.', 'Look from above each day—if it becomes swollen tight and stiff all over, treat it as dropsy.'] },
     treatment: 'A short fast, then fibre-rich or thawed foods',
     recovery: 'Usually a few days.',
   },
   popeye: {
     steps: [TEST, 'If only one eye bulges, it is probably an injury—clean water and time usually fix it.', `If both eyes bulge or it gets worse: ${HOSPITAL.toLowerCase()} Add Epsom salt and treat with an antibacterial medication.`],
-    marine: { steps: ['Test the water and do a water change.', 'One eye: probably an injury—clean water and time usually fix it.', 'Both eyes or getting worse: treat in a hospital tank with an antibacterial medication.'], reefUnsafe: true },
+    marine: { steps: ['Test the water and do a water change.', 'One eye: probably an injury—clean water and time usually fix it.', 'Both eyes or getting worse: treat in a hospital tank with an antibacterial medication.'], treatment: 'Clean water; antibacterial in a hospital tank if both eyes', reefUnsafe: true },
     treatment: 'Clean water; Epsom salt + antibacterial if both eyes',
     recovery: '2–4 weeks; the swelling goes down slowly.', medicated: true,
   },
@@ -165,7 +186,8 @@ const PLANS = {
   },
   'swim-bladder': {
     steps: ['Skip feeding for 1–2 days.', 'Then feed small amounts of a skinned, cooked pea (plant-eaters) or thawed foods—no floating dry food.', 'Lower the water level a little and keep the temperature steady so it can rest.', 'If several fish are struggling or it came on suddenly, check the water first.'],
-    marine: { steps: ['Skip feeding for 1–2 days, then feed small amounts of thawed foods.', 'Keep the water stable and the flow gentle so it can rest.', 'If several fish are struggling, check the water and oxygen first.'] },
+    marine: { steps: ['Skip feeding for 1–2 days, then feed small amounts of thawed foods.', 'Keep the water stable and the flow gentle so it can rest.', 'If several fish are struggling, check the water and oxygen first.'],
+      treatment: 'Fast 1–2 days, then small amounts of thawed foods', recovery: 'A few days to a week.' },
     treatment: 'Fast 1–2 days, then peas or thawed foods',
     recovery: 'A few days to a week; some fancy goldfish get it on and off.',
   },
@@ -191,9 +213,9 @@ const PLANS = {
     recovery: '1–2 weeks for scrapes; fins regrow over several weeks.',
   },
   uronema: {
-    steps: ['Act fast—Uronema eats into the muscle and spreads quickly.', MARINE_HOSPITAL, 'Treat with a formalin bath or a medication labelled for Uronema/marine ciliates; many keepers also lower the salinity in the hospital tank.', 'Keep the hospital water very clean and watch tankmates.'],
+    steps: ['Act fast—Uronema eats into the muscle and spreads quickly.', MARINE_HOSPITAL, 'Treat with a formalin bath or a medication labelled for Uronema/marine ciliates. Don’t lower the salinity—Uronema copes with low salinity.', 'Keep the hospital water very clean and watch tankmates.'],
     treatment: 'Formalin or a ciliate medication in a hospital tank',
-    recovery: '1–3 weeks if caught early.', medicated: true, reefUnsafe: true,
+    recovery: 'It can kill within days; caught early, 1–3 weeks.', medicated: true, reefUnsafe: true,
   },
   brooklynella: {
     steps: ['Act today—it can kill within days.', MARINE_HOSPITAL, 'Give a formalin bath, then keep treating in the hospital tank.', 'Keep it there for about 2 weeks after it looks better, and check every other clownfish.'],
@@ -222,16 +244,24 @@ const PLANS = {
   },
 };
 
-export function carePlanFor(id, water) {
+export function carePlanFor(id, water, fishType = '') {
   const plan = PLANS[id];
   if (!plan) return null;
-  const variant = water === 'marine' && plan.marine ? plan.marine : {};
+  const variant = water === 'fresh' && fishType && plan[fishType] ? plan[fishType] : water === 'marine' && plan.marine ? plan.marine : {};
+  // The one-line summary follows the fish and the tank like the steps do (Nov 6 2026 plan sweep):
+  // no salt suggestion for scaleless corys and plecos, and saltwater medicine says where it goes.
+  let treatment = variant.treatment || plan.treatment;
+  const reefUnsafe = water === 'marine' && Boolean(variant.reefUnsafe ?? plan.reefUnsafe);
+  if (['cory', 'pleco'].includes(fishType)) treatment = treatment.replace(/\s*\((or|plus) (aquarium )?salt for salt-tolerant fish\)/i, ' (no salt for corys and plecos)');
+  if (reefUnsafe && !/hospital|isolate|separate|no medicine/i.test(treatment)) treatment += ', in a hospital tank';
+  let steps = variant.steps || plan.steps;
+  if (['cory', 'pleco'].includes(fishType)) steps = steps.map(step => step.replace(/\s*;?\s*aquarium salt helps salt-tolerant fish\./i, '. Skip salt—corys and plecos don’t tolerate it.').replace(/\.\. /, '. '));
   return {
-    steps: variant.steps || plan.steps,
-    treatment: variant.treatment || plan.treatment,
+    steps,
+    treatment,
     recovery: variant.recovery || plan.recovery,
     medicated: Boolean(variant.medicated ?? plan.medicated),
-    reefUnsafe: water === 'marine' && Boolean(variant.reefUnsafe ?? plan.reefUnsafe),
+    reefUnsafe,
   };
 }
 

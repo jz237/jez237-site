@@ -37,10 +37,14 @@ export const REEF_KINDS = {
 export const REEF_SIGNS = {
   coral: [
     { id: 'bleach', title: 'Turning white', text: 'Color gone, flesh still there' },
-    { id: 'peeling', title: 'Flesh peeling off', text: 'White skeleton showing', kinds: ['sps', 'lps'] },
-    { id: 'brown-jelly', title: 'Brown jelly', text: 'Brown slime on the flesh', kinds: ['lps', 'sps'] },
+    // urgency: the floor for any answer to this sign (active flesh loss can't wait, whatever the cause).
+    { id: 'peeling', title: 'Flesh peeling off', text: 'White skeleton showing', kinds: ['sps', 'lps'], urgency: 'today' },
+    { id: 'creeping', title: 'White creeping up from the base', text: 'Slowly, over days or weeks', kinds: ['sps'] },
+    { id: 'brown-jelly', title: 'Brown jelly', text: 'Brown slime on the flesh', kinds: ['lps', 'sps'], urgency: 'today' },
     { id: 'closed', title: 'Won’t open', text: 'Stays shut or shrunk back', kinds: ['soft', 'lps', 'sps'] },
     { id: 'browning', title: 'Turning brown', text: 'Dull, losing its color' },
+    { id: 'pastel', title: 'Pale and pastel', text: 'Washed out, very clean tank' },
+    { id: 'blasted', title: 'Bent over or stung', text: 'Strong flow, shade or a neighbor', kinds: ['soft', 'lps', 'sps'] },
     { id: 'red-bugs', title: 'Tiny red bugs', text: 'Specks on the branches', kinds: ['sps'] },
     { id: 'flatworms', title: 'Flat worms', text: 'Tan ovals on the branches', kinds: ['sps'] },
     { id: 'slugs', title: 'Sea slugs', text: 'Little slugs or egg spirals', kinds: ['sps', 'soft'] },
@@ -90,9 +94,11 @@ export const REEF_CONDITIONS = [
   {
     id: 'bleaching', group: 'coral', title: 'Bleaching (heat or light stress)', kind: 'Stress', urgency: 'today',
     summary: 'The coral pushes out the algae that give it color, so it turns white while the flesh stays on. Usually heat or light.',
-    weights: { bleach: 6, anemone: 2, closed: 1, unclear: 1 },
+    weights: { bleach: 6, anemone: 2, closed: 1, unclear: 1, pastel: 2 },
     changes: { temp: 3, light: 1 },
     check: 'White flesh that’s still attached is classic bleaching—most often heat or a light change.',
+    // Wording when a different sign led here (Nov 6 2026 combination sweep).
+    checks: { "unclear": "A coral that looks off after a heat spike or a light change is often starting to bleach—watch for it going pale or white." },
     clues: ['White or very pale, but the flesh is still there (not bare skeleton).', 'Often after a hot spell, a stuck heater or a new light.'],
     distinguish: 'Light shock bleaches mainly the top, after a new light or a move. Bare white skeleton is tissue loss (RTN/STN), not bleaching.',
     avoid: 'Don’t move it around or crank the light to “bring the color back”.',
@@ -100,9 +106,13 @@ export const REEF_CONDITIONS = [
   {
     id: 'alk-swing', group: 'coral', title: 'Alkalinity swing or low alk', kind: 'Water', urgency: 'week',
     summary: 'A fast change in alkalinity is one of the most common reasons corals close up, burn at the tips or lose flesh.',
-    weights: { closed: 4, peeling: 4, unclear: 4, bleach: 2, 'zoa-melt': 2, browning: 1, anemone: 1 },
+    weights: { closed: 4, peeling: 4, unclear: 4, bleach: 2, 'zoa-melt': 2, browning: 1, anemone: 1, creeping: 1, pastel: 1 },
     changes: { alk: 4, dosing: 4 },
-    check: 'Corals closing or losing flesh with no pest in sight often comes down to an alkalinity swing.',
+    check: 'With no pest in sight, an alkalinity swing is one of the most common reasons corals close up, change colour or lose flesh.',
+    // The only signs its own picture shows; any other sign leads with that sign's picture (picture audit).
+    shows: ["closed", "peeling"],
+    // Wording when a different sign led here (Nov 6 2026 combination sweep).
+    checks: { "unclear": "Corals that just look off with no pest in sight often come down to an alkalinity swing." },
     clues: ['Several corals look unhappy at once.', 'A missed or doubled dose, an empty dosing container or a new salt mix.'],
     distinguish: 'A single coral with pests on it, or white flesh after a heat spike, points somewhere else. A test kit settles it.',
     avoid: 'Don’t fix a low reading in one go—change alkalinity by no more than 1 dKH a day.',
@@ -120,7 +130,7 @@ export const REEF_CONDITIONS = [
   {
     id: 'low-nutrients', group: 'coral', title: 'Starved (nutrients too low)', kind: 'Water', urgency: 'watch',
     summary: 'Nitrate and phosphate at zero leave corals pale, pastel and slow to grow. Common in very clean tanks.',
-    weights: { bleach: 3, unclear: 3, closed: 2, peeling: 2 },
+    weights: { bleach: 3, unclear: 3, closed: 2, peeling: 2, pastel: 7 },
     changes: { dosing: 1 },
     check: 'Pale, pastel corals in a spotless tank are often starved—nitrate and phosphate reading zero.',
     clues: ['Pale or pastel color, little growth.', 'Nitrate and phosphate test at zero, little or no algae anywhere.'],
@@ -130,7 +140,7 @@ export const REEF_CONDITIONS = [
   {
     id: 'rtn', group: 'coral', title: 'RTN (rapid tissue loss)', kind: 'Tissue loss', urgency: 'today', kinds: ['sps'],
     summary: 'Flesh slides off an SPS coral in hours to a day or two, leaving white skeleton. Act fast—it can take the whole colony.',
-    weights: { peeling: 6, 'brown-jelly': 1 },
+    weights: { peeling: 6, 'brown-jelly': 1, creeping: 2 },
     changes: { alk: 2, temp: 2 },
     check: 'Flesh peeling off an SPS coral fast, leaving white skeleton, is RTN.',
     clues: ['Bare white skeleton spreading by the hour.', 'Often after an alkalinity or temperature swing.'],
@@ -140,7 +150,7 @@ export const REEF_CONDITIONS = [
   {
     id: 'stn', group: 'coral', title: 'STN (slow tissue loss)', kind: 'Tissue loss', urgency: 'week', kinds: ['sps'],
     summary: 'Flesh slowly dies back from the base of an SPS coral over days or weeks.',
-    weights: { peeling: 5 },
+    weights: { peeling: 5, creeping: 7 },
     changes: { alk: 1 },
     check: 'Flesh creeping back slowly from the base, over days or weeks, is STN.',
     clues: ['A white band at the base that grows a little each day.', 'Often with low phosphate or unstable alkalinity.'],
@@ -154,6 +164,8 @@ export const REEF_CONDITIONS = [
     kindBoost: { lps: 1 },
     changes: { 'new-coral': 1, temp: 1 },
     check: 'Brown, jelly-like slime on dying LPS flesh is brown jelly disease.',
+    // Wording when a different sign led here (Nov 6 2026 combination sweep).
+    checks: { "peeling": "Flesh pulling away from an LPS coral, especially with brown slime on it, can be brown jelly disease—it spreads fast." },
     clues: ['Brown, snotty slime on the flesh, often after an injury.', 'Spreads fast on euphyllia (torch, hammer) and other LPS.'],
     distinguish: 'Plain flesh loss without slime is RTN/STN or an alkalinity swing.',
     avoid: 'Don’t leave it in the tank next to other LPS.',
@@ -161,9 +173,11 @@ export const REEF_CONDITIONS = [
   {
     id: 'light-shock', group: 'coral', title: 'Too much light (light shock)', kind: 'Light', urgency: 'week',
     summary: 'A new coral or a new light can be too bright at first. The top goes pale or white while the shaded side stays fine.',
-    weights: { bleach: 4, closed: 3, 'zoa-melt': 2, anemone: 2, unclear: 1 },
+    weights: { bleach: 4, closed: 3, 'zoa-melt': 2, anemone: 2, unclear: 1, pastel: 2, blasted: 1 },
     changes: { light: 4, 'new-coral': 4 },
     check: 'Pale or white tops after a new light, a move or a new coral usually mean too much light.',
+    // Wording when a different sign led here (Nov 6 2026 combination sweep).
+    checks: { "closed": "A coral that stays shut after a new light, a move or a new coral is often getting too much light at first.", "unclear": "A coral that looks a bit off after a new light, a move or a new coral is often adjusting to too much light.", "pastel": "Corals going pale after a new light, a move or a new coral are often getting too much light at first.", "zoa-melt": "Zoas that close up and melt after a new light or a move are often getting too much light at first." },
     clues: ['Pale on top, normal color underneath or in the shade.', 'Started after a new light, a move or adding the coral.'],
     distinguish: 'Bleaching from heat whitens the whole coral. Brown color is the opposite—too little light or extra nutrients.',
     avoid: 'Don’t move it around every day—pick a lower spot and leave it.',
@@ -171,7 +185,7 @@ export const REEF_CONDITIONS = [
   {
     id: 'flow-placement', group: 'coral', title: 'Wrong spot (flow, shade or a neighbor)', kind: 'Placement', urgency: 'watch',
     summary: 'Too much or too little flow, a dark spot, or a neighbor stinging it can keep a coral shut or brown.',
-    weights: { closed: 3, browning: 3, anemone: 3, peeling: 2, unclear: 2, bites: 1 },
+    weights: { closed: 3, browning: 3, anemone: 3, peeling: 2, unclear: 2, bites: 1, blasted: 7 },
     changes: { 'new-coral': 2 },
     check: 'A coral that stays shut or browns in one spot may just be in the wrong place—flow, shade or a stinging neighbor.',
     clues: ['Blasted flat by a pump, or sitting in still water.', 'Touching another coral, or damage only on the side facing it.'],
@@ -191,10 +205,12 @@ export const REEF_CONDITIONS = [
   {
     id: 'aefw', group: 'coral', title: 'Acropora-eating flatworms (AEFW)', kind: 'Pest', urgency: 'week', kinds: ['sps'],
     summary: 'Flat, tan worms that eat acropora flesh and leave half-moon bite marks.',
-    weights: { flatworms: 6, bites: 4, peeling: 1, slugs: 2 },
+    weights: { flatworms: 6, bites: 4, peeling: 1, slugs: 2, creeping: 2 },
     kindBoost: { sps: 2 },
     changes: { 'new-coral': 2 },
     check: 'Flat tan ovals and half-moon bite marks on an acropora are flatworms (AEFW).',
+    // Signs its own picture already shows; any other sign leads with that sign's picture.
+    shows: ["bites", "flatworms"],
     clues: ['Flat, tan, almost invisible ovals on the branches.', 'Half-moon bite marks and egg clusters on bare skeleton.'],
     distinguish: 'Red bugs are tiny red specks. Montipora nudibranchs are on montipora, not acropora.',
     avoid: 'Never treat pests in the display—dip the coral in a separate container.',
@@ -215,6 +231,8 @@ export const REEF_CONDITIONS = [
     weights: { 'zoa-melt': 6, slugs: 4, bites: 3, closed: 2 },
     changes: { 'new-coral': 2 },
     check: 'Melting or pocked zoas usually mean zoa pox or a pest like zoa spiders.',
+    // Wording when a different sign led here (Nov 6 2026 combination sweep).
+    checks: { "slugs": "Small slugs or white egg spirals on zoas are zoa-eating nudibranchs—one of the common zoa pests." },
     clues: ['White pimple-like bumps on the polyps (pox).', 'Tiny spiders or slugs on the colony at night.'],
     distinguish: 'A whole tank of zoas closing at once points to the water or the light.',
     avoid: 'Never treat pests in the display—dip the coral in a separate container.',
@@ -235,6 +253,8 @@ export const REEF_CONDITIONS = [
     kindBoost: { anemone: 2 },
     changes: { light: 2, 'new-coral': 2 },
     check: 'An anemone that wanders, shrinks or spits food is stressed—usually light, flow or settling in.',
+    // Wording when a different sign led here (Nov 6 2026 combination sweep).
+    checks: { "unclear": "An anemone that just looks off is most often stressed by its light or flow, or is still settling in." },
     clues: ['Moves around the tank or hides under rock.', 'Shrinks, deflates or spits food out.'],
     distinguish: 'A white anemone is bleaching. Anemones deflate now and then to exchange water—that’s normal if it reinflates.',
     avoid: 'Don’t pull it off the rock, and cover pump intakes so it can’t get sucked in.',
@@ -242,9 +262,11 @@ export const REEF_CONDITIONS = [
   {
     id: 'nipped', group: 'coral', title: 'Nipped by a fish or crab', kind: 'Injury', urgency: 'watch',
     summary: 'Some fish, crabs and hungry hermits pick at corals, leaving chewed edges and closed polyps.',
-    weights: { bites: 5, closed: 1, 'zoa-melt': 1 },
+    weights: { bites: 5, closed: 1, 'zoa-melt': 1, blasted: 1 },
     changes: { 'new-livestock': 4 },
     check: 'Chewed edges and missing bits usually mean something is picking at it.',
+    // Wording when a different sign led here (Nov 6 2026 combination sweep).
+    checks: { "closed": "A coral that stays shut after a new fish or crab went in is often being picked at—watch it around feeding time." },
     clues: ['Ragged, chewed edges or missing polyps.', 'Often after adding a new fish (angelfish, butterflyfish) or crab.'],
     distinguish: 'Half-moon bites on acropora point to flatworms. Slugs on montipora point to nudibranchs.',
     avoid: 'Don’t add more fish until you know who’s nibbling.',
@@ -267,17 +289,24 @@ export const REEF_CONDITIONS = [
     weights: { 'molt-stuck': 6, pale: 2, deaths: 1, 'empty-shell': 2 },
     changes: { swing: 3, 'water-change': 2 },
     check: 'Stuck halfway out of the old shell is a failed molt—usually from swings or low magnesium/iodine.',
+    // Wording when a different sign led here (Nov 6 2026 combination sweep).
+    checks: { "pale": "A pale, milky shrimp or crab after a salinity swing is often struggling with its molt—watch for it getting stuck in the old shell." },
     clues: ['Old shell still attached, the animal can’t get free.', 'Often after a salinity swing or a big water change.'],
-    distinguish: 'A complete, hollow shell with nobody inside is a normal molt.',
-    avoid: 'Don’t pull the old shell off—you can tear the new one.',
+    distinguish: 'A complete, hollow shell with nobody inside is a normal molt. On a shrimp, a pale ring where the head shell meets the tail is a molt that’s struggling, not a catching disease; a milky white tail muscle is a different problem.',
+    avoid: 'Don’t pull the old shell off—you can tear the new one. No medicine can help a shrimp through a molt, so don’t dose the tank.',
   },
   {
     id: 'copper', group: 'invert', title: 'Copper or medicine poisoning', kind: 'Poisoning', urgency: 'today',
     summary: 'Copper and most fish medicines kill shrimp, crabs, snails and starfish—even small amounts.',
-    weights: { deaths: 6, spines: 3, 'not-moving': 2, pale: 2, color: 1 },
+    // "Died after dosing" names the cause, so this always leads for that sign.
+    weights: { deaths: 12, spines: 3, 'not-moving': 2, pale: 2, color: 1 },
     changes: { medicine: 6 },
     check: 'Inverts dying soon after a medicine or copper went in is poisoning.',
-    clues: ['Deaths within hours or days of dosing.', 'Several kinds of inverts affected at once.'],
+    // The only signs its own picture shows; any other sign leads with that sign's picture (picture audit).
+    shows: ["deaths"],
+    // Wording when a different sign led here (Nov 6 2026 combination sweep).
+    checks: { "color": "Inverts that fade, go pale, stop moving or drop spines soon after a medicine or copper went in are being poisoned—most fish medicines are toxic to them.", "pale": "Inverts that fade, go pale, stop moving or drop spines soon after a medicine or copper went in are being poisoned—most fish medicines are toxic to them.", "not-moving": "Inverts that fade, go pale, stop moving or drop spines soon after a medicine or copper went in are being poisoned—most fish medicines are toxic to them.", "spines": "Inverts that fade, go pale, stop moving or drop spines soon after a medicine or copper went in are being poisoned—most fish medicines are toxic to them." },
+    clues: ['Deaths within hours or days of dosing, new decor or cleaning near the tank (sprays, soap, plant treatments).', 'Several kinds of inverts affected at once.'],
     distinguish: 'Deaths after adding new animals point to acclimation shock. Many deaths with gasping fish point to oxygen.',
     avoid: 'Never dose copper or fish medicine in a tank with inverts.',
   },
@@ -287,6 +316,8 @@ export const REEF_CONDITIONS = [
     weights: { deaths: 3, 'not-moving': 3, spines: 3, pale: 2, color: 2, unclear: 2, 'molt-stuck': 1 },
     changes: { 'new-arrival': 5, swing: 4 },
     check: 'Trouble right after adding it, or after a salinity or temperature swing, is acclimation shock.',
+    // The only signs its own picture shows; any other sign leads with that sign's picture (picture audit).
+    shows: ["not-moving"],
     clues: ['Started within a day or two of being added.', 'Salinity or temperature changed fast (top-off, heater, water change).'],
     distinguish: 'Deaths after dosing point to medicine. Losses over weeks point to food or water quality.',
     avoid: 'Don’t drop new inverts straight in—drip-acclimate slowly.',
@@ -296,7 +327,9 @@ export const REEF_CONDITIONS = [
     summary: 'Low oxygen, ammonia or rotting food hits inverts fast. Something dead in the rock can crash the water.',
     weights: { pale: 3, deaths: 4, spines: 4, 'not-moving': 4, color: 2, unclear: 3 },
     changes: { 'water-change': 2 },
-    check: 'A pale, still or dying invert with no recent changes often points to low oxygen or poor water.',
+    check: 'A pale, still or struggling invert often points to low oxygen or poor water—test the water first.',
+    // The only signs its own picture shows; any other sign leads with that sign's picture (picture audit).
+    shows: ["not-moving"],
     clues: ['Several animals struggling, fish breathing fast too.', 'A pump or skimmer off, or something dead in the tank.'],
     distinguish: 'Deaths right after dosing point to medicine; right after adding it, to acclimation.',
     avoid: 'Don’t add medicine or new animals until the water tests clean.',
@@ -342,7 +375,8 @@ export const REEF_CONDITIONS = [
   {
     id: 'flipped', group: 'invert', title: 'Snail stuck upside down', kind: 'Snail', urgency: 'today', kinds: ['snail'],
     summary: 'Turbo and astrea snails often fall and can’t turn back over. They starve or get eaten if left.',
-    weights: { 'not-moving': 6 },
+    weights: { 'not-moving': 3 },
+    kindBoost: { snail: 4 },
     check: 'A snail upside down on the sand usually just fell and can’t flip over.',
     clues: ['Lying on its back on the sand.', 'The foot comes out when you turn it over.'],
     distinguish: 'If it doesn’t move after a day, or smells bad, it has died.',
