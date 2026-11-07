@@ -276,3 +276,17 @@ test('J1: every look-alike carries a why-it-could-be-this line built from the an
   const fins = assessDiagnosis({ water: 'fresh', primarySign: 'fins', signs: ['fins'] }).alternatives.find(a => a.id === 'columnaris');
   assert.match(fins.whyAlso, /“Damaged fins” fits this too/);
 });
+
+// Jez, Nov 6 19:13 screenshot: "Nothing obvious" + not eating explained itself with fast breathing.
+test('J2: the water guess from "Nothing obvious" explains itself without unpicked signs', () => {
+  for (const water of ['fresh', 'marine']) {
+    const d = assessDiagnosis({ water, primarySign: 'unclear', signs: ['unclear', 'appetite'] });
+    assert.equal(d.primary.id, 'water');
+    assert.doesNotMatch(d.primary.reason + d.primary.summary, /fast breathing|breathe fast|red gills/i);
+    assert.match(d.primary.reason, /Nothing obvious/);
+    assert.match(d.primary.reason, /eating less/);
+  }
+  // Real breathing or red-gill answers keep the breathing explanation.
+  assert.match(assessDiagnosis({ water: 'fresh', primarySign: 'breathing', signs: ['breathing'] }).primary.reason, /Fast breathing/);
+  assert.match(assessDiagnosis({ water: 'fresh', primarySign: 'unclear', signs: ['unclear', 'red-gills'] }).primary.summary, /breathe fast/);
+});

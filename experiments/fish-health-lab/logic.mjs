@@ -186,14 +186,28 @@ function reasonFor(condition, input, fits) {
   ].filter(Boolean).join(' ');
 }
 
+// "Nothing obvious" leads to the water as the first check. Its usual wording is about fast breathing
+// and red gills, which the person did not report (Jez, Nov 6 19:13 screenshot), so say why instead.
+const WATER_ALARMS = ['red-gills', 'gasping', 'several', 'deaths', 'collapse'];
+function quietWater(condition, input, fits) {
+  if (condition.id !== 'water' || !fits.length || fits.some(f => f.split(':')[0] !== 'unclear') || WATER_ALARMS.some(id => (input.signs || []).includes(id))) return null;
+  const behaviors = (input.signs || []).filter(id => BEHAVIORS.some(b => b.id === id) && id !== 'unclear').map(id => labelFor(id, input).toLowerCase());
+  return {
+    summary: 'When a fish is off but nothing shows on it, the water is the most common cause—and the quickest thing to check.',
+    reason: `You picked “Nothing obvious”${behaviors.length ? `, plus ${behaviors.join(', ')}` : ''}. With nothing to see on the fish, bad water—ammonia, nitrite, low oxygen or a temperature swing—is the most likely cause, and it often shows as ${behaviors.length ? 'this kind of change' : 'hiding or not eating'} before anything else. A quick test rules it in or out before you think about disease.`,
+  };
+}
+
 function decorate(condition, input, fits) {
   const fish = fishTypeFor(input.water, input.fishType);
+  const quiet = quietWater(condition, input, fits);
   return {
     ...condition,
+    ...(quiet ? { summary: quiet.summary } : {}),
     fits,
     matched: fits.map(id => labelFor(id, input)),
     urgencyLevel: urgencyFor(condition, input),
-    reason: reasonFor(condition, input, fits),
+    reason: quiet?.reason || reasonFor(condition, input, fits),
     plan: carePlanFor(condition.id, input.water, input.fishType),
     tip: fish ? condition.tips?.[fish.id] || '' : '',
   };
