@@ -310,6 +310,7 @@ footer > .text-button { font-size: 12px; }
 .alternative .alt-text strong{display:block;font-size:16px;font-weight:500;line-height:1.3;margin:0 64px 3px 0}
 .alternative .alt-text small{display:block;font-size:13.5px;line-height:1.4;color:var(--muted)}
 .alternative .alt-text .alt-note{margin-top:3px;font-size:13px}
+.alt-text .alt-why{color:var(--ink);margin-bottom:3px}.alt-text .alt-why b,.alt-text .alt-check b{font-weight:600}
 .alt-note>b,.alt-note>span{display:block}
 .alt-danger{color:#f99480;font-weight:600}
 .alt-treatment{color:var(--green)}
@@ -335,3 +336,9 @@ dialog .quick-compare-check{font-size:16px;color:var(--ink);background:rgba(14,3
   dialog .quick-compare-check{font-size:15px}
   .quick-compare-actions .button{flex:1 1 100%}
 }
+
+.result-save{display:flex;flex-wrap:wrap;gap:6px 22px;align-items:center}
+
+/* Quiet notice under each result (Nov 7 2026) */
+.result-note{margin:22px 0 0;font-size:.8rem;line-height:1.5;opacity:.72}
+.result-note a{color:inherit;text-decoration:underline}

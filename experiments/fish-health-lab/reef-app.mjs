@@ -1,10 +1,14 @@
 // Reef section UI: "What needs help?" → coral/anemone or shrimp/crab/snail
 // questions → the same result layout as the fish check. app.mjs hands over its
 // step machine (goStep etc.); everything reef-specific lives here.
-import { REEF_GROUPS, REEF_KINDS, REEF_CHANGES, REEF_CONDITIONS } from './reef-data.mjs';
+import { REEF_GROUPS, REEF_KINDS, REEF_CHANGES, REEF_CONDITIONS, REEF_LOOKALIKES } from './reef-data.mjs';
+import { REEF_LIB_INFO, ZONES, fishMap, closeupsFor } from './library-visuals.mjs';
 import { STEP_TAGS, INVERT_WARNING, reefPlanFor } from './reef-care.mjs';
 import { assessReef, reefSignsFor, reefKindFor, reefConditionFor, ALTERNATIVE_TEXT } from './reef-logic.mjs';
-import { reefImageFor, reefSlotsFor } from './reef-images.mjs';
+import { reefImageFor, reefResultImageFor, reefSlotsFor } from './reef-images.mjs';
+import { scienceLine } from './science.mjs';
+import { RESULT_NOTE } from './result-note.mjs';
+import { shopLinkFor, shopLinkHtml } from './shop-links.mjs';
 
 export const REEF_STEPS = ['reef-kind', 'reef-signs', 'reef-changes', 'reef-results'];
 
@@ -56,7 +60,7 @@ export function createReef({ $, $$, escape, goStep, badge, autoAdvance, switchVi
   function renderKinds() {
     const kinds = REEF_KINDS[state.group] || [];
     $('#reef-kind-title').textContent = groupText(state.group).ask;
-    $('#reef-kind-hint').textContent = 'Optional. Pick the closest, or Not sure.';
+    $('#reef-kind-hint').textContent = state.group === 'invert' ? 'For saltwater (reef) tanks. Optional—pick the closest, or Not sure.' : 'Optional. Pick the closest, or Not sure.';
     const tiles = [...kinds, { id: '', title: 'Not sure', text: 'Show every sign' }];
     $('#reef-kind-grid').innerHTML = tiles.map(k => `<button type="button" class="reef-tile" data-reef-kind="${k.id}" aria-pressed="${String(state.kindPicked && k.id === state.kind)}">${picture(reefImageFor(state.group, k.id, '', 'kinds'), k.id ? groupIcon(state.group, k.id) : 'unsure', { label: '', cls: 'reef-ph-tile' })}<strong>${escape(k.title)}</strong><small>${escape(k.text)}</small></button>`).join('');
   }
@@ -72,7 +76,8 @@ export function createReef({ $, $$, escape, goStep, badge, autoAdvance, switchVi
   function stepItem(step) {
     const [lead, ...rest] = step.text.split(/(?<=[.!?])\s/);
     const tag = step.tag ? `<em class="step-tag step-tag-${step.tag}">${escape(STEP_TAGS[step.tag])}</em>` : '';
-    return `<li${step.tag ? ` data-step-tag="${step.tag}"` : ''}><span><strong>${escape(lead)}</strong>${rest.length ? `<small>${escape(rest.join(' '))}</small>` : ''}${tag}</span></li>`;
+    const water = state.group === 'pond' ? 'pond' : 'marine';
+    return `<li${step.tag ? ` data-step-tag="${step.tag}"` : ''}><span><strong>${escape(lead)}</strong>${rest.length ? `<small>${escape(rest.join(' '))}</small>` : ''}${tag}${shopLinkHtml(shopLinkFor(step.text, '', water), escape)}</span></li>`;
   }
 
   function todoCard(c) {
@@ -85,19 +90,19 @@ export function createReef({ $, $$, escape, goStep, badge, autoAdvance, switchVi
 
   function alternativeCard(c) {
     const notes = [c.moreUrgent ? `<b class="alt-danger">${escape(ALTERNATIVE_TEXT.danger)}</b>` : '', c.treatmentNote === 'different' ? `<span class="alt-treatment">Different fix — check first</span>` : ''].filter(Boolean);
-    return `<div class="alternative" data-reef-alternative="${c.id}" data-more-urgent="${c.moreUrgent}"><button type="button" class="alt-pick" data-reef-choose="${c.id}" aria-label="This looks more like mine: ${escape(c.title)}">${picture(reefImageFor(state.group, c.id, state.kind), groupIcon(state.group, state.kind), { label: '', cls: 'reef-ph-thumb' })}<span class="alt-text"><strong>${escape(c.title)}</strong><small class="alt-check">${escape(c.comparisonReason)}</small>${notes.length ? `<small class="alt-note">${notes.join('')}</small>` : ''}</span></button><button type="button" class="alt-compare" data-reef-compare="${c.id}">Compare</button></div>`;
+    return `<div class="alternative" data-reef-alternative="${c.id}" data-more-urgent="${c.moreUrgent}"><button type="button" class="alt-pick" data-reef-choose="${c.id}" aria-label="This looks more like mine: ${escape(c.title)}">${picture(reefImageFor(state.group, c.id, state.kind), groupIcon(state.group, state.kind), { label: '', cls: 'reef-ph-thumb' })}<span class="alt-text"><strong>${escape(c.title)}</strong>${c.whyAlso ? `<small class="alt-why"><b>Why it could be this:</b> ${escape(c.whyAlso)}</small>` : ''}<small class="alt-check"><b>How to tell:</b> ${escape(c.comparisonReason)}</small>${notes.length ? `<small class="alt-note">${notes.join('')}</small>` : ''}</span></button><button type="button" class="alt-compare" data-reef-compare="${c.id}">Compare</button></div>`;
   }
 
   function renderResults() {
     const result = assessReef(input()), first = result.primary;
     const kind = reefKindFor(state.group, state.kind);
     const where = kind?.title || groupInfo()?.title || '';
-    const hero = first ? picture(reefImageFor(state.group, first.id, state.kind), groupIcon(state.group, state.kind)) : '';
+    const hero = first ? picture(first.chosen ? reefImageFor(state.group, first.id, state.kind) : reefResultImageFor(state.group, first, state.sign, state.kind), groupIcon(state.group, state.kind)) : '';
     const focus = first ? `<article class="result-focus reef-result" data-reef-result="${first.id}" data-urgency="${first.urgencyLevel}"><div class="result-head">${badge(first.urgencyLevel)}<p class="result-summary">${escape(first.summary)}</p></div><button type="button" class="result-image" data-reef-condition="${first.id}" aria-label="More about ${escape(first.title)}">${hero}<span>More info ↗</span></button><div class="diagnosis-reason"><strong>Why we think so</strong><p>${escape(first.reason)}</p></div>${todoCard(first)}</article>` : '<section class="notice no-diagnosis"><h2>Not enough to go on yet.</h2><p>Try the closest picture again, and test your water.</p></section>';
     const cards = result.alternatives.map(alternativeCard).join('');
     const natural = result.naturalNote ? `<p class="natural-note">${escape(result.naturalNote)}</p>` : '';
     const couldAlso = cards || natural ? `<section class="could-also"><h2 class="subheading">Could also be</h2>${cards ? `<p class="could-also-hint">Tap the one that looks more like yours.</p><div class="alternatives">${cards}</div>` : ''}${natural}</section>` : '';
-    $('#reef-results-content').innerHTML = `<h1 id="reef-results-title" class="question-title results-title">${first ? `<span>Most likely:</span> ${escape(first.title)}` : escape(result.title)}</h1><p class="question-hint result-hint">${where ? `${escape(where)} · ` : ''}${result.chosen ? 'Your pick from the look-alikes' : 'Our best guess from your answers'}—a hobby guide, not a vet.</p>${warning(result.warning)}${focus}${couldAlso}<button type="button" class="text-button" data-action="reef-library">${escape(groupText(state.group).all)}</button>`;
+    $('#reef-results-content').innerHTML = `<h1 id="reef-results-title" class="question-title results-title">${first ? `<span>Most likely:</span> ${escape(first.title)}` : escape(result.title)}</h1>${first ? scienceLine(first.id) : ''}<p class="question-hint result-hint">${where ? `${escape(where)} · ` : ''}${result.chosen ? 'Your pick from the look-alikes' : 'Our best guess from your answers'}—a hobby guide, not a vet.</p>${warning(result.warning)}${focus}${couldAlso}<button type="button" class="text-button" data-action="reef-library">${escape(groupText(state.group).all)}</button>${RESULT_NOTE()}`;
     goStep('reef-results');
   }
 
@@ -124,11 +129,33 @@ export function createReef({ $, $$, escape, goStep, badge, autoAdvance, switchVi
     return `<div class="reef-gallery" data-reef-gallery="${c.id}">${shown.map(slot => `<figure data-reef-slot="${slot.id}">${picture(slot.image, groupIcon(c.group))}<figcaption>${escape(slot.image?.caption || slot.label)}</figcaption></figure>`).join('')}</div>${note}`;
   }
 
+  // Visual guide (Nov 6 2026), same layout as the fish pages: four numbered close-ups,
+  // where to look (pond: the fish map), how it changes, and the main look-alike.
+  const zoomAttrs = (src, title, alt) => `data-zoom-src="${escape(src)}" data-zoom-title="${escape(title)}" data-zoom-alt="${escape(alt || '')}"`;
+  const img = im => `<img src="${escape(im.url)}" width="${im.width || 362}" height="${im.height || 362}" alt="${escape(im.alt || '')}" loading="lazy" decoding="async">`;
+  function infographic(c) {
+    const info = REEF_LIB_INFO[c.id], close = closeupsFor(c.id);
+    if (!info && !close.length) return '';
+    const closeups = close.length ? `<ol class="ig-closeups">${close.map((im, i) => `<li><button type="button" class="ig-zoom" ${zoomAttrs(im.url, `${c.title} · ${im.caption || ''}`, im.alt)} aria-label="Enlarge: ${escape(im.caption || '')}">${img(im)}<b aria-hidden="true">${i + 1}</b></button><span>${escape(im.caption || '')}</span></li>`).join('')}</ol>` : '';
+    const where = !info ? '' : info.zones
+      ? `<div class="ig-where"><h4>Where it shows</h4>${fishMap(info.zones)}<p>${info.zones.map(z => `<span class="ig-zone">${escape(ZONES[z])}</span>`).join('')}</p></div>`
+      : `<div class="ig-where ig-look"><h4>Where to look</h4><p>${info.look.map(l => `<span class="ig-zone">${escape(l)}</span>`).join('')}</p></div>`;
+    const time = info ? `<div class="ig-time"><h4>How it can change</h4><ol class="ig-timeline">${['Early', 'Common', 'Advanced'].map((label, i) => `<li><strong>${label}</strong><span>${escape(info.time[i])}</span></li>`).join('')}</ol><small class="ig-time-note">Not every fish goes through every stage.</small></div>` : '';
+    const [lookId, lookReason] = (REEF_LOOKALIKES[c.id] || []).find(([id]) => id) || [];
+    const look = lookId && reefConditionFor(lookId), lookImage = look && reefImageFor(look.group, look.id);
+    const notThis = look ? `<div class="ig-notthis"><h4>Not this?</h4><div>${lookImage ? `<button type="button" class="ig-zoom" ${zoomAttrs(lookImage.url, look.title, lookImage.alt)} aria-label="Enlarge ${escape(look.title)}">${img(lookImage)}</button>` : ''}<p><strong>${escape(look.title)}</strong>${escape(lookReason)}<button type="button" class="text-button" data-reef-condition="${look.id}">Open ${escape(shortName(look.title))} →</button></p></div></div>` : '';
+    return `<section class="infographic" data-infographic="${c.id}" aria-label="${escape(c.title)} visual guide"><p class="ig-eyebrow">VISUAL GUIDE</p>${closeups}${where || time ? `<div class="ig-row">${where}${time}</div>` : ''}${notThis}<small class="image-origin-note">AI illustrations.</small></section>`;
+  }
+
   function openDetail(id) {
-    const c = reefConditionFor(id);
-    if (!c) return;
+    const base = reefConditionFor(id);
+    if (!base) return;
+    // Opened from a result: same urgency as the result showed (e.g. peeling flesh = act today).
+    const r = state.group && !$('#guide-view').hidden && !$('[data-step="reef-results"]').hidden ? assessReef(input()) : null;
+    const shown = r && [r.primary, ...r.alternatives].find(x => x?.id === id);
+    const c = shown ? { ...base, urgency: shown.urgencyLevel } : base;
     const scope = groupText(c.group).scope;
-    $('#detail-content').innerHTML = `<p class="eyebrow">${escape(c.kind)} · ${escape(scope)}</p><h2 id="detail-title">${escape(c.title)}</h2>${badge(c.urgency)}<p class="lead">${escape(c.summary)}</p>${c.group === 'invert' ? warning(INVERT_WARNING) : ''}${gallery(c)}<h3>What to look for</h3><ul>${c.clues.map(x => `<li>${escape(x)}</li>`).join('')}</ul><h3>Easy to confuse with</h3><p>${escape(c.distinguish)}</p>${todoCard({ ...c, plan: reefPlanFor(c.id) })}<p class="avoid"><strong>Avoid:</strong> ${escape(c.avoid)}</p>`;
+    $('#detail-content').innerHTML = `<p class="eyebrow">${escape(c.kind)} · ${escape(scope)}</p><h2 id="detail-title">${escape(c.title)}</h2>${scienceLine(c.id)}${badge(c.urgency)}<p class="lead">${escape(c.summary)}</p>${c.group === 'invert' ? warning(INVERT_WARNING) : ''}${infographic(c)}${gallery(c)}<h3>What to look for</h3><ul>${c.clues.map(x => `<li>${escape(x)}</li>`).join('')}</ul><h3>Easy to confuse with</h3><p>${escape(c.distinguish)}</p>${todoCard({ ...c, plan: reefPlanFor(c.id) })}<p class="avoid"><strong>Avoid:</strong> ${escape(c.avoid)}</p>`;
     $('#detail-dialog').showModal();
   }
 
