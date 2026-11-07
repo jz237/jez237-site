@@ -10,7 +10,7 @@ const SFX = ['step', 'land', 'jump', 'climb', 'hurt', 'death', 'splash', 'swim',
   'uimove', 'uiok', 'uiback', 'rewind', 'slowmo', 'warn', 'amb1', 'amb2', 'amb3', 'amb4', 'amb5', 'waterfall'];
 const VOICE = ['begin', 'd2', 'd3', 'd4', 'd5', 'deep', 'boss', 'bossdown', 'wonder', 'relic', 'lowoil', 'lastlife', 'gameover', 'newrecord', 'champion'];
 export const MUSIC = new Set(['title', 'd1', 'd2', 'd3', 'd4', 'd5', 'deep', 'boss', 'clear', 'over', 'discover']);
-const V = '?v=4';
+const V = '?v=5';
 
 export class Audio {
   constructor(base) {

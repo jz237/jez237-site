@@ -1,7 +1,7 @@
 // The five bosses. Every attack is shown before it can hurt (W.zones with a `warn` time from RAMP.bossWarn),
 // and every boss has a moment when it is open to the pick (stuck, stunned or resting) plus a weak point that
 // dynamite can reach. Shapes the renderer draws: rect (bands, columns), circle (impact marks), curve (a swoop).
-import { BOSSES, PHYS, TOOLS, LOOT } from './config.js?v=4';
+import { BOSSES, PHYS, TOOLS, LOOT } from './config.js?v=5';
 
 const D2 = (ax, ay, bx, by) => (ax - bx) * (ax - bx) + (ay - by) * (ay - by);
 
