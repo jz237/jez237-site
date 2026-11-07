@@ -215,10 +215,10 @@ export const CROPS = {
     "set": "fish"
   },
   "molly-balance": {
-    "key": "experiments/fish-health-lab/audit/fish-molly-balance-67b0825dfefa.jpg",
-    "width": 362,
-    "height": 362,
-    "alt": "AI illustration: Black molly floating flat on its side at the surface.",
+    "key": "experiments/fish-health-lab/audit/fish-molly-balance-b86fbb0552c8.jpg",
+    "width": 543,
+    "height": 724,
+    "alt": "AI illustration: Black molly floating upside down near the surface, unable to right itself.",
     "set": "fish"
   },
   "livebearer-dropsy": {
@@ -269,5 +269,13 @@ export const CROPS = {
     "height": 443,
     "alt": "AI illustration: Cardinal tetra with a milky film over one eye.",
     "set": "fish"
+  },
+  "sign-lps-closed": {
+    "key": "experiments/fish-health-lab/audit/coral-sign-lps-closed-68e47285ca18.jpg",
+    "width": 444,
+    "height": 443,
+    "alt": "AI illustration: A hammer coral pulled in tight, its flesh still covering the skeleton, no tentacles out.",
+    "set": "coral",
+    "caption": "Pulled in tight; the flesh still covers the skeleton."
   }
 };

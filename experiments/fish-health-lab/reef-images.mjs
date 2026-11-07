@@ -18,6 +18,7 @@ import { CROPS as CORAL_CROPS, IMAGE_SOURCE as CORAL_IMAGE_SOURCE } from './reef
 import { CROPS as POND_CROPS, IMAGE_SOURCE as POND_IMAGE_SOURCE } from './reef-images-pond-data.mjs';
 import { CROPS as LIB_REEF_CROPS, IMAGE_SOURCE as LIB_REEF_IMAGE_SOURCE } from './library-reef-images-data.mjs';
 import { CROPS as FIX_CROPS, IMAGE_SOURCE as FIX_IMAGE_SOURCE } from './fish-images-fixes-data.mjs';
+import { CROPS as AUDIT_CROPS, IMAGE_SOURCE as AUDIT_IMAGE_SOURCE } from './fish-images-audit-data.mjs';
 
 // 'media' = content-hashed R2 keys on media.jez237.com; 'local' = the untracked
 // preview copies (experiments/fish-health-lab/corals/x.jpg → local-images/corals/x.jpg).
@@ -40,7 +41,9 @@ const invertFixes = fixesFor('invert'), pondFixes = fixesFor('pond');
 const invertPic = picker(merged(INVERT_CROPS, invertFixes), entry => entry.fixed ? fixUrlFor(entry) : invertUrlFor(entry), 'invert');
 const pondPic = picker(merged(POND_CROPS, pondFixes), entry => entry.fixed ? fixUrlFor(entry) : pondUrlFor(entry), 'pond');
 // New coral sign tiles (Nov 6 2026 logic check) use library close-ups: slow tissue loss, starved, wrong spot.
-const coralPic = picker({ ...CORAL_CROPS, ...Object.fromEntries(Object.entries(LIB_REEF_CROPS).map(([id, e]) => [id, { ...e, lib: true }])) }, entry => entry.lib ? libReefUrlFor(entry) : coralUrlFor(entry), 'coral');
+// Picture-audit redraws (Nov 6 2026: the "won't open" hammer coral looked dead) replace a coral crop under the same id.
+const coralAudit = Object.fromEntries(Object.entries(AUDIT_CROPS).filter(([id, e]) => e.set === 'coral' && CORAL_CROPS[id]).map(([id, e]) => [id, { ...CORAL_CROPS[id], ...e, audit: true }]));
+const coralPic = picker({ ...CORAL_CROPS, ...coralAudit, ...Object.fromEntries(Object.entries(LIB_REEF_CROPS).map(([id, e]) => [id, { ...e, lib: true }])) }, entry => entry.lib ? libReefUrlFor(entry) : entry.audit ? urlFor(entry, AUDIT_IMAGE_SOURCE) : coralUrlFor(entry), 'coral');
 
 // Which crop goes where. Kind-specific keys (`crab:…`) win over the plain key.
 export const INVERT_SET = {

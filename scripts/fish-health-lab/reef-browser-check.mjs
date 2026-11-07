@@ -46,7 +46,8 @@ const loaded = (p, sel) => p.locator(sel).evaluateAll(async els => {
 const allLoaded = async (p, sel, n) => {
   const got = await loaded(p, sel);
   if (n !== undefined) assert.equal(got.length, n, `${sel}: ${got.length} pictures`);
-  assert.ok(got.length > 0 && got.every(([id, w]) => id && w === 362), `${sel}: ${JSON.stringify(got)}`);
+  // Crops are 362 px; picture-audit redraws from 2:1 sheets are ~444 px (unresized, Nov 6 2026).
+  assert.ok(got.length > 0 && got.every(([id, w]) => id && (w === 362 || (w >= 440 && w <= 446))), `${sel}: ${JSON.stringify(got)}`);
   return got.map(([id]) => id);
 };
 const hero = async p => (await allLoaded(p, '.reef-result .result-image img', 1))[0];

@@ -35,7 +35,7 @@ const FISH_FIXES = Object.fromEntries(Object.entries(FIX_CROPS).filter(([id, e])
 const BEFORE_AUDIT = { ...PUBLISHED_CROPS, ...FISH_FIXES, ...withSource(DROPSY_CROPS, DROPSY_IMAGE_SOURCE) };
 // Picture audit (Nov 6 2026 20:12): redraws replace a crop under the same id (keeping its caption);
 // the freshwater "-scrape" crops are new.
-export const ALL_CROPS = { ...BEFORE_AUDIT, ...Object.fromEntries(Object.entries(AUDIT_CROPS).map(([id, e]) => [id, { ...(BEFORE_AUDIT[id] || {}), ...e, source: AUDIT_IMAGE_SOURCE }])) };
+export const ALL_CROPS = { ...BEFORE_AUDIT, ...Object.fromEntries(Object.entries(AUDIT_CROPS).filter(([, e]) => e.set === 'fish').map(([id, e]) => [id, { ...(BEFORE_AUDIT[id] || {}), ...e, source: AUDIT_IMAGE_SOURCE }])) };
 export const localPathFor = entry => `local-images/${entry.key.slice(KEY_PREFIX.length)}`;
 export const urlFor = entry => (entry.source || IMAGE_SOURCE) === 'media' ? MEDIA_BASE + entry.key : localPathFor(entry);
 const crop = id => ALL_CROPS[id] && { ...ALL_CROPS[id], url: urlFor(ALL_CROPS[id]) };

@@ -471,7 +471,9 @@ test('picture audit: redraws replace published crops under the same id, scrapes 
   assert.equal(receipt.assets.length, Object.keys(AUDIT_CROPS).length);
   for (const a of receipt.assets) {
     const e = AUDIT_CROPS[a.id]; assert.ok(e, a.id); assert.equal(e.key, a.r2Key); assert.ok(a.uploaded && !a.resized, a.id);
-    assert.ok(e.key.endsWith(`-${a.sha256.slice(0, 12)}.jpg`), a.id); assert.equal(ALL_CROPS[a.id].key, e.key, `${a.id} is used`);
+    assert.ok(e.key.endsWith(`-${a.sha256.slice(0, 12)}.jpg`), a.id);
+    if (e.set === 'coral') { const { reefImageFor } = await import('../../experiments/fish-health-lab/reef-images.mjs'); assert.equal(reefImageFor('coral', 'closed', 'lps', 'signs').key, e.key); continue; }
+    assert.equal(ALL_CROPS[a.id].key, e.key, `${a.id} is used`);
     if (!a.id.endsWith('-scrape')) assert.ok(CROPS[a.id] || FRESH_CROPS[a.id] || SPLIT_CROPS[a.id] || MARINE_CROPS[a.id] || FIX_CROPS[a.id], `${a.id} replaces a published crop`);
   }
 });
