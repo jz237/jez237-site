@@ -1,6 +1,6 @@
 // Gold Digger: every tunable in one place. The simulation (sim.js), the level generator (levelgen.js) and the
 // autopilot (ai.js) read only from here, so the Node checks and the browser agree exactly.
-export const VERSION = '1.3.1';
+export const VERSION = '1.4.0';
 export const STEP = 1 / 120;
 
 // ------------------------------------------------------------------ tiles (1 m cells, row 0 = bottom)
@@ -123,12 +123,14 @@ export function applyDiff(r, diff) {
 
 // ------------------------------------------------------------------ depths (biomes) and bosses
 export const BIOMES = [
-  { key: 'copper', name: 'COPPER HOLLOWS', sub: 'THE OLD WORKINGS', boss: 'rockjaw', bossName: 'ROCKJAW', music: 'd1', amb: 'amb1' },
-  { key: 'glow', name: 'GLOWROOT GROTTO', sub: 'WHERE THE FUNGUS SHINES', boss: 'gloomwing', bossName: 'GLOOMWING', music: 'd2', amb: 'amb2' },
-  { key: 'geode', name: 'GEODE VAULTS', sub: 'HALLS OF CRYSTAL', boss: 'warden', bossName: 'THE PRISM WARDEN', music: 'd3', amb: 'amb3' },
-  { key: 'drowned', name: 'DROWNED HALLS', sub: 'THE BURIED CITY', boss: 'wyrm', bossName: 'TIDEWYRM', music: 'd4', amb: 'amb4' },
-  { key: 'ember', name: 'EMBER CORE', sub: 'THE HEART OF THE MOUNTAIN', boss: 'heart', bossName: 'THE MOLTEN HEART', music: 'd5', amb: 'amb5' },
+  { key: 'copper', levels: ['THE OLD WORKINGS', 'THE RUST SEAM', 'THE GREEN DRIFT'], name: 'COPPER HOLLOWS', sub: 'THE OLD WORKINGS', boss: 'rockjaw', bossName: 'ROCKJAW', music: 'd1', amb: 'amb1' },
+  { key: 'glow', levels: ['THE GLOWING GARDEN', 'BLUECAP DEEP', 'THE ROOT CATHEDRAL'], name: 'GLOWROOT GROTTO', sub: 'WHERE THE FUNGUS SHINES', boss: 'gloomwing', bossName: 'GLOOMWING', music: 'd2', amb: 'amb2' },
+  { key: 'geode', levels: ['THE AMETHYST HALLS', 'THE FROZEN QUARTZ', 'THE ROSE GEODES'], name: 'GEODE VAULTS', sub: 'HALLS OF CRYSTAL', boss: 'warden', bossName: 'THE PRISM WARDEN', music: 'd3', amb: 'amb3' },
+  { key: 'drowned', levels: ['THE SUNKEN STREETS', 'THE SALT CISTERNS', 'THE GLOWING TIDE'], name: 'DROWNED HALLS', sub: 'THE BURIED CITY', boss: 'wyrm', bossName: 'TIDEWYRM', music: 'd4', amb: 'amb4' },
+  { key: 'ember', levels: ['THE BASALT FORGE', 'THE OBSIDIAN GLASS', 'THE SULFUR VENTS'], name: 'EMBER CORE', sub: 'THE HEART OF THE MOUNTAIN', boss: 'heart', bossName: 'THE MOLTEN HEART', music: 'd5', amb: 'amb5' },
 ];
+// each level of a depth has its own look (render.js VARIANTS); bosses use the first
+export const variantOf = (M) => (M.level >= 0 && M.level < 3 ? M.level : 0);
 // endless strata: biome looks cycle with new names (the renderer shifts the palette by `hue`)
 export const STRATA = ['DEEP', 'HOLLOW', 'SUNKEN', 'GILDED', 'WHISPERING', 'SHATTERED', 'ANCIENT', 'BURNING', 'SILENT', 'FORGOTTEN', 'STARLIT', 'IRON'];
 

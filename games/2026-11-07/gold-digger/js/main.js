@@ -1,15 +1,15 @@
 // Gold Digger: the game shell. Fixed-step simulation (sim.js) + renderer (render.js), level flow, the general store,
 // the journal of discoveries, tips, cinematics, the attract demo, the AI playthrough, scores and menus.
-import { VERSION, STEP, T, BIOMES, LEVELS, DEPTHS, UPGRADES, TYPICAL_UP, DIFFICULTY, MEDALS, RELICS, FOSSILS, WONDERS, NOTES, CREATURES, RANKS, START, STRATA, REWARDS, MAX_PERKS } from './config.js?v=13';
-import { makeWorld, step, drainEvents, cloneWorld, carryOut } from './sim.js?v=13';
-import { hash, findName } from './levelgen.js?v=13';
-import { Autopilot } from './ai.js?v=13';
-import { Renderer, pickQuality, LOOKS } from './render.js?v=13';
-import { CALM } from './fx.js?v=13';
-import { Audio } from './audio.js?v=13';
-import { Input } from './input.js?v=13';
-import { Scores, NO_POST } from './scores.js?v=13';
-import { Recorder, Replay } from './replay.js?v=13';
+import { VERSION, STEP, T, BIOMES, LEVELS, DEPTHS, UPGRADES, TYPICAL_UP, DIFFICULTY, MEDALS, RELICS, FOSSILS, WONDERS, NOTES, CREATURES, RANKS, START, STRATA, REWARDS, MAX_PERKS, variantOf } from './config.js?v=14';
+import { makeWorld, step, drainEvents, cloneWorld, carryOut } from './sim.js?v=14';
+import { hash, findName } from './levelgen.js?v=14';
+import { Autopilot } from './ai.js?v=14';
+import { Renderer, pickQuality, LOOKS } from './render.js?v=14';
+import { CALM } from './fx.js?v=14';
+import { Audio } from './audio.js?v=14';
+import { Input } from './input.js?v=14';
+import { Scores, NO_POST } from './scores.js?v=14';
+import { Recorder, Replay } from './replay.js?v=14';
 
 const Q = new URLSearchParams(location.search);
 const $ = (id) => document.getElementById(id);
@@ -156,7 +156,7 @@ function loadLevel() {
   $('level-name').textContent = W.endless ? `THE ENDLESS DEEP · LEVEL ${W.endlessN + 1}` : W.boss ? `DEPTH ${W.depth + 1} · THE GUARDIAN` : `DEPTH ${W.depth + 1} · LEVEL ${W.level + 1}`;
   const hi = board(W.endless, run.diff).best();
   $('hiscore').textContent = hi.toLocaleString();
-  descendCard(dname, W.boss ? BIOMES[W.depth].bossName : W.endless ? `LEVEL ${W.endlessN + 1}` : `LEVEL ${W.level + 1} OF ${LEVELS}`, W.boss ? 'Something is waiting at the bottom of the shaft.' : B.sub.charAt(0) + B.sub.slice(1).toLowerCase());
+  descendCard(dname, W.boss ? BIOMES[W.depth].bossName : W.endless ? `LEVEL ${W.endlessN + 1}` : `LEVEL ${W.level + 1} OF ${LEVELS}`, W.boss ? 'Something is waiting at the bottom of the shaft.' : (B.levels[variantOf(W.M)] || B.sub).charAt(0) + (B.levels[variantOf(W.M)] || B.sub).slice(1).toLowerCase());
   // music and the old prospector (rarely)
   A.playMusic(W.endless ? 'deep' : B.music);
   if (A.ctx) A.setBed('amb', B.amb, 0.32);
@@ -833,7 +833,7 @@ async function boot() {
   toTitle();
   checkUnlocks(true); applyLoadout();
   $('loading').style.opacity = 0; setTimeout(() => $('loading').remove(), 700);
-  if (Q.has('test')) { const T2 = await import('./tests.js?v=13'); T2.run({ G, R, startCampaign, startEndless, toTitle, tick, makeWorld, step }); return; }
+  if (Q.has('test')) { const T2 = await import('./tests.js?v=14'); T2.run({ G, R, startCampaign, startEndless, toTitle, tick, makeWorld, step }); return; }
   if (Q.has('autoplay')) startCampaign(+(Q.get('depth') || 0), { mode: 'autoplay', auto: 'demo', level: +(Q.get('level') || 0) });
   if (Q.has('playthrough')) startCampaign(+(Q.get('depth') || 0), { mode: 'playthrough', auto: 'demo', level: +(Q.get('level') || 0) });
   requestAnimationFrame(raf);

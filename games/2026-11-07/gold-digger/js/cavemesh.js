@@ -6,7 +6,7 @@
 // weights (gold vein, wetness, glow, rubble/cracks) that the triplanar rock shader uses.
 // Breaking a tile re-meshes only the chunks around it (a few ms).
 import * as THREE from '../vendor/three.module.min.js';
-import { T } from './config.js?v=13';
+import { T } from './config.js?v=14';
 
 export const S = 0.5;                  // sample spacing (m)
 export const Z0 = -15, Z1 = 5;         // depth range (camera side is +z)
@@ -14,6 +14,7 @@ const NZ = Math.round((Z1 - Z0) / S) + 1;
 export const CH = 16;                  // chunk size in tiles
 
 // 3D value noise (deterministic per level)
+const hashK = (k, n) => { let h = Math.imul(k ^ 0x9e3779b9, 0x85ebca6b) ^ Math.imul(n + 7, 0xc2b2ae35); h ^= h >>> 15; h = Math.imul(h, 0x27d4eb2d); h ^= h >>> 13; return (h >>> 0) / 4294967296; };
 function noise3(seed) {
   const p = new Uint8Array(512); let s = seed >>> 0 || 1;
   for (let i = 0; i < 256; i++) p[i] = i;
@@ -45,8 +46,12 @@ export class Cave {
     this.chunks = new Map();
     // sample grid in x/y covers the map plus a margin of solid rock
     this.mx = 3;
+    // a deeper margin under the map: the exit shaft runs on down through it, so the lift sinks out of sight
+    this.my = 12;
     this.nx = Math.round((M.w + this.mx * 2) / S) + 1;
-    this.ny = Math.round((M.h + this.mx * 2) / S) + 1;
+    this.ny = Math.round((M.h + this.mx + this.my) / S) + 1;
+    const sh = look.shape || {};
+    this.back = sh.back || 1; this.jag = sh.jag || 1; this.cols = sh.cols || 0; this.colR = sh.colR || 0.75; this.sk = (M.seed * 13 + M.level * 101) | 0;
     this.buildColumns();
     const cw = Math.ceil(M.w / CH), chh = Math.ceil(M.h / CH);
     this.cw = cw; this.chh = chh;
@@ -54,7 +59,8 @@ export class Cave {
   }
   tile(x, y) {
     const M = this.M;
-    if (x < 0 || y < 0 || x >= M.w) return T.ROCK;
+    if (x < 0 || x >= M.w) return T.ROCK;
+    if (y < 0) return (M.exit && (x === Math.floor(M.exit.x) - 1 || x === Math.floor(M.exit.x))) ? T.AIR : T.ROCK;   // the shaft the lift goes down
     if (y >= M.h) return (M.start && (x === Math.floor(M.start.x) - 1 || x === Math.floor(M.start.x))) ? T.AIR : T.ROCK;   // the shaft up to daylight
     return M.tiles[y * M.w + x];
   }
@@ -62,7 +68,7 @@ export class Cave {
 
   // per-column (x, y) values: smoothed solidity, front face depth, back wall depth
   buildColumns() {
-    const { nx, ny, M } = this, m = this.mx;
+    const { nx, ny, M } = this, m = this.mx, my = this.my;
     const N = nx * ny;
     this.sol = new Float32Array(N); this.zf = new Float32Array(N); this.zb = new Float32Array(N);
     // distance (tiles) from each open tile to the nearest rock, for the back wall depth
@@ -78,7 +84,7 @@ export class Cave {
     this.pockets = (M.finds || []).filter((f) => f.kind === 'wonder' && f.room).map((f) => [f.room[0] + 1.5, f.room[1] + 3, f.room[0] + 14.5, f.room[1] + 11]);
     const raw = new Float32Array(N);
     for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) {
-      const x = -m + i * S + 0.25, y = -m + j * S + 0.25;
+      const x = -m + i * S + 0.25, y = -my + j * S + 0.25;
       // bilinear over tile centres
       const fx = x - 0.5, fy = y - 0.5, x0 = Math.floor(fx), y0 = Math.floor(fy), tx = fx - x0, ty = fy - y0;
       const a = this.solid(x0, y0), b = this.solid(x0 + 1, y0), c = this.solid(x0, y0 + 1), d = this.solid(x0 + 1, y0 + 1);
@@ -91,12 +97,12 @@ export class Cave {
       this.sol[j * nx + i] = s / w;
     }
     for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) {
-      const x = -m + i * S, y = -m + j * S;
+      const x = -m + i * S, y = -my + j * S;
       const tx = Math.floor(x), ty = Math.floor(y);
       const dd = (tx >= 0 && ty >= 0 && tx < W && ty < H) ? dist[ty * W + tx] : 0;
       const k = j * nx + i;
       this.zf[k] = 2.3 + n3(x * 0.13, y * 0.13, 1.5) * 1.6 + n3(x * 0.5, y * 0.5, 9.1) * 0.4;
-      this.zb[k] = -(1.9 + Math.min(dd, 8) * 0.62 + n3(x * 0.09 + 3, y * 0.09, 4.2) * 2.6 + n3(x * 0.4, y * 0.4, 7.7) * 0.6);
+      this.zb[k] = -(1.9 + (Math.min(dd, 8) * 0.62 + n3(x * 0.09 + 3, y * 0.09, 4.2) * 2.6) * this.back + n3(x * 0.4 * this.jag, y * 0.4 * this.jag, 7.7) * 0.6 * this.jag);
       // a wonder's room opens into a great hollow behind it
       for (const pk of this.pockets) {
         const ex = Math.max(pk[0] - x, 0, x - pk[2]), ey = Math.max(pk[1] - y, 0, y - pk[3]);
@@ -106,7 +112,7 @@ export class Cave {
     }
   }
   col(arr, x, y) {
-    const fx = (x + this.mx) / S, fy = (y + this.mx) / S;
+    const fx = (x + this.mx) / S, fy = (y + this.my) / S;
     const i = Math.max(0, Math.min(this.nx - 2, Math.floor(fx))), j = Math.max(0, Math.min(this.ny - 2, Math.floor(fy)));
     const tx = Math.min(1, Math.max(0, fx - i)), ty = Math.min(1, Math.max(0, fy - j)), n = this.nx;
     const a = arr[j * n + i], b = arr[j * n + i + 1], c = arr[(j + 1) * n + i], d = arr[(j + 1) * n + i + 1];
@@ -117,6 +123,17 @@ export class Cave {
     const sv = (this.col(this.sol, x, y) - 0.5) * 4;
     const zf = this.col(this.zf, x, y), zb = this.col(this.zb, x, y);
     let d = Math.max(Math.min(sv, zf - z), zb - z);
+    // pillared halls: stone columns stand floor to ceiling behind the play plane
+    if (this.cols && z < -2.3) {
+      const sp = 7, ci = Math.round(x / sp);
+      for (let k = ci - 1; k <= ci + 1; k++) {
+        const h1 = hashK(k + this.sk, 1);
+        if (h1 > this.cols) continue;
+        const cx = k * sp + (hashK(k + this.sk, 2) - 0.5) * 2.5, cz = -3.7 - hashK(k + this.sk, 3) * 2.2;
+        const r = this.colR * (0.8 + hashK(k + this.sk, 4) * 0.45) * (1 + 0.1 * Math.sin(y * 1.1 + k * 2.3));
+        d = Math.max(d, (r - Math.hypot(x - cx, z - cz)) * 2.2);
+      }
+    }
     const az = Math.abs(z);
     if (az > 1.1) { const w = Math.min(1, (az - 1.1) / 1.9); d += (this.n3(x * 0.42, y * 0.42, z * 0.42) - 0.5) * 1.5 * w + (this.n3(x * 1.3, y * 1.3, z * 1.3) - 0.5) * 0.45 * w; }
     return d;
@@ -137,9 +154,10 @@ export class Cave {
     // refresh the solidity samples around a changed tile (rubble gone: the hole opens)
     const { nx, ny, M } = this, m = this.mx;
     const i0 = Math.max(0, Math.floor((tx - 2 + m) / S)), i1 = Math.min(nx - 1, Math.ceil((tx + 3 + m) / S));
-    const j0 = Math.max(0, Math.floor((ty - 2 + m) / S)), j1 = Math.min(ny - 1, Math.ceil((ty + 3 + m) / S));
+    const my = this.my;
+    const j0 = Math.max(0, Math.floor((ty - 2 + my) / S)), j1 = Math.min(ny - 1, Math.ceil((ty + 3 + my) / S));
     const raw = (i, j) => {
-      const x = -m + i * S + 0.25, y = -m + j * S + 0.25, fx = x - 0.5, fy = y - 0.5, x0 = Math.floor(fx), y0 = Math.floor(fy), ax = fx - x0, ay = fy - y0;
+      const x = -m + i * S + 0.25, y = -my + j * S + 0.25, fx = x - 0.5, fy = y - 0.5, x0 = Math.floor(fx), y0 = Math.floor(fy), ax = fx - x0, ay = fy - y0;
       const a = this.solid(x0, y0), b = this.solid(x0 + 1, y0), c = this.solid(x0, y0 + 1), d = this.solid(x0 + 1, y0 + 1);
       return a + (b - a) * ax + (c - a) * ay + (a - b - c + d) * ax * ay;
     };
@@ -168,13 +186,14 @@ export class Cave {
     const m = this.mx;
     // sample index range (one extra each side so edge quads are complete)
     const i0 = Math.max(0, Math.round((tx0 + m) / S) - 1), i1 = Math.min(this.nx - 1, Math.round((tx0 + n + m) / S) + 1);
-    const j0 = Math.max(0, Math.round((ty0 + m) / S) - 1), j1 = Math.min(this.ny - 1, Math.round((ty0 + n + m) / S) + 1);
+    const my = this.my;
+    const j0 = Math.max(0, Math.round((ty0 + my) / S) - 1), j1 = Math.min(this.ny - 1, Math.round((ty0 + n + my) / S) + 1);
     if (i1 - i0 < 2 || j1 - j0 < 2) return null;
     const NX = i1 - i0 + 1, NY = j1 - j0 + 1;
     const D = new Float32Array(NX * NY * NZ);
     let any = false, allIn = true;
     for (let k = 0; k < NZ; k++) for (let j = 0; j < NY; j++) for (let i = 0; i < NX; i++) {
-      const v = this.density(-m + (i0 + i) * S, -m + (j0 + j) * S, Z0 + k * S);
+      const v = this.density(-m + (i0 + i) * S, -my + (j0 + j) * S, Z0 + k * S);
       D[(k * NY + j) * NX + i] = v;
       if (v > 0) any = true; else allIn = false;
     }
@@ -198,13 +217,13 @@ export class Cave {
         sx += oa[0] + (ob[0] - oa[0]) * t; sy += oa[1] + (ob[1] - oa[1]) * t; sz += oa[2] + (ob[2] - oa[2]) * t; cnt++;
       }
       vid[(k * NY + j) * NX + i] = pos.length / 3;
-      pos.push(-m + (i0 + i + sx / cnt) * S, -m + (j0 + j + sy / cnt) * S, Z0 + (k + sz / cnt) * S);
+      pos.push(-m + (i0 + i + sx / cnt) * S, -my + (j0 + j + sy / cnt) * S, Z0 + (k + sz / cnt) * S);
     }
     // faces: for each sample edge with a sign change, a quad of the four cells around it. Only edges whose
     // lower corner lies inside this chunk's tile range are emitted, so chunks never double up.
     const idx = [];
     const inI = (i) => { const x = -m + (i0 + i) * S; return x >= tx0 && x < tx0 + n; };
-    const inJ = (j) => { const y = -m + (j0 + j) * S; return y >= ty0 && y < ty0 + n; };
+    const inJ = (j) => { const y = -my + (j0 + j) * S; return y >= ty0 && y < ty0 + n; };
     const cell = (i, j, k) => (i < 0 || j < 0 || k < 0 || i >= NX - 1 || j >= NY - 1 || k >= NZ - 1) ? -1 : vid[(k * NY + j) * NX + i];
     const quad = (a, b, c, d, flip) => { if (a < 0 || b < 0 || c < 0 || d < 0) return; if (!flip) idx.push(a, c, b, a, d, c); else idx.push(a, b, c, a, c, d); };
     for (let k = 1; k < NZ - 1; k++) for (let j = 1; j < NY - 1; j++) for (let i = 1; i < NX - 1; i++) {
@@ -237,8 +256,9 @@ export class Cave {
       const o = v * 3, x = position[o], y = position[o + 1], z = position[o + 2], ny = nrm[o + 1];
       const up = Math.max(0, ny);
       if (up > 0.6 && Math.abs(z) < 2.2) continue;
-      const amp = (Math.abs(z) < 1.8 ? 0.14 : 0.42) * (1 - up * 0.7);
-      const d = (n3(x * 0.9, y * 0.9, z * 0.9) * 0.7 + n3(x * 2.6, y * 2.6, z * 2.6) * 0.3) * amp;
+      const amp = (Math.abs(z) < 1.8 ? 0.14 : 0.42 * this.jag) * (1 - up * 0.7);
+      const jf = 0.9 * Math.sqrt(this.jag);
+      const d = (n3(x * jf, y * jf, z * jf) * 0.7 + n3(x * 2.6 * jf, y * 2.6 * jf, z * 2.6 * jf) * 0.3) * amp;
       position[o] -= nrm[o] * d; position[o + 1] -= nrm[o + 1] * d; position[o + 2] -= nrm[o + 2] * d;
     }
     // colours, AO and material weights
@@ -311,6 +331,7 @@ export function rockMaterial(tex, look) {
     tAlb: { value: tex.alb }, tNrm: { value: tex.nrm }, uScale: { value: 0.32 }, uBump: { value: 1.25 }, uTime: { value: 0 },
     uGold: { value: new THREE.Color(1.0, 0.68, 0.22) }, uGlow: { value: new THREE.Color().fromArray(look.glow || [1, 0.4, 0.1]) },
     uMoss: { value: new THREE.Color().fromArray(look.mossCol || [0.1, 0.3, 0.2]) }, uRubble: { value: new THREE.Color().fromArray(look.rubble || [0.5, 0.45, 0.4]) }, uCaus: { value: new THREE.Color(0, 0, 0) }, uSpark: { value: new THREE.Color(0, 0, 0) }, uStrata: { value: 0 }, uLampP: { value: new THREE.Vector3(0, -999, 0) },
+    uCrust: { value: new THREE.Color(1, 1, 1) }, uCrustA: { value: 0 }, uStain: { value: new THREE.Color(0, 0, 0) }, uStainA: { value: 0 }, uRoughK: { value: 1 },
   };
   mat.userData.U = U;
   mat.onBeforeCompile = (sh) => {
@@ -322,6 +343,7 @@ export function rockMaterial(tex, look) {
       .replace('#include <common>', `#include <common>
 uniform sampler2D tAlb; uniform sampler2D tNrm; uniform float uScale; uniform float uBump; uniform float uTime;
 uniform vec3 uGold; uniform vec3 uGlow; uniform vec3 uMoss; uniform vec3 uRubble; uniform vec3 uCaus; uniform vec3 uSpark; uniform vec3 uLampP; uniform float uStrata;
+uniform vec3 uCrust; uniform float uCrustA; uniform vec3 uStain; uniform float uStainA; uniform float uRoughK;
 // light thrown off moving water: thin bright ripple lines
 float caustic(vec2 p, float t) {
   vec2 i = p; float c = 1.0;
@@ -363,13 +385,28 @@ vec3 gTW; vec4 gAlb; vec3 gNW;`)
   // sediment: soft horizontal bands that wander a little, lighter and darker layers of stone
   float sb = sin(vWPos.y * 1.6 + gAlb.r * 2.2 + sin(vWPos.x * 0.13 + vWPos.z * 0.2) * 1.8) * 0.6 + sin(vWPos.y * 4.3 + gAlb.g * 3.0 + sin(vWPos.x * 0.31) * 1.2) * 0.4;
   c *= 1.0 + sb * 0.14 * uStrata * (1.0 - moss);
+  // mineral stains washed down the walls (rust, verdigris, salt, sulfur): long vertical streaks
+  if (uStainA > 0.0) {
+    float side = 1.0 - smoothstep(0.3, 0.8, abs(N.y));
+    float sn = texture2D(tAlb, vec2(vWPos.x * 0.47 + vWPos.z * 0.31, vWPos.y * 0.028)).r;
+    float sm = texture2D(tAlb, vec2(vWPos.x * 0.11 + 0.5 + vWPos.z * 0.07, vWPos.y * 0.045)).g;
+    float st = smoothstep(0.53, 0.68, sn + (sm - 0.5) * 0.6) * side * uStainA;
+    c = mix(c, uStain * (0.65 + 0.6 * gAlb.g), st * (1.0 - moss));
+  }
+  // a crust settled on every ledge (salt, frost, sulfur bloom, copper patina)
+  if (uCrustA > 0.0) {
+    float upf = smoothstep(0.2, 0.75, N.y);
+    float cn = texture2D(tAlb, vWPos.xz * 0.19 + 0.37).g;
+    float cr = smoothstep(0.35, 0.7, upf * (0.75 + cn * 0.6)) * uCrustA;
+    c = mix(c, uCrust * (0.78 + 0.32 * gAlb.g), cr);
+  }
   diffuseColor.rgb = c;
 }`)
       .replace('#include <normal_fragment_maps>', `#include <normal_fragment_maps>
 normal = normalize((viewMatrix * vec4(gNW, 0.0)).xyz);`)
       .replace('#include <roughnessmap_fragment>', `#include <roughnessmap_fragment>
 roughnessFactor = clamp(mix(0.97, 0.5, 1.0 - gAlb.a) , 0.3, 1.0);
-roughnessFactor = mix(roughnessFactor, 0.16, vMat.y);`)
+roughnessFactor = mix(roughnessFactor, 0.16, vMat.y) * uRoughK;`)
       .replace('#include <metalnessmap_fragment>', `#include <metalnessmap_fragment>
 {
   // gold: veins that wander through the rock and bright flecks in them
@@ -424,6 +461,6 @@ roughnessFactor = mix(roughnessFactor, 0.16, vMat.y);`)
   if (code > 1.5) { float cr = smoothstep(0.86, 0.97, 1.0 - abs(sin(vWPos.x * 3.1 + vWPos.y * 2.3 + gAlb.r * 9.0))); totalEmissiveRadiance += vec3(1.0, 0.3, 0.05) * cr * smoothstep(1.5, 1.9, code) * (0.6 + 0.4 * sin(uTime * 2.4)) * 0.38; }
 }`);
   };
-  mat.customProgramCacheKey = () => 'gd-rock-6';
+  mat.customProgramCacheKey = () => 'gd-rock-7';
   return mat;
 }

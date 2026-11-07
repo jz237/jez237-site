@@ -3,7 +3,7 @@
 // Things that glow register light "emitters" the renderer's light pool can aim at.
 // The wonders (one per level in the campaign) are big set pieces in a room whose back wall is pushed far back.
 import * as THREE from '../vendor/three.module.min.js';
-import { T, SOLID } from './config.js?v=13';
+import { T, SOLID } from './config.js?v=14';
 
 function rng(seed) { let s = seed >>> 0 || 1; return () => { s = (s + 0x6D2B79F5) >>> 0; let t = s; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
 
@@ -96,6 +96,23 @@ void main(){
 const WF_VERT = `varying vec2 vUv; varying vec3 vW; void main(){ vUv = uv; vec4 w = modelMatrix * vec4(position, 1.0); vW = w.xyz; gl_Position = projectionMatrix * viewMatrix * w; }`;
 const GW_VERT = `attribute float aPh; uniform float uT; uniform float uScale; varying float vA;
 void main(){ vec4 mv = modelViewMatrix * vec4(position, 1.0); vA = 0.55 + 0.45 * sin(uT * 1.7 + aPh * 6.28); gl_PointSize = uScale * 0.09 / max(0.5, -mv.z) * (0.7 + vA * 0.6); gl_Position = projectionMatrix * mv; }`;
+// each level's set (render.js VARIANTS); the first level of a depth uses the depth's own
+const SETS = ['workings', 'garden', 'amethyst', 'streets', 'basalt'];
+// floating motes: colour, size, life, drift; fire = the fire particle pool (embers)
+const MOTES = {
+  garden: { rate: 6, c: [0.3, 1, 0.8], s0: 0.12, s1: 0.06, life: 4, a: 0.7, vy: 0.15, grav: -0.02 },
+  bluecap: { rate: 7, c: [0.45, 0.6, 1], s0: 0.12, s1: 0.05, life: 4, a: 0.7, vy: 0.12, grav: -0.02 },
+  roots: { rate: 6, c: [1, 0.85, 0.4], s0: 0.08, s1: 0.05, life: 5, a: 0.75, vy: 0.04, jx: 0.5, grav: 0 },
+  amethyst: { rate: 6, c: [0.85, 0.7, 1], s0: 0.25, s1: 0.05, life: 1.5, a: 0.8, vy: 0.05, jx: 0, fade: 0.6 },
+  rose: { rate: 6, c: [1, 0.65, 0.75], s0: 0.22, s1: 0.05, life: 1.6, a: 0.8, vy: 0.05, jx: 0, fade: 0.6 },
+  frost: { rate: 10, c: [0.9, 0.95, 1], s0: 0.07, s1: 0.06, life: 6, a: 0.75, vy: -0.35, jx: 0.4, dy: 3, grav: 0.02, fade: 0.3 },
+  rust: { rate: 6, c: [1, 0.5, 0.22], s0: 0.06, s1: 0.04, life: 5, a: 0.6, vy: -0.15, jx: 0.3, dy: 3, grav: 0.03 },
+  salt: { rate: 6, c: [0.95, 0.94, 0.88], s0: 0.06, s1: 0.04, life: 5, a: 0.55, vy: -0.08, jx: 0.3, dy: 2 },
+  tide: { rate: 8, c: [0.5, 0.9, 1], s0: 0.06, s1: 0.1, life: 4, a: 0.6, vy: 0.5, jy: 0.4, jx: 0.15, dy: -2, grav: -0.05 },
+  basalt: { rate: 6, fire: 1, c: [1, 0.45, 0.12], s0: 0.1, s1: 0.04, life: 3, a: 1, vy: 0.8, jy: 1, jx: 0.4, dy: -2, drag: 0.2, grav: -0.2 },
+  obsidian: { rate: 7, fire: 1, c: [0.85, 0.3, 1], s0: 0.1, s1: 0.04, life: 3, a: 1, vy: 0.7, jy: 1, jx: 0.4, dy: -2, drag: 0.2, grav: -0.2 },
+  sulfur: { rate: 6, fire: 1, c: [1, 0.75, 0.2], s0: 0.08, s1: 0.03, life: 3, a: 0.9, vy: 0.6, jy: 0.8, jx: 0.4, dy: -2, drag: 0.2, grav: -0.15 },
+};
 const GW_FRAG = `uniform sampler2D uTex; uniform vec3 uCol; varying float vA; void main(){ vec4 t = texture2D(uTex, gl_PointCoord); gl_FragColor = vec4(uCol * 2.2 * vA, t.a * vA); }`;
 
 export function buildDecor(M, look, W, K) {
@@ -134,7 +151,7 @@ export function buildDecor(M, look, W, K) {
     const [x, y] = floors[i];
     const g = obj(make('stalactite', 0.8 + R() * 1.6)); g.rotation.z = Math.PI; g.position.set(x + R(), y - 0.05, -1.6 - R() * 2.5); g.scale.setScalar(0.8 + R() * 0.7); statics.push(g);
   }
-  // ---- biome dressing
+  // ---- dressing: each level's set (render.js VARIANTS) has its own props
   const fl = floors.slice();
   const take = (n, minGap = 3, pred = () => true) => {
     const out = [];
@@ -142,20 +159,51 @@ export function buildDecor(M, look, W, K) {
     return out;
   };
   const headroom = (x, y) => { let h = 0; while (h < 12 && open(x, y + h)) h++; return h; };
+  const drop = (x, y) => { let h = 0; while (h < 14 && open(x, y - h)) h++; return h; };   // open cells below a ceiling spot
   const accent = look.accent;
-  if (biome === 0) {
-    // timber frames across corridors, lanterns, rails and carts
-    for (const [x, y] of take(Math.round(10 * dens), 5, ([x, y]) => headroom(x, y) >= 3 && headroom(x, y) <= 6 && open(x - 1, y) && open(x + 1, y))) {
-      const h = headroom(x, y);
-      place(make('timberFrame', 3.2, h), x + 0.5, y, -0.9);
-      const ln = obj(make('lantern')); ln.position.set(x + 0.5 + (R() < 0.5 ? -1.1 : 1.1), y + h - 0.65, -0.55); statics.push(ln);
-      emitters.push({ x: ln.position.x, y: ln.position.y, z: -0.2, col: [1, 0.6, 0.26], int: 6, range: 9, pri: 3, flick: 1 });
+  const set = look.set || SETS[biome % 5];
+  const info = { set, roots: 0, shelves: 0 };
+  const lantern = (x, y, col = [1, 0.6, 0.26]) => { const ln = obj(make('lantern')); ln.position.set(x, y, -0.55); statics.push(ln); emitters.push({ x, y, z: -0.2, col, int: 6, range: 9, pri: 3, flick: 1 }); };
+  const crystals = (n, cols, back = 0.7, glowP = 0.5, smin = 0.5, smax = 1.9) => {
+    for (const [x, y] of take(Math.round(n * dens), 2)) {
+      const c = cols[Math.floor(R() * cols.length)], s = smin + R() * (smax - smin), z = R() < back ? -1 - R() * 2.5 : 1.2 + R() * 0.6;
+      place(make('crystal', s, c), x + R(), y, z, 1, R() * 6);
+      if (R() < glowP) emitters.push({ x: x + 0.5, y: y + s * 0.8, z, col: new THREE.Color(c).toArray(), int: 2.2 * s, range: 6, pri: 1.5 });
     }
-    for (const [x, y] of take(Math.round(4 * dens), 8, ([x, y]) => open(x + 2, y) && open(x - 2, y) && solid(x + 2, y - 1) && solid(x - 2, y - 1))) {
+  };
+  // side walls a prop can cling to: [x at the wall face, y, facing +1 (wall on the left) or -1]
+  const walls = [];
+  for (let y = 1; y < M.h - 1; y++) for (let x = 1; x < M.w - 1; x++) {
+    if (!open(x, y) || !open(x, y + 1)) continue;
+    if (solid(x - 1, y) && solid(x - 1, y + 1)) walls.push([x, y, 1]);
+    else if (solid(x + 1, y) && solid(x + 1, y + 1)) walls.push([x + 1, y, -1]);
+  }
+  shuffle(walls);
+  if (set === 'workings' || set === 'patina') {
+    // timber frames across corridors with lanterns, rails and carts (the green drift's frames lean where the ground has moved)
+    for (const [x, y] of take(Math.round((set === 'patina' ? 7 : 10) * dens), 5, ([x, y]) => headroom(x, y) >= 3 && headroom(x, y) <= 6 && open(x - 1, y) && open(x + 1, y))) {
+      const h = headroom(x, y);
+      const f = place(make('timberFrame', 3.2, h), x + 0.5, y, -0.9);
+      if (set === 'patina') f.rotation.z = (R() - 0.5) * 0.12;
+      if (set === 'workings' || R() < 0.5) lantern(x + 0.5 + (R() < 0.5 ? -1.1 : 1.1), y + h - 0.65);
+    }
+    for (const [x, y] of take(Math.round((set === 'patina' ? 2 : 4) * dens), 8, ([x, y]) => open(x + 2, y) && open(x - 2, y) && solid(x + 2, y - 1) && solid(x - 2, y - 1))) {
       place(make('rail', 5), x + 0.5, y, -1.5);
       if (R() < 0.6) place(make('cart'), x + 0.5 + (R() - 0.5) * 2, y + 0.05, -1.5);
     }
-  } else if (biome === 1) {
+    // copper ore turned green and blue: malachite and azurite on the floors
+    if (set === 'patina') crystals(14, [0x2fbf8a, 0x2f6fd0, 0x48d6b0], 0.75, 0.45, 0.4, 1.3);
+  } else if (set === 'rust') {
+    // iron frames, pipe runs along the back walls, chains from the roof, a few carts
+    for (const [x, y] of take(Math.round(8 * dens), 5, ([x, y]) => headroom(x, y) >= 3 && headroom(x, y) <= 6 && open(x - 1, y) && open(x + 1, y))) {
+      const h = headroom(x, y);
+      place(make('girder', 3.2, h), x + 0.5, y, -0.9);
+      if (R() < 0.6) lantern(x + 0.5 + (R() < 0.5 ? -1.1 : 1.1), y + h - 0.65, [1, 0.42, 0.18]);
+    }
+    for (const [x, y] of take(Math.round(6 * dens), 9, ([x, y]) => headroom(x, y) >= 3 && open(x - 3, y) && open(x + 3, y))) place(make('pipes', 5 + Math.floor(R() * 4)), x + 0.5, y + 0.8 + R() * 1.4, -2.1);
+    for (const [x, y] of ceils.slice(0, Math.round(14 * dens))) { if (drop(x, y) < 4) continue; place(make('chain', 1 + R() * 2.5), x + 0.5, y + 1, -0.8 - R() * 2); }
+    for (const [x, y] of take(Math.round(2 * dens), 8, ([x, y]) => open(x + 2, y) && open(x - 2, y) && solid(x + 2, y - 1) && solid(x - 2, y - 1))) { place(make('rail', 5), x + 0.5, y, -1.5); place(make('cart'), x + 0.5, y + 0.05, -1.5); }
+  } else if (set === 'garden') {
     for (const [x, y] of take(Math.round(26 * dens), 2)) {
       const s = 0.6 + R() * 1.1, z = R() < 0.7 ? -0.9 - R() * 2.2 : 1.2 + R() * 0.8;
       place(make('mushroom', s), x + R(), y, z, 1, R() * 6);
@@ -168,30 +216,94 @@ export function buildDecor(M, look, W, K) {
       for (let k = 0; k <= 6; k++) pts.push(new THREE.Vector3(x + 0.5 + Math.sin(k + x) * 0.15, y + 1 - len * k / 6, -0.8 - R() * 1.5));
       const m = new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts), 10, 0.035 + R() * 0.03, 5), rootMat); statics.push(m);
     }
-  } else if (biome === 2) {
-    const cols = [0x9a5cff, 0xd9c8ff, 0xff7ad0, 0x7fd2ff];
-    for (const [x, y] of take(Math.round(22 * dens), 2)) {
-      const c = cols[Math.floor(R() * cols.length)], s = 0.5 + R() * 1.4, z = R() < 0.7 ? -1 - R() * 2.5 : 1.2 + R() * 0.6;
-      place(make('crystal', s, c), x + R(), y, z, 1, R() * 6);
-      if (R() < 0.5) emitters.push({ x: x + 0.5, y: y + s * 0.8, z, col: new THREE.Color(c).toArray(), int: 2.2 * s, range: 6, pri: 1.5 });
+  } else if (set === 'bluecap') {
+    // forests of tall bluecaps, a few of the round teal kind among them
+    for (const [x, y] of take(Math.round(30 * dens), 2)) {
+      const s = 0.7 + R() * 1.0, z = R() < 0.75 ? -0.9 - R() * 2.6 : 1.2 + R() * 0.8;
+      if (R() < 0.8) place(make('tallcap', s), x + R(), y, z, 1, R() * 6); else place(make('mushroom', s * 0.8), x + R(), y, z, 1, R() * 6);
+      if (R() < 0.4) emitters.push({ x: x + 0.5, y: y + s * 1.3, z, col: accent, int: 2.4 * s, range: 6, pri: 1.5 });
     }
+  } else if (set === 'roots') {
+    // great roots grown down through the roof of the cave, bracket fungus glowing on the walls
+    let nr = 0;
+    for (const [x, y] of ceils) {
+      if (nr >= Math.round(9 * dens)) break;
+      const d = drop(x, y);
+      if (d < 4 || near(x, y, avoid, 4)) continue;
+      const z = -1.15 - R() * 1.0, dx = (R() - 0.5) * 5, top = y + 1.6, bot = y - d + 0.6;
+      statics.push(obj(make('bigRoot', [[x + 0.5, top + 1, z - 0.5], [x + 0.5 + dx * 0.25, y - d * 0.3, z + 0.4], [x + 0.5 + dx * 0.7, bot + d * 0.25, z - 0.3], [x + 0.5 + dx, bot - 0.5, z + 0.2]], 0.3 + R() * 0.25, nr + 1)));
+      // bracket fungus glowing on the root, so it shows in the dark
+      const my = y - d * (0.35 + R() * 0.3), mx = x + 0.5 + dx * 0.45;
+      place(make('shelf'), mx, my, z + 0.35, 0.55 + R() * 0.3, (R() - 0.5) * 0.6);
+      if (nr % 2 === 0) emitters.push({ x: mx, y: my + 0.3, z: z + 0.8, col: [1, 0.66, 0.25], int: 2.6, range: 6, pri: 1.6 });
+      nr++; info.roots = nr;
+    }
+    let ns = 0;
+    for (const [x, y, f] of walls) {
+      if (ns >= Math.round(14 * dens)) break;
+      if (R() < 0.6 || near(x, y, avoid, 4)) continue;
+      const z = -0.5 - R() * 1.6;
+      place(make('shelf'), x, y + 0.8 + R() * 1.2, z, 0.8 + R() * 0.7, f * Math.PI / 2);
+      if (ns % 3 === 0) emitters.push({ x: x + f * 0.4, y: y + 1.2, z, col: [1, 0.66, 0.25], int: 2.2, range: 6, pri: 1.5 });
+      ns++; info.shelves = ns;
+    }
+    for (const [x, y] of take(Math.round(8 * dens), 3)) place(make('mushroom', 0.5 + R() * 0.6), x + R(), y, -1 - R() * 2, 1, R() * 6);
+  } else if (set === 'amethyst') {
+    const cols = [0x9a5cff, 0xd9c8ff, 0xff7ad0, 0x7fd2ff];
+    crystals(22, cols);
     for (const [x, y] of ceils.slice(0, Math.round(16 * dens))) { const g = obj(make('crystal', 0.5 + R() * 0.8, cols[Math.floor(R() * cols.length)])); g.rotation.z = Math.PI; g.position.set(x + R(), y + 1, -1 - R() * 2); statics.push(g); }
-  } else if (biome === 3) {
-    for (const [x, y] of take(Math.round(8 * dens), 6, ([x, y]) => headroom(x, y) >= 5)) {
+  } else if (set === 'frost') {
+    // clear quartz and ice: icicles from every roof
+    crystals(20, [0xcfeeff, 0xffffff, 0x9fd8ff], 0.7, 0.4, 0.5, 1.6);
+    for (const [x, y] of ceils.slice(0, Math.round(34 * dens))) { if (R() < 0.25) continue; place(make('icicles', 1 + Math.floor(R() * 6)), x + R(), y + 1, R() < 0.8 ? -0.6 - R() * 2.4 : 1.2 + R() * 0.6, 0.8 + R() * 0.7, R() * 6); }
+  } else if (set === 'rose') {
+    // split geodes in the walls of the big rooms, rose quartz and citrine on the floors
+    for (const [x, y] of take(Math.round(5 * dens), 9, ([x, y]) => headroom(x, y) >= 5)) {
+      const s = 1.3 + R() * 0.9, hex = [0xff9ac0, 0xffc24a, 0xd9a0ff][Math.floor(R() * 3)];
+      place(make('geode', 1 + Math.floor(R() * 3), hex), x + 0.5, y + s * 0.9 + R() * 0.6, -3.4 - R() * 0.8, s, (R() - 0.5) * 0.3);
+      emitters.push({ x: x + 0.5, y: y + s, z: -2.4, col: new THREE.Color(hex).toArray(), int: 4, range: 8, pri: 2.5 });
+    }
+    crystals(18, [0xff8fb0, 0xffc24a, 0xffd6e0], 0.7, 0.45, 0.5, 1.6);
+  } else if (set === 'streets' || set === 'tide') {
+    for (const [x, y] of take(Math.round((set === 'tide' ? 4 : 8) * dens), 6, ([x, y]) => headroom(x, y) >= 5)) {
       if (R() < 0.6) place(make('pillarRuin'), x + 0.5, y - 0.1, -2.2 - R() * 1.5, 0.9 + R() * 0.3, R() * 6);
       else place(make('statue'), x + 0.5, y - 0.1, -2.6 - R() * 1.2, 0.8 + R() * 0.4, (R() - 0.5) * 0.8);
       emitters.push({ x: x + 0.5, y: y + 2.5, z: -1.8, col: accent, int: 1.2, range: 7, pri: 0.8 });
     }
-  } else if (biome === 4) {
-    for (const [x, y] of take(Math.round(12 * dens), 4)) place(make('basalt', 2 + R() * 3), x + R(), y - 0.1, -1.8 - R() * 2.5, 1, R() * 6);
+    if (set === 'tide') for (const [x, y] of ceils.slice(0, Math.round(36 * dens))) { if (R() < 0.3 || drop(x, y) < 3) continue; place(make('kelp', 1 + Math.floor(R() * 5)), x + R(), y + 1, -0.7 - R() * 2.6, 0.8 + R() * 0.5, R() * 6); }
+  } else if (set === 'salt') {
+    // the old cisterns: arcades standing in the hollows, salt crystals everywhere
+    for (const [x, y] of take(Math.round(4 * dens), 12, ([x, y]) => headroom(x, y) >= 6)) place(make('arcade', 2 + Math.floor(R() * 2)), x + 0.5, y - 0.15, -4.4 - R() * 0.8, 0.85 + R() * 0.25);
+    for (const [x, y] of take(Math.round(18 * dens), 2)) { const z = R() < 0.75 ? -0.9 - R() * 2.4 : 1.2 + R() * 0.6; place(make('saltCubes', 1 + Math.floor(R() * 5)), x + R(), y, z, 0.8 + R() * 1.0, R() * 6); }
+    for (const [x, y] of take(Math.round(3 * dens), 8, ([x, y]) => headroom(x, y) >= 5)) place(make('statue'), x + 0.5, y - 0.1, -2.8 - R(), 0.9, (R() - 0.5) * 0.6);
+  } else if (set === 'basalt' || set === 'obsidian' || set === 'sulfur') {
+    for (const [x, y] of take(Math.round((set === 'basalt' ? 12 : 5) * dens), 4)) place(make('basalt', 2 + R() * 3), x + R(), y - 0.1, -1.8 - R() * 2.5, 1, R() * 6);
+    if (set === 'obsidian') crystals(22, [0x3a1d4a, 0x251530, 0x5a1a40], 0.7, 0.35, 0.6, 2.2);
+    if (set === 'sulfur') crystals(14, [0xffd23a, 0xe8b020], 0.75, 0.3, 0.4, 1.2);
   }
-  // ---- waterfalls (drowned + grotto) and lava falls (ember) from a ceiling down to the floor at the back
+  // steam vents (sulfur): mounds that breathe out yellow steam
+  const vents = [];
+  if (set === 'sulfur') for (const [x, y] of take(Math.round(7 * dens), 6, ([x, y]) => headroom(x, y) >= 3)) {
+    const z = -0.9 - R() * 1.6;
+    place(make('vent'), x + 0.5, y - 0.05, z, 0.9 + R() * 0.6, R() * 6);
+    vents.push({ x: x + 0.5, y: y + 0.4, z, t: R() * 3 });
+    emitters.push({ x: x + 0.5, y: y + 0.6, z, col: [1, 0.6, 0.15], int: 2, range: 5, pri: 1.2, flick: 1 });
+  }
+  // glow jellies drifting through the flooded halls (tide)
+  const jellies = [];
+  if (set === 'tide') for (const [x, y] of take(Math.round(12 * dens), 6, ([x, y]) => headroom(x, y) >= 4)) {
+    const g = obj(make('jelly')); const s = 0.8 + R() * 0.9, z = -1.2 - R() * 2.5;
+    g.scale.setScalar(s); group.add(g);
+    jellies.push({ g, x: x + 0.5, y: y + 1.5 + R() * Math.max(0, headroom(x, y) - 3), z, ph: R() * 6, sp: 0.6 + R() * 0.5 });
+  }
+  // ---- waterfalls and lava falls from a ceiling down to the floor at the back
+  const FALLS = { garden: ['water', 2], streets: ['water', 2], basalt: ['lava', 3], patina: ['water', 1], bluecap: ['water', 2], salt: ['water', 2], tide: ['water', 3], obsidian: ['lava', 2], sulfur: ['lava', 1] };
   const falls = [];
-  if (biome === 3 || biome === 1 || biome === 4) {
-    const n = biome === 4 ? 3 : 2;
+  if (FALLS[set]) {
+    const [kind, n] = FALLS[set];
     for (const [x, y] of take(n, 10, ([x, y]) => headroom(x, y) >= 6)) {
       const h = headroom(x, y) + 1;
-      const lava = biome === 4;
+      const lava = kind === 'lava';
       const m = new THREE.Mesh(new THREE.PlaneGeometry(lava ? 1.6 : 1.4, h), new THREE.ShaderMaterial({ vertexShader: WF_VERT, fragmentShader: WF_FRAG, transparent: true, depthWrite: false, blending: lava ? THREE.NormalBlending : THREE.AdditiveBlending,
         uniforms: { uT: { value: 0 }, uCol: { value: new THREE.Color(0.35, 0.55, 0.6) }, uLava: { value: lava ? 1 : 0 } } }));
       m.position.set(x + 0.5, y + h / 2 - 0.2, -2.6); group.add(m);
@@ -202,9 +314,10 @@ export function buildDecor(M, look, W, K) {
       emitters.push({ x: x + 0.5, y: y + 1.5, z: -2, col: lava ? [1, 0.36, 0.08] : accent, int: lava ? 10 : 1.5, range: lava ? 12 : 6, pri: lava ? 3 : 1, flick: lava ? 1 : 0 });
     }
   }
-  // ---- low mist drifting over the floors of the wet depths
+  // ---- low mist drifting over the floors
+  const MISTS = { garden: [0.45, 0.7, 0.62], streets: [0.5, 0.66, 0.7], patina: [0.42, 0.6, 0.54], bluecap: [0.4, 0.5, 0.85], frost: [0.72, 0.8, 0.9], salt: [0.78, 0.78, 0.74], tide: [0.3, 0.66, 0.72], sulfur: [0.72, 0.66, 0.3] };
   const mists = [];
-  if (biome === 1 || biome === 3) {
+  if (MISTS[set]) {
     const spots = [];
     for (const [x, y] of floors) {
       if (spots.length >= Math.round(9 * dens)) break;
@@ -213,37 +326,41 @@ export function buildDecor(M, look, W, K) {
       if (run < 5) continue;
       spots.push([x, y]);
     }
-    const col = biome === 3 ? new THREE.Color(0.5, 0.66, 0.7) : new THREE.Color(0.45, 0.7, 0.62);
+    const col = new THREE.Color().fromArray(MISTS[set]);
     for (const [x, y] of spots) for (const [z, a, w] of [[-1.1, 0.24, 8], [-2.4, 0.18, 10]]) {
       const m = new THREE.Mesh(new THREE.PlaneGeometry(w, 1.5), new THREE.ShaderMaterial({ vertexShader: WF_VERT, fragmentShader: MIST_FRAG, transparent: true, depthWrite: false,
         uniforms: { uT: { value: 0 }, uCol: { value: col }, uA: { value: a } } }));
       m.position.set(x + 0.5, y + 0.55, z); m.renderOrder = 2; m.frustumCulled = false; group.add(m); mists.push(m);
     }
   }
-  // ---- glowworm threads (grotto, endless)
+  // ---- glowworm threads
+  const WORMS = { garden: [70, [0.35, 0.95, 1.0]], bluecap: [150, [0.5, 0.7, 1.0]], tide: [45, [0.3, 1.0, 0.85]] };
   let worms = null;
-  if (biome === 1 || (W.endless && R() < 0.3)) {
+  const wd = WORMS[set] || (W.endless && R() < 0.3 ? WORMS.garden : null);
+  if (wd) {
     const pts = [], ph = [];
-    for (const [x, y] of ceils.slice(0, Math.round(70 * dens))) {
+    for (const [x, y] of ceils.slice(0, Math.round(wd[0] * dens))) {
       const len = 0.4 + R() * 2.2, z = -0.6 - R() * 3, bx = x + R();
       for (let k = 0; k < 8; k++) { pts.push(bx + (R() - 0.5) * 0.03, y + 1 - len * k / 8, z); ph.push(R()); }
     }
     const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(pts, 3)); g.setAttribute('aPh', new THREE.Float32BufferAttribute(ph, 1));
     worms = new THREE.Points(g, new THREE.ShaderMaterial({ vertexShader: GW_VERT, fragmentShader: GW_FRAG, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
-      uniforms: { uT: { value: 0 }, uScale: { value: innerHeight * 1.2 }, uTex: { value: tex.spark }, uCol: { value: new THREE.Color(0.35, 0.95, 1.0) } } }));
+      uniforms: { uT: { value: 0 }, uScale: { value: innerHeight * 1.2 }, uTex: { value: tex.spark }, uCol: { value: new THREE.Color().fromArray(wd[1]) } } }));
     worms.frustumCulled = false; group.add(worms);
   }
-  // ---- daylight shafts (copper workings: cracks to the surface)
+  // ---- daylight shafts: cracks to the surface
+  const SHAFTS = { workings: [2, [0.9, 0.75, 0.45]], rust: [1, [1, 0.6, 0.35]], patina: [1, [0.6, 0.85, 0.75]], roots: [3, [0.85, 0.9, 0.5]] };
   const shafts = [];
-  if (biome === 0) {
-    for (const [x, y] of ceils.slice(0, 40)) {
-      if (shafts.length >= 2) break;
+  if (SHAFTS[set]) {
+    const [n, sc] = SHAFTS[set];
+    for (const [x, y] of ceils.slice(0, 60)) {
+      if (shafts.length >= n) break;
       if (headroom(x, y - 6) < 6) continue;
       const h = 9;
-      const m = new THREE.Mesh(new THREE.PlaneGeometry(2.4, h), new THREE.MeshBasicMaterial({ map: tex.glow, color: new THREE.Color(0.9, 0.75, 0.45), transparent: true, opacity: 0.16, blending: THREE.AdditiveBlending, depthWrite: false }));
+      const m = new THREE.Mesh(new THREE.PlaneGeometry(2.4, h), new THREE.MeshBasicMaterial({ map: tex.glow, color: new THREE.Color().fromArray(sc), transparent: true, opacity: 0.16, blending: THREE.AdditiveBlending, depthWrite: false }));
       m.position.set(x + 0.5, y + 1 - h / 2, -1.2); m.rotation.z = (R() - 0.5) * 0.25; m.scale.x = 0.6; group.add(m);
       shafts.push({ x: x + 0.5, y });
-      emitters.push({ x: x + 0.5, y: y - 3, z: -0.5, col: [1, 0.85, 0.55], int: 3, range: 10, pri: 1 });
+      emitters.push({ x: x + 0.5, y: y - 3, z: -0.5, col: [Math.min(1, sc[0] * 1.1), Math.min(1, sc[1] * 1.1), Math.min(1, sc[2] * 1.2)], int: 3, range: 10, pri: 1 });
     }
   }
   // ---- the wonder
@@ -285,16 +402,26 @@ export function buildDecor(M, look, W, K) {
       d.t -= dt;
       if (d.t <= 0 && Math.abs(d.x - P.x) < 14 && Math.abs(d.y - P.y) < 9) { d.t = 2 + Math.random() * 5; fx.glintP.add({ x: d.x, y: d.y, z: -0.4, vx: 0, vy: -0.5, vz: 0, s0: 0.07, s1: 0.07, max: 1.4, a: 0.7, r: 0.6, g: 0.7, b: 0.8, drag: 0, grav: 14, fade: 0.1, floor: Math.floor(d.y - 0.95 - (function () { let k = 0; while (k < 12 && !SOLID[at(Math.floor(d.x), Math.floor(d.y) - 1 - k)]) k++; return k; })()) + 0.02 }); }
     }
-    // biome motes near the digger
-    if (Math.random() < dt * 6) {
-      const x = P.x + (Math.random() - 0.5) * 16, y = P.y + Math.random() * 7 - 1;
-      if (biome === 1) fx.glintP.add({ x, y, z: (Math.random() - 0.5) * 3, vx: (Math.random() - 0.5) * 0.2, vy: 0.15, vz: 0, s0: 0.12, s1: 0.06, max: 4, a: 0.7, r: 0.3, g: 1, b: 0.8, drag: 0, grav: -0.02, fade: 0.5 });
-      if (biome === 4) fx.fireP.add({ x, y: y - 2, z: (Math.random() - 0.5) * 3, vx: (Math.random() - 0.5) * 0.4, vy: 0.8 + Math.random(), vz: 0, s0: 0.1, s1: 0.04, max: 3, a: 1, r: 1, g: 0.45, b: 0.12, drag: 0.2, grav: -0.2, fade: 0.5 });
-      if (biome === 2) fx.glintP.add({ x, y, z: (Math.random() - 0.5) * 3, vx: 0, vy: 0.05, vz: 0, s0: 0.25, s1: 0.05, max: 1.5, a: 0.8, r: 0.85, g: 0.7, b: 1, drag: 0, grav: 0, fade: 0.6 });
+    // the level's motes near the digger
+    const mo = MOTES[set];
+    if (mo && Math.random() < dt * mo.rate) {
+      const x = P.x + (Math.random() - 0.5) * 16, y = P.y + Math.random() * 7 - 1 + (mo.dy || 0);
+      (mo.fire ? fx.fireP : fx.glintP).add({ x, y, z: (Math.random() - 0.5) * 3, vx: (Math.random() - 0.5) * (mo.jx || 0.2), vy: mo.vy + Math.random() * (mo.jy || 0), vz: 0, s0: mo.s0, s1: mo.s1, max: mo.life, a: mo.a,
+        r: mo.c[0], g: mo.c[1], b: mo.c[2], drag: mo.drag || 0, grav: mo.grav || 0, fade: mo.fade || 0.5 });
+    }
+    for (const v of vents) {
+      v.t -= dt;
+      if (v.t <= 0 && Math.abs(v.x - P.x) < 18 && Math.abs(v.y - P.y) < 10) { v.t = 0.12 + Math.random() * 0.2; fx.dust(v.x + (Math.random() - 0.5) * 0.2, v.y, v.z, { n: 1, s0: 0.25, s1: 1.6, life: 2.4, vy: 0.9, up: 0.6, jit: 0.25, a: 0.32, col: [0.95, 0.9, 0.62] }); }
+    }
+    for (const j of jellies) {
+      const k = t * 0.4 * j.sp + j.ph;
+      j.g.position.set(j.x + Math.sin(k * 0.7) * 1.2, j.y + Math.sin(k) * 0.6 + Math.max(0, Math.sin(k * 2.2)) * 0.25, j.z + Math.sin(k * 0.5) * 0.4);
+      j.g.scale.y = j.g.scale.x * (1 - Math.max(0, Math.sin(k * 2.2)) * 0.18);
+      j.g.rotation.z = Math.sin(k * 0.7) * 0.15;
     }
     if (wonderFx) wonderFx(t, dt, P, fx);
   };
-  return { group, emitters, update, wonder };
+  return { group, emitters, update, wonder, info };
 }
 
 // ------------------------------------------------------------------ wonders

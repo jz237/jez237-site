@@ -4,14 +4,14 @@
 // re-aimed every frame at the nearest flares, fires, lanterns, crystals and lava): their number never changes,
 // so no material ever recompiles mid-game.
 import * as THREE from '../vendor/three.module.min.js';
-import { T, SOLID, PHYS, TOOLS, GEMS, BIOMES } from './config.js?v=13';
-import { Cave, rockMaterial } from './cavemesh.js?v=13';
-import { rockTextures, spriteTextures, waterTextures } from './textures.js?v=13';
-import { FX, CALM } from './fx.js?v=13';
-import { Post } from './post.js?v=13';
-import * as MD from './models.js?v=13';
-import { buildDecor, bake } from './decor.js?v=13';
-import { Digger, loadDiggerAsset } from './digger.js?v=13';
+import { T, SOLID, PHYS, TOOLS, GEMS, BIOMES, variantOf } from './config.js?v=14';
+import { Cave, rockMaterial } from './cavemesh.js?v=14';
+import { rockTextures, spriteTextures, waterTextures } from './textures.js?v=14';
+import { FX, CALM } from './fx.js?v=14';
+import { Post } from './post.js?v=14';
+import * as MD from './models.js?v=14';
+import { buildDecor, bake } from './decor.js?v=14';
+import { Digger, loadDiggerAsset } from './digger.js?v=14';
 
 export function pickQuality(name) {
   const mobile = matchMedia('(pointer:coarse)').matches || /Android|iPhone|iPad/i.test(navigator.userAgent);
@@ -41,14 +41,67 @@ export const LOOKS = [
     hemiS: [0.16, 0.06, 0.025], hemiG: [0.05, 0.015, 0.005], dust: [0.62, 0.46, 0.4], partAmb: [0.12, 0.05, 0.03], wet: 0.0, cracks: 0.85, glow: [1.0, 0.33, 0.06],
     lamp: 0xffdcb0, accent: [1.0, 0.42, 0.12], exposure: 1.25, bloom: 1.1, gemTint: [0.9, 0.3, 0.15], tint: [1.05, 0.98, 0.94] },
 ];
-// endless strata: the base looks with a hue twist so every stratum looks new
-function strataLook(i, n) {
-  const b = LOOKS[i];
+// every level of a depth has its own look: the first is the depth's own (LOOKS), these are the second and third.
+// Besides colours: crust (settled on ledges) and stain (streaks down the walls) feed the rock shader, roughK makes it
+// glossy, shape changes the cave (back: how deep the hollows go, jag: how rough, cols: stone columns behind the play
+// plane), and set picks the props, particles and falls in decor.js.
+export const VARIANTS = [
+  [null,
+    { set: 'rust', rock: [0.31, 0.22, 0.17], rock2: [0.25, 0.2, 0.17], front: [0.08, 0.05, 0.04], rubble: [0.6, 0.34, 0.2], fog: [0.06, 0.022, 0.012], fogD: 0.02,
+      hemiS: [0.14, 0.08, 0.05], hemiG: [0.04, 0.018, 0.012], dust: [0.86, 0.5, 0.3], partAmb: [0.1, 0.05, 0.03], glow: [1, 0.32, 0.08], accent: [1, 0.45, 0.2],
+      stain: [0.62, 0.2, 0.05], stainA: 0.95, strata: 1.25, spark: [0.65, 0.32, 0.14], goldDust: 0.15, exposure: 1.28, bloom: 0.8, tint: [1.05, 0.96, 0.9], shape: { jag: 1.5, back: 0.85 } },
+    { set: 'patina', rock: [0.24, 0.23, 0.21], rock2: [0.19, 0.21, 0.2], front: [0.05, 0.06, 0.06], rubble: [0.44, 0.44, 0.4], fog: [0.012, 0.03, 0.028], fogD: 0.022,
+      hemiS: [0.05, 0.1, 0.09], hemiG: [0.014, 0.03, 0.025], dust: [0.55, 0.78, 0.7], partAmb: [0.04, 0.07, 0.065], glow: [0.3, 1, 0.75], accent: [0.35, 0.95, 0.75],
+      stain: [0.1, 0.5, 0.38], stainA: 0.9, crust: [0.3, 0.62, 0.55], crustA: 0.3, wet: 0.3, caus: [0.05, 0.17, 0.14], spark: [0.3, 0.62, 0.5], goldDust: 0.1,
+      exposure: 1.33, bloom: 0.85, tint: [0.96, 1.02, 1.0], shape: { jag: 0.65, back: 1.25 } },
+  ],
+  [null,
+    { set: 'bluecap', rock: [0.12, 0.14, 0.22], rock2: [0.16, 0.16, 0.27], front: [0.03, 0.035, 0.07], rubble: [0.26, 0.28, 0.38], fog: [0.008, 0.012, 0.05], fogD: 0.022,
+      hemiS: [0.04, 0.05, 0.15], hemiG: [0.01, 0.012, 0.035], dust: [0.5, 0.6, 0.95], partAmb: [0.03, 0.04, 0.1], wet: 0.15, moss: 0.6, mossCol: [0.1, 0.13, 0.35], mossGlow: 0.55,
+      glow: [0.3, 0.5, 1], accent: [0.35, 0.55, 1], spark: [0.3, 0.4, 0.85], caus: [0.06, 0.1, 0.26], strata: 0.5, exposure: 1.36, bloom: 1.05, tint: [0.95, 0.98, 1.06], shape: { back: 1.2 } },
+    { set: 'roots', rock: [0.26, 0.2, 0.15], rock2: [0.22, 0.19, 0.15], front: [0.07, 0.055, 0.04], rubble: [0.45, 0.36, 0.26], fog: [0.035, 0.025, 0.012], fogD: 0.016,
+      hemiS: [0.12, 0.09, 0.05], hemiG: [0.03, 0.022, 0.012], dust: [0.95, 0.8, 0.45], partAmb: [0.09, 0.07, 0.04], wet: 0.05, moss: 0.9, mossCol: [0.2, 0.3, 0.08], mossGlow: 0.2,
+      glow: [1, 0.68, 0.2], accent: [1, 0.72, 0.3], spark: [0.6, 0.5, 0.2], caus: [0.03, 0.03, 0.01], strata: 0.8, exposure: 1.3, bloom: 0.9, tint: [1.04, 1.0, 0.93], shape: { back: 1.6, jag: 1.1 } },
+  ],
+  [null,
+    { set: 'frost', rock: [0.3, 0.34, 0.4], rock2: [0.38, 0.42, 0.48], front: [0.06, 0.07, 0.09], rubble: [0.6, 0.65, 0.72], fog: [0.02, 0.035, 0.06], fogD: 0.02,
+      hemiS: [0.08, 0.11, 0.16], hemiG: [0.02, 0.03, 0.045], dust: [0.85, 0.92, 1], partAmb: [0.07, 0.08, 0.11], glow: [0.5, 0.85, 1], accent: [0.55, 0.85, 1],
+      crust: [0.78, 0.86, 0.96], crustA: 0.6, stain: [0.72, 0.82, 0.92], stainA: 0.35, roughK: 0.6, spark: [0.8, 0.9, 1], strata: 0.35, gemTint: [0.4, 0.6, 0.9],
+      exposure: 1.1, bloom: 1.0, tint: [0.97, 1.0, 1.06], shape: { jag: 1.25 } },
+    { set: 'rose', rock: [0.3, 0.21, 0.21], rock2: [0.36, 0.26, 0.24], front: [0.08, 0.05, 0.05], rubble: [0.5, 0.4, 0.38], fog: [0.05, 0.018, 0.03], fogD: 0.019,
+      hemiS: [0.14, 0.07, 0.09], hemiG: [0.035, 0.016, 0.02], dust: [1, 0.75, 0.8], partAmb: [0.1, 0.06, 0.07], glow: [1, 0.5, 0.7], accent: [1, 0.55, 0.7],
+      stain: [0.75, 0.48, 0.2], stainA: 0.35, strata: 1.15, spark: [1, 0.7, 0.6], gemTint: [0.9, 0.4, 0.5], exposure: 1.3, bloom: 1.0, tint: [1.04, 0.98, 1.0], shape: { back: 1.35 } },
+  ],
+  [null,
+    { set: 'salt', rock: [0.4, 0.37, 0.31], rock2: [0.47, 0.44, 0.38], front: [0.09, 0.085, 0.075], rubble: [0.62, 0.58, 0.5], fog: [0.035, 0.04, 0.04], fogD: 0.019,
+      hemiS: [0.12, 0.13, 0.12], hemiG: [0.03, 0.032, 0.03], dust: [0.9, 0.9, 0.85], partAmb: [0.08, 0.085, 0.08], wet: 0.25, moss: 0, glow: [0.4, 0.95, 0.9], accent: [0.45, 0.95, 0.9],
+      crust: [0.84, 0.82, 0.76], crustA: 0.7, stain: [0.86, 0.84, 0.77], stainA: 0.5, caus: [0.12, 0.25, 0.25], strata: 0.9, spark: [0.7, 0.75, 0.75],
+      exposure: 0.98, bloom: 0.8, tint: [1.0, 1.0, 0.98], shape: { back: 1.35, cols: 0.8, colR: 0.85 } },
+    { set: 'tide', rock: [0.1, 0.14, 0.16], rock2: [0.12, 0.17, 0.2], front: [0.025, 0.04, 0.05], rubble: [0.25, 0.3, 0.32], fog: [0.004, 0.02, 0.035], fogD: 0.024,
+      hemiS: [0.02, 0.06, 0.09], hemiG: [0.005, 0.015, 0.025], dust: [0.4, 0.8, 0.95], partAmb: [0.02, 0.06, 0.08], wet: 0.7, moss: 0.8, mossCol: [0.05, 0.28, 0.28], mossGlow: 0.6,
+      glow: [0.2, 0.9, 1], accent: [0.3, 0.9, 1], caus: [0.2, 0.42, 0.5], spark: [0.3, 0.7, 0.9], strata: 0.5, exposure: 1.4, bloom: 1.15, tint: [0.95, 1.01, 1.05], shape: { jag: 0.75, back: 1.3 } },
+  ],
+  [null,
+    { set: 'obsidian', rock: [0.065, 0.05, 0.075], rock2: [0.1, 0.07, 0.11], front: [0.02, 0.015, 0.025], rubble: [0.2, 0.15, 0.2], fog: [0.04, 0.012, 0.03], fogD: 0.018,
+      hemiS: [0.12, 0.05, 0.12], hemiG: [0.035, 0.012, 0.03], dust: [0.7, 0.45, 0.75], partAmb: [0.1, 0.04, 0.09], cracks: 0.6, glow: [1, 0.2, 0.45], accent: [1, 0.3, 0.55],
+      roughK: 0.35, spark: [0.8, 0.4, 0.9], strata: 0.3, gemTint: [0.7, 0.25, 0.6], exposure: 1.35, bloom: 1.15, tint: [1.02, 0.96, 1.03], shape: { jag: 1.4, back: 1.1 } },
+    { set: 'sulfur', rock: [0.22, 0.2, 0.15], rock2: [0.18, 0.17, 0.13], front: [0.06, 0.055, 0.035], rubble: [0.42, 0.38, 0.24], fog: [0.04, 0.036, 0.014], fogD: 0.022,
+      hemiS: [0.1, 0.095, 0.06], hemiG: [0.03, 0.028, 0.014], dust: [0.9, 0.86, 0.5], partAmb: [0.1, 0.09, 0.04], cracks: 0.35, glow: [1, 0.55, 0.1], accent: [1, 0.85, 0.3],
+      crust: [0.85, 0.72, 0.2], crustA: 0.38, stain: [0.62, 0.52, 0.14], stainA: 0.4, spark: [0.9, 0.8, 0.3], strata: 0.7, exposure: 1.18, bloom: 0.95, tint: [1.0, 1.0, 0.95], shape: { back: 1.15 } },
+  ],
+];
+// the rock shader's per-depth extras (each variant may override)
+const ROCKFX = { caus: [[0.05, 0.05, 0.04], [0.08, 0.22, 0.2], [0.05, 0.05, 0.04], [0.13, 0.26, 0.3], [0, 0, 0]], strata: [1, 0.6, 0.45, 0.55, 0.85],
+  spark: [[0.55, 0.42, 0.22], [0.25, 0.5, 0.45], [0.85, 0.7, 1.0], [0.35, 0.45, 0.5], [0.7, 0.28, 0.08]] };
+// endless strata: the level's look with a hue twist so every stratum looks new
+function strataLook(i, n, vi = 0) {
+  const v = (VARIANTS[i] || [])[vi];
+  const b = v ? { ...LOOKS[i], ...v } : LOOKS[i];
   if (!n) return b;
   const rot = ((n * 0.37) % 1) * 0.5 - 0.25, sat = 0.85 + (n % 3) * 0.12;
   const tw = (c) => { const col = new THREE.Color().fromArray(c); const hsl = {}; col.getHSL(hsl); col.setHSL((hsl.h + rot + 1) % 1, Math.min(1, hsl.s * sat), hsl.l); return col.toArray(); };
   const o = { ...b };
-  for (const k of ['rock', 'rock2', 'front', 'rubble', 'fog', 'hemiS', 'hemiG', 'dust', 'glow', 'accent', 'mossCol']) if (b[k]) o[k] = tw(b[k]);
+  for (const k of ['rock', 'rock2', 'front', 'rubble', 'fog', 'hemiS', 'hemiG', 'dust', 'glow', 'accent', 'mossCol', 'crust', 'stain', 'caus', 'spark']) if (b[k]) o[k] = tw(b[k]);
   return o;
 }
 
@@ -180,7 +233,7 @@ export class Renderer {
 
   // the realistic digger (a skinned, motion-captured body); the old built digger stands in if it fails to load
   async loadDigger() {
-    try { this.digGltf = await loadDiggerAsset('assets/digger.glb?v=13'); } catch (e) { console.warn('digger asset', e); }
+    try { this.digGltf = await loadDiggerAsset('assets/digger.glb?v=14'); } catch (e) { console.warn('digger asset', e); }
   }
   makePlayer() {
     if (this.digGltf) {
@@ -205,12 +258,16 @@ export class Renderer {
     for (const c of [...this.level.children]) { this.level.remove(c); c.traverse?.((o) => { if (o.geometry && !o.geometry.userData.shared) o.geometry.dispose(); }); }
     this.views.clear(); this.emitters = [];
     this.fx.clear();
-    const look = this.look = strataLook(M.biome, W.endless ? Math.floor(W.endlessN / 5) : 0);
+    const look = this.look = strataLook(M.biome, W.endless ? Math.floor(W.endlessN / 5) : 0, variantOf(M));
     Object.assign(this.rockMat.userData.U.uGlow.value, new THREE.Color().fromArray(look.glow));
     this.rockMat.userData.U.uMoss.value.fromArray(look.mossCol || [0.1, 0.3, 0.2]);
-    this.rockMat.userData.U.uCaus.value.setRGB(...(M.biome === 3 ? [0.13, 0.26, 0.3] : M.biome === 1 ? [0.08, 0.22, 0.2] : M.biome === 4 ? [0, 0, 0] : [0.05, 0.05, 0.04]));
-    this.rockMat.userData.U.uStrata.value = [1, 0.6, 0.45, 0.55, 0.85][M.biome % 5];
-    this.rockMat.userData.U.uSpark.value.setRGB(...[[0.55, 0.42, 0.22], [0.25, 0.5, 0.45], [0.85, 0.7, 1.0], [0.35, 0.45, 0.5], [0.7, 0.28, 0.08]][M.biome % 5]);
+    const RU = this.rockMat.userData.U, b5 = M.biome % 5;
+    RU.uCaus.value.fromArray(look.caus || ROCKFX.caus[b5]);
+    RU.uStrata.value = look.strata ?? ROCKFX.strata[b5];
+    RU.uSpark.value.fromArray(look.spark || ROCKFX.spark[b5]);
+    RU.uCrust.value.fromArray(look.crust || [1, 1, 1]); RU.uCrustA.value = look.crustA || 0;
+    RU.uStain.value.fromArray(look.stain || [0, 0, 0]); RU.uStainA.value = look.stainA || 0;
+    RU.uRoughK.value = look.roughK || 1;
     this.scene.fog.color.fromArray(look.fog); this.scene.fog.density = look.fogD;
     this.hemi.color.fromArray(look.hemiS); this.hemi.groundColor.fromArray(look.hemiG);
     this.lamp.color.set(this.lampCol || look.lamp);
@@ -743,7 +800,9 @@ export class Renderer {
     const pl = this.player, R = pl.rig, root = pl.root;
     // hurt flash and invulnerability blink
     pl.hurtT = Math.max(0, (pl.hurtT || 0) - dt);
-    const blink = P.inv > 0 && !P.dead && Math.sin(this.time * 30) > 0;
+    // (the lifts keep you safe without the blink: riding one down you stay in sight)
+    const riding = P.inCage || (W.exitCage && W.exitCage.state === 'down');
+    const blink = P.inv > 0 && !P.dead && !riding && Math.sin(this.time * 30) > 0;
     for (const m of pl.mats) { m.emissive.setRGB(pl.hurtT > 0 ? 0.6 : 0, 0, 0); }
     root.traverse((o) => { if (o.isMesh) o.visible = !blink || o === R.lampLens; });
     // the lamp: aimed ahead and a little down, dimming as the oil runs out

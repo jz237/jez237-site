@@ -2,11 +2,11 @@
 // checks reproduce a run exactly. No rendering, no Math.random: every random number comes from W.rs.
 // Events for sound, effects and the HUD go into W.ev and are drained by the game each frame.
 import { T, SOLID, PHYS, TOOLS, STEP, PICK_HP, BLASTABLE, LOOT, GEMS, START, LIFE_EVERY, LEVELS, DEPTHS, BIOMES, BOSSES,
-  rampAt, endlessRamp, applyDiff, DIFFICULTY } from './config.js?v=13';
-import { tileAt, solidT, makeBody, stepBody, fallHurt, boxOverlapsTile, EPS } from './physics.js?v=13';
-import { generate, bossArena, hash, findName } from './levelgen.js?v=13';
-import { validateLevel } from './nav.js?v=13';
-import { updateBoss, makeBoss, bossHit } from './boss.js?v=13';
+  rampAt, endlessRamp, applyDiff, DIFFICULTY } from './config.js?v=14';
+import { tileAt, solidT, makeBody, stepBody, fallHurt, boxOverlapsTile, EPS } from './physics.js?v=14';
+import { generate, bossArena, hash, findName } from './levelgen.js?v=14';
+import { validateLevel } from './nav.js?v=14';
+import { updateBoss, makeBoss, bossHit } from './boss.js?v=14';
 
 export { STEP };
 export const rnd = (W) => { W.rs = (W.rs + 0x6D2B79F5) >>> 0; let t = W.rs; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };

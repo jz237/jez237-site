@@ -1234,6 +1234,218 @@ export function basalt(h = 3) {
   });
 }
 
+// ================================================================== LEVEL-VARIANT SET PIECES (decor.js picks them per level)
+// an iron mine frame: two riveted I-beam posts, a top beam and knee braces, all rusted
+export function girder(w = 3.2, h = 4) {
+  const W = Math.round(w * 2) / 2, H = Math.min(6, Math.round(h * 2) / 2);
+  return make('girder' + W + ',' + H, () => {
+    const K = new Kit(), R = K.root;
+    const rust = 0x7a3a1c, rustDk = 0x4a2412;
+    for (const s of [-1, 1]) {
+      K.add(box(0.05, H, 0.18), 'rough', rust, [s * W / 2, H / 2, 0], null, 1, R, { grime: 0.55, freq: 4 });
+      for (const z of [0.09, -0.09]) K.add(box(0.2, H, 0.03), 'rough', rustDk, [s * W / 2, H / 2, z], null, 1, R, { grime: 0.55, freq: 5 });
+      K.add(box(0.36, 0.05, 0.36), 'rough', rustDk, [s * W / 2, 0.025, 0], null, 1, R);
+      K.rod('rough', rust, [s * W / 2, H - 0.95, 0], [s * (W / 2 - 0.85), H - 0.1, 0], 0.035, R, 6);
+      for (let k = 0; k < 4; k++) K.add(sph(0.017, 6, 4), 'gloss', 0x3a2418, [s * W / 2, 0.4 + k * (H - 0.8) / 3, 0.105], null, 1, R);
+    }
+    K.add(box(W + 0.3, 0.2, 0.05), 'rough', rust, [0, H - 0.1, 0], null, 1, R, { grime: 0.55, freq: 4 });
+    for (const y of [H, H - 0.2]) K.add(box(W + 0.3, 0.03, 0.2), 'rough', rustDk, [0, y, 0], null, 1, R, { grime: 0.5 });
+    for (let k = 0; k < 9; k++) K.add(sph(0.018, 6, 4), 'gloss', 0x3a2418, [-W / 2 + k * W / 8, H - 0.1, 0.03], null, 1, R);
+    return K.build();
+  });
+}
+// a run of rusty pipes on wall brackets, flanged joints and a red valve wheel
+export function pipes(len = 6) {
+  const L = Math.max(2, Math.round(len));
+  return make('pipes' + L, () => {
+    const K = new Kit(), R = K.root;
+    const rust = 0x6e3a20, iron = 0x3e3632;
+    for (const [y, r] of [[0, 0.11], [0.34, 0.065]]) {
+      K.add(cyl(r, r, L, 14), 'rough', rust, [0, y, 0], [0, 0, Math.PI / 2], 1, R, { grime: 0.65, freq: 3 });
+      for (let k = 0; k <= L; k += 1.5) K.add(cyl(r * 1.4, r * 1.4, 0.07, 14), 'rough', iron, [-L / 2 + k, y, 0], [0, 0, Math.PI / 2], 1, R, { grime: 0.4 });
+    }
+    for (let k = 0.75; k < L; k += 2) K.add(box(0.06, 0.7, 0.06), 'rough', iron, [-L / 2 + k, 0.15, -0.13], null, 1, R, { grime: 0.5 });
+    const vx = -L / 2 + Math.min(L - 0.5, 1.2);
+    K.add(tor(0.12, 0.016, 18, 6), 'gloss', 0x8a2418, [vx, 0, 0.26], null, 1, R);
+    for (let k = 0; k < 3; k++) K.add(box(0.012, 0.22, 0.012), 'gloss', 0x8a2418, [vx, 0, 0.26], [0, 0, k * Math.PI / 3], 1, R);
+    K.add(cyl(0.022, 0.022, 0.16, 6), 'rough', iron, [vx, 0, 0.18], [Math.PI / 2, 0, 0], 1, R);
+    return K.build();
+  });
+}
+// a hanging chain with a hook
+export function chain(len = 2) {
+  const L = Math.max(0.5, Math.round(len * 2) / 2);
+  return make('chain' + L, () => {
+    const K = new Kit(), R = K.root;
+    const n = Math.round(L / 0.075);
+    for (let k = 0; k < n; k++) K.add(tor(0.028, 0.008, 10, 5), 'gloss', 0x3a302a, [0, -k * 0.075 - 0.04, 0], [0, k % 2 ? Math.PI / 2 : 0, 0], [1, 1.55, 1], R, { grime: 0.4 });
+    K.add(tube('chainhook', [[0, 0, 0], [0, -0.12, 0], [0.02, -0.22, 0], [0.09, -0.24, 0], [0.11, -0.15, 0]], 0.016, 14, 6), 'gloss', 0x2e2622, [0, -n * 0.075 - 0.02, 0], null, 1, R);
+    return K.build();
+  });
+}
+// tall, thin bluecap mushrooms with glowing gills
+export function tallcap(scale = 1) {
+  const g = make('tallcap', () => {
+    const K = new Kit(), R = K.root;
+    const specs = [[0, 0, 1.6, 0.16], [0.22, 0.1, 1.05, 0.11], [-0.2, -0.05, 1.3, 0.13], [0.08, -0.2, 0.7, 0.08], [-0.3, 0.16, 0.55, 0.07], [0.33, -0.12, 0.85, 0.09]];
+    specs.forEach(([x, z, h, r], i) => {
+      const lean = (i % 2 ? 1 : -1) * 0.12;
+      K.add(tube('tcstem' + i, [[x, 0, z], [x + lean * 0.4, h * 0.5, z], [x + lean, h, z]], r * 0.16, 12, 6), 'gloss', 0x9fb0d8, null, null, 1, R, { grime: 0.15 });
+      const cx = x + lean, cy = h;
+      K.add(lathe('tccap' + i, [[0, r * 1.1], [r * 0.35, r * 0.95], [r * 0.7, r * 0.5], [r, r * 0.08], [r * 0.9, 0], [r * 0.6, 0.02]], 18), 'gloss', 0x1e2c66, [cx, cy - r * 0.05, z], [0, 0, lean], 1, R, { grime: 0.25, freq: 10 });
+      K.add(cyl(r * 0.88, r * 0.2, 0.012, 18), 'glow', hdr(0x5a8cff, 3.4), [cx, cy - r * 0.03, z], [0, 0, lean], 1, R);
+      for (let k = 0; k < 4; k++) { const a = k / 4 * Math.PI * 2 + i; K.add(sph(r * 0.08, 6, 4), 'glow', hdr(0xa8c8ff, 2.6), [cx + Math.cos(a) * r * 0.45, cy + r * 0.62, z + Math.sin(a) * r * 0.45], null, [1, 0.5, 1], R); }
+    });
+    return K.build();
+  });
+  g.scale.setScalar(scale);
+  return g;
+}
+// bracket fungus stacked up a wall (sticks out toward +z), glowing amber rims
+export function shelf() {
+  return make('shelf', () => {
+    const K = new Kit(), R = K.root;
+    const half = (r) => geo('half' + r, () => new THREE.CylinderGeometry(r, r * 0.8, 0.07, 20, 1, false, -Math.PI / 2, Math.PI));
+    [[0.3, 0, 0], [0.22, 0.3, 0.12], [0.18, 0.55, -0.1], [0.13, 0.78, 0.05], [0.24, -0.32, -0.08]].forEach(([r, y, x], i) => {
+      K.add(half(r), 'rough', i % 2 ? 0x8a5a28 : 0x6e4420, [x, y, 0], [0.12, 0, 0], [1, 1, 1], R, { grime: 0.4, freq: 9 });
+      K.add(tor(r * 0.97, 0.012, 20, 4, Math.PI), 'glow', hdr(0xffb040, 2.2), [x, y - 0.03, 0], [Math.PI / 2, 0, 0], 1, R);
+    });
+    return K.build();
+  });
+}
+// a great root grown down through the cave: one tapering tube with rootlets (unique per call)
+export function bigRoot(pts, r = 0.3, seed = 1) {
+  const K = new Kit(), R = K.root, rr = rng(seed);
+  const curve = new THREE.CatmullRomCurve3(pts.map((p) => new THREE.Vector3(...p)));
+  const N = 40, M = 10;
+  const g = new THREE.TubeGeometry(curve, N, r, M, false);
+  const pos = g.attributes.position;
+  for (let i = 0; i <= N; i++) {
+    const P = curve.getPointAt(i / N), f = (1 - 0.7 * i / N) * (1 + 0.12 * Math.sin(i * 1.7 + seed));
+    for (let j = 0; j <= M; j++) { const k = i * (M + 1) + j; pos.setXYZ(k, P.x + (pos.getX(k) - P.x) * f, P.y + (pos.getY(k) - P.y) * f, P.z + (pos.getZ(k) - P.z) * f); }
+  }
+  g.computeVertexNormals();
+  K.add(g, 'rough', 0x8a6646, null, null, 1, R, { grime: 0.55, freq: 2.5 });
+  for (let k = 0; k < 5; k++) {
+    const t = 0.15 + rr() * 0.75, p = curve.getPointAt(t), d = [(rr() - 0.5) * 1.8, -0.4 - rr() * 1.2, (rr() - 0.5) * 0.8];
+    const q = new THREE.TubeGeometry(new THREE.CatmullRomCurve3([p.clone(), new THREE.Vector3(p.x + d[0] * 0.5, p.y + d[1] * 0.35, p.z + d[2] * 0.5), new THREE.Vector3(p.x + d[0], p.y + d[1], p.z + d[2])]), 10, r * (0.2 + rr() * 0.12) * (1 - t * 0.5), 6);
+    K.add(q, 'rough', 0x6e5034, null, null, 1, R, { grime: 0.45 });
+  }
+  return K.build();
+}
+// a cluster of icicles hanging from a ceiling point (y = 0 is the ceiling)
+export function icicles(seed = 1) {
+  return make('icicles' + seed, () => {
+    const K = new Kit(), R = K.root, r = rng(seed * 5 + 1);
+    const n = 4 + Math.floor(r() * 5);
+    for (let k = 0; k < n; k++) {
+      const h = Math.round((0.3 + r() * 1.2) * 10) / 10, rad = Math.round((0.03 + r() * 0.05) * 100) / 100;
+      const g = geo('icic' + h + ',' + rad, () => { const c = new THREE.ConeGeometry(rad, h, 7, 3, false); c.rotateX(Math.PI); c.translate(0, -h / 2, 0); return c; });
+      const x = (r() - 0.5) * 0.7, z = (r() - 0.5) * 0.4;
+      K.add(g, 'crystal', 0xdaf2ff, [x, 0.04, z], null, 1, R, { grime: 0.05 });
+      K.add(g, 'glow', hdr(0x8fd0ff, 0.9), [x, 0.02, z], null, [0.4, 0.9, 0.4], R);
+    }
+    K.add(lump('iceb', 0.3, 1, 0.3, 3, 4, 1.4, 0.35, 1), 'crystal', 0xe6f6ff, [0, 0.05, 0], null, 1, R);
+    return K.build();
+  });
+}
+// a split geode: a rough bowl opening toward the camera, banded rim, lined with crystals pointing inward
+export function geode(seed = 1, hex = 0xff9ac0) {
+  return make('geode' + seed + ',' + hex, () => {
+    const K = new Kit(), R = K.root, r = rng(seed * 7 + 3);
+    const bowl = geo('geobowl', () => { const g = new THREE.SphereGeometry(1, 30, 14, 0, Math.PI * 2, 0, Math.PI / 2); g.rotateX(-Math.PI / 2); return g; });
+    K.add(roughen('geoshell' + seed, bowl, 0.06, 2.5, seed), 'rough', 0x5a504a, null, null, [1.04, 1.04, 1.04], R, { grime: 0.6 });
+    K.add(bowl, 'skin', 0x6e4a5a, null, null, [0.97, 0.97, 0.97], R, { grime: 0.3 });
+    K.add(tor(1.0, 0.07, 44, 8), 'rough', 0x6a6058, [0, 0, 0], null, 1, R, { grime: 0.5 });
+    K.add(tor(0.94, 0.035, 44, 6), 'gloss', 0xe8dcd4, [0, 0, 0.01], null, 1, R);
+    K.add(tor(0.89, 0.03, 44, 6), 'gloss', 0xb8869a, [0, 0, 0.01], null, 1, R);
+    const c = new THREE.Color(hex), up = new THREE.Vector3(0, 1, 0), d = new THREE.Vector3(), q = new THREE.Quaternion(), e = new THREE.Euler();
+    for (let k = 0; k < 70; k++) {
+      const a = r() * Math.PI * 2, z = -(0.15 + r() * 0.85), rho = Math.sqrt(1 - z * z);
+      d.set(Math.cos(a) * rho, Math.sin(a) * rho, z);
+      q.setFromUnitVectors(up, d.clone().negate()); e.setFromQuaternion(q);
+      const h = 0.12 + r() * 0.22, rad = 0.03 + r() * 0.035;
+      const col = c.clone().lerp(new THREE.Color(0xffffff), r() * 0.45);
+      K.add(prism(rad, h), 'crystal', col, [d.x * 0.93, d.y * 0.93, d.z * 0.93], [e.x, e.y, e.z], 1, R, { grime: 0.05 });
+      if (k % 3 === 0) K.add(prism(rad * 0.45, h * 0.8), 'glow', c.clone().multiplyScalar(1.6 + r()), [d.x * 0.93, d.y * 0.93, d.z * 0.93], [e.x, e.y, e.z], 1, R);
+    }
+    return K.build();
+  });
+}
+// a cluster of salt (halite) cubes on a crusted lump
+export function saltCubes(seed = 1) {
+  return make('salt' + seed, () => {
+    const K = new Kit(), R = K.root, r = rng(seed * 11 + 5);
+    K.add(lump('saltb' + seed, 0.32, 1, 0.3, 3, seed, 1.4, 0.4, 1), 'rough', 0xcfc8ba, [0, 0.04, 0], null, 1, R, { grime: 0.35 });
+    const n = 6 + Math.floor(r() * 6);
+    for (let k = 0; k < n; k++) {
+      const s = Math.round((0.08 + r() * (k === 0 ? 0.3 : 0.16)) * 50) / 50;
+      K.add(rbox(s, s, s, s * 0.06), 'crystal', 0xf4efe6, [(r() - 0.5) * 0.6, 0.08 + s * 0.4, (r() - 0.5) * 0.35], [r() * 0.8, r() * 3, r() * 0.8], 1, R, { grime: 0.15 });
+    }
+    return K.build();
+  });
+}
+// an old aqueduct arcade: a stone wall with n arches, pilasters and a cornice
+export function arcade(n = 3) {
+  return make('arcade' + n, () => {
+    const K = new Kit(), R = K.root;
+    const bay = 2.6, H = 4.2, W = n * bay, sp = 2.4;
+    const wall = geo('arcw' + n, () => {
+      const s = new THREE.Shape(); s.moveTo(-W / 2, 0); s.lineTo(W / 2, 0); s.lineTo(W / 2, H); s.lineTo(-W / 2, H); s.closePath();
+      for (let k = 0; k < n; k++) {
+        const cx = -W / 2 + bay * (k + 0.5), hw = bay * 0.33;
+        const h = new THREE.Path(); h.moveTo(cx - hw, 0.4); h.lineTo(cx + hw, 0.4); h.lineTo(cx + hw, sp); h.absarc(cx, sp, hw, 0, Math.PI, false); h.lineTo(cx - hw, 0.4);
+        s.holes.push(h);
+      }
+      const g = new THREE.ExtrudeGeometry(s, { depth: 0.5, bevelEnabled: true, bevelThickness: 0.04, bevelSize: 0.04, bevelSegments: 1, curveSegments: 12 });
+      g.translate(0, 0, -0.25); g.computeVertexNormals();
+      return g;
+    });
+    K.add(wall, 'rough', 0xb3a893, null, null, 1, R, { grime: 0.65, freq: 2 });
+    K.add(box(W + 0.4, 0.28, 0.75), 'rough', 0xa69b86, [0, H + 0.1, 0], null, 1, R, { grime: 0.6 });
+    for (let k = 0; k <= n; k++) K.add(box(0.34, H - 0.4, 0.14), 'rough', 0xa89d88, [-W / 2 + bay * k, H / 2, 0.3], null, 1, R, { grime: 0.6 });
+    K.add(box(W + 0.2, 0.35, 0.8), 'rough', 0x978c78, [0, 0.17, 0], null, 1, R, { grime: 0.6 });
+    return K.build();
+  });
+}
+// kelp-like weed hanging from a ceiling point, beaded with glowing pods
+export function kelp(seed = 1) {
+  return make('kelp' + seed, () => {
+    const K = new Kit(), R = K.root, r = rng(seed * 3 + 9);
+    for (let s = 0; s < 3; s++) {
+      const L = 0.8 + r() * 2.2, x0 = (r() - 0.5) * 0.4, z0 = (r() - 0.5) * 0.3, pts = [];
+      for (let k = 0; k <= 6; k++) pts.push([x0 + Math.sin(k * 1.3 + s) * 0.12, -L * k / 6, z0 + Math.cos(k * 0.9 + s) * 0.06]);
+      K.add(tube('kelp' + seed + s, pts, 0.025, 18, 5), 'gloss', 0x34482a, null, null, 1, R, { grime: 0.3 });
+      for (let k = 1; k < 6; k += 2) K.add(sph(0.035, 8, 6), 'glow', hdr(0x40f0d0, 1.8), [pts[k][0] + 0.03, pts[k][1], pts[k][2] + 0.03], null, 1, R);
+    }
+    return K.build();
+  });
+}
+// a drifting glow jelly (moved by decor.js each frame)
+export function jelly() {
+  return make('jelly', () => {
+    const K = new Kit(), R = K.root;
+    K.shadow = false;
+    K.add(hemi(0.22, 18, 8), 'ghost', hdr(0x3fb8ff, 0.9), [0, 0, 0], null, [1, 0.75, 1], R);
+    K.add(hemi(0.12, 14, 6), 'ghost', hdr(0xb0f4ff, 1.6), [0, 0.02, 0], null, [1, 0.8, 1], R);
+    for (let k = 0; k < 7; k++) {
+      const a = k / 7 * Math.PI * 2;
+      K.add(tube('jt' + k, [[Math.cos(a) * 0.15, 0, Math.sin(a) * 0.15], [Math.cos(a) * 0.12, -0.25, Math.sin(a) * 0.12 + 0.03], [Math.cos(a) * 0.16, -0.5, Math.sin(a) * 0.14], [Math.cos(a) * 0.1, -0.78, Math.sin(a) * 0.1]], 0.008, 12, 4), 'ghost', hdr(0x5fe0ff, 0.7), null, null, 1, R);
+    }
+    return K.build();
+  });
+}
+// a sulfur vent: a crusted mound with a hot throat and yellow crystals round the lip
+export function vent() {
+  return make('vent', () => {
+    const K = new Kit(), R = K.root;
+    K.add(roughen('ventm', lathe('ventm0', [[0.8, 0], [0.62, 0.12], [0.38, 0.3], [0.22, 0.42], [0.15, 0.41], [0.11, 0.2], [0, 0.18]], 22), 0.04, 4, 3), 'rough', 0xa88a26, null, null, 1, R, { grime: 0.6, freq: 5 });
+    K.add(cyl(0.13, 0.1, 0.02, 14), 'glow', hdr(0xffa020, 2.6), [0, 0.38, 0], null, 1, R);
+    for (let k = 0; k < 12; k++) { const a = k / 12 * Math.PI * 2; K.add(prism(0.022 + (k % 3) * 0.008, 0.1 + (k % 4) * 0.04), 'gloss', 0xffd83a, [Math.cos(a) * 0.25, 0.37, Math.sin(a) * 0.25], [Math.sin(a) * 0.6, 0, -Math.cos(a) * 0.6], 1, R); }
+    return K.build();
+  });
+}
+
 // ================================================================== BOSSES
 // cover an ellipsoid with rock plates (flattened lumps facing outward) leaving thin gaps; skip(d) leaves holes
 function plated(K, parent, c, rad, n, seed, cols, size, o = {}) {
