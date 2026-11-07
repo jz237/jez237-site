@@ -219,6 +219,16 @@ table.hs tr.me td { color: #fff; background: rgba(255, 179, 71, .1); }
 @media (max-width: 720px) { #scan { width: 120px; height: 120px; top: calc(max(10px, env(safe-area-inset-top)) + 62px); } #cpstrip b { padding: 2px 4px; font-size: 8px; letter-spacing: .06em; } }
 @media (max-width: 560px) { #scan { width: 104px; height: 104px; } #bombs-w b { font-size: 21px; } }
 @media (max-height: 500px) { #scan { width: 108px; height: 108px; top: calc(max(8px, env(safe-area-inset-top)) + 54px); } #bossbar { top: calc(max(8px, env(safe-area-inset-top)) + 70px); } #tb-fire { width: 88px; height: 88px; } #tb-bomb { width: 68px; height: 68px; right: calc(max(18px, env(safe-area-inset-right)) + 100px); bottom: calc(max(14px, env(safe-area-inset-bottom)) + 56px); } }
+#objective { position: absolute; left: 50%; top: calc(max(10px, env(safe-area-inset-top)) + 134px); transform: translateX(-50%); max-width: min(760px, 92vw); text-align: center; font-size: 11px; letter-spacing: .16em; line-height: 1.5; color: #f2e6cc; padding: 5px 12px; border-radius: 8px; background: rgba(0, 0, 0, .38); text-shadow: 0 1px 4px #000; }
+#bossbar.open .lbl { color: #8dff8a; }
+#bossbar.open .bar i { background: linear-gradient(90deg, #2fae6a, #8dff8a); }
+#intent { position: absolute; left: max(14px, env(safe-area-inset-left)); bottom: calc(max(16px, env(safe-area-inset-bottom)) + 96px); max-width: min(440px, 70vw); padding: 10px 14px; border-radius: 12px; background: rgba(4, 12, 14, .7); border: 1px solid rgba(82, 255, 216, .45); }
+#intent .lbl { color: #52ffd8; }
+#intent-t { margin-top: 4px; font-family: system-ui, sans-serif; font-size: 15px; line-height: 1.35; color: #e8fff8; }
+#intent-d { margin-top: 4px; font-size: 11px; letter-spacing: .1em; color: #ff9a80; min-height: 0; }
+#intent-d:empty { display: none; }
+@media (max-width: 720px) { #objective { font-size: 9.5px; letter-spacing: .08em; top: calc(max(10px, env(safe-area-inset-top)) + 118px); } #intent { bottom: calc(max(16px, env(safe-area-inset-bottom)) + 60px); } #intent-t { font-size: 13px; } }
+@media (max-height: 500px) { #objective { top: calc(max(8px, env(safe-area-inset-top)) + 92px); font-size: 9px; } #intent { bottom: 10px; max-width: 46vw; padding: 7px 10px; } #intent-t { font-size: 12px; } }
 #liveries button { color: var(--sc); } #liveries button[disabled] { opacity: .45; }
 #tb-pause { top: auto; bottom: calc(max(14px, env(safe-area-inset-bottom)) + 140px); }
 @media (max-width: 560px) { #scan { top: calc(max(10px, env(safe-area-inset-top)) + 150px); } #bossbar .lbl { font-size: 8.5px; letter-spacing: .12em; } #tut { top: calc(max(10px, env(safe-area-inset-top)) + 150px); max-width: 66vw; left: 36%; font-size: 13px; padding: 9px 13px; } }
@@ -248,6 +258,8 @@ table.hs tr.me td { color: #fff; background: rgba(255, 179, 71, .1); }
   </div>
   <canvas id="scan" class="hidden"></canvas>
   <div id="bossbar" class="hidden"><div class="lbl" id="boss-name">CONSTRUCT</div><div class="bar"><i></i></div></div>
+  <div id="objective" class="hidden"></div>
+  <div id="intent" class="hidden"><div class="lbl">AUTOPILOT IS</div><div id="intent-t"></div><div id="intent-d"></div></div>
   <div id="warns"></div>
   <div id="popups"></div>
   <div id="tut" class="hidden"></div>
@@ -267,7 +279,7 @@ table.hs tr.me td { color: #fff; background: rgba(255, 179, 71, .1); }
   <div class="screen hidden" id="title">
     <div class="card">
       <h1 class="logo">SINI<span> 2026</span></h1>
-      <div class="ver">VERSION <b id="ver">1.0.0</b> · MINE · ARM · BRING IT DOWN</div>
+      <div class="ver">VERSION <b id="ver">1.1.0</b> · MINE · ARM · BRING IT DOWN</div>
       <div class="diffrow">DIFFICULTY<div class="seg" data-opt="diff"><button data-v="easy">EASY</button><button data-v="normal">NORMAL</button><button data-v="hard">HARD</button><button data-v="nightmare">NIGHTMARE</button></div></div>
       <div id="diff-desc"></div>
       <div class="btns" id="title-btns">
@@ -354,14 +366,16 @@ table.hs tr.me td { color: #fff; background: rgba(255, 179, 71, .1); }
   <div class="screen hidden" id="help"><div class="card">
     <h2>HOW TO PLAY</h2>
     <p>Out in the belt the machines are building a <b>CONSTRUCT</b>: a colossal engine fitted plate by plate from crystals. <b>Shoot asteroids</b> to knock their green <b>crystals</b> loose and fly through them: each one becomes a <b>NOVA CHARGE</b> in your rack (up to 20). <b>Gatherers</b> steal crystals to build the construct; shoot them and they drop what they carry. <b>Reavers</b> shoot back.</p>
-    <p>When every plate is fitted the construct <b>wakes up</b> and hunts you. Touching it is fatal. Launch charges at it: they home in on it, and each hit blasts armour away. Bring it down to clear the sector. Charges that hit it while it is still being built knock plates off and buy you time, but you will want them later.</p>
+    <p>Once it is <b>half built</b>, a charge that hits it <b>wakes it early</b>, with less armour (the build ring round it turns teal). Wait too long and it finishes and wakes at full strength. Before it is half built, charges just knock plates off.</p>
+    <p>Awake, it <b>hunts you</b>: touching it is fatal. Its <b>core</b> opens and shuts: charges only hurt it while the core is <b>open</b> (a green timer ring round it) and bounce off while it is shut (red ring). Bring it down to clear the sector.</p>
+    <h3>WHAT TO DO NEXT</h3><p>The line under the construct bar always says what to do next. A teal ring round an asteroid fills as you shoot it, and a crystal pops out when it is full; a teal ring round a gatherer means it is carrying a crystal. In the demo and AI PLAYTHROUGH, the AUTOPILOT panel says what it is doing and a teal marker shows what it is going for.</p>
     <h3>WARNINGS</h3><p>Nothing hits you without a warning. A reaver's nose glows and a red line points where it will fire. Before the construct's <b>tractor pull</b> a red ring spreads round it: fly straight away until it stops. Later constructs also <b>lunge</b> down a marked lane. The scanner (top right) shows the whole neighbourhood; the orange marker at the screen edge always points to the construct.</p>
     <h3>CHECKPOINTS</h3><p>Every sector has three: the launch, the construct half built, and the construct awake. If you run out of ships you can continue from the last one.</p>
     <h3>POWER-UPS</h3><div class="pwgrid">
       <span><b>⁂ TWIN BLAST</b> three-way cannons</span><span><b>» OVERDRIVE</b> double fire rate</span>
       <span><b>⬡ SHIELD CELL</b> +1 shield</span><span><b>◎ MAGNET</b> crystals fly to you</span></div>
     <h3>DIFFICULTY</h3><p>Easy, Normal, Hard and Nightmare each have their own high-score tables. Harder levels score more points (×0.6, ×1, ×1.5, ×2.2). Medals count on Normal and harder, and unlock new ship colours in Options.</p>
-    <h3>KEYBOARD + MOUSE</h3><p>STEER: W A S D or the arrow keys (the ship turns toward the way you push and keeps its speed when you let go), or point with the mouse · FIRE: Space or the left mouse button · NOVA CHARGE: Shift, B or the right mouse button · PAUSE: Esc or P</p>
+    <h3>KEYBOARD + MOUSE</h3><p>STEER: W A S D or the arrow keys (the ship turns toward the way you push and keeps its speed when you let go; with a stick or the mouse, a light touch turns the nose without thrust, for aiming), or point with the mouse · FIRE: Space or the left mouse button · NOVA CHARGE: Shift, B or the right mouse button · PAUSE: Esc or P</p>
     <h3>GAMEPAD</h3><p>STEER: left stick or d-pad · FIRE: A or the right trigger · NOVA CHARGE: B, X, a bumper or the left trigger · PAUSE: Start</p>
     <h3>TOUCH</h3><p>Left thumb steers; FIRE and CHARGE sit under your right thumb.</p>
     <div class="btns" style="margin-top:14px"><button class="mbtn" data-act="back">BACK</button></div>
@@ -400,6 +414,6 @@ addEventListener('error', (e) => window.__snErrors.push(String(e.message || e)))
 addEventListener('unhandledrejection', (e) => window.__snErrors.push('rejection: ' + String(e.reason && e.reason.message || e.reason)));
 (() => { const ce = console.error; console.error = (...a) => { window.__snErrors.push(a.map(String).join(' ')); ce.apply(console, a); }; })();
 </script>
-<script type="module" src="js/main.js?v=1"></script>
+<script type="module" src="js/main.js?v=2"></script>
 </body>
 </html>

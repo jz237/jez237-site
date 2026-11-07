@@ -2,9 +2,9 @@
 // demo and the human profiles; prints how far each gets.
 //   node scripts/sini-2026/autopilot_check.mjs [runs=4]
 const base = 'file:///D:/Projects/Sinistar/games/2026-11-07/sini-2026/js/';
-const sim = await import(base + 'sim.js?v=1');
-const { Autopilot } = await import(base + 'ai.js?v=1');
-const cfg = await import(base + 'config.js?v=1');
+const sim = await import(base + 'sim.js?v=2');
+const { Autopilot } = await import(base + 'ai.js?v=2');
+const cfg = await import(base + 'config.js?v=2');
 const runs = +(process.argv[2] || 4);
 for (const profile of ['demo', 'human']) {
   for (let r = 0; r < runs; r++) {

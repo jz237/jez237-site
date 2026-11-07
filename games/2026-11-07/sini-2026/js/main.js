@@ -1,13 +1,13 @@
 // Sini 2026 — game flow, menus, HUD (with the scanner), commentary, demo director and the frame loop.
-import { VERSION, SECTORS, STEP, F, CONSTRUCTS, UPGRADES, UP_KEYS, UP_COST, MEDALS, parTime, TYPICAL_UP, START_LIVES, DIFFICULTY, POWERUPS, LIVERIES, CP_NAMES, C_KEYS } from './config.js?v=1';
-import { makeWorld, step, drainEvents, wd, isAwake } from './sim.js?v=1';
-import { Autopilot } from './ai.js?v=1';
-import { Renderer, pickQuality, CALM } from './render.js?v=1';
-import { Audio } from './audio.js?v=1';
-import { Input } from './input.js?v=1';
-import { Scores, NO_POST } from './scores.js?v=1';
-import { Recorder, Replay } from './replay.js?v=1';
-import { Online, ROOM, randomCode, cleanCode } from './online.js?v=1';
+import { VERSION, SECTORS, STEP, F, CONSTRUCTS, UPGRADES, UP_KEYS, UP_COST, MEDALS, parTime, TYPICAL_UP, START_LIVES, DIFFICULTY, POWERUPS, LIVERIES, CP_NAMES, C_KEYS } from './config.js?v=2';
+import { makeWorld, step, drainEvents, wd, isAwake, canStrike, strikeHP, coreOpen } from './sim.js?v=2';
+import { Autopilot } from './ai.js?v=2';
+import { Renderer, pickQuality, CALM } from './render.js?v=2';
+import { Audio } from './audio.js?v=2';
+import { Input } from './input.js?v=2';
+import { Scores, NO_POST } from './scores.js?v=2';
+import { Recorder, Replay } from './replay.js?v=2';
+import { Online, ROOM, randomCode, cleanCode } from './online.js?v=2';
 
 const $ = (id) => document.getElementById(id);
 const params = new URLSearchParams(location.search);
@@ -134,7 +134,7 @@ function scenic(look) {
 function stopPlay() {
   A.stopLoops();
   G.replay = null; G.ai = null; G.timeScale = 1; A.setRate(1); R.shot = null;
-  for (const id of ['letterbox', 'bossbar', 'tut', 'banner', 'caption']) $(id).classList.add('hidden');
+  for (const id of ['letterbox', 'bossbar', 'tut', 'banner', 'caption', 'intent', 'objective']) $(id).classList.add('hidden');
   for (const d of WM) d.style.display = 'none';
 }
 function newSeed() { return params.has('seed') ? +params.get('seed') : (Math.random() * 1e9) | 0; }
@@ -221,7 +221,7 @@ function setHud(on) {
   I.touchOn = showTouch;
   $('tb-pause').classList.toggle('hidden', !on || G.mode === 'demo');
   $('scan').classList.toggle('hidden', !on || settings.scanner === 'off');
-  if (!on) $('bossbar').classList.add('hidden');
+  if (!on) for (const id of ['bossbar', 'intent', 'objective']) $(id).classList.add('hidden');
 }
 function buildStrip(W) {
   const dl = W.diff !== 'normal' ? ' · ' + DL(W.diff) : '';
@@ -259,11 +259,14 @@ function updateHud(W) {
   if (C && C.st !== 'gone') {
     const nm = CONSTRUCTS[C.key].name;
     if (awake || C.st === 'dying') {
-      setText('boss-name', `${nm} · AWAKE · ${Math.max(0, C.hp)} CHARGE${C.hp === 1 ? '' : 'S'} TO BRING IT DOWN`);
+      const st = C.st === 'dying' ? 'BREAKING UP' : C.st === 'wake' ? 'WAKING · ARMOURED' : coreOpen(C) ? 'CORE OPEN' : 'CORE SHUT';
+      setText('boss-name', `${nm} · ${st} · ${Math.max(0, C.hp)} CHARGE${C.hp === 1 ? '' : 'S'} TO GO`);
+      $('bossbar').classList.toggle('open', coreOpen(C));
       $('bossbar').classList.add('awake');
       $('bossbar').querySelector('i').style.width = Math.max(0, (C.hp / C.max) * 100).toFixed(1) + '%';
     } else {
-      setText('boss-name', `${nm} · BEING BUILT · ${C.pieces} / ${C.N} PLATES`);
+      setText('boss-name', `${nm} · BEING BUILT · ${C.pieces} / ${C.N} PLATES${canStrike(W) ? ' · CAN BE WOKEN EARLY' : ''}`);
+      $('bossbar').classList.remove('open');
       $('bossbar').classList.remove('awake');
       $('bossbar').querySelector('i').style.width = ((C.pieces / C.N) * 100).toFixed(1) + '%';
     }
@@ -350,8 +353,8 @@ const TUT = {
   gath: () => `A <b>GATHERER</b>. It steals free crystals and flies them to the construct, which grows a plate for each one. Shoot it to make it drop what it carries.`,
   reaver: () => `A <b>REAVER</b>. It shoots back: when its nose glows red and a red line points at you, a shot is coming. Move off the line.`,
   bomb: () => `${keyName('bomb')} launches a <b>NOVA CHARGE</b>. Charges home in on the construct: on a half-built one they knock plates off, but you will need them when it wakes.`,
-  half: () => `The construct is <b>HALF BUILT</b> (checkpoint). Stock up on charges: it takes <b>${G.W ? G.W.R.kill : 5}</b> to bring it down once it wakes.`,
-  wake: () => `<b>IT'S AWAKE.</b> Don't let it touch you. Launch charges from a safe distance: every one blasts armour off.`,
+  half: () => `The construct is <b>HALF BUILT</b> (checkpoint). Now a charge that hits it <b>WAKES IT EARLY</b>, with less armour (${G.W ? strikeHP(G.W) : 4} charges instead of ${G.W ? G.W.R.kill : 5}). Strike when your rack is ready, or it wakes at full strength when finished.`,
+  wake: () => `<b>IT'S AWAKE.</b> Its <b>CORE</b> opens and shuts. Charges only hurt it while the core is <b>OPEN</b> (green ring round it) and bounce off while it is shut (red). Never let it touch you.`,
   pull: () => `A red ring means its <b>TRACTOR PULL</b> is coming: fly straight away from it until the pull stops.`,
 };
 function tutorial(key) { if (G.mode === 'demo' || G.mode === 'playthrough' || !TUT[key]) return; const el = $('tut'); el.innerHTML = TUT[key](); el.classList.remove('hidden'); G.tutT = key === 'gather' ? 6 : 8; }
@@ -498,6 +501,20 @@ function handleEvents(list, W, live) {
       case 'newsite': if (live) { banner(`CONSTRUCT ${W.waveN + 1}`, `${SECTORS[e.look].name} · ${CONSTRUCTS[e.key].name}`, 3); R.setLook(e.look); } break;
       case 'clear': if (live) banner('SECTOR CLEAR', `+${e.bonus.toLocaleString()} · ${fmtT(e.t)}`, 3); break;
       case 'tut': if (live) tutorial(e.key); break;
+      case 'strike':
+        A.play('bombhit', { x: X(e.x), y: 0, z: Z(e.z), vol: 1, gap: 0 });
+        fx.explode(X(e.x), 0.8, Z(e.z), 3, { metal: true, color: 0xc8a0ff, ringColor: 0x52ffd8 });
+        if (R.cView) R.cView.hit = 1;
+        R.shock(e.x, e.z, 1.2); R.addTrauma(0.4 * S);
+        if (live) banner('EARLY STRIKE', `IT WAKES HALF BUILT · ${e.hp} CHARGES INTO ITS OPEN CORE`, 2.6);
+        break;
+      case 'deflect':
+        A.play('hit', { x: X(e.x), y: 0, z: Z(e.z), vol: 0.9, rate: 0.55, gap: 0.05 }); A.play('bombpop', { x: X(e.x), y: 0, z: Z(e.z), vol: 0.6, gap: 0.05 });
+        fx.sparks(X(e.x), 0.8, Z(e.z), { n: 20, speed: 9, r: 1, g: 0.5, b: 0.4 }); fx.ring(X(e.x), 0, Z(e.z), 3, 0xff6a4a);
+        if (live && mine(e) && !G.deflT) { popup(e.waking ? 'ARMOURED WHILE IT WAKES' : 'BOUNCED OFF · CORE SHUT', e.cx, e.cz, '#ff8a80', true); G.deflT = 1; setTimeout(() => { G.deflT = 0; }, 1500); }
+        break;
+      case 'coreopen': A.play('tell', { x: X(e.x), y: 0, z: Z(e.z), vol: 0.8, rate: 0.6, gap: 0.3 }); fx.ring(X(e.x), 0, Z(e.z), 9, 0x7dff9a); if (live) popup('CORE OPEN', e.x, e.z, '#8dff8a', true); break;
+      case 'coreshut': A.play('build', { x: X(e.x), y: 0, z: Z(e.z), vol: 0.9, rate: 1.2, gap: 0.3 }); if (live) popup('CORE SHUT', e.x, e.z, '#ff8a80'); break;
       case 'empty': if (live && mine(e)) { A.play('uiback', { vol: 0.6, gap: 0.3 }); popup('NO CHARGES · MINE CRYSTALS', me.x, me.z, '#ff8a80'); if (isAwake(W.C) && !G.saidEmpty) { G.saidEmpty = true; say('empty', { chance: 0.7 }); } } break;
       case 'drop': fx.ring(X(e.x), 0, Z(e.z), 2.5, POWERUPS[e.kind].color); fx.sparks(X(e.x), 0.5, Z(e.z), { n: 10, speed: 3, life: 0.6 }); break;
       case 'pickup': {
@@ -530,7 +547,7 @@ function onWorldOver(W) {
     const got = [];
     const award = (id) => { if (W.diff !== 'easy' && !medals.has(id)) { medals.add(id); got.push(id); } };
     if (W.stats.deaths === 0 && !G.run.contSector) award(`s${s}clean`);
-    if (W.stats.bombsAtWake >= (W.R.kill || 99)) award(`s${s}ready`);
+    if (W.stats.bombsAtWake >= (W.stats.wakeHP || 99) + (W.stats.early ? 1 : 0)) award(`s${s}ready`);
     if (t <= parTime(s) && !G.run.contSector) award(`s${s}par`);
     store('sn.medals.v1', [...medals]);
     if (got.length) A.play('medal', { vol: 0.9, delay: 0.6, gap: 0 });
@@ -872,7 +889,8 @@ function updateWarnings(W) {
     let dx = PE.x - vw / 2, dy = PE.y - vh / 2;
     if (PE.z > 1) { dx = -dx; dy = -dy; }
     const k = Math.min((vw / 2 - pad) / Math.max(1, Math.abs(dx)), (vh / 2 - pad - 40) / Math.max(1, Math.abs(dy)));
-    const x = vw / 2 + dx * k, y = Math.max(top, vh / 2 + dy * k);
+    // on touch screens keep markers above the FIRE / CHARGE buttons
+    const x = vw / 2 + dx * k, y = Math.min(I.touchOn ? vh - 170 : vh, Math.max(top, vh / 2 + dy * k));
     d.className = 'wm ' + q.c;
     d.style.display = '';
     d.style.left = x + 'px'; d.style.top = y + 'px';
@@ -918,7 +936,7 @@ function tickFrame(dt, draw = true) {
   if (G.slowT > 0) { G.slowT -= dt; if (G.slowT <= 0) { G.timeScale = 1; A.setRate(1); } }
   if (G.state === 'play' || G.state === 'paused-online') playStep(dt);
   else if (G.state === 'replay') replayStep(dt);
-  else if (G.state === 'title' || (G.scenic && G.W === G.scenic)) scenicStep(dt);
+  else if (G.state === 'title' || (G.scenic && G.W === G.scenic)) { scenicStep(dt); R.setIntent(null); }
   const cur = G.state === 'replay' && G.replay ? G.replay.W : G.W;
   if (!cur) return;
   if (cur.k !== R.lookI) R.setLook(cur.k);
@@ -966,7 +984,7 @@ function playStep(dt) {
   captureClip(W);
   updateHud(W);
   if (G.mode === 'demo') { G.demoT += dt; if (G.demoT > 100) W.over = true; }
-  if (G.mode === 'demo' || G.mode === 'playthrough') demoCaptions(W, dt);
+  guidance(W);
   if (W.over && (G.state === 'play' || G.state === 'paused-online')) { G.state = 'ended'; setTimeout(() => onWorldOver(W), G.mode === 'demo' ? 1500 : 1300); }
 }
 function replayStep(dt) {
@@ -992,18 +1010,35 @@ function scenicStep(dt) {
     if (G.idleT > (params.has('demo') ? 1 : 20)) { G.demoStartT = performance.now(); startDemo(); }
   }
 }
-// what the autopilot is up to, now and then
-function demoCaptions(W, dt) {
-  G.capCool = (G.capCool || 0) - dt;
-  if (G.capCool > 0 || !G.ai) return;
-  const d = G.ai.debug, me = W.players[0], C = W.C;
-  let text = null;
-  if (C && isAwake(C) && C.st !== 'wake') text = me.bombs ? `AUTOPILOT · circling at charge range, ${me.bombs} in the rack, ${C.hp} needed` : 'AUTOPILOT · out of charges: mining for more, away from it';
-  else if (d.mode === 'thief') text = 'AUTOPILOT · shooting down a gatherer before it reaches the construct';
-  else if (d.mode === 'collect') text = `AUTOPILOT · scooping crystals (${me.bombs} charges)`;
-  else if (d.mode === 'fight') text = 'AUTOPILOT · turning to fight a reaver';
-  else if (d.mode === 'harass') text = 'AUTOPILOT · knocking plates off the half-built construct';
-  if (text) { caption(text, 2.6); G.capCool = 6.5; }
+// what to do right now: for the autopilot its goal (and what it is dodging), for a player the next objective
+function objective(W, me) {
+  const C = W.C;
+  if (!me || !me.alive) return 'WARPING BACK IN';
+  if (!C || C.st === 'gone') return W.mode === 'deep' ? 'A NEW CONSTRUCT IS ON ITS WAY' : 'SECTOR CLEAR';
+  if (C.st === 'dying') return 'IT IS BREAKING UP: KEEP CLEAR';
+  if (isAwake(C)) {
+    if (C.st === 'wake') return `IT IS WAKING AND ARMOURED · ${C.hp} CHARGES INTO ITS OPEN CORE WILL BRING IT DOWN`;
+    if (me.bombs <= 0) return 'OUT OF CHARGES · MINE CRYSTALS WELL AWAY FROM IT';
+    return coreOpen(C) ? `CORE OPEN (GREEN RING) · LAUNCH CHARGES NOW · ${C.hp} TO GO` : `CORE SHUT (RED RING) · CHARGES BOUNCE OFF · IT OPENS IN ${Math.max(0, C.cycT).toFixed(1)} s`;
+  }
+  const hp = strikeHP(W), need = hp + 1, half = Math.ceil(C.N / 2);
+  if (canStrike(W)) return me.bombs >= need ? `READY · LAUNCH A CHARGE AT IT TO WAKE IT EARLY · THEN ${hp} MORE INTO ITS CORE` : `HALF BUILT · ${need - me.bombs} MORE CHARGES AND YOU CAN STRIKE EARLY · FINISHED, IT WAKES AT FULL STRENGTH`;
+  return `SHOOT ASTEROIDS FOR CRYSTALS (${me.bombs} CHARGES) · SHOOT GATHERERS CARRYING CRYSTALS · STRIKE ONCE IT IS HALF BUILT (${C.pieces}/${half})`;
+}
+function guidance(W) {
+  const me = myPlayer(W);
+  const watch = G.ai && (G.mode === 'demo' || G.mode === 'playthrough' || G.autopilot);
+  $('intent').classList.toggle('hidden', !watch);
+  $('objective').classList.toggle('hidden', !!watch || G.mode === 'title');
+  if (watch) {
+    const d = G.ai.debug;
+    setText('intent-t', d.intent || '');
+    setText('intent-d', d.dodge ? '⚠ ' + d.dodge : '');
+    R.setIntent(d.target, me);
+  } else {
+    R.setIntent(null);
+    setText('objective', objective(W, me));
+  }
 }
 // engine, drone, reaver and construct hums
 function loops(W, dt) {
@@ -1047,7 +1082,7 @@ async function boot() {
   setTimeout(() => $('loading').remove(), 700);
   toTitle();
   boardOf('campaign', settings.diff).fresh(); boardOf('deep', settings.diff).fresh();
-  if (params.has('test')) { const m = await import('./tests.js?v=1'); m.runTests(window.__sn); }
+  if (params.has('test')) { const m = await import('./tests.js?v=2'); m.runTests(window.__sn); }
   else if (params.has('playthrough')) { A.unlock(); startPlaythrough(); }
   else if (G.autopilot) { A.unlock(); if (params.has('deep')) startDeep(); else startCampaign(+params.get('sector') || 0); }
   else if (params.has('room')) { act('online'); $('join-code').value = cleanCode(params.get('room')); }

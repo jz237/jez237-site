@@ -3,8 +3,8 @@
 // machines, the construct, lives, score) and streams snapshots. The guest flies its own ship locally (so
 // steering never lags), judges the hits it takes, and reports its ship, its shots, the crystals and pods it
 // scoops and the charges it launches; the host carries those out so every kill is decided in one place.
-import { netCollect, netBomb, netPod, netDeath, adoptCp } from './sim.js?v=1';
-import { PW_KEYS } from './config.js?v=1';
+import { netCollect, netBomb, netPod, netDeath, adoptCp } from './sim.js?v=2';
+import { PW_KEYS } from './config.js?v=2';
 const packPw = (pw) => Object.entries(pw || {}).map(([k, t]) => [PW_KEYS.indexOf(k), Math.round(t * 10) / 10]);
 const unpackPw = (a) => { const o = {}; for (const [i, t] of a || []) o[PW_KEYS[i]] = t; return o; };
 
@@ -42,7 +42,7 @@ export function packWorld(W) {
     bm: W.bombs.map((b) => [b.id, r2(b.x), r2(b.z), r3(b.a), r2(b.sp), r2(b.life), b.pid]),
     pd: W.pods.map((q) => [q.id, PW_KEYS.indexOf(q.kind), r2(q.x), r2(q.z), r2(q.life), r2(q.t)]),
     be: W.beams.map((b) => [b.eid, b.rid, r2(b.t)]),
-    c: C ? [C.key, r2(C.x), r2(C.z), r2(C.vx), r2(C.vz), r3(C.a), C.N, C.pieces, ST.indexOf(C.st), r2(C.stT), C.hp, C.max, C.R, C.hitR, r2(C.iris), r3(C.lx), r3(C.lz)] : null,
+    c: C ? [C.key, r2(C.x), r2(C.z), r2(C.vx), r2(C.vz), r3(C.a), C.N, C.pieces, ST.indexOf(C.st), r2(C.stT), C.hp, C.max, C.R, C.hitR, r2(C.iris), r3(C.lx), r3(C.lz), r3(C.wakeFrac ?? 1), C.cyc === 'open' ? 1 : 0, r2(C.cycT || 0)] : null,
     p1: [r3(h.x), r3(h.z), r2(h.vx), r2(h.vz), r3(h.a), h.alive ? 1 : 0, r2(h.inv), h.shield, h.bombs, r2(h.thrust)],
     p2: g ? [g.alive ? 1 : 0, r2(g.x), r2(g.z), r2(g.inv), g.shield, g.bombs] : null,
     hs: W.shots.filter((s) => s.pid === 1).map((s) => [r2(s.x), r2(s.z), r2(s.vx), r2(s.vz), r2(s.life)]),
@@ -68,7 +68,7 @@ export function applyWorld(W, S, lead) {
   if (S.c) {
     const q = S.c;
     const C = W.C && W.C.key === q[0] ? W.C : { t: 0, selfT: 9, pullCD: 9, lungeCD: 9, summonCD: 9, drift: 0, hitT: 0 };
-    Object.assign(C, { key: q[0], x: ext(q[1], q[3]), z: ext(q[2], q[4]), vx: q[3], vz: q[4], a: q[5], N: q[6], pieces: q[7], st: ST[q[8]], stT: q[9], hp: q[10], max: q[11], R: q[12], hitR: q[13], iris: q[14], lx: q[15], lz: q[16] });
+    Object.assign(C, { key: q[0], x: ext(q[1], q[3]), z: ext(q[2], q[4]), vx: q[3], vz: q[4], a: q[5], N: q[6], pieces: q[7], st: ST[q[8]], stT: q[9], hp: q[10], max: q[11], R: q[12], hitR: q[13], iris: q[14], lx: q[15], lz: q[16], wakeFrac: q[17] ?? 1, cyc: q[18] ? 'open' : 'shut', cycT: q[19] || 0 });
     W.C = C;
   } else W.C = null;
   const h = W.players[0], p = S.p1;

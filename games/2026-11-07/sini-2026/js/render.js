@@ -4,13 +4,13 @@
 // from the simulation, the construct assembling plate by plate, warnings drawn on the plane (aim lines,
 // tractor ring, lunge lane, warp gates) and HDR post. Nothing here changes the world.
 import * as THREE from '../vendor/three.module.min.js';
-import { Post } from './post.js?v=1';
-import * as TX from './textures.js?v=1';
-import * as MD from './models.js?v=1';
-import { FX, CALM } from './fx.js?v=1';
-import { NOISE } from './shaders.js?v=1';
-import { F, WS, CONSTRUCTS, POWERUPS, P2_LIVERY, LIVERIES } from './config.js?v=1';
-import { wd, isAwake } from './sim.js?v=1';
+import { Post } from './post.js?v=2';
+import * as TX from './textures.js?v=2';
+import * as MD from './models.js?v=2';
+import { FX, CALM } from './fx.js?v=2';
+import { NOISE } from './shaders.js?v=2';
+import { F, WS, CONSTRUCTS, POWERUPS, P2_LIVERY, LIVERIES } from './config.js?v=2';
+import { wd, isAwake, coreOpen } from './sim.js?v=2';
 
 export { CALM };
 const hdr = MD.hdr;
@@ -531,6 +531,13 @@ export class Renderer {
     this.pullRing = mk(0, 0xff5a3a);
     this.dangerRing = mk(0, 0xff3a2a);
     this.buildRing = mk(4, 0xffb347);
+    this.coreRing = mk(4, 0x7dff9a);
+    // guidance: how close a rock is to giving up its next crystal, which gatherers carry one, and what the autopilot is after
+    this.chipRings = Array.from({ length: 5 }, () => mk(4, 0x52ffd8));
+    this.carriers = Array.from({ length: 8 }, () => mk(3, 0x52ffd8));
+    this.reticle = mk(3, 0x9fffe8);
+    this.rockHitT = new Map();
+    this.intent = null;
     const lane = new THREE.PlaneGeometry(2, 1); lane.rotateX(-Math.PI / 2); lane.translate(0, 0, -0.5);
     this.laneMesh = new THREE.Mesh(lane, this.decalMat(1, 0xff4a2a)); this.laneMesh.visible = false; this.laneMesh.renderOrder = 2; this.laneMesh.frustumCulled = false; this.scene.add(this.laneMesh);
     // streaks: reaver aim lines and mining beams
@@ -539,6 +546,7 @@ export class Renderer {
       uniforms: { uColor: { value: hdr(color, 1) }, uK: { value: 1 }, uTime: { value: 0 }, uKind: { value: kind } } });
     this.aims = Array.from({ length: 10 }, () => { const m = new THREE.Mesh(sg, smat(0, 0xff3a4a)); m.visible = false; m.renderOrder = 3; m.frustumCulled = false; this.scene.add(m); return m; });
     this.beams = Array.from({ length: 10 }, () => { const m = new THREE.Mesh(sg, smat(1, 0xff7a3a)); m.visible = false; m.renderOrder = 3; m.frustumCulled = false; this.scene.add(m); return m; });
+    this.intentLine = new THREE.Mesh(sg, smat(0, 0x9fffe8)); this.intentLine.visible = false; this.intentLine.renderOrder = 3; this.intentLine.frustumCulled = false; this.scene.add(this.intentLine);
     this.shieldMat = new THREE.ShaderMaterial({ vertexShader: SHIELD_VERT, fragmentShader: SHIELD_FRAG, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
       uniforms: { uColor: { value: hdr(0x7fd8ff, 1.6) }, uK: { value: 0 }, uTime: { value: 0 } } });
   }
@@ -776,6 +784,7 @@ export class Renderer {
     for (; bi < this.beams.length; bi++) this.beams[bi].visible = false;
 
     this.syncRocks(W, t);
+    this.syncGuides(W, t);
     this.syncCrystals(W, t);
     this.syncShots(W);
     this.syncConstruct(W, dt, t);
@@ -954,6 +963,52 @@ export class Renderer {
     const br = this.buildRing;
     br.visible = C.st === 'build'; br.position.set(x, -0.35, z); br.scale.setScalar(C.R + 4.5);
     br.material.uniforms.uProg.value = C.pieces / C.N; br.material.uniforms.uTime.value = t; br.material.uniforms.uAlpha.value = 0.8;
+    // half built: the build ring turns teal (a charge now wakes it early)
+    br.material.uniforms.uColor.value.set(C.pieces >= Math.ceil(C.N / 2) ? 0x52ffd8 : 0xffb347);
+    // awake: a timer ring for the core, green while open (charges hurt it), red while shut (they bounce off)
+    const cr = this.coreRing, live = awake && C.st !== 'wake' && C.st !== 'dying';
+    cr.visible = live; cr.position.set(x, -0.3, z); cr.scale.setScalar(C.R + 5.5);
+    if (live) {
+      const open = coreOpen(C), T = Math.max(0.1, open ? W.R.openT : W.R.shutT);
+      cr.material.uniforms.uProg.value = clamp((C.cycT || 0) / T, 0, 1);
+      cr.material.uniforms.uColor.value.set(open ? 0x7dff9a : 0xff4a3a);
+      cr.material.uniforms.uAlpha.value = open ? 1.1 : 0.8; cr.material.uniforms.uTime.value = t;
+    }
+  }
+
+  // the autopilot's goal: a reticle on its target and a dashed line to it (demo / playthrough)
+  setIntent(target, me) { this.intent = target && me && me.alive ? { target, me } : null; }
+  syncGuides(W, t) {
+    // mining progress on rocks being shot (fills toward the next crystal)
+    let ci = 0;
+    for (const k of W.rocks) if (k.hitT > 0.05) this.rockHitT.set(k.id, t);
+    for (const k of W.rocks) {
+      const lt = this.rockHitT.get(k.id);
+      if (lt === undefined || t - lt > 1.8 || k.ore <= 0 || k.hits <= 0 || ci >= this.chipRings.length) continue;
+      const m = this.chipRings[ci++];
+      m.visible = true; m.position.set(this.X(k.x), -0.2, this.Z(k.z)); m.scale.setScalar(k.r + 2.2);
+      const U = m.material.uniforms; U.uProg.value = clamp(k.hits / Math.max(1, W.R.chip), 0, 1); U.uTime.value = t; U.uAlpha.value = 0.7 * Math.min(1, (1.8 - (t - lt)) * 2);
+    }
+    for (; ci < this.chipRings.length; ci++) this.chipRings[ci].visible = false;
+    if (this.rockHitT.size > 200) this.rockHitT.clear();
+    // gatherers carrying a crystal
+    let gi = 0;
+    for (const e of W.enemies) {
+      if (!e.carry || e.hp <= 0 || gi >= this.carriers.length) continue;
+      const m = this.carriers[gi++];
+      m.visible = true; m.position.set(this.X(e.x), -0.3, this.Z(e.z)); m.scale.setScalar(2.4 + 0.25 * Math.sin(t * 6 + e.id));
+      const U = m.material.uniforms; U.uProg.value = 0.6; U.uTime.value = t; U.uAlpha.value = 0.9;
+    }
+    for (; gi < this.carriers.length; gi++) this.carriers[gi].visible = false;
+    // what the autopilot is going for
+    const I = this.intent, rt = this.reticle, ln = this.intentLine;
+    if (!I) { rt.visible = false; ln.visible = false; return; }
+    const tx = this.X(I.target.x), tz = this.Z(I.target.z), px = this.X(I.me.x), pz = this.Z(I.me.z);
+    rt.visible = true; rt.position.set(tx, -0.15, tz); rt.scale.setScalar(Math.max(2, I.target.r || 2));
+    rt.material.uniforms.uProg.value = 0.35 + 0.25 * Math.sin(t * 4); rt.material.uniforms.uTime.value = t; rt.material.uniforms.uAlpha.value = 0.9;
+    const dx = tx - px, dz = tz - pz, d = Math.hypot(dx, dz) || 1, rr = Math.max(2, I.target.r || 2);
+    if (d > rr + 4) { this.setStreak(ln, px + (dx / d) * 2.4, pz + (dz / d) * 2.4, tx - (dx / d) * rr, tz - (dz / d) * rr, 0.35, 0.15); ln.material.uniforms.uK.value = 0.55; ln.material.uniforms.uTime.value = t; }
+    else ln.visible = false;
   }
 
   // ---------------------------------------------------------------- camera
@@ -1035,7 +1090,7 @@ export class Renderer {
     const t = this.time;
     this.fx.update(dt);
     this.updatePieces(dt);
-    for (const m of [...this.gates, this.pullRing, this.dangerRing, this.buildRing, this.laneMesh]) if (m.visible) m.material.uniforms.uTime.value = t;
+    for (const m of [...this.gates, this.pullRing, this.dangerRing, this.buildRing, this.coreRing, this.reticle, this.laneMesh]) if (m.visible) m.material.uniforms.uTime.value = t;
     const bd = this.backdrops[this.lookI];
     if (bd) { if (bd.userData.disc) bd.userData.disc.material.uniforms.uTime.value = t; bd.traverse((o) => { if (o.material && o.material.uniforms && o.material.uniforms.uTime) o.material.uniforms.uTime.value = t; }); }
     this.flash.w = Math.max(0, this.flash.w - dt * 3);
@@ -1063,7 +1118,7 @@ export class Renderer {
     tmp.forEach((o, i) => { o.position.set(this.cx - 30 + i * 5, 0, this.cz); this.scene.add(o); });
     const sh = new THREE.Mesh(new THREE.SphereGeometry(2, 16, 10), this.shieldMat); sh.position.set(this.cx, 0, this.cz); this.scene.add(sh); tmp.push(sh);
     const icon = new THREE.Sprite(this.iconFor('twin')); icon.position.set(this.cx, 2, this.cz); tmp.push(icon); this.scene.add(icon);
-    const vis = [...this.gates.slice(0, 1), this.pullRing, this.dangerRing, this.buildRing, this.laneMesh, this.aims[0], this.beams[0]];
+    const vis = [...this.gates.slice(0, 1), this.pullRing, this.dangerRing, this.buildRing, this.coreRing, this.reticle, this.intentLine, this.chipRings[0], this.carriers[0], this.laneMesh, this.aims[0], this.beams[0]];
     for (const m of vis) { m.visible = true; m.position.set(this.cx, 0, this.cz); m.scale.setScalar(2); }
     for (const I of [this.shotI, this.shotGlowI, this.boltI, this.boltTailI, this.abI, this.bombI, this.crystalI, this.studI, ...this.rockI]) { I.count = 1; I.setMatrixAt(0, _m.makeTranslation(this.cx, 0, this.cz)); I.instanceMatrix.needsUpdate = true; }
     this.fx.explode(this.cx, 0, this.cz, 1, { metal: true, rock: true });

@@ -4,13 +4,13 @@
 // size, the guest's world tracking the host's (checkpoint, score, lives, construct, the host's ship), the host
 // tracking the guest's ship, the guest's crystals / charges counting on the host, the guest's death reaching the
 // host and a clean leave.
-//   node scripts/sini-2026/online_check.mjs [relay=ws://127.0.0.1:8781] [seconds=40] [lags=0,60]
+//   node scripts/sini-2026/online_check.mjs [relay=ws://127.0.0.1:8781] [seconds=40] [lags=0,60]   (SN_CP=2 starts at the AWAKE checkpoint)
 // Never touches the real relay.
 const base = 'file:///D:/Projects/Sinistar/games/2026-11-07/sini-2026/js/';
-const SIM = await import(base + 'sim.js?v=1');
-const { Autopilot } = await import(base + 'ai.js?v=1');
-const CFG = await import(base + 'config.js?v=1');
-const { Online, ROOM, randomCode } = await import(base + 'online.js?v=1');
+const SIM = await import(base + 'sim.js?v=2');
+const { Autopilot } = await import(base + 'ai.js?v=2');
+const CFG = await import(base + 'config.js?v=2');
+const { Online, ROOM, randomCode } = await import(base + 'online.js?v=2');
 const { makeWorld, step, drainEvents, STEP, wd, netDeath } = SIM;
 
 const relay = process.argv[2] || 'ws://127.0.0.1:8781';
@@ -66,7 +66,7 @@ for (const lag of lags) {
   Gs.net.connect(ROOM + code, 'join', { ini: 'GST' });
   ok(await until(() => H.joined && Gs.joined), `${label}: both pilots see each other (${H.net.room})`);
   ok(H.net.role === 'p1' && Gs.net.role === 'p2', `${label}: host is p1, guest is p2`);
-  const cfg = { gm: 'campaign', sector: 2, seed: 4100 + lag, diff: 'normal', cp: 1 };
+  const cfg = { gm: 'campaign', sector: 2, seed: 4100 + lag, diff: 'normal', cp: +(process.env.SN_CP || 1) };
   H.net.sendStart(cfg); start(H, cfg);
   ok(await until(() => Gs.cfg), `${label}: the guest receives the start`);
   if (!Gs.cfg) continue;
@@ -107,7 +107,8 @@ for (const lag of lags) {
   const tol = 2 + lag / 30;
   ok(med(gpos) < tol && p90(gpos) < tol * 2.5, `${label}: the host sees the guest's ship within ${med(gpos).toFixed(2)} m median / ${p90(gpos).toFixed(2)} m p90`);
   ok(med(hpos) < tol && p90(hpos) < tol * 2.5, `${label}: the guest sees the host's ship within ${med(hpos).toFixed(2)} m median / ${p90(hpos).toFixed(2)} m p90`);
-  ok(H.net.stat.shots > 20 && (H.net.stat.grabs > 0 || H.net.stat.bombs > 0), `${label}: the guest's shots, crystals and charges reach the host`);
+  // in the build phase the guest mines (shots + crystals); in the fight it mostly launches charges
+  ok((H.net.stat.shots > 20 && H.net.stat.grabs > 0) || H.net.stat.bombs > 0, `${label}: the guest's shots, crystals and charges reach the host (${H.net.stat.shots} shots, ${H.net.stat.grabs} crystals, ${H.net.stat.bombs} charges)`);
   // the guest's ship is lost on its own machine: the host takes the life and brings it back
   {
     const me = Gs.W.players[1];

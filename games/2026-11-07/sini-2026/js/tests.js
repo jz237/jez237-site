@@ -1,9 +1,9 @@
 // ?test=1 self-test page: determinism, exact replays, the difficulty ramp, the gentle start, the construct
 // building / waking / dying, the autopilot reaching later sectors, the live loop with no console errors, no score posts.
-import { makeWorld, step, drainEvents, STEP, cloneWorld, isAwake } from './sim.js?v=1';
-import { Autopilot } from './ai.js?v=1';
-import { RAMP, SECTORS, TYPICAL_UP, rampAt, deepLevel, DIFF_KEYS, applyDiff, MIN_WARN, TUTOR } from './config.js?v=1';
-import { Recorder, Replay } from './replay.js?v=1';
+import { makeWorld, step, drainEvents, STEP, cloneWorld, isAwake } from './sim.js?v=2';
+import { Autopilot } from './ai.js?v=2';
+import { RAMP, SECTORS, TYPICAL_UP, rampAt, deepLevel, DIFF_KEYS, applyDiff, MIN_WARN, TUTOR } from './config.js?v=2';
+import { Recorder, Replay } from './replay.js?v=2';
 
 export const hashW = (W) => JSON.stringify([W.n, W.score, W.lives, W.cp, W.phase, W.rs, W.players.map((p) => [p.x.toFixed(6), p.z.toFixed(6), p.alive, p.shield, p.bombs]),
   W.enemies.map((e) => [e.id, e.x.toFixed(4), e.z.toFixed(4), e.hp]), W.rocks.map((k) => [k.id, k.x.toFixed(4), k.ore]), W.crystals.length, W.bolts.length, W.bombs.length, W.C ? [W.C.st, W.C.pieces, W.C.hp, W.C.x.toFixed(4)] : 0]);

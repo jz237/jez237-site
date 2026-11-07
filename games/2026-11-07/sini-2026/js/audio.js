@@ -6,7 +6,7 @@ const SFX = ['gun', 'hitrock', 'chip', 'collect', 'bombarm', 'bomb', 'bombhit', 
   'warpin', 'rockbreak', 'build', 'knock', 'awake', 'roar', 'tractor', 'eat', 'alarm', 'life', 'upgrade', 'medal', 'pickup', 'pwend', 'uimove', 'uiok', 'uiback', 'rewind',
   'thrust', 'gather', 'reaver', 'construct', 'hunt'];
 const VOICE = ['begin', 's2', 's3', 's4', 's5', 'deep', 'half', 'boss', 'bossdown', 'clear', 'lastlife', 'gameover', 'newrecord', 'champion', 'replay', 'partner', 'empty'];
-const V = '?v=1';
+const V = '?v=2';
 
 export class Audio {
   constructor(base) {

@@ -1,7 +1,7 @@
 // Sini 2026 simulation: fixed 120 Hz steps, all randomness from the world's own seeded generator (W.rs),
 // plain data only, so a world can be cloned and re-run bit for bit (replays, online, tests).
 // Nothing in here touches the DOM, WebGL or audio; it only pushes events into W.ev.
-import { F, STEP, WS, H, ROCK, ENEMY, CONSTRUCTS, C_KEYS, SECTORS, rampAt, rampLevel, deepLevel, TUTOR, SCORE, START_LIVES, DIFFICULTY, applyDiff, POWERUPS, PW_KEYS, DROP } from './config.js?v=1';
+import { F, STEP, WS, H, ROCK, ENEMY, CONSTRUCTS, C_KEYS, SECTORS, rampAt, rampLevel, deepLevel, TUTOR, SCORE, START_LIVES, DIFFICULTY, applyDiff, POWERUPS, PW_KEYS, DROP } from './config.js?v=2';
 export { STEP };
 
 const TAU = Math.PI * 2;
@@ -297,12 +297,16 @@ function player(W, p, dt) {
   if (m > 0.12 && W.phase !== 'intro') {
     const want = Math.atan2(mz, mx), turn = F.turn * th * dt;
     p.a += clamp(angDiff(p.a, want), -turn, turn);
-    const mag = Math.min(1, m);
-    // the engines push along the nose, so a hard reverse swings round in an arc
-    let dvx = Math.cos(p.a) * F.vmax * th * mag - p.vx, dvz = Math.sin(p.a) * F.vmax * th * mag - p.vz;
-    const l = hyp(dvx, dvz), cap = F.accel * th * dt;
-    if (l > cap) { dvx *= cap / l; dvz *= cap / l; }
-    p.vx += dvx; p.vz += dvz; p.thrust = mag;
+    // a light touch (under ~30% of the stick) only turns the nose; past that the engines push along it,
+    // so a hard reverse swings round in an arc
+    const mag = Math.max(0, (Math.min(1, m) - 0.3) / 0.7);
+    if (mag > 0) {
+      let dvx = Math.cos(p.a) * F.vmax * th * mag - p.vx, dvz = Math.sin(p.a) * F.vmax * th * mag - p.vz;
+      const l = hyp(dvx, dvz), cap = F.accel * th * dt;
+      if (l > cap) { dvx *= cap / l; dvz *= cap / l; }
+      p.vx += dvx; p.vz += dvz;
+    } else { const k = 1 - F.drag * dt; p.vx *= k; p.vz *= k; }
+    p.thrust = mag;
   } else {
     const k = 1 - F.drag * dt;
     p.vx *= k; p.vz *= k; p.thrust = 0;
@@ -686,7 +690,7 @@ export function addScore(W, n) { const b = Math.round(n * D_OF(W).score); W.scor
 function makeConstruct(W, x, z) {
   const key = cKey(W), K = CONSTRUCTS[key], R = W.R;
   return { key, x, z, vx: 0, vz: 0, a: rr(W, 0, TAU), N: R.pieces, pieces: 0, st: 'build', stT: 0, selfT: R.selfT * 0.8, hp: 0, max: R.kill, R: K.R, hitR: K.hitR,
-    pullCD: R.pullEvery, lungeCD: 6, summonCD: 9, lx: 0, lz: 0, hitT: 0, drift: rr(W, 0, TAU), t: 0, iris: 0 };
+    pullCD: R.pullEvery, lungeCD: 6, summonCD: 9, lx: 0, lz: 0, hitT: 0, drift: rr(W, 0, TAU), t: 0, iris: 0, wakeFrac: 1, cyc: 'shut', cycT: 0 };
 }
 function addPiece(W, how) {
   const C = W.C;
@@ -706,16 +710,23 @@ function checkpoint(W, cp) {
   W.ev.push({ k: 'checkpoint', cp });
   if (cp === 1) tut(W, 'half');
 }
-function wake(W) {
-  const C = W.C, R = W.R;
+// EARLY STRIKE: once a construct is half built, the first charge that hits it wakes it on the spot. It wakes with
+// armour for the plates it has: a half-built one needs about half the charges, but now it hunts you.
+export const canStrike = (W) => !!W.C && W.C.st === 'build' && W.C.pieces >= Math.ceil(W.C.N / 2);
+export const strikeHP = (W) => (canStrike(W) ? Math.max(2, Math.ceil(W.R.kill * (0.4 + 0.6 * W.C.pieces / W.C.N))) : W.R.kill);
+// once awake, charges only hurt it while its core is open (the iris more than a third open) and it is not still waking
+export const coreOpen = (C) => !!C && C.st !== 'wake' && C.st !== 'dying' && C.iris > 0.35;
+function wake(W, early = false) {
+  const C = W.C;
+  const hp = early ? strikeHP(W) : W.R.kill;
   if (W.mode !== 'deep') checkpoint(W, 2);
   const R2 = W.R;
-  C.st = 'wake'; C.stT = R2.wakeT; C.hp = C.max = R2.kill; C.pieces = C.N; C.pullCD = R2.pullEvery * 0.7; C.lungeCD = 5; C.summonCD = 4;
-  W.stats.wakeT = W.secT;
+  C.st = 'wake'; C.stT = R2.wakeT * (early ? 0.8 : 1); C.hp = C.max = hp; C.wakeFrac = early ? C.pieces / C.N : 1; if (!early) C.pieces = C.N;
+  C.pullCD = R2.pullEvery * 0.7; C.lungeCD = 5; C.summonCD = 4; C.cyc = 'shut'; C.cycT = 0; C.iris = 0;
+  W.stats.wakeT = W.secT; W.stats.early = early ? 1 : 0; W.stats.wakeHP = hp;
   W.stats.bombsAtWake = W.players.reduce((s, p) => s + p.bombs, 0);
-  W.ev.push({ k: 'wake', x: C.x, z: C.z, key: C.key, T: C.stT });
+  W.ev.push({ k: 'wake', x: C.x, z: C.z, key: C.key, T: C.stT, early, hp });
   tut(W, 'wake');
-  void R;
 }
 function construct(W, C, dt) {
   const R = W.R;
@@ -732,14 +743,23 @@ function construct(W, C, dt) {
     if (W.n % 30 === 0) W.ev.push({ k: 'cboom', x: wp(C.x + rr(W, -4, 4)), z: wp(C.z + rr(W, -4, 4)) });
     if (C.stT <= 0) destroyed(W, C);
   } else {
-    C.iris = Math.min(1, C.iris + dt * 0.6);
+    // the core cycle: open (it can be hurt) then shut (charges bounce off); the iris takes 0.8 s to move
+    if (C.st !== 'wake') {
+      C.cycT -= dt;
+      if (C.cycT <= 0) {
+        C.cyc = C.cyc === 'open' ? 'shut' : 'open';
+        C.cycT = C.cyc === 'open' ? R.openT : R.shutT;
+        W.ev.push({ k: C.cyc === 'open' ? 'coreopen' : 'coreshut', x: C.x, z: C.z, T: C.cycT });
+      }
+      C.iris = C.cyc === 'open' ? Math.min(1, C.iris + dt * 1.25) : Math.max(0, C.iris - dt * 1.25);
+    }
     const p = nearestPlayer(W, C.x, C.z);
     C.stT -= dt;
     let sp = R.bossV, tx = 0, tz = 0;
     if (p) { const tt = 0.6; tx = wd(p.x + p.vx * tt - C.x); tz = wd(p.z + p.vz * tt - C.z); }
     const d = p ? hyp(wd(p.x - C.x), wd(p.z - C.z)) : 1e9;
     switch (C.st) {
-      case 'wake': sp = 0; if (C.stT <= 0) { C.st = 'hunt'; W.ev.push({ k: 'hunt', x: C.x, z: C.z }); } break;
+      case 'wake': sp = 0; if (C.stT <= 0) { C.st = 'hunt'; C.cyc = 'open'; C.cycT = R.openT; W.ev.push({ k: 'hunt', x: C.x, z: C.z }); W.ev.push({ k: 'coreopen', x: C.x, z: C.z, T: R.openT }); } break;
       case 'digest': sp *= 0.25; if (C.stT <= 0) C.st = 'hunt'; break;
       case 'hunt':
         C.pullCD -= dt; C.lungeCD -= dt; C.summonCD -= dt;
@@ -791,6 +811,7 @@ export function pullPlayers(W, C) {
 }
 function bombConstruct(W, C, b) {
   W.stats.bombHits++;
+  if (C.st === 'build' && canStrike(W)) { wake(W, true); W.ev.push({ k: 'strike', x: b.x, z: b.z, cx: C.x, cz: C.z, pid: b.pid, hp: C.hp }); return; }
   if (C.st === 'build') {
     const floor = W.cp >= 1 ? Math.ceil(C.N / 2) : 0;
     const before = C.pieces;
@@ -802,6 +823,12 @@ function bombConstruct(W, C, b) {
     return;
   }
   if (C.st === 'dying' || C.st === 'gone') return;
+  if (!coreOpen(C)) {
+    // shut (or still waking): the charge bursts on the armour and does nothing
+    W.stats.deflected = (W.stats.deflected || 0) + 1;
+    W.ev.push({ k: 'deflect', x: b.x, z: b.z, cx: C.x, cz: C.z, pid: b.pid, waking: C.st === 'wake' ? 1 : 0 });
+    return;
+  }
   C.hp--; C.hitT = 0.7;
   if (b.pid) addScore(W, SCORE.bombHit);
   W.ev.push({ k: 'bombhit', x: b.x, z: b.z, cx: C.x, cz: C.z, hp: C.hp, max: C.max, pid: b.pid });
