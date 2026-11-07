@@ -6,7 +6,7 @@
 // weights (gold vein, wetness, glow, rubble/cracks) that the triplanar rock shader uses.
 // Breaking a tile re-meshes only the chunks around it (a few ms).
 import * as THREE from '../vendor/three.module.min.js';
-import { T } from './config.js?v=10';
+import { T } from './config.js?v=11';
 
 export const S = 0.5;                  // sample spacing (m)
 export const Z0 = -15, Z1 = 5;         // depth range (camera side is +z)
@@ -380,7 +380,7 @@ roughnessFactor = mix(roughnessFactor, 0.16, vMat.y);`)
     float fleck = step(0.86, h13(floor(vWPos * 22.0)));
     float m = clamp(g * (vein * 0.85 + fleck * 0.9), 0.0, 1.0);
     diffuseColor.rgb = mix(diffuseColor.rgb, uGold * (0.55 + 0.45 * gAlb.g), m);
-    metalnessFactor = mix(metalnessFactor, 1.0, m);
+    metalnessFactor = mix(metalnessFactor, 0.7, m);   // fully metallic flecks read black: there is no environment to reflect
     roughnessFactor = mix(roughnessFactor, 0.24, m);
   }
 }`)
@@ -410,10 +410,20 @@ roughnessFactor = mix(roughnessFactor, 0.16, vMat.y);`)
       totalEmissiveRadiance += uSpark * d * tw * lampNear * 7.0;
     }
   }
+  // gold flecks in a vein twinkle under the lamp
+  if (vMat.x > 0.01 && lampNear > 0.0) {
+    vec3 gc = vWPos * 22.0;
+    float gh = h13(floor(gc));
+    if (gh > 0.86) {
+      float gd = 1.0 - smoothstep(0.1, 0.4, length(fract(gc) - 0.5));
+      float gt = pow(0.5 + 0.5 * sin(uTime * (2.0 + gh * 9.0) + gh * 300.0 + vViewPosition.x * 2.1), 8.0);
+      totalEmissiveRadiance += uGold * gd * gt * lampNear * vMat.x * 3.5;
+    }
+  }
   // a boulder that needs dynamite shows hot little cracks; loose rubble catches the light a touch
   if (code > 1.5) { float cr = smoothstep(0.86, 0.97, 1.0 - abs(sin(vWPos.x * 3.1 + vWPos.y * 2.3 + gAlb.r * 9.0))); totalEmissiveRadiance += vec3(1.0, 0.3, 0.05) * cr * smoothstep(1.5, 1.9, code) * (0.6 + 0.4 * sin(uTime * 2.4)) * 0.38; }
 }`);
   };
-  mat.customProgramCacheKey = () => 'gd-rock-5';
+  mat.customProgramCacheKey = () => 'gd-rock-6';
   return mat;
 }

@@ -1,15 +1,15 @@
 // Gold Digger: the game shell. Fixed-step simulation (sim.js) + renderer (render.js), level flow, the general store,
 // the journal of discoveries, tips, cinematics, the attract demo, the AI playthrough, scores and menus.
-import { VERSION, STEP, T, BIOMES, LEVELS, DEPTHS, UPGRADES, TYPICAL_UP, DIFFICULTY, MEDALS, RELICS, FOSSILS, WONDERS, NOTES, CREATURES, RANKS, START, STRATA, REWARDS, MAX_PERKS } from './config.js?v=10';
-import { makeWorld, step, drainEvents, cloneWorld, carryOut } from './sim.js?v=10';
-import { hash, findName } from './levelgen.js?v=10';
-import { Autopilot } from './ai.js?v=10';
-import { Renderer, pickQuality, LOOKS } from './render.js?v=10';
-import { CALM } from './fx.js?v=10';
-import { Audio } from './audio.js?v=10';
-import { Input } from './input.js?v=10';
-import { Scores, NO_POST } from './scores.js?v=10';
-import { Recorder, Replay } from './replay.js?v=10';
+import { VERSION, STEP, T, BIOMES, LEVELS, DEPTHS, UPGRADES, TYPICAL_UP, DIFFICULTY, MEDALS, RELICS, FOSSILS, WONDERS, NOTES, CREATURES, RANKS, START, STRATA, REWARDS, MAX_PERKS } from './config.js?v=11';
+import { makeWorld, step, drainEvents, cloneWorld, carryOut } from './sim.js?v=11';
+import { hash, findName } from './levelgen.js?v=11';
+import { Autopilot } from './ai.js?v=11';
+import { Renderer, pickQuality, LOOKS } from './render.js?v=11';
+import { CALM } from './fx.js?v=11';
+import { Audio } from './audio.js?v=11';
+import { Input } from './input.js?v=11';
+import { Scores, NO_POST } from './scores.js?v=11';
+import { Recorder, Replay } from './replay.js?v=11';
 
 const Q = new URLSearchParams(location.search);
 const $ = (id) => document.getElementById(id);
@@ -825,7 +825,7 @@ async function boot() {
   toTitle();
   checkUnlocks(true); applyLoadout();
   $('loading').style.opacity = 0; setTimeout(() => $('loading').remove(), 700);
-  if (Q.has('test')) { const T2 = await import('./tests.js?v=10'); T2.run({ G, R, startCampaign, startEndless, toTitle, tick, makeWorld, step }); return; }
+  if (Q.has('test')) { const T2 = await import('./tests.js?v=11'); T2.run({ G, R, startCampaign, startEndless, toTitle, tick, makeWorld, step }); return; }
   if (Q.has('autoplay')) startCampaign(+(Q.get('depth') || 0), { mode: 'autoplay', auto: 'demo', level: +(Q.get('level') || 0) });
   if (Q.has('playthrough')) startCampaign(+(Q.get('depth') || 0), { mode: 'playthrough', auto: 'demo', level: +(Q.get('level') || 0) });
   requestAnimationFrame(raf);

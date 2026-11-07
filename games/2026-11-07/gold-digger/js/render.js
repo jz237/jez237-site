@@ -4,13 +4,13 @@
 // re-aimed every frame at the nearest flares, fires, lanterns, crystals and lava): their number never changes,
 // so no material ever recompiles mid-game.
 import * as THREE from '../vendor/three.module.min.js';
-import { T, SOLID, PHYS, TOOLS, GEMS, BIOMES } from './config.js?v=10';
-import { Cave, rockMaterial } from './cavemesh.js?v=10';
-import { rockTextures, spriteTextures, waterTextures } from './textures.js?v=10';
-import { FX, CALM } from './fx.js?v=10';
-import { Post } from './post.js?v=10';
-import * as MD from './models.js?v=10';
-import { buildDecor, bake } from './decor.js?v=10';
+import { T, SOLID, PHYS, TOOLS, GEMS, BIOMES } from './config.js?v=11';
+import { Cave, rockMaterial } from './cavemesh.js?v=11';
+import { rockTextures, spriteTextures, waterTextures } from './textures.js?v=11';
+import { FX, CALM } from './fx.js?v=11';
+import { Post } from './post.js?v=11';
+import * as MD from './models.js?v=11';
+import { buildDecor, bake } from './decor.js?v=11';
 
 export function pickQuality(name) {
   const mobile = matchMedia('(pointer:coarse)').matches || /Android|iPhone|iPad/i.test(navigator.userAgent);
