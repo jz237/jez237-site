@@ -215,6 +215,10 @@ window.addEventListener("keydown", e => {
   }
   if (e.key === "Escape" && (mouseCaptured() || (flightActive && performance.now()-lastRelease < 120))) {
     e.preventDefault(); e.stopImmediatePropagation(); releaseFlightMouse();
+  } else if (e.key === "Escape" && flightActive && !window.astraMenus?.active &&
+             !window.astraNet?.menuOpen && !document.querySelector("dialog[open]")) {
+    e.preventDefault(); e.stopImmediatePropagation();
+    if(!e.repeat){Module._astra_reset_flight_input?.();Module.menuCommand=1;}
   }
 }, true);
 window.addEventListener("blur", releaseFlightMouse);
@@ -314,7 +318,7 @@ async function launch(quick,demo=false,encounter=false,preview=false,autopilot=f
       canvas,quick,demo,encounter,autopilot,openWeaponPriorities,shadowQuality:Number($("shadowQuality").value),combatInspect:window.astraCombatPending??-1,assetDepot,loadMovie,fastLaunch:true,blastInspect:preview?firstBlastProfile:0,mineInspect:mine?0:-1,mineInspectZoom:1,demoArsenal:autopilot&&$("demoArsenal").checked,weaponInspect:weapons?0:-1,difficulty:Number($("difficulty").value),mobileDemo:autopilot&&astraTouch,autoPaused:false,startLevel:mine?Number($("mineLevel").value):autopilot?Number($("demoLevel").value):1,pickupInspect:inspect?0:-1,pyroPreviewCommand:preview?1:0,campaign,wideHud:$("wideHud").checked,intro:!openWeaponPriorities && !quick && !demo && $("intro").checked,astra, arguments:["-hogdir","/mine","-pilot",autopilot?"watch":"astra","-window","-nostickykeys","-nojoystick",
         "-gl_gettexlevelparam_ok","0","-gl_intensity4_ok","0","-gl_luminance4_alpha4_ok","0","-gl_rgba2_ok","0"],
       print:console.log,printErr:console.warn,onAbort:astraFail,
-      onExit:()=>{window.astraMenus?.hide();window.astraTerminal?.fail();window.astraFlightFocus(false);syncPilot();document.body.classList.remove("flying");$("status").textContent="Flight ended."; $("retry").hidden=false;},
+      onExit:()=>{Module.astraExited=true;window.astraMenus?.hide();window.astraTerminal?.fail();window.astraFlightFocus(false);syncPilot();document.body.classList.remove("flying");$("status").textContent="Flight ended."; $("retry").hidden=false;},
       preRun:[()=>{
         const F=Module.FS, save="/home/web_user/.d2-astra";
         F.mkdirTree("/mine/demos");F.mkdirTree("/mine/missions"); F.mkdirTree(save);
@@ -349,7 +353,7 @@ async function launch(quick,demo=false,encounter=false,preview=false,autopilot=f
         setInterval(syncPilot,3000);
       }
     };
-    await script("engine.js?v=pyre52");
+    await script("engine.js?v=pyre53");
   } catch(e) {console.error(e);astraFail(e.message);}
 }
 
@@ -402,7 +406,7 @@ function launchCampaignMenu(priorities) {
 $("menus").onclick=()=>launchCampaignMenu(false);
 $("weaponPriorities").onclick=()=>launchCampaignMenu(true);
 $("demo").onclick=()=>launch(false,true);
-$("retry").onclick=()=>location.reload();
+$("retry").onclick=()=>window.astraNavigation.home(false);
 $("full").onclick=()=>document.fullscreenElement?document.exitFullscreen():$("stage").requestFullscreen();
 $("view").oncontextmenu=e=>e.preventDefault();
 document.addEventListener("visibilitychange",()=>{if(document.hidden)syncPilot();});
@@ -475,7 +479,7 @@ function pauseDemo(paused){
 }
 $('watch').onclick=()=>{$('look').value='astra';$('wideHud').checked=true;watchWake();launch(true,false,false,false,true);};
 $('autoPause').onclick=()=>pauseDemo(!Module.autoPaused);
-$('autoStop').onclick=()=>{wakeLock?.release();astraDisc.stop();location.reload();};
+$('autoStop').onclick=()=>window.astraNavigation.home(false);
 $('autoNext').onclick=()=>{
   pauseDemo(false);Module.autoNext=(Module.flightState?.level||Module.startLevel)%(Module.campaign==='overload'?16:Module.campaign==='d2'?24:20)+1;
   $('autoTask').textContent='Loading next mine';

@@ -1238,3 +1238,9 @@ existing two-hour online-room limit remains. No host migration is introduced.
 No texture or audio parcels change. Normal flight, demo AI and single-player
 launch paths are unchanged. Browser tests are headless and muted, with pointer
 capture blocked before navigation. QA-only exports are absent from releases.
+
+R53 — in-game navigation
+- Esc after releasing the mouse opens the Flight menu; Options, Resume, manual saves and main-menu navigation are mouse accessible.
+- Multiplayer has options, priorities, controller setup, roster and Resume while the room continues running.
+- Main menu confirms flight/room departure, flushes pilot settings and saves, and disposes the old runtime before a new campaign, demo or match starts inside the same browser page.
+- One same-origin game frame at a time; pointer lock remains gesture controlled. No game content or graphics quality changes.

@@ -8,6 +8,7 @@
   let ui,notice,roomField,roster,connectButtons,start,setup,playBar;
   const session={session:null,failed:false,departed:0,stats:{sent:0,received:0},
     abort:message=>fail(message),
+    shutdown(){ignoreStart=true;this.failed=true;clearInterval(timer);timer=null;if(socket){socket.onclose=null;socket.onmessage=null;socket.close(1000,'Leaving');socket=null;}queue=[];out=[];bytes=0;},
     waitForMine:()=>status('Joined the room. Waiting for the next mine…'),
     get menuOpen(){return !!ui?.open&&!!this.session;},
     menu(){if(!this.session)return;document.exitPointerLock?.();window.astraFlightFocus?.(false);ui.classList.add('squad-in-flight');ui.showModal();status('The match continues while this menu is open.');},
@@ -41,7 +42,7 @@
       document.exitPointerLock?.();window.astraFlightFocus?.(false);
       if(window.Module){Module.netDisconnected=true;Module.autoPaused=true;}
       ui.showModal();start.hidden=true;connectButtons.hidden=true;
-      const back=document.createElement('button');back.textContent='Return to title';back.onclick=()=>location.reload();notice.after(back);
+      const back=document.createElement('button');back.textContent='Return to title';back.onclick=()=>window.astraNavigation.home(false);notice.after(back);
     }
   }
   function send(data){if(socket?.readyState===1)socket.send(JSON.stringify(data));}
@@ -151,13 +152,14 @@
       <ol id="squadRoster"></ol><p id="squadStatus" role="status" aria-live="polite">Choose a match and your pilots.</p><button id="squadLaunch" hidden>Launch squadron</button>`;
     document.body.append(ui);notice=$('squadStatus');roomField=$('squadCode');roster=$('squadRoster');setup=$('squadSetup');connectButtons=$('squadConnect');start=$('squadLaunch');
     playBar=document.createElement('div');playBar.id='squadBar';playBar.hidden=true;playBar.innerHTML='<span>Connecting squadron…</span><button>Leave match</button>';document.body.append(playBar);
-    playBar.querySelector('button').onclick=()=>{document.exitPointerLock?.();if(confirm('Leave this match? The host leaving ends the room.')){socket?.close(1000,'Leaving');location.href=location.pathname;}};
+    playBar.querySelector('button').textContent='Flight menu';
+    playBar.querySelector('button').onclick=()=>{document.exitPointerLock?.();window.Module?._astra_reset_flight_input?.();if(window.Module)Module.menuCommand=1;};
     const leaveWaitingRoom=()=>{if(socket&&!session.session){ignoreStart=true;socket.close(1000,'Leaving waiting room');}};
     button.onclick=()=>ui.showModal();$('squadClose').onclick=()=>{if(!session.failed){leaveWaitingRoom();ui.close();}};
     $('squadCreate').onclick=()=>connect(true);$('squadJoin').onclick=()=>connect(false);$('squadPractice').onclick=practice;
     $('squadOnline').onclick=()=>connect(false,true);
-    $('squadLeave').onclick=()=>{socket?.close(1000,'Leaving');if(session.session)location.href=location.pathname;};
-    $('squadCopy').onclick=async()=>{if(!socket||!roomField.value)return;const u=new URL(location.href);u.hash='room='+roomField.value;try{await navigator.clipboard.writeText(u.href);status('Invite link copied.');}catch{status(u.href);}};
+    $('squadLeave').onclick=()=>{if(session.session)window.astraNavigation.home();else socket?.close(1000,'Leaving');};
+    $('squadCopy').onclick=async()=>{if(!socket||!roomField.value)return;const u=new URL('./',location.href);u.hash='room='+roomField.value;try{await navigator.clipboard.writeText(u.href);status('Invite link copied.');}catch{status(u.href);}};
     start.onclick=()=>send({type:'start'});
     setup.onchange=()=>{if($('squadCampaign').value==='d2x')$('squadLevel').max='20';else $('squadLevel').max='24';$('squadLevel').value=Math.max(1,Math.min(Number($('squadLevel').max),Number($('squadLevel').value)||1));if(lobby)send({type:'configure',...configuration()});};
     ui.addEventListener('cancel',e=>{if(session.failed)e.preventDefault();else leaveWaitingRoom();});

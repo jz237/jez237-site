@@ -140,7 +140,7 @@
   const oldFocus=window.astraFlightFocus;
   window.astraFlightFocus=active=>{if(active)menu.hide();oldFocus(active);};
   window.addEventListener('keydown',e=>{
-    if(!menu.active||document.getElementById("controllerDialog")?.open)return;
+    if(!menu.active||document.getElementById("controllerDialog")?.open||document.getElementById('returnDialog')?.open)return;
     e.stopImmediatePropagation();
     if(e.repeat&&['Enter','Escape',' '].includes(e.key)){e.preventDefault();return;}
     if(e.key==='Escape'){e.preventDefault();menu.send(5);return;}
