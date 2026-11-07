@@ -1,13 +1,13 @@
 // Swarmbreak — game flow, menus, HUD, commentary, demo director and the frame loop.
-import { VERSION, SECTORS, STEP, F, WAVES, UPGRADES, UP_KEYS, UP_COST, MEDALS, parTime, TYPICAL_UP, START_LIVES, BOSSES, DIFFICULTY, DIFF_KEYS, POWERUPS, STREAK, streakMul, SUITS } from './config.js?v=10';
-import { makeWorld, step, drainEvents, waveLabel, isBossWave, angDiff } from './sim.js?v=10';
-import { Autopilot } from './ai.js?v=10';
-import { Renderer, pickQuality, CALM } from './render.js?v=10';
-import { Audio } from './audio.js?v=10';
-import { Input } from './input.js?v=10';
-import { Scores, NO_POST } from './scores.js?v=10';
-import { Recorder, Replay } from './replay.js?v=10';
-import { Online, ROOM, randomCode, cleanCode } from './online.js?v=10';
+import { VERSION, SECTORS, STEP, F, WAVES, UPGRADES, UP_KEYS, UP_COST, MEDALS, parTime, TYPICAL_UP, START_LIVES, BOSSES, DIFFICULTY, DIFF_KEYS, POWERUPS, STREAK, streakMul, SUITS } from './config.js?v=11';
+import { makeWorld, step, drainEvents, waveLabel, isBossWave, angDiff } from './sim.js?v=11';
+import { Autopilot } from './ai.js?v=11';
+import { Renderer, pickQuality, CALM } from './render.js?v=11';
+import { Audio } from './audio.js?v=11';
+import { Input } from './input.js?v=11';
+import { Scores, NO_POST } from './scores.js?v=11';
+import { Recorder, Replay } from './replay.js?v=11';
+import { Online, ROOM, randomCode, cleanCode } from './online.js?v=11';
 
 const $ = (id) => document.getElementById(id);
 const params = new URLSearchParams(location.search);
@@ -406,6 +406,8 @@ function handleEvents(list, W, live) {
       case 'portal': A.play('portal', { x: e.x, y: 1, z: e.z, vol: e.type === 'dummy' ? 0.4 : 0.55, gap: 0.15 }); break;
       case 'enter': A.play('enter', { x: e.x, y: 1, z: e.z, vol: 0.6, gap: 0.08 }); fx.ring(e.x, 0, e.z, 2.2, 0xff6a4a); fx.sparks(e.x, 1, e.z, { n: 10, speed: 4, r: 1, g: 0.4, b: 0.3 }); break;
       case 'aim': A.play('spitcharge', { x: e.x, y: 1, z: e.z, vol: 0.4, gap: 0.12 }); break;
+      case 'surgetell': A.play('crawl', { vol: 1, rate: 0.7, gap: 1 }); A.play('alarm', { vol: 0.3, rate: 1.2, gap: 1 }); if (live && !W.demo) caption('THE SWARM IS GATHERING', 1.4); break;
+      case 'surgego': A.play('crawl', { vol: 1, rate: 1.15, gap: 1 }); R.addTrauma(0.12); break;
       case 'bolt': A.play('spitfire', { x: e.x, y: 1, z: e.z, vol: 0.5, gap: 0.05 }); break;
       case 'hivetell': A.play('hivetell', { x: e.x, y: 1, z: e.z, vol: 0.45, gap: 0.5 }); break;
       case 'dart': A.play('hivespawn', { x: e.x, y: 1, z: e.z, vol: 0.4, gap: 0.2 }); break;
@@ -842,6 +844,13 @@ I.stickUI = (side, s) => {
 // power-up's colour for pods
 const WM = [];
 const PE = { x: 0, y: 0, z: 0 };
+// the swarm surge: a red glow at the screen's edges that throbs while it gathers and holds while it rushes
+let surgeShown = -1;
+function surgeGlow(W) {
+  const k = W.surgeTell > 0 ? 0.35 + 0.35 * Math.abs(Math.sin(W.t * 9)) : W.surgeOn > 0 ? Math.min(1, W.surgeOn / 0.8) * 0.6 : 0;
+  const o = Math.round(k * (CALM.on ? 0.5 : 1) * 40) / 40;
+  if (o !== surgeShown) { surgeShown = o; $('surgeglow').style.opacity = o; }
+}
 function updateWarnings(W) {
   const box = $('warns');
   const list = [];
@@ -937,6 +946,7 @@ function playStep(dt) {
   captureClip(W);
   updateHud(W);
   updateWarnings(W);
+  surgeGlow(W);
   if (G.mode === 'demo') { G.demoT += dt; if (G.demoT > 95) W.over = true; }
   if (G.mode === 'demo' || G.mode === 'playthrough') demoCaptions(W, dt);
   if (W.over && (G.state === 'play' || G.state === 'paused-online')) { G.state = 'ended'; setTimeout(() => onWorldOver(W), G.mode === 'demo' ? 1500 : 1300); }
@@ -1029,7 +1039,7 @@ async function boot() {
   setTimeout(() => $('loading').remove(), 700);
   toTitle();
   boardOf('campaign', settings.diff).fresh(); boardOf('stand', settings.diff).fresh();
-  if (params.has('test')) { const m = await import('./tests.js?v=10'); m.runTests(window.__sb); }
+  if (params.has('test')) { const m = await import('./tests.js?v=11'); m.runTests(window.__sb); }
   else if (params.has('playthrough')) { A.unlock(); startPlaythrough(); }
   else if (G.autopilot) { A.unlock(); if (params.has('stand')) startStand(); else startCampaign(+params.get('sector') || 0); }
   else if (params.has('room')) { act('online'); $('join-code').value = cleanCode(params.get('room')); }

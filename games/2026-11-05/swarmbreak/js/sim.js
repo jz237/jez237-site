@@ -1,7 +1,7 @@
 // Swarmbreak simulation: fixed 120 Hz steps, all randomness from the world's own seeded generator
 // (W.rs), plain data only, so a world can be cloned and re-run bit for bit (replays, online, tests).
 // Nothing in here touches the DOM, WebGL or audio; it only pushes events into W.ev.
-import { F, STEP, GATES, SECTORS, WAVES, rampAt, rampLevel, standLevel, STAND, ENEMY, HOSTILE, BOSSES, BOSS_KEYS, SCORE, START_LIVES, INTRO, introduced, DIFFICULTY, applyDiff, POWERUPS, PW_KEYS, DROP, STREAK, streakMul } from './config.js?v=10';
+import { F, STEP, GATES, SECTORS, WAVES, rampAt, rampLevel, standLevel, STAND, ENEMY, HOSTILE, BOSSES, BOSS_KEYS, SCORE, START_LIVES, INTRO, introduced, DIFFICULTY, applyDiff, POWERUPS, PW_KEYS, DROP, STREAK, streakMul } from './config.js?v=11';
 export { STEP };
 
 const { AW, AH } = F;
@@ -60,6 +60,14 @@ export function drainEvents(W) { const e = W.ev; W.ev = []; return e; }
 export const isBossWave = (W) => W.mode === 'campaign' ? W.wave >= WAVES : W.bossWave;
 export const waveLabel = (W) => (W.mode === 'campaign' ? (W.wave >= WAVES ? 'BOSS' : `WAVE ${W.wave + 1}`) : `WAVE ${W.waveN + 1}`);
 const alivePlayers = (W) => W.players.filter((p) => p.alive);
+// 1.7 machine tactics. Where the Warden will be in t seconds if it keeps going (inside the arena)
+function leadPos(P, t) { return [clamp(P.x + P.vx * t, -AW + 0.6, AW - 0.6), clamp(P.z + P.vz * t, -AH + 0.6, AH - 0.6)]; }
+// is machine e (d metres away) in the Warden's line of fire while it shoots? the side to step to (+1 / -1), else 0
+function inFire(P, e, d) {
+  if (!P || d > 13 || !P.input || !P.input.fire) return 0;
+  const off = angDiff(P.aim, Math.atan2(e.z - P.z, e.x - P.x));
+  return Math.abs(off) < 0.2 + 0.6 / Math.max(1, d) ? (off >= 0 ? 1 : -1) : 0;
+}
 function nearestPlayer(W, x, z) {
   let best = null, bd = 1e9;
   for (const p of W.players) { if (!p.alive) continue; const d = hyp(p.x - x, p.z - z); if (d < bd) { bd = d; best = p; } }
@@ -211,6 +219,7 @@ export function step(W, dt = STEP) {
     W.waveT += dt; W.fightT += dt;
     spawns(W);
     sectorHazards(W, dt);
+    swarmSurge(W, dt);
   } else if (W.phase === 'clear') {
     if (W.phaseT <= 0) nextWave(W);
   }
@@ -239,6 +248,36 @@ export function step(W, dt = STEP) {
   if (W.lives <= 0 && !W.players.some((p) => p.alive) && W.players.every((p) => p.deadT > 1.6)) { W.over = true; W.result = 'over'; W.ev.push({ k: 'over' }); }
 }
 
+// 1.7: the swarm surges. Every so often (more often in later sectors) the machines signal, then every crawler,
+// shard, splitter and unmasked mimic near the Warden rushes it at once for a few seconds: faster, straight for where it
+// is going, from all sides. Not in boss fights
+function swarmSurge(W, dt) {
+  const R = W.R, sm = R.smart || 0;
+  if (sm <= 0 || W.boss || (R.sector === 0 && W.fightT < 30)) return;
+  const period = 19 - 7 * sm;
+  if (W.surgeT === undefined) { W.surgeT = period * 0.8; W.surgeOn = 0; W.surgeTell = 0; }
+  if (W.surgeOn > 0) { W.surgeOn -= dt; return; }
+  if (W.surgeTell > 0) {
+    W.surgeTell -= dt;
+    if (W.surgeTell <= 0) {
+      // the pack that rushes: the machines nearest the Wardens (a few more in later sectors), not the whole swarm
+      const k = Math.round(5 + 4 * sm), L = [];
+      for (const e of W.enemies) { e.sg = 0; if (SURGERS.has(e.type) && e.hp > 0 && e.born <= 0 && !e.hidden) { const P = nearestPlayer(W, e.x, e.z); if (P) L.push([hyp(P.x - e.x, P.z - e.z), e]); } }
+      L.sort((a, b) => a[0] - b[0]);
+      for (const [, e] of L.slice(0, k)) e.sg = 1;
+      W.surgeOn = 1.8 + 0.8 * sm; W.ev.push({ k: 'surgego', T: W.surgeOn });
+    }
+    return;
+  }
+  if ((W.surgeT -= dt) > 0) return;
+  let n = 0;
+  for (const e of W.enemies) if (SURGERS.has(e.type) && e.hp > 0 && e.born <= 0 && !e.hidden) n++;
+  if (n < 5) { W.surgeT = 2; return; }
+  W.surgeT = period * rr(W, 0.85, 1.2);
+  W.surgeTell = Math.max(0.7, R.warn * 0.5);
+  W.ev.push({ k: 'surgetell', T: W.surgeTell });
+}
+const SURGERS = new Set(['crawler', 'shard', 'splitter', 'mimic']);
 function spawns(W) {
   const R = W.R;
   for (const g of W.spawnQ) {
@@ -438,43 +477,61 @@ function enemy(W, e, dt) {
   const P = nearestPlayer(W, e.x, e.z);
   const tx = P ? P.x : 0, tz = P ? P.z : 0;
   const dx = tx - e.x, dz = tz - e.z, d = hyp(dx, dz) || 1;
+  // how sharp the tactics are (RAMP smart): 0 = plain chasing. Sector 1 keeps them plain for its first 30 s of
+  // fighting (a new Warden that just stands there is not hunted down) and eases them in over the next 20 s
+  const sm = (R.smart || 0) * (R.sector === 0 ? clamp((W.fightT - 30) / 20, 0, 1) : 1);
   e.st -= dt;
   switch (e.type) {
     case 'crawler': {
       if (e.st <= 0) {
         e.st = rr(W, 0.5, 1.1);
-        const wa = rr(W, 0, TAU), wv = P ? R.wander : 1;
+        const wa = rr(W, 0, TAU), wv = (P ? R.wander : 1) * (1 - 0.85 * sm);
         let hx = (dx / d) * (1 - wv) + Math.cos(wa) * wv * 1.25, hz = (dz / d) * (1 - wv) + Math.sin(wa) * wv * 1.25;
         const l = hyp(hx, hz) || 1;
         e.a = Math.atan2(hz / l, hx / l);
       }
-      // close in on the Warden properly once near
-      let a = e.a;
-      if (P && d < 4.5) a = Math.atan2(dz, dx);
-      const v = E.v * spd;
+      // close in on the Warden once near: on where it is going, each from its own side so the pack closes round it,
+      // and a pounce over the last couple of metres
+      let a = e.a, v = E.v * spd;
+      const fr = W.surgeOn > 0 && e.sg && P;   // in the surging pack: no wandering, faster, from further out
+      if (fr) v *= 1.2 + 0.2 * sm;
+      const near = fr ? 16 : 4.5 + 6 * sm;
+      if (P && d < near) {
+        const [lx, lz] = leadPos(P, Math.min(0.7, d / (v + 0.1)) * sm);
+        const flank = ((((e.id * 0.618034) % 1) - 0.5) * 2.4 * sm) * clamp((d - 1.4) / near, 0, 1);
+        a = Math.atan2(lz - e.z, lx - e.x) + flank;
+        e.pnCD = (e.pnCD || 0) - dt;
+        if (sm > 0.2 && d < 2.6 && e.pnCD <= 0) { e.pn = 0.32; e.pnCD = 1.3; }
+      }
+      if (e.pn > 0) { e.pn -= dt; v *= 1 + 0.5 * sm; }
       e.vx = Math.cos(a) * v; e.vz = Math.sin(a) * v;
       break;
     }
     case 'brute': {
-      // heads for the nearest survivor, else the Warden
+      // heads for the nearest survivor, else the Warden; a Warden that comes close is hunted down instead (faster,
+      // turning sharper, cutting it off)
       let gx = tx, gz = tz;
       let sd = 11;
-      for (const s of W.survivors) { const q = hyp(s.x - e.x, s.z - e.z); if (q < sd) { sd = q; gx = s.x; gz = s.z; } }
+      const hunt = P && d < 6 + 4 * sm;
+      if (hunt) [gx, gz] = leadPos(P, Math.min(0.8, d / 4) * sm);
+      else for (const s of W.survivors) { const q = hyp(s.x - e.x, s.z - e.z); if (q < sd) { sd = q; gx = s.x; gz = s.z; } }
       const ax = gx - e.x, az = gz - e.z, l = hyp(ax, az) || 1;
-      const want = Math.atan2(az, ax);
-      e.a += clamp(angDiff(e.a, want), -1.6 * dt, 1.6 * dt);
-      const v = E.v * spd * (e.st > 0 ? 0.3 : 1);
+      const want = Math.atan2(az, ax), turn = 1.6 + (hunt ? 1.2 * sm : 0);
+      e.a += clamp(angDiff(e.a, want), -turn * dt, turn * dt);
+      const v = E.v * spd * (e.st > 0 ? 0.3 : 1) * (hunt ? 1 + 0.35 * sm : 1);
       e.vx = Math.cos(e.a) * v; e.vz = Math.sin(e.a) * v;
       void l;
       break;
     }
     case 'spitter': {
-      // keep a fighting range and strafe; tell, then fire
-      const [lo, hi] = E.range;
+      // keep a fighting range (closer when sharp) and strafe - out of the Warden's line of fire when it is aimed at;
+      // tell, then fire where the Warden will be
+      const lo = E.range[0] * (1 - 0.15 * sm), hi = E.range[1] * (1 - 0.12 * sm);
       let fx = 0, fz = 0;
       if (P) {
         if (d < lo) { fx -= dx / d; fz -= dz / d; } else if (d > hi) { fx += dx / d; fz += dz / d; }
-        const side = (e.id % 2 ? 1 : -1) * 0.6;
+        const dodge = inFire(P, e, d);
+        const side = dodge && sm > 0.3 ? -dodge * (0.7 + sm) : (e.id % 2 ? 1 : -1) * 0.6;
         fx += (-dz / d) * side; fz += (dx / d) * side;
       }
       const l = hyp(fx, fz);
@@ -484,7 +541,8 @@ function enemy(W, e, dt) {
       if (e.aimT > 0) {
         e.aimT -= dt;
         // the aim line tracks the Warden for the first part of the tell, then locks so you can sidestep
-        if (e.aimT > e.aimLock) { e.aimX = P.x; e.aimZ = P.z; e.aimA = Math.atan2(P.z - e.z, P.x - e.x) + e.aimErr; }
+        // it leads most of the way: a Warden that keeps changing course still slips it
+        if (e.aimT > e.aimLock) { const [lx, lz] = leadPos(P, (d / R.boltV) * 0.6 * sm); e.aimX = lx; e.aimZ = lz; e.aimA = Math.atan2(lz - e.z, lx - e.x) + e.aimErr; }
         if (e.aimT <= 0) {
           const v2 = R.boltV;
           W.bolts.push({ id: W.nextId++, x: e.x + Math.cos(e.aimA) * 0.7, z: e.z + Math.sin(e.aimA) * 0.7, vx: Math.cos(e.aimA) * v2, vz: Math.sin(e.aimA) * v2, life: 6, r: 0.24 });
@@ -520,7 +578,8 @@ function enemy(W, e, dt) {
     case 'dart': {
       e.life -= dt;
       if (e.life <= 0) { e.gone = true; e.hp = 0; W.ev.push({ k: 'dartpop', x: e.x, z: e.z }); break; }
-      if (P) e.a += clamp(angDiff(e.a, Math.atan2(dz, dx)), -E.turn * spd * dt, E.turn * spd * dt);
+      // it steers for where the Warden is going
+      if (P) { const [lx, lz] = leadPos(P, Math.min(0.8, d / (E.v * spd)) * sm); e.a += clamp(angDiff(e.a, Math.atan2(lz - e.z, lx - e.x)), -E.turn * spd * dt, E.turn * spd * dt); }
       const v = E.v * spd;
       e.vx = Math.cos(e.a) * v; e.vz = Math.sin(e.a) * v;
       // darts bounce off the walls
@@ -548,7 +607,7 @@ function enemy(W, e, dt) {
       // turns its shield toward the Warden, slowly, and plods in
       if (e.face === undefined) e.face = Math.atan2(dz, dx);
       if (P) e.face += clamp(angDiff(e.face, Math.atan2(dz, dx)), -E.turn * spd * dt, E.turn * spd * dt);
-      const v = E.v * spd * (d < 2.5 ? 0.4 : 1);
+      const v = E.v * spd * (d < 2.5 ? 0.4 : 1) * (1 + 0.25 * sm);
       e.a = e.face; e.vx = Math.cos(e.face) * v; e.vz = Math.sin(e.face) * v;
       if (!P) { e.vx = e.vz = 0; }
       break;
@@ -557,11 +616,12 @@ function enemy(W, e, dt) {
       // 0 stalk, 1 crouch (landing spot marked), 2 in the air, 3 recovering
       e.lp = e.lp || 0;
       if (e.lp === 0) {
-        const a = Math.atan2(dz, dx) + Math.sin(e.t * 1.7 + e.wob) * 0.6, v = E.v * spd * (d < 5 ? 0.5 : 1);
+        const dodge = inFire(P, e, d);
+        const a = Math.atan2(dz, dx) + Math.sin(e.t * 1.7 + e.wob) * 0.6 + dodge * 1.1 * sm, v = E.v * spd * (d < 5 ? 0.5 : 1);
         e.a = a; e.vx = Math.cos(a) * v; e.vz = Math.sin(a) * v;
         if (P && d < E.range && e.st <= 0) {
           e.lp = 1; e.lpT = Math.max(0.65, R.warn * 0.85); e.lpT0 = e.lpT;
-          const lead = (e.lpT + E.air) * 0.45;
+          const lead = (e.lpT + E.air) * (0.45 + 0.4 * sm);
           e.lx = clamp(P.x + P.vx * lead, -AW + 1, AW - 1); e.lz = clamp(P.z + P.vz * lead, -AH + 1, AH - 1);
           e.a = Math.atan2(e.lz - e.z, e.lx - e.x);
           W.ev.push({ k: 'leaptell', id: e.id, x: e.x, z: e.z, tx: e.lx, tz: e.lz, T: e.lpT });
@@ -575,14 +635,14 @@ function enemy(W, e, dt) {
         e.vx = (e.lx - e.ox) / E.air; e.vz = (e.lz - e.oz) / E.air;
         e.x = e.ox + (e.lx - e.ox) * f; e.z = e.oz + (e.lz - e.oz) * f;
         if (e.lpT <= 0) {
-          e.lp = 3; e.lpT = E.rest; e.vx = e.vz = 0;
+          e.lp = 3; e.lpT = E.rest * (1 - 0.35 * sm); e.vx = e.vz = 0;
           W.ev.push({ k: 'leapland', id: e.id, x: e.x, z: e.z, r: E.splash });
           for (const p of W.players) if (p.alive && !(W.net === 'host' && p.remote) && hyp(p.x - e.x, p.z - e.z) < E.splash + F.r * 0.5) hurt(W, p, 'leaper', e.x, e.z);
         }
         return;
       } else {
         e.vx = e.vz = 0; e.lpT -= dt;
-        if (e.lpT <= 0) { e.lp = 0; e.st = rr(W, 2.2, 3.6) / spd; }
+        if (e.lpT <= 0) { e.lp = 0; e.st = rr(W, 2.2, 3.6) / spd * (1 - 0.3 * sm); }
       }
       break;
     }
@@ -598,14 +658,18 @@ function enemy(W, e, dt) {
         if (Math.abs(e.z) > AH - 1) e.a = -e.a;
         break;
       }
-      const a = Math.atan2(dz, dx) + Math.sin(e.t * 3 + e.wob) * 0.25, v = E.v * spd;
+      const v = E.v * spd * (W.surgeOn > 0 && e.sg ? 1.15 + 0.15 * sm : 1);
+      const [lx, lz] = P ? leadPos(P, Math.min(0.6, d / (v + 0.1)) * sm) : [tx, tz];
+      const a = Math.atan2(lz - e.z, lx - e.x) + Math.sin(e.t * 3 + e.wob) * 0.25 * (1 - 0.5 * sm) + inFire(P, e, d) * 0.8 * sm;
       e.a = a; e.vx = Math.cos(a) * v; e.vz = Math.sin(a) * v;
       if (!P) { e.vx *= 0.3; e.vz *= 0.3; }
       break;
     }
     case 'splitter': case 'shard': {
-      const v = E.v * spd;
-      const a = Math.atan2(dz, dx) + Math.sin(e.t * 2 + e.wob) * 0.35;
+      // they cut the Warden off and weave out of its line of fire as they close (and rush it in a surge)
+      const v = E.v * spd * (W.surgeOn > 0 && e.sg ? 1.15 + 0.15 * sm : 1);
+      const [lx, lz] = P ? leadPos(P, Math.min(0.6, d / (v + 0.1)) * sm) : [tx, tz];
+      const a = Math.atan2(lz - e.z, lx - e.x) + Math.sin(e.t * 2 + e.wob) * 0.35 * (1 - 0.4 * sm) + inFire(P, e, d) * 0.8 * sm;
       e.a = a; e.vx = Math.cos(a) * v; e.vz = Math.sin(a) * v;
       if (!P) { e.vx *= 0.3; e.vz *= 0.3; }
       break;

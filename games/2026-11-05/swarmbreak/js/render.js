@@ -4,12 +4,12 @@
 // the simulation; floor decals for every warning (gates, boss tells, aim lines, arcs); HDR post.
 // Nothing here changes the world.
 import * as THREE from '../vendor/three.module.min.js';
-import { Post } from './post.js?v=10';
-import * as TX from './textures.js?v=10';
-import * as MD from './models.js?v=10';
-import { FX, CALM } from './fx.js?v=10';
-import { F, GATES, POWERUPS } from './config.js?v=10';
-import { dronePos } from './sim.js?v=10';
+import { Post } from './post.js?v=11';
+import * as TX from './textures.js?v=11';
+import * as MD from './models.js?v=11';
+import { FX, CALM } from './fx.js?v=11';
+import { F, GATES, POWERUPS } from './config.js?v=11';
+import { dronePos } from './sim.js?v=11';
 
 // crawlers come in hordes, so they are all drawn together: one instanced mesh per part of the model,
 // about twenty draw calls however many there are (a full model per crawler cost ~15 draw calls each).
