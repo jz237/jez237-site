@@ -109,6 +109,94 @@
     }
   },
   {
+    "id": "2026-11-07-factual-infographic-factual-infographic-atychiphobia-intens",
+    "title": "Factual infographic: Atychiphobia — Intense Fear of Failure",
+    "tests": "factual_subtype: phobia-infographic; phobia: Atychiphobia; title lines checked before render; no subjective review; archive_slot=2026-11-07T08:08; concept=atychiphobia-failure-anticipation-application-desk; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: phobia-infographic",
+    "prompt": "Create a finished portrait educational phobia infographic, directly on canvas, artwork-led editorial gouache with crisp technical ink and luminous layered color. No poster mockup, no boxes or rigid grid. Exact headline in prominent bold lettering: \"ATYCHIPHOBIA\". Directly beneath, exact meaning: \"Intense fear of failure\". This named phobia is the typographic anchor, not the umbrella diagnosis.\nDominant scene: a tall Latino man in his forties with brown skin, long dark hair tied back, narrow face and teal shirt, leaning over a desk. Portray him with dignity in three-quarter overhead view, hesitating over an unfinished practice application. Use rich petrol teal, muted terracotta, warm cream and golden desk light. Show finely textured wood grain, slightly curled blank paper edges, woven shirt fabric, soft window reflections and precise pencil marks, without invented personal records. His tense hands and held posture imply anticipation, not a caricature of panic. A translucent, clearly illustrative amber sweep curves from an imagined future unsuccessful outcome back toward the present desk; it is a visual metaphor, not an anatomical pathway. The entire immersive room dissolves naturally into white space for concise labels.\nIntegrate these open callouts with delicate curved leaders and small vignette studies at varied scales: \"Anticipatory anxiety — worry before the outcome\" near a restrained imagined exam sheet and interview chair. \"Body alarm — possible palpitations, trembling or nausea\" beside simple non-anatomical heart, hand and stomach symbols; no fabricated neural pathways. An open looping ribbon reads \"Potential failure → fear → avoidance → missed opportunities\", showing a small echo of the SAME man turning away from a doorway marked Interview. This represents possible impairment, not an inevitable outcome. Keep the hero large and the composition breathable.\nA quiet grounded area reads \"Perceived threat ≠ immediate physical danger\" with short supporting text \"The fear feels real; an unsuccessful outcome is not an immediate physical threat.\" Never suggest that all real-world stakes are trivial. Toward a warmer lower margin, show a small calm talking-therapy encounter and the wording \"Help: cognitive behavioural therapy (CBT)\" and \"Seek professional support if fear disrupts daily life.\" No do-it-yourself exposure, forced failure challenges, cure promises or medication advice. Add subordinate readable terminology text: \"An established descriptive name, not a separate diagnostic code.\" Small optional distinction: \"Not the same as perfectionism.\" General education, not a diagnosis.\nDo not include statistics, URLs, bibliography, DSM codes, sensational monsters, gore or extra causal claims. Show only the source-backed text specified. Text is concise and readable, integrated with the painting through asymmetry, organic paths and generous margins. Preserve nuanced lighting and unusually fine illustrative detail without decorative clutter.",
+    "image": "images/2026-11-07-factual-infographic-factual-infographic-atychiphobia-intens.jpg",
+    "thumb": "thumbs/2026-11-07-factual-infographic-factual-infographic-atychiphobia-intens.webp",
+    "color": "#c6b8a3",
+    "date": "2026-11-07",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "atychiphobia-failure-anticipation-application-desk",
+      "imageSha256": "69c732c383e1805208ce581c5e211d28a565462235ed73d675ec7a6b8b19f179",
+      "imageDHash": "6cc686060c8c2420"
+    },
+    "factualInfographic": {
+      "topic": "Atychiphobia: intense fear of failure, anticipatory anxiety, body alarm, avoidance, and evidence-based help",
+      "description": "An artwork-led explanation of intense fear of failure, possible triggers and symptoms, avoidance, and professional support.",
+      "sourceNote": "Cleveland Clinic https://my.clevelandclinic.org/health/diseases/22555-atychiphobia-fear-of-failure verifies the named fear, triggers and avoidance; NHS https://www.nhs.uk/mental-health/conditions/phobias/ supports possible symptoms, CBT and help-seeking.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-07T13:09:10.466112+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "Cleveland Clinic",
+            "title": "Atychiphobia (Fear of Failure)",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://my.clevelandclinic.org/health/diseases/22555-atychiphobia-fear-of-failure"
+          },
+          {
+            "id": "S2",
+            "publisher": "NHS",
+            "title": "Phobias",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/mental-health/conditions/phobias/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Atychiphobia means intense fear of failure; this is an established descriptive phobia name, not a separate diagnostic code.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Potential failure in exams or job interviews can trigger fear; worry about failure can arise before the event.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Phobia symptoms can include severe worry, palpitations, trembling and feeling sick. These are possible symptoms, not universal.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "People may avoid situations with potential failure; avoidance can impair work or school performance.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "A phobia can feel genuinely threatening; intense fear need not match the situation. A possible unsuccessful outcome is not the same as immediate physical danger.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Atychiphobia and perfectionism are not the same; fear of failure differs from striving to be flawless.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Talking therapy such as cognitive behavioural therapy (CBT) can help phobias; seek professional help when symptoms affect life.",
+            "sourceIds": [
+              "S2"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
     "id": "2026-11-07-factual-infographic-factual-infographic-algophobia-intense-",
     "title": "Factual infographic: Algophobia — Intense Fear of Physical Pain",
     "tests": "factual_subtype: phobia-infographic; phobia: Algophobia; requested title lines read back before rendering; no subjective review; archive_slot=2026-11-07T04:08; concept=algophobia-pain-anticipation-rehabilitation-studio; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: phobia-infographic",
