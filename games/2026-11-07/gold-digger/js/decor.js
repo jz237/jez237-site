@@ -82,6 +82,16 @@ void main(){
     gl_FragColor = vec4(c, a * 0.8);
   }
 }`;
+const MIST_FRAG = `uniform float uT; uniform vec3 uCol; uniform float uA; varying vec2 vUv; varying vec3 vW;
+float h(vec2 p){ return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
+float n(vec2 p){ vec2 i = floor(p), f = fract(p); f = f*f*(3.0-2.0*f); return mix(mix(h(i), h(i+vec2(1,0)), f.x), mix(h(i+vec2(0,1)), h(i+vec2(1,1)), f.x), f.y); }
+float fbm(vec2 p){ float s = 0.0, a = 0.5; for (int i = 0; i < 4; i++) { s += a * n(p); p = p * 2.03 + vec2(1.7, 9.2); a *= 0.5; } return s; }
+void main(){
+  float f = fbm(vec2(vW.x * 0.45 + uT * 0.07, vW.y * 1.1 - uT * 0.025 + vW.z));
+  float band = smoothstep(0.0, 0.3, vUv.y) * smoothstep(1.0, 0.2, vUv.y);
+  float side = smoothstep(0.0, 0.25, vUv.x) * smoothstep(1.0, 0.75, vUv.x);
+  gl_FragColor = vec4(uCol, smoothstep(0.3, 0.75, f) * band * side * uA);
+}`;
 const WF_VERT = `varying vec2 vUv; varying vec3 vW; void main(){ vUv = uv; vec4 w = modelMatrix * vec4(position, 1.0); vW = w.xyz; gl_Position = projectionMatrix * viewMatrix * w; }`;
 const GW_VERT = `attribute float aPh; uniform float uT; uniform float uScale; varying float vA;
 void main(){ vec4 mv = modelViewMatrix * vec4(position, 1.0); vA = 0.55 + 0.45 * sin(uT * 1.7 + aPh * 6.28); gl_PointSize = uScale * 0.09 / max(0.5, -mv.z) * (0.7 + vA * 0.6); gl_Position = projectionMatrix * mv; }`;
@@ -191,6 +201,24 @@ export function buildDecor(M, look, W, K) {
       emitters.push({ x: x + 0.5, y: y + 1.5, z: -2, col: lava ? [1, 0.36, 0.08] : accent, int: lava ? 10 : 1.5, range: lava ? 12 : 6, pri: lava ? 3 : 1, flick: lava ? 1 : 0 });
     }
   }
+  // ---- low mist drifting over the floors of the wet depths
+  const mists = [];
+  if (biome === 1 || biome === 3) {
+    const spots = [];
+    for (const [x, y] of floors) {
+      if (spots.length >= Math.round(9 * dens)) break;
+      if (near(x, y, spots, 7)) continue;
+      let run = 0; for (let k = -3; k <= 3; k++) if (open(x + k, y) && solid(x + k, y - 1)) run++;
+      if (run < 5) continue;
+      spots.push([x, y]);
+    }
+    const col = biome === 3 ? new THREE.Color(0.5, 0.66, 0.7) : new THREE.Color(0.45, 0.7, 0.62);
+    for (const [x, y] of spots) for (const [z, a, w] of [[-1.1, 0.34, 8], [-2.4, 0.26, 10]]) {
+      const m = new THREE.Mesh(new THREE.PlaneGeometry(w, 1.5), new THREE.ShaderMaterial({ vertexShader: WF_VERT, fragmentShader: MIST_FRAG, transparent: true, depthWrite: false,
+        uniforms: { uT: { value: 0 }, uCol: { value: col }, uA: { value: a } } }));
+      m.position.set(x + 0.5, y + 0.55, z); m.renderOrder = 2; group.add(m); mists.push(m);
+    }
+  }
   // ---- glowworm threads (grotto, endless)
   let worms = null;
   if (biome === 1 || (W.endless && R() < 0.3)) {
@@ -227,6 +255,7 @@ export function buildDecor(M, look, W, K) {
   // drips: ceiling points that drip now and then
   const drips = ceils.slice(0, 30).filter(() => R() < 0.6).map(([x, y]) => ({ x: x + R(), y: y + 0.95, t: R() * 4 }));
   const update = (t, dt, P, fx) => {
+    for (const m of mists) m.material.uniforms.uT.value = t;
     for (const f of falls) { f.m.material.uniforms.uT.value = t; f.pool.scale.set(1 + Math.sin(t * 3.1 + f.x) * 0.06, 1 + Math.sin(t * 4.3 + f.x) * 0.12, 1); if (Math.abs(f.x - P.x) < 18 && Math.random() < dt * (f.lava ? 6 : 10)) { if (f.lava) fx.fire(f.x + (Math.random() - 0.5), f.y + 0.3, -2.2, { n: 1, s: 0.9, life: 0.8 }); else fx.dust(f.x + (Math.random() - 0.5), f.y + 0.3, -2.2, { n: 1, s0: 0.5, s1: 2.2, life: 2, vy: 0.6, a: 0.25, col: [0.8, 0.9, 0.95] }); } }
     if (worms) worms.material.uniforms.uT.value = t;
     for (const d of drips) {

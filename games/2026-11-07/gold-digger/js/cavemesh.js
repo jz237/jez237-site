@@ -310,7 +310,7 @@ export function rockMaterial(tex, look) {
   const U = {
     tAlb: { value: tex.alb }, tNrm: { value: tex.nrm }, uScale: { value: 0.32 }, uBump: { value: 1.25 }, uTime: { value: 0 },
     uGold: { value: new THREE.Color(1.0, 0.68, 0.22) }, uGlow: { value: new THREE.Color().fromArray(look.glow || [1, 0.4, 0.1]) },
-    uMoss: { value: new THREE.Color().fromArray(look.mossCol || [0.1, 0.3, 0.2]) }, uRubble: { value: new THREE.Color().fromArray(look.rubble || [0.5, 0.45, 0.4]) }, uCaus: { value: new THREE.Color(0, 0, 0) },
+    uMoss: { value: new THREE.Color().fromArray(look.mossCol || [0.1, 0.3, 0.2]) }, uRubble: { value: new THREE.Color().fromArray(look.rubble || [0.5, 0.45, 0.4]) }, uCaus: { value: new THREE.Color(0, 0, 0) }, uSpark: { value: new THREE.Color(0, 0, 0) }, uLampP: { value: new THREE.Vector3(0, -999, 0) },
   };
   mat.userData.U = U;
   mat.onBeforeCompile = (sh) => {
@@ -321,7 +321,7 @@ export function rockMaterial(tex, look) {
     sh.fragmentShader = sh.fragmentShader
       .replace('#include <common>', `#include <common>
 uniform sampler2D tAlb; uniform sampler2D tNrm; uniform float uScale; uniform float uBump; uniform float uTime;
-uniform vec3 uGold; uniform vec3 uGlow; uniform vec3 uMoss; uniform vec3 uRubble; uniform vec3 uCaus;
+uniform vec3 uGold; uniform vec3 uGlow; uniform vec3 uMoss; uniform vec3 uRubble; uniform vec3 uCaus; uniform vec3 uSpark; uniform vec3 uLampP;
 // light thrown off moving water: thin bright ripple lines
 float caustic(vec2 p, float t) {
   vec2 i = p; float c = 1.0;
@@ -396,10 +396,21 @@ roughnessFactor = mix(roughnessFactor, 0.16, vMat.y);`)
     float patchy = smoothstep(0.25, 0.95, (0.5 + 0.5 * sin(vWPos.x * 0.23 + 1.3 + sin(vWPos.y * 0.11)) * sin(vWPos.y * 0.29 + uTime * 0.07)) * (0.6 + 0.4 * gAlb.g));
     totalEmissiveRadiance += uCaus * ca * smoothstep(0.05, 0.6, wt) * patchy * smoothstep(0.4, -0.6, vWPos.z);
   }
+  // mineral flecks that glitter as the lamp passes over them
+  float lampNear = smoothstep(9.0, 2.5, distance(vWPos, uLampP)) * smoothstep(0.5, -0.3, vWPos.z);
+  if (lampNear > 0.0 && uSpark.r + uSpark.g + uSpark.b > 0.001) {
+    vec3 sc = vWPos * 24.0;
+    float hh = h13(floor(sc));
+    if (hh > 0.93) {
+      float d = 1.0 - smoothstep(0.06, 0.28, length(fract(sc) - 0.5));
+      float tw = pow(0.5 + 0.5 * sin(uTime * (1.2 + hh * 30.0) + hh * 600.0 + vViewPosition.x * 1.7 + vViewPosition.y * 1.3), 6.0);
+      totalEmissiveRadiance += uSpark * d * tw * lampNear * 7.0;
+    }
+  }
   // a boulder that needs dynamite shows hot little cracks; loose rubble catches the light a touch
   if (code > 1.5) { float cr = smoothstep(0.86, 0.97, 1.0 - abs(sin(vWPos.x * 3.1 + vWPos.y * 2.3 + gAlb.r * 9.0))); totalEmissiveRadiance += vec3(1.0, 0.3, 0.05) * cr * smoothstep(1.5, 1.9, code) * (0.6 + 0.4 * sin(uTime * 2.4)) * 0.38; }
 }`);
   };
-  mat.customProgramCacheKey = () => 'gd-rock-3';
+  mat.customProgramCacheKey = () => 'gd-rock-4';
   return mat;
 }

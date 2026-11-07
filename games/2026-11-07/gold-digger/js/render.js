@@ -173,6 +173,7 @@ export class Renderer {
     Object.assign(this.rockMat.userData.U.uGlow.value, new THREE.Color().fromArray(look.glow));
     this.rockMat.userData.U.uMoss.value.fromArray(look.mossCol || [0.1, 0.3, 0.2]);
     this.rockMat.userData.U.uCaus.value.setRGB(...(M.biome === 3 ? [0.13, 0.26, 0.3] : M.biome === 1 ? [0.08, 0.22, 0.2] : M.biome === 4 ? [0, 0, 0] : [0.05, 0.05, 0.04]));
+    this.rockMat.userData.U.uSpark.value.setRGB(...[[0.55, 0.42, 0.22], [0.25, 0.5, 0.45], [0.85, 0.7, 1.0], [0.35, 0.45, 0.5], [0.7, 0.28, 0.08]][M.biome % 5]);
     this.scene.fog.color.fromArray(look.fog); this.scene.fog.density = look.fogD;
     this.hemi.color.fromArray(look.hemiS); this.hemi.groundColor.fromArray(look.hemiG);
     this.lamp.color.set(this.lampCol || look.lamp);
@@ -591,6 +592,7 @@ export class Renderer {
     this.time += dt;
     const t = this.time, P = W.players[0], M = W.M;
     this.rockMat.userData.U.uTime.value = t;
+    this.rockMat.userData.U.uLampP.value.copy(this.lamp.position);
     if (this.lavaMat) this.lavaMat.uniforms.uT.value = t;
     if (this.waterVol) this.waterVol.uniforms.uT.value = t;
     this.tex.water.nrm.offset.set(t * 0.02, t * 0.013);
@@ -706,6 +708,11 @@ export class Renderer {
     // KEEN EYE: walls hiding a secret room glint gold when you are near
     if (this.loadout && this.loadout.keen && W.M.seals) for (const s of W.M.seals) if (Math.abs(s.x - P.x) < 12 && Math.abs(s.y - P.y) < 8 && Math.random() < dt * 3 && SOLID[W.M.tiles[Math.floor(s.y) * W.M.w + Math.floor(s.x)]]) this.fx.glint(s.x + (Math.random() - 0.5) * 0.8, s.y + (Math.random() - 0.5) * 2.5, 0.8, 0.7, [1, 0.8, 0.35]);
     this.fill.intensity = (oil <= 0 ? 3 : 14 + lampLvl * 3) * flick;
+    // running feet kick up little puffs
+    if (P.ground && !climb && !P.inWater && !P.dead && Math.abs(P.vx) > 2.4) {
+      this.stepAcc = (this.stepAcc || 0) + Math.abs(P.vx) * dt;
+      if (this.stepAcc > 1.05) { this.stepAcc = 0; this.fx.dust(P.x - P.face * 0.15, P.y + 0.06, 0.15, { n: 1, s0: 0.12, s1: 0.65, life: 0.8, jit: 0.5, vy: 0.35, up: 0.15, a: 0.2 }); }
+    }
     // the beam: a faint cone of lit dust ahead of the lamp, stopped where the rock is
     if (this.beam) {
       const bd = tmpV2.copy(this.lamp.target.position).sub(lp).normalize();
