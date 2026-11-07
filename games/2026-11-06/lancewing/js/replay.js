@@ -1,7 +1,7 @@
 // Instant replay. The simulation is deterministic, so the recorder keeps a cloned world every half
 // second plus every rider's input for each tick; a replay re-runs the moments before the last death
 // (or boss kill) from the nearest clone and reproduces it exactly, effects and sounds included.
-import { cloneWorld, step, drainEvents, STEP } from './sim.js?v=13';
+import { cloneWorld, step, drainEvents, STEP } from './sim.js?v=14';
 
 const r3 = (v) => Math.round(v * 1000) / 1000;
 export class Recorder {
@@ -45,6 +45,7 @@ export class Replay {
     let n = 0;
     while (this.acc >= STEP && !this.done && n < 16) {
       const W = this.W, rec = this.inputs.get(W.n);
+      if (this.onStep) this.onStep(W);   // main.js: remember positions for drawing between steps
       if (rec) for (const q of rec) { const p = W.players.find((x) => x.id === q[0]); if (p) p.input = { mx: q[1], flap: !!q[2] }; }
       step(W, STEP);
       for (const e of drainEvents(W)) out.push(e);

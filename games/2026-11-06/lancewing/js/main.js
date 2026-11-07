@@ -1,14 +1,14 @@
 // Lancewing 2026 - game flow: title (version, difficulty, global boards), campaign, endless, local and online
 // co-op, upgrades, results with initials, instant replay, pause, options, attract demo and AI playthrough.
-import { VERSION, SECTORS, STEP, F, WAVES, UPGRADES, UP_KEYS, UP_COST, SALVAGE_DIV, MEDALS, parTime, TYPICAL_UP, START_LIVES, BOSSES, DIFFICULTY, DIFF_KEYS, POWERUPS, ENEMY } from './config.js?v=13';
-import { makeWorld, step, drainEvents, waveLabel, isBossWave, dX, applyClaim, cloneWorld, ledgeUnder } from './sim.js?v=13';
-import { Autopilot } from './ai.js?v=13';
-import { Renderer, pickQuality, CALM } from './render.js?v=13';
-import { Audio } from './audio.js?v=13';
-import { Input } from './input.js?v=13';
-import { Scores, NO_POST, posted } from './scores.js?v=13';
-import { Recorder, Replay } from './replay.js?v=13';
-import { Online, ROOM, randomCode, cleanCode } from './online.js?v=13';
+import { VERSION, SECTORS, STEP, F, WAVES, UPGRADES, UP_KEYS, UP_COST, SALVAGE_DIV, MEDALS, parTime, TYPICAL_UP, START_LIVES, BOSSES, DIFFICULTY, DIFF_KEYS, POWERUPS, ENEMY } from './config.js?v=14';
+import { makeWorld, step, drainEvents, waveLabel, isBossWave, dX, applyClaim, cloneWorld, ledgeUnder } from './sim.js?v=14';
+import { Autopilot } from './ai.js?v=14';
+import { Renderer, pickQuality, CALM } from './render.js?v=14';
+import { Audio } from './audio.js?v=14';
+import { Input } from './input.js?v=14';
+import { Scores, NO_POST, posted } from './scores.js?v=14';
+import { Recorder, Replay } from './replay.js?v=14';
+import { Online, ROOM, randomCode, cleanCode } from './online.js?v=14';
 
 const $ = (id) => document.getElementById(id);
 const params = new URLSearchParams(location.search);
@@ -925,6 +925,47 @@ function tickFrame(dt, draw = true) {
   const cur = G.state === 'replay' && G.replay ? G.replay.W : G.W;
   if (!cur) return;
   if (draw) {   // draw = false: the test hook runs the game without rendering
+    const a = G.mode === 'online' ? 1 : G.state === 'replay' && G.replay ? G.replay.acc / STEP : G.acc / STEP;
+    lerpIn(cur, a);
+    try { drawFrame(cur, dt); } finally { lerpOut(); }
+  }
+  if (G.bannerT > 0) { G.bannerT -= dt; if (G.bannerT <= 0) $('banner').classList.add('hidden'); }
+  if (G.tutT > 0) { G.tutT -= dt; if (G.tutT <= 0) $('tut').classList.add('hidden'); }
+  if (G.capT > 0) { G.capT -= dt; if (G.capT <= 0) $('caption').classList.add('hidden'); }
+}
+// smooth motion: the sim steps at 120 Hz while the screen draws at its own rate (60, 90, 120, 144 Hz...), so a drawn
+// frame would show 0, 1 or 2 steps' movement in turn - a judder, and a jouster that seems to stop for a frame. Each
+// frame is drawn part-way between the last two steps instead: positions only, put back straight after drawing (the sim
+// never sees them, replays stay exact)
+let PREV = new WeakMap();
+const LERPED = [];
+function snapPrev(W) {
+  const put = (b) => { let o = PREV.get(b); if (!o) PREV.set(b, o = [0, 0]); o[0] = b.x; o[1] = b.y; };
+  for (const b of W.players) put(b);
+  for (const b of W.riders) put(b);
+  for (const b of W.cores) put(b);
+  if (W.hunter) put(W.hunter);
+  if (W.boss) { put(W.boss); if (W.boss.seg) for (const s of W.boss.seg) put(s); }
+}
+function lerpIn(W, a) {
+  LERPED.length = 0;
+  if (!(a >= 0 && a < 1)) return;
+  const mix = (b) => {
+    const o = PREV.get(b); if (!o) return;
+    const dx = dX(o[0], b.x), dy = b.y - o[1];
+    if (Math.abs(dx) > 4 || Math.abs(dy) > 4) return;   // a respawn or a teleport: no sliding across
+    LERPED.push(b, b.x, b.y);
+    b.x = ((o[0] + dx * a) % F.C + F.C) % F.C; b.y = o[1] + dy * a;
+  };
+  for (const b of W.players) mix(b);
+  for (const b of W.riders) mix(b);
+  for (const b of W.cores) mix(b);
+  if (W.hunter) mix(W.hunter);
+  if (W.boss) { mix(W.boss); if (W.boss.seg) for (const s of W.boss.seg) mix(s); }
+}
+function lerpOut() { for (let i = 0; i < LERPED.length; i += 3) { LERPED[i].x = LERPED[i + 1]; LERPED[i].y = LERPED[i + 2]; } LERPED.length = 0; }
+function drawFrame(cur, dt) {
+  {
     if (cur.k !== R.lookI) R.setLook(cur.k);
     R.sync(cur, dt);
     const menu = G.state === 'title' || (G.mode === 'title' && G.screen);
@@ -940,9 +981,6 @@ function tickFrame(dt, draw = true) {
     R.render(dt, { slow: cur.slow > 0 && G.state !== 'title', sea: sea.d, seaX: sea.x });
     if (G.tutT > 0 && G.state === 'play') placeTut(cur);
   }
-  if (G.bannerT > 0) { G.bannerT -= dt; if (G.bannerT <= 0) $('banner').classList.add('hidden'); }
-  if (G.tutT > 0) { G.tutT -= dt; if (G.tutT <= 0) $('tut').classList.add('hidden'); }
-  if (G.capT > 0) { G.capT -= dt; if (G.capT <= 0) $('caption').classList.add('hidden'); }
 }
 // riders close to you are heard: their wing beats (quieter than yours, on a gap of their own) and their landings
 const RB = new Map();
@@ -1024,6 +1062,7 @@ function playStep(dt) {
     });
     if (online && NET.host) NET.hostTick(W, applyClaim);
     if (!online) REC.input(W);
+    snapPrev(W);
     step(W, STEP);
     let ev = drainEvents(W);
     if (guest) ev = ev.filter((e) => e.pid === 2 && ['flap', 'death', 'splash', 'land'].includes(e.k));
@@ -1046,6 +1085,7 @@ function replayStep(dt) {
   const Rp = G.replay;
   const near = Math.abs(Rp.toKey) < 0.7;
   A.setRate(near ? 0.7 : 1);
+  Rp.onStep = snapPrev;
   const ev = Rp.advance(dt * (near ? 0.35 : 1));
   handleEvents(ev, Rp.W, false);
   const p = Rp.W.players[0];
@@ -1056,7 +1096,7 @@ function scenicStep(dt) {
   const W = G.scenic;
   G.acc += dt;
   let n = 0;
-  while (G.acc >= STEP && n < 8) { const p = W.players[0]; p.input = G.scenicAI.control(W, p); step(W, STEP); for (const e of drainEvents(W)) R.onEvent(e, W); W.lives = 99; G.acc -= STEP; n++; }
+  while (G.acc >= STEP && n < 8) { const p = W.players[0]; p.input = G.scenicAI.control(W, p); snapPrev(W); step(W, STEP); for (const e of drainEvents(W)) R.onEvent(e, W); W.lives = 99; G.acc -= STEP; n++; }
   if (W.over) scenic();
   if (G.state === 'title' && G.screen === 'title') {
     G.idleT += dt;
@@ -1162,7 +1202,7 @@ async function boot() {
   $('loading').style.opacity = '0';
   setTimeout(() => $('loading').remove(), 700);
   toTitle();
-  if (params.has('test')) { const m = await import('./tests.js?v=13'); m.runTests(window.__lw); }
+  if (params.has('test')) { const m = await import('./tests.js?v=14'); m.runTests(window.__lw); }
   else if (params.has('playthrough')) { A.unlock(); startPlaythrough(); }
   else if (params.has('endless') && G.autopilot) { A.unlock(); startEndless(); }
   else if (G.autopilot) { A.unlock(); startCampaign(+params.get('sector') || 0); }

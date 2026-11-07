@@ -4,12 +4,12 @@
 // spire and its lightning, telegraph ribbons for every hazard and boss attack, HDR post with bloom.
 // Nothing here changes the world.
 import * as THREE from '../vendor/three.module.min.js';
-import { Post } from './post.js?v=13';
-import * as TX from './textures.js?v=13';
-import * as MD from './models.js?v=13';
-import { FX, CALM } from './fx.js?v=13';
-import { F, POWERUPS, BOSSES, HUNTER, LAYOUT, rockHang, rockDrop } from './config.js?v=13';
-import { weakPos, ledgeUnder } from './sim.js?v=13';
+import { Post } from './post.js?v=14';
+import * as TX from './textures.js?v=14';
+import * as MD from './models.js?v=14';
+import { FX, CALM } from './fx.js?v=14';
+import { F, POWERUPS, BOSSES, HUNTER, LAYOUT, rockHang, rockDrop } from './config.js?v=14';
+import { weakPos, ledgeUnder } from './sim.js?v=14';
 
 export { CALM };
 const RR = F.R, H = F.H;
@@ -623,23 +623,35 @@ export class Renderer {
     const v = V.v, air = b.on < 0, W = this.W, k5 = Math.min(1, dt * 5), k9 = Math.min(1, dt * 9);
     // a real turn: it swings round through facing the camera and banks into it
     V.face = b.face;
-    V.phi += clamp((b.face > 0 ? 0 : Math.PI) - V.phi, -dt * TURN_RATE, dt * TURN_RATE);
-    this.placeTurn(V.outer, b.x, b.y, V.phi);
-    const turning = Math.sin(V.phi), fwd = b.vx * b.face, spd = Math.hypot(b.vx, b.vy);
-    const acc = (b.vx - V.lvx) / Math.max(dt, 1e-3); V.lvx = b.vx;
-    V.bank += (clamp(-acc * 0.012 * b.face, -0.4, 0.4) - V.bank) * k5;
+    // the turn swings round on a critically damped spring: it eases out and settles instead of starting and stopping dead
+    const ds = Math.min(dt, 1 / 30), phT = b.face > 0 ? 0 : Math.PI;
+    V.phiV = (V.phiV || 0) + ((phT - V.phi) * 230 - (V.phiV || 0) * 30) * ds;
+    V.phiV = clamp(V.phiV, -TURN_RATE * 1.4, TURN_RATE * 1.4);
+    V.phi = clamp(V.phi + V.phiV * ds, -0.05, Math.PI + 0.05);
+    this.placeTurn(V.outer, b.x, b.y, clamp(V.phi, 0, Math.PI));
+    const turning = Math.sin(clamp(V.phi, 0, Math.PI)), fwd = b.vx * b.face, spd = Math.hypot(b.vx, b.vy);
+    // velocities are smoothed before they tilt the body: a wing beat changes the sim's speed in one step, and a raw
+    // pitch or bank from it would snap
+    if (V.svx === undefined) V.lvx = b.vx;
+    V.svx = (V.svx ?? b.vx) + (b.vx - (V.svx ?? b.vx)) * Math.min(1, dt * 10);
+    V.svy = (V.svy ?? b.vy) + (b.vy - (V.svy ?? b.vy)) * Math.min(1, dt * 7);
+    const acc = (V.svx - V.lvx) / Math.max(dt, 1e-3); V.lvx = V.svx;
+    V.bank += (clamp(-acc * 0.02 * b.face, -0.4, 0.4) - V.bank) * Math.min(1, dt * 4);
     V.roll += ((air ? 0.34 : 0.1) - V.roll) * k5;
-    v.g.rotation.set((air ? V.bank : 0) + V.roll + turning * 0.5, -0.34, air ? clamp(b.vy * 0.035, -0.4, 0.32) : 0, 'YXZ');
+    // hovering (in the air, nearly still): it works for it - quicker, deeper beats, nose up, bobbing on each stroke
+    V.hov = (V.hov || 0) + (((air && spd < 3.5 && !b.gliding) ? 1 : 0) - (V.hov || 0)) * Math.min(1, dt * 4);
+    V.pitch = (V.pitch || 0) + ((air ? clamp(V.svy * 0.035, -0.4, 0.32) + V.hov * 0.2 : 0) - (V.pitch || 0)) * Math.min(1, dt * 9);
+    v.g.rotation.set((air ? V.bank : 0) + V.roll + turning * 0.5, -0.34, V.pitch, 'YXZ');
     // wings: every beat from the sim is a power stroke; between beats it keeps flapping to hold itself up (deeper
     // and quicker while it climbs), a glide spreads them, a fast drop sweeps them back, on a ledge they fold
     if (b.beat < V.lastBeat - 1e-6) V.ph = 0;
     V.lastBeat = b.beat;
     const climb = clamp(b.vy / 6, -1, 1), dive = air && b.vy < -8 && !b.gliding ? 1 : 0;
-    const ampT = !air ? 0 : b.gliding ? 0.14 : 0.62 + Math.max(0, climb) * 0.38 - Math.max(0, -climb) * 0.2;
+    const ampT = !air ? 0 : b.gliding ? 0.14 : 0.62 + Math.max(0, climb) * 0.38 - Math.max(0, -climb) * 0.2 + V.hov * 0.3;
     V.amp += (ampT - V.amp) * k5;
     V.fold += ((air ? 0 : 1) - V.fold) * Math.min(1, dt * (air ? 9 : 4));
     V.dive += (dive - V.dive) * Math.min(1, dt * 4);
-    V.ph = (V.ph + dt * (b.gliding ? 1.4 : 2.3 + Math.max(0, climb) * 1.1)) % 1;
+    V.ph = (V.ph + dt * (b.gliding ? 1.4 : 2.3 + Math.max(0, climb) * 1.1 + V.hov * 1.3)) % 1;
     const A = V.amp, F0 = V.fold, D0 = V.dive * (1 - F0);
     const w1 = (0.12 + A * 0.85 * stroke(V.ph)) * (1 - F0) + 0.42 * F0 + 0.15 * D0, f1 = 0.62 * F0 + 0.85 * D0;
     const w2 = (0.06 + A * 0.5 * stroke(V.ph - 0.07)) * (1 - F0) - 0.25 * F0, f2 = 1.25 * F0 + 0.6 * D0;
@@ -654,7 +666,7 @@ export class Renderer {
     V.land = Math.max(0, V.land - dt * 4);
     const below = air && b.vy < 0.5 && W ? ledgeUnder(W, b.x, b.y) : null;
     V.reach += ((below && b.y - below.y < 2.6 ? 1 : 0) - V.reach) * k9;
-    V.tuck += ((air ? 1 : 0) - V.tuck) * Math.min(1, dt * 7);
+    V.tuck += ((air ? 1 - V.hov * 0.6 : 0) - V.tuck) * Math.min(1, dt * 7);   // legs hang down in a hover
     const gait = !air ? Math.min(1, Math.abs(b.vx) / 3) : 0, rp = b.run * 2.4 * Math.sign(fwd || 1);
     if (v.legR) for (const [L, S, Ft, off] of [[v.legR, v.shinR, v.footR, 0], [v.legL, v.shinL, v.footL, Math.PI]]) {
       const tk = V.tuck * (1 - V.reach), rc = V.reach * V.tuck, s = Math.sin(rp + off), c = Math.cos(rp + off);
@@ -683,7 +695,8 @@ export class Renderer {
       const fl = 0.15 + V.jaw * 0.9 + A * 0.12 * stroke(V.ph);
       v.frillR.rotation.x = -fl; v.frillL.rotation.x = fl;
     }
-    if (v.mount) v.mount.position.y = air ? 0 : Math.abs(Math.sin(b.run * 2.4)) * 0.05 * gait - 0.05 * V.land;
+    // the body rides each stroke (a lift after the downstroke), more in a hover
+    if (v.mount) v.mount.position.y = air ? A * (0.05 + V.hov * 0.07) * stroke(V.ph + 0.3) : Math.abs(Math.sin(b.run * 2.4)) * 0.05 * gait - 0.05 * V.land;
     // the knight: leans into the climb or the run, looks about (back over the shoulder at a threat behind); the cape
     // and the pennant stream in the wind of its flight
     if (v.torso) {
@@ -1300,7 +1313,17 @@ export class Renderer {
     // shortest way round
     let d = th - this.camTh; d = ((d + Math.PI * 3) % (Math.PI * 2)) - Math.PI;
     const k = o.snap ? 1 : 1 - Math.exp(-dt * speed);
-    this.camTh += d * k; this.camY += (cy - this.camY) * k; this.camD += (dist - this.camD) * k; this.camFov += (fov - this.camFov) * k;
+    if (o.snap) { this.camTh += d; this.camY = cy; this.camD = dist; this.cv = [0, 0, 0]; }
+    else {
+      // a critically damped follow: it gathers speed and settles smoothly (a plain exponential lurches as a target starts
+      // moving); the height follows slower so the camera does not bob with every wing beat
+      const cv = this.cv || (this.cv = [0, 0, 0]), T = 1.15 / speed;
+      const sd = (cur, tgt, i, t) => { const w = 2 / t, x = w * dt, e = 1 / (1 + x + 0.48 * x * x + 0.235 * x * x * x), ch = cur - tgt, tmp = (cv[i] + w * ch) * dt; cv[i] = (cv[i] - w * tmp) * e; return tgt + (ch + tmp) * e; };
+      this.camTh = sd(this.camTh, this.camTh + d, 0, T);
+      this.camY = sd(this.camY, cy, 1, T * 1.8);
+      this.camD = sd(this.camD, dist, 2, T * 1.5);
+    }
+    this.camFov += (fov - this.camFov) * k;
     const s = Math.sin(this.camTh), c = Math.cos(this.camTh);
     this.camPos.set(s * (RR + this.camD), this.camY + 5.2, c * (RR + this.camD));
     this.camLook.set(s * (RR - 3), this.camY, c * (RR - 3));
