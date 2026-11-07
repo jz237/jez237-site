@@ -97,6 +97,8 @@ export const REEF_CONDITIONS = [
     weights: { bleach: 6, anemone: 2, closed: 1, unclear: 1, pastel: 2 },
     changes: { temp: 3, light: 1 },
     check: 'White flesh that’s still attached is classic bleaching—most often heat or a light change.',
+    // Wording when a different sign led here (Nov 6 2026 combination sweep).
+    checks: { "unclear": "A coral that looks off after a heat spike or a light change is often starting to bleach—watch for it going pale or white." },
     clues: ['White or very pale, but the flesh is still there (not bare skeleton).', 'Often after a hot spell, a stuck heater or a new light.'],
     distinguish: 'Light shock bleaches mainly the top, after a new light or a move. Bare white skeleton is tissue loss (RTN/STN), not bleaching.',
     avoid: 'Don’t move it around or crank the light to “bring the color back”.',
@@ -106,7 +108,7 @@ export const REEF_CONDITIONS = [
     summary: 'A fast change in alkalinity is one of the most common reasons corals close up, burn at the tips or lose flesh.',
     weights: { closed: 4, peeling: 4, unclear: 4, bleach: 2, 'zoa-melt': 2, browning: 1, anemone: 1, creeping: 1, pastel: 1 },
     changes: { alk: 4, dosing: 4 },
-    check: 'Corals closing or losing flesh with no pest in sight often comes down to an alkalinity swing.',
+    check: 'With no pest in sight, an alkalinity swing is one of the most common reasons corals close up, change colour or lose flesh.',
     // Wording when a different sign led here (Nov 6 2026 combination sweep).
     checks: { "unclear": "Corals that just look off with no pest in sight often come down to an alkalinity swing." },
     clues: ['Several corals look unhappy at once.', 'A missed or doubled dose, an empty dosing container or a new salt mix.'],
@@ -160,6 +162,8 @@ export const REEF_CONDITIONS = [
     kindBoost: { lps: 1 },
     changes: { 'new-coral': 1, temp: 1 },
     check: 'Brown, jelly-like slime on dying LPS flesh is brown jelly disease.',
+    // Wording when a different sign led here (Nov 6 2026 combination sweep).
+    checks: { "peeling": "Flesh pulling away from an LPS coral, especially with brown slime on it, can be brown jelly disease—it spreads fast." },
     clues: ['Brown, snotty slime on the flesh, often after an injury.', 'Spreads fast on euphyllia (torch, hammer) and other LPS.'],
     distinguish: 'Plain flesh loss without slime is RTN/STN or an alkalinity swing.',
     avoid: 'Don’t leave it in the tank next to other LPS.',
@@ -171,7 +175,7 @@ export const REEF_CONDITIONS = [
     changes: { light: 4, 'new-coral': 4 },
     check: 'Pale or white tops after a new light, a move or a new coral usually mean too much light.',
     // Wording when a different sign led here (Nov 6 2026 combination sweep).
-    checks: { "closed": "A coral that stays shut after a new light, a move or a new coral is often getting too much light at first.", "unclear": "A coral that looks a bit off after a new light, a move or a new coral is often adjusting to too much light." },
+    checks: { "closed": "A coral that stays shut after a new light, a move or a new coral is often getting too much light at first.", "unclear": "A coral that looks a bit off after a new light, a move or a new coral is often adjusting to too much light.", "pastel": "Corals going pale after a new light, a move or a new coral are often getting too much light at first.", "zoa-melt": "Zoas that close up and melt after a new light or a move are often getting too much light at first." },
     clues: ['Pale on top, normal color underneath or in the shade.', 'Started after a new light, a move or adding the coral.'],
     distinguish: 'Bleaching from heat whitens the whole coral. Brown color is the opposite—too little light or extra nutrients.',
     avoid: 'Don’t move it around every day—pick a lower spot and leave it.',
@@ -283,6 +287,8 @@ export const REEF_CONDITIONS = [
     weights: { 'molt-stuck': 6, pale: 2, deaths: 1, 'empty-shell': 2 },
     changes: { swing: 3, 'water-change': 2 },
     check: 'Stuck halfway out of the old shell is a failed molt—usually from swings or low magnesium/iodine.',
+    // Wording when a different sign led here (Nov 6 2026 combination sweep).
+    checks: { "pale": "A pale, milky shrimp or crab after a salinity swing is often struggling with its molt—watch for it getting stuck in the old shell." },
     clues: ['Old shell still attached, the animal can’t get free.', 'Often after a salinity swing or a big water change.'],
     distinguish: 'A complete, hollow shell with nobody inside is a normal molt.',
     avoid: 'Don’t pull the old shell off—you can tear the new one.',

@@ -45,10 +45,6 @@ export const POND_CONDITIONS = [
     weights: { worm: 7, 'red-streaks': 1, ulcer: 1, flashing: 1 },
     changes: { 'new-fish': 3, spring: 1 },
     check: 'A thin thread sticking out of a red spot is anchor worm—very common after adding new pond fish.',
-    // Wording when a different sign led here (Nov 6 2026 combination sweep).
-    checks: { "unclear": "Fish that hide and act jumpy after a heron, raccoon or cat has been around are often being hunted—count the fish and check for stab marks." },
-    // Signs its own picture already shows; any other sign leads with that sign's picture.
-    shows: ["unclear"],
     clues: ['Thin whitish-green threads about 1 cm long, often with two egg sacs at the end.', 'A red, swollen spot where each one goes in.'],
     distinguish: 'Flat, round bugs that move are fish lice. Fluffy tufts are fungus.',
     avoid: 'Don’t yank them out—hold the fish, pull gently from the base with tweezers, and dab the spot.',
@@ -126,6 +122,8 @@ export const POND_CONDITIONS = [
     weights: { unclear: 4, gasping: 3, 'red-streaks': 3, lethargic: 3, flashing: 1 },
     changes: { spring: 3, pump: 3, 'new-fish': 1 },
     check: 'Several fish hanging listless, clamped or red-finned usually points to the water—test ammonia and nitrite first.',
+    // Wording when a different sign led here (Nov 6 2026 combination sweep).
+    checks: { "lethargic": "Fish sitting on the bottom or hanging listless usually points to the water—test ammonia and nitrite first.", "unclear": "Pond fish that just seem off most often point to the water—test ammonia and nitrite first." },
     // Signs its own picture already shows; any other sign leads with that sign's picture.
     shows: ["lethargic"],
     clues: ['Several fish off at once.', 'Spring start-up, a filter that was cleaned or stopped, lots of fish or heavy feeding.'],
@@ -178,7 +176,7 @@ export const POND_CONDITIONS = [
     summary: 'A deadly koi virus: sunken eyes, rotting pale gills and rough skin, and fish dying within days. Usually arrives with new koi when the water is 60–82 °F (16–28 °C).',
     weights: { 'sunken-eyes': 7, gasping: 2, lethargic: 2, unclear: 1 },
     changes: { 'new-fish': 4, spring: 1 },
-    check: 'Koi with sunken eyes and white-blotched gills, dying fast after new fish went in, may be KHV.',
+    check: 'Koi with sunken eyes and white-blotched gills—especially soon after new fish went in—may be KHV.',
     // Wording when a different sign led here (Nov 6 2026 combination sweep).
     checks: { "lethargic": "Koi sitting on the bottom soon after new fish went in can be KHV—look for sunken eyes and blotchy pale gills." },
     clues: ['Sunken eyes, pale or white-blotched gills, rough sandpaper skin.', 'Several koi sick or dying within days, often 1–3 weeks after new koi.'],
@@ -191,6 +189,10 @@ export const POND_CONDITIONS = [
     weights: { missing: 7, ulcer: 1, unclear: 1 },
     changes: { predator: 5 },
     check: 'Fish missing, or stab and scratch marks across the back, mean a predator has been visiting.',
+    // Wording when a different sign led here (Nov 6 2026 combination sweep).
+    checks: { "unclear": "Fish that hide and act jumpy after a heron, raccoon or cat has been around are often being hunted—count the fish and check for stab marks." },
+    // Signs its own picture already shows; any other sign leads with that sign's picture.
+    shows: ["unclear"],
     clues: ['Fewer fish than there were, the rest hiding.', 'Stab wounds or parallel scratches across the back.'],
     distinguish: 'A round red crater is an ulcer, not a wound.',
     avoid: 'Don’t leave the edge shallow and open—a net or a deeper edge stops most herons.',

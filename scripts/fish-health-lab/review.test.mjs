@@ -298,8 +298,9 @@ test('J3: results never explain or picture a sign that was not picked', async ()
   const { signImagesFor } = await import('../../experiments/fish-health-lab/choice-images.mjs');
   const breathingWords = /fast breathing|breathe fast|fast gills/i;
   for (const water of ['fresh', 'marine']) for (const fishType of ['', ...FISH_TYPES[water].map(f => f.id)]) for (const sign of SYMPTOMS.map(s => s.id))
-    for (const behavior of ['', ...BEHAVIORS.map(b => b.id)]) {
-      const signs = [sign, ...(behavior ? [behavior] : [])];
+    for (const picked of BEHAVIORS.map(b => b.id).reduce((all, id, i, ids) => [...all, [id], ...ids.slice(i + 1).map(b => [id, b])], [[]])) {
+      const behavior = picked.length === 1 ? picked[0] : '';
+      const signs = [sign, ...picked];
       const d = assessDiagnosis({ water, fishType, primarySign: sign, visualSigns: [sign], signs });
       for (const c of d.findings) {
         const said = c.reason.replace(/^You (picked|said)[^.]*\.\s*/, '');
@@ -307,9 +308,9 @@ test('J3: results never explain or picture a sign that was not picked', async ()
           assert.ok(['breathing', 'gasping', 'red-gills'].some(s => signs.includes(s)) || c.fits.some(f => f.startsWith('patch')), `${water} ${fishType} ${signs} → ${c.id}: ${said}`);
       }
       // "Nothing obvious" leading to the water shows the calm, no-marks picture of what was picked.
-      if (sign === 'unclear' && d.primary?.id === 'water' && !['gasping', 'red-gills'].includes(behavior)) {
-        const pic = imagesFor(fishType, 'water', water, [...d.primary.fits, ...(behavior ? [behavior] : [])]).images[0];
-        assert.doesNotMatch(pic.alt, /gasp|breathing hard|gills flared/i, `${water} ${fishType} ${behavior}`);
+      if (sign === 'unclear' && d.primary?.id === 'water' && !picked.some(b => ['gasping', 'red-gills'].includes(b))) {
+        const pic = imagesFor(fishType, 'water', water, [...d.primary.fits, ...picked]).images[0];
+        assert.doesNotMatch(pic.alt, /gasp|breathing hard|gills flared/i, `${water} ${fishType} ${picked}`);
         if (!fishType) assert.equal(pic.url, signImagesFor(water).unclear.url);
       }
     }
@@ -326,9 +327,15 @@ test('J4: coral, invert and pond results picture and explain the sign that led t
   const shrimp = assessReef({ group: 'invert', kind: 'shrimp', sign: 'color', changes: ['medicine'], chosen: [] });
   assert.doesNotMatch(shrimp.primary.reason, /dying/i);
   assert.equal(reefResultImageFor('invert', shrimp.primary, 'color', 'shrimp').alt, reefImageFor('invert', 'color', 'shrimp', 'signs').alt);
+  // A predator sighting with no visible sign gets the predator wording (it once landed on anchor worm by mistake).
+  const heron = assessReef({ group: 'pond', kind: 'koi', sign: 'unclear', changes: ['predator'], chosen: [] });
+  assert.equal(heron.primary.id, 'predator');
+  assert.match(heron.primary.reason, /being hunted/);
+  // Two recent changes picked: still the picked sign's wording (Nov 6 two-change sweep).
+  assert.match(assessReef({ group: 'coral', kind: 'sps', sign: 'pastel', changes: ['light', 'alk'], chosen: [] }).primary.reason, /pale|pastel|colour/i);
   // Every result: the explanation names the picked sign's own wording when it has one, and every look-alike explains itself.
   for (const group of ['coral', 'invert', 'pond']) for (const kind of ['', ...(REEF_KINDS[group] || []).map(k => k.id)]) for (const s of reefSignsFor(group, kind))
-    for (const changes of [[], ...(REEF_CHANGES[group] || []).map(c => [c.id])]) {
+    for (const changes of (REEF_CHANGES[group] || []).map(c => c.id).reduce((all, id, i, ids) => [...all, [id], ...ids.slice(i + 1).map(b => [id, b])], [[]])) {
       const r = assessReef({ group, kind, sign: s.id, changes, chosen: [] });
       if (!r.primary) continue;
       if (r.primary.checks?.[s.id]) assert.ok(r.primary.reason.includes(r.primary.checks[s.id]));
