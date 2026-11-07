@@ -1,6 +1,6 @@
-// Voltmaze 2026 — every tunable number lives here. The RAMP table drives difficulty; nothing else in the
+// Berserk 2026 — every tunable number lives here. The RAMP table drives difficulty; nothing else in the
 // game hard-codes robot pace, numbers, fire rate, aim, bolt speed, Seeker timing or warning time.
-export const VERSION = '1.3.0';
+export const VERSION = '1.3.1';
 export const STEP = 1 / 120;
 
 // ------------------------------------------------------------------ the facility and the infiltrator

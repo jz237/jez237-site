@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
 <meta name="theme-color" content="#000000">
-<meta name="description" content="Voltmaze 2026 — an original room-by-room maze shooter in real-time 3D. Slip a light-armoured infiltrator through a facility of electrified rooms, outgun and outwit its security robots, lure them into the walls, and keep moving before the Seeker finds you. Five sectors, five bosses, an endless mode, online co-op and world high scores.">
-<title>Voltmaze 2026</title>
+<meta name="description" content="Berserk 2026 — an original room-by-room maze shooter in real-time 3D. Slip a light-armoured infiltrator through a facility of electrified rooms, outgun and outwit its security robots, lure them into the walls, and keep moving before the Seeker finds you. Five sectors, five bosses, an endless mode, online co-op and world high scores.">
+<title>Berserk 2026</title>
 <link rel="icon" href="data:,">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -331,8 +331,8 @@ table.rbest th:first-child, table.rbest td:first-child { text-align: left; color
   <!-- title -->
   <div class="screen hidden" id="title">
     <div class="card">
-      <h1 class="logo">VOLT<span>MAZE</span> <em>2026</em></h1>
-      <div class="ver">VERSION <b id="ver">1.3.0</b> · GET IN · KEEP MOVING · GET OUT</div>
+      <h1 class="logo">BER<span>SERK</span> <em>2026</em></h1>
+      <div class="ver">VERSION <b id="ver">1.3.1</b> · GET IN · KEEP MOVING · GET OUT</div>
       <div class="diffrow">DIFFICULTY<div class="seg" data-opt="diff"><button data-v="easy">EASY</button><button data-v="normal">NORMAL</button><button data-v="hard">HARD</button><button data-v="nightmare">NIGHTMARE</button></div></div>
       <div id="diff-desc"></div>
       <div class="btns" id="title-btns">
@@ -478,6 +478,6 @@ addEventListener('error', (e) => window.__vmErrors.push(String(e.message || e)))
 addEventListener('unhandledrejection', (e) => window.__vmErrors.push('rejection: ' + String(e.reason && e.reason.message || e.reason)));
 (() => { const ce = console.error; console.error = (...a) => { window.__vmErrors.push(a.map(String).join(' ')); ce.apply(console, a); }; })();
 </script>
-<script type="module" src="js/main.js?v=8"></script>
+<script type="module" src="js/main.js?v=9"></script>
 </body>
 </html>

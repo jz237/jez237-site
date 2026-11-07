@@ -1,9 +1,9 @@
-// Voltmaze simulation: fixed 120 Hz steps, all randomness from the world's own seeded generator (W.rs,
+// Berserk simulation: fixed 120 Hz steps, all randomness from the world's own seeded generator (W.rs,
 // with a non-enumerable W.rand helper) plus layout generators seeded from (seed, sector, room x/y), plain
 // data only, so a world can be cloned and re-run bit for bit (replays, online, tests). Nothing in here
 // touches the DOM, WebGL or audio; it only pushes events into W.ev.
 import { F, STEP, ROOM, REINF, BURST_A, SECTORS, RAMP, rampAt, rampLevel, endlessLevel, ENDLESS, ENEMY, SEEKER, BOSSES, BOSS_KEYS, ATTACK, SCORE, START_LIVES, INTRO, introduced,
-  DIFFICULTY, applyDiff, POWERUPS, PW_KEYS, DROP, fireCDOf, empMax, empStart, UPGRADES } from './config.js?v=8';
+  DIFFICULTY, applyDiff, POWERUPS, PW_KEYS, DROP, fireCDOf, empMax, empStart, UPGRADES } from './config.js?v=9';
 export { STEP };
 
 const { RW, RH, wallT: WT, inT: IT, door: DOOR, cols: GC, rows: GR, entryIn } = ROOM;

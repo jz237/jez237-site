@@ -1,10 +1,10 @@
 // ?test=1 self-test page: sim invariants, determinism, exact replays, clone safety, the RAMP rising
 // step by step, the difficulty levels, every room reachable, the autopilot getting through a sector and
 // a boss, the live game loop running without console errors, and no score posts from test runs.
-import { makeWorld, step, drainEvents, STEP, cloneWorld, genWalls, wallNear, routeSide, gridDist, SIDES, entryPoint } from './sim.js?v=8';
-import { Autopilot } from './ai.js?v=8';
-import { RAMP, SECTORS, TYPICAL_UP, rampAt, rampLevel, endlessLevel, DIFF_KEYS, applyDiff, MIN_WARN, ROOM, F, BOSSES } from './config.js?v=8';
-import { Recorder, Replay } from './replay.js?v=8';
+import { makeWorld, step, drainEvents, STEP, cloneWorld, genWalls, wallNear, routeSide, gridDist, SIDES, entryPoint } from './sim.js?v=9';
+import { Autopilot } from './ai.js?v=9';
+import { RAMP, SECTORS, TYPICAL_UP, rampAt, rampLevel, endlessLevel, DIFF_KEYS, applyDiff, MIN_WARN, ROOM, F, BOSSES } from './config.js?v=9';
+import { Recorder, Replay } from './replay.js?v=9';
 
 const r6 = (v) => Math.round(v * 1e6) / 1e6;
 export const hashW = (W) => JSON.stringify([W.n, W.score, W.lives, W.roomN, W.depth, W.phase, W.rs, W.room && W.room.key, W.players.map((p) => [r6(p.x), r6(p.z), p.alive, p.shield, p.emp]),
@@ -187,7 +187,7 @@ export function simChecks() {
 export async function runTests(vm) {
   const box = document.createElement('div');
   box.id = 'testlog';
-  box.innerHTML = '<b>VOLTMAZE 2026 · SELF TEST</b><br>';
+  box.innerHTML = '<b>BERSERK 2026 · SELF TEST</b><br>';
   document.body.appendChild(box);
   const results = [];
   const add = (r, ms) => { results.push({ ...r, ms }); box.innerHTML += `<div class="${r.ok ? 'pass' : 'fail'}">${r.ok ? 'PASS' : 'FAIL'} · ${r.name} <span style="opacity:.7">${r.info} (${ms} ms)</span></div>`; };

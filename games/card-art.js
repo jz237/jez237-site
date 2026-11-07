@@ -46,7 +46,7 @@
     'Lunar Lander':['lander','#e7ca87','#9fc5de',0],
     'Lancewing 2026':['lancewing','#ffb347','#ffd9a0',0],
     'Rimstorm 2026':['rimstorm','#7fd4ff','#ffb347',0],
-    'Voltmaze 2026':['voltmaze','#7fe0ff','#ff6a4a',0],
+    'Berserk 2026':['voltmaze','#7fe0ff','#ff6a4a',0],
     'Swarmbreak':['swarm','#ffb347','#7fe0ff',0],
     'Crater Runner':['craterrun','#ffb347','#9fd8ff',0],
     'Neon Qix':['qix','#e2a3e9','#7bdade',0],

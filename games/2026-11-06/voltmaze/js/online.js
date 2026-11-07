@@ -5,8 +5,8 @@
 // reports its position, its shots and its EMPs; the host re-creates those shots so kills are decided in
 // one place. Rooms are rebuilt on the guest from the same seeded generator, so only a short room
 // descriptor travels. The relay overwrites the keys t, from, role and start.mode: never use them.
-import { adoptRoom, emp } from './sim.js?v=8';
-import { PW_KEYS, ENEMY_KEYS } from './config.js?v=8';
+import { adoptRoom, emp } from './sim.js?v=9';
+import { PW_KEYS, ENEMY_KEYS } from './config.js?v=9';
 const packPw = (pw) => Object.entries(pw || {}).map(([k, t]) => [PW_KEYS.indexOf(k), Math.round(t * 10) / 10]);
 const unpackPw = (a) => { const o = {}; for (const [i, t] of a || []) o[PW_KEYS[i]] = t; return o; };
 

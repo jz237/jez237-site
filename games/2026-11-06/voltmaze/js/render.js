@@ -1,4 +1,4 @@
-// Voltmaze renderer: one facility room at a time in real 3D, seen from a steep three-quarter camera that
+// Berserk renderer: one facility room at a time in real 3D, seen from a steep three-quarter camera that
 // fits the whole room to the screen (turned on its side on portrait phones). Five sector looks, each with
 // its own floor material, light rig, haze and scenery outside the walls; electrified barriers drawn as
 // live energy fields between pylons; the infiltrator's flashlight throws real shadows; every robot, the
@@ -6,12 +6,12 @@
 // Fixed light pools (only intensities change) and a warm-up that compiles everything at load.
 // Nothing here changes the world.
 import * as THREE from '../vendor/three.module.min.js';
-import { Post } from './post.js?v=8';
-import * as TX from './textures.js?v=8';
-import * as MD from './models.js?v=8';
-import { FX, CALM } from './fx.js?v=8';
-import { F, ROOM, ENEMY, BOSSES, POWERUPS, ATTACK, PW_KEYS, SEEKER, BURST_A } from './config.js?v=8';
-import { WK, inZone, beamLen } from './sim.js?v=8';
+import { Post } from './post.js?v=9';
+import * as TX from './textures.js?v=9';
+import * as MD from './models.js?v=9';
+import { FX, CALM } from './fx.js?v=9';
+import { F, ROOM, ENEMY, BOSSES, POWERUPS, ATTACK, PW_KEYS, SEEKER, BURST_A } from './config.js?v=9';
+import { WK, inZone, beamLen } from './sim.js?v=9';
 
 export { CALM };
 const { RW, RH, wallT: WT, door: DOOR } = ROOM;

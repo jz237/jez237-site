@@ -1,14 +1,14 @@
-// Voltmaze 2026 — game flow, menus, HUD, minimap, the facility AI's (rare) voice, the demo director
+// Berserk 2026 — game flow, menus, HUD, minimap, the facility AI's (rare) voice, the demo director
 // and the frame loop.
-import { VERSION, SECTORS, STEP, F, ROOM, RAMP, UPGRADES, UP_KEYS, UP_COST, SALVAGE, MEDALS, parTime, TYPICAL_UP, START_LIVES, BOSSES, DIFFICULTY, DIFF_KEYS, POWERUPS, ENEMY, empMax, SEEKER, SUITS } from './config.js?v=8';
-import { makeWorld, step, drainEvents, roomLabel, routeSide, angDiff, SIDES, DELTA, wallDist, cloneWorld } from './sim.js?v=8';
-import { Autopilot } from './ai.js?v=8';
-import { Renderer, pickQuality, CALM, LOOKS } from './render.js?v=8';
-import { Audio } from './audio.js?v=8';
-import { Input } from './input.js?v=8';
-import { Scores, NO_POST } from './scores.js?v=8';
-import { Recorder, Replay } from './replay.js?v=8';
-import { Online, ROOM as NET_ROOM, randomCode, cleanCode } from './online.js?v=8';
+import { VERSION, SECTORS, STEP, F, ROOM, RAMP, UPGRADES, UP_KEYS, UP_COST, SALVAGE, MEDALS, parTime, TYPICAL_UP, START_LIVES, BOSSES, DIFFICULTY, DIFF_KEYS, POWERUPS, ENEMY, empMax, SEEKER, SUITS } from './config.js?v=9';
+import { makeWorld, step, drainEvents, roomLabel, routeSide, angDiff, SIDES, DELTA, wallDist, cloneWorld } from './sim.js?v=9';
+import { Autopilot } from './ai.js?v=9';
+import { Renderer, pickQuality, CALM, LOOKS } from './render.js?v=9';
+import { Audio } from './audio.js?v=9';
+import { Input } from './input.js?v=9';
+import { Scores, NO_POST } from './scores.js?v=9';
+import { Recorder, Replay } from './replay.js?v=9';
+import { Online, ROOM as NET_ROOM, randomCode, cleanCode } from './online.js?v=9';
 
 const $ = (id) => document.getElementById(id);
 const params = new URLSearchParams(location.search);
@@ -1041,7 +1041,7 @@ document.addEventListener('visibilitychange', () => {
 let bgWorker = null;
 function bgTicks(on) {
   if (on && !bgWorker) {
-    try { bgWorker = new Worker(new URL('./tick.js?v=8', import.meta.url)); bgWorker.onmessage = bgTick; } catch (e) { bgWorker = null; console.warn('background tick', e); return; }
+    try { bgWorker = new Worker(new URL('./tick.js?v=9', import.meta.url)); bgWorker.onmessage = bgTick; } catch (e) { bgWorker = null; console.warn('background tick', e); return; }
   }
   if (bgWorker) bgWorker.postMessage(on ? 25 : 0);
 }
@@ -1250,7 +1250,7 @@ async function boot() {
   $('loading').style.opacity = '0';
   setTimeout(() => $('loading').remove(), 700);
   toTitle();
-  if (params.has('test')) { const m = await import('./tests.js?v=8'); m.runTests(window.__vm); }
+  if (params.has('test')) { const m = await import('./tests.js?v=9'); m.runTests(window.__vm); }
   else if (params.has('playthrough')) { A.unlock(); startPlaythrough(); }
   else if (G.autopilot) { A.unlock(); if (params.has('endless')) startEndless(); else startCampaign(+params.get('sector') || 0); }
   else if (params.has('room') && !params.has('sector') && isNaN(+params.get('room'))) { act('online'); $('join-code').value = cleanCode(params.get('room')); }
