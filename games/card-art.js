@@ -46,6 +46,7 @@
     'Lunar Lander':['lander','#e7ca87','#9fc5de',0],
     'Skyhold 2026':['skyhold','#8fd8ff','#ffc25a',0],
     'Sini 2026':['sini','#52ffd8','#ffb347',0],
+    'Shock Horror':['shockhorror','#e0372b','#efe3cf',0],
     'Gold Digger':['golddigger','#ffc65a','#ffe9b0',0],
     'Lancewing 2026':['lancewing','#ffb347','#ffd9a0',0],
     'Rimstorm 2026':['rimstorm','#7fd4ff','#ffb347',0],
@@ -200,6 +201,18 @@
           +group(path('M32 31 25 26','none','#ffd27a',1,'stroke-dasharray="2 2"'),'','ca-glimmer')
           +group(path('M-4 0 4-2 2 0 4 2Z','#3a2a2e','#ff4a4a',.5)+circle(4,0,.8,'#ff4a4a'),'translate(66 52)','ca-hover')
           +group(circle(0,0,1.6,'#c8b0ff')+path('M-1 0H-7','none','#a880ff',.8,'opacity=".7"'),'translate(64 30)','ca-drift');
+      }
+      case 'shockhorror': {
+        const drip=(x,y,h)=>path(`M${x-.6} ${y}V${y+h}q.6 1.8 1.2 0V${y}Z`,'#8e0f0a');
+        return rect(0,0,100,68,'#0a0505')+ellipse(50,32,48,26,'#200806','','opacity=".75"')
+          +path('M0 0H100V12Q84 18 70 11T40 14T16 10T0 13Z','#2a0d0a','#5a1a14',.5)
+          +path('M0 68V53Q16 48 33 52T60 49T82 53T100 50V68Z','#22100c','#4a1a12',.5)
+          +repeat(8,i=>drip(8+i*12,11+(i%3),3+(i*7)%9))
+          +group(path('M80 12V24','none','#8a7a60',.6)+circle(80,26,2.1,'#cfc7b6')+path('M78 28h4l1 10h-6Z','#3a3430')+path('M78.5 38 78 47M81.5 38 82 47','none','#3a3430',1.3),'','ca-sway')
+          +path('M31 39 72 25 72 55Z','#ffe2a8','','','opacity=".1"')
+          +person(27,50,.55,'#7a2a20')+circle(30.6,36.6,1.3,'#fff6cc')
+          +group(path('M57 29q3-5 6 0l1.5 21h-9Z','#d8d2c4','','','opacity=".88"')+path('M56.6 28q3.4-6 6.8 0v9q-3.4-2.4-6.8 0Z','#0d0a0a')+blink(circle(59,31.5,.45,'#fff')+circle(61,31.5,.45,'#fff')),'','ca-hover')
+          +blink(circle(11,31,.6,a)+circle(13.4,31,.6,a),-1.2)+blink(circle(88,45,.6,a)+circle(90.4,45,.6,a),-2.1)+blink(circle(45,20,.5,a)+circle(47,20,.5,a),-.5);
       }
       case 'golddigger': {
         const stal=(x,y,h,c)=>path(`M${x-2.2} ${y}L${x} ${y+h}L${x+2.2} ${y}Z`,c);
