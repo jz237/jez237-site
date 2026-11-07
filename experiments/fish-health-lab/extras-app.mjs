@@ -3,6 +3,7 @@
 // module draws the pages and keeps the medicine answer live as choices change.
 import { VERDICTS, MED_WATERS, MEDICINES, residentsFor, medicinesFor, checkMedicine, headline } from './medicine.mjs';
 import { PREVENT_SECTIONS, preventImage } from './prevent.mjs';
+import { SHOP } from './shop-links.mjs';
 
 export function createExtras({ $, escape }) {
   const state = { water: '', medicine: '', residents: new Set(), hospital: false };
@@ -33,10 +34,10 @@ export function createExtras({ $, escape }) {
       out.innerHTML = `<p class="med-empty">${state.water ? 'Pick a medicine to see the answer.' : 'Pick where you’re treating and the medicine.'}</p>`;
       return;
     }
-    const rows = result.rows
-      .filter(r => !state.hospital || ['fish', 'scaleless', 'filter'].includes(r.id))
+    // In hospital-tank mode these are the rows that apply there (with their hospital-tank wording).
+    const rows = result.shown
       .map(r => `<li data-med-row="${r.id}">${verdictBadge(r.verdict)}<span><strong>${escape(r.title)}</strong><small>${escape(r.reason)}</small></span></li>`).join('');
-    out.innerHTML = `<article class="med-answer" data-med-answer="${result.verdict}"><p class="eyebrow">YOUR ANSWER</p>${verdictBadge(result.verdict)}<h2>${escape(headline(result))}</h2><ul class="med-rows">${rows}</ul><p class="med-tip"><strong>Tip</strong> ${escape(result.tip)}</p><p class="label-note">Amounts: always follow the product label. Take out carbon while treating.</p>${result.verdict !== 'ok' && !state.hospital ? '<button type="button" class="text-button" data-view="prevent">How to set up a hospital tank →</button>' : ''}</article>`;
+    out.innerHTML = `<article class="med-answer" data-med-answer="${result.verdict}"><p class="eyebrow">YOUR ANSWER</p>${verdictBadge(result.verdict)}<h2>${escape(headline(result))}</h2><ul class="med-rows">${rows}</ul><p class="med-tip"><strong>Tip</strong> ${escape(result.tip)}</p>${SHOP?.medicines?.[result.medicine.id] && result.verdict !== 'kills' && result.verdict !== 'avoid' ? `<p class="med-shop"><a class="shop-link" href="${escape(SHOP.medicines[result.medicine.id].href)}">${escape(SHOP.medicines[result.medicine.id].label)} →</a></p>` : ''}<p class="label-note">Amounts: always follow the product label. Take out carbon while treating.</p>${!['ok', 'avoid'].includes(result.verdict) && !state.hospital && !result.rows.some(r => r.verdict === 'kills' && r.id === 'scaleless') ? '<button type="button" class="text-button" data-view="prevent">How to set up a hospital tank →</button>' : ''}</article>`;
   }
 
   function renderMedicine(presetWater = '') {
@@ -44,9 +45,15 @@ export function createExtras({ $, escape }) {
     drawWaters(); drawMedicines(); drawResidents(); drawResult();
   }
 
+  // A host store can list what each setup needs (window.FHL_SHOP.prevent[sectionId]); quiet text links.
+  const preventShop = id => {
+    const links = SHOP?.prevent?.[id] || [];
+    return links.length ? `<p class="prevent-shop"><span>What you need, from the store:</span> ${links.map(l => `<a class="shop-link" href="${escape(l.href)}">${escape(l.label)}</a>`).join(' · ')}</p>` : '';
+  };
+
   function renderPrevent() {
     if ($('#prevent-sections').childElementCount) return;
-    $('#prevent-sections').innerHTML = PREVENT_SECTIONS.map(s => `<section class="prevent-section" data-prevent="${s.id}"><div class="prevent-head"><p class="eyebrow">${escape(s.who.toUpperCase())}</p><h2>${escape(s.title)}</h2><p>${escape(s.lead)}</p></div><ol class="prevent-cards">${s.cards.map(c => { const img = preventImage(c.image); return `<li class="prevent-card"><img src="${escape(img.url)}" width="${img.width}" height="${img.height}" alt="${escape(img.alt)}" loading="lazy" decoding="async"><div><h3>${escape(c.title)}</h3><p>${escape(c.text)}</p></div></li>`; }).join('')}</ol></section>`).join('');
+    $('#prevent-sections').innerHTML = PREVENT_SECTIONS.map(s => `<section class="prevent-section" data-prevent="${s.id}"><div class="prevent-head"><p class="eyebrow">${escape(s.who.toUpperCase())}</p><h2>${escape(s.title)}</h2><p>${escape(s.lead)}</p></div><ol class="prevent-cards">${s.cards.map(c => { const img = preventImage(c.image); return `<li class="prevent-card"><img src="${escape(img.url)}" width="${img.width}" height="${img.height}" alt="${escape(img.alt)}" loading="lazy" decoding="async"><div><h3>${escape(c.title)}</h3><p>${escape(c.text)}</p></div></li>`; }).join('')}</ol>${preventShop(s.id)}</section>`).join('');
   }
 
   function handleClick(event) {
@@ -75,5 +82,8 @@ export function createExtras({ $, escape }) {
     return false;
   }
 
-  return { renderMedicine, renderPrevent, handleClick };
+  // A shop's product page links here with its medicine already picked (?medicine=copper#medicine).
+  function presetMedicine(id) { if (MEDICINES.some(m => m.id === id)) state.medicine = id; }
+
+  return { renderMedicine, renderPrevent, handleClick, presetMedicine };
 }
