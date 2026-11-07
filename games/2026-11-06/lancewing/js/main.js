@@ -1,14 +1,14 @@
 // Lancewing 2026 - game flow: title (version, difficulty, global boards), campaign, endless, local and online
 // co-op, upgrades, results with initials, instant replay, pause, options, attract demo and AI playthrough.
-import { VERSION, SECTORS, STEP, F, WAVES, UPGRADES, UP_KEYS, UP_COST, SALVAGE_DIV, MEDALS, parTime, TYPICAL_UP, START_LIVES, BOSSES, DIFFICULTY, DIFF_KEYS, POWERUPS, ENEMY } from './config.js?v=11';
-import { makeWorld, step, drainEvents, waveLabel, isBossWave, dX, applyClaim, cloneWorld } from './sim.js?v=11';
-import { Autopilot } from './ai.js?v=11';
-import { Renderer, pickQuality, CALM } from './render.js?v=11';
-import { Audio } from './audio.js?v=11';
-import { Input } from './input.js?v=11';
-import { Scores, NO_POST, posted } from './scores.js?v=11';
-import { Recorder, Replay } from './replay.js?v=11';
-import { Online, ROOM, randomCode, cleanCode } from './online.js?v=11';
+import { VERSION, SECTORS, STEP, F, WAVES, UPGRADES, UP_KEYS, UP_COST, SALVAGE_DIV, MEDALS, parTime, TYPICAL_UP, START_LIVES, BOSSES, DIFFICULTY, DIFF_KEYS, POWERUPS, ENEMY } from './config.js?v=12';
+import { makeWorld, step, drainEvents, waveLabel, isBossWave, dX, applyClaim, cloneWorld, ledgeUnder } from './sim.js?v=12';
+import { Autopilot } from './ai.js?v=12';
+import { Renderer, pickQuality, CALM } from './render.js?v=12';
+import { Audio } from './audio.js?v=12';
+import { Input } from './input.js?v=12';
+import { Scores, NO_POST, posted } from './scores.js?v=12';
+import { Recorder, Replay } from './replay.js?v=12';
+import { Online, ROOM, randomCode, cleanCode } from './online.js?v=12';
 
 const $ = (id) => document.getElementById(id);
 const params = new URLSearchParams(location.search);
@@ -32,6 +32,7 @@ const quality = pickQuality(params.get('q') || (settings.quality !== 'auto' ? se
 const bootQuality = settings.quality;
 const R = new Renderer($('gl'), quality);
 const A = new Audio('./');
+R.sfx = (name, x, y, o) => A.play(name, { ...toPos(x, y), ...o });   // the renderer's own sounds (falling pieces landing)
 const I = new Input();
 const BOARDS = {};
 function boardOf(mode, diff = 'normal') {
@@ -230,6 +231,7 @@ function setHud(on) {
   $('hud').classList.toggle('hidden', !on);
   const touch = on && settings.touch !== 'off' && (settings.touch === 'on' || I.isTouch) && G.mode !== 'demo' && G.mode !== 'playthrough';
   $('touch').classList.toggle('hidden', !touch);
+  document.body.classList.toggle('lw-touch', touch);
   I.touchOn = touch;
   $('tb-pause').classList.toggle('hidden', !on || G.mode === 'demo');
   if (!on) { $('bossbar').classList.add('hidden'); $('tut').classList.add('hidden'); $('banner').classList.add('hidden'); $('caption').classList.add('hidden'); $('warns').innerHTML = ''; WM.length = 0; }
@@ -325,21 +327,26 @@ function tutorial(key, t = 7) {
   const id = key === 'controls' && G.W && G.W.coop ? 'controls-coop' : key;
   if (tipsSeen.has(id)) return;
   tipsSeen.add(id);
-  const el = $('tut'); el.innerHTML = TUT[key](); el.classList.remove('hidden', 'up'); G.tutT = t; G.tutFlip = 0;
+  const el = $('tut'); el.innerHTML = TUT[key](); el.classList.remove('hidden', 'up', 'dim'); G.tutT = t; G.tutFlip = 0;
   placeTut(G.W, true);
 }
-// the tip never sits over your own rider: it moves to the top (below the HUD) when the rider is behind it, and back
+// the tip sits in a corner, out of the fight. It never covers your own rider (it moves up, below the pause button, while
+// the rider is behind it, and back) and it goes see-through while any other rider, the boss or the Stormhunter is
 function placeTut(W, now = false) {
   const el = $('tut');
   if (!W || el.classList.contains('hidden')) return;
   const me = myPlayer(W);
   if (!me) return;
-  R.project(me.x, me.y + 0.8, PE);
-  if (PE.z > 1) return;
   const r = el.getBoundingClientRect();
-  const over = PE.x > r.left - 60 && PE.x < r.right + 60 && PE.y > r.top - 90 && PE.y < r.bottom + 60;
+  const under = (x, y, mx, my) => { R.project(x, y, PE); return PE.z <= 1 && PE.x > r.left - mx && PE.x < r.right + mx && PE.y > r.top - my && PE.y < r.bottom + my; };
   const t = performance.now();
-  if (over && (now || t - G.tutFlip > 700)) { el.classList.toggle('up'); G.tutFlip = t; }
+  if (under(me.x, me.y + 0.8, 60, 90) && (now || t - G.tutFlip > 700)) { el.classList.toggle('up'); G.tutFlip = t; return; }
+  let dim = false;
+  for (const q of W.players) if (q.alive && q !== me && under(q.x, q.y + 0.8, 30, 40)) dim = true;
+  for (const q of W.riders) if (!dim && q.alive && under(q.x, q.y + 0.8, 30, 40)) dim = true;
+  if (!dim && W.boss && under(W.boss.x, W.boss.y, 120, 120)) dim = true;
+  if (!dim && W.hunter && under(W.hunter.x, W.hunter.y + 0.6, 40, 40)) dim = true;
+  el.classList.toggle('dim', dim);
 }
 
 // ------------------------------------------------------------------ events from the simulation
@@ -422,7 +429,8 @@ function feelEvent(e, W, live) {
   if (!live) return;
   if (e.k === 'unhorse') { if (e.pid) hitStop(0.055); }
   else if (e.k === 'bosshit') hitStop(0.06);
-  else if (e.k === 'wpdown') hitStop(0.07);
+  else if (e.k === 'wpdown') hitStop(0.1);
+  else if (e.k === 'bossphase') hitStop(0.12);
   else if (e.k === 'boss') bossReveal(W, e);
 }
 // the sim reads a flap as a press EDGE, so a tap pressed and released inside a hit-stop would never reach a step: latch it
@@ -927,12 +935,39 @@ function tickFrame(dt, draw = true) {
     R.updateCamera(dt, { focus: G.mode === 'online' ? [myPlayer(cur)] : focus.length ? focus : cur.players, cine: menu, shake: +settings.shake });
     A.setListener(R.camera);
     ambience(cur, menu);
-    R.render(dt, { slow: cur.slow > 0 && G.state !== 'title' });
+    const sea = seaDanger(cur, dt, menu);
+    R.render(dt, { slow: cur.slow > 0 && G.state !== 'title', sea: sea.d, seaX: sea.x });
     if (G.tutT > 0 && G.state === 'play') placeTut(cur);
   }
   if (G.bannerT > 0) { G.bannerT -= dt; if (G.bannerT <= 0) $('banner').classList.add('hidden'); }
   if (G.tutT > 0) { G.tutT -= dt; if (G.tutT <= 0) $('tut').classList.add('hidden'); }
   if (G.capT > 0) { G.capT -= dt; if (G.capT <= 0) $('caption').classList.add('hidden'); }
+}
+// the sea: how close a local rider is to dropping into it (below the low ledges with no ledge under it, worse the faster
+// it sinks). It reddens the screen edges, kicks up spray under the rider and beats a low warning pulse that quickens
+const SEA = { d: 0, x: 0, beat: 0, glow: 0, shown: -1 };
+function seaDanger(W, dt, menu) {
+  let d = 0, x = SEA.x;
+  if (!menu && (G.state === 'play' || G.state === 'replay')) {
+    const mine = G.mode === 'online' ? [myPlayer(W)] : W.players;
+    for (const p of mine) {
+      if (!p || !p.alive || p.on >= 0 || p.y > 4 || ledgeUnder(W, p.x, p.y)) continue;
+      const h = p.y - F.sea, low = Math.max(0, Math.min(1, (3.2 - h) / 2.6));
+      const soon = p.vy < -0.5 ? Math.max(0, Math.min(1, 1.3 - h / -p.vy)) : 0;   // under ~1.3 s from the water at this rate
+      const k = Math.max(low * (p.vy < -0.5 ? 1 : p.vy < 1.5 ? 0.55 : 0.2), soon);
+      if (k > d) { d = k; x = p.x; }
+    }
+  }
+  SEA.d += (d - SEA.d) * Math.min(1, dt * (d > SEA.d ? 12 : 5)); SEA.x = x;
+  if (SEA.d > 0.45 && G.state === 'play') {
+    SEA.beat -= dt;
+    if (SEA.beat <= 0) { A.pulse(0.18 + SEA.d * 0.3, 0.9 + SEA.d * 0.35); SEA.beat = 0.42 - SEA.d * 0.2; SEA.glow = 1; }
+  } else SEA.beat = 0;
+  // a red glow up from the bottom of the screen that throbs with the pulse
+  SEA.glow = Math.max(0, SEA.glow - dt * 5);
+  const o = Math.round(Math.min(1, SEA.d * (0.7 + SEA.glow * 0.3)) * (CALM.on ? 0.55 : 1) * 50) / 50;
+  if (o !== SEA.shown) { SEA.shown = o; $('seaglow').style.opacity = o; }
+  return SEA;
 }
 // ambient beds: storm wind (louder up high), surf (louder near the sea), the rush of a fast dive, the Stormhunter's engine
 function ambience(W, menu) {
@@ -1105,7 +1140,7 @@ async function boot() {
   $('loading').style.opacity = '0';
   setTimeout(() => $('loading').remove(), 700);
   toTitle();
-  if (params.has('test')) { const m = await import('./tests.js?v=11'); m.runTests(window.__lw); }
+  if (params.has('test')) { const m = await import('./tests.js?v=12'); m.runTests(window.__lw); }
   else if (params.has('playthrough')) { A.unlock(); startPlaythrough(); }
   else if (params.has('endless') && G.autopilot) { A.unlock(); startEndless(); }
   else if (G.autopilot) { A.unlock(); startCampaign(+params.get('sector') || 0); }

@@ -4,12 +4,12 @@
 // spire and its lightning, telegraph ribbons for every hazard and boss attack, HDR post with bloom.
 // Nothing here changes the world.
 import * as THREE from '../vendor/three.module.min.js';
-import { Post } from './post.js?v=11';
-import * as TX from './textures.js?v=11';
-import * as MD from './models.js?v=11';
-import { FX, CALM } from './fx.js?v=11';
-import { F, POWERUPS, BOSSES, HUNTER, LAYOUT, rockHang, rockDrop } from './config.js?v=11';
-import { weakPos, ledgeUnder } from './sim.js?v=11';
+import { Post } from './post.js?v=12';
+import * as TX from './textures.js?v=12';
+import * as MD from './models.js?v=12';
+import { FX, CALM } from './fx.js?v=12';
+import { F, POWERUPS, BOSSES, HUNTER, LAYOUT, rockHang, rockDrop } from './config.js?v=12';
+import { weakPos, ledgeUnder } from './sim.js?v=12';
 
 export { CALM };
 const RR = F.R, H = F.H;
@@ -742,17 +742,17 @@ export class Renderer {
     this.ghosts = this.ghosts.filter((G) => {
       if (G.wz === undefined) { G.wx = G.w * 0.6; G.wz = G.w; G.rx = G.rz = 0; G.solid = !!G.split; G.fadeAt = 1.6; G.fadeD = 0.6; }
       G.t += dt;
-      if (G.split && G.v.rider && !G.kn) this.throwKnight(G);
-      const K = G.kn;
+      if (G.split && G.v.rider && !G.parts) this.throwParts(G);
+      const PS = G.parts || [];
       this.fallBody(W, G, dt, G);
       this.place(G.outer, G.x, G.y, G.face);
       G.v.g.rotation.set(G.rx, -0.3, G.rz, 'YXZ');
-      if (K) { this.fallBody(W, K, dt, G); this.place(K.outer, K.x, K.y, G.face); G.v.rider.rotation.set(K.rx, 0, K.rz); }
-      for (const B of K ? [G, K] : [G]) if (B.y < 0.2 && !B.splashed) { B.splashed = true; toWorld(B.x, 0, _v); this.fx.splash(_v.x, 0, _v.z, B === K ? 0.7 : 1.2); }
+      for (const K of PS) { this.fallBody(W, K, dt, G); this.place(K.outer, K.x, K.y, G.face); K.joint.rotation.set(K.rx, K.ry || 0, K.rz); }
+      for (const B of [G, ...PS]) if (B.y < 0.2 && !B.splashed) { B.splashed = true; toWorld(B.x, 0, _v); this.fx.splash(_v.x, 0, _v.z, B === G ? 1.2 : B.kind === 'knight' ? 0.7 : 0.35); }
       const a = 1 - clamp((G.t - G.fadeAt) / G.fadeD, 0, 1);
       if (a < 1) this.fadeGhost(G, a);
-      if (a <= 0 || (G.y < -6 && (!K || K.y < -6))) {
-        this.scene.remove(G.outer); if (K) this.scene.remove(K.outer);
+      if (a <= 0 || [G, ...PS].every((B) => B.y < -6)) {
+        this.scene.remove(G.outer); for (const K of PS) this.scene.remove(K.outer);
         MD.release(G.v.g); return false;
       }
       return true;
@@ -773,18 +773,36 @@ export class Renderer {
     const CL = this.lightPool[0];
     CL.position.set(0, 49.5, 0); CL.intensity = 40 + charge * 400; CL.distance = 60; CL.color.set(this.look.spire);
   }
-  // the knight is thrown clear of the saddle: his joints move to a frame of their own (the skinned meshes follow
-  // their joints wherever they are), so he can fall, land and settle apart from his skyray
-  throwKnight(G) {
-    const outer = new THREE.Group(), r = G.v.rider;
-    outer.matrixAutoUpdate = false; this.scene.add(outer);
-    outer.add(r); r.position.set(0, 0, 0);
-    G.kn = { outer, x: G.x - 0.06 * G.face, y: G.y + 0.86, vx: G.vx - G.face * 1.8, vy: G.vy + 2.6, rx: 0, rz: 0,
-      wx: (Math.random() - 0.5) * 3, wz: 5 + Math.random() * 2, solid: true, knight: true };
+  sfx() { /* main.js points this at the game's 3D audio: (name, x, y, opts) */ }
+  // the jouster breaks apart: the knight is thrown clear of the saddle and loses his lance and shield. Each of those
+  // joints moves to a frame of its own (the skinned meshes follow their joints wherever they are), starting where it
+  // was, so each piece can fly, land and settle apart from the skyray
+  throwParts(G) {
+    this.place(G.outer, G.x, G.y, G.face);
+    G.v.g.rotation.set(0, -0.3, 0, 'YXZ');
+    G.outer.updateMatrixWorld(true);
+    G.v.g.traverse((o) => { if (o.isSkinnedMesh) o.frustumCulled = false; });   // the pieces end up metres apart
+    const f = G.face, rnd = () => Math.random() - 0.5;
+    const spec = [
+      ['knight', G.v.rider, -1.8 * f + rnd() * 1.5, 2.6, rnd() * 3, 5 + Math.random() * 2],
+      ['lance', G.v.lance, 3.2 * f + rnd() * 2, 4.2 + Math.random() * 1.5, rnd() * 2, (Math.random() < 0.5 ? -1 : 1) * (7 + Math.random() * 4)],
+      ['shield', G.v.shield, -0.8 * f + rnd() * 2.5, 3.4 + Math.random() * 1.2, (Math.random() < 0.5 ? -1 : 1) * (6 + Math.random() * 3), rnd() * 4],
+    ];
+    G.parts = [];
+    // where each piece is, read before any of them leaves the hierarchy (the lance and shield hang off the knight)
+    const at = spec.map(([, joint]) => joint && joint.getWorldPosition(new THREE.Vector3()));
+    spec.forEach(([kind, joint, dvx, dvy, wx, wz], i) => {
+      if (!joint) return;
+      const w = at[i], th = Math.atan2(w.x, w.z), x = ((th * RR) % F.C + F.C) % F.C;
+      const outer = new THREE.Group();
+      outer.matrixAutoUpdate = false; this.scene.add(outer);
+      outer.add(joint); joint.position.set(0, 0, 0); joint.rotation.set(0, 0, 0);
+      G.parts.push({ kind, joint, outer, x, y: w.y, vx: G.vx + dvx, vy: G.vy + dvy, rx: 0, rz: 0, wx, wz, solid: true });
+    });
   }
   // one falling piece of an unhorsed jouster (render only; the sim has moved on). hr: how high its origin sits above
-  // whatever it lies on (a skyray belly down sits low, on its back high; a knight lies flat)
-  bodyHr(B) { return B.knight ? 0.24 : 0.39 - 0.37 * Math.cos(B.rx) * Math.cos(B.rz); }
+  // whatever it lies on (a skyray belly down sits low, on its back high; a knight lies flat; a lance or shield flatter)
+  bodyHr(B) { return B.kind === 'knight' ? 0.24 : B.kind ? 0.05 : 0.39 - 0.37 * Math.cos(B.rx) * Math.cos(B.rz); }
   fallBody(W, B, dt, G) {
     if (B.L) {   // at rest: it slides to a stop and settles into a heap, and falls on if the ledge goes or it slides off
       const L = B.L;
@@ -825,19 +843,28 @@ export class Renderer {
     }
     return false;
   }
-  // a hard landing bounces once; then it comes to rest flat (a skyray on its belly or its back, a knight on his
-  // side), throws up a little dust, and the whole jouster starts to fade
+  // a hard landing bounces once (a lance or shield clatters twice); then it comes to rest flat (a skyray on its belly
+  // or its back, a knight on his side, a lance along the ledge, a shield face down or up), throws up a little dust
+  // with a thud or a clank, and the whole jouster starts to fade
   landBody(B, L, G) {
     toWorld(B.x, L.y + 0.1, _v);
-    this.fx.dust(_v.x, _v.y, _v.z, { n: B.knight ? 6 : 10, s0: 0.3, s1: 1.1, life: 0.7, vy: 1.2, up: 1, jit: 0.8, a: 0.5, k: 1.4, grav: 2 });
-    if (B.vy < -5 && !B.bounced) {
-      B.bounced = true; B.vy = -B.vy * 0.28; B.vx *= 0.6; B.wx *= 0.4; B.wz *= 0.4;
+    const kind = B.kind || 'mount', hard = Math.min(1, -B.vy / 12);
+    this.fx.dust(_v.x, _v.y, _v.z, { n: kind === 'mount' ? 10 : kind === 'knight' ? 6 : 3, s0: 0.3, s1: kind === 'mount' ? 1.1 : 0.7, life: 0.7, vy: 1.2, up: 1, jit: 0.8, a: 0.5, k: 1.4, grav: 2 });
+    if (kind === 'mount') this.sfx('land', B.x, L.y, { vol: 0.3 + hard * 0.45, rate: 0.72, gap: 0.08 });
+    else if (kind === 'knight') { this.sfx('land', B.x, L.y, { vol: 0.2 + hard * 0.25, rate: 0.95, gap: 0.08 }); this.sfx('block', B.x, L.y, { vol: 0.16 + hard * 0.2, rate: 0.62, gap: 0.08, delay: 0.02 }); }
+    else this.sfx('clang', B.x, L.y, { vol: 0.08 + hard * 0.2, rate: kind === 'lance' ? 1.5 : 1.25, gap: 0.05, vary: 0.25 });
+    const bounces = kind === 'lance' || kind === 'shield' ? 2 : 1;
+    if (B.vy < -3 && (B.bounced || 0) < bounces) {
+      B.bounced = (B.bounced || 0) + 1; B.vy = -B.vy * (kind === 'mount' || kind === 'knight' ? 0.28 : 0.35); B.vx *= 0.6; B.wx *= 0.5; B.wz *= 0.5;
       B.y = L.y + this.bodyHr(B) + 0.02;
       return;
     }
     B.L = L; B.vy = 0; B.wx = B.wz = 0;
-    if (B.knight) { B.tz = Math.round(B.rz / Math.PI) * Math.PI; B.tx = Math.PI / 2 + Math.round((B.rx - Math.PI / 2) / Math.PI) * Math.PI; }   // on his side, lance flat
-    else { B.tz = Math.round(B.rz / Math.PI) * Math.PI; B.tx = Math.round(B.rx / Math.PI) * Math.PI + (Math.random() - 0.5) * 0.3; }
+    const nearest = (a, o, s) => o + Math.round((a - o) / s) * s;
+    if (kind === 'knight') { B.tz = nearest(B.rz, 0, Math.PI); B.tx = nearest(B.rx, Math.PI / 2, Math.PI); }   // on his side
+    else if (kind === 'lance') { B.tz = nearest(B.rz, 0, Math.PI); B.tx = nearest(B.rx, 0, Math.PI); }
+    else if (kind === 'shield') { B.tz = nearest(B.rz, Math.PI / 2, Math.PI); B.tx = nearest(B.rx, 0, Math.PI); }   // its face to the ledge
+    else { B.tz = nearest(B.rz, 0, Math.PI); B.tx = nearest(B.rx, 0, Math.PI) + (Math.random() - 0.5) * 0.3; }
     if (!G.landed) {
       G.landed = true;
       const a0 = 1 - clamp((G.t - G.fadeAt) / G.fadeD, 0, 1);
@@ -855,7 +882,7 @@ export class Renderer {
         const m = o.material.clone(); m.transparent = true;
         G.fade.push([o, m, o.material.opacity]); o.material = m; o.frustumCulled = false;
       };
-      G.outer.traverse(grab); if (G.kn) G.kn.outer.traverse(grab);
+      G.outer.traverse(grab); for (const K of G.parts || []) K.outer.traverse(grab);
     }
     for (const [o, m, b] of G.fade) { m.opacity = b * a; if (a < 0.5) o.castShadow = false; }
   }
@@ -902,6 +929,23 @@ export class Renderer {
     V.v.tail.rotation.y = Math.sin(t * 5) * 0.2;
     V.v.eye.scale.setScalar(1 + Math.sin(t * 20) * 0.2);
   }
+  // a hit knocks the boss back from the blow (a damped spring, render only: the sim body does not move) and makes it
+  // flinch: a jolt of its body, wings and head, and a brief squash
+  bossKick(W, e, k) {
+    const V = this.bossV, B = W.boss;
+    if (!V || !B) return;
+    const dir = Math.sign(dXr(e.x, B.x)) || 1, below = e.y > B.y ? -1 : 0.4;
+    V.rvx = (V.rvx || 0) + dir * 12 * k; V.rvy = (V.rvy || 0) + below * 8 * k;
+    V.flv = (V.flv || 0) + 14 * k; V.fdir = dir;
+  }
+  bossRecoil(V, dt) {
+    const s = Math.min(dt, 1 / 30);
+    for (const [p, v] of [['rx', 'rvx'], ['ry', 'rvy'], ['fl', 'flv']]) {
+      V[v] = (V[v] || 0) + (-(V[p] || 0) * 140 - V[v] * 13) * s;
+      V[p] = (V[p] || 0) + V[v] * s;
+    }
+    V.rx = clamp(V.rx, -1.6, 1.6); V.ry = clamp(V.ry, -1.2, 1.2); V.fl = clamp(V.fl, -0.6, 0.9);
+  }
   syncBoss(W, dt, t) {
     const B = W.boss;
     if (!B) { if (this.bossV) { this.scene.remove(this.bossV.outer); this.bossV = null; } return; }
@@ -916,6 +960,9 @@ export class Renderer {
     }
     const V = this.bossV, v = V.v;
     const hit = B.hitT > 0 ? 1 + B.hitT * 0.15 : 1;
+    this.bossRecoil(V, dt);
+    const rcx = V.rx || 0, rcy = V.ry || 0, fl = V.fl || 0;
+    if (V.s0 === undefined) V.s0 = v.g.scale.x;
     if (B.key === 'leviathan') {
       if (!V.segLane) { V.segLane = B.seg.map(() => 0); V.segPrev = B.seg.map((s) => [s.x, s.y]); }
       const k = Math.min(1, dt * 7);
@@ -935,7 +982,8 @@ export class Renderer {
         tangent(s.x, _v).multiplyScalar(dx / l).addScaledVector(UP, dy / l).normalize();
         radial(s.x, _v2);
         _v3.crossVectors(_v2, _v).normalize();
-        _m.makeBasis(_v, _v3, _v2); toWorld(s.x, s.y, _v3, V.segLane[i]); _m.setPosition(_v3);
+        const kr = Math.max(0, 1 - i / 6);
+        _m.makeBasis(_v, _v3, _v2); toWorld(s.x + rcx * kr, s.y + rcy * kr, _v3, V.segLane[i]); _m.setPosition(_v3);
         m.matrix.copy(_m); m.matrixWorldNeedsUpdate = true;
         m.visible = s.y > -3.5;
       });
@@ -944,13 +992,17 @@ export class Renderer {
     }
     const mirror = B.key !== 'colossus';
     V.turn += clamp((mirror ? B.face : 1) - V.turn, -dt * 4, dt * 4);
-    this.place(V.outer, B.x, B.y, Math.abs(V.turn) < 0.1 ? Math.sign(V.turn || 1) * 0.1 : V.turn, V.lane);
-    v.g.rotation.set(0, B.key === 'colossus' ? 0 : -0.2, B.key === 'colossus' ? 0 : clamp(B.vy * 0.04, -0.3, 0.3), 'YXZ');
+    this.place(V.outer, B.x + rcx, B.y + rcy, Math.abs(V.turn) < 0.1 ? Math.sign(V.turn || 1) * 0.1 : V.turn, V.lane);
+    // the flinch: pitched back from the blow, rolled a little, squashed for an instant
+    const fd = (V.fdir || 1) * Math.sign(V.turn || 1);
+    v.g.rotation.set(fl * 0.18, B.key === 'colossus' ? 0 : -0.2, (B.key === 'colossus' ? 0 : clamp(B.vy * 0.04, -0.3, 0.3)) + fl * 0.32 * fd, 'YXZ');
+    v.g.scale.set(V.s0 * (1 + fl * 0.06), V.s0 * (1 - fl * 0.09), V.s0 * (1 + fl * 0.06));
     if (B.st === 'down') { v.g.rotation.z += B.t * 0.1; }
-    const flap = B.key === 'colossus' ? 0 : Math.sin(t * (B.key === 'gale' ? 2.2 : 3)) * (B.key === 'sovereign' ? 0.25 : 0.4);
+    const flap = B.key === 'colossus' ? 0 : Math.sin(t * (B.key === 'gale' ? 2.2 : 3)) * (B.key === 'sovereign' ? 0.25 : 0.4) + fl * 0.6;
     if (v.wingR) { v.wingR.rotation.x = -flap; v.wingL.rotation.x = flap; }
     if (v.tipR) { v.tipR.rotation.x = -flap * 0.6; v.tipL.rotation.x = flap * 0.6; }
-    if (v.tail) v.tail.rotation.y = Math.sin(t * 1.5) * 0.15;
+    if (v.tail) v.tail.rotation.y = Math.sin(t * 1.5) * 0.15 + fl * 0.4;
+    if (v.head && B.key !== 'colossus') { v.head.rotation.x = fl * 0.25; v.head.rotation.z = fl * 0.3; }
     v.pts.forEach((g, i) => {
       const q = B.pts[i];
       if (!q) return;
@@ -962,7 +1014,8 @@ export class Renderer {
     if (B.key === 'colossus' && v.armR) {
       const c = B.cur, raise = c && c.kind === 'slam' ? (c.t < c.T ? Math.min(1, c.t / (c.T * 0.7)) : Math.max(0, 1 - (c.t - c.T) * 4)) : 0;
       v.armR.rotation.x = 0; v.armR.rotation.z = raise * 2.2;
-      v.armL.rotation.z = -Math.sin(t * 0.8) * 0.1;
+      v.armL.rotation.z = -Math.sin(t * 0.8) * 0.1 - fl * 0.5;
+      v.armR.rotation.z += fl * 0.3;
       if (v.head) v.head.rotation.y = Math.sin(t * 0.5) * 0.3;
     }
     if (v.halo) { v.halo.position.set(0, 2.2, -2.4); v.halo.rotation.set(0, Math.PI / 2, 0); v.halo.scale.setScalar(1 + Math.sin(t) * 0.04); }
@@ -1074,9 +1127,11 @@ export class Renderer {
       case 'arc': this.lightning([[e.x, e.y], [e.x + e.dx, e.y + e.dy]], 0xd8e8ff, 0.6, 0.3); P(e.x + e.dx, e.y + e.dy); fx.sparks(_v.x, _v.y, _v.z, { n: 12, speed: 6, r: 0.8, g: 0.9, b: 1 }); break;
       case 'slam': P(e.x, e.y + 0.2); fx.debris(_v.x, _v.y, _v.z, { n: 14, speed: 7, size: 0.3 }); fx.sparks(_v.x, _v.y, _v.z, { n: 30, speed: 9 }); fx.dust(_v.x, _v.y, _v.z, { n: 12, s0: 1, s1: 3.5, life: 2.4, spread: e.w * 2 }); this.trauma = Math.min(1, this.trauma + 0.5); this.shock(e.x, e.y, 1); break;
       case 'gust': this.shock(e.x, e.y, 1.4); this.ring3(e.x, e.y, 6, 0xd8e8ff); break;
-      case 'bosshit': P(e.x, e.y, 0.3 + this.bossLaneAt(W.boss, null, e.x)); fx.sparks(_v.x, _v.y, _v.z, { n: 36, speed: 10, r: 1, g: 0.8, b: 0.5 }); fx.flash(_v.x, _v.y, _v.z, 40, 0xffd0a0, 0.25); this.shock(e.x, e.y, 0.9); this.trauma = Math.min(1, this.trauma + 0.35); break;
+      case 'bosshit': this.bossKick(W, e, 1); P(e.x, e.y, 0.3 + this.bossLaneAt(W.boss, null, e.x)); fx.sparks(_v.x, _v.y, _v.z, { n: 36, speed: 10, r: 1, g: 0.8, b: 0.5 }); fx.flash(_v.x, _v.y, _v.z, 40, 0xffd0a0, 0.25); this.shock(e.x, e.y, 0.9); this.trauma = Math.min(1, this.trauma + 0.35); break;
       case 'wpdown': P(e.x, e.y); fx.explode(_v.x, _v.y, _v.z, 2, { metal: true }); this.trauma = Math.min(1, this.trauma + 0.6); this.flashScreen(0.25, 0xffe0c0); break;
       case 'bossdown': this.bossFinale(e, W); break;
+      case 'wpdown': this.bossKick(W, e, 2.2); break;
+      case 'bossphase': this.bossKick(W, { x: W.boss ? W.boss.x : 0, y: W.boss ? W.boss.y + 2 : 0 }, 1.6); break;
       case 'hunterdown': P(e.x, e.y + 0.8); fx.explode(_v.x, _v.y, _v.z, 2, { metal: true, color: 0xff6a40 }); this.trauma = Math.min(1, this.trauma + 0.5); break;
       case 'crumble': P(e.x, e.y - 0.5); fx.debris(_v.x, _v.y, _v.z, { n: 20, speed: 4, size: 0.4, sp: 3 }); fx.dust(_v.x, _v.y, _v.z, { n: 14, s0: 1.2, s1: 4, life: 3, spread: 5 }); break;
       case 'shatter': P(e.x, e.y); if (e.kind === 'blob') fx.fire(_v.x, _v.y, _v.z, { n: 8, s: 0.8 }); else fx.sparks(_v.x, _v.y, _v.z, { n: 14, speed: 6, r: e.kind === 'orb' ? 0.7 : 0.8, g: e.kind === 'orb' ? 0.4 : 0.95, b: 1 }); if (e.sea) fx.splash(_v.x, 0, _v.z, 0.6); break;
@@ -1261,6 +1316,10 @@ export class Renderer {
     }
     for (const c of this.cols) if (c.visible) c.material.uniforms.uTime.value = t;
     this.halo.rotation.z = t * 0.2;
+    if ((p.sea || 0) > 0.15 && Math.random() < dt * 36 * p.sea) {   // spray off the swell under a rider dropping toward it
+      toWorld(p.seaX + (Math.random() - 0.5) * 1.6, 0.1, _v, (Math.random() - 0.5) * 0.8);
+      this.fx.splash(_v.x, 0, _v.z, 0.25 + p.sea * 0.35);
+    }
     this.flash.w = Math.max(0, this.flash.w - dt * (this.flashK || 3)); this.hurtT = Math.max(0, (this.hurtT || 0) - dt * 1.4);
     const shocks = [];
     for (const s of this.shocks) {
@@ -1273,8 +1332,8 @@ export class Renderer {
     this.shocks = this.shocks.filter((s) => s.t < s.max);
     const L = this.look;
     this.post.render(this.scene, this.camera, {
-      bloom: L.bloom * (p.bloom ?? 1), threshold: 1.1, exposure: L.exposure * (p.exposure ?? 1), chroma: 0.0016 + (p.slow ? 0.003 : 0), time: t, desat: (p.desat || 0) + (p.slow ? 0.25 : 0), fade: p.fade || 0, vignette: (p.slow ? 0.6 : 0.42) + (this.hurtT || 0) * (CALM.on ? 0.1 : 0.3),
-      flash: this.flash, tint: p.slow ? _tint.set(L.grade[0] * 0.95, L.grade[1] * 0.92, L.grade[2] * 1.15) : _tint.set(...L.grade), shocks, lens: [],
+      bloom: L.bloom * (p.bloom ?? 1), threshold: 1.1, exposure: L.exposure * (p.exposure ?? 1), chroma: 0.0016 + (p.slow ? 0.003 : 0), time: t, desat: (p.desat || 0) + (p.slow ? 0.25 : 0), fade: p.fade || 0, vignette: (p.slow ? 0.6 : 0.42) + (this.hurtT || 0) * (CALM.on ? 0.1 : 0.3) + (p.sea || 0) * (CALM.on ? 0.15 : 0.4),
+      flash: this.flash, tint: p.slow ? _tint.set(L.grade[0] * 0.95, L.grade[1] * 0.92, L.grade[2] * 1.15) : _tint.set(L.grade[0] * (1 + (p.sea || 0) * 0.22), L.grade[1] * (1 - (p.sea || 0) * 0.14), L.grade[2] * (1 - (p.sea || 0) * 0.16)), shocks, lens: [],
     });
   }
 

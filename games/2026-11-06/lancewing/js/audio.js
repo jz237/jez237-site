@@ -9,7 +9,7 @@ const SFX = ['flap', 'clang', 'block', 'unhorse', 'boomS', 'boomM', 'boomL', 'de
   'uimove', 'uiok', 'uiback', 'rewind', 'wind', 'surf', 'rush'];
 const VOICE = ['begin', 's2', 's3', 's4', 's5', 'boss', 'bossdown', 'clear', 'lastlife', 'gameover', 'newrecord', 'champion'];
 export const MUSIC = new Set(['title', 's1', 's2', 's3', 's4', 's5', 'boss', 'clear', 'over']);
-const V = '?v=11';
+const V = '?v=12';
 
 export class Audio {
   constructor(base) {
@@ -122,6 +122,15 @@ export class Audio {
     h.gain.gain.setTargetAtTime(vol * h.base, t, 0.08);
     if (rate) h.src.playbackRate.setTargetAtTime(rate * this.rate, t, 0.1);
     if (h.pan.positionX) { h.pan.positionX.setTargetAtTime(x, t, 0.03); h.pan.positionY.setTargetAtTime(y, t, 0.03); h.pan.positionZ.setTargetAtTime(z, t, 0.03); }
+  }
+  // a short low thump made on the spot (the sea warning's heartbeat): a falling sine with a soft click on top
+  pulse(vol = 0.3, pitch = 1) {
+    if (!this.ctx) return;
+    const c = this.ctx, t = c.currentTime;
+    const o = c.createOscillator(), g = c.createGain();
+    o.type = 'sine'; o.frequency.setValueAtTime(92 * pitch, t); o.frequency.exponentialRampToValueAtTime(48 * pitch, t + 0.16);
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(vol, t + 0.012); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.22);
+    o.connect(g).connect(this.sfxBus); o.start(t); o.stop(t + 0.25);
   }
   // a non-positional ambient bed (wind, surf, dive rush) whose level is driven every frame
   bed(key, name) {
