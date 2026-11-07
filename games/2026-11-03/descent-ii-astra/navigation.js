@@ -45,14 +45,14 @@
     window.releaseFlightMouse?.();window.Module?._astra_reset_flight_input?.();
     const net=window.Module?.netSession;
     q('returnDescription').textContent=net
-      ?(net.self===0?'Leaving ends this room for everyone. ':'You will leave this match. ')+'You can start another campaign or match from the main menu.'
-      :'Unsaved flight progress will be lost. To keep it, go back and choose Save game in the Flight menu. Your settings and existing saves are kept.';
+      ?'You will leave this match. Hosting transfers to another connected pilot. You can start another campaign or match from the main menu.'
+      :'Choose Save & return to continue this flight later, or Main menu to leave without saving this flight. Your settings and existing saves are kept.';
     q('returnStatus').textContent='';
     if(ask){if(!dialog.open)dialog.showModal();}else void leave();
   }
   window.astraNavigation={home,get busy(){return busy;}};
   q('returnCancel').onclick=()=>dialog.close();q('returnConfirm').onclick=()=>void leave();
-  dialog.addEventListener('cancel',e=>{if(busy)e.preventDefault();});
+  dialog.addEventListener('cancel',e=>{if(busy||window.astraResume?.pending)e.preventDefault();});
   for(const type of ['keydown','keyup'])dialog.addEventListener(type,e=>e.stopPropagation());
   const main=document.createElement('button');main.id='nativeHome';main.textContent='Main menu';
   main.onclick=()=>home();q('nativeBack').after(main);

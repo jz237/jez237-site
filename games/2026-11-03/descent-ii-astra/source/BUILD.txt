@@ -1244,3 +1244,11 @@ R53 — in-game navigation
 - Multiplayer has options, priorities, controller setup, roster and Resume while the room continues running.
 - Main menu confirms flight/room departure, flushes pilot settings and saves, and disposes the old runtime before a new campaign, demo or match starts inside the same browser page.
 - One same-origin game frame at a time; pointer lock remains gesture controlled. No game content or graphics quality changes.
+
+R54 — flight continuity, wingmen and comfort
+- Save & return to menu writes a separate rotating suspend snapshot; Continue last flight restores Original, Vertigo or Overload without overwriting manual saves/checkpoints.
+- Four-pilot rooms transfer host authority without changing player slots. A temporary disconnect reserves the same ship for 90 seconds, with a private reconnect credential and native world synchronization. Leaving deliberately frees the slot. Reopening/reloading the browser is a fresh join.
+- Co-op wingmen accept Follow, Cover, Attack my visible target and Regroup, from buttons or Alt+1 through Alt+4. Alt+H requests assistance; a compact squad display shows shields, distance, connection latency and visible friendly markers.
+- Optional nearby explosion glare, Earthshaker/reactor screen shake and demo turn smoothing sliders preserve previous defaults. Manual flight gains and texture quality remain unchanged.
+- A 45-second live demo performance check measures loading, frame pacing and stutters, then offers suggestions without changing graphics settings.
+- R54 public rooms have a separate protocol directory; previous room clients retain their existing protocol. Relay remains on Workers Free with the existing namespaces.

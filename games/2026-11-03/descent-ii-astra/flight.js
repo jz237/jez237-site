@@ -263,7 +263,7 @@ $("previewClose").onclick=()=>window.astraPreview.close();
 
 async function launch(quick,demo=false,encounter=false,preview=false,autopilot=false,inspect=false,weapons=false,mine=false) {
   if(launchPending)return;
-  launchPending=true;window.astraTerminal?.loading(true);
+  launchPending=true;window.astraBench?.begin();window.astraTerminal?.loading(true);
   const buttons=document.querySelectorAll(".launch");
   buttons.forEach(el=>el.disabled=true);
   try {
@@ -313,6 +313,7 @@ async function launch(quick,demo=false,encounter=false,preview=false,autopilot=f
     const quality=Number($("res").value);
     const height=Math.round(quality*9/16);
     window.Module={
+      resumeFlight:!!window.astraResumeLast,comfort:window.astraTools?.comfort,
       resumeCheckpoint:!!window.astraResumeCheckpoint,checkpoints:document.getElementById("checkpoints").checked,
       netSession:window.astraNet?.session||null,
       canvas,quick,demo,encounter,autopilot,openWeaponPriorities,shadowQuality:Number($("shadowQuality").value),combatInspect:window.astraCombatPending??-1,assetDepot,loadMovie,fastLaunch:true,blastInspect:preview?firstBlastProfile:0,mineInspect:mine?0:-1,mineInspectZoom:1,demoArsenal:autopilot&&$("demoArsenal").checked,weaponInspect:weapons?0:-1,difficulty:Number($("difficulty").value),mobileDemo:autopilot&&astraTouch,autoPaused:false,startLevel:mine?Number($("mineLevel").value):autopilot?Number($("demoLevel").value):1,pickupInspect:inspect?0:-1,pyroPreviewCommand:preview?1:0,campaign,wideHud:$("wideHud").checked,intro:!openWeaponPriorities && !quick && !demo && $("intro").checked,astra, arguments:["-hogdir","/mine","-pilot",autopilot?"watch":"astra","-window","-nostickykeys","-nojoystick",
@@ -336,6 +337,7 @@ async function launch(quick,demo=false,encounter=false,preview=false,autopilot=f
         Module.addRunDependency("pilot");
         F.syncfs(true,err=>{
           Module.saveReady=!err;window.astraProgress?.mounted();
+          if(window.astraResume?.mounted()===false){astraFail("Your last flight is unavailable in browser storage. Return to the title to choose a campaign or a manual save.");return;}
           let cfg="";
           const name=save+"/descent.cfg";
           if(F.analyzePath(name).exists) cfg=F.readFile(name,{encoding:"utf8"});
@@ -353,7 +355,7 @@ async function launch(quick,demo=false,encounter=false,preview=false,autopilot=f
         setInterval(syncPilot,3000);
       }
     };
-    await script("engine.js?v=pyre53");
+    await script("engine.js?v=pyre54");
   } catch(e) {console.error(e);astraFail(e.message);}
 }
 

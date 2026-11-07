@@ -780,6 +780,21 @@ index b32d6e4..1ce099a 100644
  
  }
  
+diff --git a/d2/main/cntrlcen.c b/d2/main/cntrlcen.c
+index 522a2b7..482b177 100644
+--- a/d2/main/cntrlcen.c
++++ b/d2/main/cntrlcen.c
+@@ -178,8 +178,8 @@ void do_countdown_frame()
+ 
+ 	if (d_tick_step)
+ 	{
+-		ConsoleObject->mtype.phys_info.rotvel.x += (fixmul(d_rand() - 16384, 3*F1_0/16 + (F1_0*(16-fc))/32))/div_scale;
+-		ConsoleObject->mtype.phys_info.rotvel.z += (fixmul(d_rand() - 16384, 3*F1_0/16 + (F1_0*(16-fc))/32))/div_scale;
++		ConsoleObject->mtype.phys_info.rotvel.x += fixmul((fixmul(d_rand() - 16384, 3*F1_0/16 + (F1_0*(16-fc))/32))/div_scale,EM_ASM_INT(return Math.round(65536*Math.max(0,Math.min(1,Module.comfort?.shake??1)))));
++		ConsoleObject->mtype.phys_info.rotvel.z += fixmul((fixmul(d_rand() - 16384, 3*F1_0/16 + (F1_0*(16-fc))/32))/div_scale,EM_ASM_INT(return Math.round(65536*Math.max(0,Math.min(1,Module.comfort?.shake??1)))));
+ 	}
+ 	//	Hook in the rumble sound effect here.
+ 
 diff --git a/d2/main/collide.c b/d2/main/collide.c
 index fdb2e78..55652ae 100644
 --- a/d2/main/collide.c
@@ -1197,7 +1212,7 @@ index 535d1ae..221fafc 100644
 +
 +#include "overload_fields.inc"
 diff --git a/d2/main/game.c b/d2/main/game.c
-index f15d413..72f8e69 100644
+index f15d413..c550fb7 100644
 --- a/d2/main/game.c
 +++ b/d2/main/game.c
 @@ -1108,6 +1108,20 @@ void game_render_frame();
@@ -1248,7 +1263,7 @@ index f15d413..72f8e69 100644
  				stop_time();
  
  			if (!((Game_mode & GM_MULTI) && (Newdemo_state != ND_STATE_PLAYBACK)))
-@@ -1157,15 +1178,26 @@ int game_handler(window *wind, d_event *event, void *data)
+@@ -1157,15 +1178,28 @@ int game_handler(window *wind, d_event *event, void *data)
  		case EVENT_KEY_COMMAND:
  		case EVENT_KEY_RELEASE:
  		case EVENT_IDLE:
@@ -1256,6 +1271,8 @@ index f15d413..72f8e69 100644
  			return ReadControls(event);
  
  		case EVENT_WINDOW_DRAW:
++            {extern int astra_net_reconnect(void);if(astra_net_reconnect())break;}
++            if(EM_ASM_INT(return !!Module.netReconnecting))break;
 +            {extern int astra_progress_command(void);if(astra_progress_command())break;}
 +            if(EM_ASM_INT({var c=Module.menuCommand||0;Module.menuCommand=0;return c;})){astra_pause_open();break;}
 +            if(astra_auto_enabled()){
@@ -1275,7 +1292,7 @@ index f15d413..72f8e69 100644
  			}
  
  			if (!Automap_active)		// efficiency hack
-@@ -1202,7 +1234,10 @@ int game_handler(window *wind, d_event *event, void *data)
+@@ -1202,7 +1236,10 @@ int game_handler(window *wind, d_event *event, void *data)
  #endif
  				show_menus();
  			Game_wind = NULL;
@@ -1287,7 +1304,7 @@ index f15d413..72f8e69 100644
  			key_toggle_repeat(1);
  			break;
  
-@@ -1306,6 +1341,8 @@ void game_leave_menus(void)
+@@ -1306,6 +1343,8 @@ void game_leave_menus(void)
  
  void GameProcessFrame(void)
  {
@@ -1296,7 +1313,7 @@ index f15d413..72f8e69 100644
  	fix player_shields = Players[Player_num].shields;
  	int player_was_dead = Player_is_dead;
  
-@@ -1409,7 +1446,10 @@ void GameProcessFrame(void)
+@@ -1409,7 +1448,10 @@ void GameProcessFrame(void)
  
  		Players[Player_num].homing_object_dist = -1;		//	Assume not being tracked.  Laser_do_weapon_sequence modifies this.
  
@@ -1307,7 +1324,7 @@ index f15d413..72f8e69 100644
  		powerup_grab_cheat_all();
  
  		if (Endlevel_sequence)	//might have been started during move
-@@ -1713,6 +1753,7 @@ void FireLaser()
+@@ -1713,6 +1755,7 @@ void FireLaser()
  	if ((Players[Player_num].primary_weapon == FUSION_INDEX) && (Global_laser_firing_count)) {
  		if ((Players[Player_num].energy < F1_0*2) && (Auto_fire_fusion_cannon_time == 0)) {
  			Global_laser_firing_count = 0;
@@ -1315,7 +1332,7 @@ index f15d413..72f8e69 100644
  		} else {
  			static fix64 Fusion_next_sound_time = 0;
  			int flash_val;
-@@ -1731,7 +1772,16 @@ void FireLaser()
+@@ -1731,7 +1774,16 @@ void FireLaser()
  
  			flash_val = !(Game_mode & GM_MULTI) || !Netgame.ReducedFlash ? Fusion_charge >> 11 :
  				PaletteRedAdd < 10 ? 10 - PaletteRedAdd : 0;
@@ -2060,29 +2077,57 @@ index 33bd8ca..5a9a4b9 100644
  }
 +
 diff --git a/d2/main/multi.c b/d2/main/multi.c
-index f2e3dc5..3856a4e 100644
+index f2e3dc5..a2a151d 100644
 --- a/d2/main/multi.c
 +++ b/d2/main/multi.c
-@@ -4905,6 +4905,7 @@ int multi_delete_extra_objects()
+@@ -2707,6 +2707,7 @@ multi_do_remobj(const ubyte *buf)
+ 
+ void multi_disconnect_player(int pnum)
+ {
++    extern int astra_net_active;
+ 	int i, n = 0;
+ 
+ 	if (!(Game_mode & GM_NETWORK))
+@@ -2768,7 +2769,7 @@ void multi_disconnect_player(int pnum)
+ 			break;
+ 	}
+ 
+-	if (pnum == multi_who_is_master()) // Host has left - Quit game!
++	if (pnum == multi_who_is_master() && !astra_net_active) // Browser relay manages host handoff.
+ 	{
+ 		if (Network_status==NETSTAT_PLAYING)
+ 			multi_leave_game();
+@@ -4905,12 +4906,14 @@ int multi_delete_extra_objects()
  // Returns 1 if player is Master/Host of this game
  int multi_i_am_master(void)
  {
-+    extern int astra_net_active,astra_net_owner;if(astra_net_active)return astra_net_owner==0;
++    extern int astra_net_active,astra_net_owner,astra_net_host;if(astra_net_active)return astra_net_owner==astra_net_host;
  	return (Player_num == 0);
  }
  
+ // Returns the Player_num of Master/Host of this game
+ int multi_who_is_master(void)
+ {
++    extern int astra_net_active,astra_net_host;if(astra_net_active)return astra_net_host;
+ 	return 0;
+ }
+ 
 diff --git a/d2/main/net_udp.c b/d2/main/net_udp.c
-index c5cad64..c998ea8 100644
+index c5cad64..cf286ea 100644
 --- a/d2/main/net_udp.c
 +++ b/d2/main/net_udp.c
-@@ -355,8 +355,15 @@ void net_log_comment(char* comment) {
+@@ -355,8 +355,19 @@ void net_log_comment(char* comment) {
  }
  
  /* General UDP functions - START */
-+extern int astra_net_active,astra_net_humans,astra_net_count,astra_net_owner,astra_net_bot_skill[4];
++extern int astra_net_active,astra_net_humans,astra_net_count,astra_net_owner,astra_net_host,astra_net_bot_skill[4];
 +int astra_net_send(const void*,int,const struct sockaddr*);
 +int astra_net_receive(void*,int,struct _sockaddr*);
 +void astra_net_bot_positions(void);
++static int astra_host_slot(void){return astra_net_active?astra_net_host:0;}
++static int astra_peer_first(void){return astra_net_active&&astra_net_host!=0?0:1;}
++static int astra_peer_next(int i){return i+1+(astra_net_active&&i+1==astra_net_host);}
++
 +static int an_sync(void);
 +
  ssize_t dxx_sendto(int sockfd, const void *msg, int len, unsigned int flags, const struct sockaddr *to, socklen_t tolen)
@@ -2091,7 +2136,7 @@ index c5cad64..c998ea8 100644
  	net_log_log(1, msg, len, to, tolen); 
  
  	ssize_t rv = sendto(sockfd, msg, len, flags, to, tolen);
-@@ -395,6 +402,7 @@ void udp_traffic_stat()
+@@ -395,6 +406,7 @@ void udp_traffic_stat()
  // Resolve address
  int udp_dns_filladdr( char *host, int port, struct _sockaddr *sAddr )
  {
@@ -2099,7 +2144,7 @@ index c5cad64..c998ea8 100644
  	// Variables
  	struct addrinfo *result, hints;
  	char sPort[6];
-@@ -446,6 +454,7 @@ int udp_dns_filladdr( char *host, int port, struct _sockaddr *sAddr )
+@@ -446,6 +458,7 @@ int udp_dns_filladdr( char *host, int port, struct _sockaddr *sAddr )
  // Closes an existing udp socket
  void udp_close_socket(int socknum)
  {
@@ -2107,7 +2152,7 @@ index c5cad64..c998ea8 100644
  	if (UDP_Socket[socknum] != -1)
  	{
  #ifdef _WIN32
-@@ -460,6 +469,7 @@ void udp_close_socket(int socknum)
+@@ -460,6 +473,7 @@ void udp_close_socket(int socknum)
  // Open socket
  int udp_open_socket(int socknum, int port)
  {
@@ -2115,7 +2160,7 @@ index c5cad64..c998ea8 100644
  	int bcast = 1;
  
  	// close stale socket
-@@ -572,6 +582,7 @@ int udp_open_socket(int socknum, int port)
+@@ -572,6 +586,7 @@ int udp_open_socket(int socknum, int port)
  
  int udp_general_packet_ready(int socknum)
  {
@@ -2123,7 +2168,7 @@ index c5cad64..c998ea8 100644
  	fd_set set;
  	struct timeval tv;
  
-@@ -587,6 +598,7 @@ int udp_general_packet_ready(int socknum)
+@@ -587,6 +602,7 @@ int udp_general_packet_ready(int socknum)
  // Gets some text. Returns 0 if nothing on there.
  int udp_receive_packet(int socknum, ubyte *text, int len, struct _sockaddr *sender_addr)
  {
@@ -2131,7 +2176,34 @@ index c5cad64..c998ea8 100644
  	socklen_t clen = sizeof (struct _sockaddr);
  	ssize_t msglen = 0;
  
-@@ -1665,7 +1677,7 @@ void net_udp_init()
+@@ -822,7 +838,7 @@ int is_same_addr(struct _sockaddr *addr1, struct _sockaddr *addr2) {
+ }
+ 
+ int is_master_ip(struct _sockaddr addr) {
+-	return is_same_addr(&Netgame.players[0].protocol.udp.addr, &addr);
++	return is_same_addr(&Netgame.players[astra_host_slot()].protocol.udp.addr, &addr);
+ }
+ 
+ int is_player_ip(struct _sockaddr addr, int pnum) {
+@@ -1169,7 +1185,7 @@ static int manual_join_game_handler(newmenu *menu, d_event *event, direct_join *
+ 				dj->start_time = timer_query();
+ 				dj->last_time = 0;
+ 				
+-				memcpy((struct _sockaddr *)&Netgame.players[0].protocol.udp.addr, (struct _sockaddr *)&dj->host_addr, sizeof(struct _sockaddr));
++				memcpy((struct _sockaddr *)&Netgame.players[astra_host_slot()].protocol.udp.addr, (struct _sockaddr *)&dj->host_addr, sizeof(struct _sockaddr));
+ 				
+ 				dj->connecting = 1;
+ 				items[6].text = connecting_txt;
+@@ -1352,7 +1368,7 @@ int net_udp_list_join_poll( newmenu *menu, d_event *event, direct_join *dj )
+ 				dj->start_time = timer_query();
+ 				dj->last_time = 0;
+ 				memcpy((struct _sockaddr *)&dj->host_addr, (struct _sockaddr *)&Active_udp_games[(citem+(NLPage*UDP_NETGAMES_PPAGE))-4].game_addr, sizeof(struct _sockaddr));
+-				memcpy((struct _sockaddr *)&Netgame.players[0].protocol.udp.addr, (struct _sockaddr *)&dj->host_addr, sizeof(struct _sockaddr));
++				memcpy((struct _sockaddr *)&Netgame.players[astra_host_slot()].protocol.udp.addr, (struct _sockaddr *)&dj->host_addr, sizeof(struct _sockaddr));
+ 				dj->connecting = 1;
+ 				return 1;
+ 			}
+@@ -1665,7 +1681,7 @@ void net_udp_init()
  	
  #ifdef USE_TRACKER
  	// Initialize the tracker info
@@ -2140,31 +2212,169 @@ index c5cad64..c998ea8 100644
  #endif
  }
  
-@@ -2079,6 +2091,7 @@ void net_udp_welcome_player(UDP_sequence_packet *their)
+@@ -2079,6 +2095,7 @@ void net_udp_welcome_player(UDP_sequence_packet *their)
  		net_udp_noloss_clear_mdata_got(player_num);
  	}
  
-+    if(astra_net_active && EM_ASM_INT(return !!Module.netSession.public))Network_player_added=1;
++    if(astra_net_active && EM_ASM_INT(return !!(Module.netSession.public||Module.netSession.continuity)))Network_player_added=1;
  	Players[player_num].KillGoalCount=0;
  
  	// Send updated Objects data to the new/returning player
-@@ -2772,6 +2785,7 @@ void net_udp_update_netgame(void)
+@@ -2711,7 +2728,7 @@ void net_udp_dump_player(struct _sockaddr dump_addr, int their_token, int why)
+ 	dxx_sendto (UDP_Socket[0], buf, sizeof(buf), 0, (struct sockaddr *)&dump_addr, sizeof(struct _sockaddr));
+ 
+ 	if (multi_i_am_master())
+-		for (i = 1; i < N_players; i++)
++		for (i=astra_peer_first(); i<N_players; i=astra_peer_next(i))
+ 			if (!memcmp((struct _sockaddr *)&dump_addr, (struct _sockaddr *)&Netgame.players[i].protocol.udp.addr, sizeof(struct _sockaddr)))
+ 				multi_disconnect_player(i);
+ }
+@@ -2772,6 +2789,7 @@ void net_udp_update_netgame(void)
  /* Send an updated endlevel status to everyone (if we are host) or host (if we are client)  */
  void net_udp_send_endlevel_packet(void)
  {
-+    if(astra_net_active&&astra_net_owner==0&&Control_center_destroyed&&Players[0].connected!=CONNECT_PLAYING)for(int b=1;b<astra_net_count;b++)if(astra_net_bot_skill[b]>=0)Players[b].connected=Players[0].connected;
++    if(astra_net_active&&astra_net_owner==astra_net_host&&Control_center_destroyed&&Players[astra_host_slot()].connected!=CONNECT_PLAYING)for(int b=1;b<astra_net_count;b++)if(astra_net_bot_skill[b]>=0)Players[b].connected=Players[astra_host_slot()].connected;
  	int i = 0, j = 0, len = 0;
  
  	if (is_observer()) {
-@@ -3368,6 +3382,7 @@ int net_udp_process_game_info(ubyte *data, int data_len, struct _sockaddr game_a
+@@ -2804,7 +2822,7 @@ void net_udp_send_endlevel_packet(void)
+ 			}
+ 		}
+ 
+-		for (i = 1; i < MAX_PLAYERS; i++)
++		for (i=astra_peer_first(); i<MAX_PLAYERS; i=astra_peer_next(i))
+ 			if (Players[i].connected != CONNECT_DISCONNECTED)
+ 				dxx_sendto (UDP_Socket[0], buf, len, 0, (struct sockaddr *)&Netgame.players[i].protocol.udp.addr, sizeof(struct _sockaddr));
+ 
+@@ -2829,7 +2847,7 @@ void net_udp_send_endlevel_packet(void)
+ 			PUT_INTEL_SHORT(buf + len, kill_matrix[Player_num][i]);			len += 2;
+ 		}
+ 
+-		dxx_sendto (UDP_Socket[0], buf, len, 0, (struct sockaddr *)&Netgame.players[0].protocol.udp.addr, sizeof(struct _sockaddr));
++		dxx_sendto (UDP_Socket[0], buf, len, 0, (struct sockaddr *)&Netgame.players[astra_host_slot()].protocol.udp.addr, sizeof(struct _sockaddr));
+ 	}
+ }
+ 
+@@ -3110,7 +3128,7 @@ void net_udp_send_netgame_update()
+ {
+ 	int i = 0;
+ 	
+-	for (i=1; i<N_players; i++ )
++	for (i=astra_peer_first(); i<N_players; i=astra_peer_next(i))
+ 	{
+ 		if (Players[i].connected == CONNECT_DISCONNECTED)
+ 			continue;
+@@ -3137,7 +3155,7 @@ int net_udp_send_request(void)
+ 	UDP_Seq.type = UPID_REQUEST;
+ 	UDP_Seq.player.connected = Current_level_num;
+ 
+-	net_udp_send_sequence_packet(UDP_Seq, Netgame.players[0].protocol.udp.addr);
++	net_udp_send_sequence_packet(UDP_Seq, Netgame.players[astra_host_slot()].protocol.udp.addr);
+ 
+ 	return i;
+ }
+@@ -3213,7 +3231,7 @@ int net_udp_process_game_info(ubyte *data, int data_len, struct _sockaddr game_a
+ 	}
+ 	else
+ 	{
+-		memcpy((struct _sockaddr *)&Netgame.players[0].protocol.udp.addr, (struct _sockaddr *)&game_addr, sizeof(struct _sockaddr));
++		memcpy((struct _sockaddr *)&Netgame.players[astra_host_slot()].protocol.udp.addr, (struct _sockaddr *)&game_addr, sizeof(struct _sockaddr));
+ 
+ 												len++; // skip UPID byte
+ 		Netgame.protocol.udp.program_iver[0] = GET_INTEL_SHORT(&(data[len]));		len += 2;
+@@ -3228,7 +3246,7 @@ int net_udp_process_game_info(ubyte *data, int data_len, struct _sockaddr game_a
+ 			Netgame.players[i].missilecolor = data[len];					len++;
+ 			Netgame.players[i].protocol.udp.isyou = data[len];			len++;
+ 			if(is_sync && Netgame.RetroProtocol) {
+-				if(i != 0) { // Don't ever overwrite host addr
++				if(i != astra_host_slot()) { // Do not overwrite the current host address
+ 					//memcpy(&Netgame.players[i].protocol.udp.addr, data + len, sizeof(struct _sockaddr)); 
+ 					struct _sockaddr new_address;
+ 					memcpy(&new_address, data + len,  sizeof(struct _sockaddr) ); 
+@@ -3368,8 +3386,9 @@ int net_udp_process_game_info(ubyte *data, int data_len, struct _sockaddr game_a
  
  void net_udp_process_dump(ubyte *data, int len, struct _sockaddr sender_addr)
  {
-+    if(astra_net_active && len>5 && (data[5]==DUMP_ENDLEVEL||data[5]==DUMP_LEVEL) && EM_ASM_INT(return !!(Module.netSession.public&&Module.netSession.late))){EM_ASM(window.astraNet.waitForMine());return;}
++    if(astra_net_active && len>5 && (data[5]==DUMP_ENDLEVEL||data[5]==DUMP_LEVEL) && EM_ASM_INT(return !!((Module.netSession.public||Module.netSession.continuity)&&Module.netSession.late))){EM_ASM(window.astraNet.waitForMine());return;}
  	// Our request for join was denied.  Tell the user why.
- 	if (memcmp((struct _sockaddr *)&sender_addr,(struct _sockaddr *)&Netgame.players[0].protocol.udp.addr,sizeof(struct _sockaddr)))
+-	if (memcmp((struct _sockaddr *)&sender_addr,(struct _sockaddr *)&Netgame.players[0].protocol.udp.addr,sizeof(struct _sockaddr)))
++	if (memcmp((struct _sockaddr *)&sender_addr,(struct _sockaddr *)&Netgame.players[astra_host_slot()].protocol.udp.addr,sizeof(struct _sockaddr)))
  		return;
-@@ -5392,6 +5407,7 @@ menu:
+ 
+ 	switch (data[5])
+@@ -3621,7 +3640,7 @@ void net_udp_read_endlevel_packet( ubyte *data, int data_len, struct _sockaddr s
+ 	if (multi_i_am_master())
+ 	{
+ 		ubyte pnum = data[5];
+-		if(pnum < 1 || pnum > MAX_PLAYERS || pnum == multi_who_is_master()) {
++		if((pnum < 1 && !astra_net_active) || pnum >= MAX_PLAYERS || pnum == multi_who_is_master()) {
+ 			drop_rx_packet(data, "invalid player number"); 
+ 			return; 
+ 		}
+@@ -3656,7 +3675,7 @@ void net_udp_read_endlevel_packet( ubyte *data, int data_len, struct _sockaddr s
+ 	}
+ 	else
+ 	{
+-		if (memcmp((struct _sockaddr *)&Netgame.players[0].protocol.udp.addr, (struct _sockaddr *)&sender_addr, sizeof(struct _sockaddr)))
++		if (memcmp((struct _sockaddr *)&Netgame.players[astra_host_slot()].protocol.udp.addr, (struct _sockaddr *)&sender_addr, sizeof(struct _sockaddr)))
+ 			return;
+ 
+ 		len++;
+@@ -3716,7 +3735,7 @@ int net_udp_sync_poll( newmenu *menu, d_event *event, void *userdata )
+ 	net_udp_listen();
+ 
+ 	// Leave if Host disconnects
+-	if (Netgame.players[0].connected == CONNECT_DISCONNECTED)
++	if (Netgame.players[astra_host_slot()].connected == CONNECT_DISCONNECTED)
+ 		rval = -2;
+ 
+ 	if (Network_status != NETSTAT_WAITING)	// Status changed to playing, exit the menu
+@@ -4872,7 +4891,7 @@ int net_udp_send_sync(void)
+ 		nm_messagebox(TXT_ERROR, 1, TXT_OK, "Not enough start positions\n(set %d got %d)\nNetgame aborted", Netgame.max_numplayers, NumNetPlayerPositions);
+ 		// Tell everyone we're bailing
+ 		Netgame.numplayers = 0;
+-		for (i=1; i<N_players; i++)
++		for (i=astra_peer_first(); i<N_players; i=astra_peer_next(i))
+ 		{
+ 			if (Players[i].connected == CONNECT_DISCONNECTED)
+ 				continue;
+@@ -4917,7 +4936,7 @@ int net_udp_send_sync(void)
+ 	Netgame.segments_checksum = my_segments_checksum;
+ 
+ 	if (multi_i_am_master())
+-		net_udp_send_game_info(Netgame.players[0].protocol.udp.addr, UPID_SYNC, 2, player_tokens[0]);
++		net_udp_send_game_info(Netgame.players[astra_host_slot()].protocol.udp.addr, UPID_SYNC, 2, player_tokens[0]);
+ 
+ 	for (i=0; i<N_players; i++ )
+ 	{
+@@ -4928,7 +4947,7 @@ int net_udp_send_sync(void)
+ 		connection_statuses[i].type = CONNT_DIRECT;
+ 	}
+ 
+-	net_udp_read_sync_packet(NULL, 0, Netgame.players[0].protocol.udp.addr); // Read it myself, as if I had sent it
++	net_udp_read_sync_packet(NULL, 0, Netgame.players[astra_host_slot()].protocol.udp.addr); // Read it myself, as if I had sent it
+ 
+ 	return 0;
+ }
+@@ -5255,7 +5274,7 @@ int net_udp_start_game(void)
+ 
+ 	net_udp_set_game_mode(Netgame.gamemode, 0);
+ 
+-	Netgame.players[0].protocol.udp.isyou = 1; // I am Host. I need to know that y'know? For syncing later.
++	Netgame.players[astra_host_slot()].protocol.udp.isyou = 1; // I am Host. I need to know that y'know? For syncing later.
+ 	
+ 	netgame_token = generate_token();
+ 	con_printf(CON_DEBUG, "Generated token %d in net_udp_start_game\n", netgame_token);
+@@ -5307,7 +5326,7 @@ int net_udp_wait_for_sync(void)
+ 		memcpy( me.player.callsign, Players[Player_num].callsign, CALLSIGN_LEN+1 );
+ 		me.player.color = PlayerCfg.ShipColor;
+ 		me.player.missilecolor = PlayerCfg.MissileColor;
+-		net_udp_send_sequence_packet(me, Netgame.players[0].protocol.udp.addr);
++		net_udp_send_sequence_packet(me, Netgame.players[astra_host_slot()].protocol.udp.addr);
+ 		N_players = 0;
+ 		Game_mode = GM_GAME_OVER;
+ 		return(-1);     // they cancelled
+@@ -5392,6 +5411,7 @@ menu:
  int
  net_udp_level_sync(void)
  {
@@ -2172,7 +2382,16 @@ index c5cad64..c998ea8 100644
  	int result = 0;
  
  	memset(&UDP_MData, 0, sizeof(UDP_mdata_info));
-@@ -5613,6 +5629,7 @@ void net_udp_send_data(const ubyte * ptr, int len, int priority )
+@@ -5510,7 +5530,7 @@ void net_udp_leave_game()
+ 		Netgame.numplayers = 0;
+ 		nsave=N_players;
+ 		N_players=0;
+-		for (i=1; i<nsave; i++ )
++		for (i=astra_peer_first(); i<nsave; i=astra_peer_next(i))
+ 		{
+ 			if (Players[i].connected == CONNECT_DISCONNECTED)
+ 				continue;
+@@ -5613,6 +5633,7 @@ void net_udp_send_data(const ubyte * ptr, int len, int priority )
  
  void net_udp_timeout_check(fix64 time)
  {
@@ -2180,17 +2399,26 @@ index c5cad64..c998ea8 100644
  	if (!multi_i_am_master() && is_observer()) { return; }
  
  	int i = 0;
-@@ -5650,6 +5667,9 @@ void net_udp_timeout_check(fix64 time)
+@@ -5631,7 +5652,7 @@ void net_udp_timeout_check(fix64 time)
+ 				}
+ 				else if ((time - Netgame.players[i].LastPacketTime) > UDP_TIMEOUT)
+ 				{
+-					if((! Netgame.RetroProtocol) || multi_i_am_master() || i == 0) {
++					if((! Netgame.RetroProtocol) || multi_i_am_master() || i == astra_host_slot()) {
+ 						multi_disconnect_player(i);
+ 					} else if ((time - Netgame.players[i].LastPacketTime) > UDP_TIMEOUT*2) {
+ 						multi_disconnect_player(i);
+@@ -5650,6 +5671,9 @@ void net_udp_timeout_check(fix64 time)
  
  void net_udp_do_frame(int force, int listen)
  {
 +    /* Bot firing must not run host robot ownership or receive processing with
 +     * a temporary bot Player_num. The normal host frame flushes their events. */
-+    if(astra_net_active&&astra_net_owner==0&&Player_num!=0)return;
++    if(astra_net_active&&astra_net_owner==astra_net_host&&Player_num!=astra_net_host)return;
  	fix64 time = 0;
  	static fix64 last_pdata_time = 0, last_mdata_time = 16, last_endlevel_time = 32, last_bcast_time = 48, last_resync_time = 64;
  
-@@ -5666,6 +5686,7 @@ void net_udp_do_frame(int force, int listen)
+@@ -5666,6 +5690,7 @@ void net_udp_do_frame(int force, int listen)
  	{
  		last_pdata_time = time;
  		net_udp_send_pdata();
@@ -2198,16 +2426,146 @@ index c5cad64..c998ea8 100644
  	}
  	
  	if (force || (time >= (last_mdata_time+(F1_0/10))))
-@@ -6608,7 +6629,7 @@ void net_udp_send_pdata()
+@@ -5791,7 +5816,7 @@ void net_udp_noloss_add_queue_pkt(uint32_t pkt_num, fix64 time, ubyte *data, ush
+ 		con_printf(CON_VERBOSE, "P#%i: MData store list is full!\n", Player_num);
+ 		if (multi_i_am_master())
+ 		{
+-			for ( i=1; i<N_players; i++ )
++			for (i=astra_peer_first(); i<N_players; i=astra_peer_next(i))
+ 				if (UDP_mdata_queue[found].player_ack[i] == 0)
+ 					net_udp_dump_player(Netgame.players[i].protocol.udp.addr, player_tokens[i], DUMP_PKTTIMEOUT);
+ 		}
+@@ -5902,7 +5927,7 @@ int net_udp_noloss_validate_mdata(uint32_t pkt_num, ubyte sender_pnum, struct _s
+ 	}
+ 	else
+ 	{
+-		if (memcmp((struct _sockaddr *)&sender_addr, (struct _sockaddr *)&Netgame.players[0].protocol.udp.addr, sizeof(struct _sockaddr)))
++		if (memcmp((struct _sockaddr *)&sender_addr, (struct _sockaddr *)&Netgame.players[astra_host_slot()].protocol.udp.addr, sizeof(struct _sockaddr)))
+ 			return 0;
+ 	}
+ 	*/
+@@ -6018,7 +6043,7 @@ void net_udp_noloss_process_queue(fix64 time)
+ 		for (plc = 0; plc < MAX_PLAYERS; plc++)
+ 		{
+ 			// If player is not playing anymore, we can remove him from list. Also remove *me* (even if that should have been done already). Also make sure Clients do not send to anyone else than Host
+-			if ((Players[plc].connected != CONNECT_PLAYING || plc == Player_num) || (!multi_i_am_master() && plc > 0))
++			if ((Players[plc].connected != CONNECT_PLAYING || plc == Player_num) || (!multi_i_am_master() && plc != astra_host_slot()))
+ 				UDP_mdata_queue[queuec].player_ack[plc] = 1;
+ 
+ 			if (!UDP_mdata_queue[queuec].player_ack[plc])
+@@ -6260,7 +6285,7 @@ void net_udp_send_mdata(int needack, fix64 time)
+ 	} else {
+ 		if (multi_i_am_master())
+ 		{
+-			for (i = 1; i < MAX_PLAYERS; i++)
++			for (i=astra_peer_first(); i<MAX_PLAYERS; i=astra_peer_next(i))
+ 			{
+ 				if (Players[i].connected == CONNECT_PLAYING)
+ 				{
+@@ -6275,7 +6300,7 @@ void net_udp_send_mdata(int needack, fix64 time)
+ 		}
+ 		else
+ 		{
+-			dxx_sendto (UDP_Socket[0], buf, len, 0, (struct sockaddr *)&Netgame.players[0].protocol.udp.addr, sizeof(struct _sockaddr));
++			dxx_sendto (UDP_Socket[0], buf, len, 0, (struct sockaddr *)&Netgame.players[astra_host_slot()].protocol.udp.addr, sizeof(struct _sockaddr));
+ 			pack[0] = 0;
+ 		}
+ 	}
+@@ -6346,7 +6371,7 @@ void net_udp_process_mdata (ubyte *data, int data_len, struct _sockaddr sender_a
+ 
+ 			memset(&pack, 1, sizeof(ubyte)*MAX_PLAYERS);
+ 			
+-			for (i = 1; i < MAX_PLAYERS; i++)
++			for (i=astra_peer_first(); i<MAX_PLAYERS; i=astra_peer_next(i))
+ 			{
+ 				if ((i != pnum) && Players[i].connected == CONNECT_PLAYING)
+ 				{
+@@ -6608,16 +6633,16 @@ void net_udp_send_pdata()
  			forward_to_observers(buf, len, 0); 
  		}
  	} else {
 -		if (multi_i_am_master())
-+		if (multi_i_am_master()||(astra_net_active&&astra_net_owner==0))
++		if (multi_i_am_master()||(astra_net_active&&astra_net_owner==astra_net_host))
  		{
- 			for (i = 1; i < MAX_PLAYERS; i++)
+-			for (i = 1; i < MAX_PLAYERS; i++)
++			for (i=astra_peer_first(); i<MAX_PLAYERS; i=astra_peer_next(i))
  				if (Players[i].connected != CONNECT_DISCONNECTED) {
-@@ -7850,3 +7871,5 @@ void net_udp_process_obs_quit(ubyte *data, int data_len, struct _sockaddr sender
+ 					dxx_sendto (UDP_Socket[0], buf, len, 0, (struct sockaddr *)&Netgame.players[i].protocol.udp.addr, sizeof(struct _sockaddr));
+ 				}
+ 		}
+ 		else
+ 		{
+-			dxx_sendto (UDP_Socket[0], buf, len, 0, (struct sockaddr *)&Netgame.players[0].protocol.udp.addr, sizeof(struct _sockaddr));
++			dxx_sendto (UDP_Socket[0], buf, len, 0, (struct sockaddr *)&Netgame.players[astra_host_slot()].protocol.udp.addr, sizeof(struct _sockaddr));
+ 		}
+ 	}
+ 
+@@ -6738,7 +6763,7 @@ void net_udp_process_pdata ( ubyte *data, int data_len, struct _sockaddr sender_
+ 		if ((Netgame.ShortPackets && data_len != UPID_PDATA_S_SIZE) || (!Netgame.ShortPackets && data_len != UPID_PDATA_Q_SIZE))
+ 			return;
+ 
+-		if (memcmp((struct _sockaddr *)&sender_addr, (struct _sockaddr *)&Netgame.players[((multi_i_am_master())?(data[len]):(0))].protocol.udp.addr, sizeof(struct _sockaddr)))
++		if (memcmp((struct _sockaddr *)&sender_addr, (struct _sockaddr *)&Netgame.players[((multi_i_am_master())?(data[len]):astra_host_slot())].protocol.udp.addr, sizeof(struct _sockaddr)))
+ 			return;
+ 	}
+ 
+@@ -6842,7 +6867,7 @@ void net_udp_process_pdata ( ubyte *data, int data_len, struct _sockaddr sender_
+ 		{
+ 			if (pd.Player_num > 0 && pd.Player_num <= N_players && Players[pd.Player_num].connected == CONNECT_PLAYING) // some checking wether this packet is legal
+ 			{
+-				for (i = 1; i < MAX_PLAYERS; i++)
++				for (i=astra_peer_first(); i<MAX_PLAYERS; i=astra_peer_next(i))
+ 				{
+ 					if (i != pd.Player_num && Players[i].connected != CONNECT_DISCONNECTED) // not to sender or disconnected players - right.
+ 						dxx_sendto (UDP_Socket[0], data, data_len, 0, (struct sockaddr *)&Netgame.players[i].protocol.udp.addr, sizeof(struct _sockaddr));
+@@ -7076,7 +7101,7 @@ void net_udp_process_p2p_ping(ubyte *data, struct _sockaddr sender_addr, int dat
+ 
+ 	// Since the host doesn't send packets as an observer, ensure that clients don't disconnect thinking the host is dead.
+ 	if (from_player == 0 && Netgame.host_is_obs) {
+-		Netgame.players[0].LastPacketTime = timer_query();
++		Netgame.players[astra_host_slot()].LastPacketTime = timer_query();
+ 	}
+ 
+ 	// If I can hear a direct ping, I can probably reply
+@@ -7350,12 +7375,12 @@ void net_udp_ping_frame(fix64 time)
+ 		memset(&buf, 0, sizeof(ubyte)*UPID_PING_SIZE);
+ 		buf[len] = UPID_PING;							len++;
+ 		memcpy(&buf[len], &time, 8);						len += 8;
+-		for (i = 1; i < MAX_PLAYERS; i++)
++		for (i=astra_peer_first(); i<MAX_PLAYERS; i=astra_peer_next(i))
+ 		{
+ 			PUT_INTEL_INT(buf + len, Netgame.players[i].ping);		len += 4;
+ 		}
+ 		
+-		for (i = 1; i < MAX_PLAYERS; i++)
++		for (i=astra_peer_first(); i<MAX_PLAYERS; i=astra_peer_next(i))
+ 		{
+ 			if (Players[i].connected == CONNECT_DISCONNECTED)
+ 				continue;
+@@ -7372,19 +7397,19 @@ void net_udp_process_ping(ubyte *data, int data_len, struct _sockaddr sender_add
+ 	ubyte buf[UPID_PONG_SIZE];
+ 	int i, len = 0;
+ 
+-	if (memcmp((struct _sockaddr *)&Netgame.players[0].protocol.udp.addr, (struct _sockaddr *)&sender_addr, sizeof(struct _sockaddr)))
++	if (memcmp((struct _sockaddr *)&Netgame.players[astra_host_slot()].protocol.udp.addr, (struct _sockaddr *)&sender_addr, sizeof(struct _sockaddr)))
+ 		return;
+ 
+ 										len++; // Skip UPID byte;
+ 	memcpy(&host_ping_time, &data[len], 8);					len += 8;
+-	for (i = 1; i < MAX_PLAYERS; i++)
++	for (i=astra_peer_first(); i<MAX_PLAYERS; i=astra_peer_next(i))
+ 	{
+ 		Netgame.players[i].ping = GET_INTEL_INT(&(data[len]));		len += 4;
+ 	}
+ 
+ 	// Since the host doesn't send packets as an observer, ensure that clients don't disconnect thinking the host is dead.
+ 	if (Netgame.host_is_obs) {
+-		Netgame.players[0].LastPacketTime = timer_query();
++		Netgame.players[astra_host_slot()].LastPacketTime = timer_query();
+ 	}
+ 
+ 	buf[0] = UPID_PONG;
+@@ -7850,3 +7875,5 @@ void net_udp_process_obs_quit(ubyte *data, int data_len, struct _sockaddr sender
  	Netgame.numobservers--;
  	multi_send_obs_update(1, 0);
  }
@@ -2731,7 +3089,7 @@ index fde0fd3..9c7fc53 100644
  }
 +
 diff --git a/d2/main/weapon.c b/d2/main/weapon.c
-index f3ad3c7..1205e1a 100644
+index f3ad3c7..7a844d7 100644
 --- a/d2/main/weapon.c
 +++ b/d2/main/weapon.c
 @@ -461,142 +461,45 @@ void do_weapon_select(int weapon_num, int secondary_flag)
@@ -2986,6 +3344,30 @@ index f3ad3c7..1205e1a 100644
  		POrderList(weapon_index)<cutpoint && POrderList(weapon_index)<POrderList(primary_weapon_index)) {
  
  		// Are you firing? 
+@@ -1021,8 +925,9 @@ void rock_the_mine_frame(void)
+ 					rx = fixmul(d_rand() - 16384, 3*F1_0/16 + (F1_0*(16-fc))/32);
+ 					rz = fixmul(d_rand() - 16384, 3*F1_0/16 + (F1_0*(16-fc))/32);
+ 
+-					ConsoleObject->mtype.phys_info.rotvel.x += rx;
+-					ConsoleObject->mtype.phys_info.rotvel.z += rz;
++					fix comfort=EM_ASM_INT(return Math.round(65536*Math.max(0,Math.min(1,Module.comfort?.shake??1))));
++				ConsoleObject->mtype.phys_info.rotvel.x += fixmul(rx,comfort);
++					ConsoleObject->mtype.phys_info.rotvel.z += fixmul(rz,comfort);
+ 
+ 					//	Shake the buddy!
+ 					if (Buddy_objnum != -1) {
+@@ -1115,8 +1020,9 @@ void seismic_disturbance_frame(void)
+ 				rx = fixmul(d_rand() - 16384, 3*F1_0/16 + (F1_0*(16-fc))/32);
+ 				rz = fixmul(d_rand() - 16384, 3*F1_0/16 + (F1_0*(16-fc))/32);
+ 
+-				ConsoleObject->mtype.phys_info.rotvel.x += rx;
+-				ConsoleObject->mtype.phys_info.rotvel.z += rz;
++				fix comfort=EM_ASM_INT(return Math.round(65536*Math.max(0,Math.min(1,Module.comfort?.shake??1))));
++				ConsoleObject->mtype.phys_info.rotvel.x += fixmul(rx,comfort);
++				ConsoleObject->mtype.phys_info.rotvel.z += fixmul(rz,comfort);
+ 
+ 				//	Shake the buddy!
+ 				if (Buddy_objnum != -1) {
 diff --git a/d2/misc/args.c b/d2/misc/args.c
 index cb81385..51533d2 100644
 --- a/d2/misc/args.c

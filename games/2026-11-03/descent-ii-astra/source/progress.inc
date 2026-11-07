@@ -1,11 +1,27 @@
 /* Full native snapshots, at frame boundaries; two rotating slots per campaign.
  * Browser persistence is acknowledged only after the IDBFS transaction completes. */
+extern int Endlevel_sequence;
 static double ap_check_at,ap_entered,ap_saved_at;
 static int ap_level=999,ap_keys=-1;
 static int ap_campaign(void){return !strcmp(Current_mission_filename,"overload")?2:!strcmp(Current_mission_filename,"d2x")?1:0;}
 static int ap_excluded(void){return EM_ASM_INT(return !!(Module.netSession||Module.autopilot||Module.demo||Module.encounter||Module.mineInspect>=0||Module.weaponInspect>=0||Module.pickupInspect>=0||Module.blastInspect>0||window.astraPreview?.active);)||Newdemo_state==ND_STATE_PLAYBACK;}
 int astra_checkpoint_available(void){if(Game_mode&GM_MULTI)return 0;return EM_ASM_INT(return window.astraProgress?.available($0)?1:0;,ap_campaign());}
 int astra_progress_command(void){
+    if(EM_ASM_INT({const c=Module.saveReturnCommand||0;Module.saveReturnCommand=0;return c;})){
+        if(ap_excluded()||Player_is_dead||Endlevel_sequence||Current_level_num<=0){
+            EM_ASM(window.astraResume.failed('Save & return is available during a living campaign flight, outside secret mines and exit sequences.'));return 0;
+        }
+        int slot=EM_ASM_INT(return window.astraResume.nextSlot());
+        char name[64],desc[DESC_LENGTH]={0};snprintf(name,sizeof name,"last-flight-%d.sav",slot);snprintf(desc,sizeof desc,"Astra last flight");
+        EM_ASM(Module.checkpointBusy=true);stop_time();
+        if(state_save_all_sub(name,desc))EM_ASM(window.astraResume.saved($0,$1,$2,UTF8ToString($3));,slot,ap_campaign(),Current_level_num,Current_level_name);
+        else EM_ASM(Module.checkpointBusy=false;window.astraResume.failed('The flight could not be saved. Keep playing or use the manual Save game option.'));
+        return 1;
+    }
+    if(EM_ASM_INT(return !!Module.resumeFlight)){
+        int slot=EM_ASM_INT(Module.resumeFlight=false;return window.astraResume.restoreSlot());
+        if(slot>=0){char name[64];snprintf(name,sizeof name,"last-flight-%d.sav",slot);int ok=state_restore_all_sub(name,0);EM_ASM(window.astraResume.restored(!!$0);,ok);return ok;}
+    }
     if(ap_excluded())return 0;
     int command=EM_ASM_INT(if(Module.resumeCheckpoint||Module.checkpointCommand){Module.resumeCheckpoint=false;Module.checkpointCommand=0;return 1;}return 0;);
     if(!command)return 0;

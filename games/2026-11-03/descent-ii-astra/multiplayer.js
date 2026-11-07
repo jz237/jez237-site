@@ -6,9 +6,15 @@
   const $=id=>document.getElementById(id);
   let socket=null,lobby=null,identity=null,timer=null,queue=[],out=[],bytes=0,barrier=null,roomChoices=false,lastHostState='',ignoreStart=false;
   let ui,notice,roomField,roster,connectButtons,start,setup,playBar;
+  let credential=null,roomCode='',intentional=false,retryTimer=null,retryUntil=0,heartbeat=null,lastPong=0,lastInventory=0;
   const session={session:null,failed:false,departed:0,stats:{sent:0,received:0},
     abort:message=>fail(message),
-    shutdown(){ignoreStart=true;this.failed=true;clearInterval(timer);timer=null;if(socket){socket.onclose=null;socket.onmessage=null;socket.close(1000,'Leaving');socket=null;}queue=[];out=[];bytes=0;},
+    shutdown(){intentional=true;ignoreStart=true;this.failed=true;send({type:'leave'});clearInterval(heartbeat);clearTimeout(retryTimer);clearInterval(timer);timer=null;if(socket){socket.onclose=null;socket.onmessage=null;socket.close(1000,'Leaving');socket=null;}queue=[];out=[];bytes=0;},
+    reconnect(){if(socket)socket.close(4001,'Reconnecting');else reconnect();},
+    rejoined(){retryUntil=0;this.reconnecting=false;this.failed=false;if(ui.open)ui.close();window.Module?._astra_reset_flight_input?.();status('Connection restored · Same ship');},
+    order(order,direction){const data={type:'order',order,direction};if(socket)send(data);else if(this.session?.mode==='coop'){data.from=this.session.self;window.astraSquadUI?.command(data);}},
+    orderResult(from,order,ok){const m={type:'order-result',from,order,ok};if(socket)send(m);else window.astraSquadUI?.result(m);},
+    help(){if(socket)send({type:'help'});else window.astraSquadUI?.help(this.session.self);},
     waitForMine:()=>status('Joined the room. Waiting for the next mine…'),
     get menuOpen(){return !!ui?.open&&!!this.session;},
     menu(){if(!this.session)return;document.exitPointerLock?.();window.astraFlightFocus?.(false);ui.classList.add('squad-in-flight');ui.showModal();status('The match continues while this menu is open.');},
@@ -25,9 +31,9 @@
     },
     synchronized:level=>barrier?.level===level,
     playing(self,level){this.session.late=false;send({type:'joined'});status(`${this.session.public?'Public room · ':''}${this.session.mode==='coop'?'Co-op':'Deathmatch'} · Mine ${level}`);},
-    hostState(level,checksum,accepting){if(!this.session?.public||this.session.self!==0)return;const value=JSON.stringify({type:'state',level,checksum,accepting:!!accepting});if(value!==lastHostState){lastHostState=value;if(socket?.readyState===1)socket.send(value);}},
+    hostState(level,checksum,accepting){if(!this.session||this.session.self!==(this.session.host??0))return;const value=JSON.stringify({type:'state',level,checksum,accepting:!!accepting});if(value!==lastHostState){lastHostState=value;if(socket?.readyState===1)socket.send(value);}},
     launch(config,self){
-      this.session={...config,self};this.targetLevel=config.level;this.failed=false;queue=[];out=[];bytes=0;
+      this.session={...config,host:config.host??0,self};this.targetLevel=config.level;this.failed=false;queue=[];out=[];bytes=0;
       $('campaign').value=config.campaign;$('look').value='astra';$('intro').checked=false;
       ui.close();ui.classList.add('squad-in-flight');document.body.classList.add('squadron');playBar.hidden=false;
       window.astraLaunchSquadron();
@@ -36,7 +42,7 @@
   window.astraNet=session;
   function status(text){notice.textContent=text;if(playBar)playBar.querySelector('span').textContent=text;}
   function fail(message){
-    if(session.failed)return;session.failed=true;status(message);clearInterval(timer);timer=null;
+    if(session.failed)return;session.failed=true;status(message);clearInterval(timer);timer=null;clearInterval(heartbeat);clearTimeout(retryTimer);
     socket?.close(1000,'Leaving');socket=null;
     if(session.session){
       document.exitPointerLock?.();window.astraFlightFocus?.(false);
@@ -62,14 +68,28 @@
       let m;try{m=JSON.parse(raw);}catch{return;}
       if(m.type==='error'){status(m.message);return;}
       if(m.type==='closed'){fail(m.message||'The host ended the room.');return;}
-      if(m.type==='welcome'){identity=m.id;roomField.value=m.code;status(m.public?'Joining the public room…':'Room ready. Share the invite link with your friends.');return;}
+      if(m.type==='welcome'){identity=m.id;roomCode=m.code;credential=m.token||null;roomField.value=m.code;status(m.public?'Joining the public room…':'Room ready. Share the invite link with your friends.');return;}
       if(m.type==='waiting'){status(m.message);return;}
+      if(m.type==='pong'){lastPong=performance.now();session.latency=Math.round(lastPong-m.at);return;}
+      if(m.type==='host'){
+        if(session.session&&m.host>=0){session.session.host=m.host;session.epoch=m.epoch;lastHostState='';status(m.host===session.session.self?'You are now hosting · Flight continues':`${session.session.roster[m.host]?.name||'Another pilot'} is now hosting`);}return;
+      }
+      if(m.type==='resumed'){
+        session.session.host=m.host;session.session.level=m.level;session.session.late=m.late;session.session.roster=m.roster;session.targetLevel=m.level;session.departed&=~(1<<m.self);queue=[];out=[];bytes=0;lastHostState='';
+        if(window.Module?.netState){if(m.late){Module.netRejoinCommand=1;}else{Module.netReconnecting=false;Module.netDisconnected=false;session.rejoined();}}
+        else if(!m.late)session.reconnecting=false;
+        status(m.late?'Restoring your ship and the current mine…':'Connection restored');return;
+      }
+      if(m.type==='inventory'){if(window.Module&&m.level===(Module.netState?.level||session.targetLevel))Module.netBotInventory=m.bots;return;}
+      if(m.type==='order'){window.astraSquadUI?.command(m);return;}
+      if(m.type==='order-result'){window.astraSquadUI?.result(m);return;}
+      if(m.type==='help'){window.astraSquadUI?.help(m.from);return;}
       if(m.type==='rooms'){showRooms(m.rooms);return;}
       if(m.type==='retarget'){session.targetLevel=m.level;session.session.level=m.level;session.session.late=!!m.late;barrier=null;status('The host is moving to the next mine…');return;}
       if(m.type==='roster'){
         if(!session.session)return;let changed=0;
         m.roster.forEach((p,i)=>{const old=session.session.roster[i];if(!old||old.name!==p.name||old.skill!==p.skill)changed|=1<<i;if(p.skill===-1)session.departed&=~(1<<i);});
-        session.session.roster=m.roster;session.session.humans=m.humans;session.pendingSlots=m.pending||0;
+        session.session.roster=m.roster;session.session.humans=m.humans;session.pendingSlots=m.pending||0;if(Number.isInteger(m.disconnected))session.departed=m.disconnected;
         if(window.Module)Module.netRosterDirty=(Module.netRosterDirty||0)|changed;return;
       }
       if(m.type==='lobby'){lobby=m;render();return;}
@@ -94,22 +114,46 @@
   function randomCode(){return Array.from(crypto.getRandomValues(new Uint8Array(9)),v=>(v%32).toString(32)).join('').toUpperCase();}
   function pilotName(){return ($('squadName').value.replace(/[^a-z0-9_-]/gi,'').slice(0,8)||'Pilot');}
   function connect(create,online=false,force=false){
-    if(socket||session.session)return;
+    if(socket||session.session)return;intentional=false;
     let code=create?randomCode():roomField.value.trim().toUpperCase();
     if(!online&&!/^[0-9A-V]{9}$/.test(code)){status('Enter the nine-character invite code.');return;}
     ignoreStart=false;roomChoices=false;$('squadRooms').hidden=true;
     status('Connecting…');connectButtons.querySelectorAll('button').forEach(b=>b.disabled=true);
     const base=window.astraRelayOverride&&/^(localhost|127\.0\.0\.1)$/.test(location.hostname)?window.astraRelayOverride:ENDPOINT;
-    const route=online?`/online?new=${force?1:0}&name=${encodeURIComponent(pilotName())}&config=${encodeURIComponent(JSON.stringify(configuration()))}`:`/room/${code}?create=${create?1:0}&name=${encodeURIComponent(pilotName())}`;
+    const route=online?`/online?v=54&new=${force?1:0}&name=${encodeURIComponent(pilotName())}&config=${encodeURIComponent(JSON.stringify(configuration()))}`:`/room/${code}?v=54&create=${create?1:0}&name=${encodeURIComponent(pilotName())}`;
     socket=new WebSocket(base+route);
     socket.binaryType='arraybuffer';socket.onmessage=e=>receive(e.data);
-    socket.onopen=()=>{timer=setInterval(flush,40);if(create&&!online)send({type:'configure',...configuration()});};
+    socket.onopen=()=>{startHeartbeat();timer=setInterval(flush,40);if(create&&!online)send({type:'configure',...configuration()});};
     socket.onerror=()=>status('Could not reach the room service. You can still play with AI pilots.');
     socket.onclose=()=>{
       clearInterval(timer);timer=null;socket=null;
-      if(session.session&&!session.failed)fail('Disconnected from the room. Return to the title to reconnect.');
+      if(session.session&&!session.failed&&!intentional){if(credential)reconnect();else fail('Disconnected from the room. Return to the title to reconnect.');}
       else if(!session.session){lobby=null;identity=null;render();if(!roomChoices)status('Room connection closed.');}
     };
+  }
+  function startHeartbeat(){
+    clearInterval(heartbeat);lastPong=performance.now();
+    heartbeat=setInterval(()=>{
+      if(!socket||socket.readyState!==1)return;
+      if(!document.hidden&&performance.now()-lastPong>15000){socket.close(4001,'Connection timeout');return;}
+      send({type:'ping',at:performance.now()});
+      const m=window.Module;if(m?.netBotExport&&session.session?.self===session.session?.host&&performance.now()-lastInventory>1000){lastInventory=performance.now();send({type:'inventory',level:m.netState.level,bots:m.netBotExport});}
+    },2500);
+  }
+  function reconnect(){
+    if(intentional||session.failed||!credential||!session.session)return;
+    clearInterval(timer);clearInterval(heartbeat);clearTimeout(retryTimer);queue=[];out=[];bytes=0;
+    session.reconnecting=true;if(window.Module)Module.netReconnecting=true;document.exitPointerLock?.();
+    if(!retryUntil)retryUntil=Date.now()+85000;
+    if(Date.now()>=retryUntil){fail('Reconnect time expired. Your room may still be available from Go online.');return;}
+    status('Connection interrupted · Reconnecting to your ship…');
+    retryTimer=setTimeout(()=>{
+      const base=window.astraRelayOverride&&/^(localhost|127\.0\.0\.1)$/.test(location.hostname)?window.astraRelayOverride:ENDPOINT;
+      const ws=socket=new WebSocket(base+'/room/'+roomCode+'?v=54&resume=1');ws.binaryType='arraybuffer';
+      ws.onopen=()=>{startHeartbeat();timer=setInterval(flush,40);send({type:'resume',token:credential});};
+      ws.onmessage=e=>receive(e.data);ws.onerror=()=>{};
+      ws.onclose=()=>{if(socket===ws)socket=null;if(!intentional&&!session.failed)reconnect();};
+    },1500);
   }
   function showRooms(rooms){
     roomChoices=true;const box=$('squadRooms');box.hidden=false;box.replaceChildren();
@@ -142,7 +186,7 @@
     const button=document.createElement('button');button.className='launch secondary-action';button.id='squadronStart';button.textContent='Multiplayer & AI squadron  →';$('start').after(button);
     ui=document.createElement('dialog');ui.id='squadronDialog';
     ui.innerHTML=`<header><div><small>ASTRA / SQUADRON</small><h2>Fly together. Fight together.</h2></div><button id="squadClose" aria-label="Close squadron">✕</button></header>
-      <p>Go online to join the available public room automatically. If there isn’t one, you’ll start it. New players can replace AI pilots while the match continues.</p><p class="squad-hint">Four human pilots fill a room. The host must stay connected. Each online room lasts up to two hours. Private invite rooms still launch together.</p>
+      <p>Go online to join the available public room automatically. If there isn’t one, you’ll start it. New players can replace AI pilots while the match continues.</p><p class="squad-hint">Four human pilots fill a room. Hosting transfers if a pilot leaves. A lost connection reserves your ship for 90 seconds. Each online room lasts up to two hours. Private invite rooms still launch together.</p>
       <label>Your callsign<input id="squadName" maxlength="8" value="Pilot" autocomplete="off"></label>
       <div id="squadSetup"><div class="squad-grid"><label>Match<select id="squadMode"><option value="coop">Co-op campaign</option><option value="deathmatch">Deathmatch</option></select></label><label>Campaign<select id="squadCampaign"><option value="d2">Descent II · Original</option><option value="d2x">Vertigo</option></select></label><label>Starting mine<input id="squadLevel" type="number" min="1" max="24" value="1"></label></div>
       <div class="squad-grid">${[0,1,2].map(i=>`<label>AI pilot ${i+1}<select id="squadAI${i}"><option value="-1">Empty slot</option>${skills.map((s,n)=>`<option value="${n}" ${n===2?'selected':''}>${s}</option>`).join('')}</select></label>`).join('')}</div></div>
@@ -170,7 +214,8 @@
     },1000);
     for(const type of ['keydown','keyup'])ui.addEventListener(type,e=>e.stopPropagation());
     const invite=/^#room=([0-9A-V]{9})$/.exec(location.hash);if(invite){roomField.value=invite[1];ui.showModal();}
-    window.addEventListener('pagehide',()=>{clearInterval(timer);socket?.close(1000,'Leaving');});
+    window.addEventListener('pagehide',()=>{clearInterval(timer);clearInterval(heartbeat);clearTimeout(retryTimer);socket?.close(1000,'Page closed');});
+    document.addEventListener('visibilitychange',()=>{if(!document.hidden)lastPong=performance.now();});
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mount,{once:true});else mount();
 })();

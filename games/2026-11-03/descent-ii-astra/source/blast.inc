@@ -136,6 +136,8 @@ void astra_blast(vms_vector *where,fix radius,float t,unsigned seed,int kind,int
     if(heavy<2 && !Player_is_dead && !astra_preview_active){
         float distance=sqrtf(origin[0]*origin[0]+origin[1]*origin[1]+origin[2]*origin[2]);
         visibility=.018f+.982f*pyro_ramp(r*1.5f+3,r*5+12,distance);
+        float glare=EM_ASM_DOUBLE(return Math.max(0,Math.min(1,Module.comfort?.glare??1)));
+        visibility*=glare+(1-glare)*pyro_ramp(r*3+8,r*8+20,distance);
     }
     int shape=(seed>>8)%5,compact=heavy==1&&shape>=3;
     float rise=.035f+.965f*(1-expf(-5.5f*t));

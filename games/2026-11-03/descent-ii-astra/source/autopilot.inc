@@ -479,7 +479,8 @@ static int aa_up_ready,aa_last_kills,aa_watch_count,aa_switches,aa_last_target=-
 static fix64 aa_watch_until,aa_target_since,aa_weapon_changed,aa_dodge_next;
 static float aa_roll_error,aa_aim_error,aa_turn_side=1,aa_dodge_side=1;
 static float aa_rotation_control(float error,float rate,float limit,float feedforward,int axis){
-    float acceleration=axis==2?.11f:.27f,dt=aa_clamp(f2fl(FrameTime),0,.1f);
+    float smooth=EM_ASM_DOUBLE(return Math.max(0,Math.min(1,Module.comfort?.smooth||0)));
+    float acceleration=(axis==2?.11f:.27f)*(1-.55f*smooth),dt=aa_clamp(f2fl(FrameTime),0,.1f);limit*=1-.25f*smooth;
     float brake=sqrtf(2*acceleration*fabsf(error)/6.2831853f);
     float wanted=copysignf(fminf(fabsf(error)*3.1f/6.2831853f,brake),error)+feedforward/6.2831853f;
     wanted=aa_clamp(wanted,-limit,limit);
