@@ -30298,5 +30298,113 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-11-07-factual-infographic-factual-infographic-algophobia-intense-",
+    "title": "Factual infographic: Algophobia — Intense Fear of Physical Pain",
+    "tests": "factual_subtype: phobia-infographic; phobia: Algophobia; requested title lines read back before rendering; no subjective review; archive_slot=2026-11-07T04:08; concept=algophobia-pain-anticipation-rehabilitation-studio; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: phobia-infographic",
+    "prompt": "Create a finished portrait-format educational phobia infographic, directly on the canvas, a sophisticated flowing editorial illustration in layered gouache, luminous colored pencil and fine technical ink. Bold prominent headline exactly \"ALGOPHOBIA\". Immediately beneath it, exact plain-English subtitle \"Intense fear of physical pain\". These two lines are the principal title hierarchy. No umbrella diagnostic headline. Small subordinate terminology note: \"Established term for fear of pain\".\nA dominant beautifully painted rehabilitation-studio scene occupies the middle: a petite East Asian woman in her thirties, light-medium skin, angular face, black pixie cut, indigo workwear, standing side-on beside a pale ashwood chair, hesitating before an ordinary movement. Treat her with dignity; no visible injury, no needles, no frightening medical scene. Angled daylight across a sage wall, tactile woven chair seat, soft terracotta floor, realistic fabric seams, nuanced expression and tense hands. A small seated clinician in the lower distance listens rather than pushes. The scene represents anticipation, not proof that movement is dangerous. Show no exercise prescription or pose sequence.\nUse a broad asymmetrical ribbon of coral pencil lines and translucent blue washes to weave open labels and small same-person gesture studies into the scene, never a grid or boxed fact cards. A spacious arc from her gaze to her hand bears \"Anticipatory anxiety\" and \"Thinking about pain can trigger alarm\". Beside a softly drawn imagined movement contour, label \"Catastrophizing — imagining the worst\". A delicate focus-ring motif around her watchful gaze reads \"Hypervigilance — monitoring for pain\". Another fine curved path bears \"Fear-avoidance — pulling back from activity\" and the consequence \"Life can narrow; disability may increase\". Label the whole pathway \"A possible fear–avoidance cycle\", avoiding universal claims. Keep all arrows psychological, not anatomical nerve pathways. An airy small body-alarm study uses simple heartbeat and trembling-hand line motifs labeled \"Body alarm: racing heart • sweating • trembling\"; no invented measurements or brain circuitry.\nLower artwork opens into warm amber light and a conversational scene with the same woman and clinician, with integrated large readable help text \"CBT: work with pain-related thoughts\" and \"Clinician-guided, gradual return to suitable activity\". A prominent calm safety line reads \"Treat actual pain as well as fear. Do not force painful exposure.\" A nearby clear contextual distinction reads \"Fear is not a measure of injury. Pain is not imaginary.\" Footer: \"Seek help when fear disrupts daily life. General education, not diagnosis.\" Do not imply all pain is harmless or recommend ignoring symptoms. No specific self-exposure instructions.\nGenerous breathing room around title and person, rich material detail, indigo/sage/terracotta with coral alarm accents and warm gold recovery light. Main explanation remains readable, with short meaningful labels, no long paragraphs. Source-grounded content only as specified. No statistics, diagnostic codes, bibliography, URLs, logos, watermarks, monsters or gore. No photographed poster, page mockup, room display or UI. Preserve artwork-led organic flow and modest clinical technical depth.",
+    "image": "images/2026-11-07-factual-infographic-factual-infographic-algophobia-intense-.jpg",
+    "thumb": "thumbs/2026-11-07-factual-infographic-factual-infographic-algophobia-intense-.webp",
+    "color": "#b9a492",
+    "date": "2026-11-07",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "algophobia-pain-anticipation-rehabilitation-studio",
+      "imageSha256": "1889e30b78e53cb6b36d0a819cd736d324b06a5258ea7f28337d177728958f3e",
+      "imageDHash": "dd9383a488a6373b"
+    },
+    "factualInfographic": {
+      "topic": "Algophobia: intense fear of physical pain, anticipatory anxiety, hypervigilance, fear-avoidance, and evidence-based help",
+      "description": "Source-backed fear-of-pain terminology, triggers, body alarm, fear-avoidance, and evidence-based clinical support.",
+      "sourceNote": "Cleveland Clinic https://my.clevelandclinic.org/health/diseases/21985-algophobia-fear-of-pain; Journal of Pain Research https://pmc.ncbi.nlm.nih.gov/articles/PMC6280906/; NHS https://www.nhs.uk/mental-health/conditions/phobias/ — verified definition, fear-avoidance and clinical help; no diagnostic code asserted.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-07T09:09:19.894129+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "Cleveland Clinic",
+            "title": "Algophobia (Fear of Pain)",
+            "sourceType": "university",
+            "url": "https://my.clevelandclinic.org/health/diseases/21985-algophobia-fear-of-pain"
+          },
+          {
+            "id": "S2",
+            "publisher": "Journal of Pain Research",
+            "title": "Assessment of pain-related fear in individuals with chronic painful conditions",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6280906/"
+          },
+          {
+            "id": "S3",
+            "publisher": "NHS",
+            "title": "Phobias",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/mental-health/conditions/phobias/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Algophobia is an established clinical term for extreme fear of physical pain; the term is descriptive, not a claim of a separate diagnostic code.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Thinking about pain, anticipated movement, and reminders of painful experiences can trigger anxiety and avoidance.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Catastrophizing means imagining the worst outcome; hypervigilance means intensely monitoring for pain or threat.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Fear-avoidance can reduce activity and participation and may worsen disability and pain; the pattern varies between people.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Body alarm can include palpitations, sweating, trembling, and shortness of breath.",
+            "sourceIds": [
+              "S1",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Actual pain and fear of pain both merit assessment; perceived threat is not a direct measure of tissue injury and fear does not mean pain is imaginary.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "CBT can help change pain-related thoughts; individualized clinician-guided gradual return to suitable activities can help with fear of pain; treatment should address actual pain too.",
+            "sourceIds": [
+              "S1",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Seek professional help when fear interferes with daily life; treatment should be planned with the healthcare team, not by forcing painful exposure.",
+            "sourceIds": [
+              "S1",
+              "S3"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
