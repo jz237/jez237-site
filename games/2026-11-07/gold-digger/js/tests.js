@@ -1,11 +1,11 @@
 // ?test=1 self-test: determinism, exact replays, level generation, the difficulty ramp, every boss can be hurt,
 // every biome renders without errors and without new shader programs after warm-up.
-import { RAMP, DEPTHS, LEVELS, rampAt, STEP, BIOMES } from './config.js?v=6';
-import { makeWorld, step, drainEvents, cloneWorld } from './sim.js?v=6';
-import { Autopilot } from './ai.js?v=6';
-import { Recorder, Replay } from './replay.js?v=6';
-import { buildNav, validateLevel } from './nav.js?v=6';
-import { bossHit } from './boss.js?v=6';
+import { RAMP, DEPTHS, LEVELS, rampAt, STEP, BIOMES, REWARDS } from './config.js?v=7';
+import { makeWorld, step, drainEvents, cloneWorld } from './sim.js?v=7';
+import { Autopilot } from './ai.js?v=7';
+import { Recorder, Replay } from './replay.js?v=7';
+import { buildNav, validateLevel } from './nav.js?v=7';
+import { bossHit } from './boss.js?v=7';
 
 const hashW = (W) => { const P = W.players[0]; let h = 0; const s = `${P.x.toFixed(5)}|${P.y.toFixed(5)}|${P.hp}|${P.oil.toFixed(3)}|${W.score}|${W.n}|${W.bats.map((b) => b.x.toFixed(3) + b.st).join()}|${W.loot.filter((l) => l.got).length}|${W.M.tiles.reduce((a, t, i) => (a + t * (i % 97)) | 0, 0)}`; for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) | 0; return h; };
 
@@ -71,6 +71,13 @@ export async function run(ctx) {
       P.inCage = false; W.cage.state = 'up'; P.x = m.x; P.y = m.y; for (let i = 0; i < 6; i++) { P.input = {}; step(W); }
       P.x = c.x; P.y = c.y + 1; for (let i = 0; i < 300; i++) { P.input = { my: -1, pick: i % 20 < 2 }; step(W); } drainEvents(W);
       res('treasure maps: most levels hide one, and digging the X opens the cache', withMap >= total - 2 && W.mapFound && c.got, `${withMap}/${total} levels`);
+    }
+    // collection rewards: every condition reads a journal, perks change only what they say
+    {
+      const empty = { relic: [], fossil: [], wonder: [], note: [], creature: [], secret: 0, endless: [], cache: [] };
+      const okNeed = REWARDS.every((r) => { const [h, n] = r.need(empty); return h === 0 && n > 0; });
+      const a = makeWorld({ seed: 9, depth: 1, level: 0, carry: { perks: ['spareflare'] } }), b2 = makeWorld({ seed: 9, depth: 1, level: 0, carry: {} });
+      res('rewards: 14 collection rewards, perks apply only when equipped', okNeed && REWARDS.length === 14 && a.players[0].flares === b2.players[0].flares + 1, `${REWARDS.filter((r) => r.kind === 'perk').length} perks`);
     }
     // the museum builds and draws
     ctx.toTitle(); ctx.R.loadMuseum({ relic: [0, 4, 9], fossil: [1], endless: [], cache: [] }, BIOMES);

@@ -1,7 +1,7 @@
 // Tile physics for the digger: one function moves a body through the tile map for one fixed step. The
 // simulation uses it for the player and the navigation builder (nav.js) uses the very same function to
 // probe every jump and drop, so the autopilot's map of "where can I get to from here" is exact.
-import { T, SOLID, CLIMB, PHYS } from './config.js?v=6';
+import { T, SOLID, CLIMB, PHYS } from './config.js?v=7';
 
 export const EPS = 1e-4;
 export function tileAt(M, x, y) {
@@ -189,9 +189,9 @@ export function stepBody(M, B, inp, dt, plats, bootFall = 0) {
 }
 
 // fall damage in hearts for a landing of `fall` metres (0 = fine, 99 = lethal)
-export function fallHurt(fall, bootLvl = 0) {
-  const safe = PHYS.safeFall + (bootLvl >= 1 ? 1.6 : 0) + (bootLvl >= 2 ? 1.2 : 0);
-  const lethal = PHYS.lethalFall + (bootLvl >= 1 ? 1.6 : 0) + (bootLvl >= 2 ? 1.2 : 0);
+export function fallHurt(fall, bootLvl = 0, extra = 0) {
+  const safe = PHYS.safeFall + (bootLvl >= 1 ? 1.6 : 0) + (bootLvl >= 2 ? 1.2 : 0) + extra;
+  const lethal = PHYS.lethalFall + (bootLvl >= 1 ? 1.6 : 0) + (bootLvl >= 2 ? 1.2 : 0) + extra;
   if (fall <= safe) return 0;
   if (fall >= lethal) return 99;
   return 1 + Math.floor((fall - safe) / PHYS.hurtPer);

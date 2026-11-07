@@ -184,6 +184,15 @@ table.hs tr.me td { color: #fff; background: rgba(255, 198, 90, .1); }
 .jent.locked { opacity: .45; } .jent.locked b { color: var(--dim); }
 #jsum { font-size: 13px; letter-spacing: .14em; color: var(--dim); }
 #museum { align-items: flex-end; }
+.lgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 8px; }
+.lock-it { position: relative; display: block; text-align: left; padding: 10px 12px 12px 36px; border-radius: 11px; border: 1px solid rgba(255, 220, 170, .16); background: rgba(255, 255, 255, .045); }
+.lock-it b { display: block; font-size: 14px; letter-spacing: .1em; }
+.lock-it small { display: block; font-family: 'Barlow', sans-serif; font-size: 12px; color: #c4b8a4; margin-top: 2px; }
+.lock-it em { display: block; font-style: normal; font-size: 11px; letter-spacing: .16em; color: var(--gold); margin-top: 5px; }
+.lock-it i { position: absolute; left: 11px; top: 13px; width: 16px; height: 16px; border-radius: 50%; box-shadow: 0 0 10px currentColor; }
+.lock-it.on { border-color: var(--gold); background: rgba(255, 198, 90, .12); box-shadow: 0 0 0 1px rgba(255, 198, 90, .4); }
+.lock-it.locked { opacity: .55; } .lock-it.locked em { color: var(--dim); }
+.lock-it .bar { display: block; height: 4px; border-radius: 2px; background: rgba(255, 255, 255, .08); margin-top: 5px; overflow: hidden; } .lock-it .bar s { display: block; height: 100%; background: var(--gold2); }
 .musc { max-height: 46vh; background: linear-gradient(170deg, rgba(30, 22, 14, .78), rgba(8, 6, 4, .86)); }
 .musrow { display: grid; grid-template-columns: 54px 1fr 54px; gap: 10px; align-items: center; }
 .mushead { text-align: center; } .mushead h2 { margin: 2px 0 0; } .mushead .sub { margin: 4px 0 10px; }
@@ -267,7 +276,7 @@ body.paused #gl { filter: brightness(.45) saturate(.6); }
   <div class="screen hidden" id="title">
     <div class="card">
       <h1 class="logo">GOLD<span>DIGGER</span></h1>
-      <div class="ver">VERSION <b id="ver">1.1.0</b> · INTO THE MOUNTAIN</div>
+      <div class="ver">VERSION <b id="ver">1.2.0</b> · INTO THE MOUNTAIN</div>
       <div class="diffrow">DIFFICULTY<div class="seg" data-opt="diff"><button data-v="easy">EASY</button><button data-v="normal">NORMAL</button><button data-v="hard">HARD</button><button data-v="nightmare">NIGHTMARE</button></div></div>
       <div id="diff-desc"></div>
       <div class="btns" id="title-btns">
@@ -277,6 +286,7 @@ body.paused #gl { filter: brightness(.45) saturate(.6); }
         <div class="btns two">
           <button class="mbtn" data-act="journal">JOURNAL<small id="j-sub">0 discoveries</small></button>
           <button class="mbtn" data-act="museum">MUSEUM<small>See your relics on show</small></button>
+          <button class="mbtn" data-act="locker">LOCKER<small id="lk-sub">0 unlocked</small></button>
           <button class="mbtn" data-act="playthrough">AI PLAYTHROUGH<small>Watch the autopilot dig</small></button>
           <button class="mbtn" data-act="scores">HIGH SCORES</button>
           <button class="mbtn" data-act="medals">MEDALS <small id="med-sub">0 / 15</small></button>
@@ -331,7 +341,14 @@ body.paused #gl { filter: brightness(.45) saturate(.6); }
       <button class="mbtn musarrow" data-act="mus-next" aria-label="next alcove">▶</button></div>
     <div class="jgrid" id="mus-list"></div>
     <div class="foot"><span id="mus-total"></span><span>◀ ▶ / SWIPE TO WALK THE HALL</span></div>
-    <div class="btns" style="margin-top:10px"><button class="mbtn" data-act="back">BACK</button></div>
+    <div class="btns two" style="margin-top:10px"><button class="mbtn" data-act="locker">LOCKER<small>Lamps, picks and perks you have earned</small></button><button class="mbtn" data-act="back">BACK</button></div>
+  </div></div>
+
+  <div class="screen hidden" id="locker"><div class="card wide">
+    <h2>THE LOCKER</h2><div class="sub" id="lk-sum"></div>
+    <p style="margin:0 0 6px">Finish collections in the journal to earn lamp colours, pick skins and perks. Perks only apply to your own expeditions.</p>
+    <div id="lk-body"></div>
+    <div class="btns" style="margin-top:14px"><button class="mbtn" data-act="back">BACK</button></div>
   </div></div>
 
   <div class="screen hidden" id="map"><div class="card wide">
@@ -380,6 +397,7 @@ body.paused #gl { filter: brightness(.45) saturate(.6); }
     <h3>YOUR LAMP</h3><p>The lamp burns oil. Pick up oil cans to keep it lit; with no oil the dark hurts you and shades come for you. Light a <b>campfire</b> to rest once (full hearts and lamp) and save your place.</p>
     <h3>FALLS</h3><p>Short drops are fine. Long falls hurt, very long falls kill — unless you land in water. Ladders catch you.</p>
     <h3>DISCOVERIES</h3><p>Every level hides a <b>relic</b> in a sealed vault, and many hide a <b>fossil</b> in the rock, a <b>wonder</b> to stumble upon and one of the old prospector's <b>notes</b>. They all go in your <b>journal</b>, and the more you find the higher your rank. The <b>map</b> (M) shows what your lamp has lit.</p>
+    <h3>THE LOCKER</h3><p>Finishing collections earns <b>lamp colours</b> (all three relics of a depth), <b>pick skins</b> and small <b>perks</b> — equip up to two in the Locker (title screen or museum).</p>
     <h3>TREASURE MAPS</h3><p>Most levels hide a <b>treasure map</b>. Pick it up and a red <b>X</b> appears on your map and minimap: stand on it and swing your pick <b>down</b> (↓ + PICK) to dig up a buried cache of gold. Relics you find go on show in the <b>museum</b> (title screen).</p>
     <h3>KEYBOARD</h3><p>MOVE A D / ← → · CLIMB / AIM W S / ↑ ↓ · JUMP SPACE (or K) · PICK J (or X) · DYNAMITE L (or C) · FLARE F (or V) · MAP M · PAUSE ESC</p>
     <h3>GAMEPAD</h3><p>Left stick moves, climbs and aims · A jump · X or RB pick · B or RT dynamite · Y or LB flare · VIEW map · START pause</p>
@@ -409,6 +427,6 @@ addEventListener('error', (e) => window.__gdErrors.push(String(e.message || e)))
 addEventListener('unhandledrejection', (e) => window.__gdErrors.push('rejection: ' + String(e.reason && e.reason.message || e.reason)));
 (() => { const ce = console.error; console.error = (...a) => { window.__gdErrors.push(a.map(String).join(' ')); ce.apply(console, a); }; })();
 </script>
-<script type="module" src="js/main.js?v=6"></script>
+<script type="module" src="js/main.js?v=7"></script>
 </body>
 </html>

@@ -1,6 +1,6 @@
 // Gold Digger: every tunable in one place. The simulation (sim.js), the level generator (levelgen.js) and the
 // autopilot (ai.js) read only from here, so the Node checks and the browser agree exactly.
-export const VERSION = '1.1.0';
+export const VERSION = '1.2.0';
 export const STEP = 1 / 120;
 
 // ------------------------------------------------------------------ tiles (1 m cells, row 0 = bottom)
@@ -220,6 +220,28 @@ export const CREATURES = {
   wyrm: ['TIDEWYRM', 'A drowned serpent. Its gills glow when it rests on the shore.'],
   heart: ['THE MOLTEN HEART', 'The mountain itself, awake. Hit its fists when they cool.'],
 };
+
+// Collection rewards: lamp colours, pick skins and perks (equip up to 2) unlocked by finishing sets.
+// need(journal) -> [have, total]
+const has = (list, ids) => ids.filter((i) => list.includes(i)).length;
+const relics = (j) => j.relic.length + (j.endless || []).filter((e) => e.kind === 'relic').length;
+export const REWARDS = [
+  { key: 'lamp-copper', kind: 'lamp', name: 'COPPER FLAME', col: 0xff9a4a, how: 'All 3 relics of the Copper Hollows', need: (j) => [has(j.relic, [0, 1, 2]), 3] },
+  { key: 'lamp-glow', kind: 'lamp', name: 'GLOWROOT BLUE', col: 0x7af5dc, how: 'All 3 relics of the Glowroot Grotto', need: (j) => [has(j.relic, [3, 4, 5]), 3] },
+  { key: 'lamp-geode', kind: 'lamp', name: 'AMETHYST', col: 0xc9a2ff, how: 'All 3 relics of the Geode Vaults', need: (j) => [has(j.relic, [6, 7, 8]), 3] },
+  { key: 'lamp-drowned', kind: 'lamp', name: 'DEEP WATER', col: 0x86d4ff, how: 'All 3 relics of the Drowned Halls', need: (j) => [has(j.relic, [9, 10, 11]), 3] },
+  { key: 'lamp-ember', kind: 'lamp', name: 'EMBERLIGHT', col: 0xff7a52, how: 'All 3 relics of the Ember Core', need: (j) => [has(j.relic, [12, 13, 14]), 3] },
+  { key: 'pick-gold', kind: 'pick', name: 'GOLDEN PICK', how: 'Dig up 3 buried caches', need: (j) => [(j.cache || []).length, 3], mat: { color: 0xffc24a, metalness: 1, roughness: 0.22, emissive: 0x2a1600 } },
+  { key: 'pick-crystal', kind: 'pick', name: 'CRYSTAL PICK', how: 'Dig 3 fossils out of the rock', need: (j) => [j.fossil.length, 3], mat: { color: 0xc4a8ff, metalness: 0.1, roughness: 0.06, emissive: 0x5a2aa0 } },
+  { key: 'pick-obsidian', kind: 'pick', name: 'OBSIDIAN PICK', how: 'Find 5 wonders', need: (j) => [j.wonder.length, 5], mat: { color: 0x18120f, metalness: 0.4, roughness: 0.1, emissive: 0x7a1a00 } },
+  { key: 'pick-relic', kind: 'pick', name: 'RELIC PICK', how: 'Find 8 relics', need: (j) => [relics(j), 8], mat: { color: 0xb5823e, metalness: 0.9, roughness: 0.3, emissive: 0x1a6a5a } },
+  { key: 'steadylamp', kind: 'perk', name: 'STEADY LAMP', desc: 'Your lamp burns 15% slower', how: 'Find 4 relics', need: (j) => [relics(j), 4] },
+  { key: 'luckypick', kind: 'perk', name: 'LUCKY PICK', desc: 'Gold veins give an extra nugget', how: 'Dig up 2 buried caches', need: (j) => [(j.cache || []).length, 2] },
+  { key: 'surefoot', kind: 'perk', name: 'SURE FOOT', desc: 'Survive falls a metre longer', how: 'Dig 2 fossils out of the rock', need: (j) => [j.fossil.length, 2] },
+  { key: 'spareflare', kind: 'perk', name: 'SPARE FLARE', desc: 'Start every level with an extra flare', how: 'Find 3 wonders', need: (j) => [j.wonder.length, 3] },
+  { key: 'keeneye', kind: 'perk', name: 'KEEN EYE', desc: 'Walls hiding a secret room glint gold', how: 'Open 5 secret rooms', need: (j) => [Math.min(j.secret || 0, 5), 5] },
+];
+export const MAX_PERKS = 2;
 
 export const RANKS = [[0, 'GREENHORN'], [8, 'TUNNEL RAT'], [20, 'PROSPECTOR'], [40, 'DEEP DELVER'], [70, 'VEIN SEEKER'], [110, 'MOUNTAIN LEGEND']];
 export const MEDALS = [

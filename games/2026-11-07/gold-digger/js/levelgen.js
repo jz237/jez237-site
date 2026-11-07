@@ -5,7 +5,7 @@
 // (mirrored at random), then hazards, creatures and loot are scattered by the RAMP numbers for this level.
 // Everything is deterministic from (seed, depth, level). Boss lairs are separate hand-shaped arenas.
 // Tile rows here are world rows: y = 0 is the bottom of the map. Templates are written top-down.
-import { T, RAMP, LEVELS, RELICS, FOSSILS, WONDERS, NOTES, GEMS, LOOT, STRATA } from './config.js?v=6';
+import { T, RAMP, LEVELS, RELICS, FOSSILS, WONDERS, NOTES, GEMS, LOOT, STRATA } from './config.js?v=7';
 
 export const RW = 16, RH = 12, BORDER = 2;
 
@@ -472,6 +472,7 @@ function tryGenerate(o) {
     const n = v.sealFrom;
     const xs = v.sealSide === 'L' ? [v.x0, n.x0 + RW - 1] : [v.x0 + RW - 1, n.x0];
     const tile = kind === 'soft' ? T.SOFT : kind === 'hard' ? T.HARD : T.DOOR;
+    (M.seals ||= []).push({ x: xs[1] + 0.5, y: v.y0 + 4.5 });
     for (const x of xs) for (let r = 5; r <= 8; r++) { const y = v.y0 + (RH - 1 - r); setT(M, x, y, (kind === 'door' && x !== xs[1]) ? T.AIR : tile); }
     if (kind === 'door') M.keyDoors.push({ x: xs[1], y0: v.y0 + 3, y1: v.y0 + 6, id: i });
     // the boulder needs dynamite: leave a powder keg (refills to 2 dynamite) by the wall

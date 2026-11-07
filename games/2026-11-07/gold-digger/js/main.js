@@ -1,15 +1,15 @@
 // Gold Digger: the game shell. Fixed-step simulation (sim.js) + renderer (render.js), level flow, the general store,
 // the journal of discoveries, tips, cinematics, the attract demo, the AI playthrough, scores and menus.
-import { VERSION, STEP, T, BIOMES, LEVELS, DEPTHS, UPGRADES, TYPICAL_UP, DIFFICULTY, MEDALS, RELICS, FOSSILS, WONDERS, NOTES, CREATURES, RANKS, START, STRATA } from './config.js?v=6';
-import { makeWorld, step, drainEvents, cloneWorld, carryOut } from './sim.js?v=6';
-import { hash, findName } from './levelgen.js?v=6';
-import { Autopilot } from './ai.js?v=6';
-import { Renderer, pickQuality, LOOKS } from './render.js?v=6';
-import { CALM } from './fx.js?v=6';
-import { Audio } from './audio.js?v=6';
-import { Input } from './input.js?v=6';
-import { Scores, NO_POST } from './scores.js?v=6';
-import { Recorder, Replay } from './replay.js?v=6';
+import { VERSION, STEP, T, BIOMES, LEVELS, DEPTHS, UPGRADES, TYPICAL_UP, DIFFICULTY, MEDALS, RELICS, FOSSILS, WONDERS, NOTES, CREATURES, RANKS, START, STRATA, REWARDS, MAX_PERKS } from './config.js?v=7';
+import { makeWorld, step, drainEvents, cloneWorld, carryOut } from './sim.js?v=7';
+import { hash, findName } from './levelgen.js?v=7';
+import { Autopilot } from './ai.js?v=7';
+import { Renderer, pickQuality, LOOKS } from './render.js?v=7';
+import { CALM } from './fx.js?v=7';
+import { Audio } from './audio.js?v=7';
+import { Input } from './input.js?v=7';
+import { Scores, NO_POST } from './scores.js?v=7';
+import { Recorder, Replay } from './replay.js?v=7';
 
 const Q = new URLSearchParams(location.search);
 const $ = (id) => document.getElementById(id);
@@ -20,11 +20,31 @@ const FIXED = Q.has('fixed');
 const settings = Object.assign({ music: 55, sfx: 85, voice: 90, talk: 'on', flash: 'full', shake: '1', tips: 'on', rumble: 'on', touch: 'auto', quality: 'auto', diff: 'normal' }, store.get('settings', {}));
 const saveSettings = () => store.set('settings', settings);
 const journal = Object.assign({ relic: [], fossil: [], wonder: [], note: [], creature: [], secret: 0, endless: [], cache: [] }, store.get('journal', {}));
-const saveJournal = () => store.set('journal', journal);
+const saveJournal = () => { store.set('journal', journal); if (typeof checkUnlocks === 'function') checkUnlocks(); };
 let medals = store.get('medals', []);
 let reached = store.get('reached', 0);
 let bests = store.get('bests', {});
 let tipsSeen = store.get('tips', {});
+let unlocks = store.get('unlocks', []);
+const loadout = Object.assign({ lamp: null, pick: null, perks: [] }, store.get('loadout', {}));
+const rewardOf = (k) => REWARDS.find((r) => r.key === k);
+function applyLoadout() {
+  const lamp = loadout.lamp && unlocks.includes(loadout.lamp) ? rewardOf(loadout.lamp) : null;
+  const pick = loadout.pick && unlocks.includes(loadout.pick) ? rewardOf(loadout.pick) : null;
+  loadout.perks = loadout.perks.filter((k) => unlocks.includes(k)).slice(0, MAX_PERKS);
+  R.setLoadout({ lampCol: lamp ? lamp.col : null, pickMat: pick ? pick.mat : null, keen: loadout.perks.includes('keeneye') });
+  store.set('loadout', loadout);
+}
+// anything newly earned is announced (in play) and kept
+function checkUnlocks(quiet) {
+  const fresh = [];
+  for (const r of REWARDS) { if (unlocks.includes(r.key)) continue; const [h, n] = r.need(journal); if (h >= n) { unlocks.push(r.key); fresh.push(r); } }
+  if (!fresh.length) return;
+  store.set('unlocks', unlocks);
+  if (quiet) return;
+  const r = fresh[0];
+  setTimeout(() => { popBanner('UNLOCKED', r.name + (fresh.length > 1 ? ` +${fresh.length - 1} MORE` : '') + ' · SEE THE LOCKER'); A.play('medal', { vol: 0.9 }); }, 1800);
+}
 const discoveries = () => journal.relic.length + journal.fossil.length + journal.wonder.length + journal.note.length + journal.creature.length + Math.min(journal.secret, 30) + journal.endless.length + (journal.cache || []).length;
 const rankName = () => { let r = RANKS[0][1]; for (const [n, name] of RANKS) if (discoveries() >= n) r = name; return r; };
 
@@ -55,7 +75,7 @@ addEventListener('resize', resize);
 resize();
 
 // ------------------------------------------------------------------ screens
-const SCREENS = ['title', 'depths', 'shop', 'results', 'journal', 'map', 'scores', 'medals', 'options', 'help', 'pause', 'museum'];
+const SCREENS = ['title', 'depths', 'shop', 'results', 'journal', 'map', 'scores', 'medals', 'options', 'help', 'pause', 'museum', 'locker'];
 let screenStack = [];
 function show(name, push = false) {
   if (push && G.screen) screenStack.push(G.screen); else if (!push) screenStack = [];
@@ -67,11 +87,13 @@ function show(name, push = false) {
   if (name === 'map') drawMap();
   if (name === 'scores') drawScores();
   if (name === 'medals') drawMedals();
+  if (name === 'locker') drawLocker();
   if (name === 'depths') drawDepths();
   firstSel();
 }
 function back() {
   A.play('uiback', { vol: 0.5 });
+  if (G.state === 'museum' && G.screen === 'locker') { G.lockerFromMuseum = false; show('museum'); drawMuseum(); return; }
   if (G.state === 'museum') { toTitle(); return; }
   const prev = screenStack.pop();
   if (prev) { G.screen = null; show(prev, false); screenStack = screenStack; return; }
@@ -88,6 +110,7 @@ function refreshTitle() {
   $('ver').textContent = VERSION;
   $('j-sub').textContent = `${discoveries()} discoveries`;
   $('med-sub').textContent = `${medals.length} / ${MEDALS.length}`;
+  $('lk-sub').textContent = `${unlocks.length} / ${REWARDS.length} unlocked`;
   $('rank').textContent = rankName();
   $('title-best').textContent = 'BEST ' + (board(false, settings.diff).best() || 0).toLocaleString();
   applySettings();
@@ -114,6 +137,7 @@ function levelSeed(run) { return hash(run.seed, run.depth, run.level, run.endles
 function loadLevel() {
   const run = G.run;
   run.carry.up = run.up;
+  run.carry.perks = run.auto ? [] : loadout.perks.slice();
   const W = makeWorld({ seed: levelSeed(run), mode: run.mode === 'endless' ? 'endless' : 'campaign', diff: run.diff, depth: run.depth, level: run.level, endlessN: run.endlessN, carry: run.carry });
   G.W = W; G.state = 'play'; G.paused = false; G.acc = 0; G.levelT = 0; G.slow = 1; G.slowT = 0; G.replay = null; G.clip = null;
   rec.reset();
@@ -292,6 +316,34 @@ function award(k) {
   if (m) { popBanner('MEDAL', m[1]); A.play('medal'); }
 }
 
+// ------------------------------------------------------------------ the locker (collection rewards)
+function drawLocker() {
+  const sec = (kind, title, def) => {
+    const list = REWARDS.filter((r) => r.kind === kind);
+    const eq = kind === 'perk' ? loadout.perks : [loadout[kind]];
+    let h = `<h3>${title}</h3><div class="lgrid">`;
+    if (def) h += `<button class="lock-it${!loadout[kind] ? ' on' : ''}" data-eq="${kind}:"><b>${def[0]}</b><small>${def[1]}</small><em>${!loadout[kind] ? 'EQUIPPED' : 'TAP TO EQUIP'}</em></button>`;
+    for (const r of list) {
+      const got = unlocks.includes(r.key), [hv, n] = r.need(journal), on = eq.includes(r.key);
+      const sw = r.col ? `<i style="background:#${r.col.toString(16).padStart(6, '0')}"></i>` : r.mat ? `<i style="background:#${r.mat.color.toString(16).padStart(6, '0')}"></i>` : '';
+      h += got ? `<button class="lock-it${on ? ' on' : ''}" data-eq="${kind}:${r.key}">${sw}<b>${r.name}</b><small>${r.desc || r.how}</small><em>${on ? 'EQUIPPED' : kind === 'perk' ? 'TAP TO EQUIP' : 'TAP TO EQUIP'}</em></button>`
+        : `<div class="lock-it locked">${sw}<b>${r.name}</b><small>${r.desc ? r.desc + ' · ' : ''}${r.how}</small><em>${Math.min(hv, n)} / ${n}</em><span class="bar"><s style="width:${Math.min(100, hv / n * 100)}%"></s></span></div>`;
+    }
+    return h + '</div>';
+  };
+  $('lk-sum').textContent = `${unlocks.length} OF ${REWARDS.length} UNLOCKED · PERKS ${loadout.perks.length} / ${MAX_PERKS}`;
+  $('lk-body').innerHTML = sec('lamp', 'LAMP COLOUR', ['MINER\'S AMBER', 'The old warm flame']) + sec('pick', 'PICK', ['STEEL PICK', 'Plain and honest']) + sec('perk', `PERKS · EQUIP UP TO ${MAX_PERKS}`);
+}
+function equip(kind, key) {
+  if (kind === 'perk') {
+    const i = loadout.perks.indexOf(key);
+    if (i >= 0) loadout.perks.splice(i, 1);
+    else { if (loadout.perks.length >= MAX_PERKS) loadout.perks.shift(); loadout.perks.push(key); }
+  } else loadout[kind] = key || null;
+  A.play(kind === 'perk' ? 'uiok' : 'upgrade', { vol: 0.6 });
+  applyLoadout(); drawLocker();
+}
+
 // ------------------------------------------------------------------ the relic museum
 function openMuseum() {
   if (G.state !== 'title') return;   // never from the pause menu: that would end the run
@@ -311,7 +363,7 @@ function drawMuseum() {
   const total = journal.relic.length + journal.endless.filter((e) => e.kind === 'relic').length;
   $('mus-name').textContent = A2.name;
   $('mus-sub').textContent = G.museumSel < 5 ? `DEPTH ${G.museumSel + 1} · ${have} OF 3 RELICS` : `THE LAST THREE RELICS FROM THE ENDLESS DEEP`;
-  $('mus-total').textContent = `${total} RELIC${total === 1 ? '' : 'S'} · ${journal.fossil.length} FOSSILS · ${journal.cache.length} CACHES`;
+  $('mus-total').textContent = `${total} RELIC${total === 1 ? '' : 'S'} · ${journal.fossil.length} FOSSILS · ${journal.cache.length} CACHES · ${unlocks.length}/${REWARDS.length} REWARDS`;
   $('mus-list').innerHTML = A2.slots.map((s) => {
     if (s.id < 0) return `<div class="jent locked"><b>EMPTY PLINTH</b><small>Dig deeper into the Endless Deep.</small></div>`;
     const [n, t] = findName('relic', s.id);
@@ -689,6 +741,7 @@ function act(a, el) {
     case 'playthrough': startCampaign(0, { mode: 'playthrough', auto: 'demo' }); break;
     case 'journal': show('journal', true); break;
     case 'museum': openMuseum(); break;
+    case 'locker': if (G.state === 'museum') { G.lockerFromMuseum = true; } show('locker', G.state !== 'museum'); break;
     case 'mus-prev': museumGo(-1); break;
     case 'mus-next': museumGo(1); break;
     case 'scores': show('scores', true); break;
@@ -714,13 +767,14 @@ document.addEventListener('click', (e) => {
   const o = e.target.closest('[data-opt] button');
   if (o) { const k = o.parentElement.dataset.opt; settings[k] = o.dataset.v; saveSettings(); applySettings(); A.play('uimove', { vol: 0.5 }); if (k === 'quality') $('q-reload').classList.remove('hidden'); if (k === 'touch') touchUI(); return; }
   const jt = e.target.closest('[data-jt]'); if (jt) { jTab = jt.dataset.jt; drawJournal(); A.play('journal', { vol: 0.5 }); return; }
+  const eqb = e.target.closest('[data-eq]'); if (eqb) { const [kind, key] = eqb.dataset.eq.split(':'); equip(kind, key); return; }
   const tb = e.target.closest('[data-tab]'); if (tb) { hsTab = tb.dataset.tab; drawScores(); return; }
   const hd = e.target.closest('[data-hd]'); if (hd) { hsDiff = hd.dataset.hd; drawScores(); return; }
   const ib = e.target.closest('[data-ini]'); if (ib) { const i = +ib.dataset.ini, d = +ib.dataset.d; ini[i] = String.fromCharCode(((ini[i].charCodeAt(0) - 65 + d + 26) % 26) + 65); iniPos = i; drawIni(); return; }
 });
 document.addEventListener('input', (e) => { const r = e.target.closest('[data-set]'); if (r) { settings[r.dataset.set] = +r.value; saveSettings(); applySettings(); } });
 I.on('tap', (k) => { if (k === 'pause') { if (G.state === 'play') pause(); else if (G.state === 'paused') resume(); } if (k === 'map') act('map'); });
-I.on('pause', () => { if (G.state === 'museum') { toTitle(); return; } if (G.replay) { endReplay(); return; } if (G.state === 'play') pause(); else if (G.state === 'paused' && G.screen === 'pause') resume(); else if (G.screen && G.screen !== 'title' && G.screen !== 'results' && G.screen !== 'shop') back(); });
+I.on('pause', () => { if (G.state === 'museum') { if (G.screen === 'locker') back(); else toTitle(); return; } if (G.replay) { endReplay(); return; } if (G.state === 'play') pause(); else if (G.state === 'paused' && G.screen === 'pause') resume(); else if (G.screen && G.screen !== 'title' && G.screen !== 'results' && G.screen !== 'shop') back(); });
 I.on('map', () => { if (G.state === 'play' && G.mode !== 'demo') act('map'); else if (G.screen === 'map') back(); });
 I.on('any', () => { G.idleT = 0; if (G.mode === 'demo') endDemo(); });
 I.on('back', () => { if (G.screen && !['title', 'results', 'shop'].includes(G.screen)) back(); });
@@ -736,6 +790,7 @@ I.on('key', (k, e) => {
     if (k === 'Backspace') { iniPos = Math.max(0, iniPos - 1); drawIni(); return; }
   }
   if (!G.screen || G.state === 'play') return;
+  if (G.screen === 'locker' && (k === 'Escape' || k === 'Backspace')) { back(); return; }
   if (G.screen === 'museum') { if (k === 'ArrowLeft' || k === 'KeyA') museumGo(-1); else if (k === 'ArrowRight' || k === 'KeyD') museumGo(1); else if (k === 'Escape' || k === 'Backspace' || k === 'Enter') toTitle(); return; }
   const items = menuItems(); if (!items.length) return;
   let i = items.findIndex((b) => b.classList.contains('sel'));
@@ -751,14 +806,16 @@ I.on('confirm', () => { const items = menuItems(); const s = items.find((b) => b
 async function boot() {
   applySettings();
   toTitle();
+  checkUnlocks(true); applyLoadout();
   $('loading').style.opacity = 0; setTimeout(() => $('loading').remove(), 700);
-  if (Q.has('test')) { const T2 = await import('./tests.js?v=6'); T2.run({ G, R, startCampaign, startEndless, toTitle, tick, makeWorld, step }); return; }
+  if (Q.has('test')) { const T2 = await import('./tests.js?v=7'); T2.run({ G, R, startCampaign, startEndless, toTitle, tick, makeWorld, step }); return; }
   if (Q.has('autoplay')) startCampaign(+(Q.get('depth') || 0), { mode: 'autoplay', auto: 'demo', level: +(Q.get('level') || 0) });
   if (Q.has('playthrough')) startCampaign(+(Q.get('depth') || 0), { mode: 'playthrough', auto: 'demo', level: +(Q.get('level') || 0) });
   requestAnimationFrame(raf);
 }
 // test hooks: tick(n) runs n frames at dt (drawing the last), plus helpers to start things
 Object.assign(window.__gd, {
+  unlocks: () => unlocks, loadout, checkUnlocks, applyLoadout, equip,
   tick(n = 1, dt = 1 / 60, draw = true) { for (let i = 0; i < n; i++) { const d = draw || i === n - 1; if (!d) { const R0 = R.frame; R.frame = () => {}; tick(dt); R.frame = R0; } else tick(dt); } },
   startCampaign, startEndless, toTitle, startDemo, pause, resume, act, show,
   auto(p = 'human') { if (G.run) { G.run.auto = p; G.ap = new Autopilot(p, 7); } },

@@ -4,13 +4,13 @@
 // re-aimed every frame at the nearest flares, fires, lanterns, crystals and lava): their number never changes,
 // so no material ever recompiles mid-game.
 import * as THREE from '../vendor/three.module.min.js';
-import { T, SOLID, PHYS, TOOLS, GEMS, BIOMES } from './config.js?v=6';
-import { Cave, rockMaterial } from './cavemesh.js?v=6';
-import { rockTextures, spriteTextures, waterTextures } from './textures.js?v=6';
-import { FX, CALM } from './fx.js?v=6';
-import { Post } from './post.js?v=6';
-import * as MD from './models.js?v=6';
-import { buildDecor, bake } from './decor.js?v=6';
+import { T, SOLID, PHYS, TOOLS, GEMS, BIOMES } from './config.js?v=7';
+import { Cave, rockMaterial } from './cavemesh.js?v=7';
+import { rockTextures, spriteTextures, waterTextures } from './textures.js?v=7';
+import { FX, CALM } from './fx.js?v=7';
+import { Post } from './post.js?v=7';
+import * as MD from './models.js?v=7';
+import { buildDecor, bake } from './decor.js?v=7';
 
 export function pickQuality(name) {
   const mobile = matchMedia('(pointer:coarse)').matches || /Android|iPhone|iPad/i.test(navigator.userAgent);
@@ -153,7 +153,7 @@ export class Renderer {
     this.rockMat.userData.U.uMoss.value.fromArray(look.mossCol || [0.1, 0.3, 0.2]);
     this.scene.fog.color.fromArray(look.fog); this.scene.fog.density = look.fogD;
     this.hemi.color.fromArray(look.hemiS); this.hemi.groundColor.fromArray(look.hemiG);
-    this.lamp.color.set(look.lamp);
+    this.lamp.color.set(this.lampCol || look.lamp);
     this.fx.setLook(look);
     this.r.setClearColor(new THREE.Color().fromArray(look.fog), 1);
     // the rock
@@ -356,6 +356,23 @@ export class Renderer {
       G.add(g);
       this.breakProps.set(y * M.w + x, g);
     }
+  }
+
+  // ------------------------------------------------------------------ the loadout (lamp colour, pick skin, keen eye)
+  setLoadout(o) {
+    this.loadout = o || {};
+    this.lampCol = o && o.lampCol != null ? new THREE.Color(o.lampCol) : null;
+    const pl = this.player; if (!pl) return;
+    if (pl.rig.lampLens && pl.rig.lampLens.material && pl.rig.lampLens.material.emissive) pl.rig.lampLens.material.emissive.set(this.lampCol || 0xffe0b0);
+    const pick = pl.rig.pick; if (!pick) return;
+    let skin = null;
+    if (o && o.pickMat) { const m = o.pickMat; skin = new THREE.MeshStandardMaterial({ color: m.color, metalness: m.metalness, roughness: m.roughness, emissive: m.emissive || 0x000000, emissiveIntensity: m.emissive ? 1.4 : 0 }); }
+    pick.traverse((x) => {
+      if (!x.isMesh) return;
+      if (!x.userData.origMat) x.userData.origMat = x.material;
+      const n = x.userData.origMat.name || '';
+      x.material = skin && /metal|polish/.test(n) ? skin : x.userData.origMat;
+    });
   }
 
   // ------------------------------------------------------------------ the relic museum
@@ -662,6 +679,9 @@ export class Renderer {
     this.lamp.distance = 30 + lampLvl * 5;
     this.lamp.angle = 0.72 + lampLvl * 0.06;
     this.fill.position.set(P.x + P.face * 0.6, P.y + 1.3, 1.2);
+    if (this.lampCol) { this.lamp.color.copy(this.lampCol); this.fill.color.copy(this.lampCol).lerp(tmpC.setRGB(1, 0.78, 0.56), 0.5); } else this.fill.color.setRGB(1, 0.78, 0.56);
+    // KEEN EYE: walls hiding a secret room glint gold when you are near
+    if (this.loadout && this.loadout.keen && W.M.seals) for (const s of W.M.seals) if (Math.abs(s.x - P.x) < 12 && Math.abs(s.y - P.y) < 8 && Math.random() < dt * 3 && SOLID[W.M.tiles[Math.floor(s.y) * W.M.w + Math.floor(s.x)]]) this.fx.glint(s.x + (Math.random() - 0.5) * 0.8, s.y + (Math.random() - 0.5) * 2.5, 0.8, 0.7, [1, 0.8, 0.35]);
     this.fill.intensity = (oil <= 0 ? 3 : 14 + lampLvl * 3) * flick;
     if (R.lampLens && R.lampLens.material && R.lampLens.material.emissive) R.lampLens.material.emissiveIntensity = 4 * k;
   }

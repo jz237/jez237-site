@@ -2,11 +2,11 @@
 // checks reproduce a run exactly. No rendering, no Math.random: every random number comes from W.rs.
 // Events for sound, effects and the HUD go into W.ev and are drained by the game each frame.
 import { T, SOLID, PHYS, TOOLS, STEP, PICK_HP, BLASTABLE, LOOT, GEMS, START, LIFE_EVERY, LEVELS, DEPTHS, BIOMES, BOSSES,
-  rampAt, endlessRamp, applyDiff, DIFFICULTY } from './config.js?v=6';
-import { tileAt, solidT, makeBody, stepBody, fallHurt, boxOverlapsTile, EPS } from './physics.js?v=6';
-import { generate, bossArena, hash, findName } from './levelgen.js?v=6';
-import { validateLevel } from './nav.js?v=6';
-import { updateBoss, makeBoss, bossHit } from './boss.js?v=6';
+  rampAt, endlessRamp, applyDiff, DIFFICULTY } from './config.js?v=7';
+import { tileAt, solidT, makeBody, stepBody, fallHurt, boxOverlapsTile, EPS } from './physics.js?v=7';
+import { generate, bossArena, hash, findName } from './levelgen.js?v=7';
+import { validateLevel } from './nav.js?v=7';
+import { updateBoss, makeBoss, bossHit } from './boss.js?v=7';
 
 export { STEP };
 export const rnd = (W) => { W.rs = (W.rs + 0x6D2B79F5) >>> 0; let t = W.rs; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
@@ -51,7 +51,9 @@ export function makeWorld(o) {
     dyn: c.dyn ?? START.dyn, dynMax: START.dynMax + 2 * (up.satchel || 0), flares: c.flares ?? START.flares, flareMax: START.flareMax + 2 * (up.pouch || 0),
     helmet: (up.helmet ? 1 : 0) + (ramp.helmet >= 0.5 ? 1 : 0), keys: [], pickT: 0, pickCD: 0, pickAim: 0, throwT: 0, darkT: 0,
     dead: false, deadT: 0, cause: '', input: { mx: 0, my: 0, jump: false, pick: false, dyn: false, flare: false }, prev: {}, inCage: true, lastHitT: -9,
+    perks: (c.perks || []).slice(0, 2),
   });
+  if (P.perks.includes('spareflare')) P.flares = Math.min(P.flareMax, P.flares + 1);
   P.oil = Math.min(P.oilMax, c.oil ?? P.oilMax);
   W.players = [P];
   // spawn the level's things
@@ -164,7 +166,7 @@ export function step(W, dt = STEP) {
     const wasGround = P.ground;
     stepBody(M, P, inp, dt, plats, P.up.boots || 0);
     if (P.landed) {
-      const h = fallHurt(P.landed, P.up.boots || 0);
+      const h = fallHurt(P.landed, P.up.boots || 0, P.perks.includes('surefoot') ? 1 : 0);
       ev(W, 'land', { x: P.x, y: P.y, v: P.landed });
       if (h > 0) hurt(W, P, h >= 99 ? 99 : h, h >= 99 ? 'a long fall' : 'a hard landing');
     }
@@ -248,7 +250,7 @@ export function step(W, dt = STEP) {
 
   // --- lamp oil
   if (!P.dead && !P.inCage && !W.clear) {
-    P.oil = Math.max(0, P.oil - R.oilDrain * dt * (W.isBoss ? 0.35 : 1));
+    P.oil = Math.max(0, P.oil - R.oilDrain * dt * (W.isBoss ? 0.35 : 1) * (P.perks.includes('steadylamp') ? 0.85 : 1));
     if (P.oil <= 0) {
       P.darkT += dt;
       if (P.darkT >= TOOLS.oilDarkHurt) { P.darkT = 0; hurt(W, P, 1, 'the dark'); }
@@ -363,7 +365,7 @@ function breakTile(W, x, y, how) {
   setTile(W, x, y, T.AIR);
   ev(W, 'break', { x: x + 0.5, y: y + 0.5, t, how });
   if (t === T.VEIN) {
-    const n = 2 + Math.floor(rnd(W) * 3);
+    const n = 2 + Math.floor(rnd(W) * 3) + (W.players[0].perks.includes('luckypick') ? 1 : 0);
     for (let k = 0; k < n; k++) W.loot.push({ id: W.uid++, k: 'gold', x: x + 0.5, y: y + 0.3, vx: rr(W, -2.5, 2.5), vy: rr(W, 2, 5), v: Math.round(rr(W, 40, 90) / 5) * 5, fly: true, got: false, t: 0 });
   }
   if (t === T.GEMV) {
@@ -711,5 +713,5 @@ const API = { hurt, ev, rnd, rr, addScore, explode, litBy, killBat, bossCleared,
 // a run's carry-over into the next level
 export function carryOut(W) {
   const P = W.players[0];
-  return { score: W.score, lifePts: W.lifePts, lives: W.lives, hp: P.hp, dyn: P.dyn, flares: P.flares, oil: P.oil, up: P.up };
+  return { score: W.score, lifePts: W.lifePts, lives: W.lives, hp: P.hp, dyn: P.dyn, flares: P.flares, oil: P.oil, up: P.up, perks: P.perks };
 }
