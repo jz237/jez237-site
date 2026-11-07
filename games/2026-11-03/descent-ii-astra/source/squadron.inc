@@ -1,6 +1,7 @@
 /* Host-owned AI player ships. Each has independent perception, navigation,
  * inventory and controls. Native D2 physics, collision and weapons do the work. */
 extern int astra_net_active,astra_net_humans,astra_net_count,astra_net_owner,astra_net_bot_skill[4];
+extern int astra_net_human(int);
 extern void init_player_stats_new_ship(ubyte);
 extern void drop_player_eggs(object*);
 typedef struct {
@@ -12,7 +13,7 @@ typedef struct {
     fix64 ignored[MAX_OBJECTS];
 } squad_pilot;
 static squad_pilot sq[4];
-static int sq_bot(int id){return astra_net_active&&id>=astra_net_humans&&id<astra_net_count&&id<4;}
+static int sq_bot(int id){return astra_net_active&&id>0&&id<astra_net_count&&id<4&&astra_net_bot_skill[id]>=0;}
 static int sq_owner(int id){return sq_bot(id)&&astra_net_owner==0;}
 static float sq_clamp(float x,float a,float b){return fmaxf(a,fminf(b,x));}
 static float sq_distance(vms_vector *a,vms_vector *b){return f2fl(vm_vec_dist_quick(a,b));}
@@ -81,7 +82,7 @@ static void sq_plan(int id,object *ship){
     }
     if(cost==1e9f&&(Game_mode&GM_MULTI_COOP)){
         float near=1e9f;
-        for(int p=0;p<astra_net_humans;p++)if(Players[p].connected==CONNECT_PLAYING){
+        for(int p=0;p<astra_net_count;p++)if(astra_net_human(p)&&Players[p].connected==CONNECT_PLAYING){
             object *lead=&Objects[Players[p].objnum];if(lead->type!=OBJ_PLAYER||lead->segnum<0||sq_dist[lead->segnum]<0)continue;
             float d=sq_distance(&lead->pos,&ship->pos);if(d<near){near=d;goal=lead->segnum;end=lead->pos;
                 vm_vec_scale_add2(&end,&lead->orient.fvec,-i2f(13+id*3));vm_vec_scale_add2(&end,&lead->orient.rvec,i2f((id&1?1:-1)*10));
@@ -185,7 +186,8 @@ static void sq_drive(int id,object *o){
 void astra_squad_frame(void){
     if(!astra_net_active||astra_net_owner||FrameTime<=0||Endlevel_sequence)return;
     int saved=Player_num,dead=Player_is_dead;object *console=ConsoleObject;control_info controls=Controls;
-    for(int id=astra_net_humans;id<astra_net_count;id++){
+    for(int id=1;id<astra_net_count;id++){
+        if(!sq_bot(id))continue;
         object *o=&Objects[Players[id].objnum];squad_pilot *b=&sq[id];
         if(b->level!=Current_level_num||b->signature!=o->signature){
             memset(b,0,sizeof(*b));b->level=Current_level_num;b->signature=o->signature;b->target=b->goal=b->last_room=-1;b->progress=GameTime64;b->last=o->pos;b->up=o->orient.uvec;

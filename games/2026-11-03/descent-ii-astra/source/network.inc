@@ -3,38 +3,76 @@
  * Included at the end of net_udp.c so native synchronization remains intact. */
 int astra_net_active=0,astra_net_humans=0,astra_net_count=0,astra_net_owner=0;
 int astra_net_bot_skill[4]={-1,-1,-1,-1};
-static int an_self,an_seed;
+static int an_self,an_seed,an_retarget;
+int astra_net_human(int id){return id>=0&&id<astra_net_count&&astra_net_bot_skill[id]==-1;}
 static void an_address(struct _sockaddr *a,int slot){
     memset(a,0,sizeof(*a));a->sin_family=AF_INET;a->sin_port=htons(UDP_PORT_DEFAULT);
     a->sin_addr.s_addr=htonl(0x0a330001u+slot);
 }
+static void an_roster(int live){
+    int changed=EM_ASM_INT({const n=Module.netRosterDirty||0;if($0)Module.netRosterDirty=0;return n;},live);
+    if(live&&!changed)return;
+    astra_net_count=EM_ASM_INT(return Module.netSession.roster.length|0);astra_net_humans=0;
+    for(int i=0;i<astra_net_count&&i<4;i++){
+        astra_net_bot_skill[i]=EM_ASM_INT(return Module.netSession.roster[$0].skill??-1,i);
+        if(astra_net_human(i))astra_net_humans++;
+        EM_ASM({const s=Module.netSession.roster[$0].name;for(let n=0;n<9;n++)HEAPU8[$1+n]=n<Math.min(8,s.length)?s.charCodeAt(n):0;},i,Players[i].callsign);
+        memcpy(Netgame.players[i].callsign,Players[i].callsign,CALLSIGN_LEN+1);
+        an_address(&Netgame.players[i].protocol.udp.addr,astra_net_human(i)?i:0);
+        if(live&&(changed&(1<<i))&&i!=an_self){
+            multi_disconnect_player(i);Players[i].connected=Netgame.players[i].connected=CONNECT_DISCONNECTED;
+            Netgame.players[i].LastPacketTime=timer_query();
+        }
+    }
+}
 int astra_net_send(const void *data,int length,const struct sockaddr *to){
     if(length<1||length>1500)return -1;
     int dest=(ntohl(((const struct sockaddr_in*)to)->sin_addr.s_addr)&255)-1;
-    if(dest<0||dest>=astra_net_humans||dest==an_self)return length;
+    if(!astra_net_human(dest)||dest==an_self)return length;
     EM_ASM({window.astraNet?.send($0,HEAPU8.subarray($1,$1+$2));},dest,data,length);
     return length;
 }
 int astra_net_receive(void *data,int length,struct _sockaddr *from){
     int sender=EM_ASM_INT({const p=window.astraNet?.peek();return p?p.source:-1;});
-    if(sender<0||sender>=astra_net_humans)return 0;
+    if(sender<0)return 0;
     int size=EM_ASM_INT({const p=window.astraNet.take();if(p.bytes.length>$1)return 0;HEAPU8.set(p.bytes,$0);return p.bytes.length;},data,length);
-    an_address(from,sender);return size;
+    if(!astra_net_human(sender))return 0;an_address(from,sender);return size;
 }
 static int an_sync(void){
     memset(&UDP_MData,0,sizeof UDP_MData);net_udp_noloss_init_mdata_queue();
+    an_roster(0);
     EM_ASM(window.astraNet.ready($0,$1),Current_level_num,my_segments_checksum);
     fix64 deadline=timer_query()+i2f(120);
+    if(EM_ASM_INT(return !!Module.netSession.late)){
+        Network_status=NETSTAT_WAITING;Network_rejoined=0;fix64 request_at=0;
+        while(Network_status==NETSTAT_WAITING){
+            int target=EM_ASM_INT(return window.astraNet.targetLevel||0);
+            if(target&&target!=Current_level_num){an_retarget=target;return -1;}
+            if(EM_ASM_INT(return !!window.astraNet.failed)||timer_query()>deadline){EM_ASM(window.astraNet.abort('Could not synchronize with the host. Please return to the title and try Online again.'));Network_status=NETSTAT_MENU;return -1;}
+            an_roster(0);
+            if(!EM_ASM_INT(return !!Module.netSession.late))return an_sync();
+            if(timer_query()>=request_at){
+                UDP_sequence_packet request;memset(&request,0,sizeof request);request.type=UPID_REQUEST;request.token=an_seed;
+                memcpy(request.player.callsign,Players[an_self].callsign,CALLSIGN_LEN+1);request.player.connected=Current_level_num;request.player.color=an_self;
+                net_udp_send_sequence_packet(request,Netgame.players[0].protocol.udp.addr);request_at=timer_query()+F1_0;
+            }
+            net_udp_listen();emscripten_sleep(25);
+        }
+        if(Network_status!=NETSTAT_PLAYING)return -1;
+        EM_ASM(Module.netRosterDirty=0;window.astraNet.playing($0,$1),Player_num,Current_level_num);return 0;
+    }
     while(!EM_ASM_INT(return window.astraNet.synchronized($0),Current_level_num)){
         if(EM_ASM_INT(return !!window.astraNet.failed)||timer_query()>deadline){Network_status=NETSTAT_MENU;return -1;}
         emscripten_sleep(25);
     }
+    an_roster(0);EM_ASM(Module.netRosterDirty=0);
     Netgame.numplayers=N_players=astra_net_count;Netgame.segments_checksum=my_segments_checksum;Netgame.levelnum=Current_level_num;
     Netgame.game_status=NETSTAT_PLAYING;Network_rejoined=0;
     int departed=EM_ASM_INT(return window.astraNet.departed||0);
+    int joining=EM_ASM_INT(return window.astraNet.pendingSlots||0);
     for(int i=0;i<MAX_PLAYERS;i++){
         Netgame.players[i].protocol.udp.isyou=i==an_self;
-        Netgame.players[i].connected=i<N_players&&!(departed&(1<<i))?CONNECT_PLAYING:CONNECT_DISCONNECTED;
+        Netgame.players[i].connected=i<N_players&&astra_net_bot_skill[i]!=-2&&!(departed&(1<<i))&&(i==an_self||!(joining&(1<<i)))?CONNECT_PLAYING:CONNECT_DISCONNECTED;
         Netgame.player_kills[i]=Players[i].net_kills_total;Netgame.killed[i]=Players[i].net_killed_total;Netgame.player_score[i]=Players[i].score;
         for(int j=0;j<MAX_PLAYERS;j++)Netgame.kills[i][j]=kill_matrix[i][j];
         Netgame.locations[i]=i%(NumNetPlayerPositions?NumNetPlayerPositions:1);
@@ -47,17 +85,19 @@ static int an_sync(void){
 }
 int astra_net_start(int level){
     astra_net_active=EM_ASM_INT(return !!Module.netSession);if(!astra_net_active)return 0;
+    level=EM_ASM_INT(return Module.netSession.level||1);
     astra_net_owner=an_self=EM_ASM_INT(return Module.netSession.self|0);
     astra_net_humans=EM_ASM_INT(return Module.netSession.humans|0);
     astra_net_count=EM_ASM_INT(return Module.netSession.roster.length|0);
     an_seed=EM_ASM_INT(return Module.netSession.seed|0);
-    if(an_self<0||an_self>=astra_net_humans||astra_net_humans<1||astra_net_count>4||astra_net_count<astra_net_humans){astra_net_active=0;return 0;}
+    if(an_self<0||an_self>=astra_net_count||astra_net_humans<1||astra_net_count>4||astra_net_count<astra_net_humans){astra_net_active=0;return 0;}
     multi_protocol=MULTI_PROTO_UDP;net_udp_init();net_udp_reset_connection_statuses();netgame_set_defaults();
     netgame_token=my_player_token=an_seed;
     change_playernum_to(an_self);
+    an_roster(0);
     Netgame.gamemode=EM_ASM_INT(return Module.netSession.mode==='coop')?NETGAME_COOPERATIVE:NETGAME_ANARCHY;
     Netgame.max_numplayers=astra_net_count;Netgame.numplayers=astra_net_count;
-    Netgame.max_numobservers=0;Netgame.Tracker=0;Netgame.RefusePlayers=1;
+    Netgame.max_numobservers=0;Netgame.Tracker=0;Netgame.RefusePlayers=EM_ASM_INT(return Module.netSession.public?0:1);
     Netgame.PacketLossPrevention=0;/* WSS is ordered and reliable. */
     Netgame.RetroProtocol=0;Netgame.ShortPackets=0;Netgame.PacketsPerSec=20;
     Netgame.NoFriendlyFire=Netgame.gamemode==NETGAME_COOPERATIVE;
@@ -66,22 +106,23 @@ int astra_net_start(int level){
     strcpy(Netgame.mission_name,Current_mission_filename);strcpy(Netgame.mission_title,Current_mission_longname);
     strcpy(Netgame.game_name,"Astra Squadron");
     for(int i=0;i<MAX_PLAYERS;i++){
-        Players[i].connected=Netgame.players[i].connected=i<astra_net_count?CONNECT_PLAYING:CONNECT_DISCONNECTED;
+        Players[i].connected=Netgame.players[i].connected=i<astra_net_count&&astra_net_bot_skill[i]!=-2?CONNECT_PLAYING:CONNECT_DISCONNECTED;
         if(i>=astra_net_count)continue;
         EM_ASM({const s=Module.netSession.roster[$0].name;for(let n=0;n<9;n++)HEAPU8[$1+n]=n<Math.min(8,s.length)?s.charCodeAt(n):0;},i,Players[i].callsign);
         memcpy(Netgame.players[i].callsign,Players[i].callsign,CALLSIGN_LEN+1);
-        Netgame.players[i].protocol.udp.isyou=i==an_self;an_address(&Netgame.players[i].protocol.udp.addr,i<astra_net_humans?i:0);
+        Netgame.players[i].protocol.udp.isyou=i==an_self;an_address(&Netgame.players[i].protocol.udp.addr,astra_net_human(i)?i:0);
         Netgame.players[i].color=i;player_tokens[i]=an_seed;
         if(i<4)astra_net_bot_skill[i]=EM_ASM_INT(return Module.netSession.roster[$0].skill??-1,i);
     }
     N_players=astra_net_count;Netgame.game_status=Network_status=NETSTAT_STARTING;
     udp_open_socket(0,UDP_PORT_DEFAULT);net_udp_set_game_mode(Netgame.gamemode,0);
-    Endlevel_sequence=Control_center_destroyed=0;StartNewLevel(level);return 1;
+    Endlevel_sequence=Control_center_destroyed=0;do{an_retarget=0;StartNewLevel(level);level=an_retarget;}while(level);return 1;
 }
 void astra_net_bot_positions(void){
     if(!astra_net_active||an_self||Network_status!=NETSTAT_PLAYING)return;
     int save=Player_num;
-    for(int i=astra_net_humans;i<astra_net_count;i++){
+    for(int i=1;i<astra_net_count;i++){
+        if(astra_net_bot_skill[i]<0)continue;
         Player_num=i;
         /* The host transmits the bots through its own reliable broadcast path. */
         net_udp_send_pdata();
@@ -90,10 +131,12 @@ void astra_net_bot_positions(void){
 }
 void astra_net_tick(void){
     if(!astra_net_active)return;
+    an_roster(1);
     int left=EM_ASM_INT({const n=Module.netLeft||0;Module.netLeft=0;return n;});
-    for(int i=1;i<astra_net_humans;i++)if(left&(1<<i))multi_disconnect_player(i);
+    for(int i=1;i<astra_net_count;i++)if(left&(1<<i))multi_disconnect_player(i);
     static fix64 next;
     if(GameTime64<next&&next-GameTime64<i2f(2))return;next=GameTime64+F1_0/4;
+    EM_ASM(window.astraNet.hostState($0,$1,$2),Current_level_num,my_segments_checksum,Network_status==NETSTAT_PLAYING&&!Control_center_destroyed&&!Endlevel_sequence);
     EM_ASM(Module.netPilots=[];Module.netState=({player:$0,status:$1,level:$2,mode:$3}),Player_num,Network_status,Current_level_num,Game_mode);
     for(int i=0;i<N_players;i++){
         object *o=&Objects[Players[i].objnum];

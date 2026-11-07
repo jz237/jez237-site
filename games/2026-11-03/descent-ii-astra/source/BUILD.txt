@@ -1209,3 +1209,32 @@ roster and leave action. Campaign checkpoints/previews are excluded during a
 match. Joystick bindings and native keyboard/mouse physics remain unchanged.
 The normal single-player launcher does not contact the relay. No new texture,
 ship or sound parcels are added. QA-only test exports are not shipped.
+
+R52 / 2026-11-06: automatic public rooms and joining in progress
+--------------------------------------------------------------
+Go Online joins the oldest public room with a human spot available, or creates
+the first room and starts play. AI pilots do not block human arrivals: a human
+replaces an AI or vacant slot, with four total pilot slots. A room list appears
+only when existing public rooms have four humans; it offers retry or another
+public room. Private invite rooms remain separate and keep their original
+launch-together behavior. Co-op and deathmatch support Original and Vertigo.
+
+A small directory Durable Object serializes simultaneous arrivals and keeps a
+bounded list of current public rooms. Individual rooms still own their sockets
+and their native game traffic. Closed/expired rooms disappear from selection.
+The existing free Worker adds the SquadronLobby SQLite binding with migration
+v2; it does not change paid plans, asset hosting, or the rest of the website.
+
+Public late joins use Descent's native object transfer, rejoin synchronization
+and world extras, preserving current players, opened doors, remaining pickups
+and scores. New human pilots replace AI slots with the native starting loadout.
+Four stable slots allow a departed slot to be reused. Dynamic roster changes
+stop the replaced AI and update native addresses and ownership on each client.
+Arrivals during level transitions wait for or follow the new mine. A public
+host can start alone with no AI. The starting-mine selector is now honored by
+the native multiplayer launcher. Host departure still ends the room, and the
+existing two-hour online-room limit remains. No host migration is introduced.
+
+No texture or audio parcels change. Normal flight, demo AI and single-player
+launch paths are unchanged. Browser tests are headless and muted, with pointer
+capture blocked before navigation. QA-only exports are absent from releases.
