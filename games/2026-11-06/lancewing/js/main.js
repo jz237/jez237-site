@@ -1,14 +1,14 @@
 // Lancewing 2026 - game flow: title (version, difficulty, global boards), campaign, endless, local and online
 // co-op, upgrades, results with initials, instant replay, pause, options, attract demo and AI playthrough.
-import { VERSION, SECTORS, STEP, F, WAVES, UPGRADES, UP_KEYS, UP_COST, SALVAGE_DIV, MEDALS, parTime, TYPICAL_UP, START_LIVES, BOSSES, DIFFICULTY, DIFF_KEYS, POWERUPS, ENEMY } from './config.js?v=5';
-import { makeWorld, step, drainEvents, waveLabel, isBossWave, dX, applyClaim, cloneWorld } from './sim.js?v=5';
-import { Autopilot } from './ai.js?v=5';
-import { Renderer, pickQuality, CALM } from './render.js?v=5';
-import { Audio } from './audio.js?v=5';
-import { Input } from './input.js?v=5';
-import { Scores, NO_POST, posted } from './scores.js?v=5';
-import { Recorder, Replay } from './replay.js?v=5';
-import { Online, ROOM, randomCode, cleanCode } from './online.js?v=5';
+import { VERSION, SECTORS, STEP, F, WAVES, UPGRADES, UP_KEYS, UP_COST, SALVAGE_DIV, MEDALS, parTime, TYPICAL_UP, START_LIVES, BOSSES, DIFFICULTY, DIFF_KEYS, POWERUPS, ENEMY } from './config.js?v=6';
+import { makeWorld, step, drainEvents, waveLabel, isBossWave, dX, applyClaim, cloneWorld } from './sim.js?v=6';
+import { Autopilot } from './ai.js?v=6';
+import { Renderer, pickQuality, CALM } from './render.js?v=6';
+import { Audio } from './audio.js?v=6';
+import { Input } from './input.js?v=6';
+import { Scores, NO_POST, posted } from './scores.js?v=6';
+import { Recorder, Replay } from './replay.js?v=6';
+import { Online, ROOM, randomCode, cleanCode } from './online.js?v=6';
 
 const $ = (id) => document.getElementById(id);
 const params = new URLSearchParams(location.search);
@@ -283,7 +283,7 @@ function popup(text, x, y, color, big) {
   POPS.push({ t: now, x: PP.x, y: top });
   const el = document.createElement('div');
   el.className = 'pop' + (big ? ' big' : '');
-  el.textContent = text; el.style.left = PP.x + 'px'; el.style.top = top + 'px';
+  el.textContent = text; el.style.left = Math.max(44, Math.min(innerWidth - 44, PP.x)) + 'px'; el.style.top = top + 'px';   // kept on screen (portrait phones clipped them at the edge)
   if (color) el.style.color = color;
   $('popups').appendChild(el);
   setTimeout(() => el.remove(), 1200);
@@ -388,7 +388,7 @@ function handleEvents(list, W, live) {
       case 'wave': if (live && !e.first) { const kt = { corerush: 'CORE RUSH', survival: 'HOLD THE SKY', crumble: 'CRUMBLING LEDGES', team: 'TEAM WAVE', boss: 'BOSS' }[e.kind]; if (e.kind !== 'boss') banner(waveLabel(W), kt || SECTORS[W.k].name, 1.8); A.play('wave', { vol: 0.75 }); } if (W.mode !== 'campaign' && live && e.kind !== 'boss') A.playMusic(SECTORS[W.k].music); break;
       case 'waveclear': A.play('waveclear', { vol: 0.8 }); banner(e.why === 'rush' ? `${e.got} / ${e.of} CORES` : e.why === 'survive' ? 'HELD THE SKY' : 'WAVE CLEAR', `+${e.pts.toLocaleString()}${e.clean ? ' · FLAWLESS' : ''}`, 2); if (live && W.mode === 'campaign' && W.wave === WAVES - 1) say('halfway', { chance: 0.4 }); break;
       case 'boss': A.play('bossroar', { vol: 1 }); banner(BOSSES[e.key].name, 'STRIKE ITS WEAK POINTS FROM ABOVE', 3); A.playMusic('boss'); say('boss', { key: true, delay: 1.2 }); if (live) R.frameShot([[e.x, 12]], 1.6); break;
-      case 'bossatk': if (e.kind === 'gust' || e.kind === 'breach' || e.kind === 'slam' || e.kind === 'beam' || e.kind === 'blast') A.play('boltwarn', { vol: 0.45, gap: 0.5, rate: 0.75 }); break;
+      case 'bossatk': if (e.kind === 'gust' || e.kind === 'breach' || e.kind === 'slam' || e.kind === 'beam') A.play('boltwarn', { vol: 0.45, gap: 0.5, rate: 0.75 }); else if (e.kind === 'blast') A.play('blast', { vol: 0.4, gap: 0.5, rate: 0.7 }); break;   // the Colossus winds up its furnace
       case 'bosshit': A.play('bosshit', { ...pos, vol: 1 }); popup('+' + e.pts, e.x, e.y + 1.5); rumble(0.8, 0.6, 180, e.pid); break;
       case 'wpdown': A.play('shatter', { ...pos, vol: 0.9 }); A.play('boomM', { ...pos, vol: 1, delay: 0.06 }); if (live) slowmo(0.4, 0.7, [[e.x, e.y]]); break;
       case 'bossphase': A.play('bossroar', { vol: 1, rate: 0.9 }); banner(`PHASE ${e.phase}`, BOSSES[e.key].name, 1.6); break;
@@ -397,7 +397,7 @@ function handleEvents(list, W, live) {
       case 'orbs': A.play('beam', { ...pos, vol: 0.4, rate: 1.5 }); break;
       case 'orbpop': A.play('shatter', { ...pos, vol: 0.35, rate: 1.3, gap: 0.1 }); break;
       case 'shatter': A.play('shatter', { ...pos, vol: 0.25, rate: e.kind === 'blob' ? 0.7 : 1.4, gap: 0.12 }); break;
-      case 'beam': A.play('beam', { ...pos, vol: 0.85 }); break;
+      case 'beam': if (W.boss && W.boss.key === 'colossus') A.play('blast', { ...pos, vol: 1 }); else A.play('beam', { ...pos, vol: 0.85 }); break;
       case 'slam': A.play('slam', { ...pos, vol: 1 }); rumble(0.8, 0.8, 300); break;
       case 'gust': A.play('gust', { ...pos, vol: 0.9 }); break;
       case 'dropfall': A.play(W.boss && W.boss.key === 'leviathan' ? 'shatter' : 'molten', { ...pos, vol: 0.45, gap: 0.12, rate: W.boss && W.boss.key === 'leviathan' ? 1.3 : 1 }); break;
@@ -641,6 +641,33 @@ function startOnline(cfg) {
   say('partner', { key: true, delay: 1 });
 }
 
+// The host's tab goes to the background: requestAnimationFrame stops there, so the arena would freeze for the guest.
+// A dedicated Worker's timer (not throttled like rAF / main-thread timers) keeps the host's game running without
+// drawing, snapshots keep flowing and the autopilot flies rider 1 until the tab is back (the guest is told).
+// If the whole page is frozen anyway (a phone switching apps), the guest holds still under HOST PAUSED (hostWait).
+let bgTick = null;
+function hostAway(hidden) {
+  const on = hidden && G.mode === 'online' && NET.host && !G.fixed && (G.state === 'play' || G.state === 'paused-online');
+  if (on && !bgTick) {
+    try {
+      bgTick = new Worker(URL.createObjectURL(new Blob(['setInterval(() => postMessage(0), 1000 / 30);'], { type: 'text/javascript' })));
+      bgTick.onmessage = () => { if (!document.hidden || G.mode !== 'online') return; const now = performance.now(), dt = Math.min(0.1, (now - lastT) / 1000); lastT = now; if (G.state === 'play' || G.state === 'paused-online') playStep(dt); };
+    } catch { bgTick = null; }
+    if (bgTick) { G.awayAI = new Autopilot(G.W.seed, 'demo'); NET.away = true; A.muffle(true); }
+  } else if (!on && bgTick) {
+    bgTick.terminate(); bgTick = null; G.awayAI = null; NET.away = false; lastT = performance.now();
+    if (G.state === 'play') A.muffle(false);
+  }
+}
+document.addEventListener('visibilitychange', () => hostAway(document.hidden));
+// guest: no snapshot for 2 s = the host's page is not running; RIDER 1 AWAY = its tab is in the background (autopilot)
+function hostWait(W) {
+  const held = !!NET.lastSnap && performance.now() - NET.lastSnap > 2000 && !W.over;
+  if (held) caption('HOST PAUSED · WAITING FOR RIDER 1 TO COME BACK', 0.6);
+  else if (NET.hostAway && !(G.capT > 0.3)) caption('RIDER 1 IS AWAY · THE AUTOPILOT FLIES FOR THEM', 1.2);
+  return held;
+}
+
 // ------------------------------------------------------------------ menus wiring
 function act(a) {
   A.unlock();
@@ -665,7 +692,7 @@ function act(a) {
     case 'done': finishResults(); break;
     case 'continue': continueRun(); break;
     case 'resume': resume(); break;
-    case 'quit': if (G.mode === 'online') NET.close(); toTitle(); break;
+    case 'quit': if (G.mode === 'online') NET.close(); hostAway(false); toTitle(); break;
     case 'pause': pause(); break;
     case 'net-quick': NET.quick({ ini: boardOf('campaign').initials() }); break;
     case 'net-host': { const code = randomCode(4); $('room-code').textContent = code; $('room-wrap').classList.remove('hidden'); NET.connect(ROOM + code, 'host', { ini: boardOf('campaign').initials() }); netStatus('Opening a room…', 'wait'); break; }
@@ -812,10 +839,11 @@ function playStep(dt) {
   let n = 0;
   const online = G.mode === 'online', guest = online && !NET.host;
   if (guest) handleEvents(NET.guestSync(W), W, true);
+  if (guest && hostWait(W)) { G.acc = 0; NET.guestFrame(W, dt); updateHud(W); return; }   // the host's page is frozen: hold still until it is back
   while (G.acc >= STEP && n < 12) {
     if (!online) REC.tick(W);
     const ctl = G.state === 'play';
-    if (online) { const me = myPlayer(W); me.input = G.ai ? G.ai.control(W, me) : ctl ? I.control(1, false) : { mx: 0, flap: false }; }
+    if (online) { const me = myPlayer(W); me.input = G.ai ? G.ai.control(W, me) : G.awayAI ? G.awayAI.control(W, me) : ctl ? I.control(1, false) : { mx: 0, flap: false }; }
     else W.players.forEach((p, i) => {
       if (i === 0 && G.ai) p.input = G.ai.control(W, p);
       else if (i === 1 && G.ai2) p.input = G.ai2.control(W, p);
@@ -960,7 +988,7 @@ async function boot() {
   $('loading').style.opacity = '0';
   setTimeout(() => $('loading').remove(), 700);
   toTitle();
-  if (params.has('test')) { const m = await import('./tests.js?v=5'); m.runTests(window.__lw); }
+  if (params.has('test')) { const m = await import('./tests.js?v=6'); m.runTests(window.__lw); }
   else if (params.has('playthrough')) { A.unlock(); startPlaythrough(); }
   else if (params.has('endless') && G.autopilot) { A.unlock(); startEndless(); }
   else if (G.autopilot) { A.unlock(); startCampaign(+params.get('sector') || 0); }
@@ -972,7 +1000,7 @@ Object.assign(window.__lw, {
   startDemo, startCampaign, startEndless, startPlaythrough, toTitle, playReplay, pause, resume, act, buy, settingsApply: applySettings,
   noPost: NO_POST, isBossWave,
   auto: (profile = 'demo') => { if (G.W) { G.ai = new Autopilot(G.W.seed + (G.mode === 'online' && !NET.host ? 1 : 0), profile); if (G.run) G.run.auto = true; } },
-  posted, bests: () => ({ best, bestSc, reach, medals: [...medals] }), demoShop,
+  posted, bests: () => ({ best, bestSc, reach, medals: [...medals] }), demoShop, hostAway,
   boardNames: () => DIFF_KEYS.flatMap((d) => ['campaign', 'endless'].map((m) => boardOf(m, d).game)),
 });
 Object.defineProperty(window.__lw, 'W', { get: () => G.W });

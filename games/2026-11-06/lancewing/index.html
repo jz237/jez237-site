@@ -446,6 +446,6 @@ addEventListener('error', (e) => window.__lwErrors.push(String(e.message || e)))
 addEventListener('unhandledrejection', (e) => window.__lwErrors.push('rejection: ' + String(e.reason && e.reason.message || e.reason)));
 (() => { const ce = console.error; console.error = (...a) => { window.__lwErrors.push(a.map(String).join(' ')); ce.apply(console, a); }; })();
 </script>
-<script type="module" src="js/main.js?v=5"></script>
+<script type="module" src="js/main.js?v=6"></script>
 </body>
 </html>

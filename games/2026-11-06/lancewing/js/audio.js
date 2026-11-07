@@ -5,11 +5,11 @@
 // All effects, music and the herald's lines are ElevenLabs renders (scripts/lancewing/gen_audio.py + process_audio.py).
 const SFX = ['flap', 'clang', 'block', 'unhorse', 'boomS', 'boomM', 'boomL', 'debris', 'death', 'splash', 'spoutwarn', 'spout', 'boltwarn', 'thunder', 'arcon',
   'crack', 'crumble', 'core', 'collect', 'chain', 'hatch', 'form', 'land', 'skid', 'drop', 'pickup', 'pwend', 'shieldhit', 'slowmo', 'spawn', 'life', 'alarm',
-  'hunter', 'hunterloop', 'bossroar', 'bosshit', 'shatter', 'slam', 'beam', 'molten', 'gust', 'breach', 'wave', 'waveclear', 'upgrade', 'medal',
+  'hunter', 'hunterloop', 'bossroar', 'bosshit', 'shatter', 'slam', 'beam', 'blast', 'molten', 'gust', 'breach', 'wave', 'waveclear', 'upgrade', 'medal',
   'uimove', 'uiok', 'uiback', 'rewind', 'wind', 'surf', 'rush'];
 const VOICE = ['begin', 's2', 's3', 's4', 's5', 'boss', 'bossdown', 'clear', 'lastlife', 'gameover', 'newrecord', 'champion'];
 export const MUSIC = new Set(['title', 's1', 's2', 's3', 's4', 's5', 'boss', 'clear', 'over']);
-const V = '?v=5';
+const V = '?v=6';
 
 export class Audio {
   constructor(base) {

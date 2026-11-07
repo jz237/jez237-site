@@ -123,7 +123,7 @@ export const RAMP = [
     bossHP: 340, bossRate: 1.2, mix: { splitter: 1, hopper: 0.9, lancer: 0.65, spinewright: 0.42, mite: 0.6, shocker: 0.55, mirror: 0.45 } },
   { spd: [1.64, 1.76], count: [31, 35], active: [9, 11], gap: [0.72, 0.65], warn: [0.81, 0.72], flip: [0.2, 0.19], grab: [0.14, 0.135], fire: [0.6, 0.66], boltV: [0.6, 0.65], shock: [2.9, 2.6], spine: [0.64, 0.7], hpS: [1.45, 1.75], hpB: [1.5, 2],
     bossHP: 150, bossRate: 0.35, mix: { splitter: 1, hopper: 0.95, lancer: 0.7, spinewright: 0.45, mite: 0.65, shocker: 0.6, mirror: 0.5 } },
-  { spd: [1.85, 1.95], count: [36, 41], active: [11, 14], gap: [0.63, 0.55], warn: [0.7, 0.6], flip: [0.19, 0.17], grab: [0.115, 0.105], fire: [0.66, 0.74], boltV: [0.65, 0.72], shock: [2.6, 2.3], spine: [0.7, 0.76], hpS: [2.0, 2.6], hpB: [2, 2],
+  { spd: [1.85, 1.95], count: [36, 41], active: [11, 14], gap: [0.63, 0.55], warn: [0.7, 0.6], flip: [0.19, 0.17], grab: [0.115, 0.105], fire: [0.66, 0.74], boltV: [0.65, 0.72], shock: [2.6, 2.3], spine: [0.7, 0.76], hpS: [2.0, 2.55], hpB: [2, 2],
     bossHP: 480, bossRate: 1.22, mix: { splitter: 1, hopper: 1.0, lancer: 0.75, spinewright: 0.45, mite: 0.7, shocker: 0.6, mirror: 0.55 } },
 ];
 const RAMP_KEYS = ['spd', 'count', 'active', 'gap', 'warn', 'flip', 'grab', 'fire', 'boltV', 'shock', 'spine', 'hpS', 'hpB'];

@@ -3,7 +3,7 @@
 // heightAt(x, z) gives the ledge top under a point, or -1 over the open sea.
 // Purely visual (uses Math.random), never touches the simulation.
 import * as THREE from '../vendor/three.module.min.js';
-import { rockGeometry } from './models.js?v=5';
+import { rockGeometry } from './models.js?v=6';
 
 export const CALM = { on: false };
 

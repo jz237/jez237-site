@@ -4,8 +4,8 @@
 // rider locally (so flapping never lags), reports it 30 times a second, judges the sea and the hazards it
 // flies into, and plays the knockbacks the host decides. The relay overwrites the keys t, from, role and
 // start.mode, so none of our messages use them.
-import { adoptWave } from './sim.js?v=5';
-import { F, PW_KEYS, ENEMY_KEYS } from './config.js?v=5';
+import { adoptWave } from './sim.js?v=6';
+import { F, PW_KEYS, ENEMY_KEYS } from './config.js?v=6';
 
 export const PROTOCOL = 1;
 const RELAY = 'wss://steel-duel-online.jez237.workers.dev';
@@ -100,7 +100,7 @@ export class Online {
   reset() {
     this.role = null; this.room = null; this.intent = null; this.peer = null; this.peers = [];
     this.rtt = 150; this.W = null; this.inbox = []; this.sendT = 0; this.lastRecv = 0;
-    this.events = []; this.remote = null; this.claimQ = [];
+    this.events = []; this.remote = null; this.claimQ = []; this.lastSnap = 0; this.away = false; this.hostAway = false;
     this.stat = { snaps: 0, inputs: 0, deaths: 0 };
     clearInterval(this.pingT); clearInterval(this.helloT); clearInterval(this.pollT);
   }
@@ -192,7 +192,7 @@ export class Online {
         return;
       }
       case 'start': if (this.role === 'p2') this.h.start(d.cfg || {}); return;
-      case 'snapshot': if (this.role === 'p2') this.inbox.push(d); return;
+      case 'snapshot': if (this.role === 'p2') { this.inbox.push(d); this.lastSnap = performance.now(); } return;
       case 'input': if (this.role === 'p1') this.onInput(d); return;
       case 'chat': if (d.k === 'bye') { this.peer = null; this.h.left('left'); return; } this.h.chat(d); return;
     }
@@ -200,7 +200,7 @@ export class Online {
   sendReady() { this.raw({ type: 'ready', g: 'lw', pv: PROTOCOL, ini: this.me.ini }); }
   sendStart(cfg) { this.raw({ type: 'start', cfg }); }
   bind(W) {
-    this.W = W; this.inbox = []; this.events = []; this.claimQ = []; this.remote = null;
+    this.W = W; this.inbox = []; this.events = []; this.claimQ = []; this.remote = null; this.lastSnap = this.host ? 0 : performance.now(); this.hostAway = false;
     W.net = this.host ? 'host' : 'guest';
     if (this.host) W.players[1].remote = true; else W.players[0].remote = true;
   }
@@ -226,7 +226,7 @@ export class Online {
     this.sendT -= dt;
     if (this.sendT > 0 || !this.peer) return;
     this.sendT = Math.max(-0.05, this.sendT) + 1 / 20;   // keep the 20 Hz cadence even when frames are uneven
-    this.raw({ type: 'snapshot', s: packWorld(W), ev: this.events.splice(0, 80), hr: Math.round(this.rtt) });
+    this.raw({ type: 'snapshot', s: packWorld(W), ev: this.events.splice(0, 80), hr: Math.round(this.rtt), aw: this.away ? 1 : 0 });   // aw: my tab is in the background (autopilot)
     this.stat.snaps++;
   }
   // -------------------------------- guest
@@ -246,6 +246,7 @@ export class Online {
     this.stat.snaps += this.inbox.length;
     for (const m of this.inbox) { for (const e of m.ev || []) ev.push(e); last = m; }
     this.inbox = [];
+    this.hostAway = !!last.aw;
     const lead = clamp(((+last.hr || this.rtt) / 2) / 1000, 0, 0.25);
     applyWorld(W, last.s, lead);
     // knockbacks the host decided for my rider

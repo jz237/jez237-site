@@ -254,10 +254,23 @@ table.hs tr.me td { color: #fff; background: rgba(111, 216, 255, .1); }
   #title .tbcard .tboard .tabs { margin: 4px 0 4px; gap: 3px; }
   #title .tbcard .tboard .tabs button { padding: 3px 5px; font-size: 9px; }
   #title .tbcard table.hs { font-size: 11px; } #title .tbcard table.hs td { padding: 2px 4px; }
-  /* tips sit on the left, clear of the tube's middle where enemies come up */
-  #tut { left: max(12px, env(safe-area-inset-left)); top: 36%; transform: none; max-width: min(300px, 32vw); font-size: 12px; line-height: 1.35; padding: 8px 12px; text-align: left; }
+  /* tips sit in the strip left of the web (the web spans about the middle 520 px of the screen), so the tube's
+     centre and its lanes stay clear while the 10 s control hint is up */
+  #tut { left: max(10px, env(safe-area-inset-left)); top: 30%; transform: none; max-width: max(150px, min(210px, calc(50vw - 262px))); font-size: 11px; line-height: 1.35; padding: 7px 10px; text-align: left; }
 }
 @media (max-width: 560px) { #bossbar .lbl { font-size: 10px; letter-spacing: .1em; padding: 3px 8px 4px; } }
+/* phone portrait: the boss plate runs from the left edge to the pause button, on one line */
+@media (max-width: 560px) and (orientation: portrait) {
+  #bossbar { left: max(12px, env(safe-area-inset-left)); transform: none; width: min(460px, calc(100vw - 92px)); }
+  #bossbar .lbl { font-size: 9.5px; letter-spacing: .06em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+}
+/* phone landscape: the boss rises right where the plate used to sit (the tube's far end is high on a short
+   screen), so during a boss fight the plate takes the place of the sector panel at the top */
+@media (max-height: 520px) and (orientation: landscape) {
+  #bossbar { top: max(10px, env(safe-area-inset-top)); width: min(400px, 44vw); }
+  #bossbar .lbl { font-size: 10px; letter-spacing: .1em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  #ui:has(#bossbar:not(.hidden)) #hud .mid { visibility: hidden; }
+}
 /* touch: drag anywhere on the left, PURGE and HOP on the right */
 #touch { position: absolute; inset: 0; }
 #drag { position: absolute; width: 90px; height: 90px; margin: -45px 0 0 -45px; border-radius: 50%; border: 2px solid rgba(111, 216, 255, .5); background: radial-gradient(circle, rgba(111, 216, 255, .18), rgba(111, 216, 255, 0)); opacity: 0; transition: opacity .12s; pointer-events: none; }
@@ -270,6 +283,10 @@ table.hs tr.me td { color: #fff; background: rgba(111, 216, 255, .1); }
 .tbtn.empty { opacity: .35; }
 @media (orientation: portrait) { #tb-purge { bottom: calc(max(14px, env(safe-area-inset-bottom)) + 120px); } #tb-hop { right: max(16px, env(safe-area-inset-right)); bottom: calc(max(14px, env(safe-area-inset-bottom)) + 220px); } #warns { bottom: calc(max(14px, env(safe-area-inset-bottom)) + 70px); } }
 #res-cont small { color: #b8c4d2; }
+/* END RUN: quieter than NEXT SECTOR, red edge so it reads as a stop */
+.mbtn.endrun { border-color: rgba(255, 120, 100, .35); }
+.mbtn.endrun:hover, .mbtn.endrun.sel { border-color: #ff8a7a; background: rgba(255, 90, 74, .12); }
+#endrun .card { width: min(420px, 92vw); }
 </style>
 </head>
 <body>
@@ -352,6 +369,16 @@ table.hs tr.me td { color: #fff; background: rgba(111, 216, 255, .1); }
     <div class="btns two" style="margin-top:14px">
       <button class="mbtn" data-act="replay">INSTANT REPLAY<small>Watch the boss go down</small></button>
       <button class="mbtn primary" data-act="next">NEXT SECTOR<small id="next-sub"></small></button>
+    </div>
+    <div class="btns" style="margin-top:9px"><button class="mbtn endrun" data-act="endrun" id="endrun-btn">END RUN<small id="endrun-sub">Stop here and bank the score on the world board</small></button></div>
+  </div></div>
+
+  <!-- END RUN asks first: KEEP GOING is picked, and ESC / P / START / B all go back to the shop -->
+  <div class="screen hidden" id="endrun"><div class="card">
+    <h2>END THE RUN?</h2><div class="sub" id="endrun-ask">YOUR SCORE GOES TO THE WORLD BOARD</div>
+    <div class="btns">
+      <button class="mbtn primary" data-act="endrun-no">KEEP GOING<small>Back to the shop</small></button>
+      <button class="mbtn endrun" data-act="endrun-yes">END RUN<small>Results, initials, world board</small></button>
     </div>
   </div></div>
 
@@ -450,6 +477,6 @@ addEventListener('error', (e) => window.__rsErrors.push(String(e.message || e)))
 addEventListener('unhandledrejection', (e) => window.__rsErrors.push('rejection: ' + String(e.reason && e.reason.message || e.reason)));
 (() => { const ce = console.error; console.error = (...a) => { window.__rsErrors.push(a.map(String).join(' ')); ce.apply(console, a); }; })();
 </script>
-<script type="module" src="js/main.js?v=5"></script>
+<script type="module" src="js/main.js?v=6"></script>
 </body>
 </html>

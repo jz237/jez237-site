@@ -1,13 +1,13 @@
 // Rimstorm 2026 — game flow, menus, HUD, commentary, demo director and the frame loop.
-import { VERSION, SECTORS, STEP, F, WEBS, UPGRADES, UP_KEYS, UP_COST, MEDALS, parTime, AIM_MEDAL, TYPICAL_UP, START_LIVES, BOSSES, DIFFICULTY, DIFF_KEYS, POWERUPS, ENEMY, AI_SHOP, SALVAGE_MEDAL, salvageFor } from './config.js?v=5';
-import { makeWorld, step, drainEvents, webLabel, isBossWeb, bossKey, cloneWorld } from './sim.js?v=5';
-import { Autopilot } from './ai.js?v=5';
-import { Renderer, pickQuality, CALM } from './render.js?v=5';
-import { Audio } from './audio.js?v=5';
-import { Input } from './input.js?v=5';
-import { Scores, NO_POST } from './scores.js?v=5';
-import { Recorder, Replay, worldSig } from './replay.js?v=5';
-import { Online, ROOM, randomCode, cleanCode } from './online.js?v=5';
+import { VERSION, SECTORS, STEP, F, WEBS, UPGRADES, UP_KEYS, UP_COST, MEDALS, parTime, AIM_MEDAL, TYPICAL_UP, START_LIVES, BOSSES, DIFFICULTY, DIFF_KEYS, POWERUPS, ENEMY, AI_SHOP, SALVAGE_MEDAL, salvageFor } from './config.js?v=6';
+import { makeWorld, step, drainEvents, webLabel, isBossWeb, bossKey, cloneWorld } from './sim.js?v=6';
+import { Autopilot } from './ai.js?v=6';
+import { Renderer, pickQuality, CALM } from './render.js?v=6';
+import { Audio } from './audio.js?v=6';
+import { Input } from './input.js?v=6';
+import { Scores, NO_POST } from './scores.js?v=6';
+import { Recorder, Replay, worldSig } from './replay.js?v=6';
+import { Online, ROOM, randomCode, cleanCode } from './online.js?v=6';
 
 const $ = (id) => document.getElementById(id);
 const params = new URLSearchParams(location.search);
@@ -68,12 +68,13 @@ function say(name, o = {}) {
 function rumble(strong, weak, ms) { if (settings.rumble === 'off' || G.mode === 'demo' || G.mode === 'playthrough' || G.mode === 'title') return; I.rumble(strong, weak, ms); }
 
 // ------------------------------------------------------------------ screens
-const SCREENS = ['title', 'sectors', 'upgrades', 'results', 'scores', 'medals', 'options', 'help', 'online', 'pause'];
+const SCREENS = ['title', 'sectors', 'upgrades', 'endrun', 'results', 'scores', 'medals', 'options', 'help', 'online', 'pause'];
 function show(id, push = true) {
   if (push && G.screen && G.screen !== id) G.back.push(G.screen);
   for (const s of SCREENS) $(s).classList.toggle('hidden', s !== id);
   G.screen = id;
-  if (id) { const first = $(id).querySelector('.mbtn.primary, .mbtn, .sec:not([disabled]), .upg'); setSel(first); }
+  // the first VISIBLE button (a hidden CONTINUE on a cleared run's results must never take a pad's A press)
+  if (id) { const first = [...$(id).querySelectorAll('.mbtn, .sec:not([disabled]), .upg')].find((e) => e.offsetParent && !e.disabled); setSel(first || null); }
 }
 function hideScreens() { for (const s of SCREENS) $(s).classList.add('hidden'); G.screen = null; G.back = []; }
 function goBack() {
@@ -322,7 +323,9 @@ function keyName(what) {
   return m[what][k] || m[what].key;
 }
 const TUT = {
-  controls: () => `Slide along the rim with ${keyName('move')} and fire down your lane with ${keyName('fire')}. Enemies climb toward you from the far end. <b>PURGE</b> (${keyName('purge')}) wipes the web once per web.`,
+  // touch gets a short version: on a phone held sideways the box has only the strip beside the web
+  controls: () => (I.lastKind === 'touch' ? 'Drag a thumb left and right to slide along the rim: it <b>fires</b> while it is down. Enemies climb toward you from the far end. <b>PURGE</b> wipes the web once per web.'
+    : `Slide along the rim with ${keyName('move')} and fire down your lane with ${keyName('fire')}. Enemies climb toward you from the far end. <b>PURGE</b> (${keyName('purge')}) wipes the web once per web.`),
   rim: () => `An enemy reached the <b>RIM</b>: it hunts you along the edge. When your lane flares <b>RED</b> it is about to <b>POUNCE</b> onto you: slide away or get into its lane and shoot it first.`,
   dive: () => `<b>DIVE!</b> You fly down the tube to the next web. Crystal <b>SPINES</b> left in a lane will wreck you: shoot them away or slide out of their lane.`,
   lancer: () => `A <b>LANCER</b>. Its lance glows, then it fires a slow bolt up its lane: shoot the bolt down or slide aside.`,
@@ -356,7 +359,7 @@ function handleEvents(list, W, live) {
   const mine = (e) => me && e.pid === me.id;
   const at = (lane, d, lift = 0.6) => { const w = R.worldAt(lane, d, lift); return { x: w.x, y: w.y, z: w.z }; };
   for (const e of list) {
-    R.onEvent(e, W);
+    if (!G.hiddenRun) R.onEvent(e, W);
     switch (e.k) {
       case 'fire': {
         A.play('fire', { ...at(e.lane, e.d), vol: mine(e) ? 0.3 : 0.2, gap: 0.05, vary: 0.1 });
@@ -521,6 +524,7 @@ function playthroughNext(W) {
   renderUpgrades();
   show('upgrades', false);
   shopReplayBtn();
+  $('endrun-btn').classList.add('hidden');
   // the autopilot's picks light up in the shop
   for (const el of document.querySelectorAll('#upgrid .upg')) if (bought.includes(UPGRADES[el.dataset.up].name)) el.classList.add('pick');
   A.play('upgrade', { gap: 0, vol: 0.7 });
@@ -537,6 +541,7 @@ function upgrades(W) {
   renderUpgrades();
   show('upgrades', false);
   shopReplayBtn();
+  $('endrun-btn').classList.remove('hidden');
   A.playMusic('title');
   say('clear', { key: true, delay: 1.5 });
 }
@@ -565,7 +570,7 @@ function buy(k) {
   renderUpgrades();
   if (sel) setSel(document.querySelector(`[data-up="${sel}"]`));
 }
-function results(W, title, sub) {
+function results(W, title, sub, banked = false) {
   G.state = 'results'; setHud(false);
   $('res-title').textContent = title; $('res-sub').textContent = sub + ' · ' + DL(W.diff);
   const st = [['SCORE', W.score.toLocaleString()]];
@@ -596,12 +601,15 @@ function results(W, title, sub) {
   if (G.mode !== 'online' && G.mode !== 'playthrough' && board.qualifies(W.score)) {
     if (W.score > board.best()) say('newrecord', { key: true, delay: 3.5 });
     const level = W.mode === 'endless' ? W.webN : W.sector + 1;
-    const extra = W.mode === 'endless' ? `W${W.webN}` : `S${W.sector + 1}${W.web >= WEBS ? 'B' : 'W' + (W.web + 1)}${W.result === 'clear' && W.sector === 4 ? ' DONE' : ''}${G.run && G.run.continues ? ' C' + G.run.continues : ''}`;
+    const extra = W.mode === 'endless' ? `W${W.webN}` : `S${W.sector + 1}${W.web >= WEBS ? 'B' : 'W' + (W.web + 1)}${W.result === 'clear' && W.sector === 4 ? ' DONE' : ''}${banked ? ' END' : ''}${G.run && G.run.continues ? ' C' + G.run.continues : ''}`;
     G.ini = { chars: board.initials().split(''), i: 0, score: W.score, level, extra };
     $('ini-wrap').classList.remove('hidden');
     renderIni();
   }
   show('results', false);
+  // a pad's A / ENTER on the results: CONTINUE after a fall, NEXT SECTOR for the co-op host, otherwise FINISH
+  // (FINISH posts the initials: the d-pad is busy typing them, so A must land on it)
+  setSel(canCont ? $('res-cont') : netNext ? $('res-net') : $('res-btns').querySelector('[data-act="done"]'));
 }
 function renderIni() { const b = $('ini').children; for (let i = 0; i < 3; i++) { b[i].textContent = G.ini.chars[i]; b[i].className = i === G.ini.i ? 'cur' : ''; } }
 async function postScore() { if (G.ini) { const q = G.ini; G.ini = null; $('ini-wrap').classList.add('hidden'); await G.board.submit(q.chars.join(''), q.score, q.level, q.extra); } }
@@ -613,6 +621,30 @@ async function continueRun() {
   G.run.lives = START_LIVES + DIFFICULTY[G.run.diff].lives;
   A.play('uiok', { gap: 0 });
   beginSector(W.sector, G.run.check.web, G.run.check.score);
+}
+
+// END RUN in the shop: ask first (KEEP GOING is picked, so a double press never ends a run), then bank the run
+// through the same results -> initials -> world board flow as a run that ended on its last Rimrunner. Only a
+// player's own campaign has it; NO_POST still keeps tests, ?noscores and WebDriver from posting.
+function endRunAsk() {
+  if (G.state !== 'upgrade' || G.mode !== 'campaign' || !G.run || !G.W) return;
+  A.play('uimove', { gap: 0 });
+  $('endrun-ask').textContent = `${G.run.score.toLocaleString()} POINTS · SECTOR ${G.W.sector + 1} · ${DL(G.W.diff)}`;
+  show('endrun');
+}
+function endRunNo() {
+  if (G.screen !== 'endrun') return;
+  A.play('uiback', { gap: 0 });
+  G.back = [];
+  show('upgrades', false);
+  setSel($('endrun-btn'));
+}
+function endRun() {
+  if (G.screen !== 'endrun' || G.state !== 'upgrade' || G.mode !== 'campaign' || !G.run) return;
+  const W = G.W, s = W.sector;
+  G.back = [];
+  A.play('uiok', { gap: 0 });
+  results(W, 'RUN ENDED', `SECTOR ${s + 1} CLEARED · ${SECTORS[s].name} · SCORE BANKED`, true);
 }
 
 // ------------------------------------------------------------------ instant replay
@@ -722,6 +754,7 @@ function startOnline(cfg) {
   G.ai = G.autopilot ? new Autopilot(cfg.seed + (NET.host ? 0 : 1), 'demo') : null;
   I.playing = !G.ai;
   banner('CO-OP', cfg.gm === 'endless' ? 'ENDLESS DESCENT' : SECTORS[cfg.sector || 0].name, 3);
+  if (document.hidden && !G.fixed) bgTicks(true); // a guest whose tab is in the background when the host starts
 }
 window.__rs.online = { hostStart, startOnline };
 
@@ -738,7 +771,10 @@ function act(a) {
     case 'medals': buildMedals(); show('medals'); break;
     case 'options': show('options'); syncSegs(); break;
     case 'help': show('help'); break;
-    case 'back': A.play('uiback', { gap: 0 }); goBack(); break;
+    case 'back': if (G.screen === 'endrun') { endRunNo(); break; } A.play('uiback', { gap: 0 }); goBack(); break;
+    case 'endrun': endRunAsk(); break;
+    case 'endrun-no': endRunNo(); break;
+    case 'endrun-yes': endRun(); break;
     case 'next': A.play('uiok', { gap: 0 }); clearTimeout(G.ptT); beginSector(G.run.sector + 1, 0); break;
     case 'replay': playReplay(); break;
     case 'done': finishResults(); break;
@@ -822,6 +858,7 @@ I.on('pause', () => { if (G.state === 'play') pause(); else if (G.state === 'pau
 I.on('unlock', () => { if (G.state === 'play' && G.mode !== 'demo' && G.mode !== 'playthrough' && !G.fixed) pause(); });
 I.on('confirm', () => { if (G.screen && selEl) selEl.click(); });
 I.on('back', () => { if (G.screen && G.screen !== 'title' && G.screen !== 'results' && G.screen !== 'upgrades') act('back'); });
+// (on the END RUN question ESC / P / START / B / Backspace all mean KEEP GOING: act('back') -> endRunNo)
 I.on('key', (k, e) => {
   A.unlock();
   // returning true means "used": Input then sends no pause for this key (a P typed into the initials stays a letter)
@@ -841,7 +878,36 @@ I.on('key', (k, e) => {
   else if (k === 'Backspace' && G.screen !== 'title' && !holdsRun()) act('back');
 });
 document.addEventListener('pointerdown', () => A.unlock(), { capture: true });
-document.addEventListener('visibilitychange', () => { if (document.hidden && G.state === 'play') pause(); });
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden && G.state === 'play') pause();
+  bgTicks(document.hidden && G.mode === 'online' && !G.fixed);
+  // nothing to hear from a tab nobody is looking at (the co-op web keeps going in it)
+  if (A.master && A.ctx) A.master.gain.setTargetAtTime(document.hidden ? 0 : A.vol.master, A.ctx.currentTime, 0.05);
+});
+// ------------------------------------------------------------------ online: the web keeps going in a hidden tab
+// A host whose tab goes to the background used to freeze the web (no requestAnimationFrame): the guest saw
+// WAITING FOR THE HOST. Now a dedicated worker (js/tick.js: worker timers are not throttled) ticks 40 times a
+// second while an online tab is hidden and the same playStep() runs on it: the same fixed-step step(), the
+// snapshots (host) and inputs (guest) keep flowing, nothing is rendered or heard, the hidden player's Rimrunner
+// gets no input (it is paused-online). Online play is never recorded, and step() is untouched, so replays stay
+// bit exact. The guest is told the host is away (snapshot flag 'aw').
+let bgWorker = null;
+function bgTicks(on) {
+  if (on && !bgWorker) {
+    try { bgWorker = new Worker(new URL('./tick.js?v=6', import.meta.url)); bgWorker.onmessage = bgTick; } catch (e) { bgWorker = null; console.warn('background tick', e); return; }
+  }
+  if (bgWorker) bgWorker.postMessage(on ? 25 : 0); // 40 ticks a second: a snapshot every second tick = 20 a second
+}
+function bgTick() {
+  if (!document.hidden || G.fixed) return;
+  const now = performance.now(), dt = Math.min(0.1, (now - lastT) / 1000);
+  lastT = now;
+  G.bgTicks = (G.bgTicks || 0) + 1;
+  if (G.slowT > 0) { G.slowT -= dt; if (G.slowT <= 0) G.timeScale = 1; }
+  if (G.mode !== 'online' || (G.state !== 'play' && G.state !== 'paused-online')) return;
+  G.hiddenRun = true;
+  try { playStep(dt); } finally { G.hiddenRun = false; }
+}
 // the touch drag marker
 I.touchUI = (x, y, on) => { const el = $('drag'); if (!on) { el.classList.remove('on'); return; } el.classList.add('on'); el.style.left = x + 'px'; el.style.top = y + 'px'; };
 
@@ -900,7 +966,8 @@ function playStep(dt) {
   G.acc += dt * G.timeScale;
   let n = 0;
   const online = G.mode === 'online', guest = online && !NET.host;
-  if (guest) handleEvents(NET.guestSync(W), W, true);
+  const live = !G.hiddenRun;
+  if (guest) handleEvents(NET.guestSync(W), W, live);
   while (G.acc >= STEP && n < 12) {
     if (!online) REC.tick(W);
     const me = myPlayer(W);
@@ -914,7 +981,7 @@ function playStep(dt) {
     let ev = drainEvents(W);
     if (guest) ev = ev.filter((e) => e.pid === 2 && e.k === 'fire');
     if (online && NET.host) NET.hostEvents(ev);
-    handleEvents(ev, W, true);
+    handleEvents(ev, W, live);
     G.acc -= STEP; n++;
     if (W.over) break;
   }
@@ -923,10 +990,10 @@ function playStep(dt) {
     if (NET.host) NET.hostFrame(W, dt); else NET.guestFrame(W, dt);
     // a host whose tab went to the background stops its web: say so instead of freezing silently
     if (!NET.host && NET.stale && G.capT <= 0.2) caption('WAITING FOR THE HOST…', 1);
+    else if (!NET.host && NET.hostAway && G.capT <= 0.2) caption("THE HOST'S TAB IS IN THE BACKGROUND · THE WEB KEEPS GOING", 1);
   }
   captureClip(W);
-  updateHud(W);
-  updateWarnings(W);
+  if (!G.hiddenRun) { updateHud(W); updateWarnings(W); }
   if (G.mode === 'demo' || G.mode === 'playthrough') demoCaptions(W, dt);
   // the attract demo hands over after 100 s without touching the world (nothing outside step() changes W)
   const demoDone = G.mode === 'demo' && (G.demoT += dt) > 100;
@@ -1013,7 +1080,7 @@ async function boot() {
   $('loading').style.opacity = '0'; $('loading').classList.add('gone'); // fading out: taps go through at once
   setTimeout(() => $('loading').remove(), 700);
   toTitle();
-  if (params.has('test')) { const m = await import('./tests.js?v=5'); m.runTests(window.__rs); }
+  if (params.has('test')) { const m = await import('./tests.js?v=6'); m.runTests(window.__rs); }
   else if (params.has('playthrough')) { A.unlock(); startPlaythrough(); }
   else if (G.autopilot) { A.unlock(); if (params.has('endless')) startEndless(); else startCampaign(+params.get('sector') || 0); }
   else if (params.has('room')) { act('online'); $('join-code').value = cleanCode(params.get('room')); }
@@ -1022,7 +1089,7 @@ async function boot() {
 // test hooks
 Object.assign(window.__rs, {
   tick: (n = 1, dt = 1 / 60) => { for (let i = 0; i < n; i++) tickFrame(dt); },
-  startDemo, startCampaign, startEndless, startPlaythrough, toTitle, playReplay, pause, resume, act, buy, settingsApply: applySettings,
+  startDemo, startCampaign, startEndless, startPlaythrough, toTitle, playReplay, pause, resume, act, buy, settingsApply: applySettings, endRun,
   noPost: NO_POST, isBossWeb, ENEMY, boardOf, Scores, worldSig, medals, best, bestSc, CALM, quality,
 });
 Object.defineProperty(window.__rs, 'W', { get: () => G.W, enumerable: true });

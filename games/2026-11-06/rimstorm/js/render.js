@@ -5,11 +5,11 @@
 // molten core, ice moon, black hole with lensing), every enemy, boss and effect from the simulation, and
 // HDR post. Nothing here changes the world. The light count never changes after boot.
 import * as THREE from '../vendor/three.module.min.js';
-import { Post } from './post.js?v=5';
-import * as TX from './textures.js?v=5';
-import * as MD from './models.js?v=5';
-import { FX, CALM } from './fx.js?v=5';
-import { SHAPES, BOSSES, POWERUPS, F, BOSS_KEYS } from './config.js?v=5';
+import { Post } from './post.js?v=6';
+import * as TX from './textures.js?v=6';
+import * as MD from './models.js?v=6';
+import { FX, CALM } from './fx.js?v=6';
+import { SHAPES, BOSSES, POWERUPS, F, BOSS_KEYS } from './config.js?v=6';
 
 export { CALM };
 export const TUBE = { R: 10, DEPTH: 64, FAR: 0.58 };

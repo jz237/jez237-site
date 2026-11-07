@@ -19,9 +19,9 @@
 // Targets: Normal about 85 / 65 / 45 / 30 / 18 % clears, Hard about 70 / 45 / 25 / 12 / 5 %, Easy 95 %+ in sector 1.
 import { fileURLToPath } from 'url';
 import { spawn } from 'child_process';
-import { makeWorld, step, drainEvents, STEP, laneDist, laneOf } from '../../games/2026-11-06/rimstorm/js/sim.js?v=5';
-import { Autopilot, PROFILES } from '../../games/2026-11-06/rimstorm/js/ai.js?v=5';
-import * as CFG from '../../games/2026-11-06/rimstorm/js/config.js?v=5';
+import { makeWorld, step, drainEvents, STEP, laneDist, laneOf } from '../../games/2026-11-06/rimstorm/js/sim.js?v=6';
+import { Autopilot, PROFILES } from '../../games/2026-11-06/rimstorm/js/ai.js?v=6';
+import * as CFG from '../../games/2026-11-06/rimstorm/js/config.js?v=6';
 const { SECTORS, TYPICAL_UP, WEBS } = CFG;
 
 const argv = process.argv.slice(2);

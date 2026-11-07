@@ -3,7 +3,7 @@
 // FIXED pool of flash lights (only their intensity changes, never their number or visibility).
 // Purely visual (uses Math.random), never touches the simulation.
 import * as THREE from '../vendor/three.module.min.js';
-import { rockGeometry } from './models.js?v=5';
+import { rockGeometry } from './models.js?v=6';
 
 export const CALM = { on: false };
 

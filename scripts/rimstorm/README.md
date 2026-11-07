@@ -20,6 +20,9 @@ Every local import carries the same `?v=N`; bump them all together (plus `js/mai
 | `systems_check.mjs [baseUrl] [shotDir]` | Playwright, ?fixed pages: the title world board fetches all 8 boards and each tab shows its own; game over asks for initials, the typed initials reach the local table and the body that would be posted (`Scores.last`, never sent: NO_POST); HARD endless goes to its own board; the death and the boss-kill instant replays are bit exact in the page (`G.replayExact`); the shop (costs, max, refusals, upgrades carried); a full sector stores best time + sector score + medals + reach and they survive a reload; every option persists under `rs.`; a fake gamepad navigates menus, steers, fires and rumbles; touch in portrait and landscape (drag steers + fires, PURGE button, buttons on screen and clear of the HUD, the phone vibrates); keyboard + mouse spinner + ESC pause; the attract demo (starts at 12 s, reaches a boss, shows its upgrades, every slow-mo framed on its cause, hands over); the AI PLAYTHROUGH (highlighted picks, no records, retries a lost sector). Screenshots `sys_*.png`. ~40 s. |
 | `online_check.mjs [baseUrl] [relay] [seconds=45] [shotDir]` | Playwright, two pages on the LOCAL relay (refuses any other): host room + join by code, both flown by the autopilot, at 0 ms and at 80 ms each way on the guest (`?netlag=80`). Checks snapshot rate / size, guest input rate, guest shots killing on the host, both pages agreeing on web / phase / score / lives / enemies, the host's picture of the guest, a guest death judged on the host and shown + respawned on the guest, climbers gliding between snapshots on the guest, the sector clear landing both on results, the host's NEXT SECTOR taking both into sector 2 with the score, a partner leaving, the host landing on results (not the title) when the partner leaves mid-sector, and quick match pairing two pages in an `RS-Q-` room. Screenshots `net_*.png`. ~2.5 min. |
 | `fix_check.mjs [baseUrl] [shotDir]` | Playwright, stage-6 regressions (~30 s): on the results screen P / Escape / pad START / Backspace never leave (P is a letter in the initials; Enter posts `KPX`), Escape on endless results stays, FINISH posts; Escape / P / Backspace / START / B never close the shop (NEXT SECTOR still goes on); a quick key tap (down + up between two frames) purges and steps one lane, a key pressed while paused does not fire on resume, a quick tap on the phone PURGE button purges; tutorial tips show once (`rs.tips.v1`; the same run again +0, HARD no enemy tips); the post pass has scene depth; the S5 lens frames (`fix_lens_s5w3_*.png`); a grabbing rider rides the Rimrunner down (`R.draggers`) and is gone on respawn; the attract demo hands over at 100 s without setting `W.over`; the phone-landscape title fits without scrolling with the board in its own card. The score worker is intercepted (fake board, POSTs answered locally); webdriver is hidden only on the score pages. Exit 1 on any failure or console error. |
+| `endrun_check.mjs [baseUrl] [shotDir]` | Playwright (~1.5 min): the shop's END RUN. Keyboard: the arrow keys reach it, ENTER asks first with KEEP GOING picked, ESC / P / Backspace / pad START / pad B / a second ENTER all go back to the shop with the run, yes lands on the results (no CONTINUE, FINISH picked), ESC / P stay there (P is a letter), ENTER posts the initials once to `rimstorm-2026` with extra `S1B END`; a HARD run banks to `rimstorm-2026-hard`. Gamepad (stubbed `navigator.getGamepads`): d-pad, A, B, START the same way, A on FINISH posts. Touch in phone portrait and landscape: taps on END RUN, KEEP GOING, END RUN, FINISH (both answers on screen). `?noscores` and a WebDriver browser build the board body but send nothing; the AI PLAYTHROUGH shop has no END RUN. The score worker is intercepted (fake board, POSTs answered locally, nothing leaves the machine). Shots `endrun_*.png`. |
+| `net_live_check.mjs [baseUrl] [playSeconds=25] [hiddenSeconds=12] [shotDir]` | Playwright, two pages on the LIVE relay (`wss://steel-duel-online.jez237.workers.dev/ws/RS-TEST-XXXXX`, a throwaway room): connection and pairing time, snapshot / input rates and sizes, RTT, host and guest agreeing; then the host's tab goes to the background (a real background tab when headless allows it, else visibilityState hidden + requestAnimationFrame stopped): the host's web must keep going on the worker tick, the guest must keep getting snapshots, never go stale and be told the host is away; the host comes back to its running web. Score POSTs intercepted and must be 0. |
+| `phone_perf.mjs [baseUrl] [shotDir]` | Playwright: an S25 Ultra-class phone (412x915 portrait and 915x412 landscape, touch, Android UA, deviceScaleFactor 3, CDP CPU throttling 4x) on the tier the game picks (auto = medium). For S4 web 3, S5 web 3, S5 web 4 (black-hole lens) and the final boss: draw calls / triangles per frame (every pass), shader programs, JS ms per frame split into sim + HUD and render submit; checks no HUD / button / tip / caption covers the tube centre or the Rimrunner and the boss name does not wrap. Shots `phone_*.png`. |
 | `gen_audio.py [music\|sfx\|voice\|all\|credits] [--only a,b] [--force]` | ElevenLabs generation (Python, `python -I`). The key comes from the Windows user env var `ELEVENLABS_API_KEY` via PowerShell and is never printed or written. At most 2 requests at a time, 429 backs off, stops below 15 % of the account's credits (`credits` just prints the balance). Raw clips go to `%TEMP%/rimstorm-audio-raw/<kind>/` (or `RS_RAW`). Prompts for the 48 effects, 9 music tracks and 12 voice lines (one voice, `Xb7hH8MSUJpSbSDYk0k2`) live in the file. |
 | `process_audio.py <game folder> [names]` | Trims, normalises and encodes the raw clips into `audio/`, `music/`, `voice/` (`python -P -E`: numpy is in the user site-packages). Frequent effects get a 4-pole low-pass so nothing chirps; `crackle` gets a crossfaded loop; music is EBU -16 LUFS at 112 kb/s. Prints each clip's spectral centroid. |
 
@@ -54,10 +57,16 @@ used a key, and then no pause is sent for it).
 `localStorage` (all `rs.`): `rs.settings.v1` (options), `rs.medals.v1`, `rs.best.v1` (best sector time per difficulty), `rs.bestsc.v1`
 (best sector score), `rs.reach.v1` (sectors open), `rs.hs.<board>` (local top 10 per board), `rs.initials` (falls back to reading the
 site-wide `jez237_initials`, never writes it), `rs.tips.v1` (tutorial tips already shown: each shows once per device; the 10 s control hint
-shows once per visit at the start of sector 1; HARD and NIGHTMARE show no enemy tips).
+shows once per visit at the start of sector 1, shorter on touch; in phone landscape every tip sits in the strip left of the web, clear of
+the tube; HARD and NIGHTMARE show no enemy tips).
 
 ## Meta systems
 
+- Shop END RUN (stage 7): asks first (END THE RUN? with KEEP GOING picked; ESC / P / START / B / Backspace on the question all mean
+  KEEP GOING), then banks the run through the normal game-over flow: results (RUN ENDED, no CONTINUE, FINISH picked), initials, a POST to
+  the run's own board (mode + difficulty), extra `S<n>B END`. Only in a player's campaign (hidden in the AI PLAYTHROUGH); NO_POST rules
+  unchanged. The results screen now always starts on a VISIBLE button (CONTINUE after a fall, NEXT SECTOR for the co-op host, else
+  FINISH): before, a hidden CONTINUE could take a pad's A press on a cleared run's results.
 - Shop between sectors: salvage = sector score / 30 + 250 per medal earned (`SALVAGE_DIV`, `SALVAGE_MEDAL`, `salvageFor`, `AI_SHOP` in config.js), costs `UP_COST`
   500 / 1100 / 1900 per level; that buys about what `TYPICAL_UP` assumes. Sector select starts with `TYPICAL_UP` + 500 salvage per sector.
 - Medals (15): UNBROKEN / DEAD EYE / QUICKSILVER per sector; only for a sector played from its first web without a continue, not on EASY.
@@ -80,12 +89,13 @@ attack lists in `BOSSES`.
 | count / active | 17-21 / 3-5 | 21-25 / 5-7 | 26-30 / 7-9 | 31-35 / 9-11 | 36-41 / 11-14 |
 | warn (every tell) | 1.2 - 1.1 s | 1.04 - 0.96 | 0.92 - 0.84 | 0.81 - 0.72 | 0.7 - 0.6 |
 | flip (rider rest) / grab | 0.46-0.38 / 0.235-0.215 | 0.35-0.32 / 0.19-0.185 | 0.21-0.2 / 0.15-0.14 | 0.2-0.19 / 0.14-0.135 | 0.19-0.17 / 0.115-0.105 |
-| hpS / hpB (extra hits) | 1 / 0 | 1 / 1 | 1.3-1.45 / 1 | 1.45-1.75 / 1.5-2 | 2.0-2.6 / 2 |
+| hpS / hpB (extra hits) | 1 / 0 | 1 / 1 | 1.3-1.45 / 1 | 1.45-1.75 / 1.5-2 | 2.0-2.55 / 2 |
 | shock interval | 5.0 - 4.6 s | 4.3 - 3.9 | 3.2 - 2.9 | 2.9 - 2.6 | 2.6 - 2.3 |
 | boss HP / rate | 150 / 0.7 | 210 / 0.9 | 340 / 1.2 | 150 / 0.35 | 480 / 1.22 |
 
-Measured (human-like autopilot, `node scripts/rimstorm/ramp_check.mjs 300`): **Normal 85 / 66 / 46 / 30 / 15 %** (target 85/65/45/30/18;
-100 trials at the default seed: 79 / 64 / 48 / 31 / 14), **Hard 72 / 45 / 26 / 9 / 3 %** (200 trials; target 70/45/25/12/5), **Easy 100 %**
+Measured (human-like autopilot, `node scripts/rimstorm/ramp_check.mjs 300`): **Normal 85 / 66 / 46 / 30 / 19 %** (target 85/65/45/30/18;
+100 trials at the default seed: 79 / 64 / 48 / 31 / 17; stage 7 moved only S5's `hpS` 2.0-2.6 -> 2.0-2.55, which took S5 from 15 % to
+19 % and left S1-S4 identical), **Hard 72 / 45 / 26 / 9 / 3 %** (200 trials; target 70/45/25/12/5), **Easy 100 %**
 in every sector, Nightmare 21 / 9 / 1 / 0 / 1 % (two Rimrunners, for experts). Deaths per web try on Normal (W1 W2 W3 W4 BOSS):
 S1 .25 .19 .31 .31 .35 · S2 .26 .43 .49 .43 .35 · S3 .46 .45 .54 .59 .60 · S4 .50 .69 .67 .72 .62 · S5 .46 .72 .86 .99 .84 (each sector
 opens a little gentler after the shop on its open web, then rises). Enemies alive on average: S1 2.9-3.9 (the medium start: 2-3 threats at
@@ -143,4 +153,9 @@ the `RS-` prefix). Host = p1 runs the web and sends snapshots at 20 Hz (`type: '
 in sim.js, rates from the last two snapshots); the host carries the guest's last report on toward the lane it is gliding to by about
 one trip (so deaths are judged where the guest really is). After a sector the host gets NEXT SECTOR (score and lives carried,
 `TYPICAL_UP` for the next sector) or RETRY / PLAY AGAIN / DESCEND AGAIN; the guest follows. Co-op posts no scores. A guest whose host
-stops sending (tab in the background) sees WAITING FOR THE HOST.
+stops sending sees WAITING FOR THE HOST (connection trouble). A tab in the background no longer stops the web (stage 7): while an
+online tab is hidden a dedicated worker (`js/tick.js`, worker timers are not throttled like requestAnimationFrame) ticks 40 times a second
+and main.js runs the same `playStep()` on it (no rendering, no sound, no popups; the hidden player's Rimrunner gets no input, it is
+paused-online). The host keeps sending snapshots (now paced with the remainder kept, so 20 a second whatever the tick) with `aw: 1`, and
+the guest shows THE HOST'S TAB IS IN THE BACKGROUND · THE WEB KEEPS GOING. The host comes back to its pause card (ONLINE · THE WEB KEEPS
+GOING). `G.bgTicks` counts the worker ticks. Online play is never recorded and `step()` is untouched, so replays stay bit exact.

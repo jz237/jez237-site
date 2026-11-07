@@ -4,12 +4,12 @@
 // spire and its lightning, telegraph ribbons for every hazard and boss attack, HDR post with bloom.
 // Nothing here changes the world.
 import * as THREE from '../vendor/three.module.min.js';
-import { Post } from './post.js?v=5';
-import * as TX from './textures.js?v=5';
-import * as MD from './models.js?v=5';
-import { FX, CALM } from './fx.js?v=5';
-import { F, POWERUPS, BOSSES, HUNTER, LAYOUT } from './config.js?v=5';
-import { weakPos } from './sim.js?v=5';
+import { Post } from './post.js?v=6';
+import * as TX from './textures.js?v=6';
+import * as MD from './models.js?v=6';
+import { FX, CALM } from './fx.js?v=6';
+import { F, POWERUPS, BOSSES, HUNTER, LAYOUT } from './config.js?v=6';
+import { weakPos } from './sim.js?v=6';
 
 export { CALM };
 const RR = F.R, H = F.H;
@@ -194,7 +194,7 @@ void main(){
 }`;
 // a sea spout: a translucent churning water column with foam streaks racing upward
 const SPOUT_FRAG = /* glsl */ `
-uniform vec3 uColor, uDeep; uniform float uK, uTime;
+uniform vec3 uColor, uDeep; uniform float uK, uTime, uFire;
 varying vec2 vUv; varying vec3 vN, vV, vW;
 float h2(vec2 p){ return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
 float n2(vec2 p){ vec2 i = floor(p), f = fract(p); f = f*f*(3.0-2.0*f); return mix(mix(h2(i), h2(i+vec2(1,0)), f.x), mix(h2(i+vec2(0,1)), h2(i+vec2(1,1)), f.x), f.y); }
@@ -204,7 +204,16 @@ void main(){
   float top = 1.0 - smoothstep(0.7, 1.0, vUv.y);
   vec3 col = mix(uDeep, uColor, clamp(0.35 + st * 0.7 + (1.0 - f) * 0.35, 0.0, 1.0));
   float a = clamp((0.02 + (1.0 - f) * 0.26 + smoothstep(0.52, 0.85, st) * 0.32) * top * uK, 0.0, 0.7);
-  gl_FragColor = vec4(col, a);
+  if (uFire > 0.5) {
+    // a molten jet (Sky Foundry): hottest through its middle, licking flames racing up, edges fade away at grazing angles
+    float fl = n2(vec2((vW.x - vW.z) * 2.2, vW.y * 0.8 - uTime * 6.5)) * 0.6 + n2(vec2((vW.x + vW.z) * 4.3, vW.y * 2.1 - uTime * 10.0)) * 0.4;
+    float core = pow(f, 1.6);
+    float heat = clamp(core * 0.85 + fl * 0.45 - vUv.y * 0.4, 0.0, 1.0);
+    vec3 fc = mix(vec3(0.55, 0.07, 0.0), vec3(1.0, 0.42, 0.06), smoothstep(0.15, 0.6, heat));
+    fc = mix(fc, vec3(1.0, 0.86, 0.55), smoothstep(0.7, 1.0, heat));
+    float fa = clamp(core * smoothstep(0.2, 0.7, fl + core * 0.45) * (1.0 - smoothstep(0.55, 1.0, vUv.y)) * uK, 0.0, 1.0);
+    gl_FragColor = vec4(fc * 1.35, fa);
+  } else gl_FragColor = vec4(col, a);
 }`;
 
 // a camera-facing strip along a path in sim coordinates
@@ -411,9 +420,7 @@ export class Renderer {
     LAYOUT[i].forEach(([f, y, w], k) => {
       const lg = new THREE.Group();
       const geo = ledgeGeometry(f * F.C, y, w, i * 31 + k * 7);
-      const m = new THREE.Mesh(twoGroups(geo), [rockMat, topMat]);
-      m.castShadow = true; m.receiveShadow = true;
-      lg.add(m);
+      for (const [g, mat] of splitTwo(geo)) { const m = new THREE.Mesh(g, mat ? topMat : rockMat); m.castShadow = true; m.receiveShadow = true; lg.add(m); }
       // a carved lip along the outer edge with a few runes, and sector dressing
       const rnd = mkr(i * 97 + k * 13);
       const lip = new THREE.Mesh(arcBox(f * F.C, y + 0.09, w * 0.96, 0.18, 0.22, 2.15), trimMat); lip.castShadow = true; lip.receiveShadow = true; lg.add(lip);
@@ -424,6 +431,12 @@ export class Renderer {
       lg.userData = { id: k, y0: 0 };
       grp.add(lg);
     });
+    // ledges that can never crumble never move: merge all of them into one mesh per material (draw calls)
+    const stat = new THREE.Group();
+    for (const lg of [...grp.children]) if (!LAYOUT[i][lg.userData.id][3].includes('c')) { for (const m of [...lg.children]) stat.add(m); grp.remove(lg); }
+    mergeByMaterial(stat);
+    stat.userData = { static: true };
+    grp.add(stat);
     this.scene.add(grp);
     return grp;
   }
@@ -442,7 +455,7 @@ export class Renderer {
         put(MD.GEO.box(1.0, 0.25, 1.0), stone, x, y + 0.12, dr);
         if (rnd() < 0.5) put(MD.GEO.box(0.9, 0.3, 0.9), stone, x, y + h + 0.15, dr, 0, 0, rnd() * 0.4);
       } else if (key === 'caverns') {
-        for (let k = 0; k < 3; k++) put(MD.GEO.cyl(0.0, 0.16 + rnd() * 0.12, 0.8 + rnd() * 1.4, 6), MD.glow(0x40ffd0, 2 + rnd() * 2), x + (rnd() - 0.5), y + 0.5, dr + rnd() * 0.5, (rnd() - 0.5) * 0.6, 0, (rnd() - 0.5) * 0.6);
+        for (let k = 0; k < 3; k++) put(MD.GEO.cyl(0.0, 0.16 + rnd() * 0.12, 0.8 + rnd() * 1.4, 6), MD.glow(0x40ffd0, 2 + Math.round(rnd() * 4) * 0.5), x + (rnd() - 0.5), y + 0.5, dr + rnd() * 0.5, (rnd() - 0.5) * 0.6, 0, (rnd() - 0.5) * 0.6);
       } else if (key === 'foundry') {
         put(MD.GEO.box(0.5, 2.4, 0.5), iron, x, y + 1.2, dr);
         put(MD.GEO.cyl(0.45, 0.3, 0.4, 12), iron, x, y + 2.5, dr);
@@ -542,7 +555,7 @@ export class Renderer {
     this.spouts = [];
     for (let i = 0; i < 6; i++) {
       const mat = new THREE.ShaderMaterial({ vertexShader: COL_VERT, fragmentShader: SPOUT_FRAG, transparent: true, depthWrite: false, side: THREE.DoubleSide,
-        uniforms: { uColor: { value: new THREE.Color(0xd8ecff) }, uDeep: { value: new THREE.Color(0x203040) }, uK: { value: 1 }, uTime: { value: 0 } } });
+        uniforms: { uColor: { value: new THREE.Color(0xd8ecff) }, uDeep: { value: new THREE.Color(0x203040) }, uK: { value: 1 }, uTime: { value: 0 }, uFire: { value: 0 } } });
       const m = new THREE.Mesh(geo, mat); m.visible = false; m.frustumCulled = false; m.renderOrder = 3;
       this.scene.add(m); this.spouts.push(m);
     }
@@ -616,6 +629,7 @@ export class Renderer {
     const t = this.time;
     // ledges: cracking, falling, rebuilt
     if (this.ledges) for (const lg of this.ledges.children) {
+      if (lg.userData.static) continue;
       const L = W.ledges[lg.userData.id];
       if (!L) { lg.visible = false; continue; }
       if (L.st === 0) { lg.visible = true; lg.position.set(0, 0, 0); lg.userData.fall = 0; }
@@ -775,7 +789,7 @@ export class Renderer {
       if (h.k === 'spout') {
         const rg = this.takeRing(); if (rg) { toWorld(h.x, 0.1, rg.position); rg.scale.setScalar(h.w * (1 + f * 0.6)); rg.visible = true; rg.material.color.setRGB(1, 0.5 + f * 0.4, 0.4).multiplyScalar(pre ? 1.5 * blink : 0.6); }
         if (pre && Math.random() < dt * 30) { toWorld(h.x + (Math.random() - 0.5) * h.w * 2, 0.1, _v); this.fx.dust(_v.x, 0.1, _v.z, { n: 1, s0: 0.3, s1: 1, life: 0.6, vy: 1 + f * 3, up: 1, jit: 0.4, a: 0.5, k: 1.4, grav: 2 }); }
-        if (act) { const c = this.takeSpout(); if (c) { toWorld(h.x, -0.2, c.position); const grow = Math.min(1, (h.t - h.T) / 0.25), fade = Math.min(1, (h.T + h.A - h.t) / 0.3); c.scale.set(h.w * (0.8 + 0.2 * grow), h.top * grow + 0.5, h.w * (0.8 + 0.2 * grow)); const u = c.material.uniforms; u.uColor.value.set(this.look.sea[2]).lerp(_c.set(0xf4f8ff), 0.55); u.uDeep.value.set(this.look.sea[1]).lerp(_c.set(this.look.fog), 0.3); u.uK.value = fade; u.uTime.value = t; c.visible = true; } if (Math.random() < dt * 40) { toWorld(h.x, h.top * Math.random(), _v); this.fx.splash(_v.x, _v.y, _v.z, 0.25); } }
+        if (act) { const c = this.takeSpout(); if (c) { toWorld(h.x, -0.2, c.position); const grow = Math.min(1, (h.t - h.T) / 0.25), fade = Math.min(1, (h.T + h.A - h.t) / 0.3); c.scale.set(h.w * (0.8 + 0.2 * grow), h.top * grow + 0.5, h.w * (0.8 + 0.2 * grow)); const u = c.material.uniforms, fire = this.look.key === 'foundry'; u.uFire.value = fire ? 1 : 0; c.material.blending = fire ? THREE.AdditiveBlending : THREE.NormalBlending; u.uColor.value.set(this.look.sea[2]).lerp(_c.set(0xf4f8ff), 0.55); u.uDeep.value.set(this.look.sea[1]).lerp(_c.set(this.look.fog), 0.3); u.uK.value = fade; u.uTime.value = t; c.visible = true; } if (Math.random() < dt * 40) { toWorld(h.x, h.top * Math.random(), _v); if (this.look.key === 'foundry') this.fx.sparks(_v.x, _v.y, _v.z, { n: 2, speed: 3, vy: 4, s: 0.12, life: 0.9, g: 0.5, b: 0.15 }); else this.fx.splash(_v.x, _v.y, _v.z, 0.25); } }
       } else if (h.k === 'bolt') {
         if (pre) { const r = this.takeRibbon(); if (r) { r.set([[h.x, H], [h.x, h.bot]], h.w * 2 * (0.3 + 0.7 * f), 0.8); r.mat.uniforms.uColor.value.set(0xff4a3a); r.mat.uniforms.uK.value = 0.35 + f * 0.6 * blink; r.mat.uniforms.uDash.value = 0; } }
       } else if (h.k === 'arc') {
@@ -965,6 +979,8 @@ export class Renderer {
     this.skyMat.uniforms.uFlash.value = fl; this.seaMat.uniforms.uFlash.value = fl;
     this.hemi.intensity = this.look.hemi[2] + fl * 1.5;
     this.spire.rotation.y = t * 0.01;
+    // portrait: the spire sits straight behind the play slice, so it stands slimmer and further back there (play reads; the set piece stays)
+    const sk = this.portrait ? 0.5 : 1; this.spire.scale.set(sk, 1, sk); this.spire.position.y = this.portrait ? -1.5 : 0;
     // ambient particles near the camera's view of the ring
     const ax = this.camTh * RR + (Math.random() - 0.5) * 50, ay = Math.random() * 26;
     if (Math.random() < dt * 16) {
@@ -1117,6 +1133,12 @@ function mergeByMaterial(grp) {
     for (const m of list) grp.remove(m);
     grp.add(mm);
   }
+}
+// a bent ledge box as two geometries: [rock faces, false] and [the top, true]
+function splitTwo(geo) {
+  const g = twoGroups(geo), idx = g.index.array, out = [];
+  for (const gr of g.groups) { const q = new THREE.BufferGeometry(); for (const k in g.attributes) q.setAttribute(k, g.attributes[k]); q.setIndex(Array.from(idx.subarray(gr.start, gr.start + gr.count))); q.computeBoundingSphere(); out.push([q, gr.materialIndex === 1]); }
+  return out;
 }
 // a box bent into a ledge has 6 face groups: put the rock faces together (1 draw) and the top on its own (1 draw)
 function twoGroups(g) {

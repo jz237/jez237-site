@@ -15,7 +15,7 @@ const { Online, ROOM, QUICK, randomCode, packWorld } = ONL;
 const relay = process.argv[2] || 'ws://127.0.0.1:8781';
 const secs = +(process.argv[3] || 40);
 const lags = (process.argv[4] || '0,40,80').split(',').map(Number);
-if (!/^wss?:\/\/(127\.0\.0\.1|localhost)(:\d+)?$/.test(relay)) { console.log('refusing: the check only runs against a local relay'); process.exit(2); }
+if (!/^wss?:\/\/(127\.0\.0\.1|localhost)(:\d+)?$/.test(relay) && !(process.env.LW_LIVE && relay === 'wss://steel-duel-online.jez237.workers.dev')) { console.log('refusing: the check only runs against a local relay'); process.exit(2); }
 try { const r = await fetch(relay.replace(/^ws/, 'http') + '/health'); if (!r.ok) throw new Error(r.status); } catch (e) {
   console.log(`no relay at ${relay} (${e.message}). Start one: copy games/2026-06-14/steel-duel/worker to the work folder and run wrangler dev --local --port 8781`);
   process.exit(2);
@@ -137,7 +137,8 @@ async function session(lag, label, pair) {
 }
 
 for (const lag of lags) {
-  const code = randomCode(4);
+  // LW_LIVE=1 (the live relay): rooms are LW-TEST-xxxxx and the quick-match / unknown-code checks are skipped (no LW-Q- rooms on the live lobby)
+  const code = process.env.LW_LIVE ? 'TEST-' + randomCode(5) : randomCode(4);
   await session(lag, `code room, guest lag ${lag} ms`, async (H, Gs) => {
     H.net.connect(ROOM + code, 'host', { ini: 'HST' });
     await until(() => H.net.role === 'p1');
@@ -145,7 +146,7 @@ for (const lag of lags) {
   });
 }
 // quick match: two players press QUICK MATCH a moment apart and end up in the same LW-Q- room
-{
+if (!process.env.LW_LIVE) {
   const H = side('q1', 0), Gs = side('q2', 0);
   H.net.quick({ ini: 'QQA' });
   await until(() => H.net.role === 'p1');

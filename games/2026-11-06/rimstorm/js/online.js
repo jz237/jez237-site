@@ -4,8 +4,8 @@
 // second. The guest steers its own Rimrunner locally (so moving never lags) and reports where it is, the
 // shots it fires and its PURGE / HOP presses; the host re-creates those, so every hit and every death is
 // decided in one place. The relay overwrites the keys t, from, role and start.mode: none are used here.
-import { adoptWeb, purge, laneDist, laneOf } from './sim.js?v=5';
-import { PW_KEYS, ENEMY_KEYS, F } from './config.js?v=5';
+import { adoptWeb, purge, laneDist, laneOf } from './sim.js?v=6';
+import { PW_KEYS, ENEMY_KEYS, F } from './config.js?v=6';
 
 export const PROTOCOL = 1;
 const RELAY = 'wss://steel-duel-online.jez237.workers.dev';
@@ -262,8 +262,10 @@ export class Online {
     // the snapshot that ends the run goes out at once: after it the host's loop stops
     if ((this.sendT > 0 && !W.over) || !this.peer || this.overSent === W) return;
     if (W.over) this.overSent = W;
-    this.sendT = 1 / 20;
-    const n = this.raw({ type: 'snapshot', s: packWorld(W), ev: this.events.splice(0, 80), hr: Math.round(this.rtt) });
+    // keep the remainder, so 20 a second holds whatever the frame (or hidden-tab tick) length is
+    this.sendT = Math.max(0, this.sendT) + 1 / 20;
+    // aw: the host's tab is in the background (its web keeps going on a worker tick; the guest says so)
+    const n = this.raw({ type: 'snapshot', s: packWorld(W), ev: this.events.splice(0, 80), hr: Math.round(this.rtt), aw: typeof document !== 'undefined' && document.hidden ? 1 : 0 });
     this.stat.snaps++; this.stat.bytes += n; this.stat.maxBytes = Math.max(this.stat.maxBytes, n);
   }
 
@@ -293,6 +295,7 @@ export class Online {
     let last = null;
     this.stat.snaps += this.inbox.length;
     for (const m of this.inbox) { for (const e of m.ev || []) ev.push(e); last = m; }
+    this.hostAway = !!last.aw;
     this.inbox = [];
     const lead = clamp(((+last.hr || this.rtt) / 2) / 1000, 0, 0.25);
     applyWorld(W, last.s, lead);

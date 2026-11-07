@@ -114,6 +114,7 @@ SFX = {
     'shatter':   (1.2, 0.55, 'Huge crystal armour shattering, heavy glassy break with tumbling shards'),
     'slam':      (1.6, 0.5, 'Giant forge hammer slamming onto a metal platform, enormous clang thud with a shockwave rumble'),
     'beam':      (2.4, 0.5, 'Powerful sweeping energy beam breathed by a giant creature, intense humming roar with crackle'),
+    'blast':     (1.8, 0.5, 'Furnace door bursting open and a roaring jet of fire blasting out sideways, deep whooshing flame roar with crackle and a metallic clank'),
     'molten':    (1.4, 0.5, 'Molten metal blobs falling and splashing, hissing sizzle and bubbling'),
     'gust':      (1.8, 0.5, 'Huge gust of wind from enormous wings, roaring blast of air'),
     'breach':    (2.6, 0.5, 'Gigantic sea creature bursting out of icy water, massive surge of water and crashing ice'),
