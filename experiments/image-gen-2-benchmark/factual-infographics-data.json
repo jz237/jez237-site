@@ -20534,5 +20534,87 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-11-07-factual-infographic-factual-infographic-ombrophobia-extreme",
+    "title": "Factual infographic: Ombrophobia — Extreme Fear of Rain",
+    "tests": "factual_subtype: phobia-infographic; phobia: Ombrophobia; exact title lines read back before render; no subjective review; archive_slot=2026-11-07T16:08; concept=ombrophobia-rain-anticipation-covered-doorway; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: phobia-infographic",
+    "prompt": "Create a finished richly illustrated artistic educational phobia infographic, directly on canvas, portrait-oriented composition with a confident readable typographic hierarchy. Render finely layered gouache, luminous rain washes and precise graphite/ink annotation; midnight blue, pearlescent silver, warm terracotta and burgundy. No mockup, frame, logos, grids or detached fact cards. The artwork headline must be exactly “Ombrophobia” in prominent bold lettering (no literal asterisks). Directly beneath it put the exact plain-English subtitle “Extreme fear of rain”. These are the two largest lines. A small subordinate line reads “An established name within specific phobia”.\nHero artwork occupies the central two-thirds: a young adult white man with pale skin, long blond hair, narrow face, slim build, denim jacket and burgundy boots, standing three-quarter view under a covered doorway. He hesitates with a hand on the doorframe, dignified rather than caricatured. Rain glistens on the threshold; individual droplets bead on painted wood, wet brick catches amber indoor light, and softly reflected bare branches ripple in shallow puddles. His guarded posture conveys anxiety, not actual imminent injury. No lightning, catastrophe, monsters or terrifying imagery. The ordinary street recedes through a curtain of delicate blue rain.\nWeave the facts into the scene with loose curved leader lines and open handwritten-style but fully legible typesetting, not rigid panels. Along an upper rain arc label “Triggers can range from drizzle to heavy rain”. A small forecast silhouette integrated into the left doorway margin reads “Anticipatory anxiety — worry before rain arrives”. A translucent contour around the hero's chest and hands has tasteful schematic pulse and trembling marks, no fabricated internal brain anatomy: “Body alarm can include palpitations, trembling or dizziness”. Beneath the rain arc, a lightly drawn route that turns back at the doorway carries “Avoidance — staying indoors or missing activities when rain is possible”. Make this an illustrative example, not a universal symptom or inevitable sequence.\nAt the lower right, rain washes give way to a small warm, open vignette of the same protagonist conversing with a clinician, connected by a gently curving path, with “Help: cognitive behavioural therapy (CBT)” and “Seek professional help if fear disrupts daily life”. Do not show a forced exposure, dare, flooding exercise or a home treatment protocol. Beside the main doorway in generous negative space write “Fear can feel overwhelming even when a person knows it is unreasonable” and the small distinction “Feared consequences are not proof of actual danger”. Do not depict actual weather hazards as harmless or recommend entering bad weather. In fine readable footer text: “Symptoms vary. Educational information, not a diagnosis.” No statistics, diagnostic codes, bibliography, URLs or extra unsupported claims. Keep organic visual flow, ample breathing room, tactile surfaces and detailed rain lighting; information supports an immersive, humane illustration rather than crowding it.",
+    "image": "images/2026-11-07-factual-infographic-factual-infographic-ombrophobia-extreme.jpg",
+    "thumb": "thumbs/2026-11-07-factual-infographic-factual-infographic-ombrophobia-extreme.webp",
+    "color": "#887275",
+    "date": "2026-11-07",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "ombrophobia-rain-anticipation-covered-doorway",
+      "imageSha256": "7a8fcf84cf161a7b25db9131d99db632803ca177ae2c3d92ce3e4a28d1ab3dd9",
+      "imageDHash": "0a0301c147891923"
+    },
+    "factualInfographic": {
+      "topic": "Ombrophobia: extreme fear of rain, anticipatory anxiety, body alarm, avoidance, and evidence-based help",
+      "description": "Source-backed definition, rain triggers, body alarm, avoidance and CBT help.",
+      "sourceNote": "Cleveland Clinic https://my.clevelandclinic.org/health/diseases/22534-ombrophobia-fear-of-rain; NHS https://www.nhs.uk/mental-health/conditions/phobias/ — verified name, definition, symptoms, daily-life impact and CBT support.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-07T21:09:11.376028+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "Cleveland Clinic",
+            "title": "Ombrophobia (Fear of Rain)",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://my.clevelandclinic.org/health/diseases/22534-ombrophobia-fear-of-rain"
+          },
+          {
+            "id": "S2",
+            "publisher": "NHS",
+            "title": "Phobias",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/mental-health/conditions/phobias/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Ombrophobia is an extreme fear of rain; this established descriptive name falls within specific phobia, an anxiety disorder.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Triggers may include light drizzle, heavy rain or anticipating rainfall; worrying about forecasts and refusing to go outdoors can disrupt everyday activities.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "A person may recognize that their fear is unreasonable yet find it difficult to control; feared consequences are not evidence of actual danger.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Phobias can involve severe worry, palpitations, trembling and dizziness; symptoms vary between people.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Avoiding outings or skipping activities when rain is possible can restrict daily life.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Talking therapies including cognitive behavioural therapy (CBT) can help phobias; seek professional help when symptoms affect life.",
+            "sourceIds": [
+              "S2"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
