@@ -1309,3 +1309,10 @@ R62 — classic mine shapes and smoother asset rendering/loading
 - Immutable collectible and robot geometry is uploaded once per model to cached GPU buffers and reused, including articulated parts and detached wreckage. Robot cut-edge shader uniforms are cached. Geometry, texture resolution, lighting and animation detail are preserved.
 - Gzip game parcels now stream directly into final file buffers, removing the whole-parcel decoded temporary array and its large synchronous copy. Three-parcel prefetch remains bounded.
 - The APU9 mesh parcel contains the original 51 pickup slots plus two deployed mine meshes. All 49 unrelated pickup meshes are byte-identical. Content-addressed parcel and versioned catalog prevent stale mesh/runtime mismatches.
+
+R63 — connected geology, constructed metal and natural water edges
+- Cached sculpted rock shells now cover native quadrilaterals and both folded-triangle orientations. Shared rock edges use the same world-space contours; smooth normals, low-frequency strata, crevice shading and damp edge highlights add depth. Unsupported borders taper to the original openings. All native room connectivity, collision, physics and AI remain unchanged.
+- Metal ribs and plates use their actual chamfer normals. Layered door jambs, dark gaskets, rounded shoulders and deeper moving slab edges follow existing door animations. Natural rock areas retain only sparse perimeter supports.
+- Cached partly submerged stones fit actual rock/water junctions, avoiding metal edges and open portals. Irregular shoreline foam and directional flow enhance existing slopes. No new texture downloads or resolution reductions.
+- Showroom exhibits for sculpted geology, industrial construction, water banks and doors provide comparisons. Rock inspection looks along an actual passage where possible.
+- Geometry checks cover 708 Vertigo and 698 Original rock faces in their first levels, including 118 and 210 folded surfaces respectively. Shared-edge gaps remain below 0.00013 world units. Mesh caches and smooth residency transitions bound rendering work.

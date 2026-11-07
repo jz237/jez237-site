@@ -1,13 +1,13 @@
 /* Stable ten-surface residency. Selection is independent of draw order and
  * camera rotation; an outgoing surface fades before its slot is reused. */
-#define ND_SLOTS 10
+#define ND_SLOTS 18
 typedef struct {int key;float weight;} nd_resident;
 typedef struct {int key;float score;} nd_choice;
 static nd_resident nd_residents[ND_SLOTS];
 static nd_choice nd_choices[ND_SLOTS];
 static int nd_choice_count;
 static float nd_smooth(float value){value=fmaxf(0,fminf(1,value));return value*value*(3-2*value);}
-static float nd_distance_fade(float distance){return 1-nd_smooth((distance-32)/24);}
+static float nd_distance_fade(float distance){return 1-nd_smooth((distance-44)/32);}
 static int nd_resident_index(int key){for(int i=0;i<ND_SLOTS;i++)if(nd_residents[i].key==key)return i;return -1;}
 static void nd_consider(int key,float distance){
     if(nd_resident_index(key)>=0)distance*=.82f;

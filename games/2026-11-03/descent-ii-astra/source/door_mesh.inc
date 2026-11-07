@@ -8,7 +8,7 @@ static float afx_door_field(const ad_atlas *a,int frame,int x,int y){
 static void afx_door_segment(const afx_plane *m,const float *a,const float *b){
     if(!afx_inside(m,a[0],a[1])||!afx_inside(m,b[0],b[1]))return;
     float p[4][3];afx_world(m,a[0],a[1],.015f,p[0]);afx_world(m,b[0],b[1],.015f,p[1]);
-    afx_world(m,b[0],b[1],.22f,p[2]);afx_world(m,a[0],a[1],.22f,p[3]);
+    afx_world(m,b[0],b[1],.38f,p[2]);afx_world(m,a[0],a[1],.38f,p[3]);
     ax_paint(.19f,.205f,.22f,0);ag_triangle(p[0],p[1],p[2]);ag_triangle(p[0],p[2],p[3]);
     /* A thin polished leading edge gives the moving slab a readable highlight. */
     ax_paint(.41f,.42f,.43f,0);ax_tube(p[2][0],p[2][1],p[2][2],p[3][0],p[3][1],p[3][2],.022f,.022f,4);

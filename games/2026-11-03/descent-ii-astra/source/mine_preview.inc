@@ -64,7 +64,7 @@ static void am_liquid_view(int room,int side,am_scene *scene){
     }
 }
 static void am_build(void){
-    memset(am_scenes,0,sizeof am_scenes);am_mask=0;am_level=Current_level_num;am_segments=Highest_segment_index;float liquid_score[2]={-1,-1};
+    memset(am_scenes,0,sizeof am_scenes);am_mask=0;am_level=Current_level_num;am_segments=Highest_segment_index;float liquid_score[2]={-1,-1},rock_score=-1;
     for(int room=0;room<=Highest_segment_index;room++)for(int side=0;side<6;side++){
         segment *s=&Segments[room];int t=s->sides[side].tmap_num;if(t<0||t>=NumTextures)continue;
         int solid=s->children[side]<0&&s->sides[side].wall_num<0;
@@ -73,7 +73,7 @@ static void am_build(void){
             am_scene candidate={0};am_liquid_view(room,side,&candidate);
             if(candidate.valid){
                 vms_matrix orient;extract_orient_from_segment(&orient,s);float score=12*fmaxf(0,f2fl(vm_vec_dot(&s->sides[side].normals[0],&orient.uvec)));
-                for(int j=0;j<6;j++){int t2=s->sides[j].tmap_num;if(s->children[j]<0&&!astra_liquid_kind(t2))score+=3;if(t2>=0&&t2<NumTextures)score+=f2fl(TmapInfo[t2].lighting);}
+                for(int j=0;j<6;j++){int t2=s->sides[j].tmap_num;if(s->children[j]<0&&!astra_liquid_kind(t2))score+=3;if(astra_environment_rock(t2))score+=4;for(int k=0;k<4;k++)score+=f2fl(s->sides[j].uvls[k].l)*.3f;if(t2>=0&&t2<NumTextures)score+=f2fl(TmapInfo[t2].lighting);}
                 score+=am_distance(&candidate.eye,&candidate.goal)*.1f;
                 if(score>liquid_score[liquid-1]){liquid_score[liquid-1]=score;am_scenes[18+liquid]=candidate;}
             }
@@ -82,7 +82,25 @@ static void am_build(void){
             extern int astra_detail_surface_kind(int,int);int detail=astra_detail_surface_kind(room,side);
             const char *surface_name=piggy_game_bitmap_name(&GameBitmaps[Textures[t].index]);
             int construction=detail==2||(surface_name&&(!strncmp(surface_name,"metl",4)||!strncmp(surface_name,"wall",4)));
-            if(detail&&construction&&!am_scenes[detail==1?27:28].valid)am_face(room,side,0,&am_scenes[detail==1?27:28]);
+            if(detail==1&&construction&&!am_scenes[27].valid)am_face(room,side,0,&am_scenes[27]);
+            if(detail==2){
+                am_scene candidate={0};if(am_face(room,side,0,&candidate)){
+                    float score=0;for(int j=0;j<6;j++)if(astra_environment_rock(s->sides[j].tmap_num)&&s->children[j]<0){score+=3;if(s->sides[j].type!=SIDE_IS_QUAD)score+=2;}
+                    vms_vector ctr,view;compute_segment_center(&ctr,s);float distance=am_distance(&ctr,&candidate.goal);
+                    if(distance>7&&distance<35&&am_clear(&ctr,room,&candidate.goal,F1_0/3)){candidate.eye=ctr;candidate.room=room;score+=2;}
+                    vms_matrix orient;extract_orient_from_segment(&orient,s);candidate.up=orient.uvec;
+                    /* Look down the mine so curved transitions have a visible
+                     * silhouette, rather than filling the screen with one wall. */
+                    for(int j=0;j<6;j++)if(s->children[j]>=0&&s->sides[j].wall_num<0){
+                        vms_vector portal;compute_center_point_on_side(&portal,s,j);float span=am_distance(&ctr,&portal);
+                        if(span>7&&span<35&&am_clear(&ctr,room,&portal,F1_0/3)){
+                            candidate.eye=ctr;candidate.room=room;candidate.goal=portal;score+=6;
+                            int next=s->children[j];for(int k=0;k<6;k++)if(astra_environment_rock(Segments[next].sides[k].tmap_num))score+=.7f;break;
+                        }
+                    }
+                    if(score>rock_score){rock_score=score;am_scenes[28]=candidate;}
+                }
+            }
             extern int astra_fixture_kind(int,int);int fixture=astra_fixture_kind(room,side);
             extern int astra_wall_style(int,int);int accent=astra_wall_style(room,side);
             if(accent&&!am_scenes[20+accent].valid)am_face(room,side,0,&am_scenes[20+accent]);

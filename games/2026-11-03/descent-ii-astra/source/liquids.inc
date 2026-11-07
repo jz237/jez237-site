@@ -11,7 +11,7 @@ static const char *astra_liquid_fragment=
 "varying highp vec2 uv;\n"
 "varying mediump vec4 light;\n"
 "uniform sampler2D baseMap,overlayMap,env0,env1,env2,env3,env4,env5;\n"
-"uniform float clock,kind,overlay,turn;\n"
+"uniform float clock,kind,overlay,turn,cascade;uniform vec2 downhill;\n"
 "uniform vec3 eye,normal,tangent,bitangent;\n"
 "uniform vec4 shore[4],planes[6],origins[6],pu[6],pv[6],texuv[6],texduv[6],rect[6],tints[6];\n"
 "uniform vec4 lamps[3],lampColors[3];\n"
@@ -70,10 +70,10 @@ static const char *astra_liquid_fragment=
 " vec3 V=normalize(eye-world),N=normal*sign(dot(normal,V));\n"
 " vec2 q=vec2(dot(world,tangent),dot(world,bitangent));\n"
 " float edge=10000.;for(int i=0;i<4;i++)edge=min(edge,dot(shore[i].xyz,world)+shore[i].w);\n"
-" float room=clamp(dot(light.rgb,vec3(.21,.72,.07)),.12,1.1);\n"
+" edge=max(0.,edge-(noise(q*.85)-.5)*.55);float room=clamp(dot(light.rgb,vec3(.21,.72,.07)),.12,1.1);\n"
 " vec3 col;float exponent=74.,specular=.65;\n"
 " if(kind<1.5){\n"
-"  vec2 flow=q*.36+vec2(clock*.034,-clock*.021);\n"
+"  vec2 flow=q*.36+mix(vec2(clock*.034,-clock*.021),-downhill*clock*.72,cascade);\n"
 "  vec3 swell=wave(q*.075,clock*.48),ripple=wave(flow+swell.xy*.8,clock);\n"
 "  vec3 w=vec3(swell.xy*.70+ripple.xy*.62,swell.z*.60+ripple.z*.40);\n"
 "  N=normalize(N-tangent*w.x-bitangent*w.y);\n"
@@ -95,8 +95,8 @@ static const char *astra_liquid_fragment=
 "  col+=vec3(.22,.33,.35)*sheen*(.32+.28*room);\n"
 "  float crest=smoothstep(.34,.47,w.z)*smoothstep(.62,.85,fbm(flow*5.));\n"
 "  float wash=(.5+.5*sin(edge*5.-clock*1.5+fbm(flow*3.)*5.));\n"
-"  float foam=exp(-max(0.,edge)*2.1)*smoothstep(.35,.75,noise(flow*18.+w.xy))*wash;\n"
-"  col=mix(col,vec3(.50,.66,.64)*(room*.45+.55),min(.78,foam*.83+crest*.10));\n"
+"  float foam=exp(-max(0.,edge)*1.55)*smoothstep(.35,.75,noise(flow*18.+w.xy))*wash;\n"
+"  col=mix(col,vec3(.50,.66,.64)*(room*.45+.55),min(.78,foam*.83+crest*.10+cascade*.24*smoothstep(.56,.82,noise(vec2(dot(q,vec2(-downhill.y,downhill.x))*2.5,dot(q,downhill)*.28-clock*1.6)))));\n"
 " }else{\n"
 "  vec2 flow=q*.39+vec2(clock*.022,-clock*.037);\n"
 "  vec2 warp=vec2(fbm(flow*.85+clock*.013),fbm(flow*.92+19.-clock*.01))-.5;\n"
@@ -239,6 +239,7 @@ int astra_liquid_face(int count,const g3s_point **view,const int *ids,const g3s_
     glUniform4fv(glGetUniformLocation(program,"lamps[0]"),3,&afx_light_world[0][0]);glUniform4fv(glGetUniformLocation(program,"lampColors[0]"),3,&afx_colors[0][0]);
     float n[3],t[3]={0},b[3]={0},eye[3];al_vec(n,&face->normals[0]);astra_unit(n);al_vec(eye,&View_position);
     int major=fabsf(n[0])>fabsf(n[1])?(fabsf(n[0])>fabsf(n[2])?0:2):(fabsf(n[1])>fabsf(n[2])?1:2);t[(major+1)%3]=1;b[(major+2)%3]=1;
+    vms_matrix orient;extract_orient_from_segment(&orient,&Segments[room]);float up[3];al_vec(up,&orient.uvec);float cascade=kind==1?(1-fminf(1,fabsf(al_dot(n,up)))):0;cascade=cascade*cascade;glUniform1f(glGetUniformLocation(program,"cascade"),cascade);float dx=-al_dot(up,t),dy=-al_dot(up,b),length=sqrtf(dx*dx+dy*dy);glUniform2f(glGetUniformLocation(program,"downhill"),length>.01f?dx/length:0,length>.01f?dy/length:1);
     glUniform3fv(glGetUniformLocation(program,"normal"),1,n);glUniform3fv(glGetUniformLocation(program,"tangent"),1,t);glUniform3fv(glGetUniformLocation(program,"bitangent"),1,b);glUniform3fv(glGetUniformLocation(program,"eye"),1,eye);
     glUniform1f(glGetUniformLocation(program,"kind"),kind);glUniform1f(glGetUniformLocation(program,"clock"),al_clock());glUniform1f(glGetUniformLocation(program,"overlay"),mode);glUniform1f(glGetUniformLocation(program,"turn"),(face->tmap_num2>>14)&3);
     float edges[4][4];int corners[4];get_side_verts(corners,room,sidenum);vms_vector center;compute_center_point_on_side(&center,&Segments[room],sidenum);float ctr[3];al_vec(ctr,&center);

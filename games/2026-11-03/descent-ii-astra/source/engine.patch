@@ -2902,7 +2902,7 @@ index 650f69e..7271753 100644
  }
 +
 diff --git a/d2/main/render.c b/d2/main/render.c
-index 517bc8a..8bb565a 100644
+index 517bc8a..40a59cc 100644
 --- a/d2/main/render.c
 +++ b/d2/main/render.c
 @@ -84,6 +84,7 @@ short Rotated_last[MAX_VERTICES];
@@ -2979,8 +2979,8 @@ index 517bc8a..8bb565a 100644
 +        astra_light_face(nv,pointlist,vp);
 +    }
 +    if(astra_drawing_mine){
-+        extern void astra_environment_face(int,const g3s_point**,g3s_lrgb*,int,int,int);
-+        astra_environment_face(nv,pointlist,dyn_light,segnum,sidenum,wid_flags);
++        extern void astra_environment_face(int,const g3s_point**,const int*,g3s_lrgb*,int,int,int);
++        astra_environment_face(nv,pointlist,vp,dyn_light,segnum,sidenum,wid_flags);
 +    }
  
  #ifndef NDEBUG

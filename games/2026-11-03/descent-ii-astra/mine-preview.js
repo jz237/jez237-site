@@ -1,13 +1,13 @@
 // A paused tour of the loaded campaign's real architecture and machinery.
 window.astraMinePreview={
-  names:['Architecture & materials','Rotating fans','Hydraulic machinery','Live terminals','Cables & electrical faults','Doors & locking systems','Reactor assembly','Recharge lattice','Moving ship shadows','Brushed metal & surface wear','Fractured rock & minerals','Storage bay','Cooling chamber','Steam, dust & light','Clean edges in motion','Deep ventilation grilles','Light housings & spill','Service conduits','Raised frames & panel variants','Water surfaces','Molten lava','Red service lighting','Blue service lighting','Cyan service lighting','Amber service lighting','Warm ventilation & moving fans','Strip-light reflections','Industrial wall construction','Rock relief & material finish','Fixture light shafts','Room-aware metal reflections'],
+  names:['Architecture & materials','Rotating fans','Hydraulic machinery','Live terminals','Cables & electrical faults','Doors & locking systems','Reactor assembly','Recharge lattice','Moving ship shadows','Brushed metal & surface wear','Fractured rock & minerals','Storage bay','Cooling chamber','Steam, dust & light','Clean edges in motion','Deep ventilation grilles','Light housings & spill','Service conduits','Raised frames & panel variants','Water, wet banks & cascades','Molten lava','Red service lighting','Blue service lighting','Cyan service lighting','Amber service lighting','Warm ventilation & moving fans','Strip-light reflections','Industrial wall construction','Sculpted rock & rounded joins','Fixture light shafts','Room-aware metal reflections'],
   descriptions:[
     'New high-resolution metal, rock, grilles, machinery and lamps throughout both campaigns. Pause and compare the same view with the original artwork.',
     'Spinning fan blades behind a fixed protective grille.',
     'Moving pistons, service pipes, joints and coolant conduits.',
     'Inset displays with changing readouts and scanning lights.',
     'Suspended cable bundles and intermittent electrical faults.',
-    'Watch thick moving panel edges, guide-rail carriages, pistons and retracting locking pins follow the original door cycle.',
+    'Layered steel jambs, dark gaskets, rounded shoulders and deeper moving slab edges. Carriages, pistons and locking pins follow the original door cycle.',
     'Machined housings, pulsing energy cores and rotating containment rings.',
     'Animated charge cells, flowing pulses and electrical arcs in the original recharge field.',
     'A display ship hovers above a real mine wall. Watch its soft shadow change with its position and orientation.',
@@ -21,13 +21,13 @@ window.astraMinePreview={
     'Solid protective housings surround the original lamps. Their color spills onto nearby metal inside the room; broken lamps stop contributing.',
     'Physical service pipes, flange joints and retaining collars. A showroom sample is mounted here when this mine has no conduit wall.',
     'Raised frame rails and new reinforced, painted-metal and machinery panel families give different walls their own character.',
-    'Layered ripples, reflections of this room, depth coloring and broken shoreline foam. The water continues across adjoining surfaces.',
+    'Irregular foam, wet rock banks and partly submerged stones at natural water edges. Existing slopes gain downhill cascades; the original water route stays intact.',
     'Slow moving basalt crust, hot fissures, pressure blisters and pulsing amber light on nearby walls.',
     ...['Red','Blue','Cyan','Amber'].map(color=>color+' inset diffusers, protective metal ribs and stamped service plates. Colored light falls onto the varied wall panels in this mine room. If the mine lacks this palette, a sample is mounted on an existing safe service wall.'),
     'Slow turning fans behind protective grilles, with warm amber backlighting and a gentle machinery pulse.',
     'Long segmented light channels and colored highlights moving across nearby metal as the inspection camera drifts.',
-    'Four structural layouts add steel ribs, split plates, service grilles and colored lens segments over the mine walls. Compare against the previous Astra treatment at the same viewpoint.',
-    'Uneven stone geometry, mineral normals and varying surface finish retain the original rock placement and high-resolution artwork.',
+    'Beveled steel ribs, layered plates, recessed joints and colored lenses. Actual chamfer normals catch moving light. Use Compare to inspect the underlying surfaces.',
+    'Sculpted rock now follows folded and sloped walls, with connected contours, rounded lighting transitions, layered fractures and damp edges. The original layout and flight clearance are preserved.',
     'Local beams follow the real colored fixtures. Dust drifts through the light; the volume stays inside its mine room.',
     'Soft reflections sample the six surfaces and lamps in this room. These are cached room reflections, not mirrors of moving ships.'
   ],
@@ -39,7 +39,7 @@ window.astraMinePreview={
   sync(){
     $('minePause').textContent=this.paused?'Play':'Pause';$('minePause').setAttribute('aria-pressed',String(this.paused));
     $('mineTour').checked=this.touring;
-    $('mineCompare').textContent=(window.Module?.mineInspect>=27?(Module.mineRefinement===false?'Previous Astra':'New details'):(window.Module?.mineRefinement===false?'Original surfaces':'Remastered surfaces'));
+    $('mineCompare').textContent=(window.Module?.mineInspect>=27?(Module.mineRefinement===false?'Base surfaces':'New details'):(window.Module?.mineRefinement===false?'Original surfaces':'Remastered surfaces'));
     $('mineCompare').setAttribute('aria-pressed',String(window.Module?.mineRefinement!==false));
   },
   details(open){$('mineDetails').hidden=!open;$('mineControls').setAttribute('aria-expanded',String(open));},

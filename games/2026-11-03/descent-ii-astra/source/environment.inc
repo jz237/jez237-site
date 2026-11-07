@@ -230,7 +230,8 @@ static void ae_hatch(int room,int side,int theme,float w,float h){
 #include "astra_door_mesh.inc"
 #include "astra_detail_upgrade.inc"
 #include "astra_industrial.inc"
-void astra_environment_face(int nv,const g3s_point **points,g3s_lrgb *light,int room,int side,int flags){
+#include "astra_shore_geometry.inc"
+void astra_environment_face(int nv,const g3s_point **points,const int *vp,g3s_lrgb *light,int room,int side,int flags){
     if(!ax_on()||astra_native_compare)return;ae_faces++;ae_reset();segment *s=&Segments[room];int wallnum=s->sides[side].wall_num;
     int hidden=wallnum>=0&&Walls[wallnum].type==WALL_DOOR&&Walls[wallnum].clip_num>=0&&(WallAnims[Walls[wallnum].clip_num].flags&WCF_HIDDEN);
     int solid=s->children[side]<0&&wallnum<0;
@@ -244,7 +245,7 @@ void astra_environment_face(int nv,const g3s_point **points,g3s_lrgb *light,int 
     }
     int texture=s->sides[side].tmap_num,theme=ae_theme(room),wet=texture>=0&&texture<NumTextures&&(TmapInfo[texture].damage||TmapInfo[texture].flags&(TMI_WATER|TMI_VOLATILE|TMI_FORCE_FIELD));
     if(hidden&&(Walls[wallnum].state!=WALL_DOOR_CLOSED))return;
-    if(solid&&!wet&&nv==4)nd_surface(room,side,light);
+    if((solid||hidden)&&!wet&&!(flags&WID_CLOAKED_FLAG))nd_surface(room,side,nv,vp,light);
     ae_wall_finish(nv,points,room,side,!wet&&nv==4);
     if((solid||hidden)&&!wet&&!(flags&WID_CLOAKED_FLAG))ai_wall(room,side,light);
     if(wet||nv!=4||flags&WID_CLOAKED_FLAG)return;
@@ -286,6 +287,16 @@ static void ae_door(int room,int side){
         for(int i=0;i<3;i++){float y=(i-1)*h*.27f;
             if(wall->keys&KEY_BLUE)ax_paint(.08f,.26f,.90f,.45f);else if(wall->keys&KEY_RED)ax_paint(.85f,.055f,.025f,.45f);else if(wall->keys&KEY_GOLD)ax_paint(.85f,.57f,.025f,.45f);else ax_paint(.07f,.50f,.53f,.35f);
             ax_tube(x,y-.25f,.32f,x,y+.25f,.32f,.055f,.055f,6);}}
+    /* Layered reveal, gasket and chamfered shoulders: all remain at the jamb. */
+    if(astra_detail_upgrade){
+        for(int sign=-1;sign<=1;sign+=2){
+            float x=sign*w*.489f,y=sign*h*.489f;
+            ax_paint(.035f,.041f,.046f,0);ag_box(x,0,.055f,.12f,h*.48f,.045f);ag_box(0,y,.055f,w*.48f,.12f,.045f);
+            ax_paint(.24f,.28f,.30f,0);ax_tube(x,-h*.48f,.20f,x,h*.48f,.20f,.14f,.14f,8);ax_tube(-w*.48f,y,.20f,w*.48f,y,.20f,.14f,.14f,8);
+            ax_paint(.46f,.49f,.50f,0);ax_tube(x-sign*.09f,-h*.46f,.30f,x-sign*.09f,h*.46f,.30f,.023f,.023f,6);
+            for(int j=-1;j<=1;j+=2){ax_paint(.13f,.16f,.18f,0);ag_box(x,j*h*.43f,.24f,.19f,.24f,.10f);ax_paint(.47f,.50f,.51f,0);ax_tube(x,j*h*.43f,.30f,x,j*h*.43f,.36f,.065f,.065f,6);}
+        }
+    }
     /* Separate guide rails, travelling carriages and retracting locking pins. */
     for(int sign=-1;sign<=1;sign+=2){float x=sign*w*.462f,travel=h*(.34f-.65f*open);
         ax_paint(.045f,.05f,.055f,0);ag_box(x,0,.035f,.20f,h*.44f,.03f);
@@ -350,7 +361,7 @@ void astra_environment_rooms(const short *rooms,int count,int window_num){
     extern void astra_combat_fragments(const short*,int,int);astra_combat_fragments(rooms,count,window_num);
     for(int i=0;i<count;i++){int room=rooms[i];if(room<0||room>Highest_segment_index)continue;
         for(int side=0;side<6;side++)ae_door(room,side);
-        nd_atmosphere(room);
+        nd_atmosphere(room);nb_room(room);
         if(astra_refinement){int side=astra_environment_bay(room);vms_vector c;vms_matrix b;float w,h;
             if(side>=0&&ae_basis(room,side,&c,&b,&w,&h)){g3s_point p;g3_rotate_point(&p,&c);if(p.p3_z>F1_0&&p.p3_z<i2f(65)){
                 g3_start_instance_matrix(&c,&b);ag_atmosphere(room,side,ae_theme(room),w,h);g3_done_instance();}}}
@@ -386,7 +397,7 @@ void astra_environment_rooms(const short *rooms,int count,int window_num){
     }
     ag_render_exhibit();
     if(!window_num)EM_ASM({const w=Module.industrialWalls||(Module.industrialWalls={version:61});w.uploads=$0;w.draws=$1;},ai_uploads,ai_draws);
-    if(!window_num)EM_ASM(Module.detailUpgrade=({version:57,meshes:$0,shafts:$1,meshUploads:$2,meshCapacity:96});,nd_draws,nd_shafts,nd_uploads);
+    if(!window_num)EM_ASM(Module.detailUpgrade=({version:63,meshes:$0,shafts:$1,meshUploads:$2,meshCapacity:128});,nd_draws,nd_shafts,nd_uploads);
     if(!window_num)EM_ASM(Module.environmentVersion=38;Module.foundryStats=({rockFaces:$6,equipmentBays:$7,shipShadows:$8,atmosphereBays:$9});Module.environmentStats=({faces:$0,machines:$1,doors:$2,reactors:$3,atmosphere:$4});Module.environmentLevel=$5;Module.environmentFrames=(Module.environmentFrames||0)+1;,ae_faces,ae_machines,ae_doors,ae_reactors,ae_atmosphere,Current_level_num,ag_rocks,ag_props,ag_shadows,ag_air);
     if(!window_num)EM_ASM(Module.fixtureDetails=({version:38,draws:$0,grilles:$1,pipes:$2,lights:$3,panels:$4,doorEdges:$5,mechanisms:$6});,afx_draws,afx_grilles,afx_pipes,afx_lights,afx_panels,afx_door_edges_drawn,afx_door_mechanisms);
 }
