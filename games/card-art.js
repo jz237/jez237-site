@@ -44,6 +44,7 @@
     'Stellar Drift':['space','#ebaf68','#9ec5eb',2],
     'SUPER STAR TREK':['trek','#e5b875','#8fbdeb',0],
     'Lunar Lander':['lander','#e7ca87','#9fc5de',0],
+    'Sini 2026':['sini','#52ffd8','#ffb347',0],
     'Gold Digger':['golddigger','#ffc65a','#ffe9b0',0],
     'Lancewing 2026':['lancewing','#ffb347','#ffd9a0',0],
     'Rimstorm 2026':['rimstorm','#7fd4ff','#ffb347',0],
@@ -176,6 +177,18 @@
       case 'helicopter': return stars+skyline(59)+group(path('M-21 2-5 0Q0-13 13-8L22 0Q24 9 11 10H-1L-8 5-23 7Z',metal,a,.5)+path('M5-8 12-7 19 0H4Z','#20445c','#b0dae3',.7)+path('M-22 5-28-5-28 8Z',b)+path('M-4 10-7 14H20M14 10v4M0-8v-7','none',metal,1.2)+group(path('M-28-15H32','none','#d1dce0',1.1),'','ca-rotor')+circle(-25,2,2,'none',b,.7),'translate(48 29)','ca-hover')+path('M65 39 82 62H40Z','#f1d99f','','','opacity=".11"')+person(63,56,.43,b)+person(73,58,.35,a);
       case 'slash': return stars+floor+repeat(3,i=>group(crystal(0,0,1,i%2?a:b),`translate(${26+i*25} ${25+(i%2)*14}) rotate(${i*25-20})`,'ca-drift'))+group(path('M15 54Q44 35 83 13','none','#e8faf6',3,'stroke-linecap="round"')+path('M15 55Q43 40 84 14','none',a,6,'opacity=".2"'),'','ca-slash')+repeat(8,i=>blink(path(`M${39+i*4} ${23+(i%3)*7}l${i%2?3:-3} -3`,'none',b,.8),-i*.16));
       case 'gravity': return stars+repeat(6,i=>path(`M${8+i*15} 8Q${15+i*12} 49 ${8+i*15} 60M8 ${9+i*10}Q49 ${5+i*7} 94 ${9+i*10}`,'none',a,.45,'opacity=".35"'))+group(ellipse(50,34,25,14,'none',b)+ellipse(50,34,14,25,'none',a),'','ca-current')+circle(50,34,8,'#142339',a,.8)+circle(48,31,3,haze)+group(circle(26,30,3,metal)+circle(74,39,2,b),'','ca-current')+blink(circle(50,34,3,'#e7dff2'));
+      case 'sini': {
+        const rock=(x,y,r,i)=>group(path(`M${-r} ${r*.2}Q${-r*.9} ${-r*.8} ${-r*.1} ${-r}Q${r*.8} ${-r*.9} ${r} ${-r*.1}Q${r*.9} ${r*.8} ${r*.1} ${r}Q${-r*.8} ${r*.9} ${-r} ${r*.2}Z`,'#3a3430','#7a6a5a',.5)+circle(-r*.3,-r*.25,r*.18,'#2a2522')+circle(r*.35,r*.3,r*.12,'#2a2522'),`translate(${x} ${y})`,'ca-drift',`style="--lag:${-i*.9}s"`);
+        const plate=(k)=>{const t=k/8*Math.PI*2;return path(`M${(80+Math.cos(t)*7).toFixed(1)} ${(22+Math.sin(t)*7).toFixed(1)}L${(80+Math.cos(t+.7)*7).toFixed(1)} ${(22+Math.sin(t+.7)*7).toFixed(1)}L${(80+Math.cos(t+.35)*10).toFixed(1)} ${(22+Math.sin(t+.35)*10).toFixed(1)}Z`,'#4a4e58','#c8a070',.4)};
+        return stars+ellipse(30,58,40,14,'#2a1608','','opacity=".5"')+circle(80,22,5,'#ff8a3a','#ffd9a0',.6)+circle(80,22,2.4,'#fff0c0')
+          +[0,1,2,3,5,6].map(plate).join('')+blink(circle(80,22,11,'none',b,.4,'opacity=".6"'))
+          +rock(22,22,8,0)+rock(55,48,6,1)+rock(10,52,4,2)+rock(48,14,3.5,3)
+          +repeat(3,i=>blink(path(`M${27+i*3} ${14+i*4}l1.6-3 1.6 3-1.6 3Z`,a),-i*.4))
+          +group(path('M-6 3 0-5 6 3 0 1Z','#3d7fd9','#cfe6ff',.5)+path('M-3 3-2 6M3 3 2 6','none','#9fd8ff',1),'translate(38 34) rotate(-60)','ca-hover')
+          +group(path('M32 31 25 26','none','#ffd27a',1,'stroke-dasharray="2 2"'),'','ca-glimmer')
+          +group(path('M-4 0 4-2 2 0 4 2Z','#3a2a2e','#ff4a4a',.5)+circle(4,0,.8,'#ff4a4a'),'translate(66 52)','ca-hover')
+          +group(circle(0,0,1.6,'#c8b0ff')+path('M-1 0H-7','none','#a880ff',.8,'opacity=".7"'),'translate(64 30)','ca-drift');
+      }
       case 'golddigger': {
         const stal=(x,y,h,c)=>path(`M${x-2.2} ${y}L${x} ${y+h}L${x+2.2} ${y}Z`,c);
         return rect(0,0,100,68,'#140d08')+ellipse(52,30,46,24,'#2a1c12','','opacity=".55"')
