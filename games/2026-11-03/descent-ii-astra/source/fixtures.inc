@@ -19,9 +19,9 @@ static void afx_finish(int family,float fade){
     }
     ag_load(family);ag_load(7);ag_load(6);float axis[9];for(int k=0;k<3;k++){vms_vector a={0},r;if(k==0)a.x=F1_0;else if(k==1)a.y=F1_0;else a.z=F1_0;g3_rotate_delta_vec(&r,&a);axis[3*k]=f2fl(r.x);axis[3*k+1]=f2fl(r.y);axis[3*k+2]=-f2fl(r.z);}
     vms_vector zero={0};g3s_point origin;g3_rotate_point(&origin,&zero);int oldfade=grd_curcanv->cv_fade_level,blend=grd_curcanv->cv_blend_func;GLboolean cull=glIsEnabled(GL_CULL_FACE);glDisable(GL_CULL_FACE);gr_settransblend(GR_FADE_OFF,GR_BLEND_NORMAL);glDepthMask(fade>.99f?GL_TRUE:GL_FALSE);
-    glUseProgram(program);glUniformMatrix3fv(glGetUniformLocation(program,"axis"),1,GL_FALSE,axis);glUniform3f(glGetUniformLocation(program,"origin"),f2fl(origin.p3_x),f2fl(origin.p3_y),-f2fl(origin.p3_z));
-    glUniform1f(glGetUniformLocation(program,"opacity"),fade);glUniform1f(glGetUniformLocation(program,"kind"),family==11?1:2);glUniform1i(glGetUniformLocation(program,"paint"),0);glUniform1i(glGetUniformLocation(program,"metal"),1);glUniform1i(glGetUniformLocation(program,"lens"),2);
-    glUniform4fv(glGetUniformLocation(program,"lamps[0]"),3,&afx_lamps[0][0]);glUniform4fv(glGetUniformLocation(program,"colors[0]"),3,&afx_colors[0][0]);glUniform4fv(glGetUniformLocation(program,"lightAxes[0]"),3,&afx_axes[0][0]);
+    glUseProgram(program);glUniformMatrix3fv(AS_UNIFORM(program,"axis"),1,GL_FALSE,axis);glUniform3f(AS_UNIFORM(program,"origin"),f2fl(origin.p3_x),f2fl(origin.p3_y),-f2fl(origin.p3_z));
+    glUniform1f(AS_UNIFORM(program,"opacity"),fade);glUniform1f(AS_UNIFORM(program,"kind"),family==11?1:2);glUniform1i(AS_UNIFORM(program,"paint"),0);glUniform1i(AS_UNIFORM(program,"metal"),1);glUniform1i(AS_UNIFORM(program,"lens"),2);
+    glUniform4fv(AS_UNIFORM(program,"lamps[0]"),3,&afx_lamps[0][0]);glUniform4fv(AS_UNIFORM(program,"colors[0]"),3,&afx_colors[0][0]);glUniform4fv(AS_UNIFORM(program,"lightAxes[0]"),3,&afx_axes[0][0]);
     glActiveTexture(GL_TEXTURE2);glBindTexture(GL_TEXTURE_2D,ag_colors[6]);
     glActiveTexture(GL_TEXTURE1);glBindTexture(GL_TEXTURE_2D,ag_colors[7]);glActiveTexture(GL_TEXTURE0);glBindTexture(GL_TEXTURE_2D,ag_colors[family]);
     glEnableClientState(GL_VERTEX_ARRAY);glEnableClientState(GL_NORMAL_ARRAY);glEnableClientState(GL_COLOR_ARRAY);glEnableClientState(GL_TEXTURE_COORD_ARRAY);

@@ -4,7 +4,8 @@
 typedef struct {int face,next;} ng_link;
 static ng_link *ng_links;static int *ng_head;static float (*ng_normal)[3];static unsigned char *ng_border;
 static int ng_level=-999,ng_rooms=-1,ng_vertices=-1,ng_count;static unsigned ng_catalogs;
-typedef struct {int room,side,rock,type,ids[4],shared[4],wet[4];float p[4][3],n[3],corner[4][3],width,height,amplitude;} ng_shape;
+typedef struct {int room,side,rock,type,ids[4],shared[4],wet[4];float p[4][3],n[3],corner[4][3],width,height,amplitude;int mounted,zone,closed[4];float mount[3],right[3],up[3];} ng_shape;
+extern int astra_surface_mount(int,int,float*,float*,float*,int*);
 static int ng_solid(int room,int s){
     side *f=&Segments[room].sides[s];if(Segments[room].children[s]<0&&f->wall_num<0)return 1;
     if(f->wall_num<0)return 0;wall *w=&Walls[f->wall_num];return w->type==WALL_DOOR&&w->clip_num>=0&&(WallAnims[w->clip_num].flags&WCF_HIDDEN);
@@ -48,9 +49,11 @@ static void ng_prepare(int room,int s,int rock,ng_shape *g){
     for(int i=0;i<4;i++)al_vec(g->p[i],&Vertices[g->ids[i]]);
     g->width=f2fl(vm_vec_dist(&Vertices[g->ids[0]],&Vertices[g->ids[1]]));g->height=f2fl(vm_vec_dist(&Vertices[g->ids[0]],&Vertices[g->ids[3]]));
     g->amplitude=fminf(1.3f,fminf(g->width,g->height)*.05f);
+    g->mounted=astra_surface_mount(room,s,g->mount,g->right,g->up,&g->zone);
     if(rock)ng_catalog();
     for(int i=0;i<4;i++){
         memcpy(g->corner[i],g->n,sizeof g->n);
+        for(int f=0;f<6;f++)if(f!=s&&ng_solid(room,f)){int ids[4],matches=0;get_side_verts(ids,room,f);for(int j=0;j<4;j++)if(ids[j]==g->ids[i]||ids[j]==g->ids[(i+1)%4])matches++;if(matches==2)g->closed[i]=1;}
         if(rock&&ng_head){g->shared[i]=ng_adjacent(room*6+s,g->ids[i],g->ids[(i+1)%4])>=0;memcpy(g->corner[i],ng_normal[g->ids[i]],sizeof g->n);}
         for(int f=0;f<6;f++)if(astra_liquid_kind(Segments[room].sides[f].tmap_num)==1){int ids[4],matches=0;get_side_verts(ids,room,f);for(int j=0;j<4;j++)if(ids[j]==g->ids[i]||ids[j]==g->ids[(i+1)%4])matches++;if(matches==2)g->wet[i]=1;}
     }
@@ -76,14 +79,38 @@ static void ng_position(ng_shape *g,float u,float v,float *p,float *finish){
         float edgeDistance=fminf(fminf(edge[0],edge[1]),fminf(edge[2],edge[3]));float amp=.62f+(g->amplitude-.62f)*nd_smooth(edgeDistance/1.4f);
         for(int e=0;e<4;e++)if(edge[e]<.0001f&&g->shared[e]){guard=1;for(int i=0;i<4;i++)if(ng_border&&ng_border[g->ids[i]]){float delta[3];for(int k=0;k<3;k++)delta[k]=p[k]-g->p[i][k];guard=fminf(guard,nd_smooth(sqrtf(al_dot(delta,delta))/1.25f));}join=1;}
         float rounded=0;for(int e=0;e<4;e++)if(g->shared[e])rounded=fmaxf(rounded,(1-nd_smooth(edge[e]/2.8f))*.64f);
-        float ledge=nd_smooth((strata-.38f)/.34f)*.22f*nd_smooth(edgeDistance/1.4f);
+        /* Broad asymmetric shelves and fracture shoulders: same grid and a
+         * zero contribution on shared boundaries keep neighboring skins joined. */
+        float fracture=.5f+.5f*sinf(p[0]*.27f-p[1]*.41f+p[2]*.36f+field*3.1f);
+        float ledge=(nd_smooth((strata-.35f)/.38f)*.20f+nd_smooth((fracture-.42f)/.3f)*.27f)*nd_smooth(edgeDistance/2.2f);
         rise=.008f+guard*join*(amp*(.30f+field*.66f+strata*.25f)+rounded+ledge);ao=.76f+.24f*nd_smooth(field*1.2f+strata*.18f);
     }else{float edgeDistance=fminf(fminf(edge[0],edge[1]),fminf(edge[2],edge[3])),joint=fabsf(u-.5f)*g->width;rise=.008f+.21f*nd_smooth(fminf(edgeDistance,joint)/.45f);ao=.72f+.28f*nd_smooth(fminf(edgeDistance,joint)/.6f);}
     for(int k=0;k<3;k++)p[k]+=direction[k]*rise;
-    if(finish){finish[0]=ao;finish[1]=wet;finish[2]=0;finish[3]=1;}
+    if(finish){finish[0]=ao;finish[1]=wet;finish[2]=0;finish[3]=0;}
+}
+/* Baked once per surface upload. All distances are world units, so a bolt
+ * recess or a wet tide line cannot stretch to room-sized proportions. */
+static void ng_finish(ng_shape *g,float u,float v,nd_vertex *out){
+    float edge[4]={v*g->height,(1-u)*g->width,(1-v)*g->height,u*g->width},contact=0,wet=out->finish[1];
+    for(int e=0;e<4;e++){
+        if(g->closed[e])contact=fmaxf(contact,(1-nd_smooth(edge[e]/1.0f))*.15f);
+        if(g->wet[e])wet=fmaxf(wet,(1-nd_smooth(edge[e]/2.4f))*(.78f+.22f*ng_noise(out->p[0]*2,out->p[1]*2,out->p[2]*2)));
+    }
+    float rust=0,soot=0;
+    if(g->mounted){
+        float delta[3];for(int k=0;k<3;k++)delta[k]=out->p[k]-g->mount[k];
+        float x=al_dot(delta,g->right),y=al_dot(delta,g->up);
+        float box=fmaxf(fabsf(x)-2.72f,fabsf(y)-2.67f);
+        contact=fmaxf(contact,.37f*(1-nd_smooth(fmaxf(0,box)/1.0f)));
+        float below=nd_smooth((-y-2.0f)/.65f)*(1-nd_smooth((-y-2.7f)/5.5f));
+        float drip=1-nd_smooth(fabsf(fabsf(x)-1.25f)/.78f);
+        rust=below*drip*(g->zone==2?.8f:.5f);
+        if(g->zone!=2){float above=nd_smooth((y-1.2f)/1.0f)*(1-nd_smooth((y-2.1f)/4.5f));soot=above*(1-nd_smooth(fabsf(x+1.05f)/2.2f))*.66f;}
+    }
+    out->finish[0]*=1-contact;out->finish[1]=wet;out->finish[2]=rust;out->finish[3]=soot;
 }
 static void ng_point(ng_shape *g,float u,float v,nd_vertex *out){
-    float w[4];ng_weights(g->type,u,v,w);memset(out,0,sizeof *out);ng_position(g,u,v,out->p,out->finish);side *f=&Segments[g->room].sides[g->side];
+    float w[4];ng_weights(g->type,u,v,w);memset(out,0,sizeof *out);ng_position(g,u,v,out->p,out->finish);ng_finish(g,u,v,out);side *f=&Segments[g->room].sides[g->side];
     for(int i=0;i<4;i++){out->uv[0]+=f2fl(f->uvls[i].u)*w[i];out->uv[1]+=f2fl(f->uvls[i].v)*w[i];}out->uv[2]=u;out->uv[3]=v;
     float a[3],b[3],c[3],d[3];float du=fminf(.006f,.08f/fmaxf(1,g->width)),dv=fminf(.006f,.08f/fmaxf(1,g->height));
     ng_position(g,fmaxf(0,u-du),v,a,NULL);ng_position(g,fminf(1,u+du),v,b,NULL);ng_position(g,u,fmaxf(0,v-dv),c,NULL);ng_position(g,u,fminf(1,v+dv),d,NULL);

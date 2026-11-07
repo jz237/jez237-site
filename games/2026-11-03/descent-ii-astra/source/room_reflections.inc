@@ -43,7 +43,7 @@ void astra_room_materials(int room){
         const char *fs="precision highp float;varying highp vec2 uv;uniform sampler2D image;uniform vec4 uv0,duv,rect,tint;uniform float glow;uniform vec4 lines[2];uniform vec3 lineColors[2];void main(){vec2 q=uv0.xy+uv.x*uv0.zw+uv.y*duv.xy;if(rect.z>0.)q=(fract(q)-rect.xy)/rect.zw;vec4 a=texture2D(image,q);vec3 c=a.rgb*tint.rgb;float hot=smoothstep(.65,.9,max(a.r,max(a.g,a.b)));c+=a.rgb*hot*glow;for(int i=0;i<2;i++){vec2 d=lines[i].zw-lines[i].xy;float t=clamp(dot(uv-lines[i].xy,d)/max(.00001,dot(d,d)),0.,1.);float r=length(uv-lines[i].xy-d*t);c+=lineColors[i]*(1.-smoothstep(.006,.025,r));}gl_FragColor=vec4(c,a.a);}";
         GLuint v=astra_compile(GL_VERTEX_SHADER,vs),f=astra_compile(GL_FRAGMENT_SHADER,fs);if(!v||!f){ar_failed=1;return;}
         ar_program=glCreateProgram();glAttachShader(ar_program,v);glAttachShader(ar_program,f);glLinkProgram(ar_program);glDeleteShader(v);glDeleteShader(f);GLint ok;glGetProgramiv(ar_program,GL_LINK_STATUS,&ok);if(!ok){ar_failed=1;return;}
-        ar_uv0=glGetUniformLocation(ar_program,"uv0");ar_duv=glGetUniformLocation(ar_program,"duv");ar_rect=glGetUniformLocation(ar_program,"rect");ar_tint=glGetUniformLocation(ar_program,"tint");ar_glow=glGetUniformLocation(ar_program,"glow");ar_lines=glGetUniformLocation(ar_program,"lines[0]");ar_line_colors=glGetUniformLocation(ar_program,"lineColors[0]");glGenFramebuffers(1,&ar_fbo);
+        ar_uv0=AS_UNIFORM(ar_program,"uv0");ar_duv=AS_UNIFORM(ar_program,"duv");ar_rect=AS_UNIFORM(ar_program,"rect");ar_tint=AS_UNIFORM(ar_program,"tint");ar_glow=AS_UNIFORM(ar_program,"glow");ar_lines=AS_UNIFORM(ar_program,"lines[0]");ar_line_colors=AS_UNIFORM(ar_program,"lineColors[0]");glGenFramebuffers(1,&ar_fbo);
     }
     al_reflection_room(room);
     GLint framebuffer,viewport[4];glGetIntegerv(GL_FRAMEBUFFER_BINDING,&framebuffer);glGetIntegerv(GL_VIEWPORT,viewport);
@@ -53,7 +53,7 @@ void astra_room_materials(int room){
     if(glCheckFramebufferStatus(GL_FRAMEBUFFER)!=GL_FRAMEBUFFER_COMPLETE){ar_failed=1;glBindFramebuffer(GL_FRAMEBUFFER,framebuffer);glActiveTexture(GL_TEXTURE0);return;}
     glDisable(GL_DEPTH_TEST);glDisable(GL_BLEND);glDisable(GL_CULL_FACE);glDisable(GL_SCISSOR_TEST);glDepthMask(GL_FALSE);glUseProgram(ar_program);glActiveTexture(GL_TEXTURE0);
     glDisableClientState(GL_COLOR_ARRAY);glDisableClientState(GL_NORMAL_ARRAY);glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-    glUniform1i(glGetUniformLocation(ar_program,"image"),0);float quad[]={-1,-1,1,-1,1,1,-1,1};glEnableClientState(GL_VERTEX_ARRAY);glVertexPointer(2,GL_FLOAT,0,quad);
+    glUniform1i(AS_UNIFORM(ar_program,"image"),0);float quad[]={-1,-1,1,-1,1,1,-1,1};glEnableClientState(GL_VERTEX_ARRAY);glVertexPointer(2,GL_FLOAT,0,quad);
     for(int s=0;s<6;s++){
         glViewport((s%4)*64,(s/4)*64,64,64);probe->valid[s]=al_probe.origins[s][3];
         glBindTexture(GL_TEXTURE_2D,al_probe.textures[s]?al_probe.textures[s]:ag_colors[7]);
@@ -76,7 +76,7 @@ static void ar_bind_to(GLuint program,int room){
     static bindings programs[3];bindings *b=NULL;for(int i=0;i<3;i++)if(programs[i].program==program){b=&programs[i];break;}
     if(!b)for(int i=0;i<3;i++)if(!programs[i].program){b=&programs[i];b->program=program;b->on=-2;b->frame=-1;break;}if(!b)return;
     GLint on=b->on,planes=b->planes,origins=b->origins,du=b->du,dv=b->dv,texture=b->texture;
-    if(on==-2){on=glGetUniformLocation(program,"roomReflection");planes=glGetUniformLocation(program,"reflectPlanes[0]");origins=glGetUniformLocation(program,"reflectOrigins[0]");du=glGetUniformLocation(program,"reflectU[0]");dv=glGetUniformLocation(program,"reflectV[0]");texture=glGetUniformLocation(program,"roomAtlas");}
+    if(on==-2){on=AS_UNIFORM(program,"roomReflection");planes=AS_UNIFORM(program,"reflectPlanes[0]");origins=AS_UNIFORM(program,"reflectOrigins[0]");du=AS_UNIFORM(program,"reflectU[0]");dv=AS_UNIFORM(program,"reflectV[0]");texture=AS_UNIFORM(program,"roomAtlas");}
     b->on=on;b->planes=planes;b->origins=origins;b->du=du;b->dv=dv;b->texture=texture;
     ar_frame_begin();ar_probe *probe=ar_find(room);float gain=astra_detail_upgrade&&astra_drawing_mine&&probe&&!ar_failed?ar_gain(probe,room):0;glUniform1f(on,gain);if(gain<=0)return;probe->seen=framecount;
     if(b->room==room&&b->frame==framecount){glActiveTexture(GL_TEXTURE7);glBindTexture(GL_TEXTURE_2D,probe->texture);glActiveTexture(GL_TEXTURE0);return;}b->room=room;b->frame=framecount;

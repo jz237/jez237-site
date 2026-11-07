@@ -12,6 +12,7 @@ for checkout,commit in [(repo,"9fd90f03513663ce1372c8cfa723b7a73c4219fa"),
         raise SystemExit("Unexpected upstream revision in "+str(checkout))
 git(repo,"apply","--check",str(src/"engine.patch"))
 includes={
+    "uniform_cache.inc": "arch/ogl/astra_uniform_cache.inc",
     'industrial.inc':'arch/ogl/astra_industrial.inc',
     'confinement.inc':'arch/ogl/astra_confinement.inc',"armor.inc":"3d/astra_armor.inc","finish.inc":"arch/ogl/astra_finish.inc",
           "lighting.inc":"main/astra_light.inc","shader.inc":"arch/ogl/astra_shader.inc",

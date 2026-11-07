@@ -15,7 +15,7 @@ extern int astra_refinement,astra_native_compare,astra_detail_upgrade;
 extern int astra_environment_theme(int),astra_environment_bay(int),astra_environment_rock(int);
 float astra_mine_clock=-1,astra_mine_door=-1;
 typedef struct {vms_vector eye,goal,up;int room,side,subject,valid;} am_scene;
-static am_scene am_scenes[37];static int am_level=-999,am_segments=-1;static uint64_t am_mask;
+static am_scene am_scenes[43],am_materials[4];static int am_level=-999,am_segments=-1;static uint64_t am_mask;
 extern int astra_life_anchor(int,vms_vector*,int*);
 extern void astra_life_preview(int,int,int);
 static float am_distance(const vms_vector *a,const vms_vector *b){return f2fl(vm_vec_dist(a,b));}
@@ -207,7 +207,36 @@ static void am_build(void){
     }
     am_scenes[35]=am_scenes[19].valid?am_scenes[19]:am_scenes[20].valid?am_scenes[20]:am_scenes[0];
     am_scenes[36]=am_scenes[19].valid?am_scenes[19]:am_scenes[9];
-    for(int i=0;i<37;i++)if(am_scenes[i].valid)am_mask|=UINT64_C(1)<<i;
+    am_scenes[37]=am_scenes[34];am_scenes[38]=am_scenes[27];
+    am_scenes[39]=am_scenes[34];am_scenes[40]=am_scenes[32];
+    am_scenes[41]=am_scenes[34];am_scenes[42]=am_scenes[34];
+    /* Checked close-up positions show the same installations used in play. */
+    for(int i=37;i<43;i++)if(am_scenes[i].valid&&i!=38&&i!=40){
+        am_scene *v=&am_scenes[i];vms_vector delta,eye,goal=v->goal;
+        vm_vec_sub(&delta,&v->eye,&goal);vm_vec_scale(&delta,fl2f(i==41?.58f:i==42?1.3f:.85f));vm_vec_add(&eye,&goal,&delta);
+        if(i==39){vm_vec_scale_add2(&goal,&v->up,-F1_0*2);vm_vec_scale_add2(&eye,&v->up,-F1_0*2);}
+        int room=find_point_seg(&eye,v->room);if(room>=0&&am_clear(&v->eye,v->room,&eye,F1_0/3)&&am_clear(&eye,room,&goal,0)){v->eye=eye;v->goal=goal;v->room=room;}
+    }
+    am_materials[0]=am_scenes[27];am_materials[1]=am_scenes[32];am_materials[3]=am_scenes[9];memset(&am_materials[2],0,sizeof(am_scene));float wetBest=-1;
+    /* Inspect a real wet rock bank rather than aiming the material exhibit at
+     * the middle of a water polygon. Score visible, brighter adjoining stone. */
+    for(int room=0;room<=Highest_segment_index;room++)for(int side=0;side<6;side++){
+        if(astra_detail_surface_kind(room,side)!=2)continue;int ids[4];get_side_verts(ids,room,side);am_scene face={0};if(!am_face(room,side,0,&face))continue;
+        for(int f=0;f<6;f++)if(astra_liquid_kind(Segments[room].sides[f].tmap_num)==1){
+            int water[4];get_side_verts(water,room,f);
+            for(int e=0;e<4;e++){int matches=0;for(int k=0;k<4;k++)if(water[k]==ids[e]||water[k]==ids[(e+1)%4])matches++;if(matches!=2)continue;
+                vms_vector edge,center,along,n,goal,eye;vm_vec_avg(&edge,&Vertices[ids[e]],&Vertices[ids[(e+1)%4]]);compute_center_point_on_side(&center,&Segments[room],side);
+                vm_vec_normalized_dir(&along,&center,&edge);vm_vec_normalized_dir(&n,&face.eye,&face.goal);vm_vec_scale_add(&goal,&edge,&along,fl2f(1.8f));vm_vec_scale_add2(&goal,&n,F1_0);
+                vm_vec_scale_add(&eye,&goal,&n,i2f(12));vm_vec_scale_add2(&eye,&along,i2f(3));int er=find_point_seg(&eye,room),gr=find_point_seg(&goal,room);
+                if(er<0||gr<0||!am_clear(&eye,er,&goal,F1_0/3))continue;float score=0;for(int k=0;k<4;k++)score+=f2fl(Segments[room].sides[side].uvls[k].l);
+                if(score>wetBest){wetBest=score;vms_matrix basis;extract_orient_from_segment(&basis,&Segments[room]);am_materials[2]=(am_scene){eye,goal,basis.uvec,er,side,room,1};}
+            }
+        }
+    }
+    unsigned materials=0;for(int i=0;i<4;i++)if(am_materials[i].valid)materials|=1u<<i;EM_ASM(Module.mineMaterialMask=$0;,materials);
+    /* An oblique inspection angle makes the shallow contours legible. */
+    if(am_scenes[40].valid){am_scene *v=&am_scenes[40];vms_vector n,r,eye;vm_vec_normalized_dir(&n,&v->goal,&v->eye);vm_vec_cross(&r,&n,&v->up);vm_vec_normalize(&r);vm_vec_scale_add(&eye,&v->eye,&r,i2f(6));int room=find_point_seg(&eye,v->room);if(room>=0&&am_clear(&v->eye,v->room,&eye,F1_0/3)&&am_clear(&eye,room,&v->goal,0)){v->eye=eye;v->room=room;}}
+    for(int i=0;i<43;i++)if(am_scenes[i].valid)am_mask|=UINT64_C(1)<<i;
 }
 /* The transient door frame is restored immediately after drawing, including
  * its connected side. No wall_open_door, trigger, sound or ActiveDoors changes. */
@@ -227,9 +256,10 @@ static void am_restore_door(am_door_saved *save){
 }
 void astra_mine_preview(int index,float clock,float zoom){
     if(am_level!=Current_level_num||am_segments!=Highest_segment_index||!am_mask)am_build();
-    if(index<0||index>36||!am_scenes[index].valid){index=0;while(index<37&&!am_scenes[index].valid)index++;}
-    if(index>=37){EM_ASM(window.astraMinePreview?.unavailable());return;}
+    if(index<0||index>42||!am_scenes[index].valid){index=0;while(index<43&&!am_scenes[index].valid)index++;}
+    if(index>=43){EM_ASM(window.astraMinePreview?.unavailable());return;}
     am_scene *s=&am_scenes[index];
+    if(index==38){int pick=EM_ASM_INT(return Module.mineMaterial|0);if(pick>=0&&pick<4&&am_materials[pick].valid)s=&am_materials[pick];}
     if(index==35){int pick=EM_ASM_INT(return Module.mineChamber|0);int choices[]={19,20,0};if(pick>=0&&pick<3&&am_scenes[choices[pick]].valid)s=&am_scenes[choices[pick]];}
     if(index==36){int pick=EM_ASM_INT(return Module.mineReactionKind|0);int choices[]={19,9,32,20};if(pick>=0&&pick<4&&am_scenes[choices[pick]].valid)s=&am_scenes[choices[pick]];}
     am_scene chamber;

@@ -398,7 +398,7 @@ void astra_environment_rooms(const short *rooms,int count,int window_num){
         EM_ASM(window.astraDeck?.reflect([$0,$1,$2],[$3,$4,$5]);,colors[0][0],colors[0][1],colors[0][2],colors[1][0],colors[1][1],colors[1][2]);
     }
     ag_render_exhibit();
-    if(!window_num)EM_ASM(Module.mineLife=({version:64,installations:$0,uploads:$1,hits:$2,dust:$3,drips:$4});,ml_draws,ml_uploads,ml_hits,ml_dust,ml_drips);
+    if(!window_num)EM_ASM(Module.mineLife=({version:65,installations:$0,uploads:$1,hits:$2,dust:$3,drips:$4});,ml_draws,ml_uploads,ml_hits,ml_dust,ml_drips);
     if(!window_num)EM_ASM({const w=Module.industrialWalls||(Module.industrialWalls={version:61});w.uploads=$0;w.draws=$1;},ai_uploads,ai_draws);
     if(!window_num)EM_ASM(Module.detailUpgrade=({version:63,meshes:$0,shafts:$1,meshUploads:$2,meshCapacity:128});,nd_draws,nd_shafts,nd_uploads);
     if(!window_num)EM_ASM(Module.environmentVersion=38;Module.foundryStats=({rockFaces:$6,equipmentBays:$7,shipShadows:$8,atmosphereBays:$9});Module.environmentStats=({faces:$0,machines:$1,doors:$2,reactors:$3,atmosphere:$4});Module.environmentLevel=$5;Module.environmentFrames=(Module.environmentFrames||0)+1;,ae_faces,ae_machines,ae_doors,ae_reactors,ae_atmosphere,Current_level_num,ag_rocks,ag_props,ag_shadows,ag_air);
