@@ -20425,5 +20425,114 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-11-07-factual-infographic-factual-infographic-phonophobia-persist",
+    "title": "Factual infographic: Phonophobia — Persistent Fear of Sound",
+    "tests": "factual_subtype: phobia-infographic; phobia: Phonophobia; exact headline lines read back before rendering; no subjective review; archive_slot=2026-11-07T12:08; concept=phonophobia-sound-anticipation-apartment-window; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: phobia-infographic",
+    "prompt": "Create a finished portrait educational phobia infographic, directly on the canvas, not a photographed poster, book, slide or app. Artwork-led luminous gouache and fine colored-pencil illustration, warm rust and midnight teal with pale pearl negative space; a richly detailed ordinary apartment window, brushed wood sill, woven jacket fibers, sheer curtains and late-afternoon light. Organic asymmetric composition, not boxes, cards or a grid. Make a compassionate, compelling hero scene dominant and weave concise readable facts into flowing translucent acoustic arcs. These arcs are explanatory visual metaphors, not a literal measurement of sound intensity or a neural pathway.\nThe exact two title lines at the top, with confident elegant typography, MUST be:\nPhonophobia\nPersistent fear of sound\nSet Phonophobia prominently in BOLD type, with Persistent fear of sound directly beneath. No literal markdown asterisks. Never substitute Specific Phobia as the headline.\nHero: a medium-build Arab woman in her fifties with olive skin, square face, short wavy brown hair and rust jacket, seated at a window, three-quarter profile, holding her hands tensely near her lap, with a thoughtful worried expression. This is a fictional person, not a clinical case portrait. Maintain this same person in any small contextual study. Show dignity and believable anatomy, not panic caricature. Beyond the window a normal street and a softly illustrated car; an interior door and two faint conversation silhouettes supply environmental context without threatening imagery.\nUse the following accurate concise annotations in open callouts, visually connected by curves, with enough breathing room and hierarchical sizes:\nNear the street/door: \"Possible triggers\" and \"Traffic • closing doors • loud speech\". A smaller line: \"Even non-damaging sounds may trigger fear.\"\nFrom the window toward the figure: \"Anticipatory anxiety\" / \"Fear before a sound occurs\".\nNear a small schematic torso contour, not a detailed brain: \"Autonomic arousal\" / \"Racing heart • sweating • trembling\". Depict the heart marker schematically, no fabricated anatomy.\nA curved pathway toward a small empty social chair: \"Avoidance\" / \"Withdrawing can limit daily life\". Do not imply everyone experiences every symptom or invent a quantified feedback mechanism.\nA clear lower-middle contrast annotation: \"Fear ≠ acoustic danger\" / \"Protect hearing from genuinely hazardous noise.\" No decibels, no unsafe exposure instructions, no fireworks, no headphone challenge.\nLet the sound-wave curves dissolve toward a gently lit unboxed vignette of the same woman speaking with a clinician across a small table: \"Evidence-based help\" / \"CBT; clinician-guided graded exposure when appropriate\" / \"A safe, individualized plan—not forced loud sounds.\"\nPreserve small but readable clinical context at the base: \"Fear of sound is not the same as hyperacusis; they may overlap. Painful sound or hearing concerns need assessment.\" Another short subordinate line: \"In migraine, phonophobia may mean sound intolerance.\" End with \"Seek help if fear limits daily life. Education, not diagnosis.\"\nMake the named fear and definition, the main figure, the body-alarm/avoidance pathway and the help text readable before secondary details. Technical depth without prose overload. No invented prevalence, no cure promises, no diagnostic code, no assertion of brain damage or ear damage, no monsters, gore, logos, tiny bibliography or URLs. Render one finished coherent artistic educational composition with substantial fine environmental detail and varied typographic scale. Request auto size, opaque background, medium quality through the stock OpenAI provider using openai/gpt-image-2.6-sunburst.",
+    "image": "images/2026-11-07-factual-infographic-factual-infographic-phonophobia-persist.jpg",
+    "thumb": "thumbs/2026-11-07-factual-infographic-factual-infographic-phonophobia-persist.webp",
+    "color": "#cbab93",
+    "date": "2026-11-07",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "phonophobia-sound-anticipation-apartment-window",
+      "imageSha256": "11b02c2eb3944e8db7499bfe6d67337a887137ff41f36a20d91c1662021ec0c9",
+      "imageDHash": "55830503369892c0"
+    },
+    "factualInfographic": {
+      "topic": "Phonophobia: persistent fear of sound, environmental triggers, autonomic arousal, avoidance, differential assessment, and evidence-based help",
+      "description": "An artwork-led educational chart of fear of sound, its triggers and bodily response, clinical distinctions and professionally guided help.",
+      "sourceNote": "Malaysian Journal of Medical Sciences: https://pmc.ncbi.nlm.nih.gov/articles/PMC3216140/ ; NHS: https://www.nhs.uk/mental-health/conditions/phobias/ . Verified terminology, environmental triggers, autonomic arousal, avoidance, differential assessment and CBT/graded exposure context. Case report is not generalized for prevalence or outcomes.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-07T17:09:18.982709+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "Malaysian Journal of Medical Sciences",
+            "title": "Phonophobia and Hyperacusis: Practical Points from a Case Report",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3216140/"
+          },
+          {
+            "id": "S2",
+            "publisher": "NHS",
+            "title": "Phobias",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/mental-health/conditions/phobias/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Phonophobia is an established clinical term for persistent fear of sound; here it means fear of sound, not a separately named diagnostic category.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Environmental sounds such as traffic, closing doors and loud speech can trigger fear, even at non-damaging levels.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Anticipation of feared sounds and learned reactions can accompany avoidance of sound-related situations.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Autonomic arousal can include palpitations, sweating and trembling.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Avoidance may restrict social participation and daily life.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Fear is not a measurement of acoustic danger; non-damaging sounds can trigger fear. Genuine hazardous noise should not be used for exposure.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Phonophobia and hyperacusis are not interchangeable; hearing-related and emotional components can overlap and require clinical assessment.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "In migraine literature phonophobia can mean sound intolerance rather than a phobic disorder.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "CBT is an evidence-based talking therapy used for phobias; professionally guided graded exposure may be part of treatment, with an individualized safe plan rather than forced loud-sound exposure.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Seek a clinician if fear affects daily life; painful sound or hearing concerns merit hearing assessment. General education is not diagnosis.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
