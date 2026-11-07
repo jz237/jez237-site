@@ -1,3 +1,4 @@
+#include "astra_uniform_cache.inc"
 /* R37: render-only, smooth distance contours for native animated doors.
  * Native wall state, animation timing, collision and triggers remain untouched.
  * One padded atlas per visible clip; no image downloads or per-frame allocation. */
@@ -98,8 +99,8 @@ static int ad_build(int id){
     glActiveTexture(GL_TEXTURE0);return 1;
 }
 static void ad_bind(GLuint program,int active){
-    int ready=active&&ad_clip>=0&&ad_build(ad_clip);glUniform1f(glGetUniformLocation(program,"doorActive"),ready);
-    glUniform1f(glGetUniformLocation(program,"doorMotion"),ready?ad_phase/fmaxf(1,ad_atlases[ad_clip].frames-1):0);
+    int ready=active&&ad_clip>=0&&ad_build(ad_clip);glUniform1f(AS_UNIFORM(program,"doorActive"),ready);
+    glUniform1f(AS_UNIFORM(program,"doorMotion"),ready?ad_phase/fmaxf(1,ad_atlases[ad_clip].frames-1):0);
     glActiveTexture(GL_TEXTURE6);
     /* A valid same-type fallback also satisfies WebGL sampler validation on
      * ordinary walls, before the first door atlas has been constructed. */
@@ -108,8 +109,8 @@ static void ad_bind(GLuint program,int active){
     if(ready){
         ad_atlas *a=&ad_atlases[ad_clip];int f=(int)floorf(ad_phase),g=f+1<a->frames?f+1:f;
         float tile[4]={((f%8)*AD_TILE+2.f)/a->w,((f/8)*AD_TILE+2.f)/a->h,((g%8)*AD_TILE+2.f)/a->w,((g/8)*AD_TILE+2.f)/a->h};
-        glUniform4fv(glGetUniformLocation(program,"doorTiles"),1,tile);
-        glUniform3f(glGetUniformLocation(program,"doorScale"),AD_SIZE/(float)a->w,AD_SIZE/(float)a->h,ad_phase-f);
+        glUniform4fv(AS_UNIFORM(program,"doorTiles"),1,tile);
+        glUniform3f(AS_UNIFORM(program,"doorScale"),AD_SIZE/(float)a->w,AD_SIZE/(float)a->h,ad_phase-f);
         if((++ad_draws&31)==1)EM_ASM({Module.smoothDoors=({version:38,clip:$0,frame:$1,draws:$2});},ad_clip,ad_phase,ad_draws);
     }
     glActiveTexture(GL_TEXTURE0);
