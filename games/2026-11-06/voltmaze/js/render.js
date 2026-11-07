@@ -6,12 +6,12 @@
 // Fixed light pools (only intensities change) and a warm-up that compiles everything at load.
 // Nothing here changes the world.
 import * as THREE from '../vendor/three.module.min.js';
-import { Post } from './post.js?v=5';
-import * as TX from './textures.js?v=5';
-import * as MD from './models.js?v=5';
-import { FX, CALM } from './fx.js?v=5';
-import { F, ROOM, ENEMY, BOSSES, POWERUPS, ATTACK, PW_KEYS, SEEKER, BURST_A } from './config.js?v=5';
-import { WK, inZone, beamLen } from './sim.js?v=5';
+import { Post } from './post.js?v=6';
+import * as TX from './textures.js?v=6';
+import * as MD from './models.js?v=6';
+import { FX, CALM } from './fx.js?v=6';
+import { F, ROOM, ENEMY, BOSSES, POWERUPS, ATTACK, PW_KEYS, SEEKER, BURST_A } from './config.js?v=6';
+import { WK, inZone, beamLen } from './sim.js?v=6';
 
 export { CALM };
 const { RW, RH, wallT: WT, door: DOOR } = ROOM;
@@ -78,10 +78,13 @@ void main(){
 }`;
 // one shader for every telegraph on the floor. kind 0 = disc, 1 = lane, 2 = ring
 const DECAL_VERT = /* glsl */ `varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }`;
+// zone decals (molten pools, rings...) are clipped to the platform: nothing hangs out over the depths
+const DECALW_VERT = /* glsl */ `varying vec2 vUv; varying vec2 vW; void main(){ vUv = uv; vW = (modelMatrix * vec4(position, 1.0)).xz; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }`;
 const DECAL_FRAG = /* glsl */ `
-uniform vec3 uColor; uniform float uProg, uLive, uTime, uKind, uAlpha;
-varying vec2 vUv;
+uniform vec3 uColor; uniform float uProg, uLive, uTime, uKind, uAlpha; uniform vec2 uClip;
+varying vec2 vUv; varying vec2 vW;
 void main(){
+  if (abs(vW.x) > uClip.x || abs(vW.y) > uClip.y) discard;
   vec2 p = vUv * 2.0 - 1.0;
   float r = length(p);
   float a = 0.0;
@@ -701,8 +704,8 @@ export class Renderer {
     this.decalPool = [];
     const g = new THREE.PlaneGeometry(1, 1); g.rotateX(-Math.PI / 2);
     for (let i = 0; i < 28; i++) {
-      const m = new THREE.Mesh(g, new THREE.ShaderMaterial({ vertexShader: DECAL_VERT, fragmentShader: DECAL_FRAG, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
-        uniforms: { uColor: { value: new THREE.Color() }, uProg: { value: 0 }, uLive: { value: 0 }, uTime: { value: 0 }, uKind: { value: 0 }, uAlpha: { value: 1 } } }));
+      const m = new THREE.Mesh(g, new THREE.ShaderMaterial({ vertexShader: DECALW_VERT, fragmentShader: DECAL_FRAG, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
+        uniforms: { uColor: { value: new THREE.Color() }, uProg: { value: 0 }, uLive: { value: 0 }, uTime: { value: 0 }, uKind: { value: 0 }, uAlpha: { value: 1 }, uClip: { value: new THREE.Vector2(RW + WT, RH + WT) } } }));
       m.visible = false; m.renderOrder = 2; m.frustumCulled = false; this.scene.add(m); this.decalPool.push(m);
     }
     // aim lines: a thin glowing strip from a robot along its aim

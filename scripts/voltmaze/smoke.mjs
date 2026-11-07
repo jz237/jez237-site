@@ -1,10 +1,10 @@
 // Sim smoke test: the autopilot plays every sector from its arrival lift through the boss (fresh
 // worlds per sector, typical upgrades, plenty of lives) and must ride every boss lift without errors.
 //   node scripts/voltmaze/smoke.mjs [profile=demo] [seeds=2] [diff=normal] [lives=12]
-import { makeWorld, step, drainEvents, STEP } from '../../games/2026-11-06/voltmaze/js/sim.js?v=5';
-import { Autopilot } from '../../games/2026-11-06/voltmaze/js/ai.js?v=5';
-import { TYPICAL_UP, SECTORS, VERSION, START_LIVES, UPGRADES, UP_COST, SALVAGE } from '../../games/2026-11-06/voltmaze/js/config.js?v=5';
-import { invariants } from '../../games/2026-11-06/voltmaze/js/tests.js?v=5';
+import { makeWorld, step, drainEvents, STEP } from '../../games/2026-11-06/voltmaze/js/sim.js?v=6';
+import { Autopilot } from '../../games/2026-11-06/voltmaze/js/ai.js?v=6';
+import { TYPICAL_UP, SECTORS, VERSION, START_LIVES, UPGRADES, UP_COST, SALVAGE } from '../../games/2026-11-06/voltmaze/js/config.js?v=6';
+import { invariants } from '../../games/2026-11-06/voltmaze/js/tests.js?v=6';
 
 const profile = process.argv[2] || 'demo', seeds = +(process.argv[3] || 2), diff = process.argv[4] || 'normal', lives = +(process.argv[5] || 12);
 const MAX_T = 900;

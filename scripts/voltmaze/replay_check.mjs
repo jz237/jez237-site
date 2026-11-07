@@ -5,11 +5,11 @@
 // Covers normal rooms, boss rooms (every sector), endless floors, every difficulty, both autopilots, and
 // a clip cut short by the end of the run (the game takes the clip when the world ends).
 //   node scripts/voltmaze/replay_check.mjs [seeds=10]
-import { makeWorld, step, drainEvents, STEP, cloneWorld } from '../../games/2026-11-06/voltmaze/js/sim.js?v=5';
-import { Autopilot } from '../../games/2026-11-06/voltmaze/js/ai.js?v=5';
-import { TYPICAL_UP, DIFF_KEYS } from '../../games/2026-11-06/voltmaze/js/config.js?v=5';
-import { Recorder, Replay } from '../../games/2026-11-06/voltmaze/js/replay.js?v=5';
-import { hashW } from '../../games/2026-11-06/voltmaze/js/tests.js?v=5';
+import { makeWorld, step, drainEvents, STEP, cloneWorld } from '../../games/2026-11-06/voltmaze/js/sim.js?v=6';
+import { Autopilot } from '../../games/2026-11-06/voltmaze/js/ai.js?v=6';
+import { TYPICAL_UP, DIFF_KEYS } from '../../games/2026-11-06/voltmaze/js/config.js?v=6';
+import { Recorder, Replay } from '../../games/2026-11-06/voltmaze/js/replay.js?v=6';
+import { hashW } from '../../games/2026-11-06/voltmaze/js/tests.js?v=6';
 
 const seeds = +(process.argv[2] || 10);
 const AFTER = Math.round(1.6 / STEP);

@@ -1,7 +1,7 @@
 # Voltmaze 2026 tools
 
 Game: `games/2026-11-06/voltmaze/` (three.js r181 vendored in `vendor/`, plain ES modules, no build).
-Every local import carries the same `?v=N`; bump them all together (plus `js/main.js?v=` in index.html and `V` in js/audio.js). Current: `?v=5`.
+Every local import carries the same `?v=N`; bump them all together (plus `js/main.js?v=` in index.html and `V` in js/audio.js). Current: `?v=6`.
 
 | Script | What it does |
 | --- | --- |
@@ -102,3 +102,10 @@ Online co-op: rooms `VM-XXXX` / `VM-Q-XXXXX` on the Steel Duel relay (`wss://ste
 - Touch initials: ▲ / ▼ under each letter. Phones: smaller, higher SECTOR banner that gets out of the way once a robot aims; compact tutorial card. Font fallbacks for 'Saira Condensed'.
 - Perf (medium / low tiers): no shadows from the scenery outside the walls or a robot's small parts, the idle co-op flashlight skips its shadow pass. Medium draw calls (915 x 412): S1 441 -> 357, S5 545 -> 455; still 44 shader programs.
 - Final boss renamed CUSTODIAN CORE; three voice lines say 'infiltrator'; Reactor fields white-hot so they stand out from the green; Furnace Crusher and Data-Core Hydra detail pass.
+
+## Stage 7 gap pass (v=6)
+
+- Boss label always one line (`fitBossLabel()` in main.js, shorter status words); score popups cleared on a room or world change and on the title (`clearPopups()`); zone decals clipped to the platform (`uClip` in the decal shader); an online tab in the background keeps simulating on a worker tick (`js/tick.js`, main.js `bgTicks` / `bgTick` / `G.hiddenRun`, nothing rendered or heard; snapshots carry `aw` so the guest says the host's tab is in the background); if snapshots stop anyway the guest shows HOST PAUSED (`NET.lastSnap`).
+- `net_live_check.mjs [baseUrl] [playSeconds=25] [hiddenSeconds=12] [shotDir]`: co-op on the LIVE relay (`VM-TEST-XXXXX` room) including a hidden host; must post no scores. Lock waits in the browser scripts are 3-7 s per try.
+- The title room's robots patrol, turn at walls and now and then fire at a wall (main.js `scenicPatrol`, presentation only, Math.random).
+- Robot draw-call merge: tried (skinned merge) and reverted after a rendering fault; see HANDOFF Stage 7. Measuring script: `D:/Projects/.tmp/arcade-trio-work/voltmaze/tmp/dc.mjs <base> <tag> [q] [w] [h] [dsf] [cpuThrottle] [mobile] [scenes]` (`VM_V=6`).

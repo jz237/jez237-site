@@ -5,8 +5,8 @@
 // reports its position, its shots and its EMPs; the host re-creates those shots so kills are decided in
 // one place. Rooms are rebuilt on the guest from the same seeded generator, so only a short room
 // descriptor travels. The relay overwrites the keys t, from, role and start.mode: never use them.
-import { adoptRoom, emp } from './sim.js?v=5';
-import { PW_KEYS, ENEMY_KEYS } from './config.js?v=5';
+import { adoptRoom, emp } from './sim.js?v=6';
+import { PW_KEYS, ENEMY_KEYS } from './config.js?v=6';
 const packPw = (pw) => Object.entries(pw || {}).map(([k, t]) => [PW_KEYS.indexOf(k), Math.round(t * 10) / 10]);
 const unpackPw = (a) => { const o = {}; for (const [i, t] of a || []) o[PW_KEYS[i]] = t; return o; };
 
@@ -110,7 +110,7 @@ export class Online {
   }
   reset() {
     this.role = null; this.room = null; this.intent = null; this.peer = null; this.peers = [];
-    this.rtt = 150; this.W = null; this.inbox = []; this.sendT = 0; this.lastRecv = 0; this.gridT = 0; this.lastKey = null;
+    this.rtt = 150; this.W = null; this.inbox = []; this.sendT = 0; this.lastRecv = 0; this.lastSnap = 0; this.gridT = 0; this.lastKey = null;
     this.events = []; this.remote = null; this.shotQ = []; this.claimQ = []; this.outShots = []; this.sent = new WeakSet();
     this.stat = { snaps: 0, inputs: 0, shots: 0, deaths: 0 };
     clearInterval(this.pingT); clearInterval(this.helloT); clearInterval(this.pollT);
@@ -209,7 +209,7 @@ export class Online {
         return;
       }
       case 'start': if (this.role === 'p2') this.h.start(d.cfg || {}); return;
-      case 'snapshot': if (this.role === 'p2') this.inbox.push(d); return;
+      case 'snapshot': if (this.role === 'p2') { this.lastSnap = performance.now(); this.inbox.push(d); } return;
       case 'input': if (this.role === 'p1') this.onInput(d); return;
       case 'chat': if (d.k === 'bye') { this.peer = null; this.h.left('left'); return; } this.h.chat(d); return;
     }
@@ -266,7 +266,8 @@ export class Online {
     this.sendT = 1 / 20;
     const withGrid = this.lastKey !== W.room.key || this.gridT <= 0;
     if (withGrid) { this.lastKey = W.room.key; this.gridT = 2; }
-    this.raw({ type: 'snapshot', s: packWorld(W, withGrid), ev: this.events.splice(0, 80), hr: Math.round(this.rtt) });
+    // aw: the host's tab is in the background (its facility keeps running on a worker tick; the guest says so)
+    this.raw({ type: 'snapshot', s: packWorld(W, withGrid), ev: this.events.splice(0, 80), hr: Math.round(this.rtt), aw: typeof document !== 'undefined' && document.hidden ? 1 : 0 });
     this.stat.snaps++;
   }
 
@@ -293,6 +294,7 @@ export class Online {
     this.stat.snaps += this.inbox.length;
     for (const m of this.inbox) { for (const e of m.ev || []) ev.push(e); last = m; }
     this.inbox = [];
+    this.hostAway = !!last.aw;
     const lead = clamp(((+last.hr || this.rtt) / 2) / 1000, 0, 0.25);
     applyWorld(W, last.s, lead);
     // my own hits, deaths and EMPs already played here

@@ -10,7 +10,7 @@ const SFX = ['gun', 'zap', 'charge', 'shotwall', 'ricochet', 'boomS', 'boomM', '
 const ALIAS = { uiback: ['uimove', 0.78], boltwall: ['shotwall', 0.82], drop: ['mineland', 1.18], life: ['medal', 1.12], pwend: ['pickup', 0.72], warp: ['respawn', 1.3] };
 // facility AI lines (voice/v_<name>.mp3), one voice for all of them. Only names listed here are fetched.
 const VOICE = ['begin', 's2', 's3', 's4', 's5', 'boss', 'bossdown', 'seeker', 'lastlife', 'gameover', 'clear', 'champion'];
-const V = '?v=5';
+const V = '?v=6';
 
 export class Audio {
   constructor(base) {

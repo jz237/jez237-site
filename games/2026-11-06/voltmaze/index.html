@@ -49,7 +49,7 @@ button { appearance: none; border: 0; background: none; font: inherit; color: in
 #minimap { display: block; width: 125px; height: 100px; }
 .mapbox { padding: 6px; }
 #bossbar { position: absolute; left: 50%; top: calc(max(10px, env(safe-area-inset-top)) + 104px); transform: translateX(-50%); width: min(460px, 70vw); text-align: center; }
-#bossbar .lbl { display: inline-block; color: #ffd0c8; letter-spacing: .3em; font-size: 11px; font-weight: 700; padding: 3px 12px; border-radius: 6px; background: rgba(12, 8, 10, .62); text-shadow: 0 0 8px rgba(255, 70, 50, .8); }
+#bossbar .lbl { display: block; width: max-content; position: relative; left: 50%; transform: translateX(-50%); white-space: nowrap; color: #ffd0c8; letter-spacing: .3em; font-size: 11px; font-weight: 700; padding: 3px 12px; border-radius: 6px; background: rgba(12, 8, 10, .62); text-shadow: 0 0 8px rgba(255, 70, 50, .8); }
 #bossbar .bar { margin-top: 5px; height: 8px; box-shadow: 0 0 12px rgba(255, 70, 50, .35), 0 2px 8px rgba(0, 0, 0, .6); border-radius: 4px; background: rgba(255, 255, 255, .1); overflow: hidden; border: 1px solid rgba(255, 90, 74, .4); }
 #bossbar .bar i { display: block; height: 100%; width: 100%; background: linear-gradient(90deg, #ff3b2f, #ffb347); transition: width .15s; }
 #tut { position: absolute; left: 50%; bottom: calc(max(16px, env(safe-area-inset-bottom)) + 96px); transform: translateX(-50%); max-width: min(640px, 92vw); text-align: center; padding: 11px 18px; border-radius: 14px; background: rgba(4, 8, 14, .74); border: 1px solid rgba(127, 216, 255, .45); font-size: 15px; line-height: 1.45; letter-spacing: .02em; }
@@ -391,6 +391,6 @@ addEventListener('error', (e) => window.__vmErrors.push(String(e.message || e)))
 addEventListener('unhandledrejection', (e) => window.__vmErrors.push('rejection: ' + String(e.reason && e.reason.message || e.reason)));
 (() => { const ce = console.error; console.error = (...a) => { window.__vmErrors.push(a.map(String).join(' ')); ce.apply(console, a); }; })();
 </script>
-<script type="module" src="js/main.js?v=5"></script>
+<script type="module" src="js/main.js?v=6"></script>
 </body>
 </html>

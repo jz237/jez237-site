@@ -1,14 +1,14 @@
 // Voltmaze 2026 — game flow, menus, HUD, minimap, the facility AI's (rare) voice, the demo director
 // and the frame loop.
-import { VERSION, SECTORS, STEP, F, ROOM, RAMP, UPGRADES, UP_KEYS, UP_COST, SALVAGE, MEDALS, parTime, TYPICAL_UP, START_LIVES, BOSSES, DIFFICULTY, DIFF_KEYS, POWERUPS, ENEMY, empMax, SEEKER } from './config.js?v=5';
-import { makeWorld, step, drainEvents, roomLabel, routeSide, angDiff, SIDES, DELTA, wallDist, cloneWorld } from './sim.js?v=5';
-import { Autopilot } from './ai.js?v=5';
-import { Renderer, pickQuality, CALM, LOOKS } from './render.js?v=5';
-import { Audio } from './audio.js?v=5';
-import { Input } from './input.js?v=5';
-import { Scores, NO_POST } from './scores.js?v=5';
-import { Recorder, Replay } from './replay.js?v=5';
-import { Online, ROOM as NET_ROOM, randomCode, cleanCode } from './online.js?v=5';
+import { VERSION, SECTORS, STEP, F, ROOM, RAMP, UPGRADES, UP_KEYS, UP_COST, SALVAGE, MEDALS, parTime, TYPICAL_UP, START_LIVES, BOSSES, DIFFICULTY, DIFF_KEYS, POWERUPS, ENEMY, empMax, SEEKER } from './config.js?v=6';
+import { makeWorld, step, drainEvents, roomLabel, routeSide, angDiff, SIDES, DELTA, wallDist, cloneWorld } from './sim.js?v=6';
+import { Autopilot } from './ai.js?v=6';
+import { Renderer, pickQuality, CALM, LOOKS } from './render.js?v=6';
+import { Audio } from './audio.js?v=6';
+import { Input } from './input.js?v=6';
+import { Scores, NO_POST } from './scores.js?v=6';
+import { Recorder, Replay } from './replay.js?v=6';
+import { Online, ROOM as NET_ROOM, randomCode, cleanCode } from './online.js?v=6';
 
 const $ = (id) => document.getElementById(id);
 const params = new URLSearchParams(location.search);
@@ -108,7 +108,7 @@ function navigate(dir) {
 
 // ------------------------------------------------------------------ title + scenic background
 function toTitle() {
-  NET.close(); stopPlay();
+  NET.close(); stopPlay(); clearPopups(); G.popW = null;
   clearTimeout(G.ptT);
   G.state = 'title'; G.mode = 'title'; G.idleT = 0;
   hideScreens(); show('title', false);
@@ -222,7 +222,25 @@ const fmtT = (t) => `${Math.floor(t / 60)}:${(t % 60).toFixed(1).padStart(4, '0'
 function setText(id, v) { if (G.hudCache[id] !== v) { G.hudCache[id] = v; $(id).textContent = v; } }
 function setHTML(id, v) { if (G.hudCache[id] !== v) { G.hudCache[id] = v; $(id).innerHTML = v; } }
 const myPlayer = (W) => (G.mode === 'online' && !NET.host ? W.players[1] : W.players[0]);
+// boss label: always one line; shrink the type until it fits the screen (phones)
+function fitBossLabel() {
+  const el = $('boss-name');
+  el.style.fontSize = ''; el.style.letterSpacing = '';
+  const max = Math.min(innerWidth - 20, 640);
+  let fs = parseFloat(getComputedStyle(el).fontSize) || 11, ls = 0.3;
+  for (let i = 0; i < 12 && el.offsetWidth > max; i++) { ls = Math.max(0.06, ls - 0.06); if (ls <= 0.06) fs = Math.max(7, fs - 0.5); el.style.letterSpacing = ls + 'em'; el.style.fontSize = fs + 'px'; }
+}
+addEventListener('resize', () => { if (G.hudCache && G.hudCache['boss-name']) fitBossLabel(); });
+// score popups belong to one room of one world: drop them when either changes
+function clearPopups() { const box = $('popups'); if (box) box.replaceChildren(); }
 function updateHud(W) {
+  const pk = W.room ? W.room.key : '';
+  if (G.popW !== W || G.popRoom !== pk) { G.popW = W; G.popRoom = pk; clearPopups(); }
+  // online guest: the host's tab went to the background (its browser stops drawing it, so it stops sending)
+  const hostGone = G.mode === 'online' && !NET.host && G.state === 'play' && NET.lastSnap > 0 && performance.now() - NET.lastSnap > 1500;
+  if (hostGone && !G.hostWait) { G.hostWait = true; caption('HOST PAUSED · THEIR GAME IS IN THE BACKGROUND · WAITING…', 1e9); }
+  else if (!hostGone && G.hostWait) { G.hostWait = false; G.capT = Math.min(G.capT, 0.01); }
+  else if (!hostGone && G.mode === 'online' && !NET.host && NET.hostAway && G.capT <= 0.2) caption("THE HOST'S TAB IS IN THE BACKGROUND · THE FACILITY KEEPS RUNNING", 1);
   setText('score', W.score.toLocaleString());
   const board = boardOf(W.mode, W.diff);
   setText('hiscore', Math.max(board.best(), W.score).toLocaleString());
@@ -253,7 +271,8 @@ function updateHud(W) {
   $('bossbar').classList.toggle('hidden', !b || b.state === 'in');
   if (b) {
     const heads = b.heads.filter((h) => h.hp > 0).length;
-    setText('boss-name', BOSSES[b.key].name + (heads ? ` · TAKE OUT THE ${heads} HEADS` : b.stun > 0 ? ' · VENTS OPEN · DOUBLE DAMAGE' : b.plates ? ' · SHOOT BETWEEN THE PLATES' : ''));
+    const bn = BOSSES[b.key].name + (heads ? ` · ${heads} HEADS LEFT` : b.stun > 0 ? ' · VENTS OPEN · 2X DAMAGE' : b.plates ? ' · SHOOT BETWEEN PLATES' : '');
+    if (G.hudCache['boss-name'] !== bn) { setText('boss-name', bn); fitBossLabel(); }
     $('bossbar').querySelector('i').style.width = Math.max(0, (b.hp / b.max) * 100).toFixed(1) + '%';
   }
   drawMap(W);
@@ -687,6 +706,7 @@ function startOnline(cfg) {
   enterPlay(W);
   G.ai = G.autopilot ? new Autopilot(cfg.seed + (NET.host ? 0 : 1), 'demo') : null;
   banner('CO-OP', cfg.gm === 'endless' ? 'ENDLESS FACILITY' : SECTORS[cfg.sector || 0].name, 3);
+  if (document.hidden && !G.fixed) bgTicks(true);
 }
 window.__vm.online = { hostStart, startOnline };
 
@@ -822,7 +842,36 @@ I.on('key', (k, e) => {
   else if (k === 'Backspace' && G.screen !== 'title' && !KEEP(G.screen)) act('back');
 });
 document.addEventListener('pointerdown', () => A.unlock(), { capture: true });
-document.addEventListener('visibilitychange', () => { if (document.hidden && G.state === 'play') pause(); });
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden && G.state === 'play') pause();
+  bgTicks(document.hidden && G.mode === 'online' && !G.fixed);
+  // nothing to hear from a tab nobody is looking at (the co-op facility keeps running in it)
+  if (A.master && A.ctx) A.master.gain.setTargetAtTime(document.hidden ? 0 : A.vol.master, A.ctx.currentTime, 0.05);
+});
+// ------------------------------------------------------------------ online: the facility keeps running in a hidden tab
+// requestAnimationFrame stops in a background tab, so a host whose tab was hidden froze the run and the guest got
+// no snapshots. A dedicated worker (js/tick.js: worker timers are not throttled) ticks 40 times a second while an
+// online tab is hidden and the same playStep() runs on it: the same fixed-step step(), snapshots (host) and inputs
+// (guest) keep flowing, nothing is rendered or heard, the hidden player's suit gets no input (paused-online).
+// Online play is never recorded and step() is untouched, so replays stay bit exact. Snapshots carry 'aw' (host
+// away) so the guest can say so; if snapshots stop anyway (an old browser, a frozen tab) the guest says HOST PAUSED.
+let bgWorker = null;
+function bgTicks(on) {
+  if (on && !bgWorker) {
+    try { bgWorker = new Worker(new URL('./tick.js?v=6', import.meta.url)); bgWorker.onmessage = bgTick; } catch (e) { bgWorker = null; console.warn('background tick', e); return; }
+  }
+  if (bgWorker) bgWorker.postMessage(on ? 25 : 0);
+}
+function bgTick() {
+  if (!document.hidden || G.fixed) return;
+  const now = performance.now(), dt = Math.min(0.1, (now - lastT) / 1000);
+  lastT = now;
+  G.bgTicks = (G.bgTicks || 0) + 1;
+  if (G.slowT > 0) { G.slowT -= dt; if (G.slowT <= 0) { G.timeScale = 1; A.setRate(1); } }
+  if (G.mode !== 'online' || (G.state !== 'play' && G.state !== 'paused-online')) return;
+  G.hiddenRun = true;
+  try { playStep(dt); } finally { G.hiddenRun = false; }
+}
 I.stickUI = (side, s) => {
   const el = $('stick-' + side);
   if (!s) { el.classList.remove('on'); return; }
@@ -869,7 +918,8 @@ function playStep(dt) {
   G.acc += dt * G.timeScale;
   let n = 0;
   const online = G.mode === 'online', guest = online && !NET.host;
-  if (guest) handleEvents(NET.guestSync(W), W, true);
+  const live = !G.hiddenRun;
+  if (guest) handleEvents(NET.guestSync(W), W, live);
   while (G.acc >= STEP && n < 12) {
     if (!online) REC.tick(W);
     const me = myPlayer(W);
@@ -883,14 +933,14 @@ function playStep(dt) {
     let ev = drainEvents(W);
     if (guest) ev = ev.filter((e) => (e.pid === 2 && ['fire', 'shield', 'death', 'emp', 'plate', 'dash', 'brush'].includes(e.k)) || e.k === 'roomenter');
     if (online && NET.host) NET.hostEvents(ev);
-    handleEvents(ev, W, true);
+    handleEvents(ev, W, live);
     G.acc -= STEP; n++;
     if (W.over) break;
   }
   if (n >= 12) G.acc = 0;
   if (online) { if (NET.host) NET.hostFrame(W, dt); else NET.guestFrame(W, dt); }
   captureClip(W);
-  updateHud(W);
+  if (!G.hiddenRun) updateHud(W);
   if (G.mode === 'demo') { G.demoT += dt; if (G.demoT > 95) W.over = true; }
   if (G.mode === 'demo' || G.mode === 'playthrough') demoCaptions(W, dt);
   // (a key that ends the demo, or quitting, replaces G.W meanwhile: then this world's ending no longer counts)
@@ -912,11 +962,49 @@ function scenicStep(dt) {
   if (!W) return;
   G.acc += dt;
   let n = 0;
+  for (const e of W.robots) { e.vx = 0; e.vz = 0; }   // the patrol below moves them, not the sim's coasting
   while (G.acc >= STEP && n < 8) { step(W, STEP); drainEvents(W); G.acc -= STEP; n++; }
+  scenicPatrol(W, dt);
   if (W.room.cleared || W.over || W.room.t > 40) scenic(R.lookI);
   if (G.state === 'title' && G.screen === 'title') {
     G.idleT += dt;
     if (G.idleT > (params.has('demo') ? 1 : 12)) { G.demoStartT = performance.now(); startDemo(); }
+  }
+}
+// the title room's robots patrol, turn at walls and now and then fire at a wall (an aim glint, then a spark where
+// it lands). Presentation only: the scenic world is never recorded or sent and this uses Math.random, not the
+// world's RNG; with no live infiltrator the sim leaves its robots standing.
+function scenicPatrol(W, dt) {
+  const walls = W.room.walls, r0 = 0.15;
+  const blocked = (x, z, r) => Math.abs(x) > ROOM.RW - r || Math.abs(z) > ROOM.RH - r || walls.some((w) => x > w[0] - r && x < w[2] + r && z > w[1] - r && z < w[3] + r);
+  for (const e of W.robots) {
+    if (e.hp <= 0 || e.boot > 0 || e.fly) continue;
+    const r = (e.r || 0.5) + r0;
+    if (e.scT === undefined) { e.scT = 0.5 + Math.random() * 2.5; e.scFire = 2 + Math.random() * 7; e.scV = (ENEMY[e.type].v || 1.5) * (0.45 + Math.random() * 0.2); e.scA = e.a || Math.random() * 6.28; }
+    if (e.aimT > 0) {
+      e.aimT -= dt;
+      if (e.aimT <= 0) {
+        e.aimT = 0;
+        const c = Math.cos(e.aimA), sn = Math.sin(e.aimA);
+        let d = 0.8;
+        while (d < 26 && !blocked(e.x + c * d, e.z + sn * d, 0)) d += 0.2;
+        R.spark(e.x + c * d, e.z + sn * d, false);
+        R.fx.flash(e.x + c * 0.6, 1, e.z + sn * 0.6, 3, 0xff6a3a, 0.15);
+      }
+      continue;
+    }
+    e.scT -= dt; e.scFire -= dt;
+    if (e.scT <= 0) { e.scA = (e.a || 0) + (Math.random() - 0.5) * 2.6; e.scT = 2 + Math.random() * 3; }
+    e.a = (e.a || 0) + Math.max(-dt * 2.2, Math.min(dt * 2.2, angDiff(e.a || 0, e.scA)));
+    const v = e.scV, nx = e.x + Math.cos(e.a) * v * dt, nz = e.z + Math.sin(e.a) * v * dt;
+    // robots that bump into each other blow up (sim robotContacts): keep clear of the others too
+    const crowd = W.robots.some((o) => o !== e && o.hp > 0 && !o.fly && Math.hypot(nx - o.x, nz - o.z) < r + (o.r || 0.5) + 0.35 && Math.hypot(nx - o.x, nz - o.z) < Math.hypot(e.x - o.x, e.z - o.z));
+    if (crowd || blocked(nx, nz, r)) { e.scA = e.a + Math.PI * (0.6 + Math.random() * 0.8); e.scT = 1.5 + Math.random() * 2; e.vx = e.vz = 0; }
+    else { e.x = nx; e.z = nz; e.vx = Math.cos(e.a) * v; e.vz = Math.sin(e.a) * v; }
+    if (e.scFire <= 0) {
+      e.scFire = 5 + Math.random() * 7;
+      if (e.type !== 'mortar' && e.type !== 'ripper') { e.aimA = e.a; e.aimT = e.aimTot = 0.8; e.burstN = 1; e.vx = e.vz = 0; }
+    }
   }
 }
 // the demo / AI playthrough points out an upgrade or power-up in use (sparingly, after the FITTED caption)
@@ -974,7 +1062,7 @@ async function boot() {
   $('loading').style.opacity = '0';
   setTimeout(() => $('loading').remove(), 700);
   toTitle();
-  if (params.has('test')) { const m = await import('./tests.js?v=5'); m.runTests(window.__vm); }
+  if (params.has('test')) { const m = await import('./tests.js?v=6'); m.runTests(window.__vm); }
   else if (params.has('playthrough')) { A.unlock(); startPlaythrough(); }
   else if (G.autopilot) { A.unlock(); if (params.has('endless')) startEndless(); else startCampaign(+params.get('sector') || 0); }
   else if (params.has('room') && !params.has('sector') && isNaN(+params.get('room'))) { act('online'); $('join-code').value = cleanCode(params.get('room')); }

@@ -19,7 +19,7 @@ if (!chromium) { console.error('playwright not found'); process.exit(2); }
 const base = process.argv[2] || 'http://127.0.0.1:8773/games/2026-11-06/voltmaze/';
 const shots = process.argv[3] || 'D:/Projects/.tmp/arcade-trio-work/voltmaze/shots';
 const quick = process.argv[4] === 'quick';
-const V = '?v=5';
+const V = '?v=6';
 fs.mkdirSync(shots, { recursive: true });
 
 // the shared lock: only one headless Edge at a time across the agents
@@ -28,8 +28,8 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 for (let i = 0; ; i++) {
   try { fs.mkdirSync(LOCK); break; } catch {
     try { const st = fs.statSync(LOCK); if (Date.now() - st.mtimeMs > 10 * 60 * 1000) { fs.rmdirSync(LOCK); continue; } } catch { /* gone */ }
-    if (i > 40) { console.error('could not get the Edge lock'); process.exit(3); }
-    console.log('waiting for the Edge lock…'); await sleep(20000 + Math.random() * 20000);
+    if (i > 300) { console.error('could not get the Edge lock'); process.exit(3); }
+    console.log('waiting for the Edge lock…'); await sleep(3000 + Math.random() * 4000);
   }
 }
 const release = () => { try { fs.rmdirSync(LOCK); } catch { /* already */ } };

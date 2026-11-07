@@ -57,8 +57,8 @@ const LOCK = 'D:/Projects/.tmp/arcade-trio-edge.lock';
 for (let i = 0; ; i++) {
   try { fs.mkdirSync(LOCK); break; } catch {
     try { const st = fs.statSync(LOCK); if (Date.now() - st.mtimeMs > 10 * 60 * 1000) { fs.rmdirSync(LOCK); continue; } } catch { /* gone */ }
-    if (i > 40) { console.error('could not get the Edge lock'); stopRelay(); process.exit(3); }
-    console.log('waiting for the Edge lock…'); await sleep(20000 + Math.random() * 20000);
+    if (i > 300) { console.error('could not get the Edge lock'); stopRelay(); process.exit(3); }
+    console.log('waiting for the Edge lock…'); await sleep(3000 + Math.random() * 4000);
   }
 }
 const release = () => { try { fs.rmdirSync(LOCK); } catch { /* already */ } };
