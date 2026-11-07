@@ -93,8 +93,13 @@ const _a = new THREE.Vector3(), _b = new THREE.Vector3(), _d = new THREE.Vector3
 
 // ------------------------------------------------------------------ the kit: collect parts, merge the static ones
 const STATIC_PARTS = new Set(['visor', 'lamp', 'eyes', 'rune', 'vent']);
+// skinned kits (the jousters): every static part of the whole model goes into ONE mesh per material class, each
+// vertex rigidly bound to its joint group (one bone per joint, weight 1), so a skyray and its knight can have thirty
+// moving joints (neck, jaw, three-piece wings, legs, tail, helm, arms, cape, pennant) for four draw calls
+let skinNext = false;
+const _I4 = new THREE.Matrix4();
 class Kit {
-  constructor() { this.root = new THREE.Group(); this.buckets = new Map(); this.named = []; this.parts = []; }
+  constructor() { this.root = new THREE.Group(); this.buckets = new Map(); this.named = []; this.parts = []; this.skin = skinNext; }
   group(name, parent = this.root, x = 0, y = 0, z = 0) { const g = new THREE.Group(); g.name = name || ''; g.position.set(x, y, z); parent.add(g); return g; }
   // a static part: merged later with everything else in the same parent and material
   add(g, mat, x = 0, y = 0, z = 0, rx = 0, ry = 0, rz = 0, sx = 1, sy = sx, sz = sx, parent = this.root) {
@@ -102,10 +107,10 @@ class Kit {
     // joints that never move (`flat`, e.g. a rider's helm, lance and shield) merge into the joint above them (fewer draw calls)
     while (this.flat && parent !== this.root && this.flat.test(parent.name)) { parent.updateMatrix(); m = parent.matrix.clone().multiply(m); parent = parent.parent; }
     const cls = mat.userData.cls;
-    const key = parent.uuid + '|' + (cls || mat.uuid);
+    const key = (this.skin ? 's' : parent.uuid) + '|' + (cls || mat.uuid);
     let b = this.buckets.get(key);
     if (!b) { b = { parent, mat: cls ? M.cls[cls] : mat, list: [], colored: !!cls }; this.buckets.set(key, b); }
-    b.list.push([g, m, mat.color]);
+    b.list.push([g, m, mat.color, parent]);
     this.parts.push({ g, mat, m, parent });
   }
   // a part between two points (struts, pistons, cables, legs)
@@ -125,6 +130,7 @@ class Kit {
     parent.add(m); return m;
   }
   build() {
+    if (this.skin) return this.buildSkinned();
     for (const { parent, mat, list, colored } of this.buckets.values()) {
       const g = merge(list, colored);
       const m = new THREE.Mesh(g, mat);
@@ -135,10 +141,68 @@ class Kit {
     PARTS.set(this.root, this.parts.map((q) => ({ g: q.g, mat: q.mat, m: q.m, parent: q.parent === this.root ? '' : q.parent.name })));
     return this.root;
   }
+  buildSkinned() {
+    this.root.updateMatrixWorld(true);
+    const bones = [], idx = new Map();
+    for (const b of this.buckets.values()) for (const e of b.list) if (!idx.has(e[3])) { idx.set(e[3], bones.length); bones.push(e[3]); }
+    const skel = new THREE.Skeleton(bones, bones.map((o) => o.matrixWorld.clone().invert()));
+    for (const { mat, list, colored } of this.buckets.values()) {
+      // every part in model space (its joint's rest pose); merge() makes every part non-indexed, so a part's vertex
+      // count in the merged buffer is its index count
+      const g = merge(list.map(([q, m, c, p]) => [q, new THREE.Matrix4().multiplyMatrices(p.matrixWorld, m), c]), colored);
+      const n = g.attributes.position.count, si = new Uint16Array(n * 4), sw = new Float32Array(n * 4);
+      let o = 0;
+      for (const [q, , , p] of list) {
+        const c = vcount(q), bi = idx.get(p);
+        for (let k = 0; k < c; k++) { si[(o + k) * 4] = bi; sw[(o + k) * 4] = 1; }
+        o += c;
+      }
+      if (o !== n) throw new Error(`skinned merge: ${o} skinned vertices, ${n} merged`);
+      g.setAttribute('skinIndex', new THREE.BufferAttribute(si, 4));
+      g.setAttribute('skinWeight', new THREE.BufferAttribute(sw, 4));
+      if (!SKM.has(mat)) SKM.set(mat, mat.clone());
+      const m = new THREE.SkinnedMesh(g, SKM.get(mat));
+      m.castShadow = !mat.isMeshBasicMaterial; m.receiveShadow = true; m.customDepthMaterial = skinDepth();
+      m.boundingSphere = g.boundingSphere.clone(); m.boundingSphere.radius += 1.6;   // rest pose + room for wings, legs, a thrown knight
+      this.root.add(m);
+      m.bind(skel, _I4);
+    }
+    this.buckets.clear();
+    PARTS.set(this.root, this.parts.map((q) => ({ g: q.g, mat: q.mat, m: q.m, parent: q.parent === this.root ? '' : q.parent.name })));
+    return this.root;
+  }
+}
+// skinned meshes draw their shadows with their own depth material, so the shared one never flips between its
+// skinned and unskinned programs (both are compiled in the warm-up)
+let SKIN_DEPTH = null;
+const skinDepth = () => SKIN_DEPTH || (SKIN_DEPTH = new THREE.MeshDepthMaterial({ depthPacking: THREE.RGBADepthPacking }));
+// skinned meshes use twins of the shared class materials: three rebuilds a material's program state whenever the
+// next object drawn with it differs in skinning; the twins share the compiled programs
+const SKM = new Map();
+const vcount = (g) => (g.index ? g.index.count : g.attributes.position.count);
+// a clone of a skinned model gets its own skeleton made of its own joints (same traversal order)
+function rebind(proto, c) {
+  const a = [], b = [];
+  proto.traverse((o) => a.push(o));
+  if (!a.some((o) => o.isSkinnedMesh)) return;
+  c.traverse((o) => b.push(o));
+  const at = new Map(a.map((o, i) => [o, i])), made = new Map();
+  for (let i = 0; i < a.length; i++) {
+    if (!a[i].isSkinnedMesh) continue;
+    const S = a[i].skeleton;
+    let s2 = made.get(S);
+    if (!s2) { s2 = new THREE.Skeleton(S.bones.map((o) => b[at.get(o)]), S.boneInverses); made.set(S, s2); }
+    b[i].bind(s2, _I4); b[i].customDepthMaterial = a[i].customDepthMaterial;
+  }
+}
+const PROTO_SKEL = new WeakSet();
+// a model taken out of the scene for good: free its skeleton's bone texture (geometry and materials are shared)
+export function release(g) {
+  if (g) g.traverse((o) => { if (o.isSkinnedMesh && o.skeleton && !PROTO_SKEL.has(o.skeleton)) o.skeleton.dispose(); });
 }
 function merge(list, colored) {
   let n = 0;
-  const parts = list.map(([g, m]) => { const q = (g.index ? g.toNonIndexed() : g.clone()); q.applyMatrix4(m); n += q.attributes.position.count; return q; });
+  const parts = list.map(([g, m]) => { const q = (g.index ? g.toNonIndexed() : g.clone()); if (!q.attributes.normal) q.computeVertexNormals(); q.applyMatrix4(m); n += q.attributes.position.count; return q; });
   const pos = new Float32Array(n * 3), nor = new Float32Array(n * 3), uv = new Float32Array(n * 2), col = colored ? new Float32Array(n * 3) : null;
   let o = 0;
   for (let pi = 0; pi < parts.length; pi++) {
@@ -150,6 +214,9 @@ function merge(list, colored) {
     o += c;
     q.dispose();
   }
+  // no NaN may reach the shaders (a NaN normal lights a part as a white bloom blob)
+  for (let i = 0; i < pos.length; i++) if (!Number.isFinite(pos[i])) pos[i] = 0;
+  for (let i = 0; i < nor.length; i += 3) { const l = Math.hypot(nor[i], nor[i + 1], nor[i + 2]); if (!(l > 1e-6) || !Number.isFinite(l)) { nor[i] = 0; nor[i + 1] = 1; nor[i + 2] = 0; } }
   const g = new THREE.BufferGeometry();
   g.setAttribute('position', new THREE.BufferAttribute(pos, 3));
   g.setAttribute('normal', new THREE.BufferAttribute(nor, 3));
@@ -163,8 +230,13 @@ const PROTO = new Map();
 // every model's original parts (before merging), so it can be broken into its real pieces
 const PARTS = new WeakMap();
 function make(key, build) {
-  if (!PROTO.has(key)) PROTO.set(key, build());
+  if (!PROTO.has(key)) {
+    skinNext = key.startsWith('lancer:');
+    try { PROTO.set(key, build()); } finally { skinNext = false; }
+    PROTO.get(key).traverse((o) => { if (o.isSkinnedMesh) PROTO_SKEL.add(o.skeleton); });
+  }
   const p = PROTO.get(key), c = p.clone(true);
+  rebind(p, c);
   PARTS.set(c, PARTS.get(p));
   return c;
 }
@@ -212,96 +284,154 @@ function fin(key, pts, t = 0.04) {
 }
 function leather(color = 0x4a3426) { return cloth(color, 0.7); }
 
-// ------------------------------------------------------------------ the skyray: a plated manta mount
-// origin at the belly, nose toward +x. Joints: wingL/wingR (rotate x to beat), tipL/tipR, tail, tail2, head.
-const WING_IN = [[0.55, 0], [0.62, 0.35], [0.4, 0.95], [0.1, 1.15], [-0.42, 1.05], [-0.62, 0.55], [-0.55, 0]];
-const WING_OUT = [[0.42, 0], [0.3, 0.42], [0.05, 0.86], [-0.08, 0.95], [-0.22, 0.7], [-0.38, 0.3], [-0.4, 0]];
+// ------------------------------------------------------------------ the skyray: a plated manta mount on clawed legs
+// origin at the belly, nose toward +x, its right side (+z) toward the camera. Joints (bones of one skinned mesh):
+// neck > head > jaw + frillL/R, wingL/R > midL/R > tipL/R (rotate x to beat, y to fold back), legL/R > shinL/R > footL/R,
+// tail > tail2 > tail3. Wing shapes are [x, z] outlines, z outward from the joint.
+const WING_IN = [[0.52, 0], [0.62, 0.3], [0.54, 0.66], [0.44, 0.95], [-0.34, 0.95], [-0.42, 0.8], [-0.6, 0.74], [-0.64, 0.4], [-0.55, 0]];
+const WING_MID = [[0.44, 0], [0.38, 0.36], [0.26, 0.68], [-0.02, 0.72], [-0.18, 0.58], [-0.34, 0.62], [-0.42, 0.3], [-0.36, 0]];
+const WING_OUT = [[0.28, 0], [0.2, 0.3], [0.06, 0.62], [-0.08, 0.74], [-0.16, 0.52], [-0.28, 0.4], [-0.38, 0.12], [-0.38, 0]];
+const FRILL = [[0, 0], [-0.08, 0.16], [-0.3, 0.22], [-0.46, 0.12], [-0.36, 0.06], [-0.4, 0]];
 function skyrayParts(K, root, o) {
-  const hide = o.hide, arm = o.armor, trim = o.trim, belly = paint(o.belly || 0xb8b0a2, 0.7, 0.05), eye = glow(o.eye, 5);
-  // hull: a flattened, tapered body with a pale belly
+  const hide = o.hide, arm = o.armor, trim = o.trim, belly = paint(o.belly || 0xb8b0a2, 0.7, 0.05), eye = glow(o.eye, 5), edge = glow(o.eye, 2.5);
+  const tooth = paint(0xe8e0cc, 0.4, 0.05), claw = paint(0x1c1d22, 0.3, 0.6);
+  // hull: a flattened, tapered body with a pale, scaled belly
   K.add(sph(1, 30, 16), hide, 0.05, 0.42, 0, 0, 0, 0, 1.42, 0.33, 0.74, root);
   K.add(sph(1, 26, 12), belly, 0.08, 0.31, 0, 0, 0, 0, 1.28, 0.2, 0.62, root);
   K.add(sph(1, 20, 10), hide, -0.85, 0.44, 0, 0, 0, 0, 0.7, 0.24, 0.42, root);
-  // armour: overlapping spine plates with trim and rivets, flank plates, a chest plate
+  for (let i = 0; i < 5; i++) for (const s of [-1, 1]) K.add(rbox(0.2, 0.03, 0.2, 0.012), belly, 0.7 - i * 0.3, 0.16 + Math.abs(i - 2) * 0.012, s * 0.2, s * 0.18, 0, 0, 1, 1, 1, root);
+  // armour: overlapping spine plates with trim, rivets and dorsal spikes, flank plates, a chest plate
   for (let i = 0; i < 6; i++) {
     const x = 0.98 - i * 0.36, y = 0.7 - Math.abs(x - 0.1) * 0.1, wd = 0.66 - Math.abs(i - 2) * 0.07;
     K.add(rbox(0.36, 0.07, wd, 0.025), arm, x, y, 0, 0, 0, -0.05 + i * 0.025, 1, 1, 1, root);
     K.add(rbox(0.06, 0.035, wd * 0.9, 0.012), trim, x + 0.15, y + 0.03, 0, 0, 0, 0, 1, 1, 1, root);
     bolts(K, M.steel, [[x - 0.1, y + 0.04, wd * 0.4, 0, 0, 0], [x - 0.1, y + 0.04, -wd * 0.4, 0, 0, 0]], 0.02, root);
+    if (i >= 3) K.add(cone(0.05, 0.2, 6), trim, x - 0.02, y + 0.1, 0, 0, 0, 0.7, 1, 1, 1, root);
   }
   for (const s of [-1, 1]) {
     K.add(rbox(1.0, 0.06, 0.3, 0.02), arm, 0.15, 0.55, s * 0.56, s * 0.42, 0, 0, 1, 1, 1, root);
     K.add(rbox(0.7, 0.05, 0.22, 0.02), arm, -0.6, 0.5, s * 0.42, s * 0.38, 0, 0, 1, 1, 1, root);
     K.add(rbox(0.9, 0.025, 0.05, 0.01), trim, 0.15, 0.58, s * 0.68, s * 0.42, 0, 0, 1, 1, 1, root);
-    // gill slits under the wing roots
-    for (let i = 0; i < 4; i++) K.add(box(0.025, 0.02, 0.18), M.black, 0.55 - i * 0.09, 0.26, s * 0.38, 0, s * 0.4, 0, 1, 1, 1, root);
+    for (let i = 0; i < 4; i++) K.add(box(0.025, 0.02, 0.18), M.black, 0.55 - i * 0.09, 0.26, s * 0.38, 0, s * 0.4, 0, 1, 1, 1, root);   // gills
+    K.add(sph(0.03, 8, 6), edge, -0.95, 0.5, s * 0.36, 0, 0, 0, 1, 1, 1, root);   // running lights
   }
-  K.add(rbox(0.5, 0.22, 0.56, 0.05), arm, 1.02, 0.36, 0, 0, 0, 0.25, 1, 1, 1, root);
+  K.add(rbox(0.5, 0.22, 0.56, 0.05), arm, 1.0, 0.36, 0, 0, 0, 0.25, 1, 1, 1, root);
   // harness: girth straps, saddle, stirrups, saddle bags
   for (const x of [0.22, -0.32]) K.add(tor(0.62, 0.025, 26, 6), leather(0x3a2a20), x, 0.43, 0, 0, Math.PI / 2, 0, 1, 0.48, 1.15, root);
   K.add(rbox(0.56, 0.12, 0.44, 0.04), leather(), -0.04, 0.8, 0, 0, 0, 0, 1, 1, 1, root);
   K.add(rbox(0.12, 0.2, 0.42, 0.04), leather(0x3a2a20), -0.3, 0.88, 0, 0, 0, 0.1, 1, 1, 1, root);
   K.add(rbox(0.1, 0.14, 0.34, 0.04), leather(0x3a2a20), 0.22, 0.86, 0, 0, 0, -0.2, 1, 1, 1, root);
   for (const s of [-1, 1]) { K.add(tor(0.06, 0.012, 12, 6), M.steel, 0.18, 0.48, s * 0.46, 0, 0, 0, 1, 1, 1, root); K.add(rbox(0.22, 0.16, 0.08, 0.03), leather(0x5a3a28), -0.42, 0.62, s * 0.44, s * 0.3, 0, 0, 1, 1, 1, root); }
-  // head: armoured face, glowing eyes, forward horns, a dark mouth slit
-  const head = K.group('head', root, 1.32, 0.46, 0);
-  K.add(rbox(0.58, 0.26, 0.66, 0.08), hide, 0.04, 0, 0, 0, 0, -0.06, 1, 1, 1, head);
-  K.add(rbox(0.52, 0.06, 0.62, 0.02), arm, 0.07, 0.14, 0, 0, 0, -0.16, 1, 1, 1, head);
-  K.add(rbox(0.16, 0.18, 0.46, 0.03), arm, 0.33, 0.03, 0, 0, 0, 0.32, 1, 1, 1, head);
-  K.add(rbox(0.04, 0.05, 0.4, 0.01), trim, 0.38, 0.12, 0, 0, 0, 0.32, 1, 1, 1, head);
-  K.add(box(0.3, 0.02, 0.5), M.black, 0.2, -0.1, 0, 0, 0, 0.05, 1, 1, 1, head);
-  for (const s of [-1, 1]) {
-    K.add(sph(0.06, 12, 8), eye, 0.22, 0.04, s * 0.3, 0, 0, 0, 1, 0.7, 1, head);
-    K.add(rbox(0.14, 0.04, 0.1, 0.012), arm, 0.22, 0.09, s * 0.3, 0, 0, -0.2, 1, 1, 1, head);
-    K.add(cone(0.075, 0.62, 10), hide, 0.48, -0.04, s * 0.3, s * 0.12, 0, -Math.PI / 2 - 0.22, 1, 1, 1, head);
-    K.add(tor(0.07, 0.015, 12, 6), trim, 0.3, -0.03, s * 0.3, 0, Math.PI / 2, 0, 1, 1, 1, head);
+  // neck: three armour rings and a throat plate
+  const neck = K.group('neck', root, 1.08, 0.46, 0);
+  for (let i = 0; i < 3; i++) {
+    K.add(cyl(0.2 - i * 0.012, 0.22 - i * 0.012, 0.15, 16), hide, 0.06 + i * 0.12, 0, 0, 0, 0, Math.PI / 2, 1, 0.82, 1.25, neck);
+    K.add(tor(0.2 - i * 0.012, 0.022, 18, 6), arm, 0.12 + i * 0.12, 0.01, 0, 0, Math.PI / 2, 0, 0.8, 1.25, 1, neck);
   }
-  // tail: a tapering whip in two joints with armour rings and a blade fin
-  const tail = K.group('tail', root, -1.3, 0.44, 0);
-  for (let i = 0; i < 3; i++) { K.add(cyl(0.1 - i * 0.022, 0.13 - i * 0.022, 0.44, 10), hide, -0.2 - i * 0.4, 0, 0, 0, 0, Math.PI / 2, 1, 1, 1, tail); K.add(tor(0.11 - i * 0.022, 0.018, 14, 6), arm, -0.02 - i * 0.4, 0, 0, 0, Math.PI / 2, 0, 1, 1, 1, tail); }
-  const tail2 = K.group('tail2', tail, -1.25, 0, 0);
-  for (let i = 0; i < 3; i++) K.add(cyl(0.035 - i * 0.008, 0.05 - i * 0.008, 0.36, 8), hide, -0.18 - i * 0.34, 0, 0, 0, 0, Math.PI / 2, 1, 1, 1, tail2);
-  K.add(fin('tailblade', [[0, 0], [-0.18, 0.2], [-0.6, 0.06], [-0.62, 0], [-0.6, -0.06], [-0.18, -0.16]], 0.03), arm, -1.0, 0, 0, 0, 0, 0, 1, 1, 1, tail2);
-  K.add(fin('tailedge', [[-0.18, 0.2], [-0.62, 0.02], [-0.6, 0.06]], 0.035), glow(o.eye, 2.5), -1.0, 0, 0, 0, 0, 0, 1, 1, 1, tail2);
-  // wings: an armoured inner wing and a hinged tip, both beat
+  K.add(rbox(0.36, 0.05, 0.26, 0.02), belly, 0.18, -0.14, 0, 0, 0, 0.05, 1, 1, 1, neck);
+  K.add(cone(0.045, 0.18, 6), trim, 0.2, 0.2, 0, 0, 0, 0.6, 1, 1, 1, neck);
+  // head: armoured skull, glowing eyes under brow plates, swept horns, tusks, teeth; a hinged jaw and two frills
+  const head = K.group('head', neck, 0.36, 0.02, 0);
+  K.add(sph(1, 22, 14), hide, 0.1, 0.04, 0, 0, 0, 0, 0.32, 0.17, 0.27, head);   // skull
+  K.add(lathe('snout', [[0.16, 0], [0.15, 0.1], [0.12, 0.22], [0.075, 0.33], [0.03, 0.4], [0, 0.42]], 16), hide, 0.26, 0.01, 0, 0, 0, -Math.PI / 2, 1.3, 1, 0.72, head);
+  K.add(rbox(0.3, 0.035, 0.36, 0.015), arm, 0.12, 0.18, 0, 0, 0, -0.12, 1, 1, 1, head);   // brow plate
+  K.add(rbox(0.36, 0.03, 0.07, 0.012), trim, 0.42, 0.1, 0, 0, 0, -0.32, 1, 1, 1, head);   // a ridge down the snout
+  K.add(rbox(0.12, 0.05, 0.2, 0.015), arm, 0.34, 0.11, 0, 0, 0, -0.3, 1, 1, 1, head);
+  K.add(box(0.34, 0.03, 0.24), M.black, 0.36, -0.06, 0, 0, 0, 0.05, 1, 1, 1, head);   // mouth
+  K.add(sph(0.05, 10, 8), glow(o.eye, 1.8), 0.14, -0.05, 0, 0, 0, 0, 1.4, 0.7, 1.4, head);   // the glow in its throat
   for (const s of [-1, 1]) {
-    const w = K.group(s < 0 ? 'wingL' : 'wingR', root, 0.12, 0.5, s * 0.6);
-    const pin = s < 0 ? mirror(WING_IN) : WING_IN, pout = s < 0 ? mirror(WING_OUT) : WING_OUT;
-    K.add(plate('wi' + s, pin, 0.05), hide, 0, 0, 0, 0, 0, 0, 1, 1, 1, w);
-    K.add(plate('wib' + s, pin, 0.02, 0), belly, 0, -0.03, 0, 0, 0, 0, 0.94, 1, 0.96, w);
-    K.rod(arm, 0.56, 0.03, 0, 0.12, 0.03, s * 1.12, 0.045, w, 10);
-    for (let i = 0; i < 4; i++) { const t = i / 4; K.add(rbox(0.26, 0.05, 0.26, 0.02), arm, 0.5 - t * 0.34, 0.05, s * (0.14 + t * 0.92), 0, s * 0.35, 0, 1, 1, 1, w); K.add(box(0.2, 0.012, 0.03), trim, 0.48 - t * 0.34, 0.085, s * (0.14 + t * 0.92), 0, s * 0.35, 0, 1, 1, 1, w); }
-    for (let i = 0; i < 3; i++) K.add(box(0.7 - i * 0.1, 0.008, 0.012), M.black, -0.15, 0.03, s * (0.35 + i * 0.25), 0, s * (0.2 + i * 0.1), 0, 1, 1, 1, w);
-    const tip = K.group(s < 0 ? 'tipL' : 'tipR', w, 0.04, 0, s * 1.08);
-    K.add(plate('wo' + s, pout, 0.04), hide, 0, 0, 0, 0, 0, 0, 1, 1, 1, tip);
-    K.rod(arm, 0.42, 0.02, 0, 0.0, 0.02, s * 0.9, 0.032, tip, 8);
-    K.add(rbox(0.2, 0.04, 0.2, 0.015), arm, 0.3, 0.04, s * 0.3, 0, s * 0.5, 0, 1, 1, 1, tip);
-    K.add(sph(0.035, 8, 6), glow(o.eye, 5), -0.05, 0.03, s * 0.92, 0, 0, 0, 1, 1, 1, tip);
+    K.add(sph(0.055, 12, 8), eye, 0.26, 0.08, s * 0.19, 0, 0, 0, 1.2, 0.7, 1, head);
+    K.add(rbox(0.14, 0.035, 0.08, 0.012), arm, 0.25, 0.13, s * 0.2, s * 0.25, 0, -0.3, 1, 1, 1, head);
+    K.add(cone(0.05, 0.4, 10), hide, -0.12, 0.17, s * 0.15, s * 0.3, 0, Math.PI / 2 - 0.45, 1, 1, 1, head);   // horns, swept back
+    K.add(tor(0.05, 0.012, 12, 6), trim, 0.04, 0.15, s * 0.16, 0, Math.PI / 2, 0, 1, 1, 1, head);
+    K.add(cone(0.04, 0.26, 10), tooth, 0.5, -0.04, s * 0.12, s * 0.12, 0, -Math.PI / 2 - 0.35, 1, 1, 1, head);   // tusks
+    for (let i = 0; i < 4; i++) K.add(cone(0.015, 0.06, 6), tooth, 0.52 - i * 0.07, -0.07, s * (0.07 + i * 0.016), Math.PI, 0, 0, 1, 1, 1, head);
+    const fr = K.group(s < 0 ? 'frillL' : 'frillR', head, -0.04, 0.06, s * 0.22);
+    K.add(plate('frill' + s, s < 0 ? mirror(FRILL) : FRILL, 0.025), trim, 0, 0, 0, 0, 0, 0.15, 1, 1, 1, fr);
+    K.add(plate('frille' + s, s < 0 ? mirror(FRILL) : FRILL, 0.012, 0), edge, -0.02, 0.016, 0, 0, 0, 0.15, 0.92, 1, 0.9, fr);
+  }
+  const jaw = K.group('jaw', head, 0.08, -0.08, 0);
+  K.add(sph(1, 18, 10), hide, 0.22, -0.02, 0, 0, 0, 0, 0.3, 0.055, 0.16, jaw);
+  K.add(rbox(0.26, 0.03, 0.2, 0.012), arm, 0.24, -0.06, 0, 0, 0, 0.08, 1, 1, 1, jaw);
+  for (const s of [-1, 1]) for (let i = 0; i < 3; i++) K.add(cone(0.014, 0.05, 6), tooth, 0.42 - i * 0.08, 0.02, s * (0.08 + i * 0.016), 0, 0, 0, 1, 1, 1, jaw);
+  // tail: a tapering whip in three joints with armour rings and a glowing blade fin
+  const tail = K.group('tail', root, -1.3, 0.44, 0);
+  for (let i = 0; i < 2; i++) { K.add(cyl(0.11 - i * 0.02, 0.13 - i * 0.02, 0.34, 10), hide, -0.17 - i * 0.3, 0, 0, 0, 0, Math.PI / 2, 1, 1, 1, tail); K.add(tor(0.115 - i * 0.02, 0.018, 14, 6), arm, -0.02 - i * 0.3, 0, 0, 0, Math.PI / 2, 0, 1, 1, 1, tail); }
+  const tail2 = K.group('tail2', tail, -0.6, 0, 0);
+  for (let i = 0; i < 2; i++) { K.add(cyl(0.065 - i * 0.015, 0.08 - i * 0.015, 0.32, 8), hide, -0.16 - i * 0.28, 0, 0, 0, 0, Math.PI / 2, 1, 1, 1, tail2); K.add(tor(0.07 - i * 0.015, 0.013, 12, 6), arm, -0.02 - i * 0.28, 0, 0, 0, Math.PI / 2, 0, 1, 1, 1, tail2); }
+  const tail3 = K.group('tail3', tail2, -0.56, 0, 0);
+  K.add(cyl(0.025, 0.04, 0.42, 8), hide, -0.21, 0, 0, 0, 0, Math.PI / 2, 1, 1, 1, tail3);
+  K.add(fin('tailblade', [[0, 0], [-0.18, 0.2], [-0.6, 0.06], [-0.62, 0], [-0.6, -0.06], [-0.18, -0.16]], 0.03), arm, -0.36, 0, 0, 0, 0, 0, 1, 1, 1, tail3);
+  K.add(fin('tailedge', [[-0.18, 0.2], [-0.62, 0.02], [-0.6, 0.06]], 0.035), edge, -0.36, 0, 0, 0, 0, 0, 1, 1, 1, tail3);
+  for (const s of [-1, 1]) K.add(plate('tailfin' + s, s < 0 ? mirror([[0, 0], [-0.12, 0.16], [-0.28, 0.12], [-0.22, 0]]) : [[0, 0], [-0.12, 0.16], [-0.28, 0.12], [-0.22, 0]], 0.015), arm, -0.3, 0, s * 0.02, 0, 0, 0, 1, 1, 1, tail3);
+  // wings: an armoured inner wing, a mid wing and a tip, each hinged, with spars, scutes, ribs and a lit tip
+  for (const s of [-1, 1]) {
+    const M3 = (pts) => (s < 0 ? mirror(pts) : pts), side = s < 0 ? 'L' : 'R';
+    const w = K.group('wing' + side, root, 0.12, 0.5, s * 0.6);
+    K.add(plate('wi' + s, M3(WING_IN), 0.05), hide, 0, 0, 0, 0, 0, 0, 1, 1, 1, w);
+    K.add(plate('wib' + s, M3(WING_IN), 0.02, 0), belly, 0, -0.03, 0, 0, 0, 0, 0.94, 1, 0.96, w);
+    K.rod(arm, 0.56, 0.03, 0, 0.44, 0.03, s * 0.95, 0.05, w, 10);
+    for (let i = 0; i < 3; i++) { const t = i / 3; K.add(rbox(0.26, 0.05, 0.24, 0.02), arm, 0.48 - t * 0.12, 0.05, s * (0.16 + t * 0.7), 0, s * 0.2, 0, 1, 1, 1, w); K.add(box(0.2, 0.012, 0.03), trim, 0.46 - t * 0.12, 0.085, s * (0.16 + t * 0.7), 0, s * 0.2, 0, 1, 1, 1, w); }
+    for (let i = 0; i < 3; i++) K.add(box(0.7 - i * 0.1, 0.008, 0.012), M.black, -0.15, 0.03, s * (0.3 + i * 0.22), 0, s * (0.2 + i * 0.1), 0, 1, 1, 1, w);
+    K.add(sph(0.06, 10, 8), arm, 0.44, 0.03, s * 0.94, 0, 0, 0, 1, 1, 1, w);   // the elbow knuckle
+    const mid = K.group('mid' + side, w, 0, 0, s * 0.92);
+    K.add(plate('wm' + s, M3(WING_MID), 0.042), hide, 0, 0, 0, 0, 0, 0, 1, 1, 1, mid);
+    K.add(plate('wmb' + s, M3(WING_MID), 0.016, 0), belly, 0, -0.025, 0, 0, 0, 0, 0.92, 1, 0.94, mid);
+    K.rod(arm, 0.44, 0.02, 0, 0.26, 0.02, s * 0.68, 0.04, mid, 8);
+    K.rod(arm, 0.3, 0.025, s * 0.1, -0.3, 0.025, s * 0.55, 0.016, mid, 6);   // a finger spar to the trailing edge
+    for (let i = 0; i < 2; i++) K.add(rbox(0.2, 0.04, 0.2, 0.015), arm, 0.36 - i * 0.08, 0.04, s * (0.14 + i * 0.32), 0, s * 0.35, 0, 1, 1, 1, mid);
+    K.add(sph(0.045, 8, 6), arm, 0.26, 0.02, s * 0.66, 0, 0, 0, 1, 1, 1, mid);
+    const tip = K.group('tip' + side, mid, 0, 0, s * 0.62);
+    K.add(plate('wo' + s, M3(WING_OUT), 0.035), hide, 0, 0, 0, 0, 0, 0, 1, 1, 1, tip);
+    K.rod(arm, 0.28, 0.02, 0, -0.08, 0.02, s * 0.74, 0.03, tip, 8);
+    K.rod(arm, 0.18, 0.02, s * 0.1, -0.3, 0.02, s * 0.38, 0.014, tip, 6);
+    K.add(rbox(0.16, 0.035, 0.16, 0.012), arm, 0.16, 0.035, s * 0.2, 0, s * 0.5, 0, 1, 1, 1, tip);
+    K.add(sph(0.038, 8, 6), eye, -0.08, 0.03, s * 0.74, 0, 0, 0, 1, 1, 1, tip);
+  }
+  // legs: armoured thighs, scaled shins and three-clawed feet (tucked in flight, running on the ledges)
+  for (const s of [-1, 1]) {
+    const side = s < 0 ? 'L' : 'R';
+    const leg = K.group('leg' + side, root, 0.22, 0.36, s * 0.5);
+    K.rod(hide, 0, 0, 0, 0.12, -0.2, s * 0.2, 0.075, leg, 10);
+    K.add(rbox(0.16, 0.12, 0.05, 0.02), arm, 0.06, -0.08, s * 0.14, s * 0.6, 0, -0.5, 1, 1, 1, leg);
+    K.add(sph(0.06, 10, 8), trim, 0.12, -0.2, s * 0.2, 0, 0, 0, 1, 1, 1, leg);
+    const shin = K.group('shin' + side, leg, 0.12, -0.2, s * 0.2);
+    K.rod(hide, 0, 0, 0, -0.1, -0.15, s * 0.02, 0.045, shin, 8);
+    K.add(rbox(0.05, 0.14, 0.07, 0.015), arm, -0.03, -0.07, s * 0.035, 0, 0, 0.55, 1, 1, 1, shin);
+    const foot = K.group('foot' + side, shin, -0.1, -0.15, s * 0.02);
+    K.add(sph(0.06, 10, 6), hide, 0.02, -0.005, 0, 0, 0, 0, 1.3, 0.6, 1.1, foot);
+    for (let i = -1; i <= 1; i++) K.add(cone(0.02, 0.13, 6), claw, 0.11, -0.02, i * 0.045, 0, -i * 0.3, -Math.PI / 2 - 0.25, 1, 1, 1, foot);
+    K.add(cone(0.018, 0.09, 6), claw, -0.07, -0.01, 0, 0, 0, Math.PI / 2 + 0.3, 1, 1, 1, foot);
   }
 }
 
 // ------------------------------------------------------------------ the lancer: an armoured knight seated on the saddle
-// joints: rider, torso, helm, lance (with tip), shield
+// joints: rider > torso > helm, cape > cape2, armR > foreR > lance > pennant (the glowing 'tip' mesh), armL > shield
 const HELM = [[0, -0.13], [0.11, -0.12], [0.135, -0.04], [0.14, 0.04], [0.12, 0.11], [0.07, 0.16], [0, 0.17]];
 function riderParts(K, root, o) {
   const arm = o.armor, trim = o.trim, dark = paint(0x2a2c31, 0.4, 0.7), tab = cloth(o.cloth || o.armor, 0.85), acc = glow(o.accent, 4);
   const R = K.group('rider', root, -0.06, 0.86, 0);
-  // legs astride the hull, boots in the stirrups
+  // legs astride the hull: cuisses, knee cops, greaves, sabatons in the stirrups with rowel spurs
   for (const s of [-1, 1]) {
     K.add(rbox(0.38, 0.14, 0.15, 0.045), arm, 0.08, 0.02, s * 0.2, s * 0.15, 0, 0, 1, 1, 1, R);
     K.add(sph(0.075, 10, 8), trim, 0.26, 0.01, s * 0.27, 0, 0, 0, 1, 1, 1, R);
+    K.add(cone(0.05, 0.08, 8), trim, 0.31, 0.01, s * 0.29, 0, 0, -Math.PI / 2, 1, 1, 1, R);
     K.add(rbox(0.13, 0.34, 0.13, 0.04), arm, 0.28, -0.17, s * 0.33, s * 0.35, 0, 0.1, 1, 1, 1, R);
+    K.add(rbox(0.04, 0.26, 0.05, 0.012), trim, 0.35, -0.16, s * 0.36, s * 0.35, 0, 0.1, 1, 1, 1, R);
     K.add(rbox(0.22, 0.08, 0.12, 0.03), dark, 0.33, -0.33, s * 0.4, s * 0.35, 0, 0, 1, 1, 1, R);
+    K.add(tor(0.035, 0.008, 10, 6), M.steel, 0.2, -0.33, s * 0.42, 0, 0, 0, 1, 1, 1, R);
   }
   K.add(rbox(0.26, 0.12, 0.34, 0.04), dark, 0, 0.04, 0, 0, 0, 0, 1, 1, 1, R);
   for (const s of [-1, 1]) K.add(rbox(0.2, 0.14, 0.04, 0.015), arm, 0.02, 0.0, s * 0.19, 0, 0, 0.05, 1, 1, 1, R);   // tassets
   const T = K.group('torso', R, 0, 0.1, 0);
-  // the cuirass: lames, breastplate with a ridge, backplate, gorget, a tabard in the class colour
+  // the cuirass: lames, breastplate with a ridge, backplate, gorget, belt, a tabard in the class colour
   for (let i = 0; i < 3; i++) K.add(rbox(0.28 - i * 0.01, 0.06, 0.34 - i * 0.01, 0.02), arm, 0.02, 0.04 + i * 0.06, 0, 0, 0, 0, 1, 1, 1, T);
   K.add(rbox(0.32, 0.3, 0.4, 0.08), arm, 0.03, 0.34, 0, 0, 0, 0, 1, 1, 1, T);
   K.add(rbox(0.06, 0.26, 0.05, 0.02), trim, 0.18, 0.34, 0, 0, 0, 0, 1, 1, 1, T);
   K.add(rbox(0.12, 0.3, 0.36, 0.05), dark, -0.12, 0.34, 0, 0, 0, 0, 1, 1, 1, T);
   K.add(tor(0.11, 0.035, 18, 8), trim, 0.02, 0.52, 0, Math.PI / 2, 0, 0, 1, 1, 1, T);
+  K.add(tor(0.18, 0.02, 20, 6), leather(0x3a2a20), 0.02, 0.06, 0, Math.PI / 2, 0, 0, 0.9, 1.05, 1, T);
+  K.add(rbox(0.05, 0.05, 0.06, 0.01), trim, 0.19, 0.06, 0, 0, 0, 0, 1, 1, 1, T);
   K.add(rbox(0.04, 0.36, 0.24, 0.015), tab, 0.17, 0.12, 0, 0, 0, 0.1, 1, 1, 1, T);
   K.add(box(0.012, 0.05, 0.08), acc, 0.198, 0.36, 0, 0, 0, 0, 1, 1, 1, T);
   for (const s of [-1, 1]) {
@@ -309,12 +439,21 @@ function riderParts(K, root, o) {
     K.add(tor(0.14, 0.02, 18, 6), trim, 0.0, 0.46, s * 0.24, Math.PI / 2, 0, 0, 1.1, 1, 0.85, T);
     K.add(rbox(0.24, 0.05, 0.08, 0.02), arm, 0, 0.42, s * 0.3, 0, 0, 0, 1, 1, 1, T);
   }
-  // helm with a visor slit and a crest by class
+  // a cape from the shoulders in two pieces that stream behind
+  const capeA = K.group('cape', T, -0.16, 0.5, 0);
+  const capeB = K.group('cape2', capeA, -0.01, -0.36, 0);
+  for (const s of [-1, 0, 1]) {
+    K.add(rbox(0.025, 0.36, 0.16, 0.01), tab, -0.01 + Math.abs(s) * 0.05, -0.18, s * 0.14, 0, s * 0.7, 0, 1, 1, 1, capeA);
+    K.add(rbox(0.022, 0.32, 0.17, 0.01), tab, Math.abs(s) * 0.06, -0.16, s * 0.15, 0, s * 0.75, 0, 1, 1, 1, capeB);
+    K.add(box(0.026, 0.03, 0.17), trim, Math.abs(s) * 0.06, -0.32, s * 0.15, 0, s * 0.75, 0, 1, 1, 1, capeB);
+  }
+  // helm with a visor slit and a crest by class (its own joint: the knight looks about)
   const helm = K.group('helm', T, 0.03, 0.68, 0);
   K.add(lathe('helm', HELM, 22), arm, 0, 0, 0, 0, 0, 0, 1, 1, 1.05, helm);
   K.add(rbox(0.06, 0.12, 0.22, 0.02), arm, 0.12, -0.05, 0, 0, 0, 0.12, 1, 1, 1, helm);
   K.add(box(0.02, 0.022, 0.2), M.black, 0.14, 0.03, 0, 0, 0, 0, 1, 1, 1, helm);
   K.add(box(0.012, 0.012, 0.17), acc, 0.148, 0.03, 0, 0, 0, 0, 1, 1, 1, helm);
+  for (let i = 0; i < 3; i++) K.add(box(0.012, 0.035, 0.01), M.black, 0.135, -0.07, (i - 1) * 0.04, 0, 0, 0, 1, 1, 1, helm);   // breaths
   const kind = o.kind;
   if (kind === 'player' || kind === 'lancer') for (let i = 0; i < 5; i++) K.add(rbox(0.07, 0.06 + i * 0.012, 0.035, 0.012), kind === 'player' ? glow(o.accent, 2.2) : tab, 0.06 - i * 0.07, 0.19 + Math.sin(i * 0.6) * 0.03, 0, 0, 0, 0.2 + i * 0.12, 1, 1, 1, helm);
   if (kind === 'reaver') for (const s of [-1, 1]) { K.add(cone(0.035, 0.32, 8), M.black, 0.0, 0.16, s * 0.12, s * -0.6, 0, -0.5, 1, 1, 1, helm); K.add(cone(0.02, 0.14, 6), trim, -0.08, 0.22, s * 0.2, s * -0.9, 0, -0.9, 1, 1, 1, helm); }
@@ -322,12 +461,14 @@ function riderParts(K, root, o) {
   if (kind === 'shieldbearer') { K.add(rbox(0.3, 0.3, 0.3, 0.05), arm, 0.02, 0.0, 0, 0, 0, 0, 1, 1, 1, helm); K.add(box(0.012, 0.022, 0.24), acc, 0.175, 0.03, 0, 0, 0, 0, 1, 1, 1, helm); }
   if (kind === 'twinblade') for (const s of [-1, 1]) K.add(fin('hwing', [[0, 0], [-0.22, 0.16], [-0.18, 0.05], [-0.28, 0.02], [-0.12, -0.04]], 0.02), trim, -0.02, 0.1, s * 0.14, 0, 0, 0, 1, 1, 1, helm);
   if (kind === 'stormcaller') { K.add(cone(0.18, 0.42, 12), tab, -0.02, 0.1, 0, 0, 0, 0.25, 1, 1, 1, helm); for (const s of [-1, 1]) K.add(sph(0.022, 8, 6), acc, 0.14, 0.02, s * 0.05, 0, 0, 0, 1, 1, 1, helm); }
-  // lance arm (+z, toward the camera): pauldron, couched forearm, gauntlet on the grip
-  K.add(cap(0.06, 0.18, 10), arm, 0.1, 0.36, 0.28, 0, 0, -1.1, 1, 1, 1, T);
-  K.add(rbox(0.24, 0.1, 0.1, 0.03), arm, 0.2, 0.28, 0.28, 0, 0, -0.1, 1, 1, 1, T);
-  K.add(rbox(0.09, 0.09, 0.1, 0.025), dark, 0.32, 0.27, 0.27, 0, 0, 0, 1, 1, 1, T);
-  const lance = K.group('lance', T, 0.3, 0.27, 0.27);
-  lance.rotation.z = 0.1;
+  // lance arm (+z, toward the camera): upper arm, couter, forearm and gauntlet on the grip, the lance with a pennant
+  const armR = K.group('armR', T, 0.02, 0.46, 0.28);
+  K.rod(arm, 0, 0, 0, 0.1, -0.16, 0, 0.055, armR, 10);
+  K.add(sph(0.06, 10, 8), trim, 0.1, -0.16, 0, 0, 0, 0, 1, 1, 1, armR);
+  const foreR = K.group('foreR', armR, 0.1, -0.16, 0);
+  K.add(rbox(0.22, 0.09, 0.1, 0.03), arm, 0.09, 0.0, 0, 0, 0, -0.1, 1, 1, 1, foreR);
+  K.add(rbox(0.09, 0.09, 0.1, 0.025), dark, 0.2, -0.01, -0.01, 0, 0, 0, 1, 1, 1, foreR);
+  const lance = K.group('lance', foreR, 0.18, -0.03, -0.01);
   if (kind === 'stormcaller') {
     K.add(cyl(0.022, 0.026, 2.1, 8), M.brass, 0.85, 0, 0, 0, 0, Math.PI / 2, 1, 1, 1, lance);
     for (let i = 0; i < 4; i++) K.add(tor(0.03, 0.008, 10, 6), M.copper, 0.2 + i * 0.5, 0, 0, 0, Math.PI / 2, 0, 1, 1, 1, lance);
@@ -341,8 +482,14 @@ function riderParts(K, root, o) {
     K.add(box(0.5, 0.004, 0.06), glow(o.accent, 1.6), 1.2, 0.03, 0, 0, 0, 0, 1, 1, 1, lance);
     if (kind === 'twinblade') K.add(fin('blade2', [[0, 0], [-0.5, 0.06], [-0.55, 0], [-0.5, -0.03]], 0.02), M.chrome, -0.28, 0, 0, 0, 0, 0, 1, 1, 1, lance);
   }
+  const pen = K.group('pennant', lance, 0.7, 0.03, 0);
+  K.add(fin('pennant', [[0, 0], [-0.4, -0.03], [-0.3, -0.1], [-0.42, -0.18], [0, -0.17]], 0.012), tab, 0, 0, 0, 0, 0, 0, 1, 1, 1, pen);
+  K.add(box(0.012, 0.04, 0.016), acc, -0.12, -0.085, 0, 0, 0, 0, 1, 1, 1, pen);
   // shield arm (-z)
-  const sh = K.group('shield', T, 0.18, 0.3, -0.3);
+  const armL = K.group('armL', T, 0.02, 0.46, -0.28);
+  K.rod(arm, 0, 0, 0, 0.12, -0.14, -0.02, 0.05, armL, 10);
+  K.add(sph(0.055, 10, 8), trim, 0.12, -0.14, -0.02, 0, 0, 0, 1, 1, 1, armL);
+  const sh = K.group('shield', armL, 0.16, -0.16, -0.02);
   if (kind === 'shieldbearer') {
     K.add(rbox(0.07, 0.9, 0.62, 0.05), arm, 0.18, -0.05, 0.12, 0, 0.5, 0, 1, 1, 1, sh);
     K.add(rbox(0.03, 0.8, 0.08, 0.012), trim, 0.22, -0.05, 0.12, 0, 0.5, 0, 1, 1, 1, sh);
@@ -351,6 +498,7 @@ function riderParts(K, root, o) {
   } else {
     K.add(rbox(0.05, 0.36, 0.28, 0.06), arm, 0, 0, 0, 0, 0.3, 0, 1, 1, 1, sh);
     K.add(rbox(0.02, 0.3, 0.05, 0.01), trim, 0.03, 0, 0, 0, 0.3, 0, 1, 1, 1, sh);
+    K.add(sph(0.035, 8, 6), trim, 0.035, 0.02, 0, 0, 0.3, 0, 1, 1, 1, sh);
   }
 }
 const KIND_LOOK = {
@@ -362,6 +510,8 @@ const KIND_LOOK = {
   twinblade: { hide: 0x3a545c, armor: 0x2f8a72, trim: 0xc0d0c8, eye: 0x60ffd0, accent: 0x60ffd0, cloth: 0x1f5a4c },
   stormcaller: { hide: 0x545440, armor: 0x9a8040, trim: 0xe0c070, eye: 0x9fd0ff, accent: 0xa8d8ff, cloth: 0x50483a },
 };
+const JOINTS = ['mount', 'neck', 'head', 'jaw', 'frillL', 'frillR', 'wingL', 'wingR', 'midL', 'midR', 'tipL', 'tipR', 'legL', 'legR', 'shinL', 'shinR', 'footL', 'footR',
+  'tail', 'tail2', 'tail3', 'rider', 'torso', 'helm', 'cape', 'cape2', 'armR', 'foreR', 'lance', 'pennant', 'armL', 'shield'];
 // a skyray with its lancer. o: { armor, accent } override the player's colours; elite adds gold trim
 export function lancer(kind = 'player', o = {}) {
   const L = { ...KIND_LOOK[kind] || KIND_LOOK.lancer, ...o };
@@ -369,15 +519,15 @@ export function lancer(kind = 'player', o = {}) {
   const key = 'lancer:' + kind + ':' + L.armor + ':' + L.accent + ':' + (o.elite ? 1 : 0);
   const g = make(key, () => {
     const K = new Kit();
-    K.noShadow = /^(tip|tail2|helm|lance|shield|head)/;
-    K.flat = /^(helm|lance|shield)$/;
     const mount = K.group('mount');
     skyrayParts(K, mount, { hide: paint(L.hide, 0.62, 0.15), armor: paint(kind === 'player' ? 0x9aa3ad : L.armor, 0.34, 0.75), trim: paint(L.trim, 0.3, 0.85), eye: L.eye });
     riderParts(K, mount, { armor: paint(L.armor, 0.3, 0.75), trim: paint(L.trim, 0.28, 0.9), accent: L.accent, cloth: L.cloth, kind });
     return K.build();
   });
-  const n = (k) => by(g, k);
-  return { g, mount: n('mount'), wingL: n('wingL'), wingR: n('wingR'), tipL: n('tipL'), tipR: n('tipR'), tail: n('tail'), tail2: n('tail2'), head: n('head'), rider: n('rider'), torso: n('torso'), helm: n('helm'), lance: n('lance'), tip: n('tip'), shield: n('shield') };
+  const v = { g };
+  for (const k of JOINTS) v[k] = by(g, k);
+  v.tip = by(g, 'tip');   // the glowing lance tip (its own mesh)
+  return v;
 }
 
 // ------------------------------------------------------------------ the Stormhunter: a mechanical harrier with one eye

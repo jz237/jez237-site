@@ -1,6 +1,6 @@
 // Lancewing 2026 - every tunable number lives here. The RAMP table drives difficulty; nothing else in
 // the game hard-codes rider pace, numbers, spacing, skill, hazard rate or warning time.
-export const VERSION = '1.3.0';
+export const VERSION = '1.4.0';
 export const STEP = 1 / 120;
 
 // ------------------------------------------------------------------ the arena and the flight model

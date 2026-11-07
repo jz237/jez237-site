@@ -4,12 +4,12 @@
 // spire and its lightning, telegraph ribbons for every hazard and boss attack, HDR post with bloom.
 // Nothing here changes the world.
 import * as THREE from '../vendor/three.module.min.js';
-import { Post } from './post.js?v=9';
-import * as TX from './textures.js?v=9';
-import * as MD from './models.js?v=9';
-import { FX, CALM } from './fx.js?v=9';
-import { F, POWERUPS, BOSSES, HUNTER, LAYOUT, rockHang, rockDrop } from './config.js?v=9';
-import { weakPos } from './sim.js?v=9';
+import { Post } from './post.js?v=10';
+import * as TX from './textures.js?v=10';
+import * as MD from './models.js?v=10';
+import { FX, CALM } from './fx.js?v=10';
+import { F, POWERUPS, BOSSES, HUNTER, LAYOUT, rockHang, rockDrop } from './config.js?v=10';
+import { weakPos, ledgeUnder } from './sim.js?v=10';
 
 export { CALM };
 const RR = F.R, H = F.H;
@@ -17,6 +17,10 @@ const clamp = (v, a, b) => (v < a ? a : v > b ? b : v);
 const hdr = MD.hdr;
 const _v = new THREE.Vector3(), _v2 = new THREE.Vector3(), _v3 = new THREE.Vector3(), _m = new THREE.Matrix4(), _c = new THREE.Color(), _tint = new THREE.Vector3(), _q = new THREE.Quaternion(), _s = new THREE.Vector3(), _e = new THREE.Euler();
 const UP = new THREE.Vector3(0, 1, 0);
+const _v4 = new THREE.Vector3(), _v5 = new THREE.Vector3();
+const TURN_RATE = Math.PI / 0.26;   // a jouster swings right round in about a quarter of a second
+// one wing beat as a stroke from wings up (+1, phase 0) down to wings down (-1, phase 0.38) and back up
+function stroke(p) { p = ((p % 1) + 1) % 1; if (p < 0.38) { const f = p / 0.38; return 1 - 2 * f * f * (3 - 2 * f); } const f = (p - 0.38) / 0.62; return -1 + 2 * f * f * (3 - 2 * f); }
 // sim (x, y) -> world, at radius RR + dr
 export function toWorld(x, y, out = new THREE.Vector3(), dr = 0) { const th = x / RR; return out.set(Math.sin(th) * (RR + dr), y, Math.cos(th) * (RR + dr)); }
 const tangent = (x, out) => { const th = x / RR; return out.set(Math.cos(th), 0, -Math.sin(th)); };
@@ -586,7 +590,23 @@ export class Renderer {
     outer.matrixAutoUpdate = false;
     outer.add(v.g);
     this.scene.add(outer);
-    return { outer, v, turn: 1, face: 1, kind, pid, t: Math.random() * 10, bank: 0, lvx: 0, roll: 0.2 };
+    return { outer, v, turn: 1, face: 1, phi: 0, kind, pid, t: Math.random() * 10, bank: 0, lvx: 0, roll: 0.2, ph: Math.random(), lastBeat: 9, amp: 0.6,
+      fold: 1, dive: 0, tuck: 0, reach: 0, land: 0, wasAir: false, jaw: 0, cape: -0.4, look: 0, lookY: 0 };
+  }
+  // place a jouster turned phi round the vertical from facing +x along the ring (0) to facing back (PI). It swings
+  // round through facing the camera, so a turn shows the skyray's head and chest and not a flat card; past halfway
+  // the model is mirrored so its lance side ends up toward the camera whichever way it flies (as before)
+  placeTurn(outer, x, y, phi) {
+    tangent(x, _v); radial(x, _v2);
+    const c = Math.cos(phi), s = Math.sin(phi);
+    _v4.copy(_v).multiplyScalar(c).addScaledVector(_v2, s);          // the nose
+    _v5.copy(_v2).multiplyScalar(c).addScaledVector(_v, -s);         // its right side
+    if (phi > Math.PI / 2) _v5.negate();
+    _m.makeBasis(_v4, UP, _v5);
+    toWorld(x, y, _v3);
+    _m.setPosition(_v3);
+    outer.matrix.copy(_m);
+    outer.matrixWorldNeedsUpdate = true;
   }
   // place a model at sim (x, y) facing face (+1 along the ring / -1 back); mirrored so its right side always faces the camera
   place(outer, x, y, sx, dr = 0) {
@@ -599,30 +619,86 @@ export class Renderer {
     outer.matrixWorldNeedsUpdate = true;
   }
   animRider(V, b, dt, t) {
-    const v = V.v;
-    // a quick turn when the facing flips
-    if (b.face !== V.face) { V.face = b.face; }
-    V.turn += clamp(V.face - V.turn, -dt * 11, dt * 11);
-    const sx = Math.abs(V.turn) < 0.12 ? Math.sign(V.turn || 1) * 0.12 : V.turn;
-    this.place(V.outer, b.x, b.y, sx);
-    const air = b.on < 0;
+    const v = V.v, air = b.on < 0, W = this.W, k5 = Math.min(1, dt * 5), k9 = Math.min(1, dt * 9);
+    // a real turn: it swings round through facing the camera and banks into it
+    V.face = b.face;
+    V.phi += clamp((b.face > 0 ? 0 : Math.PI) - V.phi, -dt * TURN_RATE, dt * TURN_RATE);
+    this.placeTurn(V.outer, b.x, b.y, V.phi);
+    const turning = Math.sin(V.phi), fwd = b.vx * b.face, spd = Math.hypot(b.vx, b.vy);
     const acc = (b.vx - V.lvx) / Math.max(dt, 1e-3); V.lvx = b.vx;
-    V.bank += (clamp(-acc * 0.012 * Math.sign(V.turn), -0.4, 0.4) - V.bank) * Math.min(1, dt * 5);
-    V.roll += ((air ? 0.34 : 0.1) - V.roll) * Math.min(1, dt * 5);
-    v.g.rotation.set((air ? V.bank : 0) + V.roll, -0.34, air ? clamp(b.vy * 0.035, -0.4, 0.32) : 0, 'YXZ');
-    // wing beats
-    let a, tip;
-    const k = b.beat;
-    if (!air) { a = 0.3 + Math.sin(t * 2 + V.t) * 0.04; tip = 0.9; }
-    else if (b.gliding) { a = -0.05 + Math.sin(t * 2 + V.t) * 0.04; tip = -0.05; }
-    else if (k < 0.13) { const f = k / 0.13; a = 1.0 - f * 1.6; tip = 0.6 - f * 1.0; }
-    else if (k < 0.45) { const f = (k - 0.13) / 0.32, e = f * f * (3 - 2 * f); a = -0.6 + e * 0.78; tip = -0.4 + e * 0.55; }
-    else { a = 0.18 + Math.sin(t * 3.2 + V.t) * 0.12; tip = 0.12 + Math.sin(t * 3.2 + V.t - 0.8) * 0.18; }
-    if (v.wingR) { v.wingR.rotation.x = -a; v.wingL.rotation.x = a; v.tipR.rotation.x = -tip; v.tipL.rotation.x = tip; }
-    if (v.tail) { v.tail.rotation.y = Math.sin(t * 2.6 + V.t) * 0.12; v.tail.rotation.z = air ? clamp(-b.vy * 0.03, -0.3, 0.3) : 0.15; v.tail2.rotation.y = Math.sin(t * 2.6 + V.t - 0.9) * 0.25; }
-    if (v.head) v.head.rotation.z = Math.sin(t * 1.7 + V.t) * 0.05;
-    if (v.mount) v.mount.position.y = air ? 0 : Math.abs(Math.sin(b.run * 2.2)) * 0.06 * Math.min(1, Math.abs(b.vx) / 2);
-    if (v.torso) v.torso.rotation.z = air ? clamp(b.vy * 0.02, -0.15, 0.15) : 0;
+    V.bank += (clamp(-acc * 0.012 * b.face, -0.4, 0.4) - V.bank) * k5;
+    V.roll += ((air ? 0.34 : 0.1) - V.roll) * k5;
+    v.g.rotation.set((air ? V.bank : 0) + V.roll + turning * 0.5, -0.34, air ? clamp(b.vy * 0.035, -0.4, 0.32) : 0, 'YXZ');
+    // wings: every beat from the sim is a power stroke; between beats it keeps flapping to hold itself up (deeper
+    // and quicker while it climbs), a glide spreads them, a fast drop sweeps them back, on a ledge they fold
+    if (b.beat < V.lastBeat - 1e-6) V.ph = 0;
+    V.lastBeat = b.beat;
+    const climb = clamp(b.vy / 6, -1, 1), dive = air && b.vy < -8 && !b.gliding ? 1 : 0;
+    const ampT = !air ? 0 : b.gliding ? 0.14 : 0.62 + Math.max(0, climb) * 0.38 - Math.max(0, -climb) * 0.2;
+    V.amp += (ampT - V.amp) * k5;
+    V.fold += ((air ? 0 : 1) - V.fold) * Math.min(1, dt * (air ? 9 : 4));
+    V.dive += (dive - V.dive) * Math.min(1, dt * 4);
+    V.ph = (V.ph + dt * (b.gliding ? 1.4 : 2.3 + Math.max(0, climb) * 1.1)) % 1;
+    const A = V.amp, F0 = V.fold, D0 = V.dive * (1 - F0);
+    const w1 = (0.12 + A * 0.85 * stroke(V.ph)) * (1 - F0) + 0.42 * F0 + 0.15 * D0, f1 = 0.62 * F0 + 0.85 * D0;
+    const w2 = (0.06 + A * 0.5 * stroke(V.ph - 0.07)) * (1 - F0) - 0.25 * F0, f2 = 1.25 * F0 + 0.6 * D0;
+    const w3 = (A * 0.45 * stroke(V.ph - 0.15)) * (1 - F0) + 0.1 * F0, f3 = 0.9 * F0 + 0.45 * D0;
+    if (v.wingR) {
+      v.wingR.rotation.set(-w1, -f1, 0); v.wingL.rotation.set(w1, f1, 0);
+      v.midR.rotation.set(-w2, -f2, 0); v.midL.rotation.set(w2, f2, 0);
+      v.tipR.rotation.set(-w3, -f3, 0); v.tipL.rotation.set(w3, f3, 0);
+    }
+    // legs: tucked back in flight, reaching for a ledge below it as it comes down, striding when it runs, a crouch on landing
+    if (air !== V.wasAir) { if (!air) V.land = 1; V.wasAir = air; }
+    V.land = Math.max(0, V.land - dt * 4);
+    const below = air && b.vy < 0.5 && W ? ledgeUnder(W, b.x, b.y) : null;
+    V.reach += ((below && b.y - below.y < 2.6 ? 1 : 0) - V.reach) * k9;
+    V.tuck += ((air ? 1 : 0) - V.tuck) * Math.min(1, dt * 7);
+    const gait = !air ? Math.min(1, Math.abs(b.vx) / 3) : 0, rp = b.run * 2.4 * Math.sign(fwd || 1);
+    if (v.legR) for (const [L, S, Ft, off] of [[v.legR, v.shinR, v.footR, 0], [v.legL, v.shinL, v.footL, Math.PI]]) {
+      const tk = V.tuck * (1 - V.reach), rc = V.reach * V.tuck, s = Math.sin(rp + off), c = Math.cos(rp + off);
+      L.rotation.z = -1.15 * tk + 0.35 * rc + s * 0.55 * gait + 0.25 * V.land;
+      S.rotation.z = 1.5 * tk - 0.25 * rc + Math.max(0, c) * 0.7 * gait - 0.45 * V.land;
+      Ft.rotation.z = 0.9 * tk - 0.35 * rc - s * 0.35 * gait + 0.2 * V.land;
+    }
+    // tail: a whip that ripples with the beats and droops on a ledge
+    if (v.tail) {
+      const tw = t * 2.6 + V.t;
+      v.tail.rotation.set(0, Math.sin(tw) * 0.12, air ? clamp(-b.vy * 0.03, -0.3, 0.3) : 0.15);
+      v.tail2.rotation.set(0, Math.sin(tw - 0.9) * 0.22, A * 0.12 * stroke(V.ph - 0.3));
+      v.tail3.rotation.set(0, Math.sin(tw - 1.8) * 0.32, A * 0.18 * stroke(V.ph - 0.45) + (air ? 0 : 0.1));
+    }
+    // neck and head: the head rides the beats and looks at whoever is closest; the jaw opens on a beat and screeches in a dive
+    let tg = null, td = 14;
+    if (W) for (const q of b.input ? W.riders : W.players) { if (!q.alive) continue; const d = Math.abs(((q.x - b.x + F.C * 1.5) % F.C) - F.C / 2); if (d < td) { td = d; tg = q; } }
+    const dyT = tg ? clamp((tg.y - b.y) / Math.max(2, td), -0.8, 0.8) : 0;
+    V.lookY += (dyT - V.lookY) * Math.min(1, dt * 3);
+    if (v.neck) {
+      v.neck.rotation.set(0, Math.sin(t * 0.9 + V.t) * 0.08, (air ? clamp(b.vy * 0.025, -0.2, 0.25) : -0.1) - A * 0.07 * stroke(V.ph + 0.1));
+      v.head.rotation.set(0, Math.sin(t * 1.3 + V.t) * 0.06, V.lookY * 0.35 + Math.sin(t * 1.7 + V.t) * 0.04);
+      const open = 0.06 + Math.max(0, 1 - b.beat / 0.22) * 0.25 + V.dive * 0.35 + (air ? 0 : Math.max(0, Math.sin(t * 0.7 + V.t * 3) - 0.92) * 4);
+      V.jaw += (open - V.jaw) * Math.min(1, dt * 12);
+      v.jaw.rotation.z = -V.jaw;
+      const fl = 0.15 + V.jaw * 0.9 + A * 0.12 * stroke(V.ph);
+      v.frillR.rotation.x = -fl; v.frillL.rotation.x = fl;
+    }
+    if (v.mount) v.mount.position.y = air ? 0 : Math.abs(Math.sin(b.run * 2.4)) * 0.05 * gait - 0.05 * V.land;
+    // the knight: leans into the climb or the run, looks about (back over the shoulder at a threat behind); the cape
+    // and the pennant stream in the wind of its flight
+    if (v.torso) {
+      v.torso.rotation.set(0, 0, (air ? clamp(b.vy * 0.02, -0.15, 0.15) : 0) - clamp(fwd * 0.012, -0.08, 0.1) + A * 0.03 * stroke(V.ph + 0.2) + 0.12 * V.land);
+      const behind = tg && (((tg.x - b.x + F.C * 1.5) % F.C) - F.C / 2) * b.face < -1 ? 1 : 0;
+      V.look += (behind - V.look) * Math.min(1, dt * 4);
+      v.helm.rotation.set(0, -0.95 * V.look + Math.sin(t * 0.6 + V.t) * 0.12 * (1 - V.look), V.lookY * 0.45);
+      v.foreR.rotation.set(0, 0, A * 0.04 * stroke(V.ph + 0.25));
+      v.armL.rotation.set(Math.sin(t * 1.1 + V.t) * 0.05, 0, A * 0.06 * stroke(V.ph + 0.3) - 0.05 * V.land);
+      const cx = -fwd * 0.13 - 0.15, cy = -1.6 - b.vy * 0.2;
+      V.cape += (clamp(Math.atan2(cx, -cy), -2.3, -0.3) - V.cape) * Math.min(1, dt * 6);
+      const fl = Math.min(1, spd / 9);
+      v.cape.rotation.set(0, 0, V.cape + Math.sin(t * 9 + V.t) * 0.06 * fl);
+      v.cape2.rotation.set(Math.sin(t * 7 + V.t) * 0.08 * fl, 0, -0.25 * fl + Math.sin(t * 11 + V.t + 1) * 0.16 * fl);
+      v.pennant.rotation.set(Math.sin(t * 9 + V.t) * 0.12 * (0.3 + fl), Math.sin(t * 14 + V.t) * 0.3 * (0.3 + fl), 0);
+    }
     if (v.tip) v.tip.scale.setScalar(1 + Math.sin(t * 9 + V.t) * 0.12);
   }
   sync(W, dt) {
@@ -658,7 +734,7 @@ export class Renderer {
       this.animRider(V, r, dt, t);
       this.hitFlash(V, r.hitT, dt);
     }
-    for (const [id, V] of this.views.r) if (!seen.has(id)) { this.scene.remove(V.outer); this.views.r.delete(id); }
+    for (const [id, V] of this.views.r) if (!seen.has(id)) { this.scene.remove(V.outer); MD.release(V.v.g); this.views.r.delete(id); }
     // ghosts: unhorsed riders tumbling away
     for (const G of this.ghosts) if (G.v.flashOn) this.flashView(G.v, false);
     this.ghosts = this.ghosts.filter((G) => {
@@ -668,7 +744,7 @@ export class Renderer {
       // break apart: the knight is thrown clear of the saddle and tumbles on his own
       if (G.split && G.v.rider) { const k = G.t; G.v.rider.position.set(-0.06 - k * 1.4, 0.86 + k * 2.4 - k * k * 4.5, k * 0.6); G.v.rider.rotation.set(k * 2, 0, k * 6); }
       if (G.y < 0.2 && !G.splashed) { G.splashed = true; toWorld(G.x, 0, _v); this.fx.splash(_v.x, 0, _v.z, 1.2); }
-      if (G.t > 2.2 || G.y < -6) { this.scene.remove(G.outer); return false; }
+      if (G.t > 2.2 || G.y < -6) { this.scene.remove(G.outer); MD.release(G.v.g); return false; }
       return true;
     });
     this.syncCores(W, dt, t);
@@ -956,9 +1032,13 @@ export class Renderer {
     if (on === !!v.flashOn) return;
     v.flashOn = on;
     // instanced / skinned / morphing meshes would need their own variant of the glow program (a runtime compile): never swapped
-    if (!v.mats) { v.mats = []; v.g.traverse((o) => { if (o.isMesh && !o.isInstancedMesh && !o.isSkinnedMesh && !o.isBatchedMesh && !o.morphTargetInfluences) v.mats.push([o, o.material]); }); }
+    // (the jousters' skinned meshes take a twin of the flash material, compiled in the warm-up)
+    if (!v.mats) { v.mats = []; v.g.traverse((o) => { if (o.isMesh && !o.isInstancedMesh && !o.isBatchedMesh && !o.morphTargetInfluences) v.mats.push([o, o.material]); }); }
     const fm = MD.glow(0xfff2dc, CALM.on ? 0.8 : 1.2);
-    for (const [o, m] of v.mats) o.material = on ? fm : m;
+    if (!this.flashSk) this.flashSk = new Map();
+    if (!this.flashSk.has(fm)) this.flashSk.set(fm, fm.clone());
+    const fs = this.flashSk.get(fm);
+    for (const [o, m] of v.mats) o.material = on ? (o.isSkinnedMesh ? fs : fm) : m;
   }
   // live boss weak points: a pulsing camera-facing ring round each one that can be struck now (own small pool, the same
   // additive MeshBasic program as the sea rings)
@@ -1106,9 +1186,15 @@ export class Renderer {
   warmUp() {
     const tmp = [];
     const addTmp = (g, x) => { toWorld(x, 10, g.position); this.scene.add(g); tmp.push(g); };
-    let x = 0;
-    for (const k of ['skirmisher', 'lancer', 'reaver', 'shieldbearer', 'twinblade', 'stormcaller']) { addTmp(MD.lancer(k).g, x += 3); addTmp(MD.lancer(k, { elite: true }).g, x += 3); }
-    addTmp(MD.lancer('player', this.suit[0]).g, x += 3); addTmp(MD.lancer('player', this.suit[1]).g, x += 3);
+    // the jousters are skinned: they stand close together inside the sun's shadow camera (aimed at them first), so
+    // their skinned shadow programs (with and without a texture) compile here and not in the middle of play
+    this.updateCamera(0, { snap: true, focus: [{ x: 12, y: 10 }] });
+    let x = 0, j = 0;
+    const addJ = (g) => { toWorld(4 + (j % 8) * 2.4, 6 + Math.floor(j / 8) * 3.5, g.position); this.scene.add(g); tmp.push(g); j++; };
+    for (const k of ['skirmisher', 'lancer', 'reaver', 'shieldbearer', 'twinblade', 'stormcaller']) { addJ(MD.lancer(k).g); addJ(MD.lancer(k, { elite: true }).g); }
+    addJ(MD.lancer('player', this.suit[0]).g); addJ(MD.lancer('player', this.suit[1]).g);
+    const lit = MD.lancer('lancer'); addJ(lit.g); this.flashView(lit, true);
+    x = 40;
     addTmp(MD.hunter().g, x += 3); addTmp(MD.core().g, x += 3);
     for (const k in POWERUPS) addTmp(MD.pickup(POWERUPS[k].color).g, x += 2);
     for (const k of Object.keys(BOSSES)) addTmp(MD.boss(k).g, x += 8);
@@ -1129,7 +1215,8 @@ export class Renderer {
     for (const k in this.shotI) this.shotI[k].count = 0;
     for (const r of this.ribbons) r.hide();
     for (const c of [...this.cols, ...this.spouts, ...this.rings]) c.visible = false;
-    for (const o of tmp) this.scene.remove(o);
+    this.flashView(lit, false);
+    for (const o of tmp) { this.scene.remove(o); MD.release(o); }
     this.fx.clear();
     void HUNTER; void weakPos;
   }
