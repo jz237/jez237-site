@@ -338,3 +338,7 @@ dialog .quick-compare-check{font-size:16px;color:var(--ink);background:rgba(14,3
 }
 
 .result-save{display:flex;flex-wrap:wrap;gap:6px 22px;align-items:center}
+
+/* Quiet notice under each result (Nov 7 2026) */
+.result-note{margin:22px 0 0;font-size:.8rem;line-height:1.5;opacity:.72}
+.result-note a{color:inherit;text-decoration:underline}

@@ -8,6 +8,7 @@ import { createReef } from './reef-app.mjs';
 import { createExtras } from './extras-app.mjs';
 import { scienceLine } from './science.mjs';
 import { createReader } from './reader.mjs';
+import { RESULT_NOTE } from './result-note.mjs';
 import { shopLinkFor, shopLinkHtml } from './shop-links.mjs';
 import { LIB_INFO, ZONES, fishMap, closeupsFor, fishStripFor, leadImageFor, libraryPictureCount } from './library-visuals.mjs';
 import { UI_IMAGES, IMAGE_SOURCE as UI_IMAGE_SOURCE } from './ui-images-data.mjs';
@@ -260,7 +261,7 @@ function renderResults() {
   const natural = diagnosis.naturalNote ? `<p class="natural-note">${escape(diagnosis.naturalNote)}</p>` : '';
   const couldAlso = other || natural ? `<section class="could-also"><h2 class="subheading">Could also be</h2>${other ? `<p class="could-also-hint">Tap the one that looks more like your fish.</p><div class="alternatives">${other}</div>` : ''}${natural}</section>` : '';
   const where = [ {fresh:'Freshwater',marine:'Saltwater'}[input.water], fish?.title ].filter(Boolean).join(' · ');
-  $('#results-content').innerHTML = `<h1 id="results-title" class="question-title results-title">${first ? `<span>Most likely:</span> ${escape(first.title)}` : escape(diagnosis.title)}</h1>${first ? scienceLine(first.id) : ''}<p class="question-hint result-hint">${where ? `${escape(where)} · ` : ''}${diagnosis.chosen ? 'Your pick from the look-alikes' : 'Our best guess from your answers'}—a hobby guide, not a vet.</p>${urgent}${messages}${focus}${WATER_NUDGE}${additional}${unresolved}${context}${couldAlso}<section class="care-next"><h3>Got water test results?</h3><p>Add your readings and tank details for a tailored checklist.</p><button class="button secondary" data-action="care">Add readings & tank details →</button></section><div class="result-save"><button class="text-button" data-action="case">Save my notes ↗</button><button class="text-button" data-action="print-sheet">Print a sheet for the store ↗</button></div>`;
+  $('#results-content').innerHTML = `<h1 id="results-title" class="question-title results-title">${first ? `<span>Most likely:</span> ${escape(first.title)}` : escape(diagnosis.title)}</h1>${first ? scienceLine(first.id) : ''}<p class="question-hint result-hint">${where ? `${escape(where)} · ` : ''}${diagnosis.chosen ? 'Your pick from the look-alikes' : 'Our best guess from your answers'}—a hobby guide, not a vet.</p>${urgent}${messages}${focus}${WATER_NUDGE}${additional}${unresolved}${context}${couldAlso}<section class="care-next"><h3>Got water test results?</h3><p>Add your readings and tank details for a tailored checklist.</p><button class="button secondary" data-action="care">Add readings & tank details →</button></section><div class="result-save"><button class="text-button" data-action="case">Save my notes ↗</button><button class="text-button" data-action="print-sheet">Print a sheet for the store ↗</button></div>${RESULT_NOTE()}`;
   goStep('results');
 }
 
