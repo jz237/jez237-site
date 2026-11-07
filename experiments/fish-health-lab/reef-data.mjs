@@ -292,8 +292,8 @@ export const REEF_CONDITIONS = [
     // Wording when a different sign led here (Nov 6 2026 combination sweep).
     checks: { "pale": "A pale, milky shrimp or crab after a salinity swing is often struggling with its molt—watch for it getting stuck in the old shell." },
     clues: ['Old shell still attached, the animal can’t get free.', 'Often after a salinity swing or a big water change.'],
-    distinguish: 'A complete, hollow shell with nobody inside is a normal molt.',
-    avoid: 'Don’t pull the old shell off—you can tear the new one.',
+    distinguish: 'A complete, hollow shell with nobody inside is a normal molt. On a shrimp, a pale ring where the head shell meets the tail is a molt that’s struggling, not a catching disease; a milky white tail muscle is a different problem.',
+    avoid: 'Don’t pull the old shell off—you can tear the new one. No medicine can help a shrimp through a molt, so don’t dose the tank.',
   },
   {
     id: 'copper', group: 'invert', title: 'Copper or medicine poisoning', kind: 'Poisoning', urgency: 'today',
