@@ -224,6 +224,13 @@ window.addEventListener("keydown", e => {
 window.addEventListener("blur", releaseFlightMouse);
 document.addEventListener("visibilitychange", () => { if (document.hidden) releaseFlightMouse(); });
 
+function preloadFlightEngine() {
+  if(location.protocol!=="http:"&&location.protocol!=="https:")return;
+  if(document.getElementById("astraEnginePreload"))return;
+  const link=document.createElement("link");link.id="astraEnginePreload";
+  link.rel="preload";link.as="script";link.href="engine.js?v=pyre56";
+  document.head.append(link);
+}
 let firstBlastProfile=0;
 let openWeaponPriorities=false;
 window.astraPreview = {
@@ -263,7 +270,7 @@ $("previewClose").onclick=()=>window.astraPreview.close();
 
 async function launch(quick,demo=false,encounter=false,preview=false,autopilot=false,inspect=false,weapons=false,mine=false) {
   if(launchPending)return;
-  launchPending=true;window.astraBench?.begin();window.astraTerminal?.loading(true);
+  launchPending=true;preloadFlightEngine();window.astraBench?.begin();window.astraTerminal?.loading(true);
   const buttons=document.querySelectorAll(".launch");
   buttons.forEach(el=>el.disabled=true);
   try {
@@ -277,7 +284,7 @@ async function launch(quick,demo=false,encounter=false,preview=false,autopilot=f
     const silence="data:audio/wav;base64,UklGRiYAAABXQVZFZm10IBAAAAABAAEAQB8AAIA+AAACABAAZGF0YQIAAAAAAA==";
     music.src=silence; music.volume=.75;
     music.play().then(()=>{if(music.getAttribute("src")===silence){music.pause();music.currentTime=0;}}).catch(()=>{});
-    await script("streaming.js?v=36");
+    await script("streaming.js?v=56");
     const loadMovie=astraMovieLibrary(async file=>{
       const response=await fetch("payload/"+file);
       if(!response.ok||!response.body)throw Error("Could not load "+file);
@@ -305,7 +312,7 @@ async function launch(quick,demo=false,encounter=false,preview=false,autopilot=f
       mounted.set("pyro-field.png",field);
       mounted.set("collectibles.mesh",mesh);
     }
-    if(astra){await script("generated-materials.js?v=47");assetDepot=astraGeneratedLibrary(assetDepot);}
+    if(astra){await script("generated-materials.js?v=56");assetDepot=astraGeneratedLibrary(assetDepot);}
     if(astra)await loadAstraShipAssets();
     if(campaign==="overload"){await script("mission-controller.js?v=46");await script("overload-loader.js?v=48");await astraOverload.install(mounted);}
     $("status").textContent="Starting flight computer";
@@ -355,7 +362,7 @@ async function launch(quick,demo=false,encounter=false,preview=false,autopilot=f
         setInterval(syncPilot,3000);
       }
     };
-    await script("engine.js?v=pyre54a");
+    await script("engine.js?v=pyre56");
   } catch(e) {console.error(e);astraFail(e.message);}
 }
 

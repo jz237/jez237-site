@@ -9,6 +9,9 @@
   const field = {};
   svg.querySelectorAll("[id]").forEach(node => {field[node.id]=node;});
   const write = (id,val) => {const value=String(val);if(field[id].textContent!==value)field[id].textContent=value;};
+  const attributes=new Map(),styles=new Map();
+  const attribute=(id,key,value)=>{value=String(value);const name=id+':'+key;if(attributes.get(name)!==value){field[id].setAttribute(key,value);attributes.set(name,value);}};
+  const style=(id,key,value)=>{value=String(value);const name=id+':'+key;if(styles.get(name)!==value){field[id].style[key]=value;styles.set(name,value);}};
   const fmt = n=>String(Math.max(0,n)).padStart(3,"0");
   const cap = n=>Math.max(0,Math.min(100,n));
   let visible=false,lastKey="";
@@ -17,8 +20,8 @@
       if(!visible)return;
       for(const [id,c] of [['deckReflectLeft',left],['deckReflectRight',right]]){
         const color=c.map(v=>Math.round(Math.max(0,Math.min(1,v))*255));
-        const node=document.getElementById(id);node?.setAttribute('stroke','rgb('+color.join(',')+')');
-        node?.setAttribute('opacity',String(Math.min(.48,Math.max(...c)*.42)));
+        attribute(id,'stroke','rgb('+color.join(',')+')');
+        attribute(id,'opacity',Math.min(.48,Math.max(...c)*.42));
       }
     },
     show(wanted) {
@@ -39,15 +42,15 @@
       write("deckAmmo",fmt(missileCount));write("deckLevel",level<0?"S"+Math.abs(level):"L"+String(level).padStart(2,"0"));
       write("deckAlert",incoming?"MISSILE LOCK":flags&1?"INVULNERABLE":flags&2048?"CLOAKED":shields<25?"SHIELDS LOW":"");
       write("deckBurn",flags&4096?"AFTERBURNER   "+burn+"%":"");
-      field.deckEnergyArc.style.strokeDasharray=cap(energy)+" 100";
-      field.deckShieldArc.style.strokeDasharray=cap(shields)+" 100";
-      field.deckShields.style.fill=shields<25?"#ff9a62":"#edfaff";
-      field.deckReticle.style.display=reticle?"":"none";
-      field.deckRounds.style.opacity=missileCount?"1":".48";
-      ["Blue","Red","Gold"].forEach((name,i)=>{field["deckKey"+name].style.opacity=flags&(2<<i)?"1":".16";});
-      field.deckGun.setAttribute("color",["#6ce8ff","#f6bb73","#a1ef80","#6aefb4","#da96ff","#78ddff","#e3b97e","#f9a6ad","#ff986c","#a4bdff"][primary]||"#79e7ff");
-      field.deckMine.style.display=secondary===2||secondary===7?"":"none";
-      field.deckMissile.style.display=secondary===2||secondary===7?"none":"";
+      style("deckEnergyArc","strokeDasharray",cap(energy)+" 100");
+      style("deckShieldArc","strokeDasharray",cap(shields)+" 100");
+      style("deckShields","fill",shields<25?"#ff9a62":"#edfaff");
+      style("deckReticle","display",reticle?"":"none");
+      style("deckRounds","opacity",missileCount?"1":".48");
+      ["Blue","Red","Gold"].forEach((name,i)=>{style("deckKey"+name,"opacity",flags&(2<<i)?"1":".16");});
+      attribute("deckGun","color",["#6ce8ff","#f6bb73","#a1ef80","#6aefb4","#da96ff","#78ddff","#e3b97e","#f9a6ad","#ff986c","#a4bdff"][primary]||"#79e7ff");
+      style("deckMine","display",secondary===2||secondary===7?"":"none");
+      style("deckMissile","display",secondary===2||secondary===7?"none":"");
     }
   };
 })();

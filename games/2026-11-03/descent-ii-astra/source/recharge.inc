@@ -44,9 +44,13 @@ int astra_recharge_face(int count,const g3s_point **view,const g3s_uvl *uv,int r
     glUniform1f(glGetUniformLocation(program,"clock"),astra_mine_clock>=0?astra_mine_clock:(double)(GameTime64%(F1_0*2000))/F1_0);
     glUniform1f(glGetUniformLocation(program,"seed"),room*.13f+side*.71f);
     glUniform1f(glGetUniformLocation(program,"charging"),charging);
+    /* This shader has no vertex-color input. A prior legacy draw can leave its
+     * client array enabled; preserve it without binding attribute location -1. */
+    GLboolean color_array;glGetBooleanv(GL_COLOR_ARRAY,&color_array);glDisableClientState(GL_COLOR_ARRAY);
     glEnableClientState(GL_VERTEX_ARRAY);glEnableClientState(GL_TEXTURE_COORD_ARRAY);
     glVertexPointer(3,GL_FLOAT,0,p);glTexCoordPointer(2,GL_FLOAT,0,tex);glDrawArrays(GL_TRIANGLE_FAN,0,count);
     glDisableClientState(GL_VERTEX_ARRAY);glDisableClientState(GL_TEXTURE_COORD_ARRAY);glUseProgram(0);
+    if(color_array)glEnableClientState(GL_COLOR_ARRAY);
     glDepthMask(GL_TRUE);if(cull)glEnable(GL_CULL_FACE);gr_settransblend(fade,blend);
     EM_ASM(Module.rechargeVisualVersion=17;Module.rechargeFaces=(Module.rechargeFaces||0)+1;Module.rechargeActive=!!$0;,charging);
     return 1;

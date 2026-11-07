@@ -6,6 +6,7 @@
   const $=id=>document.getElementById(id);
   let socket=null,lobby=null,identity=null,timer=null,queue=[],out=[],bytes=0,barrier=null,roomChoices=false,lastHostState='',ignoreStart=false;
   let ui,notice,roomField,roster,connectButtons,start,setup,playBar;
+  let sentTimes=[];
   let credential=null,roomCode='',intentional=false,retryTimer=null,retryUntil=0,heartbeat=null,lastPong=0,lastInventory=0;
   const session={session:null,failed:false,departed:0,stats:{sent:0,received:0},
     abort:message=>fail(message),
@@ -55,12 +56,15 @@
   function flush(){
     if(!out.length||socket?.readyState!==1)return;
     if(socket.bufferedAmount>128*1024){fail('Network connection cannot keep up. Please rejoin.');return;}
-    while(out.length){
+    // Keep 30 of the relay's 80 messages/second available for control traffic.
+    // A busy object transfer stays ordered and bounded instead of flooding it.
+    const now=performance.now();while(sentTimes.length&&now-sentTimes[0]>=1000)sentTimes.shift();
+    while(out.length&&sentTimes.length<50){
       const parts=[];let n=0;
       while(out.length&&n+out[0].data.length+3<=16384){const p=out.shift();parts.push(p);n+=p.data.length+3;}
       const data=new Uint8Array(n);let k=0;
       for(const p of parts){data[k++]=p.dest;data[k++]=p.data.length&255;data[k++]=p.data.length>>8;data.set(p.data,k);k+=p.data.length;}
-      socket.send(data);session.stats.sent+=parts.length;bytes-=n;
+      socket.send(data);sentTimes.push(now);session.stats.sent+=parts.length;bytes-=n;
     }
   }
   function receive(raw){
@@ -123,7 +127,7 @@
     const route=online?`/online?v=54&new=${force?1:0}&name=${encodeURIComponent(pilotName())}&config=${encodeURIComponent(JSON.stringify(configuration()))}`:`/room/${code}?v=54&create=${create?1:0}&name=${encodeURIComponent(pilotName())}`;
     socket=new WebSocket(base+route);
     socket.binaryType='arraybuffer';socket.onmessage=e=>receive(e.data);
-    socket.onopen=()=>{startHeartbeat();timer=setInterval(flush,40);if(create&&!online)send({type:'configure',...configuration()});};
+    socket.onopen=()=>{startHeartbeat();sentTimes=[];timer=setInterval(flush,20);if(create&&!online)send({type:'configure',...configuration()});};
     socket.onerror=()=>status('Could not reach the room service. You can still play with AI pilots.');
     socket.onclose=()=>{
       clearInterval(timer);timer=null;socket=null;
@@ -150,7 +154,7 @@
     retryTimer=setTimeout(()=>{
       const base=window.astraRelayOverride&&/^(localhost|127\.0\.0\.1)$/.test(location.hostname)?window.astraRelayOverride:ENDPOINT;
       const ws=socket=new WebSocket(base+'/room/'+roomCode+'?v=54&resume=1');ws.binaryType='arraybuffer';
-      ws.onopen=()=>{startHeartbeat();timer=setInterval(flush,40);send({type:'resume',token:credential});};
+      ws.onopen=()=>{startHeartbeat();sentTimes=[];timer=setInterval(flush,20);send({type:'resume',token:credential});};
       ws.onmessage=e=>receive(e.data);ws.onerror=()=>{};
       ws.onclose=()=>{if(socket===ws)socket=null;if(!intentional&&!session.failed)reconnect();};
     },1500);

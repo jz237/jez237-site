@@ -118,7 +118,7 @@ function astraMaterialLibrary(catalog) {
   return {
     knows(name) { return !!groupFor(name); },
     async image(name) { await load(groupFor(name)); },
-    async level(bitmapNames, robotNames) {
+    async level(bitmapNames, robotNames, manageLoading=true) {
       const version = ++generation, firstFrame = Module.environmentFrames || 0;
       const wanted = batches(bitmapNames);
       wanted.add(groups.get("forge.png"));
@@ -127,7 +127,7 @@ function astraMaterialLibrary(catalog) {
       warmAfterFlight(robotNames, version, firstFrame);
       if (!queue.length) return;
       let next = 0, done = 0;
-      window.astraTerminal?.loading(true);
+      if(manageLoading)window.astraTerminal?.loading(true);
       const progress = () => $("status").textContent = "Preparing this mine’s materials · " + done + " / " + queue.length;
       progress();
       async function worker() {
@@ -137,7 +137,7 @@ function astraMaterialLibrary(catalog) {
         }
       }
       try { await Promise.all(Array.from({length: Math.min(6, queue.length)}, worker)); }
-      finally { window.astraTerminal?.loading(false); }
+      finally { if(manageLoading)window.astraTerminal?.loading(false); }
     }
   };
 }

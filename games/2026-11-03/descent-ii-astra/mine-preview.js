@@ -57,11 +57,15 @@ window.astraMinePreview={
   update(index,mask,level,room,clock){
     this.mask=mask;
     if(!(mask&(1<<Module.mineInspect)))Module.mineInspect=index;
+    const uiKey=[index,mask,level,Module.campaign].join('|');
+    if(this.uiKey!==uiKey){
     [...$('mineScene').options].forEach((o,i)=>o.disabled=!(mask&(1<<i)));
     $('mineScene').value=String(index);
     $('mineCaption').textContent=this.names[index];
     $('mineLocation').textContent=(Module.campaign==='d2'?'Counterstrike':'Vertigo')+' · '+(level<0?'Secret mine '+(-level):'Mine '+level);
     $('mineDescription').textContent=this.descriptions[index];
+      this.uiKey=uiKey;
+    }
     this.state={index,mask,level,room,clock,paused:this.paused};
     if(this.fresh){this.fresh=false;Module.mineRefinement=true;this.select(0);this.sync();return;}
     if(this.touring&&!this.paused&&clock>11)this.next(1);

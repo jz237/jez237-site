@@ -1261,3 +1261,11 @@ R55 — interface polish
 - Collapsible flight controls replace the scattered utility buttons. Squad rows show shield meters and separate pilot, distance and assistance information.
 - Responsive portrait/landscape layouts, named dialogs, reduced-motion support and automatic section scroll reset.
 - Existing renderer, models, textures, native engine, flight controls, demo AI, multiplayer relay and saved-flight formats are unchanged. No extra asset parcels or quality reductions.
+
+R56 — rendering, startup and multiplayer efficiency
+- Bounded native shader-uniform location cache avoids repeated WebGL string parsing, with safe relink/delete invalidation. Shader code, uniform values and visual detail are retained.
+- Cockpit attributes and showroom labels update only when their displayed values change.
+- Preload the flight engine during existing asset downloads, and overlap independent material loading while retaining the two-image decode limit and waiting for all required materials.
+- Flush native multiplayer packets every 20 ms with a rolling 50-binary-message/second cap, leaving relay capacity for control traffic. Same protocol, room service, packet order and reconnect behavior.
+- Restore the recharge grid's inherited color-array state correctly, eliminating invalid attribute bindings without changing its shader or appearance.
+- No texture/model reductions, effect removals, flight/demo changes, new external dependencies or additional asset parcels. See PERFORMANCE-R56.txt for measured results and limits.

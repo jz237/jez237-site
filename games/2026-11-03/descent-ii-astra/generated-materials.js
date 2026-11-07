@@ -38,9 +38,12 @@ window.astraGeneratedLibrary = function(nativeDepot) {
     knows(name){return !!parse(name)||!!nativeDepot?.knows(name);},
     image(name){const match=parse(name);return match?family(Number(match[1])):nativeDepot?.image(name);},
     async level(names,robots){
-      await nativeDepot?.level(names,robots);
-      // Two decodes at once bound transient memory on phones and older PCs.
-      for(let id=0;id<8;id+=2)await Promise.all([family(id),family(id+1)]);
+      // Download independent material sets together, but retain the two-image
+      // decode limit and await every material before exposing the flight view.
+      const generated=async()=>{for(let id=0;id<8;id+=2)await Promise.all([family(id),family(id+1)]);};
+      window.astraTerminal?.loading(true);
+      try { await Promise.all([nativeDepot?.level(names,robots,false),generated()]); }
+      finally { window.astraTerminal?.loading(false); }
     }
   };
 };
