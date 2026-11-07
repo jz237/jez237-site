@@ -6,7 +6,7 @@
 // weights (gold vein, wetness, glow, rubble/cracks) that the triplanar rock shader uses.
 // Breaking a tile re-meshes only the chunks around it (a few ms).
 import * as THREE from '../vendor/three.module.min.js';
-import { T } from './config.js?v=1';
+import { T } from './config.js?v=2';
 
 export const S = 0.5;                  // sample spacing (m)
 export const Z0 = -15, Z1 = 5;         // depth range (camera side is +z)
@@ -243,7 +243,7 @@ export class Cave {
     }
     // colours, AO and material weights
     const L = this.look;
-    const col = new Float32Array(nv * 3), mat = new Float32Array(nv * 4);
+    const col = new Float32Array(nv * 3), mat = new Float32Array(nv * 4), code = new Float32Array(nv);
     const base = L.rock, alt = L.rock2, front = L.front;
     for (let v = 0; v < nv; v++) {
       const o = v * 3, x = position[o], y = position[o + 1], z = position[o + 2];
@@ -289,13 +289,15 @@ export class Cave {
       if (t === T.HARD) glow = Math.max(glow, 0.0);
       col[o] = r * ao; col[o + 1] = g * ao; col[o + 2] = b * ao;
       const q4 = v * 4;
-      mat[q4] = gold; mat[q4 + 1] = wet; mat[q4 + 2] = glow; mat[q4 + 3] = moss + loose * 10;   // w: moss in the fraction, rubble/crack code in the tens
+      mat[q4] = gold; mat[q4 + 1] = wet; mat[q4 + 2] = glow; mat[q4 + 3] = moss;
+      code[v] = loose;   // 1 loose rubble, 2 a boulder that needs dynamite
     }
     const geo = new THREE.BufferGeometry();
     geo.setAttribute('position', new THREE.BufferAttribute(position, 3));
     geo.setAttribute('normal', new THREE.BufferAttribute(nrm, 3));
     geo.setAttribute('color', new THREE.BufferAttribute(col, 3));
     geo.setAttribute('aMat', new THREE.BufferAttribute(mat, 4));
+    geo.setAttribute('aCode', new THREE.BufferAttribute(code, 1));
     geo.setIndex(nv > 65535 ? new THREE.Uint32BufferAttribute(idx, 1) : new THREE.Uint16BufferAttribute(idx, 1));
     geo.computeBoundingSphere(); geo.computeBoundingBox();
     return geo;
@@ -314,13 +316,13 @@ export function rockMaterial(tex, look) {
   mat.onBeforeCompile = (sh) => {
     Object.assign(sh.uniforms, U);
     sh.vertexShader = sh.vertexShader
-      .replace('#include <common>', '#include <common>\nattribute vec4 aMat; varying vec4 vMat; varying vec3 vWPos; varying vec3 vWNrm;')
-      .replace('#include <begin_vertex>', '#include <begin_vertex>\nvMat = aMat; vWPos = (modelMatrix * vec4(position, 1.0)).xyz; vWNrm = normalize(mat3(modelMatrix) * normal);');
+      .replace('#include <common>', '#include <common>\nattribute vec4 aMat; attribute float aCode; varying vec4 vMat; varying float vCode; varying vec3 vWPos; varying vec3 vWNrm;')
+      .replace('#include <begin_vertex>', '#include <begin_vertex>\nvMat = aMat; vCode = aCode; vWPos = (modelMatrix * vec4(position, 1.0)).xyz; vWNrm = normalize(mat3(modelMatrix) * normal);');
     sh.fragmentShader = sh.fragmentShader
       .replace('#include <common>', `#include <common>
 uniform sampler2D tAlb; uniform sampler2D tNrm; uniform float uScale; uniform float uBump; uniform float uTime;
 uniform vec3 uGold; uniform vec3 uGlow; uniform vec3 uMoss; uniform vec3 uRubble;
-varying vec4 vMat; varying vec3 vWPos; varying vec3 vWNrm;
+varying vec4 vMat; varying float vCode; varying vec3 vWPos; varying vec3 vWNrm;
 float h13(vec3 p){ p = fract(p * .1031); p += dot(p, p.zyx + 31.32); return fract((p.x + p.y) * p.z); }
 vec3 gTW; vec4 gAlb; vec3 gNW;`)
       .replace('#include <color_fragment>', `#include <color_fragment>
@@ -341,11 +343,11 @@ vec3 gTW; vec4 gAlb; vec3 gNW;`)
   tZ = vec3(tZ.xy + N.xy, abs(tZ.z) * N.z);
   gNW = normalize(tX.zyx * w.x + tY.xzy * w.y + tZ.xyz * w.z);
   float wet = vMat.y;
-  float moss = fract(vMat.w);
-  float code = floor(vMat.w / 10.0 + 0.01);
+  float moss = vMat.w;
+  float code = vCode;
   vec3 c = diffuseColor.rgb * gAlb.rgb * 1.55;
   c = mix(c, uMoss * (0.6 + gAlb.g * 0.6), moss * smoothstep(0.3, 0.6, gAlb.g + moss * 0.3));
-  if (code > 1.5) c *= 0.75 + 0.25 * smoothstep(0.2, 0.6, gAlb.g);
+  c *= 1.0 - smoothstep(1.5, 1.9, code) * 0.25 * (1.0 - smoothstep(0.2, 0.6, gAlb.g));
   c *= 1.0 - wet * 0.35;
   diffuseColor.rgb = c;
 }`)
@@ -375,11 +377,11 @@ roughnessFactor = mix(roughnessFactor, 0.16, vMat.y);`)
     float pat = smoothstep(0.42, 0.18, gAlb.a) * (0.6 + 0.4 * sin(uTime * 1.3 + vWPos.x * 0.7 + vWPos.y * 0.9));
     totalEmissiveRadiance += uGlow * gl * pat * 2.2;
   }
-  float code = floor(vMat.w / 10.0 + 0.01);
+  float code = vCode;
   // a boulder that needs dynamite shows hot little cracks; loose rubble catches the light a touch
-  if (code > 1.5) { float cr = smoothstep(0.86, 0.97, 1.0 - abs(sin(vWPos.x * 3.1 + vWPos.y * 2.3 + gAlb.r * 9.0))); totalEmissiveRadiance += vec3(1.0, 0.36, 0.08) * cr * (0.55 + 0.45 * sin(uTime * 2.4)) * 0.9; }
+  if (code > 1.5) { float cr = smoothstep(0.86, 0.97, 1.0 - abs(sin(vWPos.x * 3.1 + vWPos.y * 2.3 + gAlb.r * 9.0))); totalEmissiveRadiance += vec3(1.0, 0.3, 0.05) * cr * smoothstep(1.5, 1.9, code) * (0.6 + 0.4 * sin(uTime * 2.4)) * 0.38; }
 }`);
   };
-  mat.customProgramCacheKey = () => 'gd-rock-1';
+  mat.customProgramCacheKey = () => 'gd-rock-2';
   return mat;
 }

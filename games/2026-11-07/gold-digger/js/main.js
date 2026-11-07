@@ -1,15 +1,15 @@
 // Gold Digger: the game shell. Fixed-step simulation (sim.js) + renderer (render.js), level flow, the general store,
 // the journal of discoveries, tips, cinematics, the attract demo, the AI playthrough, scores and menus.
-import { VERSION, STEP, T, BIOMES, LEVELS, DEPTHS, UPGRADES, TYPICAL_UP, DIFFICULTY, MEDALS, RELICS, FOSSILS, WONDERS, NOTES, CREATURES, RANKS, START, STRATA } from './config.js?v=1';
-import { makeWorld, step, drainEvents, cloneWorld, carryOut } from './sim.js?v=1';
-import { hash, findName } from './levelgen.js?v=1';
-import { Autopilot } from './ai.js?v=1';
-import { Renderer, pickQuality, LOOKS } from './render.js?v=1';
-import { CALM } from './fx.js?v=1';
-import { Audio } from './audio.js?v=1';
-import { Input } from './input.js?v=1';
-import { Scores, NO_POST } from './scores.js?v=1';
-import { Recorder, Replay } from './replay.js?v=1';
+import { VERSION, STEP, T, BIOMES, LEVELS, DEPTHS, UPGRADES, TYPICAL_UP, DIFFICULTY, MEDALS, RELICS, FOSSILS, WONDERS, NOTES, CREATURES, RANKS, START, STRATA } from './config.js?v=2';
+import { makeWorld, step, drainEvents, cloneWorld, carryOut } from './sim.js?v=2';
+import { hash, findName } from './levelgen.js?v=2';
+import { Autopilot } from './ai.js?v=2';
+import { Renderer, pickQuality, LOOKS } from './render.js?v=2';
+import { CALM } from './fx.js?v=2';
+import { Audio } from './audio.js?v=2';
+import { Input } from './input.js?v=2';
+import { Scores, NO_POST } from './scores.js?v=2';
+import { Recorder, Replay } from './replay.js?v=2';
 
 const Q = new URLSearchParams(location.search);
 const $ = (id) => document.getElementById(id);
@@ -703,7 +703,7 @@ async function boot() {
   applySettings();
   toTitle();
   $('loading').style.opacity = 0; setTimeout(() => $('loading').remove(), 700);
-  if (Q.has('test')) { const T2 = await import('./tests.js?v=1'); T2.run({ G, R, startCampaign, startEndless, toTitle, tick, makeWorld, step }); return; }
+  if (Q.has('test')) { const T2 = await import('./tests.js?v=2'); T2.run({ G, R, startCampaign, startEndless, toTitle, tick, makeWorld, step }); return; }
   if (Q.has('autoplay')) startCampaign(+(Q.get('depth') || 0), { mode: 'autoplay', auto: 'demo', level: +(Q.get('level') || 0) });
   if (Q.has('playthrough')) startCampaign(+(Q.get('depth') || 0), { mode: 'playthrough', auto: 'demo', level: +(Q.get('level') || 0) });
   requestAnimationFrame(raf);

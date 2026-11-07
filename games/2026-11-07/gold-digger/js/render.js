@@ -4,13 +4,13 @@
 // re-aimed every frame at the nearest flares, fires, lanterns, crystals and lava): their number never changes,
 // so no material ever recompiles mid-game.
 import * as THREE from '../vendor/three.module.min.js';
-import { T, SOLID, PHYS, TOOLS, GEMS, BIOMES } from './config.js?v=1';
-import { Cave, rockMaterial } from './cavemesh.js?v=1';
-import { rockTextures, spriteTextures, waterTextures } from './textures.js?v=1';
-import { FX, CALM } from './fx.js?v=1';
-import { Post } from './post.js?v=1';
-import * as MD from './models.js?v=1';
-import { buildDecor } from './decor.js?v=1';
+import { T, SOLID, PHYS, TOOLS, GEMS, BIOMES } from './config.js?v=2';
+import { Cave, rockMaterial } from './cavemesh.js?v=2';
+import { rockTextures, spriteTextures, waterTextures } from './textures.js?v=2';
+import { FX, CALM } from './fx.js?v=2';
+import { Post } from './post.js?v=2';
+import * as MD from './models.js?v=2';
+import { buildDecor } from './decor.js?v=2';
 
 export function pickQuality(name) {
   const mobile = matchMedia('(pointer:coarse)').matches || /Android|iPhone|iPad/i.test(navigator.userAgent);
@@ -102,12 +102,12 @@ export class Renderer {
     this.scene.fog = new THREE.FogExp2(0x000000, 0.03);
     // the fixed light rig
     this.hemi = new THREE.HemisphereLight(0x332820, 0x0a0806, 2.6); this.scene.add(this.hemi);
-    this.lamp = new THREE.SpotLight(0xffd6a0, 120, 30, 0.72, 0.6, 1.3);
+    this.lamp = new THREE.SpotLight(0xffd6a0, 100, 30, 0.72, 0.6, 1.15);
     this.lamp.castShadow = true; this.lamp.shadow.mapSize.set(q.shadow, q.shadow); this.lamp.shadow.bias = -0.0004; this.lamp.shadow.normalBias = 0.03; this.lamp.shadow.camera.near = 0.2; this.lamp.shadow.camera.far = 34;
     this.scene.add(this.lamp, this.lamp.target);
     this.fill = new THREE.PointLight(0xffc890, 14, 16, 1.4); this.scene.add(this.fill);
     this.pool = [];
-    for (let i = 0; i < q.lights; i++) { const l = new THREE.PointLight(0xffa060, 0, 14, 1.7); this.scene.add(l); this.pool.push({ l, key: null, target: 0 }); }
+    for (let i = 0; i < q.lights; i++) { const l = new THREE.PointLight(0xffa060, 0, 14, 2.0); this.scene.add(l); this.pool.push({ l, key: null, target: 0 }); }
     this.flashes = [];
     for (let i = 0; i < 2; i++) { const l = new THREE.PointLight(0xffa060, 0, 18, 1.6); this.scene.add(l); this.flashes.push({ l, t: 0, max: 1, i0: 0 }); }
     this.fi = 0;
@@ -305,8 +305,11 @@ export class Renderer {
     }
     // crumbling slabs and the props that say "break me"
     this.breakProps = new Map();
-    const chip = new THREE.IcosahedronGeometry(0.5, 1);
-    { const p = chip.attributes.position; for (let i = 0; i < p.count; i++) { const k = 0.75 + Math.random() * 0.4; p.setXYZ(i, p.getX(i) * k, p.getY(i) * k * 0.8, p.getZ(i) * k); } chip.computeVertexNormals(); }
+    // rounded, lumpy stones (a smooth sphere pushed about by low-frequency bumps, not faceted cubes)
+    const chip = new THREE.IcosahedronGeometry(0.5, 3);
+    { const p = chip.attributes.position, ph = [Math.random() * 6, Math.random() * 6, Math.random() * 6];
+      for (let i = 0; i < p.count; i++) { const x = p.getX(i), y = p.getY(i), z = p.getZ(i); const k = 0.82 + 0.12 * Math.sin(x * 5 + ph[0]) * Math.cos(y * 4 + ph[1]) + 0.08 * Math.sin(z * 7 + ph[2]); p.setXYZ(i, x * k, y * k * 0.78, z * k); }
+      chip.computeVertexNormals(); }
     const rubbleMat = new THREE.MeshStandardMaterial({ color: new THREE.Color().fromArray(look.rubble).multiplyScalar(0.9), roughness: 0.95 });
     const slabMat = new THREE.MeshStandardMaterial({ color: new THREE.Color().fromArray(look.rock2).multiplyScalar(1.5), roughness: 0.85 });
     const goldMat = new THREE.MeshStandardMaterial({ color: 0xffc24a, metalness: 1, roughness: 0.28, emissive: 0x201000 });
@@ -326,7 +329,7 @@ export class Renderer {
           c.scale.setScalar(0.28 + Math.random() * 0.22); c.rotation.set(Math.random() * 3, Math.random() * 3, 0); c.castShadow = true; g.add(c);
         }
       } else if (t === T.HARD) {
-        for (const [dx, dy] of sides) { const c = new THREE.Mesh(chip, rubbleMat); c.position.set(0.5 + dx * 0.35, 0.5 + dy * 0.35, 0.3); c.scale.set(1.1, 1.0, 1.4); c.material = slabMat; c.castShadow = true; g.add(c); }
+        for (const [dx, dy] of sides) if (Math.random() < 0.7) { const c = new THREE.Mesh(chip, slabMat); c.position.set(0.5 + dx * (0.3 + Math.random() * 0.25) + (dy ? (Math.random() - 0.5) * 0.6 : 0), 0.5 + dy * 0.35 + (dx ? (Math.random() - 0.5) * 0.7 : 0), (Math.random() - 0.5) * 1.6); c.scale.set(0.5 + Math.random() * 0.45, 0.45 + Math.random() * 0.4, 0.7 + Math.random() * 0.6); c.rotation.set(Math.random() * 3, Math.random() * 3, Math.random() * 3); c.castShadow = true; g.add(c); }
       } else if (t === T.VEIN) {
         for (const [dx, dy] of sides) for (let k = 0; k < 3; k++) { const c = new THREE.Mesh(chip, goldMat); c.position.set(0.5 + dx * 0.52 + (dy ? (Math.random() - 0.5) * 0.7 : 0), 0.5 + dy * 0.52 + (dx ? (Math.random() - 0.5) * 0.7 : 0), (Math.random() - 0.4) * 1.6); c.scale.setScalar(0.08 + Math.random() * 0.08); g.add(c); }
         this.emitters.push({ x: x + 0.5, y: y + 0.5, z: 0.6, col: [1, 0.75, 0.3], int: 0.6, pri: 0.2, glint: 1 });
@@ -525,7 +528,7 @@ export class Renderer {
     const lampLvl = P.up.lamp || 0;
     const flick = oil < 0.2 ? (0.75 + 0.25 * Math.sin(this.time * 23) * Math.sin(this.time * 7.3)) : 1;
     const k = (oil <= 0 ? 0.16 : (0.45 + Math.min(1, oil * 2.2) * 0.55)) * flick;
-    this.lamp.intensity = (120 + lampLvl * 25) * k;
+    this.lamp.intensity = (100 + lampLvl * 22) * k;
     this.lamp.distance = 30 + lampLvl * 5;
     this.lamp.angle = 0.72 + lampLvl * 0.06;
     this.fill.position.set(P.x + P.face * 0.6, P.y + 1.3, 1.2);
@@ -769,7 +772,7 @@ export class Renderer {
       s.l.position.set(c.x, c.y, (c.z ?? 0) + 0.8);
       s.l.color.setRGB(c.col[0], c.col[1], c.col[2]);
       s.l.distance = c.range || 9;
-      const target = c.int * (c.flick ? 0.85 + Math.sin(t * 5 + c.x) * 0.1 + Math.sin(t * 13.1 + c.y) * 0.05 : 1);
+      const target = c.int * 0.6 * (c.flick ? 0.85 + Math.sin(t * 5 + c.x) * 0.1 + Math.sin(t * 13.1 + c.y) * 0.05 : 1);
       s.l.intensity += (target - s.l.intensity) * Math.min(1, dt * 8);
     }
     for (const F of this.flashes) { if (F.t <= 0) { F.l.intensity = 0; continue; } F.t -= dt; const f = Math.max(0, F.t / F.max); F.l.intensity = F.i0 * f * f; }
