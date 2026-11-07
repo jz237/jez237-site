@@ -1,7 +1,7 @@
 # Lancewing 2026 tools
 
 Game: `games/2026-11-06/lancewing/` (three.js r181 vendored, plain ES modules, no build step).
-Every local import carries the same `?v=N` (now `?v=10`, version 1.4.0 on the title). Since 1.4 the jousters are skinned (models.js `buildSkinned`): ~30 joints each (neck, jaw, frills, three-piece wings, legs, three-piece tail, helm, arms, cape, pennant) in one mesh per material class; perf_check 1.4: 33 programs throughout, S4/S5 waves 155/193 draw calls (were 304/339); bump them all together, plus `js/main.js?v=` in index.html and `V` in js/audio.js.
+Every local import carries the same `?v=N` (now `?v=11`, version 1.4.1 on the title). Since 1.4 the jousters are skinned (models.js `buildSkinned`): ~30 joints each (neck, jaw, frills, three-piece wings, legs, three-piece tail, helm, arms, cape, pennant) in one mesh per material class; perf_check 1.4: 33 programs throughout, S4/S5 waves 155/193 draw calls (were 304/339); since 1.4.1 an unhorsed skyray and its thrown knight fall as two pieces (render.js `fallBody`: the knight's joints move to a frame of their own), land on ledges / bounce off the rock instead of dropping through, settle flat and fade on see-through copies of their materials (`fadeGhost`, programs compiled in the warm-up); bump them all together, plus `js/main.js?v=` in index.html and `V` in js/audio.js.
 The Node scripts load the game through `_game.mjs`, which reads the version from main.js, so they never need editing after a bump.
 
 | Script | What it does |

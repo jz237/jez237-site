@@ -4,16 +4,17 @@
 // spire and its lightning, telegraph ribbons for every hazard and boss attack, HDR post with bloom.
 // Nothing here changes the world.
 import * as THREE from '../vendor/three.module.min.js';
-import { Post } from './post.js?v=10';
-import * as TX from './textures.js?v=10';
-import * as MD from './models.js?v=10';
-import { FX, CALM } from './fx.js?v=10';
-import { F, POWERUPS, BOSSES, HUNTER, LAYOUT, rockHang, rockDrop } from './config.js?v=10';
-import { weakPos, ledgeUnder } from './sim.js?v=10';
+import { Post } from './post.js?v=11';
+import * as TX from './textures.js?v=11';
+import * as MD from './models.js?v=11';
+import { FX, CALM } from './fx.js?v=11';
+import { F, POWERUPS, BOSSES, HUNTER, LAYOUT, rockHang, rockDrop } from './config.js?v=11';
+import { weakPos, ledgeUnder } from './sim.js?v=11';
 
 export { CALM };
 const RR = F.R, H = F.H;
 const clamp = (v, a, b) => (v < a ? a : v > b ? b : v);
+const dXr = (a, b) => ((b - a + F.C * 1.5) % F.C) - F.C / 2;
 const hdr = MD.hdr;
 const _v = new THREE.Vector3(), _v2 = new THREE.Vector3(), _v3 = new THREE.Vector3(), _m = new THREE.Matrix4(), _c = new THREE.Color(), _tint = new THREE.Vector3(), _q = new THREE.Quaternion(), _s = new THREE.Vector3(), _e = new THREE.Euler();
 const UP = new THREE.Vector3(0, 1, 0);
@@ -735,16 +736,25 @@ export class Renderer {
       this.hitFlash(V, r.hitT, dt);
     }
     for (const [id, V] of this.views.r) if (!seen.has(id)) { this.scene.remove(V.outer); MD.release(V.v.g); this.views.r.delete(id); }
-    // ghosts: unhorsed riders tumbling away
+    // ghosts: unhorsed riders tumbling away. The skyray and its knight break apart and fall on their own; a ledge
+    // (and its hanging rock) stops them like anything else, and whatever comes to rest on one slowly fades away
     for (const G of this.ghosts) if (G.v.flashOn) this.flashView(G.v, false);
     this.ghosts = this.ghosts.filter((G) => {
-      G.t += dt; G.vy -= 14 * dt; G.x += G.vx * dt; G.y += G.vy * dt; G.spin += dt * G.w;
+      if (G.wz === undefined) { G.wx = G.w * 0.6; G.wz = G.w; G.rx = G.rz = 0; G.solid = !!G.split; G.fadeAt = 1.6; G.fadeD = 0.6; }
+      G.t += dt;
+      if (G.split && G.v.rider && !G.kn) this.throwKnight(G);
+      const K = G.kn;
+      this.fallBody(W, G, dt, G);
       this.place(G.outer, G.x, G.y, G.face);
-      G.v.g.rotation.set(G.spin * 0.6, -0.3, G.spin, 'YXZ');
-      // break apart: the knight is thrown clear of the saddle and tumbles on his own
-      if (G.split && G.v.rider) { const k = G.t; G.v.rider.position.set(-0.06 - k * 1.4, 0.86 + k * 2.4 - k * k * 4.5, k * 0.6); G.v.rider.rotation.set(k * 2, 0, k * 6); }
-      if (G.y < 0.2 && !G.splashed) { G.splashed = true; toWorld(G.x, 0, _v); this.fx.splash(_v.x, 0, _v.z, 1.2); }
-      if (G.t > 2.2 || G.y < -6) { this.scene.remove(G.outer); MD.release(G.v.g); return false; }
+      G.v.g.rotation.set(G.rx, -0.3, G.rz, 'YXZ');
+      if (K) { this.fallBody(W, K, dt, G); this.place(K.outer, K.x, K.y, G.face); G.v.rider.rotation.set(K.rx, 0, K.rz); }
+      for (const B of K ? [G, K] : [G]) if (B.y < 0.2 && !B.splashed) { B.splashed = true; toWorld(B.x, 0, _v); this.fx.splash(_v.x, 0, _v.z, B === K ? 0.7 : 1.2); }
+      const a = 1 - clamp((G.t - G.fadeAt) / G.fadeD, 0, 1);
+      if (a < 1) this.fadeGhost(G, a);
+      if (a <= 0 || (G.y < -6 && (!K || K.y < -6))) {
+        this.scene.remove(G.outer); if (K) this.scene.remove(K.outer);
+        MD.release(G.v.g); return false;
+      }
       return true;
     });
     this.syncCores(W, dt, t);
@@ -762,6 +772,92 @@ export class Renderer {
     this.crown.scale.setScalar(1 + charge * 0.6 + Math.sin(t * 2) * 0.05);
     const CL = this.lightPool[0];
     CL.position.set(0, 49.5, 0); CL.intensity = 40 + charge * 400; CL.distance = 60; CL.color.set(this.look.spire);
+  }
+  // the knight is thrown clear of the saddle: his joints move to a frame of their own (the skinned meshes follow
+  // their joints wherever they are), so he can fall, land and settle apart from his skyray
+  throwKnight(G) {
+    const outer = new THREE.Group(), r = G.v.rider;
+    outer.matrixAutoUpdate = false; this.scene.add(outer);
+    outer.add(r); r.position.set(0, 0, 0);
+    G.kn = { outer, x: G.x - 0.06 * G.face, y: G.y + 0.86, vx: G.vx - G.face * 1.8, vy: G.vy + 2.6, rx: 0, rz: 0,
+      wx: (Math.random() - 0.5) * 3, wz: 5 + Math.random() * 2, solid: true, knight: true };
+  }
+  // one falling piece of an unhorsed jouster (render only; the sim has moved on). hr: how high its origin sits above
+  // whatever it lies on (a skyray belly down sits low, on its back high; a knight lies flat)
+  bodyHr(B) { return B.knight ? 0.24 : 0.39 - 0.37 * Math.cos(B.rx) * Math.cos(B.rz); }
+  fallBody(W, B, dt, G) {
+    if (B.L) {   // at rest: it slides to a stop and settles into a heap, and falls on if the ledge goes or it slides off
+      const L = B.L;
+      B.vx *= Math.exp(-dt * 7); B.x += B.vx * dt;
+      if (L.st !== 2 && Math.abs(dXr(L.x, B.x)) <= L.w + 0.25) {
+        const k = 1 - Math.exp(-dt * 9);
+        B.rx += (B.tx - B.rx) * k; B.rz += (B.tz - B.rz) * k;
+        B.y += (L.y + this.bodyHr(B) - B.y) * Math.min(1, dt * 14);
+        return;
+      }
+      B.L = null;
+    }
+    const px = B.x, py = B.y, hr0 = this.bodyHr(B);
+    B.vy -= 14 * dt; B.x += B.vx * dt; B.y += B.vy * dt; B.rx += B.wx * dt; B.rz += B.wz * dt;
+    if (!W || !B.solid) return;
+    const hr = this.bodyHr(B);
+    // its lowest point came down through a ledge top: it lands
+    if (B.vy < 0) for (const L of W.ledges) {
+      if (L.st === 2 || Math.abs(dXr(L.x, B.x)) > L.w + 0.25) continue;
+      if (py - hr0 >= L.y - 0.05 && B.y - hr < L.y) { this.landBody(B, L, G); return; }
+    }
+    // the slab's ends and the rock hanging under it are solid too (unless it started inside, then it falls out)
+    if (this.inSolid(W, B.x, B.y, hr) && !this.inSolid(W, px, py, hr0)) {
+      if (!this.inSolid(W, px, B.y, hr)) { B.x = px; B.vx *= -0.35; }
+      else if (!this.inSolid(W, B.x, py, hr)) { B.y = py; B.vy = B.vy > 0 ? -B.vy * 0.25 : 0; }
+      else { B.x = px; B.y = py; B.vx *= -0.35; B.vy = B.vy > 0 ? -B.vy * 0.25 : 0; }
+    }
+  }
+  // does a body (its origin x, y; about half a unit tall above its lowest point) overlap a ledge's slab or rock?
+  inSolid(W, x, y, hr) {
+    const lo = y - hr, hi = lo + 0.5;
+    for (const L of W.ledges) {
+      if (L.st === 2) continue;
+      const a = Math.abs(dXr(L.x, x));
+      if (a > L.w + 0.25 || lo >= L.y - 0.02) continue;
+      const c = Math.max(0, a - 0.25);
+      if (c < L.w && hi > L.y - F.ledgeT - rockDrop(L.w, c)) return true;
+    }
+    return false;
+  }
+  // a hard landing bounces once; then it comes to rest flat (a skyray on its belly or its back, a knight on his
+  // side), throws up a little dust, and the whole jouster starts to fade
+  landBody(B, L, G) {
+    toWorld(B.x, L.y + 0.1, _v);
+    this.fx.dust(_v.x, _v.y, _v.z, { n: B.knight ? 6 : 10, s0: 0.3, s1: 1.1, life: 0.7, vy: 1.2, up: 1, jit: 0.8, a: 0.5, k: 1.4, grav: 2 });
+    if (B.vy < -5 && !B.bounced) {
+      B.bounced = true; B.vy = -B.vy * 0.28; B.vx *= 0.6; B.wx *= 0.4; B.wz *= 0.4;
+      B.y = L.y + this.bodyHr(B) + 0.02;
+      return;
+    }
+    B.L = L; B.vy = 0; B.wx = B.wz = 0;
+    if (B.knight) { B.tz = Math.round(B.rz / Math.PI) * Math.PI; B.tx = Math.PI / 2 + Math.round((B.rx - Math.PI / 2) / Math.PI) * Math.PI; }   // on his side, lance flat
+    else { B.tz = Math.round(B.rz / Math.PI) * Math.PI; B.tx = Math.round(B.rx / Math.PI) * Math.PI + (Math.random() - 0.5) * 0.3; }
+    if (!G.landed) {
+      G.landed = true;
+      const a0 = 1 - clamp((G.t - G.fadeAt) / G.fadeD, 0, 1);
+      G.fadeAt = a0 >= 1 ? Math.min(G.fadeAt, G.t + 0.45) : G.t - (1 - a0) * 1.4;
+      G.fadeD = 1.4;
+    }
+  }
+  // fading: the ghost gets its own see-through copies of its materials (their programs are compiled in the warm-up;
+  // the copies are never disposed, so those programs stay)
+  fadeGhost(G, a) {
+    if (!G.fade) {
+      G.fade = [];
+      const grab = (o) => {
+        if (!o.isMesh || o.isInstancedMesh || !o.material || Array.isArray(o.material)) return;
+        const m = o.material.clone(); m.transparent = true;
+        G.fade.push([o, m, o.material.opacity]); o.material = m; o.frustumCulled = false;
+      };
+      G.outer.traverse(grab); if (G.kn) G.kn.outer.traverse(grab);
+    }
+    for (const [o, m, b] of G.fade) { m.opacity = b * a; if (a < 0.5) o.castShadow = false; }
   }
   syncCores(W, dt, t) {
     const seen = new Set();
@@ -1194,6 +1290,7 @@ export class Renderer {
     for (const k of ['skirmisher', 'lancer', 'reaver', 'shieldbearer', 'twinblade', 'stormcaller']) { addJ(MD.lancer(k).g); addJ(MD.lancer(k, { elite: true }).g); }
     addJ(MD.lancer('player', this.suit[0]).g); addJ(MD.lancer('player', this.suit[1]).g);
     const lit = MD.lancer('lancer'); addJ(lit.g); this.flashView(lit, true);
+    const faded = MD.lancer('lancer'); addJ(faded.g); this.fadeGhost({ outer: faded.g }, 0.6);   // a ghost fading out
     x = 40;
     addTmp(MD.hunter().g, x += 3); addTmp(MD.core().g, x += 3);
     for (const k in POWERUPS) addTmp(MD.pickup(POWERUPS[k].color).g, x += 2);
