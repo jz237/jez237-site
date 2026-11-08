@@ -1,13 +1,13 @@
 // Swarmbreak — game flow, menus, HUD, commentary, demo director and the frame loop.
-import { VERSION, SECTORS, STEP, F, WAVES, UPGRADES, UP_KEYS, UP_COST, MEDALS, parTime, TYPICAL_UP, START_LIVES, BOSSES, DIFFICULTY, DIFF_KEYS, POWERUPS, STREAK, streakMul, SUITS } from './config.js?v=11';
-import { makeWorld, step, drainEvents, waveLabel, isBossWave, angDiff } from './sim.js?v=11';
-import { Autopilot } from './ai.js?v=11';
-import { Renderer, pickQuality, CALM } from './render.js?v=11';
-import { Audio } from './audio.js?v=11';
-import { Input } from './input.js?v=11';
-import { Scores, NO_POST } from './scores.js?v=11';
-import { Recorder, Replay } from './replay.js?v=11';
-import { Online, ROOM, randomCode, cleanCode } from './online.js?v=11';
+import { VERSION, SECTORS, STEP, F, WAVES, UPGRADES, UP_KEYS, UP_COST, MEDALS, parTime, TYPICAL_UP, START_LIVES, BOSSES, DIFFICULTY, DIFF_KEYS, POWERUPS, STREAK, streakMul, SUITS } from './config.js?v=12';
+import { makeWorld, step, drainEvents, waveLabel, isBossWave, angDiff } from './sim.js?v=12';
+import { Autopilot } from './ai.js?v=12';
+import { Renderer, pickQuality, CALM } from './render.js?v=12';
+import { Audio } from './audio.js?v=12';
+import { Input } from './input.js?v=12';
+import { Scores, NO_POST } from './scores.js?v=12';
+import { Recorder, Replay } from './replay.js?v=12';
+import { Online, ROOM, randomCode, cleanCode } from './online.js?v=12';
 
 const $ = (id) => document.getElementById(id);
 const params = new URLSearchParams(location.search);
@@ -417,7 +417,7 @@ function handleEvents(list, W, live) {
       case 'wave':
         if (live) {
           if (e.boss) banner('WARNING', `${BOSSES[W.boss ? W.boss.key : (W.mode === 'campaign' ? SECTORS[W.sector].boss : 'foreman')].name} IS COMING`, 2.6);
-          else banner(e.label, W.mode === 'stand' ? (W.k !== R.lookI ? SECTORS[W.k].name : 'HOLD THE LINE') : `${W.R.count} MACHINES · ${W.survivors.length} SURVIVORS`, 2);
+          else banner(e.label, W.mode === 'stand' ? (W.k !== R.lookI ? SECTORS[W.k].name : 'HOLD THE LINE') : `${W.R.count + Math.round(W.R.horde || 0)} MACHINES · ${W.survivors.length} SURVIVORS`, 2);
           A.play('wave', { vol: 0.7, gap: 0 });
           if (W.mode === 'campaign' && W.wave === 2 && !e.boss) say('halfway', { chance: 0.4, delay: 1.2 });
         }
@@ -1039,7 +1039,7 @@ async function boot() {
   setTimeout(() => $('loading').remove(), 700);
   toTitle();
   boardOf('campaign', settings.diff).fresh(); boardOf('stand', settings.diff).fresh();
-  if (params.has('test')) { const m = await import('./tests.js?v=11'); m.runTests(window.__sb); }
+  if (params.has('test')) { const m = await import('./tests.js?v=12'); m.runTests(window.__sb); }
   else if (params.has('playthrough')) { A.unlock(); startPlaythrough(); }
   else if (G.autopilot) { A.unlock(); if (params.has('stand')) startStand(); else startCampaign(+params.get('sector') || 0); }
   else if (params.has('room')) { act('online'); $('join-code').value = cleanCode(params.get('room')); }

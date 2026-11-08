@@ -1,7 +1,7 @@
 // Swarmbreak simulation: fixed 120 Hz steps, all randomness from the world's own seeded generator
 // (W.rs), plain data only, so a world can be cloned and re-run bit for bit (replays, online, tests).
 // Nothing in here touches the DOM, WebGL or audio; it only pushes events into W.ev.
-import { F, STEP, GATES, SECTORS, WAVES, rampAt, rampLevel, standLevel, STAND, ENEMY, HOSTILE, BOSSES, BOSS_KEYS, SCORE, START_LIVES, INTRO, introduced, DIFFICULTY, applyDiff, POWERUPS, PW_KEYS, DROP, STREAK, streakMul } from './config.js?v=11';
+import { F, ARCADE, STEP, GATES, SECTORS, WAVES, rampAt, rampLevel, standLevel, STAND, ENEMY, HOSTILE, BOSSES, BOSS_KEYS, SCORE, START_LIVES, INTRO, introduced, DIFFICULTY, applyDiff, POWERUPS, PW_KEYS, DROP, STREAK, streakMul } from './config.js?v=12';
 export { STEP };
 
 const { AW, AH } = F;
@@ -84,7 +84,7 @@ function startWave(W, first = false) {
     W.bossWave = W.waveN > 0 && (W.waveN + 1) % STAND.bossEvery === 0;
   }
   const R = W.R;
-  W.phase = 'intro'; W.phaseT = first ? 2.6 : 2.0; W.waveT = 0; W.chain = 0;
+  W.phase = 'intro'; W.phaseT = first ? ARCADE.first : ARCADE.intro; W.waveT = 0; W.chain = 0;
   W.supplyT = rr(W, DROP.supply[0], DROP.supply[1]) + (W.tutorial && W.wave === 0 ? 30 : 0);
   W.hazT = rr(W, 6, 10);
   W.spawnQ = []; W.portals = []; W.hazards = []; W.bolts = [];
@@ -145,6 +145,25 @@ function planWave(W) {
     t += R.gap * 1.3; left--;
   }
   let hives = Q.filter((q) => q.types[0] === 'hive').length, brutes = 0;
+  // 1.8: the warp-in. Most of the wave lands at once, scattered over the arena in small groups
+  const nw = tw ? 0 : Math.min(left, Math.round(R.count * ARCADE.warpIn));
+  if (nw > 0) {
+    let k = nw;
+    while (k > 0) {
+      const sz = Math.min(k, 1 + Math.floor(rand(W) * 3)), types = [];
+      for (let i = 0; i < sz; i++) {
+        let ty = pickW(W, allowed);
+        if (ty === 'hive' && hives >= 2) ty = 'crawler';
+        if (ty === 'brute' && brutes >= 2 + s) ty = 'crawler';
+        if (ty === 'hive') hives++;
+        if (ty === 'brute') brutes++;
+        types.push(ty);
+      }
+      Q.push({ t: ARCADE.warpT, types, inside: true, warp: true });
+      k -= sz;
+    }
+    left -= nw; t = Math.max(t, ARCADE.warpT + R.gap);
+  }
   // the opening rush: part of the wave comes through several gates at once
   const nb = Math.min(left, Math.round(R.count * (R.burst || 0)));
   if (nb > 0) {
@@ -184,12 +203,12 @@ function planWave(W) {
   // (well away from the Wardens), the rest pours in through the gates in packs while the wave goes on
   const H = Math.round(R.horde || 0);
   if (H > 0) {
-    const t0 = tw ? 19 : R.warn + 0.5, tEnd = Math.max(t0 + 10, t);
-    let k = Math.round(H * 0.55), i = 0;
-    while (k > 0) { const sz = Math.min(k, 4 + Math.floor(rand(W) * 3)); Q.push({ t: t0 + i * 0.3, types: Array(sz).fill('crawler'), inside: true }); k -= sz; i++; }
-    let rest = H - Math.round(H * 0.55);
+    const t0 = tw ? 19 : ARCADE.warpT, tEnd = Math.max(t0 + 10, t), hin = Math.round(H * (tw ? 0.55 : ARCADE.hordeIn));
+    let k = hin, i = 0;
+    while (k > 0) { const sz = Math.min(k, 3 + Math.floor(rand(W) * 3)); Q.push({ t: tw ? t0 + i * 0.3 : t0, types: Array(sz).fill('crawler'), inside: true, warp: !tw }); k -= sz; i++; }
+    let rest = H - hin;
     const packs = Math.ceil(rest / Math.max(1, Math.round(R.pack)));
-    for (let j = 0; j < packs; j++) { const sz = Math.ceil(rest / (packs - j)); Q.push({ t: t0 + 5 + ((tEnd - t0 - 5) * (j + 0.5)) / packs, types: Array(sz).fill('crawler') }); rest -= sz; }
+    for (let j = 0; j < packs; j++) { const sz = Math.ceil(rest / (packs - j)); Q.push({ t: t0 + 4 + ((tEnd - t0 - 4) * (j + 0.5)) / packs, types: Array(sz).fill('crawler') }); rest -= sz; }
   }
   // pylons are wired at the start of the wave
   if (R.mix.pylon && (!camp || introduced('pylon', s, w))) {
@@ -284,7 +303,7 @@ function spawns(W) {
     if (g.open || W.waveT < g.t - R.warn) continue;
     g.open = true;
     let x, z;
-    if (g.inside) [x, z] = freeSpot(W, g.types[0] === 'dummy' ? 7 : 8, 3);
+    if (g.inside) [x, z] = freeSpot(W, g.types[0] === 'dummy' ? 7 : g.warp ? (W.sector === 0 && W.mode === 'campaign' ? 9 : 8) : 8, g.warp ? 1.5 : 3);
     else {
       // the gate furthest-ish from the Wardens, picked at random among the safe ones
       const far = W.sector === 0 && W.mode === 'campaign' ? 13 : 9;
@@ -473,7 +492,7 @@ function enemy(W, e, dt) {
   e.t += dt;
   e.hitT = Math.max(0, e.hitT - dt);
   if (e.born > 0) { e.born -= dt; return; }
-  const spd = R.spd * (1 + R.rush * Math.min(1, W.waveT / 60));
+  const spd = R.spd * (1 + R.rush * Math.min(1, W.waveT / ARCADE.rushT));
   const P = nearestPlayer(W, e.x, e.z);
   const tx = P ? P.x : 0, tz = P ? P.z : 0;
   const dx = tx - e.x, dz = tz - e.z, d = hyp(dx, dz) || 1;
@@ -485,7 +504,8 @@ function enemy(W, e, dt) {
     case 'crawler': {
       if (e.st <= 0) {
         e.st = rr(W, 0.5, 1.1);
-        const wa = rr(W, 0, TAU), wv = (P ? R.wander : 1) * (1 - 0.85 * sm);
+        // (sector 1's first 30 s also keep them wandering, so a new Warden gets time to find its feet)
+        const wa = rr(W, 0, TAU), wv = (P ? (R.sector === 0 && W.fightT < 30 ? Math.max(R.wander, 0.75) : R.wander) : 1) * (1 - 0.85 * sm);
         let hx = (dx / d) * (1 - wv) + Math.cos(wa) * wv * 1.25, hz = (dz / d) * (1 - wv) + Math.sin(wa) * wv * 1.25;
         const l = hyp(hx, hz) || 1;
         e.a = Math.atan2(hz / l, hx / l);
@@ -496,7 +516,9 @@ function enemy(W, e, dt) {
       const fr = W.surgeOn > 0 && e.sg && P;   // in the surging pack: no wandering, faster, from further out
       if (fr) v *= 1.2 + 0.2 * sm;
       const near = fr ? 16 : 4.5 + 6 * sm;
-      if (P && d < near) {
+      // sector 1's first 30 s: a crawler that wanders close to a Warden veers off instead of closing in
+      if (P && d < 3.4 && R.sector === 0 && W.fightT < 30) a = Math.atan2(-dz, -dx) + Math.sin(e.wob + W.t) * 0.6;
+      else if (P && d < near) {
         const [lx, lz] = leadPos(P, Math.min(0.7, d / (v + 0.1)) * sm);
         const flank = ((((e.id * 0.618034) % 1) - 0.5) * 2.4 * sm) * clamp((d - 1.4) / near, 0, 1);
         a = Math.atan2(lz - e.z, lx - e.x) + flank;
@@ -1034,7 +1056,7 @@ function rescue(W, s, p) {
 }
 
 function waveClear(W) {
-  W.phase = 'clear'; W.phaseT = 2.2;
+  W.phase = 'clear'; W.phaseT = ARCADE.clear;
   const bonus = SCORE.wave * (1 + (W.mode === 'campaign' ? W.sector : Math.floor(W.waveN / 5)));
   addScore(W, bonus);
   // leftover pylons and dummies power down; the survivors still out there are walked out

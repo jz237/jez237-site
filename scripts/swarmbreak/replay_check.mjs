@@ -1,11 +1,11 @@
 // Exact replays: records autopilot runs and re-runs every death and boss kill from its saved clip;
 // the world must match bit for bit at the key tick.
 //   node scripts/swarmbreak/replay_check.mjs [seeds=10]
-import { makeWorld, step, drainEvents, STEP, cloneWorld } from '../../games/2026-11-05/swarmbreak/js/sim.js?v=11';
-import { Autopilot } from '../../games/2026-11-05/swarmbreak/js/ai.js?v=11';
-import { TYPICAL_UP } from '../../games/2026-11-05/swarmbreak/js/config.js?v=11';
-import { Recorder, Replay } from '../../games/2026-11-05/swarmbreak/js/replay.js?v=11';
-import { hashW } from '../../games/2026-11-05/swarmbreak/js/tests.js?v=11';
+import { makeWorld, step, drainEvents, STEP, cloneWorld } from '../../games/2026-11-05/swarmbreak/js/sim.js?v=12';
+import { Autopilot } from '../../games/2026-11-05/swarmbreak/js/ai.js?v=12';
+import { TYPICAL_UP } from '../../games/2026-11-05/swarmbreak/js/config.js?v=12';
+import { Recorder, Replay } from '../../games/2026-11-05/swarmbreak/js/replay.js?v=12';
+import { hashW } from '../../games/2026-11-05/swarmbreak/js/tests.js?v=12';
 
 const seeds = +(process.argv[2] || 10);
 let ok = 0, bad = 0, total = 0;

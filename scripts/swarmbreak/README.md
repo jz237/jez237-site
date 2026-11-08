@@ -6,6 +6,7 @@ Every local import carries the same `?v=N`; bump them all together (plus `js/mai
 | Script | What it does |
 | --- | --- |
 | `ramp_check.mjs [trials] [sectors] [profile] [difficulty]` | Human-like autopilot (0.35 s reaction with scatter, sometimes late, aim wobble and a limited turn speed, tracks only the ~8 nearest threats and often misses things behind it) plays each sector from wave 1 with 3 Wardens and the typical upgrades (`TYPICAL_UP`); prints the clear rate, deaths / hits per wave try and what killed it. Run sectors in parallel: `for s in 1 2 3 4 5; do node scripts/swarmbreak/ramp_check.mjs 100 $s & done; wait` |
+| `action_check.mjs [trials] [difficulty]` | Pace: seconds per wave, kills per minute, machines alive, share of time between waves, and seconds until the first machine is within 6 m. |
 | `replay_check.mjs [seeds]` | Records autopilot runs and re-runs every death and boss kill from its saved clip; the world must match bit for bit. |
 | `autopilot_check.mjs [runs]` | Chained campaigns (lives and score carry over, salvage buys upgrades) for the demo and human profiles. |
 | `console_check.mjs [baseUrl]` | Playwright + Edge: the `?test=1` self-test page, the attract demo, an autoplay campaign and the AI playthrough rolling from the S1 boss into S2; fails on console errors or score POSTs. Needs a static server on the repo root. |

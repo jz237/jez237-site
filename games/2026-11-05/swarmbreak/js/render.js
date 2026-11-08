@@ -4,12 +4,12 @@
 // the simulation; floor decals for every warning (gates, boss tells, aim lines, arcs); HDR post.
 // Nothing here changes the world.
 import * as THREE from '../vendor/three.module.min.js';
-import { Post } from './post.js?v=11';
-import * as TX from './textures.js?v=11';
-import * as MD from './models.js?v=11';
-import { FX, CALM } from './fx.js?v=11';
-import { F, GATES, POWERUPS } from './config.js?v=11';
-import { dronePos } from './sim.js?v=11';
+import { Post } from './post.js?v=12';
+import * as TX from './textures.js?v=12';
+import * as MD from './models.js?v=12';
+import { FX, CALM } from './fx.js?v=12';
+import { F, GATES, POWERUPS } from './config.js?v=12';
+import { dronePos } from './sim.js?v=12';
 
 // crawlers come in hordes, so they are all drawn together: one instanced mesh per part of the model,
 // about twenty draw calls however many there are (a full model per crawler cost ~15 draw calls each).
@@ -494,10 +494,10 @@ export class Renderer {
     for (const m of [this.railI, this.seekI]) { m.frustumCulled = false; m.instanceMatrix.setUsage(THREE.DynamicDrawUsage); this.scene.add(m); }
     // soft contact shadows under everything that stands on the floor
     const cg = new THREE.PlaneGeometry(1, 1); cg.rotateX(-Math.PI / 2);
-    this.blobI = new THREE.InstancedMesh(cg, new THREE.MeshBasicMaterial({ map: this.T.glow, color: 0x000000, transparent: true, opacity: 0.6, depthWrite: false }), 220);
+    this.blobI = new THREE.InstancedMesh(cg, new THREE.MeshBasicMaterial({ map: this.T.glow, color: 0x000000, transparent: true, opacity: 0.6, depthWrite: false }), 320);
     this.blobI.frustumCulled = false; this.blobI.renderOrder = 1; this.blobI.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
     this.scene.add(this.blobI);
-    this.crowd = new Crowd(this.scene, 220);
+    this.crowd = new Crowd(this.scene, 320);
     this.icons = {};
   }
   iconFor(kind) {
@@ -812,7 +812,7 @@ export class Renderer {
   }
   syncBlobs(W) {
     let n = 0;
-    const put = (x, z, r) => { if (n >= 220) return; _m.compose(_p.set(x, 0.025, z), _q.identity(), _s.set(r, 1, r)); this.blobI.setMatrixAt(n++, _m); };
+    const put = (x, z, r) => { if (n >= 320) return; _m.compose(_p.set(x, 0.025, z), _q.identity(), _s.set(r, 1, r)); this.blobI.setMatrixAt(n++, _m); };
     for (const p of W.players) if (p.alive) put(p.x, p.z, 1.8);
     for (const e of W.enemies) if (e.hp > 0 && e.type !== 'dart') put(e.x, e.z, e.r * 2.8);
     for (const s of W.survivors) put(s.x, s.z, 1.0);

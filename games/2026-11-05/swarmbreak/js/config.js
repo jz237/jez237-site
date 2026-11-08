@@ -1,6 +1,6 @@
 // Swarmbreak — every tunable number lives here. The RAMP table drives difficulty; nothing else in the
 // game hard-codes enemy pace, numbers, spacing, fire rate, aim or warning time.
-export const VERSION = '1.7.0';
+export const VERSION = '1.8.0';
 export const STEP = 1 / 120;
 
 // ------------------------------------------------------------------ the arena and the Warden
@@ -8,10 +8,10 @@ export const STEP = 1 / 120;
 export const F = {
   AW: 22, AH: 13,
   r: 0.55,               // Warden radius
-  speed: 6.0,            // run speed, m/s (SERVOS adds 9% a level)
+  speed: 6.6,            // run speed, m/s (SERVOS adds 9% a level)
   accel: 15,             // how quickly the suit reaches the speed you ask for
-  fireCD: 0.15,          // seconds between shots (RAPID EMITTER cuts it)
-  shotV: 30, shotLife: 0.55, shotR: 0.18,
+  fireCD: 0.115,         // seconds between shots (RAPID EMITTER cuts it)
+  shotV: 34, shotLife: 0.5, shotR: 0.18,
   spread: 0.2,           // radians between spread shots
   pulseR: 6.2,           // PULSE: kills small machines and bolts inside this, shoves the rest
   pulseShove: 9,
@@ -21,6 +21,15 @@ export const F = {
   clearR: 7.5,           // machines are thrown clear of the respawn point
   rescueR: 1.15,         // walk this close to a survivor to bring them in (TRACTOR adds)
 };
+
+// 1.8 arcade pacing: most of a wave warps in at once, all over the arena (well away from the Wardens), the moment
+// it starts; the rest follows through the gates. Short breaks between waves, and machines speed up quickly.
+//   warpIn   share of the wave's machines (not the horde) that warp in at the start
+//   hordeIn  share of the horde that warps in at the start
+//   warpT    seconds the warp-in shimmer lasts (they can't hurt you until they land)
+//   intro / first / clear   seconds before a wave (the first of a run) and after one is cleared
+//   rushT    seconds into a wave when the machines reach their full RAMP rush speed-up
+export const ARCADE = { warpIn: 0.7, hordeIn: 0.8, warpT: 0.9, intro: 1.1, first: 1.8, clear: 1.2, rushT: 25 };
 
 // gates: where machines come in (portals in the arena wall), in arena coordinates
 export const GATES = (() => {
@@ -66,25 +75,25 @@ export const WAVES = 5;   // waves per sector, then the boss
 //   bossHP   boss armour; bossRate scales how often it attacks
 //   mix      which machines can come and how often
 export const RAMP = [
-  { spd: [0.6, 0.74], count: [7, 13], gap: [3.3, 2.4], group: [1, 2], warn: [2.4, 2.1], fire: [0.18, 0.28], aim: [0.32, 0.25], boltV: [4.7, 5.3],
-    horde: [22, 34], pack: [5, 7],
-    smart: [0.55, 0.68], mimic: [0, 0], haz: [0, 0], burst: [0, 0.12], rush: [0.1, 0.18], wander: [0.75, 0.55], surv: [4, 5], combo: [0, 0], shield: [1, 1], pulse: [2, 2], bossHP: 190, bossRate: 0.42,
+  { spd: [0.6, 0.74], count: [7, 13], gap: [2.6, 1.9], group: [1, 2], warn: [2.4, 2.1], fire: [0.18, 0.28], aim: [0.32, 0.25], boltV: [4.7, 5.3],
+    horde: [28, 42], pack: [6, 8],
+    smart: [0.55, 0.68], mimic: [0, 0], haz: [0, 0], burst: [0, 0.12], rush: [0.1, 0.18], wander: [0.5, 0.36], surv: [4, 5], combo: [0, 0], shield: [1, 1], pulse: [2, 2], bossHP: 190, bossRate: 0.42,
     mix: { crawler: 1, spitter: 0.3, brute: 0.14 } },
-  { spd: [0.76, 0.94], count: [14, 18], gap: [1.9, 1.6], group: [2, 3], warn: [2.0, 1.7], fire: [0.42, 0.46], aim: [0.17, 0.15], boltV: [6.4, 7.2],
-    horde: [34, 38], pack: [7, 9],
-    smart: [0.68, 0.78], mimic: [0, 0], haz: [15, 11], burst: [0.2, 0.3], rush: [0.2, 0.27], wander: [0.52, 0.42], surv: [5, 6], combo: [0, 0], shield: [1, 0.4], pulse: [1, 1], bossHP: 260, bossRate: 0.3,
+  { spd: [0.76, 0.94], count: [14, 18], gap: [1.6, 1.35], group: [2, 3], warn: [2.0, 1.7], fire: [0.36, 0.4], aim: [0.22, 0.16], boltV: [5.6, 6.8],
+    horde: [42, 48], pack: [8, 10],
+    smart: [0.68, 0.78], mimic: [0, 0], haz: [15, 11], burst: [0.2, 0.3], rush: [0.2, 0.27], wander: [0.34, 0.26], surv: [5, 6], combo: [0, 0], shield: [1, 0.6], pulse: [1, 1], bossHP: 260, bossRate: 0.3,
     mix: { crawler: 1, spitter: 0.4, brute: 0.2, hive: 0.14, pylon: 0.2, leaper: 0.16 } },
-  { spd: [0.94, 1.08], count: [18, 22], gap: [1.6, 1.38], group: [3, 4], warn: [1.7, 1.4], fire: [0.46, 0.47], aim: [0.19, 0.16], boltV: [7.2, 7.9],
-    horde: [38, 44], pack: [8, 10],
-    smart: [0.78, 0.86], mimic: [0, 1], haz: [13, 10], burst: [0.34, 0.4], rush: [0.24, 0.3], wander: [0.4, 0.32], surv: [6, 6], combo: [0.25, 0.4], shield: [1, 0], pulse: [1, 1], bossHP: 380, bossRate: 0.56,
+  { spd: [0.94, 1.08], count: [18, 22], gap: [1.35, 1.15], group: [3, 4], warn: [1.7, 1.4], fire: [0.4, 0.42], aim: [0.19, 0.16], boltV: [7.2, 7.9],
+    horde: [48, 54], pack: [9, 11],
+    smart: [0.78, 0.86], mimic: [0, 1], haz: [13, 10], burst: [0.34, 0.4], rush: [0.24, 0.3], wander: [0.24, 0.18], surv: [6, 6], combo: [0.25, 0.4], shield: [1, 0.4], pulse: [1, 1], bossHP: 380, bossRate: 0.56,
     mix: { crawler: 1, spitter: 0.8, brute: 0.24, hive: 0.2, pylon: 0.24, leaper: 0.22, bulwark: 0.2 } },
-  { spd: [1.08, 1.14], count: [22, 25], gap: [1.4, 1.2], group: [4, 5], warn: [1.36, 1.1], fire: [0.47, 0.49], aim: [0.18, 0.15], boltV: [8.0, 8.6],
-    horde: [44, 48], pack: [9, 11],
-    smart: [0.86, 0.94], mimic: [1, 1], haz: [11, 9], burst: [0.4, 0.44], rush: [0.3, 0.34], wander: [0.3, 0.24], surv: [6, 7], combo: [0.4, 0.45], shield: [1, 0], pulse: [1, 1], bossHP: 400, bossRate: 0.25,
+  { spd: [1.08, 1.14], count: [22, 25], gap: [1.15, 1.0], group: [4, 5], warn: [1.36, 1.1], fire: [0.42, 0.46], aim: [0.18, 0.15], boltV: [8.0, 8.6],
+    horde: [54, 60], pack: [10, 12],
+    smart: [0.86, 0.94], mimic: [1, 1], haz: [11, 9], burst: [0.4, 0.44], rush: [0.3, 0.34], wander: [0.18, 0.14], surv: [6, 7], combo: [0.4, 0.45], shield: [1, 0], pulse: [1, 1], bossHP: 400, bossRate: 0.25,
     mix: { crawler: 1, spitter: 0.65, brute: 0.26, hive: 0.2, pylon: 0.26, splitter: 0.3, leaper: 0.26, bulwark: 0.24 } },
-  { spd: [1.14, 1.24], count: [25, 28], gap: [1.15, 0.98], group: [5, 6], warn: [1.06, 0.7], fire: [0.49, 0.53], aim: [0.09, 0.06], boltV: [8.7, 9.4],
-    horde: [48, 54], pack: [10, 12],
-    smart: [0.94, 1], mimic: [1, 2], haz: [9, 7], burst: [0.44, 0.48], rush: [0.42, 0.48], wander: [0.22, 0.14], surv: [7, 7], combo: [0.4, 0.48], shield: [1, 0], pulse: [1, 1], bossHP: 600, bossRate: 0.33,
+  { spd: [1.14, 1.24], count: [25, 28], gap: [0.98, 0.84], group: [5, 6], warn: [1.06, 0.7], fire: [0.49, 0.53], aim: [0.09, 0.06], boltV: [8.7, 9.4],
+    horde: [60, 68], pack: [11, 13],
+    smart: [0.94, 1], mimic: [1, 2], haz: [9, 7], burst: [0.44, 0.48], rush: [0.42, 0.48], wander: [0.13, 0.08], surv: [7, 7], combo: [0.4, 0.48], shield: [1, 0], pulse: [1, 1], bossHP: 600, bossRate: 0.33,
     mix: { crawler: 1, spitter: 0.75, brute: 0.3, hive: 0.22, pylon: 0.3, splitter: 0.36, leaper: 0.22, bulwark: 0.2 } },
 ];
 const RAMP_KEYS = ['spd', 'count', 'horde', 'pack', 'gap', 'group', 'warn', 'fire', 'aim', 'boltV', 'smart', 'mimic', 'haz', 'burst', 'rush', 'wander', 'surv', 'combo'];
@@ -176,7 +185,7 @@ export const MIN_WARN = 0.5;
 export const DIFFICULTY = {
   easy: { label: 'EASY', desc: 'Slower, fewer machines, longer warnings, an extra Warden and shield', smart: 0.55, spd: 0.84, fire: 0.62, count: 0.8, horde: 0.75, aim: 1.5, boltV: 0.85, warn: 1.25, boss: 0.75, bossRate: 0.75, shield: 1, lives: 1, drops: 1.4, score: 0.6 },
   normal: { label: 'NORMAL', desc: 'The intended challenge', spd: 1, fire: 1, count: 1, horde: 1, aim: 1, boltV: 1, warn: 1, boss: 1, bossRate: 1, shield: 0, lives: 0, drops: 1, score: 1 },
-  hard: { label: 'HARD', desc: 'Faster, busier, sharper aim, shorter warnings', smart: 1.1, spd: 1.06, fire: 1.08, count: 1.04, horde: 0.9, aim: 0.8, boltV: 1.1, warn: 0.85, boss: 1.15, bossRate: 1.1, shield: 0, lives: 0, drops: 0.85, score: 1.5 },
+  hard: { label: 'HARD', desc: 'Faster, busier, sharper aim, shorter warnings', smart: 1.1, spd: 1.05, fire: 1.04, count: 1.04, horde: 0.8, aim: 0.8, boltV: 1.1, warn: 0.85, boss: 1.15, bossRate: 1.1, shield: 0, lives: 0, drops: 0.85, score: 1.5 },
   nightmare: { label: 'NIGHTMARE', desc: 'For experts: everything at full tilt, one Warden fewer', smart: 1.25, spd: 1.25, fire: 1.6, count: 1.3, horde: 1.1, aim: 0.5, boltV: 1.2, warn: 0.72, boss: 1.5, bossRate: 1.4, shield: 0, lives: -1, drops: 0.7, score: 2.2 },
 };
 export const DIFF_KEYS = Object.keys(DIFFICULTY);
