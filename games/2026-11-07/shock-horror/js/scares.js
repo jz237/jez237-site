@@ -41,7 +41,7 @@ export class Scares {
       const im = new Image(); im.decoding = 'async'; im.src = `img/${n}.webp?v=1`; this.imgs[n] = im;
     }
     // two realistic, motion-captured ghosts (the lost miner and your double): the digger's own body, re-dressed
-    const want = q && q.name === 'low' ? 1 : 2;
+    const want = /noghosts/.test(location.search) ? 0 : q && q.name === 'low' ? 1 : 2;
     for (let i = 0; i < want; i++) {
       try {
         const g = await loadDiggerAsset('assets/digger.glb?v=1');
@@ -94,11 +94,13 @@ export class Scares {
   // the title screen: the start of the Night Shift, dressed (writing, a hanged man, candles), nothing springs
   loadTitle(W) {
     this.clear();
+    if (/notitleprops/.test(location.search)) return;
     this.W = W; this.M = W.M; this.o = { quiet: true, title: true }; this.enabled = true; this.t = 0; this.cool = 1e9; this.bigCool = 1e9;
     const P = W.players[0], by = (id) => SCARES.find((x) => x.id === id);
     const spots = [];
     for (let d = 2; d <= 10; d++) for (const k of [0, 1, -1, 2, -2]) { const tx = Math.floor(P.x + d), ty = Math.round(P.y) + k; if (this.standable(tx, ty)) { spots.push({ x: tx + 0.5, y: ty }); break; } }
-    const put = (id, i, go) => { const sp = spots[i]; if (!sp) return; const inst = this.prop(by(id), sp.x, sp.y); if (!inst) return; if (go) { inst.st = 'go'; inst.t = 0; inst.credit = undefined; } this.placed.push(inst); };
+    const only = new URLSearchParams(location.search).get('tp');
+    const put = (id, i, go) => { if (only && !id.startsWith(only)) return; const sp = spots[i]; if (!sp) return; const inst = this.prop(by(id), sp.x, sp.y); if (!inst) return; if (go) { inst.st = 'go'; inst.t = 0; inst.credit = undefined; } this.placed.push(inst); };
     put('write:turn-back', 2, true);
     put('hanging:one', 5, false);
     put('candles:row', 1, false);
