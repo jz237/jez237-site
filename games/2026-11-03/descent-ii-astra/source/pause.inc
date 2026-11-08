@@ -1,6 +1,54 @@
 /* Mouse-accessible flight actions, using the existing save/load and options. */
 #include "state.h"
 #include "menu.h"
+#include "config.h"
+#include "playsave.h"
+EMSCRIPTEN_KEEPALIVE void astra_store_preferences(void){
+    char name[CALLSIGN_LEN+1];memcpy(name,Players[Player_num].callsign,sizeof name);
+    if(Game_mode&GM_MULTI)strcpy(Players[Player_num].callsign,"astra");
+    WriteConfigFile();write_player_file();memcpy(Players[Player_num].callsign,name,sizeof name);
+}
+EMSCRIPTEN_KEEPALIVE void astra_silence_flight(void){digi_stop_digi_sounds();songs_stop_all();}
+/* One action hides the cockpit while retaining native fullscreen readouts.
+ * Keep the previous full cockpit layout for the return toggle. */
+static int astra_last_hud=0,astra_last_cockpit=CM_FULL_SCREEN;
+EMSCRIPTEN_KEEPALIVE int astra_hud_visible(void){return PlayerCfg.HudMode!=3;}
+int astra_toggle_hud(void){
+    if(!Game_wind)return PlayerCfg.HudMode!=3;
+    if(PlayerCfg.HudMode!=3){
+        astra_last_hud=PlayerCfg.HudMode;
+        astra_last_cockpit=PlayerCfg.PreferredCockpitMode;
+        PlayerCfg.HudMode=3;PlayerCfg.PreferredCockpitMode=CM_FULL_SCREEN;
+    }else{
+        PlayerCfg.HudMode=astra_last_hud;
+        PlayerCfg.PreferredCockpitMode=astra_last_cockpit;
+    }
+    if(!Player_is_dead&&!Rear_view&&!Endlevel_sequence)select_cockpit(PlayerCfg.PreferredCockpitMode);
+    reset_cockpit();astra_store_preferences();
+    EM_ASM(window.astraHud?.sync());
+    return PlayerCfg.HudMode!=3;
+}
+/* Use the existing cockpit cameras, including their native FRONT/REAR swap
+ * while the pilot looks behind. Queue mutations through the normal game frame. */
+static int astra_rear_restore[2]={CV_NONE,CV_NONE};
+EMSCRIPTEN_KEEPALIVE int astra_rear_status(void){
+    return (PlayerCfg.Cockpit3DView[0]==CV_REAR?1:0)|
+        (PlayerCfg.Cockpit3DView[1]==CV_REAR?2:0)|(Rear_view?4:0);
+}
+static void astra_toggle_rear_display(void){
+    if(!Game_wind||EM_ASM_INT(return !!Module.autopilot))return;
+    if(astra_rear_status()&3){
+        for(int i=0;i<2;i++)if(PlayerCfg.Cockpit3DView[i]==CV_REAR){
+            PlayerCfg.Cockpit3DView[i]=astra_rear_restore[i];
+            astra_rear_restore[i]=CV_NONE;
+        }
+    }else{
+        astra_rear_restore[0]=PlayerCfg.Cockpit3DView[0];
+        PlayerCfg.Cockpit3DView[0]=CV_REAR;
+    }
+    reset_cockpit();astra_store_preferences();
+    EM_ASM(window.astraRear?.sync());
+}
 static int astra_pause_handler(newmenu *menu,d_event *event,void *data)
 {
     if(event->type!=EVENT_NEWMENU_SELECTED)return 0;
@@ -10,16 +58,40 @@ static int astra_pause_handler(newmenu *menu,d_event *event,void *data)
     if(choice==2){if(state_restore_all(1,0,NULL)&&window_exists(wind))window_close(wind);return 1;}
     if(choice==3){do_options_menu();return 1;}
     if(choice==4){do_weapon_priority_menu();return 1;}
-    if(choice==5&&nm_messagebox("End flight?",2,"End flight","Keep flying","Return to the campaign menu?\nUnsaved flight progress will be lost.")==0){
-        window_close(wind);if(Game_wind)window_close(Game_wind);return 1;
+    if(choice==5){extern int astra_checkpoint_available(void);if(astra_checkpoint_available()){if(nm_messagebox("Restore checkpoint?",2,"Restore","Keep flying","Replace this flight with the last checkpoint?")==0){EM_ASM(Module.checkpointCommand=1);window_close(wind);}}else nm_messagebox("Checkpoint",1,"Back","No checkpoint is available for this campaign.");return 1;}
+    if(choice==6){EM_ASM(window.astraControllers?.open());return 1;}
+    if(choice==7){EM_ASM(window.astraResume.save());return 1;}
+    if(choice==8){EM_ASM(window.astraNavigation.home());return 1;}
+    return 1;
+}
+static int astra_online_pause_handler(newmenu *menu,d_event *event,void *data)
+{
+    if(event->type!=EVENT_NEWMENU_SELECTED)return 0;
+    switch(newmenu_get_citem(menu)){
+        case 0: window_close(newmenu_get_window(menu));break;
+        case 1: do_options_menu();break;
+        case 2: do_weapon_priority_menu();break;
+        case 3: EM_ASM(window.astraControllers?.open());break;
+        case 4: EM_ASM(window.astraNet.menu());break;
+        case 5: EM_ASM(window.astraSquadUI.open());break;
+        case 6: EM_ASM(window.astraTools.open());break;
+        case 7: EM_ASM(window.astraNavigation.home());break;
     }
     return 1;
 }
 static void astra_pause_open(void)
 {
-    static newmenu_item items[6];
-    static char *labels[]={"Resume flight","Save game...","Load game...","Options...","Weapon auto-select...","End flight..."};
-    memset(items,0,sizeof items);for(int i=0;i<6;i++){items[i].type=NM_TYPE_MENU;items[i].text=labels[i];}
+    if(EM_ASM_INT(return !!Module.netSession)){
+        static newmenu_item online[8];
+        static char *labels[]={"Resume match","Options...","Weapon auto-select...","Joysticks & controllers...","Players & room...","Wingman commands...","Comfort settings...","Main menu..."};
+        memset(online,0,sizeof online);for(int i=0;i<8;i++){online[i].type=NM_TYPE_MENU;online[i].text=labels[i];}
+        game_flush_inputs();
+        newmenu_do3("Flight menu","The match continues while you change options.",8,online,astra_online_pause_handler,NULL,0,NULL);
+        return;
+    }
+    static newmenu_item items[9];
+    static char *labels[]={"Resume flight","Save game...","Load game...","Options...","Weapon auto-select...","Restore checkpoint...","Joysticks & controllers...","Save & return to menu","Main menu..."};
+    memset(items,0,sizeof items);for(int i=0;i<9;i++){items[i].type=NM_TYPE_MENU;items[i].text=labels[i];}
     game_flush_inputs();
-    newmenu_do3("Flight paused","Your ship is standing by.",6,items,astra_pause_handler,NULL,0,NULL);
+    newmenu_do3("Flight paused","Your ship is standing by.",9,items,astra_pause_handler,NULL,0,NULL);
 }
