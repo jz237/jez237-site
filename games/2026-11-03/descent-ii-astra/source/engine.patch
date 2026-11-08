@@ -1545,15 +1545,20 @@ index 30de489..84b985f 100644
  }
 +
 diff --git a/d2/main/gauges.c b/d2/main/gauges.c
-index 3ece085..d2e7b21 100644
+index 3ece085..3c0c672 100644
 --- a/d2/main/gauges.c
 +++ b/d2/main/gauges.c
-@@ -4520,6 +4520,26 @@ void observer_show_bomb_highlights()
+@@ -4520,6 +4520,31 @@ void observer_show_bomb_highlights()
  }
  
  //draw all the things on the HUD
 +/* Reuse the pilot's actual inventory and native cockpit mode, including F3 and rear view. */
 +static int astra_deck_visible;
++int astra_hud_message_inset(void)
++{
++    /* Match the 48-unit top rail of the 1672 x 941 flight deck, plus spacing. */
++    return astra_deck_visible ? (SHEIGHT * 58 + 940) / 941 : 0;
++}
 +void astra_deck_update(int ordinary_view)
 +{
 +    player *pilot=&Players[Player_num];
@@ -1575,7 +1580,7 @@ index 3ece085..d2e7b21 100644
  void draw_hud()
  {
  	int pnum = get_pnum_for_hud();
-@@ -4616,7 +4636,7 @@ void draw_hud()
+@@ -4616,7 +4641,7 @@ void draw_hud()
  
  	//	Show score so long as not in rearview
  	if ( !Rear_view && PlayerCfg.CurrentCockpitMode!=CM_REAR_VIEW && PlayerCfg.CurrentCockpitMode!=CM_STATUS_BAR) {
@@ -1584,7 +1589,7 @@ index 3ece085..d2e7b21 100644
  		if (score_time)
  			hud_show_score_added();
  	}
-@@ -4630,15 +4650,15 @@ void draw_hud()
+@@ -4630,15 +4655,15 @@ void draw_hud()
  		show_HUD_names();
  
  		if (PlayerCfg.CurrentCockpitMode==CM_STATUS_BAR || PlayerCfg.CurrentCockpitMode==CM_FULL_SCREEN)
@@ -1607,7 +1612,7 @@ index 3ece085..d2e7b21 100644
  
  			if (Newdemo_state==ND_STATE_RECORDING)
  			{
-@@ -4660,7 +4680,7 @@ void draw_hud()
+@@ -4660,7 +4685,7 @@ void draw_hud()
  		HUD_render_message_frame();
  
  		if (PlayerCfg.CurrentCockpitMode!=CM_STATUS_BAR)
@@ -1616,7 +1621,7 @@ index 3ece085..d2e7b21 100644
  		if (Game_mode&GM_MULTI && Show_kill_list)
  			hud_show_kill_list();
  		if (PlayerCfg.CurrentCockpitMode != CM_LETTERBOX)
-@@ -4858,8 +4878,8 @@ void do_cockpit_window_view(int win,object *viewer,int rear_view_flag,int user,c
+@@ -4858,8 +4883,8 @@ void do_cockpit_window_view(int win,object *viewer,int rear_view_flag,int user,c
  
  		dx = (win==0)?-(w+(w/10)):(w/10);
  
@@ -1627,6 +1632,17 @@ index 3ece085..d2e7b21 100644
  
  		gr_init_sub_canvas(&window_canv,&grd_curscreen->sc_canvas,window_x,window_y,w,h);
  	}
+diff --git a/d2/main/gauges.h b/d2/main/gauges.h
+index 7e3393c..7a21264 100644
+--- a/d2/main/gauges.h
++++ b/d2/main/gauges.h
+@@ -112,5 +112,6 @@ extern span weapon_window_left[],weapon_window_left_hires[],weapon_window_right[
+ #define RET_COLOR_DEFAULT_A     0
+ 
+ extern int Observer_message_y_start;
++extern int astra_hud_message_inset(void);
+ 
+ #endif /* _GAUGES_H */
 diff --git a/d2/main/hostage.c b/d2/main/hostage.c
 index 64c6202..9dde716 100644
 --- a/d2/main/hostage.c
@@ -1640,6 +1656,22 @@ index 64c6202..9dde716 100644
  	draw_object_tmap_rod(obj, Vclip[obj->rtype.vclip_info.vclip_num].frames[obj->rtype.vclip_info.framenum], 1);
  }
  
+diff --git a/d2/main/hud.c b/d2/main/hud.c
+index 7298cc1..b795bc6 100644
+--- a/d2/main/hud.c
++++ b/d2/main/hud.c
+@@ -98,7 +98,11 @@ void HUD_render_message_frame()
+ 		if (is_observer())
+ 			y = Observer_message_y_start;
+ 		else
++		{
+ 			y = FSPACY(1);
++			int inset = astra_hud_message_inset();
++			if (y < inset) y = inset;
++		}
+ 
+ 		if (Guided_missile[Player_num] && Guided_missile[Player_num]->type==OBJ_WEAPON && Guided_missile[Player_num]->id==GUIDEDMISS_ID &&
+ 		Guided_missile[Player_num]->signature==Guided_missile_sig[Player_num] && PlayerCfg.GuidedInBigWindow)
 diff --git a/d2/main/inferno.c b/d2/main/inferno.c
 index dc6e44a..961f198 100644
 --- a/d2/main/inferno.c

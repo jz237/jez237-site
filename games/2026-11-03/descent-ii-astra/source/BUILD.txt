@@ -1333,3 +1333,9 @@ R65 — material realism and cached shader bindings
 - Six additional native-mine showroom views (37–42), including a steel / dry rock / wet stone / coated-panel material selector. The total is 43 exhibits; availability remains tied to the loaded level.
 - Constant-name uniform locations are cached per program across mine walls, doors, machinery, liquids, fixtures and reflection bindings. Liquid environment sampler names are resolved once. Programs remain static for the engine lifetime; reloads recreate their caches.
 - Flight controls, native simulation, demo AI and multiplayer code are unchanged. Performance and geometry results are recorded in the release validation artifact.
+
+R66 — post-release bug audit
+- Native pickup and status messages now clear the modern cockpit top rail at every resolution; original HUD and observer placement are unchanged.
+- Removed duplicated replay text from the explosion-showroom entry.
+- Audited Original and Vertigo live demos, later and secret mines, showroom scenes, save-and-return/resume, and graphics-context-loss recovery with muted, pointer-unlocked browser tests.
+- Flight controls, demo AI, simulation and rendering quality are unchanged.
