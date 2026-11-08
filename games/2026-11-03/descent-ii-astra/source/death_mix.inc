@@ -1,4 +1,4 @@
-/* Derived only from the loaded Descent samples. The ordinary SDL mixer owns
+/* Derived only from the loaded Descent samples. Native sound channels own
  * these voices, so pause/stop, the SFX slider and demo mute remain authoritative. */
 typedef struct {const unsigned char *source; unsigned source_len,length; int sound,variant,rate; unsigned char *pcm;} ad_audio_cache;
 static ad_audio_cache ad_audio[12];
@@ -41,10 +41,13 @@ int astra_death_audio(int logical,int variant,fix volume,int pan)
             }
         }
     }
+    astra_defer_audio_start=1;
     int channel=digi_audio_start_sound(sound,volume,pan,0,-1,-1,-1);
+    astra_defer_audio_start=0;
     if(channel>=0&&entry){
         SDL_LockAudio();SoundSlots[channel].samples=entry->pcm;SoundSlots[channel].length=entry->length;SDL_UnlockAudio();
         EM_ASM({Module.deathAudio=({version:43,voices:(Module.deathAudio?.voices||0)+1,seconds:$0,preset:$1});if(Module.traceDeathPcm)Module.traceDeathPcm($2,$3,$4,$5,$1);},entry->length/(double)rate,variant,entry->pcm,entry->length,rate,logical);
     }
+    if(astra_web_audio&&channel>=0)astra_sfx_play_slot(channel);
     return channel;
 }
