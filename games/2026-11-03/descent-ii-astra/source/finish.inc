@@ -60,15 +60,24 @@ static void astra_finish(grs_bitmap *bm,const char *name,png_data *img)
             lampw=fminf(.36f,(lamp_vertical?height:width)*.43f);lamph=fminf(.075f,(lamp_vertical?width:height)*.20f);
         }
     }
+    /* R67: source-column mapping is invariant across every output row.
+     * Keep the original interpolation arithmetic and full resolution. */
+    typedef struct {int x0,x1,ax,maskx;float fraction;} finish_column;
+    finish_column *columns=malloc(W*sizeof(*columns));
+    if(columns)for(int x=0;x<W;x++){
+        float fx=((x+.5f)*w/W)-.5f;int xo=(int)floorf(fx);fx-=xo;
+        columns[x]=(finish_column){(xo+w)%w,((xo+w)%w+1)%w,(x+W+(int)(travel*W*(x<W/2?1:-1)))%W,x*w/W,fx};
+    }
+    int lava=astra_prefix(name,"lava"),blown=astra_prefix(name,"blown");
     for(int y=0;y<H;y++){
+        int ay=lava?(y+frame*H/16)%H:y;
         float fy=((y+.5f)*h/H)-.5f; int yo=(int)floorf(fy); fy-=yo;
         int y0=(yo+h)%h, y1=(y0+1)%h;
         for(int x=0;x<W;x++){
-            float fx=((x+.5f)*w/W)-.5f; int xo=(int)floorf(fx); fx-=xo;
-            int x0=(xo+w)%w, x1=(x0+1)%w;
+            float fx;int x0,x1,ax,maskx;
+            if(columns){finish_column *c=&columns[x];fx=c->fraction;x0=c->x0;x1=c->x1;ax=c->ax;maskx=c->maskx;}
+            else {fx=((x+.5f)*w/W)-.5f;int xo=(int)floorf(fx);fx-=xo;x0=(xo+w)%w;x1=(x0+1)%w;ax=(x+W+(int)(travel*W*(x<W/2?1:-1)))%W;maskx=x*w/W;}
             int ix[4]={index[y0*w+x0],index[y0*w+x1],index[y1*w+x0],index[y1*w+x1]};
-            int ax=(x+W+(int)(travel*W*(x<W/2?1:-1)))%W;
-            int ay=astra_prefix(name,"lava") ? (y+frame*H/16)%H : y;
             unsigned char *mat=img->data+3*(ay*W+ax);
             unsigned char *dst=result+ch*(y*W+x);
             for(int c=0;c<3;c++) {
@@ -80,7 +89,7 @@ static void astra_finish(grs_bitmap *bm,const char *name,png_data *img)
                 dst[c]=(unsigned char)sat_byte(color);
             }
             if(masked) {
-                int t=index[(y*h/H)*w+x*w/W];
+                int t=index[(y*h/H)*w+maskx];
                 dst[3]=(t==254&&(bm->bm_flags&BM_FLAG_SUPER_TRANSPARENT))?0:(t==255&&(bm->bm_flags&BM_FLAG_TRANSPARENT))?1:255;
             }
             if(modern_light){
@@ -91,12 +100,12 @@ static void astra_finish(grs_bitmap *bm,const char *name,png_data *img)
                 float edge=fminf(lampw-fabsf(X),lamph-fabsf(Y));
                 float diffuser=edge>.012f?1:0;
                 float seams=fmodf((X+lampw)*24,1);if(seams<.10f)diffuser*=.16f;
-                float lit=astra_prefix(name,"blown")?.07f:fminf(1,.36f+lum/255*.60f);
+                float lit=blown?.07f:fminf(1,.36f+lum/255*.60f);
                 float bevel=edge>.004f&&edge<.010f?1:0;
                 for(int c=0;c<3;c++)dst[c]=(unsigned char)sat_byte((22+c*4+bevel*29)*(1-diffuser)+(118+c*20)*lit*tint[c]*diffuser);
             }
         }
     }
-    free(index);free(img->data);img->data=result;img->channels=ch;img->alpha=masked!=0;
+    free(columns);free(index);free(img->data);img->data=result;img->channels=ch;img->alpha=masked!=0;
 }
 

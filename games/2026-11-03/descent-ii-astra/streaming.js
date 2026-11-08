@@ -18,7 +18,7 @@ function astraMovieLibrary(readParcel) {
     if (fs.analyzePath(path).exists) return true;
     const [start, size] = entry, end = start + size;
     const first = offsets.findIndex((offset, i) => offset <= start && offsets[i + 1] > start);
-    if (first < 0 || end > offsets.at(-1)) throw Error("Invalid movie range for " + name);
+    if (first < 0 || end > offsets[offsets.length-1]) throw Error("Invalid movie range for " + name);
     const result = new Uint8Array(size);
     let written = 0;
     window.astraTerminal?.loading(true);

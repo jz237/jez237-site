@@ -27,6 +27,18 @@ static float af_sample(const float *a,int w,int h,float x,float y,int c,int chan
     int x0=(X%w+w)%w,x1=(x0+1)%w,y0=(Y%h+h)%h,y1=(y0+1)%h;
     return af_mix(af_mix(a[(y0*w+x0)*channels+c],a[(y0*w+x1)*channels+c],u),af_mix(a[(y1*w+x0)*channels+c],a[(y1*w+x1)*channels+c],u),v);
 }
+/* R67: immutable microdetail is shared by same-sized reconstructed surfaces.
+ * Three bounded slots (256, 512 and 1024) retain the exact float samples; no texture,
+ * normal, animation or output resolution is reduced. Larger images fall back. */
+typedef struct {float noise,brush,pores;} af_micro_sample;
+static af_micro_sample *af_micro_cache[3];
+static int af_micro_ready[3];
+static void af_sample_rgb(const float *a,int w,int h,float x,float y,float out[3]){
+    int X=floorf(x),Y=floorf(y);float u=x-X,v=y-Y;
+    int x0=(X%w+w)%w,x1=(x0+1)%w,y0=(Y%h+h)%h,y1=(y0+1)%h;
+    const float *p=a+(y0*w+x0)*4,*q=a+(y0*w+x1)*4,*r=a+(y1*w+x0)*4,*s=a+(y1*w+x1)*4;
+    for(int c=0;c<3;c++)out[c]=af_mix(af_mix(p[c],q[c],u),af_mix(r[c],s[c],u),v);
+}
 static int af_surface(const char *name){
     if(!strcmp(name,"rbot090"))return 1; /* Also used as a native mine panel. */
     const char *prefix[]={"rock","metl","ceil","misc","ctrl","door","wall","secretdr","lava","water","blown","fram","rmap","exit","arw","fan","box","force","bluegoal","redgoal"};
@@ -86,10 +98,13 @@ static int astra_faithful(grs_bitmap *bm,const char *name,png_data *img){
     if(xmax<0||lensCount<1)lens=0;
     for(int c=0;c<3;c++)lensColor[c]/=fmaxf(1,lensCount);
     float cx=(xmin+xmax+1.f)/(2*w),cy=(ymin+ymax+1.f)/(2*h),bx=(xmax-xmin+1.f)/(2*w),by=(ymax-ymin+1.f)/(2*h);
+    int micro_slot=W==H?(W==256?0:W==512?1:W==1024?2:-1):-1;
+    if(micro_slot>=0&&!af_micro_cache[micro_slot])af_micro_cache[micro_slot]=malloc(W*H*sizeof(af_micro_sample));
+    af_micro_sample *micro_cache=micro_slot>=0?af_micro_cache[micro_slot]:NULL;
+    int micro_ready=micro_cache&&af_micro_ready[micro_slot];
     for(int y=0;y<H;y++)for(int x=0;x<W;x++){
         int i=y*W+x;float u=(x+.5f)/W,v=(y+.5f)/H,sx=u*w-.5f,sy=v*h-.5f;
-        float src[3];for(int c=0;c<3;c++){
-            src[c]=af_sample(layout,w,h,sx,sy,c,4);
+        float src[3];af_sample_rgb(layout,w,h,sx,sy,src);for(int c=0;c<3;c++){
             if(rock){float sum=src[c]*2;for(int j=0;j<4;j++)sum+=af_sample(layout,w,h,sx+(j%2?1:-1)*1.25f,sy+(j/2?1:-1)*1.25f,c,4);src[c]=sum/6;}
         }
         float lum=.25f*src[0]+.55f*src[1]+.20f*src[2];
@@ -99,21 +114,26 @@ static int astra_faithful(grs_bitmap *bm,const char *name,png_data *img){
          * panel layout. Procedural microdetails stay fixed across door frames. */
         unsigned char *grain=img->data+3*i,*around=img->data+3*(((y+5)%H)*W+(x+5)%W);
         float fine=(grain[0]+grain[1]+grain[2]-around[0]-around[1]-around[2])/765.f;
-        float n=af_noise(u*147,v*147)-.5f,brush=af_noise(u*420,v*18)-.5f;
-        float pores=af_noise(u*260,v*260),vein=af_noise(u*24,v*24);
-        float metal=.74f+.18f*lum;
-        float stone=.5f,steel=.5f;
+        float n,brush,pores,stone,steel,scratch;
+        if(micro_ready){af_micro_sample *m=&micro_cache[i];n=m->noise;brush=m->brush;pores=m->pores;}
+        else {
+            n=af_noise(u*147,v*147)-.5f;brush=af_noise(u*420,v*18)-.5f;pores=af_noise(u*260,v*260);
+            if(micro_cache)micro_cache[i]=(af_micro_sample){n,brush,pores};
+        }
+        stone=.5f;steel=.5f;
         if(af_stone_color.data){int px=(int)(u*af_stone_color.width)%af_stone_color.width,py=(int)(v*af_stone_color.height)%af_stone_color.height;unsigned char *s=af_stone_color.data+(py*af_stone_color.width+px)*af_stone_color.channels;stone=(s[0]+s[1]+s[2])/765.f;}
         if(af_metal_color.data){int px=(int)((.08f+u*.84f)*af_metal_color.width),py=(int)((.08f+v*.60f)*af_metal_color.height);unsigned char *s=af_metal_color.data+(py*af_metal_color.width+px)*af_metal_color.channels;steel=(s[0]+s[1]+s[2])/765.f;}
-        float micro=rock?((stone-.33f)*.62f+n*.025f):((steel-.60f)*.12f+brush*.018f+n*.015f);
         float cellx=u*28,celly=v*28,dx=cellx-floorf(cellx),dy=celly-floorf(celly);
-        float scratch=af_random((int)cellx,(int)celly)>.93f?(1-af_smooth(.018f,.035f,fabsf(dx-.5f)))*af_smooth(.1f,.2f,dy)*(1-af_smooth(.65f,.8f,dy)):0;
+        scratch=af_random((int)cellx,(int)celly)>.93f?(1-af_smooth(.018f,.035f,fabsf(dx-.5f)))*af_smooth(.1f,.2f,dy)*(1-af_smooth(.65f,.8f,dy)):0;
+
+        float metal=.74f+.18f*lum;
+        float micro=rock?((stone-.33f)*.62f+n*.025f):((steel-.60f)*.12f+brush*.018f+n*.015f);
         if(!rock)micro+=scratch*.10f;
         float glow=lamp?af_smooth(.65f,.94f,hi)*(1-af_smooth(.10f,.31f,hi-lo))*.7f:0;
         if(!strncmp(name,"ctrl",4))glow=fmaxf(glow,pigment*af_smooth(.35f,.8f,hi)*.7f);
         float diffuser=(af_smooth(.32f,.40f,fabsf(sinf(u*W*.53f)*sinf(v*H*.53f)))*.09f-.035f)*glow;
-        float hx=af_sample(layout,w,h,sx+.65f,sy,0,4)+af_sample(layout,w,h,sx+.65f,sy,1,4);
-        float hy=af_sample(layout,w,h,sx,sy+.65f,0,4)+af_sample(layout,w,h,sx,sy+.65f,1,4);
+        float samplex[3],sampley[3];af_sample_rgb(layout,w,h,sx+.65f,sy,samplex);af_sample_rgb(layout,w,h,sx,sy+.65f,sampley);
+        float hx=samplex[0]+samplex[1],hy=sampley[0]+sampley[1];
         float edge=af_sat((fabsf(hx-src[0]-src[1])+fabsf(hy-src[0]-src[1]))*2.1f);
         float polish=edge*(1-pigment)*.07f;
         for(int c=0;c<3;c++){
@@ -162,6 +182,7 @@ static int astra_faithful(grs_bitmap *bm,const char *name,png_data *img){
         float len=sqrtf(dx*dx+dy*dy+1);detail[i*4]=(unsigned char)((dx/len*.5f+.5f)*255);detail[i*4+1]=(unsigned char)((dy/len*.5f+.5f)*255);
         if(rock&&af_stone_normal.data){int px=x*af_stone_normal.width/W,py=y*af_stone_normal.height/H;unsigned char *s=af_stone_normal.data+(py*af_stone_normal.width+px)*af_stone_normal.channels;detail[i*4]=(unsigned char)(detail[i*4]*.25f+s[0]*.75f);detail[i*4+1]=(unsigned char)(detail[i*4+1]*.25f+s[1]*.75f);}
     }
+    if(micro_cache)af_micro_ready[micro_slot]=1;
     /* Re-typeset known native safety labels inside their original text bounds.
      * The surrounding panel, colors and transparency still come from Descent. */
     if(!strncmp(name,"misc",4)||!strncmp(name,"exit",4))EM_ASM({(function(){

@@ -111,7 +111,7 @@ index 1812c5d..cac69b8 100644
  #include "fix.h"
  #include "event.h"
 diff --git a/d2/arch/ogl/gr.c b/d2/arch/ogl/gr.c
-index c5cca0b..fc9a574 100644
+index c5cca0b..c60a912 100644
 --- a/d2/arch/ogl/gr.c
 +++ b/d2/arch/ogl/gr.c
 @@ -54,6 +54,10 @@
@@ -147,7 +147,19 @@ index c5cca0b..fc9a574 100644
  #endif
  }
  
-@@ -727,7 +727,7 @@ void gr_set_attributes(void)
+@@ -567,7 +567,10 @@ void ogl_get_verinfo(void)
+ #ifndef NDEBUG
+ 	con_printf(CON_VERBOSE,"gl_intensity4:%i gl_luminance4_alpha4:%i gl_rgba2:%i gl_readpixels:%i gl_gettexlevelparam:%i\n",GameArg.DbgGlIntensity4Ok,GameArg.DbgGlLuminance4Alpha4Ok,GameArg.DbgGlRGBA2Ok,GameArg.DbgGlReadPixelsOk,GameArg.DbgGlGetTexLevelParamOk);
+ #endif
+-	if (!d_stricmp(gl_extensions,"GL_EXT_texture_filter_anisotropic")==0)
++	/* R67: an extension list is not a single extension name. A missing
++	 * capability must never trigger its unsupported enum query. */
++	ogl_maxanisotropy = 1;
++	if (gl_extensions && strstr(gl_extensions,"GL_EXT_texture_filter_anisotropic"))
+ 	{
+ 		glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &ogl_maxanisotropy);
+ 		con_printf(CON_VERBOSE,"ogl_maxanisotropy:%f\n",ogl_maxanisotropy);
+@@ -727,7 +730,7 @@ void gr_set_attributes(void)
  	SDL_GL_SetAttribute(SDL_GL_ACCUM_BLUE_SIZE,0);
  	SDL_GL_SetAttribute(SDL_GL_ACCUM_ALPHA_SIZE,0);
  	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER,1);
@@ -156,7 +168,7 @@ index c5cca0b..fc9a574 100644
  	if (GameCfg.Multisample)
  	{
  		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
-@@ -874,8 +874,8 @@ unsigned char ogl_ugpixel( grs_bitmap * bitmap, int x, int y )
+@@ -874,8 +877,8 @@ unsigned char ogl_ugpixel( grs_bitmap * bitmap, int x, int y )
  	ubyte buf[4];
  
  #ifndef OGLES
@@ -167,7 +179,7 @@ index c5cca0b..fc9a574 100644
  #endif
  
  	glReadPixels(bitmap->bm_x + x, SHEIGHT - bitmap->bm_y - y, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, buf);
-@@ -1167,10 +1167,12 @@ void save_screen_shot(int automap_flag)
+@@ -1167,10 +1170,12 @@ void save_screen_shot(int automap_flag)
  		HUD_init_message(HM_DEFAULT, "%s '%s'", TXT_DUMPING_SCREEN, savename + strlen(SCRNS_DIR));
  
  #ifndef OGLES
@@ -182,7 +194,7 @@ index c5cca0b..fc9a574 100644
 +
 +
 diff --git a/d2/arch/ogl/ogl.c b/d2/arch/ogl/ogl.c
-index c536c46..be3fe58 100644
+index c536c46..c9eb844 100644
 --- a/d2/arch/ogl/ogl.c
 +++ b/d2/arch/ogl/ogl.c
 @@ -56,6 +56,7 @@
@@ -409,12 +421,17 @@ index c536c46..be3fe58 100644
  void ogl_loadbmtexture_f(grs_bitmap *bm, int texfilt, const char *bitmapname)
  {
  	unsigned char *buf;
-@@ -1663,11 +1719,20 @@ void ogl_loadbmtexture_f(grs_bitmap *bm, int texfilt, const char *bitmapname)
- 		png_data pdata;
+@@ -1660,14 +1716,24 @@ void ogl_loadbmtexture_f(grs_bitmap *bm, int texfilt, const char *bitmapname)
+ 	if (ogl_allow_png() && bitmapname)
+ 	{
+ 		char filename[64];
+-		png_data pdata;
++		png_data pdata={0};
  
  		sprintf(filename, /*"textures/"*/ "%s.png", bitmapname);
 -		if (read_png(filename, &pdata))
-+		int found=read_png(filename, &pdata);
++		int generated=astra_generated(bm,bitmapname,&pdata);
++		int found=generated?1:read_png(filename, &pdata);
 +		/* Native signs, fans and water did not have Overload aliases. They use
 +		 * the same reconstruction path, without fetching a substitute design. */
 +		if(!found&&af_surface(bitmapname)){
@@ -427,11 +444,11 @@ index c536c46..be3fe58 100644
  			con_printf(CON_DEBUG,"%s: %ux%ux%i p=%i(%i) c=%i a=%i chans=%i\n", filename, pdata.width, pdata.height, pdata.depth, pdata.paletted, pdata.num_palette, pdata.color, pdata.alpha, pdata.channels);
  			if (pdata.depth == 8 && pdata.color)
  			{
-+				astra_finish(bm,bitmapname,&pdata);
++				if(generated)++astra_surfaces;else astra_finish(bm,bitmapname,&pdata);
  				if (bm->gltexture == NULL)
  					ogl_init_texture(bm->gltexture = ogl_get_free_texture(), pdata.width, pdata.height, ((pdata.alpha || bm->bm_flags & BM_FLAG_TRANSPARENT) ? OGL_FLAG_ALPHA : 0));
  				unsigned char *data = pdata.data;
-@@ -1688,6 +1753,9 @@ void ogl_loadbmtexture_f(grs_bitmap *bm, int texfilt, const char *bitmapname)
+@@ -1688,6 +1754,9 @@ void ogl_loadbmtexture_f(grs_bitmap *bm, int texfilt, const char *bitmapname)
  				if (pdata.palette)
  					free(pdata.palette);
  				bm->gltexture->is_png = 1;
@@ -441,7 +458,7 @@ index c536c46..be3fe58 100644
  				return;
  			}
  			else
-@@ -1845,6 +1913,8 @@ void ogl_freetexture(ogl_texture *gltexture)
+@@ -1845,6 +1914,8 @@ void ogl_freetexture(ogl_texture *gltexture)
  	if (gltexture->handle>0) {
  		r_texcount--;
  		glmprintf((0,"ogl_freetexture(%p):%i (%i left)\n",gltexture,gltexture->handle,r_texcount));

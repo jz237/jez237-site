@@ -236,7 +236,7 @@ function preloadFlightEngine() {
   if(location.protocol!=="http:"&&location.protocol!=="https:")return;
   if(document.getElementById("astraEnginePreload"))return;
   const link=document.createElement("link");link.id="astraEnginePreload";
-  link.rel="preload";link.as="script";link.href="engine.js?v=pyre66";
+  link.rel="preload";link.as="script";link.href="engine.js?v=pyre67";
   document.head.append(link);
 }
 let firstBlastProfile=0;
@@ -293,7 +293,7 @@ async function launch(quick,demo=false,encounter=false,preview=false,autopilot=f
     const silence="data:audio/wav;base64,UklGRiYAAABXQVZFZm10IBAAAAABAAEAQB8AAIA+AAACABAAZGF0YQIAAAAAAA==";
     music.src=silence; music.volume=.75;
     music.play().then(()=>{if(music.getAttribute("src")===silence){music.pause();music.currentTime=0;}}).catch(()=>{});
-    await script("streaming.js?v=56");
+    await script("streaming.js?v=67");
     const loadMovie=astraMovieLibrary(async file=>{
       const response=await fetch("payload/"+file);
       if(!response.ok||!response.body)throw Error("Could not load "+file);
@@ -323,7 +323,7 @@ async function launch(quick,demo=false,encounter=false,preview=false,autopilot=f
     }
     if(astra){await script("generated-materials.js?v=56");assetDepot=astraGeneratedLibrary(assetDepot);}
     if(astra)await loadAstraShipAssets();
-    if(campaign==="overload"){await script("mission-controller.js?v=46");await script("overload-loader.js?v=48");await astraOverload.install(mounted);}
+    if(campaign==="overload"){await script("mission-controller.js?v=67");await script("overload-loader.js?v=48");await astraOverload.install(mounted);}
     $("status").textContent="Starting flight computer";
     const canvas=$("view");
     const quality=Number($("res").value);
@@ -360,7 +360,7 @@ async function launch(quick,demo=false,encounter=false,preview=false,autopilot=f
           const settings={ResolutionX:quality,ResolutionY:height,AspectX:9,AspectY:16,WindowMode:1,
                           TexFilt:astra?3:2,MovieTexFilt:1,MusicType:2,OrigTrackOrder:1,VSync:1};
           if(!cfg) Object.assign(settings,{DigiVolume:8,MusicVolume:6,GammaLevel:3});
-          cfg=cfg.split(/\r?\n/).filter(l=>!Object.hasOwn(settings,l.split("=")[0])).join("\n");
+          cfg=cfg.split(/\r?\n/).filter(l=>!Object.prototype.hasOwnProperty.call(settings,l.split("=")[0])).join("\n");
           cfg+="\n"+Object.entries(settings).map(([k,v])=>k+"="+v).join("\n")+"\n";
           F.writeFile(name,cfg);
           Module.removeRunDependency("pilot");
@@ -371,7 +371,7 @@ async function launch(quick,demo=false,encounter=false,preview=false,autopilot=f
         setInterval(syncPilot,3000);
       }
     };
-    await script("engine.js?v=pyre66");
+    await script("engine.js?v=pyre67");
   } catch(e) {console.error(e);astraFail(e.message);}
 }
 

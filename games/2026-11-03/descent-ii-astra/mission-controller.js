@@ -83,7 +83,7 @@
           this.bridge.message(r.class,r.data.special_index);break;
         case 'ScriptHologuidePosition':this.bridge.guide(r);break;
         case 'ScriptAnalyticsChokepoint':case 'ScriptDisableOcclusion':case 'ScriptLockdownDoor':case 'ScriptLockdownRobot':case 'ScriptLevel16':break;
-        default:this.errors.push('Unimplemented mission action '+r.class);this.bridge.error(this.errors.at(-1));
+        default:this.errors.push('Unimplemented mission action '+r.class);this.bridge.error(this.errors[this.errors.length-1]);
       }
     }
     complete(){if(this.finished)return;this.finished=true;this.bridge.finish();}
@@ -143,7 +143,7 @@
       }
       if(this.time>=this.warpCooldown)for(const r of this.records){
         if(r.class!=='TriggerWarper'||!r.active||!this.inside(r,player.position))continue;
-        const target=this.targets(this.links(r).at(-1),['TriggerWarper','ScriptSecretLevel'])[0];
+        const target=this.targets(this.links(r).slice(-1)[0],['TriggerWarper','ScriptSecretLevel'])[0];
         if(target?.class==='TriggerWarper'){this.warpCooldown=this.time+2;this.bridge.warp(target);break;}
         if(target?.class==='ScriptSecretLevel'){this.warpCooldown=this.time+2;this.activate(target);break;}
       }

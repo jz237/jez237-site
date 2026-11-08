@@ -120,7 +120,7 @@
     send(op,index=-1,value=0,text=''){
       if(!this.active)return;
       const command={token:this.token,op,index,value,text};
-      const prev=this.queue.at(-1);if(prev?.token===command.token&&prev.index===index&&prev.op===op&&[1,3,4].includes(op))this.queue[this.queue.length-1]=command;else this.queue.push(command);
+      const prev=this.queue[this.queue.length-1];if(prev?.token===command.token&&prev.index===index&&prev.op===op&&[1,3,4].includes(op))this.queue[this.queue.length-1]=command;else this.queue.push(command);
       if(index>=0){this.state.selected=index;this.rows.forEach(r=>r.classList.toggle('selected',+r.dataset.index===index));}
     },
     poll(token){while(this.queue.length){const c=this.queue.shift();if(c.token===token){this.current=c;return c.op;}}return 0;},

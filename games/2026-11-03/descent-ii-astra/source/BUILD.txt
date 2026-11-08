@@ -1339,3 +1339,13 @@ R66 — post-release bug audit
 - Removed duplicated replay text from the explosion-showroom entry.
 - Audited Original and Vertigo live demos, later and secret mines, showroom scenes, save-and-return/resume, and graphics-context-loss recovery with muted, pointer-unlocked browser tests.
 - Flight controls, demo AI, simulation and rendering quality are unchanged.
+
+R67 — older-browser compatibility and texture preparation
+- Removed Object.hasOwn / Array.at startup, native-menu, streaming and mission-controller requirements.
+- Fixed anisotropic filtering capability detection; unsupported browsers no longer receive invalid enum queries.
+- Avoided source-PNG decoding when generated wall materials immediately replace that image.
+- Cached invariant procedural microdetail in three bounded slots (15.75 MiB maximum) and reused color interpolation coordinates.
+- Precomputed robot/material source columns instead of repeating that mapping for every output row.
+- Paired 4x CPU-throttled tests: 30 texture reconstructions matched prior pixel hashes exactly; representative hull preparation was about 49% faster, reconstructed surfaces about 24–28% faster.
+- Shader and all 21 weapon showcase checks pass with optional WebGL extensions disabled. Physical GTX 1080/old Chrome hardware was not available.
+- Flight controls, demo AI, geometry, texture dimensions, effects, simulation and sound assets unchanged.
