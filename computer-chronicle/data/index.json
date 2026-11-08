@@ -2,6 +2,23 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-11-08",
+      "historicDate": "1985-07-08",
+      "displayDate": "Week of July 8-14, 1985",
+      "edition": "Issue 154 - Weekly 1985 Computer & Culture Chronicle",
+      "morningLine": "Atari ships; Activision pedals; Dixons cuts the price of entry.",
+      "leadHeadline": "Atari 520ST reaches buyers as the 16-bit contest intensifies",
+      "storyHeadlines": [
+        "Activision puts the Tour de France on home micros",
+        "Compact discs promise encyclopedia-sized storage for home micros",
+        "Dixons cuts MSX prices to £99 and £149.99",
+        "Acorn’s financial strain stalls new projects"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1985-07-08.jpg",
+      "thumb": "media/thumbs/1985-07-08.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-11-07",
       "historicDate": "1985-07-01",
       "displayDate": "Week of July 1-7, 1985",

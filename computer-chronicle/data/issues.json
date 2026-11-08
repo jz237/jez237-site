@@ -4,6 +4,458 @@
   "fallbackPolicy": "Use exact-day computer news when verified. If none exists, use same-week or same-month personal-computing items with confidence labels, then fall back to a wider world/business headline.",
   "issues": [
     {
+      "masthead": {
+        "title": "Computer Chronicle",
+        "subtitle": "Issue 154 - Weekly 1985 Computer & Culture Chronicle",
+        "dateline": "Week of July 8-14, 1985",
+        "price": "75 cents"
+      },
+      "visualProfile": {
+        "tone": "The 16-bit summer and cycling on home micros",
+        "motifs": [
+          "Atari 520ST keyboard and monitor",
+          "Spectrum cycling game cassette",
+          "compact disc and MSX retail cards"
+        ],
+        "layout": "Dense warm newsprint, red and blue boxed modules"
+      },
+      "layoutPlan": {
+        "leadPlacement": "Atari 520ST shipping is the strongest historical lead; Tour de France gets a prominent gaming halftone",
+        "secondaryRail": "CD-ROM, MSX bargains and Compunet",
+        "archiveNavigation": "Weekly archive and previous/next controls"
+      },
+      "sectionChrome": {
+        "primary": "brick red",
+        "secondary": "royal blue",
+        "texture": "aged newsprint, paper grain, fine column rules, slight ink bleed"
+      },
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1985-07-08.jpg",
+        "alt": "Computer Chronicle newspaper-style front page for July 8-14, 1985",
+        "caption": "Newspaper-style front page generated from structured Chronicle issue data.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "currentDate": "2026-11-08",
+      "historicDate": "1985-07-08",
+      "displayDate": "Week of July 8-14, 1985",
+      "edition": "Issue 154 - Weekly 1985 Computer & Culture Chronicle",
+      "editorNote": "The 16-bit contest reaches the counter while cycling, compact discs and cut-price MSX machines crowd the home-computer desk.",
+      "morningLine": "Atari ships; Activision pedals; Dixons cuts the price of entry.",
+      "lead": {
+        "headline": "Atari 520ST reaches buyers as the 16-bit contest intensifies",
+        "dek": "July shipping news brings a powerful new desktop into the summer contest, with Commodore’s unveiling still ahead.",
+        "confidence": "same-week",
+        "sourceRefs": [
+          4,
+          5,
+          2,
+          0
+        ],
+        "body": [
+          "The Atari 520ST is moving from demonstration promise to the buyer’s desk. The New York Times carries a July 10 shipping report, while the machine’s widening July availability marks a new stage in the contest for the personal-computer household. This is not the original unveiling: limited releases have preceded the broader summer arrival.",
+          "The attraction is a Motorola 68000 processor running at about 8 MHz, 512 KB of memory and a GEM graphical desktop over Atari TOS. Built-in MIDI ports add a distinctive invitation to musicians. These specifications describe the machine, rather than a newly announced change this week.",
+          "The display choice matters. The ST offers 320 by 200 pixels in 16 colors or 640 by 200 in four; its 640 by 400 monochrome mode requires the monochrome monitor. Introduction packages are listed at $799.99 monochrome and $999.99 color, background prices rather than a fresh July 10 shop quotation.",
+          "The contest is not settled. Popular Computing Weekly reports lower-cost ST proposals, but proposed models are not machines already on the shelf. Commodore’s American Amiga unveiling is scheduled for July 23, still ahead of this issue’s week. For now, Atari has a shipping story to put beside the promises."
+        ]
+      },
+      "stories": [
+        {
+          "headline": "Activision puts the Tour de France on home micros",
+          "confidence": "same-week",
+          "sourceRefs": [
+            0
+          ],
+          "body": [
+            "The Tour de France has reached the home keyboard. Popular Computing Weekly’s July 11 front page reports Activision’s cycling simulation available for Commodore and Spectrum at £9.95, bringing a timely sporting subject to the software shelf.",
+            "The magazine describes a 2,500-mile course through France over 22 stages. With the real race still in progress, the program has an immediate point of recognition beyond the familiar spaceship and dungeon. The report establishes availability by July 11, not an independently verified first release day."
+          ]
+        },
+        {
+          "headline": "Compact discs promise encyclopedia-sized storage for home micros",
+          "confidence": "same-week",
+          "sourceRefs": [
+            0
+          ],
+          "body": [
+            "A familiar audio-disc shape may become a vast read-only library for the personal computer. Popular Computing Weekly reports that Atari hopes to offer a Philips-based CD-ROM player in December or January for about $600 (£450), following a demonstration at June’s Consumer Electronics Show.",
+            "Sony UK is evaluating a sample drive connected to an IBM PC AT. Its John Whitehead cites about 540 megabytes per disc: an extraordinary prospect beside the home micro’s ordinary removable storage. Philips plans a controller to connect a player to a personal computer this year.",
+            "These are prototypes, plans and forecasts, not a completed mass-market launch. The magazine distinguishes read-only discs from write-once and experimental read/write media. The immediate story is the size of the library being proposed, and the work still needed to deliver it."
+          ]
+        },
+        {
+          "headline": "Dixons cuts MSX prices to £99 and £149.99",
+          "confidence": "same-week",
+          "sourceRefs": [
+            0
+          ],
+          "body": [
+            "Dixons has put a sharp new price on the British MSX shelf. The Toshiba HX-10 is offered at £99 against a suggested £239, while Sony’s Hit Bit is £149.99 against a suggested £299, according to the July 11 Popular Computing Weekly.",
+            "The cuts are a retailer’s action, not a manufacturer-wide price revision. Toshiba’s UK product manager objects; Sony stresses that it cannot dictate the retailer’s prices. Dixons confirms the discounts without further comment. For the buyer, the sticker is concrete even as suppliers dispute the message it sends."
+          ]
+        },
+        {
+          "headline": "Acorn’s financial strain stalls new projects",
+          "confidence": "same-week",
+          "sourceRefs": [
+            0
+          ],
+          "body": [
+            "Acorn’s planned business workstations remain delayed while financing is unresolved. Popular Computing Weekly reports that Olivetti, which spent £10.4 million in February’s rescue, has not finalized a further agreement; a proposed package could be worth up to £20 million.",
+            "The National Semiconductor 16032-based machines, priced at £3,500 to £8,000, are unavailable rather than formally declared cancelled. Speech-research projects are also affected. The distinction matters: this is a report of stalled plans and continuing negotiations, not a completed rescue or an announcement that Acorn has collapsed."
+          ]
+        }
+      ],
+      "computerItems": [
+        {
+          "title": "Atari 520ST",
+          "summary": "July availability; specifications are retrospective background, with shipping headline dated July 10.",
+          "confidence": "same-week",
+          "sourceRefs": [
+            4,
+            5
+          ]
+        },
+        {
+          "title": "MSX clearance-style price competition",
+          "summary": "Dixons offers Toshiba HX-10 £99 and Sony Hit Bit £149.99.",
+          "confidence": "same-week",
+          "sourceRefs": [
+            0
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "C Power for the Commodore 64",
+          "detail": "Dynamite Software compiler on disc, 531-page manual; £122.45 including postage and packing. PCW July 11 p.5 says it follows Kernighan and Ritchie’s C language definition.",
+          "confidence": "same-week",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "name": "Devpac 80",
+          "detail": "HiSoft CP/M assembler package reviewed July 11 p.11 for disc-equipped Amstrad and Tatung Einstein, £39.99. Ed80 editor, assembler and Mon80 monitor/disassembler are described; this is a review, not a dated launch.",
+          "confidence": "same-week",
+          "sourceRefs": [
+            0
+          ]
+        }
+      ],
+      "storeShelves": [
+        {
+          "label": "Top 5 Computer Games — editorial selections, not sales rankings",
+          "items": [
+            "Tour de France — Activision, Commodore/Spectrum, £9.95; reported available July 11.",
+            "Fairlight — The Edge advertisement credits Bo Jangeborg and promotes 3D “Worldmaker”; advertising presence is not a verified release date.",
+            "A View to a Kill — Domark advertisement July 4 says available on Spectrum 48K, Commodore 64 and Enterprise; other versions promised.",
+            "A Day at the Races — Tom Wharton’s Atari BASIC horse-racing type-in uses under 8K, with text, color and sound, PCW July 11 p.14.",
+            "Spelunker — Brøderbund cavern adventure; July COMPUTE! review lists $29.95 for Commodore 64 and Atari. A month-dated review, not a new release this week."
+          ],
+          "confidence": "same-month",
+          "sourceRefs": [
+            0,
+            2,
+            13
+          ]
+        },
+        {
+          "label": "Top 5 Movies — July 12-14 domestic weekend",
+          "items": [
+            "1. Back to the Future",
+            "2. Mad Max Beyond Thunderdome",
+            "3. Cocoon",
+            "4. Rambo: First Blood Part II",
+            "5. Pale Rider"
+          ],
+          "confidence": "same-week",
+          "sourceRefs": [
+            8
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "Toshiba HX-10",
+          "price": "£99",
+          "note": "Dixons UK; suggested £239.",
+          "confidence": "same-week",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "item": "Sony Hit Bit",
+          "price": "£149.99",
+          "note": "Dixons UK; suggested £299.",
+          "confidence": "same-week",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "item": "Tour de France",
+          "price": "£9.95",
+          "note": "Activision; Commodore and Spectrum, reported July 11.",
+          "confidence": "same-week",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "item": "C Power",
+          "price": "£122.45",
+          "note": "Commodore 64 compiler; including postage and packing.",
+          "confidence": "same-week",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "item": "Devpac 80",
+          "price": "£39.99",
+          "note": "HiSoft CP/M assembler; July 11 review price.",
+          "confidence": "same-week",
+          "sourceRefs": [
+            0
+          ]
+        }
+      ],
+      "briefs": [
+        {
+          "headline": "Sinclair agrees to independent returns survey",
+          "summary": "PCW July 11 p.4 describes proposed faulty-product cards sent to Computer Trade Weekly, initially for Spectrum Plus and later QL/pocket TV; not completed survey findings.",
+          "confidence": "same-week",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "headline": "Amiga unveiling set for July 23",
+          "summary": "Commodore’s American unveiling is scheduled for July 23, replacing the earlier July 18 date reported by Popular Computing Weekly.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            2
+          ]
+        }
+      ],
+      "musicChart": [
+        {
+          "rank": 1,
+          "title": "If You Love Somebody Set Them Free",
+          "song": "If You Love Somebody Set Them Free",
+          "artist": "Sting",
+          "chart": "Billboard Top Rock Tracks",
+          "chartDate": "1985-07-13",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            6
+          ]
+        },
+        {
+          "rank": 2,
+          "title": "The Power Of Love",
+          "song": "The Power Of Love",
+          "artist": "Huey Lewis & The News",
+          "chart": "Billboard Top Rock Tracks",
+          "chartDate": "1985-07-13",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            6
+          ]
+        },
+        {
+          "rank": 3,
+          "title": "Sentimental Street",
+          "song": "Sentimental Street",
+          "artist": "Night Ranger",
+          "chart": "Billboard Top Rock Tracks",
+          "chartDate": "1985-07-13",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            6
+          ]
+        },
+        {
+          "rank": 4,
+          "title": "Little By Little",
+          "song": "Little By Little",
+          "artist": "Robert Plant",
+          "chart": "Billboard Top Rock Tracks",
+          "chartDate": "1985-07-13",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            6
+          ]
+        },
+        {
+          "rank": 5,
+          "title": "What About Love",
+          "song": "What About Love",
+          "artist": "Heart",
+          "chart": "Billboard Top Rock Tracks",
+          "chartDate": "1985-07-13",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            6
+          ]
+        }
+      ],
+      "periodAd": {
+        "headline": "Fairlight promises a three-dimensional world",
+        "summary": "The Edge’s July 11 advertisement credits Bo Jangeborg and promotes the Worldmaker system. An advertising appearance is not a verified release date.",
+        "tagline": "Another world waits on the cassette shelf.",
+        "sourceRefs": [
+          0
+        ]
+      },
+      "market": {
+        "headline": "A summer of bigger machines and smaller price tags",
+        "summary": "Atari’s July shipping news and Dixons’ MSX discounts pull the home-computer market in different directions: more ambitious hardware at one end, a cheaper route to the keyboard at the other. Acorn’s unresolved financing shows the pressure behind the shop window.",
+        "confidence": "same-week",
+        "sourceRefs": [
+          0,
+          4,
+          5
+        ]
+      },
+      "worldAnchor": {
+        "headline": "Live Aid links London and Philadelphia",
+        "summary": "The July 13 famine-relief concerts link Wembley Stadium in London and JFK Stadium in Philadelphia, organized by Bob Geldof and Midge Ure.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          11,
+          10
+        ]
+      },
+      "bbsNote": {
+        "headline": "Compunet adds chat and document transfers",
+        "summary": "Compunet expands its subscriber facilities with chat and document transfers, as reported in the July 4 Popular Computing Weekly.",
+        "posts": [
+          {
+            "topic": "Online chat",
+            "platform": "Compunet",
+            "text": "Messages may be addressed to everyone or one subscriber; up to 15 pages at 1p per page."
+          },
+          {
+            "topic": "Document exchange",
+            "platform": "Compunet",
+            "text": "New facility lets subscribers upload word-processed files for other users to download."
+          },
+          {
+            "topic": "Network growing pains",
+            "platform": "Compunet",
+            "text": "Editor Jane Firbank says January–February problems included underestimated session lengths and some Commodore modems oversensitive to line noise. Home banking is promised for early next year; estate agency remains in abeyance."
+          },
+          {
+            "topic": "Amstrad communications",
+            "platform": "Skywave Multi-Port / planned Skytel",
+            "text": "July 4 p.5 reports £99.95 Multi-Port for CPC464 with serial/parallel ports and Multi-Com; a 664 version and a users’ bulletin board named Skytel are planned, not confirmed operational."
+          }
+        ],
+        "sourceRefs": [
+          2
+        ]
+      },
+      "curiosity": {
+        "headline": "Three claps summon your lost keys",
+        "summary": "A £6.95 Key Tracer responds to clapping instead of a keyboard.",
+        "detail": "Popular Computing Weekly describes a £6.95 Key Tracer from Dudley Langmead Enterprises: a key-ring fob powered by two hearing-aid batteries that beeps after three handclaps, with about 12 feet range.",
+        "sourceRefs": [
+          0
+        ]
+      },
+      "gadgetWatch": {
+        "headline": "Maplin’s proposed robot aerobics",
+        "summary": "Alongside Hero Jr price cuts, Maplin is developing interfaces for Spectrum, C64 and BBC machines and planning an aerobics program named Herobics.",
+        "confidence": "same-week",
+        "sourceRefs": [
+          0
+        ]
+      },
+      "accuracyLedger": {
+        "items": [
+          "NYT shipping headline and date only; unread article body is not used for specifications. ST specifications and introduction prices are retrospective background.",
+          "Music top five verified directly from Billboard July 13 HTML chart rows during publication; no unverified ranks copied from dossier.",
+          "Games are editorial selections, not sales ranks; Spelunker is July review context. Fairlight advertisement is not proof of release.",
+          "CD-ROM, Amiga, robotics and Acorn developments retain contemporary future or conditional tense.",
+          "Compunet notes summarize July 4 reporting, not recovered subscriber posts. No verified named underground crew event established; feature omitted."
+        ]
+      },
+      "sources": [
+        {
+          "title": "Popular Computing Weekly 11–17 July 1985, primary scan and museum index",
+          "url": "https://www.computinghistory.org.uk/det/28799/Popular-Computing-Weekly-Vol-4-No-28-11-17-July-1985/",
+          "date": "1985-07-11"
+        },
+        {
+          "title": "PCW July 11 primary PDF",
+          "url": "https://www.computinghistory.org.uk/downloads/28799",
+          "date": "1985-07-11"
+        },
+        {
+          "title": "Popular Computing Weekly 4–10 July 1985, primary scan and museum index",
+          "url": "https://www.computinghistory.org.uk/det/28798/Popular-Computing-Weekly-Vol-4-No-27-4-10-July-1985/",
+          "date": "1985-07-04"
+        },
+        {
+          "title": "PCW July 4 primary PDF",
+          "url": "https://www.computinghistory.org.uk/downloads/28798",
+          "date": "1985-07-04"
+        },
+        {
+          "title": "Atari Is Shipping 520 ST Computer; indexed title/date only",
+          "url": "https://www.nytimes.com/1985/07/10/business/atari-is-shipping-520-st-computer.html",
+          "date": "1985-07-10"
+        },
+        {
+          "title": "Atari ST, retrospective specifications and availability",
+          "url": "https://en.wikipedia.org/wiki/Atari_ST",
+          "date": null
+        },
+        {
+          "title": "Billboard Top Rock Tracks, July 13, 1985: verified top five",
+          "url": "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1985-07-13/",
+          "date": "1985-07-13"
+        },
+        {
+          "title": "Historical Billboard rock number-one chronology",
+          "url": "https://en.wikipedia.org/wiki/List_of_Billboard_Mainstream_Rock_number-one_songs_of_the_1980s",
+          "date": null
+        },
+        {
+          "title": "The Numbers weekend domestic box office",
+          "url": "https://www.the-numbers.com/box-office-chart/weekend/1985/07/12",
+          "date": "1985-07-12"
+        },
+        {
+          "title": "COMPUTE! July 1985 index",
+          "url": "https://www.atarimagazines.com/compute/index/index.php?issue=issue62",
+          "date": "1985-07"
+        },
+        {
+          "title": "AP Today in History July 13",
+          "url": "https://apnews.com/today-in-history/july-13",
+          "date": null
+        },
+        {
+          "title": "Live Aid retrospective",
+          "url": "https://en.wikipedia.org/wiki/Live_Aid",
+          "date": "1985-07-13"
+        },
+        {
+          "title": "NZ History: Rainbow Warrior sunk",
+          "url": "https://nzhistory.govt.nz/rainbow-warrior-sunk-in-auckland",
+          "date": "1985-07-10"
+        },
+        {
+          "title": "COMPUTE! issue 62, July 1985: complete issue OCR",
+          "url": "https://archive.org/download/1985-07-compute-magazine/Compute_Issue_062_1985_Jul_djvu.txt",
+          "date": "1985-07"
+        }
+      ]
+    },
+    {
       "currentDate": "2026-11-07",
       "historicDate": "1985-07-01",
       "displayDate": "Week of July 1-7, 1985",

@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Sat, 07 Nov 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Sun, 08 Nov 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of July 8-14, 1985 — Atari 520ST reaches buyers as the 16-bit contest intensifies</title>
+      <link>https://jez237.com/computer-chronicle/?date=1985-07-08</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1985-07-08</guid>
+      <pubDate>Sun, 08 Nov 2026 12:00:00 GMT</pubDate>
+      <description>July shipping news brings a powerful new desktop into the summer contest, with Commodore’s unveiling still ahead. The Atari 520ST is moving from demonstration promise to the buyer’s desk. The New York Times carries a July 10 shipping report, while the machine’s widening July availability marks a new stage in the contest for the personal-computer household. This is not the original unveiling: limited releases have preceded the broader summer arrival. Also this week: Activision puts the Tour de France on home micros · Compact discs promise encyclopedia-sized storage for home micros · Dixons cuts MSX prices to £99 and £149.99 · Acorn’s financial strain stalls new projects.</description>
+    </item>
     <item>
       <title>Week of July 1-7, 1985 — SSI ventures into arcade adventure with Gemstone Warrior</title>
       <link>https://jez237.com/computer-chronicle/?date=1985-07-01</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1985-02-25</guid>
       <pubDate>Tue, 20 Oct 2026 12:00:00 GMT</pubDate>
       <description>February reporting opens the workshop behind Sierra’s ambitious adventure. A kingdom of 80 scenes comes at a very real price. Donald B. Trivette’s February COMPUTE! account puts the cost of Sierra’s King’s Quest above $700,000, with Roberta Williams and six programmers and artists working for 18 months. IBM supplied a prototype PCjr and asked for a game that could show its color graphics before the machine was announced. Also this week: Rent a PC for a month—but whose software license goes with it? · Michael Crichton takes storytelling from the cinema to Amazon · PC-Write asks users to share the software—and pays registered referrers · Online rivals bring games and conversation below three dollars an hour.</description>
-    </item>
-    <item>
-      <title>Week of February 18-24, 1985 — Inside King&apos;s Quest: the $700,000 adventure behind the PCjr&apos;s animated kingdom</title>
-      <link>https://jez237.com/computer-chronicle/?date=1985-02-18</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1985-02-18</guid>
-      <pubDate>Mon, 19 Oct 2026 12:00:00 GMT</pubDate>
-      <description>February reporting opens the workshop behind Sierra’s ambitious adventure. A kingdom of 80 scenes comes at a very real price. Donald B. Trivette’s February COMPUTE! account puts the cost of Sierra’s King’s Quest above $700,000, with Roberta Williams and six programmers and artists working for 18 months. IBM supplied a prototype PCjr and asked for a game that could show its color graphics before the machine was announced. Also this week: Michael Crichton takes storytelling from the cinema to Amazon · PC-EYE brings video capture and pixel retouching to the IBM PC · PC-Write asks users to share the software—and pays registered referrers.</description>
     </item>
   </channel>
 </rss>
