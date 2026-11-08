@@ -8,8 +8,8 @@
 // floating when a wall is dug or blasted away. Presentation only: the sim never sees any of it.
 import * as THREE from '../vendor/three.module.min.js';
 import { mergeVertices } from '../vendor/BufferGeometryUtils.js';
-import { T } from './config.js?v=16';
-import { bake } from './decor.js?v=16';
+import { T } from './config.js?v=17';
+import { bake } from './decor.js?v=17';
 
 function rng(seed) { let s = seed >>> 0 || 1; return () => { s = (s + 0x6D2B79F5) >>> 0; let t = s; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
 const hash = (x, y, z) => { let h = Math.imul(x | 0, 374761393) ^ Math.imul(y | 0, 668265263) ^ Math.imul(z | 0, 2147483647); h = Math.imul(h ^ (h >>> 13), 1274126177); return ((h ^ (h >>> 16)) >>> 0) / 4294967296; };

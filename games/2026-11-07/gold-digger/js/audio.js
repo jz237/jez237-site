@@ -3,14 +3,14 @@
 // (each depth's cave air, a burning flare) follow the action. Voices duck the music and only one plays at a time;
 // the old prospector speaks RARELY (key moments only) and can be switched off. Music loops with a crossfade.
 // All effects, music and voice lines are ElevenLabs renders (scripts/gold-digger/gen_audio.py + process_audio.py).
-const SFX = ['step', 'land', 'jump', 'climb', 'hurt', 'death', 'splash', 'swim', 'swing', 'pick', 'rockbreak', 'ore', 'hitflesh', 'gold', 'gem', 'bigloot',
+const SFX = ['pebble', 'rustle', 'tinkle', 'potbreak', 'step', 'land', 'jump', 'climb', 'hurt', 'death', 'splash', 'swim', 'swing', 'pick', 'rockbreak', 'ore', 'hitflesh', 'gold', 'gem', 'bigloot',
   'oil', 'heart', 'life', 'key', 'door', 'relic', 'fossil', 'chest', 'throw', 'fuse', 'boom', 'boomfar', 'debris', 'flare', 'flareloop', 'lamp', 'crack', 'stalfall',
   'crumble', 'rumble', 'geyserwarn', 'geyser', 'burn', 'lift', 'liftstop', 'cart', 'cartstop', 'bat', 'batdie', 'shade', 'shadefade', 'crawler', 'crawldie', 'eel', 'growl',
   'bossroar', 'bosshit', 'bossdie', 'slam', 'burrow', 'wings', 'screech', 'beam', 'shatter', 'surge', 'magma', 'checkpoint', 'discover', 'journal', 'upgrade', 'medal',
   'uimove', 'uiok', 'uiback', 'rewind', 'slowmo', 'warn', 'amb1', 'amb2', 'amb3', 'amb4', 'amb5', 'waterfall'];
 const VOICE = ['begin', 'd2', 'd3', 'd4', 'd5', 'deep', 'boss', 'bossdown', 'wonder', 'relic', 'lowoil', 'lastlife', 'gameover', 'newrecord', 'champion'];
 export const MUSIC = new Set(['title', 'd1', 'd2', 'd3', 'd4', 'd5', 'deep', 'boss', 'clear', 'over', 'discover']);
-const V = '?v=16';
+const V = '?v=17';
 
 export class Audio {
   constructor(base) {

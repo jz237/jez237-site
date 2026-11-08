@@ -146,6 +146,11 @@ SFX = {
     'screech':   (1.5, 0.5, 'A giant cave beast hissing screech, low and raspy, no high whistle'),
     'beam':      (1.8, 0.55, 'A crystal energy beam charging and firing, deep resonant hum building to a crackling surge'),
     'shatter':   (1.5, 0.55, 'Large crystal formation shattering into pieces, heavy glassy crash, low'),
+    # the living cave (1.7): things the digger brushes, kicks and breaks
+    'pebble':    (0.6, 0.65, 'A single small stone kicked by a boot, skittering and clacking a few times across a hard rocky cave floor, short, dry'),
+    'rustle':    (0.7, 0.6, 'A brief soft rustle of someone brushing through damp cave roots and moss, short and gentle, no footsteps'),
+    'tinkle':    (1.0, 0.6, 'A small cluster of crystals snapping off and tinkling onto stone, delicate glassy chime, short'),
+    'potbreak':  (0.9, 0.6, 'A small old clay pot smashed and breaking into shards on a stone floor, short dry crack and scatter'),
     'surge':     (2.0, 0.55, 'A huge wave of water surging through a flooded cavern, roaring rush'),
     'magma':     (2.0, 0.55, 'Molten lava erupting and splashing out of a pool, deep glooping roar and sizzle'),
     # ui and meta

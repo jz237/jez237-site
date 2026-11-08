@@ -1,15 +1,15 @@
 // Gold Digger: the game shell. Fixed-step simulation (sim.js) + renderer (render.js), level flow, the general store,
 // the journal of discoveries, tips, cinematics, the attract demo, the AI playthrough, scores and menus.
-import { VERSION, STEP, T, BIOMES, LEVELS, DEPTHS, UPGRADES, TYPICAL_UP, DIFFICULTY, MEDALS, RELICS, FOSSILS, WONDERS, NOTES, CREATURES, RANKS, START, STRATA, REWARDS, MAX_PERKS, variantOf } from './config.js?v=16';
-import { makeWorld, step, drainEvents, cloneWorld, carryOut } from './sim.js?v=16';
-import { hash, findName } from './levelgen.js?v=16';
-import { Autopilot } from './ai.js?v=16';
-import { Renderer, pickQuality, LOOKS } from './render.js?v=16';
-import { CALM } from './fx.js?v=16';
-import { Audio } from './audio.js?v=16';
-import { Input } from './input.js?v=16';
-import { Scores, NO_POST } from './scores.js?v=16';
-import { Recorder, Replay } from './replay.js?v=16';
+import { VERSION, STEP, T, BIOMES, LEVELS, DEPTHS, UPGRADES, TYPICAL_UP, DIFFICULTY, MEDALS, RELICS, FOSSILS, WONDERS, NOTES, CREATURES, RANKS, START, STRATA, REWARDS, MAX_PERKS, variantOf } from './config.js?v=17';
+import { makeWorld, step, drainEvents, cloneWorld, carryOut } from './sim.js?v=17';
+import { hash, findName } from './levelgen.js?v=17';
+import { Autopilot } from './ai.js?v=17';
+import { Renderer, pickQuality, LOOKS } from './render.js?v=17';
+import { CALM } from './fx.js?v=17';
+import { Audio } from './audio.js?v=17';
+import { Input } from './input.js?v=17';
+import { Scores, NO_POST } from './scores.js?v=17';
+import { Recorder, Replay } from './replay.js?v=17';
 
 const Q = new URLSearchParams(location.search);
 const $ = (id) => document.getElementById(id);
@@ -52,6 +52,7 @@ const rankName = () => { let r = RANKS[0][1]; for (const [n, name] of RANKS) if 
 const q = pickQuality(settings.quality === 'auto' ? null : settings.quality);
 const canvas = $('gl');
 const R = new Renderer(canvas, q);
+R.sfx = (n, o) => A.play(n, o);
 const A = new Audio('./');
 const I = new Input();
 const rec = new Recorder();
@@ -833,7 +834,7 @@ async function boot() {
   toTitle();
   checkUnlocks(true); applyLoadout();
   $('loading').style.opacity = 0; setTimeout(() => $('loading').remove(), 700);
-  if (Q.has('test')) { const T2 = await import('./tests.js?v=16'); T2.run({ G, R, startCampaign, startEndless, toTitle, tick, makeWorld, step }); return; }
+  if (Q.has('test')) { const T2 = await import('./tests.js?v=17'); T2.run({ G, R, startCampaign, startEndless, toTitle, tick, makeWorld, step }); return; }
   if (Q.has('autoplay')) startCampaign(+(Q.get('depth') || 0), { mode: 'autoplay', auto: 'demo', level: +(Q.get('level') || 0) });
   if (Q.has('playthrough')) startCampaign(+(Q.get('depth') || 0), { mode: 'playthrough', auto: 'demo', level: +(Q.get('level') || 0) });
   requestAnimationFrame(raf);
