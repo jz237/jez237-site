@@ -5,9 +5,9 @@
 //   node scripts/sini-2026/ramp_check.mjs [trials=60] [sectors=1,2,3,4,5] [profile=human] [difficulty=normal] [cp=0]
 // Run sectors in parallel: for s in 1 2 3 4 5; do node scripts/sini-2026/ramp_check.mjs 60 $s & done; wait
 const base = 'file:///D:/Projects/Sinistar/games/2026-11-07/sini-2026/js/';
-const sim = await import(base + 'sim.js?v=2');
-const { Autopilot } = await import(base + 'ai.js?v=2');
-const cfg = await import(base + 'config.js?v=2');
+const sim = await import(base + 'sim.js?v=3');
+const { Autopilot } = await import(base + 'ai.js?v=3');
+const cfg = await import(base + 'config.js?v=3');
 
 const trials = +(process.argv[2] || 60);
 const sectors = (process.argv[3] || '1,2,3,4,5').split(',').map((s) => +s - 1);

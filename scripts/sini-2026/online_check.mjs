@@ -7,10 +7,10 @@
 //   node scripts/sini-2026/online_check.mjs [relay=ws://127.0.0.1:8781] [seconds=40] [lags=0,60]   (SN_CP=2 starts at the AWAKE checkpoint)
 // Never touches the real relay.
 const base = 'file:///D:/Projects/Sinistar/games/2026-11-07/sini-2026/js/';
-const SIM = await import(base + 'sim.js?v=2');
-const { Autopilot } = await import(base + 'ai.js?v=2');
-const CFG = await import(base + 'config.js?v=2');
-const { Online, ROOM, randomCode } = await import(base + 'online.js?v=2');
+const SIM = await import(base + 'sim.js?v=3');
+const { Autopilot } = await import(base + 'ai.js?v=3');
+const CFG = await import(base + 'config.js?v=3');
+const { Online, ROOM, randomCode } = await import(base + 'online.js?v=3');
 const { makeWorld, step, drainEvents, STEP, wd, netDeath } = SIM;
 
 const relay = process.argv[2] || 'ws://127.0.0.1:8781';

@@ -1,7 +1,7 @@
 // Sini 2026 simulation: fixed 120 Hz steps, all randomness from the world's own seeded generator (W.rs),
 // plain data only, so a world can be cloned and re-run bit for bit (replays, online, tests).
 // Nothing in here touches the DOM, WebGL or audio; it only pushes events into W.ev.
-import { F, STEP, WS, H, ROCK, ENEMY, CONSTRUCTS, C_KEYS, SECTORS, rampAt, rampLevel, deepLevel, TUTOR, SCORE, START_LIVES, DIFFICULTY, applyDiff, POWERUPS, PW_KEYS, DROP } from './config.js?v=2';
+import { F, STEP, WS, H, ROCK, ENEMY, CONSTRUCTS, C_KEYS, SECTORS, rampAt, rampLevel, deepLevel, TUTOR, SCORE, START_LIVES, DIFFICULTY, applyDiff, POWERUPS, PW_KEYS, DROP } from './config.js?v=3';
 export { STEP };
 
 const TAU = Math.PI * 2;
@@ -152,7 +152,7 @@ function rocks(W, dt) {
   while (W.rockQ.length && W.rockQ[0] <= 0) { W.rockQ.shift(); if (W.rocks.length < W.R.rocks + 2) { const k = addRock(W, false); W.ev.push({ k: 'rockin', rid: k.id }); } }
 }
 function crystals(W, dt) {
-  const magBase = [0, 7, 11][W.up.magnet || 0];
+  const magBase = [4.5, 7, 11][W.up.magnet || 0];   // every ship draws in crystals that pass within 4.5 m
   for (const c of W.crystals) {
     c.spin += dt * 1.6;
     if (c.held) {

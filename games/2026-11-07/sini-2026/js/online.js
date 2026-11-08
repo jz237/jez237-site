@@ -3,8 +3,8 @@
 // machines, the construct, lives, score) and streams snapshots. The guest flies its own ship locally (so
 // steering never lags), judges the hits it takes, and reports its ship, its shots, the crystals and pods it
 // scoops and the charges it launches; the host carries those out so every kill is decided in one place.
-import { netCollect, netBomb, netPod, netDeath, adoptCp } from './sim.js?v=2';
-import { PW_KEYS } from './config.js?v=2';
+import { netCollect, netBomb, netPod, netDeath, adoptCp } from './sim.js?v=3';
+import { PW_KEYS } from './config.js?v=3';
 const packPw = (pw) => Object.entries(pw || {}).map(([k, t]) => [PW_KEYS.indexOf(k), Math.round(t * 10) / 10]);
 const unpackPw = (a) => { const o = {}; for (const [i, t] of a || []) o[PW_KEYS[i]] = t; return o; };
 

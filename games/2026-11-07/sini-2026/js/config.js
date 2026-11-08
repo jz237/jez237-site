@@ -1,6 +1,6 @@
 // Sini 2026 — every tunable number lives here. The RAMP table drives difficulty; nothing else in the game
 // hard-codes enemy pace, numbers, fire rate, aim, warning times or how tough a construct is.
-export const VERSION = '1.1.0';
+export const VERSION = '1.1.1';
 export const STEP = 1 / 120;
 
 // ------------------------------------------------------------------ the field and the Prospector
@@ -83,9 +83,9 @@ export const RAMP = [
   { reav: [2, 3], engage: [2, 2], rV: [8, 9.2], fire: [0.34, 0.38], warn: [1.8, 1.55], aim: [0.13, 0.11], boltV: [19, 21.5], gath: [3, 4], gV: [7.6, 8.4], regen: [11, 9], selfT: [9, 7.4], icpt: [0.05, 0.12], shield: [1, 1], burst: [2, 2],
     pieces: 14, kill: 7, bossV: 6.6, pull: 6, pullEvery: 8.8, pullTell: 2.0, wakeT: 3.4, lunge: 0, summon: 0, combo: 0, repair: 0, rocks: 34, chip: 16, ore: 6, bombs: 2, rHP: 3, openT: 6, shutT: 3 },
   { reav: [3, 4], engage: [2, 3], rV: [9.4, 10.6], fire: [0.38, 0.4], warn: [1.45, 1.28], aim: [0.095, 0.08], boltV: [22.5, 24.5], gath: [4, 5], gV: [8.6, 9.4], regen: [8.6, 7.6], selfT: [6.8, 6.2], icpt: [0.15, 0.24], shield: [0, 0], burst: [2, 2],
-    pieces: 16, kill: 10, bossV: 8.6, pull: 9, pullEvery: 7.8, pullTell: 1.7, wakeT: 3.0, lunge: 1, summon: 1, combo: 1, repair: 0, rocks: 30, chip: 18, ore: 5, bombs: 2, rHP: 5, openT: 4, shutT: 4.3 },
+    pieces: 16, kill: 11, bossV: 9.6, pull: 10.4, pullEvery: 7.8, pullTell: 1.7, wakeT: 3.0, lunge: 1, summon: 1, combo: 1, repair: 0, rocks: 30, chip: 18, ore: 5, bombs: 2, rHP: 5, openT: 3.3, shutT: 4.8 },
   { reav: [4, 5], engage: [3, 3], rV: [10.8, 11.8], fire: [0.4, 0.41], warn: [1.28, 1.1], aim: [0.075, 0.065], boltV: [24.5, 26], gath: [5, 6], gV: [9.6, 10.4], regen: [7.6, 6.6], selfT: [6.2, 5.6], icpt: [0.25, 0.33], shield: [1, 0], burst: [2, 2],
-    pieces: 18, kill: 12, bossV: 10.1, pull: 11, pullEvery: 6.8, pullTell: 1.35, wakeT: 2.7, lunge: 1, summon: 2, combo: 1, repair: 1, rocks: 26, chip: 20, ore: 5, bombs: 1, rHP: 5, openT: 2.9, shutT: 5.3 },
+    pieces: 18, kill: 12, bossV: 10.3, pull: 11.2, pullEvery: 6.8, pullTell: 1.35, wakeT: 2.7, lunge: 1, summon: 2, combo: 1, repair: 1, rocks: 26, chip: 20, ore: 5, bombs: 1, rHP: 5, openT: 2.8, shutT: 5.3 },
   { reav: [5, 5], engage: [3, 3], rV: [11.8, 12.6], fire: [0.41, 0.41], warn: [1.1, 0.72], aim: [0.065, 0.06], boltV: [26, 27.5], gath: [6, 7], gV: [10.6, 11.4], regen: [6.6, 5.6], selfT: [5.6, 5], icpt: [0.34, 0.42], shield: [1, 1], burst: [2, 2],
     pieces: 20, kill: 13, bossV: 10.6, pull: 11.6, pullEvery: 5.8, pullTell: 1.05, wakeT: 2.4, lunge: 1, summon: 2, combo: 1, repair: 1, rocks: 22, chip: 22, ore: 4, bombs: 1, rHP: 5, openT: 3.1, shutT: 5.1 },
 ];

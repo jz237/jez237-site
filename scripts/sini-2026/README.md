@@ -15,7 +15,7 @@ Every local import carries the same `?v=N`; bump them all together (plus `js/mai
 Difficulty lives in one table: `RAMP` in `js/config.js` (per sector, `[launch, awake]` pairs stepped by checkpoint).
 Deep Field walks the same curve via `deepLevel()` / `rampLevel()`.
 
-Final ramp (v1.1.0, 60 runs per sector, Normal): clears 100 / 100 / 85 / 57 / 25 %, hits per minute 0 / 0.38 / 1.32 / 1.91 / 2.57 (v1.0.0 was 100/97/67/48/22). Since 1.1 most of the danger is in the construct fight (core open/shut cycle `openT`/`shutT`, `bossV`, `pull`, `kill`).
+Final ramp (v1.1.1, 60 runs per sector, Normal): clears 100 / 100 / 60 / 47 / 25 %, hits per minute 0.05 / 0.23 / 1.87 / 1.92 / 2.57 (v1.1.0 was 100/100/85/57/25, v1.0.0 100/97/67/48/22). Sector 2 stays at 100 % for the bot: combined threats only start in sector 3, and the bot dodges every bolt with a warning of 1.3 s or more. Sector 4 is very sensitive to `openT`: 2.9 s gave ~55 %, 2.8 s ~35-47 %, 2.7 s ~33 %. Since 1.1 most of the danger is in the construct fight (core open/shut cycle `openT`/`shutT`, `bossV`, `pull`, `kill`).
 Findings: the clear rate is a step function of the reaver warning time for the bot (with a 1.3 s+ tell it dodges nearly everything), so the
 early-sector levers are the 2-bolt volley (`burst`), shield charges per checkpoint and reaver toughness (`rHP`); a free shield on every
 respawn made sectors with any shield trivially safe, so respawn shields are sector 1 only.

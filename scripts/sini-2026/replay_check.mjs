@@ -2,10 +2,10 @@
 // clip (a cloned world + the inputs); the world must match bit for bit.
 //   node scripts/sini-2026/replay_check.mjs [seeds=12]
 const base = 'file:///D:/Projects/Sinistar/games/2026-11-07/sini-2026/js/';
-const sim = await import(base + 'sim.js?v=2');
-const { Autopilot } = await import(base + 'ai.js?v=2');
-const { Recorder, Replay } = await import(base + 'replay.js?v=2');
-const cfg = await import(base + 'config.js?v=2');
+const sim = await import(base + 'sim.js?v=3');
+const { Autopilot } = await import(base + 'ai.js?v=3');
+const { Recorder, Replay } = await import(base + 'replay.js?v=3');
+const cfg = await import(base + 'config.js?v=3');
 const hashW = (W) => JSON.stringify([W.n, W.score, W.lives, W.cp, W.rs, W.players.map((p) => [p.x, p.z, p.alive, p.shield, p.bombs]), W.enemies.map((e) => [e.id, e.x, e.z, e.hp]),
   W.rocks.map((k) => [k.id, k.x, k.ore]), W.crystals.length, W.bolts.length, W.bombs.length, W.C ? [W.C.st, W.C.pieces, W.C.hp, W.C.x] : 0]);
 const seeds = +(process.argv[2] || 12);

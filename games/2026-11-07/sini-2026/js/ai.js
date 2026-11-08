@@ -14,8 +14,8 @@
 //             off to the side), often misses threats behind it, sometimes dodges the wrong way first, wobbly aim.
 //             The difficulty ramp is measured with this one (scripts/sini-2026/ramp_check.mjs).
 //   'demo'  — the attract mode: sharp and decisive. It never reads the world's random generator (replays stay exact).
-import { F } from './config.js?v=2';
-import { wd, isAwake, angDiff, canStrike, strikeHP, coreOpen } from './sim.js?v=2';
+import { F } from './config.js?v=3';
+import { wd, isAwake, angDiff, canStrike, strikeHP, coreOpen } from './sim.js?v=3';
 
 const hyp = Math.hypot;
 function mkr(seed) { let s = seed | 0; return () => { s = (s + 0x6D2B79F5) | 0; let t = Math.imul(s ^ (s >>> 15), s | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }

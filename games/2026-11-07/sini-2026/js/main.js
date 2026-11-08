@@ -1,13 +1,13 @@
 // Sini 2026 — game flow, menus, HUD (with the scanner), commentary, demo director and the frame loop.
-import { VERSION, SECTORS, STEP, F, CONSTRUCTS, UPGRADES, UP_KEYS, UP_COST, MEDALS, parTime, TYPICAL_UP, START_LIVES, DIFFICULTY, POWERUPS, LIVERIES, CP_NAMES, C_KEYS } from './config.js?v=2';
-import { makeWorld, step, drainEvents, wd, isAwake, canStrike, strikeHP, coreOpen } from './sim.js?v=2';
-import { Autopilot } from './ai.js?v=2';
-import { Renderer, pickQuality, CALM } from './render.js?v=2';
-import { Audio } from './audio.js?v=2';
-import { Input } from './input.js?v=2';
-import { Scores, NO_POST } from './scores.js?v=2';
-import { Recorder, Replay } from './replay.js?v=2';
-import { Online, ROOM, randomCode, cleanCode } from './online.js?v=2';
+import { VERSION, SECTORS, STEP, F, CONSTRUCTS, UPGRADES, UP_KEYS, UP_COST, MEDALS, parTime, TYPICAL_UP, START_LIVES, DIFFICULTY, POWERUPS, LIVERIES, CP_NAMES, C_KEYS } from './config.js?v=3';
+import { makeWorld, step, drainEvents, wd, isAwake, canStrike, strikeHP, coreOpen } from './sim.js?v=3';
+import { Autopilot } from './ai.js?v=3';
+import { Renderer, pickQuality, CALM } from './render.js?v=3';
+import { Audio } from './audio.js?v=3';
+import { Input } from './input.js?v=3';
+import { Scores, NO_POST } from './scores.js?v=3';
+import { Recorder, Replay } from './replay.js?v=3';
+import { Online, ROOM, randomCode, cleanCode } from './online.js?v=3';
 
 const $ = (id) => document.getElementById(id);
 const params = new URLSearchParams(location.search);
@@ -242,6 +242,8 @@ function updateHud(W) {
   setHTML('shield', me ? Array.from({ length: me.shield }, () => '<i class="on"></i>').join('') : '');
   if (me) { setText('bombs', String(me.bombs)); $('bombs-w').classList.toggle('empty', me.bombs === 0); $('bombs-w').classList.toggle('full', me.bombs >= F.maxBombs); }
   $('tb-bomb').classList.toggle('empty', !me || me.bombs <= 0);
+  const cw = W.C && isAwake(W.C) && W.C.st !== 'dying', go = !!(cw && coreOpen(W.C) && me && me.bombs > 0), hold = !!(cw && !coreOpen(W.C));
+  for (const id of ['bombs-w', 'tb-bomb']) { $(id).classList.toggle('go', go); $(id).classList.toggle('hold', hold); }
   if (me) setText('tb-bomb-n', String(me.bombs));
   const act = [];
   if (me) for (const k in me.pw) act.push([k, me.pw[k]]);
@@ -335,6 +337,12 @@ function popup(text, x, z, color, big) {
   if (color) d.style.color = color;
   $('popups').appendChild(d);
   setTimeout(() => d.remove(), 1200);
+  return d;
+}
+// one core label at a time, just above the construct
+function corePop(text, C, color, big) {
+  if (G.corePop) G.corePop.remove();
+  G.corePop = popup(text, C.x, C.z - (C.R || 6) - 2.5, color, big) || null;
 }
 function keyName(what) {
   const k = I.lastKind;
@@ -513,8 +521,8 @@ function handleEvents(list, W, live) {
         fx.sparks(X(e.x), 0.8, Z(e.z), { n: 20, speed: 9, r: 1, g: 0.5, b: 0.4 }); fx.ring(X(e.x), 0, Z(e.z), 3, 0xff6a4a);
         if (live && mine(e) && !G.deflT) { popup(e.waking ? 'ARMOURED WHILE IT WAKES' : 'BOUNCED OFF · CORE SHUT', e.cx, e.cz, '#ff8a80', true); G.deflT = 1; setTimeout(() => { G.deflT = 0; }, 1500); }
         break;
-      case 'coreopen': A.play('tell', { x: X(e.x), y: 0, z: Z(e.z), vol: 0.8, rate: 0.6, gap: 0.3 }); fx.ring(X(e.x), 0, Z(e.z), 9, 0x7dff9a); if (live) popup('CORE OPEN', e.x, e.z, '#8dff8a', true); break;
-      case 'coreshut': A.play('build', { x: X(e.x), y: 0, z: Z(e.z), vol: 0.9, rate: 1.2, gap: 0.3 }); if (live) popup('CORE SHUT', e.x, e.z, '#ff8a80'); break;
+      case 'coreopen': A.play('tell', { x: X(e.x), y: 0, z: Z(e.z), vol: 0.8, rate: 0.6, gap: 0.3 }); fx.ring(X(e.x), 0, Z(e.z), 9, 0x7dff9a); if (live && W.C) corePop('CORE OPEN', W.C, '#8dff8a', true); break;
+      case 'coreshut': A.play('build', { x: X(e.x), y: 0, z: Z(e.z), vol: 0.9, rate: 1.2, gap: 0.3 }); if (live && W.C) corePop('CORE SHUT', W.C, '#ff8a80'); break;
       case 'empty': if (live && mine(e)) { A.play('uiback', { vol: 0.6, gap: 0.3 }); popup('NO CHARGES · MINE CRYSTALS', me.x, me.z, '#ff8a80'); if (isAwake(W.C) && !G.saidEmpty) { G.saidEmpty = true; say('empty', { chance: 0.7 }); } } break;
       case 'drop': fx.ring(X(e.x), 0, Z(e.z), 2.5, POWERUPS[e.kind].color); fx.sparks(X(e.x), 0.5, Z(e.z), { n: 10, speed: 3, life: 0.6 }); break;
       case 'pickup': {
@@ -890,7 +898,8 @@ function updateWarnings(W) {
     if (PE.z > 1) { dx = -dx; dy = -dy; }
     const k = Math.min((vw / 2 - pad) / Math.max(1, Math.abs(dx)), (vh / 2 - pad - 40) / Math.max(1, Math.abs(dy)));
     // on touch screens keep markers above the FIRE / CHARGE buttons
-    const x = vw / 2 + dx * k, y = Math.min(I.touchOn ? vh - 170 : vh, Math.max(top, vh / 2 + dy * k));
+    // (and on the right edge above the pause button, which sits 154-194 px up)
+    const x = vw / 2 + dx * k, y = Math.min(I.touchOn ? (x > vw - 110 ? vh - 232 : vh - 170) : vh, Math.max(top, vh / 2 + dy * k));
     d.className = 'wm ' + q.c;
     d.style.display = '';
     d.style.left = x + 'px'; d.style.top = y + 'px';
@@ -1017,13 +1026,13 @@ function objective(W, me) {
   if (!C || C.st === 'gone') return W.mode === 'deep' ? 'A NEW CONSTRUCT IS ON ITS WAY' : 'SECTOR CLEAR';
   if (C.st === 'dying') return 'IT IS BREAKING UP: KEEP CLEAR';
   if (isAwake(C)) {
-    if (C.st === 'wake') return `IT IS WAKING AND ARMOURED · ${C.hp} CHARGES INTO ITS OPEN CORE WILL BRING IT DOWN`;
-    if (me.bombs <= 0) return 'OUT OF CHARGES · MINE CRYSTALS WELL AWAY FROM IT';
-    return coreOpen(C) ? `CORE OPEN (GREEN RING) · LAUNCH CHARGES NOW · ${C.hp} TO GO` : `CORE SHUT (RED RING) · CHARGES BOUNCE OFF · IT OPENS IN ${Math.max(0, C.cycT).toFixed(1)} s`;
+    if (C.st === 'wake') return 'KEEP YOUR DISTANCE · IT IS ARMOURED UNTIL ITS CORE OPENS';
+    if (me.bombs < C.hp) return me.bombs <= 0 ? 'OUT OF CHARGES · MINE CRYSTALS AWAY FROM IT' : `${C.hp - me.bombs} CHARGE${C.hp - me.bombs === 1 ? '' : 'S'} SHORT · MINE CRYSTALS BETWEEN OPENINGS`;
+    return coreOpen(C) ? 'GREEN RING · LAUNCH CHARGES NOW' : `RED RING · DODGE · IT OPENS IN ${Math.max(0, C.cycT).toFixed(1)} s`;
   }
   const hp = strikeHP(W), need = hp + 1, half = Math.ceil(C.N / 2);
-  if (canStrike(W)) return me.bombs >= need ? `READY · LAUNCH A CHARGE AT IT TO WAKE IT EARLY · THEN ${hp} MORE INTO ITS CORE` : `HALF BUILT · ${need - me.bombs} MORE CHARGES AND YOU CAN STRIKE EARLY · FINISHED, IT WAKES AT FULL STRENGTH`;
-  return `SHOOT ASTEROIDS FOR CRYSTALS (${me.bombs} CHARGES) · SHOOT GATHERERS CARRYING CRYSTALS · STRIKE ONCE IT IS HALF BUILT (${C.pieces}/${half})`;
+  if (canStrike(W)) return me.bombs >= need ? `READY · LAUNCH A CHARGE AT IT TO WAKE IT EARLY` : `HALF BUILT · ${need - me.bombs} MORE CHARGE${need - me.bombs === 1 ? '' : 'S'} TO STRIKE EARLY`;
+  return `MINE CRYSTALS · SHOOT CARRIERS · STRIKE AT HALF BUILT (${C.pieces}/${half})`;
 }
 function guidance(W) {
   const me = myPlayer(W);
@@ -1082,7 +1091,7 @@ async function boot() {
   setTimeout(() => $('loading').remove(), 700);
   toTitle();
   boardOf('campaign', settings.diff).fresh(); boardOf('deep', settings.diff).fresh();
-  if (params.has('test')) { const m = await import('./tests.js?v=2'); m.runTests(window.__sn); }
+  if (params.has('test')) { const m = await import('./tests.js?v=3'); m.runTests(window.__sn); }
   else if (params.has('playthrough')) { A.unlock(); startPlaythrough(); }
   else if (G.autopilot) { A.unlock(); if (params.has('deep')) startDeep(); else startCampaign(+params.get('sector') || 0); }
   else if (params.has('room')) { act('online'); $('join-code').value = cleanCode(params.get('room')); }

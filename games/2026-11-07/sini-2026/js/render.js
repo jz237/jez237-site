@@ -4,13 +4,13 @@
 // from the simulation, the construct assembling plate by plate, warnings drawn on the plane (aim lines,
 // tractor ring, lunge lane, warp gates) and HDR post. Nothing here changes the world.
 import * as THREE from '../vendor/three.module.min.js';
-import { Post } from './post.js?v=2';
-import * as TX from './textures.js?v=2';
-import * as MD from './models.js?v=2';
-import { FX, CALM } from './fx.js?v=2';
-import { NOISE } from './shaders.js?v=2';
-import { F, WS, CONSTRUCTS, POWERUPS, P2_LIVERY, LIVERIES } from './config.js?v=2';
-import { wd, isAwake, coreOpen } from './sim.js?v=2';
+import { Post } from './post.js?v=3';
+import * as TX from './textures.js?v=3';
+import * as MD from './models.js?v=3';
+import { FX, CALM } from './fx.js?v=3';
+import { NOISE } from './shaders.js?v=3';
+import { F, WS, CONSTRUCTS, POWERUPS, P2_LIVERY, LIVERIES } from './config.js?v=3';
+import { wd, isAwake, coreOpen } from './sim.js?v=3';
 
 export { CALM };
 const hdr = MD.hdr;

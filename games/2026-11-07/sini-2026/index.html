@@ -215,6 +215,10 @@ table.hs tr.me td { color: #fff; background: rgba(255, 179, 71, .1); }
 #tb-bomb small { display: block; font-size: 18px; font-family: 'Saira Condensed'; letter-spacing: .02em; }
 .tbtn.on { transform: scale(.94); filter: brightness(1.4); }
 #tb-bomb.empty { opacity: .35; }
+#tb-bomb.go { box-shadow: 0 0 0 3px #8dff8a, 0 0 24px rgba(141, 255, 138, .55); }
+#tb-bomb.hold { filter: grayscale(.8) brightness(.75); }
+#bombs-w.go b { color: #b6ffb0; text-shadow: 0 0 14px rgba(141, 255, 138, .8); }
+#bombs-w.hold b { opacity: .5; }
 .logo { font-size: clamp(50px, 8vw, 74px); }
 @media (max-width: 720px) { #scan { width: 120px; height: 120px; top: calc(max(10px, env(safe-area-inset-top)) + 62px); } #cpstrip b { padding: 2px 4px; font-size: 8px; letter-spacing: .06em; } }
 @media (max-width: 560px) { #scan { width: 104px; height: 104px; } #bombs-w b { font-size: 21px; } }
@@ -279,7 +283,7 @@ table.hs tr.me td { color: #fff; background: rgba(255, 179, 71, .1); }
   <div class="screen hidden" id="title">
     <div class="card">
       <h1 class="logo">SINI<span> 2026</span></h1>
-      <div class="ver">VERSION <b id="ver">1.1.0</b> · MINE · ARM · BRING IT DOWN</div>
+      <div class="ver">VERSION <b id="ver">1.1.1</b> · MINE · ARM · BRING IT DOWN</div>
       <div class="diffrow">DIFFICULTY<div class="seg" data-opt="diff"><button data-v="easy">EASY</button><button data-v="normal">NORMAL</button><button data-v="hard">HARD</button><button data-v="nightmare">NIGHTMARE</button></div></div>
       <div id="diff-desc"></div>
       <div class="btns" id="title-btns">
@@ -414,6 +418,6 @@ addEventListener('error', (e) => window.__snErrors.push(String(e.message || e)))
 addEventListener('unhandledrejection', (e) => window.__snErrors.push('rejection: ' + String(e.reason && e.reason.message || e.reason)));
 (() => { const ce = console.error; console.error = (...a) => { window.__snErrors.push(a.map(String).join(' ')); ce.apply(console, a); }; })();
 </script>
-<script type="module" src="js/main.js?v=2"></script>
+<script type="module" src="js/main.js?v=3"></script>
 </body>
 </html>
