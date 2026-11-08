@@ -501,7 +501,7 @@ index c536c46..c9eb844 100644
  //		gltexture->handle=0;
  		ogl_reset_texture(gltexture);
 diff --git a/d2/arch/sdl/digi_audio.c b/d2/arch/sdl/digi_audio.c
-index fdba7ce..c4a8f2f 100644
+index fdba7ce..d67cbb8 100644
 --- a/d2/arch/sdl/digi_audio.c
 +++ b/d2/arch/sdl/digi_audio.c
 @@ -9,6 +9,8 @@
@@ -513,15 +513,73 @@ index fdba7ce..c4a8f2f 100644
  #include <digi_audio.h>
  #include "pstypes.h"
  #include "dxxerror.h"
-@@ -207,6 +209,7 @@ void digi_audio_close()
+@@ -93,6 +95,7 @@ struct sound_slot {
+ 	int playing;   // Is there a sample playing on this channel?
+ 	int looped;    // Play this sample looped?
+ 	fix pan;       // 0 = far left, 1 = far right
++	fix nominal_volume; // Volume before the master SFX setting
+ 	fix volume;    // 0 = nothing, 1 = fully on
+ 	//changed on 980905 by adb from char * to unsigned char *
+ 	unsigned char *samples;
+@@ -109,6 +112,8 @@ int digi_max_channels = 16;
+ 
+ static int next_channel = 0;
+ 
++#include "astra_sfx.inc"
++
+ void digi_stop_sound(int channel);
+ int digi_xlat_sound(int soundno);
+ 
+@@ -187,7 +192,9 @@ int digi_audio_init()
+ 		return 1;
+ 		//end edit -MM
+ 	}
+-	SDL_PauseAudio(0);
++	astra_web_audio=astra_sfx_init();
++	if(astra_web_audio)SDL_CloseAudio();
++	else SDL_PauseAudio(0);
+ 
+ 	digi_initialised = 1;
+ 
+@@ -207,6 +214,8 @@ void digi_audio_close()
  	SDL_Delay(500); // CloseAudio hangs if it's called too soon after opening?
  #endif
  	SDL_CloseAudio();
++	astra_sfx_clear(1);astra_web_audio=0;
 +	astra_death_audio_clear();
  }
  
  void digi_audio_stop_all_channels()
-@@ -331,6 +334,8 @@ void digi_audio_set_digi_volume( int dvolume )
+@@ -240,6 +249,7 @@ int digi_audio_start_sound(short soundnum, fix volume, int pan, int looping, int
+ 
+ 	while(1)
+ 	{
++		if(astra_web_audio && SoundSlots[next_channel].playing && !astra_sfx_playing(next_channel))SoundSlots[next_channel].playing=0;
+ 		if (!SoundSlots[next_channel].playing)
+ 			break;
+ 
+@@ -274,6 +284,7 @@ int digi_audio_start_sound(short soundnum, fix volume, int pan, int looping, int
+ 	SoundSlots[next_channel].samples = GameSounds[soundnum].data;
+ 	SoundSlots[next_channel].length = GameSounds[soundnum].length;
+ 	SoundSlots[next_channel].volume = fixmul(digi_volume, volume);
++	SoundSlots[next_channel].nominal_volume = volume;
+ 	SoundSlots[next_channel].pan = pan;
+ 	SoundSlots[next_channel].position = 0;
+ 	SoundSlots[next_channel].looped = looping;
+@@ -290,6 +301,7 @@ int digi_audio_start_sound(short soundnum, fix volume, int pan, int looping, int
+ 
+ 	SDL_UnlockAudio();
+ 
++	if(astra_web_audio&&!astra_defer_audio_start)astra_sfx_play_slot(i);
+ 	return i;
+ }
+ 
+@@ -327,10 +339,13 @@ void digi_audio_set_digi_volume( int dvolume )
+ 
+ 	if ( !digi_initialised ) return;
+ 
++	if(astra_web_audio)astra_sfx_master(digi_volume);
+ 	digi_sync_sounds();
  }
  //end edit by adb
  
@@ -530,6 +588,54 @@ index fdba7ce..c4a8f2f 100644
  int digi_audio_is_sound_playing(int soundno)
  {
  	int i;
+@@ -339,7 +354,7 @@ int digi_audio_is_sound_playing(int soundno)
+ 
+ 	for (i = 0; i < MAX_SOUND_SLOTS; i++)
+ 		  //changed on 980905 by adb: added SoundSlots[i].playing &&
+-		  if (SoundSlots[i].playing && SoundSlots[i].soundno == soundno)
++		  if (digi_audio_is_channel_playing(i) && SoundSlots[i].soundno == soundno)
+ 		  //end changes by adb
+ 			return 1;
+ 	return 0;
+@@ -370,6 +385,8 @@ int digi_audio_is_channel_playing(int channel)
+ 	if (!digi_initialised)
+ 		return 0;
+ 
++	if(channel<0||channel>=MAX_SOUND_SLOTS)return 0;
++	if(astra_web_audio && SoundSlots[channel].playing && !astra_sfx_playing(channel))SoundSlots[channel].playing=0;
+ 	return SoundSlots[channel].playing;
+ }
+ 
+@@ -382,6 +399,8 @@ void digi_audio_set_channel_volume(int channel, int volume)
+ 		return;
+ 
+ 	SoundSlots[channel].volume = fixmuldiv(volume, digi_volume, F1_0);
++	SoundSlots[channel].nominal_volume=volume;
++	if(astra_web_audio)astra_sfx_level(channel,volume,SoundSlots[channel].pan);
+ }
+ 
+ void digi_audio_set_channel_pan(int channel, int pan)
+@@ -393,10 +412,12 @@ void digi_audio_set_channel_pan(int channel, int pan)
+ 		return;
+ 
+ 	SoundSlots[channel].pan = pan;
++	if(astra_web_audio)astra_sfx_level(channel,SoundSlots[channel].nominal_volume,pan);
+ }
+ 
+ void digi_audio_stop_sound(int channel)
+ {
++	if(astra_web_audio)astra_sfx_stop(channel);
+ 	SoundSlots[channel].playing=0;
+ 	SoundSlots[channel].soundobj = -1;
+ 	SoundSlots[channel].persistent = 0;
+@@ -416,6 +437,7 @@ void digi_audio_end_sound(int channel)
+ 
+ void digi_audio_free_cached_sounds()
+ {
++	if(astra_web_audio)astra_sfx_clear(0);
+ }
+ 
+ #ifndef NDEBUG
 diff --git a/d2/arch/sdl/key.c b/d2/arch/sdl/key.c
 index 92eee47..92be666 100644
 --- a/d2/arch/sdl/key.c

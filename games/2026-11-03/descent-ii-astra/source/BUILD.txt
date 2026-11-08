@@ -1363,3 +1363,12 @@ R69 - original mine shapes in pickup and live states
 - Only mesh records 17, 42, 51 and 52 change. Triangle counts and GPU buffer caching are unchanged; all other collectible mesh bytes are identical.
 - Actual native proximity/smart mine objects were created and rendered in Original and Vertigo in a separate instrumented test build. Test exports are excluded from the shipping engine.
 - Collision sizes, damage, ammunition, trigger/arming logic, flight controls and demo AI are unchanged.
+
+R70 - immediate original sound-effect playback
+- Native sound events now start cached original PCM samples directly in Web Audio, removing the continuously queued SDL sound-effect buffer. Native channels still control priority, spatial volume, linear stereo panning, loops and stopping.
+- The original unsigned 8-bit samples convert exactly to float PCM. Music, original sound assets, weapon timing, gameplay, flight controls and demo AI are unchanged. The layered player-destruction sample uses the same native channel path.
+- A bounded 12 MiB PCM cache avoids repeated decoding and is cleared on native sound-data reload or close. Completed/replaced voices disconnect their audio nodes; active playback continues independently of the game render thread.
+- The original SDL backend remains the compatibility fallback when direct Web Audio initialization is unavailable. SDL still initializes its shared AudioContext and browser gesture handling, including movie handoff.
+- Muted native tests measured the former game-side sound queue at 280-323 ms. Direct laser/impact onset measured 0-13 ms at audio-clock granularity, typically 0 ms for lasers and 2.27 ms for impacts (leading silence in the original impact sample). These figures exclude hardware/browser output latency.
+- Original PCM and derived destruction PCM hashes, volume/mute, demo context suspend/resume without stale shots, left/right panning, loops, natural completion, stop-all, cache reuse and close/reinitialization were checked. A test-only audio worklet verified uninterrupted loop output through a 650 ms main-thread stall; CPU-throttled Vertigo combat ran for a minute with bounded channels/cache and no runtime/render errors.
+- Test-only native exports, worklets and instrumentation are excluded from the shipping engine.
