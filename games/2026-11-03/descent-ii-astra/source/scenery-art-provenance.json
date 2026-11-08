@@ -1,0 +1,17 @@
+{
+  "tool": "built-in image_gen",
+  "source": "equipment-atlas-source.png",
+  "sourceResolution": [
+    1254,
+    1254
+  ],
+  "runtimeTexture": [
+    2048,
+    2048
+  ],
+  "paddingOnly": true,
+  "jpegQuality": 95,
+  "asset": "scenery-art.js",
+  "description": "Four generated equipment textures: cyan coolant diagnostic screen, amber thermal diagnostic screen, blue service-bay plaque and extraction warning sign. Front-on detailed industrial art with readable text. The source pixels are padded for WebGL 1 mipmaps, not upscaled.",
+  "prompt": "Create a production-ready HIGH RESOLUTION 2048 x 2048 square texture atlas for realistic 3D sci-fi mining machinery in a videogame. Asset is a FLAT ORTHOGRAPHIC front-on equipment surface texture, NOT a scene or mockup, no perspective, no outer background, no watermark. Four equally sized square quadrants arranged exactly 2 columns by 2 rows, each fills its exact quarter with a 3% dark margin to prevent texture bleed. Top-left: dark glass cyan engineering diagnostic display, sophisticated crisp thin flow diagrams, pump schematics, little white data labels, cyan and lime status bars, exact main text 'COOLANT CONTROL', slightly dusty screen corners, no huge bloom. Top-right: dark glass amber furnace diagnostic display, sophisticated fine thermal contour diagrams, pressure gauge arcs and small warning indicators, exact main text 'THERMAL CORE', amber and red accents. Bottom-left: physically realistic cobalt-blue enamel mining sector plaque on worn dark steel, prominent ivory digits '07', small text 'SERVICE BAY', double directional chevrons, tiny registration stencils, screws and chipped paint, scratched edges but clean readable lettering. Bottom-right: physically realistic warm ivory enamel extraction sign on weathered charcoal steel, prominent dark digits '04', exact text 'EXTRACTION', black-yellow caution stripe along the bottom, small red danger placard, screw heads and extremely fine machining wear. Very detailed, sharp at close range. Rich industrial material detail and restrained colored light similar to a modern cinematic spaceship mine, no cartoon art. Each quadrant must be independent and square with no internal perspective. Do not include any other text outside those four textures.\n"
+}
