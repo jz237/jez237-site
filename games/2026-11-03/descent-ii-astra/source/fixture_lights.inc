@@ -15,6 +15,7 @@ static void afx_axis(vms_vector *out,const vms_vector *world){
 extern int astra_liquid_kind(int);
 extern float astra_mine_clock;
 extern void astra_reaction_light(int);
+extern void astra_scenery_light(int);
 void astra_fixture_lights(int room){
     aw_room=room;memset(afx_axes,0,sizeof afx_axes);
     memset(afx_light_world,0,sizeof afx_light_world);memset(afx_lamps,0,sizeof afx_lamps);memset(afx_colors,0,sizeof afx_colors);
@@ -50,5 +51,6 @@ void astra_fixture_lights(int room){
         if(filtered)for(int c=0;c<3;c++)afx_colors[slot][c]*=1.6f;
         afx_colors[slot][3]=accent||filtered||vent?1:0;
     }
+    astra_scenery_light(room);
     astra_reaction_light(room);
 }

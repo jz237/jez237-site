@@ -29,7 +29,7 @@ static ml_site *ml_site_for(int room){
         vm_vec_scale_add2(&p,&basis.fvec,fl2f(astra_environment_rock(t)?1.25f:.18f));m->p=p;m->basis=basis;m->scale=1;m->side=s;m->valid=1;
     }return m;
 }
-int astra_life_anchor(int room,vms_vector *point,int *side){ml_site *m=ml_site_for(room);if(!m->valid)return 0;*point=m->p;*side=m->side;return 1;}
+int astra_life_anchor(int room,vms_vector *point,int *side){extern int astra_scenery_any_anchor(int,vms_vector*,int*);if(astra_scenery_any_anchor(room,point,side))return 1;ml_site *m=ml_site_for(room);if(!m->valid)return 0;*point=m->p;*side=m->side;return 1;}
 int astra_surface_mount(int room,int side,float *p,float *r,float *u,int *zone){
     ml_site *m=ml_site_for(room);if(!m->valid||m->side!=side)return 0;
     al_vec(p,&m->p);al_vec(r,&m->basis.rvec);al_vec(u,&m->basis.uvec);*zone=m->zone;return 1;
@@ -133,8 +133,9 @@ static void ml_water_drips(int room){
     for(int j=0;j<2;j++){float t=fmodf(ae_clock()*.28f+j*.47f+room*.13f,1),x=(j-.5f)*.38f,y=0,z=site->height*(1-fminf(1,t/.78f)*fminf(1,t/.78f));ax_paint(.28f,.57f,.62f,.13f);if(t<.78f)ax_tube(x,y,z+.04f,x,y,z+.16f,.018f,.010f,5);else ax_ring(x,y,.045f,(t-.78f)*3.8f,.014f*(1-t)/.22f,0,6.283185f,0);}
     ax_flush(1,.65f);g3_done_instance();ml_drips++;
 }
+#include "astra_scenery.inc"
 static void ml_room(int room){
-    extern int astra_ov_enabled(void);if(astra_ov_enabled())return;ml_reset();ml_installation(room);ml_water_drips(room);ml_responses(room);
+    extern int astra_ov_enabled(void);if(astra_ov_enabled())return;ml_reset();if(!sc_room(room))ml_installation(room);ml_water_drips(room);ml_responses(room);
 }
 void astra_life_preview(int room,int s,int command){
     static int last=-1;if(command==last)return;last=command;if(room<0||room>Highest_segment_index||s<0||s>5)return;

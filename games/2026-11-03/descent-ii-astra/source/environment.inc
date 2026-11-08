@@ -398,6 +398,7 @@ void astra_environment_rooms(const short *rooms,int count,int window_num){
         EM_ASM(window.astraDeck?.reflect([$0,$1,$2],[$3,$4,$5]);,colors[0][0],colors[0][1],colors[0][2],colors[1][0],colors[1][1],colors[1][2]);
     }
     ag_render_exhibit();
+    if(!window_num)EM_ASM(Module.sceneryStats=({version:74,draws:$0,uploads:$1,vertices:$2,sites:$3,styles:$4,failed:$5});,sc_draws,sc_uploads,sc_vertices,sc_site_count,sc_seen,sc_failed);
     if(!window_num)EM_ASM(Module.mineLife=({version:65,installations:$0,uploads:$1,hits:$2,dust:$3,drips:$4});,ml_draws,ml_uploads,ml_hits,ml_dust,ml_drips);
     if(!window_num)EM_ASM({const w=Module.industrialWalls||(Module.industrialWalls={version:61});w.uploads=$0;w.draws=$1;},ai_uploads,ai_draws);
     if(!window_num)EM_ASM(Module.detailUpgrade=({version:63,meshes:$0,shafts:$1,meshUploads:$2,meshCapacity:128});,nd_draws,nd_shafts,nd_uploads);

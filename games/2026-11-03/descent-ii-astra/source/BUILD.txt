@@ -1395,3 +1395,10 @@ R73 - demo cockpit default and visible rear-monitor controls
 - The original Shift+F1 / Shift+F2 display cycling and R look-behind controls remain native. The Controls page explains monitor switching and the default hold-R behavior.
 - The rear-display control is absent in AI demo mode and showrooms. It works with the full cockpit and with the cockpit hidden; it uses existing native cameras rather than adding a rendering loop.
 - Flight physics, demo navigation/combat, sound, graphics quality and original fullscreen readouts are unchanged.
+
+R74 - detailed industrial wall scenery
+- Six cached 3D assemblies appear on checked solid walls throughout Original and Vertigo: turbine/furnace grilles, illuminated service cabinets, a sealed generator/robot assembly window, connected coolant manifolds, a working extractor/conveyor and numbered maintenance landmarks.
+- Real chamfered housings, cylindrical pipes, flange collars, screws, grilles and articulated parts supplement the existing high-resolution metal/normal materials. A GPT Image equipment atlas provides detailed diagnostic screens and enamel signs; 1254-square source pixels are padded, not enlarged, to a mipmapped WebGL 1 texture.
+- Turbines, valves, robot arms, drill flights and whole conveyor slats animate in one shared vertex shader. Glass has restrained view-dependent reflections; furnace/coolant colors spill locally, with occasional small pressure steam. Cached meshes are reused between rooms, with distance fading and no new per-frame geometry uploads for the machinery.
+- Mount checks exclude native openings, doors, signs, lights, forcefields and liquids. The complete animation envelope stays on the original solid wall and inside its room. Existing level connections, collision, gameplay RNG, physics, controls, demo AI and weapon behavior remain unchanged.
+- Six new showroom entries (43–48) inspect actual installations in the loaded campaign, with pause, comparison and zoom. Observation bays are sealed visual machinery assemblies; they do not add navigable rooms.

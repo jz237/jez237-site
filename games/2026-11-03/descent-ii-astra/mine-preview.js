@@ -1,6 +1,6 @@
 // A paused tour of the loaded campaign's real architecture and machinery.
 window.astraMinePreview={
-  names:['Architecture & materials','Rotating fans','Hydraulic machinery','Live terminals','Cables & electrical faults','Doors & locking systems','Reactor assembly','Recharge lattice','Moving ship shadows','Brushed metal & surface wear','Fractured rock & minerals','Storage bay','Cooling chamber','Steam, dust & light','Clean edges in motion','Deep ventilation grilles','Light housings & spill','Service conduits','Raised frames & panel variants','Water, wet banks & cascades','Molten lava','Red service lighting','Blue service lighting','Cyan service lighting','Amber service lighting','Warm ventilation & moving fans','Strip-light reflections','Industrial wall construction','Sculpted rock & rounded joins','Fixture light shafts','Room-aware metal reflections','Natural tunnel contours','Continuous mineral surfaces','Lighting by room purpose','Working mine installations','Distinctive chambers','Environmental reactions','Contact shadows & crevices','Steel, stone & wet surfaces','Wear around working equipment','Fracture shelves & contours','Welds, seals & fasteners','Consistent construction scale'],
+  names:['Architecture & materials','Rotating fans','Hydraulic machinery','Live terminals','Cables & electrical faults','Doors & locking systems','Reactor assembly','Recharge lattice','Moving ship shadows','Brushed metal & surface wear','Fractured rock & minerals','Storage bay','Cooling chamber','Steam, dust & light','Clean edges in motion','Deep ventilation grilles','Light housings & spill','Service conduits','Raised frames & panel variants','Water, wet banks & cascades','Molten lava','Red service lighting','Blue service lighting','Cyan service lighting','Amber service lighting','Warm ventilation & moving fans','Strip-light reflections','Industrial wall construction','Sculpted rock & rounded joins','Fixture light shafts','Room-aware metal reflections','Natural tunnel contours','Continuous mineral surfaces','Lighting by room purpose','Working mine installations','Distinctive chambers','Environmental reactions','Contact shadows & crevices','Steel, stone & wet surfaces','Wear around working equipment','Fracture shelves & contours','Welds, seals & fasteners','Consistent construction scale','Turbine & furnace bay','Illuminated service cabinets','Sealed generator window','Connected coolant manifold','Ore extraction machinery','Sector landmark & maintenance'],
   descriptions:[
     'New high-resolution metal, rock, grilles, machinery and lamps throughout both campaigns. Pause and compare the same view with the original artwork.',
     'Spinning fan blades behind a fixed protective grille.',
@@ -41,9 +41,16 @@ window.astraMinePreview={
     'Rust follows service-line outlets, soot rises above ventilated housings, and damp mineral deposits follow actual water edges.',
     'Asymmetric rock shelves and broader fracture shoulders break up flat faces while keeping the same mesh budget and connected boundaries.',
     'Close up on welded mounting plates, recessed bolt sockets, rubber seals and polished hydraulic rods. These are the same assemblies installed in the mines.',
-    'Grille bars, pipe runs, lenses and small fittings keep consistent physical dimensions on differently sized mine walls.'
+    'Grille bars, pipe runs, lenses and small fittings keep consistent physical dimensions on differently sized mine walls.',
+    'A moving turbine and glowing furnace sit behind protective grilles. Machined rims, cooling pipes and a thermal diagnostic display are the same detailed assembly used during flight.',
+    'High-resolution diagnostic glass, equipment drawers, status indicators and clamped cable looms give this wall a working service-bay role.',
+    'Look through reflective protective glass at coolant generators and an articulated maintenance robot. The sealed assembly has real layered geometry and parallax; it does not add a navigable room.',
+    'Connected coolant pipes, flange joints and turning valve wheels share a live control display. A small pressure outlet occasionally releases steam.',
+    'A motor housing drives the rotating helical drill above a moving ore conveyor. Carrier slats and ore travel together, with a detailed extraction warning plate.',
+    'A large enamel sector plaque, caution markings and a partly open service cabinet form a recognizable landmark. The cabinet exposes its wiring and retaining hardware.'
+
   ],
-  active:false,paused:false,touring:true,clock:0,last:0,mask:2147483647,high:2047,fresh:false,
+  active:false,paused:false,touring:true,clock:0,last:0,mask:2147483647,high:131071,fresh:false,
   has(index){return index<32?!!(this.mask&(1<<index)):!!(this.high&(1<<(index-32)));},
   tick(){const now=performance.now();if(this.last&&!this.paused)this.clock+=Math.min(.1,(now-this.last)/1000);this.last=now;return this.clock;},
   select(index){if(!this.has(index))return;Module.mineInspect=index;this.clock=0;Module.mineReactionCommand=(Module.mineReactionCommand||0)+1;this.last=performance.now();$('mineScene').value=String(index);this.sync();},
@@ -60,7 +67,7 @@ window.astraMinePreview={
   },
   details(open){$('mineDetails').hidden=!open;$('mineControls').setAttribute('aria-expanded',String(open));},
   open(){
-    this.paused=false;this.touring=true;this.clock=0;this.last=0;this.mask=2147483647;this.high=2047;this.fresh=true;$('mineZoom').value='1';this.sync();
+    this.paused=false;this.touring=true;this.clock=0;this.last=0;this.mask=2147483647;this.high=131071;this.fresh=true;$('mineZoom').value='1';this.sync();
     if(window.Module&&flightActive&&Module.astra){
       Module.mineRefinement=true;Module.mineInspect=0;Module.mineInspectZoom=1;Module.pickupInspect=Module.weaponInspect=-1;
       releaseFlightMouse();Module._astra_reset_flight_input?.();Module.pyroPreviewCommand=1;
