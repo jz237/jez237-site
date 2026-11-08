@@ -20616,5 +20616,108 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-11-07-factual-infographic-factual-infographic-thermophobia-persis",
+    "title": "Factual infographic: Thermophobia — Persistent Fear of Heat",
+    "tests": "factual_subtype: phobia-infographic; phobia: Thermophobia; exact title lines read back before rendering; no subjective review; archive_slot=2026-11-07T20:08; concept=thermophobia-heat-anticipation-shaded-courtyard; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: phobia-infographic",
+    "prompt": "Create the finished portrait factual phobia infographic directly, with lifelike, very scary photorealistic photographic imagery and flowing unboxed explanatory design. Not a photographed printed chart, book, app, painting, engraving or cartoon. The fear trigger is HEAT, not fire or monsters. Richly detailed editorial photographic compositing, convincing optical perspective, full natural anatomy, cinematic but physically credible high-contrast daylight, exquisite real textures.\nExact two title lines, read back and verified before render:\nThermophobia\nPersistent fear of heat\nSet the first line in very prominent BOLD lettering, without literal Markdown asterisks. Place its exact meaning immediately beneath. No umbrella heading replacing the name.\nDominant hero: oppressive midsummer sunlight beyond a narrow shaded stone doorway, photographed at low waist height with a wide 28mm lens. A glaring sunlit courtyard and intensely bright pale pavement loom into the near foreground; distant edges ripple subtly in atmospheric heat shimmer, not a fantasy distortion. Hard-edged shadows, weathered stucco, dry foliage, tiny airborne dust specks in a sunshaft, an iron door handle catching white highlights. Foreground contains a close hot ceramic tea cup on a sill with subtle realistic steam, untouched, a secondary hot-object trigger, not a burn injury. Strong warm light presses against cool deep doorway shade, making the outside feel immediately threatening through proximity and perspective rather than fictitious objective hazards.\nFictional protagonist: a slim white nonbinary adult in their twenties with freckles, copper curls and sage linen clothes, seen in profile. Natural realistic skin pores, slightly tense jaw, hunched shoulders and a hand held protectively near their chest, eyes toward the bright courtyard; no theatrical screaming face. They remain safely in shade with a water bottle nearby, not trapped, injured or medically collapsing. Appearance is fictional, not a sourced clinical patient. The photo should evoke intense fear through oppressive heat cues, vulnerability, exposure and contrast, not just a frightened-face poster.\nCompose substantial educational material along the curving boundary of sun and shadow; readable ivory and charcoal type over quiet photographic negative space. Refined thin open leaders, restrained amber accents and a cool teal recovery pathway. No rigid boxes or grid. Small photographic details of tense fingertips and the untouched hot cup can merge organically into the lower design, never repeated equal cards. Keep generous breathing room while retaining these exact concise labels and explanations:\n'Heat as a trigger' — 'Hot weather and hot objects may provoke intense fear.'\n'Body alarm' — 'Palpitations, trembling, dizziness and severe worry can accompany phobias. Symptoms vary.' Add delicate leader lines to hand and chest, no invented brain anatomy or fake ECG.\n'Avoidance and relief' — 'Avoiding a feared situation may ease anxiety in the short term, while daily life becomes restricted.' Use a simple subtle curved cue-to-avoidance-to-relief pathway without claiming a universal causal circuit.\n'Fear is not a thermometer' — 'Heat can cause real illness. Keep cool, stay hydrated and follow local heat-risk guidance.' Distinguish the subjective intensity from measured danger; do not label scorching weather harmless. No numeric temperature readout or invented thresholds.\n'Getting help' — 'If fear disrupts daily life, seek professional support. Cognitive behavioural therapy (CBT) can help treat phobias.'\nSmall but readable safety note: 'Dizziness, heavy sweating, headache or weakness may signal overheating; do not assume anxiety.'\nSubordinate terminology note: 'Descriptive fear name; not a separate diagnostic label here.' Footer: 'General education, not diagnosis. Fictional photographic scene.'\nVisual mechanism and safety must stay accurate. No burns, gore, dehydration spectacle, inferno, monsters, distorted human anatomy, invented statistics or unsupported neurological claims. No self-directed exposure instructions, unsafe challenges or advice to ignore heat warnings. No tiny bibliography, web URLs, logos or watermark. Preserve the complete richly detailed, flowing photographic infographic, not a sparse poster. Request openai/gpt-image-2.6-sunburst, quality medium, size auto, opaque background.",
+    "image": "images/2026-11-07-factual-infographic-factual-infographic-thermophobia-persis.jpg",
+    "thumb": "thumbs/2026-11-07-factual-infographic-factual-infographic-thermophobia-persis.webp",
+    "color": "#7c7363",
+    "date": "2026-11-07",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1199x1312",
+    "dedup": {
+      "conceptKey": "thermophobia-heat-anticipation-shaded-courtyard",
+      "imageSha256": "9b7087b703754a1894302786009b0eadb057e9d78ed5b681a6da88bc011b392b",
+      "imageDHash": "5143452505452012"
+    },
+    "factualInfographic": {
+      "topic": "Thermophobia: persistent fear of heat, heat-related triggers, bodily anxiety, avoidance, realistic heat safety, and evidence-based help",
+      "description": "Photographic educational chart explaining heat fear, variable anxiety symptoms, avoidance, CBT and genuine heat-health precautions.",
+      "sourceNote": "Indian Journal of Psychiatry https://pmc.ncbi.nlm.nih.gov/articles/PMC9129358/; NHS https://www.nhs.uk/mental-health/conditions/phobias/; CDC https://www.cdc.gov/heat-health/about/index.html. Verified terminology, symptoms, avoidance, CBT and heat safety",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-08T01:09:47.432056+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "Indian Journal of Psychiatry",
+            "title": "A rare case with different presentation of specific phobia: Case Report",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9129358/"
+          },
+          {
+            "id": "S2",
+            "publisher": "NHS",
+            "title": "Phobias",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/mental-health/conditions/phobias/"
+          },
+          {
+            "id": "S3",
+            "publisher": "CDC",
+            "title": "About Heat and Your Health",
+            "sourceType": "government-agency",
+            "url": "https://www.cdc.gov/heat-health/about/index.html"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Thermophobia is an established descriptive term for fear of heat; a published case uses the name for fear involving hot food. This is a descriptive fear name, not a claim of a separate diagnostic category.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Heat-related situations and hot objects can trigger anxiety; the term meaning persistent fear of heat was additionally checked directly in the medically edited RxList dictionary.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Phobias can involve severe worry, palpitations, trembling, dizziness and fear of losing control; symptoms differ between people.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Avoidance of feared circumstances can bring short-term relief; the cited case reports avoidance and spontaneous subsiding of symptoms, not a universal mechanism for all patients.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Phobias can interfere with daily life; seek professional help if symptoms affect life.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "CBT is a talking therapy used to treat phobias.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Heat can cause actual illness; stay cool and hydrated, use shade and cooling, and take local heat-risk advice seriously.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "Overheating symptoms can include heavy sweating, dizziness, headache, weakness and nausea; physical symptoms must not simply be assumed to be anxiety.",
+            "sourceIds": [
+              "S3",
+              "S2"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
