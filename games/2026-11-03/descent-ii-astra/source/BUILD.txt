@@ -1349,3 +1349,9 @@ R67 — older-browser compatibility and texture preparation
 - Paired 4x CPU-throttled tests: 30 texture reconstructions matched prior pixel hashes exactly; representative hull preparation was about 49% faster, reconstructed surfaces about 24–28% faster.
 - Shader and all 21 weapon showcase checks pass with optional WebGL extensions disabled. Physical GTX 1080/old Chrome hardware was not available.
 - Flight controls, demo AI, geometry, texture dimensions, effects, simulation and sound assets unchanged.
+
+R68 - extended runtime audit
+- Balanced legacy rectangle color arrays and kept skipped palette-tint passes from enabling unused vertex inputs. This fixes invalid attribute calls during blank and seeking frames in the explosion showroom and screen postprocessing.
+- All 26 explosion profiles pass strict per-WebGL-call error checks after the fix.
+- Extended Original and Vertigo combat, respawn, level transitions, mobile rotation, interrupted asset download recovery, galleries and preview state preservation were exercised.
+- No flight control, demo AI, simulation, material, sound or texture-quality changes.
