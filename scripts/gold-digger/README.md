@@ -9,6 +9,7 @@ Game: `games/2026-11-07/gold-digger/` (three.js, plain ES modules, every local i
 | `replay_check.mjs [runs]` | records autopilot runs, replays clips around deaths/random ticks, compares the world exactly |
 | `autopilot_check.mjs [minutes]` | demo autopilot plays the whole campaign like AI PLAYTHROUGH (store buys, retries) |
 | `console_check.mjs [baseUrl]` | headless Edge: `?test=1` self-test, frames of every depth/guardian, phone layouts, demo, playthrough→store→depth 2, game over initials, shader programs flat, no console errors, no score POSTs (`ONLY=test,frames,demo,playthrough,title`) |
+| `float_check.mjs [baseUrl]` | headless Edge, every level at high (sculpted) + medium (phone) quality: every prop's feet (rock pieces, drips, living growth, settled props' contact points via `globalThis.__gdAudit`) within 3 cm of the DRAWN rock, kickables on the floor, the exact surface query agrees with a THREE raycast, the digger's soles on the floor |
 | `gen_audio.py` / `process_audio.py` | ElevenLabs SFX/music/voice → `audio/`, `music/`, `voice/` (key read from the Windows user env, never printed) |
 
 Serve the repo root without caching (the browser otherwise keeps old `?v=` modules), e.g. a tiny no-store `http.server`

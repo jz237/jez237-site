@@ -4,16 +4,16 @@
 // re-aimed every frame at the nearest flares, fires, lanterns, crystals and lava): their number never changes,
 // so no material ever recompiles mid-game.
 import * as THREE from '../vendor/three.module.min.js';
-import { T, SOLID, PHYS, TOOLS, GEMS, BIOMES, variantOf } from './config.js?v=17';
-import { Cave, rockMaterial } from './cavemesh.js?v=17';
-import { rockTextures, spriteTextures, waterTextures } from './textures.js?v=17';
-import { FX, CALM } from './fx.js?v=17';
-import { Post } from './post.js?v=17';
-import * as MD from './models.js?v=17';
-import { buildDecor, bake } from './decor.js?v=17';
-import { Digger, loadDiggerAsset } from './digger.js?v=17';
-import { buildDetail } from './detail.js?v=17';
-import { buildLiving } from './living.js?v=17';
+import { T, SOLID, PHYS, TOOLS, GEMS, BIOMES, variantOf } from './config.js?v=18';
+import { Cave, rockMaterial } from './cavemesh.js?v=18';
+import { rockTextures, spriteTextures, waterTextures } from './textures.js?v=18';
+import { FX, CALM } from './fx.js?v=18';
+import { Post } from './post.js?v=18';
+import * as MD from './models.js?v=18';
+import { buildDecor, bake } from './decor.js?v=18';
+import { Digger, loadDiggerAsset } from './digger.js?v=18';
+import { buildDetail } from './detail.js?v=18';
+import { buildLiving } from './living.js?v=18';
 
 export function pickQuality(name) {
   const mobile = matchMedia('(pointer:coarse)').matches || /Android|iPhone|iPad/i.test(navigator.userAgent);
@@ -138,7 +138,7 @@ const lerp = (a, b, t) => a + (b - a) * t;
 const obj = (x) => (x && x.group) ? x.group : x;
 const has = (n) => typeof MD[n] === 'function';
 function make(name, ...a) {
-  if (has(name)) { try { return MD[name](...a); } catch (e) { console.warn('model', name, e); } }
+  if (has(name)) { try { const r = MD[name](...a), o = obj(r); if (o && o.userData) o.userData.kind = name; return r; } catch (e) { console.warn('model', name, e); } }
   const m = new THREE.Mesh(new THREE.BoxGeometry(0.4, 0.4, 0.4), new THREE.MeshStandardMaterial({ color: 0xff00ff }));
   return { group: m };
 }
@@ -235,7 +235,7 @@ export class Renderer {
 
   // the realistic digger (a skinned, motion-captured body); the old built digger stands in if it fails to load
   async loadDigger() {
-    try { this.digGltf = await loadDiggerAsset('assets/digger.glb?v=17'); } catch (e) { console.warn('digger asset', e); }
+    try { this.digGltf = await loadDiggerAsset('assets/digger.glb?v=18'); } catch (e) { console.warn('digger asset', e); }
   }
   makePlayer() {
     if (this.digGltf) {
@@ -743,11 +743,19 @@ export class Renderer {
     const pl = this.player, R = pl.rig, root = pl.root;
     root.visible = !P.inCage || W.cage.y < W.M.start.y + 9;
     const climb = P.state === 'climb';
+    // standing on rock, his boots follow the drawn floor where it rounds off at a lip (never up into it). Visual only.
+    let want = 0;
+    if (P.ground && !climb && !P.inWater && !P.inCage && !P.dead && this.cave && this.cave.solid(Math.floor(P.x), Math.ceil(P.y - 0.01) - 1)) {
+      let g = -Infinity;
+      for (const dx of [-0.13, 0, 0.13]) { const v = this.cave.groundY(P.x + dx, P.y + 0.4, 0.05, 0.6); if (v !== null && v > g) g = v; }
+      if (g > -Infinity) want = Math.max(-0.16, Math.min(0, g - P.y));
+    }
+    this.footDY = (this.footDY || 0) + (want - (this.footDY || 0)) * Math.min(1, dt * (P.ground ? 14 : 8));
     if (pl.dig) {
       const M = W.M, tx = Math.floor(P.x), ty = Math.floor(P.y + 0.9);
       const rope = M.tiles[ty * M.w + tx] === T.ROPE || M.tiles[Math.floor(P.y + 0.2) * M.w + tx] === T.ROPE;
       pl.dig.update(dt, {
-        x: P.x, y: P.y, face: P.face, vx: P.vx, vy: P.vy, ground: !!P.ground, climb, rope, swim: !!P.inWater, dead: !!P.dead, cage: !!P.inCage,
+        x: P.x, y: P.y + this.footDY, face: P.face, vx: P.vx, vy: P.vy, ground: !!P.ground, climb, rope, swim: !!P.inWater, dead: !!P.dead, cage: !!P.inCage,
         pickF: P.pickT > 0 ? 1 - P.pickT / PHYS.pickT : -1, aim: P.pickAim || 0, throwF: P.throwT > 0 ? 1 - P.throwT / PHYS.throwT : -1,
         hurt: !!pl.hurtNow, ladderX: tx + 0.5,
       });
@@ -843,11 +851,11 @@ export class Renderer {
     }
     // contact shadow: on the floor under the boots, fading as the digger rises above it
     if (this.blob) {
-      let d = 0, fy = P.y;
+      let d = 0, fy = P.y + (this.footDY || 0);
       if (!P.ground) { while (d < 4 && !this.solidAt(P.x, P.y - d - 0.01)) d += 0.2; fy = Math.floor(P.y - d - 0.01) + 1; d = P.y - fy; }
       const op = climb || P.dead || P.inWater || d >= 3.5 ? 0 : 0.85 * (1 - d / 3.5);
       this.blob.visible = op > 0.01; this.blob.material.opacity = op;
-      const sc = 1 + d * 0.18; this.blob.position.set(P.x, fy + 0.12, 0.1); this.blob.scale.set(1.5 * sc, 1.7 * sc, 1);
+      const sc = 1 + d * 0.18; this.blob.position.set(P.x, fy + 0.02, 0.1); this.blob.scale.set(1.5 * sc, 1.7 * sc, 1);
     }
     // the beam: a faint cone of lit dust ahead of the lamp, stopped where the rock is
     if (this.beam) {

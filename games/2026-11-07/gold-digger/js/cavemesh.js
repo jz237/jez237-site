@@ -6,7 +6,7 @@
 // weights (gold vein, wetness, glow, rubble/cracks) that the triplanar rock shader uses.
 // Breaking a tile re-meshes only the chunks around it (a few ms).
 import * as THREE from '../vendor/three.module.min.js';
-import { T } from './config.js?v=17';
+import { T } from './config.js?v=18';
 
 export const S = 0.5;                  // sample spacing (m)
 export const Z0 = -15, Z1 = 5;         // depth range (camera side is +z)
@@ -90,7 +90,7 @@ export class Cave {
     this.pockets = (M.finds || []).filter((f) => f.kind === 'wonder' && f.room).map((f) => [f.room[0] + 1.5, f.room[1] + 3, f.room[0] + 14.5, f.room[1] + 11]);
     const raw = new Float32Array(N);
     for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) {
-      const x = -m + i * S + 0.25, y = -my + j * S + 0.25;
+      const x = -m + i * S, y = -my + j * S;   // the sample sits exactly where col() and the mesh put it (a +0.25 here drew all the rock 25 cm low and left of the tiles)
       // bilinear over tile centres
       const fx = x - 0.5, fy = y - 0.5, x0 = Math.floor(fx), y0 = Math.floor(fy), tx = fx - x0, ty = fy - y0;
       const a = this.solid(x0, y0), b = this.solid(x0 + 1, y0), c = this.solid(x0, y0 + 1), d = this.solid(x0 + 1, y0 + 1);
@@ -163,7 +163,7 @@ export class Cave {
     const my = this.my;
     const j0 = Math.max(0, Math.floor((ty - 2 + my) / S)), j1 = Math.min(ny - 1, Math.ceil((ty + 3 + my) / S));
     const raw = (i, j) => {
-      const x = -m + i * S + 0.25, y = -my + j * S + 0.25, fx = x - 0.5, fy = y - 0.5, x0 = Math.floor(fx), y0 = Math.floor(fy), ax = fx - x0, ay = fy - y0;
+      const x = -m + i * S, y = -my + j * S, fx = x - 0.5, fy = y - 0.5, x0 = Math.floor(fx), y0 = Math.floor(fy), ax = fx - x0, ay = fy - y0;
       const a = this.solid(x0, y0), b = this.solid(x0 + 1, y0), c = this.solid(x0, y0 + 1), d = this.solid(x0 + 1, y0 + 1);
       return a + (b - a) * ax + (c - a) * ay + (a - b - c + d) * ax * ay;
     };
@@ -445,6 +445,156 @@ export class Cave {
     if (this.fine) d += this.sculpt(x, y, zs - d, 0, 0, 1);
     return zs - d;
   }
+
+  // ---- exact heights of the DRAWN rock, so props stand on what you see (behind and in front of the play lane the
+  // floors dip and the roofs rise by up to ~0.3 m). The first surface straight down / up from (x, y, z): its height if
+  // it faces the right way (a floor below, a roof above), null if the point is inside rock or nothing is within `far`.
+  groundY(x, y, z, far = 1.5) { return this.vray(x, y, z, -1, far) > 0 ? this.hy : null; }
+  roofY(x, y, z, far = 1.5) { return this.vray(x, y, z, 1, far) > 0 ? this.hy : null; }
+  // first surface straight down (dir -1) / up (+1) within `far`: 1 = a floor below / roof above (its height in this.hy),
+  // -1 = the point is inside rock, 0 = nothing there
+  vray(x, y, z, dir, far) {
+    const ylo = dir < 0 ? y - far : y, yhi = dir < 0 ? y : y + far;
+    let best = dir < 0 ? -Infinity : Infinity, face = 0;
+    const ix = Math.floor(x * 2), iz = Math.floor(z * 2);
+    for (const mesh of this.chunks.values()) {
+      const bb = mesh.geometry.boundingBox;
+      if (x < bb.min.x || x > bb.max.x || z < bb.min.z || z > bb.max.z || yhi < bb.min.y || ylo > bb.max.y) continue;
+      const H = mesh.userData.vh || (mesh.userData.vh = vhash(mesh.geometry));
+      const P = H.pos, I = H.idx;
+      for (let iy = Math.floor(ylo); iy <= Math.floor(yhi); iy++) {
+        const L = H.map.get(hkey(ix, iy, iz));
+        if (!L) continue;
+        for (let n = 0; n < L.length; n++) {
+          const t = L[n], a = I[t * 3] * 3, b = I[t * 3 + 1] * 3, c = I[t * 3 + 2] * 3;
+          const ax = P[a], az = P[a + 2], bx = P[b], bz = P[b + 2], cx = P[c], cz = P[c + 2];
+          const det = (bz - cz) * (ax - cx) + (cx - bx) * (az - cz);
+          if (Math.abs(det) < 1e-12) continue;
+          const l1 = ((bz - cz) * (x - cx) + (cx - bx) * (z - cz)) / det, l2 = ((cz - az) * (x - cx) + (ax - cx) * (z - cz)) / det, l3 = 1 - l1 - l2;
+          if (l1 < -1e-6 || l2 < -1e-6 || l3 < -1e-6) continue;
+          const yy = l1 * P[a + 1] + l2 * P[b + 1] + l3 * P[c + 1];
+          if (yy < ylo || yy > yhi) continue;
+          if (dir < 0 ? yy > best : yy < best) { best = yy; face = H.up[t]; }
+        }
+      }
+    }
+    if (!face) return 0;
+    this.hy = best;
+    return (dir < 0 ? face > 0 : face < 0) ? 1 : -1;
+  }
+  // the lowest floor under a footprint (rx, rz: its half size), or the highest roof over one: a prop set there touches
+  // the rock everywhere and is buried a little where the rock is higher. Strict: null where the rock falls away under
+  // (rises away over) any part of it - a prop there would hang over a ledge. A sample inside rock (a wall) is skipped.
+  foot(x, y, z, rx, rz, far, dir, strict) {
+    if (this.vray(x, y, z, dir, far) <= 0) return null;
+    const c = this.hy;
+    let v = c;
+    if (rx > 0.02 || rz > 0.02) for (const [dx, dz] of FOOT) {
+      const h = this.vray(x + dx * rx, y, z + dz * rz, dir, far);
+      if (h < 0) continue;
+      const sv = this.hy, off = h === 0 ? Infinity : (dir < 0 ? c - sv : sv - c);
+      if (off > (strict ? 0.08 : 0.3)) { if (strict) return null; continue; }
+      if (dir < 0 ? sv < v : sv > v) v = sv;
+    }
+    return v;
+  }
+  floorUnder(x, y, z, rx = 0, rz = 0, far = 1.2, strict = true) { return this.foot(x, y, z, rx, rz, far, -1, strict); }
+  roofOver(x, y, z, rx = 0, rz = 0, far = 1.2, strict = true) { return this.foot(x, y, z, rx, rz, far, 1, strict); }
+  // stand a built prop on the floor under it (or hang it from the roof over it). Each of its feet - the points of its
+  // bottom (top) slice, spread over it: a frame's posts, a rail's sleepers, a mushroom's stem - is tested against the
+  // drawn rock and the prop moved so none is left above the floor (below the roof), `sink` metres into it. Returns false
+  // (and leaves it) where there is no rock; strict: also where its feet would not all rest within 10 cm (a ledge edge,
+  // a step) - a prop there would hang part-over a drop.
+  settle(o, mode = 'floor', sink = 0.03, strict = true) {
+    o.updateMatrixWorld(true);
+    const bb = _box.setFromObject(o);
+    if (bb.isEmpty()) return false;
+    const roof = mode === 'roof', pts = feet(o, bb, roof), on = [];
+    for (const p of pts) {
+      const h = this.vray(p[0], roof ? p[1] - 0.5 : p[1] + 0.5, p[2], roof ? 1 : -1, 1.4);
+      if (h < 0) continue;                                // this foot is in the rock (against a wall): fine
+      if (h === 0) { if (strict) return false; continue; } // nothing under it: over a drop
+      on.push([p, this.hy - p[1]]);                       // the move that sets this foot on the rock
+    }
+    if (!on.length) return false;
+    let lo = Infinity, hi = -Infinity;
+    for (const [, v] of on) { lo = Math.min(lo, v); hi = Math.max(hi, v); }
+    if (strict && hi - lo > 0.1) return false;
+    const kept = strict ? on : on.filter(([, v]) => roof ? v < lo + 0.3 : v > hi - 0.3);   // lenient: feet over a deep drop are given up on
+    lo = Infinity; hi = -Infinity;
+    for (const [, v] of kept) { lo = Math.min(lo, v); hi = Math.max(hi, v); }
+    const shift = roof ? hi + sink : lo - sink;
+    o.position.y += shift;
+    o.updateMatrixWorld(true);
+    o.userData.feet = kept.map(([p]) => [mode, p[0], p[1] + shift, p[2]]);   // for the float test (?test)
+    return true;
+  }
+  // settle a prop by where it was put: its foot at a floor row (rock under the cell, none in it) -> the floor; its top
+  // at a roof row -> the roof. Anything else (on walls, in the cut face, in mid-air) stays where it is. 'loose': it only
+  // fits part-over a ledge (set as low as the rock under it allows) - the caller may leave a small one out.
+  settleAuto(o) {
+    o.updateMatrixWorld(true);
+    const bb = _box.setFromObject(o);
+    if (bb.isEmpty()) return null;
+    const tx = Math.floor((bb.min.x + bb.max.x) / 2), fy = Math.round(bb.min.y), ry = Math.round(bb.max.y);
+    let mode = null;
+    if (Math.abs(bb.min.y - fy) < 0.34 && this.solid(tx, fy - 1) && !this.solid(tx, fy)) mode = 'floor';
+    else if (Math.abs(bb.max.y - ry) < 0.34 && this.solid(tx, ry) && !this.solid(tx, ry - 1)) mode = 'roof';
+    if (!mode) return null;
+    const y0 = o.position.y, sink = mode === 'floor' ? 0.03 : 0.05;
+    let res = mode;
+    if (!this.settle(o, mode, sink, true)) { res = 'loose'; if (!this.settle(o, mode, sink, false)) return null; }
+    if (Math.abs(o.position.y - y0) > 0.5) { o.position.y = y0; o.updateMatrixWorld(true); return null; }   // something odd under it: leave it
+    return res;
+  }
+}
+
+// vertical-ray lookup for a chunk mesh: its floor/roof triangles bucketed on a 0.5 m (x, z) x 1 m (y) grid
+const _box = new THREE.Box3();
+const FOOT = [[1, 0], [-1, 0], [0.5, 0], [-0.5, 0], [0, 1], [0, -1]];
+const _v = new THREE.Vector3();
+// a prop's feet: up to ~16 of its vertices within the lowest (top: highest) slice of its height, spread over it (one per
+// cell of a 4 x 4 grid over the slice, the lowest / highest in each)
+function feet(o, bb, top) {
+  const h = bb.max.y - bb.min.y, cut = Math.min(0.15, Math.max(0.03, h * 0.08)), all = [];
+  let x0 = Infinity, x1 = -Infinity, z0 = Infinity, z1 = -Infinity;
+  o.traverse((m) => {
+    if (!m.isMesh || !m.geometry || !m.geometry.attributes.position) return;
+    const P = m.geometry.attributes.position, step = Math.max(1, Math.floor(P.count / 3000));
+    for (let i = 0; i < P.count; i += step) {
+      _v.fromBufferAttribute(P, i).applyMatrix4(m.matrixWorld);
+      if (top ? _v.y < bb.max.y - cut : _v.y > bb.min.y + cut) continue;
+      all.push(_v.x, _v.y, _v.z);
+      if (_v.x < x0) x0 = _v.x; if (_v.x > x1) x1 = _v.x; if (_v.z < z0) z0 = _v.z; if (_v.z > z1) z1 = _v.z;
+    }
+  });
+  if (!all.length) return [[(bb.min.x + bb.max.x) / 2, top ? bb.max.y : bb.min.y, (bb.min.z + bb.max.z) / 2]];
+  const cell = new Map(), sx = Math.max(1e-6, x1 - x0) / 4, sz = Math.max(1e-6, z1 - z0) / 4;
+  for (let i = 0; i < all.length; i += 3) {
+    const k = Math.min(3, Math.floor((all[i] - x0) / sx)) * 4 + Math.min(3, Math.floor((all[i + 2] - z0) / sz)), c = cell.get(k);
+    if (!c || (top ? all[i + 1] > c[1] : all[i + 1] < c[1])) cell.set(k, [all[i], all[i + 1], all[i + 2]]);
+  }
+  return [...cell.values()];
+}
+const hkey = (ix, iy, iz) => ((ix + 1024) * 2048 + (iy + 1024)) * 256 + (iz + 128);
+function vhash(geo) {
+  const P = geo.attributes.position.array, N = geo.attributes.normal.array, I = geo.index.array, nt = I.length / 3;
+  const map = new Map(), up = new Int8Array(nt);
+  for (let t = 0; t < nt; t++) {
+    const a = I[t * 3] * 3, b = I[t * 3 + 1] * 3, c = I[t * 3 + 2] * 3;
+    const ny = N[a + 1] + N[b + 1] + N[c + 1];   // the normals point out of the rock
+    if (Math.abs(ny) < 0.15) continue;           // a wall: nothing stands on it
+    const z0 = Math.min(P[a + 2], P[b + 2], P[c + 2]), z1 = Math.max(P[a + 2], P[b + 2], P[c + 2]);
+    if (z1 < -9 || z0 > 5) continue;
+    up[t] = ny > 0 ? 1 : -1;
+    const x0 = Math.min(P[a], P[b], P[c]), x1 = Math.max(P[a], P[b], P[c]), y0 = Math.min(P[a + 1], P[b + 1], P[c + 1]), y1 = Math.max(P[a + 1], P[b + 1], P[c + 1]);
+    for (let ix = Math.floor(x0 * 2); ix <= Math.floor(x1 * 2); ix++) for (let iy = Math.floor(y0); iy <= Math.floor(y1); iy++) for (let iz = Math.floor(z0 * 2); iz <= Math.floor(z1 * 2); iz++) {
+      const k = hkey(ix, iy, iz);
+      const L = map.get(k);
+      if (L) L.push(t); else map.set(k, [t]);
+    }
+  }
+  return { pos: P, idx: I, map, up };
 }
 
 // ------------------------------------------------------------------ the rock material (triplanar detail)

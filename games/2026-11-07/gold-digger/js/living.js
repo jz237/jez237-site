@@ -11,7 +11,7 @@
 // Fixed light rig untouched. One shader program serves all growth, breakables and kickables (matte and glossy
 // differ only in uniforms).
 import * as THREE from '../vendor/three.module.min.js';
-import { T, SOLID } from './config.js?v=17';
+import { T, SOLID } from './config.js?v=18';
 
 function rng(seed) { let s = seed >>> 0 || 1; return () => { s = (s + 0x6D2B79F5) >>> 0; let t = s; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
 
@@ -388,7 +388,9 @@ export function buildLiving(M, look, W, K) {
     }
     return y0;
   };
-  const floorY = (x, y0, z) => march(x, y0, z, -1), roofY = (x, y0, z) => march(x, y0, z, 1);
+  // the drawn floor under / roof over a footprint of radius r (exact, from the rock mesh; null where there is none)
+  const floorY = (x, y0, z, r = 0) => cave.floorUnder ? cave.floorUnder(x, y0 + 0.5, z, r, r, 1.2) : march(x, y0, z, -1);
+  const roofY = (x, y0, z, r = 0) => cave.roofOver ? cave.roofOver(x, y0 - 0.5, z, r, r, 1.3) : march(x, y0, z, 1);
   const pick = (a) => a[Math.floor(R() * a.length)];
   const colOf = (list) => { const c = new THREE.Color(pick(list)); const k = 0.82 + R() * 0.36; return c.multiplyScalar(k); };
 
@@ -459,9 +461,12 @@ export function buildLiving(M, look, W, K) {
         if (row === 'front') h *= 0.75;
         const z = rowZ(x, cy, row, h * 0.3);
         if (z === null) continue;
-        const y = floorY(x, cy, z) - (kd.dir === 0 ? 0.04 : 0.025);
+        const g = floorY(x, cy, z, Math.min(0.2, h * 0.22));
+        if (g === null) continue;
+        const y = g - (kd.dir === 0 ? 0.04 : 0.025);
         if (y < cy - 0.45 || y > cy + 0.4) continue;
         put(name, mk(name, x, y, z, h, cols, [cx, cy - 1]));
+        if (globalThis.__gdAudit) globalThis.__gdAudit.push(['floor', x, y, z, Math.min(0.2, h * 0.22), 'live:' + name]);
       }
     }
   }
@@ -477,10 +482,11 @@ export function buildLiving(M, look, W, K) {
         if (row === 'lane') h = Math.min(h, Math.max(0.2, H - (kd.hang ? 1.85 : 1.2)));
         const z = rowZ(x, cy, row, 0.15);
         if (z === null) continue;
-        const top = roofY(x, cy + 1, z);
-        if (top < cy + 0.55 || top > cy + 1.5) continue;
+        const top = roofY(x, cy + 1, z, 0.06);
+        if (top === null || top < cy + 0.55 || top > cy + 1.5) continue;
         const sink = kd.hang ? 0.12 : 0.22;   // set into the roof so the rock's own relief never leaves a gap
         put(name, mk(name, x, top + sink, z, h + sink, cols, [cx, cy + 1]));
+        if (globalThis.__gdAudit) globalThis.__gdAudit.push(['roof', x, top + sink, z, 0.06, 'live:' + name]);
       }
     }
   }
@@ -500,9 +506,9 @@ export function buildLiving(M, look, W, K) {
   // ---- kickables: on the floor of the lane. The rock's drawn floor sits a little under the tile tops the sim walks
   // on (FO, measured here); kickables move in tile space and are drawn FO lower
   const fos = [];
-  for (let i = 0; i < floors.length && fos.length < 40; i += 3) { const [cx, cy, wet] = floors[i]; if (!wet && solid(cx - 1, cy - 1) && solid(cx + 1, cy - 1)) fos.push(floorY(cx + 0.5, cy, 0) - cy); }
+  for (let i = 0; i < floors.length && fos.length < 40; i += 3) { const [cx, cy, wet] = floors[i]; if (!wet && solid(cx - 1, cy - 1) && solid(cx + 1, cy - 1)) { const g = floorY(cx + 0.5, cy, 0); if (g !== null) fos.push(g - cy); } }
   fos.sort((a, b) => a - b);
-  const FO = fos.length ? fos[fos.length >> 1] : -0.25;
+  const FO = fos.length ? fos[fos.length >> 1] : 0;
   const kicks = [], kbatches = [];
   for (const [name, d, cols] of L.kick) {
     const kk = KICK[name], list = [];
@@ -510,8 +516,8 @@ export function buildLiving(M, look, W, K) {
       if (wet || !clear(cx, cy, 2.2)) continue;
       for (let k = nOf(d, 2.6); k > 0; k--) {
         const x = cx + 0.1 + R() * 0.8, z = (R() - 0.5) * 0.62, r = kk.r[0] + R() * (kk.r[1] - kk.r[0]);
-        const y = floorY(x, cy, z);
-        if (Math.abs(y - cy - FO) > 0.12) continue;
+        const y = floorY(x, cy, z, r * 0.6);
+        if (y === null || Math.abs(y - cy - FO) > 0.025) continue;
         list.push({ name, x, y: cy + r * 0.62, z, r, vx: 0, vy: 0, vz: 0, rest: true, q: kk.roll ? new THREE.Quaternion().setFromAxisAngle(_B.set(0, 0, 1), R() * 6.28) : new THREE.Quaternion().setFromEuler(E4.set(R() * 6, R() * 6, R() * 6)), col: cols ? colOf(cols) : colOf([look.rubble ? new THREE.Color().fromArray(look.rubble).getHex() : 0x8a8076]), cd: 0, alive: true, roll: kk.roll, glow: kk.glow });
       }
     }

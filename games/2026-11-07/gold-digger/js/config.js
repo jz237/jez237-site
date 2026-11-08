@@ -1,6 +1,6 @@
 // Gold Digger: every tunable in one place. The simulation (sim.js), the level generator (levelgen.js) and the
 // autopilot (ai.js) read only from here, so the Node checks and the browser agree exactly.
-export const VERSION = '1.7.0';
+export const VERSION = '1.7.1';
 export const STEP = 1 / 120;
 
 // ------------------------------------------------------------------ tiles (1 m cells, row 0 = bottom)

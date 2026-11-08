@@ -3,7 +3,7 @@
 // Things that glow register light "emitters" the renderer's light pool can aim at.
 // The wonders (one per level in the campaign) are big set pieces in a room whose back wall is pushed far back.
 import * as THREE from '../vendor/three.module.min.js';
-import { T, SOLID } from './config.js?v=17';
+import { T, SOLID } from './config.js?v=18';
 
 function rng(seed) { let s = seed >>> 0 || 1; return () => { s = (s + 0x6D2B79F5) >>> 0; let t = s; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
 
@@ -115,6 +115,10 @@ const MOTES = {
 };
 const GW_FRAG = `uniform sampler2D uTex; uniform vec3 uCol; varying float vA; void main(){ vec4 t = texture2D(uTex, gl_PointCoord); gl_FragColor = vec4(uCol * 2.2 * vA, t.a * vA); }`;
 
+// props built with a partner (a frame and its lantern, a rail and its cart) are never left out on their own
+const TIED = new Set(['timberFrame', 'girder', 'cart', 'lantern', 'chain']);
+// props that belong to the walls, or ride another prop (the cart on its rail): never settled on their own
+const WALL = new Set(['geode', 'pipes', 'shelf', 'cart']);
 export function buildDecor(M, look, W, K) {
   const { make, obj, tex, q } = K;
   const R = rng((M.seed * 97 + M.depth * 13 + M.level * 5 + 11) >>> 0);
@@ -127,6 +131,18 @@ export function buildDecor(M, look, W, K) {
   const anim = [];
   const dens = q.decor;
   const place = (o, x, y, z, s = 1, ry = 0) => { const g = obj(o); g.position.set(x, y, z); g.scale.multiplyScalar(s); g.rotation.y = ry; statics.push(g); return g; };
+  const railCart = (x, y, cart, off = (R() - 0.5) * 2) => {
+    const r = place(make('rail', 5), x, y, -1.5);
+    if (K.cave && !K.cave.settle(r, 'floor', 0.03, true)) { statics.pop(); return; }
+    if (cart) place(make('cart'), x + off, r.position.y + 0.05, -1.5);
+  };
+  // a frame standing from the drawn floor (its lowest point under the posts) up into the drawn roof (its highest point
+  // over the beam): [foot y, height]
+  const span = (x, y, z, h) => {
+    const c = K.cave; if (!c) return [y, h];
+    const g = c.floorUnder(x, y + 0.5, z, 1.5, 0.15, 1.2, false), r = c.roofOver(x, y + 0.5, z, 1.4, 0.15, h + 1, false);
+    return g === null || r === null || r - g < h - 0.6 || r - g > h + 0.6 ? [y, h] : [g - 0.03, r - g + 0.13];
+  };
   const biome = M.biome;
   // candidate spots
   const floors = [], ceils = [];
@@ -182,14 +198,13 @@ export function buildDecor(M, look, W, K) {
   if (set === 'workings' || set === 'patina') {
     // timber frames across corridors with lanterns, rails and carts (the green drift's frames lean where the ground has moved)
     for (const [x, y] of take(Math.round((set === 'patina' ? 7 : 10) * dens), 5, ([x, y]) => headroom(x, y) >= 3 && headroom(x, y) <= 6 && open(x - 1, y) && open(x + 1, y))) {
-      const h = headroom(x, y);
-      const f = place(make('timberFrame', 3.2, h), x + 0.5, y, -0.9);
+      const h = headroom(x, y), [fy0, fh] = span(x + 0.5, y, -0.9, h);
+      const f = place(make('timberFrame', 3.2, fh), x + 0.5, fy0, -0.9);
       if (set === 'patina') f.rotation.z = (R() - 0.5) * 0.12;
-      if (set === 'workings' || R() < 0.5) lantern(x + 0.5 + (R() < 0.5 ? -1.1 : 1.1), y + h - 0.65);
+      if (set === 'workings' || R() < 0.5) lantern(x + 0.5 + (R() < 0.5 ? -1.1 : 1.1), fy0 + fh - 0.74);
     }
     for (const [x, y] of take(Math.round((set === 'patina' ? 2 : 4) * dens), 8, ([x, y]) => open(x + 2, y) && open(x - 2, y) && solid(x + 2, y - 1) && solid(x - 2, y - 1))) {
-      place(make('rail', 5), x + 0.5, y, -1.5);
-      if (R() < 0.6) place(make('cart'), x + 0.5 + (R() - 0.5) * 2, y + 0.05, -1.5);
+      railCart(x + 0.5, y, R() < 0.6);
     }
     // copper ore turned green and blue: malachite and azurite on the floors
     if (set === 'patina') crystals(14, [0x2fbf8a, 0x2f6fd0, 0x48d6b0], 0.75, 0.45, 0.4, 1.3);
@@ -197,12 +212,12 @@ export function buildDecor(M, look, W, K) {
     // iron frames, pipe runs along the back walls, chains from the roof, a few carts
     for (const [x, y] of take(Math.round(8 * dens), 5, ([x, y]) => headroom(x, y) >= 3 && headroom(x, y) <= 6 && open(x - 1, y) && open(x + 1, y))) {
       const h = headroom(x, y);
-      place(make('girder', 3.2, h), x + 0.5, y, -0.9);
-      if (R() < 0.6) lantern(x + 0.5 + (R() < 0.5 ? -1.1 : 1.1), y + h - 0.65, [1, 0.42, 0.18]);
+      const [gy0, gh] = span(x + 0.5, y, -0.9, h); place(make('girder', 3.2, gh), x + 0.5, gy0, -0.9);
+      if (R() < 0.6) lantern(x + 0.5 + (R() < 0.5 ? -1.1 : 1.1), gy0 + gh - 0.74, [1, 0.42, 0.18]);
     }
     for (const [x, y] of take(Math.round(6 * dens), 9, ([x, y]) => headroom(x, y) >= 3 && open(x - 3, y) && open(x + 3, y))) place(make('pipes', 5 + Math.floor(R() * 4)), x + 0.5, y + 0.8 + R() * 1.4, -2.1);
     for (const [x, y] of ceils.slice(0, Math.round(14 * dens))) { if (drop(x, y) < 4) continue; place(make('chain', 1 + R() * 2.5), x + 0.5, y + 1, -0.8 - R() * 2); }
-    for (const [x, y] of take(Math.round(2 * dens), 8, ([x, y]) => open(x + 2, y) && open(x - 2, y) && solid(x + 2, y - 1) && solid(x - 2, y - 1))) { place(make('rail', 5), x + 0.5, y, -1.5); place(make('cart'), x + 0.5, y + 0.05, -1.5); }
+    for (const [x, y] of take(Math.round(2 * dens), 8, ([x, y]) => open(x + 2, y) && open(x - 2, y) && solid(x + 2, y - 1) && solid(x - 2, y - 1))) railCart(x + 0.5, y, true, 0);
   } else if (set === 'garden') {
     for (const [x, y] of take(Math.round(26 * dens), 2)) {
       const s = 0.6 + R() * 1.1, z = R() < 0.7 ? -0.9 - R() * 2.2 : 1.2 + R() * 0.8;
@@ -340,8 +355,9 @@ export function buildDecor(M, look, W, K) {
   if (wd) {
     const pts = [], ph = [];
     for (const [x, y] of ceils.slice(0, Math.round(wd[0] * dens))) {
-      const len = 0.4 + R() * 2.2, z = -0.6 - R() * 3, bx = x + R();
-      for (let k = 0; k < 8; k++) { pts.push(bx + (R() - 0.5) * 0.03, y + 1 - len * k / 8, z); ph.push(R()); }
+      const len = 0.4 + R() * 2.2, z = -0.6 - R() * 3, bx = x + R(), top = K.cave ? K.cave.roofY(bx, y + 0.5, z, 1.3) : y + 1;
+      if (top === null) continue;
+      for (let k = 0; k < 8; k++) { pts.push(bx + (R() - 0.5) * 0.03, top - 0.02 - len * k / 8, z); ph.push(R()); }
     }
     const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(pts, 3)); g.setAttribute('aPh', new THREE.Float32BufferAttribute(ph, 1));
     worms = new THREE.Points(g, new THREE.ShaderMaterial({ vertexShader: GW_VERT, fragmentShader: GW_FRAG, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
@@ -380,6 +396,14 @@ export function buildDecor(M, look, W, K) {
       eyes.push({ g, mat, a: 0, blink: R() * 5, x: g.position.x, y: g.position.y, ph: R() * 6 });
     }
   }
+  // stand every prop on the DRAWN rock: a foot at a floor row goes down onto the floor under it, a root at a roof row
+  // up into the roof over it (behind the play lane the floors dip and the roofs rise; props set on the tile grid floated)
+  if (K.cave) for (let i = statics.length - 1; i >= 0; i--) {
+    const g = statics[i];
+    if (WALL.has(g.userData.kind)) continue;
+    if (K.cave.settleAuto(g) === 'loose' && !TIED.has(g.userData.kind)) statics.splice(i, 1);
+  }
+  if (globalThis.__gdAudit) for (const g of statics) for (const f of g.userData.feet || []) globalThis.__gdAudit.push([...f, 0, 'prop:' + (g.userData.kind || '?')]);
   // bake the statics
   const baked = bake(statics);
   group.add(baked);

@@ -8,8 +8,8 @@
 // floating when a wall is dug or blasted away. Presentation only: the sim never sees any of it.
 import * as THREE from '../vendor/three.module.min.js';
 import { mergeVertices } from '../vendor/BufferGeometryUtils.js';
-import { T } from './config.js?v=17';
-import { bake } from './decor.js?v=17';
+import { T } from './config.js?v=18';
+import { bake } from './decor.js?v=18';
 
 function rng(seed) { let s = seed >>> 0 || 1; return () => { s = (s + 0x6D2B79F5) >>> 0; let t = s; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
 const hash = (x, y, z) => { let h = Math.imul(x | 0, 374761393) ^ Math.imul(y | 0, 668265263) ^ Math.imul(z | 0, 2147483647); h = Math.imul(h ^ (h >>> 13), 1274126177); return ((h ^ (h >>> 16)) >>> 0) / 4294967296; };
@@ -26,7 +26,7 @@ function vnoise(x, y, z) {
 let PROTO = null;
 function protos() {
   if (PROTO) return PROTO;
-  const pack = (g) => { g.computeVertexNormals(); const q = g.toNonIndexed(); return { pos: q.attributes.position.array, nrm: q.attributes.normal.array }; };
+  const pack = (g) => { g.computeVertexNormals(); const q = g.toNonIndexed(), pos = q.attributes.position.array; let lo = 9, hi = -9; for (let i = 1; i < pos.length; i += 3) { lo = Math.min(lo, pos[i]); hi = Math.max(hi, pos[i]); } return { pos, nrm: q.attributes.normal.array, minY: lo, maxY: hi }; };
   const lump = (detail, seed, amp) => {
     const g = mergeVertices(new THREE.IcosahedronGeometry(1, detail).deleteAttribute('uv').deleteAttribute('normal'));
     const p = g.attributes.position, v = new THREE.Vector3();
@@ -191,6 +191,8 @@ const FACE = {
   obsidian: [['crystal', (r) => [1, [0x3a1d4a, 0x251530, 0x5a1a40][Math.floor(r * 3)]], 3, 0.3, 0.8, 'out'], ['coal', (r) => [Math.floor(r * 3)], 1, 0.8, 1.2, 'out']],
   sulfur: [['crystal', (r) => [1, [0xffd23a, 0xe8b020][Math.floor(r * 2)]], 3, 0.3, 0.6, 'out'], ['coal', (r) => [Math.floor(r * 3)], 1, 0.8, 1.2, 'out']],
 };
+const FLUSH = new Set(['beamEnd', 'pipeStub', 'block', 'drum', 'gear']);
+const _fb = new THREE.Box3();
 const FIREFLY = { garden: [0.3, 1, 0.8], bluecap: [0.5, 0.7, 1], roots: [1, 0.85, 0.4], tide: [0.3, 1, 0.9], patina: [0.4, 1, 0.75] };
 
 
@@ -224,6 +226,25 @@ export function buildDetail(M, look, W, K) {
     batch.add(pr, m4, c, o);
   };
   const pick = (a) => a[Math.floor(R() * a.length)];
+  // everything stands on the DRAWN floor / hangs from the DRAWN roof (behind and in front of the lane they dip and rise):
+  // gnd = the lowest floor under a footprint of radius r at tile row cy, rof = the highest roof over one (null: no rock)
+  const gnd = (x, cy, z, r) => cave.floorUnder(x, cy + 0.5, z, r, r * 0.8, 1.2);
+  const rof = (x, cy, z, r) => cave.roofOver(x, cy + 0.5, z, r, r, 1.3);
+  // a rock piece resting on the floor, `bury` of its height sunk in; a cone hanging from the roof, its root in the rock
+  const sit = (batch, pr, x, cy, z, sx, sy, sz, bury, ry, rx, rz, c, o) => {
+    const g = gnd(x, cy, z, Math.max(sx, sz) * 0.75);
+    if (g === null) return false;
+    place(batch, pr, x, g - pr.minY * sy - bury * sy, z, sx, sy, sz, ry, rx, rz, c, o);
+    if (globalThis.__gdAudit) globalThis.__gdAudit.push(["floor", x, g - bury * sy, z, Math.max(sx, sz) * 0.75, "rock"]);
+    return true;
+  };
+  const hang = (batch, pr, x, cy, z, sx, sy, sz, c, o) => {
+    const r = rof(x, cy, z, sx * 0.5);
+    if (r === null) return false;
+    place(batch, pr, x, r + 0.04 - pr.maxY * sy, z, sx, sy, sz, undefined, 0, 0, c, o);
+    if (globalThis.__gdAudit) globalThis.__gdAudit.push(["roof", x, r + 0.04, z, sx * 0.5, "drip"]);
+    return true;
+  };
   const small = new RockBatch(look), large = new RockBatch(look);
   const cracks = look.cracks || 0;
   const ember = () => (cracks && R() < 0.25 ? cracks * 0.8 : 0);
@@ -240,8 +261,8 @@ export function buildDetail(M, look, W, K) {
       if (s < 0.06 && R() < 0.35) z = (R() - 0.5) * 0.7;
       else z = R() < 0.6 ? backZ(x, cy, s) : frontZ(x, cy, s);
       if (z === null) continue;
-      const sy = s * (0.5 + R() * 0.35);
-      place(small, pick(s < 0.07 ? P.peb : P.lump), x, cy + sy * 0.3, z, s * (0.8 + R() * 0.5), sy, s * (0.8 + R() * 0.5), undefined, 0, 0, rockCol(0.45), { glow: ember() });
+      const sy = s * (0.5 + R() * 0.35), pr = pick(s < 0.07 ? P.peb : P.lump);
+      sit(small, pr, x, cy, z, s * (0.8 + R() * 0.5), sy, s * (0.8 + R() * 0.5), 0.15, R() * 6.28, 0, 0, rockCol(0.45), { glow: ember() });
     }
   }
   // ---- rubble piles: little heaps of broken rock, back and front
@@ -253,8 +274,8 @@ export function buildDetail(M, look, W, K) {
     if (z0 === null) continue;
     const n = 5 + Math.floor(R() * 6);
     for (let k = 0; k < n; k++) {
-      const a = R() * 6.28, d = R() * 0.45, s = 0.07 + R() * 0.17;
-      place(small, pick(P.lump), x0 + Math.cos(a) * d * 1.4, cy + s * 0.25 + (0.45 - d) * 0.35, z0 + Math.sin(a) * d * 0.6, s * (0.9 + R() * 0.4), s * (0.6 + R() * 0.3), s, undefined, R() * 0.4, R() * 0.4, rockCol(0.6), { glow: ember() });
+      const a = R() * 6.28, d = R() * 0.45, s = (0.07 + R() * 0.17) * (1.3 - d), sy = s * (0.6 + R() * 0.3), sx = s * (0.9 + R() * 0.4);
+      sit(small, pick(P.lump), x0 + Math.cos(a) * d * 1.4, cy, z0 + Math.sin(a) * d * 0.6, sx, sy, s, 0.12, R() * 6.28, R() * 0.4, R() * 0.4, rockCol(0.6), { glow: ember() });
     }
   }
   // ---- boulders resting against the back walls
@@ -263,14 +284,14 @@ export function buildDetail(M, look, W, K) {
     const r = 0.28 + Math.pow(R(), 1.5) * 0.7, x = cx + R(), w = zb(x, cy + 0.6);
     const z = w + r * 0.45;
     if (z + r * 0.95 > -0.55) continue;
-    place(large, pick(r > 0.55 ? P.big : P.lump), x, cy + r * 0.25, z, r * (1 + R() * 0.6), r * (0.6 + R() * 0.45), r * (0.8 + R() * 0.3), undefined, 0, 0, rockCol(0.15), { glow: ember(), gold: set === 'workings' && R() < 0.08 ? 0.5 : 0 });
+    sit(large, pick(r > 0.55 ? P.big : P.lump), x, cy, z, r * (1 + R() * 0.6), r * (0.6 + R() * 0.45), r * (0.8 + R() * 0.3), 0.14, R() * 6.28, 0, 0, rockCol(0.15), { glow: ember(), gold: set === 'workings' && R() < 0.08 ? 0.5 : 0 });
   }
   // ---- a few big stones in the foreground, low enough never to hide the digger
   for (const [cx, cy] of floors) {
     if (R() > 0.08 * dens || !clear(cx, cy, 3)) continue;
     const r = 0.22 + R() * 0.3, x = cx + R(), z = frontZ(x, cy, r);
     if (z === null) continue;
-    place(large, pick(P.lump), x, cy + r * 0.2, z, r * (1.1 + R() * 0.6), r * (0.5 + R() * 0.3), r, undefined, 0, 0, rockCol(0.1), { glow: ember() });
+    sit(large, pick(P.lump), x, cy, z, r * (1.1 + R() * 0.6), r * (0.5 + R() * 0.3), r, 0.14, R() * 6.28, 0, 0, rockCol(0.1), { glow: ember() });
   }
   // ---- outcrops: chunks of rock standing out of the back walls, set deep enough to look grown in
   const nOut = Math.round(opens.length * 0.09 * dens);
@@ -294,14 +315,14 @@ export function buildDetail(M, look, W, K) {
       let z = R() < 0.65 ? zb(x, cy + 0.9) + 0.25 + R() * 1.4 : 0.5 + R() * 1.2;
       if (len > 0.2 && Math.abs(z) < 0.5) z = z < 0 ? -0.5 : 0.5;
       if (z < zb(x, cy + 0.9) + 0.15) continue;
-      place(small, pick(P.drip), x, cy + 1.04, z, rad * 2, len, rad * 2, undefined, 0, 0, rockCol(0.1), { wet: 0.25 });
+      hang(small, pick(P.drip), x, cy, z, rad * 2, len, rad * 2, rockCol(0.1), { wet: 0.25 });
     }
   }
   for (const [cx, cy] of floors) {
     if (R() > 0.17 * dens) continue;
     const h = 0.15 + Math.pow(R(), 1.5) * 0.9, x = cx + R(), z = backZ(x, cy, h * 0.3);
     if (z === null) continue;
-    place(small, pick(P.mite), x, cy - 0.04, z, h * 0.5, h, h * 0.5, undefined, 0, 0, rockCol(0.05), { wet: 0.15 });
+    sit(small, pick(P.mite), x, cy, z, h * 0.5, h, h * 0.5, 0.06, R() * 6.28, 0, 0, rockCol(0.05), { wet: 0.15 });
   }
   // ---- fringes along the front lips: drips under the roof edges, stones along the floor edges
   for (const [cx, cy] of ceils) {
@@ -309,7 +330,7 @@ export function buildDetail(M, look, W, K) {
     const x = cx + R(), zl = cave.surfaceZ(x, cy + 1.3, false);
     if (zl < 1.8) continue;
     const len = 0.08 + Math.pow(R(), 1.8) * 0.4, rad = len * (0.25 + R() * 0.15);
-    place(small, pick(P.drip), x, cy + 1.04, zl - 0.25 - R() * 0.45, rad * 2, len, rad * 2, undefined, 0, 0, rockCol(0.1), { wet: 0.25 });
+    hang(small, pick(P.drip), x, cy, zl - 0.25 - R() * 0.45, rad * 2, len, rad * 2, rockCol(0.1), { wet: 0.25 });
   }
   const lipSpots = [];
   for (const [cx, cy] of floors) {
@@ -319,7 +340,7 @@ export function buildDetail(M, look, W, K) {
     const z = zl - 0.25 - R() * 0.4;
     if (R() < 0.45) { lipSpots.push([x, cy, z]); continue; }
     const s = 0.05 + R() * 0.13;
-    place(small, pick(P.lump), x, cy + s * 0.25, z, s * 1.2, s * 0.6, s, undefined, 0, 0, rockCol(0.4), { glow: ember() });
+    sit(small, pick(P.lump), x, cy, z, s * 1.2, s * 0.6, s, 0.15, R() * 6.28, 0, 0, rockCol(0.4), { glow: ember() });
   }
   const group = new THREE.Group();
   const mS = small.mesh(rockMat, false), mL = large.mesh(rockMat, true);
@@ -342,6 +363,7 @@ export function buildDetail(M, look, W, K) {
       const g = obj(make(name, ...args(R())));
       g.scale.multiplyScalar(s); g.position.set(x, cy - 0.02, z); g.rotation.y = R() * 6.28;
       if (where === 'lean') { g.rotation.set(-0.28, (R() - 0.5) * 0.6, (R() - 0.5) * 0.3); g.position.y = cy; }
+      if (!cave.settle(g, 'floor', 0.025)) continue;
       statics.push(g); used.push([cx, cy]); k++;
     }
   }
@@ -358,7 +380,9 @@ export function buildDetail(M, look, W, K) {
         if (Math.abs(z) < 0.45) z = -0.45;
         if (z < w + 0.15) continue;
         let d = 0; while (d < 6 && air(cx, cy - d)) d++;
-        list.push([x, cy + 1.05, z, Math.min(d * 0.7, 0.3 + Math.pow(R(), 1.4) * 1.8)]);
+        const top = cave.roofY(x, cy + 0.5, z, 1.3);
+        if (top === null) continue;
+        list.push([x, top + 0.05, z, Math.min(d * 0.7, 0.3 + Math.pow(R(), 1.4) * 1.8)]);
       }
     }
     if (list.length) statics.push(obj(make('strands', list, gr[0], gr[1], M.seed + 3)));
@@ -380,6 +404,16 @@ export function buildDetail(M, look, W, K) {
       if (mode === 'out') g.rotation.set(Math.PI / 2 + (R() - 0.5) * 0.6, R() * 6.28, (R() - 0.5) * 0.4);
       else g.rotation.set((R() - 0.5) * 0.15, (R() - 0.5) * 0.25, (R() - 0.5) * 0.5);
       g.position.set(x, y, z - (EMBED[name] ?? 0.04) * sc);
+      if (FLUSH.has(name)) {
+        // a beam end or a block shows only its end, flush with the face: set where the face is furthest back over it,
+        // 5 cm proud, so no box sides stand out of the rock (from a raised camera they read as floating cubes)
+        g.updateMatrixWorld(true);
+        const bb = _fb.setFromObject(g);
+        const zs = [[bb.min.x, bb.min.y], [bb.max.x, bb.min.y], [bb.min.x, bb.max.y], [bb.max.x, bb.max.y], [x, y]].map(([px, py]) => cave.surfaceZ(px, py, false));
+        const zmin = Math.min(...zs);
+        if (zmin < 1.6) continue;
+        g.position.z += zmin + 0.05 - bb.max.z;
+      }
       statics.push(g);
     }
   }
@@ -399,7 +433,7 @@ export function buildDetail(M, look, W, K) {
     const sc = nm === 'saltCubes' ? 0.4 + R() * 0.3 : nm === 'gear' ? 0.5 : 0.7 + R() * 0.5;
     g.scale.multiplyScalar(sc); g.position.set(x, y - 0.02, z); g.rotation.y = R() * 6.28;
     if (nm === 'gear') { g.rotation.set(-Math.PI / 2, 0, R() * 6.28); g.position.y = y + 0.05; }
-    statics.push(g);
+    if (cave.settle(g, 'floor', nm === 'gear' ? 0.01 : 0.025)) statics.push(g);
   }
   // ---- marks on the walls: chalk, soot, ochre, carvings, stains, moss and mineral blooms (flat cards on flat stretches)
   const mk = MARKS[set];
@@ -432,6 +466,7 @@ export function buildDetail(M, look, W, K) {
       group.add(m);
     }
   }
+  if (globalThis.__gdAudit) for (const g of statics) for (const f of g.userData.feet || []) globalThis.__gdAudit.push([...f, 0, 'prop:' + (g.userData.kind || '?')]);
   if (statics.length) group.add(bake(statics, { shadow: false }));
   // moths round the lanterns, fireflies in the green and watery levels
   const fire = FIREFLY[set];
