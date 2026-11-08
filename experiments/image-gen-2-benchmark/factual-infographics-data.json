@@ -19788,5 +19788,936 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-11-06-factual-infographic-factual-infographic-acetaminophen-is-no",
+    "title": "Factual infographic: Acetaminophen Is Not Cat Medicine",
+    "tests": "; archive_slot=2026-11-06T08:20; concept=cat-acetaminophen-toxicity-red-blood-cell-damage; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: cat-infographic; cat_category: household-hazards",
+    "prompt": "Create a finished, richly artistic feline safety atlas infographic, directly rendered artwork, not a photographed poster. Headline: “ACETAMINOPHEN” with “Never give it to a cat” immediately below. A dominant exquisitely realistic charcoal-gray shorthaired cat sits in three-quarter profile, luminous amber eyes, delicate whiskers and finely resolved blue-gray fur, calm and dignified rather than visibly suffering. Coherent midnight teal, pearl and restrained vermilion palette; luminous gouache and precise anatomical illustration on cool ivory, with generous negative space and refined readable typography. Asymmetric, flowing composition, no boxed grids or detached dashboard cards. Place a small illustrated sealed medicine bottle labeled “Acetaminophen / Tylenol” well away from the cat with a clear red prohibition symbol; never show feeding medicine or an accessible spilled pile. Organically interweave a curved anatomical explanatory path behind the feline silhouette: a carefully drawn liver silhouette with label “Limited liver breakdown — high toxicity risk”, then an enlarged schematic stream of normal red blood cells transitioning to a few darkened damaged cells with label “Red blood cell damage reduces oxygen transport”. Mark anatomical enlargements “schematic”; do not imply drug-filled organs or literal blue blood. A second delicate leader from liver reads “Liver injury can also occur”. These are explanatory studies, not a full surgical cutaway. Across the lower-left open space, an elegant narrow flowing list headed “Possible warning signs” reads “Weakness • rapid or difficult breathing • blue-purple gums • vomiting • swollen face or paws”. A small cold-and-allergy package study, distinct from the medication bottle, carries “Combination cold medicines may contain it too”. Keep details lush, medically restrained and scientifically honest; no numerical doses, no home poisoning treatments, no unsupported molecular pathways, no countdowns or guaranteed symptoms. A prominent lower vermilion text line: “Suspected ingestion? Contact a veterinarian or animal poison control immediately.” Below: “ASPCA Animal Poison Control: (888) 426-4435”. Add small prevention text “Keep all medicines securely out of reach.” Tiny readable source footer: “Sources: FDA; American College of Veterinary Pharmacists”. Keep the feline hero visually dominant, supporting studies connected by fine curved ink leaders; this must be an informative atlas with breathing room, not a sparse warning poster. No other medical advice, brand logos, decorative pseudo-text, or invented facts.",
+    "image": "images/2026-11-06-factual-infographic-factual-infographic-acetaminophen-is-no.jpg",
+    "thumb": "thumbs/2026-11-06-factual-infographic-factual-infographic-acetaminophen-is-no.webp",
+    "color": "#b8ada0",
+    "date": "2026-11-06",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "cat-acetaminophen-toxicity-red-blood-cell-damage",
+      "imageSha256": "27c445d4c0a25a0effa147d3200f4980f8850f34686859894735cf6a209c451c",
+      "imageDHash": "10a68e9a38b0f0ec"
+    },
+    "factualInfographic": {
+      "topic": "Why acetaminophen is dangerous to cats and how to respond to suspected exposure",
+      "description": "Feline acetaminophen toxicity, blood oxygen transport, household exposure prevention and urgent veterinary contact.",
+      "sourceNote": "Read FDA and ACVP: https://www.fda.gov/animal-veterinary/animal-health-literacy/get-facts-about-pain-relievers-pets ; https://vetmeds.org/pet-poison-control-list/acetaminophen/",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-06T13:21:14.238490+00:00",
+        "sources": [
+          {
+            "id": "fda",
+            "publisher": "US Food and Drug Administration",
+            "title": "Get the Facts about Pain Relievers for Pets",
+            "sourceType": "government-agency",
+            "url": "https://www.fda.gov/animal-veterinary/animal-health-literacy/get-facts-about-pain-relievers-pets"
+          },
+          {
+            "id": "acvp",
+            "publisher": "American College of Veterinary Pharmacists",
+            "title": "Acetaminophen",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://vetmeds.org/pet-poison-control-list/acetaminophen/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Acetaminophen (Tylenol) must never be given to cats; deficient liver breakdown makes it potentially fatal.",
+            "sourceIds": [
+              "fda",
+              "acvp"
+            ]
+          },
+          {
+            "claim": "Acetaminophen can damage red blood cells and reduce their oxygen-carrying ability, and can damage the liver.",
+            "sourceIds": [
+              "fda"
+            ]
+          },
+          {
+            "claim": "Signs can include weakness, rapid or difficult breathing, blue-purple mucous membranes, vomiting, and facial or paw swelling.",
+            "sourceIds": [
+              "acvp"
+            ]
+          },
+          {
+            "claim": "Acetaminophen may be present in multi-symptom cold and allergy products; keep medicines out of animal reach.",
+            "sourceIds": [
+              "acvp"
+            ]
+          },
+          {
+            "claim": "Suspected ingestion requires immediate veterinary or animal poison-control contact; report accidental ingestion immediately.",
+            "sourceIds": [
+              "acvp"
+            ]
+          },
+          {
+            "claim": "ASPCA Animal Poison Control Center hotline: (888) 426-4435.",
+            "sourceIds": [
+              "acvp"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "2026-11-06-factual-infographic-factual-infographic-the-feline-shoulder",
+    "title": "Factual infographic: The Feline Shoulder — Muscle Layers Around the Scapula",
+    "tests": "; archive_slot=2026-11-06T12:20; concept=feline-shoulder-scapula-muscle-layers; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: cat-infographic; cat_category: inside-the-cat",
+    "prompt": "Create a richly detailed, artwork-led feline anatomical atlas, rendered directly as the finished artwork. Title: \"THE FELINE SHOULDER\". Subtitle: \"Muscle layers around the scapula\". Small category label \"INSIDE THE CAT\". A graceful short-haired smoke-gray domestic cat in left-facing walking profile dominates an asymmetrical vertical composition, with luminous realistic fur and a clean educational anatomical window over the shoulder. Refined gouache and colored-pencil medical illustration on cool ivory with midnight-blue typography, muted coral muscle fibers and softly luminous bone. No gore, no photographed page, no border, no boxed grid. Preserve believable feline anatomy, correct forelimb orientation, scapular spine and thorax proportions.\nThe visual journey travels from the furred hero to an enlarged shoulder muscle study below and a small deeper-layer study flowing along the right margin. Clearly mark separate studies \"Superficial layer\" and \"Deeper layer (overlying muscles removed)\". Do not pretend that all layers are visible simultaneously. Draw precise tendon margins and parallel muscle fibers, delicate curved leader lines, breathing room and a confident hierarchy of readable labels. Use anatomical regions and a few restrained transparent overlays, not a dashboard of fact cards.\nLabel trapezius and latissimus dorsi in the superficial study. In the deeper study label rhomboideus at the dorsal scapular border, and fan-shaped serratus ventralis against the lateral rib cage beneath the shoulder. Show the scapula and ribs in pale bone as landmarks. A small open ventral-chest study may label \"Pectoral muscles\" and indicate superficial and deep layers without crowding. A small accurate locator at the front of the shoulder labels \"Small clavicle\" within the brachiocephalicus, not as a human-like long collarbone.\nIntegrate these concise explanations with the relevant structures: \"Trapezius reaches the scapular spine.\" \"Rhomboideus lies beneath trapezius.\" \"Serratus ventralis: deep, fan-shaped muscle with neck and thoracic parts.\" \"Latissimus dorsi covers part of the thoracic wall.\" \"Pectoral muscles lie on the ventral chest.\" Keep labels on actual anatomy, distinguish the rhomboideus insertion on the dorsal border from trapezius insertion on the spine. No numerical performance claims, squeezing-through-gaps myth, disease advice, human anatomy or invented structures. Preserve the deep serratus study and the overlying-layer comparison; omit the optional pectoral miniature if space is tight. Small footer \"Schematic anatomy • Sources: University of Minnesota; University of Washington\". Make the cat beautiful and dominant while retaining substantial, readable anatomical explanation.",
+    "image": "images/2026-11-06-factual-infographic-factual-infographic-the-feline-shoulder.jpg",
+    "thumb": "thumbs/2026-11-06-factual-infographic-factual-infographic-the-feline-shoulder.webp",
+    "color": "#d3c1b7",
+    "date": "2026-11-06",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "feline-shoulder-scapula-muscle-layers",
+      "imageSha256": "c7b8a791d031e6c363e339f98b58e8bee403700b9d1dc4cdc672484e7be65c0d",
+      "imageDHash": "b9d8dacce4c48ebc"
+    },
+    "factualInfographic": {
+      "topic": "Feline shoulder muscle layers around the scapula",
+      "description": "A focused atlas of superficial and deep shoulder muscle relationships in the domestic cat.",
+      "sourceNote": "Read university dissection guides: https://open.lib.umn.edu/dogcatanatomylabguide/chapter/part-2-extrinsic-muscles-and-associated-structures/ ; https://courses.washington.edu/chordate/453photos/muscle_photos/cat_muscle_photos.htm",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-06T17:22:12.232577+00:00",
+        "sources": [
+          {
+            "id": "UMN",
+            "publisher": "University of Minnesota",
+            "title": "Extrinsic Muscles and Associated Structures",
+            "sourceType": "university",
+            "url": "https://open.lib.umn.edu/dogcatanatomylabguide/chapter/part-2-extrinsic-muscles-and-associated-structures/"
+          },
+          {
+            "id": "UW",
+            "publisher": "University of Washington",
+            "title": "Biology 453 Cat Skeletal Muscle Photos",
+            "sourceType": "university",
+            "url": "https://courses.washington.edu/chordate/453photos/muscle_photos/cat_muscle_photos.htm"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "The trapezius extends from dorsal midline to the scapular spine; rhomboideus lies deep to it and attaches to the dorsal scapular border.",
+            "sourceIds": [
+              "UMN",
+              "UW"
+            ]
+          },
+          {
+            "claim": "Serratus ventralis is a deep fan-shaped muscle on the lateral trunk, with neck and thoracic parts.",
+            "sourceIds": [
+              "UMN",
+              "UW"
+            ]
+          },
+          {
+            "claim": "Latissimus dorsi covers part of the thoracic wall, superficial to deeper shoulder structures.",
+            "sourceIds": [
+              "UMN",
+              "UW"
+            ]
+          },
+          {
+            "claim": "The cat has a small clavicle in the brachiocephalicus at the shoulder.",
+            "sourceIds": [
+              "UMN"
+            ]
+          },
+          {
+            "claim": "Pectoral muscles occupy the ventral chest; superficial and deep layers are present.",
+            "sourceIds": [
+              "UMN",
+              "UW"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "2026-11-06-factual-infographic-factual-infographic-flehmen-the-cat-s-c",
+    "title": "Factual infographic: Flehmen — The Cat’s Chemical-Sampling Pause",
+    "tests": "; archive_slot=2026-11-06T16:20; concept=feline-vomeronasal-flehmen-chemical-sampling; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: cat-infographic; cat_category: extraordinary-senses",
+    "prompt": "Create a finished, richly artistic feline science infographic, portrait-oriented composition, opaque background, direct artwork not a photographed page. Title: \"FLEHMEN\" with subtitle \"The cat’s chemical-sampling pause\". Extraordinary Senses / Cat Atlas in a small elegant eyebrow. Use exquisite colored-pencil and luminous gouache scientific illustration on cool pale celadon, with copper, ink-blue and warm rose anatomical accents. A magnificent silver mackerel tabby dominates the right two-thirds: three-quarter head, whisker follicles and individual hairs rendered with extraordinary delicacy, mouth slightly parted in a natural flehmen posture after investigating a scent-bearing twig. No human smile, disgust expression or anthropomorphic thoughts. Beautiful rim lighting, soft shadows, open negative space, asymmetric organic flow, no boxed cards or panel grid.\nA curved fine copper leader from the muzzle unfolds into a large oblique anatomical cutaway across the lower left, showing the paired vomeronasal organs near the roof of the mouth/base of the nasal septum, with a subtle second lobe indicating the bilateral pair, palate and upper incisors as landmarks. Label \"Paired vomeronasal organs\", \"Nasopalatine canal\", \"Oral cavity\", \"Nasal cavity\". Clearly mark this as \"Simplified anatomical schematic • not to scale\". Trace a restrained fluid-cue route from mouth via canal toward the organ; do not draw airborne perfume entering an external hole or turn it into a taste bud. Place concise open annotation: \"Flehmen helps fluid-borne chemical cues reach the vomeronasal organ.\" A tiny naturalistic preceding sniffing study nested near the twig gives a visual transition to the hero’s parted-mouth pause; caption \"Investigate scent → pause in flehmen\".\nAn organically nested magnified transverse study of the duct at the foot of the cutaway uses a muted rose lumen, medial sensory lining in copper, lateral lining in blue, supportive cartilage outside and fine nerve fibers, avoiding invented structures. Readable labels \"Sensory epithelium (medial)\", \"Respiratory epithelium (lateral)\", \"Duct lumen\", \"Supporting cartilage\"; small glands and vessels present without extra labels. Mark \"Enlarged schematic\". One delicate unboxed nerve trajectory leads to a small accessory olfactory bulb symbol, explicitly schematic rather than anatomically placed in the mouth: \"Sensory neurons → accessory olfactory bulb\". Do not elaborate unverified central brain circuitry.\nAcross the airy upper left, weave two short contrasting lines: \"Main olfaction: inhaled volatile chemicals\" and \"Vomeronasal sampling: fluid-borne chemical cues\". Beneath: \"These systems are not completely separate in function.\" Along the lower edge set a restrained educational footer: \"Chemical cues contribute to social recognition and reproduction. Detailed signal processing in cats is still being studied.\" All text precise, readable and concise; no unsupported numbers, no mind-reading, no pheromone product claims, no disease advice. Retain the dominant beautiful cat illustration, strong typographic hierarchy and breathing room. No icons masquerading as data, decorative molecular formulas, watermark, mockup, rigid grid, or filler text.",
+    "image": "images/2026-11-06-factual-infographic-factual-infographic-flehmen-the-cat-s-c.jpg",
+    "thumb": "thumbs/2026-11-06-factual-infographic-factual-infographic-flehmen-the-cat-s-c.webp",
+    "color": "#c0bfb5",
+    "date": "2026-11-06",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "feline-vomeronasal-flehmen-chemical-sampling",
+      "imageSha256": "35757ba6306377dbd0c4b16c1147e079a933585ee7fd153a0a46ea5824a2d134",
+      "imageDHash": "e19f194de2c2c1f0"
+    },
+    "factualInfographic": {
+      "topic": "How the feline vomeronasal organ samples chemical cues during flehmen",
+      "description": "Flehmen, paired vomeronasal anatomy and fluid-borne chemical sensing, with limits on what is known.",
+      "sourceNote": "Read Journal of Anatomy and Frontiers review: https://pmc.ncbi.nlm.nih.gov/articles/PMC1167581/ ; https://pmc.ncbi.nlm.nih.gov/articles/PMC9334771/",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-06T21:21:13.102047+00:00",
+        "sources": [
+          {
+            "id": "anatomy",
+            "publisher": "Journal of Anatomy",
+            "title": "The vomeronasal organ of the cat",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC1167581/"
+          },
+          {
+            "id": "review",
+            "publisher": "Frontiers in Veterinary Science",
+            "title": "Dealing With Stress in Cats: What Is New About the Olfactory Strategy?",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9334771/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Cats have a paired vomeronasal organ near the roof of the mouth, connected with oral and nasal cavities via nasopalatine canals.",
+            "sourceIds": [
+              "review"
+            ]
+          },
+          {
+            "claim": "Flehmen follows investigation of scent material and aids access of fluid-borne chemical cues to the vomeronasal organ.",
+            "sourceIds": [
+              "review"
+            ]
+          },
+          {
+            "claim": "The vomeronasal duct has sensory receptor epithelium medially and respiratory epithelium laterally in its middle portion; glands, vessels, nerves and supporting cartilage surround it.",
+            "sourceIds": [
+              "anatomy"
+            ]
+          },
+          {
+            "claim": "Vomeronasal sensory neurons send axons to the accessory olfactory bulb.",
+            "sourceIds": [
+              "review"
+            ]
+          },
+          {
+            "claim": "The main olfactory epithelium detects inhaled volatile chemicals; the accessory system is associated with fluid-borne chemical cues, but their functions are not completely exclusive.",
+            "sourceIds": [
+              "review"
+            ]
+          },
+          {
+            "claim": "Chemical communication participates in social recognition and reproduction; detailed feline central processing remains incompletely understood.",
+            "sourceIds": [
+              "review"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "2026-11-06-factual-infographic-factual-infographic-the-defensive-crouc",
+    "title": "Factual infographic: The Defensive Crouch in Context",
+    "tests": "; archive_slot=2026-11-06T20:20; concept=feline-defensive-crouch-contextual-signal-cluster; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: cat-infographic; cat_category: body-language",
+    "prompt": "Create a richly detailed, artwork-led feline behavioral atlas, finished illustration directly, not a photographed print. Title: “The Defensive Crouch”. Subtitle: “Read the whole cat — and the situation”. A magnificent silver mackerel tabby with green-gold irises dominates an asymmetrical composition on a misty blue-gray ground: three-quarter low eye-level view, body crouched close to the ground, head tucked slightly, ears flattened sideways/back, tail curved tightly around the body, wide eyes with dilated pupils, realistic paws and exquisitely individual fur. Express tension without demonizing the animal. Fine gouache and colored-pencil realism, soft directional daylight, restrained copper and deep indigo annotation ink, delicate flowing leader lines. Let the cat occupy more than half the composition with substantial breathing room. No rigid grid, boxed cards, ornamental fake scripts, charts with invented measurements, or anthropomorphic thoughts.\nIntegrate clear open labels exactly where appropriate: “Low crouch”, “Head tucked”, “Tail held close”, “Ears sideways or back”, “Wide eyes; pupils may dilate”. Around the hero use an organic visual journey: a generous close study of the same cat’s head to show ear angle and pupils; a small flowing silhouette showing the tail tucked beside the hindquarters; a faint background doorway with an unobstructed retreat route, not a threatening hand. A short separate open note says “Hissing or raised fur may also occur — not every sign appears.” Do not falsely show every sign as obligatory. Another readable note beneath the head study: “Read posture, face, ears and tail together. Consider what happened just before.” A strong but concise ribbon of free typography at the lower edge reads “Give space. Do not touch, restrain or punish a defensively aggressive cat.” Adjacent smaller text: “Fear can escalate when escape is blocked.” Retain essential context as a quiet footnote: “A pose is not a diagnosis. Pain or illness can change behavior; seek veterinary advice for new or persistent changes.” This is a focused defensive-posture plate, not a general body-language overview, disease chart, or husbandry guide. Every text element should be legible with elegant typographic hierarchy; omit decorative extras to preserve clarity. Small source credit: “Sources: Cornell Feline Health Center; ASPCA”. No invented emotion guarantees or certainty that one pose always means fear.",
+    "image": "images/2026-11-06-factual-infographic-factual-infographic-the-defensive-crouc.jpg",
+    "thumb": "thumbs/2026-11-06-factual-infographic-factual-infographic-the-defensive-crouc.webp",
+    "color": "#adadaf",
+    "date": "2026-11-06",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1168x1346",
+    "dedup": {
+      "conceptKey": "feline-defensive-crouch-contextual-signal-cluster",
+      "imageSha256": "c6ff8feb0947d22fc3ad5c074bac5a60c7fb2531c9cc60008d89bb3756cdf1dc",
+      "imageDHash": "960e66d0a4e89928"
+    },
+    "factualInfographic": {
+      "topic": "Interpreting the feline defensive crouch as a cluster of contextual signals",
+      "description": "Focused atlas of defensive feline postural signals and contextual interpretation.",
+      "sourceNote": "Read Cornell and ASPCA guidance: https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/feline-behavior-problems-aggression ; https://www.aspca.org/pet-care/cat-care/common-cat-behavior-issues/aggression-cats",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-07T01:20:50.950927+00:00",
+        "sources": [
+          {
+            "id": "cornell",
+            "publisher": "Cornell University College of Veterinary Medicine",
+            "title": "Feline Behavior Problems: Aggression",
+            "sourceType": "university",
+            "url": "https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/feline-behavior-problems-aggression"
+          },
+          {
+            "id": "aspca",
+            "publisher": "ASPCA",
+            "title": "Aggression in Cats",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://www.aspca.org/pet-care/cat-care/common-cat-behavior-issues/aggression-cats"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "A defensive cat may crouch low with its head tucked and tail curved around or tucked under its body.",
+            "sourceIds": [
+              "cornell",
+              "aspca"
+            ]
+          },
+          {
+            "claim": "Flattened sideways or backward ears and wide eyes with dilated pupils can accompany defensive postures.",
+            "sourceIds": [
+              "cornell",
+              "aspca"
+            ]
+          },
+          {
+            "claim": "Hissing and raised fur may accompany fear-related defensive behavior; not every sign must be present.",
+            "sourceIds": [
+              "cornell",
+              "aspca"
+            ]
+          },
+          {
+            "claim": "Read body posture, face, ears and tail together and consider preceding events; a pose alone does not establish its cause.",
+            "sourceIds": [
+              "aspca",
+              "cornell"
+            ]
+          },
+          {
+            "claim": "Fear-related aggression can escalate if a cat cannot escape; do not touch, restrain or punish a cat displaying defensive aggression; give space until calm.",
+            "sourceIds": [
+              "aspca"
+            ]
+          },
+          {
+            "claim": "Pain or medical problems may contribute to aggression; new or persistent changes warrant veterinary assessment.",
+            "sourceIds": [
+              "cornell",
+              "aspca"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "2026-11-07-factual-infographic-factual-infographic-autophobia-intense-",
+    "title": "Factual infographic: Autophobia — Intense Fear of Being Alone",
+    "tests": "factual_subtype: phobia-infographic; phobia: Autophobia; title lines checked before render; no subjective review; archive_slot=2026-11-07T00:08; concept=autophobia-solitude-daylit-apartment; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: phobia-infographic",
+    "prompt": "Create a finished artwork-led factual phobia infographic directly on the canvas, with portrait-oriented compositional intent and an opaque background. The exact two requested title lines at top are:\nAUTOPHOBIA\nIntense fear of being alone\nSet AUTOPHOBIA in prominent bold editorial lettering; the plain-English definition is directly underneath, smaller but very readable. Do not use Specific Phobia as the headline. Subordinate terminology: \"Also called monophobia • a descriptive phobia name\".\n\nBuild one flowing, asymmetrical cinematic gouache-and-fine-ink composition around a sunlit apartment living room. No rigid boxed grid, detached cards, photographed poster, UI, frame or mockup. Hero character: A broad-shouldered Black man in his early sixties, close silver curls, round face, short salt-and-pepper beard, ochre cardigan and charcoal trousers, seated three-quarter view with hands resting tensely on his knees.. He is alone on a textured moss-green sofa, tense but dignified, in a visibly ordinary daytime home. Show woven upholstery, the cardigan's knit, a houseplant with translucent leaves, warm floor reflections, ceramic mug and a softly lit window; no threatening intruder, monsters, dark corridor or catastrophe. An empty chair and an unoccupied doorway suggest solitude, not objective danger. A fine curved amber line travels from the quiet room through a small thought vignette of the same man imagining a companion leaving, then across open body-alarm annotations and an avoidance pathway, finally to a warm small consultation scene. Those spatial transitions are explanatory metaphors, not mandatory stages or an asserted neural circuit.\n\nPlace concise readable source-backed text organically in negative space with delicate leader lines, not a wall of prose. Near the empty chair: \"Trigger: being alone — or anticipating it\". Near the thought vignette: \"Anticipatory anxiety: fear before the situation\". At his chest and hand, use non-anatomical fine radiating marks with labels \"Palpitations\" and \"Trembling\"; nearby \"Dizziness can occur. Symptoms vary.\" Do not draw an ECG, brain scan, statistics or diagnostic thresholds. Let the amber line branch toward a small scene of the same man lingering near other people: \"Avoidance can narrow daily life\". This is a general phobia mechanism, not an accusation or universal symptom. Add a short balanced distinction in an open wash near the window: \"Feeling unsafe is not proof of immediate danger. Genuine hazards still matter.\" Beneath that: \"Not the same as loneliness: fear of solitude differs from dissatisfaction with social connection.\"\n\nLower artwork integrates a small supportive clinical conversation with the same man and a clinician, no change of protagonist. Label \"Help: cognitive behavioural therapy (CBT)\" and \"Gradual exposure is individually planned — seek professional guidance, never forced isolation.\" Do not depict a do-it-yourself exposure schedule, prescribe medication or imply a guaranteed cure. Small footer: \"Seek help when fear disrupts daily life. Education, not diagnosis.\" All clinical labels are general educational context, not a diagnosis of this fictional person. Maintain rich tactile detail, refined typography, warm ivory, moss, amber and slate palette; let artwork dominate with purposeful breathing room. No bibliography, URLs, watermarks or invented technical claims. Omit decorative extras if they compete with the core explanation. Render exactly one complete infographic.",
+    "image": "images/2026-11-07-factual-infographic-factual-infographic-autophobia-intense-.jpg",
+    "thumb": "thumbs/2026-11-07-factual-infographic-factual-infographic-autophobia-intense-.webp",
+    "color": "#baa07c",
+    "date": "2026-11-07",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "autophobia-solitude-daylit-apartment",
+      "imageSha256": "d42b49cee274dcdb4362b16dc9858b04eece809309c08150006c442b59dcda05",
+      "imageDHash": "3e63e3f2898cb808"
+    },
+    "factualInfographic": {
+      "topic": "Autophobia: intense fear of being alone, anticipatory anxiety, body alarm, avoidance, and evidence-based help",
+      "description": "Artwork-led educational chart about fear of solitude, distinct from loneliness, with general phobia symptoms and clinical help.",
+      "sourceNote": "Cleveland Clinic; NHS; NHS inform. Verified terminology, definition, triggers, symptoms, avoidance and treatment context. https://my.clevelandclinic.org/health/diseases/22578-autophobia-monophobia-fear-of-being-alone https://www.nhs.uk/mental-health/conditions/phobias/ https://www.nhsinform.scot/illnesses-and-conditions/mental-health/phobias/",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-07T05:09:39.108408+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "Cleveland Clinic",
+            "title": "Autophobia (Fear of Being Alone): Causes & Treatment",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://my.clevelandclinic.org/health/diseases/22578-autophobia-monophobia-fear-of-being-alone"
+          },
+          {
+            "id": "S2",
+            "publisher": "NHS",
+            "title": "Phobias",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/mental-health/conditions/phobias/"
+          },
+          {
+            "id": "S3",
+            "publisher": "NHS inform",
+            "title": "Phobias",
+            "sourceType": "government-agency",
+            "url": "https://www.nhsinform.scot/illnesses-and-conditions/mental-health/phobias/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Autophobia is an extreme fear of being alone; monophobia is another name.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Fear can occur when alone, when anticipating being alone, or when worrying that people will leave.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Autophobia differs from loneliness: loneliness concerns the quantity or quality of connections; autophobia involves anxiety about being alone.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "A phobic fear can occur without an immediate threat; being alone is not in itself proof of danger. This does not negate genuine hazards.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Phobia symptoms can include palpitations, trembling, dizziness and severe worry; symptoms vary between people.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Thinking about a feared situation can trigger anxiety or panic; avoidance can organise and limit daily life.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "CBT is an evidence-based talking treatment used for phobias; gradual exposure is used in treatment and should be planned individually, with professional help where needed.",
+            "sourceIds": [
+              "S2",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Seek clinical support if fear interferes with daily life; educational illustrations are not a diagnosis.",
+            "sourceIds": [
+              "S2",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Autophobia is described as a specific phobic disorder by Cleveland Clinic; the descriptive name is not itself a separate diagnostic code.",
+            "sourceIds": [
+              "S1"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "2026-11-07-factual-infographic-factual-infographic-algophobia-intense-",
+    "title": "Factual infographic: Algophobia — Intense Fear of Physical Pain",
+    "tests": "factual_subtype: phobia-infographic; phobia: Algophobia; requested title lines read back before rendering; no subjective review; archive_slot=2026-11-07T04:08; concept=algophobia-pain-anticipation-rehabilitation-studio; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: phobia-infographic",
+    "prompt": "Create a finished portrait-format educational phobia infographic, directly on the canvas, a sophisticated flowing editorial illustration in layered gouache, luminous colored pencil and fine technical ink. Bold prominent headline exactly \"ALGOPHOBIA\". Immediately beneath it, exact plain-English subtitle \"Intense fear of physical pain\". These two lines are the principal title hierarchy. No umbrella diagnostic headline. Small subordinate terminology note: \"Established term for fear of pain\".\nA dominant beautifully painted rehabilitation-studio scene occupies the middle: a petite East Asian woman in her thirties, light-medium skin, angular face, black pixie cut, indigo workwear, standing side-on beside a pale ashwood chair, hesitating before an ordinary movement. Treat her with dignity; no visible injury, no needles, no frightening medical scene. Angled daylight across a sage wall, tactile woven chair seat, soft terracotta floor, realistic fabric seams, nuanced expression and tense hands. A small seated clinician in the lower distance listens rather than pushes. The scene represents anticipation, not proof that movement is dangerous. Show no exercise prescription or pose sequence.\nUse a broad asymmetrical ribbon of coral pencil lines and translucent blue washes to weave open labels and small same-person gesture studies into the scene, never a grid or boxed fact cards. A spacious arc from her gaze to her hand bears \"Anticipatory anxiety\" and \"Thinking about pain can trigger alarm\". Beside a softly drawn imagined movement contour, label \"Catastrophizing — imagining the worst\". A delicate focus-ring motif around her watchful gaze reads \"Hypervigilance — monitoring for pain\". Another fine curved path bears \"Fear-avoidance — pulling back from activity\" and the consequence \"Life can narrow; disability may increase\". Label the whole pathway \"A possible fear–avoidance cycle\", avoiding universal claims. Keep all arrows psychological, not anatomical nerve pathways. An airy small body-alarm study uses simple heartbeat and trembling-hand line motifs labeled \"Body alarm: racing heart • sweating • trembling\"; no invented measurements or brain circuitry.\nLower artwork opens into warm amber light and a conversational scene with the same woman and clinician, with integrated large readable help text \"CBT: work with pain-related thoughts\" and \"Clinician-guided, gradual return to suitable activity\". A prominent calm safety line reads \"Treat actual pain as well as fear. Do not force painful exposure.\" A nearby clear contextual distinction reads \"Fear is not a measure of injury. Pain is not imaginary.\" Footer: \"Seek help when fear disrupts daily life. General education, not diagnosis.\" Do not imply all pain is harmless or recommend ignoring symptoms. No specific self-exposure instructions.\nGenerous breathing room around title and person, rich material detail, indigo/sage/terracotta with coral alarm accents and warm gold recovery light. Main explanation remains readable, with short meaningful labels, no long paragraphs. Source-grounded content only as specified. No statistics, diagnostic codes, bibliography, URLs, logos, watermarks, monsters or gore. No photographed poster, page mockup, room display or UI. Preserve artwork-led organic flow and modest clinical technical depth.",
+    "image": "images/2026-11-07-factual-infographic-factual-infographic-algophobia-intense-.jpg",
+    "thumb": "thumbs/2026-11-07-factual-infographic-factual-infographic-algophobia-intense-.webp",
+    "color": "#b9a492",
+    "date": "2026-11-07",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "algophobia-pain-anticipation-rehabilitation-studio",
+      "imageSha256": "1889e30b78e53cb6b36d0a819cd736d324b06a5258ea7f28337d177728958f3e",
+      "imageDHash": "dd9383a488a6373b"
+    },
+    "factualInfographic": {
+      "topic": "Algophobia: intense fear of physical pain, anticipatory anxiety, hypervigilance, fear-avoidance, and evidence-based help",
+      "description": "Source-backed fear-of-pain terminology, triggers, body alarm, fear-avoidance, and evidence-based clinical support.",
+      "sourceNote": "Cleveland Clinic https://my.clevelandclinic.org/health/diseases/21985-algophobia-fear-of-pain; Journal of Pain Research https://pmc.ncbi.nlm.nih.gov/articles/PMC6280906/; NHS https://www.nhs.uk/mental-health/conditions/phobias/ — verified definition, fear-avoidance and clinical help; no diagnostic code asserted.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-07T09:09:19.894129+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "Cleveland Clinic",
+            "title": "Algophobia (Fear of Pain)",
+            "sourceType": "university",
+            "url": "https://my.clevelandclinic.org/health/diseases/21985-algophobia-fear-of-pain"
+          },
+          {
+            "id": "S2",
+            "publisher": "Journal of Pain Research",
+            "title": "Assessment of pain-related fear in individuals with chronic painful conditions",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6280906/"
+          },
+          {
+            "id": "S3",
+            "publisher": "NHS",
+            "title": "Phobias",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/mental-health/conditions/phobias/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Algophobia is an established clinical term for extreme fear of physical pain; the term is descriptive, not a claim of a separate diagnostic code.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Thinking about pain, anticipated movement, and reminders of painful experiences can trigger anxiety and avoidance.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Catastrophizing means imagining the worst outcome; hypervigilance means intensely monitoring for pain or threat.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Fear-avoidance can reduce activity and participation and may worsen disability and pain; the pattern varies between people.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Body alarm can include palpitations, sweating, trembling, and shortness of breath.",
+            "sourceIds": [
+              "S1",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Actual pain and fear of pain both merit assessment; perceived threat is not a direct measure of tissue injury and fear does not mean pain is imaginary.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "CBT can help change pain-related thoughts; individualized clinician-guided gradual return to suitable activities can help with fear of pain; treatment should address actual pain too.",
+            "sourceIds": [
+              "S1",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Seek professional help when fear interferes with daily life; treatment should be planned with the healthcare team, not by forcing painful exposure.",
+            "sourceIds": [
+              "S1",
+              "S3"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "2026-11-07-factual-infographic-factual-infographic-atychiphobia-intens",
+    "title": "Factual infographic: Atychiphobia — Intense Fear of Failure",
+    "tests": "factual_subtype: phobia-infographic; phobia: Atychiphobia; title lines checked before render; no subjective review; archive_slot=2026-11-07T08:08; concept=atychiphobia-failure-anticipation-application-desk; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: phobia-infographic",
+    "prompt": "Create a finished portrait educational phobia infographic, directly on canvas, artwork-led editorial gouache with crisp technical ink and luminous layered color. No poster mockup, no boxes or rigid grid. Exact headline in prominent bold lettering: \"ATYCHIPHOBIA\". Directly beneath, exact meaning: \"Intense fear of failure\". This named phobia is the typographic anchor, not the umbrella diagnosis.\nDominant scene: a tall Latino man in his forties with brown skin, long dark hair tied back, narrow face and teal shirt, leaning over a desk. Portray him with dignity in three-quarter overhead view, hesitating over an unfinished practice application. Use rich petrol teal, muted terracotta, warm cream and golden desk light. Show finely textured wood grain, slightly curled blank paper edges, woven shirt fabric, soft window reflections and precise pencil marks, without invented personal records. His tense hands and held posture imply anticipation, not a caricature of panic. A translucent, clearly illustrative amber sweep curves from an imagined future unsuccessful outcome back toward the present desk; it is a visual metaphor, not an anatomical pathway. The entire immersive room dissolves naturally into white space for concise labels.\nIntegrate these open callouts with delicate curved leaders and small vignette studies at varied scales: \"Anticipatory anxiety — worry before the outcome\" near a restrained imagined exam sheet and interview chair. \"Body alarm — possible palpitations, trembling or nausea\" beside simple non-anatomical heart, hand and stomach symbols; no fabricated neural pathways. An open looping ribbon reads \"Potential failure → fear → avoidance → missed opportunities\", showing a small echo of the SAME man turning away from a doorway marked Interview. This represents possible impairment, not an inevitable outcome. Keep the hero large and the composition breathable.\nA quiet grounded area reads \"Perceived threat ≠ immediate physical danger\" with short supporting text \"The fear feels real; an unsuccessful outcome is not an immediate physical threat.\" Never suggest that all real-world stakes are trivial. Toward a warmer lower margin, show a small calm talking-therapy encounter and the wording \"Help: cognitive behavioural therapy (CBT)\" and \"Seek professional support if fear disrupts daily life.\" No do-it-yourself exposure, forced failure challenges, cure promises or medication advice. Add subordinate readable terminology text: \"An established descriptive name, not a separate diagnostic code.\" Small optional distinction: \"Not the same as perfectionism.\" General education, not a diagnosis.\nDo not include statistics, URLs, bibliography, DSM codes, sensational monsters, gore or extra causal claims. Show only the source-backed text specified. Text is concise and readable, integrated with the painting through asymmetry, organic paths and generous margins. Preserve nuanced lighting and unusually fine illustrative detail without decorative clutter.",
+    "image": "images/2026-11-07-factual-infographic-factual-infographic-atychiphobia-intens.jpg",
+    "thumb": "thumbs/2026-11-07-factual-infographic-factual-infographic-atychiphobia-intens.webp",
+    "color": "#c6b8a3",
+    "date": "2026-11-07",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "atychiphobia-failure-anticipation-application-desk",
+      "imageSha256": "69c732c383e1805208ce581c5e211d28a565462235ed73d675ec7a6b8b19f179",
+      "imageDHash": "6cc686060c8c2420"
+    },
+    "factualInfographic": {
+      "topic": "Atychiphobia: intense fear of failure, anticipatory anxiety, body alarm, avoidance, and evidence-based help",
+      "description": "An artwork-led explanation of intense fear of failure, possible triggers and symptoms, avoidance, and professional support.",
+      "sourceNote": "Cleveland Clinic https://my.clevelandclinic.org/health/diseases/22555-atychiphobia-fear-of-failure verifies the named fear, triggers and avoidance; NHS https://www.nhs.uk/mental-health/conditions/phobias/ supports possible symptoms, CBT and help-seeking.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-07T13:09:10.466112+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "Cleveland Clinic",
+            "title": "Atychiphobia (Fear of Failure)",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://my.clevelandclinic.org/health/diseases/22555-atychiphobia-fear-of-failure"
+          },
+          {
+            "id": "S2",
+            "publisher": "NHS",
+            "title": "Phobias",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/mental-health/conditions/phobias/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Atychiphobia means intense fear of failure; this is an established descriptive phobia name, not a separate diagnostic code.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Potential failure in exams or job interviews can trigger fear; worry about failure can arise before the event.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Phobia symptoms can include severe worry, palpitations, trembling and feeling sick. These are possible symptoms, not universal.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "People may avoid situations with potential failure; avoidance can impair work or school performance.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "A phobia can feel genuinely threatening; intense fear need not match the situation. A possible unsuccessful outcome is not the same as immediate physical danger.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Atychiphobia and perfectionism are not the same; fear of failure differs from striving to be flawless.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Talking therapy such as cognitive behavioural therapy (CBT) can help phobias; seek professional help when symptoms affect life.",
+            "sourceIds": [
+              "S2"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "2026-11-07-factual-infographic-factual-infographic-phonophobia-persist",
+    "title": "Factual infographic: Phonophobia — Persistent Fear of Sound",
+    "tests": "factual_subtype: phobia-infographic; phobia: Phonophobia; exact headline lines read back before rendering; no subjective review; archive_slot=2026-11-07T12:08; concept=phonophobia-sound-anticipation-apartment-window; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: phobia-infographic",
+    "prompt": "Create a finished portrait educational phobia infographic, directly on the canvas, not a photographed poster, book, slide or app. Artwork-led luminous gouache and fine colored-pencil illustration, warm rust and midnight teal with pale pearl negative space; a richly detailed ordinary apartment window, brushed wood sill, woven jacket fibers, sheer curtains and late-afternoon light. Organic asymmetric composition, not boxes, cards or a grid. Make a compassionate, compelling hero scene dominant and weave concise readable facts into flowing translucent acoustic arcs. These arcs are explanatory visual metaphors, not a literal measurement of sound intensity or a neural pathway.\nThe exact two title lines at the top, with confident elegant typography, MUST be:\nPhonophobia\nPersistent fear of sound\nSet Phonophobia prominently in BOLD type, with Persistent fear of sound directly beneath. No literal markdown asterisks. Never substitute Specific Phobia as the headline.\nHero: a medium-build Arab woman in her fifties with olive skin, square face, short wavy brown hair and rust jacket, seated at a window, three-quarter profile, holding her hands tensely near her lap, with a thoughtful worried expression. This is a fictional person, not a clinical case portrait. Maintain this same person in any small contextual study. Show dignity and believable anatomy, not panic caricature. Beyond the window a normal street and a softly illustrated car; an interior door and two faint conversation silhouettes supply environmental context without threatening imagery.\nUse the following accurate concise annotations in open callouts, visually connected by curves, with enough breathing room and hierarchical sizes:\nNear the street/door: \"Possible triggers\" and \"Traffic • closing doors • loud speech\". A smaller line: \"Even non-damaging sounds may trigger fear.\"\nFrom the window toward the figure: \"Anticipatory anxiety\" / \"Fear before a sound occurs\".\nNear a small schematic torso contour, not a detailed brain: \"Autonomic arousal\" / \"Racing heart • sweating • trembling\". Depict the heart marker schematically, no fabricated anatomy.\nA curved pathway toward a small empty social chair: \"Avoidance\" / \"Withdrawing can limit daily life\". Do not imply everyone experiences every symptom or invent a quantified feedback mechanism.\nA clear lower-middle contrast annotation: \"Fear ≠ acoustic danger\" / \"Protect hearing from genuinely hazardous noise.\" No decibels, no unsafe exposure instructions, no fireworks, no headphone challenge.\nLet the sound-wave curves dissolve toward a gently lit unboxed vignette of the same woman speaking with a clinician across a small table: \"Evidence-based help\" / \"CBT; clinician-guided graded exposure when appropriate\" / \"A safe, individualized plan—not forced loud sounds.\"\nPreserve small but readable clinical context at the base: \"Fear of sound is not the same as hyperacusis; they may overlap. Painful sound or hearing concerns need assessment.\" Another short subordinate line: \"In migraine, phonophobia may mean sound intolerance.\" End with \"Seek help if fear limits daily life. Education, not diagnosis.\"\nMake the named fear and definition, the main figure, the body-alarm/avoidance pathway and the help text readable before secondary details. Technical depth without prose overload. No invented prevalence, no cure promises, no diagnostic code, no assertion of brain damage or ear damage, no monsters, gore, logos, tiny bibliography or URLs. Render one finished coherent artistic educational composition with substantial fine environmental detail and varied typographic scale. Request auto size, opaque background, medium quality through the stock OpenAI provider using openai/gpt-image-2.6-sunburst.",
+    "image": "images/2026-11-07-factual-infographic-factual-infographic-phonophobia-persist.jpg",
+    "thumb": "thumbs/2026-11-07-factual-infographic-factual-infographic-phonophobia-persist.webp",
+    "color": "#cbab93",
+    "date": "2026-11-07",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "phonophobia-sound-anticipation-apartment-window",
+      "imageSha256": "11b02c2eb3944e8db7499bfe6d67337a887137ff41f36a20d91c1662021ec0c9",
+      "imageDHash": "55830503369892c0"
+    },
+    "factualInfographic": {
+      "topic": "Phonophobia: persistent fear of sound, environmental triggers, autonomic arousal, avoidance, differential assessment, and evidence-based help",
+      "description": "An artwork-led educational chart of fear of sound, its triggers and bodily response, clinical distinctions and professionally guided help.",
+      "sourceNote": "Malaysian Journal of Medical Sciences: https://pmc.ncbi.nlm.nih.gov/articles/PMC3216140/ ; NHS: https://www.nhs.uk/mental-health/conditions/phobias/ . Verified terminology, environmental triggers, autonomic arousal, avoidance, differential assessment and CBT/graded exposure context. Case report is not generalized for prevalence or outcomes.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-07T17:09:18.982709+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "Malaysian Journal of Medical Sciences",
+            "title": "Phonophobia and Hyperacusis: Practical Points from a Case Report",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3216140/"
+          },
+          {
+            "id": "S2",
+            "publisher": "NHS",
+            "title": "Phobias",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/mental-health/conditions/phobias/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Phonophobia is an established clinical term for persistent fear of sound; here it means fear of sound, not a separately named diagnostic category.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Environmental sounds such as traffic, closing doors and loud speech can trigger fear, even at non-damaging levels.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Anticipation of feared sounds and learned reactions can accompany avoidance of sound-related situations.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Autonomic arousal can include palpitations, sweating and trembling.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Avoidance may restrict social participation and daily life.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Fear is not a measurement of acoustic danger; non-damaging sounds can trigger fear. Genuine hazardous noise should not be used for exposure.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Phonophobia and hyperacusis are not interchangeable; hearing-related and emotional components can overlap and require clinical assessment.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "In migraine literature phonophobia can mean sound intolerance rather than a phobic disorder.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "CBT is an evidence-based talking therapy used for phobias; professionally guided graded exposure may be part of treatment, with an individualized safe plan rather than forced loud-sound exposure.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Seek a clinician if fear affects daily life; painful sound or hearing concerns merit hearing assessment. General education is not diagnosis.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "2026-11-07-factual-infographic-factual-infographic-ombrophobia-extreme",
+    "title": "Factual infographic: Ombrophobia — Extreme Fear of Rain",
+    "tests": "factual_subtype: phobia-infographic; phobia: Ombrophobia; exact title lines read back before render; no subjective review; archive_slot=2026-11-07T16:08; concept=ombrophobia-rain-anticipation-covered-doorway; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: phobia-infographic",
+    "prompt": "Create a finished richly illustrated artistic educational phobia infographic, directly on canvas, portrait-oriented composition with a confident readable typographic hierarchy. Render finely layered gouache, luminous rain washes and precise graphite/ink annotation; midnight blue, pearlescent silver, warm terracotta and burgundy. No mockup, frame, logos, grids or detached fact cards. The artwork headline must be exactly “Ombrophobia” in prominent bold lettering (no literal asterisks). Directly beneath it put the exact plain-English subtitle “Extreme fear of rain”. These are the two largest lines. A small subordinate line reads “An established name within specific phobia”.\nHero artwork occupies the central two-thirds: a young adult white man with pale skin, long blond hair, narrow face, slim build, denim jacket and burgundy boots, standing three-quarter view under a covered doorway. He hesitates with a hand on the doorframe, dignified rather than caricatured. Rain glistens on the threshold; individual droplets bead on painted wood, wet brick catches amber indoor light, and softly reflected bare branches ripple in shallow puddles. His guarded posture conveys anxiety, not actual imminent injury. No lightning, catastrophe, monsters or terrifying imagery. The ordinary street recedes through a curtain of delicate blue rain.\nWeave the facts into the scene with loose curved leader lines and open handwritten-style but fully legible typesetting, not rigid panels. Along an upper rain arc label “Triggers can range from drizzle to heavy rain”. A small forecast silhouette integrated into the left doorway margin reads “Anticipatory anxiety — worry before rain arrives”. A translucent contour around the hero's chest and hands has tasteful schematic pulse and trembling marks, no fabricated internal brain anatomy: “Body alarm can include palpitations, trembling or dizziness”. Beneath the rain arc, a lightly drawn route that turns back at the doorway carries “Avoidance — staying indoors or missing activities when rain is possible”. Make this an illustrative example, not a universal symptom or inevitable sequence.\nAt the lower right, rain washes give way to a small warm, open vignette of the same protagonist conversing with a clinician, connected by a gently curving path, with “Help: cognitive behavioural therapy (CBT)” and “Seek professional help if fear disrupts daily life”. Do not show a forced exposure, dare, flooding exercise or a home treatment protocol. Beside the main doorway in generous negative space write “Fear can feel overwhelming even when a person knows it is unreasonable” and the small distinction “Feared consequences are not proof of actual danger”. Do not depict actual weather hazards as harmless or recommend entering bad weather. In fine readable footer text: “Symptoms vary. Educational information, not a diagnosis.” No statistics, diagnostic codes, bibliography, URLs or extra unsupported claims. Keep organic visual flow, ample breathing room, tactile surfaces and detailed rain lighting; information supports an immersive, humane illustration rather than crowding it.",
+    "image": "images/2026-11-07-factual-infographic-factual-infographic-ombrophobia-extreme.jpg",
+    "thumb": "thumbs/2026-11-07-factual-infographic-factual-infographic-ombrophobia-extreme.webp",
+    "color": "#887275",
+    "date": "2026-11-07",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "ombrophobia-rain-anticipation-covered-doorway",
+      "imageSha256": "7a8fcf84cf161a7b25db9131d99db632803ca177ae2c3d92ce3e4a28d1ab3dd9",
+      "imageDHash": "0a0301c147891923"
+    },
+    "factualInfographic": {
+      "topic": "Ombrophobia: extreme fear of rain, anticipatory anxiety, body alarm, avoidance, and evidence-based help",
+      "description": "Source-backed definition, rain triggers, body alarm, avoidance and CBT help.",
+      "sourceNote": "Cleveland Clinic https://my.clevelandclinic.org/health/diseases/22534-ombrophobia-fear-of-rain; NHS https://www.nhs.uk/mental-health/conditions/phobias/ — verified name, definition, symptoms, daily-life impact and CBT support.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-07T21:09:11.376028+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "Cleveland Clinic",
+            "title": "Ombrophobia (Fear of Rain)",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://my.clevelandclinic.org/health/diseases/22534-ombrophobia-fear-of-rain"
+          },
+          {
+            "id": "S2",
+            "publisher": "NHS",
+            "title": "Phobias",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/mental-health/conditions/phobias/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Ombrophobia is an extreme fear of rain; this established descriptive name falls within specific phobia, an anxiety disorder.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Triggers may include light drizzle, heavy rain or anticipating rainfall; worrying about forecasts and refusing to go outdoors can disrupt everyday activities.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "A person may recognize that their fear is unreasonable yet find it difficult to control; feared consequences are not evidence of actual danger.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Phobias can involve severe worry, palpitations, trembling and dizziness; symptoms vary between people.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Avoiding outings or skipping activities when rain is possible can restrict daily life.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Talking therapies including cognitive behavioural therapy (CBT) can help phobias; seek professional help when symptoms affect life.",
+            "sourceIds": [
+              "S2"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "2026-11-07-factual-infographic-factual-infographic-thermophobia-persis",
+    "title": "Factual infographic: Thermophobia — Persistent Fear of Heat",
+    "tests": "factual_subtype: phobia-infographic; phobia: Thermophobia; exact title lines read back before rendering; no subjective review; archive_slot=2026-11-07T20:08; concept=thermophobia-heat-anticipation-shaded-courtyard; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: phobia-infographic",
+    "prompt": "Create the finished portrait factual phobia infographic directly, with lifelike, very scary photorealistic photographic imagery and flowing unboxed explanatory design. Not a photographed printed chart, book, app, painting, engraving or cartoon. The fear trigger is HEAT, not fire or monsters. Richly detailed editorial photographic compositing, convincing optical perspective, full natural anatomy, cinematic but physically credible high-contrast daylight, exquisite real textures.\nExact two title lines, read back and verified before render:\nThermophobia\nPersistent fear of heat\nSet the first line in very prominent BOLD lettering, without literal Markdown asterisks. Place its exact meaning immediately beneath. No umbrella heading replacing the name.\nDominant hero: oppressive midsummer sunlight beyond a narrow shaded stone doorway, photographed at low waist height with a wide 28mm lens. A glaring sunlit courtyard and intensely bright pale pavement loom into the near foreground; distant edges ripple subtly in atmospheric heat shimmer, not a fantasy distortion. Hard-edged shadows, weathered stucco, dry foliage, tiny airborne dust specks in a sunshaft, an iron door handle catching white highlights. Foreground contains a close hot ceramic tea cup on a sill with subtle realistic steam, untouched, a secondary hot-object trigger, not a burn injury. Strong warm light presses against cool deep doorway shade, making the outside feel immediately threatening through proximity and perspective rather than fictitious objective hazards.\nFictional protagonist: a slim white nonbinary adult in their twenties with freckles, copper curls and sage linen clothes, seen in profile. Natural realistic skin pores, slightly tense jaw, hunched shoulders and a hand held protectively near their chest, eyes toward the bright courtyard; no theatrical screaming face. They remain safely in shade with a water bottle nearby, not trapped, injured or medically collapsing. Appearance is fictional, not a sourced clinical patient. The photo should evoke intense fear through oppressive heat cues, vulnerability, exposure and contrast, not just a frightened-face poster.\nCompose substantial educational material along the curving boundary of sun and shadow; readable ivory and charcoal type over quiet photographic negative space. Refined thin open leaders, restrained amber accents and a cool teal recovery pathway. No rigid boxes or grid. Small photographic details of tense fingertips and the untouched hot cup can merge organically into the lower design, never repeated equal cards. Keep generous breathing room while retaining these exact concise labels and explanations:\n'Heat as a trigger' — 'Hot weather and hot objects may provoke intense fear.'\n'Body alarm' — 'Palpitations, trembling, dizziness and severe worry can accompany phobias. Symptoms vary.' Add delicate leader lines to hand and chest, no invented brain anatomy or fake ECG.\n'Avoidance and relief' — 'Avoiding a feared situation may ease anxiety in the short term, while daily life becomes restricted.' Use a simple subtle curved cue-to-avoidance-to-relief pathway without claiming a universal causal circuit.\n'Fear is not a thermometer' — 'Heat can cause real illness. Keep cool, stay hydrated and follow local heat-risk guidance.' Distinguish the subjective intensity from measured danger; do not label scorching weather harmless. No numeric temperature readout or invented thresholds.\n'Getting help' — 'If fear disrupts daily life, seek professional support. Cognitive behavioural therapy (CBT) can help treat phobias.'\nSmall but readable safety note: 'Dizziness, heavy sweating, headache or weakness may signal overheating; do not assume anxiety.'\nSubordinate terminology note: 'Descriptive fear name; not a separate diagnostic label here.' Footer: 'General education, not diagnosis. Fictional photographic scene.'\nVisual mechanism and safety must stay accurate. No burns, gore, dehydration spectacle, inferno, monsters, distorted human anatomy, invented statistics or unsupported neurological claims. No self-directed exposure instructions, unsafe challenges or advice to ignore heat warnings. No tiny bibliography, web URLs, logos or watermark. Preserve the complete richly detailed, flowing photographic infographic, not a sparse poster. Request openai/gpt-image-2.6-sunburst, quality medium, size auto, opaque background.",
+    "image": "images/2026-11-07-factual-infographic-factual-infographic-thermophobia-persis.jpg",
+    "thumb": "thumbs/2026-11-07-factual-infographic-factual-infographic-thermophobia-persis.webp",
+    "color": "#7c7363",
+    "date": "2026-11-07",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1199x1312",
+    "dedup": {
+      "conceptKey": "thermophobia-heat-anticipation-shaded-courtyard",
+      "imageSha256": "9b7087b703754a1894302786009b0eadb057e9d78ed5b681a6da88bc011b392b",
+      "imageDHash": "5143452505452012"
+    },
+    "factualInfographic": {
+      "topic": "Thermophobia: persistent fear of heat, heat-related triggers, bodily anxiety, avoidance, realistic heat safety, and evidence-based help",
+      "description": "Photographic educational chart explaining heat fear, variable anxiety symptoms, avoidance, CBT and genuine heat-health precautions.",
+      "sourceNote": "Indian Journal of Psychiatry https://pmc.ncbi.nlm.nih.gov/articles/PMC9129358/; NHS https://www.nhs.uk/mental-health/conditions/phobias/; CDC https://www.cdc.gov/heat-health/about/index.html. Verified terminology, symptoms, avoidance, CBT and heat safety",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-08T01:09:47.432056+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "Indian Journal of Psychiatry",
+            "title": "A rare case with different presentation of specific phobia: Case Report",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9129358/"
+          },
+          {
+            "id": "S2",
+            "publisher": "NHS",
+            "title": "Phobias",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/mental-health/conditions/phobias/"
+          },
+          {
+            "id": "S3",
+            "publisher": "CDC",
+            "title": "About Heat and Your Health",
+            "sourceType": "government-agency",
+            "url": "https://www.cdc.gov/heat-health/about/index.html"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Thermophobia is an established descriptive term for fear of heat; a published case uses the name for fear involving hot food. This is a descriptive fear name, not a claim of a separate diagnostic category.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Heat-related situations and hot objects can trigger anxiety; the term meaning persistent fear of heat was additionally checked directly in the medically edited RxList dictionary.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Phobias can involve severe worry, palpitations, trembling, dizziness and fear of losing control; symptoms differ between people.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Avoidance of feared circumstances can bring short-term relief; the cited case reports avoidance and spontaneous subsiding of symptoms, not a universal mechanism for all patients.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Phobias can interfere with daily life; seek professional help if symptoms affect life.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "CBT is a talking therapy used to treat phobias.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Heat can cause actual illness; stay cool and hydrated, use shade and cooling, and take local heat-risk advice seriously.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "Overheating symptoms can include heavy sweating, dizziness, headache, weakness and nausea; physical symptoms must not simply be assumed to be anxiety.",
+            "sourceIds": [
+              "S3",
+              "S2"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
