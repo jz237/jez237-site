@@ -135,3 +135,15 @@ body.hud-hidden:not(.previewing) #full{top:calc(max(76px,12%) + 104px);bottom:au
 body.hud-hidden #hudToggle{top:max(62px,12%)}
 body.hud-hidden #flightDock{top:calc(max(62px,12%) + 52px)}
 body.hud-hidden #mouseHint{display:none}
+
+/* Manual-flight rear monitor control, beside the existing flight utilities. */
+#rearDisplay{position:absolute;z-index:24;right:max(12px,env(safe-area-inset-right));top:114px;min-width:148px;min-height:58px;padding:8px 12px;display:flex;flex-direction:column;gap:4px;align-items:flex-start;border:1px solid #5b7f8f;border-radius:8px;background:#102733e8;color:#d8ebef;font:12px 'Segoe UI',sans-serif;cursor:pointer;touch-action:manipulation}
+#rearDisplay small{font-size:10px;color:#a4c6d0}#rearDisplay:hover{background:#2b4c5d;border-color:#94beca}#rearDisplay[aria-pressed=true]{border-color:#9be4e9;color:#b7f1e9}
+#rearDisplay[hidden],body.autopilot #rearDisplay,body.native-open #rearDisplay,body.previewing #rearDisplay{display:none}
+body.deck-captured #rearDisplay{opacity:.4;pointer-events:none}
+body.flying:not(.autopilot) #flightDock{top:180px}
+@media(max-width:760px){#rearDisplay{right:8px;top:104px}body.flying:not(.autopilot) #flightDock{top:170px}}
+@media(max-height:540px) and (orientation:landscape){#rearDisplay{top:98px}body.flying:not(.autopilot) #flightDock{top:164px}}
+body.hud-hidden #rearDisplay{top:calc(max(62px,12%) + 52px)}
+body.flying.hud-hidden:not(.autopilot) #flightDock{top:calc(max(62px,12%) + 118px)}
+body.hud-hidden:not(.autopilot):not(.previewing) #full{top:calc(max(76px,12%) + 170px)}

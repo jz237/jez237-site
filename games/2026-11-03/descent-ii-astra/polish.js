@@ -66,6 +66,31 @@
   new MutationObserver(syncHud).observe(document.body,{attributes:true,attributeFilter:['class']});
   setInterval(()=>{if(flightActive)syncHud();},500);
   const hudRow=document.createElement('div');hudRow.innerHTML='<dt>HUD on / off</dt><dd><kbd>Alt + F7</kbd> or the HUD button</dd>';controlList.append(hudRow);
+  const rear=document.createElement('button');rear.id='rearDisplay';rear.type='button';rear.hidden=true;
+  rear.innerHTML='<span>Rear display: Off</span><small>Shift+F1 / Shift+F2</small>';
+  rear.setAttribute('aria-label','Rear-view display');rear.setAttribute('aria-pressed','false');
+  rear.title='Rear camera on/off. Shift+F1 cycles the left monitor; Shift+F2 cycles the right. Hold R (default) to look behind.';
+  q('stage').append(rear);let rearOn=null;
+  function syncRear(){
+    const m=window.Module,ready=!!(m?.calledRun&&!m.aborted&&!m.astraExited&&m._astra_rear_status);
+    rear.hidden=!ready||!flightActive||!!m?.autopilot||!!window.astraPreview?.active||!!window.astraMenus?.active;
+    if(!ready)return;
+    const on=!!(m._astra_rear_status()&3);
+    if(on!==rearOn){rearOn=on;rear.querySelector('span').textContent='Rear display: '+(on?'On':'Off');rear.setAttribute('aria-pressed',String(on));}
+  }
+  window.astraRear={sync:syncRear,toggle(){
+    const m=window.Module;
+    if(!m?._astra_rear_status||!flightActive||m.autopilot||window.astraPreview?.active||window.astraMenus?.active)return;
+    m.rearDisplayCommand=!m.rearDisplayCommand;rear.blur();flightView.focus({preventScroll:true});
+  }};
+  rear.onclick=()=>astraRear.toggle();
+  for(const type of ['keydown','keyup'])rear.addEventListener(type,e=>{if(e.key===' '||e.key==='Enter')e.stopPropagation();});
+  new MutationObserver(syncRear).observe(document.body,{attributes:true,attributeFilter:['class']});
+  setInterval(()=>{if(flightActive)syncRear();},500);
+  for(const [label,keys] of [['Rear-view display','Rear display button · Shift+F1 left / Shift+F2 right'],['Look behind','Hold R (default); release to face forward']]){
+    const row=document.createElement('div'),dt=document.createElement('dt'),dd=document.createElement('dd');dt.textContent=label;dd.textContent=keys;row.append(dt,dd);controlList.append(row);
+  }
+  const demoHint=document.createElement('p');demoHint.className='interaction-note';demoHint.textContent='The demo starts without the cockpit, with essential flight readouts. Use Show HUD to restore the full cockpit.';q('panel-spectate').append(demoHint);
   q('loadingScreen').tabIndex=-1;
   // Native dialogs retain their own focus and Escape handling.
   const labelDialogs=()=>document.querySelectorAll('dialog:not([aria-labelledby])').forEach(d=>{const h=d.querySelector('h2');if(h){h.id=h.id||d.id+'-title';d.setAttribute('aria-labelledby',h.id);}});

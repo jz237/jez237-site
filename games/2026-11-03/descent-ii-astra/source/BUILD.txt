@@ -1387,3 +1387,11 @@ R72 - original fullscreen flight information without the cockpit
 - Keeps the HUD button, Alt+F7, prior-layout restoration, saved preference, demo and phone controls from R71.
 - Moves the collapsed demo controls and fullscreen button clear of the native corner readouts. Expanded menus remain accessible; the large cockpit is restored with the same button or shortcut.
 - Preserves flight controls, AI, level geometry, render quality and original audio behavior.
+
+R73 - demo cockpit default and visible rear-monitor controls
+- Every fresh AI demo starts cockpit-free, retaining the original Descent II flight readouts. Show HUD still restores the cockpit during a demo, and that choice can continue through subsequent demo levels. A new demo resets to cockpit-free.
+- Demo defaults apply only to the separate watch pilot. Manual HUD and rear-monitor preferences remain independent. Demo launches start with both auxiliary camera monitors off.
+- Manual gameplay gains a visible Rear display On/Off button with Shift+F1 / Shift+F2 shortcut labels. The button toggles the native rear camera and restores the previous left display when applicable; it also recognizes native keyboard changes to either monitor.
+- The original Shift+F1 / Shift+F2 display cycling and R look-behind controls remain native. The Controls page explains monitor switching and the default hold-R behavior.
+- The rear-display control is absent in AI demo mode and showrooms. It works with the full cockpit and with the cockpit hidden; it uses existing native cameras rather than adding a rendering loop.
+- Flight physics, demo navigation/combat, sound, graphics quality and original fullscreen readouts are unchanged.

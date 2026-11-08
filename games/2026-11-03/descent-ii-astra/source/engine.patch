@@ -1372,7 +1372,7 @@ index 535d1ae..221fafc 100644
 +
 +#include "overload_fields.inc"
 diff --git a/d2/main/game.c b/d2/main/game.c
-index f15d413..7ebb26c 100644
+index f15d413..3d6cdee 100644
 --- a/d2/main/game.c
 +++ b/d2/main/game.c
 @@ -853,7 +853,7 @@ void show_help()
@@ -1441,7 +1441,7 @@ index f15d413..7ebb26c 100644
  				stop_time();
  
  			if (!((Game_mode & GM_MULTI) && (Newdemo_state != ND_STATE_PLAYBACK)))
-@@ -1157,15 +1178,29 @@ int game_handler(window *wind, d_event *event, void *data)
+@@ -1157,15 +1178,30 @@ int game_handler(window *wind, d_event *event, void *data)
  		case EVENT_KEY_COMMAND:
  		case EVENT_KEY_RELEASE:
  		case EVENT_IDLE:
@@ -1458,6 +1458,7 @@ index f15d413..7ebb26c 100644
 +                if(next){StartNewGame(next);break;}
 +            }
 +            if(EM_ASM_INT({var c=Module.hudToggleCommand||0;Module.hudToggleCommand=0;return c;}))astra_toggle_hud();
++            if(EM_ASM_INT({var c=Module.rearDisplayCommand||0;Module.rearDisplayCommand=0;return c;}))astra_toggle_rear_display();
 +            astra_auto_pause_frame();
  			calc_frame_time();
 +            if(astra_preview_frame())break;
@@ -1471,7 +1472,7 @@ index f15d413..7ebb26c 100644
  			}
  
  			if (!Automap_active)		// efficiency hack
-@@ -1202,7 +1237,10 @@ int game_handler(window *wind, d_event *event, void *data)
+@@ -1202,7 +1238,10 @@ int game_handler(window *wind, d_event *event, void *data)
  #endif
  				show_menus();
  			Game_wind = NULL;
@@ -1483,7 +1484,7 @@ index f15d413..7ebb26c 100644
  			key_toggle_repeat(1);
  			break;
  
-@@ -1306,6 +1344,8 @@ void game_leave_menus(void)
+@@ -1306,6 +1345,8 @@ void game_leave_menus(void)
  
  void GameProcessFrame(void)
  {
@@ -1492,7 +1493,7 @@ index f15d413..7ebb26c 100644
  	fix player_shields = Players[Player_num].shields;
  	int player_was_dead = Player_is_dead;
  
-@@ -1409,7 +1449,10 @@ void GameProcessFrame(void)
+@@ -1409,7 +1450,10 @@ void GameProcessFrame(void)
  
  		Players[Player_num].homing_object_dist = -1;		//	Assume not being tracked.  Laser_do_weapon_sequence modifies this.
  
@@ -1503,7 +1504,7 @@ index f15d413..7ebb26c 100644
  		powerup_grab_cheat_all();
  
  		if (Endlevel_sequence)	//might have been started during move
-@@ -1713,6 +1756,7 @@ void FireLaser()
+@@ -1713,6 +1757,7 @@ void FireLaser()
  	if ((Players[Player_num].primary_weapon == FUSION_INDEX) && (Global_laser_firing_count)) {
  		if ((Players[Player_num].energy < F1_0*2) && (Auto_fire_fusion_cannon_time == 0)) {
  			Global_laser_firing_count = 0;
@@ -1511,7 +1512,7 @@ index f15d413..7ebb26c 100644
  		} else {
  			static fix64 Fusion_next_sound_time = 0;
  			int flash_val;
-@@ -1731,7 +1775,16 @@ void FireLaser()
+@@ -1731,7 +1776,16 @@ void FireLaser()
  
  			flash_val = !(Game_mode & GM_MULTI) || !Netgame.ReducedFlash ? Fusion_charge >> 11 :
  				PaletteRedAdd < 10 ? 10 - PaletteRedAdd : 0;
@@ -1646,7 +1647,7 @@ index da0872e..3297e9b 100644
 +
 +
 diff --git a/d2/main/gameseq.c b/d2/main/gameseq.c
-index 30de489..8248090 100644
+index 30de489..4acf3ec 100644
 --- a/d2/main/gameseq.c
 +++ b/d2/main/gameseq.c
 @@ -757,6 +757,7 @@ void LoadLevel(int level_num,int page_in_textures)
@@ -1685,7 +1686,7 @@ index 30de489..8248090 100644
  void StartNewGame(int start_level)
  {
  	state_quick_item = -1;	// for first blind save, pick slot to save in
-@@ -848,7 +854,18 @@ void StartNewGame(int start_level)
+@@ -848,7 +854,24 @@ void StartNewGame(int start_level)
  	else
  		StartNewLevel(start_level);
  
@@ -1693,6 +1694,12 @@ index 30de489..8248090 100644
 +	extern int astra_initial_hud(void);
 +    int astra_mode=astra_initial_hud();
 +    if(astra_mode>=0){
++        /* A fresh AI demo starts with native readouts and no cockpit/monitors.
++         * Its separate watch profile leaves the manual pilot's choices intact. */
++        if(EM_ASM_INT(return !!Module.autopilot)){
++            PlayerCfg.HudMode=3;
++            PlayerCfg.Cockpit3DView[0]=PlayerCfg.Cockpit3DView[1]=CV_NONE;
++        }
 +        extern int astra_invert_mouse(int),astra_saved_flip(void);extern void astra_input_ready(int);
 +        PlayerCfg.PreferredCockpitMode=(astra_mode||PlayerCfg.HudMode==3)?CM_FULL_SCREEN:CM_FULL_COCKPIT;
 +        select_cockpit(PlayerCfg.PreferredCockpitMode);
@@ -1705,7 +1712,7 @@ index 30de489..8248090 100644
  
  	game_disable_cheats();
  
-@@ -860,6 +877,7 @@ void StartNewGame(int start_level)
+@@ -860,6 +883,7 @@ void StartNewGame(int start_level)
  //	Call with dead_flag = 1 if player died, but deserves some portion of bonus (only skill points), anyway.
  void DoEndLevelScoreGlitz(int network)
  {
@@ -1713,7 +1720,7 @@ index 30de489..8248090 100644
  	int level_points, skill_points, energy_points, shield_points, hostage_points;
  	int	all_hostage_points;
  	int	endgame_points;
-@@ -1022,6 +1040,7 @@ int draw_stars_bg(newmenu *menu, d_event *event, grs_bitmap *background)
+@@ -1022,6 +1046,7 @@ int draw_stars_bg(newmenu *menu, d_event *event, grs_bitmap *background)
  
  void do_screen_message(char *fmt, ...)
  {
@@ -1721,7 +1728,7 @@ index 30de489..8248090 100644
  	va_list arglist;
  	grs_bitmap background;
  	char msg[1024];
-@@ -1256,6 +1275,11 @@ void EnterSecretLevel(void)
+@@ -1256,6 +1281,11 @@ void EnterSecretLevel(void)
  //called when the player has finished a level
  void PlayerFinishedLevel(int secret_flag)
  {
@@ -1733,7 +1740,7 @@ index 30de489..8248090 100644
  	Assert(!secret_flag);
  
  	if (Game_wind)
-@@ -1295,6 +1319,9 @@ void show_order_form();
+@@ -1295,6 +1325,9 @@ void show_order_form();
  //called when the player has finished the last level
  void DoEndGame(void)
  {
@@ -1743,7 +1750,7 @@ index 30de489..8248090 100644
  	if ((Newdemo_state == ND_STATE_RECORDING) || (Newdemo_state == ND_STATE_PAUSED))
  		newdemo_stop_recording(0);
  
-@@ -1456,6 +1483,7 @@ void DoPlayerDead()
+@@ -1456,6 +1489,7 @@ void DoPlayerDead()
  #endif
  	{				//Note link to above else!
  		Players[Player_num].lives--;
@@ -1751,7 +1758,7 @@ index 30de489..8248090 100644
  		if (Players[Player_num].lives == 0)
  		{
  			DoGameOver();
-@@ -1809,7 +1837,8 @@ void StartNewLevel(int level_num)
+@@ -1809,7 +1843,8 @@ void StartNewLevel(int level_num)
  		maybe_set_first_secret_visit(level_num);
  	}
  
@@ -1761,13 +1768,13 @@ index 30de489..8248090 100644
  
  	StartNewLevelSub(level_num, 1, 0 );
  
-@@ -2086,3 +2115,4 @@ void StartLevel(int random_flag)
+@@ -2086,3 +2121,4 @@ void StartLevel(int random_flag)
  	Auto_fire_fusion_cannon_time = 0;
  	Fusion_charge = 0;
  }
 +
 diff --git a/d2/main/gauges.c b/d2/main/gauges.c
-index 3ece085..3c0c672 100644
+index 3ece085..1c141b9 100644
 --- a/d2/main/gauges.c
 +++ b/d2/main/gauges.c
 @@ -4520,6 +4520,31 @@ void observer_show_bomb_highlights()
@@ -1843,14 +1850,15 @@ index 3ece085..3c0c672 100644
  		if (Game_mode&GM_MULTI && Show_kill_list)
  			hud_show_kill_list();
  		if (PlayerCfg.CurrentCockpitMode != CM_LETTERBOX)
-@@ -4858,8 +4883,8 @@ void do_cockpit_window_view(int win,object *viewer,int rear_view_flag,int user,c
+@@ -4858,8 +4883,9 @@ void do_cockpit_window_view(int win,object *viewer,int rear_view_flag,int user,c
  
  		dx = (win==0)?-(w+(w/10)):(w/10);
  
 -		window_x = grd_curscreen->sc_w/2+dx;
 -		window_y = grd_curscreen->sc_h-h-(SHEIGHT/15);
-+		window_x = astra_deck_visible?(win?SWIDTH-w-SWIDTH/12:SWIDTH/12):grd_curscreen->sc_w/2+dx;
-+		window_y = astra_deck_visible?SHEIGHT/11:grd_curscreen->sc_h-h-SHEIGHT/15;
++		/* Keep auxiliary cameras inside the cockpit struts and below corner UI. */
++		window_x = astra_deck_visible?(win?SWIDTH-w-SWIDTH/5:SWIDTH/5):grd_curscreen->sc_w/2+dx;
++		window_y = astra_deck_visible?SHEIGHT/7:grd_curscreen->sc_h-h-SHEIGHT/15;
  
  		gr_init_sub_canvas(&window_canv,&grd_curscreen->sc_canvas,window_x,window_y,w,h);
  	}
@@ -1895,16 +1903,17 @@ index 7298cc1..b795bc6 100644
  		if (Guided_missile[Player_num] && Guided_missile[Player_num]->type==OBJ_WEAPON && Guided_missile[Player_num]->id==GUIDEDMISS_ID &&
  		Guided_missile[Player_num]->signature==Guided_missile_sig[Player_num] && PlayerCfg.GuidedInBigWindow)
 diff --git a/d2/main/inferno.c b/d2/main/inferno.c
-index dc6e44a..961f198 100644
+index dc6e44a..0ed85e7 100644
 --- a/d2/main/inferno.c
 +++ b/d2/main/inferno.c
-@@ -44,6 +44,14 @@ char copyright[] = "DESCENT II  COPYRIGHT (C) 1994-1996 PARALLAX SOFTWARE CORPOR
+@@ -44,6 +44,15 @@ char copyright[] = "DESCENT II  COPYRIGHT (C) 1994-1996 PARALLAX SOFTWARE CORPOR
  #include "key.h"
  #include "3d.h"
  #include "bm.h"
 +extern int astra_vertigo(void);
 +EM_JS(int,astra_ov_selected,(void),{return Module.campaign==="overload";});
 +EM_JS(int,astra_auto_difficulty,(void),{return Module.autopilot?1:(Number.isInteger(Module.difficulty)?Module.difficulty:-1);});
++EM_JS(int,astra_demo_pilot,(void),{return !!Module.autopilot;});
 +EM_JS(int,astra_mine_launch,(void),{return Module.mineInspect>=0;});
 +EM_JS(int,astra_auto_first,(void),{return Module.startLevel||1;});
 +EM_JS(int, astra_weapon_setup_requested, (void), { return !!Module.openWeaponPriorities; });
@@ -1913,7 +1922,7 @@ index dc6e44a..961f198 100644
  #include "inferno.h"
  #include "dxxerror.h"
  #include "game.h"
-@@ -415,7 +423,7 @@ int main(int argc, char *argv[])
+@@ -415,7 +424,7 @@ int main(int argc, char *argv[])
  	con_printf( CON_DEBUG, "Initializing movie libraries...\n" );
  	init_movies();		//init movie libraries
  
@@ -1922,14 +1931,15 @@ index dc6e44a..961f198 100644
  
  	set_screen_mode(SCREEN_MENU);
  
-@@ -487,7 +495,33 @@ int main(int argc, char *argv[])
+@@ -487,7 +496,34 @@ int main(int argc, char *argv[])
  #endif
  	{
  		Game_mode = GM_GAME_OVER;
 -		DoMenu();
 +        if (!Players[Player_num].callsign[0]) {
 +            new_player_config();
-+            strcpy(Players[Player_num].callsign, "astra");
++            /* A first-time demo must create its own pilot, not overwrite astra. */
++            strcpy(Players[Player_num].callsign, astra_demo_pilot()?"watch":"astra");
 +            PlayerCfg.ControlType |= CONTROL_USING_MOUSE;
 +            kc_set_controls();
 +            write_player_file();
@@ -1957,7 +1967,7 @@ index dc6e44a..961f198 100644
  	}
  
  	setjmp(LeaveEvents);
-@@ -521,3 +555,6 @@ int main(int argc, char *argv[])
+@@ -521,3 +557,6 @@ int main(int argc, char *argv[])
  
  	return(0);		//presumably successful exit
  }

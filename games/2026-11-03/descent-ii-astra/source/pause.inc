@@ -28,6 +28,27 @@ int astra_toggle_hud(void){
     EM_ASM(window.astraHud?.sync());
     return PlayerCfg.HudMode!=3;
 }
+/* Use the existing cockpit cameras, including their native FRONT/REAR swap
+ * while the pilot looks behind. Queue mutations through the normal game frame. */
+static int astra_rear_restore[2]={CV_NONE,CV_NONE};
+EMSCRIPTEN_KEEPALIVE int astra_rear_status(void){
+    return (PlayerCfg.Cockpit3DView[0]==CV_REAR?1:0)|
+        (PlayerCfg.Cockpit3DView[1]==CV_REAR?2:0)|(Rear_view?4:0);
+}
+static void astra_toggle_rear_display(void){
+    if(!Game_wind||EM_ASM_INT(return !!Module.autopilot))return;
+    if(astra_rear_status()&3){
+        for(int i=0;i<2;i++)if(PlayerCfg.Cockpit3DView[i]==CV_REAR){
+            PlayerCfg.Cockpit3DView[i]=astra_rear_restore[i];
+            astra_rear_restore[i]=CV_NONE;
+        }
+    }else{
+        astra_rear_restore[0]=PlayerCfg.Cockpit3DView[0];
+        PlayerCfg.Cockpit3DView[0]=CV_REAR;
+    }
+    reset_cockpit();astra_store_preferences();
+    EM_ASM(window.astraRear?.sync());
+}
 static int astra_pause_handler(newmenu *menu,d_event *event,void *data)
 {
     if(event->type!=EVENT_NEWMENU_SELECTED)return 0;
