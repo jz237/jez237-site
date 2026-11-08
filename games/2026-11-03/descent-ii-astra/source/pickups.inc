@@ -39,7 +39,8 @@ static void ap_init(void){
       "float diff=max(dot(N,L),0.),rim=pow(1.-max(dot(N,V),0.),3.);"
       "float spec=pow(max(dot(N,normalize(V+L)),0.),mix(96.,24.,coat.a));"
       "vec3 base=coat.rgb*(mix(.65+dot(tex.rgb,vec3(.299,.587,.114))*.8,1.,classic)+grain*mix(.025,.012,classic));vec3 c=base*(.26+diff*1.18+max(dot(N,R),0.)*.31)*lighting;"
-      "c+=mix(vec3(.55,.68,.78),base,.48)*spec*.78+mix(vec3(.06,.24,.32),coat.rgb*.075,classic)*rim;"
+      "vec3 metal=coat.rgb/max(.001,max(coat.r,max(coat.g,coat.b)));"
+      "c+=mix(mix(vec3(.55,.68,.78),base,.48),mix(vec3(.92),metal,.80),classic)*spec*mix(.78,1.12,classic)+mix(vec3(.06,.24,.32),coat.rgb*.075,classic)*rim;"
       "vec3 F=flash.xyz-p;float fd=length(F);c+=base*vec3(1.,.42,.13)*flash.w/(1.+fd*fd*.01)*max(0.,dot(N,F/max(.01,fd)));"
       "float sweep=pow(.5+.5*sin(local.z*11.-clock*4.8),8.);c+=coat.rgb*glow*(.95+.48*sweep+.14*sin(clock*3.2+local.y*6.));"
       "gl_FragColor=vec4(c/(1.+.22*c),1.);}";
@@ -98,7 +99,7 @@ static int ap_draw_object(object *obj,int id,int deployed){
     if(deployed)g3_done_instance();
     g3_done_instance();
     if(!deployed){ap_draws++;EM_ASM(Module.pickupDraws=$0;Module.pickupCoverage[$1]=true;,ap_draws,id);}
-    else EM_ASM(Module.mineVisual=({version:62,smart:!!$0,mesh:$1});,id==52,id);
+    else EM_ASM(Module.mineVisual=({version:69,smart:!!$0,mesh:$1});,id==52,id);
     return 1;
 }
 int astra_draw_pickup(object *obj){return ap_draw_object(obj,obj->type==OBJ_HOSTAGE?50:obj->id,0);}

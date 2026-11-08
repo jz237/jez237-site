@@ -49,6 +49,10 @@
       style("deckRounds","opacity",missileCount?"1":".48");
       ["Blue","Red","Gold"].forEach((name,i)=>{style("deckKey"+name,"opacity",flags&(2<<i)?"1":".16");});
       attribute("deckGun","color",["#6ce8ff","#f6bb73","#a1ef80","#6aefb4","#da96ff","#78ddff","#e3b97e","#f9a6ad","#ff986c","#a4bdff"][primary]||"#79e7ff");
+      const smartMine=secondary===7;
+      attribute("deckMineBright","stop-color",smartMine?"#ffe37e":"#ff3530");
+      attribute("deckMineBase","stop-color",smartMine?"#b76a0b":"#b60703");
+      attribute("deckMineShade","stop-color",smartMine?"#422000":"#350200");
       style("deckMine","display",secondary===2||secondary===7?"":"none");
       style("deckMissile","display",secondary===2||secondary===7?"none":"");
     }

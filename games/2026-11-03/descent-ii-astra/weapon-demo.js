@@ -48,3 +48,35 @@ astraPreview.show=active=>{
   rangeShow(active);
   if(weapons)$('rangeToggle').focus({preventScroll:true});
 };
+
+// The same mine has a framed inventory pickup and a spiked live form.
+const minePickupStatus=window.astraCollectibleStatus;
+window.astraCollectibleStatus=id=>{
+  minePickupStatus(id);
+  $('mineState').hidden=id!==17&&id!==42;
+  $('mineState').textContent='View armed mine';
+};
+const mineWeaponStatus=astraWeaponDemo.update.bind(astraWeaponDemo);
+astraWeaponDemo.update=index=>{
+  mineWeaponStatus(index);
+  $('mineState').hidden=index!==19&&index!==20;
+  $('mineState').textContent='View inventory pickup';
+};
+$('mineState').onclick=()=>{
+  if(Module.pickupInspect===17||Module.pickupInspect===42){
+    const index=Module.pickupInspect===42?19:20;
+    Module.pickupInspect=-1;astraWeaponDemo.cycling=false;
+    astraWeaponDemo.select(index);astraWeaponDemo.sync();
+  }else if(Module.weaponInspect===19||Module.weaponInspect===20){
+    Module.pickupInspect=Module.weaponInspect===19?42:17;Module.weaponInspect=-1;
+    Module.previewRestart=true;
+    $('weaponControls').hidden=true;
+    window.astraDeck?.show(false);
+  }
+  astraPreview.show(true);
+};
+const minePreviewVisibility=astraPreview.show.bind(astraPreview);
+astraPreview.show=active=>{
+  $('mineState').hidden=!active||![17,42].includes(Module.pickupInspect)&&![19,20].includes(Module.weaponInspect);
+  minePreviewVisibility(active);
+};

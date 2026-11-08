@@ -236,7 +236,7 @@ function preloadFlightEngine() {
   if(location.protocol!=="http:"&&location.protocol!=="https:")return;
   if(document.getElementById("astraEnginePreload"))return;
   const link=document.createElement("link");link.id="astraEnginePreload";
-  link.rel="preload";link.as="script";link.href="engine.js?v=pyre68";
+  link.rel="preload";link.as="script";link.href="engine.js?v=pyre69";
   document.head.append(link);
 }
 let firstBlastProfile=0;
@@ -303,7 +303,7 @@ async function launch(quick,demo=false,encounter=false,preview=false,autopilot=f
     await readPack("vertigo","Reading the mission");
     let assetDepot=null;
     if(astra){
-      await script("payload/stream24/index.js?v=62");
+      await script("payload/stream24/index.js?v=69");
       const catalog=window.astraStreamCatalog;
       window.astraMaterialTypes=catalog.types;
       window.astraCollectiblesCatalog=catalog.effects.catalog;
@@ -371,7 +371,7 @@ async function launch(quick,demo=false,encounter=false,preview=false,autopilot=f
         setInterval(syncPilot,3000);
       }
     };
-    await script("engine.js?v=pyre68");
+    await script("engine.js?v=pyre69");
   } catch(e) {console.error(e);astraFail(e.message);}
 }
 
@@ -522,7 +522,7 @@ window.astraCollectibleStatus=id=>{
   if(!item)return;
   $('previewTitle').textContent='PTMC / COLLECTIBLE INSPECTION';
   $('previewVariation').textContent=item.name;
-  $('previewPhase').textContent=id===17||id===42?'Classic Descent II shape · Rotating 3D model':'Animated 3D model · Branching electrical discharges';
+  $('previewPhase').textContent=id===17||id===42?(id===17?'Red proximity pickup · Silver carrier frame':'Amber smart-mine pickup · Silver carrier frame'):'Animated 3D model · Branching electrical discharges';
   $('previewTime').textContent=item.triangles.toLocaleString()+' triangles';
   $('previewProgress').hidden=true;
   $('previewAgain').textContent='Next collectible →';

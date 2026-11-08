@@ -173,18 +173,28 @@ def d2_mine(m,smart,caged):
  # Reconstruct the six red/amber lobes from D2 pbomb/spbomb sprites.
  # Pickups use the original silver cubic carrier; deployed mines have
  # eight diagonal contact spikes. Shared proportions and finishes.
- shell=(.74,.30,.025) if smart else (.65,.012,.009)
- silver=(.69,.71,.70)
+ shell=(.64,.28,.012) if smart else (.58,.006,.004)
+ silver=(.72,.74,.72)
  m.sphere(.32,(.18,.12,.045) if smart else (.12,.013,.01))
  for axis in range(3):
   for sign in (-1,1):
    p=[0,0,0];p[axis]=sign*.34
-   m.sphere(.40,shell,.035,center=p)
+   # Six axial, rounded capsules, as in the original rotating sprite.
+   # Preserve a smooth silhouette without adding neon rings or extra spikes.
+   lobe=Mesh();lobe.sphere(.385,shell)
+   for at in range(0,len(lobe.v),11):
+    lobe.v[at+axis]*=1.12
+    normal=[lobe.v[at+3+k]*2-1 for k in range(3)]
+    normal[axis]/=1.12;normal=norm(normal)
+    for k in range(3):
+     lobe.v[at+k]+=p[k];lobe.v[at+3+k]=normal[k]*.5+.5
+    lobe.v[at+10]=.22
+   m.add(lobe)
  if caged:
   for axis in range(3):
    for u in (-1,1):
     for v in (-1,1):
-     center=[0,0,0];size=[.075,.075,.075]
+     center=[0,0,0];size=[.095,.095,.095]
      center[(axis+1)%3]=u*.55;center[(axis+2)%3]=v*.55;size[axis]=1.175
      m.box(center,size,silver)
  else:
