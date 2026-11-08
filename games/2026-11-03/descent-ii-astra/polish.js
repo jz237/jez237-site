@@ -31,6 +31,41 @@
   for(const id of ['flightMenu','invertFlight','previewFlight','mineFlight'])if(q(id))drawer.append(q(id));q('stage').append(dock);
   drawer.addEventListener('click',e=>{if(e.target.closest('button')?.id!=='invertFlight')dock.open=false;});
   document.addEventListener('pointerlockchange',()=>{if(document.pointerLockElement)dock.open=false;});
+  // Keep restoration reachable even when the cockpit and informational overlays are hidden.
+  const hud=document.createElement('button');hud.id='hudToggle';hud.type='button';hud.hidden=true;
+  hud.textContent='Hide HUD';hud.title='Hide HUD (Alt+F7)';hud.setAttribute('aria-controls','astraDeck');q('stage').append(hud);
+  let hudVisible=null;
+  function syncHud(){
+    const m=window.Module,ready=!!(m?.calledRun&&!m.aborted&&!m.astraExited&&m._astra_hud_visible);
+    hud.hidden=!ready||!flightActive||!!window.astraPreview?.active||!!window.astraMenus?.active;
+    if(!ready)return;
+    const visible=!!m._astra_hud_visible();
+    if(visible!==hudVisible){
+      hudVisible=visible;hud.textContent=visible?'Hide HUD':'Show HUD';hud.title=hud.textContent+' (Alt+F7)';
+      document.body.classList.toggle('hud-hidden',!visible);
+      if(!visible)window.astraDeck?.show(false);
+    }
+  }
+  window.astraHud={sync:syncHud,toggle(){
+    if(!window.Module?._astra_hud_visible||!flightActive||window.astraPreview?.active)return;
+    Module.hudToggleCommand=!Module.hudToggleCommand;hud.blur();
+    if(!document.querySelector('dialog[open]')&&!window.astraMenus?.active)flightView.focus({preventScroll:true});
+  }};
+  let hudKeyDown=false;
+  for(const type of ['keydown','keyup'])window.addEventListener(type,e=>{
+    if(e.code!=='F7')return;
+    if(type==='keyup'&&hudKeyDown){hudKeyDown=false;e.preventDefault();e.stopImmediatePropagation();return;}
+    if(!e.altKey||e.ctrlKey||e.metaKey||e.shiftKey)return;
+    if(!flightActive||window.astraMenus?.active||window.astraPreview?.active||document.querySelector('dialog[open]')||e.target.closest?.('input,textarea,select,[contenteditable=true]'))return;
+    e.preventDefault();e.stopImmediatePropagation();
+    if(type==='keydown'){if(!e.repeat&&!hudKeyDown)astraHud.toggle();hudKeyDown=true;}else hudKeyDown=false;
+  },true);
+  window.addEventListener('blur',()=>{hudKeyDown=false;});
+  hud.onclick=()=>astraHud.toggle();
+  for(const type of ['keydown','keyup'])hud.addEventListener(type,e=>{if(e.key===' '||e.key==='Enter')e.stopPropagation();});
+  new MutationObserver(syncHud).observe(document.body,{attributes:true,attributeFilter:['class']});
+  setInterval(()=>{if(flightActive)syncHud();},500);
+  const hudRow=document.createElement('div');hudRow.innerHTML='<dt>HUD on / off</dt><dd><kbd>Alt + F7</kbd> or the HUD button</dd>';controlList.append(hudRow);
   q('loadingScreen').tabIndex=-1;
   // Native dialogs retain their own focus and Escape handling.
   const labelDialogs=()=>document.querySelectorAll('dialog:not([aria-labelledby])').forEach(d=>{const h=d.querySelector('h2');if(h){h.id=h.id||d.id+'-title';d.setAttribute('aria-labelledby',h.id);}});

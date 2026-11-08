@@ -9,6 +9,25 @@ EMSCRIPTEN_KEEPALIVE void astra_store_preferences(void){
     WriteConfigFile();write_player_file();memcpy(Players[Player_num].callsign,name,sizeof name);
 }
 EMSCRIPTEN_KEEPALIVE void astra_silence_flight(void){digi_stop_digi_sounds();songs_stop_all();}
+/* One action hides the native gauges and cockpit together. Keep the last
+ * visible layout so turning the HUD back on does not cycle other layouts. */
+static int astra_last_hud=0,astra_last_cockpit=CM_FULL_SCREEN;
+EMSCRIPTEN_KEEPALIVE int astra_hud_visible(void){return PlayerCfg.HudMode!=3;}
+int astra_toggle_hud(void){
+    if(!Game_wind)return PlayerCfg.HudMode!=3;
+    if(PlayerCfg.HudMode!=3){
+        astra_last_hud=PlayerCfg.HudMode;
+        astra_last_cockpit=PlayerCfg.PreferredCockpitMode;
+        PlayerCfg.HudMode=3;PlayerCfg.PreferredCockpitMode=CM_FULL_SCREEN;
+    }else{
+        PlayerCfg.HudMode=astra_last_hud;
+        PlayerCfg.PreferredCockpitMode=astra_last_cockpit;
+    }
+    if(!Player_is_dead&&!Rear_view&&!Endlevel_sequence)select_cockpit(PlayerCfg.PreferredCockpitMode);
+    reset_cockpit();astra_store_preferences();
+    EM_ASM(window.astraHud?.sync());
+    return PlayerCfg.HudMode!=3;
+}
 static int astra_pause_handler(newmenu *menu,d_event *event,void *data)
 {
     if(event->type!=EVENT_NEWMENU_SELECTED)return 0;

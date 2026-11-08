@@ -118,3 +118,12 @@ body.flying:not(.autopilot):not(.previewing):not(.native-open):not(.deck-capture
 @media(max-width:760px){.native-actions #nativeOpen{grid-column:auto}.native-actions #nativeComfort{width:100%}}
 @media(max-height:540px) and (orientation:landscape){.native-actions #nativeComfort{width:auto}.hangar-home .ship-caption{bottom:106px}.hangar-home .ship-caption small,.hangar-home .ship-caption p{display:none}.hangar-home .ship-caption h2{font-size:22px}.hangar-home .ship-tools{gap:4px;bottom:30px}.hangar-home .ship-tools button{padding:7px 9px;font-size:10px}.hangar-home .ship-gesture{font-size:6px;bottom:13px}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important;scroll-behavior:auto!important}.showroom-action:hover{transform:none!important}}
+
+/* A compact HUD switch stays available without opening a drawer. */
+#hudToggle{position:absolute;z-index:24;right:max(12px,env(safe-area-inset-right));top:62px;min-width:98px;min-height:44px;padding:9px 12px;border:1px solid #5b7f8f;border-radius:8px;background:#102733e8;color:#d8ebef;font:12px 'Segoe UI',sans-serif;cursor:pointer;touch-action:manipulation}
+#hudToggle:hover{background:#2b4c5d;border-color:#94beca}#hudToggle[hidden],body.native-open #hudToggle,body.previewing #hudToggle{display:none}
+body.deck-captured #hudToggle{opacity:.4;pointer-events:none}
+body.flying #flightDock{top:114px}
+body.hud-hidden :is(#objectiveTracker,#squadHUD,#friendlyMarkers){display:none!important}
+@media(max-width:760px){#hudToggle{right:8px;top:52px}body.flying #flightDock{top:104px}}
+@media(max-height:540px) and (orientation:landscape){#hudToggle{top:46px}body.flying #flightDock{top:98px}}

@@ -1372,9 +1372,27 @@ index 535d1ae..221fafc 100644
 +
 +#include "overload_fields.inc"
 diff --git a/d2/main/game.c b/d2/main/game.c
-index f15d413..c550fb7 100644
+index f15d413..7ebb26c 100644
 --- a/d2/main/game.c
 +++ b/d2/main/game.c
+@@ -853,7 +853,7 @@ void show_help()
+ 	m[nitems].type = NM_TYPE_TEXT; m[nitems++].text = "F3\t  SWITCH COCKPIT MODES";
+ 	m[nitems].type = NM_TYPE_TEXT; m[nitems++].text = TXT_HELP_F4;
+ 	m[nitems].type = NM_TYPE_TEXT; m[nitems++].text = TXT_HELP_F5;
+-	m[nitems].type = NM_TYPE_TEXT; m[nitems++].text = "ALT-F7\t  SWITCH HUD MODES";
++	m[nitems].type = NM_TYPE_TEXT; m[nitems++].text = "ALT-F7\t  HUD ON / OFF";
+ #if !(defined(__APPLE__) || defined(macintosh))
+ 	m[nitems].type = NM_TYPE_TEXT; m[nitems++].text = TXT_HELP_PAUSE;
+ #else
+@@ -905,7 +905,7 @@ void show_netgame_help()
+ 	m[nitems].type = NM_TYPE_TEXT; m[nitems++].text = "ALT-F4\t  SHOW PLAYER NAMES ON HUD";
+ 	m[nitems].type = NM_TYPE_TEXT; m[nitems++].text = "F6\t  TOGGLE CONNECTION STATS";	
+ 	m[nitems].type = NM_TYPE_TEXT; m[nitems++].text = "F7\t  TOGGLE KILL LIST";
+-	m[nitems].type = NM_TYPE_TEXT; m[nitems++].text = "ALT-F7\t  SWITCH HUD MODES";
++	m[nitems].type = NM_TYPE_TEXT; m[nitems++].text = "ALT-F7\t  HUD ON / OFF";
+ 	if (!is_observer()) {
+ 		m[nitems].type = NM_TYPE_TEXT; m[nitems++].text = "F8\t  SEND MESSAGE";
+ 		m[nitems].type = NM_TYPE_TEXT; m[nitems++].text = "(SHIFT-)F9 to F12\t  (DEFINE)SEND MACRO";
 @@ -1108,6 +1108,20 @@ void game_render_frame();
  
  window *Game_wind = NULL;
@@ -1423,7 +1441,7 @@ index f15d413..c550fb7 100644
  				stop_time();
  
  			if (!((Game_mode & GM_MULTI) && (Newdemo_state != ND_STATE_PLAYBACK)))
-@@ -1157,15 +1178,28 @@ int game_handler(window *wind, d_event *event, void *data)
+@@ -1157,15 +1178,29 @@ int game_handler(window *wind, d_event *event, void *data)
  		case EVENT_KEY_COMMAND:
  		case EVENT_KEY_RELEASE:
  		case EVENT_IDLE:
@@ -1439,6 +1457,7 @@ index f15d413..c550fb7 100644
 +                int next=EM_ASM_INT({var n=Module.autoNext||0;Module.autoNext=0;return n;});
 +                if(next){StartNewGame(next);break;}
 +            }
++            if(EM_ASM_INT({var c=Module.hudToggleCommand||0;Module.hudToggleCommand=0;return c;}))astra_toggle_hud();
 +            astra_auto_pause_frame();
  			calc_frame_time();
 +            if(astra_preview_frame())break;
@@ -1452,7 +1471,7 @@ index f15d413..c550fb7 100644
  			}
  
  			if (!Automap_active)		// efficiency hack
-@@ -1202,7 +1236,10 @@ int game_handler(window *wind, d_event *event, void *data)
+@@ -1202,7 +1237,10 @@ int game_handler(window *wind, d_event *event, void *data)
  #endif
  				show_menus();
  			Game_wind = NULL;
@@ -1464,7 +1483,7 @@ index f15d413..c550fb7 100644
  			key_toggle_repeat(1);
  			break;
  
-@@ -1306,6 +1343,8 @@ void game_leave_menus(void)
+@@ -1306,6 +1344,8 @@ void game_leave_menus(void)
  
  void GameProcessFrame(void)
  {
@@ -1473,7 +1492,7 @@ index f15d413..c550fb7 100644
  	fix player_shields = Players[Player_num].shields;
  	int player_was_dead = Player_is_dead;
  
-@@ -1409,7 +1448,10 @@ void GameProcessFrame(void)
+@@ -1409,7 +1449,10 @@ void GameProcessFrame(void)
  
  		Players[Player_num].homing_object_dist = -1;		//	Assume not being tracked.  Laser_do_weapon_sequence modifies this.
  
@@ -1484,7 +1503,7 @@ index f15d413..c550fb7 100644
  		powerup_grab_cheat_all();
  
  		if (Endlevel_sequence)	//might have been started during move
-@@ -1713,6 +1755,7 @@ void FireLaser()
+@@ -1713,6 +1756,7 @@ void FireLaser()
  	if ((Players[Player_num].primary_weapon == FUSION_INDEX) && (Global_laser_firing_count)) {
  		if ((Players[Player_num].energy < F1_0*2) && (Auto_fire_fusion_cannon_time == 0)) {
  			Global_laser_firing_count = 0;
@@ -1492,7 +1511,7 @@ index f15d413..c550fb7 100644
  		} else {
  			static fix64 Fusion_next_sound_time = 0;
  			int flash_val;
-@@ -1731,7 +1774,16 @@ void FireLaser()
+@@ -1731,7 +1775,16 @@ void FireLaser()
  
  			flash_val = !(Game_mode & GM_MULTI) || !Netgame.ReducedFlash ? Fusion_charge >> 11 :
  				PaletteRedAdd < 10 ? 10 - PaletteRedAdd : 0;
@@ -1510,8 +1529,31 @@ index f15d413..c550fb7 100644
  				PALETTE_FLASH_ADD(flash_val, 0, flash_val);
  			else
  				PALETTE_FLASH_ADD(flash_val, flash_val, 0);
+diff --git a/d2/main/gamecntl.c b/d2/main/gamecntl.c
+index d4c7b1f..de6ddc1 100644
+--- a/d2/main/gamecntl.c
++++ b/d2/main/gamecntl.c
+@@ -1033,16 +1033,8 @@ int HandleGameKey(int key)
+ 
+ 		case KEY_ALTED+KEY_F7:
+ 		KEY_MAC(case KEY_COMMAND+KEY_ALTED+KEY_7:)
+-			PlayerCfg.HudMode=(PlayerCfg.HudMode+1)%GAUGE_HUD_NUMMODES;
+-			write_player_file();
+-			switch (PlayerCfg.HudMode)
+-			{
+-				case 0: HUD_init_message_literal(HM_DEFAULT, "Standard HUD"); break;
+-				case 1: HUD_init_message_literal(HM_DEFAULT, "Alternative HUD #1"); break;
+-				case 2: HUD_init_message_literal(HM_DEFAULT, "Alternative HUD #2"); break;
+-				case 3: HUD_init_message_literal(HM_DEFAULT, "No HUD"); break;
+-			}
+-			return 1;
++            {extern int astra_toggle_hud(void);astra_toggle_hud();}
++            return 1;
+ 
+ #ifdef NETWORK
+ 		KEY_MAC(case KEY_COMMAND+KEY_6:)
 diff --git a/d2/main/gamerend.c b/d2/main/gamerend.c
-index da0872e..3137392 100644
+index da0872e..b378f23 100644
 --- a/d2/main/gamerend.c
 +++ b/d2/main/gamerend.c
 @@ -1,3 +1,4 @@
@@ -1553,7 +1595,16 @@ index da0872e..3137392 100644
  	if (!no_draw_hud)
  		game_draw_hud_stuff();
  
-@@ -968,6 +975,17 @@ void update_cockpits()
+@@ -869,6 +876,8 @@ void game_render_frame_mono(int flip)
+ 
+ void toggle_cockpit()
+ {
++    /* Explicitly choosing a cockpit restores a hidden HUD first. */
++    if(PlayerCfg.HudMode==3){extern int astra_toggle_hud(void);astra_toggle_hud();return;}
+ 	int new_mode=CM_FULL_SCREEN;
+ 
+ 	if (Rear_view || Player_is_dead)
+@@ -968,6 +977,17 @@ void update_cockpits()
  
  void game_render_frame()
  {
@@ -1571,7 +1622,7 @@ index da0872e..3137392 100644
  	set_screen_mode( SCREEN_GAME );
  	play_homing_warning();
  	game_render_frame_mono(GameArg.DbgUseDoubleBuffer);
-@@ -995,3 +1013,7 @@ void show_boxed_message(char *msg, int RenderFlag)
+@@ -995,3 +1015,7 @@ void show_boxed_message(char *msg, int RenderFlag)
  	if (!RenderFlag)
  		gr_flip();
  }
@@ -1580,7 +1631,7 @@ index da0872e..3137392 100644
 +
 +
 diff --git a/d2/main/gameseq.c b/d2/main/gameseq.c
-index 30de489..84b985f 100644
+index 30de489..8248090 100644
 --- a/d2/main/gameseq.c
 +++ b/d2/main/gameseq.c
 @@ -757,6 +757,7 @@ void LoadLevel(int level_num,int page_in_textures)
@@ -1628,7 +1679,7 @@ index 30de489..84b985f 100644
 +    int astra_mode=astra_initial_hud();
 +    if(astra_mode>=0){
 +        extern int astra_invert_mouse(int),astra_saved_flip(void);extern void astra_input_ready(int);
-+        PlayerCfg.PreferredCockpitMode=astra_mode?CM_FULL_SCREEN:CM_FULL_COCKPIT;
++        PlayerCfg.PreferredCockpitMode=(astra_mode||PlayerCfg.HudMode==3)?CM_FULL_SCREEN:CM_FULL_COCKPIT;
 +        select_cockpit(PlayerCfg.PreferredCockpitMode);
 +        astra_input_ready(astra_invert_mouse(astra_saved_flip()));
 +        /* A later level reloads this pilot file before respawning the ship. */

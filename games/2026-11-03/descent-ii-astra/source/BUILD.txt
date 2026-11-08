@@ -1372,3 +1372,11 @@ R70 - immediate original sound-effect playback
 - Muted native tests measured the former game-side sound queue at 280-323 ms. Direct laser/impact onset measured 0-13 ms at audio-clock granularity, typically 0 ms for lasers and 2.27 ms for impacts (leading silence in the original impact sample). These figures exclude hardware/browser output latency.
 - Original PCM and derived destruction PCM hashes, volume/mute, demo context suspend/resume without stale shots, left/right panning, loops, natural completion, stop-all, cache reuse and close/reinitialization were checked. A test-only audio worklet verified uninterrupted loop output through a 650 ms main-thread stall; CPU-throttled Vertigo combat ran for a minute with bounded channels/cache and no runtime/render errors.
 - Test-only native exports, worklets and instrumentation are excluded from the shipping engine.
+
+R71 - one-action HUD visibility
+- Adds a compact Hide HUD / Show HUD button during manual flight, AI demos and multiplayer; it remains reachable when the cockpit is hidden and works by mouse or touch.
+- Alt+F7 now switches directly between visible and hidden instead of cycling four HUD modes. Turning it back on restores the current session's previous cockpit and HUD layout.
+- Native cockpit rendering and gauges share the same state. F3 can restore a hidden HUD before cycling cockpit layouts; starting a new flight respects a saved hidden HUD.
+- Hiding the HUD also hides objective and wingman information overlays. Menus, demo controls and the restore button remain available. Showrooms keep their existing interface.
+- The keyboard shortcut remains available with the mouse captured. The button does not capture the mouse or change controls, AI, graphics, music or the R70 sound fixes.
+- Checked mouse clicks, touch taps, keyboard toggling, portrait/landscape layouts and restoration in both Original and Vertigo using muted, isolated tests.
