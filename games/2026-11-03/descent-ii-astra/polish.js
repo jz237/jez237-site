@@ -41,7 +41,7 @@
     if(!ready)return;
     const visible=!!m._astra_hud_visible();
     if(visible!==hudVisible){
-      hudVisible=visible;hud.textContent=visible?'Hide HUD':'Show HUD';hud.title=hud.textContent+' (Alt+F7)';
+      hudVisible=visible;hud.textContent=visible?'Hide HUD':'Show HUD';hud.title=(visible?'Hide cockpit; keep flight readouts':'Show full cockpit')+' (Alt+F7)';
       document.body.classList.toggle('hud-hidden',!visible);
       if(!visible)window.astraDeck?.show(false);
     }

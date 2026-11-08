@@ -9,8 +9,8 @@ EMSCRIPTEN_KEEPALIVE void astra_store_preferences(void){
     WriteConfigFile();write_player_file();memcpy(Players[Player_num].callsign,name,sizeof name);
 }
 EMSCRIPTEN_KEEPALIVE void astra_silence_flight(void){digi_stop_digi_sounds();songs_stop_all();}
-/* One action hides the native gauges and cockpit together. Keep the last
- * visible layout so turning the HUD back on does not cycle other layouts. */
+/* One action hides the cockpit while retaining native fullscreen readouts.
+ * Keep the previous full cockpit layout for the return toggle. */
 static int astra_last_hud=0,astra_last_cockpit=CM_FULL_SCREEN;
 EMSCRIPTEN_KEEPALIVE int astra_hud_visible(void){return PlayerCfg.HudMode!=3;}
 int astra_toggle_hud(void){

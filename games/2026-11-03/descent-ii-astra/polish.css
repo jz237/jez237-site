@@ -127,3 +127,11 @@ body.flying #flightDock{top:114px}
 body.hud-hidden :is(#objectiveTracker,#squadHUD,#friendlyMarkers){display:none!important}
 @media(max-width:760px){#hudToggle{right:8px;top:52px}body.flying #flightDock{top:104px}}
 @media(max-height:540px) and (orientation:landscape){#hudToggle{top:46px}body.flying #flightDock{top:98px}}
+
+/* Keep utility controls clear of the native fullscreen flight readouts. */
+body.hud-hidden #autoToggle{bottom:auto;top:max(76px,12%)}
+body.hud-hidden #autoPanel{bottom:auto;top:calc(max(76px,12%) + 52px);max-height:calc(100% - max(76px,12%) - 128px)}
+body.hud-hidden:not(.previewing) #full{top:calc(max(76px,12%) + 104px);bottom:auto}
+body.hud-hidden #hudToggle{top:max(62px,12%)}
+body.hud-hidden #flightDock{top:calc(max(62px,12%) + 52px)}
+body.hud-hidden #mouseHint{display:none}

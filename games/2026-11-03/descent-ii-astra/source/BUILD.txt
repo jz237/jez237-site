@@ -1380,3 +1380,10 @@ R71 - one-action HUD visibility
 - Hiding the HUD also hides objective and wingman information overlays. Menus, demo controls and the restore button remain available. Showrooms keep their existing interface.
 - The keyboard shortcut remains available with the mouse captured. The button does not capture the mouse or change controls, AI, graphics, music or the R70 sound fixes.
 - Checked mouse clicks, touch taps, keyboard toggling, portrait/landscape layouts and restoration in both Original and Vertigo using muted, isolated tests.
+
+R72 - original fullscreen flight information without the cockpit
+- Corrects HUD-off mode to retain Descent II's native fullscreen readouts: reticle, energy, shields, weapons/ammunition, mine count, score, lives, keys, afterburner, cloak/invulnerability, homing warning and game messages as applicable.
+- Uses the existing native HUD renderer with standard layout during the synchronous HUD draw. The saved visibility state remains unchanged; the Astra cockpit stays hidden. There is no replacement inventory, copied status data or extra drawing loop.
+- Keeps the HUD button, Alt+F7, prior-layout restoration, saved preference, demo and phone controls from R71.
+- Moves the collapsed demo controls and fullscreen button clear of the native corner readouts. Expanded menus remain accessible; the large cockpit is restored with the same button or shortcut.
+- Preserves flight controls, AI, level geometry, render quality and original audio behavior.
