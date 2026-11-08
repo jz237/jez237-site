@@ -1,11 +1,41 @@
 {
   "version": 1,
   "title": "AI Discoveries, Explained",
-  "updated": "2026-11-07",
+  "updated": "2026-11-08",
   "coverageStart": "2026-09-21",
-  "coverageEnd": "2026-11-07",
+  "coverageEnd": "2026-11-08",
   "editorialNote": "Source-linked discoveries, research demonstrations, follow-ups and corrections from AI Discovery Watch. Historical milestones posted before the fresh-news brief are not included. Coverage dates are when a story was shared, not necessarily when its discovery occurred. Evidence labels reflect the linked report at that time; read later updates too.",
   "stories": [
+    {
+      "category": "Medicine & biology",
+      "evidenceKind": "lab",
+      "modelNote": "MolRSI used Claude Sonnet 5 to develop the screening workflow; molecular predictors included MiniMol-based models.",
+      "sources": [
+        "https://arxiv.org/abs/2610.39714",
+        "https://arxiv.org/html/2610.39714v2"
+      ],
+      "status": "Early laboratory result, not independently replicated. Activity tests used technical repeats within one experiment; the comparison was with an earlier campaign.",
+      "takeaway": "An AI agent improved how it searches for compounds that stop bacterial growth, using lessons saved from earlier projects. In a preprint posted October 29, MolRSI redesigned a screening strategy rather than simply following a fixed recipe. Researchers supplied the data and goals, then tested 107 selected compounds: 17 worked against one laboratory strain, a 15.9% success rate versus 8.7% in an earlier human-designed campaign using the same starting resources. This could help prioritize laboratory testing, but the small study does not establish safe or effective medicines.",
+      "title": "AI learns from earlier searches to find antibacterial compounds",
+      "id": "d-1569008094275571905-molrsi-learns-to-screen-antibacterial-compounds",
+      "coveredOn": "2026-11-08",
+      "context": "🔬 **AI Discovery Watch · November 8, 2026**\n\n**AI learns from earlier searches to find antibacterial compounds**\nAn AI agent improved how it searches for compounds that stop bacterial growth, using lessons saved from earlier projects. In a preprint posted October 29, MolRSI redesigned a screening strategy rather than simply following a fixed recipe. Researchers supplied the data and goals, then tested 107 selected compounds: 17 worked against one laboratory strain, a 15.9% success rate versus 8.7% in an earlier human-designed campaign using the same starting resources. This could help prioritize laboratory testing, but the small study does not establish safe or effective medicines.\n\n**AI used:** MolRSI used Claude Sonnet 5 to develop the screening workflow; molecular predictors included MiniMol-based models.\n**Evidence:** Early laboratory result, not independently replicated. Activity tests used technical repeats within one experiment; the comparison was with an earlier campaign.\nOriginal source: <https://arxiv.org/abs/2610.39714>\nSupporting source: <https://arxiv.org/html/2610.39714v2>"
+    },
+    {
+      "category": "Medicine & biology",
+      "evidenceKind": "lab",
+      "modelNote": "EnzymeRSI generated the recommendations; its underlying language model is not identified in the inspected manuscript.",
+      "sources": [
+        "https://arxiv.org/abs/2611.06321",
+        "https://arxiv.org/html/2611.06321v1"
+      ],
+      "status": "Early laboratory result, not independently confirmed. Noisy reference measurements affect some improvement estimates; these were crude-extract light tests, not purified-enzyme measurements.",
+      "takeaway": "An AI system proposed changes to a light-producing enzyme before researchers made and tested them. In a November 4 preprint, EnzymeRSI suggested three changes from structural reasoning rather than direct measurements of those changes in earlier papers; all three gave stronger light signals when cultures were grown again. This shows a useful route from AI suggestions to laboratory checks. People supplied the scientific goals and performed the experiments, and the system was poor at ranking its candidates. No complete, self-improving campaign across repeated laboratory rounds was demonstrated.",
+      "title": "AI proposes enzyme changes that make laboratory tests glow more brightly",
+      "id": "d-1569008571352481870-enzymersi-proposes-brighter-luciferase-tests",
+      "coveredOn": "2026-11-08",
+      "context": "🔬 **AI Discovery Watch · November 8, 2026**\n\n**AI proposes enzyme changes that make laboratory tests glow more brightly**\nAn AI system proposed changes to a light-producing enzyme before researchers made and tested them. In a November 4 preprint, EnzymeRSI suggested three changes from structural reasoning rather than direct measurements of those changes in earlier papers; all three gave stronger light signals when cultures were grown again. This shows a useful route from AI suggestions to laboratory checks. People supplied the scientific goals and performed the experiments, and the system was poor at ranking its candidates. No complete, self-improving campaign across repeated laboratory rounds was demonstrated.\n\n**AI used:** EnzymeRSI generated the recommendations; its underlying language model is not identified in the inspected manuscript.\n**Evidence:** Early laboratory result, not independently confirmed. Noisy reference measurements affect some improvement estimates; these were crude-extract light tests, not purified-enzyme measurements.\nOriginal source: <https://arxiv.org/abs/2611.06321>\nSupporting source: <https://arxiv.org/html/2611.06321v1>"
+    },
     {
       "category": "Computing & engineering",
       "evidenceKind": "proof",
