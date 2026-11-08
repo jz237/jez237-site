@@ -1627,6 +1627,26 @@ export function strands(list, hex, tipHex = 0, seed = 1) {
   }
   return K.build();
 }
+// a squared timber beam end sticking out of the cut rock (axis +z)
+export function beamEnd(seed = 0) {
+  return make('beamend' + seed, () => {
+    const K = new Kit(), R = K.root, w = 0.22 + (seed % 3) * 0.04;
+    K.add(rbox(w, w, 0.7, 0.02), 'rough', [0x6a4a2c, 0x5e4228, 0x7a5634][seed % 3], null, null, 1, R, { grime: 0.6, freq: 6 });
+    for (let k = 1; k < 4; k++) K.add(tor(w * 0.12 * k, 0.004, 16, 3), 'rough', 0x3e2a18, [0, 0, 0.352], null, 1, R);
+    K.add(box(0.02, 0.02, 0.05), 'metal', 0x3a3632, [w * 0.3, w * 0.25, 0.35], null, 1, R);
+    return K.build();
+  });
+}
+// a pipe stub with a flange, sticking out of the cut rock (axis +z)
+export function pipeStub(seed = 0) {
+  return make('pipestub' + seed, () => {
+    const K = new Kit(), R = K.root, r = 0.06 + (seed % 3) * 0.025;
+    K.add(cyl(r, r, 0.7, 14), 'rough', 0x6e3a20, null, [Math.PI / 2, 0, 0], 1, R, { grime: 0.65, freq: 4 });
+    K.add(cyl(r * 1.5, r * 1.5, 0.05, 14), 'rough', 0x4a2412, [0, 0, 0.3], [Math.PI / 2, 0, 0], 1, R);
+    K.add(cyl(r * 0.8, r * 0.8, 0.02, 12), 'rough', 0x140c08, [0, 0, 0.33], [Math.PI / 2, 0, 0], 1, R);
+    return K.build();
+  });
+}
 // ================================================================== BOSSES
 // cover an ellipsoid with rock plates (flattened lumps facing outward) leaving thin gaps; skip(d) leaves holes
 function plated(K, parent, c, rad, n, seed, cols, size, o = {}) {

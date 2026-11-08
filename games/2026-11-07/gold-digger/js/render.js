@@ -4,15 +4,15 @@
 // re-aimed every frame at the nearest flares, fires, lanterns, crystals and lava): their number never changes,
 // so no material ever recompiles mid-game.
 import * as THREE from '../vendor/three.module.min.js';
-import { T, SOLID, PHYS, TOOLS, GEMS, BIOMES, variantOf } from './config.js?v=15';
-import { Cave, rockMaterial } from './cavemesh.js?v=15';
-import { rockTextures, spriteTextures, waterTextures } from './textures.js?v=15';
-import { FX, CALM } from './fx.js?v=15';
-import { Post } from './post.js?v=15';
-import * as MD from './models.js?v=15';
-import { buildDecor, bake } from './decor.js?v=15';
-import { Digger, loadDiggerAsset } from './digger.js?v=15';
-import { buildDetail } from './detail.js?v=15';
+import { T, SOLID, PHYS, TOOLS, GEMS, BIOMES, variantOf } from './config.js?v=16';
+import { Cave, rockMaterial } from './cavemesh.js?v=16';
+import { rockTextures, spriteTextures, waterTextures } from './textures.js?v=16';
+import { FX, CALM } from './fx.js?v=16';
+import { Post } from './post.js?v=16';
+import * as MD from './models.js?v=16';
+import { buildDecor, bake } from './decor.js?v=16';
+import { Digger, loadDiggerAsset } from './digger.js?v=16';
+import { buildDetail } from './detail.js?v=16';
 
 export function pickQuality(name) {
   const mobile = matchMedia('(pointer:coarse)').matches || /Android|iPhone|iPad/i.test(navigator.userAgent);
@@ -50,45 +50,45 @@ export const VARIANTS = [
   [null,
     { set: 'rust', rock: [0.31, 0.22, 0.17], rock2: [0.25, 0.2, 0.17], front: [0.08, 0.05, 0.04], rubble: [0.6, 0.34, 0.2], fog: [0.06, 0.022, 0.012], fogD: 0.02,
       hemiS: [0.14, 0.08, 0.05], hemiG: [0.04, 0.018, 0.012], dust: [0.86, 0.5, 0.3], partAmb: [0.1, 0.05, 0.03], glow: [1, 0.32, 0.08], accent: [1, 0.45, 0.2],
-      stain: [0.62, 0.2, 0.05], stainA: 0.95, strata: 1.25, spark: [0.65, 0.32, 0.14], goldDust: 0.15, exposure: 1.28, bloom: 0.8, tint: [1.05, 0.96, 0.9], shape: { jag: 1.5, back: 0.85 } },
+      stain: [0.62, 0.2, 0.05], stainA: 0.95, strata: 1.25, spark: [0.65, 0.32, 0.14], goldDust: 0.15, exposure: 1.28, bloom: 0.8, tint: [1.05, 0.96, 0.9], shape: { jag: 1.5, back: 0.85, style: 'strata' } },
     { set: 'patina', rock: [0.24, 0.23, 0.21], rock2: [0.19, 0.21, 0.2], front: [0.05, 0.06, 0.06], rubble: [0.44, 0.44, 0.4], fog: [0.012, 0.03, 0.028], fogD: 0.022,
       hemiS: [0.05, 0.1, 0.09], hemiG: [0.014, 0.03, 0.025], dust: [0.55, 0.78, 0.7], partAmb: [0.04, 0.07, 0.065], glow: [0.3, 1, 0.75], accent: [0.35, 0.95, 0.75],
       stain: [0.1, 0.5, 0.38], stainA: 0.9, crust: [0.3, 0.62, 0.55], crustA: 0.3, wet: 0.3, caus: [0.05, 0.17, 0.14], spark: [0.3, 0.62, 0.5], goldDust: 0.1,
-      exposure: 1.33, bloom: 0.85, tint: [0.96, 1.02, 1.0], shape: { jag: 0.65, back: 1.25 } },
+      exposure: 1.33, bloom: 0.85, tint: [0.96, 1.02, 1.0], shape: { jag: 0.65, back: 1.25, style: 'scallop' } },
   ],
   [null,
     { set: 'bluecap', rock: [0.12, 0.14, 0.22], rock2: [0.16, 0.16, 0.27], front: [0.03, 0.035, 0.07], rubble: [0.26, 0.28, 0.38], fog: [0.008, 0.012, 0.05], fogD: 0.022,
       hemiS: [0.04, 0.05, 0.15], hemiG: [0.01, 0.012, 0.035], dust: [0.5, 0.6, 0.95], partAmb: [0.03, 0.04, 0.1], wet: 0.15, moss: 0.6, mossCol: [0.1, 0.13, 0.35], mossGlow: 0.55,
-      glow: [0.3, 0.5, 1], accent: [0.35, 0.55, 1], spark: [0.3, 0.4, 0.85], caus: [0.06, 0.1, 0.26], strata: 0.5, exposure: 1.36, bloom: 1.05, tint: [0.95, 0.98, 1.06], shape: { back: 1.2 } },
+      glow: [0.3, 0.5, 1], accent: [0.35, 0.55, 1], spark: [0.3, 0.4, 0.85], caus: [0.06, 0.1, 0.26], strata: 0.5, exposure: 1.36, bloom: 1.05, tint: [0.95, 0.98, 1.06], shape: { back: 1.2, style: 'flow' } },
     { set: 'roots', rock: [0.26, 0.2, 0.15], rock2: [0.22, 0.19, 0.15], front: [0.07, 0.055, 0.04], rubble: [0.45, 0.36, 0.26], fog: [0.035, 0.025, 0.012], fogD: 0.016,
       hemiS: [0.12, 0.09, 0.05], hemiG: [0.03, 0.022, 0.012], dust: [0.95, 0.8, 0.45], partAmb: [0.09, 0.07, 0.04], wet: 0.05, moss: 0.9, mossCol: [0.2, 0.3, 0.08], mossGlow: 0.2,
-      glow: [1, 0.68, 0.2], accent: [1, 0.72, 0.3], spark: [0.6, 0.5, 0.2], caus: [0.03, 0.03, 0.01], strata: 0.8, exposure: 1.3, bloom: 0.9, tint: [1.04, 1.0, 0.93], shape: { back: 1.6, jag: 1.1 } },
+      glow: [1, 0.68, 0.2], accent: [1, 0.72, 0.3], spark: [0.6, 0.5, 0.2], caus: [0.03, 0.03, 0.01], strata: 0.8, exposure: 1.3, bloom: 0.9, tint: [1.04, 1.0, 0.93], shape: { back: 1.6, jag: 1.1, style: 'scallop' } },
   ],
   [null,
     { set: 'frost', rock: [0.3, 0.34, 0.4], rock2: [0.38, 0.42, 0.48], front: [0.06, 0.07, 0.09], rubble: [0.6, 0.65, 0.72], fog: [0.02, 0.035, 0.06], fogD: 0.02,
       hemiS: [0.08, 0.11, 0.16], hemiG: [0.02, 0.03, 0.045], dust: [0.85, 0.92, 1], partAmb: [0.07, 0.08, 0.11], glow: [0.5, 0.85, 1], accent: [0.55, 0.85, 1],
       crust: [0.78, 0.86, 0.96], crustA: 0.6, stain: [0.72, 0.82, 0.92], stainA: 0.35, roughK: 0.6, spark: [0.8, 0.9, 1], strata: 0.35, gemTint: [0.4, 0.6, 0.9],
-      exposure: 1.1, bloom: 1.0, tint: [0.97, 1.0, 1.06], shape: { jag: 1.25 } },
+      exposure: 1.1, bloom: 1.0, tint: [0.97, 1.0, 1.06], shape: { jag: 1.25, style: 'facet' } },
     { set: 'rose', rock: [0.3, 0.21, 0.21], rock2: [0.36, 0.26, 0.24], front: [0.08, 0.05, 0.05], rubble: [0.5, 0.4, 0.38], fog: [0.05, 0.018, 0.03], fogD: 0.019,
       hemiS: [0.14, 0.07, 0.09], hemiG: [0.035, 0.016, 0.02], dust: [1, 0.75, 0.8], partAmb: [0.1, 0.06, 0.07], glow: [1, 0.5, 0.7], accent: [1, 0.55, 0.7],
-      stain: [0.75, 0.48, 0.2], stainA: 0.35, strata: 1.15, spark: [1, 0.7, 0.6], gemTint: [0.9, 0.4, 0.5], exposure: 1.3, bloom: 1.0, tint: [1.04, 0.98, 1.0], shape: { back: 1.35 } },
+      stain: [0.75, 0.48, 0.2], stainA: 0.35, strata: 1.15, spark: [1, 0.7, 0.6], gemTint: [0.9, 0.4, 0.5], exposure: 1.3, bloom: 1.0, tint: [1.04, 0.98, 1.0], shape: { back: 1.35, style: 'strata' } },
   ],
   [null,
     { set: 'salt', rock: [0.4, 0.37, 0.31], rock2: [0.47, 0.44, 0.38], front: [0.09, 0.085, 0.075], rubble: [0.62, 0.58, 0.5], fog: [0.035, 0.04, 0.04], fogD: 0.019,
       hemiS: [0.12, 0.13, 0.12], hemiG: [0.03, 0.032, 0.03], dust: [0.9, 0.9, 0.85], partAmb: [0.08, 0.085, 0.08], wet: 0.25, moss: 0, glow: [0.4, 0.95, 0.9], accent: [0.45, 0.95, 0.9],
       crust: [0.84, 0.82, 0.76], crustA: 0.7, stain: [0.86, 0.84, 0.77], stainA: 0.5, caus: [0.12, 0.25, 0.25], strata: 0.9, spark: [0.7, 0.75, 0.75],
-      exposure: 0.98, bloom: 0.8, tint: [1.0, 1.0, 0.98], shape: { back: 1.35, cols: 0.8, colR: 0.85 } },
+      exposure: 0.98, bloom: 0.8, tint: [1.0, 1.0, 0.98], shape: { back: 1.35, cols: 0.8, colR: 0.85, style: 'strata' } },
     { set: 'tide', rock: [0.1, 0.14, 0.16], rock2: [0.12, 0.17, 0.2], front: [0.025, 0.04, 0.05], rubble: [0.25, 0.3, 0.32], fog: [0.004, 0.02, 0.035], fogD: 0.024,
       hemiS: [0.02, 0.06, 0.09], hemiG: [0.005, 0.015, 0.025], dust: [0.4, 0.8, 0.95], partAmb: [0.02, 0.06, 0.08], wet: 0.7, moss: 0.8, mossCol: [0.05, 0.28, 0.28], mossGlow: 0.6,
-      glow: [0.2, 0.9, 1], accent: [0.3, 0.9, 1], caus: [0.2, 0.42, 0.5], spark: [0.3, 0.7, 0.9], strata: 0.5, exposure: 1.4, bloom: 1.15, tint: [0.95, 1.01, 1.05], shape: { jag: 0.75, back: 1.3 } },
+      glow: [0.2, 0.9, 1], accent: [0.3, 0.9, 1], caus: [0.2, 0.42, 0.5], spark: [0.3, 0.7, 0.9], strata: 0.5, exposure: 1.4, bloom: 1.15, tint: [0.95, 1.01, 1.05], shape: { jag: 0.75, back: 1.3, style: 'flow' } },
   ],
   [null,
     { set: 'obsidian', rock: [0.065, 0.05, 0.075], rock2: [0.1, 0.07, 0.11], front: [0.02, 0.015, 0.025], rubble: [0.2, 0.15, 0.2], fog: [0.04, 0.012, 0.03], fogD: 0.018,
       hemiS: [0.12, 0.05, 0.12], hemiG: [0.035, 0.012, 0.03], dust: [0.7, 0.45, 0.75], partAmb: [0.1, 0.04, 0.09], cracks: 0.6, glow: [1, 0.2, 0.45], accent: [1, 0.3, 0.55],
-      roughK: 0.35, spark: [0.8, 0.4, 0.9], strata: 0.3, gemTint: [0.7, 0.25, 0.6], exposure: 1.35, bloom: 1.15, tint: [1.02, 0.96, 1.03], shape: { jag: 1.4, back: 1.1 } },
+      roughK: 0.35, spark: [0.8, 0.4, 0.9], strata: 0.3, gemTint: [0.7, 0.25, 0.6], exposure: 1.35, bloom: 1.15, tint: [1.02, 0.96, 1.03], shape: { jag: 1.4, back: 1.1, style: 'facet' } },
     { set: 'sulfur', rock: [0.22, 0.2, 0.15], rock2: [0.18, 0.17, 0.13], front: [0.06, 0.055, 0.035], rubble: [0.42, 0.38, 0.24], fog: [0.04, 0.036, 0.014], fogD: 0.022,
       hemiS: [0.1, 0.095, 0.06], hemiG: [0.03, 0.028, 0.014], dust: [0.9, 0.86, 0.5], partAmb: [0.1, 0.09, 0.04], cracks: 0.35, glow: [1, 0.55, 0.1], accent: [1, 0.85, 0.3],
-      crust: [0.85, 0.72, 0.2], crustA: 0.38, stain: [0.62, 0.52, 0.14], stainA: 0.4, spark: [0.9, 0.8, 0.3], strata: 0.7, exposure: 1.18, bloom: 0.95, tint: [1.0, 1.0, 0.95], shape: { back: 1.15 } },
+      crust: [0.85, 0.72, 0.2], crustA: 0.38, stain: [0.62, 0.52, 0.14], stainA: 0.4, spark: [0.9, 0.8, 0.3], strata: 0.7, exposure: 1.18, bloom: 0.95, tint: [1.0, 1.0, 0.95], shape: { back: 1.15, style: 'strata' } },
   ],
 ];
 // the rock shader's per-depth extras (each variant may override)
@@ -234,7 +234,7 @@ export class Renderer {
 
   // the realistic digger (a skinned, motion-captured body); the old built digger stands in if it fails to load
   async loadDigger() {
-    try { this.digGltf = await loadDiggerAsset('assets/digger.glb?v=15'); } catch (e) { console.warn('digger asset', e); }
+    try { this.digGltf = await loadDiggerAsset('assets/digger.glb?v=16'); } catch (e) { console.warn('digger asset', e); }
   }
   makePlayer() {
     if (this.digGltf) {
@@ -275,7 +275,7 @@ export class Renderer {
     this.fx.setLook(look);
     this.r.setClearColor(new THREE.Color().fromArray(look.fog), 1);
     // the rock
-    this.cave = new Cave(M, look, this.rockMat);
+    this.cave = new Cave(M, look, this.rockMat, { fine: this.q.name === 'high' });
     this.level.add(this.cave.group);
     this.buildDressing(W);
     // decorations and set pieces (decor.js), with their light emitters
@@ -718,6 +718,7 @@ export class Renderer {
       this.fx.dust(P.x + P.face * d + (Math.random() - 0.5) * 2, P.y + 0.5 + Math.random() * 2.5, (Math.random() - 0.5) * 2.5, { n: 1, s0: 0.05, s1: 0.08, life: 4, vy: 0.05, up: 0.1, jit: 0.15, a: 0.55, grav: -0.01, drag: 0.2, k: 1.4 });
     }
     if (this.decor && this.decor.update) this.decor.update(t, dt, P, this.fx);
+    if (this.detail && this.detail.update) this.detail.update(t, dt, P, this.fx, this.emitters);
     // post
     for (const s of this.shocks) s.t += dt;
     this.shocks = this.shocks.filter((s) => s.t < 0.9);

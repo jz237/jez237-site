@@ -6,7 +6,7 @@
 // weights (gold vein, wetness, glow, rubble/cracks) that the triplanar rock shader uses.
 // Breaking a tile re-meshes only the chunks around it (a few ms).
 import * as THREE from '../vendor/three.module.min.js';
-import { T } from './config.js?v=15';
+import { T } from './config.js?v=16';
 
 export const S = 0.5;                  // sample spacing (m)
 export const Z0 = -15, Z1 = 5;         // depth range (camera side is +z)
@@ -14,6 +14,9 @@ const NZ = Math.round((Z1 - Z0) / S) + 1;
 export const CH = 16;                  // chunk size in tiles
 
 // 3D value noise (deterministic per level)
+// how each depth's rock is sculpted when fine detail is on (variants pick their own in render.js VARIANTS shape.style)
+const STYLES = ['strata', 'scallop', 'facet', 'flow', 'columns'];
+const sstep = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a))); return t * t * (3 - 2 * t); };
 const hashK = (k, n) => { let h = Math.imul(k ^ 0x9e3779b9, 0x85ebca6b) ^ Math.imul(n + 7, 0xc2b2ae35); h ^= h >>> 15; h = Math.imul(h, 0x27d4eb2d); h ^= h >>> 13; return (h >>> 0) / 4294967296; };
 function noise3(seed) {
   const p = new Uint8Array(512); let s = seed >>> 0 || 1;
@@ -39,8 +42,11 @@ const MESHED = new Uint8Array(16);
 for (const k of [T.ROCK, T.SOFT, T.HARD, T.VEIN, T.GEMV, T.FOSSIL]) MESHED[k] = 1;
 
 export class Cave {
-  constructor(M, look, mat) {
+  constructor(M, look, mat, opts = {}) {
     this.M = M; this.look = look; this.mat = mat;
+    // fine: split every triangle in four and sculpt the walls in the level's style (high quality only)
+    this.fine = !!opts.fine;
+    this.style = (look.shape && look.shape.style) || STYLES[M.biome % 5];
     this.n3 = noise3((M.seed * 31 + M.depth * 7 + M.level) >>> 0);
     this.group = new THREE.Group();
     this.chunks = new Map();
@@ -253,12 +259,9 @@ export class Cave {
     // displace walls/ceilings/depths into the rock (never floors, never into the play space)
     const n3 = this.n3;
     for (let v = 0; v < nv; v++) {
-      const o = v * 3, x = position[o], y = position[o + 1], z = position[o + 2], ny = nrm[o + 1];
-      const up = Math.max(0, ny);
-      if (up > 0.6 && Math.abs(z) < 2.2) continue;
-      const amp = (Math.abs(z) < 1.8 ? 0.14 : 0.42 * this.jag) * (1 - up * 0.7);
-      const jf = 0.9 * Math.sqrt(this.jag);
-      const d = (n3(x * jf, y * jf, z * jf) * 0.7 + n3(x * 2.6 * jf, y * 2.6 * jf, z * 2.6 * jf) * 0.3) * amp;
+      const o = v * 3;
+      const d = this.coarse(position[o], position[o + 1], position[o + 2], nrm[o + 1]);
+      if (!d) continue;
       position[o] -= nrm[o] * d; position[o + 1] -= nrm[o + 1] * d; position[o + 2] -= nrm[o + 2] * d;
     }
     // colours, AO and material weights
@@ -312,15 +315,135 @@ export class Cave {
       mat[q4] = gold; mat[q4 + 1] = wet; mat[q4 + 2] = glow; mat[q4 + 3] = moss;
       code[v] = loose;   // 1 loose rubble, 2 a boulder that needs dynamite
     }
+    let G = { position, nrm, col, mat, code, idx };
+    if (this.fine) G = this.refine(G);
     const geo = new THREE.BufferGeometry();
-    geo.setAttribute('position', new THREE.BufferAttribute(position, 3));
-    geo.setAttribute('normal', new THREE.BufferAttribute(nrm, 3));
-    geo.setAttribute('color', new THREE.BufferAttribute(col, 3));
-    geo.setAttribute('aMat', new THREE.BufferAttribute(mat, 4));
-    geo.setAttribute('aCode', new THREE.BufferAttribute(code, 1));
-    geo.setIndex(nv > 65535 ? new THREE.Uint32BufferAttribute(idx, 1) : new THREE.Uint16BufferAttribute(idx, 1));
+    geo.setAttribute('position', new THREE.BufferAttribute(G.position, 3));
+    geo.setAttribute('normal', new THREE.BufferAttribute(G.nrm, 3));
+    geo.setAttribute('color', new THREE.BufferAttribute(G.col, 3));
+    geo.setAttribute('aMat', new THREE.BufferAttribute(G.mat, 4));
+    geo.setAttribute('aCode', new THREE.BufferAttribute(G.code, 1));
+    geo.setIndex(G.position.length / 3 > 65535 ? new THREE.Uint32BufferAttribute(G.idx, 1) : new THREE.Uint16BufferAttribute(G.idx, 1));
     geo.computeBoundingSphere(); geo.computeBoundingBox();
     return geo;
+  }
+
+  // the coarse wobble every wall gets (into the rock, never floors in the play lane)
+  coarse(x, y, z, ny) {
+    const up = Math.max(0, ny);
+    if (up > 0.6 && Math.abs(z) < 2.2) return 0;
+    const amp = (Math.abs(z) < 1.8 ? 0.14 : 0.42 * this.jag) * (1 - up * 0.7), jf = 0.9 * Math.sqrt(this.jag), n3 = this.n3;
+    return (n3(x * jf, y * jf, z * jf) * 0.7 + n3(x * 2.6 * jf, y * 2.6 * jf, z * 2.6 * jf) * 0.3) * amp;
+  }
+  // fine sculpting: how far (m) to push a surface point into the rock, by the level's style. Pure function of the
+  // world position and normal, so neighbouring chunks agree along their seams. Floors in the play lane stay flat.
+  sculpt(x, y, z, nx, ny, nz) {
+    const up = Math.max(0, ny), az = Math.abs(z);
+    if (up > 0.6 && az < 2.2) return 0;
+    const n3 = this.n3, wall = 1 - sstep(0.45, 0.8, Math.abs(ny));
+    let d = (n3(x * 4.2 + 3, y * 4.2, z * 4.2) - 0.5) * 0.1 + (n3(x * 9.5, y * 9.5 + 7, z * 9.5) - 0.5) * 0.04;
+    switch (this.style) {
+      case 'strata': {
+        // sedimentary layers: grooves along the bedding planes, each bed standing out a little differently
+        const t = y * 2.3 + (n3(x * 0.22 + 5, y * 0.22, z * 0.22) - 0.5) * 2.4, f = t - Math.floor(t);
+        const groove = 1 - sstep(0.0, 0.16, f) * (1 - sstep(0.8, 1.0, f));
+        d += (groove * 0.13 + (hashK(Math.floor(t), 9) - 0.5) * 0.1) * wall;
+        break;
+      }
+      case 'flow': {
+        // flowstone: vertical flutes on walls and roofs, as if poured
+        const r = Math.pow(0.5 + 0.5 * Math.sin(x * 6.3 + z * 4.7 + (n3(x * 0.4, y * 0.12, z * 0.4) - 0.5) * 8), 3);
+        d += r * 0.13 * (1 - sstep(0.2, 0.7, ny));
+        break;
+      }
+      case 'columns': {
+        // columnar jointing: vertical columns with grooves between them and stepped faces
+        const u = Math.abs(nz) >= Math.abs(nx) ? x : z, c = u * 1.4 + (n3(x * 0.1, 0, z * 0.1) - 0.5) * 0.6, cf = c - Math.floor(c);
+        const groove = 1 - sstep(0.0, 0.13, Math.min(cf, 1 - cf));
+        d += (groove * 0.16 + (hashK(Math.floor(c), 4) - 0.5) * 0.14) * wall;
+        break;
+      }
+      case 'facet': {
+        // crystalline: sharp creases where the rock fractured into planes
+        const f = n3(x * 1.2 + 2, y * 1.2, z * 1.2) * 4.2, g = n3(x * 2.7, y * 2.7 + 3, z * 2.7) * 3.1;
+        d += (Math.abs(f - Math.floor(f) - 0.5) * 0.2 + Math.abs(g - Math.floor(g) - 0.5) * 0.08) * (1 - up * 0.6);
+        break;
+      }
+      default: {
+        // scallops: dish-shaped hollows dissolved by old water
+        const px = (x + z * 0.6) * 2.1, py = y * 2.1, cx = Math.floor(px), cy = Math.floor(py);
+        let f1 = 9;
+        for (let j = -1; j <= 1; j++) for (let i = -1; i <= 1; i++) {
+          const ox = cx + i + 0.15 + hashK(cx + i + (cy + j) * 7919, 1) * 0.7, oy = cy + j + 0.15 + hashK(cx + i + (cy + j) * 7919, 2) * 0.7;
+          f1 = Math.min(f1, Math.hypot(px - ox, (py - oy) * 1.3));
+        }
+        d += sstep(0.62, 0.05, f1) * 0.11 * (1 - up * 0.7);
+      }
+    }
+    return d * 1.35 * (az < 1.8 ? 0.35 : 1) * (1 - up * 0.6);
+  }
+  // split every triangle in four (shared edge midpoints, attributes interpolated), sculpt, and relight the normals
+  refine(G) {
+    const { position, nrm, col, mat, code, idx } = G;
+    const nv = position.length / 3;
+    const mid = new Map();
+    const P = Array.from(position), N = Array.from(nrm), C = Array.from(col), A = Array.from(mat), K = Array.from(code);
+    const midpoint = (a, b) => {
+      const key = a < b ? a * 4194304 + b : b * 4194304 + a;
+      let m = mid.get(key);
+      if (m !== undefined) return m;
+      m = P.length / 3;
+      for (let k = 0; k < 3; k++) { P.push((P[a * 3 + k] + P[b * 3 + k]) * 0.5); N.push(N[a * 3 + k] + N[b * 3 + k]); C.push((C[a * 3 + k] + C[b * 3 + k]) * 0.5); }
+      for (let k = 0; k < 4; k++) A.push((A[a * 4 + k] + A[b * 4 + k]) * 0.5);
+      K.push((K[a] + K[b]) * 0.5);
+      mid.set(key, m);
+      return m;
+    };
+    const I = [];
+    for (let q = 0; q < idx.length; q += 3) {
+      const a = idx[q], b = idx[q + 1], c = idx[q + 2];
+      const ab = midpoint(a, b), bc = midpoint(b, c), ca = midpoint(c, a);
+      I.push(a, ab, ca, ab, b, bc, ca, bc, c, ab, bc, ca);
+    }
+    const n = P.length / 3;
+    const pos = new Float32Array(P), nr = new Float32Array(N);
+    for (let v = 0; v < n; v++) {
+      const o = v * 3, l = Math.hypot(nr[o], nr[o + 1], nr[o + 2]) || 1;
+      const nx = nr[o] / l, ny = nr[o + 1] / l, nz = nr[o + 2] / l;
+      const d = this.sculpt(pos[o], pos[o + 1], pos[o + 2], nx, ny, nz);
+      pos[o] -= nx * d; pos[o + 1] -= ny * d; pos[o + 2] -= nz * d;
+    }
+    // normals again, from the sculpted surface
+    const nn = new Float32Array(n * 3);
+    for (let q = 0; q < I.length; q += 3) {
+      const a = I[q] * 3, b = I[q + 1] * 3, c = I[q + 2] * 3;
+      const ux = pos[b] - pos[a], uy = pos[b + 1] - pos[a + 1], uz = pos[b + 2] - pos[a + 2];
+      const vx = pos[c] - pos[a], vy = pos[c + 1] - pos[a + 1], vz = pos[c + 2] - pos[a + 2];
+      const x = uy * vz - uz * vy, y = uz * vx - ux * vz, z = ux * vy - uy * vx;
+      nn[a] += x; nn[a + 1] += y; nn[a + 2] += z; nn[b] += x; nn[b + 1] += y; nn[b + 2] += z; nn[c] += x; nn[c + 1] += y; nn[c + 2] += z;
+    }
+    // blend with the coarse normal so chunk seams (where a vertex only sees one side's faces) stay soft
+    for (let v = 0; v < n; v++) {
+      const o = v * 3, l = Math.hypot(nn[o], nn[o + 1], nn[o + 2]) || 1, lc = Math.hypot(nr[o], nr[o + 1], nr[o + 2]) || 1;
+      let x = nn[o] / l * 0.8 + nr[o] / lc * 0.2, y = nn[o + 1] / l * 0.8 + nr[o + 1] / lc * 0.2, z = nn[o + 2] / l * 0.8 + nr[o + 2] / lc * 0.2;
+      const k = Math.hypot(x, y, z) || 1; nn[o] = x / k; nn[o + 1] = y / k; nn[o + 2] = z / k;
+    }
+    return { position: pos, nrm: nn, col: new Float32Array(C), mat: new Float32Array(A), code: new Float32Array(K), idx: I };
+  }
+  // where the rock surface really is in front of (x, y): back = the back wall of an open cell, else the cut face
+  // (both faces look toward the camera: +z normal)
+  // March the density field from in front of the wall back to where the rock starts (the walls carry a 3D wobble
+  // of up to a metre on top of zb/zf), then add the same displacement the mesh gets.
+  surfaceZ(x, y, back) {
+    const z0 = back ? this.col(this.zb, x, y) : this.col(this.zf, x, y);
+    let a = Math.min(Z1 - 0.1, z0 + 1.8), b = a, hit = false;
+    for (let k = 0; k < 40; k++) { b = a - 0.15; if (this.density(x, y, b) > 0) { hit = true; break; } a = b; }
+    if (!hit) return z0;
+    for (let k = 0; k < 7; k++) { const m = (a + b) / 2; if (this.density(x, y, m) > 0) b = m; else a = m; }
+    const zs = (a + b) / 2;
+    let d = this.coarse(x, y, zs, 0);
+    if (this.fine) d += this.sculpt(x, y, zs - d, 0, 0, 1);
+    return zs - d;
   }
 }
 
