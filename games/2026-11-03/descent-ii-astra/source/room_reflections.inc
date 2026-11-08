@@ -56,9 +56,10 @@ void astra_room_materials(int room){
     glUniform1i(AS_UNIFORM(ar_program,"image"),0);float quad[]={-1,-1,1,-1,1,1,-1,1};glEnableClientState(GL_VERTEX_ARRAY);glVertexPointer(2,GL_FLOAT,0,quad);
     for(int s=0;s<6;s++){
         glViewport((s%4)*64,(s/4)*64,64,64);probe->valid[s]=al_probe.origins[s][3];
-        glBindTexture(GL_TEXTURE_2D,al_probe.textures[s]?al_probe.textures[s]:ag_colors[7]);
+        int districtFamily=astra_district_family(room,s);if(districtFamily>=0)ag_load(districtFamily);
+        glBindTexture(GL_TEXTURE_2D,districtFamily>=0&&ag_colors[districtFamily]?ag_colors[districtFamily]:al_probe.textures[s]?al_probe.textures[s]:ag_colors[7]);
         glUniform4fv(ar_uv0,1,al_probe.uv[s]);glUniform4fv(ar_duv,1,al_probe.duv[s]);glUniform4fv(ar_rect,1,al_probe.rect[s]);
-        float tint[4]={.04f,.05f,.06f,1};for(int k=0;k<3;k++)if(probe->valid[s])tint[k]=al_probe.tint[s][k]*al_probe.u[s][3];glUniform4fv(ar_tint,1,tint);
+        float tint[4]={.04f,.05f,.06f,1};for(int k=0;k<3;k++)if(probe->valid[s])tint[k]=(districtFamily>=0?1:al_probe.tint[s][k])*al_probe.u[s][3];glUniform4fv(ar_tint,1,tint);
         side *face=&Segments[room].sides[s];glUniform1f(ar_glow,Light_subtracted[room]&(1<<s)?0:(face->tmap_num>=0&&face->tmap_num<NumTextures?fminf(.7f,f2fl(TmapInfo[face->tmap_num].lighting)):0));
         float lines[2][4]={{0}},colors[2][3]={{0}};
         for(int j=0;j<2;j++){aw_mount mount;if(Light_subtracted[room]&(1<<s)||!aw_mount_at(room,s,j,&mount))continue;

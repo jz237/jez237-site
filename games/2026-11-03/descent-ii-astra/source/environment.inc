@@ -45,7 +45,7 @@ static int ae_theme(int room){
 }
 int astra_environment_theme(int room){return ae_theme(room);}
 void astra_environment_material(int room,int side,int texture){
-    ae_reset();int theme=ae_theme(room),kind=1;
+    ae_reset();sz_face_room=room;sz_face_side=side;int theme=ae_theme(room),kind=1;
     if(texture>=0&&texture<NumTextures){
         if(TmapInfo[texture].damage>0||TmapInfo[texture].flags&(TMI_WATER|TMI_VOLATILE))kind=4;
         else if(astra_environment_rock(texture))kind=0;
@@ -398,6 +398,7 @@ void astra_environment_rooms(const short *rooms,int count,int window_num){
         EM_ASM(window.astraDeck?.reflect([$0,$1,$2],[$3,$4,$5]);,colors[0][0],colors[0][1],colors[0][2],colors[1][0],colors[1][1],colors[1][2]);
     }
     ag_render_exhibit();
+    if(!window_num&&sz_level==Current_level_num)EM_ASM(if(Module.mineDistricts){Module.mineDistricts.seen=$0;Module.mineDistricts.draws=$1;},sz_seen,sz_draws);
     if(!window_num)EM_ASM(Module.sceneryStats=({version:74,draws:$0,uploads:$1,vertices:$2,sites:$3,styles:$4,failed:$5});,sc_draws,sc_uploads,sc_vertices,sc_site_count,sc_seen,sc_failed);
     if(!window_num)EM_ASM(Module.mineLife=({version:65,installations:$0,uploads:$1,hits:$2,dust:$3,drips:$4});,ml_draws,ml_uploads,ml_hits,ml_dust,ml_drips);
     if(!window_num)EM_ASM({const w=Module.industrialWalls||(Module.industrialWalls={version:61});w.uploads=$0;w.draws=$1;},ai_uploads,ai_draws);

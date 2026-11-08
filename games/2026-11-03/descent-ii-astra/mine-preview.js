@@ -1,6 +1,6 @@
 // A paused tour of the loaded campaign's real architecture and machinery.
 window.astraMinePreview={
-  names:['Architecture & materials','Rotating fans','Hydraulic machinery','Live terminals','Cables & electrical faults','Doors & locking systems','Reactor assembly','Recharge lattice','Moving ship shadows','Brushed metal & surface wear','Fractured rock & minerals','Storage bay','Cooling chamber','Steam, dust & light','Clean edges in motion','Deep ventilation grilles','Light housings & spill','Service conduits','Raised frames & panel variants','Water, wet banks & cascades','Molten lava','Red service lighting','Blue service lighting','Cyan service lighting','Amber service lighting','Warm ventilation & moving fans','Strip-light reflections','Industrial wall construction','Sculpted rock & rounded joins','Fixture light shafts','Room-aware metal reflections','Natural tunnel contours','Continuous mineral surfaces','Lighting by room purpose','Working mine installations','Distinctive chambers','Environmental reactions','Contact shadows & crevices','Steel, stone & wet surfaces','Wear around working equipment','Fracture shelves & contours','Welds, seals & fasteners','Consistent construction scale','Turbine & furnace bay','Illuminated service cabinets','Sealed generator window','Connected coolant manifold','Ore extraction machinery','Sector landmark & maintenance'],
+  names:['Architecture & materials','Rotating fans','Hydraulic machinery','Live terminals','Cables & electrical faults','Doors & locking systems','Reactor assembly','Recharge lattice','Moving ship shadows','Brushed metal & surface wear','Fractured rock & minerals','Storage bay','Cooling chamber','Steam, dust & light','Clean edges in motion','Deep ventilation grilles','Light housings & spill','Service conduits','Raised frames & panel variants','Water, wet banks & cascades','Molten lava','Red service lighting','Blue service lighting','Cyan service lighting','Amber service lighting','Warm ventilation & moving fans','Strip-light reflections','Industrial wall construction','Sculpted rock & rounded joins','Fixture light shafts','Room-aware metal reflections','Natural tunnel contours','Continuous mineral surfaces','Lighting by room purpose','Working mine installations','Distinctive chambers','Environmental reactions','Contact shadows & crevices','Steel, stone & wet surfaces','Wear around working equipment','Fracture shelves & contours','Welds, seals & fasteners','Consistent construction scale','Turbine & furnace bay','Illuminated service cabinets','Sealed generator window','Connected coolant manifold','Ore extraction machinery','Sector landmark & maintenance',"Raw excavation district","Ochre clay workings","Pale limestone galleries","Dark fractured basalt","Partly lined construction","Reinforced steel galleries","Weathered service district","Finished ceramic sector"],
   descriptions:[
     'New high-resolution metal, rock, grilles, machinery and lamps throughout both campaigns. Pause and compare the same view with the original artwork.',
     'Spinning fan blades behind a fixed protective grille.',
@@ -48,9 +48,17 @@ window.astraMinePreview={
     'Connected coolant pipes, flange joints and turning valve wheels share a live control display. A small pressure outlet occasionally releases steam.',
     'A motor housing drives the rotating helical drill above a moving ore conveyor. Carrier slats and ore travel together, with a detailed extraction warning plate.',
     'A large enamel sector plaque, caution markings and a partly open service cabinet form a recognizable landmark. The cabinet exposes its wiring and retaining hardware.'
-
+,
+    "Connected stretches of exposed umber rock have continuous mineral surfaces and restrained structural equipment. The original passages and flight clearance remain intact.",
+    "Warm ochre clay, compacted earth, embedded gravel and excavated sediment cover whole groups of connected rooms.",
+    "Pale limestone strata, thin flaking layers and mineral seams give these connected passages a distinctly lighter geological character.",
+    "Dark blue-grey fractured basalt and slate replace the single brown rock appearance across this district.",
+    "Partially installed steel lining, exposed support ribs and unfinished rock occupy the same tunnel. Construction carries across neighboring rooms.",
+    "Ribbed alloy lining and reinforced structural frames cover the walls, ceiling and floor of a connected industrial section.",
+    "Weathered metal plates and older service finishes identify this connected part of the mine.",
+    "Pale ceramic armor and clean reinforced panels mark a more completely built section, while the original lamps, doors and functional signs stay recognizable."
   ],
-  active:false,paused:false,touring:true,clock:0,last:0,mask:2147483647,high:131071,fresh:false,
+  active:false,paused:false,touring:true,clock:0,last:0,mask:2147483647,high:33554431,fresh:false,
   has(index){return index<32?!!(this.mask&(1<<index)):!!(this.high&(1<<(index-32)));},
   tick(){const now=performance.now();if(this.last&&!this.paused)this.clock+=Math.min(.1,(now-this.last)/1000);this.last=now;return this.clock;},
   select(index){if(!this.has(index))return;Module.mineInspect=index;this.clock=0;Module.mineReactionCommand=(Module.mineReactionCommand||0)+1;this.last=performance.now();$('mineScene').value=String(index);this.sync();},
@@ -67,7 +75,7 @@ window.astraMinePreview={
   },
   details(open){$('mineDetails').hidden=!open;$('mineControls').setAttribute('aria-expanded',String(open));},
   open(){
-    this.paused=false;this.touring=true;this.clock=0;this.last=0;this.mask=2147483647;this.high=131071;this.fresh=true;$('mineZoom').value='1';this.sync();
+    this.paused=false;this.touring=true;this.clock=0;this.last=0;this.mask=2147483647;this.high=33554431;this.fresh=true;$('mineZoom').value='1';this.sync();
     if(window.Module&&flightActive&&Module.astra){
       Module.mineRefinement=true;Module.mineInspect=0;Module.mineInspectZoom=1;Module.pickupInspect=Module.weaponInspect=-1;
       releaseFlightMouse();Module._astra_reset_flight_input?.();Module.pyroPreviewCommand=1;

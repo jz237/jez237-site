@@ -39,7 +39,9 @@ static int ai_surface_kind(int room,int s){
 static void ai_wall(int room,int side,const g3s_lrgb *light){
     if(ai_failed||!astra_detail_upgrade||astra_native_compare||ss_capture)return;
     extern int astra_ov_enabled(void);if(astra_ov_enabled())return;
-    int kind=ai_surface_kind(room,side);if(!kind||aw_vent(room,side))return;if(kind==2&&(room*13+side*7)%5!=0)return;
+    int kind=ai_surface_kind(room,side),district=astra_district(room);if(!kind||aw_vent(room,side))return;
+    if(district>=0&&district<4)return;
+    if(kind==2&&district!=4&&(room*13+side*7)%5!=0)return;
     vms_vector center;compute_center_point_on_side(&center,&Segments[room],side);
     float distance=f2fl(vm_vec_dist(&View_position,&center)),opacity=1-nd_smooth((distance-76)/34);if(opacity<=0)return;
     ai_skin *m=NULL;unsigned stamp=nd_stamp(room,side);
@@ -51,12 +53,15 @@ static void ai_wall(int room,int side,const g3s_lrgb *light){
         for(int k=0;k<3;k++){A[k]=corners3[1][k]-corners3[0][k];B[k]=corners3[3][k]-corners3[0][k];}al_cross(faceNrm,A,B);astra_unit(faceNrm);
         vms_vector inside;compute_segment_center(&inside,&Segments[room]);float facing=(f2fl(inside.x-center.x)*faceNrm[0]+f2fl(inside.y-center.y)*faceNrm[1]+f2fl(inside.z-center.z)*faceNrm[2]);if(facing<0)for(int k=0;k<3;k++)faceNrm[k]*=-1;
         float width=sqrtf(al_dot(A,A)),height=sqrtf(al_dot(B,B));if(width<8||height<8||width>100||height>100)return;
-        m->size[0]=width;m->size[1]=height;m->material=((room/5+side)%3==0)?8:0;m->pattern=(room*13+side*7)%4;if(m->pattern>=2)m->material=0;memcpy(m->tangent,A,sizeof A);astra_unit(m->tangent);
+        m->size[0]=width;m->size[1]=height;m->material=((room/5+side)%3==0)?8:0;m->pattern=(room*13+side*7)%4;if(m->pattern>=2)m->material=0;if(district>=5)m->material=district==5?8:district==6?12:9;memcpy(m->tangent,A,sizeof A);astra_unit(m->tangent);
         gantryN=0;forgeLight=1;float u=fminf(.07f,.75f/width),v=fminf(.07f,.75f/height);int pattern=(room*13+side*7)%4,lens=(room/7)%3==0?2:1;
         /* Steel ribs and joints frame exposed geology instead of repainting it. */
         forge_strip(.008,.01,u,.99,.31,1,0,1);forge_strip(1-u,.01,.992,.99,.31,1,0,1);
         forge_strip(u,.01,1-u,v,.28,1,0,0);forge_strip(u,1-v,1-u,.99,.28,1,0,0);
-        if(kind==2){ /* Sparse perimeter supports leave natural geology exposed. */
+        if(district==4){ /* Incomplete lining and exposed ribs across the wall. */
+            forge_strip(u+.012,.035,1-u-.012,.43,.27,2,0,0);
+            for(int j=1;j<4;j++){float x=j*.25f;forge_strip(x-.25f/width,.45,x+.25f/width,.97,.25,1,0,1);}
+        }else if(kind==2){ /* Sparse perimeter supports leave natural geology exposed. */
         }else if(pattern==0){
             forge_strip(.12,.12,.47,.88,.24,2,0,0);forge_strip(.53,.12,.88,.88,.24,2,0,0);
             forge_strip(.5f-.28f/width,.18,.5f+.28f/width,.82,.29,0,4,1);

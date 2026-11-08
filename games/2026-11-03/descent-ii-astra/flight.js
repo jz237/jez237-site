@@ -236,7 +236,7 @@ function preloadFlightEngine() {
   if(location.protocol!=="http:"&&location.protocol!=="https:")return;
   if(document.getElementById("astraEnginePreload"))return;
   const link=document.createElement("link");link.id="astraEnginePreload";
-  link.rel="preload";link.as="script";link.href="engine.js?v=pyre74";
+  link.rel="preload";link.as="script";link.href="engine.js?v=pyre75";
   document.head.append(link);
 }
 let firstBlastProfile=0;
@@ -299,6 +299,7 @@ async function launch(quick,demo=false,encounter=false,preview=false,autopilot=f
       if(!response.ok||!response.body)throw Error("Could not load "+file);
       return response.body;
     });
+    const districtArt = astra && campaign!=="overload" ? script("district-art.js?v=75").then(()=>window.astraDistrictReady) : Promise.resolve(null);
     const scenery = astra && campaign!=="overload" ? script("scenery-art.js?v=74").then(()=>window.astraSceneryReady) : Promise.resolve(null);
     await readPack("game","Reading game data");
     await readPack("vertigo","Reading the mission");
@@ -322,8 +323,9 @@ async function launch(quick,demo=false,encounter=false,preview=false,autopilot=f
       mounted.set("pyro-field.png",field);
       mounted.set("collectibles.mesh",mesh);
     }
-    if(astra){await script("generated-materials.js?v=56");assetDepot=astraGeneratedLibrary(assetDepot);}
+    if(astra){await script("generated-materials.js?v=75");assetDepot=astraGeneratedLibrary(assetDepot);}
     if(astra)await loadAstraShipAssets();
+    const districtMaps=await districtArt;if(districtMaps)for(const [name,bytes] of districtMaps)mounted.set(name,bytes);
     const sceneryBytes=await scenery;if(sceneryBytes)mounted.set("scenery74.png",sceneryBytes);
     if(campaign==="overload"){await script("mission-controller.js?v=67");await script("overload-loader.js?v=48");await astraOverload.install(mounted);}
     $("status").textContent="Starting flight computer";
@@ -373,7 +375,7 @@ async function launch(quick,demo=false,encounter=false,preview=false,autopilot=f
         setInterval(syncPilot,3000);
       }
     };
-    await script("engine.js?v=pyre74");
+    await script("engine.js?v=pyre75");
   } catch(e) {console.error(e);astraFail(e.message);}
 }
 

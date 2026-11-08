@@ -10,7 +10,7 @@ static unsigned sc_draws,sc_uploads,sc_vertices,sc_site_count,sc_seen;
 static unsigned sc_hash(unsigned x){x^=x>>16;x*=0x7feb352dU;x^=x>>15;x*=0x846ca68bU;return x^(x>>16);}
 static void sc_reset(void){if(sc_level==Current_level_num&&sc_rooms==Highest_segment_index)return;sc_level=Current_level_num;sc_rooms=Highest_segment_index;memset(sc_sites,0,sizeof sc_sites);sc_site_count=sc_seen=0;}
 static sc_site *sc_site_for(int room){
-    sc_reset();sc_site *m=&sc_sites[room];if(m->tested)return m;m->tested=1;
+    sc_reset();sc_site *m=&sc_sites[room];if(m->tested)return m;m->tested=1;if(!sz_support(room))return m;
     unsigned key=sc_hash(room+Current_level_num*1987u);int zone=astra_room_identity(room);
     m->style=key%6;if(key&8){if(zone==2)m->style=3;else if(zone==3)m->style=0;else if(zone==4)m->style=4;}
     float best=-1;vms_vector center;compute_segment_center(&center,&Segments[room]);
@@ -200,6 +200,7 @@ void astra_scenery_light(int room){
     for(int k=0;k<3;k++)afx_colors[3][k]=colors[style][k];afx_colors[3][3]=0;al_vec(afx_light_world[3],&p);afx_light_world[3][3]=15;
 }
 static int sc_room(int room){
+    if(!sz_support(room))return 1;
     if(!astra_detail_upgrade||astra_native_compare||ss_capture||sc_failed)return 0;
     sc_site *site=sc_site_for(room);if(!site->valid)return 0;
     float distance=f2fl(vm_vec_dist(&site->p,&View_position)),opacity=1-nd_smooth((distance-60)/28);if(opacity<=0)return 1;

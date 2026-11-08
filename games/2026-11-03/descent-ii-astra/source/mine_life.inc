@@ -63,6 +63,7 @@ static void ml_build(int style){
     ml_mesh *m=&ml_meshes[style];glGenBuffers(1,&m->buffer);glBindBuffer(GL_ARRAY_BUFFER,m->buffer);glBufferData(GL_ARRAY_BUFFER,ax_count*sizeof(ml_vertex),data,GL_STATIC_DRAW);glBindBuffer(GL_ARRAY_BUFFER,0);m->count=ax_count;ax_count=0;ml_uploads++;
 }
 static void ml_installation(int room){
+    if(!sz_support(room))return;
     if(!astra_detail_upgrade||astra_native_compare||ss_capture||ml_failed)return;ml_site *site=ml_site_for(room);if(!site->valid)return;
     float distance=f2fl(vm_vec_dist(&site->p,&View_position)),opacity=1-nd_smooth((distance-48)/26);if(opacity<=0)return;
     vms_vector d;vm_vec_sub(&d,&View_position,&site->p);if(vm_vec_dot(&d,&site->basis.fvec)<0)return;

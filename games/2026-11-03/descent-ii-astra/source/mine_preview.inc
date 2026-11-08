@@ -15,7 +15,7 @@ extern int astra_refinement,astra_native_compare,astra_detail_upgrade;
 extern int astra_environment_theme(int),astra_environment_bay(int),astra_environment_rock(int);
 float astra_mine_clock=-1,astra_mine_door=-1;
 typedef struct {vms_vector eye,goal,up;int room,side,subject,valid;} am_scene;
-static am_scene am_scenes[49],am_materials[4];static int am_level=-999,am_segments=-1;static uint64_t am_mask;
+static am_scene am_scenes[57],am_materials[4];static int am_level=-999,am_segments=-1;static uint64_t am_mask;
 extern int astra_life_anchor(int,vms_vector*,int*);
 extern void astra_life_preview(int,int,int);
 static float am_distance(const vms_vector *a,const vms_vector *b){return f2fl(vm_vec_dist(a,b));}
@@ -259,7 +259,28 @@ static void am_build(void){
             }
         }
     }
-    for(int i=0;i<49;i++)if(am_scenes[i].valid)am_mask|=UINT64_C(1)<<i;
+    /* Wide views down real connected passages, not closeups of wall fixtures. */
+    extern int astra_district(int),astra_district_family(int,int);
+    float districtBest[8];for(int k=0;k<8;k++)districtBest[k]=-1;
+    for(int r=0;r<=Highest_segment_index;r++){
+        int district=astra_district(r);if(district<0)continue;
+        int surfaces=0;float brightness=0;
+        for(int s=0;s<6;s++)if(astra_district_family(r,s)>=0){surfaces++;for(int j=0;j<4;j++)brightness+=f2fl(Segments[r].sides[s].uvls[j].l)*.25f;}
+        if(surfaces<2)continue;
+        vms_vector center;compute_segment_center(&center,&Segments[r]);vms_matrix up;extract_orient_from_segment(&up,&Segments[r]);
+        for(int s=0;s<6;s++){
+            int child=Segments[r].children[s];if(child<0||astra_district(child)!=district||Segments[r].sides[s].wall_num>=0)continue;
+            vms_vector goal,eye=center,forward;compute_segment_center(&goal,&Segments[child]);
+            if(!am_clear(&eye,r,&goal,F1_0/3))continue;vm_vec_normalized_dir(&forward,&goal,&eye);
+            vms_vector back;vm_vec_scale_add(&back,&eye,&forward,-i2f(5));int er=find_point_seg(&back,r);
+            if(er>=0&&astra_district(er)==district&&am_clear(&eye,r,&back,F1_0/3))eye=back;else er=r;
+            float score=surfaces*2+fminf(2,brightness)*8+fminf(50,am_distance(&eye,&goal))*.10f;
+            for(int j=0;j<6;j++){int next=Segments[child].children[j];if(next>=0&&next!=r&&astra_district(next)==district){vms_vector further;compute_segment_center(&further,&Segments[next]);if(am_clear(&eye,er,&further,F1_0/3)){score+=4;}}}
+            if(score>districtBest[district]){districtBest[district]=score;am_scenes[49+district]=(am_scene){eye,goal,up.uvec,er,s,r,1};}
+        }
+    }
+    if(am_scenes[53].valid)am_scenes[0]=am_scenes[53];
+    for(int i=0;i<57;i++)if(am_scenes[i].valid)am_mask|=UINT64_C(1)<<i;
 }
 /* The transient door frame is restored immediately after drawing, including
  * its connected side. No wall_open_door, trigger, sound or ActiveDoors changes. */
@@ -279,8 +300,8 @@ static void am_restore_door(am_door_saved *save){
 }
 void astra_mine_preview(int index,float clock,float zoom){
     if(am_level!=Current_level_num||am_segments!=Highest_segment_index||!am_mask)am_build();
-    if(index<0||index>48||!am_scenes[index].valid){index=0;while(index<49&&!am_scenes[index].valid)index++;}
-    if(index>=49){EM_ASM(window.astraMinePreview?.unavailable());return;}
+    if(index<0||index>56||!am_scenes[index].valid){index=0;while(index<57&&!am_scenes[index].valid)index++;}
+    if(index>=57){EM_ASM(window.astraMinePreview?.unavailable());return;}
     am_scene *s=&am_scenes[index];
     if(index==38){int pick=EM_ASM_INT(return Module.mineMaterial|0);if(pick>=0&&pick<4&&am_materials[pick].valid)s=&am_materials[pick];}
     if(index==35){int pick=EM_ASM_INT(return Module.mineChamber|0);int choices[]={19,20,0};if(pick>=0&&pick<3&&am_scenes[choices[pick]].valid)s=&am_scenes[choices[pick]];}

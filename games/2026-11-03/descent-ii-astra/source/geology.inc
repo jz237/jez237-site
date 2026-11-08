@@ -12,7 +12,8 @@ static int ng_solid(int room,int s){
 }
 static int ng_rock(int room,int s){
     side *f=&Segments[room].sides[s];int t=f->tmap_num;
-    return ng_solid(room,s)&&!f->tmap_num2&&t>=0&&t<NumTextures&&!TmapInfo[t].lighting&&!astra_liquid_kind(t)&&astra_environment_rock(t);
+    int family=astra_district_family(room,s);
+    return ng_solid(room,s)&&!f->tmap_num2&&t>=0&&t<NumTextures&&!TmapInfo[t].lighting&&!astra_liquid_kind(t)&&(family>=0?sz_natural(family):astra_environment_rock(t));
 }
 static void ng_face_normal(int room,int s,float *n){
     side *f=&Segments[room].sides[s];vms_vector center,wall,d;compute_segment_center(&center,&Segments[room]);compute_center_point_on_side(&wall,&Segments[room],s);vm_vec_sub(&d,&center,&wall);

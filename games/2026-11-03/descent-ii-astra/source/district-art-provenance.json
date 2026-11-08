@@ -1,0 +1,55 @@
+{
+  "tool": "built-in image_gen",
+  "prompts": [
+    [
+      "clay",
+      "A high-resolution seamless tiling PBR ALBEDO texture of an excavated ochre clay and compacted earth mine wall. Extremely detailed dry terracotta and warm ochre sediment, embedded little gravel stones, horizontal deposits, irregular shallow tool scars and packed fine grains. Real geology, subdued realistic colors, no roots or vegetation. FLAT ORTHOGRAPHIC material scan, uniform neutral illumination, no perspective, no directional lighting, no shadows, no objects, no text, no border. Entire square is the wall surface. Continuous edges must tile perfectly. Aim 2048 by 2048. Not a render of a room."
+    ],
+    [
+      "limestone",
+      "A high-resolution seamless tiling PBR ALBEDO texture of pale grey ivory limestone with visibly thin horizontal sedimentary strata in a newly excavated underground mine. Photographic mineral detail, flaking layers, natural irregular seams, fine grains, sparse tan mineral stains, many small irregular chips, no large blocks. FLAT ORTHOGRAPHIC material scan, uniform neutral illumination, no perspective, no directional lighting, no shadows, no objects, no text, no border. Entire square is the wall surface. Continuous edges must tile perfectly. Aim 2048 by 2048. Natural detailed geology, not a render of a room."
+    ],
+    [
+      "basalt",
+      "A high-resolution seamless tiling PBR ALBEDO texture of fractured dark blue charcoal basalt and slate in an underground mine. Photographic dense jagged irregular angular rock plates, fine blue-grey mineral grains, fractured facets, thin pale mineral veins, subtly varied charcoal and steel grey colors. Rock must remain readable medium dark grey not black. No glow, lava, crystals or grass. FLAT ORTHOGRAPHIC material scan, uniform neutral illumination, no perspective, no directional lighting, no shadows, no objects, no text, no border. Entire square is the rock wall surface. Continuous edges must tile perfectly. Aim 2048 by 2048. Not a render of a room."
+    ]
+  ],
+  "masters": [
+    {
+      "name": "clay",
+      "path": "D:\\Projects\\hidden reef header\\work\\astra-refit\\r75\\clay-source.png",
+      "sourceSize": [
+        1254,
+        1254
+      ]
+    },
+    {
+      "name": "limestone",
+      "path": "D:\\Projects\\hidden reef header\\work\\astra-refit\\r75\\limestone-source.png",
+      "sourceSize": [
+        1254,
+        1254
+      ]
+    },
+    {
+      "name": "basalt",
+      "path": "D:\\Projects\\hidden reef header\\work\\astra-refit\\r75\\basalt-source.png",
+      "sourceSize": [
+        1254,
+        1254
+      ]
+    }
+  ],
+  "runtime": {
+    "colorSize": [
+      1024,
+      1024
+    ],
+    "normalRoughnessSize": [
+      512,
+      512
+    ],
+    "parcel": "district-art.js",
+    "masterUpscaling": false
+  }
+}

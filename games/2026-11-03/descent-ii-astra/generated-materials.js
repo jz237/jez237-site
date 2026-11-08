@@ -40,7 +40,7 @@ window.astraGeneratedLibrary = function(nativeDepot) {
     async level(names,robots){
       // Download independent material sets together, but retain the two-image
       // decode limit and await every material before exposing the flight view.
-      const generated=async()=>{for(let id=0;id<8;id+=2)await Promise.all([family(id),family(id+1)]);};
+      const generated=async()=>{for(let id=0;id<8;id+=2)await Promise.all([family(id),family(id+1)]);if(window.astraDistrictReady){await Promise.all([family(8),family(9)]);await family(12);}};
       window.astraTerminal?.loading(true);
       try { await Promise.all([nativeDepot?.level(names,robots,false),generated()]); }
       finally { window.astraTerminal?.loading(false); }
