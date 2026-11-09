@@ -5,13 +5,13 @@
 // Five looks (sky, terrain, sea, scenery, bodies in the sky), real 3D models for everything, curved beams,
 // warnings drawn in the play plane, HDR post. Nothing here changes the world.
 import * as THREE from '../vendor/three.module.min.js';
-import { Post } from './post.js?v=14';
-import * as TX from './textures.js?v=14';
-import * as MD from './models.js?v=14';
-import { FX, CALM } from './fx.js?v=14';
-import { NOISE } from './shaders.js?v=14';
-import { F, C, RP, H, ENEMY, BOSSES, POWERUPS, P2_LIVERY, LIVERIES, SETTLER, PHASE2 } from './config.js?v=14';
-import { wd, wp, nodePos, beamRange, dronePos as dronePosR } from './sim.js?v=14';
+import { Post } from './post.js?v=15';
+import * as TX from './textures.js?v=15';
+import * as MD from './models.js?v=15';
+import { FX, CALM } from './fx.js?v=15';
+import { NOISE, TONE } from './shaders.js?v=15';
+import { F, C, RP, H, ENEMY, BOSSES, POWERUPS, P2_LIVERY, LIVERIES, SETTLER, PHASE2 } from './config.js?v=15';
+import { wd, wp, nodePos, beamRange, dronePos as dronePosR } from './sim.js?v=15';
 
 export { CALM };
 const hdr = (hex, k) => new THREE.Color(hex).multiplyScalar(k);
@@ -26,6 +26,9 @@ const TCOL = { lifter: 0x9dff7a, husk: 0xff4a8a, sower: 0xc98aff, hive: 0xff8a3a
 const SIDE_FOV = 40, CHASE_FOV = 64;
 const JAW = { u: 0.44, l: 0.44 };   // how far the maw's jaws open (radians about Z)
 const SCAR_N = 200;
+// title-screen hangar portraits: picture size, their own layer, and where the ship sits (far off the planet)
+export const PW = 320, PH = 180;
+const PORTRAIT_LAYER = 7, PORTRAIT_AT = new THREE.Vector3(0, 0, 4000);
 const TERRAIN_ZS = [64, 48, 36, 27, 20, 14, 9.5, 6, 3.6, 2, 1, 0.2, -0.6, -1.6, -2.8, -4.2, -6, -8.5, -11.5, -15, -19.5, -25, -32, -40, -50, -62, -76, -92, -112, -136, -165, -200];
 const SCAR_VERT = /* glsl */ `
 attribute vec4 aInfo; varying vec2 vUv; varying vec4 vInfo;
@@ -873,6 +876,77 @@ export class Renderer {
     this.livery = L;
     const v = this.views.p.get(1);
     if (v) { this.scene.remove(v.outer); this.views.p.delete(1); }
+  }
+  // ---------------------------------------------------------------- title-screen hangar portraits
+  // Each gunship drawn once, in livery L, into a PW x PH picture for the title screen (ImageData, top row first). The
+  // ship is lit in the main scene on a layer of its own that every light joins too, so the light count, shadows, fog
+  // and environment all match play and its compiled shaders are reused as they are: only the small tone pass (ACES
+  // and sRGB, as in the post) is new. It sits far from the planet, out of every point light's reach and the sun's
+  // shadow box, with the sun turned to light it from above the bow; everything is put back afterwards.
+  portraits(kinds, L) {
+    const r = this.r, S = this.scene, PL = PORTRAIT_LAYER;
+    if (!this.pt) {
+      const hdrT = new THREE.WebGLRenderTarget(PW, PH, { type: THREE.HalfFloatType, samples: r.capabilities.isWebGL2 ? 4 : 0, depthBuffer: true });
+      const ldrT = new THREE.WebGLRenderTarget(PW, PH, { depthBuffer: false });
+      const mat = new THREE.ShaderMaterial({
+        depthTest: false, depthWrite: false, blending: THREE.NoBlending, uniforms: { tSrc: { value: hdrT.texture }, uExp: { value: 1.15 } },
+        vertexShader: 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }',
+        // MSAA edges come out premultiplied by their coverage over the clear (0, 0, 0, 0): divide it out before the curve
+        fragmentShader: `uniform sampler2D tSrc; uniform float uExp; varying vec2 vUv;\n${TONE}\nvoid main(){ vec4 s = texture2D(tSrc, vUv); float a = clamp(s.a, 0.0, 1.0); vec3 c = a > 0.002 ? s.rgb / a : vec3(0.0); if (any(isnan(c)) || any(isinf(c))) c = vec3(0.0); gl_FragColor = vec4(toSRGB(aces(max(c, 0.0) * uExp)), a); }`,
+      });
+      const quad = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), mat); quad.frustumCulled = false;
+      const ts = new THREE.Scene(); ts.add(quad);
+      const cam = new THREE.PerspectiveCamera(26, PW / PH, 0.1, 400); cam.layers.set(PL);
+      this.pt = { hdrT, ldrT, ts, tc: new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1), cam, buf: new Uint8Array(PW * PH * 4) };
+    }
+    const { hdrT, ldrT, ts, tc, cam, buf } = this.pt;
+    S.traverse((o) => { if (o.isLight) o.layers.enable(PL); });
+    const key = this.key, hemi = this.hemi, fog = S.fog;
+    const keep = { kp: key.position.clone(), kc: key.color.clone(), ki: key.intensity, hp: hemi.position.clone(), hc: hemi.color.clone(), hg: hemi.groundColor.clone(), hi: hemi.intensity,
+      ei: S.environmentIntensity, fd: fog ? fog.density : 0, cc: r.getClearColor(new THREE.Color()), ca: r.getClearAlpha(), rt: r.getRenderTarget() };
+    key.position.copy(key.target.position).addScaledVector(_v.set(0.45, 0.85, 0.55).normalize(), 180);
+    key.color.set(0xfff1e0); key.intensity = 3.2;
+    hemi.position.set(0, 1, 0); hemi.color.set(0xbcd8ff); hemi.groundColor.set(0x3a3026); hemi.intensity = 1.1;
+    S.environmentIntensity = 1;
+    if (fog) fog.density = 0;
+    r.setClearColor(0x000000, 0);
+    const out = [], box = new THREE.Box3(), ctr = new THREE.Vector3(), view = new THREE.Vector3(1.0, 0.5, 1.45).normalize();
+    const tanV = Math.tan(THREE.MathUtils.degToRad(cam.fov / 2)) * 0.97, tanH = tanV * cam.aspect;
+    let cur = null;
+    try {
+      for (const k of kinds) {
+        const m = MD.gunship(k, L.color, L.accent);
+        for (const f of m.flames) if (f) f.removeFromParent();
+        m.g.position.set(0, 0, 0); m.g.updateMatrixWorld(true);
+        box.setFromObject(m.g).getCenter(ctr);
+        m.g.position.set(PORTRAIT_AT.x - ctr.x, PORTRAIT_AT.y - ctr.y, PORTRAIT_AT.z - ctr.z);
+        m.g.traverse((o) => { o.layers.set(PL); if (o.isMesh) o.castShadow = false; });
+        S.add(cur = m.g); m.g.updateMatrixWorld(true);
+        // three-quarter view from above the starboard bow, pulled back until all eight corners of the box fit
+        cam.position.copy(PORTRAIT_AT).addScaledVector(view, 20); cam.lookAt(PORTRAIT_AT); cam.updateMatrixWorld(true);
+        box.setFromObject(m.g);
+        let need = -Infinity;
+        for (let i = 0; i < 8; i++) {
+          _v2.set(i & 1 ? box.max.x : box.min.x, i & 2 ? box.max.y : box.min.y, i & 4 ? box.max.z : box.min.z).applyMatrix4(cam.matrixWorldInverse);
+          need = Math.max(need, Math.abs(_v2.x) / tanH + _v2.z, Math.abs(_v2.y) / tanV + _v2.z);
+        }
+        cam.position.copy(PORTRAIT_AT).addScaledVector(view, 20 + need); cam.lookAt(PORTRAIT_AT); cam.updateMatrixWorld(true);
+        r.setRenderTarget(hdrT); r.clear(); r.render(S, cam);
+        r.setRenderTarget(ldrT); r.clear(); r.render(ts, tc);
+        r.readRenderTargetPixels(ldrT, 0, 0, PW, PH, buf);
+        S.remove(cur); cur = null;
+        const img = new ImageData(PW, PH), row = PW * 4;
+        for (let y = 0; y < PH; y++) img.data.set(buf.subarray((PH - 1 - y) * row, (PH - y) * row), y * row);
+        out.push(img);
+      }
+    } finally {
+      if (cur) S.remove(cur);
+      key.position.copy(keep.kp); key.color.copy(keep.kc); key.intensity = keep.ki;
+      hemi.position.copy(keep.hp); hemi.color.copy(keep.hc); hemi.groundColor.copy(keep.hg); hemi.intensity = keep.hi;
+      S.environmentIntensity = keep.ei; if (fog) fog.density = keep.fd;
+      r.setClearColor(keep.cc, keep.ca); r.setRenderTarget(keep.rt);
+    }
+    return out;
   }
   enemyView(e) {
     let v = this.views.e.get(e.id);

@@ -1,6 +1,6 @@
 // Skyhold 2026 — every tunable number lives here. The RAMP table drives difficulty; nothing else in the game
 // hard-codes enemy pace, numbers, fire rate, aim or warning times.
-export const VERSION = '1.10.1';
+export const VERSION = '1.11.0';
 export const STEP = 1 / 120;
 
 // ------------------------------------------------------------------ the planet and the Warden gunship
@@ -56,12 +56,13 @@ export const ENEMY = {
 // as long, ramming wrecks machines without a scratch, and every kill scores `score` x. The meter drains `decay` a second.
 // GUNSHIPS: the WARDEN and three more unlocked with medals. weapon: beam / arc (each hit leaps to `chain` more machines
 // within chainR m) / missile (`missiles` homing missiles a shot). vmax / accel scale the flying, cd the time between shots,
-// dmg the hits a beam deals, band / range its height and reach; hyperCD is the time between shots in HYPER.
+// dmg the hits a beam deals, band / range its height and reach; hyperCD is the time between shots in HYPER. role is the
+// one-line label under each ship in the title screen's hangar.
 export const SHIPS = {
-  warden: { name: 'WARDEN', desc: 'The colony gunship: a fast, balanced beam cannon.', medals: 0, weapon: 'beam', vmax: 1, accel: 1, cd: 1, dmg: 1, band: 1, range: 1, hyperCD: 0.045 },
-  breaker: { name: 'BREAKER', desc: 'Heavy cannon: slow, tall shots that hit three times as hard. Heavier to fly.', medals: 2, weapon: 'beam', vmax: 0.9, accel: 0.85, cd: 2.1, dmg: 3, band: 1.9, range: 0.92, hyperCD: 0.11 },
-  arc: { name: 'ARC', desc: 'Chain lightning: every hit leaps to two more machines nearby. Shorter reach, nimble.', medals: 5, weapon: 'arc', vmax: 1.05, accel: 1.05, cd: 1.3, dmg: 1, band: 1, range: 0.72, chain: 2, chainR: 13, hyperCD: 0.06 },
-  hornet: { name: 'HORNET', desc: 'Homing swarm missiles that find their own targets. The fastest ship.', medals: 9, weapon: 'missile', vmax: 1.1, accel: 1.15, cd: 3.2, dmg: 1, band: 1, range: 1, missiles: 2, hyperCD: 0.12 },
+  warden: { name: 'WARDEN', role: 'BEAM CANNON', desc: 'The colony gunship: a fast, balanced beam cannon.', medals: 0, weapon: 'beam', vmax: 1, accel: 1, cd: 1, dmg: 1, band: 1, range: 1, hyperCD: 0.045 },
+  breaker: { name: 'BREAKER', role: 'HEAVY CANNON', desc: 'Heavy cannon: slow, tall shots that hit three times as hard. Heavier to fly.', medals: 2, weapon: 'beam', vmax: 0.9, accel: 0.85, cd: 2.1, dmg: 3, band: 1.9, range: 0.92, hyperCD: 0.11 },
+  arc: { name: 'ARC', role: 'CHAIN LIGHTNING', desc: 'Chain lightning: every hit leaps to two more machines nearby. Shorter reach, nimble.', medals: 5, weapon: 'arc', vmax: 1.05, accel: 1.05, cd: 1.3, dmg: 1, band: 1, range: 0.72, chain: 2, chainR: 13, hyperCD: 0.06 },
+  hornet: { name: 'HORNET', role: 'HOMING MISSILES', desc: 'Homing swarm missiles that find their own targets. The fastest ship.', medals: 9, weapon: 'missile', vmax: 1.1, accel: 1.15, cd: 3.2, dmg: 1, band: 1, range: 1, missiles: 2, hyperCD: 0.12 },
 };
 export const SHIP_KEYS = Object.keys(SHIPS);
 // GUNSHIP MASTERY: machines a gunship shoots down (any mode you fly yourself; skimmers, mines and meteors do not count)

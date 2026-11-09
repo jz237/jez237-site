@@ -1,6 +1,6 @@
 # Skyhold 2026 scripts
 
-The game lives in `games/2026-11-09/skyhold/` (plain ES modules, three.js vendored, every local import `?v=9` (1.7.0); bump them
+The game lives in `games/2026-11-09/skyhold/` (plain ES modules, three.js vendored, every local import `?v=15` (1.11.0); bump them
 all together, plus the `modulepreload` list in `index.html` and the scripts' imports here). The design brief is in the
 work folder `D:/Projects/.tmp/skyhold-work/DESIGN.md`.
 
@@ -8,7 +8,7 @@ work folder `D:/Projects/.tmp/skyhold-work/DESIGN.md`.
 | --- | --- |
 | `ramp_check.mjs [runs=30] [sectors=1,2,3,4,5] [profile=human] [diff=normal]` | The human-like autopilot (`ai.js` profile `human`: ~0.36 s reactions, wobbly aim, sometimes late) plays each world from its first wave with the typical upgrades for it. Prints the clear rate, deaths and hits per run and per wave, settlers lost, carrier fight length and causes of death. Targets on Normal: about 95 / 80 / 60 / 40 / 25 %. Last run (1.7.0, 40-50 each): 100 / 85 / 53 / 50 / 30 %; 1.9.0 (sower, hive and husk earlier, one pod intersection per world, the autopilot finishes a wave's last machines; 20-24 each): 100 / 75 / 67 / 40 / 35 %.; 1.10.0 (whirler rings, coils and sparks, scorchers, maws; 20 each): 100 / 95 / 75 / 50 / 35 %. |
 | `replay_check.mjs [seeds=10]` | Instant replays are exact: plays until a death or a carrier kill, cuts the clip the game would keep, replays it and compares the world tick by tick. |
-| `console_check.mjs [baseUrl] [seconds=20]` | Edge headless: the `?test=1` self-test page (7 checks), then the real page in real time (title, demo, an autopilot campaign, a carrier fight, endless) with frame times, shader programs (none may compile during play), no console errors and no score POSTs. Needs a static server: `python D:/Projects/.tmp/skyhold-work/serve.py 8862` serves the worktree without caching. |
+| `console_check.mjs [baseUrl] [seconds=20]` | Edge headless: the `?test=1` self-test page (8 checks), then the real page in real time (title, demo, an autopilot campaign, a carrier fight, endless) with frame times, shader programs (none may compile during play), no console errors and no score POSTs. Needs a static server: `python D:/Projects/.tmp/skyhold-work/serve.py 8862` serves the worktree without caching. |
 | `online_check.mjs [base] [relay=ws://127.0.0.1:8781] [seconds=40] [lagMs=0] [wave=0] [world=1] [coop|rivals]` | Online co-op (or RIVALS, rooms `SH-R`/`SH-QR-`, per-pilot scores checked) in two real pages through a LOCAL relay (rooms `SH-`/`SH-Q-`): host and guest both flown by the demo autopilot; messages flowing, the guest's beams reaching the host, score / wave / lives in step, the guest's ship where it flies, the carrier the same on both screens (`wave=4`), leaving noticed. Relay: `D:/Projects/.tmp/arcade-trio-work/lancewing/relay`, `node <any wrangler>/bin/wrangler.js dev --local --port 8781` (npx's cache is broken on this machine), wait for 'Ready'. |
 | `ship_check.mjs [runs=8] [world=3] [mast=0]` | The demo autopilot flies each gunship (WARDEN, BREAKER, ARC, HORNET) through a world; every ship must clear it at least half the time. `mast` gives every ship that GUNSHIP MASTERY level (0-2) so the perks can be weighed. Also counts HYPER, planet events, chain-lightning arcs, missile hits and Breaker shockwaves. |
 | `ai_spacing_check.mjs [runs=6] [profile=demo]` | The autopilot keeps a firing band outside each carrier's hull (bumps per fight, share of the fight spent at the hull) and is never pinned under or over a machine at the ground or the ceiling during waves. |
@@ -26,6 +26,10 @@ Page hooks (`window.__sh`): `tick(n, dt = 1/60, draw = true)`, `startDemo()`, `s
 `W` (the live world), `R` (renderer), `A` (audio). URL: `?fixed` (fixed 1/60 steps, drive it with `tick`), `?test=1`,
 `?autoplay[&sector=N][&endless]`, `?playthrough`, `?seed=N`, `?wave=N`, `?q=high|medium|low`, `?noscores`.
 Storage keys `sh.*`; boards `skyhold-2026[-easy|-hard|-nightmare]` and `skyhold-2026-endless[...]`.
+
+Title-screen hangar: `R.portraits(kinds, livery)` draws each gunship into a 320 x 180 picture (main.js `syncHangar`,
+drawn again only when the livery changes). The ship is lit in the main scene on a layer of its own that every light
+joins, so it reuses the ships' compiled shaders; only its small tone pass is new (one extra program at boot).
 
 How it is drawn: the sim is a flat band (x along the equator, wraps every 1600 m; y altitude 0-36 m). `render.js`
 wraps it round a sphere of radius C / 2pi, with the sun fixed in the world, so flying round goes from day to night.

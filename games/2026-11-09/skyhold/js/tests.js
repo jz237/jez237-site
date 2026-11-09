@@ -1,9 +1,10 @@
 // ?test=1 self-test page: determinism, exact replays, the gentle start, the difficulty ramp shape, lifters taking
-// and fusing settlers, the carrier fight, the live loop with no console errors and no score posts.
-import { makeWorld, step, drainEvents, STEP, settlersLeft } from './sim.js?v=14';
-import { Autopilot } from './ai.js?v=14';
-import { RAMP, SECTORS, TYPICAL_UP, rampAt, endlessLevel, DIFF_KEYS, applyDiff, MIN_WARN, TUTOR, WAVES } from './config.js?v=14';
-import { Recorder, Replay } from './replay.js?v=14';
+// and fusing settlers, the carrier fight, the live loop with no console errors and no score posts, and the title
+// screen's hangar showing every gunship by name with its picture drawn.
+import { makeWorld, step, drainEvents, STEP, settlersLeft } from './sim.js?v=15';
+import { Autopilot } from './ai.js?v=15';
+import { RAMP, SECTORS, TYPICAL_UP, rampAt, endlessLevel, DIFF_KEYS, applyDiff, MIN_WARN, TUTOR, WAVES, SHIPS, SHIP_KEYS } from './config.js?v=15';
+import { Recorder, Replay } from './replay.js?v=15';
 
 export const hashW = (W) => JSON.stringify([W.n, W.score, W.lives, W.cp, W.phase, W.rs, W.players.map((p) => [p.x.toFixed(6), p.y.toFixed(6), p.alive, p.shield, p.nova]),
   W.enemies.map((e) => [e.id, e.type, e.x.toFixed(4), e.y.toFixed(4), e.hp]), W.settlers.map((s) => [s.id, s.st, s.x.toFixed(4), s.y.toFixed(4)]), W.bolts.length, W.boss ? [W.boss.st, W.boss.x.toFixed(4), W.boss.nodes.map((n) => n.hp).join()] : 0]);
@@ -100,6 +101,19 @@ export async function runTests(sh) {
     const ok = errs.length === 0 && sh.noPost && sh.G.W.n > 0;
     sh.toTitle();
     return { ok, info: errs.length ? errs.slice(0, 3).join(' | ') : `ran ${sh.G.W ? 'ok' : ''}, scores blocked: ${sh.noPost}` };
+  });
+  await T('the title hangar shows every gunship by name, each one drawn', () => {
+    sh.toTitle();
+    const tiles = [...document.querySelectorAll('#gs-grid .gs')], want = SHIP_KEYS.map((k) => SHIPS[k].name);
+    const names = tiles.map((t) => t.querySelector('b').textContent);
+    // a drawn ship covers a good part of its picture; an empty or failed one is clear
+    const drawn = tiles.filter((t) => {
+      const c = t.querySelector('canvas'), d = c.getContext('2d').getImageData(0, 0, c.width, c.height).data;
+      let n = 0; for (let i = 3; i < d.length; i += 4) if (d[i] > 128) n++;
+      return n > c.width * c.height * 0.08;
+    }).length;
+    const shown = !document.getElementById('hangar').closest('.hidden');
+    return { ok: shown && names.join() === want.join() && drawn === want.length, info: `${names.join(', ')} · ${drawn} of ${want.length} drawn${shown ? '' : ' · HIDDEN'}` };
   });
   void SECTORS;
   const pass = results.filter((r) => r.ok).length;

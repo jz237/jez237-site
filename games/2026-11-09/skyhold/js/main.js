@@ -1,13 +1,13 @@
 // Skyhold 2026 — game flow, menus, HUD (with the scanner strip), commentary, demo director and the frame loop.
-import { VERSION, SECTORS, STEP, F, C, H, BOSSES, UPGRADES, UP_KEYS, UP_COST, MEDALS, parTime, TYPICAL_UP, START_LIVES, DIFFICULTY, POWERUPS, LIVERIES, CP_NAMES, WAVES, ENEMY, SHIPS, SHIP_KEYS, RIVALS, MASTERY, mastLevel } from './config.js?v=14';
-import { makeWorld, step, stepGuest, drainEvents, wd, wp, settlersLeft, nodePos, CHAIN_T, chainMult, beamRange } from './sim.js?v=14';
-import { Autopilot } from './ai.js?v=14';
-import { Renderer, pickQuality, CALM, LOOKS } from './render.js?v=14';
-import { Audio } from './audio.js?v=14';
-import { Input } from './input.js?v=14';
-import { Scores, NO_POST } from './scores.js?v=14';
-import { Recorder, Replay } from './replay.js?v=14';
-import { Online, ROOM, QUICK, QUICK_R, randomCode, cleanCode } from './online.js?v=14';
+import { VERSION, SECTORS, STEP, F, C, H, BOSSES, UPGRADES, UP_KEYS, UP_COST, MEDALS, parTime, TYPICAL_UP, START_LIVES, DIFFICULTY, POWERUPS, LIVERIES, CP_NAMES, WAVES, ENEMY, SHIPS, SHIP_KEYS, RIVALS, MASTERY, mastLevel } from './config.js?v=15';
+import { makeWorld, step, stepGuest, drainEvents, wd, wp, settlersLeft, nodePos, CHAIN_T, chainMult, beamRange } from './sim.js?v=15';
+import { Autopilot } from './ai.js?v=15';
+import { Renderer, pickQuality, CALM, LOOKS, PW, PH } from './render.js?v=15';
+import { Audio } from './audio.js?v=15';
+import { Input } from './input.js?v=15';
+import { Scores, NO_POST } from './scores.js?v=15';
+import { Recorder, Replay } from './replay.js?v=15';
+import { Online, ROOM, QUICK, QUICK_R, randomCode, cleanCode } from './online.js?v=15';
 
 const $ = (id) => document.getElementById(id);
 const params = new URLSearchParams(location.search);
@@ -116,6 +116,7 @@ function toTitle() {
   syncSegs();
   $('med-sub').textContent = `${medals.size} / ${MEDALS.length}`;
   $('sel-sub').textContent = reach > 0 ? `Worlds 1 to ${reach + 1} open` : 'Clear world 1 to open more';
+  syncHangar();
   $('demo-badge').classList.add('hidden');
   setHud(false);
   scenic(G.demoI % 5);
@@ -949,6 +950,37 @@ function buildShips() {
   $('ships').innerHTML = SHIP_KEYS.map((k) => { const s = SHIPS[k], open = UNLOCK_ALL || medals.size >= s.medals; return `<button data-v="${k}" ${open ? '' : 'disabled'}>${open ? '' : '🔒'}${s.name}${open ? '' : ' · ' + s.medals}</button>`; }).join('');
   $('ship-desc').innerHTML = shipDesc(shipOf(settings.ship));
 }
+// ------------------------------------------------------------------ the title-screen hangar
+// Every gunship and its name, each drawn with its real model in the pilot's livery (drawn again only when the livery
+// changes). Locked ships are dimmed with the medals they need. Right of the title card, or inside it when narrow.
+const HANGAR = { livery: '', narrow: matchMedia('(max-width: 739px)') };
+function placeHangar() {
+  const h = $('hangar'), title = $('title'), card = title.querySelector('.card');
+  if (HANGAR.narrow.matches) { if (h.parentElement !== card) card.insertBefore(h, card.querySelector('.foot')); }
+  else if (h.parentElement !== title) title.appendChild(h);
+}
+HANGAR.narrow.addEventListener('change', placeHangar);
+function syncHangar() {
+  placeHangar();
+  const grid = $('gs-grid');
+  if (!grid.children.length) grid.innerHTML = SHIP_KEYS.map((k) => `<div class="gs" data-ship="${k}"><canvas width="${PW}" height="${PH}"></canvas><i class="hidden">🔒 <span>${SHIPS[k].medals}</span><em> MEDALS</em></i><b>${SHIPS[k].name}</b><small>${SHIPS[k].role}</small></div>`).join('');
+  let open = 0;
+  for (const el of grid.children) {
+    const s = SHIPS[el.dataset.ship], ok = UNLOCK_ALL || medals.size >= s.medals;
+    open += ok ? 1 : 0;
+    el.classList.toggle('locked', !ok);
+    el.querySelector('i').classList.toggle('hidden', ok);
+  }
+  $('gs-sub').textContent = open > 1 ? 'PICK ONE IN OPTIONS' : 'MEDALS UNLOCK THE REST';
+  const L = liveryOf(settings.livery);
+  if (HANGAR.livery === L.key) return;
+  HANGAR.livery = L.key;
+  try {
+    const pics = R.portraits(SHIP_KEYS, L);
+    // drawn once and kept: a CPU-backed canvas (cheap to read back for the self-test)
+    [...grid.children].forEach((el, i) => el.querySelector('canvas').getContext('2d', { willReadFrequently: true }).putImageData(pics[i], 0, 0));
+  } catch (e) { console.warn('hangar', e); }
+}
 function liveryOf(key) { const s = LIVERIES.find((q) => q.key === key) || LIVERIES[0]; return medals.size >= s.medals ? s : LIVERIES[0]; }
 function buildLiveries() {
   $('liveries').innerHTML = LIVERIES.map((s) => { const open = medals.size >= s.medals; return `<button data-v="${s.key}" ${open ? '' : 'disabled'} style="--sc:#${s.color.toString(16).padStart(6, '0')}">${open ? '' : '🔒'}${s.name}${open ? '' : ' · ' + s.medals}</button>`; }).join('');
@@ -959,7 +991,7 @@ function applySettings() {
   aiWatchDesc();
   if ($('net-title')) syncNetMode();
   if ($('diff-desc')) $('diff-desc').textContent = DIFFICULTY[settings.diff].desc;
-  if (G.state === 'title') $('title-best').textContent = `BEST ${Math.max(boardOf('campaign', settings.diff).best(), 0).toLocaleString()} · ${DL(settings.diff)}`;
+  if (G.state === 'title') { $('title-best').textContent = `BEST ${Math.max(boardOf('campaign', settings.diff).best(), 0).toLocaleString()} · ${DL(settings.diff)}`; syncHangar(); }
   A.vol.music = settings.music / 100 * 0.8; A.vol.sfx = settings.sfx / 100; A.vol.voice = settings.voice / 100; A.applyVolumes();
   A.setRetro(settings.retro !== 'off'); A.setCab(settings.cab !== 'off'); A.setLayersOn(settings.layers !== 'off');
   if (settings.talk === 'off') A.hush();
@@ -1354,7 +1386,7 @@ async function boot() {
   toTitle();
   boardOf('campaign', settings.diff).fresh(); boardOf('endless', settings.diff).fresh();
   if (!G.fixed && !params.has('test')) R.prepareAll(true);
-  if (params.has('test')) { const m = await import('./tests.js?v=14'); m.runTests(window.__sh); }
+  if (params.has('test')) { const m = await import('./tests.js?v=15'); m.runTests(window.__sh); }
   else if (params.has('playthrough')) { A.unlock(); startPlaythrough(); }
   else if (params.has('room')) { act('online'); $('join-code').value = cleanCode(params.get('room')); }
   else if (G.autopilot) { A.unlock(); if (params.has('endless')) startEndless(); else startCampaign(+params.get('sector') || 0); }
