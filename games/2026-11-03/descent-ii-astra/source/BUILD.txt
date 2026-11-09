@@ -1444,3 +1444,10 @@ R80 - continuous graphics preparation and useful performance measurements
 - Reuse eight fixed explosion vertex buffers; upload the identical sorted slab vertices directly, avoiding compatibility-layer client-array repacking. No effect count, shader, resolution or sorting changes.
 - Measure the first actual render, opening five seconds and sustained forty seconds separately. Exclude deliberate pauses, menus and loading; retain old saved reports with an explicit explanation of their excluded opening period.
 - Show download, texture and effect preparation with real current-operation counts. Unknown-length work remains indeterminate.
+
+R81 - deliberate demo-pilot attention and turns
+- Score both arcs of large turns against visible mine geometry, including a small view fan. Commit through the rear bearing; release for braking, a changed destination or a new room.
+- Limit changes in rotational acceleration and retain the native rotational and translational physics. Geometry-aware cruise leveling avoids flattening a climb into a nearby wall.
+- Survey open passages during normal travel, with route preference, view width and held-interest hysteresis. Short backward corrections use translation while turning.
+- Search open space without the former blind periodic pitch sweep. Cancel explosion-watching immediately for a visible opponent, impact, incoming shot or occlusion; move gently when the route is clear.
+- Renderer-confirmed enemy perception, native barrel collision tests, mission prerequisites, manual controls, artwork and networking remain unchanged.
