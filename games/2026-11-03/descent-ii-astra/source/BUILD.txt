@@ -1464,3 +1464,9 @@ R83 - stable demo orientation
 - Transport a remembered right axis through vertical flight, with entry/exit hysteresis to prevent undefined horizon flips.
 - Steer horizontal turns and elevation separately to avoid loops toward rear targets. Anticipate incline-induced bank, tolerate tiny banks, and soften roll acceleration and correction speed.
 - Native manual flight, target visibility, combat choices, route planning and graphics are unchanged.
+
+R84 - multiplayer hull-hit sparks
+- Player hits use small, short-lived world-space sparks, including native remote-hit packets and missile contacts.
+- Spark effects do not create fireballs, smoke, debris, chain sounds or blast lighting.
+- Actual local, remote and AI player destruction keeps its large dedicated explosion.
+- Native weapon damage, splash radius, friendly-fire protection, smart children, flight controls and demo AI are unchanged.

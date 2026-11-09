@@ -20,6 +20,10 @@ static void ac_launch(const object *robot,int part,int explosion);
 static float ac_wreck_heat;static int ac_wreck_part;
 static const object *ac_contact_a,*ac_contact_b;
 void astra_contact_pair(const object *a,const object *b){ac_contact_a=a;ac_contact_b=b;}
+int astra_weapon_hits_player(const object *weapon){
+    const object *other=ac_contact_a==weapon?ac_contact_b:ac_contact_b==weapon?ac_contact_a:NULL;
+    return other&&other->type==OBJ_PLAYER;
+}
 static const vms_vector *ac_contact;
 void astra_contact(const vms_vector *point){ac_contact=point;}
 static unsigned ac_hash(unsigned x){x^=x>>16;x*=0x7feb352du;x^=x>>15;x*=0x846ca68bu;return x^(x>>16);}

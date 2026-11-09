@@ -1105,7 +1105,7 @@ index fdb2e78..1069433 100644
  
  #define ENABLE_COLLISION(type1,type2)					\
 diff --git a/d2/main/fireball.c b/d2/main/fireball.c
-index fe9b0d1..224ca29 100644
+index fe9b0d1..d3ea8c6 100644
 --- a/d2/main/fireball.c
 +++ b/d2/main/fireball.c
 @@ -22,6 +22,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
@@ -1116,13 +1116,13 @@ index fe9b0d1..224ca29 100644
  #include "fix.h"
  #include "vecmat.h"
  #include "gr.h"
-@@ -65,6 +66,206 @@ fix	Flash_effect=0;
+@@ -65,6 +66,222 @@ fix	Flash_effect=0;
  
  int	PK1=1, PK2=8;
  
 +static int astra_fire_clip(int id, const char *name)
 +{
-+    if(id==VCLIP_SMALL_EXPLOSION || id==VCLIP_VOLATILE_WALL_HIT || (name && !strncmp(name,"exp",3)))return 1;
++    if(id==VCLIP_PLAYER_HIT || id==VCLIP_SMALL_EXPLOSION || id==VCLIP_VOLATILE_WALL_HIT || (name && !strncmp(name,"exp",3)))return 1;
 +    if(id==VCLIP_WATER_HIT || id==VCLIP_AFTERBURNER_BLOB || id==VCLIP_POWERUP_DISAPPEARANCE ||
 +       id==VCLIP_PLAYER_APPEARANCE || id==VCLIP_MORPHING_ROBOT)return 0;
 +    for(int i=0;i<N_weapon_types;i++)if(id==Weapon_info[i].wall_hit_vclip || id==Weapon_info[i].robot_hit_vclip)return 1;
@@ -1157,7 +1157,7 @@ index fe9b0d1..224ca29 100644
 +/* Presentation-only events outlive their original Descent damage objects.
 + * SFX, damage, robot drops, respawn input and the death camera stay in D2. */
 +#include "astra_detonations.h"
-+enum { ASTRA_PLUMES=32 };
++enum { ASTRA_PLUMES=32, ASTRA_HULL_SPARK=-1 };
 +typedef struct {vms_vector pos;fix radius;fix64 born;fix length;unsigned seed;int kind,tier,room,nextSound,closeImpact,profile;} astra_event;
 +static astra_event pyro_events[ASTRA_PLUMES];
 +static unsigned death_salt,death_serial;
@@ -1170,9 +1170,20 @@ index fe9b0d1..224ca29 100644
 +static int pyro_alive(const astra_event *e){return e->length>0 && GameTime64>=e->born && GameTime64-e->born<e->length;}
 +static unsigned death_hash(unsigned x){x^=x>>16;x*=0x7feb352du;x^=x>>15;x*=0x846ca68bu;return x^(x>>16);}
 +extern void astra_environment_blast(int,const vms_vector*,float);
++/* The native collision clip describes a shield hit, not a dying ship.
++ * Received remote-hit packets use that same clip without local contact data.
++ * A missile's damage object is preserved; only its hull-contact visual changes. */
++extern int astra_weapon_hits_player(const object *weapon);
++static int astra_plume_tier(const object *source,int clip,fix size,fix damage){
++    if(source&&source->type==OBJ_PLAYER&&damage>0)return 2;
++    if(clip==VCLIP_PLAYER_HIT)return ASTRA_HULL_SPARK;
++    if(source&&source->type==OBJ_WEAPON&&astra_weapon_hits_player(source))return ASTRA_HULL_SPARK;
++    return damage>0||size>=i2f(5)?1:0;
++}
 +static void astra_track_plume(object *o,int tier,fix elapsed)
 +{
 +    int kind=astra_effect_type(o);if(kind<0)return;
++    if(o->id==VCLIP_PLAYER_HIT&&tier!=2)tier=ASTRA_HULL_SPARK;
 +    int index=(int)(o-Objects);
 +    if(pyro_known[index] && pyro_registered[index]==o->signature)return;
 +    pyro_known[index]=1;pyro_registered[index]=o->signature;
@@ -1195,7 +1206,7 @@ index fe9b0d1..224ca29 100644
 +    }
 +    float jitter=(seed&255)/255.f;
 +    float seconds=tier==2?5.9f+1.1f*jitter:tier==1?2.40f+.23f*jitter:.50f+.32f*jitter;
-+    int profile=astra_choose_pattern(tier,seed);
++    int profile=tier<0?0:astra_choose_pattern(tier,seed);
 +    if(profile)seconds=astra_pattern_length(profile,seed);
 +    else if(tier==1&&((seed>>8)%5)>=3)seconds=2.0f+.25f*jitter;
 +    /* Routine hits on our hull clear promptly, before they hide the next
@@ -1203,6 +1214,7 @@ index fe9b0d1..224ca29 100644
 +    int closeImpact=tier<2 && !Player_is_dead && ConsoleObject &&
 +        vm_vec_dist(&ConsoleObject->pos,&o->pos)<ConsoleObject->size*3;
 +    if(closeImpact)seconds=tier==1?.46f+.18f*jitter:.20f+.12f*jitter;
++    if(tier==ASTRA_HULL_SPARK){seconds=.22f+.09f*jitter;closeImpact=0;}
 +    if(elapsed>=fl2f(seconds))return;
 +    fix radius=o->size;
 +    if(tier==2){
@@ -1218,6 +1230,7 @@ index fe9b0d1..224ca29 100644
 +    else if(tier==1&&((seed>>8)%5)>=3)radius=fixmul(radius,fl2f(.62f));
 +    if(tier==0)radius=fixmul(radius,fl2f(.79f));
 +    if(closeImpact)radius=fixmul(radius,fl2f(.62f));
++    if(tier==ASTRA_HULL_SPARK)radius=fl2f(fminf(1.1f,fmaxf(.4f,f2fl(o->size)*.18f)));
 +    pyro_events[slot]=(astra_event){o->pos,radius,GameTime64-elapsed,fl2f(seconds),seed,kind,tier,o->segnum,0,closeImpact,profile};
 +    if(tier>=1&&!elapsed)astra_environment_blast(o->segnum,&o->pos,f2fl(radius));
 +}
@@ -1243,10 +1256,13 @@ index fe9b0d1..224ca29 100644
 +    for(int i=0;i<n;i++){
 +        astra_event *e=&pyro_events[order[i]];float seconds=f2fl((fix)(GameTime64-e->born));
 +        float progress=seconds/f2fl(e->length);
-+        if(e->profile)astra_pattern_blast(&e->pos,e->radius,progress,e->seed,e->profile,e->tier);
++        if(e->tier==ASTRA_HULL_SPARK){
++            extern void astra_hull_sparks(vms_vector*,fix,float,unsigned);
++            astra_hull_sparks(&e->pos,e->radius,progress,e->seed);
++        }else if(e->profile)astra_pattern_blast(&e->pos,e->radius,progress,e->seed,e->profile,e->tier);
 +        else astra_blast(&e->pos,e->radius,progress,e->seed,e->kind,e->tier);
 +        extern void astra_debris(vms_vector*,fix,float,float,unsigned,int,int,int);
-+        astra_debris(&e->pos,e->radius,seconds,f2fl(e->length),e->seed,e->tier,e->room,window_num);
++        if(e->tier>=0)astra_debris(&e->pos,e->radius,seconds,f2fl(e->length),e->seed,e->tier,e->room,window_num);
 +        if(!window_num)EM_ASM({if(Module.traceAstraBlast)Module.traceAstraBlast($0,$1>>>0,$2,$3,$4,$5);},e->tier,e->seed,seconds,f2fl(e->length),f2fl(depth[i]),e->kind);
 +    }
 +}
@@ -1268,7 +1284,7 @@ index fe9b0d1..224ca29 100644
 +{
 +    for(int i=0;i<ASTRA_PLUMES;i++){
 +        const astra_event *e=pyro_events+i;
-+        if(e->room!=room || !pyro_alive(e))continue;
++        if(e->tier==ASTRA_HULL_SPARK || e->room!=room || !pyro_alive(e))continue;
 +        float t=(float)(GameTime64-e->born)/e->length,r=f2fl(e->radius);
 +        float glow=.65f*expf(-t*18)+1.35f*(1-expf(-t*11))*(1-t)*(1-t);
 +        if(e->tier==2)for(int j=0;j<4;j++)glow+=.67f*pyro_chain_heat(t,astra_death_burst_time(e->seed,j));
@@ -1323,18 +1339,17 @@ index fe9b0d1..224ca29 100644
  object *object_create_explosion_sub(object *objp, short segnum, vms_vector * position, fix size, int vclip_type, fix maxdamage, fix maxdistance, fix maxforce, int parent )
  {
  	int objnum;
-@@ -87,6 +288,10 @@ object *object_create_explosion_sub(object *objp, short segnum, vms_vector * pos
+@@ -87,6 +304,9 @@ object *object_create_explosion_sub(object *objp, short segnum, vms_vector * pos
  	//now set explosion-specific data
  
  	obj->lifeleft = Vclip[vclip_type ].play_time;
-+    int plume_tier=(objp==ConsoleObject && obj_type==OBJ_PLAYER && Player_is_dead && maxdamage>0)?2:
-+        (maxdamage>0 || size>=i2f(5))?1:0;
++    int plume_tier=astra_plume_tier(objp,vclip_type,size,maxdamage);
 +    pyro_known[objnum]=0;astra_track_plume(obj,plume_tier,0);
-+    astra_impact_sound(obj);
++    if(plume_tier>=0)astra_impact_sound(obj);
  	obj->ctype.expl_info.spawn_time = -1;
  	obj->ctype.expl_info.delete_objnum = -1;
  	obj->ctype.expl_info.delete_time = -1;
-@@ -287,7 +492,8 @@ object *object_create_explosion_sub(object *objp, short segnum, vms_vector * pos
+@@ -287,7 +507,8 @@ object *object_create_explosion_sub(object *objp, short segnum, vms_vector * pos
  									}
  
  									// Explosions CAN be friendly fire.
@@ -1344,7 +1359,7 @@ index fe9b0d1..224ca29 100644
  								}
  							}
  								break;
-@@ -439,10 +645,13 @@ object *object_create_debris(object *parent, int subobj_num)
+@@ -439,10 +660,13 @@ object *object_create_debris(object *parent, int subobj_num)
  
  }
  
@@ -1360,7 +1375,7 @@ index fe9b0d1..224ca29 100644
  
  }
  
-@@ -1206,6 +1415,10 @@ int get_explosion_vclip(object *obj,int stage)
+@@ -1206,6 +1430,10 @@ int get_explosion_vclip(object *obj,int stage)
  //blow up a polygon model
  void explode_model(object *obj)
  {
@@ -1371,7 +1386,7 @@ index fe9b0d1..224ca29 100644
  	Assert(obj->render_type == RT_POLYOBJ);
  
  	if (Dying_modelnums[obj->rtype.pobj_info.model_num] != -1)
-@@ -1216,7 +1429,7 @@ void explode_model(object *obj)
+@@ -1216,7 +1444,7 @@ void explode_model(object *obj)
  
  		for (i=1;i<Polygon_models[obj->rtype.pobj_info.model_num].n_models;i++)
  			if (!(obj->type == OBJ_ROBOT && obj->id == 44 && i == 5)) 	//energy sucker energy part
@@ -1380,7 +1395,7 @@ index fe9b0d1..224ca29 100644
  
  		//make parent object only draw center part
  		obj->rtype.pobj_info.subobj_flags=1;
-@@ -1620,3 +1833,7 @@ void expl_wall_read_n_swap(expl_wall *ew, int n, int swap, PHYSFS_file *fp)
+@@ -1620,3 +1848,7 @@ void expl_wall_read_n_swap(expl_wall *ew, int n, int swap, PHYSFS_file *fp)
  			expl_wall_swap(&ew[i], swap);
  }
  
