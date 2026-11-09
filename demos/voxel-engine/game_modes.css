@@ -1,0 +1,326 @@
+/* The game modes: Mayhem's score panel, the words that say what happened,
+   the prompt of the first minute, the mode buttons and the result card
+   (js/game_modes.js, game_score.js, game_card.js). Colours and panels are
+   game.css's. */
+
+/* Score panel, top centre: clock, score, multiplier; the fuse that holds
+   the multiplier; a pip per structure and the air strikes in hand. */
+#mh { position: fixed; left: 50%; top: calc(10px + var(--safe-t)); transform: translateX(-50%); min-width: 300px; box-sizing: border-box; padding: 6px 14px 8px; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; color: var(--muted); }
+.mh-top { display: grid; grid-template-columns: 64px 1fr 64px; align-items: baseline; gap: 8px; }
+.mh-clock { font: 600 17px/1.2 var(--mono); color: var(--text); font-variant-numeric: tabular-nums; }
+#mh.late .mh-clock { color: var(--danger); animation: mh-pulse 1s steps(2, jump-none) infinite; }
+#mh.over .mh-clock { color: var(--accent); }
+/* The world is running slow on this machine, and the clock with it. */
+.mh-clock { position: relative; }
+#mh.slowed .mh-clock::after { content: "SLOW MOTION"; position: absolute; left: 0; top: 100%; font: 600 8.5px/1 var(--mono); letter-spacing: 0.1em; color: var(--accent); white-space: nowrap; }
+.mh-score { font: 700 28px/1.1 var(--mono); letter-spacing: -0.02em; color: var(--text); text-align: center; font-variant-numeric: tabular-nums; }
+.mh-mult { font: 800 28px/1.1 var(--mono); color: var(--accent); text-align: right; transform-origin: 100% 60%; }
+.mh-mult.idle { color: var(--muted); opacity: 0.45; }
+/* The hold is nearly out. */
+#mh.slip .mh-mult { color: var(--danger); animation: mh-pulse 0.5s steps(2, jump-none) infinite; }
+#mh.slip .mh-fuse i { background: var(--danger); }
+.mh-mult.bump { animation: mh-bump 0.35s cubic-bezier(0.2, 2.2, 0.4, 1); }
+.mh-fuse { height: 5px; margin: 5px 0 6px; border-radius: 2px; background: rgba(255, 255, 255, 0.1); overflow: hidden; }
+.mh-fuse i { display: block; height: 100%; background: var(--accent); transform-origin: 0 50%; transform: scaleX(0); }
+.mh-foot { display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; min-height: 14px; }
+.mh-pips { display: flex; gap: 3px; }
+.mh-pips i { position: relative; width: 9px; height: 14px; border-radius: 2px; background: rgba(255, 255, 255, 0.12); overflow: hidden; }
+.mh-pips b { position: absolute; inset: 0; background: var(--muted); transform-origin: 50% 100%; transform: scaleY(0); transition: transform 0.25s; }
+.mh-pips i.done b { background: #58c26a; }
+/* A city block: more structures than the panel has room for at full width. */
+.mh-pips.many { gap: 2px; }
+.mh-pips.many i { width: 6px; }
+.mh-strikes { display: flex; gap: 4px; align-items: center; }
+.mh-strikes::before { content: "STRIKE"; margin-right: 3px; font: 600 9.5px/1 var(--mono); letter-spacing: 0.1em; }
+.mh-strikes i { width: 10px; height: 10px; border-radius: 50%; background: var(--danger); box-shadow: 0 0 0 1.5px rgba(255, 255, 255, 0.5) inset; }
+.mh-strikes.none { opacity: 0.35; }
+@keyframes mh-pulse { 50% { opacity: 0.45; } }
+@keyframes mh-bump { 0% { transform: scale(1.9); } 100% { transform: scale(1); } }
+/* The objective panel and the state pills share the top centre. */
+body.mayhem #status { top: calc(96px + var(--safe-t)); }
+
+/* What just happened, in words: under the panel, large, gone in a moment. */
+#mh-words { position: fixed; left: 0; right: 0; top: calc(108px + var(--safe-t)); display: flex; flex-direction: column; align-items: center; gap: 2px; pointer-events: none; }
+.mh-word { font: 800 22px/1.25 ui-sans-serif, system-ui, sans-serif; letter-spacing: 0.04em; text-transform: uppercase; color: #fff; text-shadow: 0 2px 0 rgba(0, 0, 0, 0.55), 0 0 14px rgba(0, 0, 0, 0.5); white-space: nowrap; animation: mh-word 1.7s cubic-bezier(0.2, 0.9, 0.3, 1) forwards; }
+.mh-word.chain { color: var(--accent); }
+.mh-word.levelled { font-size: 32px; color: #7be08c; }
+.mh-word.strike, .mh-word.slip { color: #ff7b7f; }
+/* Under the crosshair: the structure coming down and how far it has to go. */
+#mh-target { position: fixed; left: 50%; top: calc(50% + 30px); transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 3px; pointer-events: none; font: 600 11.5px/1.2 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: #fff; text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8); }
+.mh-target-bar { width: 120px; height: 5px; border-radius: 3px; background: rgba(0, 0, 0, 0.45); box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.35); overflow: hidden; }
+.mh-target-bar i { display: block; height: 100%; background: var(--accent); transform-origin: 0 50%; transform: scaleX(0); transition: transform 0.2s; }
+#mh-target.done .mh-target-bar i { background: #58c26a; }
+.mh-word.time { font-size: 30px; }
+@keyframes mh-word {
+  0% { opacity: 0; transform: scale(1.5); }
+  10% { opacity: 1; transform: scale(1); }
+  75% { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(-14px); }
+}
+
+/* The prompt: one line above the tool belt. */
+#mh-tip { pointer-events: auto; position: absolute; left: 50%; bottom: calc(118px + var(--safe-b)); transform: translateX(-50%); padding: 7px 16px; background: rgba(12, 15, 19, 0.82); border: 1px solid rgba(255, 184, 77, 0.6); border-radius: 999px; font-size: 15px; font-weight: 600; color: var(--text); white-space: nowrap; max-width: calc(100vw - 24px); box-sizing: border-box; overflow: hidden; text-overflow: ellipsis; }
+/* Nothing of a run is said over the curtain of a scene still loading. */
+/* A run gone quiet: which way the nearest structure still standing is. */
+#mh-next { position: fixed; top: calc(50% - 70px); pointer-events: none; white-space: nowrap; padding: 5px 11px; border-radius: 999px; background: rgba(12, 15, 19, 0.6); border: 1px solid rgba(255, 183, 77, 0.5); font: 600 11.5px/1.2 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: #ffd78a; text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8); }
+#mh-next.left { left: calc(14px + var(--safe-l, 0px)); }
+#mh-next.left::before { content: '\25C0\00A0\00A0'; }
+#mh-next.right { right: calc(14px + var(--safe-r, 0px)); }
+#mh-next.right::after { content: '\00A0\00A0\25B6'; }
+#mh-next.ahead { left: 50%; top: calc(50% - 96px); transform: translateX(-50%); }
+#mh-next.ahead::before { content: '\25B2\00A0\00A0'; }
+body.loading #mh-tip, body.loading #mh, body.loading #job, body.loading #job-tags, body.loading #mh-words, body.loading #mh-target, body.loading #mh-next { visibility: hidden; }
+/* The tool hint would sit under it. */
+body.mayhem #toolhint, body.tip-up #toolhint { visibility: hidden; }
+
+/* Mode buttons: on the start card above Play, in the menu above the scenes. */
+.modes { display: flex; gap: 8px; margin: 0 0 10px; }
+.modes button { flex: 1 1 0; padding: 10px 10px; font-size: 15px; font-weight: 650; color: var(--muted); display: flex; flex-direction: column; align-items: center; gap: 1px; }
+.modes button.on { color: var(--text); border-color: rgba(255, 184, 77, 0.75); background: rgba(255, 184, 77, 0.13); }
+.modes button small { font: 500 11px/1.3 var(--mono); color: var(--accent); min-height: 14px; }
+#menu .modes { margin: 4px 0 12px; }
+/* The start card says what the mode is in one line; the list of keys waits
+   in the menu (How to play), where game.js moves it. */
+#start .keys { display: none !important; }
+#start .lead { min-height: 2.9em; }
+
+/* Result card: over everything, the objective's own card stays down. */
+#result { position: fixed; inset: 0; z-index: 4; display: flex; overflow: auto; padding: 14px; box-sizing: border-box; background: rgba(6, 8, 11, 0.5); }
+body.result-up #score { display: none !important; }
+#result .card { max-width: 400px; text-align: center; padding-top: 18px; }
+#result .kicker { font: 600 11px/1.4 var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+#result .medal { width: 76px; height: 76px; margin: 14px auto 6px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #4a525c, #23282e 70%); box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.08), 0 8px 24px rgba(0, 0, 0, 0.4); }
+#result .medal[data-medal="1"] { background: radial-gradient(circle at 35% 30%, #f0b58a, #a8643a 70%); }
+#result .medal[data-medal="2"] { background: radial-gradient(circle at 35% 30%, #ffffff, #9aa7b4 70%); }
+#result .medal[data-medal="3"] { background: radial-gradient(circle at 35% 30%, #fff3b0, #e3a11c 70%); box-shadow: 0 0 0 3px rgba(255, 214, 102, 0.35), 0 0 34px rgba(255, 190, 60, 0.45); }
+#result .medal-name { font: 700 12px/1.4 var(--mono); letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); }
+#result .value { margin-top: 4px; font: 800 44px/1.15 var(--mono); letter-spacing: -0.03em; color: var(--text); font-variant-numeric: tabular-nums; }
+#result .best { min-height: 18px; font: 12px/1.5 var(--mono); color: var(--muted); }
+#result .best.new { color: var(--accent); font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; }
+#result dl { display: grid; grid-template-columns: 1fr auto; gap: 5px 16px; margin: 14px 0 0; text-align: left; font-size: 13px; color: #b9c4d0; }
+#result dd { margin: 0; font: 12.5px/1.5 var(--mono); color: var(--text); text-align: right; font-variant-numeric: tabular-nums; }
+#result .next { margin: 12px 0 0; font-size: 12.5px; color: var(--accent); }
+#result .next:empty { display: none; }
+#result footer { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--line); }
+
+/* Narrow screens: the readout has the top row, the panel goes under it. */
+@media (max-width: 1100px) {
+  #mh { top: calc(64px + var(--safe-t)); min-width: 260px; padding: 4px 10px 6px; }
+  .mh-score { font-size: 22px; }
+  .mh-mult { font-size: 22px; }
+  #mh-words { top: calc(150px + var(--safe-t)); }
+  .mh-word { font-size: 17px; }
+  .mh-word.levelled, .mh-word.time { font-size: 22px; }
+  body.mayhem #status { position: static; transform: none; }
+}
+@media (max-width: 640px) {
+  #mh-tip { bottom: calc(96px + var(--safe-b)); font-size: 13px; white-space: normal; text-align: center; border-radius: 14px; }
+  #result .value { font-size: 36px; }
+}
+@media (max-height: 480px) {
+  #mh { top: calc(6px + var(--safe-t)); left: auto; right: calc(70px + var(--safe-r)); transform: none; }
+  #mh-words { top: calc(84px + var(--safe-t)); }
+  #mh-tip { bottom: calc(60px + var(--safe-b)); }
+  /* The card in a view shorter than itself: everything smaller, the
+     buttons always on screen. */
+  #result { padding: 6px; }
+  #result .card { padding-top: 10px; }
+  #result .medal { width: 34px; height: 34px; margin: 6px auto 3px; }
+  #result .value { font-size: 30px; margin-top: 0; }
+  #result dl { grid-template-columns: 1fr auto 1fr auto; gap: 2px 12px; margin-top: 6px; font-size: 12px; }
+  #result .next { margin-top: 6px; }
+  #result footer { margin-top: 8px; padding-top: 8px; }
+}
+@media (min-width: 2200px) and (min-height: 1200px) {
+  #mh, #mh-words, #mh-tip, #mh-target { zoom: 1.3; }
+}
+@media (min-width: 3400px) and (min-height: 1900px) {
+  #mh, #mh-words, #mh-tip, #mh-target { zoom: 1.8; }
+}
+/* The running count of one happening says less than the score does. */
+body.mayhem #tally { display: none; }
+/* Touch: the thumbs own the lower half, so the prompt goes under the panel
+   (the bill is the taller of the two). */
+body.touch #mh-tip { bottom: auto; top: calc(136px + var(--safe-t)); }
+body.touch.job #mh-tip { top: calc(200px + var(--safe-t)); }
+/* A phone on its side: the panel has the top right, the words the middle,
+   so the prompt sits low between the thumbs, over the belt. */
+@media (max-height: 480px) { body.touch #mh-tip, body.touch.job #mh-tip { top: auto; bottom: calc(74px + var(--safe-b)); font-size: 13px; padding: 5px 12px; } }
+
+/* Contracts. The job board: a row per job under the mode buttons. */
+.jobs { display: flex; flex-direction: column; gap: 5px; margin: 0 0 10px; }
+.jobs button { display: grid; grid-template-columns: 14px 1fr auto; align-items: center; gap: 10px; padding: 7px 10px; text-align: left; color: var(--muted); }
+.jobs button.on { color: var(--text); border-color: rgba(255, 184, 77, 0.75); background: rgba(255, 184, 77, 0.13); }
+.jobs button span { display: flex; flex-direction: column; min-width: 0; }
+.jobs button b { font-size: 14px; font-weight: 650; color: var(--text); }
+.jobs button small { font-size: 12px; line-height: 1.35; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.jobs button em { font: 500 11.5px/1 var(--mono); font-style: normal; color: var(--muted); white-space: nowrap; }
+.jobs button em.best { color: var(--accent); }
+/* A medal the size of a full stop: none yet, done at a loss, bronze, silver, gold. */
+.jobs button i, .job-profit::before { width: 12px; height: 12px; border-radius: 50%; background: rgba(255, 255, 255, 0.12); }
+.jobs button i[data-medal="0"] { background: #6b7480; }
+.jobs button i[data-medal="1"], .job-profit[data-medal="1"]::before { background: #c9814f; }
+.jobs button i[data-medal="2"], .job-profit[data-medal="2"]::before { background: #cfd8e1; }
+.jobs button i[data-medal="3"], .job-profit[data-medal="3"]::before { background: #f2b632; box-shadow: 0 0 8px rgba(255, 190, 60, 0.6); }
+#menu .jobs { margin-bottom: 12px; }
+/* A short window: the board is titles and fees, the briefs wait for the bill. */
+@media (max-height: 700px) { .jobs button small { display: none; } .jobs button { padding: 5px 10px; } }
+/* A phone on its side, a small window: the card has to show Play without
+   a scroll. The jobs go two abreast and the line about the mode goes. */
+@media (max-height: 480px) {
+  .jobs { display: grid; grid-template-columns: 1fr 1fr; }
+  .jobs button { grid-template-columns: 12px 1fr; }
+  .jobs button em { display: none; }
+  #start .lead { display: none; }
+  .modes { margin-bottom: 6px; }
+  .modes button { padding: 6px 10px; }
+}
+@media (max-width: 640px) { .jobs button small { white-space: normal; } }
+
+/* The bill, top centre: the job, the profit as it stands with the medal
+   it would earn, progress, the lines of the bill, the neighbours. */
+#job { position: fixed; left: 50%; top: calc(10px + var(--safe-t)); transform: translateX(-50%); width: 380px; max-width: calc(100vw - 20px); box-sizing: border-box; padding: 7px 13px 8px; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; font-size: 12.5px; color: var(--muted); }
+.job-head { display: flex; align-items: baseline; gap: 10px; }
+.job-head b { flex: 1; color: var(--text); font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.job-clock { font: 600 13px/1 var(--mono); color: var(--text); }
+.job-profit { display: inline-flex; align-items: center; gap: 6px; font: 700 20px/1.1 var(--mono); color: var(--text); font-variant-numeric: tabular-nums; }
+.job-profit::before { content: ""; }
+.job-profit.red { color: #ff7b7f; }
+.job-bar { height: 5px; margin: 6px 0 5px; border-radius: 3px; background: rgba(255, 255, 255, 0.12); overflow: hidden; }
+.job-bar i { display: block; height: 100%; background: var(--accent); transform-origin: 0 50%; transform: scaleX(0); transition: transform 0.25s; }
+.job-bill { font: 11px/1.4 var(--mono); font-variant-numeric: tabular-nums; white-space: pre-wrap; }
+.job-par { font: 11px/1.4 var(--mono); white-space: pre-wrap; opacity: 0.75; }
+.job-keeps { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 5px; }
+.job-keeps:empty { display: none; }
+.job-keeps span { padding: 1px 8px; border: 1px solid var(--line); border-radius: 999px; font-size: 11.5px; }
+.job-keeps span::before { content: "keep "; opacity: 0.6; }
+.job-keeps span.hurt { color: #ff7b7f; border-color: rgba(229, 72, 77, 0.7); }
+.job-keeps span.hurt::after { content: " " attr(data-lost); font-family: var(--mono); }
+.job-hint { margin-top: 4px; font-size: 11.5px; }
+.job-hint:empty { display: none; }
+/* The metres of a job paid by the metre, while they are counted. */
+#job-count { position: fixed; left: 0; right: 0; top: 60%; text-align: center; pointer-events: none; text-shadow: 0 2px 3px rgba(0, 0, 0, 0.8); }
+#job-count b { display: block; font: 800 30px/1.1 var(--mono); color: var(--accent); font-variant-numeric: tabular-nums; }
+#job-count span { font: 700 15px/1.5 var(--mono); color: #fff; letter-spacing: 0.08em; text-shadow: 0 1px 2px #000, 0 0 6px rgba(0, 0, 0, 0.9); }
+body.loading #job-count { visibility: hidden; }
+@media (max-height: 480px) { #job-count b { font-size: 22px; } }
+/* Labels in the world while a job is looked over: the target and what must stand. */
+#job-tags { position: fixed; inset: 0; pointer-events: none; overflow: hidden; }
+.job-tag { position: absolute; left: 0; top: 0; padding: 3px 10px; border-radius: 999px; background: rgba(12, 15, 19, 0.72); border: 1px solid rgba(255, 184, 77, 0.8); font: 600 12px/1.4 ui-sans-serif, system-ui, sans-serif; color: var(--text); white-space: nowrap; }
+.job-tag.keep { border-color: rgba(229, 72, 77, 0.85); color: #ffb3b5; }
+#job.won { border-color: rgba(88, 194, 106, 0.8); }
+#job.won .job-bar i { background: #58c26a; }
+#job.lost { border-color: rgba(229, 72, 77, 0.8); }
+body.job #status { top: calc(128px + var(--safe-t)); }
+body.job #tally { display: none; }
+.mh-word.damage { color: #ff7b7f; }
+.mh-word.void { font-size: 30px; color: #ff5a5f; }
+/* What a use of the tool costs, on its slot. */
+.slot .price { position: absolute; right: 3px; bottom: 1px; font: 600 9px/1.3 var(--mono); color: var(--accent); }
+.slot .price:empty { display: none; }
+#result.lost .medal-name { color: var(--danger); }
+#result.lost .value { font-size: 26px; color: var(--muted); }
+@media (max-width: 1100px) {
+  #job { top: calc(64px + var(--safe-t)); padding: 5px 10px 6px; }
+  .job-profit { font-size: 17px; }
+  body.job #status { position: static; transform: none; }
+}
+@media (max-height: 480px) {
+  #job { top: calc(6px + var(--safe-t)); left: auto; right: calc(70px + var(--safe-r)); transform: none; width: 300px; }
+  /* What gold and silver take is on the card; the bill's own line and
+     its last one (whether to wait) are kept. */
+  .job-par { display: none; }
+  .job-bill, .job-hint { font-size: 10.5px; line-height: 1.3; }
+  .job-hint { margin-top: 2px; }
+}
+@media (min-width: 2200px) and (min-height: 1200px) { #job { zoom: 1.3; } }
+@media (min-width: 3400px) and (min-height: 1900px) { #job { zoom: 1.8; } }
+/* In a contract the bill is taller than the score panel. */
+body.job #mh-words { top: calc(226px + var(--safe-t)); }
+/* In a contract a tool keeps its name and its price sits in the corner
+   (in place of the name, a newcomer could not tell what "$150" was). */
+body.job .slot .price { top: 2px; right: 4px; bottom: auto; font-size: 9.5px; }
+@media (max-width: 1100px) { body.job #mh-words { top: calc(192px + var(--safe-t)); } }
+
+/* The sandbox's toy box (js/game_toys.js). A list to pick from at the left
+   of the view, so that what the player is pointing at stays in sight;
+   it takes clicks and taps (nothing else in the HUD does). */
+#toys { position: absolute; left: calc(10px + var(--safe-l)); top: 50%; transform: translateY(-50%); width: 286px; box-sizing: border-box; padding: 8px 8px 7px; display: flex; flex-direction: column; gap: 3px; background: var(--panel); border: 1px solid rgba(255, 184, 77, 0.6); border-radius: 12px; color: var(--muted); pointer-events: auto; }
+/* (Open, and somebody left play another way: it does not stay up.) */
+#ui:not(.mode-play) #toys, body:not(.toys-on) #toys { display: none; }
+.toys-head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; padding: 0 3px 3px; }
+.toys-head b { font: 700 11px/1.4 var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); }
+.toys-head span { font-size: 11.5px; }
+.toy { display: grid; grid-template-columns: 22px 1fr; align-items: center; gap: 9px; padding: 5px 8px; text-align: left; background: rgba(255, 255, 255, 0.04); border-color: transparent; }
+.toy span { display: flex; flex-direction: column; min-width: 0; }
+.toy b { font-size: 13.5px; font-weight: 650; line-height: 1.25; color: var(--text); }
+.toy small { font-size: 11.5px; line-height: 1.3; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.toy kbd { margin: 0; padding: 0; font-weight: 700; color: var(--accent); }
+/* The row a gamepad's d-pad is on. */
+#toys.by-pad .toy.on { border-color: rgba(255, 184, 77, 0.75); background: rgba(255, 184, 77, 0.13); }
+.toys-foot { display: flex; flex-wrap: wrap; gap: 3px 10px; margin-top: 3px; padding: 6px 3px 0; border-top: 1px solid var(--line); font-size: 11.5px; }
+.toys-foot span, .toys-shut { white-space: nowrap; }
+.toys-shut { padding: 2px 3px 0; font-size: 11.5px; opacity: 0.8; }
+#toys kbd { font-size: 10.5px; line-height: 16px; }
+.toys-foot kbd, .toys-shut kbd { margin-right: 4px; padding: 0 5px; }
+/* Touch has no keys: rows to tap, a little taller, and no key reminders. */
+body.touch #toys .toy { grid-template-columns: 1fr; padding: 7px 10px; }
+body.touch #toys kbd, body.touch .toys-foot, body.touch .toys-shut { display: none; }
+/* The hint of the first seconds in the sandbox: over the tool's own line,
+   and gone when it has been read. */
+#toys-hint, #toys-note { display: none; position: absolute; left: 50%; bottom: calc(118px + var(--safe-b)); transform: translateX(-50%); padding: 5px 14px; background: rgba(12, 15, 19, 0.82); border: 1px solid rgba(255, 184, 77, 0.6); border-radius: 999px; font-size: 13.5px; font-weight: 600; color: var(--text); white-space: nowrap; }
+body.toys-on:not(.touch) #ui.mode-play #toys-hint { display: block; animation: toys-hint 7s linear forwards; }
+@keyframes toys-hint { 0%, 85% { opacity: 1; } 100% { opacity: 0; } }
+/* What is said when a toy was refused, in the same place. */
+#toys-note { display: block; border-color: rgba(229, 72, 77, 0.7); border-radius: 14px; animation: toys-hint 3.5s linear forwards; max-width: calc(100vw - 24px); box-sizing: border-box; white-space: normal; text-align: center; }
+body.touch #toys-note { bottom: auto; top: calc(176px + var(--safe-t)); }
+/* The button on touch: under the red one, out of both thumbs' way, and
+   only in the sandbox. */
+#tb-toys { display: none; right: calc(16px + var(--safe-r)); top: calc(118px + var(--safe-t)); width: 44px; height: 44px; border-radius: 10px; font-size: 10px; border-color: rgba(255, 184, 77, 0.6); }
+body.toys-on #tb-toys { display: grid; }
+/* A phone held upright: the panel goes under the top row of buttons and
+   stops short of the crosshair. */
+@media (max-width: 640px) {
+  #toys { top: calc(104px + var(--safe-t)); transform: none; width: 250px; }
+  #toys-hint, #toys-note { bottom: calc(96px + var(--safe-b)); }
+}
+@media (max-height: 480px) {
+  #toys { padding: 6px; gap: 2px; }
+  .toy { padding: 3px 8px; }
+  body.touch #toys .toy { padding: 5px 10px; }
+  #toys-hint, #toys-note { bottom: calc(64px + var(--safe-b)); }
+}
+@media (min-width: 2200px) and (min-height: 1200px) { #toys, #toys-hint, #toys-note { zoom: 1.3; } }
+@media (min-width: 3400px) and (min-height: 1900px) { #toys, #toys-hint, #toys-note { zoom: 1.8; } }
+
+/* The player's body (game_harm.js): the edge reddens as health goes, a
+   flare on the side a hurt came from, a word while they are down. */
+#harm, #harm-flare { position: fixed; inset: 0; pointer-events: none; opacity: 0; }
+#harm { background: radial-gradient(ellipse at center, rgba(150, 0, 0, 0) 42%, rgba(170, 8, 12, 0.62) 100%); transition: opacity 0.15s linear; }
+#harm-flare.l { background: linear-gradient(90deg, rgba(230, 30, 30, 0.6), rgba(230, 30, 30, 0) 38%); }
+#harm-flare.r { background: linear-gradient(270deg, rgba(230, 30, 30, 0.6), rgba(230, 30, 30, 0) 38%); }
+#harm-flare.f { background: linear-gradient(180deg, rgba(230, 30, 30, 0.6), rgba(230, 30, 30, 0) 38%); }
+#harm-flare.b { background: linear-gradient(0deg, rgba(230, 30, 30, 0.6), rgba(230, 30, 30, 0) 38%); }
+#harm-note { position: fixed; left: 0; right: 0; bottom: calc(168px + var(--safe-b, 0px)); text-align: center; padding: 0 16px; pointer-events: none; font: 700 15px/1.25 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: #ffb3b5; text-shadow: 0 1px 2px rgba(0, 0, 0, 0.85); }
+#harm-word { position: fixed; left: 0; right: 0; top: 38%; text-align: center; pointer-events: none; font: 800 44px/1 ui-sans-serif, system-ui, sans-serif; letter-spacing: 0.24em; text-transform: uppercase; color: #ff8a8d; text-shadow: 0 2px 0 rgba(0, 0, 0, 0.6), 0 0 18px rgba(0, 0, 0, 0.55); }
+body.loading #harm, body.loading #harm-flare, body.loading #harm-word, body.loading #harm-note { visibility: hidden; }
+
+/* A narrow window: a phone held upright, or a slim frame on another site's
+   page. The opening panel is smaller, and where it is still taller than its
+   window it scrolls inside itself, with the play button always in sight.
+   Nothing here applies over 480px of width. */
+@media (max-width: 480px) {
+  #overlay { padding: 8px; }
+  #start { max-height: 100%; overflow-y: auto; overscroll-behavior: contain; padding: 12px 12px 10px; }
+  #start h1 { font-size: 19px; margin-bottom: 4px; }
+  #start .lead { min-height: 0; margin: 4px 0 8px; font-size: 13px; line-height: 1.35; }
+  #start .modes { gap: 6px; margin-bottom: 8px; }
+  #start .modes button { padding: 6px 6px; font-size: 14px; }
+  #start .jobs { gap: 4px; margin-bottom: 8px; }
+  #start .jobs button { padding: 5px 9px; }
+  #start #play { position: sticky; top: 0; bottom: 0; z-index: 1; box-shadow: 0 0 0 6px var(--panel-solid); }
+  #start .note { font-size: 11.5px; margin: 4px 0; }
+  #start .scenes { gap: 5px; margin-top: 8px; }
+  #start .scenes button { padding: 4px 8px; font-size: 12px; }
+  #start .objectives { margin-top: 6px; }
+}
