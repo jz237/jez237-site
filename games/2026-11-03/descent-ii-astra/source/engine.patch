@@ -1983,7 +1983,7 @@ index 7298cc1..b795bc6 100644
  		if (Guided_missile[Player_num] && Guided_missile[Player_num]->type==OBJ_WEAPON && Guided_missile[Player_num]->id==GUIDEDMISS_ID &&
  		Guided_missile[Player_num]->signature==Guided_missile_sig[Player_num] && PlayerCfg.GuidedInBigWindow)
 diff --git a/d2/main/inferno.c b/d2/main/inferno.c
-index dc6e44a..0ed85e7 100644
+index dc6e44a..430676c 100644
 --- a/d2/main/inferno.c
 +++ b/d2/main/inferno.c
 @@ -44,6 +44,15 @@ char copyright[] = "DESCENT II  COPYRIGHT (C) 1994-1996 PARALLAX SOFTWARE CORPOR
@@ -1992,7 +1992,7 @@ index dc6e44a..0ed85e7 100644
  #include "bm.h"
 +extern int astra_vertigo(void);
 +EM_JS(int,astra_ov_selected,(void),{return Module.campaign==="overload";});
-+EM_JS(int,astra_auto_difficulty,(void),{return Module.autopilot?1:(Number.isInteger(Module.difficulty)?Module.difficulty:-1);});
++EM_JS(int,astra_auto_difficulty,(void),{return Number.isInteger(Module.difficulty)&&Module.difficulty>=0&&Module.difficulty<5?Module.difficulty:-1;});
 +EM_JS(int,astra_demo_pilot,(void),{return !!Module.autopilot;});
 +EM_JS(int,astra_mine_launch,(void),{return Module.mineInspect>=0;});
 +EM_JS(int,astra_auto_first,(void),{return Module.startLevel||1;});
