@@ -3,7 +3,7 @@
 // Nothing in here touches the DOM, WebGL or audio; it only pushes events into W.ev.
 //
 // The world is a band round a small planet: x along the ground (wraps every C metres), y altitude (0..H).
-import { F, STEP, C, H, ENEMY, SETTLER, BOSSES, B_KEYS, SECTORS, WAVES, rampAt, rampLevel, endlessLevel, ENDLESS, TUTOR, SCORE, START_LIVES, DIFFICULTY, applyDiff, POWERUPS, PW_KEYS, DROP } from './config.js?v=2';
+import { F, STEP, C, H, ENEMY, SETTLER, BOSSES, B_KEYS, SECTORS, WAVES, rampAt, rampLevel, endlessLevel, ENDLESS, TUTOR, SCORE, START_LIVES, DIFFICULTY, applyDiff, POWERUPS, PW_KEYS, DROP } from './config.js?v=3';
 export { STEP };
 
 const clamp = (v, a, b) => (v < a ? a : v > b ? b : v);
@@ -660,7 +660,7 @@ function boss(W, B, dt) {
   B.x = wp(B.x + B.vx * dt);
   B.y = clamp(B.y + B.vy * dt, 4, H - 1);
 }
-function endAtk(W, B) { B.atk = null; B.atkT = W.R.atkT * rr(W, 0.8, 1.2); }
+function endAtk(W, B) { B.atk = null; B.atkT = W.R.atkT * rr(W, 0.8, 1.2) * (B.rage ? 0.68 : 1); }
 function hitNode(W, B, i, pid) {
   const n = B.nodes[i];
   if (!n || n.hp <= 0) return;
@@ -670,6 +670,8 @@ function hitNode(W, B, i, pid) {
   if (n.hp <= 0) {
     addScore(W, SCORE.node);
     W.ev.push({ k: 'nodebreak', i, x, y, pid, score: SCORE.node });
+    const down = B.nodes.filter((q) => q.hp <= 0).length;
+    if (!B.rage && down * 2 >= B.nodes.length && down < B.nodes.length) { B.rage = 1; W.ev.push({ k: 'enrage', x: B.x, y: B.y, key: B.key }); }
     if (B.nodes.every((q) => q.hp <= 0)) {
       B.st = 'dying'; B.stT = 2.6; B.atk = null;
       W.ev.push({ k: 'bossdying', x: B.x, y: B.y, key: B.key });

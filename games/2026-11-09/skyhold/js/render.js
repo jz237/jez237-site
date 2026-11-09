@@ -5,13 +5,13 @@
 // Five looks (sky, terrain, sea, scenery, bodies in the sky), real 3D models for everything, curved beams,
 // warnings drawn in the play plane, HDR post. Nothing here changes the world.
 import * as THREE from '../vendor/three.module.min.js';
-import { Post } from './post.js?v=2';
-import * as TX from './textures.js?v=2';
-import * as MD from './models.js?v=2';
-import { FX, CALM } from './fx.js?v=2';
-import { NOISE } from './shaders.js?v=2';
-import { F, C, RP, H, ENEMY, BOSSES, POWERUPS, P2_LIVERY, LIVERIES, SETTLER } from './config.js?v=2';
-import { wd, wp, nodePos, beamRange } from './sim.js?v=2';
+import { Post } from './post.js?v=3';
+import * as TX from './textures.js?v=3';
+import * as MD from './models.js?v=3';
+import { FX, CALM } from './fx.js?v=3';
+import { NOISE } from './shaders.js?v=3';
+import { F, C, RP, H, ENEMY, BOSSES, POWERUPS, P2_LIVERY, LIVERIES, SETTLER } from './config.js?v=3';
+import { wd, wp, nodePos, beamRange } from './sim.js?v=3';
 
 export { CALM };
 const hdr = (hex, k) => new THREE.Color(hex).multiplyScalar(k);
@@ -1003,7 +1003,17 @@ export class Renderer {
     if (V.spin) { const ax = { ark: 'y', reaper: 'x', loom: 'z', throne: 'z' }[B.key] || 'z'; V.spin.rotation[ax] += dt * (0.6 + (B.atk ? 2.5 : 0)); }
     if (V.hatch) { const open = B.atk && (B.atk.kind === 'drop' || B.atk.kind === 'mines') ? 1.3 : 0; V.hatch.rotation.z += (open - V.hatch.rotation.z) * Math.min(1, dt * 4); }
     if (V.nodes) V.nodes.forEach((g, i) => { const n = B.nodes[i]; g.visible = !!n && n.hp > 0; if (n && n.hp > 0) g.scale.setScalar(1 + Math.sin(t * 5 + i) * 0.08 + (B.hitT > 0 ? 0.3 : 0)); });
-    toW(B.x, B.y - 2, _v, 3); this.bossLight.position.copy(_v); this.bossLight.intensity = B.st === 'fight' ? 40 + Math.sin(t * 3) * 10 : 20;
+    // wounds: every destroyed weak point burns and trails smoke; an enraged carrier glows red
+    if (B.st !== 'warp' && !CALM.on) B.nodes.forEach((n, i) => {
+      if (n.hp > 0 || Math.random() > dt * (B.st === 'dying' ? 30 : 12)) return;
+      const [nx, ny] = nodePos(B, i);
+      toW(nx, ny, _v, 1.5);
+      this.fx.fire(_v.x, _v.y, _v.z, { n: 1, s: 0.9, sp: 0.6, jit: 1, life: 0.5 });
+      radial(nx, _v2);
+      this.fx.dustP.add({ x: _v.x, y: _v.y, z: _v.z, vx: _v2.x * 2.5 - (B.vx || 0) * 0.3, vy: _v2.y * 2.5, vz: 0, s0: 0.6, s1: 3.6, max: 2.6, a: 0.4, r: 0.1, g: 0.09, b: 0.09, drag: 0.5, grav: 0, fade: 0.7 });
+    });
+    toW(B.x, B.y - 2, _v, 3); this.bossLight.position.copy(_v);
+    this.bossLight.color.set(B.rage ? 0xff3a2a : 0xff8a40); this.bossLight.intensity = B.st === 'fight' ? 40 + Math.sin(t * 3) * 10 : 20;
     // attack warnings
     const a = B.atk;
     if (a && a.t < a.T) {
@@ -1163,7 +1173,8 @@ export class Renderer {
     for (const k of Object.keys(ENEMY)) tmp.push(MD[k]().g);
     for (const k of Object.keys(POWERUPS)) tmp.push(MD.pod(POWERUPS[k].color).g);
     for (const k of Object.keys(BOSSES)) tmp.push(MD.boss(k).g);
-    tmp.forEach((o, i) => { toW(this.cx - 30 + i * 3, 10, o.position, 0); this.scene.add(o); });
+    // packed close together inside the sun's shadow box, so their shadow (depth) programs compile now too
+    tmp.forEach((o, i) => { toW(this.cx - 20 + (i % 14) * 3, 6 + Math.floor(i / 14) * 12, o.position, 0); o.traverse((m) => { if (m.isMesh) m.castShadow = true; }); this.scene.add(o); });
     for (const m of [...this.shields, this.gates[0], this.reticle, this.novaMesh]) { m.visible = true; toW(this.cx, 10, m.position, 0); }
     const rb = this.takeRibbon(); rb.set([[this.cx, 10], [this.cx + 5, 10]], 0.4);
     this.boltI.count = this.boltGlowI.count = 1;
@@ -1183,7 +1194,11 @@ export class Renderer {
     this.updateCamera(0.016, { snap: true, cine: true });
     try { if (this.r.compileAsync) await this.r.compileAsync(this.scene, this.camera); else this.r.compile(this.scene, this.camera); } catch { this.r.compile(this.scene, this.camera); }
     const pr = { bloom: 0.7, threshold: 1.2, exposure: 1, chroma: 0, time: 0, desat: 0, fade: 1, vignette: 0.4, flash: this.flash, tint: _tint.set(1, 1, 1), shocks: [], lens: [] };
+    const ki = this.key.intensity; this.key.intensity = Math.max(ki, 0.5);
     this.post.render(this.scene, this.camera, pr);
+    this.updateCamera(0.016, { snap: true, me: { x: this.cx, y: 14, face: 1, vx: 0 } });
+    this.post.render(this.scene, this.camera, pr);
+    this.key.intensity = ki;
     this.finishWarm(w);
   }
   // build the other worlds in idle time (terrain, sea, scenery, clouds, lights, sky bodies, env maps)

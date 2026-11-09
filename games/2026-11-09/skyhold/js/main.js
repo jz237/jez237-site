@@ -1,13 +1,13 @@
 // Skyhold 2026 — game flow, menus, HUD (with the scanner strip), commentary, demo director and the frame loop.
-import { VERSION, SECTORS, STEP, F, C, H, BOSSES, UPGRADES, UP_KEYS, UP_COST, MEDALS, parTime, TYPICAL_UP, START_LIVES, DIFFICULTY, POWERUPS, LIVERIES, CP_NAMES, WAVES, ENEMY } from './config.js?v=2';
-import { makeWorld, step, stepGuest, drainEvents, wd, wp, settlersLeft, nodePos, CHAIN_T, chainMult } from './sim.js?v=2';
-import { Autopilot } from './ai.js?v=2';
-import { Renderer, pickQuality, CALM, LOOKS } from './render.js?v=2';
-import { Audio } from './audio.js?v=2';
-import { Input } from './input.js?v=2';
-import { Scores, NO_POST } from './scores.js?v=2';
-import { Recorder, Replay } from './replay.js?v=2';
-import { Online, ROOM, randomCode, cleanCode } from './online.js?v=2';
+import { VERSION, SECTORS, STEP, F, C, H, BOSSES, UPGRADES, UP_KEYS, UP_COST, MEDALS, parTime, TYPICAL_UP, START_LIVES, DIFFICULTY, POWERUPS, LIVERIES, CP_NAMES, WAVES, ENEMY } from './config.js?v=3';
+import { makeWorld, step, stepGuest, drainEvents, wd, wp, settlersLeft, nodePos, CHAIN_T, chainMult } from './sim.js?v=3';
+import { Autopilot } from './ai.js?v=3';
+import { Renderer, pickQuality, CALM, LOOKS } from './render.js?v=3';
+import { Audio } from './audio.js?v=3';
+import { Input } from './input.js?v=3';
+import { Scores, NO_POST } from './scores.js?v=3';
+import { Recorder, Replay } from './replay.js?v=3';
+import { Online, ROOM, randomCode, cleanCode } from './online.js?v=3';
 
 const $ = (id) => document.getElementById(id);
 const params = new URLSearchParams(location.search);
@@ -269,7 +269,7 @@ function updateHud(W) {
   $('bossbar').classList.toggle('hidden', !B);
   if (B) {
     const D = BOSSES[B.key], hp = B.nodes.reduce((a, n) => a + Math.max(0, n.hp), 0), max = B.nodes.reduce((a, n) => a + n.max, 0), left2 = B.nodes.filter((n) => n.hp > 0).length;
-    setText('boss-name', B.st === 'warp' ? `${D.name} · ARRIVING` : B.st === 'dying' ? `${D.name} · GOING DOWN` : `${D.name} · ${left2} WEAK POINT${left2 === 1 ? '' : 'S'} LEFT`);
+    setText('boss-name', B.st === 'warp' ? `${D.name} · ARRIVING` : B.st === 'dying' ? `${D.name} · GOING DOWN` : `${D.name}${B.rage ? ' · ENRAGED' : ''} · ${left2} WEAK POINT${left2 === 1 ? '' : 'S'} LEFT`);
     $('bossbar').classList.add('awake');
     $('bossbar').querySelector('i').style.width = ((hp / Math.max(1, max)) * 100).toFixed(1) + '%';
   }
@@ -498,6 +498,11 @@ function handleEvents(list, W, live) {
         if (live) { popup(`+${e.score} WEAK POINT DOWN`, e.x, e.y, '#ffd08a', true); rumble(0.5, 0.5, 220); }
         break;
       }
+      case 'enrage':
+        snd('bossroar', e, { vol: 1, rate: 0.85, gap: 0 }); A.play('alarm', { vol: 0.6, gap: 0 });
+        R.flashScreen(0.2, 0xff3a2a); R.addTrauma(0.35 * S); R.shock(e.x, e.y, 1.4);
+        if (live) { banner('ENRAGED', `${BOSSES[e.key].name} · IT ATTACKS FASTER`, 2.2); rumble(0.6, 0.5, 400); }
+        break;
       case 'bump': if (live && mine(e)) { snd('shieldhit', e, { vol: 0.35, rate: 0.6, gap: 0.3 }); rumble(0.2, 0.2, 80); } break;
       case 'bossdying': snd('boomL', e, { vol: 1, gap: 0 }); slowmo(0.45, 1.4); R.addTrauma(0.6 * S); R.frameShot([[e.x, e.y]], 2.8); if (live) rumble(0.9, 0.9, 900); break;
       case 'cboom': { const p = P(e.x, e.y); snd('boomM', e, { vol: 0.8, gap: 0.08 }); fx.explode(p.x, p.y, p.z, 2.4, { metal: true }); R.addTrauma(0.2 * S); break; }
@@ -1080,7 +1085,7 @@ async function boot() {
   toTitle();
   boardOf('campaign', settings.diff).fresh(); boardOf('endless', settings.diff).fresh();
   if (!G.fixed && !params.has('test')) R.prepareAll(true);
-  if (params.has('test')) { const m = await import('./tests.js?v=2'); m.runTests(window.__sh); }
+  if (params.has('test')) { const m = await import('./tests.js?v=3'); m.runTests(window.__sh); }
   else if (params.has('playthrough')) { A.unlock(); startPlaythrough(); }
   else if (params.has('room')) { act('online'); $('join-code').value = cleanCode(params.get('room')); }
   else if (G.autopilot) { A.unlock(); if (params.has('endless')) startEndless(); else startCampaign(+params.get('sector') || 0); }

@@ -3,8 +3,8 @@
 // carrier, lives, score) and streams snapshots 20 times a second. The guest flies its own gunship locally (so it never
 // lags), judges the hits it takes, and reports its ship, its beams, novas, catches, landings and pickups as claims;
 // the host carries those out so every kill is decided in one place.
-import { netDeath, netShield, netCatch, netLand, netPod, netFire, netRam, netNovaAt, netAdopt } from './sim.js?v=2';
-import { PW_KEYS } from './config.js?v=2';
+import { netDeath, netShield, netCatch, netLand, netPod, netFire, netRam, netNovaAt, netAdopt } from './sim.js?v=3';
+import { PW_KEYS } from './config.js?v=3';
 
 export const PROTOCOL = 1;
 const RELAY = 'wss://steel-duel-online.jez237.workers.dev';
@@ -43,7 +43,7 @@ export function packWorld(W) {
     se: W.settlers.map((s) => [s.id, SST.indexOf(s.st), r2(s.x), r2(s.y), s.by, r2(s.dropY), r2(s.vx), r2(s.mark)]),
     bo: W.bolts.map((b) => [b.id, r2(b.x), r2(b.y), r2(b.vx), r2(b.vy), r2(b.t), b.from]),
     pd: W.pods.map((q) => [q.id, PW_KEYS.indexOf(q.kind), r2(q.x), r2(q.y), r2(q.t)]),
-    b: B ? [B.key, r2(B.x), r2(B.y), r2(B.vx), r2(B.vy), B.face, BST.indexOf(B.st), r2(B.stT), B.nodes.map((n) => [n.hp, n.max]), r2(B.hitT), B.atk ? [ATK.indexOf(B.atk.kind), r2(B.atk.t), r2(B.atk.T), B.atk.dir, r2(B.atk.y)] : null, r2(B.sweepX), r2(B.t)] : null,
+    b: B ? [B.key, r2(B.x), r2(B.y), r2(B.vx), r2(B.vy), B.face, BST.indexOf(B.st), r2(B.stT), B.nodes.map((n) => [n.hp, n.max]), r2(B.hitT), B.atk ? [ATK.indexOf(B.atk.kind), r2(B.atk.t), r2(B.atk.T), B.atk.dir, r2(B.atk.y)] : null, r2(B.sweepX), r2(B.t), B.rage ? 1 : 0] : null,
     p1: [r3(h.x), r3(h.y), r2(h.vx), r2(h.vy), h.face, h.alive ? 1 : 0, r2(h.inv), h.shield, h.nova, r2(h.thrust), h.carry, r2(h.hurtT)],
     p2: g ? [g.alive ? 1 : 0, r2(g.x), r2(g.y), r2(g.inv), g.shield, g.nova] : null,
     hs: W.shots.filter((s) => s.pid === 1 && !s.done).map((s) => [r2(s.x0), r2(s.y), s.dir, r3(s.t), s.hitD === undefined ? -1 : r2(s.hitD)]),
@@ -73,7 +73,7 @@ export function applyWorld(W, S, lead) {
     const q = S.b;
     const B = W.boss && W.boss.key === q[0] ? W.boss : { t: 0 };
     Object.assign(B, { key: q[0], x: ext(q[1], q[3]), y: ext(q[2], q[4]), vx: q[3], vy: q[4], face: q[5], st: BST[q[6]], stT: q[7], nodes: q[8].map(([hp, max]) => ({ hp, max })), hitT: q[9],
-      atk: q[10] ? { kind: ATK[q[10][0]], t: q[10][1], T: q[10][2], dir: q[10][3], y: q[10][4], n: 1 } : null, sweepX: q[11], t: q[12] });
+      atk: q[10] ? { kind: ATK[q[10][0]], t: q[10][1], T: q[10][2], dir: q[10][3], y: q[10][4], n: 1 } : null, sweepX: q[11], t: q[12], rage: q[13] || 0 });
     W.boss = B;
   } else W.boss = null;
   const h = W.players[0], p = S.p1;
