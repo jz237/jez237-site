@@ -19,8 +19,8 @@ permissions:
 
 concurrency:
   group: "pages"
-  # The public payload is large. Let the active deployment finish while GitHub
-  # keeps the newest pending run, so frequent content updates cannot starve it.
+  # Let the active deployment finish while GitHub keeps the newest pending run,
+  # so frequent content updates cannot starve it.
   cancel-in-progress: false
 
 jobs:
@@ -37,6 +37,18 @@ jobs:
             !/.claude/
             !/.github/
             !/.wrangler/
+            !/games/
+            !/demos/
+            /games/index.html
+            /games/2026-08-20/final-blow/game.js
+            /games/2026-08-20/final-blow/index.html
+            /games/2026-08-20/final-blow/sw.js
+            /games/2026-08-20/final-blow/engine/
+            /games/2026-08-20/final-blow/styles.css
+            /games/2026-08-20/final-blow/manifest.webmanifest
+            /games/2026-08-20/final-blow/icon.svg
+            /games/2026-08-20/final-blow/tests/service-worker-guard.test.mjs
+            /demos/rotatable-aquascape/
             !/functions/
             !/scripts/
             /scripts/check_hidden_reef_retired.mjs
@@ -47,6 +59,8 @@ jobs:
             /scripts/publish_generated_assets.test.mjs
             /scripts/prune_pages_artifacts.mjs
             /scripts/prune_pages_artifacts.test.mjs
+            /scripts/prepare_pages_mirror.py
+            /scripts/prepare_pages_mirror_test.py
             /scripts/restore_legacy_media.py
             /scripts/media-r2.test.mjs
             /media-r2-manifest.json
@@ -113,6 +127,9 @@ jobs:
       - name: Keep Hidden Reef pointer-only
         run: node scripts/check_hidden_reef_retired.mjs
 
+      - name: Check mirror routing and total-size safeguards
+        run: python3 -m unittest discover -s scripts -p prepare_pages_mirror_test.py -v
+
       - name: Prepare GitHub Pages payload
         run: |
           set -euo pipefail
@@ -128,6 +145,8 @@ jobs:
             --exclude='./.git' \
             --exclude='./.github' \
             --exclude='./.wrangler' \
+            --exclude='./games' \
+            --exclude='./demos' \
             --exclude='./functions' \
             --exclude='./scripts' \
             --exclude='./stock-market-src' \
@@ -149,11 +168,15 @@ jobs:
             --exclude='./wrangler.toml' \
             -cf - . | tar -xf - -C _site
 
+      - name: Route large interactive sections to the canonical site
+        run: python3 scripts/prepare_pages_mirror.py routes _site
+
       - name: Preserve legacy direct video URLs from R2
         run: python3 scripts/restore_legacy_media.py _site
 
-      - name: Report payload size
+      - name: Enforce GitHub Pages total-size budget
         run: |
+          python3 scripts/prepare_pages_mirror.py check _site
           du -sh _site
           find _site -type f | wc -l
           du -ah _site | sort -h | tail -n 25

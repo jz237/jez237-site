@@ -15,6 +15,29 @@ therefore restores only previously served video files from R2 into the disposabl
 payload, verifying every checksum. This is an intentional compatibility exception,
 not source storage. Do not run `scripts/restore_legacy_media.py` for Cloudflare.
 
+## GitHub mirror size budget (November 9, 2026)
+
+GitHub Pages is a secondary mirror, not the canonical host. Its previous payload
+grew to 5.7 GiB on disk (4.97 GB uploaded) and intermittently timed out while
+syncing. Successful retries did not resolve the unsupported payload size.
+
+Only in the GitHub workflow, `games/` and `demos/` are now lightweight HTML
+entry points opening the matching page on `https://jez237.com/`, preserving
+query strings and fragments. All source/game/media files remain in Git and
+Cloudflare unchanged. The build derives entry points from the Git tree without
+downloading those sections' large assets. Old mirror service workers unregister
+and move their own open windows to the canonical game; unrelated apps and caches
+are untouched. The mirror 404 also forwards deep navigation in those two sections.
+The mirror is no longer an independent offline host for games/demos; raw asset
+fetches must use the canonical site. This does not change the checksum-verified
+legacy video restoration described above, which still runs after stub generation.
+
+`scripts/prepare_pages_mirror.py check _site` runs **after** restoration and rejects
+payloads exceeding 900,000,000 bytes including a per-file tar-header reserve. This
+is an aggregate GitHub limit, separate from the Cloudflare 25 MiB per-file guard.
+Do not raise the budget or pass this GitHub-only payload to Cloudflare. Further
+growth must be addressed by offloading media or routing additional sections.
+
 For new media: upload to R2 without overwriting different existing objects,
 verify full public-download checksums and playback, add a manifest entry, and
 update the relevant catalog/player URL. Canonical redirects are derived directly
