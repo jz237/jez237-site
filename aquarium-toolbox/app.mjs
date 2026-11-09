@@ -1,5 +1,6 @@
 import {calculators,categories,defaults,calculate,convert,usUnit,GAL} from './calculators.mjs';
 import {icon,illustration,escape as e} from './illustrations.mjs';
+import {sliderWindow,sliderValue} from './sliders.mjs';
 const $=id=>document.getElementById(id);
 const KEY='aquarium-toolbox-v1';
 const ids=new Set(calculators.map(c=>c.id));
@@ -16,7 +17,8 @@ export function validateBackup(raw){
 }
 let state=fresh(),storageAvailable=true;
 try{const saved=localStorage.getItem(KEY);if(saved)state=validateBackup(JSON.parse(saved));}catch{storageAvailable=false;}
-let category='all',query='',result=null,toastTimer;
+let category='all',query='',result=null,toastTimer,resultObserver;
+let inputVisible=false,resultVisible=false;
 function toast(message){$('toast').textContent=message;$('toast').hidden=false;clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').hidden=true,4500);}
 function snapshot(){const clean={...state,inputs:{}};for(const [id,a]of Object.entries(state.inputs)){try{calculate(id,a);clean.inputs[id]={...a};}catch{/* Incomplete edits must not corrupt otherwise valid tank backups. */}}return clean;}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(snapshot()));storageAvailable=true;}catch{storageAvailable=false;toast('Browser storage is unavailable. Download a backup to keep your settings.');}}
@@ -52,19 +54,60 @@ function fieldHTML(field,a){const id=`field-${field.key}`;const help=field.help?
   const isUS=state.units==='us',display=isUS?convert(a[field.key],field.unit,true):a[field.key],unit=isUS?usUnit(field.unit):field.unit;
   const min=isUS?convert(field.min,field.unit,true):field.min,max=isUS?convert(field.max,field.unit,true):field.max;
   const precision=['L','L/h','cm','mm','m','kg','°C'].includes(field.unit)?3:6;
-  return `<div class="field"><label for="${id}">${e(label)}</label><div class="input-wrap"><input id="${id}" name="${field.key}" type="number" inputmode="decimal" step="any" min="${min}" max="${max}" value="${Number(display.toFixed(precision))}" required ${desc}><span class="input-unit">${e(unit)}</span></div>${help}</div>`;
+  return `<div class="field"><label for="${id}">${e(label)}</label><div class="input-wrap"><input id="${id}" name="${field.key}" type="number" inputmode="decimal" step="any" min="${min}" max="${max}" value="${Number(display.toFixed(precision))}" required ${desc}><span class="input-unit">${e(unit)}</span></div>${sliderHTML(field,a,label,unit)}${help}</div>`;
+}
+function sliderHTML(field,a,label,unit){
+  const r=sliderWindow(current(),field,a,state.units==='us');
+  return `<div class="slider-control"><input type="range" class="measurement-slider" id="slider-${field.key}" data-slider="${field.key}" min="${r.min}" max="${r.max}" step="any" data-increment="${r.step}" value="${r.value}" aria-label="Adjust ${e(label)}${unit?' ('+e(unit)+')':''}" aria-describedby="slider-guide"><div class="slider-scale" aria-hidden="true"><span>${e(format(r.min))}</span><span>${e(format(r.max))} ${e(unit)}</span></div></div>`;
+}
+function syncSlider(field,expand=false){
+  const slider=$(`slider-${field.key}`),number=$(`field-${field.key}`);if(!slider||!number)return;
+  if(expand){const r=sliderWindow(current(),field,inputs(),state.units==='us');slider.min=r.min;slider.max=r.max;slider.dataset.increment=r.step;
+    const unit=state.units==='us'?usUnit(field.unit):field.unit;
+    slider.nextElementSibling.innerHTML=`<span>${e(format(r.min))}</span><span>${e(format(r.max))} ${e(unit)}</span>`;
+  }
+  const valid=number.value!==''&&number.validity.valid;
+  slider.setAttribute('aria-valuetext',valid?`${number.value} ${state.units==='us'?usUnit(field.unit):field.unit}`:'Enter a valid number or adjust this slider');
+  if(valid)slider.value=number.value;
+  const fill=100*(Number(slider.value)-Number(slider.min))/(Number(slider.max)-Number(slider.min));
+  slider.style.setProperty('--fill',`${Math.max(0,Math.min(100,fill))}%`);
+}
+function moveSlider(slider,raw){
+  const key=slider.dataset.slider,field=current().fields.find(f=>f.key===key);
+  const value=sliderValue(raw,{min:Number(slider.min),max:Number(slider.max),step:Number(slider.dataset.increment)});
+  slider.value=value;$(`field-${key}`).value=value;
+  onInput({target:$(`field-${key}`),fromSlider:true});syncSlider(field);
+}
+function watchResults(){
+  resultObserver?.disconnect();inputVisible=false;resultVisible=false;
+  resultObserver=new IntersectionObserver(entries=>{for(const entry of entries){if(entry.target.classList.contains('input-panel'))inputVisible=entry.isIntersecting;else resultVisible=entry.isIntersecting;}updateQuickResult();});
+  resultObserver.observe(document.querySelector('.input-panel'));resultObserver.observe(document.querySelector('.result-panel'));
+}
+function updateQuickResult(){
+  const bar=$('quick-result');bar.hidden=!inputVisible||resultVisible;
+  if(result){
+    const metric=displayMetric(result.metrics[0]).split('|');
+    $('quick-value').innerHTML=`<small>${e(result.metrics[0].label)}</small><strong>${metric[0]}</strong>${metric[1]?`<small>${metric[1]}</small>`:''}`;
+    $('quick-result-button').textContent='See diagram ↓';
+  }else{$('quick-value').innerHTML='<small>Check your measurements</small><strong>Inputs need attention</strong>';$('quick-result-button').textContent='See details ↓';}
 }
 function renderCalculator(){
   const c=current(),a=inputs(),cat=categories.find(x=>x[0]===c.category);
   const related=calculators.filter(x=>x.category===c.category&&x.id!==c.id).slice(0,3);
   $('calculator-content').innerHTML=`<article class="calculator-shell"><header class="calc-heading"><div><div class="calc-eyebrow">${icon(cat[2])}${e(cat[1].toUpperCase())}</div><h2>${e(c.title)}</h2><p>${e(c.description)}</p></div><button id="favorite" class="favorite icon-button" aria-pressed="${state.favorites.includes(c.id)}" aria-label="${state.favorites.includes(c.id)?'Remove from':'Add to'} favorites">${icon('star')}</button></header>
-  <div class="calc-body"><section class="input-panel" aria-label="Calculation inputs"><div class="panel-heading"><span class="step-label"><span class="step-no">1</span>Your measurements</span><button id="reset" class="text-button">Reset</button></div><form id="calc-form" novalidate><div class="input-fields">${c.fields.map(f=>fieldHTML(f,a)).join('')}</div></form>${c.fields.some(f=>f.key==='v'&&f.label==='Actual water volume')?`<div class="tank-fill-control">Saved tank: <strong>${e(profile().name)}</strong><br>${format(profile().volume)} L · ${e(gallons(profile().volume))} US gal<br><button id="use-profile" class="text-button">Use saved tank volume →</button></div>`:''}<p class="validation-note">Changes calculate automatically. Your measurements are processed in this browser.</p></section>
+  <div class="calc-body"><section class="input-panel" aria-label="Calculation inputs"><div class="panel-heading"><span class="step-label"><span class="step-no">1</span>Your measurements</span><button id="reset" class="text-button">Reset</button></div><p id="slider-guide" class="slider-guide">Drag to explore. Type for precision. Slider ranges are editing shortcuts, not recommended limits.</p><form id="calc-form" novalidate><div class="input-fields">${c.fields.map(f=>fieldHTML(f,a)).join('')}</div></form>${c.fields.some(f=>f.key==='v'&&f.label==='Actual water volume')?`<div class="tank-fill-control">Saved tank: <strong>${e(profile().name)}</strong><br>${format(profile().volume)} L · ${e(gallons(profile().volume))} US gal<br><button id="use-profile" class="text-button">Use saved tank volume →</button></div>`:''}<p class="validation-note">Changes calculate automatically. Your measurements are processed in this browser.</p></section>
   <section class="result-panel" aria-label="Calculation result"><div class="panel-heading"><span class="step-label"><span class="step-no">2</span>See what it means</span><span class="live-label">LIVE RESULT</span></div><div id="result" aria-live="polite" aria-atomic="true"></div></section></div>
   <div class="details-area"><details id="math-details"><summary>The math & sources</summary><div><p class="formula">${e(c.formula)}</p>${c.note?`<p class="note">${e(c.note)}</p>`:''}${c.reference?`<p><a class="source-link" href="${e(c.reference[1])}" target="_blank" rel="noopener noreferrer">Reference: ${e(c.reference[0])} ↗</a></p>`:'<p>Method: the geometry, unit conversion, or proportional calculation shown above.</p>'}<p>Results and converted input displays are rounded; calculations retain precision. US gallons in results are rounded to whole gallons; a positive amount below one gallon is shown as &lt;1. Litres show finer amounts.</p></div></details><div id="steps-details"></div></div>
   <div class="calc-footer"><span>${icon('check')} No account · saved on this device</span><button id="guide-inline" class="text-button">A quick guide →</button></div></article>
   <section class="related"><h3 class="related-heading">ALSO IN YOUR TOOLBOX</h3><div class="related-grid">${related.map(x=>`<a href="#tool=${x.id}" data-tool="${x.id}">${icon(cat[2])}<span>${e(x.title)}</span></a>`).join('')}</div>`;
   $('calc-form').addEventListener('submit',ev=>ev.preventDefault());
-  $('calc-form').addEventListener('input',onInput);
+  $('calc-form').addEventListener('input',ev=>{if(ev.target.dataset.slider)moveSlider(ev.target,Number(ev.target.value));else onInput(ev);});
+  $('calc-form').addEventListener('keydown',ev=>{const el=ev.target;if(!el.dataset.slider)return;const step=Number(el.dataset.increment),v=Number(el.value);
+    const keys={ArrowLeft:v-step,ArrowDown:v-step,ArrowRight:v+step,ArrowUp:v+step,PageDown:v-10*step,PageUp:v+10*step,Home:Number(el.min),End:Number(el.max)};
+    if(ev.key in keys){ev.preventDefault();moveSlider(el,keys[ev.key]);}
+  });
+  for(const field of c.fields)if(!field.options)syncSlider(field);
+  watchResults();
   $('favorite').onclick=()=>{state.favorites=state.favorites.includes(c.id)?state.favorites.filter(id=>id!==c.id):[...state.favorites,c.id];save();renderLibrary();$('favorite').setAttribute('aria-pressed',String(state.favorites.includes(c.id)));$('favorite').setAttribute('aria-label',`${state.favorites.includes(c.id)?'Remove from':'Add to'} favorites`);};
   $('reset').onclick=()=>{state.inputs[c.id]=defaults(c);if(c.fields.some(f=>f.key==='v'&&f.label==='Actual water volume'))state.inputs[c.id].v=profile().volume;save();renderCalculator();toast('Example inputs restored.');};
   if($('use-profile'))$('use-profile').onclick=()=>{inputs().v=profile().volume;save();renderCalculator();toast('Saved tank volume applied.');};
@@ -74,16 +117,18 @@ function renderCalculator(){
 function onInput(ev){
   const c=current(),field=c.fields.find(f=>f.key===ev.target.name);if(!field)return;
   const raw=ev.target.value;
-  if(!field.options&&(raw.trim()===''||!Number.isFinite(Number(raw)))){showError(`Enter a number for ${field.label.toLowerCase()}.`);return;}
+  if(!field.options&&(raw.trim()===''||!Number.isFinite(Number(raw)))){syncSlider(field);showError(`Enter a number for ${field.label.toLowerCase()}.`);return;}
   inputs()[field.key]=field.options?raw:(state.units==='us'?convert(Number(raw),field.unit,false):Number(raw));
   if(field.key==='shape'){save();renderCalculator();$(`field-${field.key}`).focus();return;}
   if(c.id==='supplement'&&field.key==='parameter'){const ca=raw==='mg/L';Object.assign(inputs(),{current:ca?400:7,target:ca?420:8,rise:ca?10:1});save();renderCalculator();$('field-parameter').focus();return;}
+  if(!field.options)syncSlider(field,!ev.fromSlider);
+  else for(const dependent of c.fields)if(!dependent.options)syncSlider(dependent,true);
   // Do not let a partially blank form produce a result from previously saved values.
-  const blank=[...$('calc-form').querySelectorAll('input')].find(x=>x.value.trim()==='');
+  const blank=[...$('calc-form').querySelectorAll('input[type=number]')].find(x=>x.value.trim()==='');
   if(blank){showError('Complete every measurement to calculate a result.');return;}
   renderResult();save();
 }
-function showError(message){result=null;$('result').innerHTML=`<div class="error-card" role="alert"><h3>Let’s check that measurement</h3><p>${e(message)}</p><p>No result is shown until the inputs are valid.</p></div>`;$('steps-details').innerHTML='';}
+function showError(message){result=null;$('result').innerHTML=`<div class="error-card" role="alert"><h3>Let’s check that measurement</h3><p>${e(message)}</p><p>No result is shown until the inputs are valid.</p></div>`;$('steps-details').innerHTML='';updateQuickResult();}
 function renderResult(){try{
   result=calculate(state.current,inputs());
   const metricHTML=result.metrics.map((m,i)=>{const [main,secondary]=displayMetric(m).split('|');return `<div class="metric ${i===0?'primary-metric':''}"><div class="metric-label">${e(m.label)}</div><div class="metric-value">${main}</div>${secondary?`<div class="metric-secondary">${secondary}</div>`:''}</div>`;}).join('');
@@ -94,6 +139,7 @@ function renderResult(){try{
   $('result').innerHTML=`<div class="diagram">${illustration(graph,diagramLabel)}</div><div class="metrics">${metricHTML}</div><p class="result-message">${e(result.message)}</p><div class="result-actions"><button id="share-result">Share calculation</button><button id="print-result">Print result</button>${['tank','system'].includes(state.current)?'<button id="apply-volume">Use as tank volume</button>':''}</div>`;
   $('steps-details').innerHTML=(result.steps?.length?`<details><summary>Step by step</summary><div><ol class="steps">${result.steps.map(s=>`<li>${e(s)}</li>`).join('')}</ol></div></details>`:'')+(result.table?`<details><summary>Change-by-change breakdown</summary><div><table class="results-table"><caption>Predicted concentration after each change</caption><tbody>${result.table.map(r=>`<tr>${r.map(s=>`<td>${e(s)}</td>`).join('')}</tr>`).join('')}</tbody></table></div></details>`:'');
   $('share-result').onclick=share;$('print-result').onclick=()=>window.print();if($('apply-volume'))$('apply-volume').onclick=()=>{const v=result.metrics[0].value;if(v<.01){toast('Volume is too small to save as a working tank.');return;}profile().volume=v;save();renderPreferences();toast('Working tank volume updated. Use “Use saved tank volume” in an existing calculation.');};
+updateQuickResult();
 }catch(err){showError(err.message);}}
 function selectTool(id,scroll=false){if(!ids.has(id))return;state.current=id;inputs();save();history.replaceState(null,'',`#tool=${id}`);renderLibrary();renderCalculator();if(scroll){$('calculator').scrollIntoView({behavior:'instant',block:'start'});$('calculator').focus({preventScroll:true});}}
 function setUnits(units){state.units=units;save();renderPreferences();renderCalculator();}
@@ -109,6 +155,7 @@ function saveProfile(asNew=false){
 function applyProfile(){for(const c of calculators){if(c.fields.some(f=>f.key==='v'&&f.label==='Actual water volume')&&state.inputs[c.id])state.inputs[c.id].v=profile().volume;}}
 function share(){const params=new URLSearchParams({tool:state.current,units:state.units,data:JSON.stringify(inputs())});$('share-url').value=`${location.origin}${location.pathname}#${params}`;$('copy-status').textContent='';$('share-dialog').showModal();$('share-url').select();}
 function loadHash(){try{const params=new URLSearchParams(location.hash.slice(1)),id=params.get('tool');if(!id||!ids.has(id))return;state.current=id;if(['us','metric'].includes(params.get('units')))state.units=params.get('units');if(params.has('data')){if(params.get('data').length>8000)throw new Error('Link is too large.');const input=JSON.parse(params.get('data')),c=current(),clean={};for(const f of c.fields)clean[f.key]=input[f.key]??f.value;calculate(id,clean);state.inputs[id]=clean;}save();}catch{toast('That shared calculation is invalid. Example inputs are shown instead.');state.inputs[state.current]=defaults(current());}}
+$('quick-result-button').onclick=()=>document.querySelector('.result-panel').scrollIntoView({behavior:'smooth',block:'start'});
 $('search-icon').innerHTML=icon('search');$('tool-count').textContent=calculators.length;
 document.addEventListener('click',ev=>{const cat=ev.target.closest('[data-category]');if(cat){category=cat.dataset.category;renderLibrary();return;}const link=ev.target.closest('[data-tool]');if(link){ev.preventDefault();selectTool(link.dataset.tool,matchMedia('(max-width:760px)').matches);}const close=ev.target.closest('[data-close]');if(close)close.closest('dialog').close();});
 $('search').addEventListener('input',ev=>{query=ev.target.value;renderLibrary();});

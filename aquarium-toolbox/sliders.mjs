@@ -1,0 +1,47 @@
+// Slider bounds are convenient editing windows, never safety recommendations or
+// replacements for the calculator's full validated numeric domain.
+import {convert} from './calculators.mjs';
+const unitWindows={
+  '%':[100,1],L:[400,1],'L/h':[4000,10],cm:[200,.5],mm:[50,.5],m:[10,.1],kg:[100,.1],
+  '°C':[40,.5],pH:[10,.05],dKH:[30,.1],ppt:[50,.1],'mg/L':[100,.5],mL:[100,.5],
+  g:[100,.5],'kg/L':[3,.01],'g/L':[60,.5],days:[30,1],hours:[72,.5],changes:[20,1],
+  heaters:[10,1],doses:[24,1],seconds:[300,1],W:[1000,5],'W/L':[5,.1],
+  '$/kWh':[1,.01],'$/m³':[20,.1],'$/kg':[30,.1],'$/m²':[200,1],': 1':[10,.1],
+  '×/hour':[30,.5],'drops/s':[10,.1],'drops/mL':[40,1],'µmol/m²/s':[500,5]
+};
+const overrides={
+  substrate:{front:[20,.5],back:[30,.5],bag:[30,.5]},weight:{density:[1.1,.001]},
+  sump:{drop:[10,.1],pipe:[30,.1],reserve:[100,1]},ro:{rate:[40,.1],feed:[1000,5],product:[100,1]},
+  label:{bottle:[1000,5]},stock:{stock:[5000,10],target:[1000,5],final:[1000,5]},
+  ammonia:{tan:[5,.01]},salt:{bag:[25000,100]},ato:{daily:[10,.1],reserve:[100,1]},
+  head:{rough:[.05,.0005],k:[30,.5]},drip:{v:[20,.1]},watercost:{evap:[10,.1]},
+  co2cylinder:{full:[10,.01],tare:[10,.01],daily:[30,.1],reserve:[200,1]},
+  doser:{collected:[100,.1],daily:[100,.1],reserve:[2000,10]}
+};
+const nice=v=>{if(v<=0)return 1;const p=10**Math.floor(Math.log10(v));return [1,2,5,10].find(n=>n*p>=v-1e-10)*p;};
+export function sliderWindow(calc,field,a,us=false){
+  let [high,step]=overrides[calc.id]?.[field.key]||unitWindows[field.unit]||[Math.max(20,nice(field.value*2)),.1];
+  // These selectors change the measurement scale without changing its field schema.
+  if(calc.id==='supplement'&&['current','target','rise'].includes(field.key)){
+    [high,step]=a.parameter==='mg/L'?(field.key==='rise'?[100,1]:[2000,5]):(field.key==='rise'?[5,.1]:[20,.1]);
+  }
+  if(calc.id==='consumption'&&['start','end'].includes(field.key))[high,step]=a.parameter==='mg/L'?[2000,5]:[20,.1];
+  if(calc.id==='hardness')[high,step]=a.unit==='ppm'?[500,1]:a.unit==='meq'?[10,.1]:[30,.1];
+  if(calc.id==='mix'&&['high','low','target'].includes(field.key))[high,step]=a.measure==='mg/L'?[1000,5]:[30,.1];
+  const display=v=>us?convert(v,field.unit,true):v;
+  const domainMin=display(field.min),domainMax=display(field.max),value=display(a[field.key]);
+  if(us&&['L','L/h','cm','mm','m','kg'].includes(field.unit)){
+    high=nice(display(high));step=nice(display(step));
+  }else if(us&&field.unit==='°C'){high=display(high);step=1;}
+  // The low edge lies on the editing increment where practical. Tiny manually
+  // entered values remain representable; exact typing never changes precision.
+  let min=Math.max(domainMin,Math.ceil(domainMin/step-1e-9)*step);
+  let max=Math.min(domainMax,Math.max(high,min+step));
+  if(Number.isFinite(value)&&value>=domainMin&&value<=domainMax){
+    min=Math.min(min,value);if(value>max)max=Math.min(domainMax,nice(value*1.2));
+  }
+  return {min,max,step,value,domainMin,domainMax};
+}
+export function sliderValue(value,{min,max,step}){
+  return Number(Math.max(min,Math.min(max,Math.round(value/step)*step)).toPrecision(12));
+}

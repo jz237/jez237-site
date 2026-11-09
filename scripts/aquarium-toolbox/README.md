@@ -16,7 +16,7 @@ analytics added by this application, third-party fonts, dependencies, or build s
 
 ## Verification
 
-`node --test scripts/aquarium-toolbox/math.test.mjs`
+`node --test scripts/aquarium-toolbox/*.test.mjs`
 
 This includes independent worked examples for every calculator, dilution/mass
 conservation, unit round trips, impossible targets, invalid numbers, ammonia
@@ -65,3 +65,25 @@ committed and pushed publishing checkout. Never upload the sparse editing worktr
 Preserve all unrelated assets, Functions and route policies. Do not deploy the
 Hidden Reef project. The existing Pages wrapper verifies its established site
 contracts before production; preserve those checks.
+
+## Slider controls
+
+Every visible numeric calculator field has a companion touch-friendly native
+range input. Exact-number inputs remain authoritative: never clamp a typed value
+to the convenience slider range, nor convert an untouched value back from its
+rounded display. `sliders.mjs` chooses useful editing windows and increments,
+including selector-dependent calcium/alkalinity, hardness and TDS scales. Manual
+values outside the window expand it on input/re-render; dragging itself never
+changes its bounds. These ranges are not husbandry or dosing recommendations.
+
+Range inputs use `step=any` to reflect precise typed values; pointer values snap
+to the defined editing increment, and Arrow/Page/Home/End keys are handled with
+that same increment and native range bounds. Fields retain focus during updates.
+Blank or invalid numeric fields cannot leave a stale result visible. The mobile
+summary is shown only when inputs intersect the viewport and the full result
+does not, and repeats no live region. Sliders/summary are excluded from printing.
+
+`node scripts/aquarium-toolbox/sliders-browser.mjs [base-URL] [evidence-directory]`
+checks all numeric sliders in US/metric, keyboard steps, actual mouse dragging,
+touch input, precision, adaptive ranges, persistence, invalid input, mobile
+summary visibility and print hiding. Run alongside the original browser suite.
