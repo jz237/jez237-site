@@ -19,7 +19,7 @@
     "facts": [
       "Self-hosted",
       "WebGL2 + WebAssembly",
-      "v1.0.0"
+      "v1.0.1"
     ],
     "note": "Original by @mattshumer on Spawn · Modern browser required · Heavy destruction can be demanding on phones."
   },

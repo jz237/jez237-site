@@ -274,3 +274,6 @@ body.nobutton #tb-blast { display: none; }
 #rp-time { font: 11.5px/1 var(--mono); color: var(--text); font-variant-numeric: tabular-nums; }
 #replay.done #rp-pause, #replay.done #rp-speed, #replay.done #rp-shot, #replay.done #rp-skip { display: none; }
 body.nohud #replay { display: none; }
+
+/* Hosting credit stays readable on the original dark start card. */
+#start .note a { color: #a9d9ff; text-underline-offset: 2px; }
