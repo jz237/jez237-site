@@ -4,8 +4,8 @@
 // rider locally (so flapping never lags), reports it 30 times a second, judges the sea and the hazards it
 // flies into, and plays the knockbacks the host decides. The relay overwrites the keys t, from, role and
 // start.mode, so none of our messages use them.
-import { adoptWave } from './sim.js?v=16';
-import { F, PW_KEYS, ENEMY_KEYS } from './config.js?v=16';
+import { adoptWave } from './sim.js?v=17';
+import { F, PW_KEYS, ENEMY_KEYS } from './config.js?v=17';
 
 export const PROTOCOL = 1;
 const RELAY = 'wss://steel-duel-online.jez237.workers.dev';

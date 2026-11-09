@@ -1,14 +1,14 @@
 // Lancewing 2026 - game flow: title (version, difficulty, global boards), campaign, endless, local and online
 // co-op, upgrades, results with initials, instant replay, pause, options, attract demo and AI playthrough.
-import { VERSION, SECTORS, STEP, F, WAVES, UPGRADES, UP_KEYS, UP_COST, SALVAGE_DIV, MEDALS, parTime, TYPICAL_UP, START_LIVES, BOSSES, DIFFICULTY, DIFF_KEYS, POWERUPS, ENEMY } from './config.js?v=16';
-import { makeWorld, step, drainEvents, waveLabel, isBossWave, dX, applyClaim, cloneWorld, ledgeUnder } from './sim.js?v=16';
-import { Autopilot } from './ai.js?v=16';
-import { Renderer, pickQuality, CALM } from './render.js?v=16';
-import { Audio } from './audio.js?v=16';
-import { Input } from './input.js?v=16';
-import { Scores, NO_POST, posted } from './scores.js?v=16';
-import { Recorder, Replay } from './replay.js?v=16';
-import { Online, ROOM, randomCode, cleanCode } from './online.js?v=16';
+import { VERSION, SECTORS, STEP, F, WAVES, UPGRADES, UP_KEYS, UP_COST, SALVAGE_DIV, MEDALS, parTime, TYPICAL_UP, START_LIVES, BOSSES, DIFFICULTY, DIFF_KEYS, POWERUPS, ENEMY } from './config.js?v=17';
+import { makeWorld, step, drainEvents, waveLabel, isBossWave, dX, applyClaim, cloneWorld, ledgeUnder } from './sim.js?v=17';
+import { Autopilot } from './ai.js?v=17';
+import { Renderer, pickQuality, CALM } from './render.js?v=17';
+import { Audio } from './audio.js?v=17';
+import { Input } from './input.js?v=17';
+import { Scores, NO_POST, posted } from './scores.js?v=17';
+import { Recorder, Replay } from './replay.js?v=17';
+import { Online, ROOM, randomCode, cleanCode } from './online.js?v=17';
 
 const $ = (id) => document.getElementById(id);
 const params = new URLSearchParams(location.search);
@@ -1030,15 +1030,23 @@ function seaDanger(W, dt, menu) {
   if (Math.abs(mo - SEA.mark) > 0.02) { SEA.mark = mo; mk.style.opacity = mo; }
   return SEA;
 }
-// ambient beds: storm wind (louder up high), surf (louder near the sea), the rush of a fast dive, the Stormhunter's engine
+// ambient beds: the sector's own sound (1.10: the storm wind used to play on every sector, too loud: now a quiet bed
+// per look - a breeze and gulls over the ruins, drips in the caverns, bubbling lava and furnaces in the foundry
+// (louder near the molten sea), glacier wind and creaking ice, the eclipse's drone; crossfaded when the look
+// changes), surf (louder near the sea; none over the foundry's lava), the rush of a fast dive, the Stormhunter's engine
+const AMB = ['amb_ruins', 'amb_caverns', 'amb_foundry', 'amb_glacier', 'amb_eclipse'], AMBV = [0.13, 0.3, 0.12, 0.12, 0.1];
 function ambience(W, menu) {
   if (!A.ctx) return;
   const p = W.players.find((q) => q.alive) || W.players[0];
   const live = G.state === 'play' || G.state === 'replay' || G.state === 'paused-online';
   const k = G.state === 'paused' ? 0.25 : 1;
   const y = p ? p.y : 12, spd = p ? Math.hypot(p.vx, p.vy) : 0;
-  A.setBed('wind', 'wind', (0.16 + Math.min(1, y / F.H) * 0.16 + (menu ? 0.06 : 0)) * k, 0.92 + Math.min(1, y / F.H) * 0.16);
-  A.setBed('surf', 'surf', (menu ? 0.16 : 0.08 + Math.max(0, 1 - y / 10) * 0.22) * k);
+  const li = R.lookI || 0, low = Math.max(0, 1 - y / 10);
+  AMB.forEach((n, i) => {
+    if (i === li) A.setBed(n, n, AMBV[i] * (i === 2 ? 0.7 + low * 0.8 : 1) * k);
+    else if (A.beds.has(n)) A.setBed(n, n, 0);
+  });
+  A.setBed('surf', 'surf', li === 2 ? 0 : (menu ? 0.1 : 0.05 + low * 0.18) * k);
   A.setBed('rush', 'rush', live && p && p.alive ? Math.max(0, Math.min(1, (spd - 9) / 9)) * 0.32 * k : 0, 0.85 + Math.min(0.4, spd / 40));
   const h = W.hunter;
   if (h && live) { A.loop('hunter', 'hunterloop', 0.55); const q = toPos(h.x, h.y); A.setLoop('hunter', q.x, q.y, q.z, 1, 1 + Math.min(0.3, Math.abs(h.vx) / 40)); }
@@ -1207,7 +1215,7 @@ async function boot() {
   $('loading').style.opacity = '0';
   setTimeout(() => $('loading').remove(), 700);
   toTitle();
-  if (params.has('test')) { const m = await import('./tests.js?v=16'); m.runTests(window.__lw); }
+  if (params.has('test')) { const m = await import('./tests.js?v=17'); m.runTests(window.__lw); }
   else if (params.has('playthrough')) { A.unlock(); startPlaythrough(); }
   else if (params.has('endless') && G.autopilot) { A.unlock(); startEndless(); }
   else if (G.autopilot) { A.unlock(); startCampaign(+params.get('sector') || 0); }

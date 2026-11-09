@@ -133,6 +133,12 @@ SFX = {
     'wind':      (6.0, 0.4, 'Strong storm wind howling around high sea cliffs, steady, no thunder, seamless loop'),
     'surf':      (6.0, 0.4, 'Stormy sea waves crashing against rocks far below, steady roar, seamless loop'),
     'rush':      (3.0, 0.4, 'Fast air rushing past while diving at high speed, steady roaring wind noise, seamless loop'),
+    # 1.10: one ambient bed per sector (the storm wind used to play everywhere)
+    'amb_ruins':   (12.0, 0.45, 'Calm warm evening breeze over ancient stone ruins on a sea cliff, distant seagulls calling, cloth banners softly fluttering, quiet, seamless loop'),
+    'amb_caverns': (12.0, 0.45, 'Vast sea cave ambience, slow water drips echoing, deep hollow resonance, faint glassy crystal hum with soft chimes, quiet, seamless loop'),
+    'amb_foundry': (12.0, 0.45, 'Molten lava bubbling and popping, deep roaring furnace fire, distant heavy chains creaking and an occasional metal clank, steady, seamless loop'),
+    'amb_glacier': (12.0, 0.45, 'Cold thin wind whistling over a glacier, ice creaking and groaning, an occasional faint ice crack, airy and quiet, seamless loop'),
+    'amb_eclipse': (12.0, 0.45, 'Dark ominous low drone, deep slow pulsing hum, distant rolling thunder, faint crackling energy, steady, seamless loop'),
 }
 
 VOICE_IDS = ['JBFqnCBsd6RMkjVDRZzb', 'onwK4e9ZLuTAKqWW03F9']  # warm storyteller herald; fallback

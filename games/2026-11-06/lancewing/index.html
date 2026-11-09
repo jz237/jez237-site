@@ -8,21 +8,21 @@
 <title>Lancewing 2026</title>
 <link rel="icon" href="data:,">
 <!-- every module up front: the browser fetches them all at once instead of finding each import in turn -->
-<link rel="modulepreload" href="js/main.js?v=16">
-<link rel="modulepreload" href="js/config.js?v=16">
-<link rel="modulepreload" href="js/sim.js?v=16">
-<link rel="modulepreload" href="js/ai.js?v=16">
-<link rel="modulepreload" href="js/render.js?v=16">
-<link rel="modulepreload" href="js/audio.js?v=16">
-<link rel="modulepreload" href="js/input.js?v=16">
-<link rel="modulepreload" href="js/scores.js?v=16">
-<link rel="modulepreload" href="js/replay.js?v=16">
-<link rel="modulepreload" href="js/online.js?v=16">
-<link rel="modulepreload" href="js/post.js?v=16">
-<link rel="modulepreload" href="js/shaders.js?v=16">
-<link rel="modulepreload" href="js/textures.js?v=16">
-<link rel="modulepreload" href="js/models.js?v=16">
-<link rel="modulepreload" href="js/fx.js?v=16">
+<link rel="modulepreload" href="js/main.js?v=17">
+<link rel="modulepreload" href="js/config.js?v=17">
+<link rel="modulepreload" href="js/sim.js?v=17">
+<link rel="modulepreload" href="js/ai.js?v=17">
+<link rel="modulepreload" href="js/render.js?v=17">
+<link rel="modulepreload" href="js/audio.js?v=17">
+<link rel="modulepreload" href="js/input.js?v=17">
+<link rel="modulepreload" href="js/scores.js?v=17">
+<link rel="modulepreload" href="js/replay.js?v=17">
+<link rel="modulepreload" href="js/online.js?v=17">
+<link rel="modulepreload" href="js/post.js?v=17">
+<link rel="modulepreload" href="js/shaders.js?v=17">
+<link rel="modulepreload" href="js/textures.js?v=17">
+<link rel="modulepreload" href="js/models.js?v=17">
+<link rel="modulepreload" href="js/fx.js?v=17">
 <link rel="modulepreload" href="vendor/three.module.min.js">
 <link rel="modulepreload" href="vendor/three.core.min.js">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -351,7 +351,7 @@ body.lw-paused #tut, body.lw-paused #warns, body.lw-paused #duels, body.lw-pause
   <div class="screen hidden" id="title">
     <div class="card">
       <h1 class="logo">LANCE<span>WING</span></h1>
-      <div class="ver"><b>2026</b> · VERSION <b id="ver">1.9.0</b> · THE HIGHER LANCE WINS</div>
+      <div class="ver"><b>2026</b> · VERSION <b id="ver">1.10.0</b> · THE HIGHER LANCE WINS</div>
       <div class="diffrow">DIFFICULTY<div class="seg" data-opt="diff"><button data-v="easy">EASY</button><button data-v="normal">NORMAL</button><button data-v="hard">HARD</button><button data-v="nightmare">NIGHTMARE</button></div></div>
       <div id="diff-desc"></div>
       <div class="btns" id="title-btns">
@@ -495,6 +495,6 @@ addEventListener('error', (e) => window.__lwErrors.push(String(e.message || e)))
 addEventListener('unhandledrejection', (e) => window.__lwErrors.push('rejection: ' + String(e.reason && e.reason.message || e.reason)));
 (() => { const ce = console.error; console.error = (...a) => { window.__lwErrors.push(a.map(String).join(' ')); ce.apply(console, a); }; })();
 </script>
-<script type="module" src="js/main.js?v=16"></script>
+<script type="module" src="js/main.js?v=17"></script>
 </body>
 </html>

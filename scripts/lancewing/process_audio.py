@@ -11,12 +11,14 @@ import numpy as np
 
 RAW = os.environ.get('LW_RAW', 'D:/Projects/.tmp/arcade-trio-work/lancewing/audio-raw')
 OUT = sys.argv[1]
-LOOPS = {'wind', 'surf', 'rush', 'hunterloop'}
+LOOPS = {'wind', 'surf', 'rush', 'hunterloop', 'amb_ruins', 'amb_caverns', 'amb_foundry', 'amb_glacier', 'amb_eclipse'}
 # frequent sounds: cut the sub-bass phones cannot play (so the audible body comes up after peak normalising) and keep them dark
 SOFT = {'flap': 'highpass=f=110,lowpass=f=5200', 'land': 'highpass=f=90,lowpass=f=6000', 'collect': 'highpass=f=120,lowpass=f=7000',
         'skid': 'lowpass=f=7000', 'chain': 'highpass=f=100', 'core': 'highpass=f=100', 'pickup': 'highpass=f=100', 'spawn': 'highpass=f=90',
         'shieldhit': 'highpass=f=90', 'form': 'highpass=f=90', 'drop': 'highpass=f=90', 'hatch': 'highpass=f=70',
         'thud': 'highpass=f=80,lowpass=f=7000', 'arrive': 'highpass=f=90', 'portal': 'highpass=f=80', 'clatter': 'highpass=f=150'}
+# sparse loops (cave drips) are squeezed so their quiet bed is audible next to the steady ones
+LOOPAF = {'amb_caverns': 'acompressor=threshold=-36dB:ratio=8:attack=4:release=300:makeup=4'}
 ONLY = set(sys.argv[2].split(',')) if len(sys.argv) > 2 else None
 
 
@@ -78,7 +80,7 @@ for kind in ('sfx', 'voice', 'music'):
             sub = 'audio' if kind == 'sfx' else 'voice'
             dst = os.path.join(OUT, sub, name + '.mp3')
             if name in LOOPS:
-                run(['ffmpeg', '-y', '-hide_banner', '-i', src, '-ac', '1', '-ar', '44100', tmp])
+                run(['ffmpeg', '-y', '-hide_banner', '-i', src] + (['-af', LOOPAF[name]] if name in LOOPAF else []) + ['-ac', '1', '-ar', '44100', tmp])
                 make_loop(tmp, tmp2)
                 g = peak_gain(tmp2)
                 run(['ffmpeg', '-y', '-hide_banner', '-i', tmp2, '-af', f'volume={-3 - g:.2f}dB', '-c:a', 'libmp3lame', '-b:a', '96k', dst])

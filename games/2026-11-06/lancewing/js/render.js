@@ -4,12 +4,12 @@
 // spire and its lightning, telegraph ribbons for every hazard and boss attack, HDR post with bloom.
 // Nothing here changes the world.
 import * as THREE from '../vendor/three.module.min.js';
-import { Post } from './post.js?v=16';
-import * as TX from './textures.js?v=16';
-import * as MD from './models.js?v=16';
-import { FX, CALM } from './fx.js?v=16';
-import { F, POWERUPS, BOSSES, HUNTER, LAYOUT, SECTORS, rockHang, rockDrop } from './config.js?v=16';
-import { weakPos, ledgeUnder } from './sim.js?v=16';
+import { Post } from './post.js?v=17';
+import * as TX from './textures.js?v=17';
+import * as MD from './models.js?v=17';
+import { FX, CALM } from './fx.js?v=17';
+import { F, POWERUPS, BOSSES, HUNTER, LAYOUT, SECTORS, rockHang, rockDrop } from './config.js?v=17';
+import { weakPos, ledgeUnder } from './sim.js?v=17';
 
 export { CALM };
 const RR = F.R, H = F.H;
@@ -637,17 +637,29 @@ export class Renderer {
   // place a jouster turned phi round the vertical from facing +x along the ring (0) to facing back (PI). It swings
   // round through facing the camera, so a turn shows the skyray's head and chest and not a flat card; past halfway
   // the model is mirrored so its lance side ends up toward the camera whichever way it flies (as before)
-  placeTurn(outer, x, y, phi) {
+  placeTurn(outer, x, y, phi, dr = 0) {
     tangent(x, _v); radial(x, _v2);
     const c = Math.cos(phi), s = Math.sin(phi);
     _v4.copy(_v).multiplyScalar(c).addScaledVector(_v2, s);          // the nose
     _v5.copy(_v2).multiplyScalar(c).addScaledVector(_v, -s);         // its right side
     if (phi > Math.PI / 2) _v5.negate();
     _m.makeBasis(_v4, UP, _v5);
-    toWorld(x, y, _v3);
+    toWorld(x, y, _v3, dr);
     _m.setPosition(_v3);
     outer.matrix.copy(_m);
     outer.matrixWorldNeedsUpdate = true;
+  }
+  // 1.10: the big fliers (bosses, the Stormhunter) turn round like the jousters: a damped spring swings them from
+  // facing along the ring to facing back THROUGH facing the camera (head and chest toward you, wings spread across the
+  // view) instead of squashing their width through zero like a paper card. yaw turns them a little toward the camera
+  // at rest (as the old fixed -0.2 did). Returns 0..1, how far into the turn they are (for banking)
+  turnSpring(V, face, dt, k, yaw) {
+    const phT = face > 0 ? yaw : Math.PI - yaw, s = Math.min(dt, 1 / 30);
+    if (V.phi === undefined) { V.phi = phT; V.phiV = 0; }
+    V.phiV += ((phT - V.phi) * k - V.phiV * 2 * Math.sqrt(k)) * s;
+    V.phi = clamp(V.phi + V.phiV * s, 0, Math.PI);
+    V.face = V.phi > Math.PI / 2 ? -1 : 1;
+    return clamp((Math.sin(V.phi) - Math.sin(yaw)) / (1 - Math.sin(yaw)), 0, 1);
   }
   // place a model at sim (x, y) facing face (+1 along the ring / -1 back); mirrored so its right side always faces the camera
   place(outer, x, y, sx, dr = 0) {
@@ -1011,12 +1023,12 @@ export class Renderer {
   syncHunter(W, dt, t) {
     const h = W.hunter;
     if (!h) { if (this.hunterV) this.hunterV.outer.visible = false; return; }
-    if (!this.hunterV) { const v = MD.hunter(); const outer = new THREE.Group(); outer.matrixAutoUpdate = false; outer.add(v.g); this.scene.add(outer); this.hunterV = { v, outer, turn: h.face }; }
+    if (!this.hunterV) { const v = MD.hunter(); const outer = new THREE.Group(); outer.matrixAutoUpdate = false; outer.add(v.g); this.scene.add(outer); this.hunterV = { v, outer }; }
     const V = this.hunterV;
     V.outer.visible = true;
-    V.turn += clamp(h.face - V.turn, -dt * 8, dt * 8);
-    this.place(V.outer, h.x, h.y, Math.abs(V.turn) < 0.12 ? Math.sign(V.turn || 1) * 0.12 : V.turn);
-    V.v.g.rotation.set(0, -0.25, clamp(h.vy * 0.05, -0.5, 0.5), 'YXZ');
+    const tw = this.turnSpring(V, h.face, dt, 160, 0.25);
+    this.placeTurn(V.outer, h.x, h.y, V.phi);
+    V.v.g.rotation.set(tw * 0.45, 0, clamp(h.vy * 0.05, -0.5, 0.5), 'YXZ');
     const a = Math.sin(t * 16) * 0.5;
     V.v.wingR.rotation.x = -a; V.v.wingL.rotation.x = a;
     V.v.tail.rotation.y = Math.sin(t * 5) * 0.2;
@@ -1048,7 +1060,7 @@ export class Renderer {
       v.g.scale.setScalar({ sovereign: 1.4, wyvern: 1.18, gale: 1.05 }[B.key] || 1);
       // the Forge Colossus wades in the sea just inside the ring, behind the ledges' rock (it is far too tall to pass
       // between them); the Leviathan's coils dip behind any rock they would cut through
-      this.bossV = { v, outer, key: B.key, turn: B.face, lane: B.key === 'colossus' ? COLOSSUS_LANE : 0, segLane: null, segPrev: null };
+      this.bossV = { v, outer, key: B.key, lane: B.key === 'colossus' ? COLOSSUS_LANE : 0, segLane: null, segPrev: null };
       if (B.key === 'leviathan') { outer.matrix.identity(); outer.matrixWorldNeedsUpdate = true; for (const s of v.segs) s.matrixAutoUpdate = false; }
     }
     const V = this.bossV, v = V.v;
@@ -1083,12 +1095,13 @@ export class Renderer {
       v.pts.forEach((g, i) => { g.visible = B.pts[i] && B.pts[i].hp > 0; g.scale.setScalar(hit * (1 + Math.sin(t * 6 + i) * 0.08)); });
       return;
     }
-    const mirror = B.key !== 'colossus';
-    V.turn += clamp((mirror ? B.face : 1) - V.turn, -dt * 4, dt * 4);
-    this.place(V.outer, B.x + rcx, B.y + rcy, Math.abs(V.turn) < 0.1 ? Math.sign(V.turn || 1) * 0.1 : V.turn, V.lane);
+    // the Colossus wades and always faces the camera; the fliers swing round on a slow, heavy spring and bank into it
+    let tw = 0;
+    if (B.key === 'colossus') { V.face = 1; this.place(V.outer, B.x + rcx, B.y + rcy, 1, V.lane); }
+    else { tw = this.turnSpring(V, B.face, dt, 26, 0.2); this.placeTurn(V.outer, B.x + rcx, B.y + rcy, V.phi, V.lane); }
     // the flinch: pitched back from the blow, rolled a little, squashed for an instant
-    const fd = (V.fdir || 1) * Math.sign(V.turn || 1);
-    v.g.rotation.set(fl * 0.18, B.key === 'colossus' ? 0 : -0.2, (B.key === 'colossus' ? 0 : clamp(B.vy * 0.04, -0.3, 0.3)) + fl * 0.32 * fd, 'YXZ');
+    const fd = (V.fdir || 1) * V.face;
+    v.g.rotation.set(fl * 0.18 + tw * 0.32, 0, (B.key === 'colossus' ? 0 : clamp(B.vy * 0.04, -0.3, 0.3)) + fl * 0.32 * fd, 'YXZ');
     v.g.scale.set(V.s0 * (1 + fl * 0.06), V.s0 * (1 - fl * 0.09), V.s0 * (1 + fl * 0.06));
     if (B.st === 'down') { v.g.rotation.z += B.t * 0.1; }
     const flap = B.key === 'colossus' ? 0 : Math.sin(t * (B.key === 'gale' ? 2.2 : 3)) * (B.key === 'sovereign' ? 0.25 : 0.4) + fl * 0.6;

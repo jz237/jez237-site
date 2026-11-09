@@ -1,15 +1,15 @@
 // Audio: effects are positioned in 3D (Web Audio panners with the listener on the camera) so clangs,
 // splashes, spouts and lightning sit where they happen; the player's wing beats are quiet low one-shots.
-// Ambient beds (storm wind, surf below, the rush of a dive) and the Stormhunter's engine are loops whose
+// Ambient beds (each sector's own: ruins breeze, cave drips, lava, glacier wind, eclipse drone; surf below, the rush of a dive) and the Stormhunter's engine are loops whose
 // level follows the action. Voices duck the music and only one plays at a time. Music loops with a crossfade.
 // All effects, music and the herald's lines are ElevenLabs renders (scripts/lancewing/gen_audio.py + process_audio.py).
 const SFX = ['flap', 'clang', 'block', 'unhorse', 'boomS', 'boomM', 'boomL', 'debris', 'death', 'splash', 'spoutwarn', 'spout', 'boltwarn', 'thunder', 'arcon',
   'crack', 'crumble', 'core', 'collect', 'chain', 'hatch', 'form', 'land', 'skid', 'drop', 'pickup', 'pwend', 'shieldhit', 'slowmo', 'spawn', 'life', 'alarm',
   'hunter', 'hunterloop', 'bossroar', 'bosshit', 'shatter', 'slam', 'beam', 'blast', 'molten', 'gust', 'breach', 'wave', 'waveclear', 'upgrade', 'medal',
-  'uimove', 'uiok', 'uiback', 'rewind', 'wind', 'surf', 'rush', 'portal', 'arrive', 'screech', 'ram', 'regrow', 'thud', 'clatter', 'corefade'];
+  'uimove', 'uiok', 'uiback', 'rewind', 'amb_ruins', 'amb_caverns', 'amb_foundry', 'amb_glacier', 'amb_eclipse', 'surf', 'rush', 'portal', 'arrive', 'screech', 'ram', 'regrow', 'thud', 'clatter', 'corefade'];
 const VOICE = ['begin', 's2', 's3', 's4', 's5', 'boss', 'bossdown', 'clear', 'lastlife', 'gameover', 'newrecord', 'champion'];
 export const MUSIC = new Set(['title', 's1', 's2', 's3', 's4', 's5', 'boss', 'clear', 'over']);
-const V = '?v=16';
+const V = '?v=17';
 
 export class Audio {
   constructor(base) {
