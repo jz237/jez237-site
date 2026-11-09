@@ -10,6 +10,7 @@ Game: `games/2026-11-07/gold-digger/` (three.js, plain ES modules, every local i
 | `autopilot_check.mjs [minutes]` | demo autopilot plays the whole campaign like AI PLAYTHROUGH (store buys, retries) |
 | `console_check.mjs [baseUrl]` | headless Edge: `?test=1` self-test, frames of every depth/guardian, phone layouts, demo, playthrough→store→depth 2, game over initials, shader programs flat, no console errors, no score POSTs (`ONLY=test,frames,demo,playthrough,title`) |
 | `float_check.mjs [baseUrl]` | headless Edge, every level at high (sculpted) + medium (phone) quality: every prop's feet (rock pieces, drips, living growth, settled props' contact points via `globalThis.__gdAudit`) within 3 cm of the DRAWN rock, kickables on the floor, the exact surface query agrees with a THREE raycast, the digger's soles on the floor |
+| `dig_check.mjs [baseUrl]` | the physical cave: in the sim five blows open plain rock, bedrock only clinks, a beetle whose floor goes drops; in headless Edge (high + medium) blows dent the drawn rock and the dents go with the cell, rubble and knocked lane props come to rest ON the drawn floor within 5 s, blasting the rock under a prop drops it onto the floor below, nothing leaves the world, no new shader programs, no page errors |
 | `gen_audio.py` / `process_audio.py` | ElevenLabs SFX/music/voice → `audio/`, `music/`, `voice/` (key read from the Windows user env, never printed) |
 
 Serve the repo root without caching (the browser otherwise keeps old `?v=` modules), e.g. a tiny no-store `http.server`

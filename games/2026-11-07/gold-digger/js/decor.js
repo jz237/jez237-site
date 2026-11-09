@@ -3,14 +3,17 @@
 // Things that glow register light "emitters" the renderer's light pool can aim at.
 // The wonders (one per level in the campaign) are big set pieces in a room whose back wall is pushed far back.
 import * as THREE from '../vendor/three.module.min.js';
-import { T, SOLID } from './config.js?v=18';
+import { T, SOLID } from './config.js?v=19';
 
 function rng(seed) { let s = seed >>> 0 || 1; return () => { s = (s + 0x6D2B79F5) >>> 0; let t = s; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
 
-// merge every mesh under `roots` into one mesh per material (world transforms baked in)
+// merge every mesh under `roots` into one mesh per material (world transforms baked in). Each root remembers where its
+// vertices went (root.userData.ranges = [[mesh, first vertex, count]]), so loose.js can lift it back out of the bake
+// when something knocks it.
 export function bake(roots, opts = {}) {
   const buckets = new Map();
   for (const r of roots) {
+    r.userData.ranges = [];
     r.updateMatrixWorld(true);
     r.traverse((o) => {
       if (!o.isMesh || o.isInstancedMesh || o.isSkinnedMesh || !o.visible) return;
@@ -23,7 +26,7 @@ export function bake(roots, opts = {}) {
       const keep = { position: g.attributes.position, normal: g.attributes.normal || null, color: g.attributes.color || null, uv: g.attributes.uv || null };
       if (!keep.normal) { g.computeVertexNormals(); keep.normal = g.attributes.normal; }
       const e = buckets.get(m) || { m, parts: [], n: 0, uv: !!m.map || !!m.normalMap || !!m.roughnessMap, shadow: o.castShadow };
-      e.parts.push({ g, keep, n });
+      e.parts.push({ g, keep, n, root: r });
       e.n += n;
       buckets.set(m, e);
     });
@@ -33,6 +36,7 @@ export function bake(roots, opts = {}) {
     const pos = new Float32Array(e.n * 3), nrm = new Float32Array(e.n * 3), col = new Float32Array(e.n * 3), uv = e.uv ? new Float32Array(e.n * 2) : null;
     let o = 0;
     for (const p of e.parts) {
+      p.at = o;
       const P = p.keep.position, N = p.keep.normal, C = p.keep.color, U = p.keep.uv;
       for (let i = 0; i < p.n; i++, o++) {
         pos[o * 3] = P.getX(i); pos[o * 3 + 1] = P.getY(i); pos[o * 3 + 2] = P.getZ(i);
@@ -49,6 +53,7 @@ export function bake(roots, opts = {}) {
     const mesh = new THREE.Mesh(g, e.m);
     mesh.castShadow = opts.shadow !== false && e.shadow !== false; mesh.receiveShadow = true;
     group.add(mesh);
+    for (const p of e.parts) p.root.userData.ranges.push([mesh, p.at, p.n]);
   }
   return group;
 }
@@ -179,7 +184,8 @@ export function buildDecor(M, look, W, K) {
   const accent = look.accent;
   const set = look.set || SETS[biome % 5];
   const info = { set, roots: 0, shelves: 0 };
-  const lantern = (x, y, col = [1, 0.6, 0.26]) => { const ln = obj(make('lantern')); ln.position.set(x, y, -0.55); statics.push(ln); emitters.push({ x, y, z: -0.2, col, int: 6, range: 9, pri: 3, flick: 1 }); };
+  // a lantern hung from a frame (on: the frame, so it falls when the frame does); its light follows it when it swings
+  const lantern = (x, y, col = [1, 0.6, 0.26], on = null) => { const ln = obj(make('lantern')); ln.position.set(x, y, -0.55); statics.push(ln); const em = { x, y, z: -0.2, col, int: 6, range: 9, pri: 3, flick: 1 }; emitters.push(em); ln.userData.emit = em; ln.userData.on = on; };
   const crystals = (n, cols, back = 0.7, glowP = 0.5, smin = 0.5, smax = 1.9) => {
     for (const [x, y] of take(Math.round(n * dens), 2)) {
       const c = cols[Math.floor(R() * cols.length)], s = smin + R() * (smax - smin), z = R() < back ? -1 - R() * 2.5 : 1.2 + R() * 0.6;
@@ -201,7 +207,7 @@ export function buildDecor(M, look, W, K) {
       const h = headroom(x, y), [fy0, fh] = span(x + 0.5, y, -0.9, h);
       const f = place(make('timberFrame', 3.2, fh), x + 0.5, fy0, -0.9);
       if (set === 'patina') f.rotation.z = (R() - 0.5) * 0.12;
-      if (set === 'workings' || R() < 0.5) lantern(x + 0.5 + (R() < 0.5 ? -1.1 : 1.1), fy0 + fh - 0.74);
+      if (set === 'workings' || R() < 0.5) lantern(x + 0.5 + (R() < 0.5 ? -1.1 : 1.1), fy0 + fh - 0.74, undefined, f);
     }
     for (const [x, y] of take(Math.round((set === 'patina' ? 2 : 4) * dens), 8, ([x, y]) => open(x + 2, y) && open(x - 2, y) && solid(x + 2, y - 1) && solid(x - 2, y - 1))) {
       railCart(x + 0.5, y, R() < 0.6);
@@ -212,8 +218,8 @@ export function buildDecor(M, look, W, K) {
     // iron frames, pipe runs along the back walls, chains from the roof, a few carts
     for (const [x, y] of take(Math.round(8 * dens), 5, ([x, y]) => headroom(x, y) >= 3 && headroom(x, y) <= 6 && open(x - 1, y) && open(x + 1, y))) {
       const h = headroom(x, y);
-      const [gy0, gh] = span(x + 0.5, y, -0.9, h); place(make('girder', 3.2, gh), x + 0.5, gy0, -0.9);
-      if (R() < 0.6) lantern(x + 0.5 + (R() < 0.5 ? -1.1 : 1.1), gy0 + gh - 0.74, [1, 0.42, 0.18]);
+      const [gy0, gh] = span(x + 0.5, y, -0.9, h), gd = place(make('girder', 3.2, gh), x + 0.5, gy0, -0.9);
+      if (R() < 0.6) lantern(x + 0.5 + (R() < 0.5 ? -1.1 : 1.1), gy0 + gh - 0.74, [1, 0.42, 0.18], gd);
     }
     for (const [x, y] of take(Math.round(6 * dens), 9, ([x, y]) => headroom(x, y) >= 3 && open(x - 3, y) && open(x + 3, y))) place(make('pipes', 5 + Math.floor(R() * 4)), x + 0.5, y + 0.8 + R() * 1.4, -2.1);
     for (const [x, y] of ceils.slice(0, Math.round(14 * dens))) { if (drop(x, y) < 4) continue; place(make('chain', 1 + R() * 2.5), x + 0.5, y + 1, -0.8 - R() * 2); }
@@ -351,12 +357,14 @@ export function buildDecor(M, look, W, K) {
   // ---- glowworm threads
   const WORMS = { garden: [70, [0.35, 0.95, 1.0]], bluecap: [150, [0.5, 0.7, 1.0]], tide: [45, [0.3, 1.0, 0.85]] };
   let worms = null;
+  const threads = [];   // [roof cell key, first point, count]: a dug roof drops its threads (loose.js)
   const wd = WORMS[set] || (W.endless && R() < 0.3 ? WORMS.garden : null);
   if (wd) {
     const pts = [], ph = [];
     for (const [x, y] of ceils.slice(0, Math.round(wd[0] * dens))) {
       const len = 0.4 + R() * 2.2, z = -0.6 - R() * 3, bx = x + R(), top = K.cave ? K.cave.roofY(bx, y + 0.5, z, 1.3) : y + 1;
       if (top === null) continue;
+      threads.push([(y + 1) * 4096 + Math.floor(bx), pts.length / 3, 8]);
       for (let k = 0; k < 8; k++) { pts.push(bx + (R() - 0.5) * 0.03, top - 0.02 - len * k / 8, z); ph.push(R()); }
     }
     const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(pts, 3)); g.setAttribute('aPh', new THREE.Float32BufferAttribute(ph, 1));
@@ -445,7 +453,7 @@ export function buildDecor(M, look, W, K) {
     }
     if (wonderFx) wonderFx(t, dt, P, fx);
   };
-  return { group, emitters, update, wonder, info };
+  return { group, emitters, update, wonder, info, props: statics, worms: worms ? { pts: worms, threads } : null };
 }
 
 // ------------------------------------------------------------------ wonders

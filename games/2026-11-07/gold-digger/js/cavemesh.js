@@ -4,9 +4,11 @@
 // where the physics has them (no noise near the play plane on upward faces); walls, ceilings and the depths get
 // layered noise so the rock reads as rock. Every vertex carries ambient occlusion, a biome colour and material
 // weights (gold vein, wetness, glow, rubble/cracks) that the triplanar rock shader uses.
-// Breaking a tile re-meshes only the chunks around it (a few ms).
+// Breaking a tile re-meshes only the chunks around it (a few ms). Pick blows and blasts DENT the drawn rock in place
+// (dent(): vertices pushed into the rock, normals tilted, fresh stone or soot in the vertex colours) without a re-mesh;
+// the dents are kept and re-applied whenever a chunk is re-meshed.
 import * as THREE from '../vendor/three.module.min.js';
-import { T } from './config.js?v=18';
+import { T } from './config.js?v=19';
 
 export const S = 0.5;                  // sample spacing (m)
 export const Z0 = -15, Z1 = 5;         // depth range (camera side is +z)
@@ -50,6 +52,8 @@ export class Cave {
     this.n3 = noise3((M.seed * 31 + M.depth * 7 + M.level) >>> 0);
     this.group = new THREE.Group();
     this.chunks = new Map();
+    this.dents = [];   // { x, y, z, r, k, fresh, soot }: bites taken out of the drawn rock (re-applied on re-mesh)
+    this.ver = 0;      // bumped whenever the drawn rock changes (re-mesh or dent): caches of surface heights key on it
     // sample grid in x/y covers the map plus a margin of solid rock
     this.mx = 3;
     // a deeper margin under the map: the exit shaft runs on down through it, so the lift sinks out of sight
@@ -185,7 +189,25 @@ export class Cave {
     mesh.matrixAutoUpdate = false;
     this.group.add(mesh);
     this.chunks.set(key, mesh);
+    this.ver++;
+    if (this.dents.length) { const near = this.dents.filter((d) => this.touches(mesh, d)); if (near.length) applyDents(mesh, near); }
   }
+  touches(mesh, d) {
+    const bb = mesh.geometry.boundingBox, r = d.r;
+    return !(d.x + r < bb.min.x || d.x - r > bb.max.x || d.y + r < bb.min.y || d.y - r > bb.max.y || d.z + r < bb.min.z || d.z - r > bb.max.z);
+  }
+  // A bite out of the drawn rock: the surface within r of (x, y, z) is pushed into the rock by up to k metres (a bowl,
+  // ragged per vertex), its normals relit from the new faces, and the stone it exposes freshened (paler, the moss gone)
+  // or blackened by soot. Presentation only; the tile map is untouched. Returns how many vertices moved.
+  dent(x, y, z, r, k, o = {}) {
+    const d = { x, y, z, r, k, fresh: o.fresh ?? 0.6, soot: o.soot || 0 };
+    let n = 0;
+    for (const mesh of this.chunks.values()) if (this.touches(mesh, d)) n += applyDents(mesh, [d]);
+    if (n) { this.dents.push(d); this.ver++; }
+    return n;
+  }
+  // forget the dents on a cell that has been dug or blasted away (its faces are gone; the re-mesh opens it cleanly)
+  dropDents(tx, ty) { this.dents = this.dents.filter((d) => d.x < tx - 0.2 || d.x > tx + 1.2 || d.y < ty - 0.2 || d.y > ty + 1.2); }
 
   // naive surface nets over the samples of a chunk (tiles [tx0, tx0+n) x [ty0, ty0+n), plus the margin chunks)
   mesh(tx0, ty0, n) {
@@ -576,6 +598,63 @@ function feet(o, bb, top) {
   }
   return [...cell.values()];
 }
+// push the vertices of a chunk mesh into the rock for each dent (see Cave.dent); keeps its vertical-ray hash current
+function applyDents(mesh, list) {
+  const geo = mesh.geometry, PA = geo.attributes.position, NA = geo.attributes.normal, CA = geo.attributes.color, MA = geo.attributes.aMat;
+  const P = PA.array, N = NA.array, C = CA.array, A = MA.array, nv = PA.count;
+  const moved = new Uint8Array(nv);
+  let lo = nv, hi = -1;
+  for (const d of list) {
+    const r2 = d.r * d.r;
+    for (let v = 0; v < nv; v++) {
+      const o = v * 3, dx = P[o] - d.x, dy = P[o + 1] - d.y, dz = P[o + 2] - d.z, q = dx * dx + dy * dy + dz * dz;
+      if (q >= r2) continue;
+      const t = 1 - q / r2, f = t * t;
+      // ragged: a jitter fixed to where the vertex is, so a re-mesh carves the very same bite
+      const jit = 0.65 + 0.7 * hashK((Math.round(P[o] * 40) * 73856093) ^ (Math.round(P[o + 1] * 40) * 19349663) ^ (Math.round(P[o + 2] * 40) * 83492791), 3);
+      const k = d.k * f * jit;
+      P[o] -= N[o] * k; P[o + 1] -= N[o + 1] * k; P[o + 2] -= N[o + 2] * k;
+      const fr = f * d.fresh, so = f * d.soot;
+      for (let c = 0; c < 3; c++) { let x = C[o + c]; x += (x * 0.55 + 0.035) * fr; x *= 1 - 0.62 * so; C[o + c] = Math.min(1.3, x); }
+      A[v * 4 + 3] *= 1 - Math.min(1, fr * 1.5);   // no moss on a fresh face
+      if (k > 0.0005 || so > 0.01 || fr > 0.01) { moved[v] = 1; if (v < lo) lo = v; if (v > hi) hi = v; }
+    }
+  }
+  if (hi < 0) return 0;
+  // relight the moved vertices from the faces round them (85 %) and their old normal (15 %)
+  const I = geo.index.array, acc = new Float32Array((hi - lo + 1) * 3);
+  const H = mesh.userData.vh;
+  for (let q = 0; q < I.length; q += 3) {
+    const a = I[q], b = I[q + 1], c = I[q + 2];
+    if (!moved[a] && !moved[b] && !moved[c]) continue;
+    const ao = a * 3, bo = b * 3, co = c * 3;
+    const ux = P[bo] - P[ao], uy = P[bo + 1] - P[ao + 1], uz = P[bo + 2] - P[ao + 2], wx = P[co] - P[ao], wy = P[co + 1] - P[ao + 1], wz = P[co + 2] - P[ao + 2];
+    const nx = uy * wz - uz * wy, ny = uz * wx - ux * wz, nz = ux * wy - uy * wx;
+    for (const v of [a, b, c]) if (moved[v]) { const o = (v - lo) * 3; acc[o] += nx; acc[o + 1] += ny; acc[o + 2] += nz; }
+    if (H) {   // the triangle may now reach other buckets (or face another way): file it again
+      const t = q / 3, sy = N[ao + 1] + N[bo + 1] + N[co + 1];
+      if (Math.abs(sy) >= 0.15) {
+        H.up[t] = sy > 0 ? 1 : -1;
+        const x0 = Math.min(P[ao], P[bo], P[co]), x1 = Math.max(P[ao], P[bo], P[co]), y0 = Math.min(P[ao + 1], P[bo + 1], P[co + 1]), y1 = Math.max(P[ao + 1], P[bo + 1], P[co + 1]), z0 = Math.min(P[ao + 2], P[bo + 2], P[co + 2]), z1 = Math.max(P[ao + 2], P[bo + 2], P[co + 2]);
+        for (let ix = Math.floor(x0 * 2); ix <= Math.floor(x1 * 2); ix++) for (let iy = Math.floor(y0); iy <= Math.floor(y1); iy++) for (let iz = Math.floor(z0 * 2); iz <= Math.floor(z1 * 2); iz++) {
+          const k = hkey(ix, iy, iz), L = H.map.get(k);
+          if (!L) H.map.set(k, [t]); else if (!L.includes(t)) L.push(t);
+        }
+      }
+    }
+  }
+  for (let v = lo; v <= hi; v++) {
+    if (!moved[v]) continue;
+    const o = v * 3, ao = (v - lo) * 3, l = Math.hypot(acc[ao], acc[ao + 1], acc[ao + 2]);
+    if (l < 1e-12) continue;
+    let x = acc[ao] / l * 0.85 + N[o] * 0.15, y = acc[ao + 1] / l * 0.85 + N[o + 1] * 0.15, z = acc[ao + 2] / l * 0.85 + N[o + 2] * 0.15;
+    const k = Math.hypot(x, y, z) || 1; N[o] = x / k; N[o + 1] = y / k; N[o + 2] = z / k;
+  }
+  for (const at of [PA, NA, CA]) { at.addUpdateRange(lo * 3, (hi - lo + 1) * 3); at.needsUpdate = true; }
+  MA.addUpdateRange(lo * 4, (hi - lo + 1) * 4); MA.needsUpdate = true;
+  let n = 0; for (let v = lo; v <= hi; v++) n += moved[v];
+  return n;
+}
 const hkey = (ix, iy, iz) => ((ix + 1024) * 2048 + (iy + 1024)) * 256 + (iz + 128);
 function vhash(geo) {
   const P = geo.attributes.position.array, N = geo.attributes.normal.array, I = geo.index.array, nt = I.length / 3;
@@ -598,6 +677,7 @@ function vhash(geo) {
 }
 
 // ------------------------------------------------------------------ the rock material (triplanar detail)
+export const BITES = 16;
 export function rockMaterial(tex, look) {
   const mat = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.9, metalness: 0.0 });
   const U = {
@@ -605,6 +685,8 @@ export function rockMaterial(tex, look) {
     uGold: { value: new THREE.Color(1.0, 0.68, 0.22) }, uGlow: { value: new THREE.Color().fromArray(look.glow || [1, 0.4, 0.1]) },
     uMoss: { value: new THREE.Color().fromArray(look.mossCol || [0.1, 0.3, 0.2]) }, uRubble: { value: new THREE.Color().fromArray(look.rubble || [0.5, 0.45, 0.4]) }, uCaus: { value: new THREE.Color(0, 0, 0) }, uSpark: { value: new THREE.Color(0, 0, 0) }, uStrata: { value: 0 }, uLampP: { value: new THREE.Vector3(0, -999, 0) },
     uCrust: { value: new THREE.Color(1, 1, 1) }, uCrustA: { value: 0 }, uStain: { value: new THREE.Color(0, 0, 0) }, uStainA: { value: 0 }, uRoughK: { value: 1 },
+    // pick bites (loose.js): xyz + how far the rock has given (0..1); cracks spread from each, drawn per pixel
+    uBite: { value: Array.from({ length: BITES }, () => new THREE.Vector4(0, -999, 0, 0)) }, uBiteLo: { value: new THREE.Vector3(0, -999, 0) }, uBiteHi: { value: new THREE.Vector3(0, -999, 0) },
   };
   mat.userData.U = U;
   mat.onBeforeCompile = (sh) => {
@@ -617,6 +699,7 @@ export function rockMaterial(tex, look) {
 uniform sampler2D tAlb; uniform sampler2D tNrm; uniform float uScale; uniform float uBump; uniform float uTime;
 uniform vec3 uGold; uniform vec3 uGlow; uniform vec3 uMoss; uniform vec3 uRubble; uniform vec3 uCaus; uniform vec3 uSpark; uniform vec3 uLampP; uniform float uStrata;
 uniform vec3 uCrust; uniform float uCrustA; uniform vec3 uStain; uniform float uStainA; uniform float uRoughK;
+uniform vec4 uBite[${BITES}]; uniform vec3 uBiteLo; uniform vec3 uBiteHi;
 // light thrown off moving water: thin bright ripple lines
 float caustic(vec2 p, float t) {
   vec2 i = p; float c = 1.0;
@@ -646,7 +729,25 @@ vec4 stoneCells(vec2 p) {
   }
   return vec4(best, id, dir);
 }
-vec3 gTW; vec4 gAlb; vec3 gNW;`)
+vec3 gTW; vec4 gAlb; vec3 gNW;
+// one pick bite on the rock colour c (N: the surface normal)
+vec3 biteFx(vec3 c, vec4 bt, float idx, vec3 N) {
+  if (bt.w <= 0.0) return c;
+  vec3 bd = vWPos - bt.xyz;
+  float bR = 0.26 + 0.5 * bt.w, bdist = length(bd);
+  if (bdist >= bR) return c;
+  vec3 an = abs(N);
+  vec2 bq = an.x > an.y && an.x > an.z ? bd.zy : (an.y > an.z ? bd.xz : bd.xy);
+  float ang = atan(bq.y, bq.x + 1e-5), rr = bdist / bR, sd = fract(sin(idx * 12.9898 + bt.x * 3.1 + bt.y * 1.7) * 43758.5453);
+  float kk = 5.0 + floor(sd * 3.0);
+  float ray = abs(sin(ang * kk * 0.5 + sd * 6.28 + (gAlb.r - 0.5) * 3.0 + rr * 2.4));
+  float crack = smoothstep(0.1 + 0.05 * bt.w, 0.0, ray) * smoothstep(1.0, 0.5, rr) * smoothstep(0.02, 0.14, rr);
+  float ring = smoothstep(0.06, 0.0, abs(rr - 0.42 - sd * 0.15)) * smoothstep(0.35, 0.8, bt.w) * (0.5 + 0.5 * sin(ang * 3.0 + sd * 9.0));
+  // the struck stone shows pale fresh breaks (so it reads even on the dark cut face), dark cracks through it
+  float pit = smoothstep(0.75, 0.05, rr + (gAlb.b - 0.5) * 0.25);
+  c = mix(c, uRubble * (0.62 + 0.55 * gAlb.g), pit * (0.25 + 0.5 * bt.w));
+  return c * (1.0 - (crack * 0.7 + ring * 0.45) * min(1.0, 0.45 + bt.w));
+}`)
       .replace('#include <color_fragment>', `#include <color_fragment>
 {
   vec3 N = normalize(vWNrm);
@@ -718,6 +819,12 @@ vec3 gTW; vec4 gAlb; vec3 gNW;`)
     float cn = texture2D(tAlb, vWPos.xz * 0.19 + 0.37).g;
     float cr = smoothstep(0.35, 0.7, upf * (0.75 + cn * 0.6)) * uCrustA;
     c = mix(c, uCrust * (0.78 + 0.32 * gAlb.g), cr);
+  }
+  // pick bites: jagged cracks running out from each blow, pale fresh stone in its heart (they spread as the rock gives).
+  // Unrolled with constant indices and per-axis box tests: ANGLE on D3D11 read the wrong elements of uBite inside a
+  // loop, got all(greaterThan()) wrong, and ignored this block when it sat before the stains below (so it goes last).
+  if (vWPos.x > uBiteLo.x && vWPos.x < uBiteHi.x && vWPos.y > uBiteLo.y && vWPos.y < uBiteHi.y && vWPos.z > uBiteLo.z && vWPos.z < uBiteHi.z) {
+    ${Array.from({ length: BITES }, (_, i) => `c = biteFx(c, uBite[${i}], ${i}.0, N);`).join(' ')}
   }
   diffuseColor.rgb = c;
 }`)

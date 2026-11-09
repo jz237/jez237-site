@@ -1,12 +1,12 @@
 // The simulation: a fixed 120 Hz step over plain data (structuredClone-able), so instant replays and the Node
 // checks reproduce a run exactly. No rendering, no Math.random: every random number comes from W.rs.
 // Events for sound, effects and the HUD go into W.ev and are drained by the game each frame.
-import { T, SOLID, PHYS, TOOLS, STEP, PICK_HP, BLASTABLE, LOOT, GEMS, START, LIFE_EVERY, LEVELS, DEPTHS, BIOMES, BOSSES,
-  rampAt, endlessRamp, applyDiff, DIFFICULTY } from './config.js?v=18';
-import { tileAt, solidT, makeBody, stepBody, fallHurt, boxOverlapsTile, EPS } from './physics.js?v=18';
-import { generate, bossArena, hash, findName } from './levelgen.js?v=18';
-import { validateLevel } from './nav.js?v=18';
-import { updateBoss, makeBoss, bossHit } from './boss.js?v=18';
+import { T, SOLID, PHYS, TOOLS, STEP, PICK_HP, BLASTABLE, DIG, LOOT, GEMS, START, LIFE_EVERY, LEVELS, DEPTHS, BIOMES, BOSSES,
+  rampAt, endlessRamp, applyDiff, DIFFICULTY } from './config.js?v=19';
+import { tileAt, solidT, makeBody, stepBody, fallHurt, boxOverlapsTile, EPS } from './physics.js?v=19';
+import { generate, bossArena, hash, findName } from './levelgen.js?v=19';
+import { validateLevel } from './nav.js?v=19';
+import { updateBoss, makeBoss, bossHit } from './boss.js?v=19';
 
 export { STEP };
 export const rnd = (W) => { W.rs = (W.rs + 0x6D2B79F5) >>> 0; let t = W.rs; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
@@ -29,6 +29,7 @@ export function makeWorld(o) {
   const M = isBoss ? bossArena(BIOMES[depth].boss, depth, seed)
     : generate({ seed, depth: endless ? 5 + n : depth, level: endless ? n % 3 : level, ramp, biome, endless, n, validate: validateLevel });
   M.biome = biome;
+  M.bed = bedrock(M, isBoss);
   const c = o.carry || {};
   const up = c.up || {};
   const maxHp = Math.max(1, START.hearts + (up.heart || 0) + D.hearts);
@@ -82,6 +83,35 @@ export function makeWorld(o) {
   W.openCells = open;
   if (isBoss) W.boss = makeBoss(W, BIOMES[depth].boss);
   return W;
+}
+
+// Bedrock: the plain rock the pick cannot dig, because the level hangs on it. A guardian's whole lair; the map's frame;
+// every vault and its walls (a seal is the only way in, so secrets stay secret); the rock round water, lava and spikes
+// (pools would hang in the air); the floor under camps, finds, kegs, keys and geysers; the rock a rope hangs from; and
+// the start and exit lift shafts. Everything else is ordinary rock that a patient digger can tunnel through.
+export function bedrock(M, boss) {
+  const W = M.w, H = M.h, bed = new Uint8Array(W * H);
+  if (boss) return bed.fill(1);
+  const mark = (x, y) => { if (x >= 0 && y >= 0 && x < W && y < H) bed[y * W + x] = 1; };
+  const at = (x, y) => (x >= 0 && y >= 0 && x < W && y < H) ? M.tiles[y * W + x] : T.ROCK;
+  for (let x = 0; x < W; x++) { mark(x, 0); mark(x, H - 1); }
+  for (let y = 0; y < H; y++) { mark(0, y); mark(W - 1, y); }
+  for (const c of M.rooms || []) if (c.kind === 'vault') for (let y = c.y0 - 1; y <= c.y0 + 12; y++) for (let x = c.x0 - 1; x <= c.x0 + 16; x++) mark(x, y);
+  for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
+    const t = M.tiles[y * W + x];
+    if (t === T.WATER || t === T.LAVA || t === T.SPIKES) for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) mark(x + dx, y + dy);
+    if (t === T.ROPE && SOLID[at(x, y + 1)]) mark(x, y + 1);
+  }
+  const under = (p, r = 1) => { if (p) for (let dx = -r; dx <= r; dx++) mark(Math.floor(p.x) + dx, Math.floor(p.y + 0.01) - 1); };
+  for (const f of M.finds || []) under(f);
+  for (const c of M.camps || []) under(c, 2);
+  const S = M.spawns || {};
+  for (const k of S.kegs || []) under(k);
+  for (const k of S.keys || []) under(k);
+  for (const g of S.geysers || []) under(g);
+  if (M.exit) for (let y = 0; y <= M.exit.y + 1; y++) for (let x = M.exit.x0 - 3; x <= M.exit.x1 + 2; x++) mark(x, y);
+  if (M.start) for (let y = M.start.y - 1; y < H; y++) for (let x = M.start.x - 4; x <= M.start.x + 3; x++) mark(x, y);
+  return bed;
 }
 
 // ------------------------------------------------------------------ helpers
@@ -343,16 +373,17 @@ function pickStrike(W, P) {
   if (W.boss && bossHit(W, W.boss, sx, sy, 'pick', 1 + 0.5 * lvl, API)) hit = true;
   if (hit) return;
   // then the rock: the cell at the swing point (forward: body middle, then feet height)
-  const cells = aim === 0 ? [[Math.floor(sx), Math.floor(P.y + 0.85)], [Math.floor(sx), Math.floor(P.y + 0.2)], [Math.floor(sx), Math.floor(P.y + 1.5)]]
-    : aim === 1 ? [[Math.floor(P.x), Math.floor(P.y + 1.9)]] : [[Math.floor(P.x), Math.floor(P.y - 0.5)]];
-  for (const [cx, cy] of cells) {
+  const hs = aim === 0 ? [P.y + 0.85, P.y + 0.2, P.y + 1.5] : aim === 1 ? [P.y + 1.9] : [P.y - 0.5];
+  const cells = hs.map((h) => [Math.floor(aim === 0 ? sx : P.x), Math.floor(h), h]);
+  for (const [cx, cy, hy] of cells) {
     const t = tileAt(M, cx, cy);
     if (!SOLID[t] || cy < 1 || cx < 1 || cx >= M.w - 1) continue;
-    const need = PICK_HP[t];
-    if (!need) { ev(W, 'clink', { x: cx + 0.5, y: cy + 0.5, hard: t === T.HARD || t === T.DOOR }); return; }
-    const i = cy * M.w + cx;
+    const need = PICK_HP[t], i = cy * M.w + cx;
+    // where the point bit (for the dent the renderer carves): the face of the cell toward the digger
+    const at = { aim, dir: P.face, hx: aim === 0 ? (P.face > 0 ? cx : cx + 1) : P.x + P.face * 0.3, hy: aim === 0 ? Math.min(cy + 0.85, Math.max(cy + 0.15, hy)) : aim === 1 ? cy : cy + 1 };
+    if (!need || (t === T.ROCK && M.bed[i])) { ev(W, 'clink', { x: cx + 0.5, y: cy + 0.5, hard: t === T.HARD || t === T.DOOR, bed: t === T.ROCK, ...at }); return; }
     M.hp[i] += 1 + (lvl >= 2 ? 1 : 0) + (lvl >= 1 && W.n % 2 === 0 ? 1 : 0);
-    ev(W, t === T.VEIN || t === T.GEMV ? 'ore' : 'pick', { x: cx + 0.5, y: cy + 0.5, t, f: Math.min(1, M.hp[i] / need) });
+    ev(W, t === T.VEIN || t === T.GEMV ? 'ore' : 'pick', { x: cx + 0.5, y: cy + 0.5, t, f: Math.min(1, M.hp[i] / need), ...at });
     if (M.hp[i] >= need) breakTile(W, cx, cy, 'pick');
     return;
   }
@@ -361,9 +392,13 @@ function pickStrike(W, P) {
 
 function breakTile(W, x, y, how) {
   const M = W.M, t = tileAt(M, x, y);
-  if (!BLASTABLE[t] && t !== T.DOOR) return;
+  if (!BLASTABLE[t] && t !== T.DOOR && !(t === T.ROCK && !M.bed[y * M.w + x])) return;
   setTile(W, x, y, T.AIR);
   ev(W, 'break', { x: x + 0.5, y: y + 0.5, t, how });
+  // what slept on it, walked on it or lay on it comes loose: a roosting bat wakes, beetles and loose loot drop
+  for (const b of W.bats) if (b.st === 'hang' && Math.floor(b.hx) === x && Math.floor(b.hy) + 1 === y) { b.st = 'wake'; b.t = 0; ev(W, 'batwake', { x: b.x, y: b.y }); }
+  for (const c of W.crawlers) if (!c.dead && Math.floor(c.x) === x && Math.floor(c.y + 0.01) - 1 === y) { c.fall = true; c.vy = 0; }
+  for (const l of W.loot) if (!l.got && !l.fly && Math.abs(l.x - (x + 0.5)) < 0.8 && Math.floor(l.y + 0.01) - 1 === y) { l.fly = true; l.vx = l.vx || 0; l.vy = 0; l.t = 0.35; l.rest = false; }
   if (t === T.VEIN) {
     const n = 2 + Math.floor(rnd(W) * 3) + (W.players[0].perks.includes('luckypick') ? 1 : 0);
     for (let k = 0; k < n; k++) W.loot.push({ id: W.uid++, k: 'gold', x: x + 0.5, y: y + 0.3, vx: rr(W, -2.5, 2.5), vy: rr(W, 2, 5), v: Math.round(rr(W, 40, 90) / 5) * 5, fly: true, got: false, t: 0 });
@@ -421,7 +456,9 @@ export function explode(W, b, radius = TOOLS.dynRadius, own = true) {
     if (D2(x + 0.5, y + 0.5, b.x, b.y) > r2) continue;
     if (x < 1 || y < 1 || x >= M.w - 1 || y >= M.h - 1) continue;
     const t = tileAt(M, x, y);
-    if (BLASTABLE[t]) breakTile(W, x, y, 'blast');
+    // plain rock in the walls and roof round its heart goes too, never the floor under the stick (holes there made the
+    // deepest levels much harder for the same player: measured with the autopilot, 10% -> 5% clears at depth 5)
+    if (BLASTABLE[t] || (t === T.ROCK && y >= Math.floor(b.y + 0.05) && D2(x + 0.5, y + 0.5, b.x, b.y) < DIG.rockBlast * DIG.rockBlast)) breakTile(W, x, y, 'blast');
   }
   for (const e of W.bats) if (e.st !== 'dead' && D2(e.x, e.y, b.x, b.y) < r2 * 1.3) killBat(W, e, P);
   for (const c of W.crawlers) if (!c.dead && D2(c.x, c.y, b.x, b.y) < r2 * 1.2) { c.dead = true; W.stats.kills++; addScore(W, LOOT.kill.crawler, c.x, c.y); ev(W, 'kill', { what: 'crawler', x: c.x, y: c.y }); }
@@ -499,6 +536,16 @@ function updateCrawlers(W, dt, P) {
   for (const c of W.crawlers) {
     if (c.dead) continue;
     c.t += dt; c.hitT = Math.max(0, c.hitT - dt);
+    // the floor was dug out from under it: it drops (into water, lava or onto spikes: gone)
+    if (c.fall) {
+      c.vy -= PHYS.grav * dt; const ny = c.y + c.vy * dt, cx = Math.floor(c.x);
+      if (ny < 0) { c.dead = true; continue; }
+      if (solidT(M, cx, Math.floor(ny)) || tileAt(M, cx, Math.floor(ny)) === T.PLANK) { c.y = Math.floor(ny) + 1; c.vy = 0; c.fall = false; }
+      else c.y = ny;
+      const tt = tileAt(M, cx, Math.floor(c.y + 0.2));
+      if (tt === T.WATER || tt === T.LAVA || tt === T.SPIKES) { c.dead = true; ev(W, 'kill', { what: 'crawler', x: c.x, y: c.y }); }
+      continue;
+    }
     const flare = litBy(W, c.x, c.y, 3.5);
     let sp = R.crawlSpeed * (flare ? 0.4 : 1);
     if (c.hitT > 0) { c.x += c.vx * dt; c.vx *= 0.9; }

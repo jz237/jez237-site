@@ -1,15 +1,15 @@
 // Gold Digger: the game shell. Fixed-step simulation (sim.js) + renderer (render.js), level flow, the general store,
 // the journal of discoveries, tips, cinematics, the attract demo, the AI playthrough, scores and menus.
-import { VERSION, STEP, T, BIOMES, LEVELS, DEPTHS, UPGRADES, TYPICAL_UP, DIFFICULTY, MEDALS, RELICS, FOSSILS, WONDERS, NOTES, CREATURES, RANKS, START, STRATA, REWARDS, MAX_PERKS, variantOf } from './config.js?v=18';
-import { makeWorld, step, drainEvents, cloneWorld, carryOut } from './sim.js?v=18';
-import { hash, findName } from './levelgen.js?v=18';
-import { Autopilot } from './ai.js?v=18';
-import { Renderer, pickQuality, LOOKS } from './render.js?v=18';
-import { CALM } from './fx.js?v=18';
-import { Audio } from './audio.js?v=18';
-import { Input } from './input.js?v=18';
-import { Scores, NO_POST } from './scores.js?v=18';
-import { Recorder, Replay } from './replay.js?v=18';
+import { VERSION, STEP, T, BIOMES, LEVELS, DEPTHS, UPGRADES, TYPICAL_UP, DIFFICULTY, MEDALS, RELICS, FOSSILS, WONDERS, NOTES, CREATURES, RANKS, START, STRATA, REWARDS, MAX_PERKS, variantOf } from './config.js?v=19';
+import { makeWorld, step, drainEvents, cloneWorld, carryOut } from './sim.js?v=19';
+import { hash, findName } from './levelgen.js?v=19';
+import { Autopilot } from './ai.js?v=19';
+import { Renderer, pickQuality, LOOKS } from './render.js?v=19';
+import { CALM } from './fx.js?v=19';
+import { Audio } from './audio.js?v=19';
+import { Input } from './input.js?v=19';
+import { Scores, NO_POST } from './scores.js?v=19';
+import { Recorder, Replay } from './replay.js?v=19';
 
 const Q = new URLSearchParams(location.search);
 const $ = (id) => document.getElementById(id);
@@ -456,6 +456,7 @@ function onEvent(e) {
   if (s && s[0] && A.ctx) A.play(s[0], { x: e.x, y: e.y, z: 0, vol: s[1], vary: s[2] ?? 0.08, rate: s[3] ?? 1 });
   if (!A.ctx) return;
   switch (e.k) {
+    case 'pick': if (e.t === T.ROCK || e.t === T.SOFT) A.play('dig', { x: e.x, y: e.y, vol: 0.55 + (e.f || 0) * 0.25, vary: 0.1 }); break;
     case 'break': A.play(e.t === T.VEIN ? 'ore' : 'rockbreak', { x: e.x, y: e.y, vol: 0.8 }); if (e.t === T.VEIN) A.play('gold', { x: e.x, y: e.y, vol: 0.6, delay: 0.15 }); break;
     case 'throw': if (e.what === 'dyn') A.play('fuse', { x: e.x, y: e.y, vol: 0.55 }); break;
     case 'place': A.play('fuse', { x: e.x, y: e.y, vol: 0.55 }); break;
@@ -834,7 +835,7 @@ async function boot() {
   toTitle();
   checkUnlocks(true); applyLoadout();
   $('loading').style.opacity = 0; setTimeout(() => $('loading').remove(), 700);
-  if (Q.has('test')) { const T2 = await import('./tests.js?v=18'); T2.run({ G, R, startCampaign, startEndless, toTitle, tick, makeWorld, step }); return; }
+  if (Q.has('test')) { const T2 = await import('./tests.js?v=19'); T2.run({ G, R, startCampaign, startEndless, toTitle, tick, makeWorld, step }); return; }
   if (Q.has('autoplay')) startCampaign(+(Q.get('depth') || 0), { mode: 'autoplay', auto: 'demo', level: +(Q.get('level') || 0) });
   if (Q.has('playthrough')) startCampaign(+(Q.get('depth') || 0), { mode: 'playthrough', auto: 'demo', level: +(Q.get('level') || 0) });
   requestAnimationFrame(raf);

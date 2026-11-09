@@ -151,6 +151,15 @@ SFX = {
     'rustle':    (0.7, 0.6, 'A brief soft rustle of someone brushing through damp cave roots and moss, short and gentle, no footsteps'),
     'tinkle':    (1.0, 0.6, 'A small cluster of crystals snapping off and tinkling onto stone, delicate glassy chime, short'),
     'potbreak':  (0.9, 0.6, 'A small old clay pot smashed and breaking into shards on a stone floor, short dry crack and scatter'),
+    # the physical cave (1.8): rock that digs away, props that tip, roll and smash
+    'dig':       (0.7, 0.65, 'A steel pickaxe biting hard into solid rock, a chunk of stone cracking loose and dropping, short, dry, crunchy, no metallic ring'),
+    'rubble':    (1.0, 0.6, 'A small heap of broken rocks and gravel tumbling down and settling on a stone cave floor, short'),
+    'woodknock': (0.8, 0.6, 'A small wooden bucket or keg knocked over, tipping and thudding onto a stone floor, short, dry, hollow'),
+    'clang':     (0.8, 0.6, 'An old tin bucket knocked over, clattering and rattling on a stone floor, short metallic clatter'),
+    'roll':      (1.4, 0.55, 'An empty wooden barrel tipping over and rolling a short way across a rough stone floor, hollow rumble, short'),
+    'splinter':  (0.8, 0.6, 'A rotten wooden crate smashed by a pickaxe, dry wood splintering and planks clattering down, short'),
+    'timber':    (1.6, 0.55, 'An old wooden mine support beam cracking and collapsing onto rock, splintering crash and a heavy thud, short'),
+    'topple':    (1.0, 0.6, 'A stone stalagmite snapping at its base and toppling onto a cave floor, sharp crack then a heavy stony thud, short'),
     'surge':     (2.0, 0.55, 'A huge wave of water surging through a flooded cavern, roaring rush'),
     'magma':     (2.0, 0.55, 'Molten lava erupting and splashing out of a pool, deep glooping roar and sizzle'),
     # ui and meta

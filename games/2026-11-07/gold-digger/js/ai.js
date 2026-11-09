@@ -4,9 +4,9 @@
 //   'demo':  sharp and curious: hunts every relic, fossil, wonder and secret, then takes the lift down.
 // It plans over the navigation graph (nav.js), whose jumps were probed with the real physics, and replans
 // whenever the tiles change (rock broken, gates opened) or it ends up somewhere it did not expect.
-import { T, PHYS, TOOLS, STEP, SOLID } from './config.js?v=18';
-import { tileAt, solidT, fallHurt } from './physics.js?v=18';
-import { buildNav, search, pathTo, nodeAt, probeInput, K_STAND, K_CLIMB, K_SWIM } from './nav.js?v=18';
+import { T, PHYS, TOOLS, STEP, SOLID } from './config.js?v=19';
+import { tileAt, solidT, fallHurt } from './physics.js?v=19';
+import { buildNav, search, pathTo, nodeAt, probeInput, K_STAND, K_CLIMB, K_SWIM } from './nav.js?v=19';
 
 const D2 = (ax, ay, bx, by) => (ax - bx) * (ax - bx) + (ay - by) * (ay - by);
 function rngFrom(seed) { let s = seed >>> 0 || 7; return () => { s = (s + 0x6D2B79F5) >>> 0; let t = s; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }

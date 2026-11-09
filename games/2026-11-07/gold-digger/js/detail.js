@@ -4,12 +4,14 @@
 //    and the lamp glitter all carry over and nothing new compiles);
 //  - clutter: dozens of small props suited to the level's set (models.js), baked like decor.js does;
 //  - growth: hanging strands (moss, rootlets, weed) from the roofs.
-// Everything sits on or hangs from plain ROCK, which nothing in the game can break, so no detail is ever left
-// floating when a wall is dug or blasted away. Presentation only: the sim never sees any of it.
+// Everything sits on or hangs from plain ROCK. Since 1.8 that rock can be dug: every piece and prop records the cell it
+// rests on, and loose.js lifts it out of the bake and lets it fall when that cell goes (or knocks it over when the
+// digger, the pick or a blast gets to it). Loose things along the lane are put there for him to knock over.
+// Presentation only: the sim never sees any of it.
 import * as THREE from '../vendor/three.module.min.js';
 import { mergeVertices } from '../vendor/BufferGeometryUtils.js';
-import { T } from './config.js?v=18';
-import { bake } from './decor.js?v=18';
+import { T } from './config.js?v=19';
+import { bake } from './decor.js?v=19';
 
 function rng(seed) { let s = seed >>> 0 || 1; return () => { s = (s + 0x6D2B79F5) >>> 0; let t = s; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
 const hash = (x, y, z) => { let h = Math.imul(x | 0, 374761393) ^ Math.imul(y | 0, 668265263) ^ Math.imul(z | 0, 2147483647); h = Math.imul(h ^ (h >>> 13), 1274126177); return ((h ^ (h >>> 16)) >>> 0) / 4294967296; };
@@ -24,7 +26,7 @@ function vnoise(x, y, z) {
 // ------------------------------------------------------------------ rock prototypes (built once)
 // noisy lumps at three detail levels with a flattened base, and drip cones hanging down / standing up
 let PROTO = null;
-function protos() {
+export function protos() {
   if (PROTO) return PROTO;
   const pack = (g) => { g.computeVertexNormals(); const q = g.toNonIndexed(), pos = q.attributes.position.array; let lo = 9, hi = -9; for (let i = 1; i < pos.length; i += 3) { lo = Math.min(lo, pos[i]); hi = Math.max(hi, pos[i]); } return { pos, nrm: q.attributes.normal.array, minY: lo, maxY: hi }; };
   const lump = (detail, seed, amp) => {
@@ -60,9 +62,11 @@ function protos() {
 
 // a batch of rock pieces in world space with the attributes the cave's rock shader reads
 class RockBatch {
-  constructor(L) { this.L = L; this.pos = []; this.nrm = []; this.col = []; this.mat = []; this.code = []; }
+  constructor(L) { this.L = L; this.pos = []; this.nrm = []; this.col = []; this.mat = []; this.code = []; this.pieces = []; }
   add(pr, m, c, o = {}) {
     const L = this.L, P = pr.pos, N = pr.nrm, n = P.length / 3;
+    // a piece that can come loose: where its vertices are, where it is, and the cell it rests on / hangs from
+    if (o.kind) this.pieces.push({ s: this.pos.length / 3, n, x: m.elements[12], y: m.elements[13], z: m.elements[14], r: o.r, kind: o.kind, sup: o.sup, lane: !!o.lane });
     const nm = new THREE.Matrix3().getNormalMatrix(m), v = new THREE.Vector3(), nn = new THREE.Vector3();
     const wet = Math.min(1, (L.wet || 0) + (o.wet || 0)), moss = L.moss || 0, glow = o.glow || 0, gold = o.gold || 0, dark = o.dark ?? 1;
     for (let i = 0; i < n; i++) {
@@ -119,6 +123,25 @@ const GROWTH = {
   streets: [0x3a4a2a, 0, 0.3], patina: [0x2a4a3a, 0, 0.25],
 };
 const SETS = ['workings', 'garden', 'amethyst', 'streets', 'basalt'];
+// loose things along the lane, for the digger to knock over: [model, args(r), weight, scale min, max, may stand in front]
+// ('stone' = a loose rock from the protos; 'lanternF' = a lantern standing on the floor, alight)
+const LANE = {
+  workings: [['bucket', () => [], 3, 0.9, 1.1], ['sack', (r) => [Math.floor(r * 2)], 2, 0.6, 0.8], ['barrel', () => [0], 2, 0.5, 0.6], ['lanternF', () => [], 2, 1, 1.1], ['crate', (r) => [Math.floor(r * 3)], 1.5, 0.5, 0.62], ['ropeCoil', () => [], 1, 0.8, 1], ['stone', null, 2, 0.12, 0.2, 1]],
+  rust: [['barrel', () => [1], 3, 0.5, 0.6], ['bucket', () => [], 3, 0.9, 1.1], ['lanternF', () => [], 1.5, 1, 1.1], ['stone', null, 2, 0.12, 0.2, 1], ['bones', (r) => [Math.floor(r * 3)], 0.6, 0.7, 0.9, 1]],
+  patina: [['bucket', () => [], 3, 0.9, 1.1], ['crate', (r) => [Math.floor(r * 3)], 2, 0.5, 0.62], ['sack', (r) => [Math.floor(r * 2)], 1.5, 0.6, 0.8], ['lanternF', () => [], 1.5, 1, 1.1], ['stone', null, 2, 0.12, 0.2, 1]],
+  garden: [['stone', null, 5, 0.11, 0.22, 1], ['bones', (r) => [Math.floor(r * 3)], 1, 0.7, 0.9, 1], ['bucket', () => [], 0.6, 0.9, 1.05]],
+  bluecap: [['stone', null, 5, 0.11, 0.22, 1], ['bones', (r) => [Math.floor(r * 3)], 1, 0.7, 0.9, 1]],
+  roots: [['stone', null, 4, 0.11, 0.22, 1], ['bucket', () => [], 1, 0.9, 1.05], ['bones', (r) => [Math.floor(r * 3)], 1, 0.7, 0.9, 1], ['sack', (r) => [Math.floor(r * 2)], 0.6, 0.6, 0.75]],
+  amethyst: [['stone', null, 5, 0.11, 0.22, 1], ['crystal', (r) => [0.3 + r * 0.2, [0x9a5cff, 0xd9c8ff, 0xff7ad0][Math.floor(r * 3)]], 2, 1, 1]],
+  frost: [['stone', null, 5, 0.11, 0.22, 1], ['crystal', (r) => [0.3 + r * 0.2, [0xcfeeff, 0xffffff, 0x9fd8ff][Math.floor(r * 3)]], 2, 1, 1]],
+  rose: [['stone', null, 5, 0.11, 0.22, 1], ['crystal', (r) => [0.3 + r * 0.2, [0xff8fb0, 0xffc24a][Math.floor(r * 2)]], 2, 1, 1]],
+  streets: [['urn', (r) => [Math.floor(r * 3)], 4, 0.6, 0.85], ['stone', null, 2, 0.12, 0.2, 1], ['bones', (r) => [Math.floor(r * 3)], 0.8, 0.7, 0.9, 1]],
+  salt: [['urn', (r) => [Math.floor(r * 3)], 3, 0.6, 0.85], ['saltCubes', (r) => [1 + Math.floor(r * 4)], 2, 0.3, 0.45], ['stone', null, 2, 0.12, 0.2, 1]],
+  tide: [['urn', (r) => [Math.floor(r * 3)], 3, 0.6, 0.85], ['shells', (r) => [Math.floor(r * 3)], 1.5, 0.9, 1.2, 1], ['stone', null, 3, 0.12, 0.2, 1]],
+  basalt: [['stone', null, 5, 0.12, 0.24, 1], ['coal', (r) => [Math.floor(r * 3)], 2, 0.9, 1.3, 1], ['bones', (r) => [Math.floor(r * 3)], 0.6, 0.7, 0.9, 1]],
+  obsidian: [['stone', null, 5, 0.12, 0.24, 1], ['crystal', (r) => [0.3 + r * 0.25, 0x3a1d4a], 2, 1, 1]],
+  sulfur: [['stone', null, 5, 0.12, 0.24, 1], ['crystal', (r) => [0.25 + r * 0.2, 0xffd23a], 1.5, 1, 1], ['coal', (r) => [Math.floor(r * 3)], 1, 0.9, 1.2, 1]],
+};
 
 // ------------------------------------------------------------------ wall marks (one canvas atlas, 4 x 4 cells)
 // 0 chalk tally  1 chalk arrow  2 chalk cross  3 miner's mark  4 soot  5 wet streak  6 ochre hand  7 ochre dots
@@ -234,14 +257,14 @@ export function buildDetail(M, look, W, K) {
   const sit = (batch, pr, x, cy, z, sx, sy, sz, bury, ry, rx, rz, c, o) => {
     const g = gnd(x, cy, z, Math.max(sx, sz) * 0.75);
     if (g === null) return false;
-    place(batch, pr, x, g - pr.minY * sy - bury * sy, z, sx, sy, sz, ry, rx, rz, c, o);
+    place(batch, pr, x, g - pr.minY * sy - bury * sy, z, sx, sy, sz, ry, rx, rz, c, { ...o, kind: P.mite.includes(pr) ? 'mite' : 'stone', sup: (cy - 1) * 4096 + Math.floor(x), r: Math.max(sx, sy, sz) });
     if (globalThis.__gdAudit) globalThis.__gdAudit.push(["floor", x, g - bury * sy, z, Math.max(sx, sz) * 0.75, "rock"]);
     return true;
   };
   const hang = (batch, pr, x, cy, z, sx, sy, sz, c, o) => {
     const r = rof(x, cy, z, sx * 0.5);
     if (r === null) return false;
-    place(batch, pr, x, r + 0.04 - pr.maxY * sy, z, sx, sy, sz, undefined, 0, 0, c, o);
+    place(batch, pr, x, r + 0.04 - pr.maxY * sy, z, sx, sy, sz, undefined, 0, 0, c, { ...o, kind: 'drip', sup: (cy + 1) * 4096 + Math.floor(x), r: Math.max(sx, sy, sz) * 0.6 });
     if (globalThis.__gdAudit) globalThis.__gdAudit.push(["roof", x, r + 0.04, z, sx * 0.5, "drip"]);
     return true;
   };
@@ -343,11 +366,9 @@ export function buildDetail(M, look, W, K) {
     sit(small, pick(P.lump), x, cy, z, s * 1.2, s * 0.6, s, 0.15, R() * 6.28, 0, 0, rockCol(0.4), { glow: ember() });
   }
   const group = new THREE.Group();
-  const mS = small.mesh(rockMat, false), mL = large.mesh(rockMat, true);
-  if (mS) group.add(mS); if (mL) group.add(mL);
 
   // ---- clutter: the level's small props, baked
-  const statics = [];
+  const statics = [], emitters = [];
   const fl = floors.filter(([x, y]) => clear(x, y, 3.5));
   for (let i = fl.length - 1; i > 0; i--) { const j = Math.floor(R() * (i + 1)); [fl[i], fl[j]] = [fl[j], fl[i]]; }
   let fi = 0;
@@ -367,6 +388,40 @@ export function buildDetail(M, look, W, K) {
       statics.push(g); used.push([cx, cy]); k++;
     }
   }
+  const pickW = (list) => { let tot = 0; for (const e of list) tot += e[2]; let k = R() * tot; for (const e of list) { k -= e[2]; if (k <= 0) return e; } return list[0]; };
+  // ---- loose things along the lane, where the digger brushes past: he knocks them over (loose.js). Never by the lift,
+  // the camps, the finds or anything he can pick up, and never where a ladder or rope comes down.
+  const lane = LANE[set] || LANE.basalt;
+  const spawnPts = keep.concat((M.finds || []).map((f) => [f.x, f.y]), ...['loot', 'keys', 'kegs'].map((k) => ((M.spawns && M.spawns[k]) || []).map((l) => [l.x, l.y])));
+  const laneOk = (cx, cy) => air(cx, cy + 1) && air(cx - 1, cy) && air(cx + 1, cy) && clear(cx + 0.5, cy, 4) && !spawnPts.some(([ax, ay]) => Math.abs(ax - cx - 0.5) < 2 && Math.abs(ay - cy) < 2);
+  const lf = floors.filter(([x, y]) => laneOk(x, y));
+  for (let i = lf.length - 1; i > 0; i--) { const j = Math.floor(R() * (i + 1)); [lf[i], lf[j]] = [lf[j], lf[i]]; }
+  const nLane = Math.round(Math.min(32, floors.length * 0.1) * dens), usedL = [];
+  let nPlaced = 0;
+  for (const [cx, cy] of lf) {
+    if (nPlaced >= nLane) break;
+    if (usedL.some(([ux, uy]) => Math.abs(ux - cx) < 3 && Math.abs(uy - cy) < 2)) continue;
+    const [name, args, , s0, s1, front] = pickW(lane), sc = s0 + R() * (s1 - s0), x = cx + 0.25 + R() * 0.5;
+    const inFront = front && R() < 0.35;
+    if (name === 'stone') {
+      const r = sc, z = inFront ? 0.34 + r : -0.34 - r * 0.9;
+      if (!sit(large, pick(r > 0.17 ? P.big : P.lump), x, cy, z, r * (1 + R() * 0.4), r * (0.65 + R() * 0.3), r * (0.85 + R() * 0.3), 0.12, R() * 6.28, 0, 0, rockCol(0.25), { lane: true })) continue;
+    } else {
+      const g = obj(make(name === 'lanternF' ? 'lantern' : name, ...args(R())));
+      g.scale.multiplyScalar(sc); g.rotation.y = R() * 6.28;
+      g.updateMatrixWorld(true);
+      const bb = _fb.setFromObject(g), hz = (bb.max.z - bb.min.z) / 2, cz = (bb.max.z + bb.min.z) / 2;
+      const z = inFront ? 0.36 + hz : -0.34 - hz * 0.85;
+      g.position.set(x, cy - bb.min.y + 0.01, z - cz);
+      if (!cave.settle(g, 'floor', name === 'lanternF' ? 0.01 : 0.02)) continue;
+      g.userData.lane = true;
+      if (name === 'lanternF') { const em = { x, y: g.position.y - 0.25 * sc, z: g.position.z + 0.15, col: [1, 0.62, 0.3], int: 2.4, range: 5.5, pri: 1.1, flick: 1 }; emitters.push(em); g.userData.emit = em; }
+      statics.push(g);
+    }
+    usedL.push([cx, cy]); nPlaced++;
+  }
+  const mS = small.mesh(rockMat, false), mL = large.mesh(rockMat, true);
+  if (mS) group.add(mS); if (mL) group.add(mL);
   // ---- hanging growth from the roofs
   const gr = GROWTH[set];
   if (gr) {
@@ -382,13 +437,16 @@ export function buildDetail(M, look, W, K) {
         let d = 0; while (d < 6 && air(cx, cy - d)) d++;
         const top = cave.roofY(x, cy + 0.5, z, 1.3);
         if (top === null) continue;
-        list.push([x, top + 0.05, z, Math.min(d * 0.7, 0.3 + Math.pow(R(), 1.4) * 1.8)]);
+        list.push([x, top + 0.05, z, Math.min(d * 0.7, 0.3 + Math.pow(R(), 1.4) * 1.8), (cy + 1) * 4096 + cx]);
       }
     }
-    if (list.length) statics.push(obj(make('strands', list, gr[0], gr[1], M.seed + 3)));
+    // one bundle per roof cell, so a dug roof takes only its own strands with it (loose.js)
+    const byCell = new Map();
+    for (const e of list) { const k = e[4]; if (!byCell.has(k)) byCell.set(k, []); byCell.get(k).push(e.slice(0, 4)); }
+    let si = 0;
+    for (const [k, l] of byCell) { const g = obj(make('strands', l, gr[0], gr[1], M.seed + 3 + si++)); g.userData.sup = [k]; statics.push(g); }
   }
   // ---- the cut face of the mountain: things bedded in it, roots threading through it
-  const pickW = (list) => { let tot = 0; for (const e of list) tot += e[2]; let k = R() * tot; for (const e of list) { k -= e[2]; if (k <= 0) return e; } return list[0]; };
   const EMBED = { beamEnd: 0.2, pipeStub: 0.2, block: 0.3, drum: 0.32, gear: 0.03, shelf: 0.03 };
   const inner = [];
   for (let y = 1; y < M.h - 1; y++) for (let x = 1; x < M.w - 1; x++) if (rock(x, y) && rock(x - 1, y) && rock(x + 1, y) && rock(x, y - 1) && rock(x, y + 1)) inner.push([x, y]);
@@ -482,5 +540,6 @@ export function buildDetail(M, look, W, K) {
         s0: 0.08, s1: 0.03, max: 2.5 + Math.random() * 2, a: 0.9, r: fire[0], g: fire[1], b: fire[2], drag: 0, grav: -0.01, fade: 0.6 });
     }
   };
-  return { group, update, info: { set, rockTris: ((small.pos.length + large.pos.length) / 9) | 0, clutter: statics.length, marks: nMarks } };
+  const rocks = [{ pieces: small.pieces, mesh: mS }, { pieces: large.pieces, mesh: mL }].filter((r) => r.mesh);
+  return { group, update, emitters, props: statics, rocks, info: { set, rockTris: ((small.pos.length + large.pos.length) / 9) | 0, clutter: statics.length, marks: nMarks, lane: nPlaced } };
 }

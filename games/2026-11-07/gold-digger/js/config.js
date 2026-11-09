@@ -1,6 +1,6 @@
 // Gold Digger: every tunable in one place. The simulation (sim.js), the level generator (levelgen.js) and the
 // autopilot (ai.js) read only from here, so the Node checks and the browser agree exactly.
-export const VERSION = '1.7.1';
+export const VERSION = '1.8.0';
 export const STEP = 1 / 120;
 
 // ------------------------------------------------------------------ tiles (1 m cells, row 0 = bottom)
@@ -12,8 +12,10 @@ export const T = {
 export const SOLID = new Uint8Array(16);
 for (const k of [T.ROCK, T.SOFT, T.HARD, T.VEIN, T.GEMV, T.DOOR, T.CRUMBLE, T.FOSSIL]) SOLID[k] = 1;
 export const CLIMB = new Uint8Array(16); CLIMB[T.LADDER] = 1; CLIMB[T.ROPE] = 1;
-// pick hits to break (0 = the pick cannot), dynamite always breaks these
-export const PICK_HP = { [T.SOFT]: 3, [T.VEIN]: 3, [T.GEMV]: 4, [T.FOSSIL]: 5, [T.CRUMBLE]: 2 };
+// pick hits to break (0 = the pick cannot), dynamite always breaks these. Plain rock digs away too (1.8), slowly,
+// except the bedrock the level hangs on (sim.js bedrock(): vault walls, rock round pools, lift shafts, under camps...)
+export const PICK_HP = { [T.SOFT]: 3, [T.VEIN]: 3, [T.GEMV]: 4, [T.FOSSIL]: 5, [T.CRUMBLE]: 2, [T.ROCK]: 5 };
+export const DIG = { rockBlast: 1.1 };   // a blast also breaks the plain rock within this many metres of its heart (walls and roof, not the floor under it)
 export const BLASTABLE = new Uint8Array(16);
 for (const k of [T.SOFT, T.HARD, T.VEIN, T.GEMV, T.CRUMBLE, T.FOSSIL]) BLASTABLE[k] = 1;
 

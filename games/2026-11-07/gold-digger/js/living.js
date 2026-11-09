@@ -11,7 +11,7 @@
 // Fixed light rig untouched. One shader program serves all growth, breakables and kickables (matte and glossy
 // differ only in uniforms).
 import * as THREE from '../vendor/three.module.min.js';
-import { T, SOLID } from './config.js?v=18';
+import { T, SOLID } from './config.js?v=19';
 
 function rng(seed) { let s = seed >>> 0 || 1; return () => { s = (s + 0x6D2B79F5) >>> 0; let t = s; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
 

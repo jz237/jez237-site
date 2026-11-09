@@ -4,16 +4,18 @@
 // re-aimed every frame at the nearest flares, fires, lanterns, crystals and lava): their number never changes,
 // so no material ever recompiles mid-game.
 import * as THREE from '../vendor/three.module.min.js';
-import { T, SOLID, PHYS, TOOLS, GEMS, BIOMES, variantOf } from './config.js?v=18';
-import { Cave, rockMaterial } from './cavemesh.js?v=18';
-import { rockTextures, spriteTextures, waterTextures } from './textures.js?v=18';
-import { FX, CALM } from './fx.js?v=18';
-import { Post } from './post.js?v=18';
-import * as MD from './models.js?v=18';
-import { buildDecor, bake } from './decor.js?v=18';
-import { Digger, loadDiggerAsset } from './digger.js?v=18';
-import { buildDetail } from './detail.js?v=18';
-import { buildLiving } from './living.js?v=18';
+import { T, SOLID, PHYS, TOOLS, GEMS, BIOMES, variantOf } from './config.js?v=19';
+import { Cave, rockMaterial } from './cavemesh.js?v=19';
+import { rockTextures, spriteTextures, waterTextures } from './textures.js?v=19';
+import { FX, CALM } from './fx.js?v=19';
+import { Post } from './post.js?v=19';
+import * as MD from './models.js?v=19';
+import { buildDecor, bake } from './decor.js?v=19';
+import { Digger, loadDiggerAsset } from './digger.js?v=19';
+import { buildDetail } from './detail.js?v=19';
+import { buildLiving } from './living.js?v=19';
+import { buildLoose } from './loose.js?v=19';
+import { protos as rockProtos } from './detail.js?v=19';
 
 export function pickQuality(name) {
   const mobile = matchMedia('(pointer:coarse)').matches || /Android|iPhone|iPad/i.test(navigator.userAgent);
@@ -235,7 +237,7 @@ export class Renderer {
 
   // the realistic digger (a skinned, motion-captured body); the old built digger stands in if it fails to load
   async loadDigger() {
-    try { this.digGltf = await loadDiggerAsset('assets/digger.glb?v=18'); } catch (e) { console.warn('digger asset', e); }
+    try { this.digGltf = await loadDiggerAsset('assets/digger.glb?v=19'); } catch (e) { console.warn('digger asset', e); }
   }
   makePlayer() {
     if (this.digGltf) {
@@ -258,6 +260,7 @@ export class Renderer {
     const M = W.M; this.M = M; this.W = W;
     // clear the old level
     if (this.living) { this.living.dispose(); this.living = null; }
+    if (this.loose) { this.loose.dispose(); this.loose = null; }
     for (const c of [...this.level.children]) { this.level.remove(c); c.traverse?.((o) => { if (o.geometry && !o.geometry.userData.shared) o.geometry.dispose(); }); }
     this.views.clear(); this.emitters = [];
     this.fx.clear();
@@ -291,6 +294,10 @@ export class Renderer {
     // the living cave: growth that bends as you push through, glow that wakes as you pass, things to kick and break (living.js)
     this.living = buildLiving(M, look, W, { cave: this.cave, q: this.q, fx: this.fx, solidAt: (x, y) => this.solidAt(x, y), sfx: (n, o) => { if (this.sfx) this.sfx(n, o); } });
     this.level.add(this.living.group);
+    // the physical cave: dents, rubble, props that tip, roll and break (loose.js)
+    this.emitters.push(...(this.detail.emitters || []));
+    this.loose = buildLoose(M, look, W, { cave: this.cave, rockMat: this.rockMat, fx: this.fx, protos: rockProtos, props: [...(D.props || []), ...(this.detail.props || [])], rocks: this.detail.rocks || [], worms: D.worms, sfx: (n, o) => { if (this.sfx) this.sfx(n, o); } });
+    this.level.add(this.loose.group);
     // the digger
     if (!this.player) this.makePlayer();
     if (this.loadout) this.setLoadout(this.loadout);
@@ -499,6 +506,7 @@ export class Renderer {
   // Endless Deep. Found relics turn on their pedestals under a lantern; missing ones are empty plinths.
   loadMuseum(journal, biomes) {
     if (this.living) { this.living.dispose(); this.living = null; }
+    if (this.loose) { this.loose.dispose(); this.loose = null; }
     for (const c of [...this.level.children]) { this.level.remove(c); c.traverse?.((o) => { if (o.geometry && !o.geometry.userData.shared) o.geometry.dispose(); }); }
     this.views.clear(); this.emitters = []; this.fx.clear(); this.boss = null; this.cave = null; this.M = null;
     const look = this.look = LOOKS[0];
@@ -643,6 +651,7 @@ export class Renderer {
   event(e, W) {
     const fx = this.fx, z = 0.3;
     if (this.living) this.living.event(e, W);
+    if (this.loose) this.loose.event(e, W);   // before a re-mesh: the dents on a broken cell are dropped first
     switch (e.k) {
       case 'break': {
         this.cave.rebuildAround(Math.floor(e.x), Math.floor(e.y));
@@ -727,6 +736,7 @@ export class Renderer {
     if (this.decor && this.decor.update) this.decor.update(t, dt, P, this.fx);
     if (this.detail && this.detail.update) this.detail.update(t, dt, P, this.fx, this.emitters);
     if (this.living) this.living.update(t, dt, P, W, this.lamp);
+    if (this.loose) this.loose.update(t, dt, P, W);
     // post
     for (const s of this.shocks) s.t += dt;
     this.shocks = this.shocks.filter((s) => s.t < 0.9);
