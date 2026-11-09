@@ -7,22 +7,22 @@
 <meta name="description" content="Skyhold 2026: an original planet-defence shooter in real-time 3D. Fly a gunship round and round a small planet, from the day side into the night, shoot down the machines lifting your settlers off the ground, catch the ones that fall and bring down a colossal carrier on each of five worlds. Endless Orbit, online co-op, upgrades, medals, instant replays and a smart demo mode.">
 <title>Skyhold 2026</title>
 <link rel="icon" href="data:,">
-<link rel="modulepreload" href="js/main.js?v=5">
-<link rel="modulepreload" href="js/config.js?v=5">
-<link rel="modulepreload" href="js/sim.js?v=5">
-<link rel="modulepreload" href="js/ai.js?v=5">
-<link rel="modulepreload" href="js/render.js?v=5">
-<link rel="modulepreload" href="js/audio.js?v=5">
-<link rel="modulepreload" href="js/chip.js?v=5">
-<link rel="modulepreload" href="js/input.js?v=5">
-<link rel="modulepreload" href="js/scores.js?v=5">
-<link rel="modulepreload" href="js/replay.js?v=5">
-<link rel="modulepreload" href="js/post.js?v=5">
-<link rel="modulepreload" href="js/textures.js?v=5">
-<link rel="modulepreload" href="js/models.js?v=5">
-<link rel="modulepreload" href="js/fx.js?v=5">
-<link rel="modulepreload" href="js/shaders.js?v=5">
-<link rel="modulepreload" href="js/online.js?v=5">
+<link rel="modulepreload" href="js/main.js?v=6">
+<link rel="modulepreload" href="js/config.js?v=6">
+<link rel="modulepreload" href="js/sim.js?v=6">
+<link rel="modulepreload" href="js/ai.js?v=6">
+<link rel="modulepreload" href="js/render.js?v=6">
+<link rel="modulepreload" href="js/audio.js?v=6">
+<link rel="modulepreload" href="js/chip.js?v=6">
+<link rel="modulepreload" href="js/input.js?v=6">
+<link rel="modulepreload" href="js/scores.js?v=6">
+<link rel="modulepreload" href="js/replay.js?v=6">
+<link rel="modulepreload" href="js/post.js?v=6">
+<link rel="modulepreload" href="js/textures.js?v=6">
+<link rel="modulepreload" href="js/models.js?v=6">
+<link rel="modulepreload" href="js/fx.js?v=6">
+<link rel="modulepreload" href="js/shaders.js?v=6">
+<link rel="modulepreload" href="js/online.js?v=6">
 <link rel="modulepreload" href="vendor/three.module.min.js">
 <link rel="modulepreload" href="vendor/three.core.min.js">
 
@@ -347,7 +347,7 @@ table.hs tr.me td { color: #fff; background: rgba(255, 179, 71, .1); }
   <div class="screen hidden" id="title">
     <div class="card">
       <h1 class="logo">SKYHOLD<span> 2026</span></h1>
-      <div class="ver">VERSION <b id="ver">1.4.0</b> · GUARD THE COLONY · HOLD THE SKY</div>
+      <div class="ver">VERSION <b id="ver">1.5.0</b> · GUARD THE COLONY · HOLD THE SKY</div>
       <div class="diffrow">DIFFICULTY<div class="seg" data-opt="diff"><button data-v="easy">EASY</button><button data-v="normal">NORMAL</button><button data-v="hard">HARD</button><button data-v="nightmare">NIGHTMARE</button></div></div>
       <div id="diff-desc"></div>
       <div class="btns" id="title-btns">
@@ -423,6 +423,7 @@ table.hs tr.me td { color: #fff; background: rgba(255, 179, 71, .1); }
     <div class="opt">SCREEN SHAKE<div class="seg" data-opt="shake"><button data-v="1">ON</button><button data-v="0.4">LIGHT</button><button data-v="0">OFF</button></div></div>
     <div class="opt">VIBRATION<div class="seg" data-opt="rumble"><button data-v="on">ON</button><button data-v="off">OFF</button></div></div>
     <div class="opt">SHIP<div class="seg" data-opt="livery" id="liveries"></div></div>
+    <div class="opt">AUTO-FIRE<div class="seg" data-opt="autofire"><button data-v="auto">TOUCH</button><button data-v="on">ON</button><button data-v="off">OFF</button></div></div>
     <div class="opt">AIM ASSIST<div class="seg" data-opt="assist"><button data-v="off">OFF</button><button data-v="light">LIGHT</button><button data-v="strong">STRONG</button></div></div>
     <div class="opt">SCANNER<div class="seg" data-opt="scanner"><button data-v="on">ON</button><button data-v="off">OFF</button></div></div>
     <div class="opt">RETRO SOUNDS<div class="seg" data-opt="retro"><button data-v="on">ON</button><button data-v="off">OFF</button></div></div>
@@ -448,7 +449,7 @@ table.hs tr.me td { color: #fff; background: rgba(255, 179, 71, .1); }
     <h3>DIFFICULTY</h3><p>Easy, Normal, Hard and Nightmare each have their own high-score tables. Harder levels score more points (×0.6, ×1, ×1.5, ×2.2). Medals count on Normal and harder, and unlock new ship colours in Options.</p>
     <h3>KEYBOARD</h3><p>FLY: A / D or ← / → (the ship turns to face the way you push) · CLIMB / DIVE: W / S or ↑ / ↓ · FIRE: Space or J · NOVA: Shift or K · BLINK: H or L · PAUSE: Esc or P</p>
     <h3>GAMEPAD</h3><p>FLY: left stick or d-pad · FIRE: A or the right trigger · NOVA: B or the left trigger · BLINK: Y or a bumper · PAUSE: Start</p>
-    <h3>TOUCH</h3><p>Hold the phone sideways. Your left thumb flies (push left or right to fly that way, up or down to climb or dive); FIRE, NOVA and BLINK sit under your right thumb. Aim assist is on by default for touch.</p>
+    <h3>TOUCH</h3><p>Hold the phone sideways. Your left thumb flies (push left or right to fly that way, up or down to climb or dive); FIRE, NOVA and BLINK sit under your right thumb. Aim assist and AUTO-FIRE (the beam fires by itself whenever something is lined up) are on by default for touch; both are in Options.</p>
     <div class="btns" style="margin-top:14px"><button class="mbtn" data-act="back">BACK</button></div>
   </div></div>
 
@@ -485,6 +486,6 @@ addEventListener('error', (e) => window.__shErrors.push(String(e.message || e)))
 addEventListener('unhandledrejection', (e) => window.__shErrors.push('rejection: ' + String(e.reason && e.reason.message || e.reason)));
 (() => { const ce = console.error; console.error = (...a) => { window.__shErrors.push(a.map(String).join(' ')); ce.apply(console, a); }; })();
 </script>
-<script type="module" src="js/main.js?v=5"></script>
+<script type="module" src="js/main.js?v=6"></script>
 </body>
 </html>

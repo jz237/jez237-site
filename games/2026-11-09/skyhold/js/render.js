@@ -5,13 +5,13 @@
 // Five looks (sky, terrain, sea, scenery, bodies in the sky), real 3D models for everything, curved beams,
 // warnings drawn in the play plane, HDR post. Nothing here changes the world.
 import * as THREE from '../vendor/three.module.min.js';
-import { Post } from './post.js?v=5';
-import * as TX from './textures.js?v=5';
-import * as MD from './models.js?v=5';
-import { FX, CALM } from './fx.js?v=5';
-import { NOISE } from './shaders.js?v=5';
-import { F, C, RP, H, ENEMY, BOSSES, POWERUPS, P2_LIVERY, LIVERIES, SETTLER } from './config.js?v=5';
-import { wd, wp, nodePos, beamRange, dronePos as dronePosR } from './sim.js?v=5';
+import { Post } from './post.js?v=6';
+import * as TX from './textures.js?v=6';
+import * as MD from './models.js?v=6';
+import { FX, CALM } from './fx.js?v=6';
+import { NOISE } from './shaders.js?v=6';
+import { F, C, RP, H, ENEMY, BOSSES, POWERUPS, P2_LIVERY, LIVERIES, SETTLER } from './config.js?v=6';
+import { wd, wp, nodePos, beamRange, dronePos as dronePosR } from './sim.js?v=6';
 
 export { CALM };
 const hdr = (hex, k) => new THREE.Color(hex).multiplyScalar(k);

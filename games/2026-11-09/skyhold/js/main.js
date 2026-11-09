@@ -1,13 +1,13 @@
 // Skyhold 2026 — game flow, menus, HUD (with the scanner strip), commentary, demo director and the frame loop.
-import { VERSION, SECTORS, STEP, F, C, H, BOSSES, UPGRADES, UP_KEYS, UP_COST, MEDALS, parTime, TYPICAL_UP, START_LIVES, DIFFICULTY, POWERUPS, LIVERIES, CP_NAMES, WAVES, ENEMY } from './config.js?v=5';
-import { makeWorld, step, stepGuest, drainEvents, wd, wp, settlersLeft, nodePos, CHAIN_T, chainMult } from './sim.js?v=5';
-import { Autopilot } from './ai.js?v=5';
-import { Renderer, pickQuality, CALM, LOOKS } from './render.js?v=5';
-import { Audio } from './audio.js?v=5';
-import { Input } from './input.js?v=5';
-import { Scores, NO_POST } from './scores.js?v=5';
-import { Recorder, Replay } from './replay.js?v=5';
-import { Online, ROOM, randomCode, cleanCode } from './online.js?v=5';
+import { VERSION, SECTORS, STEP, F, C, H, BOSSES, UPGRADES, UP_KEYS, UP_COST, MEDALS, parTime, TYPICAL_UP, START_LIVES, DIFFICULTY, POWERUPS, LIVERIES, CP_NAMES, WAVES, ENEMY } from './config.js?v=6';
+import { makeWorld, step, stepGuest, drainEvents, wd, wp, settlersLeft, nodePos, CHAIN_T, chainMult, beamRange } from './sim.js?v=6';
+import { Autopilot } from './ai.js?v=6';
+import { Renderer, pickQuality, CALM, LOOKS } from './render.js?v=6';
+import { Audio } from './audio.js?v=6';
+import { Input } from './input.js?v=6';
+import { Scores, NO_POST } from './scores.js?v=6';
+import { Recorder, Replay } from './replay.js?v=6';
+import { Online, ROOM, randomCode, cleanCode } from './online.js?v=6';
 
 const $ = (id) => document.getElementById(id);
 const params = new URLSearchParams(location.search);
@@ -17,7 +17,7 @@ const clamp = (v, a, b) => (v < a ? a : v > b ? b : v);
 const SKEY = 'sh.settings.v1';
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const touchFirst = matchMedia('(pointer:coarse)').matches;
-const settings = { music: 50, sfx: 90, voice: 100, talk: 'on', flash: reduceMotion ? 'reduced' : 'full', shake: '1', rumble: 'on', touch: 'auto', quality: 'auto', netRoute: '0', diff: 'normal', livery: 'sky', assist: touchFirst ? 'light' : 'off', scanner: 'on', retro: 'on' };
+const settings = { music: 50, sfx: 90, voice: 100, talk: 'on', flash: reduceMotion ? 'reduced' : 'full', shake: '1', rumble: 'on', touch: 'auto', quality: 'auto', netRoute: '0', diff: 'normal', livery: 'sky', assist: touchFirst ? 'light' : 'off', scanner: 'on', retro: 'on', autofire: 'auto' };
 try { Object.assign(settings, JSON.parse(localStorage.getItem(SKEY) || '{}')); } catch { /* defaults */ }
 const saveSettings = () => { try { localStorage.setItem(SKEY, JSON.stringify(settings)); } catch { /* private mode */ } };
 const load = (k, d) => { try { const v = JSON.parse(localStorage.getItem(k)); return v ?? d; } catch { return d; } };
@@ -533,6 +533,25 @@ R.sfx = (name, o) => {
   if (name === 'debris') { A.play('debris', { x: o.x, y: o.y, z: o.z, vol: 0.35, gap: 0.12, vary: 0.2 }); return; }
   if (name === 'thunder') { A.play('boomL', { vol: 0.25, rate: 0.45, delay: 0.4 + Math.random() * 0.8, gap: 1.5 }); }
 };
+// AUTO-FIRE (Options; on by default on touch screens): fire whenever a machine or a carrier's weak point is lined up
+// ahead within reach. The decision becomes part of the recorded input, so replays stay exact.
+const autoFireOn = () => settings.autofire === 'on' || (settings.autofire === 'auto' && I.lastKind === 'touch');
+function lined(W, p) {
+  if (!p || !p.alive) return false;
+  const range = beamRange(W) * 0.95, band = F.beamH + (p.assist || 0) * 2.2;
+  for (const e of W.enemies) {
+    if (e.hp <= 0 || e.born > 0) continue;
+    const d = wd(e.x - p.x) * p.face;
+    if (d > 1 && d < range && Math.abs(e.y - p.y) < ENEMY[e.type].r + band) return true;
+  }
+  const B = W.boss;
+  if (B && B.st === 'fight') for (let i = 0; i < B.nodes.length; i++) {
+    if (B.nodes[i].hp <= 0) continue;
+    const [nx, ny] = nodePos(B, i), d = wd(nx - p.x) * p.face;
+    if (d > 1 && d < range && Math.abs(ny - p.y) < 1.15 + band) return true;
+  }
+  return false;
+}
 function slowmo(scale, t) { G.timeScale = scale; G.slowT = t; A.setRate(Math.max(0.6, scale + 0.2)); }
 
 // ------------------------------------------------------------------ the end of a world / run
@@ -973,7 +992,7 @@ function playStep(dt) {
     const me = myPlayer(W);
     if (me) {
       if (G.ai) me.input = G.ai.control(W, me);
-      else { const c = I.control(); me.input = G.state === 'play' ? c : { mx: 0, my: 0, fire: false, nova: false, blink: false }; }
+      else { const c = I.control(); if (G.state === 'play' && !c.fire && autoFireOn() && lined(W, me)) c.fire = true; me.input = G.state === 'play' ? c : { mx: 0, my: 0, fire: false, nova: false, blink: false }; }
     }
     if (online && NET.host) NET.hostTick(W);
     if (!online) REC.input(W);
@@ -1091,7 +1110,7 @@ async function boot() {
   toTitle();
   boardOf('campaign', settings.diff).fresh(); boardOf('endless', settings.diff).fresh();
   if (!G.fixed && !params.has('test')) R.prepareAll(true);
-  if (params.has('test')) { const m = await import('./tests.js?v=5'); m.runTests(window.__sh); }
+  if (params.has('test')) { const m = await import('./tests.js?v=6'); m.runTests(window.__sh); }
   else if (params.has('playthrough')) { A.unlock(); startPlaythrough(); }
   else if (params.has('room')) { act('online'); $('join-code').value = cleanCode(params.get('room')); }
   else if (G.autopilot) { A.unlock(); if (params.has('endless')) startEndless(); else startCampaign(+params.get('sector') || 0); }
