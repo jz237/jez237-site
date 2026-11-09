@@ -2,6 +2,71 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-11-09",
+      "historicDate": "1985-07-15",
+      "displayDate": "Week of July 15-21, 1985",
+      "edition": "Issue 155 - Weekly 1985 Computer & Culture Chronicle",
+      "morningLine": "The next adventure may arrive down the telephone line.",
+      "leadHeadline": "British Telecom prepares MUD 2: shared adventures by telephone",
+      "storyHeadlines": [
+        "Sinclair puts its name on a floppy drive for the QL",
+        "Credit-card software takes aim at tapes and piracy",
+        "Amstrad 6128 may reach Britain this autumn"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1985-07-15.jpg",
+      "thumb": "media/thumbs/1985-07-15.webp",
+      "milestone": false
+    },
+    {
+      "currentDate": "2026-11-08",
+      "historicDate": "1985-07-08",
+      "displayDate": "Week of July 8-14, 1985",
+      "edition": "Issue 154 - Weekly 1985 Computer & Culture Chronicle",
+      "morningLine": "Atari ships; Activision pedals; Dixons cuts the price of entry.",
+      "leadHeadline": "Atari 520ST reaches buyers as the 16-bit contest intensifies",
+      "storyHeadlines": [
+        "Activision puts the Tour de France on home micros",
+        "Compact discs promise encyclopedia-sized storage for home micros",
+        "Dixons cuts MSX prices to £99 and £149.99",
+        "Acorn’s financial strain stalls new projects"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1985-07-08.jpg",
+      "thumb": "media/thumbs/1985-07-08.webp",
+      "milestone": false
+    },
+    {
+      "currentDate": "2026-11-07",
+      "historicDate": "1985-07-01",
+      "displayDate": "Week of July 1-7, 1985",
+      "edition": "Issue 153 - Weekly 1985 Computer & Culture Chronicle",
+      "morningLine": "SSI trades the battlefield for the cavern; Atari readies a summer challenger.",
+      "leadHeadline": "SSI ventures into arcade adventure with Gemstone Warrior",
+      "storyHeadlines": [
+        "Atari prepares the ST for summer buyers",
+        "HomePak bundles writing, filing and telecommunications for $49.95",
+        "The online information boom comes with a running meter"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1985-07-01.jpg",
+      "thumb": "media/thumbs/1985-07-01.webp",
+      "milestone": false
+    },
+    {
+      "currentDate": "2026-11-06",
+      "historicDate": "1985-06-24",
+      "displayDate": "Week of June 24-30, 1985",
+      "edition": "Issue 152 - Weekly 1985 Computer & Culture Chronicle",
+      "morningLine": "Apple counts the cost; poets find a place on disk.",
+      "leadHeadline": "Apple cuts one-fifth of workforce as first quarterly loss looms",
+      "storyHeadlines": [
+        "Electronic novels recruit poets as well as science-fiction stars",
+        "Commodore 128 promises three computing worlds in one box",
+        "Commodore LCD portable slips beyond September"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1985-06-24.jpg",
+      "thumb": "media/thumbs/1985-06-24.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-11-05",
       "historicDate": "1985-06-17",
       "displayDate": "Week of June 17-23, 1985",

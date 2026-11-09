@@ -6,7 +6,35 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Thu, 05 Nov 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Mon, 09 Nov 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of July 15-21, 1985 — British Telecom prepares MUD 2: shared adventures by telephone</title>
+      <link>https://jez237.com/computer-chronicle/?date=1985-07-15</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1985-07-15</guid>
+      <pubDate>Mon, 09 Nov 2026 12:00:00 GMT</pubDate>
+      <description>A commercial multiplayer adventure is planned for September, with forty lines to start. British Telecom is preparing to turn the shared computer adventure into a commercial telephone service. Popular Computing Weekly reports on July 18 that MUD 2 is being developed for a planned unveiling at September’s Personal Computer World Show. This is a service in preparation, not a July opening. Also this week: Sinclair puts its name on a floppy drive for the QL · Credit-card software takes aim at tapes and piracy · Amstrad 6128 may reach Britain this autumn.</description>
+    </item>
+    <item>
+      <title>Week of July 8-14, 1985 — Atari 520ST reaches buyers as the 16-bit contest intensifies</title>
+      <link>https://jez237.com/computer-chronicle/?date=1985-07-08</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1985-07-08</guid>
+      <pubDate>Sun, 08 Nov 2026 12:00:00 GMT</pubDate>
+      <description>July shipping news brings a powerful new desktop into the summer contest, with Commodore’s unveiling still ahead. The Atari 520ST is moving from demonstration promise to the buyer’s desk. The New York Times carries a July 10 shipping report, while the machine’s widening July availability marks a new stage in the contest for the personal-computer household. This is not the original unveiling: limited releases have preceded the broader summer arrival. Also this week: Activision puts the Tour de France on home micros · Compact discs promise encyclopedia-sized storage for home micros · Dixons cuts MSX prices to £99 and £149.99 · Acorn’s financial strain stalls new projects.</description>
+    </item>
+    <item>
+      <title>Week of July 1-7, 1985 — SSI ventures into arcade adventure with Gemstone Warrior</title>
+      <link>https://jez237.com/computer-chronicle/?date=1985-07-01</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1985-07-01</guid>
+      <pubDate>Sat, 07 Nov 2026 12:00:00 GMT</pubDate>
+      <description>A war-game specialist sends Apple and Commodore players underground. Strategic Simulations Inc., best known for detailed war games, is trying a different sort of battle. James V. Trunzo’s July COMPUTE! review finds Gemstone Warrior an arcade-oriented adventure in which fast decisions and quick reflexes matter more than the patient calculations of a historical simulation. This is a current review, not a claim that the game first appeared this week. Also this week: Atari prepares the ST for summer buyers · HomePak bundles writing, filing and telecommunications for $49.95 · The online information boom comes with a running meter.</description>
+    </item>
+    <item>
+      <title>Week of June 24-30, 1985 — Apple cuts one-fifth of workforce as first quarterly loss looms</title>
+      <link>https://jez237.com/computer-chronicle/?date=1985-06-24</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1985-06-24</guid>
+      <pubDate>Fri, 06 Nov 2026 12:00:00 GMT</pubDate>
+      <description>Three plants face closure as the personal-computer maker lowers its break-even point. Apple Computer is cutting 1,200 jobs and closing three of its six production plants, according to the June 24 Computerworld. The recently announced restructuring removes roughly one-fifth of the workforce as the company prepares for what it expects will be its first quarterly loss in eight years. Also this week: Electronic novels recruit poets as well as science-fiction stars · Commodore 128 promises three computing worlds in one box · Commodore LCD portable slips beyond September.</description>
+    </item>
     <item>
       <title>Week of June 17-23, 1985 — Elite brings its trading galaxy to the Commodore 64</title>
       <link>https://jez237.com/computer-chronicle/?date=1985-06-17</link>
@@ -118,34 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1985-03-04</guid>
       <pubDate>Wed, 21 Oct 2026 12:00:00 GMT</pubDate>
       <description>SSI puts diplomacy, conquest and battlefield command on the home computer. Strategy players have two very different maps to unfold. March COMPUTE! reports that Strategic Simulations has introduced Imperium Galactum and Field of Fire, pairing a contest for interstellar power with command of an infantry company in World War II. Each carries a suggested retail price of $39.95. Also this week: SpeedScript 3.0 brings a 6K word processor to magazine readers · Color printing breaks below $300 · 2400-bps modems promise speed, but supply and service costs loom.</description>
-    </item>
-    <item>
-      <title>Week of February 25-March 3, 1985 — Inside King’s Quest: $700,000 buys a new kind of adventure</title>
-      <link>https://jez237.com/computer-chronicle/?date=1985-02-25</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1985-02-25</guid>
-      <pubDate>Tue, 20 Oct 2026 12:00:00 GMT</pubDate>
-      <description>February reporting opens the workshop behind Sierra’s ambitious adventure. A kingdom of 80 scenes comes at a very real price. Donald B. Trivette’s February COMPUTE! account puts the cost of Sierra’s King’s Quest above $700,000, with Roberta Williams and six programmers and artists working for 18 months. IBM supplied a prototype PCjr and asked for a game that could show its color graphics before the machine was announced. Also this week: Rent a PC for a month—but whose software license goes with it? · Michael Crichton takes storytelling from the cinema to Amazon · PC-Write asks users to share the software—and pays registered referrers · Online rivals bring games and conversation below three dollars an hour.</description>
-    </item>
-    <item>
-      <title>Week of February 18-24, 1985 — Inside King&apos;s Quest: the $700,000 adventure behind the PCjr&apos;s animated kingdom</title>
-      <link>https://jez237.com/computer-chronicle/?date=1985-02-18</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1985-02-18</guid>
-      <pubDate>Mon, 19 Oct 2026 12:00:00 GMT</pubDate>
-      <description>February reporting opens the workshop behind Sierra’s ambitious adventure. A kingdom of 80 scenes comes at a very real price. Donald B. Trivette’s February COMPUTE! account puts the cost of Sierra’s King’s Quest above $700,000, with Roberta Williams and six programmers and artists working for 18 months. IBM supplied a prototype PCjr and asked for a game that could show its color graphics before the machine was announced. Also this week: Michael Crichton takes storytelling from the cinema to Amazon · PC-EYE brings video capture and pixel retouching to the IBM PC · PC-Write asks users to share the software—and pays registered referrers.</description>
-    </item>
-    <item>
-      <title>Week of February 11-17, 1985 — Michael Crichton trades the movie screen for the adventure game</title>
-      <link>https://jez237.com/computer-chronicle/?date=1985-02-11</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1985-02-11</guid>
-      <pubDate>Sun, 18 Oct 2026 12:00:00 GMT</pubDate>
-      <description>In a February interview, the author behind Amazon explains why story should guide the player. Michael Crichton wants the computer adventure to tell a story, not merely conceal a solution. Interviewed by Betsy Staples in February’s Creative Computing, the novelist and filmmaker describes Amazon, his Trillium Software adventure made with programmer Stephen Warady, as a sequence of dramatic episodes. Also this week: A $239 color printer meets the real-paper test · The Commodore 64 becomes a music room for non-musicians · IBM announces its 3090 mainframe family.</description>
-    </item>
-    <item>
-      <title>Week of February 4-10, 1985 — Michael Crichton wants adventure games to make sense</title>
-      <link>https://jez237.com/computer-chronicle/?date=1985-02-04</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1985-02-04</guid>
-      <pubDate>Sat, 17 Oct 2026 12:00:00 GMT</pubDate>
-      <description>February’s COMPUTE! finds the novelist building adventures around believable solutions, not magic words. Michael Crichton has a complaint familiar to anyone stranded at an adventure-game prompt: a sensible solution ought not to fail merely because the player has guessed the wrong words. In February’s COMPUTE!, the novelist discusses Amazon and argues for puzzles that answer to the logic of the situation rather than an arbitrary phrase. Also this week: Wozniak leaves daily Apple duties for a living-room video venture · Online games and conversation challenge the established services · PC-Write turns copying into a sales channel.</description>
     </item>
   </channel>
 </rss>

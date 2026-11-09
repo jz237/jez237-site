@@ -4,6 +4,1710 @@
   "fallbackPolicy": "Use exact-day computer news when verified. If none exists, use same-week or same-month personal-computing items with confidence labels, then fall back to a wider world/business headline.",
   "issues": [
     {
+      "currentDate": "2026-11-09",
+      "historicDate": "1985-07-15",
+      "displayDate": "Week of July 15-21, 1985",
+      "edition": "Issue 155 - Weekly 1985 Computer & Culture Chronicle",
+      "masthead": {
+        "title": "Computer Chronicle",
+        "subtitle": "Issue 155 - Weekly 1985 Computer & Culture Chronicle",
+        "dateline": "Week of July 15-21, 1985",
+        "price": "75 cents"
+      },
+      "visualProfile": {
+        "tone": "Dial-up adventures and a summer of home-computer expansion",
+        "motifs": [
+          "1980s modem and CRT displaying a text adventure",
+          "telephone handset",
+          "QL floppy disks and software cards"
+        ],
+        "layout": "Dense warm aged newsprint, red and blue boxed modules, halftones, grain and slight ink bleed; no dead footer"
+      },
+      "layoutPlan": {
+        "leadPlacement": "MUD 2 gaming plans receive the biggest headline and halftone treatment",
+        "secondaryRail": "QL disks, Sofcards and CPC6128 plans",
+        "archiveNavigation": "Weekly archive and previous/next controls"
+      },
+      "sectionChrome": {
+        "primary": "brick red",
+        "secondary": "royal blue",
+        "texture": "aged newsprint, fine column rules, ink bleed"
+      },
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1985-07-15.jpg",
+        "alt": "Newspaper-style Computer Chronicle front page for July 15-21, 1985",
+        "caption": "Newspaper-style front page generated from structured Chronicle issue data.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "editorNote": "Shared adventures, new storage and software on a card crowd the home-computer desk.",
+      "morningLine": "The next adventure may arrive down the telephone line.",
+      "lead": {
+        "headline": "British Telecom prepares MUD 2: shared adventures by telephone",
+        "dek": "A commercial multiplayer adventure is planned for September, with forty lines to start.",
+        "body": [
+          "British Telecom is preparing to turn the shared computer adventure into a commercial telephone service. Popular Computing Weekly reports on July 18 that MUD 2 is being developed for a planned unveiling at September’s Personal Computer World Show. This is a service in preparation, not a July opening.",
+          "Richard Bartle and Roy Trubshaw, creators of the original MUD at Essex University, are developing the expanded game commissioned by BT. The original adventure remains available at Essex and on Compunet. The new plan places a VAX 11/750 behind an initial forty telephone lines, with expansion beyond one hundred envisaged and play scheduled for evenings and weekends.",
+          "The proposed £20 MUD Pack includes registration, instructions, a map, a personal-code card and thirty credits of six minutes each. Further play is reported at £2 per hour, with telephone charges additional. A text adventure shared with other callers makes the cost of the connection part of the gaming decision.",
+          "The magazine specifies a 1275-baud modem and terminal-emulation software. If the venture succeeds, BT envisages putting the game on computers around the country. For now, the promise is a larger shared world beyond the standalone cassette: players will have to wait for the planned launch."
+        ],
+        "confidence": "same-week",
+        "sourceRefs": [
+          0,
+          1
+        ]
+      },
+      "stories": [
+        {
+          "headline": "Sinclair puts its name on a floppy drive for the QL",
+          "body": [
+            "Sinclair is to badge a Microperipherals 3.5-inch drive and interface for the QL, according to the July 18 front-page report. Availability is expected within a month. The move gives Sinclair’s name to a disk alternative while the company continues to support Microdrives.",
+            "The double-sided, double-density system provides 720 KB formatted capacity, or 1 MB unformatted. Its interface fits the QL expansion port, and up to four drives can be daisy-chained. No retail price is established in the report.",
+            "Microperipherals technical manager Richard Miller says the underlying drive has shipped since March and that Sinclair has considered badging it for about seven months. Miller wrote its DOS, which differs from the DOS on other QL disk units. This is a change of badge and policy rather than the invention of an entirely new drive."
+          ],
+          "confidence": "same-week",
+          "sourceRefs": [
+            0,
+            1
+          ]
+        },
+        {
+          "headline": "Credit-card software takes aim at tapes and piracy",
+          "body": [
+            "Astar International’s Sofcards package software in a thin plastic card with an edge connector. Electric Software of Cambridge is distributing the format in Britain. ROM or battery-backed RAM replaces the familiar cassette or disk, with a separate adapter required for each kind of computer.",
+            "MSX ROM games are already offered at £14.95 to £19.95. Adapters are expected to cost about £10; Spectrum and QL versions remain under development. Other proposed adapters must not be mistaken for products already on the shelf.",
+            "The companies promote resistance to copying, but price is the immediate obstacle. Electric Software’s Mike Hall says the games must reach £9.95 within a year for the scheme to succeed. Battery-backed timed licensing is discussed as a possible use, not as an established shipping system."
+          ],
+          "confidence": "same-week",
+          "sourceRefs": [
+            0,
+            1
+          ]
+        },
+        {
+          "headline": "Amstrad 6128 may reach Britain this autumn",
+          "body": [
+            "A British arrival for the disk-based 128K CPC6128 may come this autumn rather than next year, Popular Computing Weekly reports. The machine was shown to the American market at Chicago’s summer CES in early June; a British launch is still a reported possibility.",
+            "The proposed newcomer brings a revised keyboard, bank-switched 128K memory and enhanced CP/M and DR Logo compared with the CPC664. That makes the timing important for buyers considering a disk-equipped CPC today.",
+            "A September show appearance remains speculation. Infocom and Kuma express interest in supporting the machine, while Rumbelows is considering stocking it. Neither a confirmed retail agreement nor a verified British launch price is established by this report."
+          ],
+          "confidence": "same-week",
+          "sourceRefs": [
+            0,
+            1
+          ]
+        }
+      ],
+      "computerItems": [
+        {
+          "title": "Sinclair QL disk system",
+          "summary": "Microperipherals Sinclair-badged 3.5-inch system planned, 720 KB formatted; see story.",
+          "confidence": "same-week",
+          "sourceRefs": [
+            0,
+            1
+          ]
+        },
+        {
+          "title": "Amstrad CPC6128",
+          "summary": "128K disk-based machine, UK autumn launch rumored, not confirmed.",
+          "confidence": "same-week",
+          "sourceRefs": [
+            0,
+            1
+          ]
+        },
+        {
+          "title": "Verbatim erasable optical-drive prototype",
+          "summary": "Chronology places a read/write/erase prototype demonstration at Chicago National Computer Conference on July 15. Secondary source only; no price or capacity verified.",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            4
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "Plu*Perfect DateStamper",
+          "detail": "Steve Sanders reviews CP/M create/access/modify timestamps, relative clock operation and optional real-time clocks; approximately 1 KB resident memory and $39 package.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            3
+          ]
+        },
+        {
+          "name": "DDraw",
+          "detail": "Dan Griffith’s Kaypro graphics program reviewed in July newsletter; Turbo Pascal source release promised after Micro Cornucopia contest, not yet confirmed.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            3
+          ]
+        },
+        {
+          "name": "Commodore 64 C compiler",
+          "detail": "Dynamite Software full C compiler reported in PCW July 11, p. 5; price not verified.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            2
+          ]
+        }
+      ],
+      "storeShelves": [
+        {
+          "label": "Top 5 Computer Games — editorial selections, not sales rankings",
+          "items": [
+            "MUD 2 — BT promotional plans announced; not yet launched. See lead for fees, creators and hosting.",
+            "Tour de France — Activision cycling simulation for Commodore and Spectrum reported launched in July 11 PCW; advertised again July 18. No exact release day verified.",
+            "Master of the Lamps — Activision advertisement on July 18 p. 15 establishes contemporary promotion, not a release date.",
+            "Frank Bruno’s Boxing — Elite advertisement July 18 p. 2 promises eight opponents; endorsement is advertising, not an independent review.",
+            "Elite on Commodore 64 — July 11 p. 47 advertisement; do not interpret “goes gold” copy as a newly verified mastering date."
+          ],
+          "confidence": "same-month",
+          "sourceRefs": [
+            0,
+            1,
+            2
+          ]
+        },
+        {
+          "label": "Top 5 Movies — July 19-21 domestic weekend",
+          "items": [
+            "1. Back to the Future",
+            "2. Mad Max Beyond Thunderdome",
+            "3. Cocoon",
+            "4. Silverado",
+            "5. Rambo: First Blood Part II"
+          ],
+          "confidence": "same-week",
+          "sourceRefs": [
+            6
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "Sofcard MSX games",
+          "price": "£14.95–19.95",
+          "note": "Advertised retail range, July 18 report",
+          "confidence": "same-week",
+          "sourceRefs": [
+            1
+          ]
+        },
+        {
+          "item": "Sofcard adapters",
+          "price": "£about 10",
+          "note": "Projected per-machine adapter price",
+          "confidence": "same-week",
+          "sourceRefs": [
+            1
+          ]
+        },
+        {
+          "item": "MUD Pack",
+          "price": "£20",
+          "note": "Planned registration package and 30 six-minute credits",
+          "confidence": "same-week",
+          "sourceRefs": [
+            1
+          ]
+        },
+        {
+          "item": "MUD 2 play",
+          "price": "£2",
+          "note": "Planned hourly charge, plus phone charges",
+          "confidence": "same-week",
+          "sourceRefs": [
+            1
+          ]
+        },
+        {
+          "item": "Courier 2400",
+          "price": "$495",
+          "note": "MicroFlash advertisement reported by newsletter",
+          "confidence": "same-month",
+          "sourceRefs": [
+            3
+          ]
+        },
+        {
+          "item": "Courier 2400 sysop offer",
+          "price": "$350",
+          "note": "Active-system operators; approximate July 15 expiration",
+          "confidence": "same-month",
+          "sourceRefs": [
+            3
+          ]
+        },
+        {
+          "item": "DataCOM membership",
+          "price": "$30",
+          "note": "Annual network access",
+          "confidence": "same-month",
+          "sourceRefs": [
+            3
+          ]
+        },
+        {
+          "item": "DateStamper",
+          "price": "$39",
+          "note": "Package including utilities and documentation",
+          "confidence": "same-month",
+          "sourceRefs": [
+            3
+          ]
+        }
+      ],
+      "briefs": [
+        {
+          "headline": "IBM PC AT chip replacement",
+          "summary": "Chronology dates report to July 19: faulty Texas Instruments chips in some ATs shipped since start of year, about 10% of shipments; affected boards to be replaced free. Single secondary source; no independently verified technical fault description.",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            4
+          ]
+        },
+        {
+          "headline": "No PC II, says Lowe",
+          "summary": "Chronology dates IBM entry-systems president William Lowe’s denial of PC II rumors to July 19; paraphrase only.",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            4
+          ]
+        },
+        {
+          "headline": "Soviet schools turn to MSX",
+          "summary": "PCW July 18 p. 5 reports first schools order goes to MSX rather than British hopefuls; precise quantity/value unverified.",
+          "confidence": "same-week",
+          "sourceRefs": [
+            0,
+            1
+          ]
+        }
+      ],
+      "musicChart": [
+        {
+          "rank": 1,
+          "title": "The Power Of Love",
+          "artist": "Huey Lewis & The News",
+          "chart": "Billboard rock chart, archival URL labels Mainstream Rock Airplay",
+          "chartDate": "1985-07-20",
+          "confidence": "same-week",
+          "song": "The Power Of Love",
+          "sourceRefs": [
+            5
+          ]
+        },
+        {
+          "rank": 2,
+          "title": "If You Love Somebody Set Them Free",
+          "artist": "Sting",
+          "chart": "Billboard rock chart, archival URL labels Mainstream Rock Airplay",
+          "chartDate": "1985-07-20",
+          "confidence": "same-week",
+          "song": "If You Love Somebody Set Them Free",
+          "sourceRefs": [
+            5
+          ]
+        },
+        {
+          "rank": 3,
+          "title": "What About Love",
+          "artist": "Heart",
+          "chart": "Billboard rock chart, archival URL labels Mainstream Rock Airplay",
+          "chartDate": "1985-07-20",
+          "confidence": "same-week",
+          "song": "What About Love",
+          "sourceRefs": [
+            5
+          ]
+        },
+        {
+          "rank": 4,
+          "title": "Money For Nothing",
+          "artist": "Dire Straits",
+          "chart": "Billboard rock chart, archival URL labels Mainstream Rock Airplay",
+          "chartDate": "1985-07-20",
+          "confidence": "same-week",
+          "song": "Money For Nothing",
+          "sourceRefs": [
+            5
+          ]
+        },
+        {
+          "rank": 5,
+          "title": "People Get Ready",
+          "artist": "Jeff Beck & Rod Stewart",
+          "chart": "Billboard rock chart, archival URL labels Mainstream Rock Airplay",
+          "chartDate": "1985-07-20",
+          "confidence": "same-week",
+          "song": "People Get Ready",
+          "sourceRefs": [
+            5
+          ]
+        }
+      ],
+      "periodAd": {
+        "headline": "Frank Bruno’s Boxing promises eight opponents",
+        "summary": "Elite’s July 18 advertisement promotes the boxing game with eight opponents. This is a contemporary advertising claim, not an independent review.",
+        "tagline": "A ringside attraction for the home-computer shelf.",
+        "sourceRefs": [
+          0,
+          1
+        ]
+      },
+      "market": {
+        "headline": "New formats must earn their place beside the cassette",
+        "summary": "Sofcards promise convenient loading but carry a price premium. Sinclair’s disk badge and Amstrad’s reported 128K plans give home-computer buyers more expansion choices, while BT tests the idea of paying for shared play by the hour.",
+        "confidence": "same-week",
+        "sourceRefs": [
+          0,
+          1
+        ]
+      },
+      "worldAnchor": {
+        "headline": "Reagan doctors report cancer",
+        "summary": "On July 15, Dr. Steven Rosenberg announces that President Reagan has cancer, UPI reports. The medical announcement places this week’s computer news against a major national bulletin.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          7
+        ]
+      },
+      "bbsNote": {
+        "headline": "MUD meets the telephone company; DataCOM doubles speed",
+        "summary": "Two genuine dated beats: BT’s September multiplayer-game plans reported July 18, and July hobbyist reports of 2400-bps BBS upgrades. Posts below are editorial summaries, NOT fabricated historical message-board quotations.",
+        "posts": [
+          {
+            "topic": "Commercial multi-user play",
+            "platform": "BT planned MUD 2 / Essex MUD / Compunet",
+            "text": "BT commissions an expanded adventure from Bartle and Trubshaw; plans £20 registration pack and £2/hour plus telephone charges."
+          },
+          {
+            "topic": "Sysop hardware economics",
+            "platform": "DataCOM Network RCP/M, System #1",
+            "text": "Steven L. Sanders reports 2400 support and US Robotics’s $350 active-sysop modem offer, expiring around July 15."
+          },
+          {
+            "topic": "CP/M meets DOS",
+            "platform": "DataCOM Network, System #2",
+            "text": "July newsletter announces a separate new-DOS-file area alongside CP/M files, showing mixed-platform user demand."
+          }
+        ],
+        "sourceRefs": [
+          0,
+          1,
+          3
+        ]
+      },
+      "curiosity": {
+        "headline": "A software card that forgets when its battery dies",
+        "summary": "Electric Software discusses an unusual way to enforce a timed software license.",
+        "detail": "PCW July 18 p. 4 describes battery-backed Sofcards with estimated two-to-three-year battery life and discusses making business software depend on the card. The writer calls it self-destruction, but the mechanism described is loss of battery-backed memory, not physical damage. A proposed application, not verified commercial deployment.",
+        "sourceRefs": [
+          0,
+          1
+        ]
+      },
+      "accuracyLedger": {
+        "items": [
+          "MUD 2 is a planned September service, not a July launch; the ambiguous introductory-free interval is omitted.",
+          "QL drive availability and CPC6128 British timing retain their prospective wording.",
+          "Games are editorial selections, not a sales chart; advertising is not proof of release.",
+          "Music uses the dated Billboard rock chart; movies use retrospective July 19-21 weekend results.",
+          "Modem notes are editorial summaries of dated reporting, not invented historical posts.",
+          "Optical-drive and IBM briefs rely on a secondary chronology; no unsupported specifications added.",
+          "No verified named cracking crew event or separate gadget launch; these desks are omitted."
+        ]
+      },
+      "sources": [
+        {
+          "title": "Popular Computing Weekly vol. 4 no. 29, museum catalog",
+          "url": "https://www.computinghistory.org.uk/det/28800/Popular-Computing-Weekly-Vol-4-No-29-18-24-July-1985",
+          "date": "1985-07-18"
+        },
+        {
+          "title": "Popular Computing Weekly vol. 4 no. 29, full scan",
+          "url": "https://www.computinghistory.org.uk/downloads/28800",
+          "date": "1985-07-18"
+        },
+        {
+          "title": "Popular Computing Weekly vol. 4 no. 28, contents transcription",
+          "url": "https://www.computinghistory.org.uk/det/28799/Popular-Computing-Weekly-Vol-4-No-28-11-17-July-1985/",
+          "date": "1985-07-11"
+        },
+        {
+          "title": "$R/O READ ONLY, Tampa Bay Kaypro User’s Group / DataCOM, Steven L. Sanders",
+          "url": "http://www.df.lth.se/~pi/cpm/files/ftp.mayn.de/pub/cpm/archive/news/jul85.mag.txt",
+          "date": "1985-07"
+        },
+        {
+          "title": "Ken Polsson, Chronology of Personal Computers, retrospective compilation",
+          "url": "https://www.islandnet.com/~kpolsson/comphist/comp1985jul.htm",
+          "date": "Retrospective; entries July 15 and July 19, 1985"
+        },
+        {
+          "title": "Billboard archival rock chart",
+          "url": "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1985-07-20/",
+          "date": "1985-07-20"
+        },
+        {
+          "title": "The Numbers domestic weekend box office",
+          "url": "https://www.the-numbers.com/box-office-chart/weekend/1985/07/19",
+          "date": "1985-07-19 to 1985-07-21"
+        },
+        {
+          "title": "UPI: The doctor who told the nation",
+          "url": "https://www.upi.com/Archives/1985/07/15/The-doctor-who-told-the-nation-The-president-has-cancer/3894490248000/",
+          "date": "1985-07-15"
+        },
+        {
+          "title": "Washington Post: After the Music, The Memories",
+          "url": "https://www.washingtonpost.com/archive/lifestyle/1985/07/15/after-the-music-the-memories/38c13d00-1285-4c5f-8101-7832c8053779/",
+          "date": "1985-07-15"
+        }
+      ]
+    },
+    {
+      "masthead": {
+        "title": "Computer Chronicle",
+        "subtitle": "Issue 154 - Weekly 1985 Computer & Culture Chronicle",
+        "dateline": "Week of July 8-14, 1985",
+        "price": "75 cents"
+      },
+      "visualProfile": {
+        "tone": "The 16-bit summer and cycling on home micros",
+        "motifs": [
+          "Atari 520ST keyboard and monitor",
+          "Spectrum cycling game cassette",
+          "compact disc and MSX retail cards"
+        ],
+        "layout": "Dense warm newsprint, red and blue boxed modules"
+      },
+      "layoutPlan": {
+        "leadPlacement": "Atari 520ST shipping is the strongest historical lead; Tour de France gets a prominent gaming halftone",
+        "secondaryRail": "CD-ROM, MSX bargains and Compunet",
+        "archiveNavigation": "Weekly archive and previous/next controls"
+      },
+      "sectionChrome": {
+        "primary": "brick red",
+        "secondary": "royal blue",
+        "texture": "aged newsprint, paper grain, fine column rules, slight ink bleed"
+      },
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1985-07-08.jpg",
+        "alt": "Computer Chronicle newspaper-style front page for July 8-14, 1985",
+        "caption": "Newspaper-style front page generated from structured Chronicle issue data.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "currentDate": "2026-11-08",
+      "historicDate": "1985-07-08",
+      "displayDate": "Week of July 8-14, 1985",
+      "edition": "Issue 154 - Weekly 1985 Computer & Culture Chronicle",
+      "editorNote": "The 16-bit contest reaches the counter while cycling, compact discs and cut-price MSX machines crowd the home-computer desk.",
+      "morningLine": "Atari ships; Activision pedals; Dixons cuts the price of entry.",
+      "lead": {
+        "headline": "Atari 520ST reaches buyers as the 16-bit contest intensifies",
+        "dek": "July shipping news brings a powerful new desktop into the summer contest, with Commodore’s unveiling still ahead.",
+        "confidence": "same-week",
+        "sourceRefs": [
+          4,
+          5,
+          2,
+          0
+        ],
+        "body": [
+          "The Atari 520ST is moving from demonstration promise to the buyer’s desk. The New York Times carries a July 10 shipping report, while the machine’s widening July availability marks a new stage in the contest for the personal-computer household. This is not the original unveiling: limited releases have preceded the broader summer arrival.",
+          "The attraction is a Motorola 68000 processor running at about 8 MHz, 512 KB of memory and a GEM graphical desktop over Atari TOS. Built-in MIDI ports add a distinctive invitation to musicians. These specifications describe the machine, rather than a newly announced change this week.",
+          "The display choice matters. The ST offers 320 by 200 pixels in 16 colors or 640 by 200 in four; its 640 by 400 monochrome mode requires the monochrome monitor. Introduction packages are listed at $799.99 monochrome and $999.99 color, background prices rather than a fresh July 10 shop quotation.",
+          "The contest is not settled. Popular Computing Weekly reports lower-cost ST proposals, but proposed models are not machines already on the shelf. Commodore’s American Amiga unveiling is scheduled for July 23, still ahead of this issue’s week. For now, Atari has a shipping story to put beside the promises."
+        ]
+      },
+      "stories": [
+        {
+          "headline": "Activision puts the Tour de France on home micros",
+          "confidence": "same-week",
+          "sourceRefs": [
+            0
+          ],
+          "body": [
+            "The Tour de France has reached the home keyboard. Popular Computing Weekly’s July 11 front page reports Activision’s cycling simulation available for Commodore and Spectrum at £9.95, bringing a timely sporting subject to the software shelf.",
+            "The magazine describes a 2,500-mile course through France over 22 stages. With the real race still in progress, the program has an immediate point of recognition beyond the familiar spaceship and dungeon. The report establishes availability by July 11, not an independently verified first release day."
+          ]
+        },
+        {
+          "headline": "Compact discs promise encyclopedia-sized storage for home micros",
+          "confidence": "same-week",
+          "sourceRefs": [
+            0
+          ],
+          "body": [
+            "A familiar audio-disc shape may become a vast read-only library for the personal computer. Popular Computing Weekly reports that Atari hopes to offer a Philips-based CD-ROM player in December or January for about $600 (£450), following a demonstration at June’s Consumer Electronics Show.",
+            "Sony UK is evaluating a sample drive connected to an IBM PC AT. Its John Whitehead cites about 540 megabytes per disc: an extraordinary prospect beside the home micro’s ordinary removable storage. Philips plans a controller to connect a player to a personal computer this year.",
+            "These are prototypes, plans and forecasts, not a completed mass-market launch. The magazine distinguishes read-only discs from write-once and experimental read/write media. The immediate story is the size of the library being proposed, and the work still needed to deliver it."
+          ]
+        },
+        {
+          "headline": "Dixons cuts MSX prices to £99 and £149.99",
+          "confidence": "same-week",
+          "sourceRefs": [
+            0
+          ],
+          "body": [
+            "Dixons has put a sharp new price on the British MSX shelf. The Toshiba HX-10 is offered at £99 against a suggested £239, while Sony’s Hit Bit is £149.99 against a suggested £299, according to the July 11 Popular Computing Weekly.",
+            "The cuts are a retailer’s action, not a manufacturer-wide price revision. Toshiba’s UK product manager objects; Sony stresses that it cannot dictate the retailer’s prices. Dixons confirms the discounts without further comment. For the buyer, the sticker is concrete even as suppliers dispute the message it sends."
+          ]
+        },
+        {
+          "headline": "Acorn’s financial strain stalls new projects",
+          "confidence": "same-week",
+          "sourceRefs": [
+            0
+          ],
+          "body": [
+            "Acorn’s planned business workstations remain delayed while financing is unresolved. Popular Computing Weekly reports that Olivetti, which spent £10.4 million in February’s rescue, has not finalized a further agreement; a proposed package could be worth up to £20 million.",
+            "The National Semiconductor 16032-based machines, priced at £3,500 to £8,000, are unavailable rather than formally declared cancelled. Speech-research projects are also affected. The distinction matters: this is a report of stalled plans and continuing negotiations, not a completed rescue or an announcement that Acorn has collapsed."
+          ]
+        }
+      ],
+      "computerItems": [
+        {
+          "title": "Atari 520ST",
+          "summary": "July availability; specifications are retrospective background, with shipping headline dated July 10.",
+          "confidence": "same-week",
+          "sourceRefs": [
+            4,
+            5
+          ]
+        },
+        {
+          "title": "MSX clearance-style price competition",
+          "summary": "Dixons offers Toshiba HX-10 £99 and Sony Hit Bit £149.99.",
+          "confidence": "same-week",
+          "sourceRefs": [
+            0
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "C Power for the Commodore 64",
+          "detail": "Dynamite Software compiler on disc, 531-page manual; £122.45 including postage and packing. PCW July 11 p.5 says it follows Kernighan and Ritchie’s C language definition.",
+          "confidence": "same-week",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "name": "Devpac 80",
+          "detail": "HiSoft CP/M assembler package reviewed July 11 p.11 for disc-equipped Amstrad and Tatung Einstein, £39.99. Ed80 editor, assembler and Mon80 monitor/disassembler are described; this is a review, not a dated launch.",
+          "confidence": "same-week",
+          "sourceRefs": [
+            0
+          ]
+        }
+      ],
+      "storeShelves": [
+        {
+          "label": "Top 5 Computer Games — editorial selections, not sales rankings",
+          "items": [
+            "Tour de France — Activision, Commodore/Spectrum, £9.95; reported available July 11.",
+            "Fairlight — The Edge advertisement credits Bo Jangeborg and promotes 3D “Worldmaker”; advertising presence is not a verified release date.",
+            "A View to a Kill — Domark advertisement July 4 says available on Spectrum 48K, Commodore 64 and Enterprise; other versions promised.",
+            "A Day at the Races — Tom Wharton’s Atari BASIC horse-racing type-in uses under 8K, with text, color and sound, PCW July 11 p.14.",
+            "Spelunker — Brøderbund cavern adventure; July COMPUTE! review lists $29.95 for Commodore 64 and Atari. A month-dated review, not a new release this week."
+          ],
+          "confidence": "same-month",
+          "sourceRefs": [
+            0,
+            2,
+            13
+          ]
+        },
+        {
+          "label": "Top 5 Movies — July 12-14 domestic weekend",
+          "items": [
+            "1. Back to the Future",
+            "2. Mad Max Beyond Thunderdome",
+            "3. Cocoon",
+            "4. Rambo: First Blood Part II",
+            "5. Pale Rider"
+          ],
+          "confidence": "same-week",
+          "sourceRefs": [
+            8
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "Toshiba HX-10",
+          "price": "£99",
+          "note": "Dixons UK; suggested £239.",
+          "confidence": "same-week",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "item": "Sony Hit Bit",
+          "price": "£149.99",
+          "note": "Dixons UK; suggested £299.",
+          "confidence": "same-week",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "item": "Tour de France",
+          "price": "£9.95",
+          "note": "Activision; Commodore and Spectrum, reported July 11.",
+          "confidence": "same-week",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "item": "C Power",
+          "price": "£122.45",
+          "note": "Commodore 64 compiler; including postage and packing.",
+          "confidence": "same-week",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "item": "Devpac 80",
+          "price": "£39.99",
+          "note": "HiSoft CP/M assembler; July 11 review price.",
+          "confidence": "same-week",
+          "sourceRefs": [
+            0
+          ]
+        }
+      ],
+      "briefs": [
+        {
+          "headline": "Sinclair agrees to independent returns survey",
+          "summary": "PCW July 11 p.4 describes proposed faulty-product cards sent to Computer Trade Weekly, initially for Spectrum Plus and later QL/pocket TV; not completed survey findings.",
+          "confidence": "same-week",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "headline": "Amiga unveiling set for July 23",
+          "summary": "Commodore’s American unveiling is scheduled for July 23, replacing the earlier July 18 date reported by Popular Computing Weekly.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            2
+          ]
+        }
+      ],
+      "musicChart": [
+        {
+          "rank": 1,
+          "title": "If You Love Somebody Set Them Free",
+          "song": "If You Love Somebody Set Them Free",
+          "artist": "Sting",
+          "chart": "Billboard Top Rock Tracks",
+          "chartDate": "1985-07-13",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            6
+          ]
+        },
+        {
+          "rank": 2,
+          "title": "The Power Of Love",
+          "song": "The Power Of Love",
+          "artist": "Huey Lewis & The News",
+          "chart": "Billboard Top Rock Tracks",
+          "chartDate": "1985-07-13",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            6
+          ]
+        },
+        {
+          "rank": 3,
+          "title": "Sentimental Street",
+          "song": "Sentimental Street",
+          "artist": "Night Ranger",
+          "chart": "Billboard Top Rock Tracks",
+          "chartDate": "1985-07-13",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            6
+          ]
+        },
+        {
+          "rank": 4,
+          "title": "Little By Little",
+          "song": "Little By Little",
+          "artist": "Robert Plant",
+          "chart": "Billboard Top Rock Tracks",
+          "chartDate": "1985-07-13",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            6
+          ]
+        },
+        {
+          "rank": 5,
+          "title": "What About Love",
+          "song": "What About Love",
+          "artist": "Heart",
+          "chart": "Billboard Top Rock Tracks",
+          "chartDate": "1985-07-13",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            6
+          ]
+        }
+      ],
+      "periodAd": {
+        "headline": "Fairlight promises a three-dimensional world",
+        "summary": "The Edge’s July 11 advertisement credits Bo Jangeborg and promotes the Worldmaker system. An advertising appearance is not a verified release date.",
+        "tagline": "Another world waits on the cassette shelf.",
+        "sourceRefs": [
+          0
+        ]
+      },
+      "market": {
+        "headline": "A summer of bigger machines and smaller price tags",
+        "summary": "Atari’s July shipping news and Dixons’ MSX discounts pull the home-computer market in different directions: more ambitious hardware at one end, a cheaper route to the keyboard at the other. Acorn’s unresolved financing shows the pressure behind the shop window.",
+        "confidence": "same-week",
+        "sourceRefs": [
+          0,
+          4,
+          5
+        ]
+      },
+      "worldAnchor": {
+        "headline": "Live Aid links London and Philadelphia",
+        "summary": "The July 13 famine-relief concerts link Wembley Stadium in London and JFK Stadium in Philadelphia, organized by Bob Geldof and Midge Ure.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          11,
+          10
+        ]
+      },
+      "bbsNote": {
+        "headline": "Compunet adds chat and document transfers",
+        "summary": "Compunet expands its subscriber facilities with chat and document transfers, as reported in the July 4 Popular Computing Weekly.",
+        "posts": [
+          {
+            "topic": "Online chat",
+            "platform": "Compunet",
+            "text": "Messages may be addressed to everyone or one subscriber; up to 15 pages at 1p per page."
+          },
+          {
+            "topic": "Document exchange",
+            "platform": "Compunet",
+            "text": "New facility lets subscribers upload word-processed files for other users to download."
+          },
+          {
+            "topic": "Network growing pains",
+            "platform": "Compunet",
+            "text": "Editor Jane Firbank says January–February problems included underestimated session lengths and some Commodore modems oversensitive to line noise. Home banking is promised for early next year; estate agency remains in abeyance."
+          },
+          {
+            "topic": "Amstrad communications",
+            "platform": "Skywave Multi-Port / planned Skytel",
+            "text": "July 4 p.5 reports £99.95 Multi-Port for CPC464 with serial/parallel ports and Multi-Com; a 664 version and a users’ bulletin board named Skytel are planned, not confirmed operational."
+          }
+        ],
+        "sourceRefs": [
+          2
+        ]
+      },
+      "curiosity": {
+        "headline": "Three claps summon your lost keys",
+        "summary": "A £6.95 Key Tracer responds to clapping instead of a keyboard.",
+        "detail": "Popular Computing Weekly describes a £6.95 Key Tracer from Dudley Langmead Enterprises: a key-ring fob powered by two hearing-aid batteries that beeps after three handclaps, with about 12 feet range.",
+        "sourceRefs": [
+          0
+        ]
+      },
+      "gadgetWatch": {
+        "headline": "Maplin’s proposed robot aerobics",
+        "summary": "Alongside Hero Jr price cuts, Maplin is developing interfaces for Spectrum, C64 and BBC machines and planning an aerobics program named Herobics.",
+        "confidence": "same-week",
+        "sourceRefs": [
+          0
+        ]
+      },
+      "accuracyLedger": {
+        "items": [
+          "NYT shipping headline and date only; unread article body is not used for specifications. ST specifications and introduction prices are retrospective background.",
+          "Music top five verified directly from Billboard July 13 HTML chart rows during publication; no unverified ranks copied from dossier.",
+          "Games are editorial selections, not sales ranks; Spelunker is July review context. Fairlight advertisement is not proof of release.",
+          "CD-ROM, Amiga, robotics and Acorn developments retain contemporary future or conditional tense.",
+          "Compunet notes summarize July 4 reporting, not recovered subscriber posts. No verified named underground crew event established; feature omitted."
+        ]
+      },
+      "sources": [
+        {
+          "title": "Popular Computing Weekly 11–17 July 1985, primary scan and museum index",
+          "url": "https://www.computinghistory.org.uk/det/28799/Popular-Computing-Weekly-Vol-4-No-28-11-17-July-1985/",
+          "date": "1985-07-11"
+        },
+        {
+          "title": "PCW July 11 primary PDF",
+          "url": "https://www.computinghistory.org.uk/downloads/28799",
+          "date": "1985-07-11"
+        },
+        {
+          "title": "Popular Computing Weekly 4–10 July 1985, primary scan and museum index",
+          "url": "https://www.computinghistory.org.uk/det/28798/Popular-Computing-Weekly-Vol-4-No-27-4-10-July-1985/",
+          "date": "1985-07-04"
+        },
+        {
+          "title": "PCW July 4 primary PDF",
+          "url": "https://www.computinghistory.org.uk/downloads/28798",
+          "date": "1985-07-04"
+        },
+        {
+          "title": "Atari Is Shipping 520 ST Computer; indexed title/date only",
+          "url": "https://www.nytimes.com/1985/07/10/business/atari-is-shipping-520-st-computer.html",
+          "date": "1985-07-10"
+        },
+        {
+          "title": "Atari ST, retrospective specifications and availability",
+          "url": "https://en.wikipedia.org/wiki/Atari_ST",
+          "date": null
+        },
+        {
+          "title": "Billboard Top Rock Tracks, July 13, 1985: verified top five",
+          "url": "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1985-07-13/",
+          "date": "1985-07-13"
+        },
+        {
+          "title": "Historical Billboard rock number-one chronology",
+          "url": "https://en.wikipedia.org/wiki/List_of_Billboard_Mainstream_Rock_number-one_songs_of_the_1980s",
+          "date": null
+        },
+        {
+          "title": "The Numbers weekend domestic box office",
+          "url": "https://www.the-numbers.com/box-office-chart/weekend/1985/07/12",
+          "date": "1985-07-12"
+        },
+        {
+          "title": "COMPUTE! July 1985 index",
+          "url": "https://www.atarimagazines.com/compute/index/index.php?issue=issue62",
+          "date": "1985-07"
+        },
+        {
+          "title": "AP Today in History July 13",
+          "url": "https://apnews.com/today-in-history/july-13",
+          "date": null
+        },
+        {
+          "title": "Live Aid retrospective",
+          "url": "https://en.wikipedia.org/wiki/Live_Aid",
+          "date": "1985-07-13"
+        },
+        {
+          "title": "NZ History: Rainbow Warrior sunk",
+          "url": "https://nzhistory.govt.nz/rainbow-warrior-sunk-in-auckland",
+          "date": "1985-07-10"
+        },
+        {
+          "title": "COMPUTE! issue 62, July 1985: complete issue OCR",
+          "url": "https://archive.org/download/1985-07-compute-magazine/Compute_Issue_062_1985_Jul_djvu.txt",
+          "date": "1985-07"
+        }
+      ]
+    },
+    {
+      "currentDate": "2026-11-07",
+      "historicDate": "1985-07-01",
+      "displayDate": "Week of July 1-7, 1985",
+      "edition": "Issue 153 - Weekly 1985 Computer & Culture Chronicle",
+      "masthead": {
+        "title": "Computer Chronicle",
+        "subtitle": "Issue 153 - Weekly 1985 Computer & Culture Chronicle",
+        "dateline": "Week of July 1-7, 1985",
+        "price": "75 cents"
+      },
+      "visualProfile": {
+        "tone": "Arcade adventure in the home-computer caverns",
+        "motifs": [
+          "crossbow warrior and gemstone fragments",
+          "Commodore 64 and Apple II",
+          "Atari ST monochrome monitor"
+        ],
+        "layout": "Dense warm newsprint, red and blue boxed modules"
+      },
+      "layoutPlan": {
+        "leadPlacement": "Gaming lead: Gemstone Warrior takes the biggest headline and halftone illustration",
+        "secondaryRail": "Atari ST, HomePak and online services",
+        "archiveNavigation": "Weekly archive and previous/next controls"
+      },
+      "sectionChrome": {
+        "primary": "brick red",
+        "secondary": "royal blue",
+        "texture": "aged newsprint, paper grain, fine column rules, slight ink bleed"
+      },
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1985-07-01.jpg",
+        "alt": "Computer Chronicle newspaper-style front page for July 1-7, 1985",
+        "caption": "Newspaper-style front page generated from structured Chronicle issue data.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "editorNote": "July reviews put adventure, affordable applications and the online meter on the home-computer desk.",
+      "morningLine": "SSI trades the battlefield for the cavern; Atari readies a summer challenger.",
+      "lead": {
+        "headline": "SSI ventures into arcade adventure with Gemstone Warrior",
+        "dek": "A war-game specialist sends Apple and Commodore players underground.",
+        "confidence": "same-month",
+        "sourceRefs": [
+          0
+        ],
+        "body": [
+          "Strategic Simulations Inc., best known for detailed war games, is trying a different sort of battle. James V. Trunzo’s July COMPUTE! review finds Gemstone Warrior an arcade-oriented adventure in which fast decisions and quick reflexes matter more than the patient calculations of a historical simulation. This is a current review, not a claim that the game first appeared this week.",
+          "The assignment is to recover five fragments of a stolen magical gemstone from 90 underground caverns. A crossbow-armed warrior confronts monsters and gathers magical objects along the way. Knowing when to use those devices is as important as keeping the weapon pointed in the right direction.",
+          "The review covers Commodore 64 with a disk drive and the Apple II series with at least 48K and a disk drive. A joystick is optional, but recommended. Several difficulty levels let players adjust the challenge, while a pause feature offers relief from the action.",
+          "A successful expedition can run as long as two hours, making the ability to save a game in progress more than a convenience. Trunzo calls SSI’s first true arcade entry impressive: an invitation for home-computer adventurers to explore a publisher normally associated with a very different battlefield."
+        ]
+      },
+      "stories": [
+        {
+          "headline": "Atari prepares the ST for summer buyers",
+          "body": [
+            "Atari’s 520ST is approaching its summer test with buyers. In his July COMPUTE! column, Tom R. Halfhill describes hands-on time with the machine and a development-lab tour led by Sam and Leonard Tramiel. The earlier April availability promise has slipped; U.S. quantity availability is now expected in summer, with Europe receiving earlier shipments.",
+            "The production model has 512K RAM, but its initial operating system, GEM and programming language load from disk rather than ROM. Halfhill reports about 240K free after loading. The planned $799 package includes system disks, a microfloppy drive and a high-resolution monochrome monitor refreshing at 70 Hz; that is a reported package plan, not a verified dealer offer this week.",
+            "Atari also promises a sub-$500 10MB hard disk by fall and a sub-$500 CD-ROM peripheral by year end. Those remain promises. Across the Atlantic, the July 4 Popular Computing Weekly reports a revived proposal for a 256K 260ST with a built-in drive, while the Amiga’s U.S. unveiling is still ahead on July 23."
+          ],
+          "sourceRefs": [
+            0,
+            2
+          ],
+          "confidence": "same-month"
+        },
+        {
+          "headline": "HomePak bundles writing, filing and telecommunications for $49.95",
+          "body": [
+            "Batteries Included is making an inexpensive bid for the everyday home-computer desk. Sheldon Leemon’s July COMPUTE! review examines Russ Wetmore’s HomePak: HomeText for writing, HomeFind for filing and HomeTerm for telecommunications, at $49.95 for the reviewed Atari and Commodore package.",
+            "The package requires an Atari 400/800, XL or XE with at least 48K and disk drive, or a Commodore 64 with disk drive. A printer and modem are recommended. None of its three programs is copy-protected. IBM PC, Enhanced Model PCjr and Macintosh versions are described as forthcoming; the future Macintosh package is listed at $69.95.",
+            "HomeTerm supplies XMODEM transfers, an online-time counter, macros and an outgoing edit window that keeps half-written replies separate from incoming conference text. Memory is a constraint: Atari HomeText and HomeTerm buffers hold about 7K, roughly three double-spaced pages, with somewhat larger buffers on Commodore. The first Commodore HomeTerm cannot dial the 1650 modem; the review describes a free disk-return update for original owners."
+          ],
+          "sourceRefs": [
+            0
+          ],
+          "confidence": "same-month"
+        },
+        {
+          "headline": "The online information boom comes with a running meter",
+          "body": [
+            "The modem can lead to a local hobbyist board or a professional information service, but the bill changes dramatically with the destination. July COMPUTE! distinguishes BBSs, commercial information services and specialist databases. A BBS often costs only the telephone call, although some boards charge membership fees to support operation and manage demand.",
+            "CompuServe, The Source, Dow Jones News/Retrieval, Delphi and American People/Link offer a growing menu of quotations, reference material, conferences and newspaper archives. The article gives commercial-service costs ranging broadly from $5 to $100 or more per hour, with specialist databases reaching $300 to $400. These are category ranges, not a quoted rate for any one named service.",
+            "Arlan R. Levitan’s Telecomputing Today column offers a practical countermeasure: write mail before connecting. Fifteen minutes spent typing online can cost a couple of dollars, and even a free board may entail a long-distance call. Local user groups can help newcomers learn the territory before the meter starts."
+          ],
+          "sourceRefs": [
+            0
+          ],
+          "confidence": "same-month"
+        }
+      ],
+      "computerItems": [
+        {
+          "title": "520ST",
+          "summary": "512K production-model report, initial disk-loaded system software, planned $799 monochrome package; see story.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "title": "260ST proposal revived",
+          "summary": "July 4 PCW headline describes a 256K ST with built-in disk drive. Manufacturing proposal, not proof of shipment.",
+          "confidence": "same-week",
+          "sourceRefs": [
+            2
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "HomePak",
+          "detail": "Batteries Included, $49.95 for non-Mac versions; forthcoming Mac $69.95. See story.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "name": "Fast Filer",
+          "detail": "Richard Mansfield and Patrick Parrish's multi-computer type-in filing program appears in COMPUTE! July, p. 44 onward.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "name": "Apple SpeedScript 3.0 ProDOS Converter",
+          "detail": "July COMPUTE! index lists a converter for the magazine's word processor; period utility coverage, not a commercial launch.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0
+          ]
+        }
+      ],
+      "storeShelves": [
+        {
+          "label": "Top 5 Computer Games — editorial selections, not sales rankings",
+          "items": [
+            "Spelunker — $29.95 in Steve Hudson's July review, p. 52. Brøderbund; reviewed for Commodore 64 and Atari with disk drive and joystick. Six increasingly challenging levels, scrolling caverns, batteries, flares and dynamite; a current review, not a newly verified release.",
+            "Gemstone Warrior — SSI arcade-adventure review, pp. 55–56; see lead. Price omitted because OCR is unclear.",
+            "Run For It — Karen McCullough reviews Weekly Reader Family Software's robot maze game, p. 52 onward. Apple II or Atari with 48K and disk; 72 rooms in 18 levels. Robot Orbit gathers energy and avoids hostile devices.",
+            "The Goonies heads for UK shops — PCW July 4, p. 1 says US Gold plans to import Datasoft's film-based computer game in September. UK film release is described as Christmas; retain regional distinction and future tense.",
+            "A View to a Kill — Domark advertisement in PCW July 4, p. 8 claims availability on Spectrum 48K, Commodore 64 and Enterprise; Amstrad and MSX are future versions. p. 12 profiles developer Tigress. Advertisement claims, not independently verified stock."
+          ],
+          "confidence": "same-month",
+          "sourceRefs": [
+            0,
+            2
+          ]
+        },
+        {
+          "label": "Top 5 Movies — July 5-7 domestic weekend",
+          "items": [
+            "1. Back to the Future",
+            "2. Pale Rider",
+            "3. Rambo: First Blood Part II",
+            "4. Cocoon",
+            "5. The Emerald Forest"
+          ],
+          "confidence": "same-week",
+          "sourceRefs": [
+            4
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "Spelunker review price",
+          "price": "$29.95",
+          "note": "$29.95; COMPUTE! July p. 52; review/list context, not a retailer discount.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "item": "HomePak review price",
+          "price": "$49.95",
+          "note": "$49.95 non-Mac package; forthcoming Mac version $69.95; pp. 54–55.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "item": "Omnibot 2000",
+          "price": "$500.00",
+          "note": "Fred D’Ignazio's toy robot column, p. 83, captions Tomy's remote-controlled robot at about $500; approximate retail price.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0
+          ]
+        }
+      ],
+      "briefs": [
+        {
+          "headline": "Acorn rescue talks deepen",
+          "summary": "PCW July 4, p. 4 reports urgent talks with the BBC, manufacturers, Close Brothers and Olivetti toward a second rescue package that year. No completed rescue asserted.",
+          "confidence": "same-week",
+          "sourceRefs": [
+            2
+          ]
+        },
+        {
+          "headline": "Sinclair takeover uncertainty",
+          "summary": "PCW July 4, p. 1 discusses Robert Maxwell's proposed takeover of Sinclair Research and clarification of Sir Clive's R&D role. Proposal only, not a consummated takeover.",
+          "confidence": "same-week",
+          "sourceRefs": [
+            2
+          ]
+        },
+        {
+          "headline": "Amiga announcement ahead",
+          "summary": "Popular Computing Weekly reports the U.S. Amiga unveiling is scheduled for July 23, moved from July 18.",
+          "confidence": "same-week",
+          "sourceRefs": [
+            2
+          ]
+        }
+      ],
+      "musicChart": [
+        {
+          "rank": 1,
+          "title": "If You Love Somebody Set Them Free",
+          "artist": "Sting",
+          "chart": "Billboard Top Rock Tracks (archive labels Mainstream Rock Airplay)",
+          "chartDate": "1985-07-06",
+          "confidence": "exact-date",
+          "song": "If You Love Somebody Set Them Free",
+          "sourceRefs": [
+            3
+          ]
+        },
+        {
+          "rank": 2,
+          "title": "Little By Little",
+          "artist": "Robert Plant",
+          "chart": "Billboard Top Rock Tracks (archive labels Mainstream Rock Airplay)",
+          "chartDate": "1985-07-06",
+          "confidence": "exact-date",
+          "song": "Little By Little",
+          "sourceRefs": [
+            3
+          ]
+        },
+        {
+          "rank": 3,
+          "title": "Sentimental Street",
+          "artist": "Night Ranger",
+          "chart": "Billboard Top Rock Tracks (archive labels Mainstream Rock Airplay)",
+          "chartDate": "1985-07-06",
+          "confidence": "exact-date",
+          "song": "Sentimental Street",
+          "sourceRefs": [
+            3
+          ]
+        },
+        {
+          "rank": 4,
+          "title": "The Power Of Love",
+          "artist": "Huey Lewis & The News",
+          "chart": "Billboard Top Rock Tracks (archive labels Mainstream Rock Airplay)",
+          "chartDate": "1985-07-06",
+          "confidence": "exact-date",
+          "song": "The Power Of Love",
+          "sourceRefs": [
+            3
+          ]
+        },
+        {
+          "rank": 5,
+          "title": "Cannonball",
+          "artist": "Supertramp",
+          "chart": "Billboard Top Rock Tracks (archive labels Mainstream Rock Airplay)",
+          "chartDate": "1985-07-06",
+          "confidence": "exact-date",
+          "song": "Cannonball",
+          "sourceRefs": [
+            3
+          ]
+        }
+      ],
+      "periodAd": {
+        "headline": "Bond on the home screen",
+        "summary": "Domark’s July 4 Popular Computing Weekly advertisement claims A View to a Kill availability for Spectrum 48K, Commodore 64 and Enterprise, with Amstrad and MSX versions to follow. These are advertisement claims, not an independently checked stock report.",
+        "tagline": "The licensed adventure visits the keyboard.",
+        "sourceRefs": [
+          2
+        ]
+      },
+      "market": {
+        "headline": "Summer competition meets the household budget",
+        "summary": "Atari’s planned $799 ST package and HomePak’s $49.95 review price illustrate competing bids for the home-computer budget. British reports of Acorn rescue talks and uncertainty over a proposed Sinclair takeover show the pressure on the other side of the counter.",
+        "confidence": "same-week",
+        "sourceRefs": [
+          0,
+          2
+        ]
+      },
+      "worldAnchor": {
+        "headline": "Freed TWA hostages reach West Germany",
+        "summary": "The July 1 Guardian reports that all 39 remaining hostages left Damascus for Frankfurt after their June 30 release. President Reagan welcomed their freedom while noting that seven other kidnapped Americans remained in Lebanon.",
+        "confidence": "same-week",
+        "sourceRefs": [
+          5
+        ]
+      },
+      "bbsNote": {
+        "headline": "Write first, connect later",
+        "summary": "Online time and long-distance calls make preparation worthwhile; HomeTerm brings a timer and an outgoing edit window to the home desk.",
+        "posts": [
+          {
+            "topic": "Mail before the meter starts",
+            "platform": "Commercial services and BBSs",
+            "text": "Levitan recommends composing mail offline to reduce connect-time and long-distance charges."
+          },
+          {
+            "topic": "Conference software",
+            "platform": "HomeTerm on Atari and Commodore",
+            "text": "The July review describes an outgoing edit window, online timer and XMODEM transfers."
+          },
+          {
+            "topic": "Expansion plans",
+            "platform": "Compunet",
+            "text": "Popular Computing Weekly reports plans to expand through the remainder of 1985 after early teething troubles."
+          }
+        ],
+        "sourceRefs": [
+          0,
+          2
+        ]
+      },
+      "curiosity": {
+        "headline": "A robot sings to the wastebasket",
+        "summary": "Fred D’Ignazio finds personality more compelling than household utility.",
+        "detail": "In July COMPUTE!, the columnist describes HEROjr reciting nonsense rhymes, mistaking pets for humans, ordering hamburgers from a bathroom sink and singing Old MacDonald Has a Robot to a wastepaper basket. These are his playful descriptions of robot behavior. The same page captions Tomy’s remote-controlled Omnibot 2000 at about $500.",
+        "sourceRefs": [
+          0
+        ]
+      },
+      "gadgetWatch": {
+        "headline": "Amstrad twin-cassette recorder draws legal dispute",
+        "summary": "The July 4 Popular Computing Weekly reports a legal dispute over Amstrad’s dual-cassette tape-copying machine.",
+        "confidence": "same-week",
+        "sourceRefs": [
+          2
+        ]
+      },
+      "sources": [
+        {
+          "title": "COMPUTE! issue 62, July 1985: complete issue OCR",
+          "url": "https://archive.org/download/1985-07-compute-magazine/Compute_Issue_062_1985_Jul_djvu.txt",
+          "date": "1985-07"
+        },
+        {
+          "title": "COMPUTE! July 1985 article index",
+          "url": "https://www.atarimagazines.com/compute/index/index.php?issue=issue62",
+          "date": "1985-07"
+        },
+        {
+          "title": "Popular Computing Weekly vol. 4 no. 27, museum contents and scan links",
+          "url": "https://www.computinghistory.org.uk/det/28798/Popular-Computing-Weekly-Vol-4-No-27-4-10-July-1985/",
+          "date": "1985-07-04"
+        },
+        {
+          "title": "Billboard Mainstream Rock Airplay, historical chart",
+          "url": "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1985-07-06/",
+          "date": "1985-07-06"
+        },
+        {
+          "title": "Domestic weekend box office July 5–7",
+          "url": "https://www.boxofficemojo.com/weekend/1985W27/",
+          "date": "1985-07-07"
+        },
+        {
+          "title": "Hostages are freed — Ian Black and Michael White, The Guardian",
+          "url": "https://www.theguardian.com/world/1985/jul/01/syria.ianblack",
+          "date": "1985-07-01"
+        }
+      ],
+      "accuracyLedger": {
+        "items": [
+          "Month-dated reviews are not exact-week releases. No milestone: the July 23 Amiga unveiling is outside this issue week.",
+          "PCW evidence is the museum's dated contents transcription and synopsis, not a full independently read scan; keep those items to documented details.",
+          "No verified named piracy crew, warez board or phreaking event established for this week/month; undergroundCandidates intentionally omitted. HomePak's absence of copy protection is a review fact, not evidence of piracy.",
+          "Quoted text is limited to a short reviewer assessment. OCR-uncertain prices are omitted. No actual historical BBS posts collected.",
+          "Movie rankings cover the closing July 5-7 weekend. Game selections are editorial, not a sales chart.",
+          "Hardware proposals and forthcoming products remain future tense. No unverified game price transcribed."
+        ]
+      }
+    },
+    {
+      "currentDate": "2026-11-06",
+      "historicDate": "1985-06-24",
+      "displayDate": "Week of June 24-30, 1985",
+      "edition": "Issue 152 - Weekly 1985 Computer & Culture Chronicle",
+      "sources": [
+        {
+          "title": "Computerworld, Vol. XIX No. 25; pp. 26 and 77",
+          "url": "https://archive.org/stream/computerworld1925unse/computerworld1925unse_djvu.txt",
+          "date": "1985-06-24"
+        },
+        {
+          "title": "COMPUTE!'s Gazette, issue 24; LCD update, Commodore interview and electronic-novel feature",
+          "url": "https://archive.org/stream/1985-06-computegazette/Compute_Gazette_Issue_24_1985_Jun_djvu.txt",
+          "date": "1985-06"
+        },
+        {
+          "title": "COMPUTE!, issue 61; Commodore 128 hands-on, SpeedScript and Okidata advertisement",
+          "url": "https://archive.org/stream/1985-06-compute-magazine/Compute_Issue_061_1985_Jun_djvu.txt",
+          "date": "1985-06"
+        },
+        {
+          "title": "Billboard Mainstream Rock Airplay archive; full HTML chart rows inspected, not generic page extraction",
+          "url": "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1985-06-29/",
+          "date": "1985-06-29"
+        },
+        {
+          "title": "Box Office Mojo domestic weekend 26",
+          "url": "https://www.boxofficemojo.com/weekend/1985W26/",
+          "date": "1985-06-28/1985-06-30"
+        },
+        {
+          "title": "HISTORY retrospective: TWA Flight 847 (June 30 release verified in body)",
+          "url": "https://www.history.com/this-day-in-history/june-14/twa-flight-847-is-hijacked-by-terrorists",
+          "date": "2009-11-13; updated 2025-05-27"
+        }
+      ],
+      "masthead": {
+        "title": "Computer Chronicle",
+        "subtitle": "Issue 152 - Weekly 1985 Computer & Culture Chronicle",
+        "dateline": "Week of June 24-30, 1985",
+        "price": "75 cents"
+      },
+      "visualProfile": {
+        "tone": "Apple retrenches while electronic novels flourish",
+        "motifs": [
+          "Macintosh and Apple II",
+          "hardback book and game disk",
+          "Commodore keyboard"
+        ],
+        "layout": "Dense warm newsprint, red and blue boxed modules"
+      },
+      "layoutPlan": {
+        "leadPlacement": "Apple restructuring is the strongest historical lead",
+        "secondaryRail": "Electronic novels, Commodore 128 and LCD portable",
+        "archiveNavigation": "Weekly archive and previous/next controls"
+      },
+      "sectionChrome": {
+        "primary": "brick red",
+        "secondary": "royal blue",
+        "texture": "aged newsprint, paper grain, fine column rules, slight ink bleed"
+      },
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1985-06-24.jpg",
+        "alt": "Computer Chronicle newspaper-style front page for June 24-30, 1985",
+        "caption": "Newspaper-style front page generated from structured Chronicle issue data.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "editorNote": "A week of retrenchment at Apple and literary ambition on the home computer.",
+      "morningLine": "Apple counts the cost; poets find a place on disk.",
+      "lead": {
+        "headline": "Apple cuts one-fifth of workforce as first quarterly loss looms",
+        "dek": "Three plants face closure as the personal-computer maker lowers its break-even point.",
+        "confidence": "same-week",
+        "sourceRefs": [
+          0
+        ],
+        "body": [
+          "Apple Computer is cutting 1,200 jobs and closing three of its six production plants, according to the June 24 Computerworld. The recently announced restructuring removes roughly one-fifth of the workforce as the company prepares for what it expects will be its first quarterly loss in eight years.",
+          "The closures cover Carrollton, Texas; Garden Grove, California; and Millstreet, Ireland, over the coming three months. Manufacturing accounts for 60 percent of the layoffs. Research and development is spared, although sales, marketing, finance and administration also face reductions.",
+          "President John Sculley says the measures should significantly reduce the company’s break-even point. Restructuring charges are expected to push the quarter ending June 30 into the red; an analyst estimate of a $15 million after-tax loss remains a forecast, not a published final result.",
+          "The cuts follow a reorganization combining Apple II and Macintosh production divisions and removing chairman Steven P. Jobs from operational control. Jobs has not resigned from Apple. With approximately 4,600 employees expected to remain, the company is seeking a leaner manufacturing and marketing structure without abandoning research."
+        ]
+      },
+      "stories": [
+        {
+          "headline": "Electronic novels recruit poets as well as science-fiction stars",
+          "body": [
+            "A poet and a science-fiction humorist are helping turn the adventure game into an electronic novel. June’s COMPUTE!'s Gazette profiles Robert Pinsky’s work with Synapse on Mindwheel alongside Douglas Adams and Steve Meretzky’s collaboration on The Hitchhiker’s Guide to the Galaxy. These are accounts of development and design, not announcements of releases this week.",
+            "Synapse sought writers who did not already know adventure-game conventions. Pinsky, head of Berkeley’s creative-writing program and poetry editor of The New Republic, worked with programmers credited in the magazine as William Mataga and Steve Hales. Mindwheel comes in a hardback book with a disk, and the printed material supplies information needed during play.",
+            "The attraction is language rather than another screen full of pictures. Synapse calls its system BTZ, Better Than ZORK, and pursues more vocabulary and richer parsing. That is a design ambition and a tradeoff against memory-hungry graphics, not proof that every text adventure outclasses every illustrated game.",
+            "Adams describes planning in Boston, electronic-mail exchanges from England, a London work session and more testing in Boston. The months-long partnership makes the modem as much a writer’s tool as a hobbyist’s accessory."
+          ],
+          "sourceRefs": [
+            1
+          ],
+          "confidence": "same-month"
+        },
+        {
+          "headline": "Commodore 128 promises three computing worlds in one box",
+          "body": [
+            "The Commodore 128 promises continuity as well as expansion. Tom R. Halfhill’s June COMPUTE! hands-on report describes a machine that can run existing C64 software, enter a native 128K environment with BASIC 7.0, or use a Z80-based CP/M mode aimed at business applications.",
+            "Native and CP/M modes offer 80-column text. RGB output and the faster 1571 disk drive give the buyer more to consider than memory alone, while compatibility with C64 peripherals protects part of an existing investment.",
+            "The report follows a mid-March visit and expected June store availability with intended retail below $300. Those are advance expectations, not a verified June 24 launch or a confirmed dealer transaction. Buyers should distinguish the promise of three computing worlds from the software and equipment actually on a dealer’s shelf."
+          ],
+          "sourceRefs": [
+            2
+          ],
+          "confidence": "same-month"
+        },
+        {
+          "headline": "Commodore LCD portable slips beyond September",
+          "body": [
+            "Commodore’s LCD portable is running later than expected. The June Gazette reports that the prototype shown at January’s Consumer Electronics Show is now expected sometime after September, rather than midsummer. Marketing vice president Frank Leonardi denies that the project has been shelved.",
+            "The proposed five-and-a-half-pound machine combines an 80-by-16-character display, 32K RAM and 96K ROM with eight built-in applications: word processor, file manager, spreadsheet, address book, scheduler, calculator, memo pad and terminal emulator.",
+            "A built-in 300-baud modem and support for Commodore serial peripherals, including 1541 and 1571 drives, make it more than a pocket notebook. The reported $600 price and timetable remain plans for a prototype, not evidence of a shipping product."
+          ],
+          "sourceRefs": [
+            1
+          ],
+          "confidence": "same-month"
+        }
+      ],
+      "computerItems": [
+        {
+          "title": "Commodore 128",
+          "summary": "128K native mode, C64 compatibility, CP/M and 80-column text; advance hands-on coverage.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            2
+          ]
+        },
+        {
+          "title": "Commodore LCD prototype",
+          "summary": "Delayed portable, proposed $600, 80x16 LCD and built-in applications; not a shipping recommendation.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            1
+          ]
+        },
+        {
+          "title": "Okimate 10 and 20",
+          "summary": "Okidata June COMPUTE! advertisement: Okimate 10 for Atari/Commodore, nine-element head and over 36 colors; Okimate 20 advertised with 24-element head and over 100 colors. Interface/Plug N Print packages may cost extra.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            2
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "Apple SpeedScript 3.0",
+          "detail": "June COMPUTE! contents list a machine-language word processor and ready-to-run/type-in program. Treat as magazine publication, not commercial boxed release.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            2
+          ]
+        },
+        {
+          "name": "Accessible C64 telecommunications",
+          "detail": "Gazette reader-service column describes Smart 64 Terminal from Microtechnic Solutions used with Genesis COMVoice speech synthesis for blind users.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            1
+          ]
+        }
+      ],
+      "storeShelves": [
+        {
+          "label": "Computer Games — four verified editorial selections, not sales rankings",
+          "items": [
+            "Mindwheel — Synapse electronic novel profiled in June.",
+            "The Hitchhiker’s Guide to the Galaxy — Infocom collaboration profiled in June.",
+            "Questron — SSI C64 edition advertised at $39.95.",
+            "Gemstone Warrior — SSI Apple II/C64 editions advertised at $34.95."
+          ],
+          "confidence": "same-month",
+          "sourceRefs": [
+            1
+          ]
+        },
+        {
+          "label": "Top 5 Movies — June 28-30 domestic weekend",
+          "items": [
+            "1. Pale Rider",
+            "2. Cocoon",
+            "3. Rambo: First Blood Part II",
+            "4. St. Elmo's Fire",
+            "5. The Goonies"
+          ],
+          "confidence": "same-week",
+          "sourceRefs": [
+            4
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "Questron, Commodore 64",
+          "price": "$39.95",
+          "note": "June SSI advertisement; direct orders add $2 shipping and handling.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            1
+          ]
+        },
+        {
+          "item": "Gemstone Warrior, Apple II / C64",
+          "price": "$34.95",
+          "note": "June SSI advertisement.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            1
+          ]
+        },
+        {
+          "item": "Commodore 128 advance estimate",
+          "price": "Under $300 expected",
+          "note": "Advance report, not confirmed street price.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            2
+          ]
+        },
+        {
+          "item": "VICmodem",
+          "price": "About $30",
+          "note": "Interview retail band, not a universal dealer quote.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            1
+          ]
+        }
+      ],
+      "briefs": [
+        {
+          "headline": "R&D spared at Apple",
+          "summary": "June 24 Computerworld distinguishes protected research work from cuts across manufacturing, sales, marketing, finance and administration.",
+          "confidence": "same-week",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "headline": "Mail crosses the Atlantic to build a game",
+          "summary": "Adams says he and Meretzky exchanged ideas and text by electronic mail between in-person work sessions.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            1
+          ]
+        }
+      ],
+      "musicChart": [
+        {
+          "chart": "Billboard Top Rock Tracks (modern archive label: Mainstream Rock Airplay)",
+          "chartDate": "1985-06-29",
+          "rank": 1,
+          "title": "If You Love Somebody Set Them Free",
+          "artist": "Sting",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            3
+          ],
+          "song": "If You Love Somebody Set Them Free"
+        },
+        {
+          "chart": "Billboard Top Rock Tracks (modern archive label: Mainstream Rock Airplay)",
+          "chartDate": "1985-06-29",
+          "rank": 2,
+          "title": "Little By Little",
+          "artist": "Robert Plant",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            3
+          ],
+          "song": "Little By Little"
+        },
+        {
+          "chart": "Billboard Top Rock Tracks (modern archive label: Mainstream Rock Airplay)",
+          "chartDate": "1985-06-29",
+          "rank": 3,
+          "title": "Tough All Over",
+          "artist": "John Cafferty & The Beaver Brown Band",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            3
+          ],
+          "song": "Tough All Over"
+        },
+        {
+          "chart": "Billboard Top Rock Tracks (modern archive label: Mainstream Rock Airplay)",
+          "chartDate": "1985-06-29",
+          "rank": 4,
+          "title": "Sentimental Street",
+          "artist": "Night Ranger",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            3
+          ],
+          "song": "Sentimental Street"
+        },
+        {
+          "chart": "Billboard Top Rock Tracks (modern archive label: Mainstream Rock Airplay)",
+          "chartDate": "1985-06-29",
+          "rank": 5,
+          "title": "Cannonball",
+          "artist": "Supertramp",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            3
+          ],
+          "song": "Cannonball"
+        }
+      ],
+      "periodAd": {
+        "headline": "Adventure by the disk",
+        "summary": "SSI advertises Questron for C64 at $39.95 and Gemstone Warrior for Apple II and C64 at $34.95. Direct orders add $2 shipping and handling.",
+        "tagline": "June catalogue prices, not new-release dates.",
+        "sourceRefs": [
+          1
+        ]
+      },
+      "market": {
+        "headline": "Lower break-even points, lower entry prices",
+        "summary": "Apple’s restructuring puts manufacturing costs in focus. Commodore’s advance under-$300 C128 estimate and interview reports of inexpensive modems point toward price-sensitive home buyers; neither forecasts nor eventual targets are confirmed retail offers.",
+        "confidence": "same-week",
+        "sourceRefs": [
+          0,
+          1,
+          2
+        ]
+      },
+      "worldAnchor": {
+        "headline": "TWA hostages freed June 30",
+        "summary": "Remaining hostages from the June 14 hijacking were released June 30 after negotiations; Navy diver Robert Stethem had been killed earlier in the ordeal. Use only developments through June 30; omit later arrests and trials from period copy.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          5
+        ]
+      },
+      "bbsNote": {
+        "headline": "Commodore bets on cheaper modems and everyday online use",
+        "summary": "June Gazette interview connects hardware price reductions to online services and education. Claims about future products remain forecasts.",
+        "posts": [
+          {
+            "topic": "Hardware watch",
+            "platform": "Commodore modem users",
+            "text": "Reported retail bands are about $30 for VICmodem and high $40s for the 1650. Goheen forecasts a later 300/1200-baud 1670 and an eventual sub-$100 target, not an immediate confirmed price."
+          },
+          {
+            "topic": "Service desk",
+            "platform": "CompuServe / Dow Jones / The Source / Delphi / Playnet / TeleLearning",
+            "text": "Goheen lists service relationships and snap packs and discusses aligning specialized learning databases with major services. This is interview reporting, not an announcement that all services have merged."
+          },
+          {
+            "topic": "Accessibility",
+            "platform": "CompuServe",
+            "text": "Gazette highlights its Handicapped User's Database, containing organization contacts, commercial-product information and user articles. Smart 64 Terminal plus COMVoice is cited for blind access."
+          }
+        ],
+        "sourceRefs": [
+          1
+        ]
+      },
+      "curiosity": {
+        "headline": "A computer game arrives dressed as a hardback book",
+        "summary": "Synapse sells an electronic novel whose physical book is part of play.",
+        "detail": "June Gazette describes Mindwheel as a hardback book with a disk in the back; players need information from the book. Poet Robert Pinsky collaborated with programmers rather than merely licensing his name. Do not call this packaging newly invented or released during June 24–30.",
+        "sourceRefs": [
+          1
+        ]
+      },
+      "undergroundDesk": {
+        "headline": "Computer-trespass sentence tests new federal law",
+        "dek": "Probation, a fine and equipment forfeiture follow unauthorized Forest Service access.",
+        "body": [
+          "Computerworld’s June 24 report describes the June 14 sentencing of Philip Gonzalez Fadriquela, 26, of Los Angeles, after a May guilty plea to unauthorized access to Forest Service computers in Colorado. The sentence includes three years probation, a $3,000 fine, 200 hours of community service, equipment forfeiture and an explanatory statement to the agency.",
+          "Prosecutor Cathy Goodwin presents the case as evidence that convictions can be obtained under the 1984 Computer Fraud and Abuse Act. Defense lawyer Robert Booms challenges the law’s breadth and says his client did not use stored information. The report mentions hacker bulletin boards but names no board, crew or handle."
+        ],
+        "groups": [],
+        "sourceRefs": [
+          0
+        ],
+        "confidence": "same-week"
+      },
+      "accuracyLedger": {
+        "items": [
+          "Week ends June 30; June 28–30 movie receipts are end-of-week context, not information available at the opening of June 24.",
+          "Same-month features are explicitly background, not invented day-specific launches. Quotes normalized only for OCR spacing and line breaks.",
+          "No milestone: the Apple story is follow-up reporting on previously announced restructuring, not a newly dated era-defining launch. No gadget field: no verified breaking noncomputer consumer-electronics story established.",
+          "Billboard rankings were read from full HTML chart rows; Tunecaster is a different chart and must not be substituted. Modern Billboard measurement boilerplate is not evidence of 1985 methodology.",
+          "Discarded September Antic retrospective for current-week claims, and avoided unverified final C128 pricing and prototype CPU claims.",
+          "Four distinct game titles verified; no fifth game or sales ranking invented.",
+          "Apple loss and Commodore prices/timetables are forecasts."
+        ]
+      }
+    },
+    {
       "sectionChrome": {
         "primary": "brick red",
         "secondary": "royal blue",
