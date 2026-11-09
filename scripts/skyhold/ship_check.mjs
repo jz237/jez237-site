@@ -1,9 +1,9 @@
 // Gunships: the demo autopilot flies each gunship through a world (waves and carrier) for several seeds. Every ship
 // must be able to clear it, and no ship should be far stronger than the rest.
 //   node scripts/skyhold/ship_check.mjs [runs=8] [world=3]
-import { makeWorld, step, drainEvents, STEP } from '../../games/2026-11-09/skyhold/js/sim.js?v=9';
-import { Autopilot } from '../../games/2026-11-09/skyhold/js/ai.js?v=9';
-import { TYPICAL_UP, SHIP_KEYS } from '../../games/2026-11-09/skyhold/js/config.js?v=9';
+import { makeWorld, step, drainEvents, STEP } from '../../games/2026-11-09/skyhold/js/sim.js?v=10';
+import { Autopilot } from '../../games/2026-11-09/skyhold/js/ai.js?v=10';
+import { TYPICAL_UP, SHIP_KEYS } from '../../games/2026-11-09/skyhold/js/config.js?v=10';
 const runs = +(process.argv[2] || 8), s = +(process.argv[3] || 3) - 1;
 let fail = 0;
 for (const ship of SHIP_KEYS) {

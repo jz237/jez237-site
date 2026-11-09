@@ -1,13 +1,13 @@
 // Skyhold 2026 — game flow, menus, HUD (with the scanner strip), commentary, demo director and the frame loop.
-import { VERSION, SECTORS, STEP, F, C, H, BOSSES, UPGRADES, UP_KEYS, UP_COST, MEDALS, parTime, TYPICAL_UP, START_LIVES, DIFFICULTY, POWERUPS, LIVERIES, CP_NAMES, WAVES, ENEMY, SHIPS, SHIP_KEYS, RIVALS } from './config.js?v=9';
-import { makeWorld, step, stepGuest, drainEvents, wd, wp, settlersLeft, nodePos, CHAIN_T, chainMult, beamRange } from './sim.js?v=9';
-import { Autopilot } from './ai.js?v=9';
-import { Renderer, pickQuality, CALM, LOOKS } from './render.js?v=9';
-import { Audio } from './audio.js?v=9';
-import { Input } from './input.js?v=9';
-import { Scores, NO_POST } from './scores.js?v=9';
-import { Recorder, Replay } from './replay.js?v=9';
-import { Online, ROOM, QUICK, QUICK_R, randomCode, cleanCode } from './online.js?v=9';
+import { VERSION, SECTORS, STEP, F, C, H, BOSSES, UPGRADES, UP_KEYS, UP_COST, MEDALS, parTime, TYPICAL_UP, START_LIVES, DIFFICULTY, POWERUPS, LIVERIES, CP_NAMES, WAVES, ENEMY, SHIPS, SHIP_KEYS, RIVALS } from './config.js?v=10';
+import { makeWorld, step, stepGuest, drainEvents, wd, wp, settlersLeft, nodePos, CHAIN_T, chainMult, beamRange } from './sim.js?v=10';
+import { Autopilot } from './ai.js?v=10';
+import { Renderer, pickQuality, CALM, LOOKS } from './render.js?v=10';
+import { Audio } from './audio.js?v=10';
+import { Input } from './input.js?v=10';
+import { Scores, NO_POST } from './scores.js?v=10';
+import { Recorder, Replay } from './replay.js?v=10';
+import { Online, ROOM, QUICK, QUICK_R, randomCode, cleanCode } from './online.js?v=10';
 
 const $ = (id) => document.getElementById(id);
 const params = new URLSearchParams(location.search);
@@ -17,7 +17,7 @@ const clamp = (v, a, b) => (v < a ? a : v > b ? b : v);
 const SKEY = 'sh.settings.v1';
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const touchFirst = matchMedia('(pointer:coarse)').matches;
-const settings = { music: 50, sfx: 90, voice: 100, talk: 'on', flash: reduceMotion ? 'reduced' : 'full', shake: '1', rumble: 'on', touch: 'auto', quality: 'auto', netRoute: '0', diff: 'normal', livery: 'sky', assist: touchFirst ? 'light' : 'off', scanner: 'on', retro: 'on', autofire: 'auto', ship: 'warden', netMode: 'coop' };
+const settings = { music: 50, sfx: 90, voice: 100, talk: 'on', flash: reduceMotion ? 'reduced' : 'full', shake: '1', rumble: 'on', touch: 'auto', quality: 'auto', netRoute: '0', diff: 'normal', livery: 'sky', assist: touchFirst ? 'light' : 'off', scanner: 'on', retro: 'on', cab: 'on', autofire: 'auto', ship: 'warden', netMode: 'coop' };
 try { Object.assign(settings, JSON.parse(localStorage.getItem(SKEY) || '{}')); } catch { /* defaults */ }
 const saveSettings = () => { try { localStorage.setItem(SKEY, JSON.stringify(settings)); } catch { /* private mode */ } };
 const load = (k, d) => { try { const v = JSON.parse(localStorage.getItem(k)); return v ?? d; } catch { return d; } };
@@ -204,7 +204,8 @@ function enterPlay(W) {
   R.cx = me.x;
   R.updateCamera(0.016, { snap: true, me });
   A.playMusic(SECTORS[W.k].music);
-  A.loop('thrust', 'thrust', 0.85); A.loop('lift', 'liftloop', 0.6); A.loop('boss', 'bossloop', 0.7);
+  A.loop('thrust', 'thrust', 0.85); A.loop('lift', 'liftloop', 0.6); A.loop('boss', 'bossloop', 0.7); A.loop('cabthrust', 'cab_thrust', 0.8, 'cab');
+  if (G.mode !== 'demo') A.cab('start');
   buildStrip(W);
   G.idleT = 0;
 }
@@ -359,6 +360,8 @@ const TUT = {
 function tutorial(key) { if (G.mode === 'demo' || G.mode === 'playthrough' || !TUT[key]) return; const el = $('tut'); el.innerHTML = TUT[key](); el.classList.remove('hidden'); G.tutT = 8; }
 
 // ------------------------------------------------------------------ events from the simulation
+// the cabinet sound for each machine's wreck (Options: CABINET SOUNDS) and its pitch
+const CABK = { husk: 'mutant', sower: 'bomber', hive: 'pod', stinger: 'swarmer' }, CABR = { prowler: 0.8, skimmer: 1.25, meteor: 0.7, mine: 1.4 };
 const SCOL = { lifter: 0x9dff7a, husk: 0xff4a8a, sower: 0xc98aff, hive: 0xff8a3a, stinger: 0xff6a6a, prowler: 0xff3a3a, skimmer: 0x5ef0ff, meteor: 0xffa040, mine: 0xffb347 };
 function handleEvents(list, W, live) {
   const me = myPlayer(W);
@@ -369,14 +372,17 @@ function handleEvents(list, W, live) {
   // your own ship's sounds play close to the listener (full volume, still panned); everything else sits in the world
   const snd = (name, e, o = {}) => { let p = P(e.x, e.y); if (mine(e)) p = nearMe(p); return A.play(name, { x: p.x, y: p.y, z: p.z, ...o }); };
   const pan = (x) => clamp(wd(x - R.cx) / 50, -1, 1);
+  const cab = (name, e, o = {}) => A.cab(name, { pan: e ? pan(e.x) : 0, ...o });
+  const seen = (e) => Math.abs(wd(e.x - R.cx)) < 70;
   for (const e of list) {
     switch (e.k) {
       case 'fire': {
         if (e.drone) { snd('beam', e, { vol: 0.16, rate: 1.4, gap: 0.08 }); A.retro('beam', { vol: 0.2, rate: 1.5 }); break; }
-        if (e.ship === 'hornet') { snd('bolt', e, { vol: mine(e) ? 0.45 : 0.25, rate: 1.5, gap: 0.06, vary: 0.15 }); A.retro('beam', { vol: 0.25, rate: 0.7, pan: pan(e.x) }); break; }
-        if (e.ship === 'breaker') { snd('boomS', e, { vol: mine(e) ? 0.55 : 0.3, rate: 1.4, gap: 0.08 }); snd('beam', e, { vol: mine(e) ? 0.4 : 0.2, rate: 0.6, gap: 0.05 }); A.retro('beam', { vol: 0.45, rate: 0.55, pan: pan(e.x) }); R.addTrauma(mine(e) ? 0.08 * S : 0); break; }
+        if (e.ship === 'hornet') { snd('bolt', e, { vol: mine(e) ? 0.45 : 0.25, rate: 1.5, gap: 0.06, vary: 0.15 }); A.retro('beam', { vol: 0.25, rate: 0.7, pan: pan(e.x) }); if (mine(e)) cab('fire', e, { rate: 1.3, gap: 0.08, vol: 0.5 }); break; }
+        if (e.ship === 'breaker') { snd('boomS', e, { vol: mine(e) ? 0.55 : 0.3, rate: 1.4, gap: 0.08 }); snd('beam', e, { vol: mine(e) ? 0.4 : 0.2, rate: 0.6, gap: 0.05 }); A.retro('beam', { vol: 0.45, rate: 0.55, pan: pan(e.x) }); if (mine(e)) cab('fire', e, { rate: 0.7, vol: 0.6 }); R.addTrauma(mine(e) ? 0.08 * S : 0); break; }
         snd('beam', e, { vol: mine(e) ? 0.42 : 0.2, gap: 0.05, vary: 0.08 });
         A.retro('beam', { vol: mine(e) ? 0.55 : 0.3, pan: pan(e.x) });
+        if (mine(e)) cab('fire', e, { gap: 0.06, vol: 0.55 });
         const p = P(e.x, e.y), v = R.vel(e.x, e.dir * 14, 0);
         fx.sparks(p.x, p.y, p.z, { n: 3, speed: 3, s: 0.35, life: 0.08, vx: v.x, vy: v.y, r: 1, g: 0.55, b: 0.4 });
         R.beamLight.position.copy(p); R.beamLight.intensity = 30;
@@ -395,6 +401,7 @@ function handleEvents(list, W, live) {
         const v = R.vel(e.x, e.vx || 0, e.vy || 0);
         R.breakEnemy(e.id, { vx: v.x * 0.4, vy: v.y * 0.4, power: big ? 1.3 : 0.9, max: big ? 6 : 4 });
         const p = P(e.x, e.y);
+        if (seen(e)) cab(CABK[e.type] || 'explosion', e, { rate: CABR[e.type] || 1 });
         if (e.type === 'mine') { snd('pop', e, { vol: 0.4, rate: 1.3 }); fx.explode(p.x, p.y, p.z, 0.6, { color: 0xffb070 }); break; }
         if (e.type === 'skimmer') {
           snd('pop', e, { vol: 0.5, rate: 1.25, gap: 0.04, vary: 0.25 }); A.retro('pop', { vol: 0.35, pan: pan(e.x) });
@@ -417,26 +424,26 @@ function handleEvents(list, W, live) {
         break;
       }
       case 'warpin': snd('warpin', e, { vol: e.type === 'prowler' ? 0.8 : 0.4, gap: 0.12 }); A.retro('warp', { vol: 0.25, pan: pan(e.x) }); break;
-      case 'grab': snd('grab', e, { vol: 0.8, gap: 0.2 }); A.retro('grab', { vol: 0.35, pan: pan(e.x) }); break;
+      case 'grab': snd('grab', e, { vol: 0.8, gap: 0.2 }); A.retro('grab', { vol: 0.35, pan: pan(e.x) }); cab('abduct', e); break;
       case 'lifted':
         snd('distress', e, { vol: 0.9, gap: 0.5 });
         if (live && G.mode !== 'demo') { if (!G.saidLift) { G.saidLift = true; say('lifted', { chance: 0.8 }); } caption('A SETTLER IS BEING LIFTED · SHOOT THE LIFTER', 2.6); }
         break;
       case 'fuse': {
         const p = P(e.x, e.y);
-        snd('fuse', e, { vol: 1, gap: 0.2 });
+        snd('fuse', e, { vol: 1, gap: 0.2 }); cab('mutant', e, { rate: 0.8 });
         fx.explode(p.x, p.y, p.z, 1.6, { color: 0xff4a8a, ringColor: 0xff4a8a });
         R.shock(e.x, e.y, 0.7);
         if (live && G.mode !== 'demo') caption('A SETTLER WAS TAKEN · THAT LIFTER IS NOW A HUSK', 3);
         break;
       }
-      case 'fall': snd('fall', e, { vol: 0.6, gap: 0.3 }); if (live && !e.safe && G.mode !== 'demo') popup('CATCH!', e.x, e.y, '#8dff8a', true); break;
-      case 'catch': { const p = P(e.x, e.y); snd('catch', e, { vol: 0.9, gap: 0 }); A.retro('catch', { vol: 0.5 }); fx.sparks(p.x, p.y, p.z, { n: 16, speed: 4, r: 0.5, g: 1, b: 0.6 }); if (live) { popup(`+${e.score} CAUGHT`, e.x, e.y, '#8dff8a', true); if (mine(e)) rumble(0.2, 0.4, 120); } break; }
-      case 'land': { const p = P(e.x, 0.3); snd('land', e, { vol: 0.9, gap: 0 }); A.retro('land', { vol: 0.5 }); fx.ring(p.x, p.y, p.z, 4, 0x8dff8a); fx.sparks(p.x, p.y, p.z, { n: 14, speed: 3, r: 0.5, g: 1, b: 0.6 }); R.cheer(e.id); if (live) popup(`+${e.score} SAFE`, e.x, 1, '#8dff8a', true); break; }
+      case 'fall': snd('fall', e, { vol: 0.6, gap: 0.3 }); if (!e.safe) cab('fall', e); if (live && !e.safe && G.mode !== 'demo') popup('CATCH!', e.x, e.y, '#8dff8a', true); break;
+      case 'catch': { const p = P(e.x, e.y); snd('catch', e, { vol: 0.9, gap: 0 }); A.retro('catch', { vol: 0.5 }); cab('catch', e); fx.sparks(p.x, p.y, p.z, { n: 16, speed: 4, r: 0.5, g: 1, b: 0.6 }); if (live) { popup(`+${e.score} CAUGHT`, e.x, e.y, '#8dff8a', true); if (mine(e)) rumble(0.2, 0.4, 120); } break; }
+      case 'land': { const p = P(e.x, 0.3); snd('land', e, { vol: 0.9, gap: 0 }); A.retro('land', { vol: 0.5 }); cab('delivery', e); fx.ring(p.x, p.y, p.z, 4, 0x8dff8a); fx.sparks(p.x, p.y, p.z, { n: 14, speed: 3, r: 0.5, g: 1, b: 0.6 }); R.cheer(e.id); if (live) popup(`+${e.score} SAFE`, e.x, 1, '#8dff8a', true); break; }
       case 'selfland': R.cheer(e.id); if (live && G.mode !== 'demo') popup('LANDED SAFELY', e.x, 1, '#c8ffc8'); break;
       case 'lost': { R.siteDamage(e.x); const p = P(e.x, Math.max(0.3, e.y)); snd('lost', e, { vol: 0.8, gap: 0.2 }); A.retro('lost', { vol: 0.4 }); fx.sparks(p.x, p.y, p.z, { n: 10, speed: 3, r: 1, g: 0.5, b: 0.4 }); if (live && e.why === 'fall' && G.mode !== 'demo') caption('A SETTLER FELL TOO FAR', 2.4); break; }
       case 'colonyfall':
-        A.play('colonyfall', { vol: 1, gap: 0 }); A.play('alarm', { vol: 0.7, delay: 0.4, gap: 0 });
+        A.play('colonyfall', { vol: 1, gap: 0 }); A.cab('planet'); A.play('alarm', { vol: 0.7, delay: 0.4, gap: 0 });
         R.flashScreen(0.3, 0xff3a2a); R.addTrauma(0.5 * S);
         if (live) { banner('THE COLONY HAS FALLEN', 'EVERY LIFTER LEFT IS NOW A HUSK', 3.4); say('colonyfall', { key: true, delay: 0.8 }); rumble(0.7, 0.7, 600); }
         break;
@@ -454,7 +461,7 @@ function handleEvents(list, W, live) {
       case 'death': {
         const v = R.vel(e.x, e.vx || 0, e.vy || 0);
         R.breakPlayer(e.pid, { power: 1.4, vx: v.x * 0.3, vy: v.y * 0.3 });
-        snd('death', e, { vol: 1, gap: 0 }); A.retro('death', { vol: 0.5 });
+        snd('death', e, { vol: 1, gap: 0 }); A.retro('death', { vol: 0.5 }); if (mine(e)) cab('death', e); else cab('explosion', e, { rate: 0.7 });
         const p = P(e.x, e.y); fx.explode(p.x, p.y, p.z, 2.6, { metal: true, color: 0x9fd8ff, vx: v.x * 0.3, vy: v.y * 0.3 });
         R.flashScreen(0.3, 0xffc890); R.addTrauma(0.7 * S); R.shock(e.x, e.y, 1);
         if (live) {
@@ -469,7 +476,7 @@ function handleEvents(list, W, live) {
       }
       case 'spawn': { snd('spawn', e, { vol: 0.8 }); const p = P(e.x, e.y); fx.ring(p.x, p.y, p.z, 6, 0x9fd8ff); R.shock(e.x, e.y, 0.6); fx.sparks(p.x, p.y, p.z, { n: 20, speed: 5, r: 0.5, g: 0.85, b: 1 }); break; }
       case 'nova': {
-        A.play('nova', { vol: 1, gap: 0 }); A.retro('nova', { vol: 0.5 });
+        A.play('nova', { vol: 1, gap: 0 }); A.retro('nova', { vol: 0.5 }); cab('bomb', e);
         const p = P(e.x, e.y);
         for (const r of [10, 22, 34]) fx.ring(p.x, p.y, p.z, r, 0xffd0a0);
         R.novaWave(e.x, e.y);
@@ -479,22 +486,22 @@ function handleEvents(list, W, live) {
         break;
       }
       case 'empty': if (live && mine(e)) { A.play('uiback', { vol: 0.6, gap: 0.3 }); popup('NO NOVAS LEFT', e.x, e.y, '#ff8a80'); } break;
-      case 'blink': { const p = P(e.x, e.y); snd('blink', e, { vol: 0.9, gap: 0 }); A.retro('blink', { vol: 0.45 }); fx.sparks(p.x, p.y, p.z, { n: 24, speed: 9, r: 0.6, g: 0.85, b: 1 }); fx.ring(p.x, p.y, p.z, 5, 0x8fd8ff); break; }
+      case 'blink': { const p = P(e.x, e.y); snd('blink', e, { vol: 0.9, gap: 0 }); A.retro('blink', { vol: 0.45 }); cab('hyperspace', e); fx.sparks(p.x, p.y, p.z, { n: 24, speed: 9, r: 0.6, g: 0.85, b: 1 }); fx.ring(p.x, p.y, p.z, 5, 0x8fd8ff); break; }
       case 'blinkin': { const p = P(e.x, e.y); A.play('blinkin', { vol: 0.8, delay: 0.05, gap: 0 }); fx.ring(p.x, p.y, p.z, 5, 0x8fd8ff); R.shock(e.x, e.y, 0.5); if (live && mine(e)) R.updateCamera(0.016, { snap: true, me: myPlayer(W) }); break; }
       case 'mine': snd('mine', e, { vol: 0.35, gap: 0.25 }); A.retro('mine', { vol: 0.15, pan: pan(e.x) }); break;
       case 'pop': { const p = P(e.x, e.y); fx.sparks(p.x, p.y, p.z, { n: 6, speed: 3, r: 1, g: 0.7, b: 0.4, life: 0.3 }); break; }
-      case 'hivepop': snd('hivepop', e, { vol: 0.9, gap: 0 }); snd('swarm', e, { vol: 0.7, delay: 0.2, gap: 0.5 }); A.retro('swarm', { vol: 0.3, pan: pan(e.x) }); if (live && G.mode !== 'demo') caption(`THE HIVE BURST · ${e.n} STINGERS`, 2); break;
+      case 'hivepop': snd('hivepop', e, { vol: 0.9, gap: 0 }); snd('swarm', e, { vol: 0.7, delay: 0.2, gap: 0.5 }); A.retro('swarm', { vol: 0.3, pan: pan(e.x) }); cab('pod', e); if (live && G.mode !== 'demo') caption(`THE HIVE BURST · ${e.n} STINGERS`, 2); break;
       case 'prowler': if (live) { A.play('prowler', { vol: 0.8, gap: 0 }); if (G.mode !== 'demo') caption('A PROWLER IS HUNTING YOU · FINISH THE WAVE', 2.6); } break;
       case 'drop': { const p = P(e.x, e.y); fx.ring(p.x, p.y, p.z, 2.5, POWERUPS[e.kind].color); fx.sparks(p.x, p.y, p.z, { n: 10, speed: 3, life: 0.6 }); break; }
       case 'pickup': {
         const Pw = POWERUPS[e.kind], p = P(e.x, e.y);
-        A.play('pickup', { vol: 0.9, gap: 0 });
+        A.play('pickup', { vol: 0.9, gap: 0 }); cab('credit', e);
         fx.ring(p.x, p.y, p.z, 3.5, Pw.color); fx.sparks(p.x, p.y, p.z, { n: 24, speed: 5, life: 0.7 }); fx.flash(p.x, p.y, p.z, 14, Pw.color, 0.3);
         if (live) { popup(Pw.name, e.x, e.y, '#' + Pw.color.toString(16).padStart(6, '0'), true); if (mine(e)) rumble(0.2, 0.4, 120); }
         break;
       }
       case 'pwend': if (live && mine(e)) A.play('pwend', { vol: 0.5, gap: 0.2 }); break;
-      case 'life': if (live) { A.play('life', { vol: 0.9, gap: 0 }); A.retro('life', { vol: 0.45 }); caption('+1 SHIP', 2.5); } break;
+      case 'life': if (live) { A.play('life', { vol: 0.9, gap: 0 }); A.retro('life', { vol: 0.45 }); A.cab('extra'); caption('+1 SHIP', 2.5); } break;
       case 'wave': if (live) { A.play('alarm', { vol: 0.35, gap: 0 }); banner(W.mode === 'endless' ? `WAVE ${e.n}` : `WAVE ${e.w + 1}`, W.mode === 'endless' ? SECTORS[W.k].name : `${SECTORS[W.sector].name} · ${W.R.lifters} LIFTERS`, 2.2); } break;
       case 'checkpoint': if (live) A.play('upgrade', { vol: 0.5, gap: 0 }); break;
       case 'waveclear': {
@@ -520,7 +527,7 @@ function handleEvents(list, W, live) {
       case 'nodehit': { const p = P(e.x, e.y); snd('bosshit', e, { vol: 0.7, gap: 0.05 }); R.bossKick(e, 0.6); fx.sparks(p.x, p.y, p.z, { n: 14, speed: 8, r: 1, g: 0.75, b: 0.45 }); break; }
       case 'nodebreak': {
         const p = P(e.x, e.y);
-        snd('nodebreak', e, { vol: 1, gap: 0 }); A.retro('boom', { vol: 0.5 });
+        snd('nodebreak', e, { vol: 1, gap: 0 }); A.retro('boom', { vol: 0.5 }); cab('bomber', e, { rate: 0.8 });
         fx.explode(p.x, p.y, p.z, 2.4, { metal: true, color: 0xffb070 });
         R.bossKick(e, 2.2); R.shock(e.x, e.y, 1.2); R.addTrauma(0.35 * S); R.flashScreen(0.12, 0xffd0a0);
         if (live) { popup(`+${e.score} WEAK POINT DOWN`, e.x, e.y, '#ffd08a', true); rumble(0.5, 0.5, 220); }
@@ -536,7 +543,7 @@ function handleEvents(list, W, live) {
       case 'cboom': { const p = P(e.x, e.y); snd('boomM', e, { vol: e.small ? 0.6 : 0.8, gap: 0.08 }); fx.explode(p.x, p.y, p.z, e.small ? 1.8 : 3, { metal: true }); R.addTrauma((e.small ? 0.12 : 0.25) * S); R.shock(e.x, e.y, 0.6); break; }
       case 'bossshed': {
         const p = P(e.x, e.y);
-        snd('boomL', e, { vol: 1, rate: 0.9, gap: 0 }); snd('bossroar', e, { vol: 1, rate: 0.75, delay: 0.3, gap: 0 }); A.retro('bigboom', { vol: 0.5 });
+        snd('boomL', e, { vol: 1, rate: 0.9, gap: 0 }); snd('bossroar', e, { vol: 1, rate: 0.75, delay: 0.3, gap: 0 }); A.retro('bigboom', { vol: 0.5 }); cab('bomb', e, { rate: 0.85 });
         for (let k = 0; k < 5; k++) fx.explode(p.x + (Math.random() - 0.5) * 16, p.y + (Math.random() - 0.5) * 5, p.z, 3.2, { metal: true, color: 0xffb070 });
         fx.debris(p.x, p.y, p.z, { metal: true, n: 40, speed: 14, size: 0.8, trail: true });
         fx.ring(p.x, p.y, p.z, 26, 0xffa060);
@@ -549,7 +556,7 @@ function handleEvents(list, W, live) {
         if (live) caption('THE CORE IS EXPOSED · HIT THE GLOWING HEART AND VENTS', 3);
         break;
       case 'hyper':
-        A.play('upgrade', { vol: 1, gap: 0 }); A.play('nova', { vol: 0.5, rate: 1.4, gap: 0 }); A.retro('life', { vol: 0.5 });
+        A.play('upgrade', { vol: 1, gap: 0 }); A.play('nova', { vol: 0.5, rate: 1.4, gap: 0 }); A.retro('life', { vol: 0.5 }); cab('extra', e, { rate: 1.25 });
         R.flashScreen(0.35, 0xffffff); R.shock(e.x, e.y, 1.6); R.addTrauma(0.3 * S);
         if (live && mine(e)) { banner('HYPER', 'EVERYTHING ELSE SLOWS · RAM THEM · DOUBLE POINTS', 1.8); rumble(0.6, 0.6, 400); }
         break;
@@ -562,12 +569,12 @@ function handleEvents(list, W, live) {
         if (live && T) banner(T[0], T[1], 2.6);
         break;
       }
-      case 'impact': { const p = P(e.x, 0.4); snd('boomM', e, { vol: 0.8, gap: 0.05 }); fx.explode(p.x, p.y, p.z, 2.2, { rock: true, color: e.lava ? 0xff7a30 : 0xffa060 }); R.shock(e.x, 0.4, 0.7); R.addTrauma(0.18 * S); break; }
+      case 'impact': { const p = P(e.x, 0.4); snd('boomM', e, { vol: 0.8, gap: 0.05 }); if (seen(e)) cab('explosion', e, { rate: 0.6 }); fx.explode(p.x, p.y, p.z, 2.2, { rock: true, color: e.lava ? 0xff7a30 : 0xffa060 }); R.shock(e.x, 0.4, 0.7); R.addTrauma(0.18 * S); break; }
       case 'vent': { const p = P(e.x, 0.6); fx.fire(p.x, p.y, p.z, { n: 10, s: 1.4, sp: 1.2, jit: 4, life: 0.8 }); snd('boomS', e, { vol: 0.5, rate: 0.7, gap: 0.1 }); break; }
       case 'bosskill': {
         const p = P(e.x, e.y);
         if (R.bossV) R.breakView(R.bossV, { power: 2.2, max: 12 });
-        snd('boomL', e, { vol: 1, rate: 0.8, gap: 0 }); A.retro('bigboom', { vol: 0.5 });
+        snd('boomL', e, { vol: 1, rate: 0.8, gap: 0 }); A.retro('bigboom', { vol: 0.5 }); cab('bomb', e, { rate: 0.7 });
         fx.explode(p.x, p.y, p.z, 6, { metal: true, color: 0xffb070 }); fx.explode(p.x + 4, p.y - 1, p.z, 4, { metal: true }); fx.debris(p.x, p.y, p.z, { metal: true, n: 30, speed: 12, size: 0.6, trail: true });
         fx.ring(p.x, p.y, p.z, 30, 0xffd0a0); fx.ring(p.x, p.y, p.z, 60, 0xffffff);
         for (let k = 0; k < 26; k++) { const q = P(e.x + (Math.random() - 0.5) * 70, e.y + 6 + Math.random() * 14); fx.debris(q.x, q.y, q.z, { metal: true, n: 2, speed: 3, size: 0.5 + Math.random() * 0.6, trail: true }); }
@@ -638,7 +645,7 @@ function onWorldOver(W) {
     if (W.stats.lost === 0 && !G.run.contSector) award(`s${s}guard`);
     if (t <= parTime(s) && !G.run.contSector) award(`s${s}par`);
     store('sh.medals.v1', [...medals]);
-    if (got.length) A.play('medal', { vol: 0.9, delay: 0.6, gap: 0 });
+    if (got.length) { A.play('medal', { vol: 0.9, delay: 0.6, gap: 0 }); A.cab('credit'); }
     G.run.newMedals.push(...got);
     G.run.score = W.score; G.run.lives = W.lives + 1; G.run.contSector = false;
     G.run.salvage += Math.floor((W.score - G.run.score0) / 10);
@@ -834,9 +841,9 @@ window.__sh.online = { hostStart, startOnline };
 function act(a) {
   A.unlock();
   switch (a) {
-    case 'campaign': A.play('uiok', { gap: 0 }); startCampaign(0); break;
-    case 'deep': A.play('uiok', { gap: 0 }); startEndless(); break;
-    case 'playthrough': A.play('uiok', { gap: 0 }); startPlaythrough(); break;
+    case 'campaign': A.play('uiok', { gap: 0 }); A.cab('credit'); startCampaign(0); break;
+    case 'deep': A.play('uiok', { gap: 0 }); A.cab('credit'); startEndless(); break;
+    case 'playthrough': A.play('uiok', { gap: 0 }); A.cab('credit'); startPlaythrough(); break;
     case 'sectors': buildSectors(); show('sectors'); break;
     case 'online': show('online'); syncNetMode(); netStatus(''); $('room-wrap').classList.add('hidden'); $('net-go').classList.add('hidden'); syncSegs(); break;
     case 'scores': show('scores'); renderScores(G.scoreTab || 'campaign'); break;
@@ -892,7 +899,7 @@ function applySettings() {
   if ($('diff-desc')) $('diff-desc').textContent = DIFFICULTY[settings.diff].desc;
   if (G.state === 'title') $('title-best').textContent = `BEST ${Math.max(boardOf('campaign', settings.diff).best(), 0).toLocaleString()} · ${DL(settings.diff)}`;
   A.vol.music = settings.music / 100 * 0.8; A.vol.sfx = settings.sfx / 100; A.vol.voice = settings.voice / 100; A.applyVolumes();
-  A.setRetro(settings.retro !== 'off');
+  A.setRetro(settings.retro !== 'off'); A.setCab(settings.cab !== 'off');
   if (settings.talk === 'off') A.hush();
   applyCalm();
   if (G.state === 'play') { setHud(true); const me = G.W && myPlayer(G.W); if (me && G.mode !== 'demo' && G.mode !== 'playthrough') me.assist = assistOf(); }
@@ -1151,7 +1158,7 @@ function loops(W, menu) {
   const live = G.state === 'play' || G.state === 'replay' || G.state === 'paused-online';
   const me = myPlayer(W) || W.players[0];
   const at = (x, y) => R.at(x, y);
-  if (live && me) { const p = nearMe(at(me.x, me.y)), sp = Math.min(1, Math.abs(me.vx) / F.vmax); A.setLoop('thrust', p.x, p.y, p.z, me.alive ? 0.32 + (me.thrust || 0) * 0.55 + sp * 0.25 : 0, 0.78 + sp * 0.5 + (me.thrust || 0) * 0.08); }
+  if (live && me) { const p = nearMe(at(me.x, me.y)), sp = Math.min(1, Math.abs(me.vx) / F.vmax); A.setLoop('thrust', p.x, p.y, p.z, me.alive ? 0.32 + (me.thrust || 0) * 0.55 + sp * 0.25 : 0, 0.78 + sp * 0.5 + (me.thrust || 0) * 0.08); A.setLoop('cabthrust', p.x, p.y, p.z, me.alive && (me.thrust || 0) > 0.05 ? 1 : 0, 1); }
   let lf = null, ld = 1e9;
   for (const e of W.enemies) if (e.type === 'lifter' && e.hp > 0 && (e.st === 'grab' || e.st === 'lift')) { const d = Math.abs(wd(e.x - R.cx)); if (d < ld) { ld = d; lf = e; } }
   if (live) { const p = lf ? at(lf.x, lf.y) : at(R.cx, 10); A.setLoop('lift', p.x, p.y, p.z, lf && ld < 90 ? 0.8 : 0, 1); }
@@ -1188,7 +1195,7 @@ async function boot() {
   toTitle();
   boardOf('campaign', settings.diff).fresh(); boardOf('endless', settings.diff).fresh();
   if (!G.fixed && !params.has('test')) R.prepareAll(true);
-  if (params.has('test')) { const m = await import('./tests.js?v=9'); m.runTests(window.__sh); }
+  if (params.has('test')) { const m = await import('./tests.js?v=10'); m.runTests(window.__sh); }
   else if (params.has('playthrough')) { A.unlock(); startPlaythrough(); }
   else if (params.has('room')) { act('online'); $('join-code').value = cleanCode(params.get('room')); }
   else if (G.autopilot) { A.unlock(); if (params.has('endless')) startEndless(); else startCampaign(+params.get('sector') || 0); }

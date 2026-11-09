@@ -1,7 +1,8 @@
 # SKYHOLD 2026 audio
 
 `gen_audio.py` (in this folder) makes every sampled clip with ElevenLabs, and `process_audio.py` finishes them. All
-of it is our own audio: nothing imitates the arcade classic the genre comes from. The carriers (bosses) never speak.
+of it is our own audio: nothing imitates the arcade classic the genre comes from. The one exception is the separate,
+switchable cabinet layer described below, which plays that cabinet's own sound effects. The carriers (bosses) never speak.
 Their roar and drone are machines, with no voice. The settlers make no human sounds: their distress call is an
 electronic radio beacon, and the husk fusion is grinding metal.
 
@@ -10,6 +11,7 @@ Raw clips, candidate takes, `picks.json` and `manifest.json` (loop points, loudn
 `D:/Projects/.tmp/skyhold-work/audio-raw/`.
 
 A live-synthesised retro layer sits on top of the samples: `js/chip.js` (see the last section).
+The original arcade cabinet's sound effects sit on top as a third layer (see "Cabinet layer").
 
 ## Voice
 
@@ -238,3 +240,36 @@ python -I scripts/skyhold/gen_audio.py stt                                      
 python scripts/skyhold/process_audio.py games/2026-11-09/skyhold [names]        # plain python (numpy + scipy)
 python scripts/skyhold/process_audio.py stats games/2026-11-09/skyhold/audio    # spectral screen
 ```
+
+## Cabinet layer: `audio/cabinet/`
+
+Options → CABINET SOUNDS (on by default) plays the original 1980 arcade cabinet's sound effects alongside our own.
+The 18 WAVs and `manifest.json` (ROM hashes, how they were rendered, each file's sha256) are copied unchanged from
+the site's arcade cabinet exhibit, `demos/defender-exhibit/audio/`. They were rendered from the cabinet's sound ROM by
+emulating its 6800 sound CPU and DAC, so they are the cabinet's sounds, not re-creations.
+
+`Audio.cab(name, o)` in `js/audio.js` plays them through their own bus (`CAB_GAIN` 0.2: the square waves are about
+14 dB louder than our samples). Like the cabinet's sound board there is one channel: a new sound cuts off the one
+playing unless that one ranks higher (`CAB` in `js/audio.js`), in which case the new one is dropped. The cabinet
+thrust is a separate loop (`cabthrust`) heard only while you push.
+
+| Cabinet sound | Plays on |
+|---|---|
+| fire | your shots (pitched up for the Hornet, down for the Breaker) |
+| explosion | lifter, prowler, skimmer, meteor and mine wrecks near you; a partner's ship lost; meteor impacts |
+| mutant | husk wrecks; a lifter fusing into a husk |
+| bomber | sower wrecks; a carrier weak point destroyed |
+| pod | hive wrecks and hive bursts |
+| swarmer | stinger wrecks |
+| abduct | a lifter grabbing a settler |
+| fall | a settler falling from too high |
+| catch | catching a settler |
+| delivery | setting a settler down |
+| hyperspace | blink |
+| bomb | nova; a carrier shedding its armour and its final explosion |
+| death | your ship lost |
+| planet | the colony falling |
+| extra | +1 ship; HYPER |
+| credit | starting a game, power-ups, medals |
+| start | each world beginning |
+| thrust | while you push the stick |

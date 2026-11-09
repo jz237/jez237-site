@@ -1,10 +1,13 @@
-// Audio: every sample is an ElevenLabs render (made by scripts/skyhold/gen_audio.py + process_audio.py, see
+// Audio: every sample except the cabinet layer (below) is an ElevenLabs render (made by scripts/skyhold/gen_audio.py + process_audio.py, see
 // scripts/skyhold/AUDIO.md). Effects are positioned in 3D (Web Audio panners with the listener on the camera) so the
 // beam, the alien machines and the explosions sit where they happen; the gunship turbine, the lifters' tractor hum,
 // the carrier drone and the per-planet ambient beds are seamless loops (thrust, liftloop, bossloop, amb_<planet>).
+// A third layer, the CABINET SOUNDS (Options), plays the sound effects of the 1980 arcade cabinet this genre comes
+// from, rendered from its sound ROM (audio/cabinet/, copied from the site's arcade cabinet exhibit, see manifest.json
+// there). Like the cabinet's one-channel sound board, a cabinet sound cuts off the one before unless that one ranks higher.
 // The colony-command voice ducks the music and only one line plays at a time. Music loops with a crossfade; clear and
 // over are one-shot stings. (js/chip.js adds a live-synthesised retro layer on top.)
-import { Chip } from './chip.js?v=9';
+import { Chip } from './chip.js?v=10';
 
 const SFX = ['beam', 'beamhit', 'pop', 'boomS', 'boomM', 'boomL', 'debris', 'warpin', 'grab', 'distress', 'fuse', 'fall', 'catch', 'land', 'lost',
   'mine', 'minebeep', 'hivepop', 'swarm', 'prowler', 'bolt', 'tell', 'nova', 'blink', 'blinkin', 'shieldhit', 'death', 'spawn', 'pickup', 'pwend',
@@ -13,7 +16,11 @@ const SFX = ['beam', 'beamhit', 'pop', 'boomS', 'boomM', 'boomL', 'debris', 'war
 const VOICE = ['begin', 's2', 's3', 's4', 's5', 'boss', 'bossdown', 'clear', 'lastlife', 'gameover', 'newrecord', 'champion', 'colonyfall', 'saved',
   'endless', 'partner', 'replay', 'lifted'];
 const MUSIC = new Set(['title', 's1', 's2', 's3', 's4', 's5', 'boss', 'clear', 'over']);  // clear, over: stings
-const V = '?v=9';
+const V = '?v=10';
+// the cabinet layer: file names in audio/cabinet/ and how they rank (higher cuts off lower; lower waits, so is dropped)
+const CAB = { fire: 1, explosion: 2, swarmer: 2, mutant: 3, bomber: 3, pod: 3, abduct: 4, fall: 4, credit: 4, catch: 5, delivery: 5,
+  extra: 6, hyperspace: 6, bomb: 7, death: 8, planet: 9, start: 9, thrust: 0 };
+const CAB_GAIN = 0.2;   // the cabinet's square waves run about 14 dB hotter than our samples
 
 export class Audio {
   constructor(base) {
@@ -24,6 +31,7 @@ export class Audio {
     this.music = null; this.musicName = null;
     this.speaking = 0; this.voiceQ = []; this.lastPlay = new Map();
     this.rate = 1; this.loading = null; this.loops = new Map(); this.beds = new Map(); this.chip = null; this.retroOn = true; this.retroVol = 0.55;
+    this.cabOn = true; this.cabCh = null;
   }
 
   unlock() {
@@ -45,6 +53,7 @@ export class Audio {
     // the retro layer: crunchy synthesised blips of our own design on top of the samples (Options: RETRO SOUNDS)
     this.chipBus = ctx.createGain(); this.chipBus.gain.value = this.retroVol; this.chipBus.connect(this.sfxBus);
     this.chip = new Chip(ctx, this.chipBus);
+    this.cabBus = ctx.createGain(); this.cabBus.gain.value = this.cabOn ? CAB_GAIN : 0; this.cabBus.connect(this.sfxBus);
     this.applyVolumes();
     this.loading = this.loadAll();
   }
@@ -67,6 +76,7 @@ export class Audio {
     const jobs = [];
     for (const n of SFX) jobs.push([n, `${this.base}audio/${n}.mp3${V}`]);
     for (const n of VOICE) jobs.push(['v_' + n, `${this.base}voice/v_${n}.mp3${V}`]);
+    for (const n of Object.keys(CAB)) jobs.push(['cab_' + n, `${this.base}audio/cabinet/${n}.wav${V}`]);
     let i = 0;
     const worker = async () => { while (i < jobs.length) { const j = jobs[i++]; await this.load(j[0], j[1]); } };
     await Promise.all([worker(), worker(), worker(), worker(), worker(), worker()]);
@@ -106,17 +116,17 @@ export class Audio {
     let node = src.connect(g);
     let pan = null;
     if (o.x !== undefined) { pan = this.panner(o.x, o.y ?? 1, o.z ?? 0); node = node.connect(pan); }
-    node.connect(o.bus === 'voice' ? this.voiceBus : this.sfxBus);
+    node.connect(o.bus === 'voice' ? this.voiceBus : o.bus === 'cab' ? this.cabBus : this.sfxBus);
     if (o.loop) src.loop = true;
     src.start(now + (o.delay || 0));
     return { src, gain: g, pan };
   }
   // a positioned loop that can be moved and re-pitched every frame
-  loop(key, name, vol = 0.4) {
+  loop(key, name, vol = 0.4, bus) {
     if (!this.ctx) return null;
     let h = this.loops.get(key);
     if (h) return h;
-    h = this.play(name, { loop: true, vol: 0, vary: 0, gap: 0, x: 0, y: 0, z: 0 });
+    h = this.play(name, { loop: true, vol: 0, vary: 0, gap: 0, x: 0, y: 0, z: 0, bus });
     if (!h) return null;
     h.base = vol;
     this.loops.set(key, h);
@@ -221,6 +231,27 @@ export class Audio {
   // a retro blip (o: { vol, pan, rate }); x, the sim position, pans it left / right of the listener when given
   retro(name, o = {}) { if (!this.retroOn || !this.chip) return; try { this.chip.play(name, o); } catch { /* never let a blip break play */ } }
   setRetro(on) { this.retroOn = !!on; }
+  // a cabinet sound (o: { vol, pan -1..1, rate, gap }): one channel, ranked like the cabinet's sound board
+  cab(name, o = {}) {
+    if (!this.cabOn || !this.ctx) return;
+    const b = this.buf.get('cab_' + name);
+    if (!b) return;
+    const now = this.ctx.currentTime, pr = CAB[name] ?? 1, c = this.cabCh, busy = c && now < c.end;
+    if (busy && pr < c.pr) return;
+    if (c && c.name === name && now - c.t < (o.gap ?? 0.04)) return;
+    if (busy) { try { c.g.gain.setTargetAtTime(0, now, 0.003); c.src.stop(now + 0.02); } catch { /* ended */ } }
+    try {
+      const src = this.ctx.createBufferSource(); src.buffer = b;
+      const rate = (o.rate ?? 1) * this.rate; src.playbackRate.value = rate;
+      const g = this.ctx.createGain(); g.gain.value = o.vol ?? 1;
+      let node = src.connect(g);
+      if (o.pan && this.ctx.createStereoPanner) { const p = this.ctx.createStereoPanner(); p.pan.value = Math.max(-1, Math.min(1, o.pan * 0.6)); node = node.connect(p); }
+      node.connect(this.cabBus);
+      src.start(now);
+      this.cabCh = { name, pr, t: now, end: now + b.duration / rate, src, g };
+    } catch { /* never let a cabinet sound break play */ }
+  }
+  setCab(on) { this.cabOn = !!on; if (this.ctx) this.cabBus.gain.setTargetAtTime(on ? CAB_GAIN : 0, this.ctx.currentTime, 0.05); }
   // a non-positional ambient bed (planet ambience) whose level is driven every frame
   bed(key, name) {
     if (!this.ctx) return null;
