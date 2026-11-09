@@ -674,46 +674,78 @@ static float aa_open_turn(float yaw,float rise,vms_vector goal){
 }
 static float aa_rotation_control(float error,float rate,float limit,float feedforward,int axis){
     float smooth=EM_ASM_DOUBLE(return Math.max(0,Math.min(1,Module.comfort?.smooth||0)));
-    float acceleration=(axis==2?.09f:.22f+.12f*aa_reaction)*(1-.55f*smooth),dt=aa_clamp(f2fl(FrameTime),0,.1f);limit*=1-.25f*smooth;
+    float acceleration=(axis==2?.045f:.22f+.12f*aa_reaction)*(1-.55f*smooth),dt=aa_clamp(f2fl(FrameTime),0,.1f);limit*=1-.25f*smooth;
     float brake=sqrtf(2*acceleration*fabsf(error)/6.2831853f);
-    float wanted=copysignf(fminf(fabsf(error)*3.1f/6.2831853f,brake),error)+feedforward/6.2831853f;
+    float wanted=copysignf(fminf(fabsf(error)*3.1f/6.2831853f,brake),error)+(axis==2?0:feedforward)/6.2831853f;
     wanted=aa_clamp(wanted,-limit,limit);
     if(!aa_up_ready){aa_smooth_rate[axis]=rate;aa_smooth_acceleration[axis]=0;}
     float gap=wanted-aa_smooth_rate[axis],desired_acceleration=aa_clamp(gap/fmaxf(.12f,dt),-acceleration,acceleration);
-    float jerk=(axis==2?.65f:1.5f+.6f*aa_reaction)*(1-.4f*smooth);
+    float jerk=(axis==2?.25f:1.5f+.6f*aa_reaction)*(1-.4f*smooth);
     aa_smooth_acceleration[axis]+=aa_clamp(desired_acceleration-aa_smooth_acceleration[axis],-jerk*dt,jerk*dt);
     float step=aa_smooth_acceleration[axis]*dt;
     if(step*gap>=0&&fabsf(step)>fabsf(gap)){aa_smooth_rate[axis]=wanted;aa_smooth_acceleration[axis]=0;}
     else aa_smooth_rate[axis]+=step;
     wanted=aa_smooth_rate[axis];
+    /* Roll feed-forward cancels the roll induced by inclined yaw. Filtering
+     * that compensation as a new maneuver lets the cockpit tip before it acts. */
+    if(axis==2)wanted=aa_clamp(wanted+feedforward/6.2831853f,-.18f,.18f);
     physics_info *p=&ConsoleObject->mtype.phys_info;
     float drag=aa_clamp(f2fl(p->drag)*2.5f,.01f,.90f);
     float gain=64*(1-drag)*f2fl(Player_ship->max_rotthrust)/fmaxf(.01f,f2fl(p->mass));
     return aa_clamp((64*drag*wanted+(wanted-rate)*8)/fmaxf(.01f,gain),-1,1);
 }
+/* Keep one gravity-free orientation reference for the whole mine. Following
+ * each segment's nearest wall normal slowly ratchets the cockpit onto its side.
+ * Respawn may reset rate control, but must not redefine the mine's horizon. */
+static int aa_horizon_level=-999,aa_horizon_polar,aa_horizon_transitions;
+static vms_vector aa_horizon_up,aa_horizon_right;
+static float aa_horizon_projection=1,aa_bank_feed;
 static void aa_level_up(void){
+    object *ship=ConsoleObject;
+    if(aa_horizon_level!=Current_level_num){
+        aa_horizon_level=Current_level_num;aa_horizon_up=ship->orient.uvec;
+        vm_vec_normalize(&aa_horizon_up);aa_horizon_right=ship->orient.rvec;
+        aa_horizon_polar=0;aa_horizon_transitions=0;
+    }
+    aa_up=aa_horizon_up;
     if(!aa_up_ready){
-        aa_up=ConsoleObject->orient.uvec;aa_up_ready=1;aa_arc_active=0;
-        physics_info *p=&ConsoleObject->mtype.phys_info;
+        aa_up_ready=1;aa_arc_active=0;aa_horizon_polar=0;
+        physics_info *p=&ship->mtype.phys_info;
         aa_smooth_rate[0]=f2fl(p->rotvel.x);aa_smooth_rate[1]=f2fl(p->rotvel.y);aa_smooth_rate[2]=f2fl(p->rotvel.z);
         memset(aa_smooth_acceleration,0,sizeof aa_smooth_acceleration);
     }
-    /* Segment side numbers can rotate between rooms. Keep a remembered up
-     * reference and choose the nearest mine plane to it, never to a temporary
-     * bank caused by combat. This follows sloping corridors without flipping
-     * onto a new wall just because its authored side number is 'floor'. */
-    vms_vector desired=aa_up;fix best=-F1_0;
-    for(int i=0;i<6;i++){
-        side *plane=&Segments[ConsoleObject->segnum].sides[i];vms_vector normal=plane->normals[0];
-        if(get_num_faces(plane)==2)vm_vec_add2(&normal,&plane->normals[1]);
-        if(vm_vec_normalize(&normal)<F1_0/100)continue;
-        fix alignment=vm_vec_dot(&normal,&aa_up);
-        if(alignment>best){best=alignment;desired=normal;}
-    }
-    float t=aa_clamp(f2fl(FrameTime)*1.6f,0,.12f);
-    vms_vector next;vm_vec_copy_scale(&next,&aa_up,fl2f(1-t));vm_vec_scale_add2(&next,&desired,fl2f(t));
-    if(vm_vec_normalize(&next)>F1_0/100)aa_up=next;
 }
+static float aa_horizon_roll(void){
+    object *ship=ConsoleObject;
+    float ux=f2fl(vm_vec_dot(&aa_up,&ship->orient.rvec)),uy=f2fl(vm_vec_dot(&aa_up,&ship->orient.uvec));
+    float projection=sqrtf(ux*ux+uy*uy);aa_horizon_projection=projection;
+    if(!aa_horizon_polar&&projection<.36f){aa_horizon_polar=1;aa_horizon_transitions++;}
+    if(aa_horizon_polar&&projection>.62f){aa_horizon_polar=0;aa_horizon_transitions++;}
+    float roll;
+    if(aa_horizon_polar){
+        /* Parallel transport the last reliable right axis through a vertical
+         * climb. The tiny world-up projection there cannot choose a new bank. */
+        vms_vector right=aa_horizon_right;
+        vm_vec_scale_add2(&right,&ship->orient.fvec,-vm_vec_dot(&right,&ship->orient.fvec));
+        if(vm_vec_normalize(&right)<F1_0/10)right=ship->orient.rvec;
+        aa_horizon_right=right;
+        roll=atan2f(f2fl(vm_vec_dot(&right,&ship->orient.uvec)),f2fl(vm_vec_dot(&right,&ship->orient.rvec)));
+        aa_bank_feed=0;
+    }else{
+        vm_vec_cross(&aa_horizon_right,&aa_up,&ship->orient.fvec);vm_vec_normalize(&aa_horizon_right);
+        roll=atan2f(-ux,uy);
+        /* Yaw at an incline has a roll component relative to the remembered
+         * horizon. Anticipate it instead of letting a large bank accumulate. */
+        float rise=f2fl(vm_vec_dot(&aa_up,&ship->orient.fvec));
+        float pitch=f2fl(ship->mtype.phys_info.rotvel.x),yaw=f2fl(ship->mtype.phys_info.rotvel.y);
+        aa_bank_feed=aa_clamp(6.2831853f*rise*(yaw*uy+pitch*ux)/fmaxf(.1296f,projection*projection),-.85f,.85f);
+        aa_bank_feed*=aa_clamp((projection-.36f)/.26f,0,1);
+    }
+    aa_roll_error=roll*57.29578f;
+    /* Tolerate tiny banks. Damping still arrests residual spin inside this band. */
+    return copysignf(fmaxf(0,fabsf(roll)-.02618f),roll);
+}
+
 /* Sliding holds a heading, not an accidental nose-up attitude. Small vertical
  * offsets use translation; only real climbs/shafts tilt the cruise camera. */
 static void aa_cruise_direction(vms_vector *direction){
@@ -746,7 +778,21 @@ static float aa_aim(vms_vector target,int focus){
         }
     }
     float yaw=atan2f(x,z),pitch=-atan2f(y,sqrtf(x*x+z*z));
-    yaw=aa_open_turn(yaw,y,d);
+    float roll=aa_horizon_roll();
+    if(!aa_horizon_polar){
+        /* Turn around the mine's horizon, with elevation controlled separately.
+         * Local pitch-to-target otherwise loops over the pole when a target is
+         * behind and above, even if both bearings have the same elevation. */
+        vms_vector flat=ship->orient.fvec;
+        float rise=f2fl(vm_vec_dot(&aa_up,&flat));
+        vm_vec_scale_add2(&flat,&aa_up,-fl2f(rise));vm_vec_normalize(&flat);
+        float bearing=atan2f(f2fl(vm_vec_dot(&d,&aa_horizon_right)),f2fl(vm_vec_dot(&d,&flat)));
+        float elevation=asinf(aa_clamp(rise,-1,1))-asinf(aa_clamp(f2fl(vm_vec_dot(&d,&aa_up)),-.9986f,.9986f));
+        bearing=aa_open_turn(bearing,y,d);
+        float ux=f2fl(vm_vec_dot(&aa_up,&ship->orient.rvec)),uy=f2fl(vm_vec_dot(&aa_up,&ship->orient.uvec));
+        yaw=bearing*uy-elevation*ux/aa_horizon_projection;
+        pitch=bearing*ux+elevation*uy/aa_horizon_projection;
+    }else yaw=aa_open_turn(yaw,y,d);
     float dt=f2fl(FrameTime),limit=focus?.20f+.04f*aa_reaction:.16f,feed_yaw=0,feed_pitch=0;
     if(focus==1&&distance>4){
         vms_vector relative;vm_vec_sub(&relative,&aa_target_velocity,&ship->mtype.phys_info.velocity);
@@ -754,13 +800,20 @@ static float aa_aim(vms_vector target,int focus){
         feed_yaw=f2fl(vm_vec_dot(&relative,&ship->orient.rvec))*weight;
         feed_pitch=-f2fl(vm_vec_dot(&relative,&ship->orient.uvec))*weight;
     }
-    Controls.heading_time=fl2f(aa_rotation_control(yaw,f2fl(ship->mtype.phys_info.rotvel.y),limit,feed_yaw,1)*dt);
-    Controls.pitch_time=fl2f(aa_rotation_control(pitch,f2fl(ship->mtype.phys_info.rotvel.x),limit,feed_pitch,0)*dt);
+    float heading_limit=limit,pitch_limit=limit;
+    if(!aa_horizon_polar){
+        float rise=fabsf(f2fl(vm_vec_dot(&aa_up,&ship->orient.fvec)))/fmaxf(.1296f,aa_horizon_projection*aa_horizon_projection);
+        float yaw_coupling=rise*fabsf(f2fl(vm_vec_dot(&aa_up,&ship->orient.uvec)));
+        float pitch_coupling=rise*fabsf(f2fl(vm_vec_dot(&aa_up,&ship->orient.rvec)));
+        float budget=yaw_coupling>.2f&&pitch_coupling>.2f?.06f:.085f;
+        heading_limit=fminf(heading_limit,budget/fmaxf(.2f,yaw_coupling));
+        pitch_limit=fminf(pitch_limit,budget/fmaxf(.2f,pitch_coupling));
+        heading_limit*=1-.55f*aa_clamp((fabsf(aa_roll_error)-15)/45,0,1);
+    }
+    Controls.heading_time=fl2f(aa_rotation_control(yaw,f2fl(ship->mtype.phys_info.rotvel.y),heading_limit,feed_yaw,1)*dt);
+    Controls.pitch_time=fl2f(aa_rotation_control(pitch,f2fl(ship->mtype.phys_info.rotvel.x),pitch_limit,feed_pitch,0)*dt);
     aa_cruise_pitch=asinf(aa_clamp(f2fl(vm_vec_dot(&ship->orient.fvec,&aa_up)),-1,1))*57.29578f;
-    float ux=f2fl(vm_vec_dot(&aa_up,&ship->orient.rvec)),uy=f2fl(vm_vec_dot(&aa_up,&ship->orient.uvec));
-    float projected=sqrtf(ux*ux+uy*uy),roll=projected>.25f?atan2f(-ux,uy):0;
-    aa_roll_error=roll*57.29578f;
-    Controls.bank_time=fl2f(aa_rotation_control(roll,f2fl(ship->mtype.phys_info.rotvel.z),.060f,0,2)*dt);
+    Controls.bank_time=fl2f(aa_rotation_control(roll,f2fl(ship->mtype.phys_info.rotvel.z),aa_horizon_polar?.025f:.045f,aa_bank_feed,2)*dt);
     return alignment;
 }
 /* Survey openings independently of short position corrections. A stable
@@ -1709,10 +1762,12 @@ void astra_auto_frame(void){
         EM_ASM(Module.autoCombat=({attacker:$0,target:$1,retaliating:!!$2,retaliations:$3,cruise:52,arsenal:!!Module.demoArsenal});,aa_recent_attacker,enemy,enemy>=0&&aa_threat(enemy),aa_retaliations);
         EM_ASM(Module.autoSight=({version:21,visible:$0,targetVisible:!!$1,hiddenRoute:!!$2});,aa_sight_count,enemy>=0&&aa_can_see(enemy),aa_combat_object(aa_object)&&!aa_can_see(aa_object));
         EM_ASM(Module.autoView=({version:81,turning:!!$0,turnSide:$0,plans:$1,openTurns:$2,leftScore:$3,rightScore:$4,surveying:!!$5});,aa_arc_active,aa_arc_plans,aa_open_turns,aa_arc_left,aa_arc_right,surveying);
-        EM_ASM(Module.autoPilot=({version:82,aimError:$0,rollError:$1,watching:!!$2,watches:$3,switches:$4,held:$5,targetAge:$6,turnRate:$7});,
+        EM_ASM(Module.autoPilot=({version:83,aimError:$0,rollError:$1,watching:!!$2,watches:$3,switches:$4,held:$5,targetAge:$6,turnRate:$7});,
             aa_aim_error,aa_roll_error,watching,aa_watch_count,aa_switches,(double)(GameTime64-aa_weapon_changed)/F1_0,(double)(GameTime64-aa_target_since)/F1_0,f2fl(vm_vec_mag(&ConsoleObject->mtype.phys_info.rotvel))*360);
         EM_ASM(Module.autoSkill=({version:82,path:!!$0,pathPlans:$1,rounded:$2,speedLimit:$3,pathLength:$4,cover:$5,coverPlans:$6,peeks:$7,returns:$8,exits:$9,positionQuality:$10,positionChecks:$11,bursts:$12,fusionReleases:$13,fusionAborts:$14,trigger:!!$15});,
             aa_line_active,aa_line_builds,aa_line_rounds,aa_line_limit,aa_line_distance,aa_cover_phase,aa_cover_count,aa_cover_peeks,aa_cover_returns,aa_position_exits,aa_position_safety,aa_position_checks,aa_fire_bursts,aa_fusion_releases,aa_fusion_aborts,Controls.fire_primary_state);
+        EM_ASM(Module.autoHorizon=({version:83,polar:!!$0,projection:$1,roll:$2,rollRate:$3,feed:$4,transitions:$5,up:[$6,$7,$8]});,
+            aa_horizon_polar,aa_horizon_projection,aa_roll_error,f2fl(ConsoleObject->mtype.phys_info.rotvel.z)*360,aa_bank_feed,aa_horizon_transitions,f2fl(aa_up.x),f2fl(aa_up.y),f2fl(aa_up.z));
         EM_ASM(Module.autoLevel=({version:32,pitch:$0,cruising:!!$1,door:$2});,aa_cruise_pitch,!attacking&&!watching&&door<0&&flare_door<0,flare_door);
         EM_ASM(Module.autoSlide=({active:!!$0,count:$1,requested:$2,forward:$3});,aa_sliding,aa_slide_count,aa_drive_intent,travel_facing);
         EM_ASM(Module.autoLane=({reason:$0,blockedFor:$1});,aa_lane_reason,aa_lane_since?(double)(GameTime64-aa_lane_since)/F1_0:0);

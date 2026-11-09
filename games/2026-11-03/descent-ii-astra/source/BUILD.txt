@@ -1458,3 +1458,9 @@ R82 - planned demo flight and deliberate combat
 - Under fire, try a hull-clear shelter/peek pair, retreat briefly, slide back to its firing point, and hold a bounded volley. Changed geometry, stale contact or an immediate new threat cancels the maneuver. Hidden enemies cannot update the stored bearing or authorize shots.
 - Use engagement-relative cannon bursts, measured target-dependent Fusion charging, native weapon-switch cancellation of unsafe charges, and situation-dependent missiles. Native ammo, energy use, damage, charging and firing rates are unchanged.
 - Manual flight controls, renderer visibility, native barrel collision tests, projectile dodging, mission prerequisite planning, visuals and network/squad pilots remain unchanged. These changes apply only to the spectator pilot in all three campaigns.
+
+R83 - stable demo orientation
+- Preserve the initial mine horizon across rooms and respawns instead of repeatedly adopting adjacent wall normals.
+- Transport a remembered right axis through vertical flight, with entry/exit hysteresis to prevent undefined horizon flips.
+- Steer horizontal turns and elevation separately to avoid loops toward rear targets. Anticipate incline-induced bank, tolerate tiny banks, and soften roll acceleration and correction speed.
+- Native manual flight, target visibility, combat choices, route planning and graphics are unchanged.
