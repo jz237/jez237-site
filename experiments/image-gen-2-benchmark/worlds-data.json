@@ -4491,5 +4491,30 @@
       "continuity": "Chalk-white seasonal CO2 ice over charcoal basaltic fines; restrained lavender shadows and pale gold low spring sunlight from upper left. Crescent Scarp curves along upper right, three dark low basalt knobs called Three Teeth stand at mid-left, branching Basin Loom drains toward a central vent called Pin Eye. No liquid water, vegetation, animals, people, cities, machinery or lava.",
       "entryDescription": "Establish geography and evidence boundary with a sweeping polar atlas and integrated basal sublimation study."
     }
+  },
+  {
+    "id": "2026-11-09-weekly-world-rime-aperture-light-beneath-the-slab",
+    "title": "Rime Aperture: Light Beneath the Slab",
+    "tests": "Continuity follows established week 2026-W46 world bible and introductory beat. Mars analog sources and evidence retained in 2026-11-09T0020/world-evidence.json; no new factual claims or invented observations.; archive_slot=2026-11-09T03:20; concept=rime-aperture-sunlight-translucent-slab-basalt-grains; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; Story beat: 1/7",
+    "prompt": "Create a finished cinematic scientific-documentary macro landscape of RIME APERTURE: LIGHT BENEATH THE SLAB. Science-informed speculative world / artist’s impression. This is story beat 1 after the introductory polar atlas: early spring sunlight penetrates sealed seasonal carbon-dioxide ice and warms dark basaltic grains; no eruption yet. A low ground-level camera rests almost flush with an irregular natural edge of translucent CO2 slab, looking across the ice toward the distant established landmarks. Dominant foreground: extraordinarily tactile milky-clear ice with delicate internal laminae, tiny trapped dark dust grains, microfractures and frosted scalloped edges, over charcoal basaltic sand. A thin naturally exposed edge reveals intimate contact between ice and granular bed, not a floating shelf or a deep cavern. Low pale-gold sunlight enters from upper left and transmits through the slab in restrained warm streaks onto dark sediment, while the upper frosted surface is ivory and shadows lavender. Depict solid ice and grains, no liquid droplets, water, wet puddles or neon gas. Use physically credible transmission and scattering, subtle subsurface texture, realistic camera optics and broad environmental depth with the near edge exquisitely sharp and the distant landmarks softly readable. The surface remains mostly sealed; only an incipient hairline stress fracture is visible, no dust plume or open vent yet. Far upper-right Crescent Scarp arcs across the horizon; mid-left stand exactly three low charcoal basalt knobs called Three Teeth; Basin Loom is mostly concealed beneath the ice, its subtle branching dark traces converge toward the small sealed Pin Eye near center distance. Perspective must read as a close ground detail in the same polar basin, not a new landscape or an aerial atlas. Richly detailed, quiet, majestic environmental realism, no dramatic volcanic explosion, no biological spiders, creatures, humans, machinery, vegetation, buildings, Earth-blue sky, liquid CO2 rivers, lava or fantasy crystals. Spacious asymmetric wide composition. Integrate only discreet elegant open typography in a spare upper margin: “RIME APERTURE”, smaller “Light Beneath the Slab”, and “Science-informed speculative world / artist’s impression”. At the foreground edge add one fine unobtrusive leader to the dark grains labeled “Sunlight warms the dark substrate”. Tiny footer: “Hypothetical terrain • Mars-inspired sublimation model”. The physical scene dominates, not an infographic grid; no detached boxes, no poster mockup. Do not suggest this hypothetical world has been observed. The illumination is the subject: light reaching dark grains beneath solid ice, the first step of a sublimation-driven seasonal story.",
+    "image": "images/2026-11-09-weekly-world-rime-aperture-light-beneath-the-slab.jpg",
+    "thumb": "thumbs/2026-11-09-weekly-world-rime-aperture-light-beneath-the-slab.webp",
+    "color": "#907467",
+    "date": "2026-11-09",
+    "batch": "Daily Prompt",
+    "slot": "weekly-world",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1672x941",
+    "dedup": {
+      "conceptKey": "rime-aperture-sunlight-translucent-slab-basalt-grains",
+      "imageSha256": "288f64e8ec9e7bfda13e3b549673574107ff577d790aef54a71765928f3d6fbf",
+      "imageDHash": "fffeff797c1a84a6"
+    },
+    "world": {
+      "name": "Rime Aperture",
+      "description": "An explicitly hypothetical cold rocky exoplanet reveals a branching landscape as seasonal carbon-dioxide slab ice vents and retreats.",
+      "continuity": "Chalk-white seasonal CO2 ice over charcoal basaltic fines; restrained lavender shadows and pale gold low spring sunlight from upper left. Crescent Scarp curves along upper right, three dark low basalt knobs called Three Teeth stand at mid-left, branching Basin Loom drains toward a central vent called Pin Eye. No liquid water, vegetation, animals, people, cities, machinery or lava.",
+      "entryDescription": "Ground-level macro view of translucent slab over dark grains receiving low spring sunlight."
+    }
   }
 ]
