@@ -99,3 +99,22 @@ void astra_debris_lights(int room,const vms_vector *center,float rank[3],float p
         colors[k][0]=power;colors[k][1]=power*.47f;colors[k][2]=power*.10f;colors[k][3]=1;
     }
 }
+
+/* Brief world-space shield/metal streaks. These never spawn smoke, hull chunks,
+ * chain sounds, blast lighting or secondary explosions. */
+void astra_hull_sparks(vms_vector *where,fix radius,float t,unsigned seed){
+    if(t<0||t>=1||!ax_on())return;
+    g3s_point point;g3_rotate_point(&point,where);if(point.p3_z<-radius)return;
+    float size=f2fl(radius),fade=(1-t)*(1-t);
+    g3_start_instance_matrix(where,&vmd_identity_matrix);ax_count=0;
+    for(int i=0;i<8+(seed%3);i++){
+        float d[3];pyro_dir(seed,i+381,d);
+        float travel=size*(.12f+1.75f*t)*(.65f+.65f*pyro_random(seed,i,82));
+        float tail=fmaxf(0,travel-size*(.09f+.30f*(1-t)));
+        if(i%4==0)ax_paint(.45f,.80f,1,.7f);else ax_paint(1,.62f,.20f,.8f);
+        af_beam(d[0]*tail,d[1]*tail,d[2]*tail,d[0]*travel,d[1]*travel,d[2]*travel,
+            size*(.012f+.008f*(1-t)),.68f*fade,seed+i);
+    }
+    af_flush_tinted(t,1,1);g3_done_instance();
+    EM_ASM(Module.hullSparkDraws=(Module.hullSparkDraws||0)+1;Module.hullSparkVersion=84;);
+}
