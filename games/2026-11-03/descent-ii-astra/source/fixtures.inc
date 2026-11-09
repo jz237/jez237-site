@@ -3,9 +3,10 @@
  * No portals, secrets, damage volumes or collision geometry are altered. */
 static unsigned afx_draws,afx_grilles,afx_pipes,afx_lights,afx_panels;
 static float afx_uv[36000];
-static void afx_finish(int family,float fade){
-    static GLuint program;static int failed;if(!ax_count||failed)return;
-    if(!program){
+static GLuint warm_afx_finish_program;static int warm_afx_finish_failed;
+static int warm_afx_finish(void){
+    if(warm_afx_finish_failed)return 0;if(warm_afx_finish_program)return 1;
+
         const char *vs="varying highp vec3 p,n;varying highp vec2 uv;varying mediump vec4 tint;uniform mat3 axis;uniform vec3 origin;void main(){p=axis*gl_Vertex.xyz+origin;n=normalize(axis*gl_Normal);uv=gl_MultiTexCoord0.xy;tint=gl_Color;gl_Position=gl_ProjectionMatrix*vec4(p,1.);}";
         const char *fs="precision highp float;varying highp vec3 p,n;varying highp vec2 uv;varying mediump vec4 tint;uniform sampler2D paint,metal,lens;uniform float opacity,kind;uniform vec4 lamps[3],colors[3],lightAxes[3];"
           "void main(){vec3 N=normalize(n),V=normalize(-p),L=normalize(vec3(-.45,.7,.6));vec2 q=kind<1.5?vec2(.24,.23)+uv*vec2(.52,.53):uv;vec3 art=texture2D(paint,q).rgb;vec3 grain=texture2D(metal,uv*2.).rgb;"
@@ -14,14 +15,19 @@ static void afx_finish(int family,float fade){
           "float core=1.-smoothstep(.025,.085,abs(uv.y-.5));float diffuser=texture2D(lens,vec2(fract(uv.x*8.)*.60+.20,clamp((uv.y-.4)*5.,0.,1.)*.60+.20)).r;vec3 emission=tint.rgb*(.80+.8*core)*(.65+.50*diffuser)+vec3(.16)*core;"
           "if(tint.a>3.5){vec2 q=uv-.5;float radius=length(q),angle=atan(q.y,q.x);float annulus=exp(-pow((radius-.25)*12.,2.));float cells=pow(max(0.,cos(angle*10.)),4.);float heat=annulus*(.15+.85*cells);float detail=texture2D(lens,uv*3.).r;emission=vec3(.045,.021,.012)+tint.rgb*(.10+heat*1.35)*(.65+.55*detail)+vec3(.42,.24,.035)*heat*heat;}"
           "c=mix(c,emission,emit);gl_FragColor=vec4(c,opacity);}";
-        GLuint v=astra_compile(GL_VERTEX_SHADER,vs),f=astra_compile(GL_FRAGMENT_SHADER,fs);if(!v||!f){failed=1;return;}program=glCreateProgram();glAttachShader(program,v);glAttachShader(program,f);glLinkProgram(program);glDeleteShader(v);glDeleteShader(f);
-        GLint ok;glGetProgramiv(program,GL_LINK_STATUS,&ok);if(!ok){failed=1;return;}
-    }
+        GLuint v=astra_compile(GL_VERTEX_SHADER,vs),f=astra_compile(GL_FRAGMENT_SHADER,fs);if(!v||!f){warm_afx_finish_failed=1;return 0;}warm_afx_finish_program=glCreateProgram();glAttachShader(warm_afx_finish_program,v);glAttachShader(warm_afx_finish_program,f);glLinkProgram(warm_afx_finish_program);glDeleteShader(v);glDeleteShader(f);
+        GLint ok;glGetProgramiv(warm_afx_finish_program,GL_LINK_STATUS,&ok);if(!ok){warm_afx_finish_failed=1;return 0;}
+
+    return 1;
+}
+static void afx_finish(int family,float fade){
+    if(!ax_count||warm_afx_finish_failed)return;
+    if(!warm_afx_finish_program&&!warm_afx_finish()){return;}
     ag_load(family);ag_load(7);ag_load(6);float axis[9];for(int k=0;k<3;k++){vms_vector a={0},r;if(k==0)a.x=F1_0;else if(k==1)a.y=F1_0;else a.z=F1_0;g3_rotate_delta_vec(&r,&a);axis[3*k]=f2fl(r.x);axis[3*k+1]=f2fl(r.y);axis[3*k+2]=-f2fl(r.z);}
     vms_vector zero={0};g3s_point origin;g3_rotate_point(&origin,&zero);int oldfade=grd_curcanv->cv_fade_level,blend=grd_curcanv->cv_blend_func;GLboolean cull=glIsEnabled(GL_CULL_FACE);glDisable(GL_CULL_FACE);gr_settransblend(GR_FADE_OFF,GR_BLEND_NORMAL);glDepthMask(fade>.99f?GL_TRUE:GL_FALSE);
-    glUseProgram(program);glUniformMatrix3fv(AS_UNIFORM(program,"axis"),1,GL_FALSE,axis);glUniform3f(AS_UNIFORM(program,"origin"),f2fl(origin.p3_x),f2fl(origin.p3_y),-f2fl(origin.p3_z));
-    glUniform1f(AS_UNIFORM(program,"opacity"),fade);glUniform1f(AS_UNIFORM(program,"kind"),family==11?1:2);glUniform1i(AS_UNIFORM(program,"paint"),0);glUniform1i(AS_UNIFORM(program,"metal"),1);glUniform1i(AS_UNIFORM(program,"lens"),2);
-    glUniform4fv(AS_UNIFORM(program,"lamps[0]"),3,&afx_lamps[0][0]);glUniform4fv(AS_UNIFORM(program,"colors[0]"),3,&afx_colors[0][0]);glUniform4fv(AS_UNIFORM(program,"lightAxes[0]"),3,&afx_axes[0][0]);
+    glUseProgram(warm_afx_finish_program);glUniformMatrix3fv(AS_UNIFORM(warm_afx_finish_program,"axis"),1,GL_FALSE,axis);glUniform3f(AS_UNIFORM(warm_afx_finish_program,"origin"),f2fl(origin.p3_x),f2fl(origin.p3_y),-f2fl(origin.p3_z));
+    glUniform1f(AS_UNIFORM(warm_afx_finish_program,"opacity"),fade);glUniform1f(AS_UNIFORM(warm_afx_finish_program,"kind"),family==11?1:2);glUniform1i(AS_UNIFORM(warm_afx_finish_program,"paint"),0);glUniform1i(AS_UNIFORM(warm_afx_finish_program,"metal"),1);glUniform1i(AS_UNIFORM(warm_afx_finish_program,"lens"),2);
+    glUniform4fv(AS_UNIFORM(warm_afx_finish_program,"lamps[0]"),3,&afx_lamps[0][0]);glUniform4fv(AS_UNIFORM(warm_afx_finish_program,"colors[0]"),3,&afx_colors[0][0]);glUniform4fv(AS_UNIFORM(warm_afx_finish_program,"lightAxes[0]"),3,&afx_axes[0][0]);
     glActiveTexture(GL_TEXTURE2);glBindTexture(GL_TEXTURE_2D,ag_colors[6]);
     glActiveTexture(GL_TEXTURE1);glBindTexture(GL_TEXTURE_2D,ag_colors[7]);glActiveTexture(GL_TEXTURE0);glBindTexture(GL_TEXTURE_2D,ag_colors[family]);
     glEnableClientState(GL_VERTEX_ARRAY);glEnableClientState(GL_NORMAL_ARRAY);glEnableClientState(GL_COLOR_ARRAY);glEnableClientState(GL_TEXTURE_COORD_ARRAY);

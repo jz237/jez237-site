@@ -84,24 +84,10 @@ static int ae_basis(int,int,vms_vector*,vms_matrix*,float*,float*);
 static int ag_shadow_data(int,int,float*,float*,float*);
 static int ss_wall(int,int);
 extern int astra_refinement;
-static void ae_wall_finish(int nv,const g3s_point **points,int room,int side,int frame){
-    static GLuint program;static int failed;if(failed||nv<3||nv>4)return;
-    float p[12],uv[8],marks[24]={0},mount[4]={0};int count=0;float shadows[12]={0},axes[12]={0},ups[12]={0};
-    int shadow_count=frame?ag_shadow_data(room,side,shadows,axes,ups):0;
-    if(frame&&side%2==0&&(room+side)%3!=1){
-        vms_vector c;vms_matrix b;float w,h;if(ae_basis(room,side,&c,&b,&w,&h)){
-            vm_vec_scale_add2(&c,&b.rvec,fl2f(-w*.30f));vm_vec_scale_add2(&c,&b.uvec,fl2f(h*.20f));
-            g3s_point q;g3_rotate_point(&q,&c);mount[0]=f2fl(q.p3_x);mount[1]=f2fl(q.p3_y);mount[2]=-f2fl(q.p3_z);mount[3]=fminf(1.45f,fminf(w,h)*.095f)*1.3f;
-        }
-    }
-    for(int i=0;i<nv;i++){p[3*i]=f2fl(points[i]->p3_x);p[3*i+1]=f2fl(points[i]->p3_y);p[3*i+2]=-f2fl(points[i]->p3_z);uv[i*2]=(i==1||i==2);uv[i*2+1]=i>=2;}
-    for(int i=AE_MARKS-1;i>=0&&count<6;i--){ae_mark *m=&ae_marks[i];float age=(double)(GameTime64-m->born)/F1_0;
-        if(!m->born||age<0||age>180||m->room!=room||m->side!=side)continue;
-        g3s_point v;g3_rotate_point(&v,&m->p);marks[count*4]=f2fl(v.p3_x);marks[count*4+1]=f2fl(v.p3_y);marks[count*4+2]=-f2fl(v.p3_z);marks[count*4+3]=m->size*(1-fmaxf(0,age-150)/30);count++;
-    }
-    if(!frame&&!count)return;
-    int detailed=frame?ss_wall(room,side):0;
-    if(!program){
+static GLuint warm_ae_wall_finish_program;static int warm_ae_wall_finish_failed;
+static int warm_ae_wall_finish(void){
+    if(warm_ae_wall_finish_failed)return 0;if(warm_ae_wall_finish_program)return 1;
+
         const char *vs="varying highp vec3 p;varying mediump vec2 uv;void main(){p=gl_Vertex.xyz;uv=gl_MultiTexCoord0.xy;gl_Position=ftransform();}";
         const char *fs="precision highp float;varying highp vec3 p;varying mediump vec2 uv;uniform vec4 marks[6],mount;uniform vec3 scale;uniform float frame,refinement;uniform vec4 shadows[3],axes[3],ups[3];"
           "uniform sampler2D silhouette;uniform float detailed;uniform vec3 shadowCenter,shadowRight,shadowUp;uniform vec2 shadowSize;uniform float texel;"
@@ -117,23 +103,43 @@ static void ae_wall_finish(int nv,const g3s_point **points,int room,int side,int
           "mask+=texture2D(silhouette,st+vec2(float(x),float(y))*texel*1.6).r*weight/16.;}"
           "float edge=step(0.,st.x)*step(st.x,1.)*step(0.,st.y)*step(st.y,1.);shadow=max(shadow,mask*.42*edge);}"
           "ao*=mix(1.,1.35,refinement);gl_FragColor=vec4(mix(vec3(.012,.018,.022),vec3(.20,.23,.24),chips),max(max(max(ao,contact),burn),shadow));}";
-        GLuint v=astra_compile(GL_VERTEX_SHADER,vs),f=astra_compile(GL_FRAGMENT_SHADER,fs);if(!v||!f){failed=1;return;}
-        program=glCreateProgram();glAttachShader(program,v);glAttachShader(program,f);glLinkProgram(program);glDeleteShader(v);glDeleteShader(f);
-        GLint ok;glGetProgramiv(program,GL_LINK_STATUS,&ok);if(!ok){failed=1;return;}
+        GLuint v=astra_compile(GL_VERTEX_SHADER,vs),f=astra_compile(GL_FRAGMENT_SHADER,fs);if(!v||!f){warm_ae_wall_finish_failed=1;return 0;}
+        warm_ae_wall_finish_program=glCreateProgram();glAttachShader(warm_ae_wall_finish_program,v);glAttachShader(warm_ae_wall_finish_program,f);glLinkProgram(warm_ae_wall_finish_program);glDeleteShader(v);glDeleteShader(f);
+        GLint ok;glGetProgramiv(warm_ae_wall_finish_program,GL_LINK_STATUS,&ok);if(!ok){warm_ae_wall_finish_failed=1;return 0;}
+
+    return 1;
+}
+static void ae_wall_finish(int nv,const g3s_point **points,int room,int side,int frame){
+    if(warm_ae_wall_finish_failed||nv<3||nv>4)return;
+    float p[12],uv[8],marks[24]={0},mount[4]={0};int count=0;float shadows[12]={0},axes[12]={0},ups[12]={0};
+    int shadow_count=frame?ag_shadow_data(room,side,shadows,axes,ups):0;
+    if(frame&&side%2==0&&(room+side)%3!=1){
+        vms_vector c;vms_matrix b;float w,h;if(ae_basis(room,side,&c,&b,&w,&h)){
+            vm_vec_scale_add2(&c,&b.rvec,fl2f(-w*.30f));vm_vec_scale_add2(&c,&b.uvec,fl2f(h*.20f));
+            g3s_point q;g3_rotate_point(&q,&c);mount[0]=f2fl(q.p3_x);mount[1]=f2fl(q.p3_y);mount[2]=-f2fl(q.p3_z);mount[3]=fminf(1.45f,fminf(w,h)*.095f)*1.3f;
+        }
     }
+    for(int i=0;i<nv;i++){p[3*i]=f2fl(points[i]->p3_x);p[3*i+1]=f2fl(points[i]->p3_y);p[3*i+2]=-f2fl(points[i]->p3_z);uv[i*2]=(i==1||i==2);uv[i*2+1]=i>=2;}
+    for(int i=AE_MARKS-1;i>=0&&count<6;i--){ae_mark *m=&ae_marks[i];float age=(double)(GameTime64-m->born)/F1_0;
+        if(!m->born||age<0||age>180||m->room!=room||m->side!=side)continue;
+        g3s_point v;g3_rotate_point(&v,&m->p);marks[count*4]=f2fl(v.p3_x);marks[count*4+1]=f2fl(v.p3_y);marks[count*4+2]=-f2fl(v.p3_z);marks[count*4+3]=m->size*(1-fmaxf(0,age-150)/30);count++;
+    }
+    if(!frame&&!count)return;
+    int detailed=frame?ss_wall(room,side):0;
+    if(!warm_ae_wall_finish_program&&!warm_ae_wall_finish()){return;}
     int fade=grd_curcanv->cv_fade_level,blend=grd_curcanv->cv_blend_func;gr_settransblend(GR_FADE_OFF,GR_BLEND_NORMAL);
-    glDepthMask(GL_FALSE);glEnable(GL_POLYGON_OFFSET_FILL);glPolygonOffset(-1,-1);glUseProgram(program);
-    glUniform1f(glGetUniformLocation(program,"detailed"),detailed);
+    glDepthMask(GL_FALSE);glEnable(GL_POLYGON_OFFSET_FILL);glPolygonOffset(-1,-1);glUseProgram(warm_ae_wall_finish_program);
+    glUniform1f(glGetUniformLocation(warm_ae_wall_finish_program,"detailed"),detailed);
     if(detailed){
-        glActiveTexture(GL_TEXTURE0);glBindTexture(GL_TEXTURE_2D,ss_texture);glUniform1i(glGetUniformLocation(program,"silhouette"),0);
-        glUniform3fv(glGetUniformLocation(program,"shadowCenter"),1,ss_center);glUniform3fv(glGetUniformLocation(program,"shadowRight"),1,ss_right);glUniform3fv(glGetUniformLocation(program,"shadowUp"),1,ss_up);
-        glUniform2f(glGetUniformLocation(program,"shadowSize"),ss_width,ss_height);glUniform1f(glGetUniformLocation(program,"texel"),1.f/ss_size);
+        glActiveTexture(GL_TEXTURE0);glBindTexture(GL_TEXTURE_2D,ss_texture);glUniform1i(glGetUniformLocation(warm_ae_wall_finish_program,"silhouette"),0);
+        glUniform3fv(glGetUniformLocation(warm_ae_wall_finish_program,"shadowCenter"),1,ss_center);glUniform3fv(glGetUniformLocation(warm_ae_wall_finish_program,"shadowRight"),1,ss_right);glUniform3fv(glGetUniformLocation(warm_ae_wall_finish_program,"shadowUp"),1,ss_up);
+        glUniform2f(glGetUniformLocation(warm_ae_wall_finish_program,"shadowSize"),ss_width,ss_height);glUniform1f(glGetUniformLocation(warm_ae_wall_finish_program,"texel"),1.f/ss_size);
     }
-    glUniform4fv(glGetUniformLocation(program,"marks[0]"),6,marks);glUniform1f(glGetUniformLocation(program,"frame"),frame);
-    glUniform4fv(glGetUniformLocation(program,"mount"),1,mount);
-    glUniform1f(glGetUniformLocation(program,"refinement"),astra_refinement);
-    glUniform4fv(glGetUniformLocation(program,"shadows[0]"),3,shadows);glUniform4fv(glGetUniformLocation(program,"axes[0]"),3,axes);glUniform4fv(glGetUniformLocation(program,"ups[0]"),3,ups);
-    glUniform3f(glGetUniformLocation(program,"scale"),f2fl(Matrix_scale.x),f2fl(Matrix_scale.y),f2fl(Matrix_scale.z));
+    glUniform4fv(glGetUniformLocation(warm_ae_wall_finish_program,"marks[0]"),6,marks);glUniform1f(glGetUniformLocation(warm_ae_wall_finish_program,"frame"),frame);
+    glUniform4fv(glGetUniformLocation(warm_ae_wall_finish_program,"mount"),1,mount);
+    glUniform1f(glGetUniformLocation(warm_ae_wall_finish_program,"refinement"),astra_refinement);
+    glUniform4fv(glGetUniformLocation(warm_ae_wall_finish_program,"shadows[0]"),3,shadows);glUniform4fv(glGetUniformLocation(warm_ae_wall_finish_program,"axes[0]"),3,axes);glUniform4fv(glGetUniformLocation(warm_ae_wall_finish_program,"ups[0]"),3,ups);
+    glUniform3f(glGetUniformLocation(warm_ae_wall_finish_program,"scale"),f2fl(Matrix_scale.x),f2fl(Matrix_scale.y),f2fl(Matrix_scale.z));
     glEnableClientState(GL_VERTEX_ARRAY);glEnableClientState(GL_TEXTURE_COORD_ARRAY);glVertexPointer(3,GL_FLOAT,0,p);glTexCoordPointer(2,GL_FLOAT,0,uv);glDrawArrays(GL_TRIANGLE_FAN,0,nv);
     glDisableClientState(GL_TEXTURE_COORD_ARRAY);glDisableClientState(GL_VERTEX_ARRAY);glUseProgram(0);glDisable(GL_POLYGON_OFFSET_FILL);glDepthMask(GL_TRUE);gr_settransblend(fade,blend);
 }
@@ -343,17 +349,23 @@ int astra_environment_reactor(object *obj){
         ax_paint(.78f,.24f,.035f,.35f+.15f*sinf(t*2.4f+k));ax_ring(0,0,0,r*(.91f+k*.035f),r*.012f,t*(k%2?-.4f:.3f)+k,.65f,k);ax_flush(1,1);}
     ax_flush(1,1);g3_done_instance();ae_reactors++;return 1;
 }
-static void ae_haze_flush(void){
-    static GLuint program;static int failed;if(!ax_count||failed)return;
-    if(!program){
+static GLuint warm_ae_haze_flush_program;static int warm_ae_haze_flush_failed;
+static int warm_ae_haze_flush(void){
+    if(warm_ae_haze_flush_failed)return 0;if(warm_ae_haze_flush_program)return 1;
+
         const char *vs="varying mediump vec3 uv;varying mediump vec4 tint;void main(){gl_Position=ftransform();uv=gl_Normal;tint=gl_Color;}";
         const char *fs="precision mediump float;varying mediump vec3 uv;varying mediump vec4 tint;void main(){float r=dot(uv.xy,uv.xy);float a=exp(-r*3.8)*(1.-smoothstep(.65,1.,r));a*=.72+.28*sin(uv.x*8.+sin(uv.y*9.+uv.z));gl_FragColor=vec4(tint.rgb,tint.a*a);}";
-        GLuint v=astra_compile(GL_VERTEX_SHADER,vs),f=astra_compile(GL_FRAGMENT_SHADER,fs);if(!v||!f){failed=1;return;}
-        program=glCreateProgram();glAttachShader(program,v);glAttachShader(program,f);glLinkProgram(program);glDeleteShader(v);glDeleteShader(f);
-        GLint ok;glGetProgramiv(program,GL_LINK_STATUS,&ok);if(!ok){failed=1;return;}
-    }
+        GLuint v=astra_compile(GL_VERTEX_SHADER,vs),f=astra_compile(GL_FRAGMENT_SHADER,fs);if(!v||!f){warm_ae_haze_flush_failed=1;return 0;}
+        warm_ae_haze_flush_program=glCreateProgram();glAttachShader(warm_ae_haze_flush_program,v);glAttachShader(warm_ae_haze_flush_program,f);glLinkProgram(warm_ae_haze_flush_program);glDeleteShader(v);glDeleteShader(f);
+        GLint ok;glGetProgramiv(warm_ae_haze_flush_program,GL_LINK_STATUS,&ok);if(!ok){warm_ae_haze_flush_failed=1;return 0;}
+
+    return 1;
+}
+static void ae_haze_flush(void){
+    if(!ax_count||warm_ae_haze_flush_failed)return;
+    if(!warm_ae_haze_flush_program&&!warm_ae_haze_flush()){return;}
     int fade=grd_curcanv->cv_fade_level,blend=grd_curcanv->cv_blend_func;gr_settransblend(GR_FADE_OFF,GR_BLEND_NORMAL);
-    GLboolean cull=glIsEnabled(GL_CULL_FACE);glDisable(GL_CULL_FACE);glDepthMask(GL_FALSE);glUseProgram(program);
+    GLboolean cull=glIsEnabled(GL_CULL_FACE);glDisable(GL_CULL_FACE);glDepthMask(GL_FALSE);glUseProgram(warm_ae_haze_flush_program);
     glEnableClientState(GL_VERTEX_ARRAY);glEnableClientState(GL_NORMAL_ARRAY);glEnableClientState(GL_COLOR_ARRAY);
     glVertexPointer(3,GL_FLOAT,sizeof(ax_vertex),ax_vertices[0].p);glNormalPointer(GL_FLOAT,sizeof(ax_vertex),ax_vertices[0].n);glColorPointer(4,GL_FLOAT,sizeof(ax_vertex),ax_vertices[0].color);glDrawArrays(GL_TRIANGLES,0,ax_count);
     glDisableClientState(GL_VERTEX_ARRAY);glDisableClientState(GL_NORMAL_ARRAY);glDisableClientState(GL_COLOR_ARRAY);glUseProgram(0);glDepthMask(GL_TRUE);if(cull)glEnable(GL_CULL_FACE);gr_settransblend(fade,blend);ax_count=0;

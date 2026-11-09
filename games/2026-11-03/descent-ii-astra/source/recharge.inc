@@ -1,9 +1,9 @@
 /* An animated, transparent charging lattice on the original fuel-center face.
  * Original portals, recharge amounts and collision geometry are unchanged. */
-int astra_recharge_face(int count,const g3s_point **view,const g3s_uvl *uv,int room,int side){
-    static GLuint program;static int failed;
-    if(!ax_on()||failed||count<3||count>8)return 0;
-    if(!program){
+static GLuint warm_astra_recharge_face_program;static int warm_astra_recharge_face_failed;
+static int warm_astra_recharge_face(void){
+    if(warm_astra_recharge_face_failed)return 0;if(warm_astra_recharge_face_program)return 1;
+
         const char *vs="varying highp vec2 uv;void main(){uv=gl_MultiTexCoord0.xy;gl_Position=ftransform();}";
         const char *fs=
           "precision highp float;varying highp vec2 uv;uniform float clock,seed,charging;"
@@ -27,10 +27,16 @@ int astra_recharge_face(int count,const g3s_point **view,const g3s_uvl *uv,int r
           "float alpha=clamp(grid*(.20+.27*pulse)+mote*charge*.45+arc*.7+curtain*.08,0.,.72);"
           "color*=.8+.20*energy+.30*charging;if(alpha<.006)discard;gl_FragColor=vec4(color,alpha);}";
         GLuint v=astra_compile(GL_VERTEX_SHADER,vs),f=astra_compile(GL_FRAGMENT_SHADER,fs);
-        if(!v||!f){failed=1;return 0;}
-        program=glCreateProgram();glAttachShader(program,v);glAttachShader(program,f);glLinkProgram(program);glDeleteShader(v);glDeleteShader(f);
-        GLint linked;glGetProgramiv(program,GL_LINK_STATUS,&linked);if(!linked){failed=1;return 0;}
-    }
+        if(!v||!f){warm_astra_recharge_face_failed=1;return 0;}
+        warm_astra_recharge_face_program=glCreateProgram();glAttachShader(warm_astra_recharge_face_program,v);glAttachShader(warm_astra_recharge_face_program,f);glLinkProgram(warm_astra_recharge_face_program);glDeleteShader(v);glDeleteShader(f);
+        GLint linked;glGetProgramiv(warm_astra_recharge_face_program,GL_LINK_STATUS,&linked);if(!linked){warm_astra_recharge_face_failed=1;return 0;}
+
+    return 1;
+}
+int astra_recharge_face(int count,const g3s_point **view,const g3s_uvl *uv,int room,int side){
+
+    if(!ax_on()||warm_astra_recharge_face_failed||count<3||count>8)return 0;
+    if(!warm_astra_recharge_face_program&&!warm_astra_recharge_face()){return 0;}
     float p[24],tex[16];
     for(int i=0;i<count;i++){
         p[i*3]=f2fl(view[i]->p3_x);p[i*3+1]=f2fl(view[i]->p3_y);p[i*3+2]=-f2fl(view[i]->p3_z);
@@ -39,11 +45,11 @@ int astra_recharge_face(int count,const g3s_point **view,const g3s_uvl *uv,int r
     float charging=ConsoleObject&&Segment2s[ConsoleObject->segnum].special==SEGMENT_IS_FUELCEN&&Players[Player_num].energy<i2f(100)?1:0;
     int fade=grd_curcanv->cv_fade_level,blend=grd_curcanv->cv_blend_func;
     GLboolean cull=glIsEnabled(GL_CULL_FACE);glDisable(GL_CULL_FACE);glDepthMask(GL_FALSE);
-    gr_settransblend(GR_FADE_OFF,GR_BLEND_ADDITIVE_A);glUseProgram(program);
+    gr_settransblend(GR_FADE_OFF,GR_BLEND_ADDITIVE_A);glUseProgram(warm_astra_recharge_face_program);
     extern float astra_mine_clock;
-    glUniform1f(glGetUniformLocation(program,"clock"),astra_mine_clock>=0?astra_mine_clock:(double)(GameTime64%(F1_0*2000))/F1_0);
-    glUniform1f(glGetUniformLocation(program,"seed"),room*.13f+side*.71f);
-    glUniform1f(glGetUniformLocation(program,"charging"),charging);
+    glUniform1f(glGetUniformLocation(warm_astra_recharge_face_program,"clock"),astra_mine_clock>=0?astra_mine_clock:(double)(GameTime64%(F1_0*2000))/F1_0);
+    glUniform1f(glGetUniformLocation(warm_astra_recharge_face_program,"seed"),room*.13f+side*.71f);
+    glUniform1f(glGetUniformLocation(warm_astra_recharge_face_program,"charging"),charging);
     /* This shader has no vertex-color input. A prior legacy draw can leave its
      * client array enabled; preserve it without binding attribute location -1. */
     GLboolean color_array;glGetBooleanv(GL_COLOR_ARRAY,&color_array);glDisableClientState(GL_COLOR_ARRAY);

@@ -30,6 +30,15 @@ static nb_mesh *nb_build(int room,int side){
     if(nb_count){if(!m->buffer)glGenBuffers(1,&m->buffer);glBindBuffer(GL_ARRAY_BUFFER,m->buffer);glBufferData(GL_ARRAY_BUFFER,nb_count*sizeof(nb_vertex),nb_vertices,GL_STATIC_DRAW);glBindBuffer(GL_ARRAY_BUFFER,0);nb_uploads++;}
     m->room=room;m->side=side;m->stamp=stamp;m->count=nb_count;m->used=++nb_tick;return m;
 }
+static int warm_nb_room(void){
+    if(nb_failed)return 0;if(nb_program)return 1;
+
+            const char *vs="uniform mat3 axis;uniform vec3 origin;varying highp vec3 world,p,n;varying mediump vec3 uv;void main(){world=gl_Vertex.xyz;p=axis*world+origin;n=normalize(axis*gl_Normal);uv=gl_MultiTexCoord0.xyz;gl_Position=gl_ProjectionMatrix*vec4(p,1.);}";
+            const char *fs="precision highp float;uniform sampler2D stone;uniform vec3 shade;uniform float opacity;uniform vec4 lamps[3],colors[3];varying highp vec3 world,p,n;varying mediump vec3 uv;void main(){vec3 N=normalize(n),V=normalize(-p);float wet=1.-uv.z;vec3 base=texture2D(stone,uv.xy).rgb*mix(.55,.91,uv.z);vec3 c=base*(shade*.78+.10)*( .7+.3*uv.z);for(int i=0;i<3;i++){vec3 L=lamps[i].xyz-p;float d=length(L);L/=max(.01,d);float f=pow(max(0.,1.-d/max(.01,lamps[i].w)),2.);c+=colors[i].rgb*f*(base*(.1+.75*max(0.,dot(N,L)))+pow(max(0.,dot(N,normalize(V+L))),56.)*(.10+.65*wet));}c+=vec3(.025,.045,.055)*pow(1.-max(0.,dot(N,V)),3.)*wet;gl_FragColor=vec4(c,opacity);}";
+            GLuint v=astra_compile(GL_VERTEX_SHADER,vs),f=astra_compile(GL_FRAGMENT_SHADER,fs);if(!v||!f){nb_failed=1;return 0;}nb_program=glCreateProgram();glAttachShader(nb_program,v);glAttachShader(nb_program,f);glLinkProgram(nb_program);glDeleteShader(v);glDeleteShader(f);GLint ok;glGetProgramiv(nb_program,GL_LINK_STATUS,&ok);if(!ok){nb_failed=1;return 0;}
+
+    return 1;
+}
 static void nb_room(int room){
     extern int astra_ov_enabled(void);if(!astra_detail_upgrade||astra_native_compare||ss_capture||astra_ov_enabled()||nb_failed)return;
     if(nb_frame!=framecount){nb_frame=framecount;nb_budget=0;}if(nb_budget>=6)return;
@@ -37,11 +46,7 @@ static void nb_room(int room){
         if(astra_liquid_kind(Segments[room].sides[side].tmap_num)!=1||Segments[room].children[side]>=0)continue;
         vms_vector center;compute_center_point_on_side(&center,&Segments[room],side);float distance=f2fl(vm_vec_dist(&center,&View_position)),opacity=1-nd_smooth((distance-45)/30);if(opacity<=0)continue;
         nb_mesh *m=nb_build(room,side);if(!m->count)continue;astra_fixture_lights(room);
-        if(!nb_program){
-            const char *vs="uniform mat3 axis;uniform vec3 origin;varying highp vec3 world,p,n;varying mediump vec3 uv;void main(){world=gl_Vertex.xyz;p=axis*world+origin;n=normalize(axis*gl_Normal);uv=gl_MultiTexCoord0.xyz;gl_Position=gl_ProjectionMatrix*vec4(p,1.);}";
-            const char *fs="precision highp float;uniform sampler2D stone;uniform vec3 shade;uniform float opacity;uniform vec4 lamps[3],colors[3];varying highp vec3 world,p,n;varying mediump vec3 uv;void main(){vec3 N=normalize(n),V=normalize(-p);float wet=1.-uv.z;vec3 base=texture2D(stone,uv.xy).rgb*mix(.55,.91,uv.z);vec3 c=base*(shade*.78+.10)*( .7+.3*uv.z);for(int i=0;i<3;i++){vec3 L=lamps[i].xyz-p;float d=length(L);L/=max(.01,d);float f=pow(max(0.,1.-d/max(.01,lamps[i].w)),2.);c+=colors[i].rgb*f*(base*(.1+.75*max(0.,dot(N,L)))+pow(max(0.,dot(N,normalize(V+L))),56.)*(.10+.65*wet));}c+=vec3(.025,.045,.055)*pow(1.-max(0.,dot(N,V)),3.)*wet;gl_FragColor=vec4(c,opacity);}";
-            GLuint v=astra_compile(GL_VERTEX_SHADER,vs),f=astra_compile(GL_FRAGMENT_SHADER,fs);if(!v||!f){nb_failed=1;return;}nb_program=glCreateProgram();glAttachShader(nb_program,v);glAttachShader(nb_program,f);glLinkProgram(nb_program);glDeleteShader(v);glDeleteShader(f);GLint ok;glGetProgramiv(nb_program,GL_LINK_STATUS,&ok);if(!ok){nb_failed=1;return;}
-        }
+        if(!nb_program&&!warm_nb_room()){return;}
         float axis[9];for(int k=0;k<3;k++){vms_vector a={0},r;if(k==0)a.x=F1_0;else if(k==1)a.y=F1_0;else a.z=F1_0;g3_rotate_delta_vec(&r,&a);axis[k*3]=f2fl(r.x);axis[k*3+1]=f2fl(r.y);axis[k*3+2]=-f2fl(r.z);}
         vms_vector zero={0};g3s_point origin;g3_rotate_point(&origin,&zero);ag_load(3);if(!ag_colors[3])continue;
         int fade=grd_curcanv->cv_fade_level,blend=grd_curcanv->cv_blend_func;GLboolean cull=glIsEnabled(GL_CULL_FACE),write=astra_depth_write;gr_settransblend(GR_FADE_OFF,GR_BLEND_NORMAL);glDisable(GL_CULL_FACE);glDepthMask(opacity>.995?GL_TRUE:GL_FALSE);glUseProgram(nb_program);

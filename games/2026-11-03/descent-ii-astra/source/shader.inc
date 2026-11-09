@@ -210,10 +210,27 @@ static int astra_material_begin(ogl_texture *tex,const float *p,const float *uv)
  * world coordinates put the light at the impact even on very large mine walls. */
 extern float astra_blast_positions[3][4],astra_blast_colors[3][4];
 extern int astra_room_blast_count;
+static GLuint warm_astra_light_face_program;static GLint warm_astra_light_face_bulbs,warm_astra_light_face_colors;static int warm_astra_light_face_failed;
+static int warm_astra_light_face(void){
+    if(warm_astra_light_face_failed)return 0;if(warm_astra_light_face_program)return 1;
+
+        const char *vs="varying highp vec3 world;void main(){world=gl_MultiTexCoord0.xyz;gl_Position=ftransform();}";
+        const char *fs="precision highp float;varying highp vec3 world;uniform vec4 bulbs[3],colors[3];uniform vec3 normal,eye;uniform float rock;"
+          "void main(){vec3 light=vec3(0.);for(int i=0;i<3;i++){float r=bulbs[i].w;"
+          "float t=clamp(1.-distance(world,bulbs[i].xyz)/max(.001,r),0.,1.);"
+          "vec3 L=normalize(bulbs[i].xyz-world+vec3(.0001)),V=normalize(eye-world);float diffuse=max(0.,dot(normal,L));float spec=pow(max(0.,dot(normal,normalize(L+V))),mix(48.,9.,rock));light+=colors[i].rgb*t*t*(.16+.70*diffuse+spec*mix(.9,.045,rock));}gl_FragColor=vec4(light,1.);}";
+        GLuint v=astra_compile(GL_VERTEX_SHADER,vs),f=astra_compile(GL_FRAGMENT_SHADER,fs);
+        if(!v||!f){warm_astra_light_face_failed=1;return 0;}
+        warm_astra_light_face_program=glCreateProgram();glAttachShader(warm_astra_light_face_program,v);glAttachShader(warm_astra_light_face_program,f);glLinkProgram(warm_astra_light_face_program);
+        glDeleteShader(v);glDeleteShader(f);GLint linked;glGetProgramiv(warm_astra_light_face_program,GL_LINK_STATUS,&linked);
+        if(!linked){warm_astra_light_face_failed=1;return 0;}warm_astra_light_face_bulbs=AS_UNIFORM(warm_astra_light_face_program,"bulbs[0]");warm_astra_light_face_colors=AS_UNIFORM(warm_astra_light_face_program,"colors[0]");
+
+    return 1;
+}
 void astra_light_face(int count,const g3s_point **view,const int *ids)
 {
-    static GLuint program;static GLint bulbs,colors;static int failed;
-    if(!astra_room_blast_count || failed || count<3 || count>8)return;
+
+    if(!astra_room_blast_count || warm_astra_light_face_failed || count<3 || count>8)return;
     float p[24],world[24],low[3],high[3];
     for(int i=0;i<count;i++){
         p[i*3]=f2fl(view[i]->p3_vec.x);p[i*3+1]=f2fl(view[i]->p3_vec.y);p[i*3+2]=-f2fl(view[i]->p3_vec.z);
@@ -226,26 +243,15 @@ void astra_light_face(int count,const g3s_point **view,const int *ids)
         for(int a=0;a<3;a++){float d=fmaxf(0,fmaxf(low[a]-b[a],b[a]-high[a]));d2+=d*d;}
         if(b[3]>0 && d2<b[3]*b[3])near++;}
     if(!near)return;
-    if(!program){
-        const char *vs="varying highp vec3 world;void main(){world=gl_MultiTexCoord0.xyz;gl_Position=ftransform();}";
-        const char *fs="precision highp float;varying highp vec3 world;uniform vec4 bulbs[3],colors[3];uniform vec3 normal,eye;uniform float rock;"
-          "void main(){vec3 light=vec3(0.);for(int i=0;i<3;i++){float r=bulbs[i].w;"
-          "float t=clamp(1.-distance(world,bulbs[i].xyz)/max(.001,r),0.,1.);"
-          "vec3 L=normalize(bulbs[i].xyz-world+vec3(.0001)),V=normalize(eye-world);float diffuse=max(0.,dot(normal,L));float spec=pow(max(0.,dot(normal,normalize(L+V))),mix(48.,9.,rock));light+=colors[i].rgb*t*t*(.16+.70*diffuse+spec*mix(.9,.045,rock));}gl_FragColor=vec4(light,1.);}";
-        GLuint v=astra_compile(GL_VERTEX_SHADER,vs),f=astra_compile(GL_FRAGMENT_SHADER,fs);
-        if(!v||!f){failed=1;return;}
-        program=glCreateProgram();glAttachShader(program,v);glAttachShader(program,f);glLinkProgram(program);
-        glDeleteShader(v);glDeleteShader(f);GLint linked;glGetProgramiv(program,GL_LINK_STATUS,&linked);
-        if(!linked){failed=1;return;}bulbs=AS_UNIFORM(program,"bulbs[0]");colors=AS_UNIFORM(program,"colors[0]");
-    }
+    if(!warm_astra_light_face_program&&!warm_astra_light_face()){return;}
     int fade=grd_curcanv->cv_fade_level,blend=grd_curcanv->cv_blend_func;
     gr_settransblend(GR_FADE_OFF,GR_BLEND_ADDITIVE_A);glDepthMask(GL_FALSE);
     /* Reflect more light from bright metal while retaining a little scatter in dark areas. */
-    glBlendFunc(GL_DST_COLOR,GL_ONE);glUseProgram(program);
+    glBlendFunc(GL_DST_COLOR,GL_ONE);glUseProgram(warm_astra_light_face_program);
     float A[3],B[3],normal[3];for(int k=0;k<3;k++){A[k]=world[3+k]-world[k];B[k]=world[6+k]-world[k];}for(int k=0;k<3;k++)normal[k]=A[(k+1)%3]*B[(k+2)%3]-A[(k+2)%3]*B[(k+1)%3];astra_unit(normal);
     float eye[3]={f2fl(View_position.x),f2fl(View_position.y),f2fl(View_position.z)},facing=0;for(int k=0;k<3;k++)facing+=normal[k]*(eye[k]-world[k]);if(facing<0)for(int k=0;k<3;k++)normal[k]*=-1;
-    glUniform3fv(AS_UNIFORM(program,"normal"),1,normal);glUniform3fv(AS_UNIFORM(program,"eye"),1,eye);glUniform1f(AS_UNIFORM(program,"rock"),astra_surface[0]<.5f?1:0);
-    glUniform4fv(bulbs,3,&astra_blast_positions[0][0]);glUniform4fv(colors,3,&astra_blast_colors[0][0]);
+    glUniform3fv(AS_UNIFORM(warm_astra_light_face_program,"normal"),1,normal);glUniform3fv(AS_UNIFORM(warm_astra_light_face_program,"eye"),1,eye);glUniform1f(AS_UNIFORM(warm_astra_light_face_program,"rock"),astra_surface[0]<.5f?1:0);
+    glUniform4fv(warm_astra_light_face_bulbs,3,&astra_blast_positions[0][0]);glUniform4fv(warm_astra_light_face_colors,3,&astra_blast_colors[0][0]);
     glEnableClientState(GL_VERTEX_ARRAY);glEnableClientState(GL_TEXTURE_COORD_ARRAY);
     glVertexPointer(3,GL_FLOAT,0,p);glTexCoordPointer(3,GL_FLOAT,0,world);glDrawArrays(GL_TRIANGLE_FAN,0,count);
     glDisableClientState(GL_VERTEX_ARRAY);glDisableClientState(GL_TEXTURE_COORD_ARRAY);

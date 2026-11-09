@@ -236,7 +236,7 @@ function preloadFlightEngine() {
   if(location.protocol!=="http:"&&location.protocol!=="https:")return;
   if(document.getElementById("astraEnginePreload"))return;
   const link=document.createElement("link");link.id="astraEnginePreload";
-  link.rel="preload";link.as="script";link.href="engine.js?v=pyre78";
+  link.rel="preload";link.as="script";link.href="engine.js?v=pyre79";
   document.head.append(link);
 }
 let firstBlastProfile=0;
@@ -375,7 +375,7 @@ async function launch(quick,demo=false,encounter=false,preview=false,autopilot=f
         setInterval(syncPilot,3000);
       }
     };
-    await script("engine.js?v=pyre78");
+    await script("engine.js?v=pyre79");
   } catch(e) {console.error(e);astraFail(e.message);}
 }
 

@@ -1431,3 +1431,9 @@ R78 - campaign co-op regression fixes
 - Allocate extra multiplayer starts from saved player start positions, not unrelated or deleted object slots. This fixes an invalid start in Vertigo mine 2 and applies to every campaign using the shared native path.
 - Discard queued previous-mine packets at the ordered relay synchronization boundary, and clear pending sends when loading begins. Delayed end-level status no longer leaves a pilot marked as waiting after the new mine starts. Ignore stale synchronization messages for other levels.
 - Tab map, demo AI, flight controls, rendering quality and sound settings remain unchanged.
+
+R79 - prepare graphics before the opening flight
+- Compile the existing mine, water/lava, effects, robot, pickup and post-processing programs during loading, with browser yields between steps. Draw paths retain their lazy fallback and cached fast path.
+- Prepare mounted material families and a bounded spawn neighborhood (at most 32 rooms / four portal steps), plus nearby robot and pickup buffers. Do not fetch the complete asset library or preload the whole mine.
+- No synthetic gameplay frames or random-number calls. Shader literals, visual detail, flight controls and demo AI are unchanged. Original, Vertigo and Overload share preparation.
+- First-frame GPU program compilation and uploads are measured separately from loading; preparation timing is exposed as Module.graphicsWarmup.

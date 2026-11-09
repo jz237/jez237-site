@@ -16,11 +16,9 @@ static void lens_texture(GLuint *tex,int w,int h){
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_CLAMP_TO_EDGE);glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_CLAMP_TO_EDGE);
     GLenum format=tex==&lensScene?GL_RGB:GL_RGBA;glTexImage2D(GL_TEXTURE_2D,0,format,w,h,0,format,GL_UNSIGNED_BYTE,NULL);
 }
-void astra_lens(int x,int y,int w,int h){
-    if(lensOn<0)lensOn=EM_ASM_INT(return !!Module.astra);
-    if(!lensOn||lensFailed||w<240||h<160)return;
-    int sw=(w+3)/4,sh=(h+3)/4;
-    if(!lensFbo[0]){
+static int warm_astra_lens(void){
+    if(lensFailed)return 0;if(lensFbo[0])return 1;
+
         lensPrograms[0]=lens_program("precision mediump float;varying mediump vec2 uv;uniform sampler2D src;uniform vec2 stepUV;"
             "vec3 high(vec2 p){vec3 a=texture2D(src,p).rgb;float lum=max(a.r,max(a.g,a.b));return a*smoothstep(.54,.96,lum)*(.27+.73*lum);}"
             "void main(){vec2 d=stepUV*1.35;gl_FragColor=vec4(.25*(high(uv+d)+high(uv-d)+high(uv+vec2(d.x,-d.y))+high(uv+vec2(-d.x,d.y))),1.);}");
@@ -31,11 +29,18 @@ void astra_lens(int x,int y,int w,int h){
             "void main(){float warp=0.;for(int i=0;i<4;i++){vec2 q=(uv-heat[i].xy)/max(vec2(.0001),heat[i].zw);warp+=max(0.,1.-dot(q,q))*step(.001,heat[i].z);}vec2 shift=vec2(sin(uv.y*180.-clock*3.2),cos(uv.x*140.+clock*2.7))*.00065*min(1.,warp);vec3 a=texture2D(src,uv+shift).rgb,b=texture2D(glow,uv).rgb;vec3 c=a*(.89+.12*a)+b*.57;"
             "c=mix(c,vec3(.014,.030,.040),.09*(1.-max(a.r,max(a.g,a.b))));"
             "c=c/(1.+.18*max(c-.70,vec3(0.))); vec2 e=uv*2.-1.;c*=1.-.052*dot(e,e);gl_FragColor=vec4(c,1.);}");
-        if(!lensPrograms[0]||!lensPrograms[1]||!lensPrograms[2]){lensFailed=1;return;}
+        if(!lensPrograms[0]||!lensPrograms[1]||!lensPrograms[2]){lensFailed=1;return 0;}
         for(int i=0;i<2;i++)lensStep[i]=glGetUniformLocation(lensPrograms[i],"stepUV");
         lensGlow=glGetUniformLocation(lensPrograms[2],"glow");lensHeat=glGetUniformLocation(lensPrograms[2],"heat[0]");lensClock=glGetUniformLocation(lensPrograms[2],"clock");
         glGenFramebuffers(2,lensFbo);
-    }
+
+    return 1;
+}
+void astra_lens(int x,int y,int w,int h){
+    if(lensOn<0)lensOn=EM_ASM_INT(return !!Module.astra);
+    if(!lensOn||lensFailed||w<240||h<160)return;
+    int sw=(w+3)/4,sh=(h+3)/4;
+    if(!lensFbo[0]&&!warm_astra_lens()){return;}
     GLint vp[4],fb;glGetIntegerv(GL_VIEWPORT,vp);glGetIntegerv(GL_FRAMEBUFFER_BINDING,&fb);
     GLboolean blend=glIsEnabled(GL_BLEND),depth=glIsEnabled(GL_DEPTH_TEST),cull=glIsEnabled(GL_CULL_FACE),sc=glIsEnabled(GL_SCISSOR_TEST);
     glDisable(GL_SCISSOR_TEST);glDisable(GL_BLEND);glDisable(GL_DEPTH_TEST);glDisable(GL_CULL_FACE);glDepthMask(GL_FALSE);

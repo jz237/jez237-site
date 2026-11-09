@@ -75,6 +75,7 @@ includes['mine_life.inc'] = 'arch/ogl/astra_mine_life.inc'
 includes['scenery.inc'] = 'arch/ogl/astra_scenery.inc'
 includes['geology.inc'] = 'arch/ogl/astra_geology.inc'
 includes['shore_geometry.inc'] = 'arch/ogl/astra_shore_geometry.inc'
+includes['warmup.inc'] = 'arch/ogl/astra_warmup.inc'
 for name,path in includes.items():
     if (repo/"d2"/path).exists():raise SystemExit("Use a fresh checkout. An Astra include already exists.")
 git(repo,"apply",str(src/"engine.patch"))

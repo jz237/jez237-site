@@ -18,6 +18,17 @@ static void ar_frame_begin(void){if(ar_frame!=framecount){ar_frame=framecount;ar
 static GLint ar_uv0,ar_duv,ar_rect,ar_tint,ar_glow,ar_lines,ar_line_colors;
 static int ar_signature(int room){unsigned hash=2166136261u;for(int s=0;s<6;s++){side *f=&Segments[room].sides[s];hash=(hash^(unsigned)(f->tmap_num+f->tmap_num2*997+WALL_IS_DOORWAY(&Segments[room],s)*193))*16777619u;}return (int)(hash^Light_subtracted[room]);}
 static ar_probe *ar_find(int room){for(int i=0;i<12;i++)if(ar_probes[i].texture&&ar_probes[i].room==room&&ar_probes[i].level==Current_level_num)return &ar_probes[i];return NULL;}
+static int warm_astra_room_materials(void){
+    if(ar_failed)return 0;if(ar_program)return 1;
+
+        const char *vs="varying highp vec2 uv;void main(){uv=gl_Vertex.xy*.5+.5;gl_Position=vec4(gl_Vertex.xy,0.,1.);}";
+        const char *fs="precision highp float;varying highp vec2 uv;uniform sampler2D image;uniform vec4 uv0,duv,rect,tint;uniform float glow;uniform vec4 lines[2];uniform vec3 lineColors[2];void main(){vec2 q=uv0.xy+uv.x*uv0.zw+uv.y*duv.xy;if(rect.z>0.)q=(fract(q)-rect.xy)/rect.zw;vec4 a=texture2D(image,q);vec3 c=a.rgb*tint.rgb;float hot=smoothstep(.65,.9,max(a.r,max(a.g,a.b)));c+=a.rgb*hot*glow;for(int i=0;i<2;i++){vec2 d=lines[i].zw-lines[i].xy;float t=clamp(dot(uv-lines[i].xy,d)/max(.00001,dot(d,d)),0.,1.);float r=length(uv-lines[i].xy-d*t);c+=lineColors[i]*(1.-smoothstep(.006,.025,r));}gl_FragColor=vec4(c,a.a);}";
+        GLuint v=astra_compile(GL_VERTEX_SHADER,vs),f=astra_compile(GL_FRAGMENT_SHADER,fs);if(!v||!f){ar_failed=1;return 0;}
+        ar_program=glCreateProgram();glAttachShader(ar_program,v);glAttachShader(ar_program,f);glLinkProgram(ar_program);glDeleteShader(v);glDeleteShader(f);GLint ok;glGetProgramiv(ar_program,GL_LINK_STATUS,&ok);if(!ok){ar_failed=1;return 0;}
+        ar_uv0=AS_UNIFORM(ar_program,"uv0");ar_duv=AS_UNIFORM(ar_program,"duv");ar_rect=AS_UNIFORM(ar_program,"rect");ar_tint=AS_UNIFORM(ar_program,"tint");ar_glow=AS_UNIFORM(ar_program,"glow");ar_lines=AS_UNIFORM(ar_program,"lines[0]");ar_line_colors=AS_UNIFORM(ar_program,"lineColors[0]");glGenFramebuffers(1,&ar_fbo);
+
+    return 1;
+}
 void astra_room_materials(int room){
     static int enabled=-1;if(enabled<0)enabled=EM_ASM_INT(return !!Module.astra);if(!enabled)return;
     extern int astra_ov_enabled(void);if(!astra_detail_upgrade||astra_native_compare||ar_failed||astra_ov_enabled()||room<0||room>Highest_segment_index)return;
@@ -38,13 +49,7 @@ void astra_room_materials(int room){
         if(!probe)return;
     }
     ar_budget++;
-    if(!ar_program){
-        const char *vs="varying highp vec2 uv;void main(){uv=gl_Vertex.xy*.5+.5;gl_Position=vec4(gl_Vertex.xy,0.,1.);}";
-        const char *fs="precision highp float;varying highp vec2 uv;uniform sampler2D image;uniform vec4 uv0,duv,rect,tint;uniform float glow;uniform vec4 lines[2];uniform vec3 lineColors[2];void main(){vec2 q=uv0.xy+uv.x*uv0.zw+uv.y*duv.xy;if(rect.z>0.)q=(fract(q)-rect.xy)/rect.zw;vec4 a=texture2D(image,q);vec3 c=a.rgb*tint.rgb;float hot=smoothstep(.65,.9,max(a.r,max(a.g,a.b)));c+=a.rgb*hot*glow;for(int i=0;i<2;i++){vec2 d=lines[i].zw-lines[i].xy;float t=clamp(dot(uv-lines[i].xy,d)/max(.00001,dot(d,d)),0.,1.);float r=length(uv-lines[i].xy-d*t);c+=lineColors[i]*(1.-smoothstep(.006,.025,r));}gl_FragColor=vec4(c,a.a);}";
-        GLuint v=astra_compile(GL_VERTEX_SHADER,vs),f=astra_compile(GL_FRAGMENT_SHADER,fs);if(!v||!f){ar_failed=1;return;}
-        ar_program=glCreateProgram();glAttachShader(ar_program,v);glAttachShader(ar_program,f);glLinkProgram(ar_program);glDeleteShader(v);glDeleteShader(f);GLint ok;glGetProgramiv(ar_program,GL_LINK_STATUS,&ok);if(!ok){ar_failed=1;return;}
-        ar_uv0=AS_UNIFORM(ar_program,"uv0");ar_duv=AS_UNIFORM(ar_program,"duv");ar_rect=AS_UNIFORM(ar_program,"rect");ar_tint=AS_UNIFORM(ar_program,"tint");ar_glow=AS_UNIFORM(ar_program,"glow");ar_lines=AS_UNIFORM(ar_program,"lines[0]");ar_line_colors=AS_UNIFORM(ar_program,"lineColors[0]");glGenFramebuffers(1,&ar_fbo);
-    }
+    if(!ar_program&&!warm_astra_room_materials()){return;}
     al_reflection_room(room);
     GLint framebuffer,viewport[4];glGetIntegerv(GL_FRAMEBUFFER_BINDING,&framebuffer);glGetIntegerv(GL_VIEWPORT,viewport);
     GLboolean depth=glIsEnabled(GL_DEPTH_TEST),blend=glIsEnabled(GL_BLEND),cull=glIsEnabled(GL_CULL_FACE),scissor=glIsEnabled(GL_SCISSOR_TEST),write=astra_depth_write;

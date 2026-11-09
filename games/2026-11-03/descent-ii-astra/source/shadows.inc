@@ -29,9 +29,9 @@ static void ss_draw(const float *vertices,int stride,int count,const vms_vector 
     glEnableClientState(GL_VERTEX_ARRAY);glVertexPointer(3,GL_FLOAT,stride,vertices);glDrawArrays(GL_TRIANGLES,0,count);glDisableClientState(GL_VERTEX_ARRAY);
     ss_draws++;
 }
-static int ss_start(const vms_vector *center,const vms_matrix *basis,float width,float height,const vms_vector *lamp){
-    if(ss_failed)return 0;
-    if(!ss_program){
+static int warm_ss_start(void){
+    if(ss_failed)return 0;if(ss_program)return 1;
+
         const char *vs="uniform mat3 axis;uniform vec3 origin,center,right,up,normal,lamp;uniform vec2 size;varying highp float height;"
           "void main(){vec3 P=axis*gl_Vertex.xyz+origin,D=P-lamp;float denom=dot(D,normal);"
           "float factor=dot(center-lamp,normal)/min(-.0001,denom);vec3 H=lamp+D*factor-center;"
@@ -41,7 +41,12 @@ static int ss_start(const vms_vector *center,const vms_matrix *basis,float width
         ss_program=glCreateProgram();glAttachShader(ss_program,v);glAttachShader(ss_program,f);glLinkProgram(ss_program);glDeleteShader(v);glDeleteShader(f);
         GLint ok;glGetProgramiv(ss_program,GL_LINK_STATUS,&ok);if(!ok){ss_failed=1;return 0;}
         glGenFramebuffers(1,&ss_fbo);glGenTextures(1,&ss_texture);
-    }
+
+    return 1;
+}
+static int ss_start(const vms_vector *center,const vms_matrix *basis,float width,float height,const vms_vector *lamp){
+    if(ss_failed)return 0;
+    if(!ss_program&&!warm_ss_start()){return 0;}
     glGetIntegerv(GL_VIEWPORT,ss_old_vp);glGetIntegerv(GL_FRAMEBUFFER_BINDING,&ss_old_fb);
     glActiveTexture(GL_TEXTURE0);glGetIntegerv(GL_TEXTURE_BINDING_2D,&ss_old_texture);
     ss_old_blend=glIsEnabled(GL_BLEND);ss_old_depth=glIsEnabled(GL_DEPTH_TEST);ss_old_cull=glIsEnabled(GL_CULL_FACE);ss_old_scissor=glIsEnabled(GL_SCISSOR_TEST);
