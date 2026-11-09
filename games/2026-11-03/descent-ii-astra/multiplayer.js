@@ -31,7 +31,7 @@
       out.push({dest,data:data.slice()});bytes+=data.length+3;
     },
     ready(level,checksum){
-      queue=[];barrier=null;this.targetLevel=level;if(this.campaignSnapshot?.level!==level)this.campaignSnapshot=null;
+      queue=[];out=[];bytes=0;barrier=null;this.targetLevel=level;if(this.campaignSnapshot?.level!==level)this.campaignSnapshot=null;
       if(!socket){barrier={level,checksum};return;}
       send({type:'ready',level,checksum});status('Waiting for the other pilots to load…');
     },
@@ -106,7 +106,13 @@
       }
       if(m.type==='lobby'){lobby=m;render();return;}
       if(m.type==='start'){if(!ignoreStart)session.launch(m.config,m.self);return;}
-      if(m.type==='sync'){barrier={level:m.level,checksum:m.checksum};status('All pilots ready');return;}
+      if(m.type==='sync'){
+        if(m.level!==session.targetLevel)return;
+        // The relay sends this after every pilot's ready message. Its ordered
+        // WebSocket stream puts all old-mine packets before this barrier.
+        // Keep old end-level status from marking next-mine pilots as waiting.
+        queue=[];barrier={level:m.level,checksum:m.checksum};status('All pilots ready');return;
+      }
       if(m.type==='left'){session.departed|=1<<m.slot;if(window.Module)Module.netLeft=(Module.netLeft||0)|(1<<m.slot);return;}
       return;
     }

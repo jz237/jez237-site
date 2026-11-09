@@ -77,7 +77,7 @@
     publishNetwork(force=false){
       if(!this.networked()||!this.authority()||!this.controller||!this.networkReady)return;
       const now=performance.now();if(!force&&now-this.lastNetwork<1000)return;this.lastNetwork=now;
-      const m=Module,source=window.astraOverloadHeap,pointer=m._astra_ov_states();
+      const m=Module,pointer=m._astra_ov_states(),source=window.astraOverloadHeap;
       for(const [key,s] of this.spawns){
         const o=this.spawnLocal.get(key),at=(pointer>>2)+(o?.index||0)*8;
         if(o&&source[at]===2&&source[at+3]===o.signature&&source[at+2]>=0){s.alive=true;s.position=Array.from(source.slice(at+4,at+7));}

@@ -88,6 +88,9 @@ EMSCRIPTEN_KEEPALIVE void astra_ov_robot(int index,double health,double radius,d
     if(hidden){obj->type=OBJ_GHOST;obj->control_type=CT_NONE;obj->render_type=RT_NONE;}
 }
 EMSCRIPTEN_KEEPALIVE int astra_ov_states(void){
+    /* Late-join snapshots can be replayed by begin(), before the first tick.
+     * Bind the current heap on every read, including after memory growth. */
+    EM_ASM(window.astraOverloadHeap=HEAPF32;);
     for(int i=0;i<MAX_OBJECTS;i++){
         object *o=&Objects[i];ov_snapshot[i][0]=i<=Highest_object_index?o->type:OBJ_NONE;ov_snapshot[i][1]=o->flags;ov_snapshot[i][2]=f2fl(o->shields);ov_snapshot[i][3]=o->signature;
         ov_snapshot[i][4]=f2fl(o->pos.x)/4;ov_snapshot[i][5]=f2fl(o->pos.y)/4;ov_snapshot[i][6]=f2fl(o->pos.z)/4;ov_snapshot[i][7]=o->type==OBJ_WEAPON?o->ctype.laser_info.parent_type==OBJ_PLAYER:ov_hidden[i];

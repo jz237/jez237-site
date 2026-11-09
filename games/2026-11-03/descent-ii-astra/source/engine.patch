@@ -1677,9 +1677,22 @@ index da0872e..3297e9b 100644
 +
 +
 diff --git a/d2/main/gameseq.c b/d2/main/gameseq.c
-index 30de489..4acf3ec 100644
+index 30de489..079bff7 100644
 --- a/d2/main/gameseq.c
 +++ b/d2/main/gameseq.c
+@@ -232,9 +232,9 @@ gameseq_init_network_players()
+ 	if (Game_mode & GM_MULTI) {
+ 		// Ensure we have 8 starting locations, even if there aren't 8 in the file.  This makes observer mode work in all levels.
+ 		for (; k < MAX_PLAYERS; k++) {
+-			Player_init[k].pos = Objects[k % NumNetPlayerPositions].pos;
+-			Player_init[k].orient = Objects[k % NumNetPlayerPositions].orient;
+-			Player_init[k].segnum = Objects[k % NumNetPlayerPositions].segnum;
++			// Starts are not consecutive object slots. Some slots have already
++			// been deleted above (notably in Vertigo), so use the saved starts.
++			Player_init[k] = Player_init[k % NumNetPlayerPositions];
+ 
+ 			i = obj_create(OBJ_PLAYER, k, Player_init[k].segnum, &Player_init[k].pos,
+ 				&Player_init[k].orient, Polygon_models[Player_ship->model_num].rad,
 @@ -757,6 +757,7 @@ void LoadLevel(int level_num,int page_in_textures)
  	gr_set_current_canvas(NULL);
  	gr_clear_canvas(BM_XRGB(0, 0, 0));		//so palette switching is less obvious
