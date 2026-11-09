@@ -1451,3 +1451,10 @@ R81 - deliberate demo-pilot attention and turns
 - Survey open passages during normal travel, with route preference, view width and held-interest hysteresis. Short backward corrections use translation while turning.
 - Search open space without the former blind periodic pitch sweep. Cancel explosion-watching immediately for a visible opponent, impact, incoming shot or occlusion; move gently when the route is clear.
 - Renderer-confirmed enemy perception, native barrel collision tests, mission prerequisites, manual controls, artwork and networking remain unchanged.
+
+R82 - planned demo flight and deliberate combat
+- Round a short sequence of open portals into a hull-checked flight line; anticipate bend speed and preserve brisk travel through open passages. Narrow or obstructed curves fall back to the original clearance/recovery planner. Planning is bounded and cached at four updates per second.
+- Rank a shortlist of fighting positions for native barrel clearance, weapon range, lateral/vertical dodge space, rear escape space and visible crossfire. Commit to a chosen move instead of resampling every frame.
+- Under fire, try a hull-clear shelter/peek pair, retreat briefly, slide back to its firing point, and hold a bounded volley. Changed geometry, stale contact or an immediate new threat cancels the maneuver. Hidden enemies cannot update the stored bearing or authorize shots.
+- Use engagement-relative cannon bursts, measured target-dependent Fusion charging, native weapon-switch cancellation of unsafe charges, and situation-dependent missiles. Native ammo, energy use, damage, charging and firing rates are unchanged.
+- Manual flight controls, renderer visibility, native barrel collision tests, projectile dodging, mission prerequisite planning, visuals and network/squad pilots remain unchanged. These changes apply only to the spectator pilot in all three campaigns.
