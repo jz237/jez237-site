@@ -5,13 +5,13 @@
 // Five looks (sky, terrain, sea, scenery, bodies in the sky), real 3D models for everything, curved beams,
 // warnings drawn in the play plane, HDR post. Nothing here changes the world.
 import * as THREE from '../vendor/three.module.min.js';
-import { Post } from './post.js?v=3';
-import * as TX from './textures.js?v=3';
-import * as MD from './models.js?v=3';
-import { FX, CALM } from './fx.js?v=3';
-import { NOISE } from './shaders.js?v=3';
-import { F, C, RP, H, ENEMY, BOSSES, POWERUPS, P2_LIVERY, LIVERIES, SETTLER } from './config.js?v=3';
-import { wd, wp, nodePos, beamRange } from './sim.js?v=3';
+import { Post } from './post.js?v=4';
+import * as TX from './textures.js?v=4';
+import * as MD from './models.js?v=4';
+import { FX, CALM } from './fx.js?v=4';
+import { NOISE } from './shaders.js?v=4';
+import { F, C, RP, H, ENEMY, BOSSES, POWERUPS, P2_LIVERY, LIVERIES, SETTLER } from './config.js?v=4';
+import { wd, wp, nodePos, beamRange, dronePos as dronePosR } from './sim.js?v=4';
 
 export { CALM };
 const hdr = (hex, k) => new THREE.Color(hex).multiplyScalar(k);
@@ -60,8 +60,8 @@ export const LOOKS = [
     ground: [0x3a2e2a, 0x54423a, 0x463830, 0x5e4a40, 0x7a6a60], relief: 'jagged', sea: { kind: 'lava', c: [0xff8a2a, 0x3a0800, 0xff5a10] }, props: 'cinder',
     bodies: [{ kind: 'star', dir: 2.2, el: 0.4, r: 260, c: [0xff5a2a, 0xffa060, 0xffe0b0] }],
     clouds: 0x6a5048, cloudN: 30, exposure: 1.05, bloom: 0.95, grade: [1.06, 0.97, 0.92], aurora: 0, ash: 1, lights: 0xff9a40 },
-  { key: 'umbra', sky: [0x2a2050, 0x6a5a9a, 0xb06aff, 0x020108, 0x120a28], sun: 0xd8c8ff, sunI: 2.6, moon: 0xb8a0ff, moonI: 0.75, hemi: [0x8070c0, 0x1a1428], fog: [0x4a3a7a, 0x08041a], fogD: 0.0034,
-    ground: [0x3a3650, 0x2a2838, 0x342f48, 0x4a4660, 0x8a80b0], relief: 'mesas', sea: { kind: 'water', c: [0x4a3aa0, 0x0a0620, 0x9a70ff] }, props: 'umbra',
+  { key: 'umbra', sky: [0x2a2050, 0x6a5a9a, 0xb06aff, 0x020108, 0x120a28], sun: 0xd8c8ff, sunI: 2.6, moon: 0xc0aaff, moonI: 1.0, hemi: [0x8070c0, 0x1a1428], fog: [0x4a3a7a, 0x08041a], fogD: 0.0034,
+    ground: [0x4a4666, 0x3a3650, 0x443e5e, 0x5a5674, 0x9a90c0], relief: 'mesas', sea: { kind: 'water', c: [0x4a3aa0, 0x0a0620, 0x9a70ff] }, props: 'umbra',
     bodies: [{ kind: 'giant', dir: 0.4, el: 0.6, r: 420, c: [0xc8a0ff, 0x6a4ab0, 0xffd2f0] }],
     clouds: 0x8a7ab8, cloudN: 30, exposure: 1.1, bloom: 1.0, grade: [0.98, 0.96, 1.07], aurora: 0.5, ash: 0.3, lights: 0xc8a0ff },
 ];
@@ -805,7 +805,7 @@ export class Renderer {
       const v = this.playerView(p);
       seenP.add(p.id);
       const L = this.shipLights[i];
-      if (!p.alive) { v.outer.visible = false; if (L) L.intensity = 0; this.shields[i].visible = false; v.trail = [[], []]; return; }
+      if (!p.alive) { v.outer.visible = false; if (v.drone) v.drone.outer.visible = false; if (L) L.intensity = 0; this.shields[i].visible = false; v.trail = [[], []]; return; }
       const blink = p.inv > 0 && p.inv < F.inv && Math.floor(t * 16) % 2 === 0 && p.inv > F.hitInv * 0.5;
       v.outer.visible = !blink || true;
       // the turn: a quick spring swing through facing the camera, banked
@@ -833,6 +833,13 @@ export class Renderer {
           if (rb) { rb.set(tr, (q) => 0.34 * (1 - q), 0.15 - k * 0.3); rb.mat.uniforms.uColor.value.set(0xffa860).multiplyScalar(1.4); rb.mat.uniforms.uK.value = clamp(Math.abs(p.vx) / F.vmax, 0, 1) * (CALM.on ? 0.5 : 0.9); rb.mat.uniforms.uDash.value = 0; rb.mat.uniforms.uHead.value = 0; rb.mat.uniforms.uSoft.value = 2; }
         }
       }
+      // the escort drone
+      if (!v.drone) { const d = MD.pod(0x9dff7a); const o = new THREE.Group(); o.matrixAutoUpdate = false; o.add(d.g); o.visible = false; this.scene.add(o); v.drone = { ...d, outer: o }; }
+      if (p.pw && p.pw.drone) {
+        const [dx, dy] = dronePosR(p, this.W.t);
+        this.placeTurn(v.drone.outer, dx, dy, (t * 2) % Math.PI, 0.3, 1.6);
+        v.drone.outer.visible = p.pw.drone > 2 || Math.floor(t * 6) % 2 === 0;
+      } else v.drone.outer.visible = false;
       // no shield left: the ship trails smoke and the odd spark (it is one hit from going down)
       if (p.shield === 0 && Math.random() < dt * 14) {
         this.at(p.x - p.face * 1.4, p.y + 0.2);
@@ -925,7 +932,7 @@ export class Renderer {
       const pts = []; for (let k = 0; k <= 6; k++) pts.push([wp(s.x0 + s.dir * (tail + (end - tail) * k / 6)), s.y]);
       if (s.dir < 0) pts.reverse();
       rb.set(pts, 0.42, 0.35);
-      rb.mat.uniforms.uColor.value.set(W.players.find((q) => q.id === s.pid)?.pw?.twin ? 0x8fe4ff : 0xff6a50).multiplyScalar(2.4);
+      rb.mat.uniforms.uColor.value.set(s.drone ? 0x9dff7a : W.players.find((q) => q.id === s.pid)?.pw?.twin ? 0x8fe4ff : 0xff6a50).multiplyScalar(2.4);
       rb.mat.uniforms.uK.value = 1.4; rb.mat.uniforms.uDash.value = 0; rb.mat.uniforms.uSoft.value = 3; rb.mat.uniforms.uHead.value = 0;
     }
     // ---- bolts
@@ -952,6 +959,24 @@ export class Renderer {
     for (const s of W.settlers) {
       if (s.st !== 'walk' || !(s.mark > 0)) continue;
       this.gate(s.x, 1.3, 0.4 + 0.3 * Math.sin(t * 8), 0xff4a3a, 1.8);
+    }
+    // weather: far-off lightning storms on the dark worlds, rain at night over the green one
+    const Lk = this.look.key;
+    if (!CALM.on && (Lk === 'umbra' || Lk === 'cinder') && Math.random() < dt * 0.12) {
+      const bx = this.cx + (Math.random() - 0.5) * 140, top = 70 + Math.random() * 30, pts = [[bx, top]];
+      let x = bx, y = top;
+      while (y > 8) { y -= 4 + Math.random() * 6; x += (Math.random() - 0.5) * 8; pts.push([x, y]); }
+      const rb = this.takeRibbon();
+      if (rb) { rb.keep = true; rb.set(pts, 0.6, -70); rb.mat.uniforms.uColor.value.set(Lk === 'umbra' ? 0xc8a8ff : 0xffc890).multiplyScalar(3); rb.mat.uniforms.uK.value = 1.5; rb.mat.uniforms.uDash.value = 0; rb.mat.uniforms.uHead.value = 0; setTimeout(() => { rb.keep = false; rb.hide(); }, 120 + Math.random() * 120); }
+      this.flashScreen(0.08, Lk === 'umbra' ? 0xc8a8ff : 0xffb070);
+      if (this.sfx) this.sfx('thunder', { x: bx });
+    }
+    if (!CALM.on && Lk === 'verdant' && (this.nightK || 0) > 0.5 && Math.random() < dt * 60) {
+      for (let k = 0; k < 3; k++) {
+        toW(this.cx + (Math.random() - 0.5) * 110, 20 + Math.random() * 30, _v, (Math.random() - 0.4) * 20);
+        radial(this.cx, _v2);
+        this.fx.dustP.add({ x: _v.x, y: _v.y, z: _v.z, vx: -_v2.x * 26, vy: -_v2.y * 26, vz: 0, s0: 0.13, s1: 0.1, max: 1.2, a: 0.5, r: 0.75, g: 0.82, b: 0.95, drag: 0, grav: 0, fade: 0.4 });
+      }
     }
     // shooting stars at night
     if ((this.nightK || 0) > 0.6 && !CALM.on && Math.random() < dt * 0.25 && this.meteors.length < 2) this.meteors.push({ x: this.cx + (Math.random() - 0.5) * 120, y: 60 + Math.random() * 30, vx: (Math.random() < 0.5 ? -1 : 1) * (60 + Math.random() * 40), vy: -18 - Math.random() * 12, t: 0, T: 0.9 + Math.random() * 0.6 });

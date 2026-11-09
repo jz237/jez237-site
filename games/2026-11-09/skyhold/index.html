@@ -7,22 +7,22 @@
 <meta name="description" content="Skyhold 2026: an original planet-defence shooter in real-time 3D. Fly a gunship round and round a small planet, from the day side into the night, shoot down the machines lifting your settlers off the ground, catch the ones that fall and bring down a colossal carrier on each of five worlds. Endless Orbit, online co-op, upgrades, medals, instant replays and a smart demo mode.">
 <title>Skyhold 2026</title>
 <link rel="icon" href="data:,">
-<link rel="modulepreload" href="js/main.js?v=3">
-<link rel="modulepreload" href="js/config.js?v=3">
-<link rel="modulepreload" href="js/sim.js?v=3">
-<link rel="modulepreload" href="js/ai.js?v=3">
-<link rel="modulepreload" href="js/render.js?v=3">
-<link rel="modulepreload" href="js/audio.js?v=3">
-<link rel="modulepreload" href="js/chip.js?v=3">
-<link rel="modulepreload" href="js/input.js?v=3">
-<link rel="modulepreload" href="js/scores.js?v=3">
-<link rel="modulepreload" href="js/replay.js?v=3">
-<link rel="modulepreload" href="js/post.js?v=3">
-<link rel="modulepreload" href="js/textures.js?v=3">
-<link rel="modulepreload" href="js/models.js?v=3">
-<link rel="modulepreload" href="js/fx.js?v=3">
-<link rel="modulepreload" href="js/shaders.js?v=3">
-<link rel="modulepreload" href="js/online.js?v=3">
+<link rel="modulepreload" href="js/main.js?v=4">
+<link rel="modulepreload" href="js/config.js?v=4">
+<link rel="modulepreload" href="js/sim.js?v=4">
+<link rel="modulepreload" href="js/ai.js?v=4">
+<link rel="modulepreload" href="js/render.js?v=4">
+<link rel="modulepreload" href="js/audio.js?v=4">
+<link rel="modulepreload" href="js/chip.js?v=4">
+<link rel="modulepreload" href="js/input.js?v=4">
+<link rel="modulepreload" href="js/scores.js?v=4">
+<link rel="modulepreload" href="js/replay.js?v=4">
+<link rel="modulepreload" href="js/post.js?v=4">
+<link rel="modulepreload" href="js/textures.js?v=4">
+<link rel="modulepreload" href="js/models.js?v=4">
+<link rel="modulepreload" href="js/fx.js?v=4">
+<link rel="modulepreload" href="js/shaders.js?v=4">
+<link rel="modulepreload" href="js/online.js?v=4">
 <link rel="modulepreload" href="vendor/three.module.min.js">
 <link rel="modulepreload" href="vendor/three.core.min.js">
 
@@ -347,7 +347,7 @@ table.hs tr.me td { color: #fff; background: rgba(255, 179, 71, .1); }
   <div class="screen hidden" id="title">
     <div class="card">
       <h1 class="logo">SKYHOLD<span> 2026</span></h1>
-      <div class="ver">VERSION <b id="ver">1.2.0</b> · GUARD THE COLONY · HOLD THE SKY</div>
+      <div class="ver">VERSION <b id="ver">1.3.0</b> · GUARD THE COLONY · HOLD THE SKY</div>
       <div class="diffrow">DIFFICULTY<div class="seg" data-opt="diff"><button data-v="easy">EASY</button><button data-v="normal">NORMAL</button><button data-v="hard">HARD</button><button data-v="nightmare">NIGHTMARE</button></div></div>
       <div id="diff-desc"></div>
       <div class="btns" id="title-btns">
@@ -438,10 +438,13 @@ table.hs tr.me td { color: #fff; background: rgba(255, 179, 71, .1); }
     <p>Clear every machine to end a wave. After four waves a <b>CARRIER</b> arrives: shoot its glowing <b>weak points</b> (line up with them; the hull stops other shots). Lose every settler and the colony falls: lifters turn into husks for the rest of that world.</p>
     <h3>WHAT TO DO NEXT</h3><p>The line under the top bar always says what to do next. The <b>SCANNER</b> strip at the top shows the whole planet: settlers (green), lifters (amber, red when they have someone), everything else, and the bracket where you are. A red marker at the screen edge points to a settler being lifted.</p>
     <h3>WARNINGS</h3><p>Nothing hits you without a warning: machines shimmer as they warp in, and glow before they fire. A carrier shows a line or a ring before each attack. Its hull is solid but safe to brush, except when it charges.</p>
+    <h3>CHAINS, ENRAGED CARRIERS</h3><p>Destroy machines in quick succession for a <b>CHAIN</b>: 4 in a row doubles their points, 8 triples them, 12 quadruples them (the meter under your nova count shows it running down). Once half a carrier's weak points are gone it is <b>ENRAGED</b> and attacks faster.</p>
+    <h3>ONLINE CO-OP</h3><p>Two gunships guard one colony and share the ships. Quick match pairs you with anyone looking, or host a room and share its 4-letter code. The host picks the world.</p>
     <h3>NOVA AND BLINK</h3><p><b>NOVA</b> destroys every machine on screen (and hurts a carrier's weak points); you carry a few. <b>BLINK</b> jumps you far round the planet to escape; it needs a few seconds to recharge.</p>
     <h3>POWER-UPS</h3><div class="pwgrid">
       <span><b>⁂ TWIN BEAM</b> two beams at once</span><span><b>» OVERDRIVE</b> double fire rate</span>
-      <span><b>⬡ SHIELD CELL</b> +1 shield</span><span><b>✸ NOVA</b> +1 nova</span></div>
+      <span><b>⬡ SHIELD CELL</b> +1 shield</span><span><b>✸ NOVA</b> +1 nova</span>
+      <span><b>◈ ESCORT DRONE</b> a drone flies with you and shoots the nearest machine</span></div>
     <h3>DIFFICULTY</h3><p>Easy, Normal, Hard and Nightmare each have their own high-score tables. Harder levels score more points (×0.6, ×1, ×1.5, ×2.2). Medals count on Normal and harder, and unlock new ship colours in Options.</p>
     <h3>KEYBOARD</h3><p>FLY: A / D or ← / → (the ship turns to face the way you push) · CLIMB / DIVE: W / S or ↑ / ↓ · FIRE: Space or J · NOVA: Shift or K · BLINK: H or L · PAUSE: Esc or P</p>
     <h3>GAMEPAD</h3><p>FLY: left stick or d-pad · FIRE: A or the right trigger · NOVA: B or the left trigger · BLINK: Y or a bumper · PAUSE: Start</p>
@@ -482,6 +485,6 @@ addEventListener('error', (e) => window.__shErrors.push(String(e.message || e)))
 addEventListener('unhandledrejection', (e) => window.__shErrors.push('rejection: ' + String(e.reason && e.reason.message || e.reason)));
 (() => { const ce = console.error; console.error = (...a) => { window.__shErrors.push(a.map(String).join(' ')); ce.apply(console, a); }; })();
 </script>
-<script type="module" src="js/main.js?v=3"></script>
+<script type="module" src="js/main.js?v=4"></script>
 </body>
 </html>

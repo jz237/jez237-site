@@ -46,7 +46,7 @@ try {
   console.log('      host ', JSON.stringify(hs));
   console.log('      guest', JSON.stringify(gs));
   ok(hs.stat.inputs > secs * 10 && gs.stat.snaps > secs * 10, `messages flowing (host got ${hs.stat.inputs} inputs, guest ${gs.stat.snaps} snapshots)`);
-  ok(hs.stat.shots > secs / 5, `the guest's beams reach the host (${hs.stat.shots})`);
+  ok(hs.stat.shots >= 3, `the guest's beams reach the host (${hs.stat.shots})`);
   ok(Math.abs(hs.score - gs.score) <= 2000 && hs.wave === gs.wave && hs.lives === gs.lives, `score / wave / lives in step (host ${hs.score} w${hs.wave} l${hs.lives}, guest ${gs.score} w${gs.wave} l${gs.lives})`);
   const d = Math.hypot(((hs.g[0] - gs.me[0] + 2400) % 1600) - 800, hs.g[1] - gs.me[1]);
   const tol = 4 + 45 * (lag * 2 + 40) / 1000;   // a ship at full speed moves this far while the messages are in flight

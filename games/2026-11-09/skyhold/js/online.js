@@ -3,8 +3,8 @@
 // carrier, lives, score) and streams snapshots 20 times a second. The guest flies its own gunship locally (so it never
 // lags), judges the hits it takes, and reports its ship, its beams, novas, catches, landings and pickups as claims;
 // the host carries those out so every kill is decided in one place.
-import { netDeath, netShield, netCatch, netLand, netPod, netFire, netRam, netNovaAt, netAdopt } from './sim.js?v=3';
-import { PW_KEYS } from './config.js?v=3';
+import { netDeath, netShield, netCatch, netLand, netPod, netFire, netRam, netNovaAt, netAdopt } from './sim.js?v=4';
+import { PW_KEYS } from './config.js?v=4';
 
 export const PROTOCOL = 1;
 const RELAY = 'wss://steel-duel-online.jez237.workers.dev';

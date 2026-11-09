@@ -1,13 +1,13 @@
 // Skyhold 2026 — game flow, menus, HUD (with the scanner strip), commentary, demo director and the frame loop.
-import { VERSION, SECTORS, STEP, F, C, H, BOSSES, UPGRADES, UP_KEYS, UP_COST, MEDALS, parTime, TYPICAL_UP, START_LIVES, DIFFICULTY, POWERUPS, LIVERIES, CP_NAMES, WAVES, ENEMY } from './config.js?v=3';
-import { makeWorld, step, stepGuest, drainEvents, wd, wp, settlersLeft, nodePos, CHAIN_T, chainMult } from './sim.js?v=3';
-import { Autopilot } from './ai.js?v=3';
-import { Renderer, pickQuality, CALM, LOOKS } from './render.js?v=3';
-import { Audio } from './audio.js?v=3';
-import { Input } from './input.js?v=3';
-import { Scores, NO_POST } from './scores.js?v=3';
-import { Recorder, Replay } from './replay.js?v=3';
-import { Online, ROOM, randomCode, cleanCode } from './online.js?v=3';
+import { VERSION, SECTORS, STEP, F, C, H, BOSSES, UPGRADES, UP_KEYS, UP_COST, MEDALS, parTime, TYPICAL_UP, START_LIVES, DIFFICULTY, POWERUPS, LIVERIES, CP_NAMES, WAVES, ENEMY } from './config.js?v=4';
+import { makeWorld, step, stepGuest, drainEvents, wd, wp, settlersLeft, nodePos, CHAIN_T, chainMult } from './sim.js?v=4';
+import { Autopilot } from './ai.js?v=4';
+import { Renderer, pickQuality, CALM, LOOKS } from './render.js?v=4';
+import { Audio } from './audio.js?v=4';
+import { Input } from './input.js?v=4';
+import { Scores, NO_POST } from './scores.js?v=4';
+import { Recorder, Replay } from './replay.js?v=4';
+import { Online, ROOM, randomCode, cleanCode } from './online.js?v=4';
 
 const $ = (id) => document.getElementById(id);
 const params = new URLSearchParams(location.search);
@@ -363,6 +363,7 @@ function handleEvents(list, W, live) {
   for (const e of list) {
     switch (e.k) {
       case 'fire': {
+        if (e.drone) { snd('beam', e, { vol: 0.16, rate: 1.4, gap: 0.08 }); A.retro('beam', { vol: 0.2, rate: 1.5 }); break; }
         snd('beam', e, { vol: mine(e) ? 0.32 : 0.2, gap: 0.05, vary: 0.08 });
         A.retro('beam', { vol: mine(e) ? 0.55 : 0.3, pan: pan(e.x) });
         const p = P(e.x, e.y), v = R.vel(e.x, e.dir * 14, 0);
@@ -527,6 +528,11 @@ function handleEvents(list, W, live) {
     }
   }
 }
+// sounds the renderer asks for (wreckage landing, distant thunder)
+R.sfx = (name, o) => {
+  if (name === 'debris') { A.play('debris', { x: o.x, y: o.y, z: o.z, vol: 0.35, gap: 0.12, vary: 0.2 }); return; }
+  if (name === 'thunder') { A.play('boomL', { vol: 0.25, rate: 0.45, delay: 0.4 + Math.random() * 0.8, gap: 1.5 }); }
+};
 function slowmo(scale, t) { G.timeScale = scale; G.slowT = t; A.setRate(Math.max(0.6, scale + 0.2)); }
 
 // ------------------------------------------------------------------ the end of a world / run
@@ -1085,7 +1091,7 @@ async function boot() {
   toTitle();
   boardOf('campaign', settings.diff).fresh(); boardOf('endless', settings.diff).fresh();
   if (!G.fixed && !params.has('test')) R.prepareAll(true);
-  if (params.has('test')) { const m = await import('./tests.js?v=3'); m.runTests(window.__sh); }
+  if (params.has('test')) { const m = await import('./tests.js?v=4'); m.runTests(window.__sh); }
   else if (params.has('playthrough')) { A.unlock(); startPlaythrough(); }
   else if (params.has('room')) { act('online'); $('join-code').value = cleanCode(params.get('room')); }
   else if (G.autopilot) { A.unlock(); if (params.has('endless')) startEndless(); else startCampaign(+params.get('sector') || 0); }

@@ -1,6 +1,6 @@
 // Skyhold 2026 — every tunable number lives here. The RAMP table drives difficulty; nothing else in the game
 // hard-codes enemy pace, numbers, fire rate, aim or warning times.
-export const VERSION = '1.2.0';
+export const VERSION = '1.3.0';
 export const STEP = 1 / 120;
 
 // ------------------------------------------------------------------ the planet and the Warden gunship
@@ -97,8 +97,8 @@ export const RAMP = [
   { lifters: [8, 10], group: [3, 3], gap: [5.4, 4.6], lV: [7.6, 8.4], liftV: [2.0, 2.2], grabT: [1.4, 1.25], hunters: [3, 3], fire: [0.29, 0.34], shooters: [3, 3], warn: [1.35, 1.15],
     aim: [0.11, 0.09], boltV: [20, 22], lead: [0.5, 0.6], hV: [15, 16], stV: [17, 18], sowers: [1, 2], hives: [2, 2], husks: [2, 3], prowlT: [48, 42], fallV: [5, 5.5], safeH: [12, 10], shield: [0, 0],
     sting: 4, settlers: 10, nodeHP: 19, bossV: 6.4, atkT: 4.0 },
-  { lifters: [9, 12], group: [3, 4], gap: [4.8, 4], lV: [8.6, 9.6], liftV: [2.3, 2.6], grabT: [1.2, 1.0], hunters: [3, 4], fire: [0.35, 0.41], shooters: [3, 3], warn: [1.1, 0.72],
-    aim: [0.08, 0.065], boltV: [22, 25], lead: [0.6, 0.7], hV: [17, 19], stV: [19, 21], sowers: [2, 2], hives: [2, 2], husks: [3, 4], prowlT: [42, 34], fallV: [5.8, 6.4], safeH: [9, 8], shield: [0, 0],
+  { lifters: [10, 12], group: [3, 4], gap: [4.8, 4], lV: [8.6, 9.6], liftV: [2.3, 2.6], grabT: [1.2, 1.0], hunters: [3, 4], fire: [0.38, 0.44], shooters: [3, 3], warn: [1.1, 0.72],
+    aim: [0.072, 0.058], boltV: [22, 25], lead: [0.6, 0.7], hV: [17, 19], stV: [19, 21], sowers: [2, 2], hives: [2, 2], husks: [4, 4], prowlT: [42, 34], fallV: [5.8, 6.4], safeH: [9, 8], shield: [0, 0],
     sting: 6, settlers: 10, nodeHP: 21, bossV: 7, atkT: 3.4 },
 ];
 export const RAMP_KEYS = ['lifters', 'group', 'gap', 'lV', 'liftV', 'grabT', 'hunters', 'fire', 'shooters', 'warn', 'aim', 'boltV', 'lead', 'hV', 'stV', 'sowers', 'hives', 'husks', 'prowlT', 'fallV', 'safeH', 'shield'];
@@ -168,6 +168,7 @@ export const POWERUPS = {
   overdrive: { name: 'OVERDRIVE', glyph: '»', color: 0xffd23f, time: 10, w: 10, desc: 'Double fire rate' },
   cell: { name: 'SHIELD CELL', glyph: '⬡', color: 0x6ad8ff, time: 0, w: 8, desc: '+1 shield charge' },
   nova: { name: 'NOVA', glyph: '✸', color: 0xff9a5a, time: 0, w: 6, desc: '+1 nova' },
+  drone: { name: 'ESCORT DRONE', glyph: '◈', color: 0x9dff7a, time: 12, w: 4, desc: 'A drone flies with you and shoots the nearest machine' },
 };
 export const PW_KEYS = Object.keys(POWERUPS);
 export const DROP = { chance: { sower: 0.25, hive: 0.4, prowler: 0.3, husk: 0.06, lifter: 0.04, stinger: 0.03 }, life: 14, r: 2.2, max: 3 };

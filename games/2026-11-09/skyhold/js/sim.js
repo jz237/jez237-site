@@ -3,7 +3,7 @@
 // Nothing in here touches the DOM, WebGL or audio; it only pushes events into W.ev.
 //
 // The world is a band round a small planet: x along the ground (wraps every C metres), y altitude (0..H).
-import { F, STEP, C, H, ENEMY, SETTLER, BOSSES, B_KEYS, SECTORS, WAVES, rampAt, rampLevel, endlessLevel, ENDLESS, TUTOR, SCORE, START_LIVES, DIFFICULTY, applyDiff, POWERUPS, PW_KEYS, DROP } from './config.js?v=3';
+import { F, STEP, C, H, ENEMY, SETTLER, BOSSES, B_KEYS, SECTORS, WAVES, rampAt, rampLevel, endlessLevel, ENDLESS, TUTOR, SCORE, START_LIVES, DIFFICULTY, applyDiff, POWERUPS, PW_KEYS, DROP } from './config.js?v=4';
 export { STEP };
 
 const clamp = (v, a, b) => (v < a ? a : v > b ? b : v);
@@ -243,6 +243,8 @@ function player(W, p, dt) {
   // the beam cannon
   p.fireT -= dt;
   if (I.fire && p.fireT <= 0) fire(W, p);
+  // the escort drone fires on its own at the nearest machine within reach
+  if (p.pw.drone) { p.droneT = (p.droneT || 0) - dt; if (p.droneT <= 0) droneFire(W, p); }
   // nova
   p.novaT -= dt;
   if (I.nova && !p.novaHeld && p.novaT <= 0) nova(W, p);
@@ -267,6 +269,23 @@ function player(W, p, dt) {
 }
 export function fireCD(W, p) { return F.fireCD * [1, 0.84, 0.72, 0.62][W.up.rapid || 0] * (p && p.pw.overdrive ? 0.5 : 1); }
 export const beamRange = (W) => F.beamRange * (1 + 0.15 * (W.up.reach || 0));
+// the escort drone rides above the ship; it picks the nearest machine within 40 m and fires a beam along its height
+export const dronePos = (p, t) => [wp(p.x - p.face * 1.2 + Math.sin(t * 2.3) * 0.6), p.y + 2.2 + Math.sin(t * 3.1) * 0.4];
+function droneFire(W, p) {
+  const [dx0, dy0] = dronePos(p, W.t);
+  let best = null, bd = 30;
+  for (const e of W.enemies) {
+    if (e.hp <= 0 || e.born > 0 || e.type === 'mine') continue;
+    const d = Math.abs(wd(e.x - dx0)) + Math.abs(e.y - dy0) * 1.5;
+    if (d < bd) { bd = d; best = e; }
+  }
+  if (!best) { p.droneT = 0.2; return; }
+  p.droneT = 0.9;
+  const dir = Math.sign(wd(best.x - dx0)) || 1, x0 = wp(dx0 + dir * 0.6), y = best.y;
+  if (W.net === 'guest') W.claims.push({ fire: [Math.round(x0 * 100) / 100, Math.round(y * 100) / 100, dir, 0] });
+  W.shots.push({ id: W.nextId++, pid: p.id, x0, y, dir, t: 0, done: false, vx: 0, drone: 1 });
+  W.ev.push({ k: 'fire', pid: p.id, x: x0, y, dir, twin: false, drone: true, fy: dy0 });
+}
 function fire(W, p) {
   p.fireT = fireCD(W, p);
   const x0 = wp(p.x + p.face * 1.9);
@@ -789,7 +808,7 @@ function kill(W, e, pid, by) {
     W.bestChain = Math.max(W.bestChain, W.chain);
     score *= chainMult(W.chain);
   }
-  if (pid) addScore(W, score);
+  if (pid) addScore(W, score, ENEMY[e.type].score);
   W.stats.kills++;
   if (e.type === 'lifter') W.stats.lifters++;
   if (e.type === 'husk') W.stats.husks++;
@@ -831,7 +850,8 @@ export function pickup(W, p, q) {
   else p.pw[q.kind] = P.time;
   W.ev.push({ k: 'pickup', kind: q.kind, x: q.x, y: q.y, pid: p.id });
 }
-export function addScore(W, n) { const b = Math.round(n * D_OF(W).score); W.score += b; W.lifePts += b; }
+// lifeN: the points that count toward extra ships (a kill chain's bonus does not, so chains do not make the game easier)
+export function addScore(W, n, lifeN = n) { const b = Math.round(n * D_OF(W).score); W.score += b; W.lifePts += Math.round(lifeN * D_OF(W).score); }
 
 // ------------------------------------------------------------------ contacts
 function contacts(W) {
