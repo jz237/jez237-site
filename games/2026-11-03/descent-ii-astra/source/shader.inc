@@ -1,15 +1,21 @@
+#include "astra_uniform_cache.inc"
+#include "astra_strata.inc"
+#define AR_ROOM_GLSL "uniform sampler2D roomAtlas;uniform float roomReflection;uniform vec4 reflectPlanes[6],reflectOrigins[6],reflectU[6],reflectV[6];" \
+        "vec3 roomRay(vec3 direction,float rough){float nearest=10000.;vec2 address=vec2(0.);float valid=0.;for(int i=0;i<6;i++){vec4 plane=reflectPlanes[i];float den=dot(plane.xyz,direction);if(abs(den)<.0001||reflectOrigins[i].w<.5)continue;float t=-(dot(plane.xyz,p)+plane.w)/den;if(t<.18||t>nearest)continue;vec3 d=p+direction*t-reflectOrigins[i].xyz;vec2 q=vec2(dot(d,reflectU[i].xyz),dot(d,reflectV[i].xyz));if(q.x<0.||q.y<0.||q.x>1.||q.y>1.)continue;nearest=t;address=(vec2(mod(float(i),4.),floor(float(i)/4.))+clamp(q,vec2(.06),vec2(.94)))/vec2(4.,2.);valid=1.;}vec2 blur=vec2(.005,.01)*rough;return valid*(texture2D(roomAtlas,address).rgb*.5+texture2D(roomAtlas,address+blur).rgb*.25+texture2D(roomAtlas,address-blur).rgb*.25);}"
 /* Materials are shared across palette slots. One tangent map per source, on unit 1. */
 extern float astra_lamp[4],astra_flash[4];
 extern int astra_drawing_mine,astra_refinement;
 static float astra_surface[4];
-int astra_native_compare;
+int astra_native_compare,astra_detail_upgrade=1;
+static void ar_bind(int room);
+static void ar_bind_to(GLuint program,int room);
 static GLuint astra_normals[256],astra_program;
 static GLint astra_tangents,astra_fixture,astra_moving;
 static int astra_gpu_failed,astra_shaded;
-static GLuint ag_colors[16],ag_details[16];
+static GLuint ag_colors[19],ag_details[19];
 static GLuint af_upload(const unsigned char *,int,int,int);
 static void ag_load(int id){
-    if(id<0||id>=16||ag_colors[id])return;
+    if(id<0||id>=19||ag_colors[id])return;
     char filename[24];png_data data;glActiveTexture(GL_TEXTURE0);
     snprintf(filename,sizeof filename,"g%02d.png",id);
     if(read_png(filename,&data)){ag_colors[id]=af_upload(data.data,data.width,data.height,data.channels);free(data.data);}
@@ -18,6 +24,7 @@ static void ag_load(int id){
 }
 static GLuint ag_color(ogl_texture *t){return t->faithful>=20?ag_colors[t->faithful-20]:t->handle;}
 static GLuint ag_detail(ogl_texture *t){return t->faithful>=20?ag_details[t->faithful-20]:t->faithful_detail?t->faithful_detail:astra_normals[t->material];}
+#include "astra_districts.inc"
 static int af_surface(const char *name);
 static int astra_material_id(const char *name)
 {
@@ -44,7 +51,8 @@ static void astra_init_shader(void)
     const char *vs="varying highp vec2 uv;varying mediump vec4 light;varying highp vec3 p;"
         "void main(){gl_Position=ftransform();uv=gl_MultiTexCoord0.xy;light=gl_Color;p=gl_Vertex.xyz;}";
     const char *fs="precision highp float;varying highp vec2 uv;varying mediump vec4 light;varying highp vec3 p;"
-        "uniform sampler2D colorMap,detailMap,nativeMap,nativeTop,doorMap;uniform float doorActive,doorLayer;uniform vec4 doorTiles;uniform vec3 doorScale;uniform vec3 generatedTint,topGeneratedTint;uniform float generatedShape,topGeneratedShape;uniform vec4 generatedRect,topGeneratedRect;uniform float faithful,topFaithful,nativeCompare;uniform mat3 basis;uniform vec4 lamp,shot,surface;uniform vec4 fixturePos[3],fixtureColor[3],fixtureAxis[3];uniform float doorMotion;uniform vec2 density;uniform float refinement;uniform sampler2D topMap,topDetail;uniform float paired,topTurn;"
+        "uniform sampler2D colorMap,detailMap,nativeMap,nativeTop,doorMap;uniform float doorActive,doorLayer;uniform vec4 doorTiles;uniform vec3 doorScale;uniform vec3 generatedTint,topGeneratedTint;uniform float generatedShape,topGeneratedShape;uniform vec4 generatedRect,topGeneratedRect;uniform mat3 geologyWorld;uniform vec3 geologyEye;uniform float geologyOn;uniform float district;uniform float faithful,topFaithful,nativeCompare;uniform mat3 basis;uniform vec4 lamp,shot,surface;uniform vec4 fixturePos[4],fixtureColor[4],fixtureAxis[4];uniform float doorMotion;uniform vec2 density;uniform float refinement,detailUpgrade;uniform sampler2D topMap,topDetail;uniform float paired,topTurn;"
+        AR_ROOM_GLSL AS_STRATA_GLSL
         "float hash(vec2 q){return fract(sin(dot(q,vec2(127.1,311.7)))*43758.5453);}"
         "float noise(vec2 q){vec2 i=floor(q),f=fract(q);f=f*f*(3.-2.*f);return mix(mix(hash(i),hash(i+vec2(1.,0.)),f.x),mix(hash(i+vec2(0.,1.)),hash(i+1.),f.x),f.y);}"
         "float skin(vec2 q){vec2 f=fract(q),e=min(f,1.-f);float d=min(e.x,e.y);float h=smoothstep(.015,.045,d)*.035;"
@@ -63,9 +71,10 @@ static void astra_init_shader(void)
         "vec2 leafUV(vec2 q){vec2 d=fract(q)-.5;return q-sign(d)*doorMotion*.24;}"
         "void main(){vec2 coord=uv;vec3 eye=normalize(-p);float close=1.-smoothstep(35.,120.,-p.z);"
         "if(surface.x>3.5){coord+=sin(uv.yx*19.+surface.z*.8)*.003;}"
-        "if(faithful>.5&&nativeCompare<.5&&paired<.5){float h=texture2D(detailMap,guv(uv,faithful,generatedRect)).a-.42;vec2 e=vec2(dot(eye,basis[0]),dot(eye,basis[1]));coord-=e*h*.018*close;}"
+        "if(faithful>.5&&nativeCompare<.5&&paired<.5){float h=texture2D(detailMap,guv(uv,faithful,generatedRect)).a-.42;vec2 e=vec2(dot(eye,basis[0]),dot(eye,basis[1]));coord-=e*h*mix(.018,.032,detailUpgrade)*close;}"
         "vec2 gc=guv(coord,faithful,generatedRect);if(doorActive>.5&&doorLayer<1.5&&faithful==24.)gc=leafUV(gc);vec4 a=texture2D(colorMap,gc);if(faithful>19.5){a=gs(colorMap,gc,faithful,0.);a.rgb=gt(a.rgb,gc,faithful,generatedTint);a.a=generatedShape>.5?gm(guv(uv,faithful,generatedRect),generatedShape):texture2D(nativeMap,uv).a;}if(doorActive>.5&&doorLayer<1.5&&nativeCompare<.5)a.a=doorAlpha(uv);if(nativeCompare>.5&&faithful>.5)a=texture2D(nativeMap,uv);"
         "vec3 sampleN=faithful>19.5?gs(detailMap,gc,faithful,1.).rgb:texture2D(detailMap,coord).rgb;"
+        "vec3 rockWorld=geologyWorld*p+geologyEye,rockNormal=normalize(geologyWorld*basis[2]);if(geologyOn>.5&&detailUpgrade>.5&&nativeCompare<.5){a.rgb=strataSample(colorMap,rockWorld,rockNormal)*strataTint(rockWorld);sampleN=strataSample(detailMap,rockWorld,rockNormal);if(district==4.){float lining=districtLining(coord);a.rgb=mix(a.rgb,texture2D(topMap,coord).rgb,lining);sampleN=mix(sampleN,texture2D(topDetail,coord).rgb,lining);}}"
         "if(paired>.5){vec2 tuv=uv;if(topTurn>.5&&topTurn<1.5)tuv=vec2(1.-uv.y,uv.x);else if(topTurn>1.5&&topTurn<2.5)tuv=1.-uv;else if(topTurn>2.5)tuv=vec2(uv.y,1.-uv.x);"
         "vec2 tc=guv(tuv,topFaithful,topGeneratedRect);if(doorActive>.5&&doorLayer>1.5&&topFaithful==24.)tc=leafUV(tc);vec4 top=texture2D(topMap,tc);if(topFaithful>19.5){top=gs(topMap,tc,topFaithful,0.);top.rgb=gt(top.rgb,tc,topFaithful,topGeneratedTint);top.a=topGeneratedShape>.5?gm(tc,topGeneratedShape):texture2D(nativeTop,tuv).a;}if(doorActive>.5&&doorLayer>1.5&&nativeCompare<.5)top.a=doorAlpha(tuv);if(nativeCompare>.5&&topFaithful>.5)top=texture2D(nativeTop,tuv);if(top.a<.001)discard;float useTop=smoothstep(.004,.08,top.a);a=mix(a,vec4(top.rgb,1.),useTop);"
         "vec3 tn=topFaithful>19.5?gs(topDetail,tc,topFaithful,1.).rgb:texture2D(topDetail,tuv).rgb;vec2 normal=tn.xy*2.-1.;if(topTurn>.5&&topTurn<1.5)normal=vec2(normal.y,-normal.x);else if(topTurn>1.5&&topTurn<2.5)normal=-normal;else if(topTurn>2.5)normal=vec2(-normal.y,normal.x);"
@@ -77,6 +86,7 @@ static void astra_init_shader(void)
         "float seam=1.-smoothstep(.012,.050,min(edges.x,edges.y));a.rgb*=1.-seam*.32*hard*close*layout;"
         "float fiber=sin(cell.x*170.+sin(cell.y*21.))*sin(cell.y*110.);a.rgb*=1.+fiber*.015*close*exp(-max(0.,-p.z-8.)*.08);"
         "vec3 n=normalize(basis[0]*xy.x+basis[1]*xy.y+base*sqrt(max(.06,1.-dot(xy,xy))));"
+        "if(geologyOn>.5&&detailUpgrade>.5&&nativeCompare<.5&&paired<.5){vec3 N=strataNormal(detailMap,rockWorld,rockNormal);vec3 naturalN=normalize(vec3(dot(geologyWorld[0],N),dot(geologyWorld[1],N),dot(geologyWorld[2],N)));n=mix(naturalN,n,district==4.?districtLining(coord):0.);}"
         "vec3 L=lamp.xyz-p;float dist=length(L);L/=max(dist,.001);"
         "float reach=lamp.w/(1.+dist*dist*.0018);"
         "vec3 beam=normalize(eye+vec3(-.25,.36,.12));float ndl=max(0.,dot(n,L));"
@@ -91,6 +101,7 @@ static void astra_init_shader(void)
         "float chip=seamEdge*smoothstep(.55,.73,fleck)*hard*detailFade*refinement*layout;float wet=smoothstep(.64,.86,grime)*oil*refinement;"
         "a.rgb=mix(a.rgb,vec3(.28,.32,.33),chip*.65);a.rgb*=1.-refinement*(smoothstep(.52,.80,grime)*.16+wet*.16);"
         "metal=mix(metal,.88,chip);expn=mix(expn,105.,wet*.8);expn=mix(min(expn,22.),expn,detailFade);"
+        "float finish=noise(coord*1.7+surface.w*11.);float coating=smoothstep(.32,.67,finish)*hard;float rust=smoothstep(.72,.91,finish)*hard*detailUpgrade;metal*=1.-coating*.35*detailUpgrade;expn=mix(expn,mix(12.,68.,coating),detailUpgrade*.28);a.rgb=mix(a.rgb,a.rgb*vec3(1.09,.91,.80),rust*.45);a.rgb*=1.+(finish-.5)*.11*detailUpgrade;"
         "float cavity=clamp(1.-length(xy)*(.18+.12*rock),.72,1.);cavity*=mix(.78,1.,smoothstep(.24,.66,sampleN.z));"
         "float glint=pow(max(dot(n,normalize(L+eye)),0.),expn)*reach;"
         "vec3 D=shot.xyz-p;float sd=length(D);D/=max(.01,sd);float fire=shot.w/(1.+sd*sd*.009);"
@@ -99,12 +110,13 @@ static void astra_init_shader(void)
         "vec3 lampTint=mix(vec3(1.,.75,.46),vec3(.40,.76,.85),step(1.5,surface.y)*(1.-step(2.5,surface.y)));"
         "col+=lampTint*glint*(.12+.35*metal)*(1.-rock*.8);"
         "col+=vec3(1.,.29,.085)*fire*(a.rgb*.64*max(0.,dot(n,D))+.38*pow(max(dot(n,normalize(D+eye)),0.),25.));"
-        "for(int i=0;i<3;i++){vec3 F=fixturePos[i].xyz-p;F+=fixtureAxis[i].xyz*clamp(dot(-F,fixtureAxis[i].xyz),-fixtureAxis[i].w,fixtureAxis[i].w);float fd=length(F);F/=max(.01,fd);float fall=pow(max(0.,1.-fd/max(.01,fixturePos[i].w)),2.);vec3 fc=fixtureColor[i].rgb*fall;float diffuse=max(0.,dot(n,F));float spec=pow(max(0.,dot(n,normalize(F+eye))),expn);col+=fc*(a.rgb*(.12+.20*fixtureColor[i].w+.70*diffuse)*cavity+spec*(.08+.23*metal));}"
+        "for(int i=0;i<4;i++){vec3 F=fixturePos[i].xyz-p;F+=fixtureAxis[i].xyz*clamp(dot(-F,fixtureAxis[i].xyz),-fixtureAxis[i].w,fixtureAxis[i].w);float fd=length(F);F/=max(.01,fd);float fall=pow(max(0.,1.-fd/max(.01,fixturePos[i].w)),2.);vec3 fc=fixtureColor[i].rgb*fall;float diffuse=max(0.,dot(n,F));float spec=pow(max(0.,dot(n,normalize(F+eye))),expn);col+=fc*(a.rgb*(.12+.20*fixtureColor[i].w+.70*diffuse)*cavity+spec*(.08+.23*metal));}"
         "vec3 H=normalize(beam+eye);float tangent=dot(H,basis[0]),across=dot(H,basis[1]);"
         "float brushed=exp(-(tangent*tangent*260.+across*across*16.))*max(0.,dot(n,beam));"
         "col+=refinement*hard*(1.-ceramic)*vec3(.19,.24,.27)*brushed*(.35+.65*metal)*room;"
         "vec3 reflection=reflect(-eye,n);float strip=pow(max(0.,1.-abs(reflection.y-.56)*2.4),14.);"
-        "col+=refinement*vec3(.16,.29,.34)*strip*(wet*.43+metal*.07)*room;"
+        "col+=refinement*(1.-detailUpgrade)*vec3(.16,.29,.34)*strip*(wet*.43+metal*.07)*room;"
+        "if(roomReflection>0.){float fresnel=.06+.35*pow(1.-max(0.,dot(n,eye)),4.);col+=roomReflection*roomRay(reflection,1.-metal)*fresnel*(.22+.65*metal)*(1.-rock*.86);}"
         "float vein=1.-smoothstep(.014,.045,abs(noise(cell*3.5+noise(cell*.8)*2.)-.51));"
         "col+=rock*refinement*vein*vec3(.038,.052,.048)*close*layout;"
         "float haze=min(.16,1.-exp(-max(0.,-p.z-10.)*.0017));col=mix(col,vec3(.09,.145,.16),haze);"
@@ -117,28 +129,20 @@ static void astra_init_shader(void)
     GLint ok;glGetProgramiv(astra_program,GL_LINK_STATUS,&ok);
     if(!ok){char log[1024];glGetProgramInfoLog(astra_program,sizeof log,NULL,log);fprintf(stderr,"Astra link: %s\n",log);astra_gpu_failed=1;return;}
     glUseProgram(astra_program);
-    glUniform1i(glGetUniformLocation(astra_program,"colorMap"),0);
-    glUniform1i(glGetUniformLocation(astra_program,"doorMap"),6);
-    glUniform1i(glGetUniformLocation(astra_program,"detailMap"),1);
-    glUniform1i(glGetUniformLocation(astra_program,"nativeMap"),4);glUniform1i(glGetUniformLocation(astra_program,"nativeTop"),5);
-    glUniform1i(glGetUniformLocation(astra_program,"topMap"),2);glUniform1i(glGetUniformLocation(astra_program,"topDetail"),3);
-    astra_tangents=glGetUniformLocation(astra_program,"basis");
-    astra_fixture=glGetUniformLocation(astra_program,"lamp");astra_moving=glGetUniformLocation(astra_program,"shot");
+    glUniform1i(AS_UNIFORM(astra_program,"colorMap"),0);
+    glUniform1i(AS_UNIFORM(astra_program,"doorMap"),6);
+    glUniform1i(AS_UNIFORM(astra_program,"detailMap"),1);
+    glUniform1i(AS_UNIFORM(astra_program,"nativeMap"),4);glUniform1i(AS_UNIFORM(astra_program,"nativeTop"),5);
+    glUniform1i(AS_UNIFORM(astra_program,"topMap"),2);glUniform1i(AS_UNIFORM(astra_program,"topDetail"),3);
+    astra_tangents=AS_UNIFORM(astra_program,"basis");
+    astra_fixture=AS_UNIFORM(astra_program,"lamp");astra_moving=AS_UNIFORM(astra_program,"shot");
 }
 static void astra_unit(float *s){float d=sqrtf(s[0]*s[0]+s[1]*s[1]+s[2]*s[2]);if(d>1e-7f)for(int i=0;i<3;i++)s[i]/=d;}
-static int astra_material_begin(ogl_texture *tex,const float *p,const float *uv)
-{
-    if(!tex || tex->material<=0 || tex->material>=256 || astra_gpu_failed)return 0;
-    if(!astra_program)astra_init_shader();
-    if(astra_gpu_failed)return 0;
-    int id=tex->material;
-    if(tex->faithful>=20)ag_load(tex->faithful-20);
+static int astra_prepare_normal(int id){
+    if(id<=0||id>=256)return 0;if(astra_normals[id])return 1;
     glActiveTexture(GL_TEXTURE1);
-    if(tex->faithful>=20)glBindTexture(GL_TEXTURE_2D,ag_details[tex->faithful-20]);
-    else if(tex->faithful_detail)glBindTexture(GL_TEXTURE_2D,tex->faithful_detail);
-    else if(!astra_normals[id]){
         char name[20];snprintf(name,sizeof name,"n%03d.png",id-1);png_data data;
-        if(!read_png(name,&data)){glActiveTexture(GL_TEXTURE0);glUseProgram(0);return 0;}
+        if(!read_png(name,&data))return 0;
         glGenTextures(1,&astra_normals[id]);glBindTexture(GL_TEXTURE_2D,astra_normals[id]);
         glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR_MIPMAP_LINEAR);
         glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
@@ -146,20 +150,40 @@ static int astra_material_begin(ogl_texture *tex,const float *p,const float *uv)
         glGenerateMipmap(GL_TEXTURE_2D);
         if(ogl_maxanisotropy>1.0)glTexParameterf(GL_TEXTURE_2D,GL_TEXTURE_MAX_ANISOTROPY_EXT,fminf(16,ogl_maxanisotropy));
         free(data.data);
+    return 1;
+}
+static int astra_material_begin(ogl_texture *tex,const float *p,const float *uv)
+{
+    if(!tex || tex->material<=0 || tex->material>=256 || astra_gpu_failed)return 0;
+    if(!astra_program)astra_init_shader();
+    if(astra_gpu_failed)return 0;
+    int id=tex->material;
+    int districtFamily=astra_drawing_mine&&!astra_native_compare&&astra_detail_upgrade?astra_district_family(sz_face_room,sz_face_side):-1;
+    if(districtFamily>=0){ag_load(districtFamily);if(!ag_colors[districtFamily]||!ag_details[districtFamily])districtFamily=-1;}
+    if(tex->faithful>=20)ag_load(tex->faithful-20);
+    glActiveTexture(GL_TEXTURE1);
+    if(tex->faithful>=20)glBindTexture(GL_TEXTURE_2D,ag_details[tex->faithful-20]);
+    else if(tex->faithful_detail)glBindTexture(GL_TEXTURE_2D,tex->faithful_detail);
+    else if(!astra_normals[id]){
+        if(!astra_prepare_normal(id)){glActiveTexture(GL_TEXTURE0);glUseProgram(0);return 0;}
     }else glBindTexture(GL_TEXTURE_2D,astra_normals[id]);
     glActiveTexture(GL_TEXTURE4);glBindTexture(GL_TEXTURE_2D,tex->native_color?tex->native_color:tex->handle);
     glActiveTexture(GL_TEXTURE5);glBindTexture(GL_TEXTURE_2D,tex->native_color?tex->native_color:tex->handle);
     glActiveTexture(GL_TEXTURE0);glBindTexture(GL_TEXTURE_2D,ag_color(tex));glUseProgram(astra_program);
-    float lens_tint[3];aw_lens_tint(tex,aw_room,lens_tint);
-    glUniform1f(glGetUniformLocation(astra_program,"generatedShape"),tex->generated_shape);glUniform3fv(glGetUniformLocation(astra_program,"generatedTint"),1,lens_tint);glUniform4fv(glGetUniformLocation(astra_program,"generatedRect"),1,tex->generated_rect);glUniform1f(glGetUniformLocation(astra_program,"paired"),0);
-    ad_bind(astra_program,astra_drawing_mine&&ad_matches(tex));glUniform1f(glGetUniformLocation(astra_program,"doorLayer"),1);
-    glUniform1f(glGetUniformLocation(astra_program,"faithful"),tex->faithful);glUniform1f(glGetUniformLocation(astra_program,"nativeCompare"),astra_native_compare);
+    if(districtFamily>=0){glActiveTexture(GL_TEXTURE1);glBindTexture(GL_TEXTURE_2D,ag_details[districtFamily]);glActiveTexture(GL_TEXTURE0);glBindTexture(GL_TEXTURE_2D,ag_colors[districtFamily]);sz_record(sz_face_room);}
+    int district=districtFamily>=0?astra_district(sz_face_room):-1;
+    glUniform1f(AS_UNIFORM(astra_program,"district"),district);
+    if(district==4){ag_load(8);glActiveTexture(GL_TEXTURE2);glBindTexture(GL_TEXTURE_2D,ag_colors[8]);glActiveTexture(GL_TEXTURE3);glBindTexture(GL_TEXTURE_2D,ag_details[8]);glActiveTexture(GL_TEXTURE0);}
+    float lens_tint[3];aw_lens_tint(tex,aw_room,lens_tint);if(districtFamily>=0)for(int c=0;c<3;c++)lens_tint[c]=1;
+    glUniform1f(AS_UNIFORM(astra_program,"generatedShape"),tex->generated_shape);glUniform3fv(AS_UNIFORM(astra_program,"generatedTint"),1,lens_tint);glUniform4fv(AS_UNIFORM(astra_program,"generatedRect"),1,tex->generated_rect);glUniform1f(AS_UNIFORM(astra_program,"paired"),0);
+    ad_bind(astra_program,astra_drawing_mine&&ad_matches(tex));glUniform1f(AS_UNIFORM(astra_program,"doorLayer"),1);
+    glUniform1f(AS_UNIFORM(astra_program,"faithful"),districtFamily>=0?(sz_natural(districtFamily)?23:20+districtFamily):tex->faithful);glUniform1f(AS_UNIFORM(astra_program,"nativeCompare"),astra_native_compare);
     float a=uv[2]-uv[0],b=uv[3]-uv[1],c=uv[4]-uv[0],d=uv[5]-uv[1],mat[9];
     float flip=(a*d-b*c)<0?-1.f:1.f;
     for(int i=0;i<3;i++){float e=p[3+i]-p[i],g=p[6+i]-p[i];mat[i]=(d*e-b*g)*flip;mat[3+i]=(a*g-c*e)*flip;}
     float density[2];
     for(int j=0;j<2;j++)density[j]=fminf(12,fmaxf(.6f,sqrtf(mat[j*3]*mat[j*3]+mat[j*3+1]*mat[j*3+1]+mat[j*3+2]*mat[j*3+2])/fmaxf(.001f,fabsf(a*d-b*c))/8.f));
-    glUniform2fv(glGetUniformLocation(astra_program,"density"),1,density);
+    glUniform2fv(AS_UNIFORM(astra_program,"density"),1,density);
     astra_unit(mat);astra_unit(mat+3);
     for(int i=0;i<3;i++)mat[6+i]=mat[(i+1)%3]*mat[3+(i+2)%3]-mat[(i+2)%3]*mat[3+(i+1)%3];
     astra_unit(mat+6);
@@ -168,11 +192,21 @@ static int astra_material_begin(ogl_texture *tex,const float *p,const float *uv)
     if(!kinds_ready){EM_ASM({var k=window.astraMaterialTypes||[];for(var i=0;i<256;i++)HEAP32[($0>>2)+i]=k[i]??-1;},kinds);kinds_ready=1;}
     float surface[4];memcpy(surface,astra_surface,sizeof surface);if(kinds[id]==0||kinds[id]==4)surface[0]=kinds[id];else if(kinds[id]>0&&surface[0]==0)surface[0]=1;if(id>=181&&id<=183)surface[0]=1;
     if(tex->faithful)surface[0]=(tex->faithful==1||tex->faithful==23)?0:tex->faithful==5?4:1;
-    glUniform4fv(glGetUniformLocation(astra_program,"surface"),1,surface);
-    glUniform1f(glGetUniformLocation(astra_program,"refinement"),astra_refinement);
-    EM_ASM(Module.wallDetailVersion=38;);
-    glUniform4fv(glGetUniformLocation(astra_program,"fixtureAxis[0]"),3,&afx_axes[0][0]);
-    glUniform4fv(glGetUniformLocation(astra_program,"fixturePos[0]"),3,&afx_lamps[0][0]);glUniform4fv(glGetUniformLocation(astra_program,"fixtureColor[0]"),3,&afx_colors[0][0]);
+    static GLint geologyMatrix=-2,geologyEye,geologyOn;
+    if(geologyMatrix==-2){geologyMatrix=AS_UNIFORM(astra_program,"geologyWorld");geologyEye=AS_UNIFORM(astra_program,"geologyEye");geologyOn=AS_UNIFORM(astra_program,"geologyOn");}
+    if(districtFamily>=0)surface[0]=sz_natural(districtFamily)?0:1;
+    int geological=astra_drawing_mine&&(districtFamily>=0?sz_natural(districtFamily):tex->faithful==23);glUniform1f(geologyOn,geological);
+    if(geological){
+        float worldMatrix[9];const vms_matrix *view=&Unscaled_matrix;float scales[3]={f2fl(Matrix_scale.x),f2fl(Matrix_scale.y),-f2fl(Matrix_scale.z)};const vms_vector *directions[3]={&view->rvec,&view->uvec,&view->fvec};
+        for(int k=0;k<3;k++){worldMatrix[k*3]=f2fl(directions[k]->x)/scales[k];worldMatrix[k*3+1]=f2fl(directions[k]->y)/scales[k];worldMatrix[k*3+2]=f2fl(directions[k]->z)/scales[k];}
+        glUniformMatrix3fv(geologyMatrix,1,GL_FALSE,worldMatrix);glUniform3f(geologyEye,f2fl(View_position.x),f2fl(View_position.y),f2fl(View_position.z));
+    }
+    glUniform4fv(AS_UNIFORM(astra_program,"surface"),1,surface);
+    glUniform1f(AS_UNIFORM(astra_program,"refinement"),astra_refinement);
+    static GLint upgrade=-2;if(upgrade==-2)upgrade=AS_UNIFORM(astra_program,"detailUpgrade");glUniform1f(upgrade,astra_detail_upgrade);ar_bind(aw_room);
+    EM_ASM(Module.wallDetailVersion=50;);
+    glUniform4fv(AS_UNIFORM(astra_program,"fixtureAxis[0]"),4,&afx_axes[0][0]);
+    glUniform4fv(AS_UNIFORM(astra_program,"fixturePos[0]"),4,&afx_lamps[0][0]);glUniform4fv(AS_UNIFORM(astra_program,"fixtureColor[0]"),4,&afx_colors[0][0]);
     glUniform4fv(astra_fixture,1,astra_lamp);glUniform4fv(astra_moving,1,astra_flash);
     ++astra_shaded;return 1;
 }
@@ -182,10 +216,27 @@ static int astra_material_begin(ogl_texture *tex,const float *p,const float *uv)
  * world coordinates put the light at the impact even on very large mine walls. */
 extern float astra_blast_positions[3][4],astra_blast_colors[3][4];
 extern int astra_room_blast_count;
+static GLuint warm_astra_light_face_program;static GLint warm_astra_light_face_bulbs,warm_astra_light_face_colors;static int warm_astra_light_face_failed;
+static int warm_astra_light_face(void){
+    if(warm_astra_light_face_failed)return 0;if(warm_astra_light_face_program)return 1;
+
+        const char *vs="varying highp vec3 world;void main(){world=gl_MultiTexCoord0.xyz;gl_Position=ftransform();}";
+        const char *fs="precision highp float;varying highp vec3 world;uniform vec4 bulbs[3],colors[3];uniform vec3 normal,eye;uniform float rock;"
+          "void main(){vec3 light=vec3(0.);for(int i=0;i<3;i++){float r=bulbs[i].w;"
+          "float t=clamp(1.-distance(world,bulbs[i].xyz)/max(.001,r),0.,1.);"
+          "vec3 L=normalize(bulbs[i].xyz-world+vec3(.0001)),V=normalize(eye-world);float diffuse=max(0.,dot(normal,L));float spec=pow(max(0.,dot(normal,normalize(L+V))),mix(48.,9.,rock));light+=colors[i].rgb*t*t*(.16+.70*diffuse+spec*mix(.9,.045,rock));}gl_FragColor=vec4(light,1.);}";
+        GLuint v=astra_compile(GL_VERTEX_SHADER,vs),f=astra_compile(GL_FRAGMENT_SHADER,fs);
+        if(!v||!f){warm_astra_light_face_failed=1;return 0;}
+        warm_astra_light_face_program=glCreateProgram();glAttachShader(warm_astra_light_face_program,v);glAttachShader(warm_astra_light_face_program,f);glLinkProgram(warm_astra_light_face_program);
+        glDeleteShader(v);glDeleteShader(f);GLint linked;glGetProgramiv(warm_astra_light_face_program,GL_LINK_STATUS,&linked);
+        if(!linked){warm_astra_light_face_failed=1;return 0;}warm_astra_light_face_bulbs=AS_UNIFORM(warm_astra_light_face_program,"bulbs[0]");warm_astra_light_face_colors=AS_UNIFORM(warm_astra_light_face_program,"colors[0]");
+
+    return 1;
+}
 void astra_light_face(int count,const g3s_point **view,const int *ids)
 {
-    static GLuint program;static GLint bulbs,colors;static int failed;
-    if(!astra_room_blast_count || failed || count<3 || count>8)return;
+
+    if(!astra_room_blast_count || warm_astra_light_face_failed || count<3 || count>8)return;
     float p[24],world[24],low[3],high[3];
     for(int i=0;i<count;i++){
         p[i*3]=f2fl(view[i]->p3_vec.x);p[i*3+1]=f2fl(view[i]->p3_vec.y);p[i*3+2]=-f2fl(view[i]->p3_vec.z);
@@ -198,23 +249,15 @@ void astra_light_face(int count,const g3s_point **view,const int *ids)
         for(int a=0;a<3;a++){float d=fmaxf(0,fmaxf(low[a]-b[a],b[a]-high[a]));d2+=d*d;}
         if(b[3]>0 && d2<b[3]*b[3])near++;}
     if(!near)return;
-    if(!program){
-        const char *vs="varying highp vec3 world;void main(){world=gl_MultiTexCoord0.xyz;gl_Position=ftransform();}";
-        const char *fs="precision highp float;varying highp vec3 world;uniform vec4 bulbs[3],colors[3];"
-          "void main(){vec3 light=vec3(0.);for(int i=0;i<3;i++){float r=bulbs[i].w;"
-          "float t=clamp(1.-distance(world,bulbs[i].xyz)/max(.001,r),0.,1.);"
-          "light+=colors[i].rgb*t*t*(.58+.42*t);}gl_FragColor=vec4(light,1.);}";
-        GLuint v=astra_compile(GL_VERTEX_SHADER,vs),f=astra_compile(GL_FRAGMENT_SHADER,fs);
-        if(!v||!f){failed=1;return;}
-        program=glCreateProgram();glAttachShader(program,v);glAttachShader(program,f);glLinkProgram(program);
-        glDeleteShader(v);glDeleteShader(f);GLint linked;glGetProgramiv(program,GL_LINK_STATUS,&linked);
-        if(!linked){failed=1;return;}bulbs=glGetUniformLocation(program,"bulbs[0]");colors=glGetUniformLocation(program,"colors[0]");
-    }
+    if(!warm_astra_light_face_program&&!warm_astra_light_face()){return;}
     int fade=grd_curcanv->cv_fade_level,blend=grd_curcanv->cv_blend_func;
     gr_settransblend(GR_FADE_OFF,GR_BLEND_ADDITIVE_A);glDepthMask(GL_FALSE);
     /* Reflect more light from bright metal while retaining a little scatter in dark areas. */
-    glBlendFunc(GL_DST_COLOR,GL_ONE);glUseProgram(program);
-    glUniform4fv(bulbs,3,&astra_blast_positions[0][0]);glUniform4fv(colors,3,&astra_blast_colors[0][0]);
+    glBlendFunc(GL_DST_COLOR,GL_ONE);glUseProgram(warm_astra_light_face_program);
+    float A[3],B[3],normal[3];for(int k=0;k<3;k++){A[k]=world[3+k]-world[k];B[k]=world[6+k]-world[k];}for(int k=0;k<3;k++)normal[k]=A[(k+1)%3]*B[(k+2)%3]-A[(k+2)%3]*B[(k+1)%3];astra_unit(normal);
+    float eye[3]={f2fl(View_position.x),f2fl(View_position.y),f2fl(View_position.z)},facing=0;for(int k=0;k<3;k++)facing+=normal[k]*(eye[k]-world[k]);if(facing<0)for(int k=0;k<3;k++)normal[k]*=-1;
+    glUniform3fv(AS_UNIFORM(warm_astra_light_face_program,"normal"),1,normal);glUniform3fv(AS_UNIFORM(warm_astra_light_face_program,"eye"),1,eye);glUniform1f(AS_UNIFORM(warm_astra_light_face_program,"rock"),astra_surface[0]<.5f?1:0);
+    glUniform4fv(warm_astra_light_face_bulbs,3,&astra_blast_positions[0][0]);glUniform4fv(warm_astra_light_face_colors,3,&astra_blast_colors[0][0]);
     glEnableClientState(GL_VERTEX_ARRAY);glEnableClientState(GL_TEXTURE_COORD_ARRAY);
     glVertexPointer(3,GL_FLOAT,0,p);glTexCoordPointer(3,GL_FLOAT,0,world);glDrawArrays(GL_TRIANGLE_FAN,0,count);
     glDisableClientState(GL_VERTEX_ARRAY);glDisableClientState(GL_TEXTURE_COORD_ARRAY);
@@ -244,12 +287,12 @@ static int astra_layered_draw(int nv,const g3s_point **points,const g3s_uvl *uvl
     glActiveTexture(GL_TEXTURE2);glBindTexture(GL_TEXTURE_2D,ag_color(top->gltexture));
     glActiveTexture(GL_TEXTURE3);glBindTexture(GL_TEXTURE_2D,ag_detail(top->gltexture));
     glActiveTexture(GL_TEXTURE5);glBindTexture(GL_TEXTURE_2D,top->gltexture->native_color?top->gltexture->native_color:top->gltexture->handle);
-    glUniform1f(glGetUniformLocation(astra_program,"topFaithful"),top->gltexture->faithful);
+    glUniform1f(AS_UNIFORM(astra_program,"topFaithful"),top->gltexture->faithful);
     float top_lens_tint[3];aw_lens_tint(top->gltexture,aw_room,top_lens_tint);
-    glUniform1f(glGetUniformLocation(astra_program,"topGeneratedShape"),top->gltexture->generated_shape);glUniform3fv(glGetUniformLocation(astra_program,"topGeneratedTint"),1,top_lens_tint);glUniform4fv(glGetUniformLocation(astra_program,"topGeneratedRect"),1,top->gltexture->generated_rect);
+    glUniform1f(AS_UNIFORM(astra_program,"topGeneratedShape"),top->gltexture->generated_shape);glUniform3fv(AS_UNIFORM(astra_program,"topGeneratedTint"),1,top_lens_tint);glUniform4fv(AS_UNIFORM(astra_program,"topGeneratedRect"),1,top->gltexture->generated_rect);
     glActiveTexture(GL_TEXTURE0);OGL_BINDTEXTURE(ag_color(base->gltexture));
-    ad_bind(astra_program,astra_drawing_mine&&ad_clip>=0);glUniform1f(glGetUniformLocation(astra_program,"doorLayer"),ad_base?1:2);
-    glUniform1f(glGetUniformLocation(astra_program,"paired"),1);glUniform1f(glGetUniformLocation(astra_program,"topTurn"),turn);
+    ad_bind(astra_program,astra_drawing_mine&&ad_clip>=0);glUniform1f(AS_UNIFORM(astra_program,"doorLayer"),ad_base?1:2);
+    glUniform1f(AS_UNIFORM(astra_program,"paired"),1);glUniform1f(AS_UNIFORM(astra_program,"topTurn"),turn);
     glEnableClientState(GL_VERTEX_ARRAY);glEnableClientState(GL_COLOR_ARRAY);glEnableClientState(GL_TEXTURE_COORD_ARRAY);
     glVertexPointer(3,GL_FLOAT,0,p);glColorPointer(4,GL_FLOAT,0,color);glTexCoordPointer(2,GL_FLOAT,0,uv);glDrawArrays(GL_TRIANGLE_FAN,0,nv);
     glDisableClientState(GL_TEXTURE_COORD_ARRAY);glDisableClientState(GL_COLOR_ARRAY);glDisableClientState(GL_VERTEX_ARRAY);
