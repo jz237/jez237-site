@@ -45,7 +45,7 @@ static int ae_theme(int room){
 }
 int astra_environment_theme(int room){return ae_theme(room);}
 void astra_environment_material(int room,int side,int texture){
-    ae_reset();int theme=ae_theme(room),kind=1;
+    ae_reset();sz_face_room=room;sz_face_side=side;int theme=ae_theme(room),kind=1;
     if(texture>=0&&texture<NumTextures){
         if(TmapInfo[texture].damage>0||TmapInfo[texture].flags&(TMI_WATER|TMI_VOLATILE))kind=4;
         else if(astra_environment_rock(texture))kind=0;
@@ -56,9 +56,10 @@ void astra_environment_material(int room,int side,int texture){
     astra_surface[3]=(texture*17%31)/31.f;
 }
 /* Record actual native wall hits, without changing damage or weapon behavior. */
+extern void astra_environment_response(int,int,const vms_vector*,float);
 void astra_environment_hit(int room,int side,const vms_vector *point,float size){
     if(!ax_on()||room<0||room>Highest_segment_index||side<0||side>5)return;
-    ae_reset();segment *s=&Segments[room];int t=s->sides[side].tmap_num;
+    ae_reset();astra_environment_response(room,side,point,size);segment *s=&Segments[room];int t=s->sides[side].tmap_num;
     int wallnum=s->sides[side].wall_num;
     /* Every solid surface can be scarred, including doors, breakable walls,
      * locked panels and hazardous metal. Liquids/forcefields keep native hit FX. */
@@ -83,24 +84,10 @@ static int ae_basis(int,int,vms_vector*,vms_matrix*,float*,float*);
 static int ag_shadow_data(int,int,float*,float*,float*);
 static int ss_wall(int,int);
 extern int astra_refinement;
-static void ae_wall_finish(int nv,const g3s_point **points,int room,int side,int frame){
-    static GLuint program;static int failed;if(failed||nv<3||nv>4)return;
-    float p[12],uv[8],marks[24]={0},mount[4]={0};int count=0;float shadows[12]={0},axes[12]={0},ups[12]={0};
-    int shadow_count=frame?ag_shadow_data(room,side,shadows,axes,ups):0;
-    if(frame&&side%2==0&&(room+side)%3!=1){
-        vms_vector c;vms_matrix b;float w,h;if(ae_basis(room,side,&c,&b,&w,&h)){
-            vm_vec_scale_add2(&c,&b.rvec,fl2f(-w*.30f));vm_vec_scale_add2(&c,&b.uvec,fl2f(h*.20f));
-            g3s_point q;g3_rotate_point(&q,&c);mount[0]=f2fl(q.p3_x);mount[1]=f2fl(q.p3_y);mount[2]=-f2fl(q.p3_z);mount[3]=fminf(1.45f,fminf(w,h)*.095f)*1.3f;
-        }
-    }
-    for(int i=0;i<nv;i++){p[3*i]=f2fl(points[i]->p3_x);p[3*i+1]=f2fl(points[i]->p3_y);p[3*i+2]=-f2fl(points[i]->p3_z);uv[i*2]=(i==1||i==2);uv[i*2+1]=i>=2;}
-    for(int i=AE_MARKS-1;i>=0&&count<6;i--){ae_mark *m=&ae_marks[i];float age=(double)(GameTime64-m->born)/F1_0;
-        if(!m->born||age<0||age>180||m->room!=room||m->side!=side)continue;
-        g3s_point v;g3_rotate_point(&v,&m->p);marks[count*4]=f2fl(v.p3_x);marks[count*4+1]=f2fl(v.p3_y);marks[count*4+2]=-f2fl(v.p3_z);marks[count*4+3]=m->size*(1-fmaxf(0,age-150)/30);count++;
-    }
-    if(!frame&&!count)return;
-    int detailed=frame?ss_wall(room,side):0;
-    if(!program){
+static GLuint warm_ae_wall_finish_program;static int warm_ae_wall_finish_failed;
+static int warm_ae_wall_finish(void){
+    if(warm_ae_wall_finish_failed)return 0;if(warm_ae_wall_finish_program)return 1;
+
         const char *vs="varying highp vec3 p;varying mediump vec2 uv;void main(){p=gl_Vertex.xyz;uv=gl_MultiTexCoord0.xy;gl_Position=ftransform();}";
         const char *fs="precision highp float;varying highp vec3 p;varying mediump vec2 uv;uniform vec4 marks[6],mount;uniform vec3 scale;uniform float frame,refinement;uniform vec4 shadows[3],axes[3],ups[3];"
           "uniform sampler2D silhouette;uniform float detailed;uniform vec3 shadowCenter,shadowRight,shadowUp;uniform vec2 shadowSize;uniform float texel;"
@@ -116,23 +103,43 @@ static void ae_wall_finish(int nv,const g3s_point **points,int room,int side,int
           "mask+=texture2D(silhouette,st+vec2(float(x),float(y))*texel*1.6).r*weight/16.;}"
           "float edge=step(0.,st.x)*step(st.x,1.)*step(0.,st.y)*step(st.y,1.);shadow=max(shadow,mask*.42*edge);}"
           "ao*=mix(1.,1.35,refinement);gl_FragColor=vec4(mix(vec3(.012,.018,.022),vec3(.20,.23,.24),chips),max(max(max(ao,contact),burn),shadow));}";
-        GLuint v=astra_compile(GL_VERTEX_SHADER,vs),f=astra_compile(GL_FRAGMENT_SHADER,fs);if(!v||!f){failed=1;return;}
-        program=glCreateProgram();glAttachShader(program,v);glAttachShader(program,f);glLinkProgram(program);glDeleteShader(v);glDeleteShader(f);
-        GLint ok;glGetProgramiv(program,GL_LINK_STATUS,&ok);if(!ok){failed=1;return;}
+        GLuint v=astra_compile(GL_VERTEX_SHADER,vs),f=astra_compile(GL_FRAGMENT_SHADER,fs);if(!v||!f){warm_ae_wall_finish_failed=1;return 0;}
+        warm_ae_wall_finish_program=glCreateProgram();glAttachShader(warm_ae_wall_finish_program,v);glAttachShader(warm_ae_wall_finish_program,f);glLinkProgram(warm_ae_wall_finish_program);glDeleteShader(v);glDeleteShader(f);
+        GLint ok;glGetProgramiv(warm_ae_wall_finish_program,GL_LINK_STATUS,&ok);if(!ok){warm_ae_wall_finish_failed=1;return 0;}
+
+    return 1;
+}
+static void ae_wall_finish(int nv,const g3s_point **points,int room,int side,int frame){
+    if(warm_ae_wall_finish_failed||nv<3||nv>4)return;
+    float p[12],uv[8],marks[24]={0},mount[4]={0};int count=0;float shadows[12]={0},axes[12]={0},ups[12]={0};
+    int shadow_count=frame?ag_shadow_data(room,side,shadows,axes,ups):0;
+    if(frame&&side%2==0&&(room+side)%3!=1){
+        vms_vector c;vms_matrix b;float w,h;if(ae_basis(room,side,&c,&b,&w,&h)){
+            vm_vec_scale_add2(&c,&b.rvec,fl2f(-w*.30f));vm_vec_scale_add2(&c,&b.uvec,fl2f(h*.20f));
+            g3s_point q;g3_rotate_point(&q,&c);mount[0]=f2fl(q.p3_x);mount[1]=f2fl(q.p3_y);mount[2]=-f2fl(q.p3_z);mount[3]=fminf(1.45f,fminf(w,h)*.095f)*1.3f;
+        }
     }
+    for(int i=0;i<nv;i++){p[3*i]=f2fl(points[i]->p3_x);p[3*i+1]=f2fl(points[i]->p3_y);p[3*i+2]=-f2fl(points[i]->p3_z);uv[i*2]=(i==1||i==2);uv[i*2+1]=i>=2;}
+    for(int i=AE_MARKS-1;i>=0&&count<6;i--){ae_mark *m=&ae_marks[i];float age=(double)(GameTime64-m->born)/F1_0;
+        if(!m->born||age<0||age>180||m->room!=room||m->side!=side)continue;
+        g3s_point v;g3_rotate_point(&v,&m->p);marks[count*4]=f2fl(v.p3_x);marks[count*4+1]=f2fl(v.p3_y);marks[count*4+2]=-f2fl(v.p3_z);marks[count*4+3]=m->size*(1-fmaxf(0,age-150)/30);count++;
+    }
+    if(!frame&&!count)return;
+    int detailed=frame?ss_wall(room,side):0;
+    if(!warm_ae_wall_finish_program&&!warm_ae_wall_finish()){return;}
     int fade=grd_curcanv->cv_fade_level,blend=grd_curcanv->cv_blend_func;gr_settransblend(GR_FADE_OFF,GR_BLEND_NORMAL);
-    glDepthMask(GL_FALSE);glEnable(GL_POLYGON_OFFSET_FILL);glPolygonOffset(-1,-1);glUseProgram(program);
-    glUniform1f(glGetUniformLocation(program,"detailed"),detailed);
+    glDepthMask(GL_FALSE);glEnable(GL_POLYGON_OFFSET_FILL);glPolygonOffset(-1,-1);glUseProgram(warm_ae_wall_finish_program);
+    glUniform1f(glGetUniformLocation(warm_ae_wall_finish_program,"detailed"),detailed);
     if(detailed){
-        glActiveTexture(GL_TEXTURE0);glBindTexture(GL_TEXTURE_2D,ss_texture);glUniform1i(glGetUniformLocation(program,"silhouette"),0);
-        glUniform3fv(glGetUniformLocation(program,"shadowCenter"),1,ss_center);glUniform3fv(glGetUniformLocation(program,"shadowRight"),1,ss_right);glUniform3fv(glGetUniformLocation(program,"shadowUp"),1,ss_up);
-        glUniform2f(glGetUniformLocation(program,"shadowSize"),ss_width,ss_height);glUniform1f(glGetUniformLocation(program,"texel"),1.f/ss_size);
+        glActiveTexture(GL_TEXTURE0);glBindTexture(GL_TEXTURE_2D,ss_texture);glUniform1i(glGetUniformLocation(warm_ae_wall_finish_program,"silhouette"),0);
+        glUniform3fv(glGetUniformLocation(warm_ae_wall_finish_program,"shadowCenter"),1,ss_center);glUniform3fv(glGetUniformLocation(warm_ae_wall_finish_program,"shadowRight"),1,ss_right);glUniform3fv(glGetUniformLocation(warm_ae_wall_finish_program,"shadowUp"),1,ss_up);
+        glUniform2f(glGetUniformLocation(warm_ae_wall_finish_program,"shadowSize"),ss_width,ss_height);glUniform1f(glGetUniformLocation(warm_ae_wall_finish_program,"texel"),1.f/ss_size);
     }
-    glUniform4fv(glGetUniformLocation(program,"marks[0]"),6,marks);glUniform1f(glGetUniformLocation(program,"frame"),frame);
-    glUniform4fv(glGetUniformLocation(program,"mount"),1,mount);
-    glUniform1f(glGetUniformLocation(program,"refinement"),astra_refinement);
-    glUniform4fv(glGetUniformLocation(program,"shadows[0]"),3,shadows);glUniform4fv(glGetUniformLocation(program,"axes[0]"),3,axes);glUniform4fv(glGetUniformLocation(program,"ups[0]"),3,ups);
-    glUniform3f(glGetUniformLocation(program,"scale"),f2fl(Matrix_scale.x),f2fl(Matrix_scale.y),f2fl(Matrix_scale.z));
+    glUniform4fv(glGetUniformLocation(warm_ae_wall_finish_program,"marks[0]"),6,marks);glUniform1f(glGetUniformLocation(warm_ae_wall_finish_program,"frame"),frame);
+    glUniform4fv(glGetUniformLocation(warm_ae_wall_finish_program,"mount"),1,mount);
+    glUniform1f(glGetUniformLocation(warm_ae_wall_finish_program,"refinement"),astra_refinement);
+    glUniform4fv(glGetUniformLocation(warm_ae_wall_finish_program,"shadows[0]"),3,shadows);glUniform4fv(glGetUniformLocation(warm_ae_wall_finish_program,"axes[0]"),3,axes);glUniform4fv(glGetUniformLocation(warm_ae_wall_finish_program,"ups[0]"),3,ups);
+    glUniform3f(glGetUniformLocation(warm_ae_wall_finish_program,"scale"),f2fl(Matrix_scale.x),f2fl(Matrix_scale.y),f2fl(Matrix_scale.z));
     glEnableClientState(GL_VERTEX_ARRAY);glEnableClientState(GL_TEXTURE_COORD_ARRAY);glVertexPointer(3,GL_FLOAT,0,p);glTexCoordPointer(2,GL_FLOAT,0,uv);glDrawArrays(GL_TRIANGLE_FAN,0,nv);
     glDisableClientState(GL_TEXTURE_COORD_ARRAY);glDisableClientState(GL_VERTEX_ARRAY);glUseProgram(0);glDisable(GL_POLYGON_OFFSET_FILL);glDepthMask(GL_TRUE);gr_settransblend(fade,blend);
 }
@@ -228,7 +235,11 @@ static void ae_hatch(int room,int side,int theme,float w,float h){
 
 #include "astra_fixtures.inc"
 #include "astra_door_mesh.inc"
-void astra_environment_face(int nv,const g3s_point **points,g3s_lrgb *light,int room,int side,int flags){
+#include "astra_detail_upgrade.inc"
+#include "astra_industrial.inc"
+#include "astra_shore_geometry.inc"
+#include "astra_mine_life.inc"
+void astra_environment_face(int nv,const g3s_point **points,const int *vp,g3s_lrgb *light,int room,int side,int flags){
     if(!ax_on()||astra_native_compare)return;ae_faces++;ae_reset();segment *s=&Segments[room];int wallnum=s->sides[side].wall_num;
     int hidden=wallnum>=0&&Walls[wallnum].type==WALL_DOOR&&Walls[wallnum].clip_num>=0&&(WallAnims[Walls[wallnum].clip_num].flags&WCF_HIDDEN);
     int solid=s->children[side]<0&&wallnum<0;
@@ -242,7 +253,9 @@ void astra_environment_face(int nv,const g3s_point **points,g3s_lrgb *light,int 
     }
     int texture=s->sides[side].tmap_num,theme=ae_theme(room),wet=texture>=0&&texture<NumTextures&&(TmapInfo[texture].damage||TmapInfo[texture].flags&(TMI_WATER|TMI_VOLATILE|TMI_FORCE_FIELD));
     if(hidden&&(Walls[wallnum].state!=WALL_DOOR_CLOSED))return;
+    if((solid||hidden)&&!wet&&!(flags&WID_CLOAKED_FLAG))nd_surface(room,side,nv,vp,light);
     ae_wall_finish(nv,points,room,side,!wet&&nv==4);
+    if((solid||hidden)&&!wet&&!(flags&WID_CLOAKED_FLAG))ai_wall(room,side,light);
     if(wet||nv!=4||flags&WID_CLOAKED_FLAG)return;
     if(solid)afx_fixture(room,side);
     /* The surface material supplies native panels and recesses.
@@ -282,6 +295,16 @@ static void ae_door(int room,int side){
         for(int i=0;i<3;i++){float y=(i-1)*h*.27f;
             if(wall->keys&KEY_BLUE)ax_paint(.08f,.26f,.90f,.45f);else if(wall->keys&KEY_RED)ax_paint(.85f,.055f,.025f,.45f);else if(wall->keys&KEY_GOLD)ax_paint(.85f,.57f,.025f,.45f);else ax_paint(.07f,.50f,.53f,.35f);
             ax_tube(x,y-.25f,.32f,x,y+.25f,.32f,.055f,.055f,6);}}
+    /* Layered reveal, gasket and chamfered shoulders: all remain at the jamb. */
+    if(astra_detail_upgrade){
+        for(int sign=-1;sign<=1;sign+=2){
+            float x=sign*w*.489f,y=sign*h*.489f;
+            ax_paint(.035f,.041f,.046f,0);ag_box(x,0,.055f,.12f,h*.48f,.045f);ag_box(0,y,.055f,w*.48f,.12f,.045f);
+            ax_paint(.24f,.28f,.30f,0);ax_tube(x,-h*.48f,.20f,x,h*.48f,.20f,.14f,.14f,8);ax_tube(-w*.48f,y,.20f,w*.48f,y,.20f,.14f,.14f,8);
+            ax_paint(.46f,.49f,.50f,0);ax_tube(x-sign*.09f,-h*.46f,.30f,x-sign*.09f,h*.46f,.30f,.023f,.023f,6);
+            for(int j=-1;j<=1;j+=2){ax_paint(.13f,.16f,.18f,0);ag_box(x,j*h*.43f,.24f,.19f,.24f,.10f);ax_paint(.47f,.50f,.51f,0);ax_tube(x,j*h*.43f,.30f,x,j*h*.43f,.36f,.065f,.065f,6);}
+        }
+    }
     /* Separate guide rails, travelling carriages and retracting locking pins. */
     for(int sign=-1;sign<=1;sign+=2){float x=sign*w*.462f,travel=h*(.34f-.65f*open);
         ax_paint(.045f,.05f,.055f,0);ag_box(x,0,.035f,.20f,h*.44f,.03f);
@@ -326,17 +349,23 @@ int astra_environment_reactor(object *obj){
         ax_paint(.78f,.24f,.035f,.35f+.15f*sinf(t*2.4f+k));ax_ring(0,0,0,r*(.91f+k*.035f),r*.012f,t*(k%2?-.4f:.3f)+k,.65f,k);ax_flush(1,1);}
     ax_flush(1,1);g3_done_instance();ae_reactors++;return 1;
 }
-static void ae_haze_flush(void){
-    static GLuint program;static int failed;if(!ax_count||failed)return;
-    if(!program){
+static GLuint warm_ae_haze_flush_program;static int warm_ae_haze_flush_failed;
+static int warm_ae_haze_flush(void){
+    if(warm_ae_haze_flush_failed)return 0;if(warm_ae_haze_flush_program)return 1;
+
         const char *vs="varying mediump vec3 uv;varying mediump vec4 tint;void main(){gl_Position=ftransform();uv=gl_Normal;tint=gl_Color;}";
         const char *fs="precision mediump float;varying mediump vec3 uv;varying mediump vec4 tint;void main(){float r=dot(uv.xy,uv.xy);float a=exp(-r*3.8)*(1.-smoothstep(.65,1.,r));a*=.72+.28*sin(uv.x*8.+sin(uv.y*9.+uv.z));gl_FragColor=vec4(tint.rgb,tint.a*a);}";
-        GLuint v=astra_compile(GL_VERTEX_SHADER,vs),f=astra_compile(GL_FRAGMENT_SHADER,fs);if(!v||!f){failed=1;return;}
-        program=glCreateProgram();glAttachShader(program,v);glAttachShader(program,f);glLinkProgram(program);glDeleteShader(v);glDeleteShader(f);
-        GLint ok;glGetProgramiv(program,GL_LINK_STATUS,&ok);if(!ok){failed=1;return;}
-    }
+        GLuint v=astra_compile(GL_VERTEX_SHADER,vs),f=astra_compile(GL_FRAGMENT_SHADER,fs);if(!v||!f){warm_ae_haze_flush_failed=1;return 0;}
+        warm_ae_haze_flush_program=glCreateProgram();glAttachShader(warm_ae_haze_flush_program,v);glAttachShader(warm_ae_haze_flush_program,f);glLinkProgram(warm_ae_haze_flush_program);glDeleteShader(v);glDeleteShader(f);
+        GLint ok;glGetProgramiv(warm_ae_haze_flush_program,GL_LINK_STATUS,&ok);if(!ok){warm_ae_haze_flush_failed=1;return 0;}
+
+    return 1;
+}
+static void ae_haze_flush(void){
+    if(!ax_count||warm_ae_haze_flush_failed)return;
+    if(!warm_ae_haze_flush_program&&!warm_ae_haze_flush()){return;}
     int fade=grd_curcanv->cv_fade_level,blend=grd_curcanv->cv_blend_func;gr_settransblend(GR_FADE_OFF,GR_BLEND_NORMAL);
-    GLboolean cull=glIsEnabled(GL_CULL_FACE);glDisable(GL_CULL_FACE);glDepthMask(GL_FALSE);glUseProgram(program);
+    GLboolean cull=glIsEnabled(GL_CULL_FACE);glDisable(GL_CULL_FACE);glDepthMask(GL_FALSE);glUseProgram(warm_ae_haze_flush_program);
     glEnableClientState(GL_VERTEX_ARRAY);glEnableClientState(GL_NORMAL_ARRAY);glEnableClientState(GL_COLOR_ARRAY);
     glVertexPointer(3,GL_FLOAT,sizeof(ax_vertex),ax_vertices[0].p);glNormalPointer(GL_FLOAT,sizeof(ax_vertex),ax_vertices[0].n);glColorPointer(4,GL_FLOAT,sizeof(ax_vertex),ax_vertices[0].color);glDrawArrays(GL_TRIANGLES,0,ax_count);
     glDisableClientState(GL_VERTEX_ARRAY);glDisableClientState(GL_NORMAL_ARRAY);glDisableClientState(GL_COLOR_ARRAY);glUseProgram(0);glDepthMask(GL_TRUE);if(cull)glEnable(GL_CULL_FACE);gr_settransblend(fade,blend);ax_count=0;
@@ -346,6 +375,7 @@ void astra_environment_rooms(const short *rooms,int count,int window_num){
     extern void astra_combat_fragments(const short*,int,int);astra_combat_fragments(rooms,count,window_num);
     for(int i=0;i<count;i++){int room=rooms[i];if(room<0||room>Highest_segment_index)continue;
         for(int side=0;side<6;side++)ae_door(room,side);
+        nd_atmosphere(room);nb_room(room);ml_room(room);
         if(astra_refinement){int side=astra_environment_bay(room);vms_vector c;vms_matrix b;float w,h;
             if(side>=0&&ae_basis(room,side,&c,&b,&w,&h)){g3s_point p;g3_rotate_point(&p,&c);if(p.p3_z>F1_0&&p.p3_z<i2f(65)){
                 g3_start_instance_matrix(&c,&b);ag_atmosphere(room,side,ae_theme(room),w,h);g3_done_instance();}}}
@@ -373,7 +403,18 @@ void astra_environment_rooms(const short *rooms,int count,int window_num){
             ax_paint(.36f,.48f,.50f,0);af_particle(0,0,.5f+j*.65f,.24f+j*.14f,.022f,room+j);}
         ae_haze_flush();g3_done_instance();ae_atmosphere++;
     }
+    if(!window_num&&framecount%6==0&&Viewer&&astra_mine_clock<0){
+        astra_fixture_lights(Viewer->segnum);float colors[2][3]={{0}};
+        for(int j=0;j<3;j++){float x=afx_lamps[j][0],z=afx_lamps[j][2],dist=sqrtf(x*x+afx_lamps[j][1]*afx_lamps[j][1]+z*z);float reach=fmaxf(0,1-dist/fmaxf(1,afx_lamps[j][3]));for(int k=0;k<3;k++)for(int side=0;side<2;side++)colors[side][k]+=afx_colors[j][k]*reach*(side==(x>0)?1:.23f);}
+        for(int k=0;k<3;k++)for(int side=0;side<2;side++)colors[side][k]+=astra_flash[3]*(k==0?.28f:k==1?.075f:.02f);
+        EM_ASM(window.astraDeck?.reflect([$0,$1,$2],[$3,$4,$5]);,colors[0][0],colors[0][1],colors[0][2],colors[1][0],colors[1][1],colors[1][2]);
+    }
     ag_render_exhibit();
+    if(!window_num&&sz_level==Current_level_num)EM_ASM(if(Module.mineDistricts){Module.mineDistricts.seen=$0;Module.mineDistricts.draws=$1;},sz_seen,sz_draws);
+    if(!window_num)EM_ASM(Module.sceneryStats=({version:74,draws:$0,uploads:$1,vertices:$2,sites:$3,styles:$4,failed:$5});,sc_draws,sc_uploads,sc_vertices,sc_site_count,sc_seen,sc_failed);
+    if(!window_num)EM_ASM(Module.mineLife=({version:65,installations:$0,uploads:$1,hits:$2,dust:$3,drips:$4});,ml_draws,ml_uploads,ml_hits,ml_dust,ml_drips);
+    if(!window_num)EM_ASM({const w=Module.industrialWalls||(Module.industrialWalls={version:61});w.uploads=$0;w.draws=$1;},ai_uploads,ai_draws);
+    if(!window_num)EM_ASM(Module.detailUpgrade=({version:63,meshes:$0,shafts:$1,meshUploads:$2,meshCapacity:128});,nd_draws,nd_shafts,nd_uploads);
     if(!window_num)EM_ASM(Module.environmentVersion=38;Module.foundryStats=({rockFaces:$6,equipmentBays:$7,shipShadows:$8,atmosphereBays:$9});Module.environmentStats=({faces:$0,machines:$1,doors:$2,reactors:$3,atmosphere:$4});Module.environmentLevel=$5;Module.environmentFrames=(Module.environmentFrames||0)+1;,ae_faces,ae_machines,ae_doors,ae_reactors,ae_atmosphere,Current_level_num,ag_rocks,ag_props,ag_shadows,ag_air);
     if(!window_num)EM_ASM(Module.fixtureDetails=({version:38,draws:$0,grilles:$1,pipes:$2,lights:$3,panels:$4,doorEdges:$5,mechanisms:$6});,afx_draws,afx_grilles,afx_pipes,afx_lights,afx_panels,afx_door_edges_drawn,afx_door_mechanisms);
 }

@@ -1,12 +1,13 @@
 /* Chamfered steel jambs, recessed vents and area lamps follow solid mine faces.
    All geometry is visual and stays close to the original collision surface. */
-typedef struct {float p[3],c[4],uv[2];} forge_vertex;
+typedef struct {float p[3],c[4],uv[2],face[3];} forge_vertex;
 static forge_vertex gantryVerts[1800];static int gantryN;
 static float corners3[4][3],faceNrm[3],forgeLight;
 static GLuint gantryTexture,gantryProgram;static int gantryFailed;
 static void forge_vertex_at(float u,float v,float h,float s,float t,float r,float g,float b,float lamp){
     if(gantryN>=1800)return;forge_vertex *o=&gantryVerts[gantryN++];float s0=(1-u)*(1-v),s1=u*(1-v),s2=u*v,s3=(1-u)*v;
     for(int k=0;k<3;k++)o->p[k]=s0*corners3[0][k]+s1*corners3[1][k]+s2*corners3[2][k]+s3*corners3[3][k]+faceNrm[k]*h;
+    o->face[0]=u;o->face[1]=v;o->face[2]=h;
     o->uv[0]=s;o->uv[1]=t;o->c[0]=r;o->c[1]=g;o->c[2]=b;o->c[3]=lamp;
 }
 static void forge_strip(float a,float b,float c,float d,float h,int tile,int style,int upright){
@@ -31,6 +32,17 @@ static void forge_strip(float a,float b,float c,float d,float h,int tile,int sty
         forge_vertex_at(U[k],V[k],h,upright?y:x,(tile+.013f+(upright?x:y)*.973f)/4.f,color[0]*(aLight?1:forgeLight),color[1]*(aLight?1:forgeLight),color[2]*(aLight?1:forgeLight),aLight);
     }
 }
+static int warm_astra_gantry(void){
+    if(gantryFailed)return 0;if(gantryProgram)return 1;
+
+        const char *vs="varying mediump vec2 uv;varying mediump vec4 paint;void main(){gl_Position=ftransform();uv=gl_MultiTexCoord0.xy;paint=gl_Color;}";
+        const char *fs="precision mediump float;uniform sampler2D atlas;varying mediump vec2 uv;varying mediump vec4 paint;void main(){vec3 art=texture2D(atlas,uv).rgb;vec3 steel=(vec3(.065)+pow(art,vec3(.83))*1.26)*paint.rgb;gl_FragColor=vec4(mix(steel,paint.rgb*(.90+.10*art),paint.a),1.);}";
+        GLuint v=astra_compile(GL_VERTEX_SHADER,vs),f=astra_compile(GL_FRAGMENT_SHADER,fs);if(!v||!f){gantryFailed=1;return 0;}
+        gantryProgram=glCreateProgram();glAttachShader(gantryProgram,v);glAttachShader(gantryProgram,f);glLinkProgram(gantryProgram);glDeleteShader(v);glDeleteShader(f);
+        GLint ok;glGetProgramiv(gantryProgram,GL_LINK_STATUS,&ok);if(!ok){gantryFailed=1;return 0;}
+
+    return 1;
+}
 void astra_gantry(int nv,const g3s_point **points,g3s_lrgb *l,int seed,int floor){
     static int enabled=-1;if(enabled<0)enabled=EM_ASM_INT(return !!Module.astra);
     if(!enabled||nv!=4||gantryFailed)return;
@@ -41,13 +53,7 @@ void astra_gantry(int nv,const g3s_point **points,g3s_lrgb *l,int seed,int floor
     for(int i=0;i<3;i++)faceNrm[i]=A[(i+1)%3]*B[(i+2)%3]-A[(i+2)%3]*B[(i+1)%3];astra_unit(faceNrm);
     if(faceNrm[0]*corners3[0][0]+faceNrm[1]*corners3[0][1]+faceNrm[2]*corners3[0][2]>0)for(int k=0;k<3;k++)faceNrm[k]*=-1;
     if(!gantryTexture&&!refit_png("forge.png",&gantryTexture,GL_REPEAT))return;
-    if(!gantryProgram){
-        const char *vs="varying mediump vec2 uv;varying mediump vec4 paint;void main(){gl_Position=ftransform();uv=gl_MultiTexCoord0.xy;paint=gl_Color;}";
-        const char *fs="precision mediump float;uniform sampler2D atlas;varying mediump vec2 uv;varying mediump vec4 paint;void main(){vec3 art=texture2D(atlas,uv).rgb;vec3 steel=(vec3(.065)+pow(art,vec3(.83))*1.26)*paint.rgb;gl_FragColor=vec4(mix(steel,paint.rgb*(.90+.10*art),paint.a),1.);}";
-        GLuint v=astra_compile(GL_VERTEX_SHADER,vs),f=astra_compile(GL_FRAGMENT_SHADER,fs);if(!v||!f){gantryFailed=1;return;}
-        gantryProgram=glCreateProgram();glAttachShader(gantryProgram,v);glAttachShader(gantryProgram,f);glLinkProgram(gantryProgram);glDeleteShader(v);glDeleteShader(f);
-        GLint ok;glGetProgramiv(gantryProgram,GL_LINK_STATUS,&ok);if(!ok){gantryFailed=1;return;}
-    }
+    if(!gantryProgram&&!warm_astra_gantry()){return;}
     forgeLight=.39f+.86f*fminf(1.2f,f2fl((l[0].r+l[0].g+l[0].b)/3));gantryN=0;
     float u=fminf(.115f,.92f/aw),v=fminf(.13f,1.05f/bw);
     forge_strip(.007,.004,u, .995,.32,1,0,1);forge_strip(1-u,.004,.993,.995,.32,1,0,1);

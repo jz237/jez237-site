@@ -67,10 +67,10 @@ static void ag_box(float x,float y,float z,float w,float h,float d){
     const int q[36]={0,2,3,0,3,1,4,5,7,4,7,6,0,4,6,0,6,2,1,3,7,1,7,5,0,1,5,0,5,4,2,6,7,2,7,3};
     for(int i=0;i<36;i+=3)ag_triangle(p[q[i]],p[q[i+1]],p[q[i+2]]);
 }
-static void ag_rock_flush(int material,const vms_vector *center,const vms_matrix *basis){
-    static GLuint program,maps[256];static int failed;if(failed||material<=0||material>=256){ax_count=0;return;}
-    if(!maps[material]){char name[24];snprintf(name,sizeof name,"m%03d.png",material-1);if(!refit_png(name,&maps[material],GL_REPEAT)){ax_count=0;return;}}
-    if(!program){
+static GLuint warm_ag_rock_flush_program,warm_ag_rock_flush_maps[256];static int warm_ag_rock_flush_failed;
+static int warm_ag_rock_flush(void){
+    if(warm_ag_rock_flush_failed)return 0;if(warm_ag_rock_flush_program)return 1;
+
         const char *vs="varying highp vec3 q,n,p,world;uniform mat3 axis,worldAxis;uniform vec3 origin,worldOrigin;void main(){q=gl_Vertex.xyz;p=axis*q+origin;world=worldAxis*q+worldOrigin;n=normalize(axis*gl_Normal);gl_Position=gl_ProjectionMatrix*vec4(p,1.);}";
         const char *fs="precision highp float;varying highp vec3 q,n,p,world;uniform sampler2D rock;uniform vec4 bulbs[3],colors[3],shot;void main(){vec3 N=normalize(n);vec3 c=texture2D(rock,q.xy*.13).rgb;"
           "float grit=sin(q.x*33.+sin(q.y*41.))*sin(q.y*27.);float close=1.-smoothstep(10.,45.,-p.z);c*=1.+grit*.045*close;"
@@ -78,19 +78,25 @@ static void ag_rock_flush(int material,const vms_vector *center,const vms_matrix
           "float diffuse=max(0.,dot(N,normalize(vec3(-.5,.8,.7))));c*=.36+diffuse*.83;vec3 bounce=vec3(0.);"
           "for(int i=0;i<3;i++){float t=clamp(1.-distance(world,bulbs[i].xyz)/max(.001,bulbs[i].w),0.,1.)*step(.001,bulbs[i].w);bounce+=colors[i].rgb*t*t*(.58+.42*t);}"
           "vec3 D=shot.xyz-p;float sd=length(D);c+=c*bounce;c+=vec3(1.,.29,.085)*shot.w/(1.+sd*sd*.009)*c*.64*max(0.,dot(N,D/max(.01,sd)));gl_FragColor=vec4(c,1.);}";
-        GLuint v=astra_compile(GL_VERTEX_SHADER,vs),f=astra_compile(GL_FRAGMENT_SHADER,fs);if(!v||!f){failed=1;ax_count=0;return;}
-        program=glCreateProgram();glAttachShader(program,v);glAttachShader(program,f);glLinkProgram(program);glDeleteShader(v);glDeleteShader(f);
-        GLint ok;glGetProgramiv(program,GL_LINK_STATUS,&ok);if(!ok){failed=1;ax_count=0;return;}
-    }
+        GLuint v=astra_compile(GL_VERTEX_SHADER,vs),f=astra_compile(GL_FRAGMENT_SHADER,fs);if(!v||!f){warm_ag_rock_flush_failed=1;ax_count=0;return 0;}
+        warm_ag_rock_flush_program=glCreateProgram();glAttachShader(warm_ag_rock_flush_program,v);glAttachShader(warm_ag_rock_flush_program,f);glLinkProgram(warm_ag_rock_flush_program);glDeleteShader(v);glDeleteShader(f);
+        GLint ok;glGetProgramiv(warm_ag_rock_flush_program,GL_LINK_STATUS,&ok);if(!ok){warm_ag_rock_flush_failed=1;ax_count=0;return 0;}
+
+    return 1;
+}
+static void ag_rock_flush(int material,const vms_vector *center,const vms_matrix *basis){
+    if(warm_ag_rock_flush_failed||material<=0||material>=256){ax_count=0;return;}
+    if(!warm_ag_rock_flush_maps[material]){char name[24];snprintf(name,sizeof name,"m%03d.png",material-1);if(!refit_png(name,&warm_ag_rock_flush_maps[material],GL_REPEAT)){ax_count=0;return;}}
+    if(!warm_ag_rock_flush_program&&!warm_ag_rock_flush()){return;}
     float axis[9];for(int k=0;k<3;k++){vms_vector a={0,0,0},r;if(k==0)a.x=F1_0;else if(k==1)a.y=F1_0;else a.z=F1_0;g3_rotate_delta_vec(&r,&a);axis[k*3]=f2fl(r.x);axis[k*3+1]=f2fl(r.y);axis[k*3+2]=-f2fl(r.z);}
     vms_vector zero={0};g3s_point p;g3_rotate_point(&p,&zero);GLboolean cull=glIsEnabled(GL_CULL_FACE);glDisable(GL_CULL_FACE);
-    glUseProgram(program);glBindTexture(GL_TEXTURE_2D,maps[material]);glUniform1i(glGetUniformLocation(program,"rock"),0);glUniformMatrix3fv(glGetUniformLocation(program,"axis"),1,GL_FALSE,axis);
-    glUniform3f(glGetUniformLocation(program,"origin"),f2fl(p.p3_x),f2fl(p.p3_y),-f2fl(p.p3_z));
+    glUseProgram(warm_ag_rock_flush_program);glBindTexture(GL_TEXTURE_2D,warm_ag_rock_flush_maps[material]);glUniform1i(glGetUniformLocation(warm_ag_rock_flush_program,"rock"),0);glUniformMatrix3fv(glGetUniformLocation(warm_ag_rock_flush_program,"axis"),1,GL_FALSE,axis);
+    glUniform3f(glGetUniformLocation(warm_ag_rock_flush_program,"origin"),f2fl(p.p3_x),f2fl(p.p3_y),-f2fl(p.p3_z));
     const float world[9]={f2fl(basis->rvec.x),f2fl(basis->rvec.y),f2fl(basis->rvec.z),f2fl(basis->uvec.x),f2fl(basis->uvec.y),f2fl(basis->uvec.z),f2fl(basis->fvec.x),f2fl(basis->fvec.y),f2fl(basis->fvec.z)};
-    glUniformMatrix3fv(glGetUniformLocation(program,"worldAxis"),1,GL_FALSE,world);glUniform3f(glGetUniformLocation(program,"worldOrigin"),f2fl(center->x),f2fl(center->y),f2fl(center->z));
+    glUniformMatrix3fv(glGetUniformLocation(warm_ag_rock_flush_program,"worldAxis"),1,GL_FALSE,world);glUniform3f(glGetUniformLocation(warm_ag_rock_flush_program,"worldOrigin"),f2fl(center->x),f2fl(center->y),f2fl(center->z));
     const float dark[12]={0};
-    glUniform4fv(glGetUniformLocation(program,"bulbs[0]"),3,astra_room_blast_count?&astra_blast_positions[0][0]:dark);glUniform4fv(glGetUniformLocation(program,"colors[0]"),3,astra_room_blast_count?&astra_blast_colors[0][0]:dark);
-    glUniform4fv(glGetUniformLocation(program,"shot"),1,astra_flash);
+    glUniform4fv(glGetUniformLocation(warm_ag_rock_flush_program,"bulbs[0]"),3,astra_room_blast_count?&astra_blast_positions[0][0]:dark);glUniform4fv(glGetUniformLocation(warm_ag_rock_flush_program,"colors[0]"),3,astra_room_blast_count?&astra_blast_colors[0][0]:dark);
+    glUniform4fv(glGetUniformLocation(warm_ag_rock_flush_program,"shot"),1,astra_flash);
     glEnableClientState(GL_VERTEX_ARRAY);glEnableClientState(GL_NORMAL_ARRAY);glVertexPointer(3,GL_FLOAT,sizeof(ax_vertex),ax_vertices[0].p);glNormalPointer(GL_FLOAT,sizeof(ax_vertex),ax_vertices[0].n);
     glDrawArrays(GL_TRIANGLES,0,ax_count);glDisableClientState(GL_VERTEX_ARRAY);glDisableClientState(GL_NORMAL_ARRAY);glUseProgram(0);if(cull)glEnable(GL_CULL_FACE);ax_count=0;
 }

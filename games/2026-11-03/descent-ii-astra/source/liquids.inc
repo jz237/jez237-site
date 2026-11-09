@@ -1,10 +1,17 @@
+extern int framecount;
+static int ah_frame=-1,ah_count;static float ah_regions[4][4];
+static void ah_lava(int count,const g3s_point **view){
+    if(ah_frame!=framecount){ah_frame=framecount;ah_count=0;}if(!astra_detail_upgrade||ah_count>=4)return;
+    float low[2]={1,1},high[2]={0,0};for(int i=0;i<count;i++){g3s_point p=*view[i];if(p.p3_z<i2f(2)||p.p3_z>i2f(80))return;g3_project_point(&p);float x=f2fl(p.p3_sx)/grd_curcanv->cv_bitmap.bm_w,y=1-f2fl(p.p3_sy)/grd_curcanv->cv_bitmap.bm_h;low[0]=fminf(low[0],x);low[1]=fminf(low[1],y);high[0]=fmaxf(high[0],x);high[1]=fmaxf(high[1],y);}
+    float *r=ah_regions[ah_count++];r[0]=(low[0]+high[0])*.5f;r[1]=(low[1]+high[1])*.5f;r[2]=fminf(.2f,(high[0]-low[0])*.18f);r[3]=fminf(.16f,(high[1]-low[1])*.18f);
+}
 static const char *astra_liquid_fragment=
 "precision highp float;\n"
 "varying highp vec3 world,pos;\n"
 "varying highp vec2 uv;\n"
 "varying mediump vec4 light;\n"
 "uniform sampler2D baseMap,overlayMap,env0,env1,env2,env3,env4,env5;\n"
-"uniform float clock,kind,overlay,turn;\n"
+"uniform float clock,kind,overlay,turn,cascade;uniform vec2 downhill;\n"
 "uniform vec3 eye,normal,tangent,bitangent;\n"
 "uniform vec4 shore[4],planes[6],origins[6],pu[6],pv[6],texuv[6],texduv[6],rect[6],tints[6];\n"
 "uniform vec4 lamps[3],lampColors[3];\n"
@@ -63,10 +70,10 @@ static const char *astra_liquid_fragment=
 " vec3 V=normalize(eye-world),N=normal*sign(dot(normal,V));\n"
 " vec2 q=vec2(dot(world,tangent),dot(world,bitangent));\n"
 " float edge=10000.;for(int i=0;i<4;i++)edge=min(edge,dot(shore[i].xyz,world)+shore[i].w);\n"
-" float room=clamp(dot(light.rgb,vec3(.21,.72,.07)),.12,1.1);\n"
+" edge=max(0.,edge-(noise(q*.85)-.5)*.55);float room=clamp(dot(light.rgb,vec3(.21,.72,.07)),.12,1.1);\n"
 " vec3 col;float exponent=74.,specular=.65;\n"
 " if(kind<1.5){\n"
-"  vec2 flow=q*.36+vec2(clock*.034,-clock*.021);\n"
+"  vec2 flow=q*.36+mix(vec2(clock*.034,-clock*.021),-downhill*clock*.72,cascade);\n"
 "  vec3 swell=wave(q*.075,clock*.48),ripple=wave(flow+swell.xy*.8,clock);\n"
 "  vec3 w=vec3(swell.xy*.70+ripple.xy*.62,swell.z*.60+ripple.z*.40);\n"
 "  N=normalize(N-tangent*w.x-bitangent*w.y);\n"
@@ -88,8 +95,8 @@ static const char *astra_liquid_fragment=
 "  col+=vec3(.22,.33,.35)*sheen*(.32+.28*room);\n"
 "  float crest=smoothstep(.34,.47,w.z)*smoothstep(.62,.85,fbm(flow*5.));\n"
 "  float wash=(.5+.5*sin(edge*5.-clock*1.5+fbm(flow*3.)*5.));\n"
-"  float foam=exp(-max(0.,edge)*2.1)*smoothstep(.35,.75,noise(flow*18.+w.xy))*wash;\n"
-"  col=mix(col,vec3(.50,.66,.64)*(room*.45+.55),min(.78,foam*.83+crest*.10));\n"
+"  float foam=exp(-max(0.,edge)*1.55)*smoothstep(.35,.75,noise(flow*18.+w.xy))*wash;\n"
+"  col=mix(col,vec3(.50,.66,.64)*(room*.45+.55),min(.78,foam*.83+crest*.10+cascade*.24*smoothstep(.56,.82,noise(vec2(dot(q,vec2(-downhill.y,downhill.x))*2.5,dot(q,downhill)*.28-clock*1.6)))));\n"
 " }else{\n"
 "  vec2 flow=q*.39+vec2(clock*.022,-clock*.037);\n"
 "  vec2 warp=vec2(fbm(flow*.85+clock*.013),fbm(flow*.92+19.-clock*.01))-.5;\n"
@@ -207,33 +214,40 @@ static void al_reflection_room(int room){
         if(tex->faithful==26)memcpy(al_probe.rect[s],tex->generated_rect,4*sizeof(float));
     }
 }
-int astra_liquid_face(int count,const g3s_point **view,const int *ids,const g3s_uvl *uv,g3s_lrgb *light,int room,int sidenum){
-    static GLuint program;static int failed,draws[2];
-    if(astra_native_compare||failed||count<3||count>8)return 0;
-    side *face=&Segments[room].sides[sidenum];int kind=astra_liquid_kind(face->tmap_num);if(!kind)return 0;
-    if(face->wall_num>=0&&Walls[face->wall_num].type==WALL_DOOR)return 0;
-    if(!program){
+static GLuint warm_astra_liquid_face_program;static int warm_astra_liquid_face_failed,warm_astra_liquid_face_draws[2];
+static int warm_astra_liquid_face(void){
+    if(warm_astra_liquid_face_failed)return 0;if(warm_astra_liquid_face_program)return 1;
+
         const char *vs="varying highp vec3 world,pos;varying highp vec2 uv;varying mediump vec4 light;void main(){gl_Position=ftransform();pos=gl_Vertex.xyz;world=gl_MultiTexCoord0.xyz;uv=gl_Normal.xy;light=gl_Color;}";
-        GLuint v=astra_compile(GL_VERTEX_SHADER,vs),f=astra_compile(GL_FRAGMENT_SHADER,astra_liquid_fragment);if(!v||!f){failed=1;return 0;}
-        program=glCreateProgram();glAttachShader(program,v);glAttachShader(program,f);glLinkProgram(program);glDeleteShader(v);glDeleteShader(f);
-        GLint ok;glGetProgramiv(program,GL_LINK_STATUS,&ok);if(!ok){char log[1024];glGetProgramInfoLog(program,sizeof log,NULL,log);fprintf(stderr,"Astra liquid link: %s\n",log);failed=1;return 0;}
-    }
+        GLuint v=astra_compile(GL_VERTEX_SHADER,vs),f=astra_compile(GL_FRAGMENT_SHADER,astra_liquid_fragment);if(!v||!f){warm_astra_liquid_face_failed=1;return 0;}
+        warm_astra_liquid_face_program=glCreateProgram();glAttachShader(warm_astra_liquid_face_program,v);glAttachShader(warm_astra_liquid_face_program,f);glLinkProgram(warm_astra_liquid_face_program);glDeleteShader(v);glDeleteShader(f);
+        GLint ok;glGetProgramiv(warm_astra_liquid_face_program,GL_LINK_STATUS,&ok);if(!ok){char log[1024];glGetProgramInfoLog(warm_astra_liquid_face_program,sizeof log,NULL,log);fprintf(stderr,"Astra liquid link: %s\n",log);warm_astra_liquid_face_failed=1;return 0;}
+
+    return 1;
+}
+int astra_liquid_face(int count,const g3s_point **view,const int *ids,const g3s_uvl *uv,g3s_lrgb *light,int room,int sidenum){
+
+    if(astra_native_compare||warm_astra_liquid_face_failed||count<3||count>8)return 0;
+    side *face=&Segments[room].sides[sidenum];int kind=astra_liquid_kind(face->tmap_num);if(!kind)return 0;if(kind==2)ah_lava(count,view);
+    if(face->wall_num>=0&&Walls[face->wall_num].type==WALL_DOOR)return 0;
+    if(!warm_astra_liquid_face_program&&!warm_astra_liquid_face()){return 0;}
     al_catalog();al_reflection_room(room);
     PIGGY_PAGE_IN(Textures[face->tmap_num]);grs_bitmap *base=&GameBitmaps[Textures[face->tmap_num].index];ogl_bindbmtex(base);ogl_texture *tex=base->gltexture;
     GLuint native=tex->native_color?tex->native_color:tex->handle,toptex=native;int top=face->tmap_num2&0x3fff,mode=0;
     if(top>0&&top<NumTextures){PIGGY_PAGE_IN(Textures[top]);grs_bitmap *bm=&GameBitmaps[Textures[top].index];ogl_bindbmtex(bm);toptex=bm->gltexture->handle;mode=(bm->bm_flags&BM_FLAG_SUPER_TRANSPARENT)?2:1;}
-    glUseProgram(program);glUniform1i(glGetUniformLocation(program,"baseMap"),0);glUniform1i(glGetUniformLocation(program,"overlayMap"),1);
-    for(int i=0;i<6;i++){char name[12];snprintf(name,sizeof name,"env%d",i);glUniform1i(glGetUniformLocation(program,name),2+i);glActiveTexture(GL_TEXTURE2+i);glBindTexture(GL_TEXTURE_2D,al_probe.textures[i]?al_probe.textures[i]:native);}
+    glUseProgram(warm_astra_liquid_face_program);glUniform1i(AS_UNIFORM(warm_astra_liquid_face_program,"baseMap"),0);glUniform1i(AS_UNIFORM(warm_astra_liquid_face_program,"overlayMap"),1);
+    static GLint environmentUnits[6];static int unitsReady;if(!unitsReady){for(int i=0;i<6;i++){char name[12];snprintf(name,sizeof name,"env%d",i);environmentUnits[i]=glGetUniformLocation(warm_astra_liquid_face_program,name);}unitsReady=1;}for(int i=0;i<6;i++){glUniform1i(environmentUnits[i],2+i);glActiveTexture(GL_TEXTURE2+i);glBindTexture(GL_TEXTURE_2D,al_probe.textures[i]?al_probe.textures[i]:native);}
     glActiveTexture(GL_TEXTURE1);glBindTexture(GL_TEXTURE_2D,toptex);glActiveTexture(GL_TEXTURE0);glBindTexture(GL_TEXTURE_2D,native);
-    glUniform4fv(glGetUniformLocation(program,"planes[0]"),6,&al_probe.planes[0][0]);glUniform4fv(glGetUniformLocation(program,"origins[0]"),6,&al_probe.origins[0][0]);
-    glUniform4fv(glGetUniformLocation(program,"pu[0]"),6,&al_probe.u[0][0]);glUniform4fv(glGetUniformLocation(program,"pv[0]"),6,&al_probe.v[0][0]);
-    glUniform4fv(glGetUniformLocation(program,"texuv[0]"),6,&al_probe.uv[0][0]);glUniform4fv(glGetUniformLocation(program,"texduv[0]"),6,&al_probe.duv[0][0]);
-    glUniform4fv(glGetUniformLocation(program,"rect[0]"),6,&al_probe.rect[0][0]);glUniform4fv(glGetUniformLocation(program,"tints[0]"),6,&al_probe.tint[0][0]);
-    glUniform4fv(glGetUniformLocation(program,"lamps[0]"),3,&afx_light_world[0][0]);glUniform4fv(glGetUniformLocation(program,"lampColors[0]"),3,&afx_colors[0][0]);
+    glUniform4fv(AS_UNIFORM(warm_astra_liquid_face_program,"planes[0]"),6,&al_probe.planes[0][0]);glUniform4fv(AS_UNIFORM(warm_astra_liquid_face_program,"origins[0]"),6,&al_probe.origins[0][0]);
+    glUniform4fv(AS_UNIFORM(warm_astra_liquid_face_program,"pu[0]"),6,&al_probe.u[0][0]);glUniform4fv(AS_UNIFORM(warm_astra_liquid_face_program,"pv[0]"),6,&al_probe.v[0][0]);
+    glUniform4fv(AS_UNIFORM(warm_astra_liquid_face_program,"texuv[0]"),6,&al_probe.uv[0][0]);glUniform4fv(AS_UNIFORM(warm_astra_liquid_face_program,"texduv[0]"),6,&al_probe.duv[0][0]);
+    glUniform4fv(AS_UNIFORM(warm_astra_liquid_face_program,"rect[0]"),6,&al_probe.rect[0][0]);glUniform4fv(AS_UNIFORM(warm_astra_liquid_face_program,"tints[0]"),6,&al_probe.tint[0][0]);
+    glUniform4fv(AS_UNIFORM(warm_astra_liquid_face_program,"lamps[0]"),3,&afx_light_world[0][0]);glUniform4fv(AS_UNIFORM(warm_astra_liquid_face_program,"lampColors[0]"),3,&afx_colors[0][0]);
     float n[3],t[3]={0},b[3]={0},eye[3];al_vec(n,&face->normals[0]);astra_unit(n);al_vec(eye,&View_position);
     int major=fabsf(n[0])>fabsf(n[1])?(fabsf(n[0])>fabsf(n[2])?0:2):(fabsf(n[1])>fabsf(n[2])?1:2);t[(major+1)%3]=1;b[(major+2)%3]=1;
-    glUniform3fv(glGetUniformLocation(program,"normal"),1,n);glUniform3fv(glGetUniformLocation(program,"tangent"),1,t);glUniform3fv(glGetUniformLocation(program,"bitangent"),1,b);glUniform3fv(glGetUniformLocation(program,"eye"),1,eye);
-    glUniform1f(glGetUniformLocation(program,"kind"),kind);glUniform1f(glGetUniformLocation(program,"clock"),al_clock());glUniform1f(glGetUniformLocation(program,"overlay"),mode);glUniform1f(glGetUniformLocation(program,"turn"),(face->tmap_num2>>14)&3);
+    vms_matrix orient;extract_orient_from_segment(&orient,&Segments[room]);float up[3];al_vec(up,&orient.uvec);float cascade=kind==1?(1-fminf(1,fabsf(al_dot(n,up)))):0;cascade=cascade*cascade;glUniform1f(AS_UNIFORM(warm_astra_liquid_face_program,"cascade"),cascade);float dx=-al_dot(up,t),dy=-al_dot(up,b),length=sqrtf(dx*dx+dy*dy);glUniform2f(AS_UNIFORM(warm_astra_liquid_face_program,"downhill"),length>.01f?dx/length:0,length>.01f?dy/length:1);
+    glUniform3fv(AS_UNIFORM(warm_astra_liquid_face_program,"normal"),1,n);glUniform3fv(AS_UNIFORM(warm_astra_liquid_face_program,"tangent"),1,t);glUniform3fv(AS_UNIFORM(warm_astra_liquid_face_program,"bitangent"),1,b);glUniform3fv(AS_UNIFORM(warm_astra_liquid_face_program,"eye"),1,eye);
+    glUniform1f(AS_UNIFORM(warm_astra_liquid_face_program,"kind"),kind);glUniform1f(AS_UNIFORM(warm_astra_liquid_face_program,"clock"),al_clock());glUniform1f(AS_UNIFORM(warm_astra_liquid_face_program,"overlay"),mode);glUniform1f(AS_UNIFORM(warm_astra_liquid_face_program,"turn"),(face->tmap_num2>>14)&3);
     float edges[4][4];int corners[4];get_side_verts(corners,room,sidenum);vms_vector center;compute_center_point_on_side(&center,&Segments[room],sidenum);float ctr[3];al_vec(ctr,&center);
     int catalog=al_index[room][sidenum];unsigned shore=catalog>=0?al_faces[catalog].shore:15;
     for(int i=0;i<4;i++){
@@ -241,7 +255,7 @@ int astra_liquid_face(int count,const g3s_point **view,const int *ids,const g3s_
         edges[i][3]=-al_dot(edges[i],a);if(al_dot(edges[i],ctr)+edges[i][3]<0)for(int k=0;k<4;k++)edges[i][k]=-edges[i][k];
         if(!(shore&(1<<i))){memset(edges[i],0,sizeof edges[i]);edges[i][3]=10000;}
     }
-    glUniform4fv(glGetUniformLocation(program,"shore[0]"),4,&edges[0][0]);
+    glUniform4fv(AS_UNIFORM(warm_astra_liquid_face_program,"shore[0]"),4,&edges[0][0]);
     float vertices[24],world[24],texcoord[24],colors[32];
     for(int i=0;i<count;i++){
         vertices[i*3]=f2fl(view[i]->p3_x);vertices[i*3+1]=f2fl(view[i]->p3_y);vertices[i*3+2]=-f2fl(view[i]->p3_z);al_vec(world+i*3,&Vertices[ids[i]]);
@@ -252,5 +266,5 @@ int astra_liquid_face(int count,const g3s_point **view,const int *ids,const g3s_
     glVertexPointer(3,GL_FLOAT,0,vertices);glTexCoordPointer(3,GL_FLOAT,0,world);glNormalPointer(GL_FLOAT,0,texcoord);glColorPointer(4,GL_FLOAT,0,colors);glDrawArrays(GL_TRIANGLE_FAN,0,count);
     glDisableClientState(GL_VERTEX_ARRAY);glDisableClientState(GL_TEXTURE_COORD_ARRAY);glDisableClientState(GL_NORMAL_ARRAY);glDisableClientState(GL_COLOR_ARRAY);glUseProgram(0);
     glActiveTexture(GL_TEXTURE0);glBindTexture(GL_TEXTURE_2D,tex->handle);
-    draws[kind-1]++;EM_ASM(Module.liquidSurface=({version:42,waterDraws:$0,lavaDraws:$1,room:$2,kind:$3,time:$4});,draws[0],draws[1],room,kind,al_clock());return 1;
+    warm_astra_liquid_face_draws[kind-1]++;EM_ASM(Module.liquidSurface=({version:42,waterDraws:$0,lavaDraws:$1,room:$2,kind:$3,time:$4});,warm_astra_liquid_face_draws[0],warm_astra_liquid_face_draws[1],room,kind,al_clock());return 1;
 }

@@ -62,6 +62,17 @@ static void ax_arc(float radius,float phase,float clock,int plane,float thicknes
         memcpy(prev,p,sizeof p);
     }
 }
+static int warm_ax_flush(void){
+    if(ax_failed)return 0;if(ax_program)return 1;
+
+        const char *vs="varying highp vec3 p,n,q;varying mediump vec4 color;uniform mat3 axis;uniform vec3 origin;void main(){q=gl_Vertex.xyz;p=axis*q+origin;n=normalize(axis*(gl_Normal));color=gl_Color;gl_Position=gl_ProjectionMatrix*vec4(p,1.);}";
+        const char *fs="precision highp float;varying highp vec3 p,n,q;varying mediump vec4 color;uniform float opacity,clock,energy;void main(){vec3 N=normalize(n),V=normalize(-p),L=normalize(vec3(-.5,.8,.7));float spec=pow(max(dot(N,normalize(V+L)),0.),48.);float flow=.68+.32*sin(q.x*17.+sin(q.z*13.+clock*7.)+q.y*12.);float emit=color.a*mix(1.,flow,step(1.4,color.a));vec3 c=color.rgb*(.28+1.05*max(dot(N,L),0.)+emit)+vec3(.4,.52,.6)*spec*(1.-min(.8,color.a));if(energy>1.5){float facing=max(0.,dot(N,V));float glow=.18+.65*pow(facing,.8)+.13*max(dot(N,normalize(vec3(-.4,.6,1.))),0.)+.04*flow;gl_FragColor=vec4(color.rgb*glow,opacity);}else if(energy>.5){float rim=pow(max(0.,dot(N,V)),.6);gl_FragColor=vec4(color.rgb*(.24+.50*rim+.30*flow),opacity*rim*.8);}else gl_FragColor=vec4(c/(1.+.27*c),opacity);}";
+        GLuint v=astra_compile(GL_VERTEX_SHADER,vs),f=astra_compile(GL_FRAGMENT_SHADER,fs);if(!v||!f){ax_failed=1;return 0;}
+        ax_program=glCreateProgram();glAttachShader(ax_program,v);glAttachShader(ax_program,f);glLinkProgram(ax_program);glDeleteShader(v);glDeleteShader(f);
+        GLint ok;glGetProgramiv(ax_program,GL_LINK_STATUS,&ok);if(!ok){ax_failed=1;fprintf(stderr,"Astra motion shader failed\n");return 0;}
+
+    return 1;
+}
 static void ax_flush(float scale,float opacity){
     if(ss_capture){
         vms_vector sizes={fl2f(scale),fl2f(scale),fl2f(scale)},zero={0};
@@ -69,13 +80,7 @@ static void ax_flush(float scale,float opacity){
         ax_count=0;return;
     }
     if(!ax_count||ax_failed)return;
-    if(!ax_program){
-        const char *vs="varying highp vec3 p,n,q;varying mediump vec4 color;uniform mat3 axis;uniform vec3 origin;void main(){q=gl_Vertex.xyz;p=axis*q+origin;n=normalize(axis*(gl_Normal));color=gl_Color;gl_Position=gl_ProjectionMatrix*vec4(p,1.);}";
-        const char *fs="precision highp float;varying highp vec3 p,n,q;varying mediump vec4 color;uniform float opacity,clock,energy;void main(){vec3 N=normalize(n),V=normalize(-p),L=normalize(vec3(-.5,.8,.7));float spec=pow(max(dot(N,normalize(V+L)),0.),48.);float flow=.68+.32*sin(q.x*17.+sin(q.z*13.+clock*7.)+q.y*12.);float emit=color.a*mix(1.,flow,step(1.4,color.a));vec3 c=color.rgb*(.28+1.05*max(dot(N,L),0.)+emit)+vec3(.4,.52,.6)*spec*(1.-min(.8,color.a));if(energy>1.5){float facing=max(0.,dot(N,V));float glow=.18+.65*pow(facing,.8)+.13*max(dot(N,normalize(vec3(-.4,.6,1.))),0.)+.04*flow;gl_FragColor=vec4(color.rgb*glow,opacity);}else if(energy>.5){float rim=pow(max(0.,dot(N,V)),.6);gl_FragColor=vec4(color.rgb*(.24+.50*rim+.30*flow),opacity*rim*.8);}else gl_FragColor=vec4(c/(1.+.27*c),opacity);}";
-        GLuint v=astra_compile(GL_VERTEX_SHADER,vs),f=astra_compile(GL_FRAGMENT_SHADER,fs);if(!v||!f){ax_failed=1;return;}
-        ax_program=glCreateProgram();glAttachShader(ax_program,v);glAttachShader(ax_program,f);glLinkProgram(ax_program);glDeleteShader(v);glDeleteShader(f);
-        GLint ok;glGetProgramiv(ax_program,GL_LINK_STATUS,&ok);if(!ok){ax_failed=1;fprintf(stderr,"Astra motion shader failed\n");return;}
-    }
+    if(!ax_program&&!warm_ax_flush()){return;}
     float axis[9];for(int k=0;k<3;k++){vms_vector a={0,0,0},r;if(k==0)a.x=fl2f(scale);else if(k==1)a.y=fl2f(scale);else a.z=fl2f(scale);g3_rotate_delta_vec(&r,&a);axis[3*k]=f2fl(r.x);axis[3*k+1]=f2fl(r.y);axis[3*k+2]=-f2fl(r.z);}
     g3s_point p;vms_vector zero={0};g3_rotate_point(&p,&zero);
     int fade=grd_curcanv->cv_fade_level,blend=grd_curcanv->cv_blend_func;
@@ -170,13 +175,11 @@ static void af_beam(float x,float y,float z,float X,float Y,float Z,float radius
     for(int j=0;j<6;j++){int k=order[j],end=k>=2;float sign=k==1||k==2?1:-1,*v=end?q:p;
         ax_vertex_add((v[0]+sign*u[0])*scale[0],(v[1]+sign*u[1])*scale[1],-(v[2]+sign*u[2])*scale[2],sign,end,seed);}
 }
-static void af_flush_tinted(float clock,int style,int preserve_hue){
-    /* This include and the robot renderer share a translation unit.
-     * Keep particle shader ownership local to the batch that uses it. */
-    static GLuint particle_program = 0;
-    static int particle_failed = 0;
-    if(!ax_count||particle_failed)return;
-    if(!particle_program){
+static GLuint warm_af_flush_tinted_particle_program = 0;
+    static int warm_af_flush_tinted_particle_failed = 0;
+static int warm_af_flush_tinted(void){
+    if(warm_af_flush_tinted_particle_failed)return 0;if(warm_af_flush_tinted_particle_program)return 1;
+
         const char *vs="varying highp vec3 uv;varying mediump vec4 tint;void main(){gl_Position=ftransform();uv=gl_Normal;tint=gl_Color;}";
         const char *fs=
           "precision highp float;varying highp vec3 uv;varying mediump vec4 tint;uniform float clock,style,preserveHue;"
@@ -189,16 +192,24 @@ static void af_flush_tinted(float clock,int style,int preserve_hue){
           "vec3 c=mix(tint.rgb,vec3(.94,.97,1.),core*mix(.45,.12,preserveHue));float alpha=(cloud*.68+core*.6)*tint.a;"
           "if(style>1.5){c=tint.rgb*(.55+.6*grain);alpha=cloud*tint.a;}"
           "if(alpha<.003)discard;gl_FragColor=vec4(c,alpha);}";
-        GLuint v=astra_compile(GL_VERTEX_SHADER,vs),f=astra_compile(GL_FRAGMENT_SHADER,fs);if(!v||!f){particle_failed=1;return;}
-        particle_program=glCreateProgram();glAttachShader(particle_program,v);glAttachShader(particle_program,f);glLinkProgram(particle_program);glDeleteShader(v);glDeleteShader(f);
-        GLint ok;glGetProgramiv(particle_program,GL_LINK_STATUS,&ok);if(!ok){particle_failed=1;fprintf(stderr,"Astra weapon particles failed\n");return;}
-    }
+        GLuint v=astra_compile(GL_VERTEX_SHADER,vs),f=astra_compile(GL_FRAGMENT_SHADER,fs);if(!v||!f){warm_af_flush_tinted_particle_failed=1;return 0;}
+        warm_af_flush_tinted_particle_program=glCreateProgram();glAttachShader(warm_af_flush_tinted_particle_program,v);glAttachShader(warm_af_flush_tinted_particle_program,f);glLinkProgram(warm_af_flush_tinted_particle_program);glDeleteShader(v);glDeleteShader(f);
+        GLint ok;glGetProgramiv(warm_af_flush_tinted_particle_program,GL_LINK_STATUS,&ok);if(!ok){warm_af_flush_tinted_particle_failed=1;fprintf(stderr,"Astra weapon particles failed\n");return 0;}
+
+    return 1;
+}
+static void af_flush_tinted(float clock,int style,int preserve_hue){
+    /* This include and the robot renderer share a translation unit.
+     * Keep particle shader ownership local to the batch that uses it. */
+
+    if(!ax_count||warm_af_flush_tinted_particle_failed)return;
+    if(!warm_af_flush_tinted_particle_program&&!warm_af_flush_tinted()){return;}
     int fade=grd_curcanv->cv_fade_level,blend=grd_curcanv->cv_blend_func;
     GLboolean cull=glIsEnabled(GL_CULL_FACE),depth=glIsEnabled(GL_DEPTH_TEST);glDisable(GL_CULL_FACE);glEnable(GL_DEPTH_TEST);
-    gr_settransblend(GR_FADE_OFF,style==2?GR_BLEND_NORMAL:GR_BLEND_ADDITIVE_A);glDepthMask(GL_FALSE);glUseProgram(particle_program);
-    glUniform1f(glGetUniformLocation(particle_program,"clock"),clock);
-    glUniform1f(glGetUniformLocation(particle_program,"style"),style);
-    glUniform1f(glGetUniformLocation(particle_program,"preserveHue"),preserve_hue);
+    gr_settransblend(GR_FADE_OFF,style==2?GR_BLEND_NORMAL:GR_BLEND_ADDITIVE_A);glDepthMask(GL_FALSE);glUseProgram(warm_af_flush_tinted_particle_program);
+    glUniform1f(glGetUniformLocation(warm_af_flush_tinted_particle_program,"clock"),clock);
+    glUniform1f(glGetUniformLocation(warm_af_flush_tinted_particle_program,"style"),style);
+    glUniform1f(glGetUniformLocation(warm_af_flush_tinted_particle_program,"preserveHue"),preserve_hue);
     glEnableClientState(GL_VERTEX_ARRAY);glEnableClientState(GL_NORMAL_ARRAY);glEnableClientState(GL_COLOR_ARRAY);
     glVertexPointer(3,GL_FLOAT,sizeof(ax_vertex),ax_vertices[0].p);glNormalPointer(GL_FLOAT,sizeof(ax_vertex),ax_vertices[0].n);glColorPointer(4,GL_FLOAT,sizeof(ax_vertex),ax_vertices[0].color);
     glDrawArrays(GL_TRIANGLES,0,ax_count);glDisableClientState(GL_VERTEX_ARRAY);glDisableClientState(GL_NORMAL_ARRAY);glDisableClientState(GL_COLOR_ARRAY);
@@ -376,44 +387,26 @@ static void af_flare(object *obj, float age, float speed, float clock, float dep
     af_flush_tinted(clock,0,1);
 }
 
-/* A deployed smart mine unfolds at the native two-second arming threshold.
- * All parts, scanning brackets and homing globules are depth-tested geometry. */
+/* Original D2 clustered mine silhouette. The game retains ownership of
+ * arming, collisions and homing children; only the display is replaced. */
+extern int astra_draw_classic_mine(object*,int);
 static float af_smart_arming(const object *o){
     float elapsed=f2fl(Weapon_info[o->id].lifetime-o->lifeleft);
     return fminf(1,fmaxf(0,(elapsed-.35f)/1.65f));
 }
-static void af_smart_mine(object *o,float clock){
-    float armed=af_smart_arming(o),open=armed*armed*(3-2*armed);
-    float radius=fminf(2.3f,fmaxf(.8f,f2fl(o->size))),pulse=.65f+.35f*sinf(clock*5+o->signature);
-    g3_start_instance_matrix(&o->pos,&o->orient);ax_count=0;ax_energy=0;
-    ax_paint(.12f,.16f,.19f,0);ax_orb(.24f,.9f);
-    ax_paint(.39f,.45f,.49f,.04f);ax_ring(0,0,0,.50f,.07f,0,6.2831853f,0);
-    for(int i=0;i<6;i++){
-        float a=i*1.04719755f,c=cosf(a),s=sinf(a),reach=.58f+open*.60f,z=.35f-open*.45f;
-        ax_paint(.19f,.24f,.27f,0);ax_tube(c*.35f,s*.35f,0,c*reach,s*reach,z,.15f,.24f,6);
-        ax_paint(.46f,.51f,.53f,.03f);ax_tube(c*reach,s*reach,z-.22f,c*reach,s*reach,z+.15f,.24f,.15f,5);
-        ax_paint(1,.33f+open*.30f,.045f,.45f+open*.7f);
-        ax_tube(c*(reach-.09f),s*(reach-.09f),z-.18f,c*(reach-.09f),s*(reach-.09f),z+.11f,.055f,.055f,8);
-        /* Independent three-dimensional targeting brackets, not a billboard. */
-        if(open>.8f){float b=a+clock*.22f;
-            ax_paint(1,.58f,.055f,.75f);ax_ring(0,0,.20f,1.40f,.018f,b,.30f,0);
-            ax_tube(c*1.30f,s*1.30f,.2f,c*1.52f,s*1.52f,.2f,.02f,.02f,5);
-        }
-    }
-    ax_flush(radius,1);ax_count=0;ax_energy=2;
-    ax_paint(1,.38f+open*.28f,.025f,1.8f);ax_orb(.29f+open*.09f+pulse*.018f,1);
-    ax_flush(radius,1);ax_energy=0;
-    if(open>.4f){ax_count=0;ax_paint(1,.60f,.07f,1.3f);ax_arc(.63f,clock*.7f,clock,1,.014f);ax_flush(radius,1);}
-    g3_done_instance();
-    EM_ASM(Module.smartMineVisual=({version:33,armed:!!$0,unfold:$1});,armed>=1,open);
+static int af_smart_mine(object *o,float clock){
+    int drawn=astra_draw_classic_mine(o,1);
+    EM_ASM(Module.smartMineVisual=({version:62,armed:!!$0,classic:true});,af_smart_arming(o)>=1);
+    return drawn;
 }
 
 int astra_draw_weapon(object *obj){
     if(!ax_on()||obj->type!=OBJ_WEAPON||obj->id>=N_weapon_types)return 0;
     int id=obj->id,missile=astra_weapon_missile(obj);
     int laser=(id>=LASER_ID_L1&&id<=LASER_ID_L4)||id==LASER_ID_L5||id==LASER_ID_L6;
-    if(id==SUPERPROX_ID||id==ROBOT_SUPERPROX_ID){af_smart_mine(obj,astra_visual_clock());return 1;}
-    if(is_proximity_bomb_or_smart_mine(id)||id==PMINE_ID)return 0;
+    if(id==SUPERPROX_ID||id==ROBOT_SUPERPROX_ID)return af_smart_mine(obj,astra_visual_clock());
+    if(id==PROXIMITY_ID)return astra_draw_classic_mine(obj,0);
+    if(id==PMINE_ID)return 0;
     if(obj->render_type==RT_NONE&&id!=FLARE_ID&&id!=VULCAN_ID&&id!=GAUSS_ID)return 0;
     /* Player Omega is drawn once as a continuous paired discharge. */
     if(id==OMEGA_ID&&obj->ctype.laser_info.parent_type==OBJ_PLAYER)return 1;
