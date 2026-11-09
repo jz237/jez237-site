@@ -87,3 +87,36 @@ does not, and repeats no live region. Sliders/summary are excluded from printing
 checks all numeric sliders in US/metric, keyboard steps, actual mouse dragging,
 touch input, precision, adaptive ranges, persistence, invalid input, mobile
 summary visibility and print hiding. Run alongside the original browser suite.
+
+## Familiar-size shortcuts (2026-11-09)
+
+`presets.mjs` holds curated common package sizes, nominal tank capacities,
+container/bottle sizes, depths, equipment wattages and time intervals. No preset
+represents store inventory, a measured water reading, or a safe chemical dose.
+Users may always type a custom value. Profile size buttons edit the dialog only;
+saving remains explicit. Nominal volumes need adjustment to actual water volume.
+
+Substrate bags accept either kg (displayed as lb in US mode) or volume-labelled
+litres, kept in label units even in US mode. Bag count is ceil(bed mass / bag mass)
+or ceil(bed volume / bag litres), respectively. Loose bulk density is a rough,
+user-overridable estimate; generic material buttons are not measured brand data.
+The shopping guide compares every displayed common size using the same units.
+Volume-labelled bag counts do not depend on material density. Water displacement
+and substrate bed volume are different concepts; do not conflate them.
+
+`migrateInputs` narrowly upgrades legacy substrate saves/links missing both new
+fields to **volume** mode, preserving the old bag quantity and resulting count.
+Malformed new fields still fail validation. The storage version is unchanged
+because existing source fields/units retain meaning. Backup, restore, share,
+printing, sliders and typed precision must remain compatible.
+
+Representative package references (checked 2026-11-09):
+- CaribSea 2025 catalog: https://caribsea.com/wp-content/uploads/2025/09/2025-CaribSea-Catalog-new_compressed.pdf
+- https://aquariumswest.com/collections/plant-soil (2/4/8 kg and 3 L packages)
+- https://www.zynaquatics.com/shop-12 (5 lb gravel, 10 L soil)
+These are evidence of package conventions, not a current stock or price feed.
+
+Run `node scripts/aquarium-toolbox/presets-browser.mjs [base] [evidence-dir]` for
+US/metric shortcuts, exact custom entry, both bag modes, bag comparison, legacy
+saved settings/shares, profiles and mobile checks. The formula/preset unit tests
+are included by `node --test scripts/aquarium-toolbox/*.test.mjs`.

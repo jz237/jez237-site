@@ -1,6 +1,7 @@
-import {calculators,categories,defaults,calculate,convert,usUnit,GAL} from './calculators.mjs';
+import {calculators,categories,defaults,calculate,convert,usUnit,GAL,migrateInputs} from './calculators.mjs';
 import {icon,illustration,escape as e} from './illustrations.mjs';
 import {sliderWindow,sliderValue} from './sliders.mjs';
+import {fieldChoices,extraHelp,bagComparison} from './presets.mjs';
 const $=id=>document.getElementById(id);
 const KEY='aquarium-toolbox-v1';
 const ids=new Set(calculators.map(c=>c.id));
@@ -12,7 +13,7 @@ export function validateBackup(raw){
   if(new Set(result.profiles.map(p=>p.id)).size!==result.profiles.length)throw new Error('The backup contains duplicate tanks.');
   result.activeProfile=result.profiles.some(p=>p.id===raw.activeProfile)?raw.activeProfile:result.profiles[0].id;
   result.favorites=Array.isArray(raw.favorites)?[...new Set(raw.favorites.filter(id=>ids.has(id)))]:[];
-  for(const calc of calculators){const a=raw.inputs?.[calc.id];if(a){const v={};for(const f of calc.fields){const x=a[f.key];if(f.options){if(!f.options.some(o=>o[0]===x))throw new Error('The backup contains an invalid selection.');}else if(typeof x!=='number'||!Number.isFinite(x)||x<f.min||x>f.max)throw new Error('The backup contains an invalid number.');v[f.key]=x;}result.inputs[calc.id]=v;}}
+  for(const calc of calculators){const a=migrateInputs(calc.id,raw.inputs?.[calc.id]);if(a){const v={};for(const f of calc.fields){const x=a[f.key];if(f.options){if(!f.options.some(o=>o[0]===x))throw new Error('The backup contains an invalid selection.');}else if(typeof x!=='number'||!Number.isFinite(x)||x<f.min||x>f.max)throw new Error('The backup contains an invalid number.');v[f.key]=x;}result.inputs[calc.id]=v;}}
   return result;
 }
 let state=fresh(),storageAvailable=true;
@@ -46,7 +47,11 @@ function renderLibrary(){
   $('tool-list').innerHTML=matches.map(c=>`<a class="tool-link" href="#tool=${c.id}" data-tool="${c.id}" aria-current="${c.id===state.current}">${e(c.title)}<span>${e(c.description)}</span></a>`).join('');
   $('empty-search').hidden=matches.length>0;$('list-caption').textContent=query?`${matches.length} MATCHING TOOLS`:opts.find(o=>o[0]===category)[1].toUpperCase();$('library-count').textContent=calculators.length;
 }
-function fieldHTML(field,a){const id=`field-${field.key}`;const help=field.help?`<small id="help-${field.key}">${e(field.help)}</small>`:'';const desc=field.help?`aria-describedby="help-${field.key}"`:'';
+function fieldHTML(field,a){
+  if(current().id==='substrate'&&((field.key==='bag'&&a.bagMode!=='volume')||(field.key==='bagWeight'&&a.bagMode!=='weight')))return '';
+  const id=`field-${field.key}`,helpText=[field.help,extraHelp(current(),field)].filter(Boolean).join(' ');
+  const help=helpText?`<small id="help-${field.key}">${e(helpText)}${field.key==='v'&&field.label==='Actual water volume'?' <a href="#tool=tank" data-tool="tank">Estimate my volume →</a>':''}</small>`:'';
+  const desc=helpText?`aria-describedby="help-${field.key}"`:'';
   let label=field.label;
   if(current().id==='tank'){if(field.key==='l')label=a.shape==='cylinder'?'Inside diameter':'Inside length';if(field.key==='w')label='Inside width';}
   if(current().id==='tank'&&field.key==='w'&&a.shape==='cylinder')return '';
@@ -54,7 +59,21 @@ function fieldHTML(field,a){const id=`field-${field.key}`;const help=field.help?
   const isUS=state.units==='us',display=isUS?convert(a[field.key],field.unit,true):a[field.key],unit=isUS?usUnit(field.unit):field.unit;
   const min=isUS?convert(field.min,field.unit,true):field.min,max=isUS?convert(field.max,field.unit,true):field.max;
   const precision=['L','L/h','cm','mm','m','kg','°C'].includes(field.unit)?3:6;
-  return `<div class="field"><label for="${id}">${e(label)}</label><div class="input-wrap"><input id="${id}" name="${field.key}" type="number" inputmode="decimal" step="any" min="${min}" max="${max}" value="${Number(display.toFixed(precision))}" required ${desc}><span class="input-unit">${e(unit)}</span></div>${sliderHTML(field,a,label,unit)}${help}</div>`;
+  return `<div class="field"><label for="${id}">${e(label)}</label><div class="input-wrap"><input id="${id}" name="${field.key}" type="number" inputmode="decimal" step="any" min="${min}" max="${max}" value="${Number(display.toFixed(precision))}" required ${desc}><span class="input-unit">${e(unit)}</span></div>${sliderHTML(field,a,label,unit)}${choicesHTML(field,a)}${help}</div>`;
+}
+function choicesHTML(field,a){
+  const choice=fieldChoices(current(),field,state.units==='us',a);if(!choice)return '';
+  return `<div class="field-choices" role="group" aria-label="${e(choice.title)}"><span class="choices-title">${e(choice.title)}</span><div class="choice-buttons">${choice.options.map((x,i)=>`<button type="button" data-choice-field="${field.key}" data-choice-index="${i}" aria-pressed="${Math.abs(a[field.key]-x.value)<1e-8}">${e(x.label)}</button>`).join('')}</div><small>${e(choice.note)}</small></div>`;
+}
+function syncChoices(){for(const button of document.querySelectorAll('[data-choice-field]')){
+  const field=current().fields.find(f=>f.key===button.dataset.choiceField),choice=fieldChoices(current(),field,state.units==='us',inputs()).options[Number(button.dataset.choiceIndex)];
+  button.setAttribute('aria-pressed',String($(`field-${field.key}`).value!==''&&Math.abs(inputs()[field.key]-choice.value)<1e-8));
+}}
+function applyChoice(key,index){const field=current().fields.find(f=>f.key===key),choice=fieldChoices(current(),field,state.units==='us',inputs())?.options[index];if(!choice)return;
+  const input=$(`field-${key}`);input.value=state.units==='us'?convert(choice.value,field.unit,true):choice.value;onInput({target:input});
+}
+function shoppingGuide(){if(state.current!=='substrate')return '';
+ const a=inputs();return `<section class="bag-guide"><h3>Compare common bag sizes</h3><p>${a.bagMode==='weight'?'Estimated counts using your material’s weight per litre.':'Counts using the labelled bag volume.'} Tap a size to use it above.</p><div class="bag-options">${bagComparison(a,state.units==='us').map((x,i)=>`<button type="button" data-bag-index="${i}" aria-label="Use ${e(x.label)} bag"><span>${e(x.label)} bag</span><strong>${x.bags} ${x.bags===1?'bag':'bags'}</strong></button>`).join('')}</div><small>Typical package examples, not an inventory or availability list. No size chosen yet? Use this comparison to plan your shopping.</small></section>`;
 }
 function sliderHTML(field,a,label,unit){
   const r=sliderWindow(current(),field,a,state.units==='us');
@@ -117,12 +136,15 @@ function renderCalculator(){
 function onInput(ev){
   const c=current(),field=c.fields.find(f=>f.key===ev.target.name);if(!field)return;
   const raw=ev.target.value;
-  if(!field.options&&(raw.trim()===''||!Number.isFinite(Number(raw)))){syncSlider(field);showError(`Enter a number for ${field.label.toLowerCase()}.`);return;}
+  if(!field.options&&(raw.trim()===''||!Number.isFinite(Number(raw)))){syncSlider(field);syncChoices();showError(`Enter a number for ${field.label.toLowerCase()}.`);return;}
   inputs()[field.key]=field.options?raw:(state.units==='us'?convert(Number(raw),field.unit,false):Number(raw));
-  if(field.key==='shape'){save();renderCalculator();$(`field-${field.key}`).focus();return;}
+  if(field.key==='shape'||field.key==='bagMode'){
+    if(field.key==='bagMode'){const inactive=c.fields.find(f=>f.key===(raw==='weight'?'bag':'bagWeight')),value=inputs()[inactive.key];if(!Number.isFinite(value)||value<inactive.min||value>inactive.max)inputs()[inactive.key]=inactive.value;}
+    save();renderCalculator();$(`field-${field.key}`).focus();return;}
   if(c.id==='supplement'&&field.key==='parameter'){const ca=raw==='mg/L';Object.assign(inputs(),{current:ca?400:7,target:ca?420:8,rise:ca?10:1});save();renderCalculator();$('field-parameter').focus();return;}
   if(!field.options)syncSlider(field,!ev.fromSlider);
   else for(const dependent of c.fields)if(!dependent.options)syncSlider(dependent,true);
+  syncChoices();
   // Do not let a partially blank form produce a result from previously saved values.
   const blank=[...$('calc-form').querySelectorAll('input[type=number]')].find(x=>x.value.trim()==='');
   if(blank){showError('Complete every measurement to calculate a result.');return;}
@@ -136,14 +158,17 @@ function renderResult(){try{
   const graph={...result.graphic};
   if(['ammonia','stock','mix'].includes(state.current)){graph.fractionLabel=state.current==='ammonia'?'un-ionized ammonia':state.current==='stock'?'stock solution':'source B';graph.legend=state.current==='ammonia'?['Ionized fraction','Un-ionized fraction']:state.current==='stock'?['Diluent','Stock']:['Source A','Source B'];}
   if(state.current==='hardness'){graph.type='equivalence';graph.values=result.metrics.map(m=>`${format(m.value)} ${m.unit}`);}
-  $('result').innerHTML=`<div class="diagram">${illustration(graph,diagramLabel)}</div><div class="metrics">${metricHTML}</div><p class="result-message">${e(result.message)}</p><div class="result-actions"><button id="share-result">Share calculation</button><button id="print-result">Print result</button>${['tank','system'].includes(state.current)?'<button id="apply-volume">Use as tank volume</button>':''}</div>`;
+  $('result').innerHTML=`<div class="diagram">${illustration(graph,diagramLabel)}</div><div class="metrics">${metricHTML}</div><p class="result-message">${e(result.message)}</p>${shoppingGuide()}<div class="result-actions"><button id="share-result">Share calculation</button><button id="print-result">Print result</button>${['tank','system'].includes(state.current)?'<button id="apply-volume">Use as tank volume</button>':''}</div>`;
   $('steps-details').innerHTML=(result.steps?.length?`<details><summary>Step by step</summary><div><ol class="steps">${result.steps.map(s=>`<li>${e(s)}</li>`).join('')}</ol></div></details>`:'')+(result.table?`<details><summary>Change-by-change breakdown</summary><div><table class="results-table"><caption>Predicted concentration after each change</caption><tbody>${result.table.map(r=>`<tr>${r.map(s=>`<td>${e(s)}</td>`).join('')}</tr>`).join('')}</tbody></table></div></details>`:'');
   $('share-result').onclick=share;$('print-result').onclick=()=>window.print();if($('apply-volume'))$('apply-volume').onclick=()=>{const v=result.metrics[0].value;if(v<.01){toast('Volume is too small to save as a working tank.');return;}profile().volume=v;save();renderPreferences();toast('Working tank volume updated. Use “Use saved tank volume” in an existing calculation.');};
 updateQuickResult();
 }catch(err){showError(err.message);}}
 function selectTool(id,scroll=false){if(!ids.has(id))return;state.current=id;inputs();save();history.replaceState(null,'',`#tool=${id}`);renderLibrary();renderCalculator();if(scroll){$('calculator').scrollIntoView({behavior:'instant',block:'start'});$('calculator').focus({preventScroll:true});}}
 function setUnits(units){state.units=units;save();renderPreferences();renderCalculator();}
-function openProfile(){$('tank-name').value=profile().name;$('tank-volume').value=Number((state.units==='us'?profile().volume/GAL:profile().volume).toFixed(6));$('profile-unit').textContent=state.units==='us'?'(US gal)':'(litres)';$('tank-type').value=profile().type;$('profile-error').textContent='';$('profile-dialog').showModal();}
+function openProfile(){$('tank-name').value=profile().name;$('tank-volume').value=Number((state.units==='us'?profile().volume/GAL:profile().volume).toFixed(6));$('profile-unit').textContent=state.units==='us'?'(US gal)':'(litres)';$('tank-type').value=profile().type;$('profile-error').textContent='';
+  const c=calculators.find(c=>c.id==='change'),f=c.fields.find(f=>f.key==='v'),choice=fieldChoices(c,f,state.units==='us',{});
+  $('profile-presets').innerHTML=`<div class="choices-title">Common advertised tank sizes</div><div class="choice-buttons">${choice.options.map(x=>`<button type="button" data-profile-volume="${x.value}">${e(x.label)}</button>`).join('')}</div><small>Nominal capacity only. Adjust for rocks, substrate, air gap and operating sump water before saving.</small>`;
+  $('profile-dialog').showModal();}
 function saveProfile(asNew=false){
   const name=$('tank-name').value.trim(),raw=$('tank-volume').value,volume=Number(raw)*(state.units==='us'?GAL:1);
   if(!name||name.length>60||!raw||!Number.isFinite(volume)||volume<.01||volume>1e7){$('profile-error').textContent='Enter a name and a water volume between 0.01 and 10,000,000 litres.';return;}
@@ -154,10 +179,10 @@ function saveProfile(asNew=false){
 }
 function applyProfile(){for(const c of calculators){if(c.fields.some(f=>f.key==='v'&&f.label==='Actual water volume')&&state.inputs[c.id])state.inputs[c.id].v=profile().volume;}}
 function share(){const params=new URLSearchParams({tool:state.current,units:state.units,data:JSON.stringify(inputs())});$('share-url').value=`${location.origin}${location.pathname}#${params}`;$('copy-status').textContent='';$('share-dialog').showModal();$('share-url').select();}
-function loadHash(){try{const params=new URLSearchParams(location.hash.slice(1)),id=params.get('tool');if(!id||!ids.has(id))return;state.current=id;if(['us','metric'].includes(params.get('units')))state.units=params.get('units');if(params.has('data')){if(params.get('data').length>8000)throw new Error('Link is too large.');const input=JSON.parse(params.get('data')),c=current(),clean={};for(const f of c.fields)clean[f.key]=input[f.key]??f.value;calculate(id,clean);state.inputs[id]=clean;}save();}catch{toast('That shared calculation is invalid. Example inputs are shown instead.');state.inputs[state.current]=defaults(current());}}
+function loadHash(){try{const params=new URLSearchParams(location.hash.slice(1)),id=params.get('tool');if(!id||!ids.has(id))return;state.current=id;if(['us','metric'].includes(params.get('units')))state.units=params.get('units');if(params.has('data')){if(params.get('data').length>8000)throw new Error('Link is too large.');const input=migrateInputs(id,JSON.parse(params.get('data'))),c=current(),clean={};for(const f of c.fields)clean[f.key]=input[f.key]??f.value;calculate(id,clean);state.inputs[id]=clean;}save();}catch{toast('That shared calculation is invalid. Example inputs are shown instead.');state.inputs[state.current]=defaults(current());}}
 $('quick-result-button').onclick=()=>document.querySelector('.result-panel').scrollIntoView({behavior:'smooth',block:'start'});
 $('search-icon').innerHTML=icon('search');$('tool-count').textContent=calculators.length;
-document.addEventListener('click',ev=>{const cat=ev.target.closest('[data-category]');if(cat){category=cat.dataset.category;renderLibrary();return;}const link=ev.target.closest('[data-tool]');if(link){ev.preventDefault();selectTool(link.dataset.tool,matchMedia('(max-width:760px)').matches);}const close=ev.target.closest('[data-close]');if(close)close.closest('dialog').close();});
+document.addEventListener('click',ev=>{const profileChoice=ev.target.closest('[data-profile-volume]');if(profileChoice){$('tank-volume').value=state.units==='us'?Number(profileChoice.dataset.profileVolume)/GAL:Number(profileChoice.dataset.profileVolume);return;}const choice=ev.target.closest('[data-choice-field]');if(choice){applyChoice(choice.dataset.choiceField,Number(choice.dataset.choiceIndex));return;}const bag=ev.target.closest('[data-bag-index]');if(bag){applyChoice(inputs().bagMode==='weight'?'bagWeight':'bag',Number(bag.dataset.bagIndex));document.querySelector(`[data-bag-index="${bag.dataset.bagIndex}"]`)?.focus({preventScroll:true});return;}const cat=ev.target.closest('[data-category]');if(cat){category=cat.dataset.category;renderLibrary();return;}const link=ev.target.closest('[data-tool]');if(link){ev.preventDefault();selectTool(link.dataset.tool,matchMedia('(max-width:760px)').matches);}const close=ev.target.closest('[data-close]');if(close)close.closest('dialog').close();});
 $('search').addEventListener('input',ev=>{query=ev.target.value;renderLibrary();});
 document.addEventListener('keydown',ev=>{if(ev.key==='/'&&!['INPUT','TEXTAREA','SELECT'].includes(document.activeElement.tagName)&&!document.querySelector('dialog[open]')){ev.preventDefault();$('search').focus();}});
 $('unit-us').onclick=()=>setUnits('us');$('unit-metric').onclick=()=>setUnits('metric');

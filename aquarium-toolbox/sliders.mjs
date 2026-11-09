@@ -10,7 +10,7 @@ const unitWindows={
   '×/hour':[30,.5],'drops/s':[10,.1],'drops/mL':[40,1],'µmol/m²/s':[500,5]
 };
 const overrides={
-  substrate:{front:[20,.5],back:[30,.5],bag:[30,.5]},weight:{density:[1.1,.001]},
+  substrate:{front:[20,.5],back:[30,.5],bag:[30,.5],bagWeight:[25,.1]},weight:{density:[1.1,.001]},
   sump:{drop:[10,.1],pipe:[30,.1],reserve:[100,1]},ro:{rate:[40,.1],feed:[1000,5],product:[100,1]},
   label:{bottle:[1000,5]},stock:{stock:[5000,10],target:[1000,5],final:[1000,5]},
   ammonia:{tan:[5,.01]},salt:{bag:[25000,100]},ato:{daily:[10,.1],reserve:[100,1]},
@@ -33,6 +33,7 @@ export function sliderWindow(calc,field,a,us=false){
   if(us&&['L','L/h','cm','mm','m','kg'].includes(field.unit)){
     high=nice(display(high));step=nice(display(step));
   }else if(us&&field.unit==='°C'){high=display(high);step=1;}
+  if(us&&calc.id==='substrate'&&field.key==='bagWeight'){high=50;step=.5;}
   // The low edge lies on the editing increment where practical. Tiny manually
   // entered values remain representable; exact typing never changes precision.
   let min=Math.max(domainMin,Math.ceil(domainMin/step-1e-9)*step);
