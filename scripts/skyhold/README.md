@@ -27,9 +27,11 @@ Page hooks (`window.__sh`): `tick(n, dt = 1/60, draw = true)`, `startDemo()`, `s
 `?autoplay[&sector=N][&endless]`, `?playthrough`, `?seed=N`, `?wave=N`, `?q=high|medium|low`, `?noscores`.
 Storage keys `sh.*`; boards `skyhold-2026[-easy|-hard|-nightmare]` and `skyhold-2026-endless[...]`.
 
-Title-screen hangar: `R.portraits(kinds, livery)` draws each gunship into a 320 x 180 picture (main.js `syncHangar`,
-drawn again only when the livery changes). The ship is lit in the main scene on a layer of its own that every light
-joins, so it reuses the ships' compiled shaders; only its small tone pass is new (one extra program at boot).
+Title screen: GUNSHIPS and THE ENEMY beside the card (main.js `syncHangar`). `R.portraits(kinds, livery)` draws each
+gunship into a 320 x 180 picture (again only when the livery changes); `R.machinePictures(types)` and
+`R.carrierPictures(keys)` draw the 12 machines and 5 carriers once, one a step after the title shows
+(`__sh.enemyDrawn()` resolves when they are all in). Each model is lit in the main scene on a layer of its own that
+every light joins, so it reuses the compiled shaders; only the small tone pass is new (one extra program at boot).
 
 How it is drawn: the sim is a flat band (x along the equator, wraps every 1600 m; y altitude 0-36 m). `render.js`
 wraps it round a sphere of radius C / 2pi, with the sun fixed in the world, so flying round goes from day to night.

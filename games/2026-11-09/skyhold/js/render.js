@@ -26,9 +26,11 @@ const TCOL = { lifter: 0x9dff7a, husk: 0xff4a8a, sower: 0xc98aff, hive: 0xff8a3a
 const SIDE_FOV = 40, CHASE_FOV = 64;
 const JAW = { u: 0.44, l: 0.44 };   // how far the maw's jaws open (radians about Z)
 const SCAR_N = 200;
-// title-screen hangar portraits: picture size, their own layer, and where the ship sits (far off the planet)
+// title-screen pictures: their size, their own layer, where the model sits (far off the planet) and the directions
+// they are seen from: gunships from above the starboard bow, machines a little higher, carriers more side-on
 export const PW = 320, PH = 180;
 const PORTRAIT_LAYER = 7, PORTRAIT_AT = new THREE.Vector3(0, 0, 4000);
+const VIEW_SHIP = [1.0, 0.5, 1.45], VIEW_MACHINE = [0.75, 0.6, 1.4], VIEW_CARRIER = [0.55, 0.4, 1.5];
 const TERRAIN_ZS = [64, 48, 36, 27, 20, 14, 9.5, 6, 3.6, 2, 1, 0.2, -0.6, -1.6, -2.8, -4.2, -6, -8.5, -11.5, -15, -19.5, -25, -32, -40, -50, -62, -76, -92, -112, -136, -165, -200];
 const SCAR_VERT = /* glsl */ `
 attribute vec4 aInfo; varying vec2 vUv; varying vec4 vInfo;
@@ -877,13 +879,19 @@ export class Renderer {
     const v = this.views.p.get(1);
     if (v) { this.scene.remove(v.outer); this.views.p.delete(1); }
   }
-  // ---------------------------------------------------------------- title-screen hangar portraits
-  // Each gunship drawn once, in livery L, into a PW x PH picture for the title screen (ImageData, top row first). The
-  // ship is lit in the main scene on a layer of its own that every light joins too, so the light count, shadows, fog
-  // and environment all match play and its compiled shaders are reused as they are: only the small tone pass (ACES
-  // and sRGB, as in the post) is new. It sits far from the planet, out of every point light's reach and the sun's
-  // shadow box, with the sun turned to light it from above the bow; everything is put back afterwards.
+  // ---------------------------------------------------------------- title-screen pictures
+  // The gunships (in livery L), the machines and the carriers, each drawn into a PW x PH picture for the title screen
+  // (ImageData, top row first). A model is lit in the main scene on a layer of its own that every light joins too, so
+  // the light count, shadows, fog and environment all match play and its compiled shaders are reused as they are: only
+  // the small tone pass (ACES and sRGB, as in the post) is new. It sits far from the planet, out of every point light's
+  // reach and the sun's shadow box, with the sun turned to light it from above; everything is put back afterwards.
   portraits(kinds, L) {
+    return this.pictures(kinds.map((k) => { const m = MD.gunship(k, L.color, L.accent); for (const f of m.flames) if (f) f.removeFromParent(); return m.g; }), VIEW_SHIP);
+  }
+  machinePictures(types) { return this.pictures(types.map((k) => MD[k]().g), VIEW_MACHINE); }
+  carrierPictures(keys) { return this.pictures(keys.map((k) => MD.boss(k).g), VIEW_CARRIER); }
+  // models (fresh clones, used once) seen from direction view, each pulled back until all eight corners of its box fit
+  pictures(models, view) {
     const r = this.r, S = this.scene, PL = PORTRAIT_LAYER;
     if (!this.pt) {
       const hdrT = new THREE.WebGLRenderTarget(PW, PH, { type: THREE.HalfFloatType, samples: r.capabilities.isWebGL2 ? 4 : 0, depthBuffer: true });
@@ -910,27 +918,25 @@ export class Renderer {
     S.environmentIntensity = 1;
     if (fog) fog.density = 0;
     r.setClearColor(0x000000, 0);
-    const out = [], box = new THREE.Box3(), ctr = new THREE.Vector3(), view = new THREE.Vector3(1.0, 0.5, 1.45).normalize();
+    const out = [], box = new THREE.Box3(), ctr = new THREE.Vector3(), dir = new THREE.Vector3(...view).normalize();
     const tanV = Math.tan(THREE.MathUtils.degToRad(cam.fov / 2)) * 0.97, tanH = tanV * cam.aspect;
     let cur = null;
     try {
-      for (const k of kinds) {
-        const m = MD.gunship(k, L.color, L.accent);
-        for (const f of m.flames) if (f) f.removeFromParent();
-        m.g.position.set(0, 0, 0); m.g.updateMatrixWorld(true);
-        box.setFromObject(m.g).getCenter(ctr);
-        m.g.position.set(PORTRAIT_AT.x - ctr.x, PORTRAIT_AT.y - ctr.y, PORTRAIT_AT.z - ctr.z);
-        m.g.traverse((o) => { o.layers.set(PL); if (o.isMesh) o.castShadow = false; });
-        S.add(cur = m.g); m.g.updateMatrixWorld(true);
-        // three-quarter view from above the starboard bow, pulled back until all eight corners of the box fit
-        cam.position.copy(PORTRAIT_AT).addScaledVector(view, 20); cam.lookAt(PORTRAIT_AT); cam.updateMatrixWorld(true);
-        box.setFromObject(m.g);
+      for (const g of models) {
+        g.position.set(0, 0, 0); g.updateMatrixWorld(true);
+        box.setFromObject(g).getCenter(ctr);
+        const d0 = box.getSize(_v3).length() * 2 + 2;
+        g.position.set(PORTRAIT_AT.x - ctr.x, PORTRAIT_AT.y - ctr.y, PORTRAIT_AT.z - ctr.z);
+        g.traverse((o) => { o.layers.set(PL); if (o.isMesh) o.castShadow = false; });
+        S.add(cur = g); g.updateMatrixWorld(true);
+        cam.position.copy(PORTRAIT_AT).addScaledVector(dir, d0); cam.lookAt(PORTRAIT_AT); cam.updateMatrixWorld(true);
+        box.setFromObject(g);
         let need = -Infinity;
         for (let i = 0; i < 8; i++) {
           _v2.set(i & 1 ? box.max.x : box.min.x, i & 2 ? box.max.y : box.min.y, i & 4 ? box.max.z : box.min.z).applyMatrix4(cam.matrixWorldInverse);
           need = Math.max(need, Math.abs(_v2.x) / tanH + _v2.z, Math.abs(_v2.y) / tanV + _v2.z);
         }
-        cam.position.copy(PORTRAIT_AT).addScaledVector(view, 20 + need); cam.lookAt(PORTRAIT_AT); cam.updateMatrixWorld(true);
+        cam.position.copy(PORTRAIT_AT).addScaledVector(dir, d0 + need); cam.lookAt(PORTRAIT_AT); cam.updateMatrixWorld(true);
         r.setRenderTarget(hdrT); r.clear(); r.render(S, cam);
         r.setRenderTarget(ldrT); r.clear(); r.render(ts, tc);
         r.readRenderTargetPixels(ldrT, 0, 0, PW, PH, buf);

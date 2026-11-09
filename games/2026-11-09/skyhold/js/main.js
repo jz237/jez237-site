@@ -950,14 +950,35 @@ function buildShips() {
   $('ships').innerHTML = SHIP_KEYS.map((k) => { const s = SHIPS[k], open = UNLOCK_ALL || medals.size >= s.medals; return `<button data-v="${k}" ${open ? '' : 'disabled'}>${open ? '' : '🔒'}${s.name}${open ? '' : ' · ' + s.medals}</button>`; }).join('');
   $('ship-desc').innerHTML = shipDesc(shipOf(settings.ship));
 }
-// ------------------------------------------------------------------ the title-screen hangar
+// ------------------------------------------------------------------ the title screen's gunships and enemy
 // Every gunship and its name, each drawn with its real model in the pilot's livery (drawn again only when the livery
-// changes). Locked ships are dimmed with the medals they need. Right of the title card, or inside it when narrow.
-const HANGAR = { livery: '', narrow: matchMedia('(max-width: 739px)') };
+// changes); locked ships are dimmed with the medals they need. Under them THE ENEMY: every machine and every carrier by
+// name, drawn once, a few at a time after the title shows. Right of the title card, or inside it when narrow.
+const HANGAR = { livery: '', enemy: null, narrow: matchMedia('(max-width: 739px)') };
+// the machines in about the order a campaign brings them (names as the NEW MACHINE card gives them, the description
+// as a tooltip); a mine or a meteor is not a machine of its own
+const ROSTER = ['lifter', 'husk', 'sower', 'hive', 'stinger', 'prowler', 'skimmer', 'whirler', 'coil', 'spark', 'scorcher', 'maw'];
+const ROSTER_NAME = { skimmer: 'SKIMMER', whirler: 'WHIRLER' };
 function placeHangar() {
-  const h = $('hangar'), title = $('title'), card = title.querySelector('.card');
+  const h = $('title-side'), title = $('title'), card = title.querySelector('.card');
   if (HANGAR.narrow.matches) { if (h.parentElement !== card) card.insertBefore(h, card.querySelector('.foot')); }
   else if (h.parentElement !== title) title.appendChild(h);
+}
+const putPic = (c, img) => c.getContext('2d', { willReadFrequently: true }).putImageData(img, 0, 0);
+function buildEnemy() {
+  const esc = (t) => t.replace(/"/g, '&quot;');
+  $('en-count').textContent = `${ROSTER.length} MACHINES · ${SECTORS.length} CARRIERS`;
+  $('en-machines').innerHTML = ROSTER.map((k) => `<div class="en" data-type="${k}" title="${esc(MACHINES[k][1])}"><canvas width="${PW}" height="${PH}"></canvas><b>${ROSTER_NAME[k] || MACHINES[k][0]}</b></div>`).join('');
+  $('en-carriers').innerHTML = SECTORS.map((s, i) => `<div class="en" data-boss="${s.boss}" title="${esc(s.name)}"><canvas width="${PW}" height="${PH}"></canvas><b>${BOSSES[s.boss].name}</b><small>WORLD ${i + 1}</small></div>`).join('');
+  // one picture a step, so the title keeps drawing while they come in (and none while a game is on)
+  HANGAR.enemy = (async () => {
+    const jobs = [...[...$('en-machines').children].map((el) => [el, () => R.machinePictures([el.dataset.type])[0]]),
+      ...[...$('en-carriers').children].map((el) => [el, () => R.carrierPictures([el.dataset.boss])[0]])];
+    for (const [el, pic] of jobs) {
+      do await new Promise((res) => setTimeout(res, G.state === 'title' ? 0 : 400)); while (G.state !== 'title');
+      try { putPic(el.querySelector('canvas'), pic()); } catch (e) { console.warn('enemy picture', el.dataset.type || el.dataset.boss, e); }
+    }
+  })();
 }
 HANGAR.narrow.addEventListener('change', placeHangar);
 function syncHangar() {
@@ -972,13 +993,14 @@ function syncHangar() {
     el.querySelector('i').classList.toggle('hidden', ok);
   }
   $('gs-sub').textContent = open > 1 ? 'PICK ONE IN OPTIONS' : 'MEDALS UNLOCK THE REST';
+  if (!HANGAR.enemy) buildEnemy();
   const L = liveryOf(settings.livery);
   if (HANGAR.livery === L.key) return;
   HANGAR.livery = L.key;
   try {
     const pics = R.portraits(SHIP_KEYS, L);
-    // drawn once and kept: a CPU-backed canvas (cheap to read back for the self-test)
-    [...grid.children].forEach((el, i) => el.querySelector('canvas').getContext('2d', { willReadFrequently: true }).putImageData(pics[i], 0, 0));
+    // drawn once and kept: CPU-backed canvases (cheap to read back for the self-test)
+    [...grid.children].forEach((el, i) => putPic(el.querySelector('canvas'), pics[i]));
   } catch (e) { console.warn('hangar', e); }
 }
 function liveryOf(key) { const s = LIVERIES.find((q) => q.key === key) || LIVERIES[0]; return medals.size >= s.medals ? s : LIVERIES[0]; }
@@ -1396,7 +1418,7 @@ async function boot() {
 Object.assign(window.__sh, {
   tick: (n = 1, dt = 1 / 60, draw = true) => { for (let i = 0; i < n; i++) tickFrame(dt, draw || i === n - 1); },
   startDemo, startCampaign, startEndless, startPlaythrough, toTitle, playReplay, pause, resume, act, buy, settingsApply: applySettings, continueRun,
-  noPost: NO_POST, LOOKS, nodePos, ENEMY,
+  noPost: NO_POST, LOOKS, nodePos, ENEMY, enemyDrawn: () => HANGAR.enemy || Promise.resolve(),
   // tests / screenshots: world s from wave cp with the demo autopilot flying
   startAt: (s, cp = 0, ai = true) => { G.run = { score: 0, lives: 9, up: { ...TYPICAL_UP[s] }, salvage: 0, start: s, newMedals: [], diff: 'normal', continues: 0, ai }; beginSector(s, cp); if (ai) G.ai = new Autopilot(7, 'demo'); },
 });
