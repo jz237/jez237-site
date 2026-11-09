@@ -1,11 +1,72 @@
 {
   "version": 1,
   "title": "AI Discoveries, Explained",
-  "updated": "2026-11-08",
+  "updated": "2026-11-09",
   "coverageStart": "2026-09-21",
-  "coverageEnd": "2026-11-08",
+  "coverageEnd": "2026-11-09",
   "editorialNote": "Source-linked discoveries, research demonstrations, follow-ups and corrections from AI Discovery Watch. Historical milestones posted before the fresh-news brief are not included. Coverage dates are when a story was shared, not necessarily when its discovery occurred. Evidence labels reflect the linked report at that time; read later updates too.",
   "stories": [
+    {
+      "category": "Mathematics",
+      "evidenceKind": "proof",
+      "modelNote": "GPT-6 Astra produced the proof through an agent system and Codex; Claude Opus 5.5 did minor checks and editing.",
+      "sources": [
+        "https://hexagonmath.org/2611.00039v1",
+        "https://github.com/snow-ghost/glushkov-lx-lean/releases/tag/v1.0.1"
+      ],
+      "status": "Preliminary paper with author-reported Lean computer verification. The checks were not independently rerun for this report.",
+      "takeaway": "Imagine sorting a row of cards using only two moves: shift the whole row left, or swap the first two cards. A November 2 paper gives the exact number of moves needed in the hardest cases for every row of at least five cards, settling a longstanding question. AI generated the proof while people organized the research and made minor edits. The authors report computer checks, but not independent human peer review; the work does not provide a working shortest-route solver.",
+      "title": "AI finds the exact worst-case length of a two-move sorting puzzle",
+      "id": "d-1569370192297984011-ai-exact-two-move-sorting-limit",
+      "coveredOn": "2026-11-09",
+      "context": "🔬 **AI Discovery Watch · November 9, 2026**\n\n**AI finds the exact worst-case length of a two-move sorting puzzle**\nImagine sorting a row of cards using only two moves: shift the whole row left, or swap the first two cards. A November 2 paper gives the exact number of moves needed in the hardest cases for every row of at least five cards, settling a longstanding question. AI generated the proof while people organized the research and made minor edits. The authors report computer checks, but not independent human peer review; the work does not provide a working shortest-route solver.\n\n**AI used:** GPT-6 Astra produced the proof through an agent system and Codex; Claude Opus 5.5 did minor checks and editing.\n**Evidence:** Preliminary paper with author-reported Lean computer verification. The checks were not independently rerun for this report.\nOriginal source: <https://hexagonmath.org/2611.00039v1>\nSupporting source: <https://github.com/snow-ghost/glushkov-lx-lean/releases/tag/v1.0.1>"
+    },
+    {
+      "category": "Mathematics",
+      "evidenceKind": "proof",
+      "modelNote": "Claude Opus 5.5 developed the improvements and draft; GPT-6 reviewed the proof and suggested further changes (variant unspecified).",
+      "sources": [
+        "https://arxiv.org/abs/2610.10831",
+        "https://arxiv.org/html/2610.10831v2"
+      ],
+      "status": "Preprint with author-reported Lean verification, not independently rerun here. A narrower improvement to an existing theorem.",
+      "takeaway": "When connected points must have different colors, how many colors can a network need? An October 16 paper uses AI to shrink an enormous safety factor in an existing mathematical limit to about 1.1 million. Claude found improvements and developed the argument; mathematician David Wood added ideas and revised it, with further AI review. This improves the numerical limit in an earlier theorem, not the entire underlying coloring problem. Wood calls it a proof-optimization experiment, and relies on computer checks for details he has not checked by hand.",
+      "title": "AI tightens a mathematical limit on coloring networks",
+      "id": "d-1569370444530843692-ai-tightens-network-coloring-bound",
+      "coveredOn": "2026-11-09",
+      "context": "🔬 **AI Discovery Watch · November 9, 2026**\n\n**AI tightens a mathematical limit on coloring networks**\nWhen connected points must have different colors, how many colors can a network need? An October 16 paper uses AI to shrink an enormous safety factor in an existing mathematical limit to about 1.1 million. Claude found improvements and developed the argument; mathematician David Wood added ideas and revised it, with further AI review. This improves the numerical limit in an earlier theorem, not the entire underlying coloring problem. Wood calls it a proof-optimization experiment, and relies on computer checks for details he has not checked by hand.\n\n**AI used:** Claude Opus 5.5 developed the improvements and draft; GPT-6 reviewed the proof and suggested further changes (variant unspecified).\n**Evidence:** Preprint with author-reported Lean verification, not independently rerun here. A narrower improvement to an existing theorem.\nOriginal source: <https://arxiv.org/abs/2610.10831>\nSupporting source: <https://arxiv.org/html/2610.10831v2>"
+    },
+    {
+      "category": "Physics & materials",
+      "evidenceKind": "early",
+      "modelNote": "DEFEAT uses fine-tuned EquiformerV3 for design; UMA-s-1p2 estimates energies and Nequix supports screening. These are materials models, not chatbots.",
+      "sources": [
+        "https://arxiv.org/abs/2611.09572",
+        "https://arxiv.org/html/2611.09572v1"
+      ],
+      "status": "Early computational predictions, not laboratory discoveries or independently replicated results. Calculated stability does not establish that a material can be made.",
+      "takeaway": "An AI-guided search changed both the ingredients and arrangement of crystals to seek useful electrical properties. A November 6 preprint reports 45 new crystal candidates, with more detailed physics calculations predicting that 39 could carry electricity without resistance when extremely cold; a separate search produced ten candidates with targeted light-absorption properties. People built the method, set its goals, selected candidates and ran the checking calculations. This offers leads for future experiments, not proven new working materials: none of these predictions establishes that the crystals can be made or will perform as expected.",
+      "title": "AI designs new crystal candidates for superconductors and solar materials",
+      "id": "d-1569370660180852739-defeat-crystal-design-candidates",
+      "coveredOn": "2026-11-09",
+      "context": "🔬 **AI Discovery Watch · November 9, 2026**\n\n**AI designs new crystal candidates for superconductors and solar materials**\nAn AI-guided search changed both the ingredients and arrangement of crystals to seek useful electrical properties. A November 6 preprint reports 45 new crystal candidates, with more detailed physics calculations predicting that 39 could carry electricity without resistance when extremely cold; a separate search produced ten candidates with targeted light-absorption properties. People built the method, set its goals, selected candidates and ran the checking calculations. This offers leads for future experiments, not proven new working materials: none of these predictions establishes that the crystals can be made or will perform as expected.\n\n**AI used:** DEFEAT uses fine-tuned EquiformerV3 for design; UMA-s-1p2 estimates energies and Nequix supports screening. These are materials models, not chatbots.\n**Evidence:** Early computational predictions, not laboratory discoveries or independently replicated results. Calculated stability does not establish that a material can be made.\nOriginal source: <https://arxiv.org/abs/2611.09572>\nSupporting source: <https://arxiv.org/html/2611.09572v1>"
+    },
+    {
+      "category": "Mathematics",
+      "evidenceKind": "proof",
+      "modelNote": "LongTails is the research framework; the underlying models used for these results are not specified. Lean and Comparator check proofs, not generate discoveries.",
+      "sources": [
+        "https://github.com/k3nfalt/longtails",
+        "https://raw.githubusercontent.com/k3nfalt/longtails/main/LongTails/Theorems/GeneralizedSelfNormalizedConvex.lean",
+        "https://science.mail.ru/news/59704-ii-teoremy-matematicheskaya-optimizaciya/"
+      ],
+      "status": "Author-reported new results with Lean and Comparator checks; no independent rebuild or peer-review confirmation established.",
+      "takeaway": "AI agents working with LongTails have produced new mathematical guarantees about how much computation certain search methods need. The project, reported on October 30, gives a concrete example that improves an earlier limit while avoiding an extra calculation step. People built the framework and define or approve the problems; agents develop methods and proofs, which the project checks against those exact conditions. These are theoretical improvements, not demonstrated savings in training real AI systems. The team’s novelty claims and reported computer checks have not been independently confirmed here.",
+      "title": "AI develops better guarantees for mathematical search methods",
+      "id": "d-1569371054760005753-longtails-checked-optimization-research",
+      "coveredOn": "2026-11-09",
+      "context": "🔬 **AI Discovery Watch · November 9, 2026**\n\n**AI develops better guarantees for mathematical search methods**\nAI agents working with LongTails have produced new mathematical guarantees about how much computation certain search methods need. The project, reported on October 30, gives a concrete example that improves an earlier limit while avoiding an extra calculation step. People built the framework and define or approve the problems; agents develop methods and proofs, which the project checks against those exact conditions. These are theoretical improvements, not demonstrated savings in training real AI systems. The team’s novelty claims and reported computer checks have not been independently confirmed here.\n\n**AI used:** LongTails is the research framework; the underlying models used for these results are not specified. Lean and Comparator check proofs, not generate discoveries.\n**Evidence:** Author-reported new results with Lean and Comparator checks; no independent rebuild or peer-review confirmation established.\nOriginal source: <https://github.com/k3nfalt/longtails>\nSupporting source: <https://raw.githubusercontent.com/k3nfalt/longtails/main/LongTails/Theorems/GeneralizedSelfNormalizedConvex.lean>\nSupporting source: <https://science.mail.ru/news/59704-ii-teoremy-matematicheskaya-optimizaciya/>"
+    },
     {
       "category": "Medicine & biology",
       "evidenceKind": "lab",
