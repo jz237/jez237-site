@@ -4516,5 +4516,30 @@
       "continuity": "Chalk-white seasonal CO2 ice over charcoal basaltic fines; restrained lavender shadows and pale gold low spring sunlight from upper left. Crescent Scarp curves along upper right, three dark low basalt knobs called Three Teeth stand at mid-left, branching Basin Loom drains toward a central vent called Pin Eye. No liquid water, vegetation, animals, people, cities, machinery or lava.",
       "entryDescription": "Ground-level macro view of translucent slab over dark grains receiving low spring sunlight."
     }
+  },
+  {
+    "id": "2026-11-09-weekly-world-rime-aperture-the-hidden-gathering",
+    "title": "Rime Aperture: The Hidden Gathering",
+    "tests": "Continuity follows established week 2026-W46 world bible and introductory beat. Mars analog sources and evidence retained in 2026-11-09T0020/world-evidence.json; no new factual claims or invented observations.; archive_slot=2026-11-09T07:20; concept=rime-aperture-basal-gas-pathways-sealed-ice; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; Story beat: 2/7",
+    "prompt": "Create a finished richly detailed scientific-documentary environmental section illustration titled RIME APERTURE — THE HIDDEN GATHERING. Science-informed speculative world / artist’s impression. Story beat 2 of the established abiotic polar basin: sunlight has warmed dark basalt grains beneath seasonal CO2 slab ice, basal sublimation is beginning to collect gas in shallow interconnected pathways, but Pin Eye has NOT opened and no eruption is present. Compose a dominant wide oblique landscape with a carefully drawn conceptual cutaway across its lower foreground, naturally integrated into the terrain rather than detached panels. The continuous frosted ivory slab covers most of the scene. The section is explicitly labeled “Conceptual section • vertical relief exaggerated”, with a clean thin section edge revealing solid translucent CO2 ice above a dark granular basalt bed. Show only shallow narrow basal voids and sediment grooves, not deep caves, floating unsupported shelves, liquid rivers or empty chasms. Most slab area remains supported by regolith. Subtle fine dotted warm-gray arrows within narrow gaps show invisible gas moving toward still-sealed Pin Eye near center-right; arrows are explanatory overlays, not visible luminous gas. Low pale-gold spring light from upper left enters the solid slab; restrained lavender shadows, charcoal fines and exquisite ivory ice textures. Behind the section the same Basin Loom landscape extends into distance: exactly three low dark basalt knobs called Three Teeth at mid-left and curved Crescent Scarp upper-right. Small hairline stress marks at sealed Pin Eye only, no plume or open hole. Use realistic natural light, tactile granular sediment, translucent ice lamination, fine frost, tiny grains and credible surface contact. Beautiful asymmetry, considerable atmospheric scale and generous space; sophisticated scientific artist-impression realism, neither cartoon nor fantasy. Organic fine open leader lines label “Solid CO₂ slab”, “Sunlight reaches dark grains”, “Basal sublimation: solid → gas”, “Shallow gas pathways”, and “Pin Eye — still sealed”. A discreet process note reads “Gas pressure builds beneath the ice”; no unsupported numeric measurements. Title top left with smaller subtitle “The Hidden Gathering”; readable footer “Science-informed speculative world / artist’s impression” and “Hypothetical terrain • Mars-inspired model, not an observed exoplanet”. Integrate concise distinction “Mars: seasonal terrain observed • Mechanism: modeled • This world: invented”. Artwork dominates; no rigid boxes, grid, mockup, decorative fake instrument readouts or invented measurements. No water, liquid CO2, wet sheen, lava, Earth-blue sky, biological spiders, life, humans, plants, buildings, spacecraft, machinery or fantasy crystals. This beat discovers the hidden gas pathways before the next image’s first eruption. Make the scientific cutaway’s schematic nature unmistakable so it cannot be mistaken for a physically excavated trench or a natural exposed cavern.",
+    "image": "images/2026-11-09-weekly-world-rime-aperture-the-hidden-gathering.jpg",
+    "thumb": "thumbs/2026-11-09-weekly-world-rime-aperture-the-hidden-gathering.webp",
+    "color": "#a0908f",
+    "date": "2026-11-09",
+    "batch": "Daily Prompt",
+    "slot": "weekly-world",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1672x941",
+    "dedup": {
+      "conceptKey": "rime-aperture-basal-gas-pathways-sealed-ice",
+      "imageSha256": "912be53e2669cb5d1e61271fec33510871ba2268c123464750c0108d703ac0b2",
+      "imageDHash": "dffd8203c34b2fb7"
+    },
+    "world": {
+      "name": "Rime Aperture",
+      "description": "An explicitly hypothetical cold rocky exoplanet reveals a branching landscape as seasonal carbon-dioxide slab ice vents and retreats.",
+      "continuity": "Chalk-white seasonal CO2 ice over charcoal basaltic fines; restrained lavender shadows and pale gold low spring sunlight from upper left. Crescent Scarp curves along upper right, three dark low basalt knobs called Three Teeth stand at mid-left, branching Basin Loom drains toward a central vent called Pin Eye. No liquid water, vegetation, animals, people, cities, machinery or lava.",
+      "entryDescription": "Scientifically labeled section at Basin Loom shows shallow gas pathways beneath continuous ice, not a liquid river."
+    }
   }
 ]
