@@ -111,7 +111,7 @@ async function readPack(group,label) {
   };
   for(let i=0;i<Math.min(3,files.length);i++) enqueue(i);
   for(let i=0;i<files.length;i++) {
-    $("status").textContent=label+" · "+(i+1)+" / "+files.length;
+    window.astraLoad?.progress("download",label,i,files.length);
     if (i+3<files.length) enqueue(i+3);
     const response = await requests.get(i);
     requests.delete(i);
@@ -136,6 +136,7 @@ async function readPack(group,label) {
         }
       }
     } finally {reader.releaseLock();}
+    window.astraLoad?.progress("download",label,i+1,files.length);
   }
   if(cursor!==entries.length) throw Error("Incomplete "+group+" parcel");
 }
@@ -236,7 +237,7 @@ function preloadFlightEngine() {
   if(location.protocol!=="http:"&&location.protocol!=="https:")return;
   if(document.getElementById("astraEnginePreload"))return;
   const link=document.createElement("link");link.id="astraEnginePreload";
-  link.rel="preload";link.as="script";link.href="engine.js?v=pyre79";
+  link.rel="preload";link.as="script";link.href="engine.js?v=pyre80";
   document.head.append(link);
 }
 let firstBlastProfile=0;
@@ -279,7 +280,7 @@ $("previewClose").onclick=()=>window.astraPreview.close();
 
 async function launch(quick,demo=false,encounter=false,preview=false,autopilot=false,inspect=false,weapons=false,mine=false) {
   if(launchPending)return;
-  launchPending=true;preloadFlightEngine();window.astraBench?.begin();window.astraTerminal?.loading(true);
+  launchPending=true;preloadFlightEngine();window.astraBench?.begin();window.astraLoad?.begin();
   const buttons=document.querySelectorAll(".launch");
   buttons.forEach(el=>el.disabled=true);
   try {
@@ -293,7 +294,7 @@ async function launch(quick,demo=false,encounter=false,preview=false,autopilot=f
     const silence="data:audio/wav;base64,UklGRiYAAABXQVZFZm10IBAAAAABAAEAQB8AAIA+AAACABAAZGF0YQIAAAAAAA==";
     music.src=silence; music.volume=.75;
     music.play().then(()=>{if(music.getAttribute("src")===silence){music.pause();music.currentTime=0;}}).catch(()=>{});
-    await script("streaming.js?v=67");
+    await script("streaming.js?v=80");
     const loadMovie=astraMovieLibrary(async file=>{
       const response=await fetch("payload/"+file);
       if(!response.ok||!response.body)throw Error("Could not load "+file);
@@ -318,17 +319,18 @@ async function launch(quick,demo=false,encounter=false,preview=false,autopilot=f
       }
       await readPack("cockpit","Fitting flight instruments");
       await readPack("fleet","Fitting robot chassis");
-      $("status").textContent="Preparing effects";
+      window.astraLoad?.progress("download","Downloading explosion and collectible artwork",0,2);
       const [field,mesh]=await Promise.all([effect(catalog.effects.field,false),effect(catalog.effects.mesh,true)]);
       mounted.set("pyro-field.png",field);
       mounted.set("collectibles.mesh",mesh);
+      window.astraLoad?.progress("download","Explosion and collectible artwork ready",2,2);
     }
-    if(astra){await script("generated-materials.js?v=75");assetDepot=astraGeneratedLibrary(assetDepot);}
+    if(astra){await script("generated-materials.js?v=80");assetDepot=astraGeneratedLibrary(assetDepot);}
     if(astra)await loadAstraShipAssets();
     const districtMaps=await districtArt;if(districtMaps)for(const [name,bytes] of districtMaps)mounted.set(name,bytes);
     const sceneryBytes=await scenery;if(sceneryBytes)mounted.set("scenery74.png",sceneryBytes);
     if(campaign==="overload"){await script("mission-controller.js?v=77");await script("overload-loader.js?v=78");await astraOverload.install(mounted);}
-    $("status").textContent="Starting flight computer";
+    window.astraLoad?.progress("effects","Starting flight computer");
     const canvas=$("view");
     const quality=Number($("res").value);
     const height=Math.round(quality*9/16);
@@ -375,7 +377,7 @@ async function launch(quick,demo=false,encounter=false,preview=false,autopilot=f
         setInterval(syncPilot,3000);
       }
     };
-    await script("engine.js?v=pyre79");
+    await script("engine.js?v=pyre80");
   } catch(e) {console.error(e);astraFail(e.message);}
 }
 

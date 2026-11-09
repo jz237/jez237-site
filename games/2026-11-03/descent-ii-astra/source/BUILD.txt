@@ -1437,3 +1437,10 @@ R79 - prepare graphics before the opening flight
 - Prepare mounted material families and a bounded spawn neighborhood (at most 32 rooms / four portal steps), plus nearby robot and pickup buffers. Do not fetch the complete asset library or preload the whole mine.
 - No synthetic gameplay frames or random-number calls. Shader literals, visual detail, flight controls and demo AI are unchanged. Original, Vertigo and Overload share preparation.
 - First-frame GPU program compilation and uploads are measured separately from loading; preparation timing is exposed as Module.graphicsWarmup.
+
+R80 - continuous graphics preparation and useful performance measurements
+- Prepare a bounded portal neighborhood between completed renders. One upload per opportunity, idle/busy-frame gates, cooldown after expensive work, asynchronous missing-family requests, and no gameplay state or random-number changes.
+- Prepare each mine's starting area on campaign transitions and save loads while retaining shared compiled programs and cached textures.
+- Reuse eight fixed explosion vertex buffers; upload the identical sorted slab vertices directly, avoiding compatibility-layer client-array repacking. No effect count, shader, resolution or sorting changes.
+- Measure the first actual render, opening five seconds and sustained forty seconds separately. Exclude deliberate pauses, menus and loading; retain old saved reports with an explicit explanation of their excluded opening period.
+- Show download, texture and effect preparation with real current-operation counts. Unknown-length work remains indeterminate.

@@ -17,40 +17,38 @@
   addButton('comfortSetup','Flight comfort',q('panel-settings')).onclick=()=>astraTools.open();
   addButton('nativeComfort','Comfort',q('nativeBack').parentElement).onclick=()=>astraTools.open();update();
   const start=addButton('performanceStart','Run 45-second performance check',q('panel-settings'));start.classList.add('launch');
-  const hint=document.createElement('p');hint.className='interaction-note';hint.textContent='Measures loading, frame rate and stutters using a live demo at your current quality. No automatic graphics changes.';start.after(hint);
+  const hint=document.createElement('p');hint.className='interaction-note';hint.textContent='Measures loading, the first five seconds and the following forty seconds separately, at your current quality. Pauses and menus are excluded. No automatic graphics changes.';start.after(hint);
   const report=document.createElement('dialog');report.id='performanceReport';report.className='astra-tool-dialog';report.innerHTML='<h2>Performance check</h2><div id="performanceResults"></div><p id="performanceAdvice"></p><button id="performanceClose">Close</button><button id="performanceHome">Main menu</button>';document.body.append(report);
   const previous=addButton('performancePrevious','View last performance check',q('panel-settings'));
   const progress=document.createElement('div');progress.id='performanceProgress';progress.hidden=true;progress.setAttribute('role','status');q('stage').append(progress);
-  let running=false,requested=false,started=0,first=0,last=0,lastFrame=-1,frames=[],measured=0,warmup=0,hidden=false,lastResult=null;
+  let running=false,requested=false,measurement=null,lastResult=null;
   try{lastResult=JSON.parse(localStorage.getItem(resultKey));if(!lastResult||!['load','fps','low','p95','seconds','frames','stutters'].every(k=>Number.isFinite(lastResult[k])))lastResult=null;}catch{}previous.disabled=!lastResult;
-  const percentile=(a,p)=>a[Math.min(a.length-1,Math.floor((a.length-1)*p))]||0;
   function show(value){
     if(!value)return;lastResult=value;
-    const fields=[['Loading',value.load.toFixed(1)+' s'],['Average frame rate',value.fps.toFixed(1)+' FPS'],['Slowest 1% average',value.low.toFixed(1)+' FPS'],['95th-percentile frame',value.p95.toFixed(1)+' ms'],['Frames above 50 ms',value.stutters+' / '+value.frames],['Measured flight',value.seconds.toFixed(1)+' s'],['Resolution',value.resolution],['Moving shadows',value.shadows]];
-    q('performanceResults').replaceChildren(...fields.map(([name,data])=>{const row=document.createElement('p');const label=document.createElement('span');label.textContent=name;const output=document.createElement('b');output.textContent=data;row.append(label,output);return row;}));
-    q('performanceAdvice').textContent=value.fps>=55&&value.p95<30?'This run was smooth. No graphics change is suggested.':value.fps>=35?'Try Basic moving shadows first, then repeat the check. Your textures can stay at their current quality.':'Try Basic moving shadows, then a lower rendering resolution if needed. Texture detail can stay enabled. This check has not changed any settings.';
+    const results=q('performanceResults');results.replaceChildren();
+    function row(name,data){const r=document.createElement('p'),label=document.createElement('span'),output=document.createElement('b');label.textContent=name;output.textContent=data;r.append(label,output);results.append(r);}
+    function section(title,data){const heading=document.createElement('h3');heading.textContent=title;results.append(heading);row('Average / slowest 1%',`${data.fps.toFixed(1)} / ${data.low.toFixed(1)} FPS`);row('Longest pause',data.worst.toFixed(1)+' ms');row('Frames above 50 ms',`${data.stutters} / ${data.frames}`);row('Measured flight',data.seconds.toFixed(1)+' s');}
+    row('Loading before first frame',value.load.toFixed(1)+' s');
+    if(value.version>=2&&value.opening&&value.sustained){section('Opening flight · first 5 seconds',value.opening);section('Sustained flight · remaining 40 seconds',value.sustained);}
+    else {row('Average frame rate',value.fps.toFixed(1)+' FPS');row('Slowest 1% average',value.low.toFixed(1)+' FPS');row('Frames above 50 ms',`${value.stutters} / ${value.frames}`);row('Older test', 'Opening five seconds were excluded');}
+    row('Resolution',value.resolution);row('Moving shadows',value.shadows);
+    const opening=value.opening?.worst>100,steady=value.sustained||value;
+    q('performanceAdvice').textContent=opening&&steady.fps>=55?'The opening still has a noticeable pause. Later flight is faster; these results keep the two separate. No graphics settings were changed.':steady.fps>=55&&steady.p95<30&&!(steady.worst>100)?'This run was smooth. No graphics change is suggested.':'This run still has slow frames. Compare the opening and sustained results on this computer. No graphics settings were changed.';
     q('performanceHome').hidden=!window.Module?.calledRun;if(!report.open)report.showModal();
   }
   function finish(){
-    running=false;progress.hidden=true;if(!frames.length)return;
-    const sorted=[...frames].sort((a,b)=>a-b),slow=sorted.slice(-Math.max(1,Math.ceil(sorted.length*.01)));
-    const result={time:Date.now(),load:(first-started)/1000,fps:1000*frames.length/measured,low:1000/(slow.reduce((a,b)=>a+b,0)/slow.length),p95:percentile(sorted,.95),stutters:frames.filter(n=>n>50).length,frames:frames.length,seconds:measured/1000,resolution:q('res').selectedOptions[0].textContent,shadows:q('shadowQuality').selectedOptions[0].textContent};
+    running=false;progress.hidden=true;if(!measurement)return;
+    const result={time:Date.now(),...measurement.result(),resolution:q('res').selectedOptions[0].textContent,shadows:q('shadowQuality').selectedOptions[0].textContent};if(!result.frames)return;
     if(window.Module?.autopilot)pauseDemo(true);try{localStorage.setItem(resultKey,JSON.stringify(result));}catch{}previous.disabled=false;window.astraBench.result=result;show(result);
   }
   function sample(now){
     if(!running)return;
+    const m=window.Module,paused=document.hidden||window.astraMenus?.active||document.querySelector('dialog[open]')||m?.autoPaused||m?.graphicsLoading;
+    if(measurement.sample(now,m?.renderFrames,paused)){finish();return;}
+    progress.textContent=measurement.first===null?'Performance check · Measuring loading':`Performance check · ${measurement.elapsed<5000?'Opening':'Sustained'} flight · ${Math.min(45,Math.floor(measurement.elapsed/1000))} / 45 s`;
     requestAnimationFrame(sample);
-    const m=window.Module,frame=m?.flightState?.frame;
-    if(document.hidden||window.astraMenus?.active||document.querySelector('dialog[open]')||m?.autoPaused){last=0;hidden=true;return;}
-    if(!frame||frame===lastFrame)return;lastFrame=frame;
-    if(!first){first=now;warmup=now;}
-    if(hidden){hidden=false;last=0;}
-    if(now-warmup<5000){progress.textContent='Performance check · Warming up';last=now;return;}
-    if(last){const dt=now-last;if(dt>0){frames.push(dt);measured+=dt;}}
-    last=now;progress.textContent=`Performance check · ${Math.min(45,Math.floor(measured/1000))} / 45 s`;
-    if(measured>=45000)finish();
   }
-  window.astraBench={result:null,get requested(){return requested;},begin(){if(!requested)return;running=true;started=performance.now();first=last=0;lastFrame=-1;frames=[];measured=0;progress.hidden=false;requestAnimationFrame(sample);},finish};
+  window.astraBench={result:null,get requested(){return requested;},begin(){if(!requested)return;running=true;measurement=new astraPerformance.FlightMeasurement(performance.now());progress.hidden=false;requestAnimationFrame(sample);},firstFrame(now){if(running)measurement.firstFrame(now);},finish};
   start.onclick=()=>{if(launchPending)return;requested=true;launch(true,false,false,false,true);};
   previous.onclick=()=>show(lastResult);q('performanceClose').onclick=()=>{report.close();if(window.Module?.autopilot)pauseDemo(false);};q('performanceHome').onclick=()=>astraNavigation.home(false);
   for(const modal of [dialog,report])for(const type of ['keydown','keyup'])modal.addEventListener(type,e=>e.stopPropagation());

@@ -128,7 +128,7 @@ function astraMaterialLibrary(catalog) {
       if (!queue.length) return;
       let next = 0, done = 0;
       if(manageLoading)window.astraTerminal?.loading(true);
-      const progress = () => $("status").textContent = "Preparing this mine’s materials · " + done + " / " + queue.length;
+      const progress = () => window.astraLoad?.progress("download","Downloading this mine’s materials",done,queue.length);
       progress();
       async function worker() {
         while (next < queue.length) {

@@ -1,7 +1,7 @@
 /* GPT Image material families. Shared maps keep VRAM bounded across both campaigns.
  * Script parcels also work in the installed file:// edition. */
 window.astraGeneratedLibrary = function(nativeDepot) {
-  const waiting=new Map(),pending=new Map(),ready=new Set();
+  const waiting=new Map(),pending=new Map(),ready=new Set(),background=new Map();
   const decode=text=>{
     if(Uint8Array.fromBase64)return Uint8Array.fromBase64(text);
     const binary=atob(text),bytes=new Uint8Array(binary.length);
@@ -35,13 +35,21 @@ window.astraGeneratedLibrary = function(nativeDepot) {
   }
   return {
     hasNativeLibrary:!!nativeDepot,
+    prefetchImage(name){
+      if(background.has(name))return;
+      const match=parse(name);if(!match&&!nativeDepot?.knows(name))return;
+      const job=match?family(Number(match[1])):nativeDepot.image(name);background.set(name,job);
+      job.catch(error=>{console.warn('Upcoming material:',error.message);setTimeout(()=>background.delete(name),5000);});
+    },
     knows(name){return !!parse(name)||!!nativeDepot?.knows(name);},
     image(name){const match=parse(name);return match?family(Number(match[1])):nativeDepot?.image(name);},
     async level(names,robots){
       // Download independent material sets together, but retain the two-image
       // decode limit and await every material before exposing the flight view.
-      const generated=async()=>{for(let id=0;id<8;id+=2)await Promise.all([family(id),family(id+1)]);if(window.astraDistrictReady){await Promise.all([family(8),family(9)]);await family(12);}};
-      window.astraTerminal?.loading(true);
+      const generated=async()=>{const ids=window.astraDistrictReady?[0,1,2,3,4,5,6,7,8,9,12]:[0,1,2,3,4,5,6,7];let done=0;
+        const prepare=async id=>{await family(id);window.astraLoad?.progress('textures','Preparing this mine’s surface artwork',++done,ids.length);};
+        for(let at=0;at<ids.length;at+=2)await Promise.all(ids.slice(at,at+2).map(prepare));};
+      window.astraLoad?.begin("Preparing this mine.");
       try { await Promise.all([nativeDepot?.level(names,robots,false),generated()]); }
       finally { window.astraTerminal?.loading(false); }
     }

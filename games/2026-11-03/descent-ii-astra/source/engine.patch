@@ -1590,7 +1590,7 @@ index d4c7b1f..de6ddc1 100644
  #ifdef NETWORK
  		KEY_MAC(case KEY_COMMAND+KEY_6:)
 diff --git a/d2/main/gamerend.c b/d2/main/gamerend.c
-index da0872e..3297e9b 100644
+index da0872e..87a8d34 100644
 --- a/d2/main/gamerend.c
 +++ b/d2/main/gamerend.c
 @@ -1,3 +1,4 @@
@@ -1656,10 +1656,12 @@ index da0872e..3297e9b 100644
  	int new_mode=CM_FULL_SCREEN;
  
  	if (Rear_view || Player_is_dead)
-@@ -968,6 +983,17 @@ void update_cockpits()
+@@ -968,9 +983,23 @@ void update_cockpits()
  
  void game_render_frame()
  {
++    EM_ASM({Module.renderFrames=(Module.renderFrames||0)+1;if(Module.renderFrames===1)window.astraBench?.firstFrame(performance.now());});
++    extern void astra_stream_frame_begin(void);astra_stream_frame_begin();
 +    extern int astra_draw_count(void),astra_mesh_count(void),astra_surface_count(void),astra_blast_count(void);
 +    static unsigned astra_frame;
 +    if(!astra_frame && Current_mission && Current_level_num>0)
@@ -1674,7 +1676,11 @@ index da0872e..3297e9b 100644
  	set_screen_mode( SCREEN_GAME );
  	play_homing_warning();
  	game_render_frame_mono(GameArg.DbgUseDoubleBuffer);
-@@ -995,3 +1021,7 @@ void show_boxed_message(char *msg, int RenderFlag)
++    extern void astra_stream_frame_end(void);astra_stream_frame_end();
+ }
+ 
+ //show a message in a nice little box
+@@ -995,3 +1024,7 @@ void show_boxed_message(char *msg, int RenderFlag)
  	if (!RenderFlag)
  		gr_flip();
  }
@@ -1683,7 +1689,7 @@ index da0872e..3297e9b 100644
 +
 +
 diff --git a/d2/main/gameseq.c b/d2/main/gameseq.c
-index 30de489..b92a0a4 100644
+index 30de489..cb9c4fe 100644
 --- a/d2/main/gameseq.c
 +++ b/d2/main/gameseq.c
 @@ -232,9 +232,9 @@ gameseq_init_network_players()
@@ -1716,7 +1722,7 @@ index 30de489..b92a0a4 100644
  #endif
  
  	load_endlevel_data(level_num);
-@@ -781,11 +782,17 @@ void LoadLevel(int level_num,int page_in_textures)
+@@ -781,6 +782,10 @@ void LoadLevel(int level_num,int page_in_textures)
  	load_level_robots(level_num);
  
  	verify_objects(); // set proper robot properties if customized
@@ -1727,14 +1733,17 @@ index 30de489..b92a0a4 100644
  
  	if ( page_in_textures ) {
  		piggy_load_level_data();
- #ifdef OGL
+@@ -788,6 +793,9 @@ void LoadLevel(int level_num,int page_in_textures)
  		ogl_cache_level_textures();
-+        extern void astra_warm_graphics(void);
-+        astra_warm_graphics();
  #endif
  	}
++#ifdef OGL
++    extern void astra_warm_graphics(void);astra_warm_graphics();
++#endif
  
-@@ -829,6 +836,7 @@ void InitPlayerObject()
+ #ifdef NETWORK
+ 	my_segments_checksum = netmisc_calc_checksum();
+@@ -829,6 +837,7 @@ void InitPlayerObject()
  extern void init_seismic_disturbances(void);
  
  //starts a new game on the given level
@@ -1742,7 +1751,7 @@ index 30de489..b92a0a4 100644
  void StartNewGame(int start_level)
  {
  	state_quick_item = -1;	// for first blind save, pick slot to save in
-@@ -848,7 +856,24 @@ void StartNewGame(int start_level)
+@@ -848,7 +857,24 @@ void StartNewGame(int start_level)
  	else
  		StartNewLevel(start_level);
  
@@ -1768,7 +1777,7 @@ index 30de489..b92a0a4 100644
  
  	game_disable_cheats();
  
-@@ -860,6 +885,7 @@ void StartNewGame(int start_level)
+@@ -860,6 +886,7 @@ void StartNewGame(int start_level)
  //	Call with dead_flag = 1 if player died, but deserves some portion of bonus (only skill points), anyway.
  void DoEndLevelScoreGlitz(int network)
  {
@@ -1776,7 +1785,7 @@ index 30de489..b92a0a4 100644
  	int level_points, skill_points, energy_points, shield_points, hostage_points;
  	int	all_hostage_points;
  	int	endgame_points;
-@@ -1022,6 +1048,7 @@ int draw_stars_bg(newmenu *menu, d_event *event, grs_bitmap *background)
+@@ -1022,6 +1049,7 @@ int draw_stars_bg(newmenu *menu, d_event *event, grs_bitmap *background)
  
  void do_screen_message(char *fmt, ...)
  {
@@ -1784,7 +1793,7 @@ index 30de489..b92a0a4 100644
  	va_list arglist;
  	grs_bitmap background;
  	char msg[1024];
-@@ -1256,6 +1283,11 @@ void EnterSecretLevel(void)
+@@ -1256,6 +1284,11 @@ void EnterSecretLevel(void)
  //called when the player has finished a level
  void PlayerFinishedLevel(int secret_flag)
  {
@@ -1796,7 +1805,7 @@ index 30de489..b92a0a4 100644
  	Assert(!secret_flag);
  
  	if (Game_wind)
-@@ -1295,6 +1327,9 @@ void show_order_form();
+@@ -1295,6 +1328,9 @@ void show_order_form();
  //called when the player has finished the last level
  void DoEndGame(void)
  {
@@ -1806,7 +1815,7 @@ index 30de489..b92a0a4 100644
  	if ((Newdemo_state == ND_STATE_RECORDING) || (Newdemo_state == ND_STATE_PAUSED))
  		newdemo_stop_recording(0);
  
-@@ -1456,6 +1491,7 @@ void DoPlayerDead()
+@@ -1456,6 +1492,7 @@ void DoPlayerDead()
  #endif
  	{				//Note link to above else!
  		Players[Player_num].lives--;
@@ -1814,7 +1823,7 @@ index 30de489..b92a0a4 100644
  		if (Players[Player_num].lives == 0)
  		{
  			DoGameOver();
-@@ -1809,7 +1845,8 @@ void StartNewLevel(int level_num)
+@@ -1809,7 +1846,8 @@ void StartNewLevel(int level_num)
  		maybe_set_first_secret_visit(level_num);
  	}
  
@@ -1824,7 +1833,7 @@ index 30de489..b92a0a4 100644
  
  	StartNewLevelSub(level_num, 1, 0 );
  
-@@ -2086,3 +2123,4 @@ void StartLevel(int random_flag)
+@@ -2086,3 +2124,4 @@ void StartLevel(int random_flag)
  	Auto_fire_fusion_cannon_time = 0;
  	Fusion_charge = 0;
  }

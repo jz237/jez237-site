@@ -47,8 +47,10 @@
   window.astraTerminal={
     tab,
     loading(active){
+      const opening=active&&q('loadingScreen').hidden;
       q('loadingScreen').hidden=!active;q('terminal').inert=active;
-      if(active){q('loadingScreen').classList.remove('failed');q('loadingScreen').focus();}
+      if(window.Module)Module.graphicsLoading=!!active;
+      if(active){q('loadingScreen').classList.remove('failed');if(opening)q('loadingScreen').focus();}
     },
     fail(){this.loading(true);q('loadingScreen').classList.add('failed');q('retry').hidden=false;q('retry').focus();}
   };

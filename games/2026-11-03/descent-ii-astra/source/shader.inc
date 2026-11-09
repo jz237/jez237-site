@@ -138,6 +138,20 @@ static void astra_init_shader(void)
     astra_fixture=AS_UNIFORM(astra_program,"lamp");astra_moving=AS_UNIFORM(astra_program,"shot");
 }
 static void astra_unit(float *s){float d=sqrtf(s[0]*s[0]+s[1]*s[1]+s[2]*s[2]);if(d>1e-7f)for(int i=0;i<3;i++)s[i]/=d;}
+static int astra_prepare_normal(int id){
+    if(id<=0||id>=256)return 0;if(astra_normals[id])return 1;
+    glActiveTexture(GL_TEXTURE1);
+        char name[20];snprintf(name,sizeof name,"n%03d.png",id-1);png_data data;
+        if(!read_png(name,&data))return 0;
+        glGenTextures(1,&astra_normals[id]);glBindTexture(GL_TEXTURE_2D,astra_normals[id]);
+        glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR_MIPMAP_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+        glTexImage2D(GL_TEXTURE_2D,0,GL_RGB,data.width,data.height,0,GL_RGB,GL_UNSIGNED_BYTE,data.data);
+        glGenerateMipmap(GL_TEXTURE_2D);
+        if(ogl_maxanisotropy>1.0)glTexParameterf(GL_TEXTURE_2D,GL_TEXTURE_MAX_ANISOTROPY_EXT,fminf(16,ogl_maxanisotropy));
+        free(data.data);
+    return 1;
+}
 static int astra_material_begin(ogl_texture *tex,const float *p,const float *uv)
 {
     if(!tex || tex->material<=0 || tex->material>=256 || astra_gpu_failed)return 0;
@@ -151,15 +165,7 @@ static int astra_material_begin(ogl_texture *tex,const float *p,const float *uv)
     if(tex->faithful>=20)glBindTexture(GL_TEXTURE_2D,ag_details[tex->faithful-20]);
     else if(tex->faithful_detail)glBindTexture(GL_TEXTURE_2D,tex->faithful_detail);
     else if(!astra_normals[id]){
-        char name[20];snprintf(name,sizeof name,"n%03d.png",id-1);png_data data;
-        if(!read_png(name,&data)){glActiveTexture(GL_TEXTURE0);glUseProgram(0);return 0;}
-        glGenTextures(1,&astra_normals[id]);glBindTexture(GL_TEXTURE_2D,astra_normals[id]);
-        glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR_MIPMAP_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
-        glTexImage2D(GL_TEXTURE_2D,0,GL_RGB,data.width,data.height,0,GL_RGB,GL_UNSIGNED_BYTE,data.data);
-        glGenerateMipmap(GL_TEXTURE_2D);
-        if(ogl_maxanisotropy>1.0)glTexParameterf(GL_TEXTURE_2D,GL_TEXTURE_MAX_ANISOTROPY_EXT,fminf(16,ogl_maxanisotropy));
-        free(data.data);
+        if(!astra_prepare_normal(id)){glActiveTexture(GL_TEXTURE0);glUseProgram(0);return 0;}
     }else glBindTexture(GL_TEXTURE_2D,astra_normals[id]);
     glActiveTexture(GL_TEXTURE4);glBindTexture(GL_TEXTURE_2D,tex->native_color?tex->native_color:tex->handle);
     glActiveTexture(GL_TEXTURE5);glBindTexture(GL_TEXTURE_2D,tex->native_color?tex->native_color:tex->handle);

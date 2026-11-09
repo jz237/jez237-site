@@ -8,9 +8,7 @@ static int ag_hidden(int door){
     int hidden[]={10,18,19,20,21,22,25,26,29,30,31,37,38,39,40,41,42,43,44,45,48,49,50,51,52,54,57};
     for(int i=0;i<sizeof hidden/sizeof *hidden;i++)if(door==hidden[i])return 1;return 0;
 }
-static int astra_generated(grs_bitmap *bm,const char *name,png_data *img){
-    af_detail=af_original=0;af_kind=0;ag_shape=0;
-    for(int c=0;c<3;c++)ag_tint[c]=1;ag_rect[0]=ag_rect[1]=0;ag_rect[2]=ag_rect[3]=1;
+static int ag_candidate(grs_bitmap *bm,const char *name){
     if(!af_surface(name)||!bm->bm_data||bm->bm_w<1||bm->bm_h<1||bm->bm_w>256||bm->bm_h>256)return 0;
     int w=bm->bm_w,h=bm->bm_h,door=!strncmp(name,"door",4),di=door?atoi(name+4):0;
     int metl=!strncmp(name,"metl",4),ceil=!strncmp(name,"ceil",4),misc=!strncmp(name,"misc",4),ctrl=!strncmp(name,"ctrl",4);
@@ -22,6 +20,15 @@ static int astra_generated(grs_bitmap *bm,const char *name,png_data *img){
     if(metl&&(n==23||n==24))return 0;
     if(ceil&&n==6)return 0;
     if(strchr(name,'#')&&!door)return 0;
+    return 1;
+}
+static int astra_generated(grs_bitmap *bm,const char *name,png_data *img){
+    af_detail=af_original=0;af_kind=0;ag_shape=0;
+    for(int c=0;c<3;c++)ag_tint[c]=1;ag_rect[0]=ag_rect[1]=0;ag_rect[2]=ag_rect[3]=1;
+    if(!ag_candidate(bm,name))return 0;
+    int w=bm->bm_w,h=bm->bm_h,door=!strncmp(name,"door",4),di=door?atoi(name+4):0;
+    int metl=!strncmp(name,"metl",4),ceil=!strncmp(name,"ceil",4),misc=!strncmp(name,"misc",4),ctrl=!strncmp(name,"ctrl",4);
+    int n=atoi(name+4),rock=!strncmp(name,"rock",4)||ag_hidden(di),masked=bm->bm_flags&(BM_FLAG_TRANSPARENT|BM_FLAG_SUPER_TRANSPARENT);
     unsigned char *idx=malloc(w*h),*rgba=malloc(w*h*4);
     if(!idx||!rgba){free(idx);free(rgba);return 0;}
     if(bm->bm_flags&BM_FLAG_RLE){int wide=(bm->bm_flags&BM_FLAG_RLE_BIG)!=0;unsigned char *sizes=bm->bm_data+4,*row=sizes+h*(1+wide);

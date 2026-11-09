@@ -6,6 +6,18 @@ enum { PLUME_PARTS=52, PLUME_SLICES=8 };
 typedef struct {float x,y,z,r,heat,spin,opacity,lamp[3];} pyro_part;
 typedef struct {int part; float z,local,step;} pyro_slice;
 typedef struct {float p[3],uvw[4],color[4],n[3];} pyro_vertex;
+/* The same slab vertices go straight to a small rotating GPU buffer pool.
+ * This avoids rebuilding compatibility-layer client arrays for each cloud. */
+enum { PYRO_BUFFERS=8, PYRO_VERTEX_CAPACITY=PLUME_PARTS*PLUME_SLICES*6 };
+static GLuint pyro_buffers[PYRO_BUFFERS];static unsigned pyro_buffer_next;
+static void pyro_prepare_buffers(void){
+    if(pyro_buffers[0])return;
+    glGenBuffers(PYRO_BUFFERS,pyro_buffers);
+    for(int i=0;i<PYRO_BUFFERS;i++){glBindBuffer(GL_ARRAY_BUFFER,pyro_buffers[i]);glBufferData(GL_ARRAY_BUFFER,PYRO_VERTEX_CAPACITY*sizeof(pyro_vertex),NULL,GL_STREAM_DRAW);}
+    glBindBuffer(GL_ARRAY_BUFFER,0);
+    EM_ASM({Module.pyroUpload=({buffers:$0,capacityBytes:$1,uploads:0,bytes:0});},PYRO_BUFFERS,PYRO_BUFFERS*PYRO_VERTEX_CAPACITY*sizeof(pyro_vertex));
+}
+
 static float pyro_dot(const float *p,const vms_vector *axis)
 {return p[0]*f2fl(axis->x)+p[1]*f2fl(axis->y)+p[2]*f2fl(axis->z);}
 static void pyro_dir(unsigned seed,int i,float *dir)
@@ -66,10 +78,13 @@ static void pyro_draw_parts(pyro_part *part,int count,float age,int kind,int hea
     glBindTexture(GL_TEXTURE_2D,ashTexture);glUseProgram(ashProgram);glUniformMatrix3fv(ashBasis,1,GL_FALSE,basis);
     glUniform3fv(ashScale,1,scale);glUniform1f(ashTime,age);glUniform3fv(ashTint,1,astra_effect_color(kind));
     glEnableClientState(GL_VERTEX_ARRAY);glEnableClientState(GL_TEXTURE_COORD_ARRAY);glEnableClientState(GL_COLOR_ARRAY);glEnableClientState(GL_NORMAL_ARRAY);
-    glVertexPointer(3,GL_FLOAT,sizeof(pyro_vertex),vertices[0].p);glTexCoordPointer(4,GL_FLOAT,sizeof(pyro_vertex),vertices[0].uvw);
-    glColorPointer(4,GL_FLOAT,sizeof(pyro_vertex),vertices[0].color);glNormalPointer(GL_FLOAT,sizeof(pyro_vertex),vertices[0].n);
+    pyro_prepare_buffers();glBindBuffer(GL_ARRAY_BUFFER,pyro_buffers[pyro_buffer_next++%PYRO_BUFFERS]);
+    glBufferSubData(GL_ARRAY_BUFFER,0,total*sizeof(pyro_vertex),vertices);
+    glVertexPointer(3,GL_FLOAT,sizeof(pyro_vertex),(void*)0);glTexCoordPointer(4,GL_FLOAT,sizeof(pyro_vertex),(void*)12);
+    glColorPointer(4,GL_FLOAT,sizeof(pyro_vertex),(void*)28);glNormalPointer(GL_FLOAT,sizeof(pyro_vertex),(void*)44);
     glDrawArrays(GL_TRIANGLES,0,total);
-    glDisableClientState(GL_NORMAL_ARRAY);glDisableClientState(GL_COLOR_ARRAY);glDisableClientState(GL_TEXTURE_COORD_ARRAY);glDisableClientState(GL_VERTEX_ARRAY);
+    EM_ASM({Module.pyroUpload.uploads++;Module.pyroUpload.bytes+=$0;},total*sizeof(pyro_vertex));
+    glDisableClientState(GL_NORMAL_ARRAY);glDisableClientState(GL_COLOR_ARRAY);glDisableClientState(GL_TEXTURE_COORD_ARRAY);glDisableClientState(GL_VERTEX_ARRAY);glBindBuffer(GL_ARRAY_BUFFER,0);
     glUseProgram(0);glDepthMask(GL_TRUE);if(cull)glEnable(GL_CULL_FACE);gr_settransblend(fade,blend);
 }
 static void pyro_fragments(const float *origin,float size,float t,unsigned seed,int heavy,float visibility)
