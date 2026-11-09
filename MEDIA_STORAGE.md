@@ -28,6 +28,7 @@ Cloudflare unchanged. The build derives entry points from the Git tree without
 downloading those sections' large assets. Old mirror service workers unregister
 and move their own open windows to the canonical game; unrelated apps and caches
 are untouched. The mirror 404 also forwards deep navigation in those two sections.
+The shared `demos/assets/` thumbnails remain local for the main landing page.
 The mirror is no longer an independent offline host for games/demos; raw asset
 fetches must use the canonical site. This does not change the checksum-verified
 legacy video restoration described above, which still runs after stub generation.

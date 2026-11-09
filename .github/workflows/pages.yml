@@ -48,6 +48,7 @@ jobs:
             /games/2026-08-20/final-blow/manifest.webmanifest
             /games/2026-08-20/final-blow/icon.svg
             /games/2026-08-20/final-blow/tests/service-worker-guard.test.mjs
+            /demos/assets/
             /demos/rotatable-aquascape/
             !/functions/
             !/scripts/
@@ -169,7 +170,10 @@ jobs:
             -cf - . | tar -xf - -C _site
 
       - name: Route large interactive sections to the canonical site
-        run: python3 scripts/prepare_pages_mirror.py routes _site
+        run: |
+          python3 scripts/prepare_pages_mirror.py routes _site
+          # The main landing page also uses these lightweight gallery thumbnails.
+          cp -a demos/assets _site/demos/assets
 
       - name: Preserve legacy direct video URLs from R2
         run: python3 scripts/restore_legacy_media.py _site
