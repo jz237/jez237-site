@@ -5,13 +5,13 @@
 // Five looks (sky, terrain, sea, scenery, bodies in the sky), real 3D models for everything, curved beams,
 // warnings drawn in the play plane, HDR post. Nothing here changes the world.
 import * as THREE from '../vendor/three.module.min.js';
-import { Post } from './post.js?v=4';
-import * as TX from './textures.js?v=4';
-import * as MD from './models.js?v=4';
-import { FX, CALM } from './fx.js?v=4';
-import { NOISE } from './shaders.js?v=4';
-import { F, C, RP, H, ENEMY, BOSSES, POWERUPS, P2_LIVERY, LIVERIES, SETTLER } from './config.js?v=4';
-import { wd, wp, nodePos, beamRange, dronePos as dronePosR } from './sim.js?v=4';
+import { Post } from './post.js?v=5';
+import * as TX from './textures.js?v=5';
+import * as MD from './models.js?v=5';
+import { FX, CALM } from './fx.js?v=5';
+import { NOISE } from './shaders.js?v=5';
+import { F, C, RP, H, ENEMY, BOSSES, POWERUPS, P2_LIVERY, LIVERIES, SETTLER } from './config.js?v=5';
+import { wd, wp, nodePos, beamRange, dronePos as dronePosR } from './sim.js?v=5';
 
 export { CALM };
 const hdr = (hex, k) => new THREE.Color(hex).multiplyScalar(k);
@@ -347,6 +347,9 @@ export class Renderer {
     this.sky.frustumCulled = false; this.sky.renderOrder = -10;
     this.scene.add(this.sky);
     this.scene.fog = new THREE.FogExp2(0x88aacc, 0.003);
+    this.glare = new THREE.Sprite(new THREE.SpriteMaterial({ map: this.T.glow, color: 0xffe0b0, transparent: true, depthWrite: false, depthTest: true, blending: THREE.AdditiveBlending, fog: false, opacity: 0 }));
+    this.glare.scale.set(900, 900, 1); this.glare.renderOrder = -2; this.glare.frustumCulled = false;
+    this.scene.add(this.glare);
     this.bodies = [];
   }
   bodyMat(b) {
@@ -978,6 +981,17 @@ export class Renderer {
         this.fx.dustP.add({ x: _v.x, y: _v.y, z: _v.z, vx: -_v2.x * 26, vy: -_v2.y * 26, vz: 0, s0: 0.13, s1: 0.1, max: 1.2, a: 0.5, r: 0.75, g: 0.82, b: 0.95, drag: 0, grav: 0, fade: 0.4 });
       }
     }
+    // colony searchlights sweep the night sky (not once the colony has fallen)
+    if ((this.nightK || 0) > 0.15 && !W.fallen) for (let si = 0; si < W.sites.length; si++) {
+      const site = W.sites[si];
+      if (Math.abs(wd(site - this.cx)) > 80) continue;
+      for (let k = 0; k < 2; k++) {
+        const rb = this.takeRibbon(); if (!rb) break;
+        const a = Math.sin(t * (0.35 + k * 0.13) + si * 2.1 + k * 1.7) * 0.55, bx = site + (k ? 6 : -6);
+        rb.set([[bx, 0.5], [bx + Math.sin(a) * 60, 0.5 + Math.cos(a) * 60]], (q) => 0.5 + q * 7, -7);
+        rb.mat.uniforms.uColor.value.set(this.look.lights).multiplyScalar(0.55); rb.mat.uniforms.uK.value = 0.22 * this.nightK; rb.mat.uniforms.uDash.value = 0; rb.mat.uniforms.uSoft.value = 1.0; rb.mat.uniforms.uHead.value = 0;
+      }
+    }
     // shooting stars at night
     if ((this.nightK || 0) > 0.6 && !CALM.on && Math.random() < dt * 0.25 && this.meteors.length < 2) this.meteors.push({ x: this.cx + (Math.random() - 0.5) * 120, y: 60 + Math.random() * 30, vx: (Math.random() < 0.5 ? -1 : 1) * (60 + Math.random() * 40), vy: -18 - Math.random() * 12, t: 0, T: 0.9 + Math.random() * 0.6 });
     this.meteors = this.meteors.filter((m) => {
@@ -1112,6 +1126,7 @@ export class Renderer {
     c.lookAt(_v3);
     void th;
     this.sky.position.copy(c.position);
+    this.glare.position.copy(c.position).addScaledVector(SUN, 3500);
     // day and night: how high the sun stands over this spot
     this.day = _v2.dot(SUN);
     const L = this.look, day = sstep(-0.25, 0.35, this.day), dusk = Math.exp(-Math.pow(this.day * 3.2, 2)), night = 1 - sstep(-0.35, 0.1, this.day);
@@ -1139,6 +1154,8 @@ export class Renderer {
     if (cs) cs.material.color.set(L.clouds).multiplyScalar(0.12 + 0.88 * day).lerp(_c2.set(L.sky[2]), dusk * 0.4);
     const cl = this.lightSets[this.lookI];
     if (cl) cl.material.opacity = night * 0.95;
+    this.glare.material.color.set(L.sun).lerp(_c2.set(L.sky[2]), dusk * 0.6);
+    this.glare.material.opacity = CALM.on ? 0 : sstep(-0.12, 0.05, this.day) * (0.35 + dusk * 0.9);
     this.nightK = night; this.dayK = day; this.duskK = dusk;
   }
   // a sim point (x, y) to screen pixels

@@ -1,13 +1,13 @@
 // Skyhold 2026 — game flow, menus, HUD (with the scanner strip), commentary, demo director and the frame loop.
-import { VERSION, SECTORS, STEP, F, C, H, BOSSES, UPGRADES, UP_KEYS, UP_COST, MEDALS, parTime, TYPICAL_UP, START_LIVES, DIFFICULTY, POWERUPS, LIVERIES, CP_NAMES, WAVES, ENEMY } from './config.js?v=4';
-import { makeWorld, step, stepGuest, drainEvents, wd, wp, settlersLeft, nodePos, CHAIN_T, chainMult } from './sim.js?v=4';
-import { Autopilot } from './ai.js?v=4';
-import { Renderer, pickQuality, CALM, LOOKS } from './render.js?v=4';
-import { Audio } from './audio.js?v=4';
-import { Input } from './input.js?v=4';
-import { Scores, NO_POST } from './scores.js?v=4';
-import { Recorder, Replay } from './replay.js?v=4';
-import { Online, ROOM, randomCode, cleanCode } from './online.js?v=4';
+import { VERSION, SECTORS, STEP, F, C, H, BOSSES, UPGRADES, UP_KEYS, UP_COST, MEDALS, parTime, TYPICAL_UP, START_LIVES, DIFFICULTY, POWERUPS, LIVERIES, CP_NAMES, WAVES, ENEMY } from './config.js?v=5';
+import { makeWorld, step, stepGuest, drainEvents, wd, wp, settlersLeft, nodePos, CHAIN_T, chainMult } from './sim.js?v=5';
+import { Autopilot } from './ai.js?v=5';
+import { Renderer, pickQuality, CALM, LOOKS } from './render.js?v=5';
+import { Audio } from './audio.js?v=5';
+import { Input } from './input.js?v=5';
+import { Scores, NO_POST } from './scores.js?v=5';
+import { Recorder, Replay } from './replay.js?v=5';
+import { Online, ROOM, randomCode, cleanCode } from './online.js?v=5';
 
 const $ = (id) => document.getElementById(id);
 const params = new URLSearchParams(location.search);
@@ -1091,7 +1091,7 @@ async function boot() {
   toTitle();
   boardOf('campaign', settings.diff).fresh(); boardOf('endless', settings.diff).fresh();
   if (!G.fixed && !params.has('test')) R.prepareAll(true);
-  if (params.has('test')) { const m = await import('./tests.js?v=4'); m.runTests(window.__sh); }
+  if (params.has('test')) { const m = await import('./tests.js?v=5'); m.runTests(window.__sh); }
   else if (params.has('playthrough')) { A.unlock(); startPlaythrough(); }
   else if (params.has('room')) { act('online'); $('join-code').value = cleanCode(params.get('room')); }
   else if (G.autopilot) { A.unlock(); if (params.has('endless')) startEndless(); else startCampaign(+params.get('sector') || 0); }

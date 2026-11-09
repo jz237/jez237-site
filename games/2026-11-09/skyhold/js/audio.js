@@ -4,7 +4,7 @@
 // the carrier drone and the per-planet ambient beds are seamless loops (thrust, liftloop, bossloop, amb_<planet>).
 // The colony-command voice ducks the music and only one line plays at a time. Music loops with a crossfade; clear and
 // over are one-shot stings. (js/chip.js adds a live-synthesised retro layer on top.)
-import { Chip } from './chip.js?v=4';
+import { Chip } from './chip.js?v=5';
 
 const SFX = ['beam', 'beamhit', 'pop', 'boomS', 'boomM', 'boomL', 'debris', 'warpin', 'grab', 'distress', 'fuse', 'fall', 'catch', 'land', 'lost',
   'mine', 'minebeep', 'hivepop', 'swarm', 'prowler', 'bolt', 'tell', 'nova', 'blink', 'blinkin', 'shieldhit', 'death', 'spawn', 'pickup', 'pwend',
@@ -13,7 +13,7 @@ const SFX = ['beam', 'beamhit', 'pop', 'boomS', 'boomM', 'boomL', 'debris', 'war
 const VOICE = ['begin', 's2', 's3', 's4', 's5', 'boss', 'bossdown', 'clear', 'lastlife', 'gameover', 'newrecord', 'champion', 'colonyfall', 'saved',
   'endless', 'partner', 'replay', 'lifted'];
 const MUSIC = new Set(['title', 's1', 's2', 's3', 's4', 's5', 'boss', 'clear', 'over']);  // clear, over: stings
-const V = '?v=4';
+const V = '?v=5';
 
 export class Audio {
   constructor(base) {
