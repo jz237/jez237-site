@@ -1,11 +1,177 @@
 {
   "version": 1,
   "title": "AI Discoveries, Explained",
-  "updated": "2026-11-05",
+  "updated": "2026-11-09",
   "coverageStart": "2026-09-21",
-  "coverageEnd": "2026-11-05",
+  "coverageEnd": "2026-11-09",
   "editorialNote": "Source-linked discoveries, research demonstrations, follow-ups and corrections from AI Discovery Watch. Historical milestones posted before the fresh-news brief are not included. Coverage dates are when a story was shared, not necessarily when its discovery occurred. Evidence labels reflect the linked report at that time; read later updates too.",
   "stories": [
+    {
+      "category": "Mathematics",
+      "evidenceKind": "proof",
+      "modelNote": "GPT-6 Astra produced the proof through an agent system and Codex; Claude Opus 5.5 did minor checks and editing.",
+      "sources": [
+        "https://hexagonmath.org/2611.00039v1",
+        "https://github.com/snow-ghost/glushkov-lx-lean/releases/tag/v1.0.1"
+      ],
+      "status": "Preliminary paper with author-reported Lean computer verification. The checks were not independently rerun for this report.",
+      "takeaway": "Imagine sorting a row of cards using only two moves: shift the whole row left, or swap the first two cards. A November 2 paper gives the exact number of moves needed in the hardest cases for every row of at least five cards, settling a longstanding question. AI generated the proof while people organized the research and made minor edits. The authors report computer checks, but not independent human peer review; the work does not provide a working shortest-route solver.",
+      "title": "AI finds the exact worst-case length of a two-move sorting puzzle",
+      "id": "d-1569370192297984011-ai-exact-two-move-sorting-limit",
+      "coveredOn": "2026-11-09",
+      "context": "🔬 **AI Discovery Watch · November 9, 2026**\n\n**AI finds the exact worst-case length of a two-move sorting puzzle**\nImagine sorting a row of cards using only two moves: shift the whole row left, or swap the first two cards. A November 2 paper gives the exact number of moves needed in the hardest cases for every row of at least five cards, settling a longstanding question. AI generated the proof while people organized the research and made minor edits. The authors report computer checks, but not independent human peer review; the work does not provide a working shortest-route solver.\n\n**AI used:** GPT-6 Astra produced the proof through an agent system and Codex; Claude Opus 5.5 did minor checks and editing.\n**Evidence:** Preliminary paper with author-reported Lean computer verification. The checks were not independently rerun for this report.\nOriginal source: <https://hexagonmath.org/2611.00039v1>\nSupporting source: <https://github.com/snow-ghost/glushkov-lx-lean/releases/tag/v1.0.1>"
+    },
+    {
+      "category": "Mathematics",
+      "evidenceKind": "proof",
+      "modelNote": "Claude Opus 5.5 developed the improvements and draft; GPT-6 reviewed the proof and suggested further changes (variant unspecified).",
+      "sources": [
+        "https://arxiv.org/abs/2610.10831",
+        "https://arxiv.org/html/2610.10831v2"
+      ],
+      "status": "Preprint with author-reported Lean verification, not independently rerun here. A narrower improvement to an existing theorem.",
+      "takeaway": "When connected points must have different colors, how many colors can a network need? An October 16 paper uses AI to shrink an enormous safety factor in an existing mathematical limit to about 1.1 million. Claude found improvements and developed the argument; mathematician David Wood added ideas and revised it, with further AI review. This improves the numerical limit in an earlier theorem, not the entire underlying coloring problem. Wood calls it a proof-optimization experiment, and relies on computer checks for details he has not checked by hand.",
+      "title": "AI tightens a mathematical limit on coloring networks",
+      "id": "d-1569370444530843692-ai-tightens-network-coloring-bound",
+      "coveredOn": "2026-11-09",
+      "context": "🔬 **AI Discovery Watch · November 9, 2026**\n\n**AI tightens a mathematical limit on coloring networks**\nWhen connected points must have different colors, how many colors can a network need? An October 16 paper uses AI to shrink an enormous safety factor in an existing mathematical limit to about 1.1 million. Claude found improvements and developed the argument; mathematician David Wood added ideas and revised it, with further AI review. This improves the numerical limit in an earlier theorem, not the entire underlying coloring problem. Wood calls it a proof-optimization experiment, and relies on computer checks for details he has not checked by hand.\n\n**AI used:** Claude Opus 5.5 developed the improvements and draft; GPT-6 reviewed the proof and suggested further changes (variant unspecified).\n**Evidence:** Preprint with author-reported Lean verification, not independently rerun here. A narrower improvement to an existing theorem.\nOriginal source: <https://arxiv.org/abs/2610.10831>\nSupporting source: <https://arxiv.org/html/2610.10831v2>"
+    },
+    {
+      "category": "Physics & materials",
+      "evidenceKind": "early",
+      "modelNote": "DEFEAT uses fine-tuned EquiformerV3 for design; UMA-s-1p2 estimates energies and Nequix supports screening. These are materials models, not chatbots.",
+      "sources": [
+        "https://arxiv.org/abs/2611.09572",
+        "https://arxiv.org/html/2611.09572v1"
+      ],
+      "status": "Early computational predictions, not laboratory discoveries or independently replicated results. Calculated stability does not establish that a material can be made.",
+      "takeaway": "An AI-guided search changed both the ingredients and arrangement of crystals to seek useful electrical properties. A November 6 preprint reports 45 new crystal candidates, with more detailed physics calculations predicting that 39 could carry electricity without resistance when extremely cold; a separate search produced ten candidates with targeted light-absorption properties. People built the method, set its goals, selected candidates and ran the checking calculations. This offers leads for future experiments, not proven new working materials: none of these predictions establishes that the crystals can be made or will perform as expected.",
+      "title": "AI designs new crystal candidates for superconductors and solar materials",
+      "id": "d-1569370660180852739-defeat-crystal-design-candidates",
+      "coveredOn": "2026-11-09",
+      "context": "🔬 **AI Discovery Watch · November 9, 2026**\n\n**AI designs new crystal candidates for superconductors and solar materials**\nAn AI-guided search changed both the ingredients and arrangement of crystals to seek useful electrical properties. A November 6 preprint reports 45 new crystal candidates, with more detailed physics calculations predicting that 39 could carry electricity without resistance when extremely cold; a separate search produced ten candidates with targeted light-absorption properties. People built the method, set its goals, selected candidates and ran the checking calculations. This offers leads for future experiments, not proven new working materials: none of these predictions establishes that the crystals can be made or will perform as expected.\n\n**AI used:** DEFEAT uses fine-tuned EquiformerV3 for design; UMA-s-1p2 estimates energies and Nequix supports screening. These are materials models, not chatbots.\n**Evidence:** Early computational predictions, not laboratory discoveries or independently replicated results. Calculated stability does not establish that a material can be made.\nOriginal source: <https://arxiv.org/abs/2611.09572>\nSupporting source: <https://arxiv.org/html/2611.09572v1>"
+    },
+    {
+      "category": "Mathematics",
+      "evidenceKind": "proof",
+      "modelNote": "LongTails is the research framework; the underlying models used for these results are not specified. Lean and Comparator check proofs, not generate discoveries.",
+      "sources": [
+        "https://github.com/k3nfalt/longtails",
+        "https://raw.githubusercontent.com/k3nfalt/longtails/main/LongTails/Theorems/GeneralizedSelfNormalizedConvex.lean",
+        "https://science.mail.ru/news/59704-ii-teoremy-matematicheskaya-optimizaciya/"
+      ],
+      "status": "Author-reported new results with Lean and Comparator checks; no independent rebuild or peer-review confirmation established.",
+      "takeaway": "AI agents working with LongTails have produced new mathematical guarantees about how much computation certain search methods need. The project, reported on October 30, gives a concrete example that improves an earlier limit while avoiding an extra calculation step. People built the framework and define or approve the problems; agents develop methods and proofs, which the project checks against those exact conditions. These are theoretical improvements, not demonstrated savings in training real AI systems. The team’s novelty claims and reported computer checks have not been independently confirmed here.",
+      "title": "AI develops better guarantees for mathematical search methods",
+      "id": "d-1569371054760005753-longtails-checked-optimization-research",
+      "coveredOn": "2026-11-09",
+      "context": "🔬 **AI Discovery Watch · November 9, 2026**\n\n**AI develops better guarantees for mathematical search methods**\nAI agents working with LongTails have produced new mathematical guarantees about how much computation certain search methods need. The project, reported on October 30, gives a concrete example that improves an earlier limit while avoiding an extra calculation step. People built the framework and define or approve the problems; agents develop methods and proofs, which the project checks against those exact conditions. These are theoretical improvements, not demonstrated savings in training real AI systems. The team’s novelty claims and reported computer checks have not been independently confirmed here.\n\n**AI used:** LongTails is the research framework; the underlying models used for these results are not specified. Lean and Comparator check proofs, not generate discoveries.\n**Evidence:** Author-reported new results with Lean and Comparator checks; no independent rebuild or peer-review confirmation established.\nOriginal source: <https://github.com/k3nfalt/longtails>\nSupporting source: <https://raw.githubusercontent.com/k3nfalt/longtails/main/LongTails/Theorems/GeneralizedSelfNormalizedConvex.lean>\nSupporting source: <https://science.mail.ru/news/59704-ii-teoremy-matematicheskaya-optimizaciya/>"
+    },
+    {
+      "category": "Medicine & biology",
+      "evidenceKind": "lab",
+      "modelNote": "MolRSI used Claude Sonnet 5 to develop the screening workflow; molecular predictors included MiniMol-based models.",
+      "sources": [
+        "https://arxiv.org/abs/2610.39714",
+        "https://arxiv.org/html/2610.39714v2"
+      ],
+      "status": "Early laboratory result, not independently replicated. Activity tests used technical repeats within one experiment; the comparison was with an earlier campaign.",
+      "takeaway": "An AI agent improved how it searches for compounds that stop bacterial growth, using lessons saved from earlier projects. In a preprint posted October 29, MolRSI redesigned a screening strategy rather than simply following a fixed recipe. Researchers supplied the data and goals, then tested 107 selected compounds: 17 worked against one laboratory strain, a 15.9% success rate versus 8.7% in an earlier human-designed campaign using the same starting resources. This could help prioritize laboratory testing, but the small study does not establish safe or effective medicines.",
+      "title": "AI learns from earlier searches to find antibacterial compounds",
+      "id": "d-1569008094275571905-molrsi-learns-to-screen-antibacterial-compounds",
+      "coveredOn": "2026-11-08",
+      "context": "🔬 **AI Discovery Watch · November 8, 2026**\n\n**AI learns from earlier searches to find antibacterial compounds**\nAn AI agent improved how it searches for compounds that stop bacterial growth, using lessons saved from earlier projects. In a preprint posted October 29, MolRSI redesigned a screening strategy rather than simply following a fixed recipe. Researchers supplied the data and goals, then tested 107 selected compounds: 17 worked against one laboratory strain, a 15.9% success rate versus 8.7% in an earlier human-designed campaign using the same starting resources. This could help prioritize laboratory testing, but the small study does not establish safe or effective medicines.\n\n**AI used:** MolRSI used Claude Sonnet 5 to develop the screening workflow; molecular predictors included MiniMol-based models.\n**Evidence:** Early laboratory result, not independently replicated. Activity tests used technical repeats within one experiment; the comparison was with an earlier campaign.\nOriginal source: <https://arxiv.org/abs/2610.39714>\nSupporting source: <https://arxiv.org/html/2610.39714v2>"
+    },
+    {
+      "category": "Medicine & biology",
+      "evidenceKind": "lab",
+      "modelNote": "EnzymeRSI generated the recommendations; its underlying language model is not identified in the inspected manuscript.",
+      "sources": [
+        "https://arxiv.org/abs/2611.06321",
+        "https://arxiv.org/html/2611.06321v1"
+      ],
+      "status": "Early laboratory result, not independently confirmed. Noisy reference measurements affect some improvement estimates; these were crude-extract light tests, not purified-enzyme measurements.",
+      "takeaway": "An AI system proposed changes to a light-producing enzyme before researchers made and tested them. In a November 4 preprint, EnzymeRSI suggested three changes from structural reasoning rather than direct measurements of those changes in earlier papers; all three gave stronger light signals when cultures were grown again. This shows a useful route from AI suggestions to laboratory checks. People supplied the scientific goals and performed the experiments, and the system was poor at ranking its candidates. No complete, self-improving campaign across repeated laboratory rounds was demonstrated.",
+      "title": "AI proposes enzyme changes that make laboratory tests glow more brightly",
+      "id": "d-1569008571352481870-enzymersi-proposes-brighter-luciferase-tests",
+      "coveredOn": "2026-11-08",
+      "context": "🔬 **AI Discovery Watch · November 8, 2026**\n\n**AI proposes enzyme changes that make laboratory tests glow more brightly**\nAn AI system proposed changes to a light-producing enzyme before researchers made and tested them. In a November 4 preprint, EnzymeRSI suggested three changes from structural reasoning rather than direct measurements of those changes in earlier papers; all three gave stronger light signals when cultures were grown again. This shows a useful route from AI suggestions to laboratory checks. People supplied the scientific goals and performed the experiments, and the system was poor at ranking its candidates. No complete, self-improving campaign across repeated laboratory rounds was demonstrated.\n\n**AI used:** EnzymeRSI generated the recommendations; its underlying language model is not identified in the inspected manuscript.\n**Evidence:** Early laboratory result, not independently confirmed. Noisy reference measurements affect some improvement estimates; these were crude-extract light tests, not purified-enzyme measurements.\nOriginal source: <https://arxiv.org/abs/2611.06321>\nSupporting source: <https://arxiv.org/html/2611.06321v1>"
+    },
+    {
+      "category": "Computing & engineering",
+      "evidenceKind": "proof",
+      "modelNote": "PSI’s research system used an unnamed, non-public Anthropic model to discover and formalize the proof; Lean checked it.",
+      "sources": [
+        "https://psi.inc/research/aaronson-ambainis/",
+        "https://github.com/physical-superintelligence/aaronson-ambainis"
+      ],
+      "status": "Early proof claim; Lean checking reported by the authors, not independently rerun here. Outside specialists have commented; no peer review established.",
+      "takeaway": "An AI-found proof says quantum computers cannot gain an exponential advantage in how often they read randomly chosen data when answering yes-or-no questions. This narrows when enormous quantum advantages are possible; it does not mean ordinary computers match all quantum running times. PSI’s researcher chose the problem and reviewed the AI’s proof, which builds on earlier human mathematics. Announced November 6, the proof is public and reportedly passed a computer proof checker, but broader independent review is still developing.",
+      "title": "AI finds a proof about when quantum computers can pull ahead",
+      "id": "d-1568645422891798661-ai-proof-limits-quantum-data-reading-advantage",
+      "coveredOn": "2026-11-07",
+      "context": "🔬 **AI Discovery Watch · November 7, 2026**\n\n**AI finds a proof about when quantum computers can pull ahead**\nAn AI-found proof says quantum computers cannot gain an exponential advantage in how often they read randomly chosen data when answering yes-or-no questions. This narrows when enormous quantum advantages are possible; it does not mean ordinary computers match all quantum running times. PSI’s researcher chose the problem and reviewed the AI’s proof, which builds on earlier human mathematics. Announced November 6, the proof is public and reportedly passed a computer proof checker, but broader independent review is still developing.\n\n**AI used:** PSI’s research system used an unnamed, non-public Anthropic model to discover and formalize the proof; Lean checked it.\n**Evidence:** Early proof claim; Lean checking reported by the authors, not independently rerun here. Outside specialists have commented; no peer review established.\nOriginal source: <https://psi.inc/research/aaronson-ambainis/>\nSupporting source: <https://github.com/physical-superintelligence/aaronson-ambainis>"
+    },
+    {
+      "category": "Mathematics",
+      "evidenceKind": "proof",
+      "modelNote": "GPT-6 Astra agents found the two-dimensional proof; GPT-6.1 Sol extended it to all dimensions. Claude Opus 5.5 drafted text; humans revised it.",
+      "sources": [
+        "https://arxiv.org/abs/2610.42124",
+        "https://github.com/nitromannitol/FPP-variance"
+      ],
+      "status": "Early proof; authors report complete Lean checking. Independent verification and peer review not established here.",
+      "takeaway": "Imagine crossing a landscape where each patch slows you down differently. A new AI-assisted proof tightens the limit on how unpredictable the fastest journey can be as distances increase. Posted October 30, it replaces a much longer earlier argument and extends the result beyond two dimensions. Human mathematicians directed the agents, checked the work and heavily rewrote the paper. The authors report computer-checked proofs, but this remains a preprint about idealized landscapes with no preferred direction—not every randomly weighted road network.",
+      "title": "AI helps find a simpler proof about journeys through random landscapes",
+      "id": "d-1568645766300438670-ai-simplifies-random-landscape-travel-proof",
+      "coveredOn": "2026-11-07",
+      "context": "🔬 **AI Discovery Watch · November 7, 2026**\n\n**AI helps find a simpler proof about journeys through random landscapes**\nImagine crossing a landscape where each patch slows you down differently. A new AI-assisted proof tightens the limit on how unpredictable the fastest journey can be as distances increase. Posted October 30, it replaces a much longer earlier argument and extends the result beyond two dimensions. Human mathematicians directed the agents, checked the work and heavily rewrote the paper. The authors report computer-checked proofs, but this remains a preprint about idealized landscapes with no preferred direction—not every randomly weighted road network.\n\n**AI used:** GPT-6 Astra agents found the two-dimensional proof; GPT-6.1 Sol extended it to all dimensions. Claude Opus 5.5 drafted text; humans revised it.\n**Evidence:** Early proof; authors report complete Lean checking. Independent verification and peer review not established here.\nOriginal source: <https://arxiv.org/abs/2610.42124>\nSupporting source: <https://github.com/nitromannitol/FPP-variance>"
+    },
+    {
+      "category": "Research in action",
+      "evidenceKind": "demo",
+      "modelNote": "Claude Sonnet 4.6 in Claude Code; Claude Fable 5 also tested for repeatability.",
+      "sources": [
+        "https://arxiv.org/abs/2611.00620",
+        "https://arxiv.org/html/2611.00620"
+      ],
+      "status": "Early research demonstration on previously studied data; not independently confirmed.",
+      "takeaway": "An AI proposed and tested explanations for how tiny light-emitting defects inside crystals behave. In one dataset, it separated a faint emitter's signal from a brighter neighbor and rejected better-fitting explanations that violated the measuring instrument's limits. Researchers supplied existing experimental data, background instructions and some simulation tools. Submitted October 31, this demonstrates AI making scientific analysis decisions, not discovering a new law or running a physical lab. The study also caught an unsupported AI conclusion; human expert checks remain essential.",
+      "title": "AI tests competing explanations for tiny quantum devices",
+      "id": "d-1568282958140416052-claude-quantum-model-investigator",
+      "coveredOn": "2026-11-06",
+      "context": "🔬 **AI Discovery Watch · November 6, 2026**\n\n**AI tests competing explanations for tiny quantum devices**\nAn AI proposed and tested explanations for how tiny light-emitting defects inside crystals behave. In one dataset, it separated a faint emitter's signal from a brighter neighbor and rejected better-fitting explanations that violated the measuring instrument's limits. Researchers supplied existing experimental data, background instructions and some simulation tools. Submitted October 31, this demonstrates AI making scientific analysis decisions, not discovering a new law or running a physical lab. The study also caught an unsupported AI conclusion; human expert checks remain essential.\n\n**AI used:** Claude Sonnet 4.6 in Claude Code; Claude Fable 5 also tested for repeatability.\n**Evidence:** Early research demonstration on previously studied data; not independently confirmed.\nOriginal source: <https://arxiv.org/abs/2611.00620>\nSupporting source: <https://arxiv.org/html/2611.00620>"
+    },
+    {
+      "category": "Medicine & biology",
+      "evidenceKind": "lab",
+      "modelNote": "PharmAgents2; underlying language model for these lab-linked studies not specified.",
+      "sources": [
+        "https://arxiv.org/abs/2611.07653",
+        "https://arxiv.org/html/2611.07653"
+      ],
+      "status": "Early, author-reported laboratory results; not peer-reviewed or independently confirmed.",
+      "takeaway": "An AI proposed an alternative place to attach a molecule to a bacterial protein and searched for chemicals that might disable it. People chose the protein, built the system's tools and scientific guidance, then bought and tested its 63 nominated candidates. One candidate bound to the protein and reduced its activity in laboratory tests, providing a starting point for further investigation. The November 5 preprint does not establish that it attaches where the AI predicted, works as a medicine or is safe for people.",
+      "title": "AI proposes a new way to block a bacterial protein",
+      "id": "d-1568283215985119435-pharmagents2-bacterial-enzyme-candidate",
+      "coveredOn": "2026-11-06",
+      "context": "🔬 **AI Discovery Watch · November 6, 2026**\n\n**AI proposes a new way to block a bacterial protein**\nAn AI proposed an alternative place to attach a molecule to a bacterial protein and searched for chemicals that might disable it. People chose the protein, built the system's tools and scientific guidance, then bought and tested its 63 nominated candidates. One candidate bound to the protein and reduced its activity in laboratory tests, providing a starting point for further investigation. The November 5 preprint does not establish that it attaches where the AI predicted, works as a medicine or is safe for people.\n\n**AI used:** PharmAgents2; underlying language model for these lab-linked studies not specified.\n**Evidence:** Early, author-reported laboratory results; not peer-reviewed or independently confirmed.\nOriginal source: <https://arxiv.org/abs/2611.07653>\nSupporting source: <https://arxiv.org/html/2611.07653>"
+    },
+    {
+      "category": "Mathematics",
+      "evidenceKind": "proof",
+      "modelNote": "ChatGPT; underlying model and version not disclosed.",
+      "sources": [
+        "https://arxiv.org/abs/2611.05216",
+        "https://arxiv.org/html/2611.05216"
+      ],
+      "status": "Preprint proof claim; overturns a stronger fixed-count rule, not every related conjecture.",
+      "takeaway": "ChatGPT found a way to divide an abstract shape into 489 pieces when a proposed rule said every allowed division should use 490. It is like finding a different tiling that breaks a supposedly fixed tile count. These shapes are used in mathematical descriptions of particle collisions, so the example changes which rules researchers can rely on. People guided follow-up searches and wrote the main mathematical argument. Submitted November 3, the proof is an early research report, not independently confirmed here.",
+      "title": "ChatGPT finds a mathematical tiling with one unexpected missing piece",
+      "id": "d-1568283677434052619-chatgpt-breaks-fixed-tile-count",
+      "coveredOn": "2026-11-06",
+      "context": "🔬 **AI Discovery Watch · November 6, 2026**\n\n**ChatGPT finds a mathematical tiling with one unexpected missing piece**\nChatGPT found a way to divide an abstract shape into 489 pieces when a proposed rule said every allowed division should use 490. It is like finding a different tiling that breaks a supposedly fixed tile count. These shapes are used in mathematical descriptions of particle collisions, so the example changes which rules researchers can rely on. People guided follow-up searches and wrote the main mathematical argument. Submitted November 3, the proof is an early research report, not independently confirmed here.\n\n**AI used:** ChatGPT; underlying model and version not disclosed.\n**Evidence:** Preprint proof claim; overturns a stronger fixed-count rule, not every related conjecture.\nOriginal source: <https://arxiv.org/abs/2611.05216>\nSupporting source: <https://arxiv.org/html/2611.05216>"
+    },
     {
       "category": "Medicine & biology",
       "evidenceKind": "lab",
