@@ -807,6 +807,22 @@ export function stinger() {
   return { g, wings: [by(g, 'wing0'), by(g, 'wing1')] };
 }
 
+// ------------------------------------------------------------------ SKIMMER: a 1.4 m chrome manta with glowing edges
+export function skimmer() {
+  const g = make('skimmer', () => {
+    const K = new Kit(), S = 1.5, P = (pts) => pts.map(([x, z]) => [x * S, z * S]);
+    const dk = paint(0x1a2230, 0.28, 0.85), tr = paint(0x2a6f86, 0.32, 0.6);
+    K.add(slab(P([[0.5, 0], [0.04, 0.44], [-0.34, 0.2], [-0.22, 0], [-0.34, -0.2], [0.04, -0.44]]), 0.11, 0.025), dk);
+    K.add(slab(P([[0.44, 0], [0.06, 0.26], [-0.18, 0.09], [-0.18, -0.09], [0.06, -0.26]]), 0.17, 0.03), tr, 0, 0.02, 0);
+    for (const s of BOTH) K.add(slab(P([[0.04, s * 0.44], [-0.34, s * 0.2], [-0.29, s * 0.18], [0.03, s * 0.39]]), 0.13, 0.008), glow(0x5ef0ff, 4));
+    K.mesh(sph(0.15, 16, 10), glowM(0x8af8ff, 6, 'skimCore'), 'core', 0.12, 0.1, 0);
+    K.add(cyl(0.08, 0.11, 0.1, 12), glow(0x5ef0ff, 5), -0.36, 0, 0, 0, 0, PI / 2);
+    K.build();
+    return K.root;
+  });
+  return { g, core: by(g, 'core') };
+}
+
 // ------------------------------------------------------------------ HIVE (carrier egg)
 // 2.6 m egg along x: bone caps and hoops, ribbed frame, translucent amber panes (the shell Group) with five
 // stingers packed inside (inner) round a pulsing core at the back.
@@ -1634,7 +1650,7 @@ export function scenery(lookKey) {
 }
 
 // nominal sizes (m): lengths along x, the settler's height, the lifter's width
-export const SIZE = { ship: 3.4, lifter: 2.4, husk: 2.0, sower: 3.0, mine: 0.6, hive: 2.6, stinger: 0.9, prowler: 3.2, settler: 0.9, pod: 0.9, ark: 22, reaper: 19.5, loom: 18.3, hulk: 18.8, throne: 22 };
+export const SIZE = { ship: 3.4, lifter: 2.4, husk: 2.0, sower: 3.0, mine: 0.6, hive: 2.6, stinger: 0.9, prowler: 3.2, skimmer: 1.4, settler: 0.9, pod: 0.9, ark: 22, reaper: 19.5, loom: 18.3, hulk: 18.8, throne: 22 };
 export const GEO = { box, cyl, sph, cap, tor, rbox, slab, side, washer, cone, ico, shard };
 // a plain mesh helper
 export function add(p, g, mat, x = 0, y = 0, z = 0, rx = 0, ry = 0, rz = 0) {

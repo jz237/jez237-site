@@ -5,13 +5,13 @@
 // Five looks (sky, terrain, sea, scenery, bodies in the sky), real 3D models for everything, curved beams,
 // warnings drawn in the play plane, HDR post. Nothing here changes the world.
 import * as THREE from '../vendor/three.module.min.js';
-import { Post } from './post.js?v=6';
-import * as TX from './textures.js?v=6';
-import * as MD from './models.js?v=6';
-import { FX, CALM } from './fx.js?v=6';
-import { NOISE } from './shaders.js?v=6';
-import { F, C, RP, H, ENEMY, BOSSES, POWERUPS, P2_LIVERY, LIVERIES, SETTLER } from './config.js?v=6';
-import { wd, wp, nodePos, beamRange, dronePos as dronePosR } from './sim.js?v=6';
+import { Post } from './post.js?v=7';
+import * as TX from './textures.js?v=7';
+import * as MD from './models.js?v=7';
+import { FX, CALM } from './fx.js?v=7';
+import { NOISE } from './shaders.js?v=7';
+import { F, C, RP, H, ENEMY, BOSSES, POWERUPS, P2_LIVERY, LIVERIES, SETTLER } from './config.js?v=7';
+import { wd, wp, nodePos, beamRange, dronePos as dronePosR } from './sim.js?v=7';
 
 export { CALM };
 const hdr = (hex, k) => new THREE.Color(hex).multiplyScalar(k);
@@ -21,6 +21,8 @@ const sstep = (a, b, x) => { const t = clamp((x - a) / (b - a), 0, 1); return t 
 const _v = new THREE.Vector3(), _v2 = new THREE.Vector3(), _v3 = new THREE.Vector3(), _v4 = new THREE.Vector3(), _v5 = new THREE.Vector3();
 const _c = new THREE.Color(), _c2 = new THREE.Color(), _m = new THREE.Matrix4(), _q = new THREE.Quaternion(), _s = new THREE.Vector3(), _e = new THREE.Euler();
 const ZAX = new THREE.Vector3(0, 0, 1);
+const _up = new THREE.Vector3();
+const TCOL = { lifter: 0x9dff7a, husk: 0xff4a8a, sower: 0xc98aff, hive: 0xff8a3a, stinger: 0xff6a6a, prowler: 0xff3a3a, skimmer: 0x5ef0ff, mine: 0xffb347 };
 const VIS = 1.3;   // models are drawn a little larger than their hit boxes so they read at this camera distance
 
 // sim (x, y) at depth z -> world point on the planet (y = altitude above the ground). The planet is a sphere of
@@ -46,24 +48,24 @@ export function pickQuality(name) {
 export const LOOKS = [
   { key: 'verdant', sky: [0x2f6fcf, 0xa8d4ff, 0xff9050, 0x040916, 0x14284a], sun: 0xfff1d8, sunI: 3.3, moon: 0x9db6ff, moonI: 0.7, hemi: [0x9ac8ff, 0x3a4a2a], fog: [0xa8cdf0, 0x0a1428], fogD: 0.0034,
     ground: [0xd8c690, 0x4f8f3a, 0x3d6e2e, 0x77786a, 0xeef2f6], relief: 'hills', sea: { kind: 'water', c: [0x2aa6b8, 0x06304c, 0x000000] }, props: 'verdant',
-    bodies: [{ kind: 'moon', dir: 0.9, el: 0.55, r: 150, c: [0xcfd2d6, 0x8a8e96] }, { kind: 'moon', dir: 2.6, el: 0.35, r: 80, c: [0xd8c6a8, 0x8a7a64] }],
-    clouds: 0xffffff, cloudN: 70, exposure: 1.0, bloom: 0.75, grade: [1.02, 1.0, 0.98], aurora: 0, ash: 0, lights: 0xffd890 },
+    bodies: [{ kind: 'giant', dir: 0.95, el: 0.25, r: 1100, c: [0x7ab8ff, 0x2a4aa0, 0xd8f0ff] }, { kind: 'moon', dir: 3.0, el: 0.5, r: 260, c: [0xcfd2d6, 0x8a8e96] }, { kind: 'ringed', dir: 5.0, el: 0.24, r: 700, c: [0xffc890, 0xa0603a, 0xfff0d8] }],
+    neb: [0x2a6cff, 0xff4ab0], dome: 0x5ad8ff, clouds: 0xffffff, cloudN: 70, exposure: 1.0, bloom: 0.75, grade: [1.02, 1.0, 0.98], aurora: 0, ash: 0, lights: 0xffd890 },
   { key: 'dune', sky: [0x5a86c8, 0xf3cfa0, 0xff6030, 0x0a0614, 0x2a1428], sun: 0xffe2b0, sunI: 3.6, moon: 0xffc8a0, moonI: 0.55, hemi: [0xf0c8a0, 0x6a3a1c], fog: [0xe8b888, 0x140a14], fogD: 0.0038,
     ground: [0xd9a46a, 0xc77b3e, 0xb0602e, 0x7a3e24, 0xe8c49a], relief: 'dunes', sea: { kind: 'none', c: [0, 0, 0] }, props: 'dune', sun2: 1,
-    bodies: [{ kind: 'moon', dir: 1.8, el: 0.45, r: 110, c: [0xf0d8c0, 0xa07860] }],
-    clouds: 0xffe2c0, cloudN: 18, exposure: 1.0, bloom: 0.8, grade: [1.05, 0.99, 0.93], aurora: 0, ash: 0.2, lights: 0xffc070 },
+    bodies: [{ kind: 'moon', dir: 1.8, el: 0.45, r: 300, c: [0xf0d8c0, 0xa07860] }, { kind: 'giant', dir: 3.9, el: 0.24, r: 1200, c: [0xff9a5a, 0x8a2a1a, 0xffe0c0] }, { kind: 'ringed', dir: 5.6, el: 0.3, r: 520, c: [0xd8b0ff, 0x6a4a9a, 0xf0e0ff] }],
+    neb: [0xff6a2a, 0x8a3aff], dome: 0xffb04a, clouds: 0xffe2c0, cloudN: 18, exposure: 1.0, bloom: 0.8, grade: [1.05, 0.99, 0.93], aurora: 0, ash: 0.2, lights: 0xffc070 },
   { key: 'frost', sky: [0x2a62b8, 0xa8d0f4, 0xff98c0, 0x02040e, 0x0a1a34], sun: 0xeef6ff, sunI: 2.6, moon: 0xa8d8ff, moonI: 0.8, hemi: [0x9cc4ec, 0x40566e], fog: [0x9ec4e8, 0x06122a], fogD: 0.0026,
     ground: [0xc4dcef, 0xe8f2fa, 0xd0e2f2, 0x6f8aa6, 0xffffff], relief: 'spires', sea: { kind: 'ice', c: [0xbfe6ff, 0x3a7aa8, 0x6fd8ff] }, props: 'frost',
-    bodies: [{ kind: 'ringed', dir: 1.2, el: 0.5, r: 220, c: [0x9ab8d8, 0x5a7aa0, 0xe8f0ff] }],
-    clouds: 0xf4f8ff, cloudN: 40, exposure: 1.0, bloom: 0.85, grade: [0.97, 1.0, 1.05], aurora: 1, ash: 0.15, lights: 0x9fe0ff },
+    bodies: [{ kind: 'ringed', dir: 1.2, el: 0.27, r: 880, c: [0x9ab8d8, 0x5a7aa0, 0xe8f0ff] }, { kind: 'moon', dir: 3.5, el: 0.55, r: 220, c: [0xe8f0ff, 0x8aa0c0] }, { kind: 'giant', dir: 5.2, el: 0.24, r: 720, c: [0x6affd8, 0x1a6a7a, 0xd0fff0] }],
+    neb: [0x2affd0, 0x4a7aff], dome: 0x7af0ff, clouds: 0xf4f8ff, cloudN: 40, exposure: 0.9, bloom: 0.85, grade: [0.97, 1.0, 1.05], aurora: 1, ash: 0.15, lights: 0x9fe0ff },
   { key: 'cinder', sky: [0x5a3428, 0xc0683a, 0xff4a18, 0x0a0302, 0x2a0a04], sun: 0xffc090, sunI: 2.8, moon: 0xffa878, moonI: 0.95, hemi: [0xb06a48, 0x2a0c06], fog: [0x8a4a30, 0x1a0804], fogD: 0.0042,
     ground: [0x3a2e2a, 0x54423a, 0x463830, 0x5e4a40, 0x7a6a60], relief: 'jagged', sea: { kind: 'lava', c: [0xff8a2a, 0x3a0800, 0xff5a10] }, props: 'cinder',
-    bodies: [{ kind: 'star', dir: 2.2, el: 0.4, r: 260, c: [0xff5a2a, 0xffa060, 0xffe0b0] }],
-    clouds: 0x6a5048, cloudN: 30, exposure: 1.05, bloom: 0.95, grade: [1.06, 0.97, 0.92], aurora: 0, ash: 1, lights: 0xff9a40 },
+    bodies: [{ kind: 'star', dir: 2.2, el: 0.24, r: 520, c: [0xff5a2a, 0xffa060, 0xffe0b0] }, { kind: 'giant', dir: 4.4, el: 0.23, r: 1000, c: [0xff5a2a, 0x3a0a04, 0xffb070] }, { kind: 'moon', dir: 0.9, el: 0.5, r: 240, c: [0x8a6a5a, 0x3a2a24] }],
+    neb: [0xff3a10, 0xffb03a], dome: 0xff8a3a, clouds: 0x6a5048, cloudN: 30, exposure: 1.05, bloom: 0.95, grade: [1.06, 0.97, 0.92], aurora: 0, ash: 1, lights: 0xff9a40 },
   { key: 'umbra', sky: [0x2a2050, 0x6a5a9a, 0xb06aff, 0x020108, 0x120a28], sun: 0xd8c8ff, sunI: 2.6, moon: 0xc0aaff, moonI: 1.0, hemi: [0x8070c0, 0x1a1428], fog: [0x4a3a7a, 0x08041a], fogD: 0.0034,
     ground: [0x4a4666, 0x3a3650, 0x443e5e, 0x5a5674, 0x9a90c0], relief: 'mesas', sea: { kind: 'water', c: [0x4a3aa0, 0x0a0620, 0x9a70ff] }, props: 'umbra',
-    bodies: [{ kind: 'giant', dir: 0.4, el: 0.6, r: 420, c: [0xc8a0ff, 0x6a4ab0, 0xffd2f0] }],
-    clouds: 0x8a7ab8, cloudN: 30, exposure: 1.1, bloom: 1.0, grade: [0.98, 0.96, 1.07], aurora: 0.5, ash: 0.3, lights: 0xc8a0ff },
+    bodies: [{ kind: 'giant', dir: 0.4, el: 0.3, r: 1300, c: [0xc8a0ff, 0x6a4ab0, 0xffd2f0] }, { kind: 'ringed', dir: 2.6, el: 0.27, r: 700, c: [0x6ad8ff, 0x2a3a8a, 0xc0f0ff] }, { kind: 'moon', dir: 4.6, el: 0.55, r: 260, c: [0xffc0f0, 0x8a4a7a] }],
+    neb: [0xb04aff, 0x2ad8ff], dome: 0xd07aff, clouds: 0x8a7ab8, cloudN: 30, exposure: 1.1, bloom: 1.0, grade: [0.98, 0.96, 1.07], aurora: 0.5, ash: 0.3, lights: 0xc8a0ff },
 ];
 // the sun sits over x = 0 (noon there, midnight at C / 2); a little tilted so dawn and dusk are not symmetric
 const SUN = new THREE.Vector3(0.18, 1, 0.42).normalize();
@@ -72,7 +74,7 @@ const MOON = new THREE.Vector3(-0.3, -1, 0.5).normalize();
 // ------------------------------------------------------------------ shaders
 const SKY_VERT = /* glsl */ `varying vec3 vD; void main(){ vD = position; vec4 p = projectionMatrix * modelViewMatrix * vec4(position, 1.0); gl_Position = p.xyww; }`;
 const SKY_FRAG = /* glsl */ `
-uniform vec3 uZen, uHor, uDusk, uNZen, uNHor, uSunC, uUp, uSun, uSun2;
+uniform vec3 uZen, uHor, uDusk, uNZen, uNHor, uSunC, uUp, uSun, uSun2, uNeb1, uNeb2;
 uniform float uDay, uTime, uAurora, uSun2K;
 varying vec3 vD;
 ${NOISE}
@@ -85,6 +87,8 @@ void main(){
   vec3 dayC = mix(uZen, uHor, h);
   vec3 nightC = mix(uNZen, uNHor, h);
   vec3 c = mix(nightC, dayC, day);
+  // thin air: overhead the sky deepens toward space even at noon
+  c = mix(c, nightC * 1.6 + uZen * 0.12, smoothstep(0.04, 0.6, el) * 0.7 * day);
   float sd = max(dot(d, uSun), 0.0);
   c += uDusk * dusk * h * (0.55 + 1.6 * pow(sd, 4.0));
   // the sun, its glow, and (for twin-sun worlds) a second smaller sun
@@ -98,7 +102,12 @@ void main(){
   vec3 q2 = d * 120.0; vec3 cell2 = floor(q2);
   st += step(0.994, hash13(cell2 + 3.0)) * smoothstep(0.35, 0.0, length(fract(q2) - 0.5)) * 3.0;
   float mw = smoothstep(0.55, 0.95, fbm(d * 3.0 + vec3(1.0, 9.0, 4.0))) * 0.25;   // a faint galaxy band
-  c += (vec3(st) + vec3(0.6, 0.7, 1.0) * mw) * night * smoothstep(-0.05, 0.25, el);
+  float starK = max(night, 0.35 * smoothstep(0.3, 0.9, el));
+  c += (vec3(st) + vec3(0.6, 0.7, 1.0) * mw) * starK * smoothstep(-0.05, 0.25, el);
+  // a vast nebula across the heavens: faint by day, blazing at night
+  float nb = fbm(d * 2.1 + vec3(4.0, 1.0, 7.0)), nb2 = fbm(d * 5.3 + vec3(nb * 2.5, 3.0, 1.0));
+  vec3 neb = mix(uNeb1, uNeb2, smoothstep(0.3, 0.75, nb2)) * smoothstep(0.36, 0.82, nb) * (0.5 + 0.9 * nb2);
+  c += neb * smoothstep(0.02, 0.45, el) * mix(0.38, 1.35, night);
   // aurora curtains on the night side of an ice world
   if (uAurora > 0.0) {
     float ax = atan(d.x, d.z);
@@ -110,6 +119,21 @@ void main(){
   // under the horizon: the planet's own haze
   c = mix(c, mix(uNHor, uHor, day) * 0.6, smoothstep(0.0, -0.25, el));
   gl_FragColor = vec4(c, 1.0);
+}`;
+// colony shield dome: a hex lattice with a bright rim and a scan band rising through it
+const DOME_VERT = /* glsl */ `varying vec3 vN; varying vec3 vV; varying vec3 vP; void main(){ vP = position; vec4 w = modelMatrix * vec4(position, 1.0); vN = normalize(mat3(modelMatrix) * normal); vV = normalize(cameraPosition - w.xyz); gl_Position = projectionMatrix * viewMatrix * w; }`;
+const DOME_FRAG = /* glsl */ `uniform vec3 uC; uniform float uT; varying vec3 vN; varying vec3 vV; varying vec3 vP;
+void main(){
+  vec3 d = normalize(vP);
+  float fr = pow(1.0 - abs(dot(normalize(vN), vV)), 2.2);
+  vec2 q = vec2(atan(d.x, d.z) * 7.0, asin(clamp(d.y, 0.0, 1.0)) * 9.0);
+  q.x += 0.5 * mod(floor(q.y), 2.0);
+  vec2 f = abs(fract(q) - 0.5);
+  float grid = smoothstep(0.08, 0.0, min(0.5 - f.x, 0.5 - f.y));
+  float scan = exp(-pow((d.y - fract(uT * 0.18)) * 14.0, 2.0));
+  float base = smoothstep(0.0, 0.12, d.y);
+  float a = (fr * 0.55 + grid * (0.16 + scan * 0.5) + scan * 0.12) * base;
+  gl_FragColor = vec4(uC * a, a);
 }`;
 // the sea band: water, lava or an ice sheet; lit by the day factor
 const SEA_VERT = /* glsl */ `varying vec3 vW; varying vec2 vP; void main(){ vec4 w = modelMatrix * vec4(position, 1.0); vW = w.xyz; vP = vec2(atan(w.x, w.y) * ${RP.toFixed(3)}, asin(clamp(w.z / length(w.xyz), -1.0, 1.0)) * ${RP.toFixed(3)}); gl_Position = projectionMatrix * viewMatrix * w; }`;
@@ -308,7 +332,7 @@ export class Renderer {
     this.pieces = [];
     this.bossV = null;
     this.ribbons = [];
-    for (let i = 0; i < 40; i++) this.ribbons.push(new Ribbon(this.scene, 16, 0xffffff));
+    for (let i = 0; i < 72; i++) this.ribbons.push(new Ribbon(this.scene, 16, 0xffffff));
     this.makeProjectiles();
     this.makeMarks();
     this.trails = new Map();
@@ -340,7 +364,7 @@ export class Renderer {
   }
   buildSky() {
     const u = { uZen: new THREE.Color(), uHor: new THREE.Color(), uDusk: new THREE.Color(), uNZen: new THREE.Color(), uNHor: new THREE.Color(), uSunC: new THREE.Color(),
-      uUp: new THREE.Vector3(0, 1, 0), uSun: SUN.clone(), uSun2: new THREE.Vector3(), uDay: 1, uTime: 0, uAurora: 0, uSun2K: 0 };
+      uUp: new THREE.Vector3(0, 1, 0), uSun: SUN.clone(), uSun2: new THREE.Vector3(), uNeb1: new THREE.Color(), uNeb2: new THREE.Color(), uDay: 1, uTime: 0, uAurora: 0, uSun2K: 0 };
     const uniforms = {}; for (const k in u) uniforms[k] = { value: u[k] };
     this.skyMat = new THREE.ShaderMaterial({ vertexShader: SKY_VERT, fragmentShader: SKY_FRAG, side: THREE.BackSide, depthWrite: false, uniforms });
     this.sky = new THREE.Mesh(new THREE.SphereGeometry(6000, 48, 24), this.skyMat);
@@ -590,6 +614,18 @@ export class Renderer {
       mk(p.geo, p.mat, false);
       if (p.glowGeo) mk(p.glowGeo, p.glowMat, true);
     });
+    this.makeDomes(W, L);
+  }
+  makeDomes(W, L) {
+    if (this.domes) for (const d of this.domes) this.scene.remove(d);
+    this.domes = [];
+    if (!this.domeGeo) this.domeGeo = new THREE.SphereGeometry(17, 48, 16, 0, TAU, 0, Math.PI / 2);
+    for (const site of W.sites) {
+      const m = new THREE.Mesh(this.domeGeo, new THREE.ShaderMaterial({ vertexShader: DOME_VERT, fragmentShader: DOME_FRAG, transparent: true, depthWrite: false, side: THREE.DoubleSide, blending: THREE.AdditiveBlending, fog: false,
+        uniforms: { uC: { value: hdr(L.dome || 0x5ad8ff, 1) }, uT: { value: 0 } } }));
+      toW(site, -0.5, m.position, -8); radial(site, _v2); m.quaternion.setFromUnitVectors(_up.set(0, 1, 0), _v2);
+      m.userData.x = site; m.renderOrder = 2; m.frustumCulled = false; this.scene.add(m); this.domes.push(m);
+    }
   }
   setLook(i) {
     if (i === this.lookI) return;
@@ -609,6 +645,7 @@ export class Renderer {
     const u = this.skyMat.uniforms;
     u.uZen.value.set(L.sky[0]); u.uHor.value.set(L.sky[1]); u.uDusk.value.set(L.sky[2]).multiplyScalar(0.9); u.uNZen.value.set(L.sky[3]); u.uNHor.value.set(L.sky[4]);
     u.uSunC.value.set(L.sun); u.uAurora.value = L.aurora; u.uSun2K.value = L.sun2 ? 1 : 0;
+    u.uNeb1.value.set(L.neb[0]).multiplyScalar(0.55); u.uNeb2.value.set(L.neb[1]).multiplyScalar(0.55);
     u.uSun2.value.set(0.45, 0.85, 0.3).normalize();
     this.fx.setLook({ dust: L.key === 'cinder' ? 0x4a3a34 : L.key === 'dune' ? 0xc89a70 : 0x9a9690, dustLight: 1.1 });
   }
@@ -719,6 +756,10 @@ export class Renderer {
     if (!v) {
       v = this.pool(e.type, () => { const m = MD[e.type](); return { ...m, type: e.type }; });
       v.hit = 0; v.born = 1;
+      if (!v.halo && e.type !== 'mine') {
+        v.halo = new THREE.Sprite(new THREE.SpriteMaterial({ map: this.T.glow, color: hdr(TCOL[e.type] || 0xffffff, 1.4), transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, fog: false, opacity: 0.55 }));
+        const hs = (MD.SIZE[e.type] || 2) * 1.5; v.halo.scale.set(hs, hs, 1); v.outer.add(v.halo);
+      }
       this.views.e.set(e.id, v);
     }
     return v;
@@ -870,6 +911,12 @@ export class Renderer {
       if (e.type === 'hive' && v.inner) v.inner.rotation.x += dt * 1.2;
       if (e.type === 'sower' && v.bay) v.bay.rotation.z = 0.25 + Math.sin(t * 2 + e.id) * 0.2;
       if (e.type === 'stinger' && v.wings) { const f = Math.sin(t * 40 + e.id) * 0.5; v.wings[0].rotation.x = -f; v.wings[1].rotation.x = f; }
+      if (v.halo) v.halo.material.opacity = (0.45 + 0.15 * Math.sin(t * 5 + e.id) + (e.tell > 0 ? 0.5 : 0) + (e.hitT > 0 ? 0.6 : 0)) * (born ? 0.4 : 1);
+      if (!born && e.type !== 'mine' && !CALM.on && Math.random() < dt * (e.type === 'skimmer' ? 26 : 18)) {
+        toW(e.x, e.y, _v, 0); const c = _c2.set(TCOL[e.type] || 0xffffff);
+        this.fx.fireP.add({ x: _v.x, y: _v.y, z: _v.z, vx: 0, vy: 0, vz: 0, s0: e.type === 'skimmer' ? 0.5 : 0.65, s1: 0.06, max: 0.55, a: 0.85, r: c.r * 1.6, g: c.g * 1.6, b: c.b * 1.6, drag: 1, grav: 0, fade: 0.5 });
+      }
+      if (e.type === 'skimmer') v.g.rotation.x += Math.sin(t * 1.7 + (e.ph || 0)) * 0.5;
       // warp-in gate
       if (born) this.gate(e.x, e.y, 1 - e.born / 1.8, e.type === 'prowler' ? 0xff4a5a : e.type === 'lifter' ? 0x8dff7a : 0xffb347, 2.6);
       // a machine about to fire: a dashed red line toward the pilot it is aiming at
@@ -934,9 +981,10 @@ export class Renderer {
       const rb = this.takeRibbon(); if (!rb) break;
       const pts = []; for (let k = 0; k <= 6; k++) pts.push([wp(s.x0 + s.dir * (tail + (end - tail) * k / 6)), s.y]);
       if (s.dir < 0) pts.reverse();
-      rb.set(pts, 0.42, 0.35);
-      rb.mat.uniforms.uColor.value.set(s.drone ? 0x9dff7a : W.players.find((q) => q.id === s.pid)?.pw?.twin ? 0x8fe4ff : 0xff6a50).multiplyScalar(2.4);
-      rb.mat.uniforms.uK.value = 1.4; rb.mat.uniforms.uDash.value = 0; rb.mat.uniforms.uSoft.value = 3; rb.mat.uniforms.uHead.value = 0;
+      rb.set(pts, s.drone ? 0.45 : 0.78, 0.35);
+      rb.mat.uniforms.uColor.value.set(s.drone ? 0x9dff7a : W.players.find((q) => q.id === s.pid)?.pw?.twin ? 0x8fe4ff : 0xff6a50).multiplyScalar(2.8);
+      rb.mat.uniforms.uK.value = 1.5; rb.mat.uniforms.uDash.value = 0; rb.mat.uniforms.uSoft.value = 3; rb.mat.uniforms.uHead.value = 0;
+      const cr = this.takeRibbon(); if (cr) { cr.set(pts, 0.2, 0.4); cr.mat.uniforms.uColor.value.set(0xfff4e8).multiplyScalar(4); cr.mat.uniforms.uK.value = 1.6; cr.mat.uniforms.uDash.value = 0; cr.mat.uniforms.uSoft.value = 2; cr.mat.uniforms.uHead.value = 0; }
     }
     // ---- bolts
     let n = 0;
@@ -981,6 +1029,8 @@ export class Renderer {
         this.fx.dustP.add({ x: _v.x, y: _v.y, z: _v.z, vx: -_v2.x * 26, vy: -_v2.y * 26, vz: 0, s0: 0.13, s1: 0.1, max: 1.2, a: 0.5, r: 0.75, g: 0.82, b: 0.95, drag: 0, grav: 0, fade: 0.4 });
       }
     }
+    // colony shield domes shimmer over the sites (they fail when the colony falls)
+    if (this.domes) for (const d of this.domes) { d.visible = !W.fallen && Math.abs(wd(d.userData.x - this.cx)) < 140; d.material.uniforms.uT.value = t; }
     // colony searchlights sweep the night sky (not once the colony has fallen)
     if ((this.nightK || 0) > 0.15 && !W.fallen) for (let si = 0; si < W.sites.length; si++) {
       const site = W.sites[si];
@@ -1005,8 +1055,6 @@ export class Renderer {
     if (this.intent && this.intent.t) {
       const T = this.intent.t;
       toW(T.x, T.y, _v, 0.6); this.reticle.position.copy(_v); this.reticle.rotation.z = t * 1.5; this.reticle.visible = true;
-      const me = this.intent.me;
-      if (me && me.alive) { const rb = this.takeRibbon(); if (rb) { rb.set([[me.x, me.y], [T.x, T.y]], 0.12, 0.5); rb.mat.uniforms.uColor.value.set(0x52ffd8); rb.mat.uniforms.uK.value = 0.7; rb.mat.uniforms.uDash.value = 4; rb.mat.uniforms.uTime.value = t; rb.mat.uniforms.uHead.value = 0; } }
     } else this.reticle.visible = false;
   }
   gate(x, y, f, color, size) {
@@ -1147,7 +1195,7 @@ export class Renderer {
     this.hemi.intensity = 0.55 + 0.35 * day + night * 0.85;
     this.scene.environmentIntensity = 0.25 + 0.75 * day;
     _c.set(L.fog[0]).lerp(_c2.set(L.fog[1]), 1 - day).lerp(_c2.set(L.sky[2]), dusk * 0.35);
-    this.scene.fog.color.copy(_c); this.scene.fog.density = L.fogD;
+    this.scene.fog.color.copy(_c); this.scene.fog.density = L.fogD * (0.62 + 0.38 * night);
     const sea = this.seas[this.lookI];
     if (sea) { const su = sea.material.uniforms; su.uSky.value.set(L.sky[1]).lerp(_c2.set(L.sky[4]), 1 - day); su.uSunC.value.set(L.sun).multiplyScalar(2); su.uFog.value.copy(_c); su.uDay.value = this.day; }
     const cs = this.cloudSets[this.lookI];
@@ -1204,7 +1252,7 @@ export class Renderer {
     this.shocks = this.shocks.filter((s) => s.t < s.max);
     const night = this.nightK || 0;
     this.post.render(this.scene, this.camera, {
-      bloom: L.bloom * (1 + night * 0.35) * (p.bloom ?? 1), threshold: 1.05, exposure: L.exposure * (1 + night * 0.25) * (p.exposure ?? 1), chroma: 0.0012 + (p.chroma || 0), time: t, desat: p.desat || 0, fade: p.fade || 0,
+      bloom: L.bloom * (1.2 + night * 0.75) * (p.bloom ?? 1), threshold: 1.12 - night * 0.22, exposure: L.exposure * (1 + night * 0.25) * (p.exposure ?? 1), chroma: 0.0019 + (p.chroma || 0), time: t, desat: p.desat || 0, fade: p.fade || 0,
       vignette: 0.42 + (p.vignette || 0), flash: this.flash, tint: _tint.set(...L.grade), shocks, lens: [],
     });
   }

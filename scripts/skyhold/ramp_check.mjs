@@ -2,9 +2,9 @@
 // typically has by then) and we count how often it clears the sector, plus where it dies and gets hit.
 //   node scripts/skyhold/ramp_check.mjs [runs=30] [sectors=1,2,3,4,5] [profile=human] [diff=normal]
 // Targets (Normal): about 95 / 80 / 60 / 40 / 25 % of runs clear sectors 1-5, no wave much harder than the next.
-import { makeWorld, step, drainEvents, STEP, settlersLeft } from '../../games/2026-11-09/skyhold/js/sim.js?v=6';
-import { Autopilot } from '../../games/2026-11-09/skyhold/js/ai.js?v=6';
-import { TYPICAL_UP, START_LIVES, WAVES } from '../../games/2026-11-09/skyhold/js/config.js?v=6';
+import { makeWorld, step, drainEvents, STEP, settlersLeft } from '../../games/2026-11-09/skyhold/js/sim.js?v=7';
+import { Autopilot } from '../../games/2026-11-09/skyhold/js/ai.js?v=7';
+import { TYPICAL_UP, START_LIVES, WAVES } from '../../games/2026-11-09/skyhold/js/config.js?v=7';
 
 const runs = +(process.argv[2] || 30);
 const sectors = (process.argv[3] || '1,2,3,4,5').split(',').map((n) => +n - 1);

@@ -9,8 +9,8 @@
 //   'human' — plays like a person: ~0.35 s reaction (scattered, sometimes late), wobbly altitude, misses things
 //             behind it, saves novas too long. The difficulty ramp is measured with this one.
 //   'demo'  — the attract mode: sharp and decisive. It never reads the world's random generator (replays stay exact).
-import { F, ENEMY, BOSSES, H } from './config.js?v=6';
-import { wd, nodePos, beamRange } from './sim.js?v=6';
+import { F, ENEMY, BOSSES, H } from './config.js?v=7';
+import { wd, wp, nodePos, beamRange } from './sim.js?v=7';
 
 const clamp = (v, a, b) => (v < a ? a : v > b ? b : v);
 function mkr(seed) { let s = seed | 0; return () => { s = (s + 0x6D2B79F5) | 0; let t = Math.imul(s ^ (s >>> 15), s | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
@@ -73,6 +73,7 @@ export class Autopilot {
       } else if (DANGER.has(e.type) && d < 34) { s = 600 - d * 6; w = 'Fighting off a ' + e.type.toUpperCase() + ' that is on us'; }
       else if (e.type === 'hive') s = 80 - d;
       else if (e.type === 'sower') s = 60 - d;
+      else if (e.type === 'skimmer') { s = 30 - d * 1.2; w = 'Clearing a skimmer flock'; }
       if (e.tell > 0 && d < 40) { s += 150; w = 'Taking out a machine that is about to fire'; }
       if (B) s -= 120;
       consider({ kind: 'enemy', o: e }, s * P.greed + (1 - P.greed) * -d, w);
@@ -128,7 +129,18 @@ export class Autopilot {
     // fly there: horizontal stick toward the target point (it also sets the facing), altitude stick toward ty
     const hx = wd(tx - me.x);
     let mx = Math.abs(hx) > 1.2 ? Math.sign(hx) * Math.min(1, Math.abs(hx) / 14 + 0.25) * (want || 0.6) : 0;
-    if (g.kind !== 'land' && g.kind !== 'settler' && g.kind !== 'patrol') {
+    let escape = false;
+    if (g.kind === 'enemy' && Math.abs(wd(g.o.x - me.x)) < 6) escape = true;
+    if (g.kind === 'node') {
+      // the carrier: hold station in a band outside its hull, facing it, and let the weak point come to the beam
+      const B = W.boss, half = BOSSES[B.key].len * 0.5, toB = wd(B.x - me.x), dB = Math.abs(toB), sB = Math.sign(toB) || me.face;
+      const near = half + 9, far = half + 22;
+      if (dB < near) mx = -sB;
+      else if (dB > far) mx = sB * Math.min(1, (dB - far) / 10 + 0.3);
+      else mx = me.face === sB ? 0 : sB * 0.17;
+      const closing = (me.vx - B.vx) * sB;
+      if (closing > 10 && dB < near + closing * 0.5) mx = -sB;
+    } else if (g.kind !== 'land' && g.kind !== 'settler' && g.kind !== 'patrol' && !escape) {
       const ax = g.kind === 'node' ? nodePos(W.boss, g.i)[0] : g.o.x, adx = wd(ax - me.x);
       // keep facing what we shoot at: inside the stand-off, push gently toward it rather than turning away
       if (Math.abs(adx) < P.stand + 4) mx = Math.sign(adx) * 0.17;
@@ -153,7 +165,11 @@ export class Autopilot {
       if (e.hp <= 0 || !this.notice(W, e.id, e.x, me)) continue;
       const dx = wd(e.x - me.x), dy = e.y - me.y, r = ENEMY[e.type].r + 1.4;
       const closing = (e.vx - me.vx) * -Math.sign(dx);
-      if (Math.abs(dx) < r + Math.max(0, closing) * 0.35 && Math.abs(dy) < r) { threat++; my = dy > 0 ? -1 : 1; D.dodge = e.type === 'mine' ? 'Steering round a mine' : 'Keeping off a ' + e.type; }
+      if (Math.abs(dx) < r + Math.max(0, closing) * 0.35 && Math.abs(dy) < r) {
+        threat++; my = dy > 0 ? -1 : 1;
+        if ((my < 0 && me.y < 4) || (my > 0 && me.y > H - 4)) { my = 0; mx = -(Math.sign(dx) || me.face); }
+        D.dodge = e.type === 'mine' ? 'Steering round a mine' : 'Keeping off a ' + e.type;
+      }
     }
     // a machine is charging a shot and we are on its line: change altitude before it fires
     for (const e of W.enemies) {
@@ -169,6 +185,11 @@ export class Autopilot {
       const a = B.atk;
       if (a.kind === 'sweep') { const sx = a.t >= a.T ? B.sweepX : B.x, dx = wd(me.x - sx); if (Math.abs(dx) < 9 && me.y < B.y) { mx = Math.sign(dx || -a.dir) * 1; if (Math.sign(dx) === a.dir) mx = a.dir; D.dodge = "Out from under the carrier's beam"; threat++; } }
       if (a.kind === 'rush' && Math.abs(me.y - a.y) < 4.5 && Math.abs(wd(B.x - me.x)) < 60) { my = me.y > a.y ? 1 : -1; if (a.y < 6) my = 1; D.dodge = "Climbing out of the carrier's path"; threat++; }
+    }
+    // never sit inside or against the carrier's hull
+    if (B && (B.st === 'fight' || B.st === 'warp')) for (const b of BOSSES[B.key].body) {
+      const cx = wp(B.x + b[0] * B.face), cy = B.y + b[1], u = wd(me.x - cx) / (b[2] + 4), v = (me.y - cy) / (b[3] + 3);
+      if (u * u + v * v < 1) { mx = Math.sign(u) || -B.face; my = v > 0 ? 1 : -1; if (me.y < 4) my = 1; if (me.y > H - 4) my = -1; D.dodge = "Keeping clear of the carrier's hull"; threat++; break; }
     }
     if (this.dodgeT > 0) { this.dodgeT -= 1 / 120; my = this.dodgeY; D.dodge = D.dodge || 'Dodging a bolt'; }
     // nova when swamped

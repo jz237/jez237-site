@@ -3,8 +3,8 @@
 // carrier, lives, score) and streams snapshots 20 times a second. The guest flies its own gunship locally (so it never
 // lags), judges the hits it takes, and reports its ship, its beams, novas, catches, landings and pickups as claims;
 // the host carries those out so every kill is decided in one place.
-import { netDeath, netShield, netCatch, netLand, netPod, netFire, netRam, netNovaAt, netAdopt } from './sim.js?v=6';
-import { PW_KEYS } from './config.js?v=6';
+import { netDeath, netShield, netCatch, netLand, netPod, netFire, netRam, netNovaAt, netAdopt } from './sim.js?v=7';
+import { PW_KEYS } from './config.js?v=7';
 
 export const PROTOCOL = 1;
 const RELAY = 'wss://steel-duel-online.jez237.workers.dev';
@@ -22,7 +22,7 @@ export const cleanCode = (v) => String(v || '').toUpperCase().replace(/[^A-Z0-9]
 const clamp = (v, a, b) => (v < a ? a : v > b ? b : v);
 const r2 = (v) => Math.round(v * 100) / 100;
 const r3 = (v) => Math.round(v * 1000) / 1000;
-const TYPES = ['lifter', 'husk', 'sower', 'mine', 'hive', 'stinger', 'prowler'];
+const TYPES = ['lifter', 'husk', 'sower', 'mine', 'hive', 'stinger', 'prowler', 'skimmer'];
 const EST = ['roam', 'seek', 'down', 'grab', 'lift', 'hunt'];
 const SST = ['walk', 'fall', 'held', 'carried', 'dead'];
 const PH = ['intro', 'fight', 'break', 'boss', 'clear'];
