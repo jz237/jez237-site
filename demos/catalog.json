@@ -1,5 +1,29 @@
 [
   {
+    "id": "033",
+    "title": "Voxel Engine",
+    "category": "3D · Destruction sandbox",
+    "description": "A town made of 10 cm voxels. Break buildings, drive vehicles and bring entire structures down in this standalone copy of @mattshumer’s Voxel Engine on Spawn.",
+    "url": "voxel-engine/",
+    "image": "assets/voxel-engine.jpg",
+    "imageAlt": "Voxel town with buildings, roads and a destruction-tool belt",
+    "imageWidth": 1280,
+    "imageHeight": 800,
+    "source": "https://github.com/jz237/jez237-site/tree/main/demos/voxel-engine",
+    "features": [
+      "Eight scenes, from town streets to castle keeps",
+      "Destructible buildings and physics-driven debris",
+      "Tools, vehicles, objectives and replays",
+      "Keyboard, gamepad and touch controls"
+    ],
+    "facts": [
+      "Self-hosted",
+      "WebGL2 + WebAssembly",
+      "v1.0.0"
+    ],
+    "note": "Original by @mattshumer on Spawn · Modern browser required · Heavy destruction can be demanding on phones."
+  },
+  {
     "id": "032",
     "title": "Aquarium Filtration",
     "category": "3D · Interactive filter collection",

@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="theme-color" content="#0b0d10">
+<title>Voxel Engine — Jez237</title>
+<meta name="description" content="A fully destructible voxel town. Original Voxel Engine by @mattshumer on Spawn, hosted on Jez237.">
+<link rel="icon" href="data:image/svg+xml,
+%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E
+%3Cpath d='M8 1.5 14 4.8v6.4L8 14.5 2 11.2V4.8z' fill='%23f4f1ea'/%3E
+%3Cpath d='M8 8v6.5L2 11.2V4.8z' fill='%23b9b4a8'/%3E
+%3Cpath d='M8 8v6.5l6-3.3V4.8z' fill='%237d7a72'/%3E
+%3C/svg%3E">
+<link rel="stylesheet" href="game.css">
+<link rel="stylesheet" href="game_modes.css">
+</head>
+<body>
+<canvas id="view"></canvas>
+<div id="curtain">Restarting</div>
+
+<div id="ui">
+  <div id="cross" data-tool="0"><i class="dot"></i><i class="tick t"></i><i class="tick r"></i><i class="tick b"></i><i class="tick l"></i><i class="ring"></i><i class="cool"></i></div>
+  <div id="perf">
+    <pre id="hud"></pre>
+    <div id="detail" hidden>
+      <div id="graphbox"><canvas id="graph" width="280" height="84"></canvas><span></span><span></span></div>
+      <div id="legend"><i class="k-sim"></i>sim<i class="k-mesh"></i>mesh<i class="k-draw"></i>draw<i class="k-frame"></i>frame<i class="k-spike"></i>spike</div>
+      <pre id="prof"></pre>
+    </div>
+    <div id="goal" hidden>
+      <div class="head"><b id="goal-title"></b><span id="goal-clock"></span></div>
+      <div class="bar"><i id="goal-fill"></i></div>
+      <div class="foot"><span id="goal-now"></span><span id="goal-left"></span><span id="goal-where"><i id="goal-arrow"></i><span id="goal-dist"></span></span></div>
+      <div class="hint" id="goal-hint"></div>
+    </div>
+    <div id="tally" hidden>
+      <span><b id="tally-voxels">0</b>voxels destroyed</span>
+      <span><b id="tally-pieces">0</b>pieces</span>
+      <span><b id="tally-largest">0</b>largest piece</span>
+    </div>
+    <div id="status"></div>
+  </div>
+  <div id="dock">
+    <div id="toolhint"><b id="toolname"></b><span id="tooltext"></span></div>
+    <div id="belt"></div>
+  </div>
+</div>
+
+<div id="touch">
+  <div id="stick"><i></i></div>
+  <button class="tb" id="tb-menu" data-act="menu" aria-label="Menu"><i></i></button>
+  <button class="tb" id="tb-blast" data-btn="64">B</button>
+  <button class="tb" id="tb-toys" data-act="toys">Toys</button>
+  <button class="tb" id="tb-crouch" data-toggle="16">Duck</button>
+  <button class="tb" id="tb-next" data-act="next">Tool</button>
+  <button class="tb" id="tb-alt" data-btn="2">Alt</button>
+  <button class="tb" id="tb-jump" data-btn="4">Jump</button>
+  <button class="tb" id="tb-use" data-btn="128" style="display:none">Drive</button>
+  <button class="tb" id="tb-fire" data-btn="1">Fire</button>
+</div>
+
+<div id="overlay"><div class="card" id="start">
+  <h1>Voxel Engine</h1>
+  <p class="note">By <a href="https://www.spawn.co/@mattshumer/voxel-engine" target="_blank" rel="noopener">@mattshumer on Spawn</a> · Jez237 edition v1.0.0 · <a href="/demos/">Demo gallery</a></p>
+  <p class="lead">A town made of 10 cm voxels. Everything in it breaks, falls and piles up. Go and knock it down.</p>
+  <button id="play" class="primary" disabled>Loading</button>
+  <p id="lockmsg" class="note" hidden></p>
+  <div class="keys" id="keys-desktop">
+    <span><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd></span><span>move</span>
+    <span><kbd>Space</kbd></span><span>jump</span>
+    <span><kbd>Shift</kbd></span><span>sprint</span>
+    <span><kbd>C</kbd></span><span>crouch</span>
+    <span><kbd>1</kbd>-<kbd>9</kbd> <kbd>0</kbd> <kbd>-</kbd> <kbd>=</kbd> <kbd>Wheel</kbd> <kbd>Q</kbd></span><span>pick a tool</span>
+    <span><kbd>Left click</kbd></span><span>use it</span>
+    <span><kbd>Right click</kbd></span><span>detonate, throw, cycle</span>
+    <span><kbd>E</kbd></span><span>get in a car, a truck, a bulldozer; and out</span>
+    <span><kbd>B</kbd></span><span>the big red button (in Mayhem: an air strike)</span>
+    <span><kbd>T</kbd> <kbd>P</kbd> <kbd>R</kbd></span><span>slow motion, pause, restart</span>
+    <span><kbd>G</kbd></span><span>the toy box, in the sandbox: five things to set off where you look</span>
+    <span><kbd>V</kbd> <kbd>F3</kbd> <kbd>Esc</kbd></span><span>fly, stats, settings</span>
+    <span>Gamepad</span><span>sticks to move and look, RT fire, LT alt, LB / RB tools, A jump, Y air strike, d-pad toy box, Start menu</span>
+  </div>
+  <div class="keys" id="keys-touch">
+    <span>Left thumb</span><span>move (push to the rim to sprint)</span>
+    <span>Right thumb</span><span>look around</span>
+    <span>Fire / Alt</span><span>use the tool; detonate, throw, cycle</span>
+    <span>Tool belt</span><span>tap a tool to pick it</span>
+    <span>Toys</span><span>the toy box, in the sandbox</span>
+  </div>
+  <div class="scenes" data-scenes></div>
+  <div class="objectives" data-objectives></div>
+</div></div>
+
+<div id="replay" hidden>
+  <div class="track"><i id="rp-fill"></i></div>
+  <div class="row">
+    <button id="rp-pause">Pause</button>
+    <button id="rp-speed" title="Speed: Auto follows the director (slow motion at the peaks, quiet stretches run fast)">Auto</button>
+    <button id="rp-shot">Next shot</button>
+    <button id="rp-skip" title="Skip to the next thing that happens">Skip ahead</button>
+    <span id="rp-shot-name"></span>
+    <span id="rp-time"></span>
+    <button id="rp-again" class="primary" hidden>Watch again</button>
+    <button id="rp-exit">Exit</button>
+  </div>
+</div>
+
+<div id="score" hidden><div class="card">
+  <h2 id="score-title"></h2>
+  <p id="score-sub" class="lead"></p>
+  <div id="score-stars" aria-hidden="true"></div>
+  <dl id="score-stats"></dl>
+  <footer>
+    <button id="score-retry" class="primary">Try again</button>
+    <button id="score-next">Next objective</button>
+    <button id="score-free">Keep playing</button>
+    <button id="score-replay" disabled>Watch replay</button>
+  </footer>
+</div></div>
+
+<div id="menu" hidden><div class="card">
+  <header><h2 id="menu-title">Paused</h2><button id="resume" class="primary">Resume</button></header>
+  <p id="menu-note" class="note" hidden></p>
+  <div class="grid">
+    <section>
+      <h3>Controls</h3>
+      <label class="row"><span>Mouse sensitivity</span><input type="range" data-set="sens" min="0.2" max="3" step="0.05"><output></output></label>
+      <label class="row"><span>Touch sensitivity</span><input type="range" data-set="touchSens" min="0.3" max="3" step="0.05"><output></output></label>
+      <label class="row check"><span>Invert Y</span><input type="checkbox" data-set="invertY"></label>
+      <div data-group>
+        <h3>Audio</h3>
+        <label class="row"><span>Volume</span><input type="range" data-set="volume" min="0" max="1" step="0.05"><output></output></label>
+      </div>
+    </section>
+    <section>
+      <h3>Video</h3>
+      <label class="row"><span>Field of view</span><input type="range" data-set="fov" min="60" max="110" step="1"><output></output></label>
+      <label class="row"><span>Render scale</span><input type="range" data-set="scale" min="0.4" max="1" step="0.05"><output></output></label>
+      <div class="row"><span>Quality</span><div class="seg" data-set="quality"><button data-v="auto">Auto</button><button data-v="low">Low</button><button data-v="medium">Medium</button><button data-v="high">High</button></div></div>
+      <label class="row"><span>Screen shake</span><input type="range" data-set="shake" min="0" max="1.5" step="0.05"><output></output></label>
+      <label class="row check"><span>View bob</span><input type="checkbox" data-set="bob"></label>
+    </section>
+  </div>
+  <h3>Scene</h3>
+  <div class="scenes" data-scenes></div>
+  <div class="objectives" data-objectives></div>
+  <details id="help"><summary>How to play</summary></details>
+  <footer>
+    <button id="restart">Restart scene</button>
+    <button id="menu-replay" disabled>Watch replay</button>
+    <button id="fullscreen">Fullscreen</button>
+    <button id="reset">Reset settings</button>
+  </footer>
+</div></div>
+
+<script type="module" src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,276 @@
+:root {
+  --panel: rgba(12, 15, 19, 0.74);
+  --panel-solid: rgba(17, 21, 26, 0.95);
+  --line: rgba(255, 255, 255, 0.09);
+  --text: #e9eef3;
+  --muted: #9eabb8;
+  --accent: #ffb84d;
+  --danger: #e5484d;
+  --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --safe-b: env(safe-area-inset-bottom, 0px);
+  --safe-t: env(safe-area-inset-top, 0px);
+  --safe-l: env(safe-area-inset-left, 0px);
+  --safe-r: env(safe-area-inset-right, 0px);
+}
+html, body { margin: 0; height: 100%; overflow: hidden; background: #0b0d10; color: var(--text); font: 14px/1.45 ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; -webkit-text-size-adjust: 100%; }
+body { user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; -webkit-tap-highlight-color: transparent; overscroll-behavior: none; }
+[hidden] { display: none !important; }
+#view { position: fixed; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; outline: none; }
+/* Covers the scene while a restarted world is meshed, then fades away. */
+#curtain { position: fixed; inset: 0; z-index: 1; display: grid; place-items: center; background: #0b0d10; color: var(--muted); font: 600 11px/1 var(--mono); letter-spacing: 0.14em; text-transform: uppercase; opacity: 0; pointer-events: none; transition: opacity 0.25s; }
+body.loading #curtain { opacity: 1; transition: none; }
+body.loading #cross { visibility: hidden; }
+#ui { position: fixed; inset: 0; z-index: 2; pointer-events: none; }
+/* Behind the start card the HUD is laid out and not shown: the frame
+   that enters play then has nothing of it to lay out (hidden with
+   display, the tool belt and all the rest were laid out in that frame). */
+#ui.mode-start { visibility: hidden; }
+body.nohud #ui { display: none; }
+/* A replay is watched, not played: no crosshair, tool belt or counters. */
+#ui.mode-replay #cross, #ui.mode-replay #dock, #ui.mode-replay #goal, #ui.mode-replay #tally, #ui.mode-replay #status { display: none; }
+body.nohud #touch { opacity: 0; }
+
+/* Crosshair: a zero-size anchor at the screen centre. JS moves the ticks out
+   from the centre and scales the cooldown bar with transforms and sizes the
+   ring; the tool picks which parts show. */
+#cross { position: absolute; left: 50%; top: 50%; width: 0; height: 0; color: #fff; filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.75)); transition: color 0.08s; }
+#cross i { position: absolute; display: none; background: currentColor; }
+#cross .dot { display: block; width: 2px; height: 2px; left: -1px; top: -1px; border-radius: 50%; }
+#cross .tick.t { left: -1px; top: -7px; width: 2px; height: 7px; }
+#cross .tick.b { left: -1px; top: 0; width: 2px; height: 7px; }
+#cross .tick.l { top: -1px; left: -7px; width: 7px; height: 2px; }
+#cross .tick.r { top: -1px; left: 0; width: 7px; height: 2px; }
+#cross .ring { box-sizing: border-box; width: 12px; height: 12px; left: 0; top: 0; translate: -50% -50%; background: none; border: 1.5px solid currentColor; border-radius: 50%; opacity: 0.55; }
+#cross .cool { display: block; left: -9px; top: 20px; width: 18px; height: 2px; border-radius: 1px; transform-origin: 0 50%; transform: scaleX(0); opacity: 0.7; }
+#cross[data-tool="0"] .ring, #cross[data-tool="2"] .ring, #cross[data-tool="5"] .ring, #cross[data-tool="6"] .ring { display: block; }
+#cross[data-tool="1"] .tick, #cross[data-tool="3"] .tick, #cross[data-tool="7"] .tick { display: block; }
+#cross[data-tool="3"] { transform: rotate(45deg); }
+#cross[data-tool="4"] .tick.l, #cross[data-tool="4"] .tick.r, #cross[data-tool="6"] .tick.b { display: block; }
+#cross[data-tool="7"] .dot { display: none; }
+#cross.can[data-tool="0"] .ring, #cross.can[data-tool="5"] .ring { opacity: 1; }
+/* No room for what the cannon or spawner would create (nose against a wall). */
+#cross:not(.can)[data-tool="6"], #cross:not(.can)[data-tool="7"] { color: var(--danger); }
+#cross.can[data-tool="4"], #cross.can[data-tool="5"], #cross.held { color: var(--accent); }
+#cross.held .ring { border-width: 3px; opacity: 1; }
+#cross.hit { color: #ffd9a0; }
+
+/* Performance readout (top left) and the F3 detail panel below it. On touch
+   layouts the top right corner belongs to the menu button, so the readout
+   wraps before it gets there; the detail panel, which would lie under the
+   thumb buttons of a phone, is left to screens with room for it. */
+body.touch #perf { max-width: calc(100vw - 84px - var(--safe-l) - var(--safe-r)); }
+body.touch #perf pre { max-width: 100%; box-sizing: border-box; white-space: pre-wrap; }
+@media (max-width: 640px), (max-height: 420px) { body.touch #detail { display: none; } }
+
+#perf { position: absolute; left: calc(10px + var(--safe-l)); top: calc(10px + var(--safe-t)); display: flex; flex-direction: column; gap: 6px; align-items: flex-start; }
+/* The engine's readouts (frame rate, times) are the stats key's: F3 shows them and hides them. */
+body:not(.stats) #perf { display: none; }
+#perf pre { margin: 0; padding: 6px 9px; background: var(--panel); border: 1px solid var(--line); border-radius: 7px; font: 11px/1.5 var(--mono); color: #d5dee7; font-variant-numeric: tabular-nums; white-space: pre; }
+#perf pre:empty { display: none; }
+#detail { display: flex; flex-direction: column; gap: 6px; }
+#graphbox { position: relative; align-self: flex-start; }
+#graphbox span { position: absolute; right: 6px; font: 9px/1 var(--mono); color: var(--muted); text-shadow: 0 0 2px #000; }
+#graph { display: block; width: 280px; height: 84px; background: var(--panel); border: 1px solid var(--line); border-radius: 7px; image-rendering: pixelated; }
+
+#legend { display: flex; gap: 10px; padding: 4px 8px; background: var(--panel); border: 1px solid var(--line); border-radius: 7px; font: 9.5px/1 var(--mono); color: #d5dee7; }
+#legend i { display: inline-block; width: 8px; height: 8px; margin-right: 4px; border-radius: 2px; vertical-align: -1px; }
+.k-sim { background: #4aa8ff; } .k-mesh { background: #b48cff; } .k-draw { background: #d9dde2; } .k-frame { background: #0ca30c; } .k-spike { background: #ff4d4d; }
+
+/* Demolition objective (top centre) and the 'what just happened' counter
+   (top right). On a narrower screen both queue up under the readout, clear
+   of the thumbs and of the menu button. */
+#goal { position: fixed; left: 50%; top: calc(10px + var(--safe-t)); transform: translateX(-50%); width: 340px; box-sizing: border-box; padding: 7px 11px 8px; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; font-size: 12.5px; color: var(--muted); }
+#goal .head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+#goal b { color: var(--text); font-weight: 600; }
+#goal-clock { font: 600 13px/1 var(--mono); color: var(--text); font-variant-numeric: tabular-nums; }
+#goal.late #goal-clock { color: var(--danger); }
+#goal .bar { height: 5px; margin: 6px 0 5px; border-radius: 3px; background: rgba(255, 255, 255, 0.12); overflow: hidden; }
+#goal-fill { display: block; height: 100%; background: var(--accent); transform-origin: 0 50%; transform: scaleX(0); transition: transform 0.25s; }
+#goal .foot { display: flex; justify-content: space-between; gap: 10px; font: 11px/1.4 var(--mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+#goal-where { display: inline-flex; align-items: center; gap: 5px; }
+#goal-arrow { width: 0; height: 0; border: 4px solid transparent; border-top: 0; border-bottom: 8px solid var(--accent); }
+#goal .hint { margin-top: 4px; font-size: 11.5px; }
+#goal .hint:empty { display: none; }
+#goal.won { border-color: rgba(88, 194, 106, 0.8); }
+#goal.won #goal-fill { background: #58c26a; }
+@media (min-width: 1101px) { body.objective #status { top: calc(104px + var(--safe-t)); } }
+#tally { position: fixed; right: calc(12px + var(--safe-r)); top: calc(10px + var(--safe-t)); display: flex; gap: 16px; padding: 7px 12px; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; font: 9.5px/1.3 var(--mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); transition: opacity 0.6s; }
+#tally span { display: flex; flex-direction: column; white-space: nowrap; }
+#tally b { font: 600 17px/1.2 var(--mono); letter-spacing: 0; text-transform: none; color: var(--text); font-variant-numeric: tabular-nums; }
+#tally.fade { opacity: 0; }
+body.touch #tally { right: calc(72px + var(--safe-r)); }
+
+/* No room for readout, objective and counter side by side. */
+@media (max-width: 1100px) { #goal, #tally { position: static; transform: none; } }
+
+/* State pills: top centre on a wide screen; on a narrow one they queue up
+   under the readout (and under the F3 panel when that is open). */
+#status { position: fixed; left: 50%; top: calc(12px + var(--safe-t)); transform: translateX(-50%); display: flex; gap: 6px; }
+#status:empty { display: none; }
+#status span { padding: 3px 10px; background: var(--panel); border: 1px solid var(--line); border-radius: 999px; font: 600 11px/1.5 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); white-space: nowrap; }
+
+/* Tool belt (bottom centre) with the active tool's name and hint above it. */
+#dock { position: absolute; left: 50%; bottom: calc(12px + var(--safe-b)); transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 8px; max-width: calc(100vw - 12px); }
+#toolhint { padding: 4px 12px; background: var(--panel); border: 1px solid var(--line); border-radius: 999px; font-size: 12.5px; color: var(--muted); white-space: nowrap; max-width: 100%; box-sizing: border-box; overflow: hidden; text-overflow: ellipsis; transition: opacity 0.6s; }
+#toolhint b { color: var(--text); font-weight: 600; margin-right: 8px; }
+#toolhint.idle { opacity: 0; }
+#belt { display: flex; gap: 4px; padding: 4px; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; }
+.slot { position: relative; width: 62px; height: 52px; padding: 0; border: 1px solid transparent; border-radius: 8px; background: none; color: var(--muted); font: inherit; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; }
+.slot svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.slot svg .f { fill: currentColor; stroke: none; }
+.slot .key { position: absolute; left: 5px; top: 2px; font: 10px/1.4 var(--mono); opacity: 0.7; }
+.slot .name { font-size: 10px; line-height: 1.2; letter-spacing: 0.02em; }
+.slot .badge { position: absolute; right: 3px; top: 3px; min-width: 14px; padding: 0 3px; box-sizing: border-box; border-radius: 7px; background: var(--accent); color: #17130b; font: 700 10px/14px var(--mono); text-align: center; }
+.slot .badge:empty { display: none; }
+.slot.on { color: var(--text); background: rgba(255, 184, 77, 0.13); border-color: rgba(255, 184, 77, 0.75); }
+.slot.on svg { color: var(--accent); }
+/* A tool the objective does not allow. */
+.slot.off { opacity: 0.28; }
+
+@media (max-width: 640px) {
+  #belt { gap: 2px; padding: 3px; }
+  .slot { width: calc((100vw - 42px) / 12); max-width: 54px; height: 44px; }
+  .slot .name { display: none; }
+  .slot .key { left: 3px; top: 1px; font-size: 9px; }
+  #toolhint { font-size: 11.5px; white-space: normal; border-radius: 12px; text-align: center; line-height: 1.35; }
+  #perf pre { font-size: 10px; padding: 4px 7px; }
+  #status { position: static; transform: none; }
+  #goal { width: min(340px, 100%); padding: 5px 9px 6px; font-size: 11.5px; }
+  #tally { gap: 11px; padding: 5px 9px; font-size: 8.5px; }
+  #tally b { font-size: 14px; }
+}
+@media (max-height: 420px) {
+  #toolhint { display: none; }
+  .slot { height: 40px; }
+  .slot .name { display: none; }
+}
+
+/* Start overlay and settings menu: one card over a dimmed scene. */
+#overlay, #menu, #score { position: fixed; inset: 0; z-index: 3; display: flex; overflow: auto; padding: 14px; box-sizing: border-box; background: rgba(6, 8, 11, 0.5); }
+/* Framed on another site's page (game.js, `straight`), nobody playing: the
+   world alone. No panel, nothing over it. */
+#overlay[data-bare] { background: none; cursor: crosshair; }
+#overlay[data-bare] .card { display: none; }
+.card { width: 100%; max-width: 480px; margin: auto; box-sizing: border-box; padding: 20px 22px; background: var(--panel-solid); border: 1px solid var(--line); border-radius: 14px; box-shadow: 0 18px 60px rgba(0, 0, 0, 0.45); }
+.card h1 { margin: 0 0 6px; font-size: 22px; letter-spacing: -0.01em; }
+.card h1 small { margin-left: 6px; font: 500 11px/1 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); vertical-align: middle; }
+.card h2 { margin: 0; font-size: 18px; }
+.card h3 { margin: 14px 0 6px; font: 600 11px/1.4 var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.card p { margin: 6px 0; color: #b9c4d0; }
+.card .lead { margin-bottom: 14px; }
+.card .note { color: var(--accent); font-size: 12.5px; }
+button { font: inherit; color: var(--text); background: rgba(255, 255, 255, 0.06); border: 1px solid var(--line); border-radius: 8px; padding: 7px 12px; cursor: pointer; touch-action: manipulation; }
+button:hover { background: rgba(255, 255, 255, 0.1); }
+button:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+button.primary { background: var(--accent); border-color: var(--accent); color: #17130b; font-weight: 650; padding: 9px 18px; }
+button.primary:hover { background: #ffc670; }
+button.primary:disabled { background: #3a3f46; border-color: #3a3f46; color: var(--muted); cursor: default; }
+#play { width: 100%; font-size: 15px; padding: 11px; }
+kbd { display: inline-block; min-width: 10px; margin: 0 1px; padding: 0 6px; background: #0d1115; border: 1px solid #2c343e; border-bottom-width: 2px; border-radius: 5px; font: 11px/18px var(--mono); color: var(--text); text-align: center; }
+.keys { display: grid; grid-template-columns: auto 1fr; gap: 5px 14px; margin: 16px 0 4px; font-size: 13px; color: #b9c4d0; align-items: center; }
+.keys > span:nth-child(odd) { color: var(--text); white-space: nowrap; }
+#keys-touch, body.touch #keys-desktop { display: none; }
+body.touch #keys-touch { display: grid; }
+.scenes, .objectives { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
+.scenes button, .objectives button { flex: 1 1 auto; padding: 6px 10px; font-size: 12.5px; color: var(--muted); }
+.scenes button.on, .objectives button.on { color: var(--text); border-color: rgba(255, 184, 77, 0.75); background: rgba(255, 184, 77, 0.13); }
+/* Objectives: 'free sandbox' and one chip per target, with the chosen one
+   spelled out underneath. */
+.objectives { margin-top: 8px; }
+.objectives:empty { display: none; }
+.objectives button small { margin-left: 5px; color: var(--accent); letter-spacing: 1px; }
+.objectives h3 { flex: 1 0 100%; margin: 6px 0 0; }
+.objectives p { flex: 1 0 100%; margin: 2px 0 0; font-size: 12.5px; min-height: 2.9em; }
+#score .card { max-width: 420px; text-align: center; }
+#score-stars { margin: 4px 0 2px; font-size: 34px; line-height: 1.2; letter-spacing: 8px; color: var(--accent); }
+#score-stars i { font-style: normal; color: rgba(255, 255, 255, 0.16); }
+#score-stats { display: grid; grid-template-columns: 1fr auto; gap: 5px 16px; margin: 12px 0 0; text-align: left; font-size: 13px; color: #b9c4d0; }
+#score-stats dd { margin: 0; font: 12.5px/1.5 var(--mono); color: var(--text); text-align: right; font-variant-numeric: tabular-nums; }
+#score footer { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--line); }
+#score.lost h2 { color: var(--danger); }
+
+#menu .card { max-width: 660px; }
+#menu header { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 2px; }
+#menu .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 28px; }
+#menu .scenes { margin-top: 0; }
+#help { margin-top: 14px; }
+#help summary { cursor: pointer; font: 600 11px/1.4 var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+#help .keys { margin: 10px 0 0; grid-template-columns: auto 1fr auto 1fr; }
+#menu footer { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--line); }
+#menu footer #reset { margin-left: auto; color: var(--muted); }
+.row { display: grid; grid-template-columns: 1fr 112px 38px; align-items: center; gap: 10px; min-height: 30px; font-size: 13px; color: #c9d3dd; }
+.row output { font: 11.5px/1 var(--mono); color: var(--muted); text-align: right; font-variant-numeric: tabular-nums; }
+.row input[type=range] { width: 100%; margin: 0; accent-color: var(--accent); }
+.row.check { grid-template-columns: 1fr auto; }
+.row input[type=checkbox] { width: 16px; height: 16px; margin: 0; accent-color: var(--accent); }
+.row .seg { grid-column: 2 / 4; display: flex; }
+.seg button { flex: 1; padding: 4px 0; font-size: 11.5px; border-radius: 0; color: var(--muted); }
+.seg button + button { border-left: 0; }
+.seg button:first-child { border-radius: 7px 0 0 7px; }
+.seg button:last-child { border-radius: 0 7px 7px 0; }
+.seg button.on { color: #17130b; background: var(--accent); border-color: var(--accent); }
+.seg button:disabled, .row input:disabled { opacity: 0.45; cursor: default; }
+body:not(.touch) .row:has([data-set=touchSens]), body.touch .row:has([data-set=sens]) { display: none; }
+@media (max-width: 640px) {
+  .card { padding: 16px; }
+  #menu .grid { grid-template-columns: 1fr; }
+  #help .keys { grid-template-columns: auto 1fr; }
+  .keys { font-size: 12.5px; gap: 5px 10px; }
+}
+
+/* Touch controls: only on touch devices, only while playing. */
+#touch { position: fixed; inset: 0; z-index: 1; display: none; touch-action: none; }
+body.touch #touch.mode-play { display: block; }
+body.touch #ui.mode-play .slot { pointer-events: auto; }
+#stick { position: absolute; left: 0; top: 0; width: 120px; height: 120px; margin: -60px 0 0 -60px; border-radius: 50%; border: 1.5px solid rgba(255, 255, 255, 0.28); background: rgba(12, 15, 19, 0.28); opacity: 0.55; pointer-events: none; will-change: transform; }
+#stick i { position: absolute; left: 50%; top: 50%; width: 52px; height: 52px; margin: -26px 0 0 -26px; border-radius: 50%; background: rgba(255, 255, 255, 0.4); will-change: transform; }
+#stick.on { opacity: 1; }
+.tb { position: absolute; display: grid; place-items: center; padding: 0; border-radius: 50%; border: 1.5px solid rgba(255, 255, 255, 0.3); background: rgba(12, 15, 19, 0.45); color: var(--text); font: 600 11px/1 var(--mono); letter-spacing: 0.04em; text-transform: uppercase; touch-action: none; }
+.tb:hover { background: rgba(12, 15, 19, 0.45); }
+.tb.down { background: rgba(255, 184, 77, 0.4); border-color: var(--accent); }
+#tb-fire { right: calc(18px + var(--safe-r)); bottom: calc(136px + var(--safe-b)); width: 84px; height: 84px; font-size: 13px; }
+#tb-jump { right: calc(114px + var(--safe-r)); bottom: calc(124px + var(--safe-b)); width: 64px; height: 64px; }
+#tb-alt { right: calc(100px + var(--safe-r)); bottom: calc(200px + var(--safe-b)); width: 58px; height: 58px; }
+#tb-next { right: calc(24px + var(--safe-r)); bottom: calc(236px + var(--safe-b)); width: 54px; height: 54px; }
+#tb-crouch { right: calc(186px + var(--safe-r)); bottom: calc(130px + var(--safe-b)); width: 50px; height: 50px; font-size: 10px; }
+#tb-blast { right: calc(16px + var(--safe-r)); top: calc(64px + var(--safe-t)); width: 44px; height: 44px; background: rgba(229, 72, 77, 0.75); border-color: rgba(255, 255, 255, 0.5); font-size: 13px; }
+body.nobutton #tb-blast { display: none; }
+#tb-menu { right: calc(16px + var(--safe-r)); top: calc(10px + var(--safe-t)); width: 44px; height: 44px; border-radius: 10px; }
+#tb-menu i, #tb-menu i::before, #tb-menu i::after { content: ""; display: block; width: 18px; height: 2px; border-radius: 1px; background: currentColor; }
+#tb-menu i { position: relative; }
+#tb-menu i::before { position: absolute; top: -6px; }
+#tb-menu i::after { position: absolute; top: 6px; }
+/* Portrait phones: the left half belongs to the stick, so Duck moves up
+   beside Alt instead of sitting where the thumb lands. */
+@media (max-width: 480px) {
+  #tb-crouch { right: calc(88px + var(--safe-r)); bottom: calc(268px + var(--safe-b)); }
+}
+@media (max-height: 420px) {
+  #tb-fire { bottom: calc(70px + var(--safe-b)); }
+  #tb-jump { bottom: calc(62px + var(--safe-b)); }
+  #tb-alt { bottom: calc(134px + var(--safe-b)); }
+  #tb-next { bottom: calc(170px + var(--safe-b)); }
+  #tb-crouch { bottom: calc(68px + var(--safe-b)); }
+}
+
+/* A big display at 100% scaling (2560x1440 and up): panels laid out in the
+   same pixels as on a laptop would be small print from where the player
+   sits. The crosshair is drawn to the spread in real pixels and the frame
+   graph is one pixel a frame: neither scales. */
+@media (min-width: 2200px) and (min-height: 1200px) {
+  #hud, #prof, #legend, #goal, #tally, #status, #dock, .card { zoom: 1.3; }
+}
+@media (min-width: 3400px) and (min-height: 1900px) {
+  #hud, #prof, #legend, #goal, #tally, #status, #dock, .card { zoom: 1.8; }
+}
+
+/* The replay bar: progress along the top edge of a strip of controls. */
+#replay { position: fixed; left: 50%; bottom: calc(14px + var(--safe-b)); z-index: 2; width: min(620px, calc(100vw - 20px)); translate: -50% 0; padding: 0 0 8px; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+#replay .track { height: 3px; background: rgba(255, 255, 255, 0.1); }
+#rp-fill { display: block; height: 100%; background: var(--accent); transform-origin: 0 50%; transform: scaleX(0); }
+#replay .row { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; min-height: 0; padding: 8px 8px 0; grid-template-columns: none; }
+#replay button { padding: 5px 10px; font-size: 12.5px; }
+#rp-shot-name { margin-left: auto; font: 600 11px/1 var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+#rp-time { font: 11.5px/1 var(--mono); color: var(--text); font-variant-numeric: tabular-nums; }
+#replay.done #rp-pause, #replay.done #rp-speed, #replay.done #rp-shot, #replay.done #rp-skip { display: none; }
+body.nohud #replay { display: none; }
