@@ -1,12 +1,13 @@
 // Skyhold 2026 — game flow, menus, HUD (with the scanner strip), commentary, demo director and the frame loop.
-import { VERSION, SECTORS, STEP, F, C, H, BOSSES, UPGRADES, UP_KEYS, UP_COST, MEDALS, parTime, TYPICAL_UP, START_LIVES, DIFFICULTY, POWERUPS, LIVERIES, CP_NAMES, WAVES, ENEMY } from './config.js?v=1';
-import { makeWorld, step, drainEvents, wd, wp, settlersLeft, nodePos } from './sim.js?v=1';
-import { Autopilot } from './ai.js?v=1';
-import { Renderer, pickQuality, CALM, LOOKS } from './render.js?v=1';
-import { Audio } from './audio.js?v=1';
-import { Input } from './input.js?v=1';
-import { Scores, NO_POST } from './scores.js?v=1';
-import { Recorder, Replay } from './replay.js?v=1';
+import { VERSION, SECTORS, STEP, F, C, H, BOSSES, UPGRADES, UP_KEYS, UP_COST, MEDALS, parTime, TYPICAL_UP, START_LIVES, DIFFICULTY, POWERUPS, LIVERIES, CP_NAMES, WAVES, ENEMY } from './config.js?v=2';
+import { makeWorld, step, stepGuest, drainEvents, wd, wp, settlersLeft, nodePos, CHAIN_T, chainMult } from './sim.js?v=2';
+import { Autopilot } from './ai.js?v=2';
+import { Renderer, pickQuality, CALM, LOOKS } from './render.js?v=2';
+import { Audio } from './audio.js?v=2';
+import { Input } from './input.js?v=2';
+import { Scores, NO_POST } from './scores.js?v=2';
+import { Recorder, Replay } from './replay.js?v=2';
+import { Online, ROOM, randomCode, cleanCode } from './online.js?v=2';
 
 const $ = (id) => document.getElementById(id);
 const params = new URLSearchParams(location.search);
@@ -41,13 +42,15 @@ const DL = (d) => (DIFFICULTY[d] || DIFFICULTY.normal).label;
 const bestKey = (diff, i) => (diff === 'normal' ? 's' + i : diff + ':s' + i);
 const REC = new Recorder();
 const ASSIST = { off: 0, light: 0.5, strong: 0.9 };
+const NET = new Online({ status: netStatus, joined: netJoined, start: (cfg) => startOnline(cfg), left: netLeft, chat: () => {} },
+  { relay: params.get('relay') || undefined, lag: +params.get('netlag') || 0 });
 
 const G = {
   state: 'boot', mode: 'title', W: null, ai: null, acc: 0, timeScale: 1, slowT: 0, idleT: 0, run: null, clip: null, pendingClip: null, replay: null,
   afterReplay: null, demoI: 0, demoT: 0, says: new Map(), screen: null, back: [], ini: null, scenic: null, hudCache: {}, tutT: 0, bannerT: 0, capT: 0, frameT: [],
   autopilot: params.has('autoplay'), fixed: params.has('fixed'), lastLife: false,
 };
-window.__sh = { G, R, A, I, REC, settings, VERSION };
+window.__sh = { G, R, A, I, REC, NET, settings, VERSION };
 
 // ------------------------------------------------------------------ talking: rare on purpose
 const VOICE_GAP = 26;
@@ -102,7 +105,7 @@ function navigate(dir) {
 
 // ------------------------------------------------------------------ title + scenic background
 function toTitle() {
-  stopPlay();
+  NET.close(); stopPlay();
   clearTimeout(G.ptT);
   G.state = 'title'; G.mode = 'title'; G.idleT = 0;
   hideScreens(); show('title', false);
@@ -223,7 +226,7 @@ function buildStrip(W) {
 const fmtT = (t) => `${Math.floor(t / 60)}:${(t % 60).toFixed(1).padStart(4, '0')}`;
 function setText(id, v) { if (G.hudCache[id] !== v) { G.hudCache[id] = v; $(id).textContent = v; } }
 function setHTML(id, v) { if (G.hudCache[id] !== v) { G.hudCache[id] = v; $(id).innerHTML = v; } }
-const myPlayer = (W) => W.players[0];
+const myPlayer = (W) => (G.mode === 'online' && !NET.host && W.players[1] ? W.players[1] : W.players[0]);
 function updateHud(W) {
   setText('score', W.score.toLocaleString());
   const board = boardOf(W.mode, W.diff);
@@ -241,6 +244,15 @@ function updateHud(W) {
   const act = [];
   if (me) for (const k in me.pw) act.push([k, me.pw[k]]);
   setHTML('pw', act.map(([k, t]) => { const P = POWERUPS[k]; return `<span style="--c:#${P.color.toString(16).padStart(6, '0')}"><b>${P.glyph}</b>${P.name}<i style="width:${Math.min(100, (t / P.time) * 100).toFixed(0)}%"></i></span>`; }).join(''));
+  // the kill chain
+  const ca = W.t - W.chainT < CHAIN_T && W.chain >= 2;
+  $('streak').classList.toggle('hidden', !ca);
+  if (ca) {
+    const m = chainMult(W.chain);
+    setText('chain-n', m > 1 ? `×${m}` : `${W.chain}`); setText('chain-l', m > 1 ? `CHAIN · ${W.chain} IN A ROW` : 'IN A ROW');
+    $('streak').classList.toggle('hot', m > 1);
+    $('chain-bar').style.width = (100 * (1 - (W.t - W.chainT) / CHAIN_T)).toFixed(0) + '%';
+  }
   // the colony
   const left = settlersLeft(W), N = W.settlers.length, up = W.settlers.filter((s) => s.st === 'held').length;
   setText('settlers', String(left));
@@ -293,7 +305,7 @@ function drawScanner(W) {
   for (const p of W.players) if (p.alive) { g.fillStyle = p === me ? '#ffffff' : '#ffb070'; const x = X(p.x), y = Y(p.y); g.beginPath(); g.moveTo(x + p.face * 4 * dpr, y); g.lineTo(x - p.face * 3 * dpr, y - 2.5 * dpr); g.lineTo(x - p.face * 3 * dpr, y + 2.5 * dpr); g.closePath(); g.fill(); }
   g.strokeStyle = 'rgba(190,205,225,0.3)'; g.lineWidth = 1 * dpr; g.strokeRect(0.5, 0.5, S - 1, T - 1);
 }
-function halfView() { const c = R.camera, vf = c.fov * Math.PI / 180, needH = H + 12, D = Math.max((needH / 2) / Math.tan(vf / 2), 23 / (Math.tan(vf / 2) * c.aspect)); return D * Math.tan(vf / 2) * c.aspect; }
+function halfView() { const c = R.camera, vf = c.fov * Math.PI / 180, needH = R.needH, D = Math.max((needH / 2) / Math.tan(vf / 2), 23 / (Math.tan(vf / 2) * c.aspect)); return D * Math.tan(vf / 2) * c.aspect; }
 
 // banners, captions, popups, tutorial prompts
 function banner(a, b, t = 2.2) {
@@ -371,7 +383,8 @@ function handleEvents(list, W, live) {
         A.retro(big ? 'boom' : 'pop', { vol: 0.5, pan: pan(e.x) });
         fx.explode(p.x, p.y, p.z, big ? 1.8 : 1.0, { metal: true, vx: v.x * 0.3, vy: v.y * 0.3, color: SCOL[e.type] === 0x9dff7a ? 0xffc070 : 0xff7a50, ringColor: SCOL[e.type] });
         if (big) { R.shock(e.x, e.y, 0.5); R.addTrauma(0.12 * S); if (live) rumble(0.25, 0.3, 110); }
-        if (live && e.pid && e.score && G.mode !== 'demo') popup(`+${e.score}`, e.x, e.y, e.carry ? '#8dff8a' : null);
+        if (live && e.pid && e.score && G.mode !== 'demo') popup(`+${e.score}${chainMult(e.chain || 0) > 1 ? ' ×' + chainMult(e.chain) : ''}`, e.x, e.y, e.carry ? '#8dff8a' : chainMult(e.chain || 0) > 1 ? '#ffd27a' : null);
+        if (live && e.pid && e.chain && e.chain % 4 === 0 && e.chain <= 12) { A.play('pickup', { vol: 0.5, rate: 1 + e.chain * 0.03, gap: 0.2 }); A.retro('life', { vol: 0.3 }); }
         if (live && e.carry && G.mode !== 'demo') caption('LIFTER DOWN: CATCH THE SETTLER', 2.2);
         break;
       }
@@ -391,8 +404,8 @@ function handleEvents(list, W, live) {
       }
       case 'fall': snd('fall', e, { vol: 0.6, gap: 0.3 }); if (live && !e.safe && G.mode !== 'demo') popup('CATCH!', e.x, e.y, '#8dff8a', true); break;
       case 'catch': { const p = P(e.x, e.y); snd('catch', e, { vol: 0.9, gap: 0 }); A.retro('catch', { vol: 0.5 }); fx.sparks(p.x, p.y, p.z, { n: 16, speed: 4, r: 0.5, g: 1, b: 0.6 }); if (live) { popup(`+${e.score} CAUGHT`, e.x, e.y, '#8dff8a', true); if (mine(e)) rumble(0.2, 0.4, 120); } break; }
-      case 'land': { const p = P(e.x, 0.3); snd('land', e, { vol: 0.9, gap: 0 }); A.retro('land', { vol: 0.5 }); fx.ring(p.x, p.y, p.z, 4, 0x8dff8a); fx.sparks(p.x, p.y, p.z, { n: 14, speed: 3, r: 0.5, g: 1, b: 0.6 }); if (live) popup(`+${e.score} SAFE`, e.x, 1, '#8dff8a', true); break; }
-      case 'selfland': if (live && G.mode !== 'demo') popup('LANDED SAFELY', e.x, 1, '#c8ffc8'); break;
+      case 'land': { const p = P(e.x, 0.3); snd('land', e, { vol: 0.9, gap: 0 }); A.retro('land', { vol: 0.5 }); fx.ring(p.x, p.y, p.z, 4, 0x8dff8a); fx.sparks(p.x, p.y, p.z, { n: 14, speed: 3, r: 0.5, g: 1, b: 0.6 }); R.cheer(e.id); if (live) popup(`+${e.score} SAFE`, e.x, 1, '#8dff8a', true); break; }
+      case 'selfland': R.cheer(e.id); if (live && G.mode !== 'demo') popup('LANDED SAFELY', e.x, 1, '#c8ffc8'); break;
       case 'lost': { const p = P(e.x, Math.max(0.3, e.y)); snd('lost', e, { vol: 0.8, gap: 0.2 }); A.retro('lost', { vol: 0.4 }); fx.sparks(p.x, p.y, p.z, { n: 10, speed: 3, r: 1, g: 0.5, b: 0.4 }); if (live && e.why === 'fall' && G.mode !== 'demo') caption('A SETTLER FELL TOO FAR', 2.4); break; }
       case 'colonyfall':
         A.play('colonyfall', { vol: 1, gap: 0 }); A.play('alarm', { vol: 0.7, delay: 0.4, gap: 0 });
@@ -431,6 +444,7 @@ function handleEvents(list, W, live) {
         A.play('nova', { vol: 1, gap: 0 }); A.retro('nova', { vol: 0.5 });
         const p = P(e.x, e.y);
         for (const r of [10, 22, 34]) fx.ring(p.x, p.y, p.z, r, 0xffd0a0);
+        R.novaWave(e.x, e.y);
         fx.flash(p.x, p.y, p.z + 4, 120, 0xffc890, 0.6);
         R.flashScreen(0.5, 0xffe8c8); R.addTrauma(0.6 * S); R.shock(e.x, e.y, 2.2);
         if (live && mine(e)) rumble(0.8, 0.8, 400);
@@ -515,6 +529,7 @@ function onWorldOver(W) {
   if (G.mode === 'demo') { if (G.demoI % 2 === 0) toTitle(); else startDemo(); return; }
   A.stopLoops();
   if (G.mode === 'playthrough') { playthroughNext(W); return; }
+  if (G.mode === 'online') { results(W, W.result === 'clear' ? 'WORLD CLEAR' : 'SHOT DOWN', 'CO-OP'); return; }
   if (W.mode === 'endless') { A.sting('over'); say('gameover', { key: true, delay: 1 }); results(W, 'ORBIT LOST', `${W.waveN} WAVE${W.waveN === 1 ? '' : 'S'} · ${fmtT(W.fightT)}`); return; }
   const s = W.sector;
   if (W.result === 'clear') {
@@ -603,7 +618,7 @@ function results(W, title, sub, canContinue = false) {
   const st = [['SCORE', W.score.toLocaleString()]];
   if (W.mode === 'endless') st.push(['WAVES', W.waveN], ['TIME', fmtT(W.fightT)]);
   else st.push(['WORLD TIME', fmtT(W.secT)]);
-  st.push(['SETTLERS CAUGHT / SET DOWN', `${W.stats.caught} / ${W.stats.landed}`], ['SETTLERS LOST', W.stats.lost], ['LIFTERS / HUSKS DOWN', `${W.stats.lifters} / ${W.stats.husks}`], ['MACHINES DOWN', W.stats.kills], ['NOVAS USED', W.stats.novas], ['SHIPS LOST', W.stats.deaths]);
+  st.push(['LONGEST CHAIN', W.bestChain || 0], ['SETTLERS CAUGHT / SET DOWN', `${W.stats.caught} / ${W.stats.landed}`], ['SETTLERS LOST', W.stats.lost], ['LIFTERS / HUSKS DOWN', `${W.stats.lifters} / ${W.stats.husks}`], ['MACHINES DOWN', W.stats.kills], ['NOVAS USED', W.stats.novas], ['SHIPS LOST', W.stats.deaths]);
   $('res-stats').innerHTML = st.map(([a, b]) => `<div class="stat"><span>${a}</span><b>${b}</b></div>`).join('');
   const got = G.run ? G.run.newMedals : [];
   $('res-medals').innerHTML = got.map((id) => { const m = MEDALS.find((q) => q.id === id); return `<span class="medal on new">🏅 ${m.name} · W${m.sector + 1}</span>`; }).join('');
@@ -615,7 +630,7 @@ function results(W, title, sub, canContinue = false) {
   const board = boardOf(W.mode, W.diff);
   G.board = board; G.ini = null;
   $('ini-wrap').classList.add('hidden');
-  if (G.mode !== 'playthrough' && board.qualifies(W.score)) {
+  if (G.mode !== 'playthrough' && G.mode !== 'online' && board.qualifies(W.score)) {
     if (W.score > board.best()) say('newrecord', { key: true, delay: 3.5 });
     G.ini = { chars: board.initials().split(''), i: 0, score: W.score, level: W.mode === 'endless' ? W.waveN : W.sector + 1 };
     $('ini-wrap').classList.remove('hidden');
@@ -672,13 +687,49 @@ function endReplay() {
 function pause() {
   if (G.state !== 'play' || G.mode === 'demo') return;
   if (G.mode === 'playthrough') { toTitle(); return; }
+  if (G.mode === 'online') { show('pause'); $('pause-sub').textContent = 'ONLINE · THE FIGHT KEEPS GOING'; G.state = 'paused-online'; return; }
   G.state = 'paused';
   A.muffle(true);
   $('pause-sub').textContent = G.W.mode === 'endless' ? `ENDLESS ORBIT · WAVE ${G.W.waveN}` : `WORLD ${G.W.sector + 1} · ${CP_NAMES[G.W.cp]}`;
   $('pause-replay').classList.toggle('hidden', !G.clip);
   show('pause', false);
 }
-function resume() { if (G.state === 'paused') { G.state = 'play'; A.muffle(false); hideScreens(); } }
+function resume() { if (G.state === 'paused' || G.state === 'paused-online') { G.state = 'play'; A.muffle(false); hideScreens(); } }
+
+// ------------------------------------------------------------------ online co-op
+function netStatus(text, kind) {
+  const el = $('net-status');
+  if (text === 'waiting') { el.textContent = 'Waiting for your wingmate to join…'; el.className = ''; return; }
+  el.textContent = text; el.className = kind === 'error' ? 'error' : '';
+}
+function netJoined(peer) {
+  A.play('uiok', { gap: 0 });
+  netStatus(`${peer.ini || 'A pilot'} is here.` + (NET.host ? ' Pick the world and start.' : ' Waiting for the host to start…'));
+  $('net-go').classList.toggle('hidden', !NET.host);
+  if (NET.host) setSel($('net-go'));
+  say('partner', { key: true });
+}
+function netLeft(why) {
+  if (G.mode === 'online' && G.state !== 'results') { caption(why === 'lost' ? 'CONNECTION LOST' : 'YOUR WINGMATE LEFT', 4); setTimeout(() => { if (G.mode === 'online') toTitle(); }, 2500); }
+  else netStatus(why === 'lost' ? 'Connection lost' : 'Your wingmate left', 'error');
+}
+function hostStart() {
+  const route = settings.netRoute;
+  const cfg = route === 'deep' ? { gm: 'endless', seed: newSeed(), diff: settings.diff } : { gm: 'campaign', sector: +route, seed: newSeed(), up: { ...TYPICAL_UP[+route] }, diff: settings.diff, cp: +params.get('wave') || 0 };
+  NET.sendStart(cfg);
+  startOnline(cfg);
+}
+function startOnline(cfg) {
+  G.mode = 'online';
+  G.run = { score: 0, lives: START_LIVES + 1, up: cfg.up || {}, newMedals: [] };
+  const W = makeWorld({ mode: cfg.gm === 'endless' ? 'endless' : 'campaign', sector: cfg.sector || 0, seed: cfg.seed, up: cfg.up || {}, coop: true, lives: START_LIVES + 2 + (DIFFICULTY[cfg.diff] || DIFFICULTY.normal).lives, noTut: true, diff: cfg.diff, assist: assistOf(), cp: cfg.cp || 0 });
+  NET.bind(W);
+  if (!NET.host) { W.players[1].assist = assistOf(); W.players[0].assist = 0; }
+  enterPlay(W);
+  G.ai = G.autopilot ? new Autopilot(cfg.seed + (NET.host ? 0 : 1), 'demo') : null;
+  banner('CO-OP', cfg.gm === 'endless' ? 'ENDLESS ORBIT' : SECTORS[cfg.sector || 0].name, 3);
+}
+window.__sh.online = { hostStart, startOnline };
 
 // ------------------------------------------------------------------ menus wiring
 function act(a) {
@@ -688,12 +739,17 @@ function act(a) {
     case 'deep': A.play('uiok', { gap: 0 }); startEndless(); break;
     case 'playthrough': A.play('uiok', { gap: 0 }); startPlaythrough(); break;
     case 'sectors': buildSectors(); show('sectors'); break;
-    case 'online': show('online'); break;
+    case 'online': show('online'); netStatus(''); $('room-wrap').classList.add('hidden'); $('net-go').classList.add('hidden'); syncSegs(); break;
     case 'scores': show('scores'); renderScores(G.scoreTab || 'campaign'); break;
     case 'medals': buildMedals(); show('medals'); break;
     case 'options': buildLiveries(); show('options'); syncSegs(); break;
     case 'help': show('help'); break;
-    case 'back': case 'net-back': A.play('uiback', { gap: 0 }); goBack(); break;
+    case 'back': A.play('uiback', { gap: 0 }); goBack(); break;
+    case 'net-quick': NET.quick({ ini: HS.initials() }); break;
+    case 'net-host': { const code = randomCode(4); $('room-code').textContent = code; $('room-wrap').classList.remove('hidden'); NET.connect(ROOM + code, 'host', { ini: HS.initials() }); break; }
+    case 'net-join': { const code = cleanCode($('join-code').value); if (code.length !== 4) { netStatus('Type the 4-letter room code', 'error'); return; } NET.connect(ROOM + code, 'join', { ini: HS.initials() }); netStatus('Joining…'); break; }
+    case 'net-go': hostStart(); break;
+    case 'net-back': NET.close(); A.play('uiback', { gap: 0 }); goBack(); break;
     case 'next': A.play('uiok', { gap: 0 }); clearTimeout(G.ptT); beginSector(G.run.sector + 1); break;
     case 'replay': playReplay(); break;
     case 'done': finishResults(); break;
@@ -764,7 +820,7 @@ async function renderScores(tab, diff = G.scoreDiff || settings.diff) {
 
 // keyboard / pad in menus and in play
 I.on('any', () => { G.idleT = 0; if (G.mode === 'demo' && G.state === 'play' && performance.now() - G.demoStartT > 600) { A.unlock(); toTitle(); } });
-I.on('pause', () => { if (G.state === 'play') pause(); else if (G.state === 'paused') resume(); else if (G.state === 'replay') endReplay(); else if (G.screen && G.screen !== 'title') act('back'); });
+I.on('pause', () => { if (G.state === 'play') pause(); else if (G.state === 'paused' || G.state === 'paused-online') resume(); else if (G.state === 'replay') endReplay(); else if (G.screen && G.screen !== 'title') act('back'); });
 I.on('confirm', () => { if (G.screen && selEl) selEl.click(); });
 I.on('back', () => { if (G.screen && G.screen !== 'title' && G.screen !== 'results' && G.screen !== 'upgrades') act('back'); });
 I.on('key', (k, e) => {
@@ -800,6 +856,17 @@ I.stickUI = (s) => {
 // the carrier (orange), power-up pods
 const WM = [];
 const PE = { x: 0, y: 0, z: 0 };
+// co-op: a name tag over the other gunship
+function wingTag(W) {
+  const el = $('wingtag');
+  const other = G.mode === 'online' ? W.players.find((p) => p !== myPlayer(W)) : null;
+  if (!other || !other.alive) { el.classList.add('hidden'); return; }
+  R.project(other.x, other.y + 2.2, PE);
+  if (PE.z > 1 || PE.x < 0 || PE.x > innerWidth) { el.classList.add('hidden'); return; }
+  el.classList.remove('hidden');
+  el.textContent = (NET.peer && NET.peer.ini) || 'WINGMATE';
+  el.style.transform = `translate(${PE.x.toFixed(0)}px, ${PE.y.toFixed(0)}px) translate(-50%, -100%)`;
+}
 function updateWarnings(W) {
   const box = $('warns');
   const list = [];
@@ -862,13 +929,13 @@ function tickFrame(dt, draw = true) {
   I.pollPads();
   perf(dt);
   if (G.slowT > 0) { G.slowT -= dt; if (G.slowT <= 0) { G.timeScale = 1; A.setRate(1); } }
-  if (G.state === 'play') playStep(dt);
+  if (G.state === 'play' || G.state === 'paused-online') playStep(dt);
   else if (G.state === 'replay') replayStep(dt);
   else if (G.state === 'title' || (G.scenic && G.W === G.scenic)) { scenicStep(dt); R.setIntent(null); }
   const cur = G.state === 'replay' && G.replay ? G.replay.W : G.W;
   if (!cur) return;
   if (cur.k !== R.lookI) R.setLook(cur.k);
-  const interp = (G.state === 'play' || G.state === 'replay') && !G.fixed;
+  const interp = (G.state === 'play' || G.state === 'replay') && G.mode !== 'online' && !G.fixed;
   if (interp) lerpIn(cur, Math.min(1, (G.state === 'replay' ? G.replay.acc : G.acc) / STEP));
   const me = myPlayer(cur);
   const menu = G.state === 'title' || (['sectors', 'online', 'scores', 'medals', 'options', 'help'].includes(G.screen) && G.mode === 'title');
@@ -879,7 +946,7 @@ function tickFrame(dt, draw = true) {
   loops(cur, menu);
   if (draw) R.render(dt, {});
   R.beamLight.intensity *= Math.exp(-dt * 30);
-  if (G.state === 'play') { updateWarnings(cur); drawScanner(cur); }
+  if (G.state === 'play' || G.state === 'paused-online') { updateWarnings(cur); drawScanner(cur); wingTag(cur); } else $('wingtag').classList.add('hidden');
   if (G.bannerT > 0) { G.bannerT -= dt; if (G.bannerT <= 0) $('banner').classList.add('hidden'); }
   if (G.tutT > 0) { G.tutT -= dt; if (G.tutT <= 0) $('tut').classList.add('hidden'); }
   if (G.capT > 0) { G.capT -= dt; if (G.capT <= 0) $('caption').classList.add('hidden'); }
@@ -888,26 +955,32 @@ function playStep(dt) {
   const W = G.W;
   G.acc += dt * G.timeScale;
   let n = 0;
+  const online = G.mode === 'online', guest = online && !NET.host;
+  if (guest) handleEvents(NET.guestSync(W), W, true);
   while (G.acc >= STEP && n < 12) {
-    REC.tick(W);
+    if (!online) REC.tick(W);
     const me = myPlayer(W);
     if (me) {
       if (G.ai) me.input = G.ai.control(W, me);
       else { const c = I.control(); me.input = G.state === 'play' ? c : { mx: 0, my: 0, fire: false, nova: false, blink: false }; }
     }
-    REC.input(W);
+    if (online && NET.host) NET.hostTick(W);
+    if (!online) REC.input(W);
     snapPrev(W);
-    step(W, STEP);
-    handleEvents(drainEvents(W), W, true);
+    if (guest) stepGuest(W, STEP); else step(W, STEP);
+    const ev = drainEvents(W);
+    if (online && NET.host) NET.hostEvents(ev);
+    handleEvents(ev, W, true);
     G.acc -= STEP; n++;
     if (W.over) break;
   }
   if (n >= 12) G.acc = 0;
+  if (online) { if (NET.host) NET.hostFrame(W, dt); else NET.guestFrame(W, dt); }
   captureClip(W);
   updateHud(W);
   if (G.mode === 'demo') { G.demoT += dt; if (G.demoT > 110) W.over = true; }
   guidance(W);
-  if (W.over && G.state === 'play') { G.state = 'ended'; setTimeout(() => onWorldOver(W), G.mode === 'demo' ? 1500 : 1300); }
+  if (W.over && (G.state === 'play' || G.state === 'paused-online')) { G.state = 'ended'; setTimeout(() => onWorldOver(W), G.mode === 'demo' ? 1500 : 1300); }
 }
 function replayStep(dt) {
   const Rp = G.replay;
@@ -967,7 +1040,7 @@ function guidance(W) {
 const AMB = ['amb_verdant', 'amb_dune', 'amb_frost', 'amb_cinder', 'amb_umbra'];
 function loops(W, menu) {
   if (!A.ctx) return;
-  const live = G.state === 'play' || G.state === 'replay';
+  const live = G.state === 'play' || G.state === 'replay' || G.state === 'paused-online';
   const me = myPlayer(W) || W.players[0];
   const at = (x, y) => R.at(x, y);
   if (live && me) { const p = at(me.x, me.y); A.setLoop('thrust', p.x, p.y, p.z, me.alive ? 0.3 + (me.thrust || 0) * 0.7 : 0, 0.85 + Math.min(0.4, Math.abs(me.vx) / F.vmax * 0.4)); }
@@ -1007,8 +1080,9 @@ async function boot() {
   toTitle();
   boardOf('campaign', settings.diff).fresh(); boardOf('endless', settings.diff).fresh();
   if (!G.fixed && !params.has('test')) R.prepareAll(true);
-  if (params.has('test')) { const m = await import('./tests.js?v=1'); m.runTests(window.__sh); }
+  if (params.has('test')) { const m = await import('./tests.js?v=2'); m.runTests(window.__sh); }
   else if (params.has('playthrough')) { A.unlock(); startPlaythrough(); }
+  else if (params.has('room')) { act('online'); $('join-code').value = cleanCode(params.get('room')); }
   else if (G.autopilot) { A.unlock(); if (params.has('endless')) startEndless(); else startCampaign(+params.get('sector') || 0); }
   if (!G.fixed) requestAnimationFrame(frame);
 }

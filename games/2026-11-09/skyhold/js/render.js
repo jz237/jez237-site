@@ -5,13 +5,13 @@
 // Five looks (sky, terrain, sea, scenery, bodies in the sky), real 3D models for everything, curved beams,
 // warnings drawn in the play plane, HDR post. Nothing here changes the world.
 import * as THREE from '../vendor/three.module.min.js';
-import { Post } from './post.js?v=1';
-import * as TX from './textures.js?v=1';
-import * as MD from './models.js?v=1';
-import { FX, CALM } from './fx.js?v=1';
-import { NOISE } from './shaders.js?v=1';
-import { F, C, RP, H, ENEMY, BOSSES, POWERUPS, P2_LIVERY, LIVERIES, SETTLER } from './config.js?v=1';
-import { wd, wp, nodePos, beamRange } from './sim.js?v=1';
+import { Post } from './post.js?v=2';
+import * as TX from './textures.js?v=2';
+import * as MD from './models.js?v=2';
+import { FX, CALM } from './fx.js?v=2';
+import { NOISE } from './shaders.js?v=2';
+import { F, C, RP, H, ENEMY, BOSSES, POWERUPS, P2_LIVERY, LIVERIES, SETTLER } from './config.js?v=2';
+import { wd, wp, nodePos, beamRange } from './sim.js?v=2';
 
 export { CALM };
 const hdr = (hex, k) => new THREE.Color(hex).multiplyScalar(k);
@@ -125,8 +125,8 @@ void main(){
   vec3 c;
   if (uKind < 1.5) {
     // water: two scrolling ripple layers tilt the normal; fresnel mixes in the sky, a glint for the sun
-    float n1 = fbm(vec3(p * 0.11 + vec2(uTime * 0.06, 0.0), uTime * 0.05));
-    float n2 = fbm(vec3(p * 0.37 - vec2(0.0, uTime * 0.1), 3.0 + uTime * 0.08));
+    float n1 = fbm(vW * 0.11 + vec3(uTime * 0.06, 0.0, uTime * 0.05));
+    float n2 = fbm(vW * 0.37 + vec3(3.0, -uTime * 0.1, uTime * 0.08));
     vec3 tan = normalize(cross(up, vec3(0.0, 0.0, 1.0)));
     vec3 bit = normalize(cross(tan, up));
     vec3 N = normalize(up + tan * (n1 - 0.5) * 0.35 + bit * (n2 - 0.5) * 0.35);
@@ -138,19 +138,19 @@ void main(){
     c += uG * (0.25 + 0.75 * n2) * 0.35;
   } else if (uKind < 2.5) {
     // lava: cooling crust over glowing channels
-    float n = fbm(vec3(p * 0.08, uTime * 0.04));
-    float m = fbm(vec3(p * 0.3 + n * 2.0, uTime * 0.07));
+    float n = fbm(vW * 0.08 + vec3(0.0, 0.0, uTime * 0.04));
+    float m = fbm(vW * 0.3 + vec3(n * 2.0, n * 2.0, uTime * 0.07));
     float glow = smoothstep(0.42, 0.72, m);
     c = mix(uB * 0.4, uA * 3.5, glow) + uG * pow(glow, 3.0) * 4.0;
     c *= 0.85 + 0.15 * sin(uTime * 2.0 + n * 8.0);
   } else {
     // an ice sheet: pale, cracked, glittering
-    float n = fbm(vec3(p * 0.2, 1.0));
-    float cr = 1.0 - smoothstep(0.0, 0.03, abs(fbm(vec3(p * 0.6, 4.0)) - 0.5));
+    float n = fbm(vW * 0.2 + vec3(1.0));
+    float cr = 1.0 - smoothstep(0.0, 0.03, abs(fbm(vW * 0.6 + vec3(4.0)) - 0.5));
     c = mix(uB, uA, n) * (0.3 + 0.7 * day) + uG * cr * (0.3 + 0.7 * (1.0 - day)) * 0.6;
     float fr = pow(1.0 - max(dot(up, V), 0.0), 3.0);
     c = mix(c, uSky, fr * 0.5);
-    c += uSunC * step(0.996, hash13(floor(vec3(p * 6.0, 1.0)))) * day * 2.0;
+    c += uSunC * step(0.996, hash13(floor(vW * 6.0))) * day * 2.0;
   }
   float dist = length(cameraPosition - vW);
   float f = 1.0 - exp(-pow(dist * uFogD, 2.0));
@@ -295,7 +295,7 @@ export class Renderer {
     this.flash = new THREE.Vector4(1, 1, 1, 0);
     this.shocks = [];
     this.lookI = -1; this.look = LOOKS[0];
-    this.camLift = 4; this.lookLift = -1.5; this.needH = H + 12; this.cyK = 0.54; this.cx = 0; this.cy = 18; this.lead = 0; this.leadV = 0; this.zoom = 1; this.cvx = 0;
+    this.camLift = 4; this.lookLift = -1.5; this.needH = H + 15; this.cyK = 0.6; this.cx = 0; this.cy = 18; this.lead = 0; this.leadV = 0; this.zoom = 1; this.cvx = 0;
     this.shot = null; this.intent = null;
     this.fx = new FX(this.scene, this.T, { dust: q.dust, sparks: q.sparks, debris: q.debris, flashLights: q.flashLights }, () => -1e9);
     this.fx.planet = { R: RP, g: 14 };
@@ -631,7 +631,14 @@ export class Renderer {
     this.gates = [];
     for (let i = 0; i < 16; i++) { const m = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), this.gateMat.clone()); m.visible = false; m.renderOrder = 4; this.scene.add(m); this.gates.push(m); }
     this.icons = new Map();
+    // the nova: a fresnel shell of light that sweeps out across the screen
+    this.novaMesh = new THREE.Mesh(new THREE.SphereGeometry(1, 48, 24), this.shieldMat.clone());
+    this.novaMesh.material.uniforms.uColor.value = hdr(0xffd8a8, 3); this.novaMesh.visible = false; this.novaMesh.renderOrder = 8; this.scene.add(this.novaMesh);
+    this.novaT = 0;
+    // shooting stars on the night side
+    this.meteors = [];
   }
+  novaWave(x, y) { toW(x, y, this.novaMesh.position, 0); this.novaT = 0.01; this.novaMesh.visible = true; }
   makeMarks() {
     // the autopilot's target reticle (a ring facing the camera)
     this.reticle = new THREE.Mesh(new THREE.RingGeometry(1.5, 1.75, 40), new THREE.MeshBasicMaterial({ color: hdr(0x52ffd8, 2.5), transparent: true, opacity: 0.8, depthWrite: false, toneMapped: false }));
@@ -713,6 +720,7 @@ export class Renderer {
     }
     return v;
   }
+  cheer(id) { const v = this.views.s.get(id); if (v) v.cheer = 2.2; }
   settlerView(s) {
     let v = this.views.s.get(s.id);
     if (!v) {
@@ -782,6 +790,15 @@ export class Renderer {
     this.W = W;
     this.setWorld(W);
     for (const r of this.ribbons) if (r.used && !r.keep) r.hide();
+    // a fallen colony: its lights go out and the sites burn
+    if (this.colony) for (const m of this.colony) if (m.userData.glow) m.visible = !W.fallen;
+    if (W.fallen && !CALM.on) for (const site of W.sites) {
+      if (Math.abs(wd(site - this.cx)) > 90 || Math.random() > dt * 9) continue;
+      toW(site + (Math.random() - 0.5) * 22, 0.4, _v, -5 - Math.random() * 8);
+      this.fx.fire(_v.x, _v.y, _v.z, { n: 2, s: 1.1, sp: 1.5, jit: 1, life: 0.7 });
+      radial(site, _v2);
+      this.fx.dustP.add({ x: _v.x, y: _v.y, z: _v.z, vx: _v2.x * 2.2, vy: _v2.y * 2.2, vz: 0, s0: 1, s1: 5, max: 4, a: 0.35, r: 0.1, g: 0.09, b: 0.09, drag: 0.4, grav: 0, fade: 0.7 });
+    }
     // ---- players
     const seenP = new Set();
     W.players.forEach((p, i) => {
@@ -816,7 +833,13 @@ export class Renderer {
           if (rb) { rb.set(tr, (q) => 0.34 * (1 - q), 0.15 - k * 0.3); rb.mat.uniforms.uColor.value.set(0xffa860).multiplyScalar(1.4); rb.mat.uniforms.uK.value = clamp(Math.abs(p.vx) / F.vmax, 0, 1) * (CALM.on ? 0.5 : 0.9); rb.mat.uniforms.uDash.value = 0; rb.mat.uniforms.uHead.value = 0; rb.mat.uniforms.uSoft.value = 2; }
         }
       }
-      // a carried settler hangs under the ship
+      // no shield left: the ship trails smoke and the odd spark (it is one hit from going down)
+      if (p.shield === 0 && Math.random() < dt * 14) {
+        this.at(p.x - p.face * 1.4, p.y + 0.2);
+        const q = this._at;
+        this.fx.dustP.add({ x: q.x, y: q.y, z: q.z, vx: 0, vy: 0, vz: 0, s0: 0.3, s1: 1.6, max: 1.2, a: 0.35, r: 0.12, g: 0.12, b: 0.13, drag: 1, grav: 0, fade: 0.7 });
+        if (Math.random() < 0.25) this.fx.sparks(q.x, q.y, q.z, { n: 2, speed: 3, s: 0.15, life: 0.3, r: 1, g: 0.6, b: 0.3 });
+      }
     });
     for (const [id, v] of this.views.p) if (!seenP.has(id)) { this.scene.remove(v.outer); this.views.p.delete(id); }
     // ---- machines
@@ -853,6 +876,8 @@ export class Renderer {
           rb.set([[e.x, e.y - 0.7], [e.x, bot]], (q) => 0.6 + q * 1.6, -0.2);
           rb.mat.uniforms.uColor.value.set(0x8dff7a).multiplyScalar(1.2); rb.mat.uniforms.uK.value = k * (0.55 + 0.25 * Math.sin(t * 14)); rb.mat.uniforms.uDash.value = 3; rb.mat.uniforms.uTime.value = -t; rb.mat.uniforms.uSoft.value = 1.2; rb.mat.uniforms.uHead.value = 0;
         }
+        // motes drifting up the beam
+        if (e.st !== 'down' && !CALM.on && Math.random() < dt * 18) { const yy = Math.random() * Math.max(1, e.y - 1); toW(e.x + (Math.random() - 0.5) * (0.6 + yy * 0.08), yy, _v, 0.2); radial(e.x, _v2); this.fx.fireP.add({ x: _v.x, y: _v.y, z: _v.z, vx: _v2.x * 3, vy: _v2.y * 3, vz: 0, s0: 0.22, s1: 0.05, max: 0.7, a: 0.9, r: 0.5, g: 1, b: 0.45, drag: 0.5, grav: 0, fade: 0.5 }); }
       }
     }
     for (const [id, v] of this.views.e) if (!seen.has(id)) { this.release(v); this.views.e.delete(id); }
@@ -867,14 +892,16 @@ export class Renderer {
       this.turnSpring(v, s.st === 'walk' ? dir : 1, dt, 60, 0.35);
       this.placeTurn(v.outer, s.x, Math.max(0, s.y), v.phi, 0.8, 1.6);
       const ph = s.t * 7;
-      const sw = walking ? Math.sin(ph) * 0.6 : 0;
+      if (v.cheer > 0) v.cheer -= dt;
+      const cheering = v.cheer > 0 && s.st === 'walk';
+      const sw = walking && !cheering ? Math.sin(ph) * 0.6 : 0;
       const up = s.st === 'held' || s.st === 'fall' || s.st === 'carried';
       if (v.legL) { v.legL.rotation.z = sw + (up ? Math.sin(t * 9 + s.id) * 0.4 : 0); v.legR.rotation.z = -sw + (up ? -Math.sin(t * 9 + s.id) * 0.4 : 0); }
       if (v.armL) {
-        const wave = s.mark > 0 || up ? Math.PI * 0.85 + Math.sin(t * 10 + s.id) * 0.35 : 0;
-        v.armL.rotation.z = -sw * 0.8 + wave; v.armR.rotation.z = sw * 0.8 + (up ? wave : 0);
+        const wave = s.mark > 0 || up || cheering ? Math.PI * 0.85 + Math.sin(t * (cheering ? 14 : 10) + s.id) * 0.35 : 0;
+        v.armL.rotation.z = -sw * 0.8 + wave; v.armR.rotation.z = sw * 0.8 + (up || cheering ? wave : 0);
       }
-      v.g.position.y = walking ? Math.abs(Math.cos(ph)) * 0.04 : 0;
+      v.g.position.y = cheering ? Math.abs(Math.sin(t * 9 + s.id)) * 0.35 : walking ? Math.abs(Math.cos(ph)) * 0.04 : 0;
       v.g.rotation.z = s.st === 'fall' ? Math.sin(t * 5 + s.id) * 0.25 : 0;
       if (v.lamp) v.lamp.visible = true;
     }
@@ -915,6 +942,27 @@ export class Renderer {
     this.boltI.instanceMatrix.needsUpdate = this.boltGlowI.instanceMatrix.needsUpdate = true;
     this.syncBoss(W, dt, t);
     this.syncGates(dt);
+    // a tractor link from a gunship to the settler it carries; a red marker over settlers a lifter is going for
+    for (const p of W.players) {
+      if (!p.alive || !p.carry) continue;
+      const s = W.settlers.find((q) => q.id === p.carry);
+      if (!s) continue;
+      const rb = this.takeRibbon(); if (rb) { rb.set([[p.x, p.y - 0.3], [s.x, s.y + 0.6]], (q) => 0.25 + q * 0.5, 0.6); rb.mat.uniforms.uColor.value.set(0x8dff8a).multiplyScalar(1.4); rb.mat.uniforms.uK.value = 0.6 + 0.3 * Math.sin(t * 12); rb.mat.uniforms.uDash.value = 4; rb.mat.uniforms.uTime.value = -t; rb.mat.uniforms.uHead.value = 0; }
+    }
+    for (const s of W.settlers) {
+      if (s.st !== 'walk' || !(s.mark > 0)) continue;
+      this.gate(s.x, 1.3, 0.4 + 0.3 * Math.sin(t * 8), 0xff4a3a, 1.8);
+    }
+    // shooting stars at night
+    if ((this.nightK || 0) > 0.6 && !CALM.on && Math.random() < dt * 0.25 && this.meteors.length < 2) this.meteors.push({ x: this.cx + (Math.random() - 0.5) * 120, y: 60 + Math.random() * 30, vx: (Math.random() < 0.5 ? -1 : 1) * (60 + Math.random() * 40), vy: -18 - Math.random() * 12, t: 0, T: 0.9 + Math.random() * 0.6 });
+    this.meteors = this.meteors.filter((m) => {
+      m.t += dt; if (m.t > m.T) return false;
+      const rb = this.takeRibbon(); if (!rb) return true;
+      const hx = m.x + m.vx * m.t, hy = m.y + m.vy * m.t;
+      rb.set([[hx - m.vx * 0.18, hy - m.vy * 0.18], [hx, hy]], (q) => 0.06 + q * 0.3, -60);
+      rb.mat.uniforms.uColor.value.set(0xe8f0ff).multiplyScalar(2.2); rb.mat.uniforms.uK.value = Math.sin(Math.PI * m.t / m.T); rb.mat.uniforms.uDash.value = 0; rb.mat.uniforms.uHead.value = 1;
+      return true;
+    });
     if (this.intent && this.intent.t) {
       const T = this.intent.t;
       toW(T.x, T.y, _v, 0.6); this.reticle.position.copy(_v); this.reticle.rotation.z = t * 1.5; this.reticle.visible = true;
@@ -1086,6 +1134,12 @@ export class Renderer {
       const ash = L.key === 'cinder';
       this.fx.dustP.add({ x: _v.x, y: _v.y, z: _v.z, vx: (Math.random() - 0.5) * 2, vy: -0.5, vz: 0, s0: ash ? 0.12 : 0.08, s1: ash ? 0.12 : 0.08, max: 4, a: ash ? 0.6 : 0.4, r: ash ? 1 : 0.95, g: ash ? 0.45 : 0.9, b: ash ? 0.2 : 0.85, drag: 0.1, grav: 0, fade: 0.5 });
     }
+    if (this.novaT > 0) {
+      this.novaT += dt;
+      const f = this.novaT / 0.7, s = 4 + 52 * Math.pow(Math.min(1, f), 0.6);
+      this.novaMesh.scale.setScalar(s); this.novaMesh.material.uniforms.uK.value = Math.max(0, 1 - f) * (CALM.on ? 0.35 : 1); this.novaMesh.material.uniforms.uTime.value = this.time;
+      if (f >= 1) { this.novaT = 0; this.novaMesh.visible = false; }
+    }
     this.flash.w = Math.max(0, this.flash.w - dt * 3);
     const shocks = [];
     for (const s of this.shocks) {
@@ -1110,7 +1164,7 @@ export class Renderer {
     for (const k of Object.keys(POWERUPS)) tmp.push(MD.pod(POWERUPS[k].color).g);
     for (const k of Object.keys(BOSSES)) tmp.push(MD.boss(k).g);
     tmp.forEach((o, i) => { toW(this.cx - 30 + i * 3, 10, o.position, 0); this.scene.add(o); });
-    for (const m of [...this.shields, this.gates[0], this.reticle]) { m.visible = true; toW(this.cx, 10, m.position, 0); }
+    for (const m of [...this.shields, this.gates[0], this.reticle, this.novaMesh]) { m.visible = true; toW(this.cx, 10, m.position, 0); }
     const rb = this.takeRibbon(); rb.set([[this.cx, 10], [this.cx + 5, 10]], 0.4);
     this.boltI.count = this.boltGlowI.count = 1;
     this.fx.explode(...toW(this.cx, 10, _v).toArray(), 1, { metal: true, rock: true });
@@ -1119,7 +1173,7 @@ export class Renderer {
   }
   finishWarm(w) {
     for (const o of w.tmp) this.scene.remove(o);
-    for (const m of [...this.shields, this.gates[0], this.reticle]) m.visible = false;
+    for (const m of [...this.shields, this.gates[0], this.reticle, this.novaMesh]) m.visible = false;
     w.rb.hide();
     this.boltI.count = this.boltGlowI.count = 0;
     this.fx.clear();

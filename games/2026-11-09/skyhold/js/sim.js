@@ -3,7 +3,7 @@
 // Nothing in here touches the DOM, WebGL or audio; it only pushes events into W.ev.
 //
 // The world is a band round a small planet: x along the ground (wraps every C metres), y altitude (0..H).
-import { F, STEP, C, H, ENEMY, SETTLER, BOSSES, B_KEYS, SECTORS, WAVES, rampAt, rampLevel, endlessLevel, ENDLESS, TUTOR, SCORE, START_LIVES, DIFFICULTY, applyDiff, POWERUPS, PW_KEYS, DROP } from './config.js?v=1';
+import { F, STEP, C, H, ENEMY, SETTLER, BOSSES, B_KEYS, SECTORS, WAVES, rampAt, rampLevel, endlessLevel, ENDLESS, TUTOR, SCORE, START_LIVES, DIFFICULTY, applyDiff, POWERUPS, PW_KEYS, DROP } from './config.js?v=2';
 export { STEP };
 
 const clamp = (v, a, b) => (v < a ? a : v > b ? b : v);
@@ -31,7 +31,7 @@ export function makeWorld(o = {}) {
     diff: DIFFICULTY[o.diff] ? o.diff : 'normal', lives: o.lives ?? START_LIVES + D_OF({ diff: o.diff }).lives, score: o.score || 0, lifePts: 0, nextLife: 0,
     wave: 0, cp: 0, phase: 'intro', phaseT: 2.4, secT: 0, waveT: 0, fightT: 0, R: null, level: 0, waveN: 0, bossN: 0,
     players: [], enemies: [], settlers: [], sites: [], shots: [], bolts: [], pods: [], boss: null, plan: null, fallen: false,
-    nextId: 1, ev: [], over: false, result: null, net: null, cpNova: [], tutorial: false, tut: {},
+    nextId: 1, ev: [], over: false, result: null, net: null, claims: [], chain: 0, chainT: -9, bestChain: 0, cpNova: [], tutorial: false, tut: {},
     stats: { kills: 0, lifters: 0, husks: 0, caught: 0, landed: 0, selfLanded: 0, lost: 0, fused: 0, fired: 0, hits: 0, novas: 0, blinks: 0, deaths: 0, shieldHits: 0, pods: 0,
       waveDeaths: [0, 0, 0, 0, 0], waveHits: [0, 0, 0, 0, 0], waveTries: [0, 0, 0, 0, 0], cause: {}, bossT: -1 },
   };
@@ -59,6 +59,8 @@ function ramp(W) {
   if (W.mode === 'endless') { W.level = endlessLevel(W.fightT); return applyDiff(rampLevel(W.level), W.diff); }
   return applyDiff(rampAt(W.sector, W.wave), W.diff);
 }
+export const CHAIN_T = 2.4;
+export const chainMult = (n) => Math.min(4, 1 + Math.floor(n / 4));
 export const bossKey = (W) => (W.mode === 'endless' ? B_KEYS[W.k % 5] : SECTORS[W.sector].boss);
 const alivePlayers = (W) => W.players.filter((p) => p.alive);
 function nearestPlayer(W, x, max = 1e9) {
@@ -255,8 +257,11 @@ function player(W, p, dt) {
     if (!s || s.st !== 'carried') p.carry = 0;
     else if (p.y < F.landY) {
       s.st = 'walk'; s.by = 0; s.y = 0; s.x = p.x; s.home = p.x; p.carry = 0;
-      addScore(W, SCORE.land); W.stats.landed++;
-      W.ev.push({ k: 'land', x: s.x, y: 0, pid: p.id, score: SCORE.land });
+      if (W.net === 'guest') { W.claims.push({ land: s.id }); W.ev.push({ k: 'land', x: s.x, y: 0, pid: p.id, score: SCORE.land, id: s.id }); }
+      else {
+        addScore(W, SCORE.land); W.stats.landed++;
+        W.ev.push({ k: 'land', x: s.x, y: 0, pid: p.id, score: SCORE.land, id: s.id });
+      }
     }
   }
 }
@@ -279,6 +284,7 @@ function fire(W, p) {
     if (best && Math.abs(best.y - y) < p.assist * 2.2) y += clamp(best.y - y, -p.assist * 2.2, p.assist * 2.2);
   }
   const twin = !!p.pw.twin;
+  if (W.net === 'guest') W.claims.push({ fire: [Math.round(x0 * 100) / 100, Math.round(y * 100) / 100, p.face, twin ? 1 : 0] });
   W.shots.push({ id: W.nextId++, pid: p.id, x0, y, dir: p.face, t: 0, done: false, vx: p.vx });
   if (twin) W.shots.push({ id: W.nextId++, pid: p.id, x0, y: y - F.twinY, dir: p.face, t: 0, done: false, vx: p.vx });
   W.stats.fired++;
@@ -288,6 +294,7 @@ function nova(W, p) {
   if (p.nova <= 0) { W.ev.push({ k: 'empty', pid: p.id, x: p.x, y: p.y }); p.novaT = 0.5; return; }
   p.nova--; p.novaT = F.novaCD; W.stats.novas++;
   W.ev.push({ k: 'nova', pid: p.id, x: p.x, y: p.y, r: F.novaR });
+  if (W.net === 'guest') { W.claims.push({ nova: [Math.round(p.x * 100) / 100, Math.round(p.y * 100) / 100] }); return; }
   for (const e of W.enemies) if (e.hp > 0 && Math.abs(wd(e.x - p.x)) < F.novaR) { if (e.born > 0) e.born = 0; kill(W, e, p.id, 'nova'); }
   for (const b of W.bolts) if (Math.abs(wd(b.x - p.x)) < F.novaR) b.t = 99;
   const B = W.boss;
@@ -323,16 +330,18 @@ function respawn(W, p) {
 function hurt(W, p, cause, fx, fy) {
   if (!p.alive || p.inv > 0) return false;
   W.stats.waveHits[clamp(W.cp, 0, WAVES)]++;
-  if (p.remote) { W.ev.push({ k: 'remotehit', pid: p.id, cause, x: p.x, y: p.y }); return true; }
+  if (p.remote) return false;   // a guest's ship: the guest judges its own hits
   if (p.shield > 0) {
     p.shield--; p.inv = F.hitInv; p.hurtT = 0.6; W.stats.shieldHits++;
     W.ev.push({ k: 'shield', pid: p.id, x: p.x, y: p.y, left: p.shield, fx: fx ?? p.x, fy: fy ?? p.y });
+    if (W.net === 'guest') W.claims.push({ shield: p.shield });
     return true;
   }
   die(W, p, cause, fx, fy);
   return true;
 }
 function die(W, p, cause, fx, fy) {
+  if (W.net === 'guest') { W.claims.push({ died: cause }); p.alive = false; p.deadT = 99; if (p.carry) { p.carry = 0; } W.ev.push({ k: 'death', pid: p.id, x: p.x, y: p.y, vx: p.vx, vy: p.vy, cause, fx: fx ?? p.x, fy: fy ?? p.y }); return; }
   p.alive = false; p.deadT = F.respawn; W.lives--; W.stats.deaths++;
   W.stats.waveDeaths[clamp(W.cp, 0, WAVES)]++;
   W.stats.cause[cause] = (W.stats.cause[cause] || 0) + 1;
@@ -365,7 +374,7 @@ function settlers(W, dt) {
       }
       if (s.st === 'fall' && s.y <= 0) {
         s.y = 0;
-        if (s.dropY <= R.safeH) { s.st = 'walk'; s.home = s.x; addScore(W, SCORE.selfLand); W.stats.selfLanded++; W.ev.push({ k: 'selfland', x: s.x, y: 0, score: SCORE.selfLand }); }
+        if (s.dropY <= R.safeH) { s.st = 'walk'; s.home = s.x; addScore(W, SCORE.selfLand); W.stats.selfLanded++; W.ev.push({ k: 'selfland', x: s.x, y: 0, score: SCORE.selfLand, id: s.id }); }
         else lose(W, s, 'fall');
       }
     } else if (s.st === 'carried') {
@@ -772,12 +781,17 @@ export function damage(W, e, dmg, pid) {
 }
 function kill(W, e, pid, by) {
   e.hp = 0;
-  const score = ENEMY[e.type].score;
+  let score = ENEMY[e.type].score;
+  if (pid && e.type !== 'mine') {
+    W.chain = W.t - W.chainT < CHAIN_T ? W.chain + 1 : 1; W.chainT = W.t;
+    W.bestChain = Math.max(W.bestChain, W.chain);
+    score *= chainMult(W.chain);
+  }
   if (pid) addScore(W, score);
   W.stats.kills++;
   if (e.type === 'lifter') W.stats.lifters++;
   if (e.type === 'husk') W.stats.husks++;
-  W.ev.push({ k: 'kill', id: e.id, type: e.type, x: e.x, y: e.y, vx: e.vx, vy: e.vy, score: pid ? score : 0, pid, by, carry: !!e.carry });
+  W.ev.push({ k: 'kill', id: e.id, type: e.type, x: e.x, y: e.y, vx: e.vx, vy: e.vy, score: pid ? score : 0, pid, by, carry: !!e.carry, chain: pid ? W.chain : 0 });
   if (e.carry) { const s = W.settlers.find((q) => q.id === e.carry); if (s && s.st === 'held') drop(W, s); e.carry = 0; }
   if (e.tgt) { const s = W.settlers.find((q) => q.id === e.tgt); if (s) s.mark = 0; }
   if (e.type === 'hive') {
@@ -820,7 +834,7 @@ export function addScore(W, n) { const b = Math.round(n * D_OF(W).score); W.scor
 // ------------------------------------------------------------------ contacts
 function contacts(W) {
   for (const p of W.players) {
-    if (!p.alive) continue;
+    if (!p.alive || p.remote) continue;
     for (const e of W.enemies) {
       if (e.hp <= 0 || e.born > 0) continue;
       const r = ENEMY[e.type].r + F.r * 0.8;
@@ -873,11 +887,59 @@ export function netLand(W, p) {
   if (!s) return;
   s.st = 'walk'; s.by = 0; s.y = 0; s.x = p.x; s.home = p.x; p.carry = 0;
   addScore(W, SCORE.land); W.stats.landed++;
-  W.ev.push({ k: 'land', x: s.x, y: 0, pid: p.id, score: SCORE.land });
+  W.ev.push({ k: 'land', x: s.x, y: 0, pid: p.id, score: SCORE.land, id: s.id });
 }
 export function netPod(W, id, p) { const q = W.pods.find((o) => o.id === id); if (q) { q.t = 99; pickup(W, p, q); } }
 export function netFire(W, p, x0, y, dir, twin) {
   W.shots.push({ id: W.nextId++, pid: p.id, x0, y, dir, t: 0, done: false, vx: 0 });
   if (twin) W.shots.push({ id: W.nextId++, pid: p.id, x0, y: y - F.twinY, dir, t: 0, done: false, vx: 0 });
   W.ev.push({ k: 'fire', pid: p.id, x: x0, y, dir, twin });
+}
+
+// ------------------------------------------------------------------ the online guest's step
+// The guest's world comes from the host's snapshots; locally it flies its own ship (no lag), draws its own beams,
+// and judges what hits it. Everything that changes the shared world goes to the host as a claim (W.claims).
+export function stepGuest(W, dt = STEP) {
+  W.n++; W.t += dt;
+  const me = W.players.find((p) => !p.remote);
+  if (!me) return;
+  player(W, me, dt);
+  for (const s of W.shots) { if (s.pid !== me.id || s.done) continue; s.t += dt; if (F.beamV * s.t - F.beamLen > beamRange(W)) s.done = true; }
+  W.shots = W.shots.filter((s) => !s.done || s.pid !== me.id);
+  for (const b of W.bolts) b.t += 0;   // bolts are moved by the host's snapshots
+  if (!me.alive) return;
+  for (const b of W.bolts) {
+    if (b.t >= 99) continue;
+    if (Math.abs(wd(me.x - b.x)) < F.r + 0.3 && Math.abs(me.y - b.y) < 0.75) { if (hurt(W, me, 'bolt:' + b.from, b.x, b.y)) b.t = 99; }
+  }
+  for (const e of W.enemies) {
+    if (!me.alive || e.hp <= 0 || e.born > 0 || me.inv > 0) continue;
+    const r = ENEMY[e.type].r + F.r * 0.8;
+    if (Math.abs(wd(e.x - me.x)) < r && Math.abs(e.y - me.y) < r * 0.8) { hurt(W, me, e.type, e.x, e.y); W.claims.push({ ram: e.id }); }
+  }
+  if (me.alive && !me.carry) {
+    const cr = F.catchR * (1 + 0.3 * (W.up.tractor || 0));
+    for (const s of W.settlers) {
+      if (s.st !== 'fall' || Math.abs(wd(me.x - s.x)) > cr || Math.abs(me.y - s.y) > cr) continue;
+      s.st = 'carried'; s.by = me.id; me.carry = s.id;
+      W.claims.push({ catch: s.id });
+      W.ev.push({ k: 'catch', x: s.x, y: s.y, pid: me.id, score: SCORE.catch });
+      break;
+    }
+  }
+  if (me.carry) { const s = W.settlers.find((q) => q.id === me.carry); if (s && s.st === 'carried') { s.x = me.x; s.y = me.y - 1.25; } }
+  for (const q of W.pods) {
+    if (q.t >= 99 || Math.abs(wd(me.x - q.x)) > DROP.r || Math.abs(me.y - q.y) > DROP.r) continue;
+    q.t = 99; W.claims.push({ pod: q.id }); pickup(W, me, q);
+  }
+}
+// the host applies a guest's claims
+export function netRam(W, p, id) { const e = W.enemies.find((q) => q.id === id); if (e && e.hp > 0) kill(W, e, p.id, 'ram'); }
+export function netNovaAt(W, p, x, y) { const px = p.x, py = p.y, n = p.nova; p.x = x; p.y = y; p.nova = Math.max(1, n); nova(W, p); p.nova = Math.max(0, n - 1); p.x = px; p.y = py; }
+// a guest keeps the host's wave, world and colony layout
+export function netAdopt(W, wave, k, level, sites) {
+  const changed = W.wave !== wave || W.k !== k || Math.abs((W.level || 0) - level) > 0.05;
+  W.wave = wave; W.cp = Math.min(WAVES, wave); W.k = k; W.level = level;
+  if (sites && sites.length) W.sites = sites;
+  if (changed || !W.R) W.R = W.mode === 'endless' ? applyDiff(rampLevel(level), W.diff) : applyDiff(rampAt(W.sector, Math.min(WAVES, wave)), W.diff);
 }
