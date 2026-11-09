@@ -9,6 +9,9 @@
     const el=q(id),value=String(preferences[id]??'');
     if([...el.options].some(o=>o.value===value))el.value=value;
   }
+  const mode=q('playMode');try{mode.value=localStorage.getItem('astra-play-mode-v77')==='solo'?'solo':'coop';}catch{}
+  function syncPlayMode(){const online=mode.value==='coop';q('start').querySelector('span').innerHTML=online?'<small>ONLINE CO-OP / UP TO 4</small>Join co-op campaign':'<small>SOLO FLIGHT / LEVEL 01</small>Enter mine';q('playModeHint').textContent=online?'Join an open game in this campaign, or start one for others to join. Up to four pilots.':'Fly the selected campaign on your own. No connection required.';}
+  mode.onchange=()=>{try{localStorage.setItem('astra-play-mode-v77',mode.value);}catch{}syncPlayMode();};syncPlayMode();
   q('intro').checked=!!preferences.intro;
   const remember=()=>{try{localStorage.setItem(storage,JSON.stringify(Object.fromEntries(['look','res','difficulty','campaign','intro'].map(id=>[id,q(id).type==='checkbox'?q(id).checked:q(id).value]))));}catch{}};
   for(const id of ['look','res','difficulty','campaign','intro'])q(id).addEventListener('change',remember);

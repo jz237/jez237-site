@@ -1,5 +1,6 @@
 /* Overload campaign adapter: native D2 physics and weapon code. */
 extern void EnterSecretLevel(void),ExitSecretLevel(void);
+static int ov_created[MAX_OBJECTS];
 static int ov_configured,ov_signature[MAX_OBJECTS],ov_kind[MAX_OBJECTS],ov_hidden[MAX_OBJECTS];
 static float ov_snapshot[MAX_OBJECTS][8];
 static int ov_active,ov_pending,ov_props[MAX_OBJECTS],ov_owner[MAX_OBJECTS],ov_shield[MAX_OBJECTS];
@@ -14,7 +15,7 @@ void astra_ov_prepare(const char *name){
     extern void astra_ov_tactics_reset(void);astra_ov_tactics_reset();
     extern void astra_ov_world_reset(void);astra_ov_world_reset();
     if(ov_configured){memcpy(Robot_info,ov_original_robots,sizeof ov_original_robots);ov_configured=0;}
-    memset(ov_hidden,0,sizeof ov_hidden);memset(ov_props,0,sizeof ov_props);memset(ov_shield,0,sizeof ov_shield);memset(ov_barriers,0,sizeof ov_barriers);
+    memset(ov_created,0,sizeof ov_created);memset(ov_hidden,0,sizeof ov_hidden);memset(ov_props,0,sizeof ov_props);memset(ov_shield,0,sizeof ov_shield);memset(ov_barriers,0,sizeof ov_barriers);
     ov_prepare_js(name);ov_active=EM_ASM_INT(return !!Module.overload);ov_pending=ov_active;
 }
 EMSCRIPTEN_KEEPALIVE void astra_ov_remove(int index){if(index>0&&index<=Highest_object_index)Objects[index].flags|=OF_SHOULD_BE_DEAD;}
@@ -35,12 +36,21 @@ EMSCRIPTEN_KEEPALIVE int astra_ov_spawn(int type,int room,double x,double y,doub
     if(!ov_active||type<0||type>=26||room<0||room>Highest_segment_index)return -1;
     vms_vector position={fl2f(x*4),fl2f(y*4),fl2f(z*4)};int actual=find_point_seg(&position,room);if(actual<0)return -1;
     int i=obj_create(OBJ_ROBOT,type,actual,&position,&vmd_identity_matrix,i2f(4),CT_AI,MT_PHYSICS,RT_POLYOBJ);
-    if(i>=0){Objects[i].rtype.pobj_info.model_num=Robot_info[type].model_num;init_ai_object(i,AIB_NORMAL,actual);}return i;
+    if(i>=0){ov_created[i]=1;Objects[i].rtype.pobj_info.model_num=Robot_info[type].model_num;init_ai_object(i,AIB_NORMAL,actual);if(Game_mode&GM_MULTI)map_objnum_local_to_local(i);}return i;
+}
+/* Spawn identities use the existing native object map, including late joins. */
+EMSCRIPTEN_KEEPALIVE int astra_ov_net_object(int owner,int remote){
+    if(owner<0||owner>=4||remote<0||remote>=MAX_OBJECTS)return -1;
+    int i=objnum_remote_to_local(remote,owner);return i>=0&&i<=Highest_object_index&&Objects[i].type==OBJ_ROBOT?i:-1;
+}
+EMSCRIPTEN_KEEPALIVE void astra_ov_net_map(int i,int owner,int remote){
+    if(i<0||i>Highest_object_index||owner<0||owner>=4||remote<0||remote>=MAX_OBJECTS)return;
+    if(owner==Player_num&&remote==i)map_objnum_local_to_local(i);else map_objnum_local_to_remote(i,remote,owner);
 }
 EMSCRIPTEN_KEEPALIVE void astra_ov_prop(int index,int owner,int mode,int shield,double radius,double health){
     if(index<=0||index>Highest_object_index)return;
     ov_props[index]=mode;ov_owner[index]=owner;ov_shield[index]=shield;ov_signature[index]=Objects[index].signature;
-    Objects[index].size=fl2f(radius);Objects[index].shields=fl2f(health);
+    Objects[index].size=fl2f(radius);if(!EM_ASM_INT(return !!Module.overloadLate))Objects[index].shields=fl2f(health);
 }
 int astra_ov_hide_proxy(object *obj){return ov_active&&(obj->type==OBJ_CNTRLCEN||(ov_props[obj-Objects]&&ov_signature[obj-Objects]==obj->signature));}
 int astra_ov_invulnerable(object *obj){int i=obj-Objects;return ov_active&&i>=0&&i<MAX_OBJECTS&&ov_signature[i]==obj->signature&&ov_shield[i];}
@@ -49,7 +59,7 @@ int astra_ov_impact(object *weapon,object *target){
     if(ov_signature[i]!=target->signature)return 0;
     if(ov_shield[i]){weapon->flags|=OF_SHOULD_BE_DEAD;return 1;}
     if(ov_props[i]==2||ov_props[i]==3){
-        if(weapon->ctype.laser_info.parent_type==OBJ_PLAYER)EM_ASM(window.astraOverload?.controller?.hit($0,$1);,ov_owner[i],f2fl(weapon->shields));
+        if(weapon->ctype.laser_info.parent_type==OBJ_PLAYER&&(!(Game_mode&GM_MULTI)||weapon->ctype.laser_info.parent_num==Players[Player_num].objnum))EM_ASM(window.astraOverload?.hit($0,$1);,ov_owner[i],f2fl(weapon->shields));
         weapon->flags|=OF_SHOULD_BE_DEAD;return 1;
     }return 0;
 }
@@ -68,12 +78,12 @@ EMSCRIPTEN_KEEPALIVE void astra_ov_type_gun(int type,int gun,double x,double y,d
 }
 EMSCRIPTEN_KEEPALIVE void astra_ov_recharge(double amount,double cap){if(ov_active&&Players[Player_num].energy<fl2f(cap)){fix e=Players[Player_num].energy+fl2f(amount),limit=fl2f(cap);Players[Player_num].energy=e>limit?limit:e;}}
 EMSCRIPTEN_KEEPALIVE void astra_ov_robot(int index,double health,double radius,double speed,int weapon,int melee,int hidden){
-    if(index<=0||index>Highest_object_index||Objects[index].type!=OBJ_ROBOT)return;ov_profiles_init();
+    if(index<=0||index>Highest_object_index||(Objects[index].type!=OBJ_ROBOT&&Objects[index].type!=OBJ_GHOST))return;ov_profiles_init();
     object *obj=&Objects[index];if(obj->id>=26)return;robot_info *ri=&Robot_info[obj->id];
     ri->strength=fl2f(health);ri->weapon_type=weapon;ri->attack_type=!!melee;ri->n_guns=2;
     for(int g=0;g<2;g++)ri->gun_points[g]=(vms_vector){fl2f(radius*(g?-.5:.5)),0,fl2f(radius*.7)};
     for(int d=0;d<NDL;d++){ri->max_speed[d]=fl2f(speed*(.65+.12*d));ri->field_of_view[d]=fl2f(.1);ri->firing_wait[d]=fl2f(.6-.08*d);ri->turn_time[d]=fl2f(.45-.05*d);ri->circle_distance[d]=i2f(50);ri->rapidfire_count[d]=3;}
-    obj->size=fl2f(radius);obj->shields=fl2f(health);obj->mtype.phys_info.mass=ri->mass;obj->mtype.phys_info.drag=ri->drag;obj->control_type=CT_AI;
+    obj->size=fl2f(radius);if(!(Game_mode&GM_MULTI)||!EM_ASM_INT(return !!Module.overloadLate)||ov_created[index])obj->shields=fl2f(health);ov_created[index]=0;obj->type=OBJ_ROBOT;obj->render_type=RT_POLYOBJ;obj->mtype.phys_info.mass=ri->mass;obj->mtype.phys_info.drag=ri->drag;obj->control_type=CT_AI;
     ov_signature[index]=obj->signature;ov_kind[index]=OBJ_ROBOT;ov_saved_control[index]=CT_AI;ov_saved_render[index]=RT_POLYOBJ;ov_hidden[index]=!!hidden;
     if(hidden){obj->type=OBJ_GHOST;obj->control_type=CT_NONE;obj->render_type=RT_NONE;}
 }
@@ -119,7 +129,7 @@ void astra_ov_tick(void){
     if(ov_pending){ov_pending=0;ov_restore_before_begin();EM_ASM(window.astraOverload?.begin());ov_restore_after_begin();}
     if(!EM_ASM_INT(return !!window.astraOverload?.controller))return;
     int pointer=astra_ov_states();
-    EM_ASM(window.astraOverloadHeap=HEAPF32;window.astraOverload.tick($0,$1,$2,$3);,f2fl(FrameTime),pointer,ConsoleObject->segnum,!Player_is_dead);
-    if(EM_ASM_INT(if(Module.overloadFinish){Module.overloadFinish=false;return 1;}return 0;))astra_ov_finish();
+    EM_ASM(window.astraOverloadHeap=HEAPF32;window.astraOverload.tick($0,$1,$2,$3,$4);,f2fl(FrameTime),pointer,ConsoleObject->segnum,!Player_is_dead,ConsoleObject-Objects);
+    if(!Player_is_dead&&EM_ASM_INT(if(Module.overloadFinish){Module.overloadFinish=false;return 1;}return 0;))astra_ov_finish();
     else if(EM_ASM_INT(if(Module.overloadSecret){Module.overloadSecret=false;return 1;}return 0;)){extern int First_secret_visit;First_secret_visit=1;EnterSecretLevel();}
 }

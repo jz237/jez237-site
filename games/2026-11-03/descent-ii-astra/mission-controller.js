@@ -118,9 +118,21 @@
       if(r.inverse){const m=r.inverse,c=r.box?.m_Center||{x:0,y:0,z:0},x=m[0]*p[0]+m[1]*p[1]+m[2]*p[2]+m[3]-c.x,y=m[4]*p[0]+m[5]*p[1]+m[6]*p[2]+m[7]-c.y,z=m[8]*p[0]+m[9]*p[1]+m[10]*p[2]+m[11]-c.z,s=r.data.m_size||r.box?.m_Size;return s&&Math.abs(x)<=s.x/2&&Math.abs(y)<=s.y/2&&Math.abs(z)<=s.z/2;}
       const radius=r.data.m_size?.x||r.sphere?.m_Radius||2;return Math.hypot(...p.map((v,i)=>v-r.position[i]))<=radius;
     }
-    tick(dt,player,states){
-      if(this.finished||!player.alive||!(dt>0))return;this.time+=Math.min(dt,.25);
+    localTick(dt,player){
+      if(!player?.alive||!(dt>0))return;
+      this.localTime=(this.localTime||0)+Math.min(dt,.25);
       for(const r of this.records)if(r.active&&!this.disabled.has(r.go)&&['TriggerEnergy','AlienTriggerEnergyWeak'].includes(r.class)&&this.inside(r,player.position))this.bridge.recharge(Math.min(dt,.25)*15,r.class==='AlienTriggerEnergyWeak'?10:100);
+      if(this.localTime<(this.localWarpUntil||0))return;
+      for(const r of this.records){
+        if(r.class!=='TriggerWarper'||!r.active||!this.inside(r,player.position))continue;
+        const target=this.targets(this.links(r).slice(-1)[0],['TriggerWarper','ScriptSecretLevel'])[0];
+        if(target?.class==='TriggerWarper'){this.localWarpUntil=this.localTime+2;this.bridge.warp(target);break;}
+        if(target?.class==='ScriptSecretLevel'){this.localWarpUntil=this.localTime+2;this.activate(target);break;}
+      }
+    }
+    tick(dt,player,states,party=[player]){
+      const pilots=party.filter(p=>p.alive),inside=r=>pilots.some(p=>this.inside(r,p.position)),near=(r,d)=>pilots.some(p=>Math.hypot(...p.position.map((v,i)=>v-r.position[i]))<d);
+      if(this.finished||!pilots.length||!(dt>0))return;this.time+=Math.min(dt,.25);
       if(this.meta.secret){
         this.challengeEnd??=180.99;this.challengeNext??=1;this.challengeRobots??=[];
         const remaining=Math.ceil(this.challengeEnd-this.time);
@@ -139,13 +151,7 @@
         if(r.object==null||this.hidden.has(r.go)||this.dead.has(r.go))continue;const o=states[r.object];if(!o)continue;
         if(!this.objectSignatures.has(r.object))this.objectSignatures.set(r.object,o.signature);
         if(o.signature!==this.objectSignatures.get(r.object)||o.type===255||o.flags&3||o.shields<0){if(r.class==='Item')this.pickup(r);else this.destroyed(r);}
-        if(r.class==='Item'&&[24,25,27,28].includes(r.data.m_type)&&Math.hypot(...player.position.map((v,i)=>v-r.position[i]))<2){this.bridge.consume(r.object);this.pickup(r);}
-      }
-      if(this.time>=this.warpCooldown)for(const r of this.records){
-        if(r.class!=='TriggerWarper'||!r.active||!this.inside(r,player.position))continue;
-        const target=this.targets(this.links(r).slice(-1)[0],['TriggerWarper','ScriptSecretLevel'])[0];
-        if(target?.class==='TriggerWarper'){this.warpCooldown=this.time+2;this.bridge.warp(target);break;}
-        if(target?.class==='ScriptSecretLevel'){this.warpCooldown=this.time+2;this.activate(target);break;}
+        if(r.class==='Item'&&[24,25,27,28].includes(r.data.m_type)&&near(r,2)){this.bridge.consume(r.object);this.pickup(r);}
       }
       for(const q of this.queue.filter(q=>q.at<=this.time)){this.queue=this.queue.filter(v=>v!==q);this.execute(q.record);}
       for(const [go,until] of this.switchUntil)if(until<=this.time){
@@ -158,20 +164,20 @@
       if(!this.escaping)for(const factory of this.factories.values()){
         const r=factory.record;if(this.dead.has(r.go)||this.disabled.has(r.go)||this.time<factory.next)continue;
         factory.spawned=factory.spawned.filter(o=>states[o.index]?.type===2&&states[o.index]?.signature===o.signature);
-        if(factory.spawned.length>=Math.max(1,r.data.m_matcen_max_robots_alive||4)||Math.hypot(...player.position.map((v,i)=>v-r.position[i]))>=50)continue;
+        if(factory.spawned.length>=Math.max(1,r.data.m_matcen_max_robots_alive||4)||!near(r,50))continue;
         factory.next=this.time+Math.max(2,r.data.m_matcen_spawn_wait||7);const created=this.bridge.spawn(r);if(created)factory.spawned.push(created);
       }
       for(const r of this.records){
         if(r.class!=='TriggerEnter'||!r.active||this.disabled.has(r.go))continue;
         const previous=this.triggerTimes.get(r.id);if(previous!=null&&(r.data.m_one_time||this.time-previous<Math.max(.1,r.data.m_repeat_delay)))continue;
-        if(this.inside(r,player.position)||(r.data.m_player_weapons&&states.some(s=>s?.playerShot&&this.inside(r,s.position)))){this.triggerTimes.set(r.id,this.time);this.fireLinks(r);}
+        if(inside(r)||(r.data.m_player_weapons&&states.some(s=>s?.playerShot&&this.inside(r,s.position)))){this.triggerTimes.set(r.id,this.time);this.fireLinks(r);}
       }
       if(this.levelOne){
         const r=this.levelOne,goal=r.data.special_index||40,links=this.links(r);
         if(this.levelOnePhase===0&&this.kills>=goal-5){this.levelOnePhase=1;this.levelOneTimer=this.time+300;}
         if(this.levelOnePhase===1&&(this.kills>=goal||this.time>=this.levelOneTimer)){this.signal(links[this.kills>=goal?0:1]);this.levelOnePhase=2;this.levelOneTimer=this.time+(this.kills>=goal?10:8);}
-        if(this.levelOnePhase===2&&this.time>=this.levelOneTimer){this.levelOnePhase=3;if(player.position[1]<=r.position[1]-10)this.signal(links[2]);}
-        if(this.levelOnePhase===3&&player.position[1]>r.position[1]){this.levelOnePhase=4;this.signal(links[4]);}
+        if(this.levelOnePhase===2&&this.time>=this.levelOneTimer){this.levelOnePhase=3;if(pilots.some(p=>p.position[1]<=r.position[1]-10))this.signal(links[2]);}
+        if(this.levelOnePhase===3&&pilots.some(p=>p.position[1]>r.position[1])){this.levelOnePhase=4;this.signal(links[4]);}
       }
       for(const lockdown of this.lockdowns){
         if(lockdown.done)continue;
@@ -180,8 +186,8 @@
         }
         if(!lockdown.remaining&&(lockdown.spawned.every(r=>this.dead.has(r.go))||(!lockdown.boss&&this.time>=lockdown.safety))){lockdown.done=true;for(const d of lockdown.doors)this.setDoor(d,false,true);if(lockdown.boss)this.escape();this.bridge.lockdownDone(lockdown.record);}
       }
-      if(this.escaping&&(this.meta.exitRooms||[]).includes(player.room))this.complete();
-      for(const r of this.records.filter(r=>r.class==='AlienWarp'))if(this.warpActive.has(r.go)&&Math.hypot(...player.position.map((v,i)=>v-r.position[i]))<3)this.complete();
+      if(this.escaping&&pilots.some(p=>(this.meta.exitRooms||[]).includes(p.room)))this.complete();
+      for(const r of this.records.filter(r=>r.class==='AlienWarp'))if(this.warpActive.has(r.go)&&near(r,3))this.complete();
     }
     serialize(){
       const out={version:1,scene:this.meta.scene};

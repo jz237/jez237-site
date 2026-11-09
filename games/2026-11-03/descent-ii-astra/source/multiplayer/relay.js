@@ -3,7 +3,7 @@ import { DurableObject } from 'cloudflare:workers';
 const DEFAULT={mode:'coop',campaign:'d2',level:1,bots:[2,2,2]};
 const json=(ws,value)=>{try{ws.send(JSON.stringify(value));}catch{}};
 const error=(ws,message)=>json(ws,{type:'error',message});
-const validConfig=c=>c&&['coop','deathmatch'].includes(c.mode)&&['d2','d2x'].includes(c.campaign)&&Number.isInteger(c.level)&&c.level>=1&&c.level<=(c.campaign==='d2'?24:20)&&Array.isArray(c.bots)&&c.bots.length<=3&&c.bots.every(s=>Number.isInteger(s)&&s>=0&&s<=4);
+const validConfig=c=>c&&['coop','deathmatch'].includes(c.mode)&&['d2','d2x','overload'].includes(c.campaign)&&Number.isInteger(c.level)&&c.level>=1&&c.level<=(c.campaign==='overload'?16:c.campaign==='d2'?24:20)&&Array.isArray(c.bots)&&c.bots.length<=3&&c.bots.every(s=>Number.isInteger(s)&&s>=0&&s<=4);
 const encode=s=>new TextEncoder().encode(s);
 const token=()=>crypto.randomUUID()+crypto.randomUUID();
 const sameToken=(a,b)=>typeof a==='string'&&typeof b==='string'&&a.length===72&&/^[0-9a-f-]{72}$/i.test(b)&&crypto.subtle.timingSafeEqual(encode(a),encode(b));
@@ -29,7 +29,7 @@ export class SquadronRoom extends DurableObject {
   }
   startPilot(ws,late){
     const a=ws.deserializeAttachment();ws.serializeAttachment({...a,pending:false,late,ready:null});
-    json(ws,{type:'start',self:a.slot,config:{...this.room.launch,humans:this.room.players.filter(Boolean).length,level:this.room.level||this.room.config.level,public:!!this.room.public,continuity:!!this.room.continuity,host:this.room.host??0,late}});this.roster();
+    json(ws,{type:'start',self:a.slot,config:{...this.room.launch,humans:this.room.players.filter(Boolean).length,level:this.room.level||this.room.config.level,public:!!this.room.public,continuity:!!this.room.continuity,host:this.room.host??0,late}});if(this.room.campaignSnapshot)json(ws,this.room.campaignSnapshot);this.roster();
   }
   async publicJoin(request){
     const url=new URL(request.url);
@@ -54,6 +54,7 @@ export class SquadronRoom extends DurableObject {
       this.room={config,players:[],started:false,created:Date.now(),closed:false,public:publicRoom,code:url.pathname.split('/').pop(),accepting:false,host:0,epoch:0,continuity:url.searchParams.get('v')==='54'};
       await this.save();await this.ctx.storage.setAlarm(Date.now()+2*60*60*1000);
     }else if(create)return new Response('Room already exists',{status:409});
+    if(this.room.config.campaign==='overload'&&Number(url.searchParams.get('build'))<77)return new Response('Reload Astra for Overload co-op',{status:409});
     if(this.room.closed)return new Response('Room ended',{status:409});
     if(this.room.continuity&&url.searchParams.get('v')!=='54')return new Response('Reload Astra to join this updated room',{status:409});
     if(this.room.continuity&&url.searchParams.get('resume')==='1'){
@@ -94,7 +95,7 @@ export class SquadronRoom extends DurableObject {
     if(!this.room||this.room.closed)return;
     const a=ws.deserializeAttachment();if(!a)return;
     const size=typeof data==='string'?data.length:data.byteLength;
-    if(size>16384||!this.rate(ws,size)){ws.close(1008,'Message limit exceeded');return;}
+    if(size>(typeof data==='string'?98304:16384)||!this.rate(ws,size)){ws.close(1008,'Message limit exceeded');return;}
     if(typeof data!=='string'){
       if(!this.room.started||a.slot<0||a.gone)return;
       const bytes=new Uint8Array(data),peers=this.peers();let p=0;
@@ -111,12 +112,25 @@ export class SquadronRoom extends DurableObject {
       for(const [slot,packet] of routes){const dest=peers.find(s=>s.deserializeAttachment()?.slot===slot);if(dest)try{dest.send(new Uint8Array(packet));}catch{}}
       return;
     }
-    if(size>6144){ws.close(1008,'Control message too large');return;}
     let m;try{m=JSON.parse(data);}catch{return error(ws,'Invalid room message');}
     if(!m||typeof m!=='object')return;
     if(m.type==='resume'&&a.slot===-2){await this.resume(ws,m.token);return;}
     if(a.slot===-2||a.gone)return;
     const host=a.id===this.room.players[this.room.host??0]?.id;
+    if(m.type==='campaign-state'){
+      if(!host||!this.room.started||this.room.config.campaign!=='overload'||m.level!==(this.room.level||this.room.config.level))return;
+      const p=m.payload;if(!p||p.version!==1||typeof p.scene!=='string'||!/^sp_[a-z0-9_]+$/.test(p.scene)||!p.mission||p.mission.scene!==p.scene||!Array.isArray(p.effects)||p.effects.length>2048||!Array.isArray(p.spawns)||p.spawns.length>1000)return;
+      this.room.campaignSnapshot={type:'campaign-state',level:m.level,host:a.slot,epoch:this.room.epoch,payload:p};
+      await this.save();for(const s of this.peers())if(s!==ws)json(s,this.room.campaignSnapshot);return;
+    }
+    if(size>6144){ws.close(1008,'Control message too large');return;}
+    if(m.type==='campaign-request'&&this.room.config.campaign==='overload'){
+      if(this.room.campaignSnapshot?.level===m.level)json(ws,this.room.campaignSnapshot);
+      const leader=this.peers().find(s=>s.deserializeAttachment()?.slot===(this.room.host??0));if(leader)json(leader,{type:'campaign-request'});return;
+    }
+    if(m.type==='campaign-hit'&&!a.late&&!a.pending&&this.room.config.campaign==='overload'&&m.level===(this.room.level||this.room.config.level)&&Number.isSafeInteger(m.go)&&Number.isFinite(m.damage)&&m.damage>=0&&m.damage<=10000){
+      const leader=this.peers().find(s=>s.deserializeAttachment()?.slot===(this.room.host??0));if(leader)json(leader,{type:'campaign-hit',from:a.slot,level:m.level,go:m.go,damage:m.damage});return;
+    }
     if(m.type==='ping'&&Number.isFinite(m.at)){json(ws,{type:'pong',at:m.at});return;}
     if(m.type==='leave'){ws.serializeAttachment({...a,intentional:true});await this.webSocketClose(ws);try{ws.close(1000,'Leaving');}catch{}return;}
     if(this.room.continuity&&m.type==='inventory'&&host){
@@ -141,7 +155,7 @@ export class SquadronRoom extends DurableObject {
     if(m.type==='joined'&&(this.room.public||this.room.continuity)&&this.room.started){ws.serializeAttachment({...a,late:false,pending:false});this.roster();return;}
     if(m.type==='configure'){
       if(!host||this.room.started)return error(ws,'Only the host can configure a waiting room.');
-      if(!['coop','deathmatch'].includes(m.mode)||!['d2','d2x'].includes(m.campaign)||!Number.isInteger(m.level)||m.level<1||m.level>(m.campaign==='d2'?24:20)||!Array.isArray(m.bots)||m.bots.some(s=>!Number.isInteger(s)||s<0||s>4))return error(ws,'Invalid match configuration.');
+      if(!['coop','deathmatch'].includes(m.mode)||!['d2','d2x','overload'].includes(m.campaign)||!Number.isInteger(m.level)||m.level<1||m.level>(m.campaign==='overload'?16:m.campaign==='d2'?24:20)||!Array.isArray(m.bots)||m.bots.some(s=>!Number.isInteger(s)||s<0||s>4))return error(ws,'Invalid match configuration.');
       this.room.config={mode:m.mode,campaign:m.campaign,level:m.level,bots:m.bots.slice(0,4-this.room.players.length)};
       await this.save();this.lobby();return;
     }
@@ -229,7 +243,7 @@ export class SquadronRoom extends DurableObject {
     const late=slot!==this.room.host;
     ws.serializeAttachment({id:p.id,slot,ready:null,late,pending:false});await this.save();
     json(ws,{type:'resumed',self:slot,host:this.room.host,level:this.room.level||this.room.config.level,late,roster:this.room.launch.roster,epoch:this.room.epoch});
-    this.broadcast({type:'host',host:this.room.host,epoch:this.room.epoch});this.roster();await this.schedule();
+    if(this.room.campaignSnapshot)json(ws,this.room.campaignSnapshot);this.broadcast({type:'host',host:this.room.host,epoch:this.room.epoch});this.roster();await this.schedule();
   }
   async schedule(){
     if(!this.room||this.room.closed)return;
@@ -253,28 +267,31 @@ export class SquadronLobby extends DurableObject {
   fetch(request){const job=this.serial.then(()=>this.match(request));this.serial=job.catch(()=>{});return job;}
   async match(request){
     const url=new URL(request.url),rooms=[];
+    let requested=DEFAULT;try{requested=JSON.parse(url.searchParams.get('config')||JSON.stringify(DEFAULT));}catch{return new Response('Invalid configuration',{status:400});}
+    if(!validConfig(requested))return new Response('Invalid configuration',{status:400});
     for(const entry of this.rooms){if(Date.now()-entry.created>2*60*60*1000)continue;const info=await this.env.ROOMS.getByName(entry.code).publicInfo();if(info)rooms.push({entry,info});}
     const retained=rooms.map(r=>r.entry);await this.ctx.storage.put('rooms',retained);this.rooms=retained;
-    for(const {entry,info} of rooms){
+    const matching=rooms.filter(r=>r.info.mode===requested.mode&&r.info.campaign===requested.campaign);
+    for(const {entry,info} of matching){
       if(info.players>=4)continue;
       const target=new URL(request.url);target.pathname='/room/'+entry.code;target.searchParams.delete('create');
       const response=await this.env.ROOMS.getByName(entry.code).fetch(new Request(target,request));if(response.status===101)return response;
     }
-    if(rooms.length&&url.searchParams.get('new')!=='1'){
-      const [client,ws]=Object.values(new WebSocketPair());ws.accept();json(ws,{type:'rooms',rooms:rooms.map(r=>r.info)});ws.close(1000,'All rooms full');
+    if(matching.length&&url.searchParams.get('new')!=='1'){
+      const [client,ws]=Object.values(new WebSocketPair());ws.accept();json(ws,{type:'rooms',rooms:matching.map(r=>r.info)});ws.close(1000,'All rooms full');
       return new Response(null,{status:101,webSocket:client});
     }
     if(rooms.length>=16)return new Response('Public rooms are full. Try again shortly.',{status:503});
     const entry={code:code(),created:Date.now()},next=[...this.rooms,entry];await this.ctx.storage.put('rooms',next);this.rooms=next;
     const target=new URL(request.url);target.pathname='/room/'+entry.code;target.searchParams.set('create','1');
-    const headers=new Headers(request.headers);headers.set('X-Astra-Public','1');headers.set('X-Astra-Config',url.searchParams.get('config')||JSON.stringify(DEFAULT));
+    const headers=new Headers(request.headers);headers.set('X-Astra-Public','1');headers.set('X-Astra-Config',JSON.stringify(requested));
     return this.env.ROOMS.getByName(entry.code).fetch(new Request(target,{method:'GET',headers}));
   }
 }
 export default {
   async fetch(request,env){
     const url=new URL(request.url);
-    if(url.pathname==='/health')return Response.json({service:'astra-squadron',version:54,maxPilots:4});
+    if(url.pathname==='/health')return Response.json({service:'astra-squadron',version:77,maxPilots:4,campaigns:['d2','d2x','overload'],matchBy:['mode','campaign']});
     if(url.pathname!=='/online'&&!/^\/room\/[0-9A-V]{9}$/.test(url.pathname))return new Response('Not found',{status:404});
     const origin=request.headers.get('Origin')||'';
     // The standalone Astra installation also runs from a loopback web server.

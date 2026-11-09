@@ -21,6 +21,7 @@ includes.update({'fleet.inc': 'arch/ogl/astra_fleet.inc', 'fleet_types.inc': 'ar
 includes["weapons_demo.inc"]="arch/ogl/astra_weapons_demo.inc"
 includes["motion.inc"]="arch/ogl/astra_motion.inc"
 includes["pickups.inc"]="arch/ogl/astra_pickups.inc"
+includes["atlas.inc"]="main/astra_atlas.inc"
 includes["autopilot.inc"]="main/astra_autopilot.inc"
 includes["menus.inc"]="main/astra_menus.inc"
 includes["lists.inc"]="main/astra_lists.inc"

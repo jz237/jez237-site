@@ -936,6 +936,36 @@ index b32d6e4..1ce099a 100644
  
  }
  
+diff --git a/d2/main/automap.c b/d2/main/automap.c
+index ec1e610..73f02af 100644
+--- a/d2/main/automap.c
++++ b/d2/main/automap.c
+@@ -519,8 +519,11 @@ static void automap_apply_input(automap *am)
+ 	}
+ }
+ 
++#include "astra_atlas.inc"
++
+ void draw_automap(automap *am)
+ {
++    if(astra_atlas_draw(am))return;
+ 	int i;
+ 	int color;
+ 	object * objp;
+@@ -807,11 +810,13 @@ int automap_handler(window *wind, d_event *event, automap *am)
+ 		}
+ 			
+ 		case EVENT_WINDOW_DRAW:
++            if(EM_ASM_INT({const c=Module.mapCommand||0;Module.mapCommand=0;return c;})){window_close(wind);return 1;}
+ 			automap_apply_input(am);
+ 			draw_automap(am);
+ 			break;
+ 			
+ 		case EVENT_WINDOW_CLOSE:
++            ax_open=0;ax_next=0;EM_ASM(window.astraMap?.close(););
+ 			if (!am->pause_game)
+ 				ConsoleObject->mtype.phys_info.flags |= am->old_wiggle;		// Restore wiggle
+ 			if (am->pause_game)
 diff --git a/d2/main/cntrlcen.c b/d2/main/cntrlcen.c
 index 522a2b7..482b177 100644
 --- a/d2/main/cntrlcen.c
@@ -2381,7 +2411,7 @@ index f2e3dc5..a2a151d 100644
  }
  
 diff --git a/d2/main/net_udp.c b/d2/main/net_udp.c
-index c5cad64..cf286ea 100644
+index c5cad64..0a03c9e 100644
 --- a/d2/main/net_udp.c
 +++ b/d2/main/net_udp.c
 @@ -355,8 +355,19 @@ void net_log_comment(char* comment) {
@@ -2501,7 +2531,7 @@ index c5cad64..cf286ea 100644
  /* Send an updated endlevel status to everyone (if we are host) or host (if we are client)  */
  void net_udp_send_endlevel_packet(void)
  {
-+    if(astra_net_active&&astra_net_owner==astra_net_host&&Control_center_destroyed&&Players[astra_host_slot()].connected!=CONNECT_PLAYING)for(int b=1;b<astra_net_count;b++)if(astra_net_bot_skill[b]>=0)Players[b].connected=Players[astra_host_slot()].connected;
++    if(astra_net_active&&astra_net_owner==astra_net_host&&Players[astra_host_slot()].connected>=CONNECT_WAITING)for(int b=0;b<astra_net_count;b++)if(astra_net_bot_skill[b]>=0)Players[b].connected=Players[astra_host_slot()].connected;
  	int i = 0, j = 0, len = 0;
  
  	if (is_observer()) {
@@ -2694,6 +2724,15 @@ index c5cad64..cf286ea 100644
  	}
  	
  	if (force || (time >= (last_mdata_time+(F1_0/10))))
+@@ -5683,7 +5708,7 @@ void net_udp_do_frame(int force, int listen)
+ 		net_udp_resend_sync_due_to_packet_loss(); // This will resend to UDP_sync_player
+ 	}
+ 
+-	if ((time>=last_endlevel_time+F1_0) && Control_center_destroyed)
++	if ((time>=last_endlevel_time+F1_0) && (Control_center_destroyed || (astra_net_active && Network_status==NETSTAT_ENDLEVEL)))
+ 	{
+ 		last_endlevel_time = time;
+ 		net_udp_send_endlevel_packet();
 @@ -5791,7 +5816,7 @@ void net_udp_noloss_add_queue_pkt(uint32_t pkt_num, fix64 time, ubyte *data, ush
  		con_printf(CON_VERBOSE, "P#%i: MData store list is full!\n", Player_num);
  		if (multi_i_am_master())

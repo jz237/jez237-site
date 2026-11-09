@@ -2,6 +2,7 @@
 (() => {
   'use strict';
   const ENDPOINT='wss://astra-squadron.jez237.workers.dev';
+  const campaigns={d2:{name:'Original',levels:24},d2x:{name:'Vertigo',levels:20},overload:{name:'Overload',levels:16}};
   const skills=['Novice','Rookie','Hotshot','Ace','Expert'];
   const $=id=>document.getElementById(id);
   let socket=null,lobby=null,identity=null,timer=null,queue=[],out=[],bytes=0,barrier=null,roomChoices=false,lastHostState='',ignoreStart=false;
@@ -10,9 +11,13 @@
   let credential=null,roomCode='',intentional=false,retryTimer=null,retryUntil=0,heartbeat=null,lastPong=0,lastInventory=0;
   const session={session:null,failed:false,departed:0,stats:{sent:0,received:0},
     abort:message=>fail(message),
+    quickCoop(){if(this.session||socket)return;$('squadMode').value='coop';$('squadCampaign').value=$('campaign').value;$('squadLevel').value='1';setup.onchange();ui.showModal();connect(false,true);},
+    campaignState(payload){if(socket&&this.session?.campaign==='overload'&&this.session.self===this.session.host)send({type:'campaign-state',level:this.targetLevel,payload});},
+    campaignHit(go,damage){if(socket&&this.session?.campaign==='overload')send({type:'campaign-hit',level:this.targetLevel,go,damage});},
+    campaignRequest(){send({type:'campaign-request',level:this.targetLevel});},
     shutdown(){intentional=true;ignoreStart=true;this.failed=true;send({type:'leave'});clearInterval(heartbeat);clearTimeout(retryTimer);clearInterval(timer);timer=null;if(socket){socket.onclose=null;socket.onmessage=null;socket.close(1000,'Leaving');socket=null;}queue=[];out=[];bytes=0;},
     reconnect(){if(socket)socket.close(4001,'Reconnecting');else reconnect();},
-    rejoined(){retryUntil=0;this.reconnecting=false;this.failed=false;if(ui.open)ui.close();window.Module?._astra_reset_flight_input?.();status('Connection restored · Same ship');},
+    rejoined(){retryUntil=0;this.reconnecting=false;this.failed=false;window.astraOverload?.resyncNetwork?.();if(ui.open)ui.close();window.Module?._astra_reset_flight_input?.();status('Connection restored · Same ship');},
     order(order,direction){const data={type:'order',order,direction};if(socket)send(data);else if(this.session?.mode==='coop'){data.from=this.session.self;window.astraSquadUI?.command(data);}},
     orderResult(from,order,ok){const m={type:'order-result',from,order,ok};if(socket)send(m);else window.astraSquadUI?.result(m);},
     help(){if(socket)send({type:'help'});else window.astraSquadUI?.help(this.session.self);},
@@ -26,7 +31,7 @@
       out.push({dest,data:data.slice()});bytes+=data.length+3;
     },
     ready(level,checksum){
-      queue=[];barrier=null;
+      queue=[];barrier=null;this.targetLevel=level;if(this.campaignSnapshot?.level!==level)this.campaignSnapshot=null;
       if(!socket){barrier={level,checksum};return;}
       send({type:'ready',level,checksum});status('Waiting for the other pilots to load…');
     },
@@ -88,6 +93,9 @@
       if(m.type==='order'){window.astraSquadUI?.command(m);return;}
       if(m.type==='order-result'){window.astraSquadUI?.result(m);return;}
       if(m.type==='help'){window.astraSquadUI?.help(m.from);return;}
+      if(m.type==='campaign-state'){const n=session.session;if(n?.campaign==='overload'&&m.level===session.targetLevel){session.campaignSnapshot=m;window.astraOverload?.receiveNetwork?.(m);}return;}
+      if(m.type==='campaign-request'){window.astraOverload?.publishNetwork?.(true);return;}
+      if(m.type==='campaign-hit'){if(session.session?.self===session.session?.host)window.astraOverload?.networkHit?.(m);return;}
       if(m.type==='rooms'){showRooms(m.rooms);return;}
       if(m.type==='retarget'){session.targetLevel=m.level;session.session.level=m.level;session.session.late=!!m.late;barrier=null;status('The host is moving to the next mine…');return;}
       if(m.type==='roster'){
@@ -112,7 +120,7 @@
     if(p!==data.length)fail('Incomplete multiplayer packet.');
   }
   function configuration(){
-    const campaign=$('squadCampaign').value,level=Math.max(1,Math.min(campaign==='d2x'?20:24,Math.trunc(Number($('squadLevel').value)||1)));
+    const campaign=$('squadCampaign').value,level=Math.max(1,Math.min(campaigns[campaign]?.levels||24,Math.trunc(Number($('squadLevel').value)||1)));
     return {mode:$('squadMode').value,campaign,level,bots:[0,1,2].map(i=>Number($('squadAI'+i).value)).filter(v=>v>=0)};
   }
   function randomCode(){return Array.from(crypto.getRandomValues(new Uint8Array(9)),v=>(v%32).toString(32)).join('').toUpperCase();}
@@ -124,7 +132,7 @@
     ignoreStart=false;roomChoices=false;$('squadRooms').hidden=true;
     status('Connecting…');connectButtons.querySelectorAll('button').forEach(b=>b.disabled=true);
     const base=window.astraRelayOverride&&/^(localhost|127\.0\.0\.1)$/.test(location.hostname)?window.astraRelayOverride:ENDPOINT;
-    const route=online?`/online?v=54&new=${force?1:0}&name=${encodeURIComponent(pilotName())}&config=${encodeURIComponent(JSON.stringify(configuration()))}`:`/room/${code}?v=54&create=${create?1:0}&name=${encodeURIComponent(pilotName())}`;
+    const route=online?`/online?v=54&build=77&new=${force?1:0}&name=${encodeURIComponent(pilotName())}&config=${encodeURIComponent(JSON.stringify(configuration()))}`:`/room/${code}?v=54&build=77&create=${create?1:0}&name=${encodeURIComponent(pilotName())}`;
     socket=new WebSocket(base+route);
     socket.binaryType='arraybuffer';socket.onmessage=e=>receive(e.data);
     socket.onopen=()=>{startHeartbeat();sentTimes=[];timer=setInterval(flush,20);if(create&&!online)send({type:'configure',...configuration()});};
@@ -153,7 +161,7 @@
     status('Connection interrupted · Reconnecting to your ship…');
     retryTimer=setTimeout(()=>{
       const base=window.astraRelayOverride&&/^(localhost|127\.0\.0\.1)$/.test(location.hostname)?window.astraRelayOverride:ENDPOINT;
-      const ws=socket=new WebSocket(base+'/room/'+roomCode+'?v=54&resume=1');ws.binaryType='arraybuffer';
+      const ws=socket=new WebSocket(base+'/room/'+roomCode+'?v=54&build=77&resume=1');ws.binaryType='arraybuffer';
       ws.onopen=()=>{startHeartbeat();sentTimes=[];timer=setInterval(flush,20);send({type:'resume',token:credential});};
       ws.onmessage=e=>receive(e.data);ws.onerror=()=>{};
       ws.onclose=()=>{if(socket===ws)socket=null;if(!intentional&&!session.failed)reconnect();};
@@ -162,9 +170,9 @@
   function showRooms(rooms){
     roomChoices=true;const box=$('squadRooms');box.hidden=false;box.replaceChildren();
     const heading=document.createElement('h3');heading.textContent='The public room is full';box.append(heading);
-    for(const r of rooms){const row=document.createElement('p');row.textContent=`${r.host} · ${r.mode==='coop'?'Co-op':'Deathmatch'} · ${r.campaign==='d2x'?'Vertigo':'Original'} ${r.level} · ${r.players}/4 players`;box.append(row);}
+    for(const r of rooms){const row=document.createElement('p');row.textContent=`${r.host} · ${r.mode==='coop'?'Co-op':'Deathmatch'} · ${campaigns[r.campaign]?.name||r.campaign} ${r.level} · ${r.players}/4 players`;box.append(row);}
     for(const [label,fresh] of [['Try joining again',false],['Start another public room',true]]){const b=document.createElement('button');b.textContent=label;b.onclick=()=>connect(false,true,fresh);box.append(b);}
-    status('All public rooms have four human pilots. Try again or start another room.');
+    status('All matching public rooms have four human pilots. Try again or start another room.');
     heading.tabIndex=-1;heading.focus();box.scrollIntoView({block:'nearest'});
   }
   function render(){
@@ -190,9 +198,9 @@
     const button=document.createElement('button');button.className='launch secondary-action';button.id='squadronStart';button.textContent='Multiplayer & AI squadron  →';$('start').after(button);
     ui=document.createElement('dialog');ui.id='squadronDialog';
     ui.innerHTML=`<header><div><small>ASTRA / SQUADRON</small><h2>Fly together. Fight together.</h2></div><button id="squadClose" aria-label="Close squadron">✕</button></header>
-      <p>Go online to join the available public room automatically. If there isn’t one, you’ll start it. New players can replace AI pilots while the match continues.</p><p class="squad-hint">Four human pilots fill a room. Hosting transfers if a pilot leaves. A lost connection reserves your ship for 90 seconds. Each online room lasts up to two hours. Private invite rooms still launch together.</p>
+      <p>Go online to join an available game with the same campaign and mode automatically. If there isn’t one, you’ll start it. New players can replace AI pilots while the match continues.</p><p class="squad-hint">Four human pilots fill a room. Hosting transfers if a pilot leaves. A lost connection reserves your ship for 90 seconds. Each online room lasts up to two hours. Private invite rooms still launch together.</p>
       <label>Your callsign<input id="squadName" maxlength="8" value="Pilot" autocomplete="off"></label>
-      <div id="squadSetup"><div class="squad-grid"><label>Match<select id="squadMode"><option value="coop">Co-op campaign</option><option value="deathmatch">Deathmatch</option></select></label><label>Campaign<select id="squadCampaign"><option value="d2">Descent II · Original</option><option value="d2x">Vertigo</option></select></label><label>Starting mine<input id="squadLevel" type="number" min="1" max="24" value="1"></label></div>
+      <div id="squadSetup"><div class="squad-grid"><label>Match<select id="squadMode"><option value="coop">Co-op campaign</option><option value="deathmatch">Deathmatch</option></select></label><label>Campaign<select id="squadCampaign"><option value="d2">Descent II · Original</option><option value="d2x">Vertigo</option><option value="overload">Overload</option></select></label><label>Starting mine<input id="squadLevel" type="number" min="1" max="24" value="1"></label></div>
       <div class="squad-grid">${[0,1,2].map(i=>`<label>AI pilot ${i+1}<select id="squadAI${i}"><option value="-1">Empty slot</option>${skills.map((s,n)=>`<option value="${n}" ${n===2?'selected':''}>${s}</option>`).join('')}</select></label>`).join('')}</div></div>
       <p class="squad-hint">AI skill changes reaction time, aim, speed and tactics. All pilots use Descent II flight and weapons.</p>
       <div id="squadConnect"><button id="squadOnline">Go online</button><button id="squadPractice">Play with AI</button><details id="squadPrivate"><summary>Private room / invite code</summary><button id="squadCreate">Create private room</button><label>Invite code<input id="squadCode" maxlength="9" autocomplete="off" spellcheck="false"></label><button id="squadJoin">Join by code</button></details></div><section id="squadRooms" hidden></section>
@@ -203,13 +211,13 @@
     playBar.querySelector('button').textContent='Flight menu';
     playBar.querySelector('button').onclick=()=>{document.exitPointerLock?.();window.Module?._astra_reset_flight_input?.();if(window.Module)Module.menuCommand=1;};
     const leaveWaitingRoom=()=>{if(socket&&!session.session){ignoreStart=true;socket.close(1000,'Leaving waiting room');}};
-    button.onclick=()=>ui.showModal();$('squadClose').onclick=()=>{if(!session.failed){leaveWaitingRoom();ui.close();}};
+    button.onclick=()=>{if(!session.session&&!socket){$('squadCampaign').value=$('campaign').value;setup.onchange();}ui.showModal();};$('squadClose').onclick=()=>{if(!session.failed){leaveWaitingRoom();ui.close();}};
     $('squadCreate').onclick=()=>connect(true);$('squadJoin').onclick=()=>connect(false);$('squadPractice').onclick=practice;
     $('squadOnline').onclick=()=>connect(false,true);
     $('squadLeave').onclick=()=>{if(session.session)window.astraNavigation.home();else socket?.close(1000,'Leaving');};
     $('squadCopy').onclick=async()=>{if(!socket||!roomField.value)return;const u=new URL('./',location.href);u.hash='room='+roomField.value;try{await navigator.clipboard.writeText(u.href);status('Invite link copied.');}catch{status(u.href);}};
     start.onclick=()=>send({type:'start'});
-    setup.onchange=()=>{if($('squadCampaign').value==='d2x')$('squadLevel').max='20';else $('squadLevel').max='24';$('squadLevel').value=Math.max(1,Math.min(Number($('squadLevel').max),Number($('squadLevel').value)||1));if(lobby)send({type:'configure',...configuration()});};
+    setup.onchange=()=>{$('squadLevel').max=String(campaigns[$('squadCampaign').value]?.levels||24);$('squadLevel').value=Math.max(1,Math.min(Number($('squadLevel').max),Number($('squadLevel').value)||1));if(lobby)send({type:'configure',...configuration()});};
     ui.addEventListener('cancel',e=>{if(session.failed)e.preventDefault();else leaveWaitingRoom();});
     ui.addEventListener('close',()=>{window.Module?._astra_reset_flight_input?.();});
     setInterval(()=>{

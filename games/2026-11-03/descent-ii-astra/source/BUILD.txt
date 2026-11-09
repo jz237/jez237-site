@@ -1416,3 +1416,12 @@ R76 - demo firing lanes and combat positioning
 - A bounded combat-position search selects reachable firing positions and maintains a waypoint while strafing/backing away. It avoids recently failed positions, monitors damage and movement progress, and preserves smooth rotational thrust and weapon hold times.
 - Reactor damage counts as mission progress. The reactor is not temporarily blacklisted like a mobile robot when an approach is ineffective. A brief occlusion retains only the observed approach and last seen point, with firing disabled until visible again.
 - Human flight controls, native movement/weapon physics, enemy AI, audio, materials and level layouts are unchanged.
+
+R77 - mine survey map and default public co-op
+- Tab opens a high-DPI 3D survey of discovered native geometry, with deck view/filter, zoom/orbit/pan, searchable landmarks, keyed/locked doors, explored-passages route plotting and live co-op teammate positions. Unexplored geometry and enemy positions remain hidden. Map rendering is inactive when closed; online simulation continues while the map is open.
+- The main launch button defaults to public co-op for the selected Original, Vertigo or Overload campaign. The directory joins an existing room for the same campaign and mode, or creates it. Four human pilots fill a room; AI pilots yield slots to late arrivals. Solo, private invites, AI practice and deathmatch remain selectable.
+- Overload scripts use one host authority, with shared clearance, doors, forcefields, objectives, factory spawns and completion snapshots. Local recharge/warps use the actual local player object. Script triggers can respond to any connected living teammate. Dynamic robots use native remote-object identities. Late arrivals receive current script state and host handoff retains progress.
+- Overload bonus secret arenas remain Solo-only: native secret-level save/restore is not multiplayer-safe. All 16 main campaign mines are available in co-op.
+- End-of-level status is exchanged for non-reactor objectives too, and AI wingmen advance with the hosting pilot. Dead pilots retain a pending campaign finish until respawn.
+- The existing free-tier astra-squadron Worker is updated without new resources or billing changes. Original/Vertigo room protocol remains compatible; Overload rooms require release 77.
+- Demo AI, human flight, weapon physics, level layouts, graphics and sound assets are unchanged.
