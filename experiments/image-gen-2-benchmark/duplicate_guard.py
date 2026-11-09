@@ -126,6 +126,19 @@ def concept_tokens(value: object) -> set[str]:
     }
 
 
+def positive_prompt_text(value: object) -> str:
+    """Explicit exclusions are not evidence that an earlier image depicts them.
+
+    Keep positive text before/after the excluded clause. This is deliberately
+    limited to explicit negative instructions, not general semantic similarity.
+    Titles, declared concept keys and image fingerprints remain independent gates.
+    """
+    return re.sub(
+        r"\b(?:no|not(?!\s+(?:only|just)\b)|never|without|avoid|exclude|excluding)\b[^.!?;\n]*",
+        " ", str(value or ""), flags=re.IGNORECASE,
+    )
+
+
 def canonical_style_keys(value: object) -> set[str]:
     text = ascii_text(value)
     found = {
@@ -312,8 +325,9 @@ def find_duplicates(
         # record catches renamed and lightly paraphrased concepts.
         existing_concept_blob = " ".join(str(value or "") for value in (
             entry_title,
-            entry.get("prompt"),
-            entry.get("tests"),
+            dedup.get("conceptKey"),
+            positive_prompt_text(entry.get("prompt")),
+            positive_prompt_text(entry.get("tests")),
             (entry.get("factualInfographic") or {}).get("topic")
             if isinstance(entry.get("factualInfographic"), dict) else "",
         ))

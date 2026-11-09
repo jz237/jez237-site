@@ -156,6 +156,38 @@ class DuplicateGuardTests(unittest.TestCase):
         )
         self.assertTrue(any(item["reason"] == "visual-image-fingerprint" for item in matches))
 
+    def world_fixture(self, prompt, **extra):
+        entry = {"id": "sealed-slab", "title": "Rime Aperture: Light Beneath the Slab",
+                 "slot": "weekly-world", "prompt": prompt, **extra}
+        (self.root / "gallery-data.json").write_text(json.dumps([entry]))
+
+    def world_check(self, **extra):
+        return self.check(title="Rime Aperture: Pin Eye Opens", slot="weekly-world",
+                          concept_key="rime-aperture-pin-eye-fracture-dust-eruption",
+                          style_family="", **extra)
+
+    def test_negated_eruption_does_not_block_later_story_beat(self):
+        for negative in ("no eruption yet", "not an eruption", "never show an eruption",
+                         "without an eruption", "avoid an eruption", "do not show an eruption"):
+            with self.subTest(negative=negative):
+                self.world_fixture("Rime Aperture: sealed Pin Eye fracture with dust grains; " + negative + ".")
+                self.assertEqual([], self.world_check())
+
+    def test_positive_eruption_still_blocks_renamed_beat(self):
+        for prompt in ("Rime Aperture: Pin Eye fracture dust eruption.",
+                       "No blue sky. Rime Aperture: Pin Eye fracture dust eruption.",
+                       "Rime Aperture: Pin Eye fracture dust eruption; no blue sky."):
+            self.world_fixture(prompt)
+            self.assertIn("concept-contained", {d['reason'] for d in self.world_check()})
+
+    def test_declared_key_and_pixels_still_block_despite_negative_prompt(self):
+        self.world_fixture("No eruption yet.", dedup={
+            "conceptKey": "rime-aperture-pin-eye-fracture-dust-eruption"})
+        self.assertIn("concept-key", {d['reason'] for d in self.world_check()})
+        self.world_fixture("No eruption yet.", image="old.jpg")
+        self.assertIn("visual-image-fingerprint", {
+            d['reason'] for d in self.world_check(image=self.root/'old.jpg')})
+
 
 if __name__ == "__main__":
     unittest.main()
