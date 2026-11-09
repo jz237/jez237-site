@@ -9,6 +9,15 @@
     const el=q(id),value=String(preferences[id]??'');
     if([...el.options].some(o=>o.value===value))el.value=value;
   }
+  const mode=q('playMode');try{mode.value=localStorage.getItem('astra-play-mode-v77')==='solo'?'solo':'coop';}catch{}
+  function syncPlayMode(){
+    const online=mode.value==='coop',arena=!!window.astraCampaigns[q('campaign').value]?.arena;
+    mode.options[0].textContent=arena?'Online deathmatch · Join or start an arena':'Online co-op · Join or start a campaign';
+    mode.options[1].textContent=arena?'Practice with AI · Offline':'Solo campaign · Offline';
+    q('start').querySelector('span').innerHTML=arena?(online?'<small>CLASSIC ANARCHY / UP TO 4</small>Join arena deathmatch':'<small>OFFLINE / AI OPPONENTS</small>Play arena with AI'):(online?'<small>ONLINE CO-OP / UP TO 4</small>Join co-op campaign':'<small>SOLO FLIGHT / LEVEL 01</small>Enter mine');
+    q('playModeHint').textContent=arena?'Fight other pilots in the original arena layouts. Choose AI skill and player slots in Multiplayer & AI squadron.':online?'Join an open game in this campaign, or start one for others to join. Up to four pilots.':'Fly the selected campaign on your own. No connection required.';
+  }
+  mode.onchange=()=>{try{localStorage.setItem('astra-play-mode-v77',mode.value);}catch{}syncPlayMode();};syncPlayMode();
   q('intro').checked=!!preferences.intro;
   const remember=()=>{try{localStorage.setItem(storage,JSON.stringify(Object.fromEntries(['look','res','difficulty','campaign','intro'].map(id=>[id,q(id).type==='checkbox'?q(id).checked:q(id).value]))));}catch{}};
   for(const id of ['look','res','difficulty','campaign','intro'])q(id).addEventListener('change',remember);
@@ -17,6 +26,7 @@
     all('[data-tab]').forEach(b=>{const active=b.dataset.tab===name;b.setAttribute('aria-selected',active);b.tabIndex=active?0:-1;});
     all('.terminal-panel').forEach(p=>p.hidden=p.id!=='panel-'+name);
     q('terminal').dataset.tab=name;
+    window.scrollTo({top:0,behavior:'instant'});
   }
   all('[data-tab]').forEach((b,i)=>{
     b.parentElement.setAttribute('role','tablist');b.setAttribute('role','tab');b.id='tab-'+b.dataset.tab;b.setAttribute('aria-controls','panel-'+b.dataset.tab);
@@ -27,7 +37,13 @@
   all('[data-go]').forEach(b=>b.onclick=()=>{tab(b.dataset.go);q('terminal').scrollIntoView({block:'start'});});
   function syncCampaign(){
     all('[data-campaign]').forEach(b=>{const active=b.dataset.campaign===q('campaign').value;b.classList.toggle('selected',active);b.setAttribute('aria-pressed',active);});
-    all('.selected-campaign').forEach(el=>el.textContent=q('campaign').value==='d2'?'COUNTERSTRIKE':'VERTIGO');
+    const c=window.astraCampaigns[q('campaign').value],arena=!!c?.arena;
+    all('.selected-campaign').forEach(el=>el.textContent=c.name.toUpperCase());
+    q('classicSettings').hidden=q('classicExplore').hidden=!arena;q('continueFlight').hidden=arena;
+    q('watch').disabled=arena;
+    q('panel-spectate').querySelector('.panel-description').textContent=arena?'These classic arenas have no campaign robots. Choose Play arena with AI in Missions, or explore an arena solo.':'Watch a pilot track enemies, hold its aim and choose weapons for the fight. Use normal pickups, or opt into the full arsenal showcase.';
+    if(arena){q('classicLevel').replaceChildren(...c.maps.map((name,i)=>new Option((i+1)+' · '+name,i+1)));q('classicInfo').textContent=c.name+' by '+c.author+' · Original layouts, pickups and spawn points.';q('classicCredits').href='classic-levels/'+q('campaign').value+'.txt';}
+    syncPlayMode();
   }
   all('[data-campaign]').forEach(b=>{
     b.onclick=()=>{if(launchPending)return;q('campaign').value=b.dataset.campaign;q('campaign').dispatchEvent(new Event('change'));};
@@ -43,8 +59,10 @@
   window.astraTerminal={
     tab,
     loading(active){
+      const opening=active&&q('loadingScreen').hidden;
       q('loadingScreen').hidden=!active;q('terminal').inert=active;
-      if(active){q('loadingScreen').classList.remove('failed');q('loadingScreen').focus();}
+      if(window.Module)Module.graphicsLoading=!!active;
+      if(active){q('loadingScreen').classList.remove('failed');if(opening)q('loadingScreen').focus();}
     },
     fail(){this.loading(true);q('loadingScreen').classList.add('failed');q('retry').hidden=false;q('retry').focus();}
   };
@@ -119,7 +137,7 @@
     send(op,index=-1,value=0,text=''){
       if(!this.active)return;
       const command={token:this.token,op,index,value,text};
-      const prev=this.queue.at(-1);if(prev?.token===command.token&&prev.index===index&&prev.op===op&&[1,3,4].includes(op))this.queue[this.queue.length-1]=command;else this.queue.push(command);
+      const prev=this.queue[this.queue.length-1];if(prev?.token===command.token&&prev.index===index&&prev.op===op&&[1,3,4].includes(op))this.queue[this.queue.length-1]=command;else this.queue.push(command);
       if(index>=0){this.state.selected=index;this.rows.forEach(r=>r.classList.toggle('selected',+r.dataset.index===index));}
     },
     poll(token){while(this.queue.length){const c=this.queue.shift();if(c.token===token){this.current=c;return c.op;}}return 0;},
@@ -140,7 +158,7 @@
   const oldFocus=window.astraFlightFocus;
   window.astraFlightFocus=active=>{if(active)menu.hide();oldFocus(active);};
   window.addEventListener('keydown',e=>{
-    if(!menu.active)return;
+    if(!menu.active||document.querySelector("dialog[open]"))return;
     e.stopImmediatePropagation();
     if(e.repeat&&['Enter','Escape',' '].includes(e.key)){e.preventDefault();return;}
     if(e.key==='Escape'){e.preventDefault();menu.send(5);return;}

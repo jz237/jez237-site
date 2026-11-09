@@ -111,28 +111,37 @@ async function readPack(group,label) {
   };
   for(let i=0;i<Math.min(3,files.length);i++) enqueue(i);
   for(let i=0;i<files.length;i++) {
-    $("status").textContent=label+" · "+(i+1)+" / "+files.length;
+    window.astraLoad?.progress("download",label,i,files.length);
     if (i+3<files.length) enqueue(i+3);
     const response = await requests.get(i);
     requests.delete(i);
     if (!response.ok || !response.body) throw Error("Could not read "+files[i]);
     const stream=response.body.pipeThrough(new DecompressionStream("gzip"));
-    const decoded=new Uint8Array(await new Response(stream).arrayBuffer());
-    let offset=0;
-    while(offset<decoded.length) {
-      const take=Math.min(target.length-at,decoded.length-offset);
-      target.set(decoded.subarray(offset,offset+take),at);
-      at+=take;offset+=take;
-      if(at===target.length) {
-        mounted.set(entries[cursor][0],target);
-        cursor++; at=0; target=cursor<entries.length?new Uint8Array(entries[cursor][1]):null;
+    // Copy decompressed chunks directly into their final file buffers. Avoid
+    // allocating a second whole decoded parcel and then copying it at once.
+    const reader=stream.getReader();
+    try {
+      for(;;){
+        const {value:decoded,done}=await reader.read();if(done)break;
+        let offset=0;
+        while(offset<decoded.length) {
+          if(!target)throw Error("Oversized "+group+" parcel");
+          const take=Math.min(target.length-at,decoded.length-offset);
+          target.set(decoded.subarray(offset,offset+take),at);
+          at+=take;offset+=take;
+          if(at===target.length) {
+            mounted.set(entries[cursor][0],target);
+            cursor++; at=0; target=cursor<entries.length?new Uint8Array(entries[cursor][1]):null;
+          }
+        }
       }
-    }
+    } finally {reader.releaseLock();}
+    window.astraLoad?.progress("download",label,i+1,files.length);
   }
   if(cursor!==entries.length) throw Error("Incomplete "+group+" parcel");
 }
 function syncPilot() {
-  if(!window.Module?.FS || !Module.saveReady || saving || Module.autopilot) return;
+  if(!window.Module?.FS || !Module.saveReady || saving || Module.netSession || Module.checkpointBusy || Module.autopilot) return;
   saving=true;
   Module.FS.syncfs(false,err=>{saving=false;if(err)console.warn("Pilot save",err);});
 }
@@ -144,7 +153,7 @@ const mouseCaptured = () => document.pointerLockElement === flightView;
 function refreshMouseHint() {
   $("flightMenu").hidden=!flightActive || !!window.Module?.autopilot || !!window.astraPreview?.active;
   mouseHint.hidden = !!window.Module?.autopilot || !flightActive || mouseCaptured() || window.astraPreview?.active;
-  $("previewFlight").hidden = !flightActive || !window.Module?.astra || window.astraPreview?.active;
+  $("previewFlight").hidden = !!window.Module?.netSession || !flightActive || !window.Module?.astra || window.astraPreview?.active;
 }
 function releaseFlightMouse() {
   if (mouseCaptured()) document.exitPointerLock();
@@ -215,11 +224,22 @@ window.addEventListener("keydown", e => {
   }
   if (e.key === "Escape" && (mouseCaptured() || (flightActive && performance.now()-lastRelease < 120))) {
     e.preventDefault(); e.stopImmediatePropagation(); releaseFlightMouse();
+  } else if (e.key === "Escape" && flightActive && !window.astraMenus?.active &&
+             !window.astraNet?.menuOpen && !document.querySelector("dialog[open]")) {
+    e.preventDefault(); e.stopImmediatePropagation();
+    if(!e.repeat){Module._astra_reset_flight_input?.();Module.menuCommand=1;}
   }
 }, true);
 window.addEventListener("blur", releaseFlightMouse);
 document.addEventListener("visibilitychange", () => { if (document.hidden) releaseFlightMouse(); });
 
+function preloadFlightEngine() {
+  if(location.protocol!=="http:"&&location.protocol!=="https:")return;
+  if(document.getElementById("astraEnginePreload"))return;
+  const link=document.createElement("link");link.id="astraEnginePreload";
+  link.rel="preload";link.as="script";link.href="engine.js?v=pyre86";
+  document.head.append(link);
+}
 let firstBlastProfile=0;
 let openWeaponPriorities=false;
 window.astraPreview = {
@@ -238,12 +258,13 @@ window.astraPreview = {
     this.state={number,seed,age,length,profile};
     $("blastControls").hidden=false;
     $("blastSelect").value=String(profile);
-    $("previewTitle").textContent=profile?"COMBAT EXPLOSIONS":"PYRO–GX / DESTRUCTION PREVIEW";
+    $("previewTitle").textContent=profile>=18?"CHAIN EXPLOSIONS / "+String(profile-17).padStart(2,"0"):profile?"COMBAT EXPLOSIONS":"PYRO–GX / DESTRUCTION PREVIEW";
     $("previewVariation").textContent="VARIATION "+String(number).padStart(2,"0");
     $("previewPhase").textContent=age<0?"PYRO–GX · Stand by":age>=length?"Clear · Try another variation":age<length*.16?"Hull breakup":age<length*.65?"Secondary detonations":"Cooling embers";
     if(profile){
       $("previewVariation").textContent=$("blastSelect").selectedOptions[0].textContent;
       $("previewPhase").textContent=age<0?"Armed":age<length?"Detonating":"Clear";
+      if(profile>=18){const c=Module.chainPreview;$("previewPhase").textContent=age<0?"Intact hull · Stand by":age>=length?"Clear":c?.breakup?`Hull fragments · ${c.wallHits} wall impacts · ${c.shipHits} ship impacts`:"Sequential detonations";}
       $("previewAgain").textContent="Replay";
       if($("blastLoop").checked && !Module.previewPaused && age>length+.9)Module.pyroPreviewCommand=2;
     }else $("previewAgain").textContent="Play another variation ↻";
@@ -259,29 +280,34 @@ $("previewClose").onclick=()=>window.astraPreview.close();
 
 async function launch(quick,demo=false,encounter=false,preview=false,autopilot=false,inspect=false,weapons=false,mine=false) {
   if(launchPending)return;
-  launchPending=true;window.astraTerminal?.loading(true);
+  launchPending=true;preloadFlightEngine();window.astraBench?.begin();window.astraLoad?.begin();
   const buttons=document.querySelectorAll(".launch");
   buttons.forEach(el=>el.disabled=true);
   try {
-    if(quick && !demo && !preview && !autopilot)captureFlightMouse();
-    const astra=$("look").value==="astra";
+    if(quick && !demo && !preview && !autopilot && !window.astraNet?.session)captureFlightMouse();
+    const selectedCampaign=$("campaign").value;
+    const campaign=(selectedCampaign==='overload'&&(preview||inspect||weapons||mine)||window.astraCampaigns[selectedCampaign]?.arena&&(preview&&!mine||inspect||weapons))?'d2x':selectedCampaign;
+    const astra=campaign==='overload'||$("look").value==="astra";
     // Prime the media element in the button gesture before disk I/O.
     const music=player;
     // Unlock the existing Red Book audio element with a short silent WAV.
     const silence="data:audio/wav;base64,UklGRiYAAABXQVZFZm10IBAAAAABAAEAQB8AAIA+AAACABAAZGF0YQIAAAAAAA==";
     music.src=silence; music.volume=.75;
     music.play().then(()=>{if(music.getAttribute("src")===silence){music.pause();music.currentTime=0;}}).catch(()=>{});
-    await script("streaming.js?v=36");
+    await script("streaming.js?v=80");
     const loadMovie=astraMovieLibrary(async file=>{
       const response=await fetch("payload/"+file);
       if(!response.ok||!response.body)throw Error("Could not load "+file);
       return response.body;
     });
+    const districtArt = astra && campaign!=="overload" ? script("district-art.js?v=75").then(()=>window.astraDistrictReady) : Promise.resolve(null);
+    const scenery = astra && campaign!=="overload" ? script("scenery-art.js?v=74").then(()=>window.astraSceneryReady) : Promise.resolve(null);
     await readPack("game","Reading game data");
     await readPack("vertigo","Reading the mission");
+    if(window.astraCampaigns[campaign]?.arena)await readPack("classics86","Reading classic arenas");
     let assetDepot=null;
     if(astra){
-      await script("payload/stream24/index.js");
+      await script("payload/stream24/index.js?v=69");
       const catalog=window.astraStreamCatalog;
       window.astraMaterialTypes=catalog.types;
       window.astraCollectiblesCatalog=catalog.effects.catalog;
@@ -294,22 +320,29 @@ async function launch(quick,demo=false,encounter=false,preview=false,autopilot=f
       }
       await readPack("cockpit","Fitting flight instruments");
       await readPack("fleet","Fitting robot chassis");
-      $("status").textContent="Preparing effects";
+      window.astraLoad?.progress("download","Downloading explosion and collectible artwork",0,2);
       const [field,mesh]=await Promise.all([effect(catalog.effects.field,false),effect(catalog.effects.mesh,true)]);
       mounted.set("pyro-field.png",field);
       mounted.set("collectibles.mesh",mesh);
+      window.astraLoad?.progress("download","Explosion and collectible artwork ready",2,2);
     }
-    if(astra){await script("generated-materials.js?v=44");assetDepot=astraGeneratedLibrary(assetDepot);}
+    if(astra){await script("generated-materials.js?v=80");assetDepot=astraGeneratedLibrary(assetDepot);}
     if(astra)await loadAstraShipAssets();
-    $("status").textContent="Starting flight computer";
+    const districtMaps=await districtArt;if(districtMaps)for(const [name,bytes] of districtMaps)mounted.set(name,bytes);
+    const sceneryBytes=await scenery;if(sceneryBytes)mounted.set("scenery74.png",sceneryBytes);
+    if(campaign==="overload"){await script("mission-controller.js?v=77");await script("overload-loader.js?v=78");await astraOverload.install(mounted);}
+    window.astraLoad?.progress("effects","Starting flight computer");
     const canvas=$("view");
     const quality=Number($("res").value);
     const height=Math.round(quality*9/16);
     window.Module={
-      canvas,quick,demo,encounter,autopilot,openWeaponPriorities,shadowQuality:Number($("shadowQuality").value),combatInspect:window.astraCombatPending??-1,assetDepot,loadMovie,fastLaunch:true,blastInspect:preview?firstBlastProfile:0,mineInspect:mine?0:-1,mineInspectZoom:1,demoArsenal:autopilot&&$("demoArsenal").checked,weaponInspect:weapons?0:-1,difficulty:Number($("difficulty").value),mobileDemo:autopilot&&astraTouch,autoPaused:false,startLevel:mine?Number($("mineLevel").value):autopilot?Number($("demoLevel").value):1,pickupInspect:inspect?0:-1,pyroPreviewCommand:preview?1:0,campaign:$("campaign").value,wideHud:$("wideHud").checked,intro:!openWeaponPriorities && !quick && !demo && $("intro").checked,astra, arguments:["-hogdir","/mine","-pilot",autopilot?"watch":"astra","-window","-nostickykeys",
+      resumeFlight:!!window.astraResumeLast,comfort:window.astraTools?.comfort,
+      resumeCheckpoint:!!window.astraResumeCheckpoint,checkpoints:document.getElementById("checkpoints").checked,
+      netSession:window.astraNet?.session||null,
+      canvas,quick,demo,encounter,autopilot,openWeaponPriorities,shadowQuality:Number($("shadowQuality").value),combatInspect:window.astraCombatPending??-1,assetDepot,loadMovie,fastLaunch:true,blastInspect:preview?firstBlastProfile:0,mineInspect:mine?0:-1,mineInspectZoom:1,demoArsenal:autopilot&&$("demoArsenal").checked,weaponInspect:weapons?0:-1,difficulty:Number($("difficulty").value),mobileDemo:autopilot&&astraTouch,autoPaused:false,startLevel:mine?Number($("mineLevel").value):autopilot?Number($("demoLevel").value):window.astraCampaigns[campaign]?.arena?Number($("classicLevel").value)||1:1,pickupInspect:inspect?0:-1,pyroPreviewCommand:preview?1:0,campaign,wideHud:$("wideHud").checked,intro:!openWeaponPriorities && !quick && !demo && $("intro").checked,astra, arguments:["-hogdir","/mine","-pilot",autopilot?"watch":"astra","-window","-nostickykeys","-nojoystick",
         "-gl_gettexlevelparam_ok","0","-gl_intensity4_ok","0","-gl_luminance4_alpha4_ok","0","-gl_rgba2_ok","0"],
       print:console.log,printErr:console.warn,onAbort:astraFail,
-      onExit:()=>{window.astraMenus?.hide();window.astraTerminal?.fail();window.astraFlightFocus(false);syncPilot();document.body.classList.remove("flying");$("status").textContent="Flight ended."; $("retry").hidden=false;},
+      onExit:()=>{Module.astraExited=true;window.astraMenus?.hide();window.astraTerminal?.fail();window.astraFlightFocus(false);syncPilot();document.body.classList.remove("flying");$("status").textContent="Flight ended."; $("retry").hidden=false;},
       preRun:[()=>{
         const F=Module.FS, save="/home/web_user/.d2-astra";
         F.mkdirTree("/mine/demos");F.mkdirTree("/mine/missions"); F.mkdirTree(save);
@@ -326,14 +359,15 @@ async function launch(quick,demo=false,encounter=false,preview=false,autopilot=f
         F.mount(Module.IDBFS,{},save);
         Module.addRunDependency("pilot");
         F.syncfs(true,err=>{
-          Module.saveReady=!err;
+          Module.saveReady=!err;window.astraProgress?.mounted();
+          if(window.astraResume?.mounted()===false){astraFail("Your last flight is unavailable in browser storage. Return to the title to choose a campaign or a manual save.");return;}
           let cfg="";
           const name=save+"/descent.cfg";
           if(F.analyzePath(name).exists) cfg=F.readFile(name,{encoding:"utf8"});
           const settings={ResolutionX:quality,ResolutionY:height,AspectX:9,AspectY:16,WindowMode:1,
                           TexFilt:astra?3:2,MovieTexFilt:1,MusicType:2,OrigTrackOrder:1,VSync:1};
           if(!cfg) Object.assign(settings,{DigiVolume:8,MusicVolume:6,GammaLevel:3});
-          cfg=cfg.split(/\r?\n/).filter(l=>!Object.hasOwn(settings,l.split("=")[0])).join("\n");
+          cfg=cfg.split(/\r?\n/).filter(l=>!Object.prototype.hasOwnProperty.call(settings,l.split("=")[0])).join("\n");
           cfg+="\n"+Object.entries(settings).map(([k,v])=>k+"="+v).join("\n")+"\n";
           F.writeFile(name,cfg);
           Module.removeRunDependency("pilot");
@@ -344,7 +378,7 @@ async function launch(quick,demo=false,encounter=false,preview=false,autopilot=f
         setInterval(syncPilot,3000);
       }
     };
-    await script("engine.js?v=pyre45");
+    await script("engine.js?v=pyre86");
   } catch(e) {console.error(e);astraFail(e.message);}
 }
 
@@ -375,7 +409,9 @@ window.addEventListener("keydown",e=>{
   }
 },true);
 
-$("start").onclick=()=>launch(true);
+window.astraLaunchSquadron=()=>launch(true);
+$("start").onclick=()=>window.astraResumeLast||window.astraResumeCheckpoint?launch(true):window.astraCampaigns[$("campaign").value]?.arena?window.astraNet.quickArena($("playMode").value==='coop'):$("playMode")?.value==='coop'?window.astraNet.quickCoop():launch(true);
+$("classicExplore").onclick=()=>launch(true);
 function launchBlastPreview(profile){
   firstBlastProfile=profile;
   $("look").value="astra";
@@ -383,6 +419,7 @@ function launchBlastPreview(profile){
 }
 $("previewStart").onclick=()=>launchBlastPreview(0);
 $("blastStart").onclick=()=>launchBlastPreview(1);
+$("chainStart").onclick=()=>launchBlastPreview(18);
 $("blastSelect").onchange=()=>{
   Module.blastInspect=Number($("blastSelect").value);
   Module.pyroPreviewCommand=1;
@@ -396,7 +433,7 @@ function launchCampaignMenu(priorities) {
 $("menus").onclick=()=>launchCampaignMenu(false);
 $("weaponPriorities").onclick=()=>launchCampaignMenu(true);
 $("demo").onclick=()=>launch(false,true);
-$("retry").onclick=()=>location.reload();
+$("retry").onclick=()=>window.astraNavigation.home(false);
 $("full").onclick=()=>document.fullscreenElement?document.exitFullscreen():$("stage").requestFullscreen();
 $("view").oncontextmenu=e=>e.preventDefault();
 document.addEventListener("visibilitychange",()=>{if(document.hidden)syncPilot();});
@@ -446,7 +483,7 @@ $('full').hidden=!$('stage').requestFullscreen;
 $('full').onclick=async()=>{try{if(document.fullscreenElement)await document.exitFullscreen?.();else await $('stage').requestFullscreen?.();}catch{}};
 const demoLevel=$('demoLevel');
 function populateDemoLevels(){
-  const count=$('campaign').value==='d2'?24:20;
+  const count=window.astraCampaigns[$('campaign').value]?.levels||20;
   demoLevel.replaceChildren(...Array.from({length:count},(_,i)=>new Option('Level '+(i+1),i+1)));
 }
 $('campaign').addEventListener('change',populateDemoLevels);populateDemoLevels();
@@ -456,7 +493,7 @@ window.astraAutoStatus=(task,rooms,deaths,kills,pickups)=>{
   if(!Module.autopilot)return;
   $('autoTask').textContent=Module.autoPaused?'Paused':task;
   const level=Module.flightState?.level||Module.startLevel;
-  $('autoStats').textContent=`${Module.campaign==='d2'?'Counterstrike':'Vertigo'} · L${level} · ${kills} kills · ${pickups} pickups · ${rooms} rooms${Module.demoArsenal?' · Full arsenal':''}`;
+  $('autoStats').textContent=`${window.astraCampaigns[Module.campaign]?.name||'Astra'} · L${level} · ${kills} kills · ${pickups} pickups · ${rooms} rooms${Module.demoArsenal?' · Full arsenal':''}`;
   Module.autoStats={task,rooms,deaths,kills,pickups};
 };
 function pauseDemo(paused){
@@ -469,9 +506,9 @@ function pauseDemo(paused){
 }
 $('watch').onclick=()=>{$('look').value='astra';$('wideHud').checked=true;watchWake();launch(true,false,false,false,true);};
 $('autoPause').onclick=()=>pauseDemo(!Module.autoPaused);
-$('autoStop').onclick=()=>{wakeLock?.release();astraDisc.stop();location.reload();};
+$('autoStop').onclick=()=>window.astraNavigation.home(false);
 $('autoNext').onclick=()=>{
-  pauseDemo(false);Module.autoNext=(Module.flightState?.level||Module.startLevel)%(Module.campaign==='d2'?24:20)+1;
+  pauseDemo(false);Module.autoNext=(Module.flightState?.level||Module.startLevel)%(window.astraCampaigns[Module.campaign]?.levels||20)+1;
   $('autoTask').textContent='Loading next mine';
 };
 window.astraAutoFinished=()=>{Module.autoNext=1;$('autoTask').textContent='Campaign complete · Starting a new tour';};
@@ -493,7 +530,7 @@ window.astraCollectibleStatus=id=>{
   if(!item)return;
   $('previewTitle').textContent='PTMC / COLLECTIBLE INSPECTION';
   $('previewVariation').textContent=item.name;
-  $('previewPhase').textContent='Animated 3D model · Branching electrical discharges';
+  $('previewPhase').textContent=id===17||id===42?(id===17?'Red proximity pickup · Silver carrier frame':'Amber smart-mine pickup · Silver carrier frame'):'Animated 3D model · Branching electrical discharges';
   $('previewTime').textContent=item.triangles.toLocaleString()+' triangles';
   $('previewProgress').hidden=true;
   $('previewAgain').textContent='Next collectible →';

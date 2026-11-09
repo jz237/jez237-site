@@ -1,0 +1,156 @@
+===================================================================
+     __________            ____               __      ____
+     \________/   _____    \ __\  __________  \/ ____/ ___\
+         /\  /\/\/ ___/    / _\__/ / __\ ___\ /\/ __/___  \
+        /  \/ __ \ __\    /      \ \___/ \_/\/  \ __\      \
+       /___/__\/__\___\  /________\___/______\__/____\_____/
+
+=========T====H====E=======E====L====E====G====I====E====S=========
+
+	*The* six level Descent][ anarchy series
+
+		  by NuKE and Karash
+
+ELEGY pl. elegies n.  "A poem which lamments the death of someone"
+
+Discription:  "The Elegies" is a six level compilation that incorporates 
+some of the best features found in almost all popular levels.  Built 
+for their flexablity, almost all playing styles can find a home in at 
+least one of these levels.  They also are very lag free...although 
+computer lag is dependent on your hardware, "The Elegies" are optimized 
+to increase average frames per second (at least on Karash's p90 ;-).  
+"The Elegies" concentrate on small to medium sized levels.  NuKE's levels 
+have a "in your face" theme with fast action and quick kills.  Karash's 
+levels are bigger in size and give a more 3D dogfighting approach towards 
+the level set.  The midi music also has been redone with some awesome 
+tracks that we have scrounged up, and even includes a track by Metallica
+and Nirvana....only for AWE32 users tho :-)
+
+(And yes...Karash made "Speed Racer Pro", and NuKE is of "Kaotix" fame...)
+
+Any feedback is welcome and very appreciated! so get those emails in ;-)
+
+Special Greet's go out to the Pyro Pilots Guild....you guys are the best!  
+Interested in the PPG?  Go to http:\\www.dimensional.com/~greyk/ppg/ 
+and check us out.  Its the Best Descent organization on the Net!
+
+NuKE's email:  Jesse Cameron "magneton@earthlink.net"
+	http:\\www.earthlink.net/~magneton/
+
+Karash's email:  Joe Brown "joe@ou.edu"
+	http:\\www.milltek.com/karash/
+
+Levels:
+	1.  Hyrocide - by NuKE
+	2.  Mausoleum - by Karash
+	3.  Thermacide - by NuKE
+	4.  Klondike - by Karash
+	5.  Sewercide - by NuKE
+	6.  Krypt - by Karash
+
+Midi:	1.  Teensprt.mid
+	2.  Untitled
+	3.  Ktulu.mid
+	4.  Ironman.mid
+
+Editor's used:  Devil2.1g and Devil2.2
+Time Spent:  approx. 1 month
+Single Play:  Yes....no bots tho
+Coop Play:  ummm what is that?
+Anarchy Play:  What else is there? OF COURSE!
+Flag Play:  Yes - good flag levels too
+Midi: by NuKE and DTX2 - great program guys!
+=======================================================================
+
+Level 1:  "Hydrocide"
+Discription:  Sleek fast level.  Be on your toes always in this one ;-)
+Weapons:  3 Gauss (31,250 extra rounds) // 5 Super Lasers -
+        with 4 Quads // 2 Plasma Cannons // 4 Homing Missles
+        8 Mercury Missles // 2 Smart Missiles // 1 Smart Mine
+        3 Afterburners // 2 Ammo Racks // 1 E.S. Converter
+        2 Flags...(or 2 sheild powerups in anarchy play)
+
+Level 2:  "Mausoleum"
+Discription:  Very open level, good for 3D dogfighting.
+Weapons:  2 Gauss Cannons (15,000 extra rounds) // 8 Super Lasers - 
+	with 4 Quads // 2 Plasma Cannons // 2 Spreadfire Cannon 
+	1 Fusion Cannon // 1 Omega Cannon // 20 Homing Missles
+	16 Mercury Missles // 5 Smart Missles // 8 Guided Missles
+	4 Afterburners // 1 Headlight // 1 E.S. Converter 
+	2 Flags...(or 2 sheild powerups in anarchy play)
+
+Level 3:  "Thermacide"
+Discription:  Compact level with a "in your face" feel - 
+	the way NuKE likes it ;-)
+Weapons:  1 Gauss Cannon (10,000 extra rounds) // 5 Super Lasers -
+        with 2 Quads // 2 Plasma Cannons // 2 Spreadfire Cannons
+        1 Fusion Cannon // 1 Omega Cannon // 8 Mercury Missiles
+        4 Homing Missles // 4 Flash Missles // 2 Smart Missles
+        2 Afterburners // 1 Ammo Rack // 1 E.S. Converter
+        1 Headlight
+
+Level 4:  "Klondike"
+Discription:  Karash's little gold mine...faster play but 
+	unorthodox in areas.
+Weapons:  2 Gauss Cannons (12,500 extra rounds) // 8 Super Lasers - 
+	with 4 Quads // 2 Plasma Cannons // 2 Spreadfire Cannon 
+	2 Omega Cannons // 1 Fusion Cannon // 24 Homing Missles                      
+	24 Mercury Missles // 12 Flash Missles // 8 Guided Missles 
+	4 Smart Missles // 4 Afterburners // 2 E.S. Converters
+	2 Flags...(or 2 sheild powerups in anarchy play)
+
+Level 5:  "Sewercide"
+Discription:  Long, wide, tunnels with a Mega to shake things up ;-)
+Weapons:  1 Gauss Cannon (3,650 extra rounds) // 5 Super Lasers -
+        with 2 Quads // 2 Plasma Cannons // 2 Spreadfire Cannons
+        1 Fusion Cannon // 1 Omega Cannon // 8 Mercury Missiles
+        4 Homing Missles // 4 Flash Missles // 2 Smart Missles
+        2 Afterburners // 1 Ammo Rack // 1 E.S. Converter
+        1 Headlight // 1 Mega Missle 
+
+Level 6:  "Krypt"
+Discription:  Medium sized level good for strategy players...
+	hope you like the coffin room ;-)
+Weapons:  2 Gauss Cannons (25,000 extra rounds) // 8 Super Lasers -
+	with 4 Quads // 2 Omega Cannons // 2 Plasma Cannons 
+	1 Spreadfire Cannon // 1 Fusion Cannon // 20 Mercury Missles 
+	20 Flash Missles // 12 Homing Missles // 5 Smart Missles        
+        4 Guided Missles // 8 Prox. Bombs (heh...no smart mines) 
+	4 Afterburners // 2 Headlights // 2 E.S. Converters 
+	2 Ammo Racks // 1 Cloaking Device     
+        2 Flags...(or 2 sheild powerups in anarchy play)        
+                       
+
+
+* Copyright / Permissions *
+
+You MAY distribute this level, provided you include this file, with
+no modifications.  You may distribute this file in any electronic
+format (BBS, Diskette, CD, etc) as long as you include this file 
+intact.
+
+The Midi Track "Call of the Ktulu" by Metallica is soley by them,
+hope they didn't mind us using it :-)
+
+(We know Curt doesn't mind...)
+                       
+                       
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                               
+                        
+                        
+                       
+                       
+                       
+                        
+                        
+                        
+                        
+                        

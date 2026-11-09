@@ -36,7 +36,7 @@ Field Refit 02 also requires the original Vertigo install. Its mission archive a
 
 fleet.py requires SciPy in addition to the dependencies listed above. The generated fleet_types.inc supplies D2 model bindings. The live D2 polymodel supplies each ship's outer panels and articulated limbs. Overload render batches supply internal mechanisms and materials. The original game handles the robot's position, weapons, collisions and AI. The optional encounter drop places the player near an existing robot; Enter mine uses the mission's original start.
 
-The explosion renderer reads its density, surface normals and fuel from a 112 Ã— 112 Ã— 112 field. Rebuild the browser parcel using NumPy, SciPy and Pillow, from the game directory:
+The explosion renderer reads its density, surface normals and fuel from a 112 Ãƒâ€” 112 Ãƒâ€” 112 field. Rebuild the browser parcel using NumPy, SciPy and Pillow, from the game directory:
 
     python source/pyro_field.py pyro-field.js
 
@@ -523,7 +523,7 @@ configuration in combat and in the explosion showroom. Small hits can produce
 Arc Snap, Ceramic Spall or Cinder Fountain. Larger detonations can produce
 Pressure Ring, Magnetic Implosion, Fuel Spiral, Canister Chain or Reactor Bloom.
 Legacy blasts remain in both selection pools. The player ship retains its
-dedicated randomized 5.9–7.0 second breakup. New profiles last 0.38–5.0 seconds
+dedicated randomized 5.9â€“7.0 second breakup. New profiles last 0.38â€“5.0 seconds
 before the existing close-impact limits. Replay and loop use the paused native
 preview. Changes use a deterministic presentation seed and the original sounds.
 The combat renderer depth-tests fragments, optical gas and streaks against
@@ -1028,3 +1028,459 @@ The mine showroom has 27 exhibits, adding warm ventilation/moving fans and strip
 reflections. Cameras frame the longer channels without hiding them under controls.
 Showroom samples are render-only; both campaigns, flight controls, weapons, audio,
 explosions and demo AI remain unchanged. Existing 22-draw fixture budget is retained.
+
+Overload campaign adaptation (pyre46)
+
+Third campaign: Cronus Frontier, 16 main stages and six three-minute secret
+arenas. Uses the owned installation's authored segment topology, detailed
+scenery, materials, animated door tracks, robot meshes and placed entities.
+Per-mine compressed scenery loads only when selected; robot parcels are kept
+across mine transitions. No other campaign downloads the new scenery.
+
+Descent II flight, collision, inventory, weapons, sound and music remain the
+engine foundation. Overload robot health, weapon roles, muzzle positions and
+stationary/melee/detonator roles are adapted to native D2 AI. This is not a
+Unity engine port: Unity postprocessing, original voice performances and exact
+multi-phase boss AI are not reproduced. Original and Vertigo remain available.
+
+The event adapter handles security tiers, linked destruction/pickup actions,
+robot reveals, timed switches, alien core charging, warps, forcefields, shield
+generators, factories, lockdowns, reactor/boss escape and secret return. Save
+files have an .ov companion in the same persistent pilot directory. Secret
+arenas use the original locations with D2 supplies and adapted robot waves.
+Existing D2 showroom exhibits continue to use their D2/Vertigo scenes.
+
+Validation: 22-map browser load sweep; save/load and secret return; real box
+forcefield hit/pass tests; intermediate animated-door progress; mission link
+and timer tests; muted combat runs. These checks are not a complete manual
+playthrough of every main-stage route. QA exports are absent in shipping WASM.
+
+Performance cleanup (pyre47)
+
+No texture, mesh, resolution, lighting, explosion or gameplay reductions.
+Overload scenery uses persistent GPU vertex/index buffers with identical bytes,
+released on every mine change. Per-chunk linked lists preserve draw order while
+avoiding full-level batch scans. Blend state is mirrored through both native
+writers, fixing unsupported legacy blend queries in WebGL and avoiding readbacks.
+Bloom keeps identical shaders and pass sizes; copy validation runs when its
+rectangle, framebuffer or allocation changes. Uniform locations are cached.
+
+The Overload loader preserves only material files shared with the next mine,
+prunes other scenery, and fetches compressed shards with bounded concurrency
+while retaining their byte order. Generated material parcels use native base64
+decoding or a byte loop, and reject incomplete scripts instead of waiting forever.
+
+Muted browser checks covered combat in all three campaigns, a fixed-camera
+comparison, repeated mine transitions and cockpit viewport changes. See
+PERFORMANCE-R47.txt for measurements and their limits. Descent II weapons and
+flight controls remain authoritative for the third campaign.
+
+Campaign command update (pyre48)
+
+Overload-only tactics add charged attacks, recoil bursts, lateral attack movement,
+wall-tested teleport steps and three distinct boss volley patterns. Boss phases
+follow remaining health. Visible emission/rim charge warns before ranged attacks.
+The original and Vertigo AI and all player weapons/flight physics are unchanged.
+
+All 22 Overload maps now carry their authored local lights. Four lamps per mesh
+batch are chosen at load, with distance and spotlight falloff in the normal-mapped
+material shader. Original fan transform clips are sampled independently of their
+stationary housings. One nearby moving assembly casts a real mesh silhouette into
+the existing 512/1024 RGBA shadow target, bounded to its visible chunk. Basic shadow
+quality skips this pass. The export also fixes inactive automap helper children
+incorrectly hiding active machinery. Existing texture resolutions are retained.
+Immutable geometry remains in GPU buffers, including the fan shadow pass.
+Overload enemy batches now also upload once, with those GPU buffers released
+on mine changes; their mesh and material bytes remain unchanged.
+
+The compact expandable objective tracker shows the current mission, clearance/keys
+and reactor state. Overload scripted objective text is retained in save companions.
+Automatic checkpoints are optional in Settings, separate from all manual save
+slots, and stored in two rotating generations per campaign. They save actual native
+world and pilot state at safe frame boundaries, after entry or clearance progress
+and periodically between fights. Saves are excluded during demos, showroom views,
+secret levels, death, reactor countdown, nearby threats and storage sync work.
+Native state, Overload script/visibility state and visited-secret companions share
+the checkpoint generation. Continue appears only after a successful storage sync;
+startup verifies both generations and falls back to the newest valid one. Restore
+is available in the flight menu and expandable tracker, including after death.
+
+Checks: all three campaign inventory/death/restart restore paths; compact 26px
+mobile tracker; all 22 scripted mission save/progression tests; all three boss
+normal/damaged attack phases; visible fan animation and moving shadow rendering;
+loader byte/hash checks and bounded material reuse; repeated map/cockpit changes
+with WebGL error 0. Test-only controls are absent from the shipping engine.
+Tests use a dedicated muted browser with pointer capture blocked.
+
+Original / Vertigo campaign extension (pyre49)
+
+Native D2 and Vertigo robots now show an emissive charge warning before their
+native volleys. Heavy homing/explosive weapons have a longer warning. Each robot
+retains its own guns, aim, burst spacing and projectile identity. Bosses change
+attack cadence at two thirds and one third health, with a longer recovery after
+every third advanced volley. Native boss teleportation, cloak, invulnerability
+and robot spawning are preserved. Companions, thieves, melee robots and
+multiplayer bypass these changes. Player weapons, flight and demo steering are
+unchanged. Wall checks gate enhanced attacks; cloak never reveals a target.
+
+Native robot materials now receive the actual colored fixtures of their room,
+including broken-light state, projected in the correct object frame. Existing
+moving machinery and ship shadows use the same actual fixture positions as the
+wall shader. Light is confined to the owning convex room. Fixed-size uniforms
+reuse the existing fleet shader; there are no new texture or geometry downloads.
+
+The R48 compact objective tracker and optional full-state checkpoints already
+support Original, Vertigo and Overload. Original and Vertigo death/reload restore
+and the 26px mobile tracker are verified again with this engine. Test controls
+are built separately and are absent from the shipping engine.
+
+Controllers and room detail (pyre50)
+
+Settings > Joysticks & controllers, also available in the mouse-accessible
+flight pause menu. Browser Gamepad API polling supports hot plugging, per-device
+profiles, independent axis and button bindings, twist/roll, thrust sliders,
+centered axes, POV hats, neutral and range calibration, inversion, dead zone,
+sensitivity and response curve. Standard gamepads and generic flight sticks have
+separate editable presets. USB or OS-recognized adapters are required; an old
+game-port SideWinder requires compatible hardware/driver support. No force
+feedback is claimed. Press a device button while the page is focused to expose it
+to the browser. Reconnect and refocus require neutral controls and released
+buttons. The six normalized axes contribute to native Controls before its usual
+clamping, preserving Descent physics. Keyboard/mouse bits are preserved. The
+legacy SDL joystick path is disabled to prevent double input. Demo, preview,
+death, automap and menus do not accept flight joystick input. Physical device
+verification awaits the user's hardware; tests simulate browser Gamepad state.
+
+Original and Vertigo: shallow beveled panel shoulders, recessed joints and
+uneven stone use existing high-resolution surface maps and UVs. GPU vertex buffers
+are uploaded once and reused (96-entry bounded cache; at most ten near faces).
+Portals, secrets, overlays, hazards and collision geometry remain authoritative.
+The original depth surface preserves projected weapon damage and ship shadows.
+Material finish adds broad coating variation and distinct roughness response.
+
+Room reflections trace six actual mine planes against a cached 256x128 atlas
+of existing wall maps and lamps. Twelve slots (1.5 MiB), at most one refresh per
+frame, no whole-scene re-render, no extra texture downloads. These soft surface
+reflections exclude moving ships. Native blast lighting remains dynamic; cockpit
+trim picks up nearby fixture colors and explosion light. Existing opaque detail,
+asset resolution, campaign routes, combat and demo steering are unchanged.
+
+Room-clipped fixture shafts contain drifting dust, supplementing the existing
+vent steam. Lava shimmer uses the existing lens composite with tightly bounded
+low-amplitude distortion; it adds no framebuffer copy or postprocessing pass.
+Four showroom exhibits compare Previous Astra / New details at the same view:
+Beveled panel construction, Rock relief & material finish, Fixture light shafts,
+and Room-aware metal reflections. Older exhibits retain original-art comparison.
+No simulated controllers or diagnostic exports are included in the shipping engine.
+
+Squadron multiplayer (pyre51)
+
+The title screen's Multiplayer & AI squadron opens private invite-code rooms.
+Original Descent II and Vertigo support cooperative campaign play and deathmatch,
+with four total pilot slots: any mix of human players and zero to three AI pilots.
+Play with AI starts locally without a network service. Five independently chosen
+AI levels run from Novice through Rookie, Hotshot and Ace to Expert. Reaction,
+aim, flight speed and weapon tactics vary; AI ships use native physics, inventory,
+collision, damage, pickups, death and respawn, with no extra engine instances.
+Co-op wingmen follow human leaders and engage visible robots; deathmatch pilots
+patrol and engage visible ships. Independent path searches respect walls, doors
+and keys. Unusable pickups and stalled routes are temporarily excluded.
+
+The browser bridge carries D2's native multiplayer packets through a bounded
+WebSocket relay. Rooms are limited to four humans plus AI filling unused slots,
+never more than four pilots. Join before the host launches. In-progress joining
+and host migration are not included: the host leaving ends the room. Rooms
+expire after two hours. Mine checksums and load barriers prevent mismatched
+levels. Native weapon damage, robot synchronization, doors, pickups and scores
+remain authoritative to the original multiplayer implementation. This is casual
+invite-based multiplayer, not a server-side anti-cheat implementation.
+
+The independent astra-squadron Worker uses SQLite Durable Objects, hibernating
+WebSockets, bounded packets/queues and per-connection rate limits. Deployment
+checks the existing account is on Workers Free; no subscription or paid plan is
+enabled. Free limits fail closed if exhausted. Source/config are in multiplayer/.
+The Pages middleware under functions/games/2026-11-03/descent-ii-astra/ adds only
+the explicit relay WebSocket origin to Astra's HTML CSP. Other site policies and
+routes are unchanged. The mandatory website publisher rebuilds the Functions
+bundle. The current Overload adaptation remains a single-player campaign.
+
+Multiplayer pauses neither the room nor other pilots. Its flight menu shows the
+roster and leave action. Campaign checkpoints/previews are excluded during a
+match. Joystick bindings and native keyboard/mouse physics remain unchanged.
+The normal single-player launcher does not contact the relay. No new texture,
+ship or sound parcels are added. QA-only test exports are not shipped.
+
+R52 / 2026-11-06: automatic public rooms and joining in progress
+--------------------------------------------------------------
+Go Online joins the oldest public room with a human spot available, or creates
+the first room and starts play. AI pilots do not block human arrivals: a human
+replaces an AI or vacant slot, with four total pilot slots. A room list appears
+only when existing public rooms have four humans; it offers retry or another
+public room. Private invite rooms remain separate and keep their original
+launch-together behavior. Co-op and deathmatch support Original and Vertigo.
+
+A small directory Durable Object serializes simultaneous arrivals and keeps a
+bounded list of current public rooms. Individual rooms still own their sockets
+and their native game traffic. Closed/expired rooms disappear from selection.
+The existing free Worker adds the SquadronLobby SQLite binding with migration
+v2; it does not change paid plans, asset hosting, or the rest of the website.
+
+Public late joins use Descent's native object transfer, rejoin synchronization
+and world extras, preserving current players, opened doors, remaining pickups
+and scores. New human pilots replace AI slots with the native starting loadout.
+Four stable slots allow a departed slot to be reused. Dynamic roster changes
+stop the replaced AI and update native addresses and ownership on each client.
+Arrivals during level transitions wait for or follow the new mine. A public
+host can start alone with no AI. The starting-mine selector is now honored by
+the native multiplayer launcher. Host departure still ends the room, and the
+existing two-hour online-room limit remains. No host migration is introduced.
+
+No texture or audio parcels change. Normal flight, demo AI and single-player
+launch paths are unchanged. Browser tests are headless and muted, with pointer
+capture blocked before navigation. QA-only exports are absent from releases.
+
+R53 — in-game navigation
+- Esc after releasing the mouse opens the Flight menu; Options, Resume, manual saves and main-menu navigation are mouse accessible.
+- Multiplayer has options, priorities, controller setup, roster and Resume while the room continues running.
+- Main menu confirms flight/room departure, flushes pilot settings and saves, and disposes the old runtime before a new campaign, demo or match starts inside the same browser page.
+- One same-origin game frame at a time; pointer lock remains gesture controlled. No game content or graphics quality changes.
+
+R54 — flight continuity, wingmen and comfort
+- Save & return to menu writes a separate rotating suspend snapshot; Continue last flight restores Original, Vertigo or Overload without overwriting manual saves/checkpoints.
+- Four-pilot rooms transfer host authority without changing player slots. A temporary disconnect reserves the same ship for 90 seconds, with a private reconnect credential and native world synchronization. Leaving deliberately frees the slot. Reopening/reloading the browser is a fresh join.
+- Co-op wingmen accept Follow, Cover, Attack my visible target and Regroup, from buttons or Alt+1 through Alt+4. Alt+H requests assistance; a compact squad display shows shields, distance, connection latency and visible friendly markers.
+- Optional nearby explosion glare, Earthshaker/reactor screen shake and demo turn smoothing sliders preserve previous defaults. Manual flight gains and texture quality remain unchanged.
+- A 45-second live demo performance check measures loading, frame pacing and stutters, then offers suggestions without changing graphics settings.
+- R54 public rooms have a separate protocol directory; previous room clients retain their existing protocol. Relay remains on Workers Free with the existing namespaces.
+
+R54a — reconnect restores the local ship’s physics, input and model modes after receiving the host’s disconnected-ship snapshot.
+
+R55 — interface polish
+- Unified title, campaign cards, settings, showroom, dialogs and native menu presentation with consistent spacing, contrast, focus states and touch targets.
+- Settings group display, flight preferences, controls/comfort and performance. Showroom exhibits form a responsive grid.
+- Collapsible flight controls replace the scattered utility buttons. Squad rows show shield meters and separate pilot, distance and assistance information.
+- Responsive portrait/landscape layouts, named dialogs, reduced-motion support and automatic section scroll reset.
+- Existing renderer, models, textures, native engine, flight controls, demo AI, multiplayer relay and saved-flight formats are unchanged. No extra asset parcels or quality reductions.
+
+R56 — rendering, startup and multiplayer efficiency
+- Bounded native shader-uniform location cache avoids repeated WebGL string parsing, with safe relink/delete invalidation. Shader code, uniform values and visual detail are retained.
+- Cockpit attributes and showroom labels update only when their displayed values change.
+- Preload the flight engine during existing asset downloads, and overlap independent material loading while retaining the two-image decode limit and waiting for all required materials.
+- Flush native multiplayer packets every 20 ms with a rolling 50-binary-message/second cap, leaving relay capacity for control traffic. Same protocol, room service, packet order and reconnect behavior.
+- Restore the recharge grid's inherited color-array state correctly, eliminating invalid attribute bindings without changing its shader or appearance.
+- No texture/model reductions, effect removals, flight/demo changes, new external dependencies or additional asset parcels. See PERFORMANCE-R56.txt for measured results and limits.
+
+R57 — continuous tunnel lighting and surface transitions
+- Detailed wall geometry now receives the tunnel's interpolated per-corner dynamic lighting, including passing weapon lights, instead of a fixed brightness floor.
+- Wall detail uses real distance, gradual fades and a stable ten-surface selection with hysteresis. Render order and camera rotation no longer toggle whole wall layers at the old 48-unit cutoff. Outgoing surfaces fade before their slots are reused.
+- Room reflections fade in and across their distance range. The twelve-entry cache no longer cycles out nearby rooms still being rendered when more rooms are visible.
+- Existing texture resolution, geometry detail, flight controls, demo AI, audio, multiplayer and quality defaults are preserved. WebGL 1 compatible; no new extension or asset parcel required.
+- Verified on a 90-second Vertigo AI demo under sixfold CPU throttling, nine showroom scenes, software WebGL and Original campaign startup/play. The user's exact old Chrome/GPU configuration was not available for testing.
+
+R58 — attentive and evasive demo pilot
+- Watches reachable open passages while making small sliding corrections instead of holding a view into a nearby wall. Stable interest points and bounded sensing preserve smooth camera motion.
+- Predicts closest approach of cockpit-visible enemy projectiles relative to the ship's velocity and chooses collision-checked lateral/vertical evasive thrust. Hidden shots and unseen shooters do not grant enemy knowledge.
+- Reacts faster to visible threats through bounded native rotational thrust, gives close attackers priority, and interrupts destruction watching for immediate danger. Stable weapon choices and manual flight controls are preserved.
+- Uses brief native afterburner bursts in clear, aligned travel corridors, with cooldown, charge and stopping-clearance checks. The selected showcase arsenal includes an afterburner; ordinary campaign demos still require the pickup.
+- No texture, lighting, audio, multiplayer, level geometry or asset parcel changes.
+
+R59 — ten chain explosions and volatile hull fragments
+- Adds ten distinct timed compositions: Fuse Run, Split-Core Relay, Capacitor Ladder, Fuel-Tank Cascade, Armor-Rack Cookoff, Engine-Pod Runaway, Shrapnel Relay, Halo Collapse, Reactor Domino, and Last-Light Breakup. Varied sizes and 1.35–5.70 second lengths retain the longer 5.9–7 second player destruction.
+- A separate Showroom card numbers the new collection 1–10. Four inspection-bay previews show actual enhanced robot hull sections separating and producing smaller secondary blasts at wall/ship contacts. Replay, new variation, slow motion and deterministic timeline seeking are supported.
+- Live explosive deaths can shed volatile components. Swept native wall queries and room-limited ship contacts stop each fragment at its first impact. The secondary effect has local flash lighting and a spatial D2 sound accent. These cosmetic effects do not apply additional gameplay damage.
+- Uses existing volumetric textures, native D2 audio samples and bounded fragment/effect buffers. No new downloadable asset parcels, recursive debris, gameplay RNG draws or changes to flight controls/demo AI.
+- Validation: all ten showcase effects, replay/seek/variation/group navigation; 47 native collision/profile checks; muted campaign demos with live wall and ship contacts; mobile preview. QA-only exports excluded from the shipping engine.
+
+R60 — curated chain effects and cool-color variants
+- Removes chain 3 (Capacitor Ladder) and 8 (Halo Collapse) from gameplay selection, preview controls and rendering. The remaining eight keep their original numbers.
+- Chain 2 (Split-Core Relay) and 6 (Engine-Pod Runaway) now use Halo Collapse's pale yellow-green fire palette, with cyan trails and native palette-driven wall lighting. Their existing timing, shapes and breakup behavior remain intact.
+- No asset downloads, gameplay, flight controls or demo AI changes. Validated the eight remaining effects, retired-ID exclusion, colors, replay/navigation and a muted live campaign run.
+
+R61 — industrial mine walls and directional destruction
+- Four structural wall layouts add fitted steel ribs, service plates, grilles and illuminated lens segments over ordinary metal and rock. Cached meshes follow the native flat or triangulated wall shape. Signs, liquids, light fixtures, doors and collision geometry retain their functions.
+- Impact direction now drives detached hull sections, including lethal hits. Broken edges glow and cool; wall-impact wreckage remains after its secondary flash.
+- Fire and smoke use cached, conservative tunnel envelopes based on closed wall planes and open portals. This is a visual corridor approximation, not a fluid or damage simulation.
+- Blast lighting uses surface orientation, view angle and material response: sharper on metal, softer on rock. Existing detail resolution, flight, AI, health and weapon balance remain unchanged.
+- Industrial construction is visible in the existing mine showroom comparison. Uses existing texture assets, cached vertex buffers and bounded fragment/envelope pools.
+
+R62 — classic mine shapes and smoother asset rendering/loading
+- Reconstructed the original pbomb/spbomb red and amber-gold clustered silhouettes in solid 3D. Pickups have silver cubic carriers; deployed mines have eight diagonal silver spikes. Player and robot smart mines share the new mesh. Native arming, damage, collision, size and homing behavior stay unchanged.
+- Added proximity mines to the cockpit firing range beside smart mines. Mine pickups retain rotation without the unrelated green electrical treatment.
+- Immutable collectible and robot geometry is uploaded once per model to cached GPU buffers and reused, including articulated parts and detached wreckage. Robot cut-edge shader uniforms are cached. Geometry, texture resolution, lighting and animation detail are preserved.
+- Gzip game parcels now stream directly into final file buffers, removing the whole-parcel decoded temporary array and its large synchronous copy. Three-parcel prefetch remains bounded.
+- The APU9 mesh parcel contains the original 51 pickup slots plus two deployed mine meshes. All 49 unrelated pickup meshes are byte-identical. Content-addressed parcel and versioned catalog prevent stale mesh/runtime mismatches.
+
+R63 — connected geology, constructed metal and natural water edges
+- Cached sculpted rock shells now cover native quadrilaterals and both folded-triangle orientations. Shared rock edges use the same world-space contours; smooth normals, low-frequency strata, crevice shading and damp edge highlights add depth. Unsupported borders taper to the original openings. All native room connectivity, collision, physics and AI remain unchanged.
+- Metal ribs and plates use their actual chamfer normals. Layered door jambs, dark gaskets, rounded shoulders and deeper moving slab edges follow existing door animations. Natural rock areas retain only sparse perimeter supports.
+- Cached partly submerged stones fit actual rock/water junctions, avoiding metal edges and open portals. Irregular shoreline foam and directional flow enhance existing slopes. No new texture downloads or resolution reductions.
+- Showroom exhibits for sculpted geology, industrial construction, water banks and doors provide comparisons. Rock inspection looks along an actual passage where possible.
+- Geometry checks cover 708 Vertigo and 698 Original rock faces in their first levels, including 118 and 210 folded surfaces respectively. Shared-edge gaps remain below 0.00013 world units. Mesh caches and smooth residency transitions bound rendering work.
+
+R64 — living mine environments in Original and Vertigo
+- Broader deterministic rock contours, rounded shared edges and short fractured ledges retain the native level connections. World-space three-plane material projection reduces stretched rock UVs and abrupt tile directions; broad mineral bands add variation without new textures.
+- Service-light palettes follow the actual room: cool water and rock areas, amber industrial equipment, red volcanic/reactor hazards, with retained original colored lamps and neutral work lights. Stable fixture ranking prevents pulse-driven light-slot switching.
+- Five shared cached installation models fit checked solid wall locations in the playable native campaigns. Fans, hydraulic rods and coolant gauges animate in the vertex shader. Mounts avoid doors, openings, hazards, lights and functional overlays.
+- Ceiling-fed drips and expanding ripples accompany suitable water chambers. Native weapon impacts produce surface-specific splashes, molten droplets, metal sparks and rock dust. Larger blasts can disturb nearby stone; brief metal-impact light stays local. Fixed event pools, distance limits and shared meshes bound the added work.
+- Six showroom exhibits: Natural tunnel contours; Continuous mineral surfaces; Lighting by room purpose; Working mine installations; Distinctive chambers; Environmental reactions. Chamber and surface selectors expose the available environments, with a Replay impact button. Expanded availability masks support all 37 exhibits.
+- Geometry validation covered 708 Vertigo and 698 Original rock faces, including folded walls. Maximum shared-edge difference remained below 0.00013 units; 202/138 installation sites passed clearance checks in their first levels. Cosmetic code does not consume gameplay RNG or alter the flight controls, demo AI, native collision, damage or campaign layouts.
+
+R65 — material realism and cached shader bindings
+- Contact occlusion, equipment rust, vent soot and waterline mineral deposits are baked into the existing four surface vertex channels. No added image download or surface vertex stride; cached meshes avoid recalculating wear every frame.
+- Existing normal/roughness maps drive distinct dry stone, wet rock, coated plate and steel highlights. Hydraulic rods have polished highlights, seals stay dark, bolt sockets are recessed and mounting edges show fine weld detail.
+- Broad asymmetric shelves and fracture shoulders use the existing 20x20 rock grid. Extra displacement fades to zero at shared edges; collision hulls, portals and native campaign layouts remain unchanged.
+- Service bars, pipes and segmented lenses use world-unit widths on differently sized industrial walls. The fixed mesh and draw budgets and current texture resolutions are retained.
+- Six additional native-mine showroom views (37–42), including a steel / dry rock / wet stone / coated-panel material selector. The total is 43 exhibits; availability remains tied to the loaded level.
+- Constant-name uniform locations are cached per program across mine walls, doors, machinery, liquids, fixtures and reflection bindings. Liquid environment sampler names are resolved once. Programs remain static for the engine lifetime; reloads recreate their caches.
+- Flight controls, native simulation, demo AI and multiplayer code are unchanged. Performance and geometry results are recorded in the release validation artifact.
+
+R66 — post-release bug audit
+- Native pickup and status messages now clear the modern cockpit top rail at every resolution; original HUD and observer placement are unchanged.
+- Removed duplicated replay text from the explosion-showroom entry.
+- Audited Original and Vertigo live demos, later and secret mines, showroom scenes, save-and-return/resume, and graphics-context-loss recovery with muted, pointer-unlocked browser tests.
+- Flight controls, demo AI, simulation and rendering quality are unchanged.
+
+R67 — older-browser compatibility and texture preparation
+- Removed Object.hasOwn / Array.at startup, native-menu, streaming and mission-controller requirements.
+- Fixed anisotropic filtering capability detection; unsupported browsers no longer receive invalid enum queries.
+- Avoided source-PNG decoding when generated wall materials immediately replace that image.
+- Cached invariant procedural microdetail in three bounded slots (15.75 MiB maximum) and reused color interpolation coordinates.
+- Precomputed robot/material source columns instead of repeating that mapping for every output row.
+- Paired 4x CPU-throttled tests: 30 texture reconstructions matched prior pixel hashes exactly; representative hull preparation was about 49% faster, reconstructed surfaces about 24–28% faster.
+- Shader and all 21 weapon showcase checks pass with optional WebGL extensions disabled. Physical GTX 1080/old Chrome hardware was not available.
+- Flight controls, demo AI, geometry, texture dimensions, effects, simulation and sound assets unchanged.
+
+R68 - extended runtime audit
+- Balanced legacy rectangle color arrays and kept skipped palette-tint passes from enabling unused vertex inputs. This fixes invalid attribute calls during blank and seeking frames in the explosion showroom and screen postprocessing.
+- All 26 explosion profiles pass strict per-WebGL-call error checks after the fix.
+- Extended Original and Vertigo combat, respawn, level transitions, mobile rotation, interrupted asset download recovery, galleries and preview state preservation were exercised.
+- No flight control, demo AI, simulation, material, sound or texture-quality changes.
+
+R69 - original mine shapes in pickup and live states
+- Refines the four existing mine meshes against the original pbombs/spbombs and pbomb/spbomb artwork: six rounded red or amber lobes, silver pickup carriers, and exposed diagonal silver spikes when deployed.
+- Mine-specific polished highlights retain the classic colors. The HUD now uses the same clustered red proximity and amber smart-mine silhouettes.
+- The collectible showroom links each mine directly to its armed firing-range preview and back to its inventory pickup.
+- Only mesh records 17, 42, 51 and 52 change. Triangle counts and GPU buffer caching are unchanged; all other collectible mesh bytes are identical.
+- Actual native proximity/smart mine objects were created and rendered in Original and Vertigo in a separate instrumented test build. Test exports are excluded from the shipping engine.
+- Collision sizes, damage, ammunition, trigger/arming logic, flight controls and demo AI are unchanged.
+
+R70 - immediate original sound-effect playback
+- Native sound events now start cached original PCM samples directly in Web Audio, removing the continuously queued SDL sound-effect buffer. Native channels still control priority, spatial volume, linear stereo panning, loops and stopping.
+- The original unsigned 8-bit samples convert exactly to float PCM. Music, original sound assets, weapon timing, gameplay, flight controls and demo AI are unchanged. The layered player-destruction sample uses the same native channel path.
+- A bounded 12 MiB PCM cache avoids repeated decoding and is cleared on native sound-data reload or close. Completed/replaced voices disconnect their audio nodes; active playback continues independently of the game render thread.
+- The original SDL backend remains the compatibility fallback when direct Web Audio initialization is unavailable. SDL still initializes its shared AudioContext and browser gesture handling, including movie handoff.
+- Muted native tests measured the former game-side sound queue at 280-323 ms. Direct laser/impact onset measured 0-13 ms at audio-clock granularity, typically 0 ms for lasers and 2.27 ms for impacts (leading silence in the original impact sample). These figures exclude hardware/browser output latency.
+- Original PCM and derived destruction PCM hashes, volume/mute, demo context suspend/resume without stale shots, left/right panning, loops, natural completion, stop-all, cache reuse and close/reinitialization were checked. A test-only audio worklet verified uninterrupted loop output through a 650 ms main-thread stall; CPU-throttled Vertigo combat ran for a minute with bounded channels/cache and no runtime/render errors.
+- Test-only native exports, worklets and instrumentation are excluded from the shipping engine.
+
+R71 - one-action HUD visibility
+- Adds a compact Hide HUD / Show HUD button during manual flight, AI demos and multiplayer; it remains reachable when the cockpit is hidden and works by mouse or touch.
+- Alt+F7 now switches directly between visible and hidden instead of cycling four HUD modes. Turning it back on restores the current session's previous cockpit and HUD layout.
+- Native cockpit rendering and gauges share the same state. F3 can restore a hidden HUD before cycling cockpit layouts; starting a new flight respects a saved hidden HUD.
+- Hiding the HUD also hides objective and wingman information overlays. Menus, demo controls and the restore button remain available. Showrooms keep their existing interface.
+- The keyboard shortcut remains available with the mouse captured. The button does not capture the mouse or change controls, AI, graphics, music or the R70 sound fixes.
+- Checked mouse clicks, touch taps, keyboard toggling, portrait/landscape layouts and restoration in both Original and Vertigo using muted, isolated tests.
+
+R72 - original fullscreen flight information without the cockpit
+- Corrects HUD-off mode to retain Descent II's native fullscreen readouts: reticle, energy, shields, weapons/ammunition, mine count, score, lives, keys, afterburner, cloak/invulnerability, homing warning and game messages as applicable.
+- Uses the existing native HUD renderer with standard layout during the synchronous HUD draw. The saved visibility state remains unchanged; the Astra cockpit stays hidden. There is no replacement inventory, copied status data or extra drawing loop.
+- Keeps the HUD button, Alt+F7, prior-layout restoration, saved preference, demo and phone controls from R71.
+- Moves the collapsed demo controls and fullscreen button clear of the native corner readouts. Expanded menus remain accessible; the large cockpit is restored with the same button or shortcut.
+- Preserves flight controls, AI, level geometry, render quality and original audio behavior.
+
+R73 - demo cockpit default and visible rear-monitor controls
+- Every fresh AI demo starts cockpit-free, retaining the original Descent II flight readouts. Show HUD still restores the cockpit during a demo, and that choice can continue through subsequent demo levels. A new demo resets to cockpit-free.
+- Demo defaults apply only to the separate watch pilot. Manual HUD and rear-monitor preferences remain independent. Demo launches start with both auxiliary camera monitors off.
+- Manual gameplay gains a visible Rear display On/Off button with Shift+F1 / Shift+F2 shortcut labels. The button toggles the native rear camera and restores the previous left display when applicable; it also recognizes native keyboard changes to either monitor.
+- The original Shift+F1 / Shift+F2 display cycling and R look-behind controls remain native. The Controls page explains monitor switching and the default hold-R behavior.
+- The rear-display control is absent in AI demo mode and showrooms. It works with the full cockpit and with the cockpit hidden; it uses existing native cameras rather than adding a rendering loop.
+- Flight physics, demo navigation/combat, sound, graphics quality and original fullscreen readouts are unchanged.
+
+R74 - detailed industrial wall scenery
+- Six cached 3D assemblies appear on checked solid walls throughout Original and Vertigo: turbine/furnace grilles, illuminated service cabinets, a sealed generator/robot assembly window, connected coolant manifolds, a working extractor/conveyor and numbered maintenance landmarks.
+- Real chamfered housings, cylindrical pipes, flange collars, screws, grilles and articulated parts supplement the existing high-resolution metal/normal materials. A GPT Image equipment atlas provides detailed diagnostic screens and enamel signs; 1254-square source pixels are padded, not enlarged, to a mipmapped WebGL 1 texture.
+- Turbines, valves, robot arms, drill flights and whole conveyor slats animate in one shared vertex shader. Glass has restrained view-dependent reflections; furnace/coolant colors spill locally, with occasional small pressure steam. Cached meshes are reused between rooms, with distance fading and no new per-frame geometry uploads for the machinery.
+- Mount checks exclude native openings, doors, signs, lights, forcefields and liquids. The complete animation envelope stays on the original solid wall and inside its room. Existing level connections, collision, gameplay RNG, physics, controls, demo AI and weapon behavior remain unchanged.
+- Six new showroom entries (43–48) inspect actual installations in the loaded campaign, with pause, comparison and zoom. Observation bays are sealed visual machinery assemblies; they do not add navigable rooms.
+
+R75 - connected mine districts
+- Original and Vertigo now have connected multi-room districts with exposed umber excavation, ochre clay, pale limestone, fractured dark basalt, partly installed steel lining, reinforced alloy, weathered service plating and finished ceramic sectors.
+- A deterministic, cached breadth-first partition follows native room connections. Small dead ends join neighboring districts. Material choices apply to ordinary eligible surfaces across walls, ceiling and floor; original signs, lamps, hazards, liquids, portals and door masks remain authoritative. Hidden surfaces retain the district treatment under their native opening mask.
+- Three built-in GPT Image geological masters (1254px) are encoded at 1024px with derived 512px normal/roughness maps. Continuous world-space rock projection, existing cached relief geometry and the same texture-unit budget are retained. Shared steel/ceramic families are warmed during loading.
+- Natural districts omit repeated wall-mounted machinery boxes and industrial frames. Partial construction combines exposed geology with broad metal lining and open ribs. Built-out districts use their corresponding steel, worn and ceramic materials for structural frames.
+- Eight wide showroom views (49-56) inspect actual connected mine sections, with the existing pause, zoom and comparison controls. Flight controls, demo AI, level topology, collision, physics and simulation random state remain unchanged.
+
+R76 - demo firing lanes and combat positioning
+- Ship-sized local movement sweeps account for reactor and robot collision bodies, including an escape direction when already touching an object.
+- Firing tests follow the actual muzzle offsets and native projectile radii all the way to a collision with the target. Hidden targets remain ineligible; partly visible targets may be approached without authorizing shots through a corner.
+- A bounded combat-position search selects reachable firing positions and maintains a waypoint while strafing/backing away. It avoids recently failed positions, monitors damage and movement progress, and preserves smooth rotational thrust and weapon hold times.
+- Reactor damage counts as mission progress. The reactor is not temporarily blacklisted like a mobile robot when an approach is ineffective. A brief occlusion retains only the observed approach and last seen point, with firing disabled until visible again.
+- Human flight controls, native movement/weapon physics, enemy AI, audio, materials and level layouts are unchanged.
+
+R77 - mine survey map and default public co-op
+- Tab opens a high-DPI 3D survey of discovered native geometry, with deck view/filter, zoom/orbit/pan, searchable landmarks, keyed/locked doors, explored-passages route plotting and live co-op teammate positions. Unexplored geometry and enemy positions remain hidden. Map rendering is inactive when closed; online simulation continues while the map is open.
+- The main launch button defaults to public co-op for the selected Original, Vertigo or Overload campaign. The directory joins an existing room for the same campaign and mode, or creates it. Four human pilots fill a room; AI pilots yield slots to late arrivals. Solo, private invites, AI practice and deathmatch remain selectable.
+- Overload scripts use one host authority, with shared clearance, doors, forcefields, objectives, factory spawns and completion snapshots. Local recharge/warps use the actual local player object. Script triggers can respond to any connected living teammate. Dynamic robots use native remote-object identities. Late arrivals receive current script state and host handoff retains progress.
+- Overload bonus secret arenas remain Solo-only: native secret-level save/restore is not multiplayer-safe. All 16 main campaign mines are available in co-op.
+- End-of-level status is exchanged for non-reactor objectives too, and AI wingmen advance with the hosting pilot. Dead pilots retain a pending campaign finish until respawn.
+- The existing free-tier astra-squadron Worker is updated without new resources or billing changes. Original/Vertigo room protocol remains compatible; Overload rooms require release 77.
+- Demo AI, human flight, weapon physics, level layouts, graphics and sound assets are unchanged.
+
+R78 - campaign co-op regression fixes
+- Bind the current Overload object snapshot heap before returning it, including during the first late-join mission replay and after memory growth. Joining after scripted robots have spawned no longer interrupts mission initialization.
+- Allocate extra multiplayer starts from saved player start positions, not unrelated or deleted object slots. This fixes an invalid start in Vertigo mine 2 and applies to every campaign using the shared native path.
+- Discard queued previous-mine packets at the ordered relay synchronization boundary, and clear pending sends when loading begins. Delayed end-level status no longer leaves a pilot marked as waiting after the new mine starts. Ignore stale synchronization messages for other levels.
+- Tab map, demo AI, flight controls, rendering quality and sound settings remain unchanged.
+
+R79 - prepare graphics before the opening flight
+- Compile the existing mine, water/lava, effects, robot, pickup and post-processing programs during loading, with browser yields between steps. Draw paths retain their lazy fallback and cached fast path.
+- Prepare mounted material families and a bounded spawn neighborhood (at most 32 rooms / four portal steps), plus nearby robot and pickup buffers. Do not fetch the complete asset library or preload the whole mine.
+- No synthetic gameplay frames or random-number calls. Shader literals, visual detail, flight controls and demo AI are unchanged. Original, Vertigo and Overload share preparation.
+- First-frame GPU program compilation and uploads are measured separately from loading; preparation timing is exposed as Module.graphicsWarmup.
+
+R80 - continuous graphics preparation and useful performance measurements
+- Prepare a bounded portal neighborhood between completed renders. One upload per opportunity, idle/busy-frame gates, cooldown after expensive work, asynchronous missing-family requests, and no gameplay state or random-number changes.
+- Prepare each mine's starting area on campaign transitions and save loads while retaining shared compiled programs and cached textures.
+- Reuse eight fixed explosion vertex buffers; upload the identical sorted slab vertices directly, avoiding compatibility-layer client-array repacking. No effect count, shader, resolution or sorting changes.
+- Measure the first actual render, opening five seconds and sustained forty seconds separately. Exclude deliberate pauses, menus and loading; retain old saved reports with an explicit explanation of their excluded opening period.
+- Show download, texture and effect preparation with real current-operation counts. Unknown-length work remains indeterminate.
+
+R81 - deliberate demo-pilot attention and turns
+- Score both arcs of large turns against visible mine geometry, including a small view fan. Commit through the rear bearing; release for braking, a changed destination or a new room.
+- Limit changes in rotational acceleration and retain the native rotational and translational physics. Geometry-aware cruise leveling avoids flattening a climb into a nearby wall.
+- Survey open passages during normal travel, with route preference, view width and held-interest hysteresis. Short backward corrections use translation while turning.
+- Search open space without the former blind periodic pitch sweep. Cancel explosion-watching immediately for a visible opponent, impact, incoming shot or occlusion; move gently when the route is clear.
+- Renderer-confirmed enemy perception, native barrel collision tests, mission prerequisites, manual controls, artwork and networking remain unchanged.
+
+R82 - planned demo flight and deliberate combat
+- Round a short sequence of open portals into a hull-checked flight line; anticipate bend speed and preserve brisk travel through open passages. Narrow or obstructed curves fall back to the original clearance/recovery planner. Planning is bounded and cached at four updates per second.
+- Rank a shortlist of fighting positions for native barrel clearance, weapon range, lateral/vertical dodge space, rear escape space and visible crossfire. Commit to a chosen move instead of resampling every frame.
+- Under fire, try a hull-clear shelter/peek pair, retreat briefly, slide back to its firing point, and hold a bounded volley. Changed geometry, stale contact or an immediate new threat cancels the maneuver. Hidden enemies cannot update the stored bearing or authorize shots.
+- Use engagement-relative cannon bursts, measured target-dependent Fusion charging, native weapon-switch cancellation of unsafe charges, and situation-dependent missiles. Native ammo, energy use, damage, charging and firing rates are unchanged.
+- Manual flight controls, renderer visibility, native barrel collision tests, projectile dodging, mission prerequisite planning, visuals and network/squad pilots remain unchanged. These changes apply only to the spectator pilot in all three campaigns.
+
+R83 - stable demo orientation
+- Preserve the initial mine horizon across rooms and respawns instead of repeatedly adopting adjacent wall normals.
+- Transport a remembered right axis through vertical flight, with entry/exit hysteresis to prevent undefined horizon flips.
+- Steer horizontal turns and elevation separately to avoid loops toward rear targets. Anticipate incline-induced bank, tolerate tiny banks, and soften roll acceleration and correction speed.
+- Native manual flight, target visibility, combat choices, route planning and graphics are unchanged.
+
+R84 - multiplayer hull-hit sparks
+- Player hits use small, short-lived world-space sparks, including native remote-hit packets and missile contacts.
+- Spark effects do not create fireballs, smoke, debris, chain sounds or blast lighting.
+- Actual local, remote and AI player destruction keeps its large dedicated explosion.
+- Native weapon damage, splash radius, friendly-fire protection, smart children, flight controls and demo AI are unchanged.
+
+R85 - normal campaign demo combat
+- Live demos start with the native campaign loadout and earn weapons through pickups.
+- The optional full arsenal showcase remains available and explicitly describes its max-level quad lasers.
+- Demo startup respects the selected difficulty instead of forcing Rookie.
+- Native robot hit attachments now use short hull sparks; missile detonations and actual deaths retain their separate explosions.
+- Native robot shields, weapon damage, firing rates, pickups, flight controls and AI tactics are unchanged.
+
+R86 - classic anarchy arenas
+- Added original Minerva and all six Elegies maps with their unchanged HOG, mission definitions and author readmes.
+- Classic arena selection supports online deathmatch, existing AI pilots and solo exploration.
+- Download the small classic parcel only when a classic arena is selected.
+- Mission identity, arena selection, saves, inspection and relay validation include both packs.
+- Native geometry, pickups, spawns, combat values, flight controls and demo AI are preserved.
