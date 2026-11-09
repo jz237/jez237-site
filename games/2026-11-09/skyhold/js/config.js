@@ -1,6 +1,6 @@
 // Skyhold 2026 — every tunable number lives here. The RAMP table drives difficulty; nothing else in the game
 // hard-codes enemy pace, numbers, fire rate, aim or warning times.
-export const VERSION = '1.9.0';
+export const VERSION = '1.10.0';
 export const STEP = 1 / 120;
 
 // ------------------------------------------------------------------ the planet and the Warden gunship
@@ -42,6 +42,11 @@ export const ENEMY = {
   mine: { r: 0.42, hp: 1, score: 25 },
   hive: { r: 1.25, hp: 3, score: 1000 },
   stinger: { r: 0.5, hp: 1, score: 150 },
+  whirler: { r: 0.6, hp: 1, score: 100 },
+  coil: { r: 1.25, hp: 4, score: 400 },
+  spark: { r: 0.4, hp: 1, score: 75 },
+  scorcher: { r: 1.0, hp: 2, score: 250 },
+  maw: { r: 1.2, hp: 2, score: 300 },
   prowler: { r: 1.2, hp: 2, score: 200 },
   skimmer: { r: 0.85, hp: 1, score: 50 },
   meteor: { r: 0.9, hp: 1, score: 75 },
@@ -81,6 +86,18 @@ export const RIVALS = { waves: 3, steal: 250, death: 500 };
 // and linked, for `hold` s: a hit on either then bursts both, pays `bonus`, and their stingers scatter away from the
 // shooter. Left alone, they break apart and hunt as usual. sting: stingers in each of these pods, per world.
 export const INTERSECT = { waves: [[2], [2], [2], [2], [2]], at: [7, 12], half: 26, travel: 4, hold: 3.2, gap: 3.6, bonus: 2000, sting: [2, 3, 3, 3, 3] };
+// the second wave of machines (each world brings them in a little at a time; per-world values, index = world)
+//   WHIRL: rings of n whirlers spinning round a centre that shadows a pilot, then the whole ring dives at them
+//   COIL: a slow drifting generator that lets out a SPARK every `every` s (at most `max` alive per coil)
+//   SCORCH: a raider that hops about a pilot and throws a FIREBRAND, a slow fireball that homes for `home` s
+//   MAW: a jawed hunter that stalks `stalk` m off, opens its jaws (a warning), then dashes in to bite
+//   GATE: the SKYGATE, a ring in the sky across the planet from the first colony: fly through it and it throws you
+//         to wherever the colony needs you most (a lifter carrying a settler, one going down, a falling settler)
+export const WHIRL = { n: 6, rad: 2.3, spin: 2.4, v: [7, 8, 9, 10, 11], dive: [13, 14, 15.5, 17, 18], diveT: 1.2, every: [8, 7, 6, 5.5, 5] };
+export const COIL = { every: [6, 6, 5.5, 5, 4.5], max: 3, life: 11, v: [10, 11, 12.5, 14, 15] };
+export const SCORCH = { hop: [1.1, 1.0, 0.9, 0.85, 0.8], fire: [5, 4.6, 4.2, 3.8, 3.4], v: 9, home: 1.8, turn: 2.2, warn: 0.55 };
+export const MAW = { stalk: 18, dash: [20, 21, 23, 25, 27], dashT: 0.85, rest: [3.2, 3, 2.7, 2.4, 2.2], warn: 0.5 };
+export const GATE = { y: 17, r: 4.2, cd: 6, back: 14 };
 export const HYPER = { gain: 0.0045, decay: 0.002, time: 8, slow: 0.55, fireCD: 0.045, band: 2.4, reach: 1.25, score: 2 };
 // planet events: one per world, mid-wave in waves 2 and 4 (index 1 and 3) between `at` seconds
 export const EVENTS = { verdant: 'meteors', dune: 'sandstorm', frost: 'flare', cinder: 'eruption', umbra: 'eclipse' };
@@ -134,23 +151,23 @@ export const CP_NAMES = ['WAVE 1', 'WAVE 2', 'WAVE 3', 'WAVE 4', 'CARRIER'];
 //   nodeHP   beam hits per carrier weak point     bossV  carrier speed     atkT  seconds between its attacks
 export const RAMP = [
   { lifters: [3, 5], group: [1, 2], gap: [8, 6.5], lV: [4.6, 5.4], liftV: [1.1, 1.3], grabT: [2.4, 2.1], hunters: [1, 2], fire: [0.1, 0.14], shooters: [1, 1], warn: [2.3, 2.0],
-    aim: [0.3, 0.26], boltV: [12, 13.5], lead: [0, 0.2], hV: [9, 10], stV: [11, 12], sowers: [0, 1], hives: [0, 0], husks: [0, 0], prowlT: [80, 70], fallV: [2.4, 2.7], safeH: [99, 99], shield: [2, 1],
+    aim: [0.3, 0.26], boltV: [12, 13.5], lead: [0, 0.2], hV: [9, 10], stV: [11, 12], sowers: [0, 1], hives: [0, 0], husks: [0, 0], whirls: [0, 1], scorchers: [0, 0], coils: [0, 0], maws: [0, 0], prowlT: [80, 70], fallV: [2.4, 2.7], safeH: [99, 99], shield: [2, 1],
     sting: 3, settlers: 8, nodeHP: 14, bossV: 4.2, atkT: 5.6 },
   { lifters: [6, 8], group: [2, 2], gap: [7, 6], lV: [5.6, 6.4], liftV: [1.4, 1.6], grabT: [2.0, 1.8], hunters: [2, 2], fire: [0.22, 0.27], shooters: [1, 2], warn: [1.9, 1.65],
-    aim: [0.22, 0.18], boltV: [15.5, 17.5], lead: [0.25, 0.35], hV: [11, 12], stV: [13, 14], sowers: [1, 1], hives: [0, 1], husks: [0, 1], prowlT: [65, 58], fallV: [3.2, 3.6], safeH: [20, 18], shield: [1, 1],
+    aim: [0.22, 0.18], boltV: [15.5, 17.5], lead: [0.25, 0.35], hV: [11, 12], stV: [13, 14], sowers: [1, 1], hives: [0, 1], husks: [0, 1], whirls: [1, 1], scorchers: [0, 1], coils: [0, 0], maws: [0, 0], prowlT: [65, 58], fallV: [3.2, 3.6], safeH: [20, 18], shield: [1, 1],
     sting: 4, settlers: 9, nodeHP: 16, bossV: 5, atkT: 5.0 },
   { lifters: [8, 10], group: [2, 3], gap: [6, 5], lV: [6.6, 7.4], liftV: [1.7, 1.9], grabT: [1.7, 1.5], hunters: [2, 3], fire: [0.31, 0.36], shooters: [2, 3], warn: [1.6, 1.4],
-    aim: [0.14, 0.115], boltV: [19, 21], lead: [0.45, 0.55], hV: [13.5, 14.5], stV: [15, 16], sowers: [1, 1], hives: [1, 1], husks: [2, 2], prowlT: [55, 48], fallV: [4, 4.5], safeH: [15, 13], shield: [0, 0],
+    aim: [0.14, 0.115], boltV: [19, 21], lead: [0.45, 0.55], hV: [13.5, 14.5], stV: [15, 16], sowers: [1, 1], hives: [1, 1], husks: [2, 2], whirls: [1, 1], scorchers: [1, 1], coils: [0, 1], maws: [0, 1], prowlT: [55, 48], fallV: [4, 4.5], safeH: [15, 13], shield: [0, 0],
     sting: 4, settlers: 10, nodeHP: 17, bossV: 5.8, atkT: 4.5 },
   { lifters: [8, 10], group: [3, 3], gap: [5.4, 4.6], lV: [7.6, 8.4], liftV: [2.0, 2.2], grabT: [1.4, 1.25], hunters: [3, 3], fire: [0.35, 0.41], shooters: [3, 3], warn: [1.35, 1.15],
-    aim: [0.11, 0.09], boltV: [20, 22], lead: [0.5, 0.6], hV: [15, 16], stV: [17, 18], sowers: [1, 2], hives: [2, 2], husks: [3, 4], prowlT: [48, 42], fallV: [5, 5.5], safeH: [12, 10], shield: [0, 0],
+    aim: [0.11, 0.09], boltV: [20, 22], lead: [0.5, 0.6], hV: [15, 16], stV: [17, 18], sowers: [1, 2], hives: [2, 2], husks: [3, 4], whirls: [1, 1], scorchers: [1, 1], coils: [1, 1], maws: [1, 1], prowlT: [48, 42], fallV: [5, 5.5], safeH: [12, 10], shield: [0, 0],
     sting: 4, settlers: 10, nodeHP: 19, bossV: 6.4, atkT: 4.0 },
   { lifters: [10, 12], group: [3, 4], gap: [4.8, 4], lV: [8.6, 9.6], liftV: [2.3, 2.6], grabT: [1.2, 1.0], hunters: [3, 4], fire: [0.33, 0.39], shooters: [3, 3], warn: [1.1, 0.72],
-    aim: [0.072, 0.058], boltV: [22, 25], lead: [0.6, 0.7], hV: [17, 19], stV: [19, 21], sowers: [2, 2], hives: [2, 2], husks: [2, 3], prowlT: [42, 34], fallV: [5.8, 6.4], safeH: [9, 8], shield: [0, 0],
+    aim: [0.072, 0.058], boltV: [22, 25], lead: [0.6, 0.7], hV: [17, 19], stV: [19, 21], sowers: [2, 2], hives: [2, 2], husks: [2, 3], whirls: [1, 1], scorchers: [0, 1], coils: [0, 1], maws: [1, 1], prowlT: [42, 34], fallV: [5.8, 6.4], safeH: [9, 8], shield: [0, 0],
     sting: 6, settlers: 10, nodeHP: 21, bossV: 7, atkT: 3.4 },
 ];
-export const RAMP_KEYS = ['lifters', 'group', 'gap', 'lV', 'liftV', 'grabT', 'hunters', 'fire', 'shooters', 'warn', 'aim', 'boltV', 'lead', 'hV', 'stV', 'sowers', 'hives', 'husks', 'prowlT', 'fallV', 'safeH', 'shield'];
-const ROUND = ['lifters', 'group', 'hunters', 'shooters', 'sowers', 'hives', 'husks', 'shield'];
+export const RAMP_KEYS = ['lifters', 'group', 'gap', 'lV', 'liftV', 'grabT', 'hunters', 'fire', 'shooters', 'warn', 'aim', 'boltV', 'lead', 'hV', 'stV', 'sowers', 'hives', 'husks', 'prowlT', 'fallV', 'safeH', 'shield', 'whirls', 'scorchers', 'coils', 'maws'];
+const ROUND = ['lifters', 'group', 'hunters', 'shooters', 'sowers', 'hives', 'husks', 'shield', 'whirls', 'scorchers', 'coils', 'maws'];
 export const MIN_WARN = 0.6;
 
 // the values in wave w (0..4, 4 = the carrier) of sector s (0-based)
@@ -207,7 +224,7 @@ export function applyDiff(R, key) {
   const n = (v) => Math.max(v > 0 ? 1 : 0, Math.round(v * d.count));
   return { ...R, lV: R.lV * d.speed, hV: R.hV * d.speed, stV: R.stV * d.speed, bossV: R.bossV * d.speed, fire: R.fire * d.fire, aim: R.aim * d.aim, boltV: R.boltV * d.boltV,
     warn: Math.max(MIN_WARN, R.warn * d.warn), liftV: R.liftV * d.lift, grabT: R.grabT / d.lift, safeH: R.safeH * d.safeH, nodeHP: Math.max(4, R.nodeHP + d.nodeHP * 3),
-    lifters: n(R.lifters), sowers: n(R.sowers), hives: n(R.hives), husks: n(R.husks), shield: R.shield + d.shield, atkT: R.atkT / d.fire ** 0.5 };
+    lifters: n(R.lifters), sowers: n(R.sowers), hives: n(R.hives), husks: n(R.husks), whirls: n(R.whirls), scorchers: n(R.scorchers), coils: n(R.coils), maws: n(R.maws), shield: R.shield + d.shield, atkT: R.atkT / d.fire ** 0.5 };
 }
 
 // power-up pods (rare drops). time = seconds it lasts (0 = instant), w = how often
@@ -219,7 +236,7 @@ export const POWERUPS = {
   drone: { name: 'ESCORT DRONE', glyph: '◈', color: 0x9dff7a, time: 12, w: 4, desc: 'A drone flies with you and shoots the nearest machine' },
 };
 export const PW_KEYS = Object.keys(POWERUPS);
-export const DROP = { chance: { sower: 0.25, hive: 0.4, prowler: 0.3, husk: 0.06, lifter: 0.04, stinger: 0.03, skimmer: 0.003 }, life: 14, r: 2.2, max: 3 };
+export const DROP = { chance: { sower: 0.25, hive: 0.4, prowler: 0.3, husk: 0.06, lifter: 0.04, stinger: 0.03, skimmer: 0.003, coil: 0.35, scorcher: 0.15, maw: 0.18, whirler: 0.02 }, life: 14, r: 2.2, max: 3 };
 
 export const UPGRADES = {
   rapid: { name: 'RAPID BEAM', icon: '»', color: '#ffb347', max: 3, desc: 'Your beam cannon fires faster' },

@@ -3,7 +3,7 @@
 // Nothing in here touches the DOM, WebGL or audio; it only pushes events into W.ev.
 //
 // The world is a band round a small planet: x along the ground (wraps every C metres), y altitude (0..H).
-import { F, STEP, C, H, ENEMY, SETTLER, BOSSES, B_KEYS, SECTORS, WAVES, rampAt, rampLevel, endlessLevel, ENDLESS, TUTOR, SCORE, START_LIVES, DIFFICULTY, applyDiff, POWERUPS, PW_KEYS, DROP, SKIM, HYPER, EVENTS, EVENT, PHASE2, B_KEYS as _BK, SHIPS, SHIP_KEYS, RIVALS, INTERSECT } from './config.js?v=12';
+import { F, STEP, C, H, ENEMY, SETTLER, BOSSES, B_KEYS, SECTORS, WAVES, rampAt, rampLevel, endlessLevel, ENDLESS, TUTOR, SCORE, START_LIVES, DIFFICULTY, applyDiff, POWERUPS, PW_KEYS, DROP, SKIM, HYPER, EVENTS, EVENT, PHASE2, B_KEYS as _BK, SHIPS, SHIP_KEYS, RIVALS, INTERSECT, WHIRL, COIL, SCORCH, MAW, GATE } from './config.js?v=13';
 export { STEP };
 
 const clamp = (v, a, b) => (v < a ? a : v > b ? b : v);
@@ -20,7 +20,7 @@ export function rand(W) {
 }
 const rr = (W, a, b) => a + (b - a) * rand(W);
 const D_OF = (W) => DIFFICULTY[W.diff] || DIFFICULTY.normal;
-const HOSTILE = new Set(['lifter', 'husk', 'sower', 'hive', 'stinger', 'prowler']);
+const HOSTILE = new Set(['lifter', 'husk', 'sower', 'hive', 'stinger', 'prowler', 'whirler', 'coil', 'spark', 'scorcher', 'maw']);
 
 // ------------------------------------------------------------------ world
 // o: { seed, mode 'campaign'|'endless', sector, cp (wave to start from, 4 = the carrier), up, lives, score, diff, demo, coop, noTut, assist, nova }
@@ -30,7 +30,7 @@ export function makeWorld(o = {}) {
     n: 0, t: 0, seed, rs: (seed ^ 0x2545F491) | 0, mode, sector, k: sector, up: { ...(o.up || {}) }, demo: !!o.demo, coop: !!o.coop || !!o.rivals, rivals: !!o.rivals,
     diff: DIFFICULTY[o.diff] ? o.diff : 'normal', lives: o.lives ?? START_LIVES + D_OF({ diff: o.diff }).lives, score: o.score || 0, lifePts: 0, nextLife: 0,
     wave: 0, cp: 0, phase: 'intro', phaseT: 2.4, secT: 0, waveT: 0, fightT: 0, R: null, level: 0, waveN: 0, bossN: 0,
-    players: [], enemies: [], settlers: [], sites: [], shots: [], bolts: [], pods: [], missiles: [], boss: null, plan: null, fallen: false,
+    players: [], enemies: [], settlers: [], sites: [], shots: [], bolts: [], pods: [], missiles: [], rings: [], gate: null, boss: null, plan: null, fallen: false,
     nextId: 1, ev: [], over: false, result: null, net: null, claims: [], chain: 0, chainT: -9, bestChain: 0, cpNova: [], tutorial: false, tut: {},
     stats: { kills: 0, lifters: 0, husks: 0, caught: 0, landed: 0, selfLanded: 0, lost: 0, fused: 0, fired: 0, hits: 0, novas: 0, blinks: 0, deaths: 0, shieldHits: 0, pods: 0,
       waveDeaths: [0, 0, 0, 0, 0], waveHits: [0, 0, 0, 0, 0], waveTries: [0, 0, 0, 0, 0], cause: {}, bossT: -1 },
@@ -45,6 +45,7 @@ export function makeWorld(o = {}) {
   makeColony(W);
   const n = o.coop ? 2 : 1;
   for (let i = 0; i < n; i++) W.players.push(makePlayer(W, i + 1, wp(W.sites[0] - 12 + i * 6), o));
+  W.gate = { x: wp(W.sites[0] + C / 2), y: GATE.y };
   for (const p of W.players) { p.nova = Math.min(F.novaMax, o.nova ?? 3 + (W.up.rack || 0)); p.shield = W.R.shield + (W.up.deflector || 0); }
   W.cpNova[cp] = W.players[0].nova;
   return W;
@@ -95,9 +96,10 @@ export function step(W, dt = STEP) {
   if (W.mode === 'endless' && W.n % 120 === 0) { const lv = W.level; W.R = ramp(W); if (Math.floor(lv) !== Math.floor(W.level)) W.ev.push({ k: 'level', level: W.level }); }
   director(W, dt);
   planetEvent(W, dt);
-  for (const p of W.players) player(W, p, dt);
+  for (const p of W.players) { player(W, p, dt); if (!p.remote) gateCheck(W, p); }
   const es = W.players.some((q) => q.hyper > 0) ? HYPER.slow : 1, ee = W.stun > 0 ? 0 : es;
   if (W.stun > 0) W.stun -= dt;
+  rings(W, dt * ee);
   for (let i = 0; i < W.enemies.length; i++) enemy(W, W.enemies[i], dt * ee);
   if (W.boss) boss(W, W.boss, dt * es);
   settlers(W, dt);
@@ -147,7 +149,7 @@ function director(W, dt) {
       P.left -= n; P.groupT = R.gap * (W.tutorial && W.waveT < TUTOR.safe ? 1.4 : 1);
     }
   }
-  for (const x of P.extra) if (!x.done && W.waveT >= x.t) { x.done = true; if (x.type === 'cross') podCross(W); else spawnEnemy(W, x.type); }
+  for (const x of P.extra) if (!x.done && W.waveT >= x.t) { x.done = true; if (x.type === 'cross') podCross(W); else if (x.type === 'whirl') whirlRing(W); else spawnEnemy(W, x.type); }
   // a PROWLER comes for a pilot who takes too long
   if (W.waveT > P.prowlT && !W.enemies.some((e) => e.type === 'prowler') && P.left === 0) { P.prowlT = W.waveT + 24; spawnEnemy(W, 'prowler'); }
   const busy = W.enemies.some((e) => HOSTILE.has(e.type) && e.hp > 0);
@@ -165,11 +167,140 @@ function startWave(W, w) {
   for (let i = 0; i < R.hives - (cross ? 1 : 0); i++) extra.push({ t: rr(W, 6, 20), type: 'hive' });
   for (let i = 0; i < R.husks; i++) extra.push({ t: rr(W, 4, 18), type: 'husk' });
   if (cross) extra.push({ t: rr(W, INTERSECT.at[0], INTERSECT.at[1]), type: 'cross' });
+  for (let i = 0; i < (R.whirls || 0); i++) extra.push({ t: rr(W, 5, 16), type: 'whirl' });
+  for (let i = 0; i < (R.scorchers || 0); i++) extra.push({ t: rr(W, 6, 18), type: 'scorcher' });
+  for (let i = 0; i < (R.coils || 0); i++) extra.push({ t: rr(W, 4, 12), type: 'coil' });
+  for (let i = 0; i < (R.maws || 0); i++) extra.push({ t: rr(W, 10, 22), type: 'maw' });
   W.plan = { left: R.lifters, groupT: W.tutorial ? TUTOR.firstAt : 1.2, extra, prowlT: R.prowlT };
   for (const p of W.players) p.shield = Math.max(p.shield, R.shield + (W.up.deflector || 0));
   W.ev.push({ k: 'wave', w, n: W.mode === 'endless' ? W.waveN : w + 1 });
 }
 // POD INTERSECTION: two pods warp in either side of a point ahead of a pilot and drift through it on crossing paths
+const wi = (W) => clamp(W.mode === 'endless' ? Math.floor(W.level || 0) : W.sector, 0, 4);
+// a ring of whirlers warps in away from the pilots and starts to shadow one
+function whirlRing(W) {
+  const x = spawnSpot(W, 'whirler'), y = rr(W, 14, 26), id = W.nextId++;
+  W.rings.push({ id, x, y, a: rr(W, 0, 6.28), st: 'cruise', t: rr(W, -2, 0), side: rand(W) < 0.5 ? -1 : 1, tx: x, ty: y });
+  for (let k = 0; k < WHIRL.n; k++) {
+    const a = (k / WHIRL.n) * Math.PI * 2;
+    const e = addEnemy(W, 'whirler', wp(x + Math.cos(a) * WHIRL.rad), y + Math.sin(a) * WHIRL.rad * 0.6);
+    e.ring = id; e.slot = k; e.born = W.R.warn * 1.2;
+    W.ev.push({ k: 'warpin', type: 'whirler', x: e.x, y: e.y, id: e.id, T: e.born });
+  }
+}
+// every ring centre: cruise alongside the nearest pilot, now and then dive the whole ring at them
+function rings(W, dt) {
+  if (!W.rings.length) return;
+  const i = wi(W);
+  for (const r of W.rings) {
+    const live = W.enemies.some((e) => e.ring === r.id && e.hp > 0);
+    if (!live) { r.gone = true; continue; }
+    r.t += dt; r.a += WHIRL.spin * dt;
+    const p = nearestPlayer(W, r.x, 240);
+    if (r.st === 'cruise') {
+      const tx = p ? wp(p.x + r.side * 22) : wp(r.x + 10), ty = p ? clamp(p.y + 4, 8, 29) : r.y;
+      const dx = wd(tx - r.x), dy = ty - r.y, l = Math.hypot(dx, dy) || 1, v = Math.min(WHIRL.v[i], l * 2);
+      r.x = wp(r.x + (dx / l) * v * dt); r.y += (dy / l) * v * dt;
+      if (p && r.t > WHIRL.every[i] && Math.abs(wd(p.x - r.x)) < 40) { r.st = 'dive'; r.t = 0; r.tx = p.x; r.ty = p.y; W.ev.push({ k: 'whirldive', x: r.x, y: r.y, id: r.id }); }
+    } else {
+      const dx = wd(r.tx - r.x), dy = r.ty - r.y, l = Math.hypot(dx, dy) || 1, v = WHIRL.dive[i];
+      r.x = wp(r.x + (dx / l) * v * dt); r.y = clamp(r.y + (dy / l) * v * dt, 4, H - 3);
+      if (r.t > WHIRL.diveT || l < 1) { r.st = 'cruise'; r.t = 0; r.side = -r.side; }
+    }
+  }
+  W.rings = W.rings.filter((r) => !r.gone);
+}
+function whirler(W, e, dt) {
+  const r = W.rings.find((q) => q.id === e.ring);
+  if (!r) { const p = nearestPlayer(W, e.x, 120); if (p) moveTo(e, p.x, p.y, WHIRL.v[wi(W)] * 1.3, 20, dt); return; }
+  const a = r.a + (e.slot / WHIRL.n) * Math.PI * 2, rad = r.st === 'dive' ? WHIRL.rad * 0.7 : WHIRL.rad;
+  moveTo(e, wp(r.x + Math.cos(a) * rad), r.y + Math.sin(a) * rad * 0.6, 30, 70, dt);
+}
+// the coil drifts on the far side of a pilot and lets out sparks
+function coil(W, e, dt) {
+  const i = wi(W), p = nearestPlayer(W, e.x, 220);
+  if (p) { const side = Math.sign(wd(e.x - p.x)) || 1; moveTo(e, wp(p.x + side * 30), clamp(p.y + Math.sin(e.t * 0.6 + e.ph) * 6, 8, 28), 3.2, 3, dt); }
+  else { e.vx = e.face * 2; e.vy = Math.sin(e.t + e.ph); }
+  e.life += dt;
+  if (e.life > COIL.every[i] && p && Math.abs(wd(p.x - e.x)) < 90) {
+    e.life = 0;
+    if (W.enemies.filter((q) => q.from === e.id && q.hp > 0).length < COIL.max) {
+      const q = addEnemy(W, 'spark', e.x, e.y + 1.2); q.from = e.id; q.born = 0.35; q.life = COIL.life;
+      W.ev.push({ k: 'coilspark', x: e.x, y: e.y, id: q.id });
+    }
+  }
+}
+function spark(W, e, dt) {
+  e.life -= dt;
+  if (e.life <= 0) { e.hp = 0; W.ev.push({ k: 'pop', x: e.x, y: e.y, type: 'spark', id: e.id }); return; }
+  const p = nearestPlayer(W, e.x, 140);
+  if (!p) { e.vx *= 0.98; return; }
+  moveTo(e, wp(p.x + Math.sin(e.t * 7 + e.ph) * 3), p.y + Math.cos(e.t * 5 + e.ph) * 2, COIL.v[wi(W)], 40, dt);
+}
+// the scorcher hops about a pilot and throws firebrands
+function scorcher(W, e, dt) {
+  const i = wi(W), p = nearestPlayer(W, e.x, 200);
+  e.life -= dt;
+  if (e.life <= 0) {
+    e.life = SCORCH.hop[i];
+    e.ox = p ? wp(p.x + (rand(W) < 0.5 ? -1 : 1) * rr(W, 14, 26)) : wp(e.x + rr(W, -20, 20));
+    e.oy = p ? clamp(p.y + rr(W, -8, 8), 5, 30) : rr(W, 8, 28);
+  }
+  moveTo(e, e.ox, e.oy, 14, 26, dt);
+  if (safeNow(W) || !p || Math.abs(wd(p.x - e.x)) > 46) return;
+  if (e.tell > 0) { e.tell -= dt; if (e.tell <= 0) brand(W, e, p); return; }
+  e.fireT -= dt;
+  if (e.fireT <= 0) { e.fireT = SCORCH.fire[i] * rr(W, 0.85, 1.15); e.tell = SCORCH.warn; W.ev.push({ k: 'tell', id: e.id, x: e.x, y: e.y, T: e.tell }); }
+}
+function brand(W, e, p) {
+  const a = Math.atan2(p.y - e.y, wd(p.x - e.x));
+  W.bolts.push({ id: W.nextId++, x: e.x, y: e.y, vx: Math.cos(a) * SCORCH.v, vy: Math.sin(a) * SCORCH.v, t: 0, from: 'scorcher', home: SCORCH.home });
+  W.ev.push({ k: 'brand', x: e.x, y: e.y, id: e.id });
+}
+// the maw stalks a pilot from `stalk` m off, opens its jaws (the warning), then dashes in to bite
+function maw(W, e, dt) {
+  const i = wi(W), p = nearestPlayer(W, e.x, 200);
+  e.life -= dt;
+  if (e.st === 'dash') {
+    if (e.life <= 0) { e.st = 'hunt'; e.life = MAW.rest[i]; }
+    return;   // keeps the dash velocity
+  }
+  if (!p) { e.vx = e.face * 3; e.vy *= 0.9; return; }
+  const side = Math.sign(wd(e.x - p.x)) || 1;
+  moveTo(e, wp(p.x + side * MAW.stalk), clamp(p.y, 4, 30), W.R.hV * 0.75, 12, dt);
+  if (e.tell > 0) {
+    e.tell -= dt;
+    if (e.tell <= 0) {
+      const dx = wd(p.x - e.x), dy = p.y - e.y, l = Math.hypot(dx, dy) || 1;
+      e.st = 'dash'; e.life = MAW.dashT; e.vx = (dx / l) * MAW.dash[i]; e.vy = (dy / l) * MAW.dash[i];
+      W.ev.push({ k: 'mawdash', id: e.id, x: e.x, y: e.y });
+    }
+    return;
+  }
+  if (e.life <= 0 && Math.abs(wd(p.x - e.x)) < MAW.stalk + 8 && !safeNow(W)) { e.tell = MAW.warn; W.ev.push({ k: 'tell', id: e.id, x: e.x, y: e.y, T: e.tell }); }
+}
+// the SKYGATE: fly through it and it throws you to wherever the colony needs you most
+function gateCheck(W, p) {
+  const g = W.gate;
+  if (!g || !p.alive) { p.px = p.x; return; }
+  if (p.gateT > 0) p.gateT -= STEP;
+  const was = wd((p.px ?? p.x) - g.x), now = wd(p.x - g.x);
+  p.px = p.x;
+  if (p.gateT > 0 || Math.sign(was) === Math.sign(now) || Math.abs(now) > 6 || Math.abs(p.y - g.y) > GATE.r) return;
+  let to = null, why = '';
+  const ls = W.enemies.filter((e) => e.type === 'lifter' && e.hp > 0 && e.born <= 0);
+  const lift = ls.filter((e) => e.st === 'lift').sort((a, b) => b.y - a.y)[0];
+  if (lift) { to = lift; why = 'lift'; }
+  if (!to) { const s = W.settlers.find((q) => q.st === 'fall' && q.dropY > W.R.safeH); if (s) { to = s; why = 'fall'; } }
+  if (!to) { const gr = ls.find((e) => e.st === 'grab' || e.st === 'down'); if (gr) { to = gr; why = 'grab'; } }
+  p.gateT = GATE.cd;
+  W.ev.push({ k: 'gate', pid: p.id, x: g.x, y: g.y, warp: !!to, why });
+  if (!to) return;
+  const side = p.face || 1;
+  p.x = wp(to.x - side * GATE.back); p.y = clamp(to.y + (why === 'fall' ? 1 : -1.5), F.minY, F.maxY); p.vx = side * 10; p.vy = 0; p.face = side; p.px = p.x;
+  p.inv = Math.max(p.inv, 1.2);
+  W.ev.push({ k: 'gatein', pid: p.id, x: p.x, y: p.y, why });
+}
 function podCross(W) {
   const p = nearestPlayer(W, rr(W, 0, C)) || W.players[0];
   if (!p) return;
@@ -550,6 +681,11 @@ function enemy(W, e, dt) {
     case 'hive': hive(W, e, dt); break;
     case 'stinger': stinger(W, e, dt); break;
     case 'prowler': prowler(W, e, dt); break;
+    case 'whirler': whirler(W, e, dt); break;
+    case 'coil': coil(W, e, dt); break;
+    case 'spark': spark(W, e, dt); if (e.hp <= 0) return; break;
+    case 'scorcher': scorcher(W, e, dt); break;
+    case 'maw': maw(W, e, dt); break;
     case 'skimmer': skimmer(W, e, dt); break;
     case 'meteor': meteor(W, e, dt); return;
   }
@@ -744,8 +880,10 @@ function prowler(W, e, dt) {
   moveTo(e, p.x + side * 10, p.y + Math.sin(e.t * 1.5 + e.ph) * 4, Math.max(W.R.hV * 1.3, Math.abs(p.vx) * 1.08 + 4), 40, dt);
 }
 // a machine that is shooting glows (the tell) for 0.6 x warn, then fires a bolt at the pilot
+// these never fire bolts (they ram, bite, spawn or throw their own firebrands)
+const NOGUN = new Set(['whirler', 'coil', 'spark', 'scorcher', 'maw']);
 function shoot(W, e, dt) {
-  if (e.type === 'mine' || e.type === 'skimmer' || e.type === 'meteor' || safeNow(W)) return;
+  if (e.type === 'mine' || e.type === 'skimmer' || e.type === 'meteor' || NOGUN.has(e.type) || safeNow(W)) return;
   const p = nearestPlayer(W, e.x, 46);
   if (e.tell > 0) {
     e.tell -= dt;
@@ -1039,6 +1177,16 @@ function shockwave(W, src, pid) {
 function bolts(W, dt) {
   for (const b of W.bolts) {
     b.t += dt;
+    if (b.home > 0) {
+      b.home -= dt;
+      const p = nearestPlayer(W, b.x, 80);
+      if (p) {
+        const want = Math.atan2(p.y - b.y, wd(p.x - b.x)), cur = Math.atan2(b.vy, b.vx), sp = Math.hypot(b.vx, b.vy);
+        let d = want - cur; while (d > Math.PI) d -= 2 * Math.PI; while (d < -Math.PI) d += 2 * Math.PI;
+        const a = cur + clamp(d, -SCORCH.turn * dt, SCORCH.turn * dt);
+        b.vx = Math.cos(a) * sp; b.vy = Math.sin(a) * sp;
+      }
+    }
     b.x = wp(b.x + b.vx * dt); b.y += b.vy * dt;
     if (b.y < 0.2) { b.t = 99; W.ev.push({ k: 'boltground', x: b.x, y: 0.2 }); continue; }
     if (b.y > H + 2) { b.t = 99; continue; }
@@ -1204,6 +1352,7 @@ export function stepGuest(W, dt = STEP) {
   const me = W.players.find((p) => !p.remote);
   if (!me) return;
   player(W, me, dt);
+  gateCheck(W, me);
   for (const s of W.shots) { if (s.pid !== me.id || s.done) continue; s.t += dt; if (F.beamV * s.t - F.beamLen > beamRange(W)) s.done = true; }
   W.shots = W.shots.filter((s) => !s.done || s.pid !== me.id);
   for (const b of W.bolts) b.t += 0;   // bolts are moved by the host's snapshots

@@ -1,10 +1,10 @@
 // Replays are exact: for many seeds, play a world with the human-like autopilot until a death (or the carrier going
 // down), cut the instant-replay clip the game would keep, replay it, and compare the world tick by tick.
 //   node scripts/skyhold/replay_check.mjs [seeds=10]
-import { makeWorld, step, drainEvents, STEP } from '../../games/2026-11-09/skyhold/js/sim.js?v=12';
-import { Autopilot } from '../../games/2026-11-09/skyhold/js/ai.js?v=12';
-import { TYPICAL_UP } from '../../games/2026-11-09/skyhold/js/config.js?v=12';
-import { Recorder, Replay } from '../../games/2026-11-09/skyhold/js/replay.js?v=12';
+import { makeWorld, step, drainEvents, STEP } from '../../games/2026-11-09/skyhold/js/sim.js?v=13';
+import { Autopilot } from '../../games/2026-11-09/skyhold/js/ai.js?v=13';
+import { TYPICAL_UP } from '../../games/2026-11-09/skyhold/js/config.js?v=13';
+import { Recorder, Replay } from '../../games/2026-11-09/skyhold/js/replay.js?v=13';
 
 const seeds = +(process.argv[2] || 10);
 const hash = (W) => JSON.stringify([W.n, W.score, W.rs, W.players.map((p) => [p.x, p.y, p.alive, p.shield, p.nova]), W.enemies.map((e) => [e.id, e.x, e.y, e.hp, e.st]), W.settlers.map((s) => [s.st, s.x, s.y]), W.boss ? [W.boss.x, W.boss.y, W.boss.nodes.map((n) => n.hp).join()] : 0]);

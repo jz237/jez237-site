@@ -5,13 +5,13 @@
 // Five looks (sky, terrain, sea, scenery, bodies in the sky), real 3D models for everything, curved beams,
 // warnings drawn in the play plane, HDR post. Nothing here changes the world.
 import * as THREE from '../vendor/three.module.min.js';
-import { Post } from './post.js?v=12';
-import * as TX from './textures.js?v=12';
-import * as MD from './models.js?v=12';
-import { FX, CALM } from './fx.js?v=12';
-import { NOISE } from './shaders.js?v=12';
-import { F, C, RP, H, ENEMY, BOSSES, POWERUPS, P2_LIVERY, LIVERIES, SETTLER, PHASE2 } from './config.js?v=12';
-import { wd, wp, nodePos, beamRange, dronePos as dronePosR } from './sim.js?v=12';
+import { Post } from './post.js?v=13';
+import * as TX from './textures.js?v=13';
+import * as MD from './models.js?v=13';
+import { FX, CALM } from './fx.js?v=13';
+import { NOISE } from './shaders.js?v=13';
+import { F, C, RP, H, ENEMY, BOSSES, POWERUPS, P2_LIVERY, LIVERIES, SETTLER, PHASE2 } from './config.js?v=13';
+import { wd, wp, nodePos, beamRange, dronePos as dronePosR } from './sim.js?v=13';
 
 export { CALM };
 const hdr = (hex, k) => new THREE.Color(hex).multiplyScalar(k);
@@ -22,8 +22,9 @@ const _v = new THREE.Vector3(), _v2 = new THREE.Vector3(), _v3 = new THREE.Vecto
 const _c = new THREE.Color(), _c2 = new THREE.Color(), _m = new THREE.Matrix4(), _q = new THREE.Quaternion(), _s = new THREE.Vector3(), _e = new THREE.Euler();
 const ZAX = new THREE.Vector3(0, 0, 1);
 const _up = new THREE.Vector3();
-const TCOL = { lifter: 0x9dff7a, husk: 0xff4a8a, sower: 0xc98aff, hive: 0xff8a3a, stinger: 0xff6a6a, prowler: 0xff3a3a, skimmer: 0x5ef0ff, mine: 0xffb347 };
+const TCOL = { lifter: 0x9dff7a, husk: 0xff4a8a, sower: 0xc98aff, hive: 0xff8a3a, stinger: 0xff6a6a, prowler: 0xff3a3a, skimmer: 0x5ef0ff, mine: 0xffb347, whirler: 0x6af0e0, coil: 0xb07aff, spark: 0xe0c0ff, scorcher: 0xff7a2a, maw: 0xff4060 };
 const SIDE_FOV = 40, CHASE_FOV = 64;
+const JAW = { u: 0.44, l: 0.44 };   // how far the maw's jaws open (radians about Z)
 const SCAR_N = 200;
 const TERRAIN_ZS = [64, 48, 36, 27, 20, 14, 9.5, 6, 3.6, 2, 1, 0.2, -0.6, -1.6, -2.8, -4.2, -6, -8.5, -11.5, -15, -19.5, -25, -32, -40, -50, -62, -76, -92, -112, -136, -165, -200];
 const SCAR_VERT = /* glsl */ `
@@ -1088,6 +1089,11 @@ export class Renderer {
       if (v.core) { const pulse = 1 + Math.sin(t * 6 + e.id) * 0.12 + (e.tell > 0 ? 0.6 * (0.5 + 0.5 * Math.sin(t * 40)) : 0) + (e.hitT > 0 ? 0.8 : 0); v.core.scale.setScalar(pulse); }
       if (e.type === 'hive' && v.inner) v.inner.rotation.x += dt * (e.link ? 6 : 1.2);
       if (e.type === 'sower' && v.bay) v.bay.rotation.z = 0.25 + Math.sin(t * 2 + e.id) * 0.2;
+      if (v.blades) v.blades.rotation.z += dt * 22;
+      if (v.rotor) v.rotor.rotation.y += dt * 3;
+      if (v.spikes) { v.spikes.rotation.x += dt * 5; v.spikes.rotation.y += dt * 3.3; }
+      if (v.vent) v.vent.scale.setScalar(1 + (e.tell > 0 ? 0.7 * (0.5 + 0.5 * Math.sin(t * 40)) : 0.15 * Math.sin(t * 7 + e.id)));
+      if (v.jawU && v.jawL) { const open = e.tell > 0 || e.st === 'dash' ? 1 : 0.12 + 0.08 * Math.sin(t * 3 + e.id); v.jo = (v.jo || 0) + (open - (v.jo || 0)) * Math.min(1, dt * 12); v.jawU.rotation.z = v.jo * JAW.u; v.jawL.rotation.z = -v.jo * JAW.l; }
       if (e.type === 'stinger' && v.wings) { const f = Math.sin(t * 40 + e.id) * 0.5; v.wings[0].rotation.x = -f; v.wings[1].rotation.x = f; }
       if (v.halo) v.halo.material.opacity = (0.45 + 0.15 * Math.sin(t * 5 + e.id) + (e.tell > 0 ? 0.5 : 0) + (e.hitT > 0 ? 0.6 : 0)) * (born ? 0.4 : 1);
       if (!born && e.type !== 'mine' && !CALM.on && Math.random() < dt * (e.type === 'skimmer' ? 26 : 18)) {
@@ -1184,12 +1190,14 @@ export class Renderer {
       if (n >= 120) break;
       toW(b.x, b.y, _v, 0.3);
       _m.makeTranslation(_v.x, _v.y, _v.z); this.boltI.setMatrixAt(n, _m);
-      const s = 1.6 + Math.sin(t * 30 + b.id) * 0.25;
+      const fire = b.from === 'scorcher', s = (1.6 + Math.sin(t * 30 + b.id) * 0.25) * (fire ? 2.3 : 1);
+      if (fire && !CALM.on && Math.random() < dt * 40) this.fx.fireP.add({ x: _v.x, y: _v.y, z: _v.z, vx: 0, vy: 0, vz: 0, s0: 0.9, s1: 0.1, max: 0.5, a: 0.9, r: 1.6, g: 0.7, b: 0.25, drag: 1, grav: 0, fade: 0.5 });
       _q.identity(); _s.set(s, s, 1); _m.compose(_v, _q, _s); this.boltGlowI.setMatrixAt(n, _m);
       n++;
     }
     this.boltI.count = this.boltGlowI.count = n;
     this.boltI.instanceMatrix.needsUpdate = this.boltGlowI.instanceMatrix.needsUpdate = true;
+    this.syncGate(W, dt, t);
     this.syncBoss(W, dt, t);
     this.syncGates(dt);
     // a tractor link from a gunship to the settler it carries; a red marker over settlers a lifter is going for
@@ -1355,6 +1363,28 @@ export class Renderer {
       if (this.burnX === undefined || Math.abs(wd(B.sweepX - this.burnX)) > 1.5) { this.burnX = B.sweepX; this.scar(B.sweepX, 3, 1.4, 1.5); }
     }
   }
+  syncGate(W, dt, t) {
+    if (!W.gate || !MD.skygate) { if (this.gateV) this.gateV.o.visible = false; return; }
+    if (!this.gateV) {
+      const m = MD.skygate(), o = new THREE.Group();
+      o.add(m.g); o.traverse((q) => { q.frustumCulled = false; });
+      this.scene.add(o);
+      this.gateV = { ...m, o };
+    }
+    const V = this.gateV, g = W.gate;
+    V.o.visible = true;
+    toW(g.x, g.y, V.o.position, 0);
+    tangent(g.x, _v); radial(g.x, _v2); _v3.crossVectors(_v, _v2);
+    _m.makeBasis(_v, _v2, _v3); V.o.quaternion.setFromRotationMatrix(_m);
+    // turned ~50 degrees about its upright so the side camera sees a ring, not an edge (ships still pass through)
+    V.o.quaternion.multiply(_q.setFromAxisAngle(_up.set(0, 1, 0), 0.9));
+    if (V.film && V.film.material) V.film.material.opacity = 0.24 + 0.08 * Math.sin(t * 2.4) + V.flash * 0.4;
+    V.flash = Math.max(0, (V.flash || 0) - dt * 2);
+    if (V.ring) V.ring.rotation.x += dt * (0.25 + V.flash * 6);
+    if (V.inner) V.inner.rotation.x -= dt * (0.9 + V.flash * 10);
+    V.o.scale.setScalar(1 + V.flash * 0.08);
+  }
+  gateFlash() { if (this.gateV) this.gateV.flash = 1; }
   bossKick(e, k) { const V = this.bossV, B = this.W && this.W.boss; if (!V || !B) return; const dir = Math.sign(wd(B.x - e.x)) || 1; V.rvx = (V.rvx || 0) + dir * 5 * k; V.flv = (V.flv || 0) + 10 * k; V.fdir = dir; }
   bossRecoil(V, dt) {
     const s = Math.min(dt, 1 / 30);

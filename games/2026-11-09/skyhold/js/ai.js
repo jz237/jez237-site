@@ -9,8 +9,8 @@
 //   'human' — plays like a person: ~0.35 s reaction (scattered, sometimes late), wobbly altitude, misses things
 //             behind it, saves novas too long. The difficulty ramp is measured with this one.
 //   'demo'  — the attract mode: sharp and decisive. It never reads the world's random generator (replays stay exact).
-import { F, ENEMY, BOSSES, H, SHIPS } from './config.js?v=12';
-import { wd, wp, nodePos, beamRange } from './sim.js?v=12';
+import { F, ENEMY, BOSSES, H, SHIPS } from './config.js?v=13';
+import { wd, wp, nodePos, beamRange } from './sim.js?v=13';
 
 const clamp = (v, a, b) => (v < a ? a : v > b ? b : v);
 function mkr(seed) { let s = seed | 0; return () => { s = (s + 0x6D2B79F5) | 0; let t = Math.imul(s ^ (s >>> 15), s | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
@@ -19,7 +19,7 @@ const PROFILES = {
   human: { react: 0.36, jit: 0.12, late: 0.16, lateT: 0.32, blind: 0.4, aimErr: 0.42, wob: 0.55, dodge: 1.6, nova: 5, novaDanger: 0.35, stand: 17, greed: 0.6, slow: 0.82, catchK: 0.85 },
   demo: { react: 0.12, jit: 0.04, late: 0, lateT: 0, blind: 0.05, aimErr: 0.12, wob: 0.15, dodge: 2.4, nova: 4, novaDanger: 1, stand: 15, greed: 1, slow: 1, catchK: 1 },
 };
-const DANGER = new Set(['husk', 'prowler', 'stinger']);
+const DANGER = new Set(['husk', 'prowler', 'stinger', 'whirler', 'spark', 'maw', 'scorcher']);
 
 export class Autopilot {
   constructor(seed = 1, profile = 'human') {
@@ -59,7 +59,7 @@ export class Autopilot {
     }
     const B = W.boss;
     // the wave's last few machines: go and finish them rather than chasing the skimmer flocks that keep coming by
-    const HOST = ['lifter', 'husk', 'sower', 'hive', 'stinger', 'prowler'];
+    const HOST = ['lifter', 'husk', 'sower', 'hive', 'stinger', 'prowler', 'whirler', 'coil', 'spark', 'scorcher', 'maw'];
     const left = W.enemies.filter((e) => e.hp > 0 && HOST.includes(e.type)).length;
     const endgame = !B && W.plan && W.plan.left === 0 && W.plan.extra.every((x) => x.done) && left > 0 && left <= 3;
     for (const e of W.enemies) {
@@ -77,6 +77,7 @@ export class Autopilot {
       } else if (DANGER.has(e.type) && d < 34) { s = 600 - d * 6; w = 'Fighting off a ' + e.type.toUpperCase() + ' that is on us'; }
       else if (e.type === 'hive') s = (e.link ? 400 : e.cross ? 5 : 80) - d;   // let an intersection pair link first
       else if (e.type === 'sower') s = 60 - d;
+      else if (e.type === 'coil') { s = 110 - d; w = 'Taking out a coil before it lets out more sparks'; }
       else if (e.type === 'skimmer') { s = 30 - d * 1.2; w = 'Clearing a skimmer flock'; }
       else if (e.type === 'meteor') { s = 480 - d * 2 - e.y * 4; w = e.st === 'lava' ? 'Shooting down a lava bomb over the colony' : 'Shooting down a meteor before it hits the colony'; }
       if (e.tell > 0 && d < 40) { s += 150; w = 'Taking out a machine that is about to fire'; }

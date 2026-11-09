@@ -1,9 +1,10 @@
 // Skyhold 2026 3D models with physically based materials: the WARDEN gunship and its BREAKER, ARC and HORNET
-// siblings, the alien machines (lifter, husk, sower, mine, hive, stinger, prowler), settlers, power pods, the
-// five sector bosses and the instanced ground scenery for each world look. Each model is built once from many
-// detailed parts (bevelled side profiles and armour plates, turned parts, greebles, lamps), every static part
-// is merged into one mesh per material class per moving joint, and later copies are cheap clones that share
-// geometry. A panel normal map adds seams, rivets and scratches to painted metal.
+// siblings, the alien machines (lifter, husk, sower, mine, hive, stinger, prowler, skimmer, whirler, coil, spark,
+// scorcher, maw), the skygate ring, settlers, power pods, the five sector bosses and the instanced ground
+// scenery for each world look. Each model is built once from many detailed parts (bevelled side profiles and
+// armour plates, turned parts, greebles, lamps), every static part is merged into one mesh per material class
+// per moving joint, and later copies are cheap clones that share geometry. A panel normal map adds seams,
+// rivets and scratches to painted metal.
 // Every model faces +x with Y up. The camera looks along -z from the +z side (a side view, ~8 degrees from
 // above), so the silhouettes and the z faces carry the detail; both faces are dressed (big things turn round).
 import * as THREE from '../vendor/three.module.min.js';
@@ -1154,6 +1155,319 @@ export function prowler() {
   return { g, strip: by(g, 'strip'), lamps: by(g, 'lamps') };
 }
 
+// ------------------------------------------------------------------ WHIRLER (ring-flying interceptor)
+// 1.2 m across: a lens-shaped disc standing in the side-view plane (XY), dressed with ice-white and teal
+// armour petals on both faces, a slit-pupil eye right through the hub (eye: its own mesh and material, seen
+// from both faces) and a six-bladed rim (blades: a Group at the centre; spin it with blades.rotation.z).
+export function whirler() {
+  const g = make('whirler', () => {
+    const K = new Kit();
+    const R = K.root, B = K.group('blades'), L = K.group('lamps');
+    const teal = paint(0x1d8794, 0.3, 0.6), ice = paint(0xdbe8ed, 0.26, 0.3), dk = paint(0x16232a, 0.34, 0.7), lg = paint(0xa8b4bc, 0.22, 0.9), hot = paint(0xd8322a, 0.32, 0.4), deep = paint(0x1d5560, 0.3, 0.65);
+    const at = atK(K, R), bl = atK(K, B), T = 0x7af5e6;
+    at(lathe('wlbody', [[0, -0.1], [0.16, -0.092], [0.3, -0.068], [0.4, -0.032], [0.43, 0], [0.4, 0.032], [0.3, 0.068], [0.16, 0.092], [0, 0.1]], 20), deep, 0, 0, 0, PI / 2);
+    const faceP = (t) => [0.13 + 0.25 * t, 0.09 - 0.05 * t * t];
+    for (const s of BOTH) {
+      for (let k = 0; k < 6; k++) {
+        const p0 = k * TAU / 6 + 0.05, p1 = (k + 1) * TAU / 6 - 0.05;
+        at(revPatch('wlp' + k, faceP, 0.04, 0.96, p0, p1, 0.022, 1, 3, 0.02), k % 2 ? teal : ice, 0, 0, 0, s * PI / 2);
+        // a hot chevron on every ice petal, a vent grille on every teal one
+        const a = -(p0 + p1) / 2 * s, [r, y] = faceP(0.55);
+        if (k % 2) for (let j = 0; j < 2; j++) at(box(0.07, 0.012, 0.012), M.black, r * Math.cos(a) - (j - 0.5) * 0.024 * Math.sin(a), r * Math.sin(a) + (j - 0.5) * 0.024 * Math.cos(a), s * (y + 0.024), 0, 0, a);
+        else at(box(0.09, 0.022, 0.012), hot, r * Math.cos(a), r * Math.sin(a), s * (y + 0.024), 0, 0, a + PI / 2);
+      }
+      at(tor(0.105, 0.02, 16, 3), lg, 0, 0, s * 0.1);
+      at(tor(0.395, 0.011, 28, 3), glow(T, 4.5), 0, 0, s * 0.042);
+    }
+    // the eye: a glowing lens through the hub with a black slit pupil
+    K.mesh(lathe('wleye', [[0, -0.135], [0.05, -0.128], [0.08, -0.11], [0.085, 0], [0.08, 0.11], [0.05, 0.128], [0, 0.135]], 16), glowM(0xff4a3a, 4.5, 'whirlerEye'), 'eye', 0, 0, 0, PI / 2);
+    at(box(0.022, 0.13, 0.285), M.black);
+    // stator ring and rim lamps
+    at(tor(0.445, 0.024, 28, 4), lg);
+    for (let k = 0; k < 6; k++) { const a = k * TAU / 6 + TAU / 12; for (const s of BOTH) K.add(box(0.026, 0.026, 0.014), glow(k % 2 ? T : 0xff6a4a, 5), 0.37 * Math.cos(a), 0.37 * Math.sin(a), s * 0.052, 0, 0, a + PI / 4, 1, 1, 1, L); }
+    // the blade ring
+    bl(tor(0.5, 0.02, 32, 3), ice);
+    const blade = side([[0.47, -0.045], [0.53, -0.055], [0.585, -0.03], [0.61, 0.015], [0.6, 0.07], [0.565, 0.035], [0.52, 0.03], [0.47, 0.03]], 0.045, 0.014);
+    const edge = side([[0.565, 0.035], [0.6, 0.07], [0.61, 0.015], [0.585, 0.02]], 0.05, 0.01);
+    for (let k = 0; k < 6; k++) {
+      const a = k * TAU / 6;
+      bl(blade, k % 2 ? ice : teal, 0, 0, 0, 0, 0, a);
+      bl(edge, hot, 0, 0, 0, 0, 0, a);
+      bl(box(0.04, 0.03, 0.06), dk, 0.49 * Math.cos(a + 0.02), 0.49 * Math.sin(a + 0.02), 0, 0, 0, a);
+      K.add(ico(0.015), glow(T, 6), 0.6 * Math.cos(a + 0.115), 0.6 * Math.sin(a + 0.115), 0, 0, 0, 0, 1, 1, 1, B);
+    }
+    K.build();
+    return K.root;
+  });
+  return { g, blades: by(g, 'blades'), eye: by(g, 'eye'), lamps: by(g, 'lamps') };
+}
+
+// ------------------------------------------------------------------ COIL (drifting generator)
+// 2.6 m tall: two wound coil stacks under white domes feed a caged core (core: its own mesh and material,
+// pulse core.scale); a vaned rotor ring circles the cage (rotor: spin rotor.rotation.y).
+export function coil() {
+  const g = make('coil', () => {
+    const K = new Kit();
+    const R = K.root, RO = K.group('rotor'), L = K.group('lamps');
+    const vio = paint(0x3b2b63, 0.3, 0.6), vio2 = paint(0x1f1830, 0.36, 0.65), wht = paint(0xe6e2f0, 0.26, 0.3), lg = paint(0xa9a6b8, 0.22, 0.9), wire = paint(0x9358e8, 0.22, 0.9);
+    const at = atK(K, R), ro = atK(K, RO), V = 0xa070ff, VW = 0xe2d0ff;
+    for (const s of BOTH) {
+      // collar, coil stack and dome cap (the bottom mirrors the top: rx = PI)
+      const fl = s > 0 ? 0 : PI, wind = [[0.15, 0]];
+      for (let i = 0; i < 5; i++) { const y0 = 0.02 + i * 0.08; wind.push([0.205, y0], [0.255, y0 + 0.04]); }
+      wind.push([0.205, 0.42], [0.15, 0.44]);
+      at(lathe('clcollar', [[0.17, -0.035], [0.55, -0.035], [0.585, 0], [0.55, 0.035], [0.17, 0.035]], 20), vio, 0, s * 0.42, 0, fl);
+      at(lathe('clwind', wind, 12), wire, 0, s * 0.44, 0, fl);
+      for (let k = 0; k < 4; k++) { const a = k * PI / 2 + PI / 4; K.rod(lg, 0.31 * Math.cos(a), s * 0.45, 0.31 * Math.sin(a), 0.31 * Math.cos(a), s * 0.86, 0.31 * Math.sin(a), 0.016, R, 6); }
+      at(lathe('clcap', [[0.18, 0], [0.46, 0.02], [0.52, 0.08], [0.48, 0.15], [0.34, 0.21], [0.15, 0.25], [0, 0.26]], 18), wht, 0, s * 0.86, 0, s > 0 ? 0 : PI);
+      for (let k = 0; k < 6; k++) { const a = k * PI / 3; K.add(ico(0.03), glow(k % 2 ? V : VW, 5), 0.53 * Math.cos(a), s * 0.94, 0.53 * Math.sin(a), 0, 0, 0, 1, 1, 1, L); }
+      for (let k = 0; k < 3; k++) { const a = k * TAU / 3 + PI / 6; at(box(0.12, 0.012, 0.02), M.black, 0.4 * Math.cos(a), s * 1.0, 0.4 * Math.sin(a), 0, -a, s * 0.5); }
+      // electrode reaching into the cage
+      at(cone(0.065, 0.13, 10), lg, 0, s * 0.355, 0, 0, 0, s > 0 ? PI : 0);
+      at(sph(0.03, 6, 4), glow(VW, 6), 0, s * 0.29, 0);
+    }
+    // spire on top, discharge prongs below
+    at(cyl(0.05, 0.09, 0.08, 12), vio, 0, 1.14, 0);
+    at(cone(0.045, 0.2, 10), lg, 0, 1.28, 0);
+    at(sph(0.045, 8, 6), glow(VW, 6), 0, 1.39, 0);
+    for (let k = 0; k < 3; k++) {
+      const a = k * TAU / 3 + PI / 2, x = 0.2 * Math.cos(a), z = 0.2 * Math.sin(a);
+      K.rod(lg, x * 0.6, -1.08, z * 0.6, x, -1.24, z, 0.022, R, 6);
+      at(ico(0.032), glow(V, 6), x, -1.25, z);
+    }
+    at(tor(0.3, 0.02, 20, 3), glow(V, 3.5), 0, -1.03, 0, PI / 2);
+    // the cage: eight bowed bars, armour on every other one, a bearing race round the middle
+    for (let k = 0; k < 8; k++) {
+      const a = k * PI / 4, c = Math.cos(a), sn = Math.sin(a), pts = [[0.5, 0.42], [0.66, 0], [0.5, -0.42]];
+      for (let i = 0; i < 2; i++) K.rod(lg, pts[i][0] * c, pts[i][1], pts[i][0] * sn, pts[i + 1][0] * c, pts[i + 1][1], pts[i + 1][0] * sn, 0.026, R, 6);
+      if (k % 2 === 0) at(rbox(0.05, 0.36, 0.12, 0.015), wht, 0.69 * c, 0, 0.69 * sn, 0, -a, 0);
+      else at(ico(0.026), glow(V, 5), 0.68 * c, 0, 0.68 * sn);
+    }
+    at(tor(0.72, 0.03, 28, 4), lg, 0, 0, 0, PI / 2);
+    // the core and crackling arcs from the bars
+    K.mesh(sph(0.26, 16, 10), glowM(VW, 3.2, 'coilCore'), 'core');
+    const r = rng(41);
+    for (let k = 0; k < 4; k++) {
+      const a = k * PI / 2 + 0.3, n = 4, P = [];
+      for (let i = 0; i <= n; i++) { const rr = 0.64 - (0.64 - 0.24) * i / n, j = i % n ? (r() - 0.5) * 0.12 : 0, yy = (r() - 0.5) * 0.14 * (i % n ? 1 : 0) + (k % 2 ? 0.1 : -0.1) * (1 - i / n); P.push([rr * Math.cos(a + j), yy, rr * Math.sin(a + j)]); }
+      for (let i = 0; i < n; i++) K.rod(glow(VW, 4), ...P[i], ...P[i + 1], 0.008, R, 4);
+    }
+    // the rotor: a ring on four spokes with four white fins
+    ro(tor(0.92, 0.035, 32, 4), vio, 0, 0, 0, PI / 2);
+    ro(tor(0.92, 0.012, 32, 3), glow(V, 3.5), 0, 0.04, 0, PI / 2);
+    const fin = side([[0.88, -0.24], [0.98, -0.18], [1.05, 0], [0.98, 0.18], [0.88, 0.24]], 0.07, 0.022);
+    for (let k = 0; k < 4; k++) {
+      const a = k * PI / 2, c = Math.cos(a), sn = Math.sin(a);
+      K.rod(lg, 0.745 * c, 0, 0.745 * sn, 0.9 * c, 0, 0.9 * sn, 0.022, RO, 6);
+      ro(fin, wht, 0, 0, 0, 0, -a, 0);
+      ro(box(0.04, 0.3, 0.075), vio2, 0.9 * c, 0, 0.9 * sn, 0, -a, 0);
+      K.add(ico(0.032), glow(VW, 6), 1.05 * c, 0, 1.05 * sn, 0, 0, 0, 1, 1, 1, RO);
+      const b = a + PI / 4;
+      ro(rbox(0.09, 0.1, 0.16, 0.02), vio2, 0.92 * Math.cos(b), 0, 0.92 * Math.sin(b), 0, -b, 0);
+    }
+    K.build();
+    return K.root;
+  });
+  return { g, rotor: by(g, 'rotor'), core: by(g, 'core'), lamps: by(g, 'lamps') };
+}
+
+// ------------------------------------------------------------------ SPARK (the coil's hunter mote)
+// 0.7 m: a white-hot core (core: its own mesh and material) inside a cage of rings and twelve spikes
+// (spikes: a Group, spin or jitter it).
+export function spark() {
+  const g = make('spark', () => {
+    const K = new Kit();
+    const S = K.group('spikes');
+    const dk = paint(0x241c36, 0.32, 0.7), lg = paint(0xb0aec0, 0.2, 0.92), vio = paint(0x5a3ca8, 0.28, 0.7);
+    const sp = atK(K, S);
+    K.mesh(sph(0.12, 16, 12), glowM(0xe6d6ff, 3.6, 'sparkCore'), 'core');
+    sp(tor(0.175, 0.013, 20, 3), dk);
+    sp(tor(0.175, 0.013, 20, 3), dk, 0, 0, 0, PI / 2);
+    sp(tor(0.175, 0.01, 20, 3), glow(0xa070ff, 4), 0, 0, 0, 0, PI / 2);
+    const ph = (1 + Math.sqrt(5)) / 2, dirs = [];
+    for (const a of [-1, 1]) for (const b of [-1, 1]) dirs.push(v3(0, a, b * ph), v3(a, b * ph, 0), v3(b * ph, 0, a));
+    dirs.forEach((d, i) => {
+      d.normalize();
+      const L = i % 3 === 0 ? 0.17 : 0.13, o = orient(d);
+      sp(cyl(0.024, 0.032, 0.04, 6), i % 2 ? vio : dk, ...d.clone().multiplyScalar(0.19).toArray(), ...o);
+      sp(cone(0.02, L, 6), lg, ...d.clone().multiplyScalar(0.21 + L / 2).toArray(), ...o);
+      K.add(ico(0.014), glow(i % 3 ? 0xc8a8ff : 0xffffff, 6), ...d.clone().multiplyScalar(0.215 + L).toArray(), 0, 0, 0, 1, 1, 1, S);
+    });
+    for (const a of [-1, 1]) for (const b of [-1, 1]) for (const c of [-1, 1]) { const d = v3(a, b, c).normalize(); sp(ico(0.026), dk, ...d.multiplyScalar(0.18).toArray(), ...orient(d)); }
+    K.build();
+    return K.root;
+  });
+  return { g, core: by(g, 'core'), spikes: by(g, 'spikes') };
+}
+
+// ------------------------------------------------------------------ SCORCHER (fire-throwing raider)
+// 2.2 m: a charcoal wedge with ember armour, drooped blade wings, a chin igniter, twin rear jets and a mortar
+// on its back whose mouth and heat slits glow (vent: its own mesh and material, pulse it when it fires).
+export function scorcher() {
+  const g = make('scorcher', () => {
+    const K = new Kit();
+    const R = K.root, L = K.group('lamps');
+    const ch = paint(0x252323, 0.4, 0.6), ch2 = paint(0x3a3633, 0.36, 0.65), emb = paint(0xd2561c, 0.36, 0.4), lg = paint(0x9a9a9e, 0.24, 0.88), blk = M.black;
+    const at = atK(K, R), E = 0xff6a1a, EH = 0xffb050;
+    const P = [[1.12, -0.03], [0.75, 0.07], [0.15, 0.2], [-0.55, 0.28], [-0.98, 0.27], [-1.04, 0.1], [-1.0, -0.12], [-0.55, -0.21], [0.35, -0.18], [0.95, -0.09]];
+    at(taperZ(side(P, 0.64, 0.06, 32), 0.1, 1.12, 0.3), ch);
+    at(side([[0.7, 0.05], [0.15, 0.225], [-0.55, 0.31], [-0.94, 0.3], [-0.94, 0.18], [0.7, 0.02]], 0.3, 0.04, 32), ch2);
+    // armour belt with ember chevrons and black seams
+    at(side([[0.12, 0.08], [-0.92, 0.22], [-0.96, -0.08], [0.12, -0.13]], 0.68, 0.03, 32), ch2);
+    for (const s of BOTH) {
+      at(side([[0.08, 0.02], [-0.3, 0.17], [-0.9, 0.19], [-0.9, 0.1], [-0.36, 0.08], [-0.02, -0.08]], 0.012, 0.004), emb, 0, 0, s * 0.343);
+      for (const x of [-0.2, -0.5, -0.78]) at(box(0.008, 0.26, 0.006), blk, x, 0.02, s * 0.345);
+      for (let k = 0; k < 4; k++) at(box(0.022, 0.09, 0.008), glow(E, 2.6 + k * 0.4), 0.02 - k * 0.05, -0.05, s * 0.345);
+      at(sph(0.12, 10, 6), M.glass, 0.48, 0.1, s * 0.15, 0, s * 0.3, 0, 1.4, 0.3, 0.35);
+      // drooped blade wings
+      const W = (pts) => pts.map(([x, zz]) => [x, s * zz]);
+      at(slab(W([[0.25, 0.3], [-0.35, 0.82], [-0.56, 0.84], [-0.5, 0.3]]), 0.05, 0.016), ch, 0, -0.08, 0, s * 0.28);
+      at(slab(W([[0.22, 0.32], [-0.36, 0.82], [-0.42, 0.83], [0.12, 0.32]]), 0.056, 0.014), emb, 0, -0.08, 0, s * 0.28);
+      const c = Math.cos(0.28), sn = Math.sin(0.28);
+      K.add(ico(0.024), glow(EH, 6), -0.5, -0.08 - 0.84 * sn, s * 0.84 * c, 0, 0, 0, 1, 1, 1, L);
+      // rear jets
+      at(lathe('scjet', [[0.1, 0], [0.125, 0.04], [0.14, 0.17], [0.125, 0.18], [0.095, 0.05]], 12), lg, -0.98, 0.05, s * 0.16, 0, 0, PI / 2);
+      at(cyl(0.1, 0.1, 0.01, 14), glow(EH, 5), -1.08, 0.05, s * 0.16, 0, 0, PI / 2);
+      at(tor(0.13, 0.014, 12, 3), ch2, -1.0, 0.05, s * 0.16, 0, PI / 2, 0);
+    }
+    // chin igniter and ventral fin
+    at(cyl(0.045, 0.06, 0.26, 12), lg, 1.0, -0.08, 0, 0, 0, PI / 2);
+    at(tor(0.055, 0.012, 12, 4), emb, 0.93, -0.08, 0, 0, PI / 2, 0);
+    at(sph(0.03, 6, 4), glow(EH, 6), 1.135, -0.08, 0);
+    at(side([[-0.45, -0.16], [-0.85, -0.13], [-1.0, -0.36], [-0.86, -0.37]], 0.05, 0.016), ch2);
+    at(side([[-0.88, -0.3], [-1.0, -0.36], [-0.86, -0.37]], 0.056, 0.01), emb);
+    at(side([[-0.6, 0.3], [-0.94, 0.3], [-1.08, 0.56], [-0.98, 0.57]], 0.05, 0.016), ch2);
+    at(side([[-0.98, 0.45], [-1.08, 0.56], [-0.98, 0.57], [-0.93, 0.46]], 0.056, 0.01), emb);
+    K.add(ico(0.024), glow(0xff3a1a, 6), -1.03, 0.57, 0, 0, 0, 0, 1, 1, 1, L);
+    // the mortar on its back: base ring, housing with fins, banded barrel raked forward
+    at(cyl(0.2, 0.25, 0.08, 18), ch2, -0.35, 0.33, 0);
+    at(rbox(0.46, 0.17, 0.34, 0.05), ch, -0.36, 0.44, 0);
+    for (const s of BOTH) for (let k = 0; k < 4; k++) at(box(0.035, 0.12, 0.02), lg, -0.56 + k * 0.08, 0.44, s * 0.18);
+    const bx = -0.3, by0 = 0.47, rk = -0.55;
+    at(lathe('scbar', [[0.12, 0], [0.13, 0.03], [0.115, 0.06], [0.115, 0.12], [0.135, 0.13], [0.135, 0.16], [0.115, 0.17], [0.115, 0.24], [0.135, 0.25], [0.135, 0.28], [0.115, 0.29], [0.115, 0.34], [0.14, 0.35], [0.14, 0.39], [0.1, 0.39], [0.1, 0.3]], 14), lg, bx, by0, 0, 0, 0, rk);
+    at(tor(0.12, 0.03, 16, 5), emb, bx, by0 + 0.02, 0, PI / 2, 0, 0);
+    const mx = bx - Math.sin(rk) * 0.33, my = by0 + Math.cos(rk) * 0.33;
+    K.mesh(combo('scvent', [[cyl(0.1, 0.1, 0.02, 14), mx, my, 0, 0, 0, rk], ...[0, 1, 2, 3].flatMap((k) => [[box(0.03, 0.08, 0.01), -0.5 + k * 0.08, 0.44, 0.174], [box(0.03, 0.08, 0.01), -0.5 + k * 0.08, 0.44, -0.174]])]), glowM(E, 4, 'scorchVent'), 'vent');
+    K.build();
+    return K.root;
+  });
+  return { g, vent: by(g, 'vent'), lamps: by(g, 'lamps') };
+}
+
+// ------------------------------------------------------------------ MAW (armoured biter)
+// 2.6 m: a dark skull carapace under bone armour with a lens eye right through it (core: its own mesh and
+// material, seen on both flanks), and two fanged jaws hinged at x = 0.12: jawU.rotation.z = +a and
+// jawL.rotation.z = -a open the mouth toward +x (a = 0 .. ~0.5).
+export function maw() {
+  const g = make('maw', () => {
+    const K = new Kit();
+    const R = K.root, L = K.group('lamps');
+    const JU = K.group('jawU', R, 0.12, 0.03, 0), JL = K.group('jawL', R, 0.12, -0.03, 0);
+    const bone = paint(0xd6c9a6, 0.42, 0.25), bone2 = paint(0x8e7f66, 0.45, 0.35), crim = paint(0x8a1622, 0.34, 0.45), dk = paint(0x231a1c, 0.4, 0.6), lg = paint(0x9a979a, 0.26, 0.85), fang = paint(0xf0e8d4, 0.3, 0.2);
+    const at = atK(K, R), ju = atK(K, JU), jl = atK(K, JL), C = 0xff2a3a;
+    const zb = (x) => { const t = Math.min(1, Math.max(0, (-0.3 - x) / 1.0)); return 0.42 * (1 - 0.45 * t * t); };
+    at(taperZ(side(hull([[0.4, 0.24], [0.1, 0.4], [-0.5, 0.42], [-1.02, 0.26], [-1.3, 0.1]], [[-1.3, -0.06], [-1.0, -0.26], [-0.4, -0.38], [0.15, -0.32], [0.4, -0.16]], 12), 0.84, 0.13), -0.3, -1.3, 0.55), dk);
+    // bone dorsal shell with a crimson spine and raked spines
+    at(side([...crv([[0.36, 0.28], [0.05, 0.47], [-0.5, 0.48], [-0.98, 0.32]], 10), [-0.98, 0.16], [0.36, 0.16]], 0.6, 0.08), bone);
+    at(side([...crv([[0.2, 0.44], [-0.5, 0.505], [-0.92, 0.36]], 8), [-0.92, 0.3], [0.2, 0.36]], 0.12, 0.03), crim);
+    for (let k = 0; k < 4; k++) { const x = -0.05 - k * 0.24, y = yAt([[0.05, 0.5], [-0.5, 0.5], [-0.98, 0.33]], x); at(cone(0.045 - k * 0.006, 0.26 - k * 0.04, 6), bone2, x - 0.06, y + 0.08, 0, 0, 0, 0.9); }
+    // flank ribs, crimson seams, the eye and its brow
+    for (const s of BOTH) {
+      for (const x of [-0.42, -0.66, -0.9]) {
+        at(side([[x + 0.05, 0.3], [x - 0.09, 0.28], [x - 0.17, -0.24], [x - 0.04, -0.27]], 0.05, 0.016), bone, 0, 0, s * (zb(x - 0.06) + 0.012));
+        at(box(0.02, 0.4, 0.01), crim, x - 0.17, 0.02, s * (zb(x - 0.17) + 0.004));
+      }
+      at(tor(0.13, 0.026, 16, 4), lg, -0.14, 0.14, s * 0.43);
+      at(tor(0.16, 0.012, 16, 3), crim, -0.14, 0.14, s * 0.425);
+      at(side([[0.12, 0.3], [-0.3, 0.33], [-0.36, 0.25], [0.06, 0.24]], 0.05, 0.015), crim, 0, 0, s * 0.43);
+      at(cyl(0.12, 0.12, 0.05, 18), crim, 0.12, 0, s * 0.43, PI / 2);
+      at(cyl(0.06, 0.06, 0.06, 12), lg, 0.12, 0, s * 0.44, PI / 2);
+      for (const x of [0.25, -0.0, -0.25]) K.add(ico(0.02), glow(C, 5), x - 0.1, -0.24, s * 0.4, 0, 0, 0, 1, 1, 1, L);
+    }
+    K.mesh(lathe('mweye', [[0, -0.46], [0.07, -0.452], [0.105, -0.43], [0.11, -0.4], [0.11, 0.4], [0.105, 0.43], [0.07, 0.452], [0, 0.46]], 18), glowM(C, 4, 'mawCore'), 'core', -0.14, 0.14, 0, PI / 2);
+    at(box(0.03, 0.18, 0.93), M.black, -0.14, 0.14, 0);
+    // throat glow at the back of the mouth (shows when it opens)
+    at(side([[0.42, 0.14], [0.45, 0.0], [0.42, -0.12], [0.36, 0.0]], 0.42, 0.04), glow(C, 2.4));
+    // tail fin, belly keel and twin jets
+    at(side([[-0.85, 0.3], [-1.22, 0.24], [-1.4, 0.52], [-1.26, 0.54]], 0.05, 0.016), bone2);
+    at(side([[-1.3, 0.44], [-1.4, 0.52], [-1.26, 0.54]], 0.056, 0.01), crim);
+    at(side([[-0.3, -0.34], [-0.85, -0.26], [-1.02, -0.42], [-0.6, -0.42]], 0.06, 0.02), bone2);
+    for (const s of BOTH) {
+      at(cyl(0.085, 0.1, 0.16, 14), lg, -1.28, 0.02, s * 0.12, 0, 0, PI / 2);
+      at(cyl(0.07, 0.07, 0.01, 14), glow(0xff6a4a, 5), -1.365, 0.02, s * 0.12, 0, 0, PI / 2);
+    }
+    // the jaws (each group's origin is the hinge): bone beaks, crimson gums and armour, fangs
+    const ztU = (x) => { const t = Math.min(1, Math.max(0, (x - 0.3) / 0.8)); return 0.36 * (1 - 0.55 * t * t); };
+    ju(taperZ(side([[-0.14, 0.0], [-0.06, 0.26], [0.4, 0.3], [0.85, 0.2], [1.1, 0.02], [1.06, -0.04], [0.9, -0.02], [0.3, -0.02], [0.0, -0.04]], 0.72, 0.07), 0.3, 1.1, 0.45), bone);
+    ju(side([[0.18, 0.33], [0.82, 0.235], [1.02, 0.1], [0.95, 0.08], [0.78, 0.17], [0.18, 0.25]], 0.36, 0.03), crim);
+    ju(side([[0.0, -0.02], [0.98, -0.01], [0.98, -0.05], [0.0, -0.07]], 0.5, 0.02), crim);
+    jl(taperZ(side([[-0.14, 0.0], [0.0, 0.04], [0.3, 0.02], [0.95, 0.02], [1.04, -0.02], [0.95, -0.12], [0.55, -0.24], [0.1, -0.28], [-0.12, -0.18]], 0.66, 0.07), 0.3, 1.04, 0.45), bone2);
+    jl(side([[0.1, -0.27], [0.55, -0.235], [0.9, -0.13], [0.86, -0.1], [0.5, -0.17], [0.1, -0.2]], 0.5, 0.03), crim);
+    jl(side([[0.0, 0.07], [0.92, 0.06], [0.92, 0.02], [0.0, 0.0]], 0.46, 0.02), crim);
+    for (const s of BOTH) {
+      for (let k = 0; k < 6; k++) {
+        const x = 0.28 + k * 0.13, Lf = k === 4 ? 0.2 : 0.11;
+        ju(cone(0.032, Lf, 6), fang, x, -0.06 - Lf / 2, s * (ztU(x) - 0.08), 0, 0, PI);
+        const x2 = x + 0.065, L2 = k === 1 ? 0.17 : 0.09;
+        if (x2 < 0.95) jl(cone(0.03, L2, 6), fang, x2, 0.05 + L2 / 2, s * (ztU(x2) * 0.92 - 0.08));
+      }
+      ju(ico(0.022), glow(C, 5), 0.7, 0.16, s * (ztU(0.7) + 0.005));
+      jl(box(0.3, 0.02, 0.01), glow(C, 3), 0.45, -0.12, s * (ztU(0.45) * 0.92 + 0.005), 0, 0, 0.18);
+    }
+    K.build();
+    return K.root;
+  });
+  return { g, jawU: by(g, 'jawU'), jawL: by(g, 'jawL'), core: by(g, 'core'), lamps: by(g, 'lamps') };
+}
+
+// ------------------------------------------------------------------ SKYGATE (the ring the player flies through)
+// 9 m across, opening facing +-x: a heavy segmented band with armour, clamps and lamps (ring: spin it slowly
+// about x), an inner toothed ring with shimmer arcs (inner: spin it the other way about x) and a pale film
+// across the opening (film: one mesh on a clone of the shared clear-glass material; animate its opacity).
+export function skygate() {
+  const g = make('skygate', () => {
+    const K = new Kit();
+    const R = K.root, RG = K.group('ring'), IN = K.group('inner');
+    const gun = paint(0x2b3038, 0.34, 0.75), gun2 = paint(0x40464f, 0.3, 0.8), ivo = paint(0xd8d3c4, 0.3, 0.3), amb = paint(0xd89a2a, 0.36, 0.4), lg = paint(0x9ca3ab, 0.24, 0.9);
+    const rg = atK(K, RG), ri = atK(K, IN), T = 0x4af0d8, A = 0xffb040;
+    const pc = (r, a) => [r * Math.cos(a), r * Math.sin(a)];
+    rg(ngonRing(48, 3.72, 4.3, 0.9, 0, 0.06), gun, 0, 0, 0, 0, 0, PI / 2);
+    for (const s of BOTH) { rg(tor(3.72, 0.07, 40, 4), lg, s * 0.43, 0, 0, 0, PI / 2, 0); rg(tor(4.3, 0.05, 48, 3), lg, s * 0.43, 0, 0, 0, PI / 2, 0); }
+    for (let k = 0; k < 12; k++) {
+      const a = k * TAU / 12, [y, z] = pc(4.42, a), b = a + TAU / 24;
+      rg(rbox(1.1, 0.3, 1.7, 0.06), k % 3 === 0 ? amb : ivo, 0, y, z, a);
+      rg(rbox(0.5, 0.08, 1.3, 0.025), gun2, 0, ...pc(4.6, a), a);
+      // joints: clamps, lamps on the rim and on both faces
+      const [y2, z2] = pc(4.36, b);
+      rg(box(1.3, 0.5, 0.36), gun2, 0, y2, z2, b);
+      rg(cyl(0.12, 0.12, 1.36, 8), lg, 0, ...pc(4.62, b), 0, 0, PI / 2);
+      K.add(sph(0.12, 6, 4), glow(k % 2 ? T : A, 6), 0, ...pc(4.76, b), 0, 0, 0, 1, 1, 1, RG);
+      for (const s of BOTH) {
+        K.add(box(0.04, 0.14, 0.3), glow(T, 4), s * 0.665, ...pc(4.36, b), b, 0, 0, 1, 1, 1, RG);
+        rg(box(0.06, 0.36, 0.8), gun2, s * 0.46, ...pc(4.0, a), a);
+        K.add(box(0.03, 0.05, 0.6), glow(k % 2 ? T : A, 2.6), s * 0.49, ...pc(4.0, a), a, 0, 0, 1, 1, 1, RG);
+      }
+    }
+    // inner ring: a toothed race with glowing edges and faint shimmer arcs across the opening
+    ri(tor(3.5, 0.13, 48, 5), lg, 0, 0, 0, 0, PI / 2, 0);
+    for (const s of BOTH) K.add(tor(3.5, 0.025, 48, 3), glow(T, 3.5), s * 0.13, 0, 0, 0, PI / 2, 0, 1, 1, 1, IN);
+    for (let k = 0; k < 16; k++) {
+      const a = k * TAU / 16;
+      ri(box(0.34, 0.3, 0.14), k % 2 ? gun : ivo, 0, ...pc(3.3, a), a);
+      if (k % 2) K.add(ico(0.075), glow(T, 5), 0, ...pc(3.13, a), 0, 0, 0, 1, 1, 1, IN);
+    }
+    [[3.0, 2.4, 0.3], [2.3, 1.7, 2.2], [1.5, 2.8, 4.0], [0.8, 1.4, 1.1]].forEach(([r, arc, rot], i) => K.add(arcT(r, 0.018, arc, 28, 3), glow(i % 2 ? 0x9afcff : T, 1.4), 0, 0, 0, rot, PI / 2, 0, 1, 1, 1, IN));
+    // the film
+    const fm = M.glassT.clone();
+    fm.color.set(0x8ff0e8); fm.emissive.set(0x1a7a7c); fm.opacity = 0.24; fm.name = 'gateFilm';
+    const film = K.mesh(cyl(3.38, 3.38, 0.03, 48), fm, 'film', 0, 0, 0, 0, 0, PI / 2);
+    film.castShadow = false; film.receiveShadow = false;
+    K.build();
+    return K.root;
+  });
+  return { g, ring: by(g, 'ring'), inner: by(g, 'inner'), film: by(g, 'film') };
+}
+
 // ------------------------------------------------------------------ SETTLER
 // 0.9 m colonist in an environment suit, feet at y = 0, facing +x. Limbs are Groups pivoting at the hips
 // and shoulders: rotation.z swings them forward (+) / back (-) in the side view.
@@ -1907,7 +2221,7 @@ export function scenery(lookKey) {
 }
 
 // nominal sizes (m): lengths along x, the settler's height, the lifter's width
-export const SIZE = { ship: 3.4, breaker: 3.7, arc: 3.6, hornet: 2.8, lifter: 2.4, husk: 2.0, sower: 3.0, mine: 0.6, hive: 2.6, stinger: 0.9, prowler: 3.2, skimmer: 1.4, settler: 0.9, pod: 0.9, ark: 22, reaper: 19.5, loom: 18.3, hulk: 18.8, throne: 22 };
+export const SIZE = { ship: 3.4, breaker: 3.7, arc: 3.6, hornet: 2.8, lifter: 2.4, husk: 2.0, sower: 3.0, mine: 0.6, hive: 2.6, stinger: 0.9, prowler: 3.2, skimmer: 1.4, whirler: 1.2, coil: 2.6, spark: 0.7, scorcher: 2.2, maw: 2.6, skygate: 9, settler: 0.9, pod: 0.9, ark: 22, reaper: 19.5, loom: 18.3, hulk: 18.8, throne: 22 };
 export const GEO = { box, cyl, sph, cap, tor, rbox, slab, side, washer, cone, ico, shard };
 // a plain mesh helper
 export function add(p, g, mat, x = 0, y = 0, z = 0, rx = 0, ry = 0, rz = 0) {
