@@ -4466,5 +4466,30 @@
       "continuity": "White Furnace is broad molten basin at upper left; a tapered black crustal peninsula called Split Tongue points from lower right toward its center, with two unequal prongs, long left prong and short right prong. Cooled arc of Ash Rim lies along lower right; a narrow glowing seam called Threadline tracks peninsula left edge. Fixed illumination from upper left. White-gold hottest melt, amber-to-deep-red cooling edge, charcoal crust, restrained pale-gray vapour against near-black sky. Glow is thermal emission, no neon blue bioluminescence.",
       "entryDescription": "Wide geographic return to unequal Split Tongue prongs and White Furnace, with explicit uncertain possible subsurface return, no established closed-cycle claim."
     }
+  },
+  {
+    "id": "2026-11-09-weekly-world-rime-aperture-the-frozen-pressure-engine-intro",
+    "title": "Rime Aperture: The Frozen Pressure Engine — Introductory Field Chart",
+    "tests": "NASA/JPL and ESA sources read; invented planetary parameters explicitly separated. Evidence: /home/jez237/.openclaw/workspace/state/image-archive-pipeline/2026-11-09T0020/world-evidence.json; archive_slot=2026-11-09T00:20; concept=rime-aperture-polar-sublimation-field-chart; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; Story beat: 0/7",
+    "prompt": "Create the finished introductory scientific field atlas for RIME APERTURE, an explicitly hypothetical alien planet, with the subtitle “Science-informed speculative world / artist’s impression”. Visually artistic first: a dominant exquisitely rendered sweeping oblique polar landscape fills most of the composition, ivory translucent carbon-dioxide slab ice resting on charcoal basaltic sediment, with delicate lavender shadow, low pale-gold spring sunlight from upper left, tactile granular dust and fine stress fractures. Crescent Scarp curves at upper right, Three Teeth is exactly three low dark knobs at mid-left, Basin Loom is an organic branching channel network converging toward the tiny central Pin Eye vent. Generous asymmetrical composition, realistic scientific-documentary environmental rendering with refined technical ink annotations woven into the negative space. Not a poster mockup, no rigid panels or boxed grid. Show a restrained dust fan from a narrow vent, never an enormous volcanic explosion. Gas is mostly invisible, not a luminous liquid. Ice remains grounded except a small physically supported cutaway lip.\nOrganically integrate a large curved ground cross-section into the lower landscape edge, clearly titled “Conceptual section — not to scale”: a translucent CO2 slab above dark grains, sunlight arrows warming substrate, a very shallow basal gas gap and arrows leading toward one crack; label “Basal sublimation”, “Pressurized CO2 gas”, “Dust carried through a crack”. Show solid-to-gas transition directly, no liquid phase, no blue water. An elegant thin curved arrow connects the section's vent to the hero's Pin Eye. Nest a small grain-scale study of dark particles deposited on white ice in a natural open margin; connect with a slender leader line. These are illustrative processes rather than measurements.\nProminent title “RIME APERTURE” and subordinate “The frozen pressure engine”. Label the three landmarks and Basin Loom cleanly. Retain a readable evidence hierarchy as three concise open text clusters, no cards: “OBSERVED / MEASURED — Mars analog: orbital images show seasonal dark spots and branched terrain. Rime Aperture has not been observed.”; “MODELED / INFERRED — Sunlight can warm dark ground beneath CO2 ice. Sublimation builds gas pressure; vents entrain dust. Laboratory work reproduces several processes.”; “SPECULATIVE — This planet, terrain and seasonal sequence are invented. No life or settlements.” Include a small airy planetary crescent with polar-cap locator, explicitly “Hypothetical world”, no misleading measured map scale. Short footer “Science basis: NASA/JPL; ESA • Mars analog, not an exoplanet observation”. Make every principal label legible, elegant confident typography and ample breathing room. No biological spiders, humans, spacecraft, structures, vegetation, fantasy glow, floating ice islands, lava, liquid rivers, decorative neon or extraneous text. Beautiful scientifically restrained material detail, broad environmental scale, coherent illumination. Render the atlas itself directly.",
+    "image": "images/2026-11-09-weekly-world-rime-aperture-the-frozen-pressure-engine-intro.jpg",
+    "thumb": "thumbs/2026-11-09-weekly-world-rime-aperture-the-frozen-pressure-engine-intro.webp",
+    "color": "#beadab",
+    "date": "2026-11-09",
+    "batch": "Daily Prompt",
+    "slot": "weekly-world",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1122x1402",
+    "dedup": {
+      "conceptKey": "rime-aperture-polar-sublimation-field-chart",
+      "imageSha256": "9de1ad6adc3b6d94b6ca175e87e0e576b782d832db6f6bf60d7b1658376c639b",
+      "imageDHash": "b4bf3ddfd696131f"
+    },
+    "world": {
+      "name": "Rime Aperture",
+      "description": "An explicitly hypothetical cold rocky exoplanet reveals a branching landscape as seasonal carbon-dioxide slab ice vents and retreats.",
+      "continuity": "Chalk-white seasonal CO2 ice over charcoal basaltic fines; restrained lavender shadows and pale gold low spring sunlight from upper left. Crescent Scarp curves along upper right, three dark low basalt knobs called Three Teeth stand at mid-left, branching Basin Loom drains toward a central vent called Pin Eye. No liquid water, vegetation, animals, people, cities, machinery or lava.",
+      "entryDescription": "Establish geography and evidence boundary with a sweeping polar atlas and integrated basal sublimation study."
+    }
   }
 ]
