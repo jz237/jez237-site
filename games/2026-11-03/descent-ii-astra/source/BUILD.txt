@@ -1475,4 +1475,5 @@ R85 - normal campaign demo combat
 - Live demos start with the native campaign loadout and earn weapons through pickups.
 - The optional full arsenal showcase remains available and explicitly describes its max-level quad lasers.
 - Demo startup respects the selected difficulty instead of forcing Rookie.
+- Native robot hit attachments now use short hull sparks; missile detonations and actual deaths retain their separate explosions.
 - Native robot shields, weapon damage, firing rates, pickups, flight controls and AI tactics are unchanged.

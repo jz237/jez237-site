@@ -988,7 +988,7 @@ index 522a2b7..482b177 100644
  	//	Hook in the rumble sound effect here.
  
 diff --git a/d2/main/collide.c b/d2/main/collide.c
-index fdb2e78..1069433 100644
+index fdb2e78..e941643 100644
 --- a/d2/main/collide.c
 +++ b/d2/main/collide.c
 @@ -649,6 +649,10 @@ int check_effect_blowup(segment *seg,int side,vms_vector *pnt, object *blower, i
@@ -1053,7 +1053,21 @@ index fdb2e78..1069433 100644
  
  	//	Do unspeakable hacks to make sure player doesn't die after killing boss.  Or before, sort of.
  	if (Robot_info[robot->id].boss_flag)
-@@ -2215,6 +2228,10 @@ extern fix64 Buddy_sorry_time;
+@@ -1656,10 +1669,11 @@ void collide_robot_and_weapon( object * robot, object * weapon, vms_vector *coll
+ 			multi_robot_request_change(robot, Objects[weapon->ctype.laser_info.parent_num].id);
+ #endif
+ 
++        extern object *astra_create_robot_hit(short,vms_vector*,fix,int);
+ 		if ( Robot_info[robot->id].exp1_vclip_num > -1 )
+-			expl_obj = object_create_explosion( weapon->segnum, collision_point, (robot->size/2*3)/4, Robot_info[robot->id].exp1_vclip_num );
++			expl_obj = astra_create_robot_hit( weapon->segnum, collision_point, (robot->size/2*3)/4, Robot_info[robot->id].exp1_vclip_num );
+ 		else if ( Weapon_info[weapon->id].robot_hit_vclip > -1 )
+-			expl_obj = object_create_explosion( weapon->segnum, collision_point, Weapon_info[weapon->id].impact_size, Weapon_info[weapon->id].robot_hit_vclip );
++			expl_obj = astra_create_robot_hit( weapon->segnum, collision_point, Weapon_info[weapon->id].impact_size, Weapon_info[weapon->id].robot_hit_vclip );
+ 
+ 		if (expl_obj)
+ 			obj_attach(robot,expl_obj);
+@@ -2215,6 +2229,10 @@ extern fix64 Buddy_sorry_time;
  
  void apply_damage_to_player(object *playerobj, object *killer, fix damage, ubyte possibly_friendly)
  {
@@ -1064,7 +1078,7 @@ index fdb2e78..1069433 100644
  	if (Player_is_dead)
  		return;
  
-@@ -2238,6 +2255,7 @@ void apply_damage_to_player(object *playerobj, object *killer, fix damage, ubyte
+@@ -2238,6 +2256,7 @@ void apply_damage_to_player(object *playerobj, object *killer, fix damage, ubyte
  
  	if (playerobj->id == Player_num) {		//is this the local player?
  		Players[Player_num].shields -= damage;
@@ -1072,7 +1086,7 @@ index fdb2e78..1069433 100644
  		PALETTE_FLASH_ADD(f2i(damage)*4,-f2i(damage/2),-f2i(damage/2));	//flash red
  
  		if (Players[Player_num].shields < 0)	{
-@@ -2403,6 +2421,7 @@ void collide_player_and_weapon( object * playerobj, object * weapon, vms_vector
+@@ -2403,6 +2422,7 @@ void collide_player_and_weapon( object * playerobj, object * weapon, vms_vector
  
  	maybe_kill_weapon(weapon,playerobj);
  
@@ -1080,7 +1094,7 @@ index fdb2e78..1069433 100644
  	bump_two_objects(playerobj, weapon, 0);	//no damage from bump
  
  	if ( !Weapon_info[weapon->id].damage_radius ) {
-@@ -2567,6 +2586,7 @@ void collide_robot_and_materialization_center(object *objp)
+@@ -2567,6 +2587,7 @@ void collide_robot_and_materialization_center(object *objp)
  extern int Network_got_powerup; // HACK!!!
  
  void collide_player_and_powerup( object * playerobj, object * powerup, vms_vector *collision_point ) {
@@ -1088,7 +1102,7 @@ index fdb2e78..1069433 100644
  	if (object_is_observer(playerobj)) {
  		return;
  	}
-@@ -2768,6 +2788,7 @@ void collide_two_objects( object * A, object * B, vms_vector *collision_point )
+@@ -2768,6 +2789,7 @@ void collide_two_objects( object * A, object * B, vms_vector *collision_point )
  		return;
  	}
  
@@ -1096,7 +1110,7 @@ index fdb2e78..1069433 100644
  	collision_type = COLLISION_OF(A->type,B->type);
  
  	switch( collision_type )	{
-@@ -2825,6 +2846,7 @@ void collide_two_objects( object * A, object * B, vms_vector *collision_point )
+@@ -2825,6 +2847,7 @@ void collide_two_objects( object * A, object * B, vms_vector *collision_point )
  	default:
  		Int3();	//Error( "Unhandled collision_type in collide.c!\n" );
  	}
@@ -1105,7 +1119,7 @@ index fdb2e78..1069433 100644
  
  #define ENABLE_COLLISION(type1,type2)					\
 diff --git a/d2/main/fireball.c b/d2/main/fireball.c
-index fe9b0d1..d3ea8c6 100644
+index fe9b0d1..3df53ec 100644
 --- a/d2/main/fireball.c
 +++ b/d2/main/fireball.c
 @@ -22,6 +22,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
@@ -1116,10 +1130,11 @@ index fe9b0d1..d3ea8c6 100644
  #include "fix.h"
  #include "vecmat.h"
  #include "gr.h"
-@@ -65,6 +66,222 @@ fix	Flash_effect=0;
+@@ -65,7 +66,223 @@ fix	Flash_effect=0;
  
  int	PK1=1, PK2=8;
  
+-object *object_create_explosion_sub(object *objp, short segnum, vms_vector * position, fix size, int vclip_type, fix maxdamage, fix maxdistance, fix maxforce, int parent )
 +static int astra_fire_clip(int id, const char *name)
 +{
 +    if(id==VCLIP_PLAYER_HIT || id==VCLIP_SMALL_EXPLOSION || id==VCLIP_VOLATILE_WALL_HIT || (name && !strncmp(name,"exp",3)))return 1;
@@ -1127,7 +1142,7 @@ index fe9b0d1..d3ea8c6 100644
 +       id==VCLIP_PLAYER_APPEARANCE || id==VCLIP_MORPHING_ROBOT)return 0;
 +    for(int i=0;i<N_weapon_types;i++)if(id==Weapon_info[i].wall_hit_vclip || id==Weapon_info[i].robot_hit_vclip)return 1;
 +    for(int i=0;i<N_robot_types;i++)
-+        if(id==Robot_info[i].exp2_vclip_num)return 1;
++        if(id==Robot_info[i].exp1_vclip_num || id==Robot_info[i].exp2_vclip_num)return 1;
 +    return 0;
 +}
 +/* Derived only from immutable object data. Visual and audio choices never touch the gameplay RNG. */
@@ -1336,14 +1351,15 @@ index fe9b0d1..d3ea8c6 100644
 +    EM_ASM(Module.blastSounds=(Module.blastSounds||0)+1;Module.blastSoundMask=(Module.blastSoundMask||0)|(1<<($0%31));,sample);
 +}
 +
- object *object_create_explosion_sub(object *objp, short segnum, vms_vector * position, fix size, int vclip_type, fix maxdamage, fix maxdistance, fix maxforce, int parent )
++object *object_create_explosion_sub(object *objp, short segnum, vms_vector * position, fix size, int vclip_type, fix maxdamage, fix maxdistance, fix maxforce, int parent, int hull_impact )
  {
  	int objnum;
+ 	object *obj;
 @@ -87,6 +304,9 @@ object *object_create_explosion_sub(object *objp, short segnum, vms_vector * pos
  	//now set explosion-specific data
  
  	obj->lifeleft = Vclip[vclip_type ].play_time;
-+    int plume_tier=astra_plume_tier(objp,vclip_type,size,maxdamage);
++    int plume_tier=hull_impact?ASTRA_HULL_SPARK:astra_plume_tier(objp,vclip_type,size,maxdamage);
 +    pyro_known[objnum]=0;astra_track_plume(obj,plume_tier,0);
 +    if(plume_tier>=0)astra_impact_sound(obj);
  	obj->ctype.expl_info.spawn_time = -1;
@@ -1359,7 +1375,38 @@ index fe9b0d1..d3ea8c6 100644
  								}
  							}
  								break;
-@@ -439,10 +660,13 @@ object *object_create_debris(object *parent, int subobj_num)
+@@ -311,19 +532,27 @@ object *object_create_explosion_sub(object *objp, short segnum, vms_vector * pos
+ 
+ object *object_create_muzzle_flash(short segnum, vms_vector * position, fix size, int vclip_type )
+ {
+-	return object_create_explosion_sub(NULL, segnum, position, size, vclip_type, 0, 0, 0, -1 );
++	return object_create_explosion_sub(NULL, segnum, position, size, vclip_type, 0, 0, 0, -1, 0 );
+ }
+ 
+ object *object_create_explosion(short segnum, vms_vector * position, fix size, int vclip_type )
+ {
+-	return object_create_explosion_sub(NULL, segnum, position, size, vclip_type, 0, 0, 0, -1 );
++	return object_create_explosion_sub(NULL, segnum, position, size, vclip_type, 0, 0, 0, -1, 0 );
++}
++
++/* The native hit attachment is visual feedback, not robot destruction.
++ * Give it an explicit spark classification before any sound/light is emitted.
++ * Keep the original clip lifetime/attachment and the separate death path. */
++object *astra_create_robot_hit(short segnum, vms_vector *position, fix size, int vclip_type)
++{
++    return object_create_explosion_sub(NULL, segnum, position, size, vclip_type, 0, 0, 0, -1, 1);
+ }
+ 
+ object *object_create_badass_explosion(object *objp, short segnum, vms_vector * position, fix size, int vclip_type, fix maxdamage, fix maxdistance, fix maxforce, int parent )
+ {
+ 	object	*rval;
+ 
+-	rval = object_create_explosion_sub(objp, segnum, position, size, vclip_type, maxdamage, maxdistance, maxforce, parent );
++	rval = object_create_explosion_sub(objp, segnum, position, size, vclip_type, maxdamage, maxdistance, maxforce, parent, 0 );
+ 
+ 	if ((objp != NULL) && (objp->type == OBJ_WEAPON))
+ 		create_smart_children(objp, NUM_SMART_CHILDREN);
+@@ -439,10 +668,13 @@ object *object_create_debris(object *parent, int subobj_num)
  
  }
  
@@ -1375,7 +1422,7 @@ index fe9b0d1..d3ea8c6 100644
  
  }
  
-@@ -1206,6 +1430,10 @@ int get_explosion_vclip(object *obj,int stage)
+@@ -1206,6 +1438,10 @@ int get_explosion_vclip(object *obj,int stage)
  //blow up a polygon model
  void explode_model(object *obj)
  {
@@ -1386,7 +1433,7 @@ index fe9b0d1..d3ea8c6 100644
  	Assert(obj->render_type == RT_POLYOBJ);
  
  	if (Dying_modelnums[obj->rtype.pobj_info.model_num] != -1)
-@@ -1216,7 +1444,7 @@ void explode_model(object *obj)
+@@ -1216,7 +1452,7 @@ void explode_model(object *obj)
  
  		for (i=1;i<Polygon_models[obj->rtype.pobj_info.model_num].n_models;i++)
  			if (!(obj->type == OBJ_ROBOT && obj->id == 44 && i == 5)) 	//energy sucker energy part
@@ -1395,7 +1442,7 @@ index fe9b0d1..d3ea8c6 100644
  
  		//make parent object only draw center part
  		obj->rtype.pobj_info.subobj_flags=1;
-@@ -1620,3 +1848,7 @@ void expl_wall_read_n_swap(expl_wall *ew, int n, int swap, PHYSFS_file *fp)
+@@ -1620,3 +1856,7 @@ void expl_wall_read_n_swap(expl_wall *ew, int n, int swap, PHYSFS_file *fp)
  			expl_wall_swap(&ew[i], swap);
  }
  
