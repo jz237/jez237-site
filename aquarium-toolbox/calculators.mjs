@@ -41,17 +41,17 @@ add('system','Whole-system volume','layout','Combine your display, sump, refugiu
 add('substrate','Substrate & slope','layout','Plan a flat or sloped sand, gravel, or aquasoil bed.',[
   f('l','Tank length',80,'cm',0.1,5000),f('w','Tank width',35,'cm',0.1,5000),f('front','Front depth',3,'cm',0,200),f('back','Back depth',7,'cm',0,200),
   pick('bagMode','How is the bag labelled?','weight',[['weight','By weight (lb / kg)'],['volume','By volume (litres)']]),
-  f('bagWeight','Weight of one bag',9.0718474,'kg',0.001,1000),f('bag','Litres in one bag',8,'L per bag',0.01,1000),
-  f('density','Estimated weight per litre',1.5,'kg/L',0.1,5,'Used to estimate weight from the bed volume. Material choices below avoid needing to know this number.')
+  f('bagWeight','Weight of one bag',9.0718474,'kg',0.001,1000),f('bag','Volume of one bag',8,'L per bag',0.01,1000),
+  f('density','Estimated material density',1.5,'kg/L',0.1,5,'Used to estimate weight from the bed volume. Material choices below avoid needing to know this number.')
 ],a=>{const v=a.l*a.w*(a.front+a.back)/2/1000;return out([metric('Substrate needed',v,'L'),metric('Estimated dry mass',v*a.density,'kg'),metric(a.bagMode==='weight'?'Estimated whole bags':'Whole bags',Math.ceil(a.bagMode==='weight'?v*a.density/a.bagWeight:v/a.bag),'bags')],a.bagMode==='weight'?'Bag count uses your chosen material weight estimate. Actual coverage varies with grain size, packing and moisture; verify the product coverage before buying.':'Bag count uses the labelled volume. The shaded slope is your planned bed; allow separately for terraces and large rocks.',{type:'substrate',front:a.front,back:a.back},['Average the front and back depths.','Multiply that depth by the tank footprint.','Round up to whole bags.']);},'Volume = length × width × (front depth + back depth) ÷ 2 ÷ 1,000. Mass = volume × bulk density. Bags = round up (mass ÷ bag weight), or round up (volume ÷ bag litres).','A geometric bed estimate, not a prescription for a suitable depth for every plant or substrate.');
 add('weight','Filled aquarium weight','layout','Add up the water, tank, stand, and hardscape.',[
-  volume(),f('density','Water density',1,'kg/L',0.95,1.1,'About 1.000 for freshwater; about 1.023 for typical warm reef water.'),f('glass','Empty tank weight',25,'kg',0,1e5),f('stand','Stand weight',20,'kg',0,1e5),f('rock','Dry rock & substrate',25,'kg',0,1e5),f('gear','Equipment weight',5,'kg',0,1e5),f('l','Stand footprint length',80,'cm',0.1,5000),f('w','Stand footprint width',35,'cm',0.1,5000)
+  volume(),f('density','Water density',1,'kg/L',0.95,1.1,'Choose a water type below, or enter a measured density.'),f('glass','Empty tank weight',25,'kg',0,1e5),f('stand','Stand weight',20,'kg',0,1e5),f('rock','Dry rock & substrate',25,'kg',0,1e5),f('gear','Equipment weight',5,'kg',0,1e5),f('l','Stand footprint length',80,'cm',0.1,5000),f('w','Stand footprint width',35,'cm',0.1,5000)
 ],a=>{const water=a.v*a.density,total=water+a.glass+a.stand+a.rock+a.gear;return out([metric('Total filled weight',total,'kg'),metric('Water weight',water,'kg'),metric('Average footprint load',total/(a.l*a.w/10000),'kg/m²')],'This estimates the load, not whether your floor or furniture can support it.',{type:'bars',values:[water,a.glass,a.stand,a.rock+a.gear],labels:['Water','Tank','Stand','Other']});},'Total mass = water volume × density + all dry components. Average load = total mass ÷ footprint area.','Floor structure and point loads from stand feet require a separate structural assessment.');
 add('sump','Power-off sump reserve','layout','Estimate how much water returns to the sump when the pump stops.',[
   f('l','Display length',120,'cm',0.1,5000),f('w','Display width',50,'cm',0.1,5000),f('drop','Display level drop',2,'cm',0,500),f('pipe','Returning pipe/filter water',3,'L',0,1e5),f('reserve','Sump empty space above operating level',25,'L',0,1e5),f('margin','Extra reserve allowance',25,'%',0,500)
 ],a=>{const drain=a.l*a.w*a.drop/1000+a.pipe,need=drain*(1+a.margin/100),spare=a.reserve-need;return out([metric('Drain-back estimate',drain,'L'),metric('Reserve with allowance',need,'L'),metric(spare<0?'Extra reserve needed':'Reserve remaining',Math.abs(spare),'L')],spare<0?'The estimated drain-back exceeds your planned reserve. Lower the sump operating level or change the design.':'The estimate fits. Confirm it with a supervised power-off test before relying on it.',{type:'sump',values:[drain,need,a.reserve],labels:['Drain-back','With margin','Available']});},'Drain-back = display footprint × level drop + returning plumbing water. Required reserve = drain-back × (1 + allowance).','Siphons, overflow chambers, and submerged return outlets can change the real drain-back. A check valve is not a substitute for reserve.');
 add('glass','Glass area & material estimate','layout','Estimate panel area and mass for a five-panel rectangular tank.',[
-  f('l','Outside length',80,'cm',0.1,5000),f('w','Outside width',35,'cm',0.1,5000),f('h','Height',40,'cm',0.1,5000),f('t','Glass thickness',6,'mm',1,100),f('price','Glass price per square metre',70,'$/m²',0,1e5)
+  f('l','Outside length',80,'cm',0.1,5000),f('w','Outside width',35,'cm',0.1,5000),f('h','Height',40,'cm',0.1,5000),f('t','Glass thickness',6,'mm',1,100),f('price','Glass unit price',70,'$/m²',0,1e5)
 ],a=>{const area=(a.l*a.w+2*a.l*a.h+2*a.w*a.h)/10000;return out([metric('Approximate panel area',area,'m²'),metric('Estimated glass mass',area*a.t*2.5,'kg'),metric('Material-only estimate',area*a.price,'$')],'A shopping estimate only; this does not specify safe glass thickness or cutting dimensions.',{type:'tank',fill:0,substrate:0,l:a.l,w:a.w,h:a.h});},'Area ≈ LW + 2LH + 2WH. Glass density ≈ 2,500 kg/m³.','Panel overlap, bracing, edge work, lids, sealant, and fabrication are not included. Never use this as a structural tank design.');
 
 add('change','Water-change mixer','water','See the predicted reading after replacing part of the water.',[
@@ -150,26 +150,41 @@ add('doser','Dosing-pump calibration','plants','Turn a collected test volume int
   f('collected','Volume collected in test',12,'mL',0.0001,1e6),f('seconds','Test runtime',60,'seconds',0.001,1e6),f('daily','Chosen daily dose',8,'mL',0,1e6),f('events','Doses each day',4,'doses',1,1440),f('reserve','Reservoir remaining',500,'mL',0,1e7)
 ],a=>{ensure(Number.isInteger(a.events),'Use a whole number of daily doses.');const persecond=a.collected/a.seconds;return out([metric('Measured pump rate',persecond*60,'mL/min'),metric('Run time per dose',a.daily/a.events/persecond,'seconds'),metric('Each dose',a.daily/a.events,'mL'),...(a.daily>0?[metric('Reservoir duration',a.reserve/a.daily,'days')]:[])],'Calibrate using the installed tubing and actual liquid. Very short pulses may be less accurate than a longer calibration run.',{type:'bottle',amount:a.daily/a.events,unit:'mL/dose'});},'Rate = collected volume ÷ runtime. Seconds per dose = daily volume ÷ events ÷ rate.','This sets pump timing for a dose you already chose; it does not decide the appropriate dose.');
 
+// Display metadata keeps legacy grams and all saved SI quantities unchanged.
+const saltTool=tools.find(c=>c.id==='salt');
+saltTool.fields.find(f=>f.key==='bag').displayUnit='bulk-g';
+const graphUnits={system:'L',weight:'kg',sump:'L',ro:'L',head:'m',pump:'L/h',heatup:'°C',energy:'kWh',heater:'W',watercost:'$'};
 export const calculators=tools;
 export function defaults(calc){return Object.fromEntries(calc.fields.map(f=>[f.key,f.value]));}
-export function calculate(id,input){
+export function calculate(id,input,us=false){
   const calc=tools.find(c=>c.id===id); if(!calc)throw new Error('Unknown calculator.');
   const a={};
   for(const field of calc.fields){
     const value=input[field.key];
     if(field.options){ensure(field.options.some(o=>o[0]===value),`Choose a valid ${field.label.toLowerCase()}.`);a[field.key]=value;}
-    else {ensure(typeof value==='number'&&Number.isFinite(value),`Enter a number for ${field.label.toLowerCase()}.`);ensure(value>=field.min&&value<=field.max,`${field.label} must be between ${field.min} and ${field.max} ${field.unit}.`);a[field.key]=value;}
+    else {ensure(typeof value==='number'&&Number.isFinite(value),`Enter a number for ${field.label.toLowerCase()}.`);ensure(value>=field.min&&value<=field.max,`${field.label} must be between ${us?convert(field.min,field.displayUnit||field.unit,true):field.min} and ${us?convert(field.max,field.displayUnit||field.unit,true):field.max} ${us?usUnit(field.displayUnit||field.unit):field.unit}.`);a[field.key]=value;}
   }
   const result=calc.calculate(a);
+  if(graphUnits[id])result.graphic.valueUnit=graphUnits[id];
+  if(id==='salt'){result.metrics[0].displayUnit='bulk-g';result.graphic.unit='bulk-g';}
   for(const m of result.metrics)ensure(Number.isFinite(m.value),'The result is outside the supported range. Check your inputs.');
   return result;
 }
 export function convert(value,unit,toUS){
-  const scale={'L':GAL,'L/h':GAL,'cm':2.54,'mm':25.4,'m':0.3048,'kg':0.45359237};
+  const lb=.45359237,ft=.3048,inch=25.4;
+  // Each scale is the SI quantity represented by ONE US unit. Ratios and
+  // prices require denominator conversion too; temperature is affine.
+  const scale={'L':GAL,'L per bag':GAL,'L/h':GAL,'cm':2.54,'mm':inch,'m':ft,'kg':lb,
+    'kg/L':lb/GAL,'g/L':28.349523125/GAL,'bulk-g':453.59237,'W/L':1/GAL,
+    'm²':ft*ft,'mm²':inch*inch,'kg/m²':lb/(ft*ft),'m/s':ft,
+    '$/m³':1/(GAL),'$/kg':1/lb,'$/m²':1/(ft*ft)};
   if(unit==='°C')return toUS?value*9/5+32:(value-32)*5/9;
   return scale[unit]?(toUS?value/scale[unit]:value*scale[unit]):value;
 }
-export const usUnit=unit=>({'L':'US gal','L/h':'US GPH','cm':'in','mm':'in','m':'ft','kg':'lb','°C':'°F'}[unit]||unit);
+export const usUnit=unit=>({'L':'US gal','L per bag':'US gal/bag','L/h':'US GPH','cm':'in','mm':'in','m':'ft','kg':'lb','°C':'°F',
+  'kg/L':'lb/US gal','g/L':'oz/US gal','bulk-g':'lb','W/L':'W/US gal',
+  'm²':'ft²','mm²':'in²','kg/m²':'lb/ft²','m/s':'ft/s',
+  '$/m³':'$/1,000 US gal','$/kg':'$/lb','$/m²':'$/ft²'}[unit]||unit);
 
 // Old saves and links had only a volume-labelled bag. Preserve that behavior,
 // rather than silently reinterpreting the customer's existing bag as a weight.

@@ -2,6 +2,7 @@ import {calculators,categories,defaults,calculate,convert,usUnit,GAL,migrateInpu
 import {icon,illustration,escape as e} from './illustrations.mjs';
 import {sliderWindow,sliderValue} from './sliders.mjs';
 import {fieldChoices,extraHelp,bagComparison} from './presets.mjs';
+import {formulaFor,noteFor,descriptionFor} from './us-copy.mjs';
 const $=id=>document.getElementById(id);
 const KEY='aquarium-toolbox-v1';
 const ids=new Set(calculators.map(c=>c.id));
@@ -27,12 +28,13 @@ const current=()=>calculators.find(c=>c.id===state.current);
 const profile=()=>state.profiles.find(p=>p.id===state.activeProfile)||state.profiles[0];
 function inputs(calc=current()){if(!state.inputs[calc.id]){state.inputs[calc.id]=defaults(calc);if(calc.fields.some(f=>f.key==='v'&&f.label==='Actual water volume'))state.inputs[calc.id].v=profile().volume;}return state.inputs[calc.id];}
 function format(v,digits=2){if(v!==0&&Math.abs(v)<.0001)return v.toExponential(3);return v.toLocaleString('en-US',{maximumFractionDigits:Math.abs(v)<.01?5:Math.abs(v)<.1?4:digits});}
+function inputNumber(value,unit){return Number(value.toFixed(usUnit(unit)!==unit?(Math.abs(value)<.001?9:3):6));}
 function gallons(l){const g=l/GAL;return g>0&&g<1?'<1':format(Math.round(g),0);}
 function displayMetric(m){
-  let value=m.value,unit=m.unit,secondary='';
+  let value=m.value,unit=m.unit,secondary='';const conversionUnit=m.displayUnit||m.unit;
   if(m.unit==='L'){if(state.units==='us'){value=gallons(m.value);unit='US gal';secondary=`${format(m.value)} litres`;}else secondary=`${gallons(m.value)} US gal`;}
   else if(m.unit==='L/h'){if(state.units==='us'){value=m.value/GAL;unit='US GPH';secondary=`${format(m.value)} L/h`;}else secondary=`${format(m.value/GAL)} US GPH`;}
-  else if(['kg','m'].includes(m.unit)){const other=convert(m.value,m.unit,true);if(state.units==='us'){value=other;unit=usUnit(m.unit);secondary=`${format(m.value)} ${m.unit}`;}else secondary=`${format(other)} ${usUnit(m.unit)}`;}
+  else if(usUnit(conversionUnit)!==conversionUnit){const other=convert(m.value,conversionUnit,true);if(state.units==='us'){value=other;unit=usUnit(conversionUnit);secondary=`${format(m.value)} ${m.unit}`;}else secondary=`${format(other)} ${usUnit(conversionUnit)}`;}
   if(unit==='$')return `<span class="currency">$</span>${format(value)}|`;
   return `${e(typeof value==='number'?format(value):value)}<span class="unit">${e(unit)}</span>|${e(secondary)}`;
 }
@@ -44,22 +46,22 @@ function renderLibrary(){
   const opts=[['all','All calculators','grid'],...categories,['favorites','Favorites','star']];
   $('categories').innerHTML=opts.map(([id,label,img])=>{const count=id==='all'?calculators.length:id==='favorites'?state.favorites.length:calculators.filter(c=>c.category===id).length;return `<button class="category" data-category="${id}" aria-pressed="${id===category}">${icon(img)}<span>${e(label)}</span><span class="count">${count}</span></button>`;}).join('');
   const matches=calculators.filter(c=>(category==='all'||(category==='favorites'?state.favorites.includes(c.id):c.category===category))&&[c.title,c.description,c.category,...c.fields.map(f=>f.label)].join(' ').toLowerCase().includes(query.toLowerCase().trim()));
-  $('tool-list').innerHTML=matches.map(c=>`<a class="tool-link" href="#tool=${c.id}" data-tool="${c.id}" aria-current="${c.id===state.current}">${e(c.title)}<span>${e(c.description)}</span></a>`).join('');
+  $('tool-list').innerHTML=matches.map(c=>`<a class="tool-link" href="#tool=${c.id}" data-tool="${c.id}" aria-current="${c.id===state.current}">${e(c.title)}<span>${e(descriptionFor(c,state.units==='us'))}</span></a>`).join('');
   $('empty-search').hidden=matches.length>0;$('list-caption').textContent=query?`${matches.length} MATCHING TOOLS`:opts.find(o=>o[0]===category)[1].toUpperCase();$('library-count').textContent=calculators.length;
 }
 function fieldHTML(field,a){
   if(current().id==='substrate'&&((field.key==='bag'&&a.bagMode!=='volume')||(field.key==='bagWeight'&&a.bagMode!=='weight')))return '';
+  const fieldUnit=field.displayUnit||field.unit;
   const id=`field-${field.key}`,helpText=[field.help,extraHelp(current(),field)].filter(Boolean).join(' ');
   const help=helpText?`<small id="help-${field.key}">${e(helpText)}${field.key==='v'&&field.label==='Actual water volume'?' <a href="#tool=tank" data-tool="tank">Estimate my volume →</a>':''}</small>`:'';
   const desc=helpText?`aria-describedby="help-${field.key}"`:'';
   let label=field.label;
   if(current().id==='tank'){if(field.key==='l')label=a.shape==='cylinder'?'Inside diameter':'Inside length';if(field.key==='w')label='Inside width';}
   if(current().id==='tank'&&field.key==='w'&&a.shape==='cylinder')return '';
-  if(field.options)return `<div class="field"><label for="${id}">${e(label)}</label><select id="${id}" name="${field.key}" ${desc}>${field.options.map(([v,t])=>`<option value="${e(v)}" ${v===a[field.key]?'selected':''}>${e(t)}</option>`).join('')}</select>${help}</div>`;
-  const isUS=state.units==='us',display=isUS?convert(a[field.key],field.unit,true):a[field.key],unit=isUS?usUnit(field.unit):field.unit;
-  const min=isUS?convert(field.min,field.unit,true):field.min,max=isUS?convert(field.max,field.unit,true):field.max;
-  const precision=['L','L/h','cm','mm','m','kg','°C'].includes(field.unit)?3:6;
-  return `<div class="field"><label for="${id}">${e(label)}</label><div class="input-wrap"><input id="${id}" name="${field.key}" type="number" inputmode="decimal" step="any" min="${min}" max="${max}" value="${Number(display.toFixed(precision))}" required ${desc}><span class="input-unit">${e(unit)}</span></div>${sliderHTML(field,a,label,unit)}${choicesHTML(field,a)}${help}</div>`;
+  if(field.options)return `<div class="field"><label for="${id}">${e(label)}</label><select id="${id}" name="${field.key}" ${desc}>${field.options.map(([v,t])=>`<option value="${e(v)}" ${v===a[field.key]?'selected':''}>${e(current().id==='substrate'&&field.key==='bagMode'&&v==='volume'&&state.units==='us'?'By volume (US gal / label litres)':t)}</option>`).join('')}</select>${help}</div>`;
+  const isUS=state.units==='us',display=isUS?convert(a[field.key],fieldUnit,true):a[field.key],unit=isUS?usUnit(fieldUnit):field.unit;
+  const min=isUS?convert(field.min,fieldUnit,true):field.min,max=isUS?convert(field.max,fieldUnit,true):field.max;
+  return `<div class="field"><label for="${id}">${e(label)}</label><div class="input-wrap"><input id="${id}" name="${field.key}" type="number" inputmode="decimal" step="any" min="${min}" max="${max}" value="${inputNumber(display,fieldUnit)}" required ${desc}><span class="input-unit">${e(unit)}</span></div>${sliderHTML(field,a,label,unit)}${choicesHTML(field,a)}${help}</div>`;
 }
 function choicesHTML(field,a){
   const choice=fieldChoices(current(),field,state.units==='us',a);if(!choice)return '';
@@ -70,10 +72,13 @@ function syncChoices(){for(const button of document.querySelectorAll('[data-choi
   button.setAttribute('aria-pressed',String($(`field-${field.key}`).value!==''&&Math.abs(inputs()[field.key]-choice.value)<1e-8));
 }}
 function applyChoice(key,index){const field=current().fields.find(f=>f.key===key),choice=fieldChoices(current(),field,state.units==='us',inputs())?.options[index];if(!choice)return;
-  const input=$(`field-${key}`);input.value=state.units==='us'?convert(choice.value,field.unit,true):choice.value;onInput({target:input});
+  // Use the exact package quantity, not its rounded display, in the calculation.
+  const input=$(`field-${key}`),unit=field.displayUnit||field.unit;
+  input.value=inputNumber(state.units==='us'?convert(choice.value,unit,true):choice.value,unit);
+  onInput({target:input,canonicalValue:choice.value});
 }
 function shoppingGuide(){if(state.current!=='substrate')return '';
- const a=inputs();return `<section class="bag-guide"><h3>Compare common bag sizes</h3><p>${a.bagMode==='weight'?'Estimated counts using your material’s weight per litre.':'Counts using the labelled bag volume.'} Tap a size to use it above.</p><div class="bag-options">${bagComparison(a,state.units==='us').map((x,i)=>`<button type="button" data-bag-index="${i}" aria-label="Use ${e(x.label)} bag"><span>${e(x.label)} bag</span><strong>${x.bags} ${x.bags===1?'bag':'bags'}</strong></button>`).join('')}</div><small>Typical package examples, not an inventory or availability list. No size chosen yet? Use this comparison to plan your shopping.</small></section>`;
+ const a=inputs();return `<section class="bag-guide"><h3>Compare common bag sizes</h3><p>${a.bagMode==='weight'?'Estimated counts using your material’s density.':'Counts using the labelled bag volume.'} Tap a size to use it above.</p><div class="bag-options">${bagComparison(a,state.units==='us').map((x,i)=>`<button type="button" data-bag-index="${i}" aria-label="Use ${e(x.label)} bag"><span>${e(x.label)} bag</span><strong>${x.bags} ${x.bags===1?'bag':'bags'}</strong></button>`).join('')}</div><small>Typical package examples, not an inventory or availability list. No size chosen yet? Use this comparison to plan your shopping.</small></section>`;
 }
 function sliderHTML(field,a,label,unit){
   const r=sliderWindow(current(),field,a,state.units==='us');
@@ -82,11 +87,11 @@ function sliderHTML(field,a,label,unit){
 function syncSlider(field,expand=false){
   const slider=$(`slider-${field.key}`),number=$(`field-${field.key}`);if(!slider||!number)return;
   if(expand){const r=sliderWindow(current(),field,inputs(),state.units==='us');slider.min=r.min;slider.max=r.max;slider.dataset.increment=r.step;
-    const unit=state.units==='us'?usUnit(field.unit):field.unit;
+    const unit=state.units==='us'?usUnit(field.displayUnit||field.unit):field.unit;
     slider.nextElementSibling.innerHTML=`<span>${e(format(r.min))}</span><span>${e(format(r.max))} ${e(unit)}</span>`;
   }
   const valid=number.value!==''&&number.validity.valid;
-  slider.setAttribute('aria-valuetext',valid?`${number.value} ${state.units==='us'?usUnit(field.unit):field.unit}`:'Enter a valid number or adjust this slider');
+  slider.setAttribute('aria-valuetext',valid?`${number.value} ${state.units==='us'?usUnit(field.displayUnit||field.unit):field.unit}`:'Enter a valid number or adjust this slider');
   if(valid)slider.value=number.value;
   const fill=100*(Number(slider.value)-Number(slider.min))/(Number(slider.max)-Number(slider.min));
   slider.style.setProperty('--fill',`${Math.max(0,Math.min(100,fill))}%`);
@@ -113,10 +118,10 @@ function updateQuickResult(){
 function renderCalculator(){
   const c=current(),a=inputs(),cat=categories.find(x=>x[0]===c.category);
   const related=calculators.filter(x=>x.category===c.category&&x.id!==c.id).slice(0,3);
-  $('calculator-content').innerHTML=`<article class="calculator-shell"><header class="calc-heading"><div><div class="calc-eyebrow">${icon(cat[2])}${e(cat[1].toUpperCase())}</div><h2>${e(c.title)}</h2><p>${e(c.description)}</p></div><button id="favorite" class="favorite icon-button" aria-pressed="${state.favorites.includes(c.id)}" aria-label="${state.favorites.includes(c.id)?'Remove from':'Add to'} favorites">${icon('star')}</button></header>
-  <div class="calc-body"><section class="input-panel" aria-label="Calculation inputs"><div class="panel-heading"><span class="step-label"><span class="step-no">1</span>Your measurements</span><button id="reset" class="text-button">Reset</button></div><p id="slider-guide" class="slider-guide">Drag to explore. Type for precision. Slider ranges are editing shortcuts, not recommended limits.</p><form id="calc-form" novalidate><div class="input-fields">${c.fields.map(f=>fieldHTML(f,a)).join('')}</div></form>${c.fields.some(f=>f.key==='v'&&f.label==='Actual water volume')?`<div class="tank-fill-control">Saved tank: <strong>${e(profile().name)}</strong><br>${format(profile().volume)} L · ${e(gallons(profile().volume))} US gal<br><button id="use-profile" class="text-button">Use saved tank volume →</button></div>`:''}<p class="validation-note">Changes calculate automatically. Your measurements are processed in this browser.</p></section>
+  $('calculator-content').innerHTML=`<article class="calculator-shell"><header class="calc-heading"><div><div class="calc-eyebrow">${icon(cat[2])}${e(cat[1].toUpperCase())}</div><h2>${e(c.title)}</h2><p>${e(descriptionFor(c,state.units==='us'))}</p></div><button id="favorite" class="favorite icon-button" aria-pressed="${state.favorites.includes(c.id)}" aria-label="${state.favorites.includes(c.id)?'Remove from':'Add to'} favorites">${icon('star')}</button></header>
+  <div class="calc-body"><section class="input-panel" aria-label="Calculation inputs"><div class="panel-heading"><span class="step-label"><span class="step-no">1</span>Your measurements</span><button id="reset" class="text-button">Reset</button></div><p id="slider-guide" class="slider-guide">Drag to explore. Type for precision. Slider ranges are editing shortcuts, not recommended limits.</p><form id="calc-form" novalidate><div class="input-fields">${c.fields.map(f=>fieldHTML(f,a)).join('')}</div></form>${c.fields.some(f=>f.key==='v'&&f.label==='Actual water volume')?`<div class="tank-fill-control">Saved tank: <strong>${e(profile().name)}</strong><br>${state.units==='us'?e(gallons(profile().volume))+' US gal · '+format(profile().volume)+' L':format(profile().volume)+' L · '+e(gallons(profile().volume))+' US gal'}<br><button id="use-profile" class="text-button">Use saved tank volume →</button></div>`:''}<p class="validation-note">Changes calculate automatically. Your measurements are processed in this browser.</p></section>
   <section class="result-panel" aria-label="Calculation result"><div class="panel-heading"><span class="step-label"><span class="step-no">2</span>See what it means</span><span class="live-label">LIVE RESULT</span></div><div id="result" aria-live="polite" aria-atomic="true"></div></section></div>
-  <div class="details-area"><details id="math-details"><summary>The math & sources</summary><div><p class="formula">${e(c.formula)}</p>${c.note?`<p class="note">${e(c.note)}</p>`:''}${c.reference?`<p><a class="source-link" href="${e(c.reference[1])}" target="_blank" rel="noopener noreferrer">Reference: ${e(c.reference[0])} ↗</a></p>`:'<p>Method: the geometry, unit conversion, or proportional calculation shown above.</p>'}<p>Results and converted input displays are rounded; calculations retain precision. US gallons in results are rounded to whole gallons; a positive amount below one gallon is shown as &lt;1. Litres show finer amounts.</p></div></details><div id="steps-details"></div></div>
+  <div class="details-area"><details id="math-details"><summary>The math & sources</summary><div><p class="formula">${e(formulaFor(c,state.units==='us'))}</p>${c.note?`<p class="note">${e(noteFor(c,state.units==='us'))}</p>`:''}${c.reference?`<p><a class="source-link" href="${e(c.reference[1])}" target="_blank" rel="noopener noreferrer">Reference: ${e(c.reference[0])} ↗</a></p>`:'<p>Method: the geometry, unit conversion, or proportional calculation shown above.</p>'}<p>Results and converted input displays are rounded; calculations retain precision. US gallons in results are rounded to whole gallons; a positive amount below one gallon is shown as &lt;1. Litres show finer amounts.</p></div></details><div id="steps-details"></div></div>
   <div class="calc-footer"><span>${icon('check')} No account · saved on this device</span><button id="guide-inline" class="text-button">A quick guide →</button></div></article>
   <section class="related"><h3 class="related-heading">ALSO IN YOUR TOOLBOX</h3><div class="related-grid">${related.map(x=>`<a href="#tool=${x.id}" data-tool="${x.id}">${icon(cat[2])}<span>${e(x.title)}</span></a>`).join('')}</div>`;
   $('calc-form').addEventListener('submit',ev=>ev.preventDefault());
@@ -137,7 +142,7 @@ function onInput(ev){
   const c=current(),field=c.fields.find(f=>f.key===ev.target.name);if(!field)return;
   const raw=ev.target.value;
   if(!field.options&&(raw.trim()===''||!Number.isFinite(Number(raw)))){syncSlider(field);syncChoices();showError(`Enter a number for ${field.label.toLowerCase()}.`);return;}
-  inputs()[field.key]=field.options?raw:(state.units==='us'?convert(Number(raw),field.unit,false):Number(raw));
+  inputs()[field.key]=field.options?raw:(ev.canonicalValue??(state.units==='us'?convert(Number(raw),field.displayUnit||field.unit,false):Number(raw)));
   if(field.key==='shape'||field.key==='bagMode'){
     if(field.key==='bagMode'){const inactive=c.fields.find(f=>f.key===(raw==='weight'?'bag':'bagWeight')),value=inputs()[inactive.key];if(!Number.isFinite(value)||value<inactive.min||value>inactive.max)inputs()[inactive.key]=inactive.value;}
     save();renderCalculator();$(`field-${field.key}`).focus();return;}
@@ -152,26 +157,26 @@ function onInput(ev){
 }
 function showError(message){result=null;$('result').innerHTML=`<div class="error-card" role="alert"><h3>Let’s check that measurement</h3><p>${e(message)}</p><p>No result is shown until the inputs are valid.</p></div>`;$('steps-details').innerHTML='';updateQuickResult();}
 function renderResult(){try{
-  result=calculate(state.current,inputs());
+  result=calculate(state.current,inputs(),state.units==='us');
   const metricHTML=result.metrics.map((m,i)=>{const [main,secondary]=displayMetric(m).split('|');return `<div class="metric ${i===0?'primary-metric':''}"><div class="metric-label">${e(m.label)}</div><div class="metric-value">${main}</div>${secondary?`<div class="metric-secondary">${secondary}</div>`:''}</div>`;}).join('');
-  const diagramLabel=`${current().title}: ${result.metrics.map(m=>`${m.label}: ${format(m.value)} ${m.unit}`).join('; ')}. Diagram illustrates the calculation, not a measurement.`;
+  const diagramLabel=`${current().title}: ${result.metrics.map(m=>`${m.label}: ${state.units==='us'?(m.unit==='L'?gallons(m.value):format(convert(m.value,m.displayUnit||m.unit,true))):format(m.value)} ${state.units==='us'?usUnit(m.displayUnit||m.unit):m.unit}`).join('; ')}. Diagram illustrates the calculation, not a measurement.`;
   const graph={...result.graphic};
   if(['ammonia','stock','mix'].includes(state.current)){graph.fractionLabel=state.current==='ammonia'?'un-ionized ammonia':state.current==='stock'?'stock solution':'source B';graph.legend=state.current==='ammonia'?['Ionized fraction','Un-ionized fraction']:state.current==='stock'?['Diluent','Stock']:['Source A','Source B'];}
   if(state.current==='hardness'){graph.type='equivalence';graph.values=result.metrics.map(m=>`${format(m.value)} ${m.unit}`);}
-  $('result').innerHTML=`<div class="diagram">${illustration(graph,diagramLabel)}</div><div class="metrics">${metricHTML}</div><p class="result-message">${e(result.message)}</p>${shoppingGuide()}<div class="result-actions"><button id="share-result">Share calculation</button><button id="print-result">Print result</button>${['tank','system'].includes(state.current)?'<button id="apply-volume">Use as tank volume</button>':''}</div>`;
+  $('result').innerHTML=`<div class="diagram">${illustration(graph,diagramLabel,state.units==='us')}</div><div class="metrics">${metricHTML}</div><p class="result-message">${e(result.message)}</p>${shoppingGuide()}<div class="result-actions"><button id="share-result">Share calculation</button><button id="print-result">Print result</button>${['tank','system'].includes(state.current)?'<button id="apply-volume">Use as tank volume</button>':''}</div>`;
   $('steps-details').innerHTML=(result.steps?.length?`<details><summary>Step by step</summary><div><ol class="steps">${result.steps.map(s=>`<li>${e(s)}</li>`).join('')}</ol></div></details>`:'')+(result.table?`<details><summary>Change-by-change breakdown</summary><div><table class="results-table"><caption>Predicted concentration after each change</caption><tbody>${result.table.map(r=>`<tr>${r.map(s=>`<td>${e(s)}</td>`).join('')}</tr>`).join('')}</tbody></table></div></details>`:'');
   $('share-result').onclick=share;$('print-result').onclick=()=>window.print();if($('apply-volume'))$('apply-volume').onclick=()=>{const v=result.metrics[0].value;if(v<.01){toast('Volume is too small to save as a working tank.');return;}profile().volume=v;save();renderPreferences();toast('Working tank volume updated. Use “Use saved tank volume” in an existing calculation.');};
 updateQuickResult();
 }catch(err){showError(err.message);}}
 function selectTool(id,scroll=false){if(!ids.has(id))return;state.current=id;inputs();save();history.replaceState(null,'',`#tool=${id}`);renderLibrary();renderCalculator();if(scroll){$('calculator').scrollIntoView({behavior:'instant',block:'start'});$('calculator').focus({preventScroll:true});}}
-function setUnits(units){state.units=units;save();renderPreferences();renderCalculator();}
-function openProfile(){$('tank-name').value=profile().name;$('tank-volume').value=Number((state.units==='us'?profile().volume/GAL:profile().volume).toFixed(6));$('profile-unit').textContent=state.units==='us'?'(US gal)':'(litres)';$('tank-type').value=profile().type;$('profile-error').textContent='';
+function setUnits(units){state.units=units;save();renderPreferences();renderLibrary();renderCalculator();}
+function openProfile(){$('tank-name').value=profile().name;$('tank-volume').value=Number((state.units==='us'?profile().volume/GAL:profile().volume).toFixed(6));$('profile-unit').textContent=state.units==='us'?'(US gal)':'(litres)';$('tank-volume').min=state.units==='us'?.01/GAL:.01;$('tank-volume').max=state.units==='us'?1e7/GAL:1e7;$('tank-type').value=profile().type;$('profile-error').textContent='';
   const c=calculators.find(c=>c.id==='change'),f=c.fields.find(f=>f.key==='v'),choice=fieldChoices(c,f,state.units==='us',{});
   $('profile-presets').innerHTML=`<div class="choices-title">Common advertised tank sizes</div><div class="choice-buttons">${choice.options.map(x=>`<button type="button" data-profile-volume="${x.value}">${e(x.label)}</button>`).join('')}</div><small>Nominal capacity only. Adjust for rocks, substrate, air gap and operating sump water before saving.</small>`;
   $('profile-dialog').showModal();}
 function saveProfile(asNew=false){
   const name=$('tank-name').value.trim(),raw=$('tank-volume').value,volume=Number(raw)*(state.units==='us'?GAL:1);
-  if(!name||name.length>60||!raw||!Number.isFinite(volume)||volume<.01||volume>1e7){$('profile-error').textContent='Enter a name and a water volume between 0.01 and 10,000,000 litres.';return;}
+  if(!name||name.length>60||!raw||!Number.isFinite(volume)||volume<.01||volume>1e7){$('profile-error').textContent=state.units==='us'?'Enter a name and a water volume between 0.002642 and 2,641,720 US gallons.':'Enter a name and a water volume between 0.01 and 10,000,000 litres.';return;}
   if(asNew&&state.profiles.length>=20){$('profile-error').textContent='This toolbox supports up to 20 saved tanks.';return;}
   const p={id:asNew?`tank-${Date.now()}`:profile().id,name,volume,type:$('tank-type').value};
   if(asNew)state.profiles.push(p);else state.profiles[state.profiles.findIndex(x=>x.id===p.id)]=p;

@@ -97,7 +97,7 @@ Users may always type a custom value. Profile size buttons edit the dialog only;
 saving remains explicit. Nominal volumes need adjustment to actual water volume.
 
 Substrate bags accept either kg (displayed as lb in US mode) or volume-labelled
-litres, kept in label units even in US mode. Bag count is ceil(bed mass / bag mass)
+litres (US mode shows gallons plus the original package litres). Bag count is ceil(bed mass / bag mass)
 or ceil(bed volume / bag litres), respectively. Loose bulk density is a rough,
 user-overridable estimate; generic material buttons are not measured brand data.
 The shopping guide compares every displayed common size using the same units.
@@ -120,3 +120,30 @@ Run `node scripts/aquarium-toolbox/presets-browser.mjs [base] [evidence-dir]` fo
 US/metric shortcuts, exact custom entry, both bag modes, bag comparison, legacy
 saved settings/shares, profiles and mobile checks. The formula/preset unit tests
 are included by `node --test scripts/aquarium-toolbox/*.test.mjs`.
+
+
+## US-first presentation (2026-11-09)
+
+US is the default; explicit saved, restored and shared metric preferences remain
+available. Fields, drawings, graph values, accessible descriptions, result cards,
+error ranges, common-size buttons and printed results use the selected units.
+Lengths/bore use inches, head/pipe runs use feet, volumes use US gallons, flow uses
+US GPH, bulk weights use pounds, temperatures use °F, areas use ft²/in², footprint
+load uses lb/ft², and velocity uses ft/s. Costs use $/lb, $/ft² and $/1,000 US gal.
+Heater allowance uses W/US gal and salt recipes oz/US gal. Product doses, fertilizer
+weights, chemistry and PAR retain conventional mL/g/mg/L/dKH/ppt/PAR units.
+
+`convert` stores each ratio as SI quantity per ONE US unit; unit prices require
+inverse denominator factors. Do not just rename units. The salt bag's displayUnit
+metadata converts bulk grams to pounds without changing its persisted grams;
+chemical grams are not globally converted. Volume bags similarly keep stored
+litres and their actual product-label litres visible beside rounded US gallons.
+Graphs receive unit metadata and are converted on a copy at rendering time.
+`us-copy.mjs` supplies matching US formula explanations (e.g. cubic inches / 231).
+
+Do not recompute canonical inputs from rounded displayed values during unit
+switches. Valid saved profiles, links and backups retain their exact physical
+meaning and original source units. Browser tests include both US/metric bag modes,
+legacy data, billing equivalents, label units, phone widths and printed diagrams.
+Run `node scripts/aquarium-toolbox/us-units-browser.mjs [base] [evidence-dir]`
+alongside unit/conversion and existing browser/preset/slider suites.

@@ -13,7 +13,7 @@ test('5 cm bed in a 100 × 40 cm tank needs 20 L; weight and volume bags remain 
 test('US weight bags convert pounds to kilograms, never gallons',()=>{
  const a=input({l:100,w:40,front:5,back:5,density:1.5,bagMode:'weight',bagWeight:20*.45359237});
  assert.equal(calculate('substrate',a).metrics[2].value,4);assert.equal(bagComparison(a,true).find(x=>x.label==='20 lb').bags,4);
- assert.equal(bagSizes('volume',true).find(x=>x.label==='9 L').value,9);
+ assert.equal(bagSizes('volume',true).find(x=>x.label==='≈2 US gal (9 L label)').value,9);
 });
 test('Legacy substrate data upgrades to volume mode without changing previous results',()=>{
  const legacy={l:80,w:35,front:3,back:7,density:1.5,bag:8};const upgraded=migrateInputs('substrate',legacy);

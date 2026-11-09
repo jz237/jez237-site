@@ -28,9 +28,10 @@ export function sliderWindow(calc,field,a,us=false){
   if(calc.id==='consumption'&&['start','end'].includes(field.key))[high,step]=a.parameter==='mg/L'?[2000,5]:[20,.1];
   if(calc.id==='hardness')[high,step]=a.unit==='ppm'?[500,1]:a.unit==='meq'?[10,.1]:[30,.1];
   if(calc.id==='mix'&&['high','low','target'].includes(field.key))[high,step]=a.measure==='mg/L'?[1000,5]:[30,.1];
-  const display=v=>us?convert(v,field.unit,true):v;
+  const unit=field.displayUnit||field.unit;
+  const display=v=>us?convert(v,unit,true):v;
   const domainMin=display(field.min),domainMax=display(field.max),value=display(a[field.key]);
-  if(us&&['L','L/h','cm','mm','m','kg'].includes(field.unit)){
+  if(us&&unit!=='°C'&&convert(1,unit,true)!==1){
     high=nice(display(high));step=nice(display(step));
   }else if(us&&field.unit==='°C'){high=display(high);step=1;}
   if(us&&calc.id==='substrate'&&field.key==='bagWeight'){high=50;step=.5;}

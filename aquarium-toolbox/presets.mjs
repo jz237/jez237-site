@@ -1,17 +1,17 @@
 // Curated editing shortcuts, not recommendations for livestock or chemical doses.
-import {GAL} from './calculators.mjs';
+import {GAL,convert} from './calculators.mjs';
 const LB=.45359237;
 const choices=(title,note,options)=>({title,note,options});
 const numbers=(values,unit,scale=1)=>values.map(n=>({label:`${n} ${unit}`,value:n*scale}));
 export function bagSizes(mode,us){
-  return mode==='volume'?numbers([3,5,8,9,10,20],'L'):us?numbers([5,10,20,25,50],'lb',LB):numbers([2,4,5,8,10,20,25],'kg');
+  return mode==='volume'?numbers([3,5,8,9,10,20],'L').map(x=>({...x,label:us?`${x.value/GAL<1?'<1':'≈'+Math.round(x.value/GAL)} US gal (${x.value} L label)`:x.label})):us?numbers([5,10,20,25,50],'lb',LB):numbers([2,4,5,8,10,20,25],'kg');
 }
 export function fieldChoices(c,f,us,a){
   if(c.id==='substrate'){
-    if(f.key==='bag')return choices('Common volume-labelled bags','Match the litres printed on your bag. Product sizes vary by brand.',bagSizes('volume',us));
+    if(f.key==='bag')return choices('Common volume-labelled bags',us?'Match the litres in parentheses to the package label. Gallon equivalents are rounded; bag counts use the exact labelled volume.':'Match the litres printed on your package. Sizes vary by brand.',bagSizes('volume',us));
     if(f.key==='bagWeight')return choices('Common weight-labelled bags','Tap the weight on the bag, or enter a different size. These are examples, not store stock.',bagSizes('weight',us));
     if(f.key==='density')return choices('Not sure? Start with a material estimate','Rough bulk estimates only. Grain size, packing and moisture change the weight. Use your product’s bulk density if available.',[
-      {label:'Gravel ≈ 1.5 kg/L',value:1.5},{label:'Sand ≈ 1.6 kg/L',value:1.6},{label:'Aquasoil ≈ 0.8 kg/L',value:.8}
+      ...[['Gravel',1.5],['Sand',1.6],['Aquasoil',.8]].map(([name,value])=>({label:`${name} ≈ ${us?convert(value,'kg/L',true).toFixed(1):value} ${us?'lb/US gal':'kg/L'}`,value}))
     ]);
     if(['front','back'].includes(f.key))return choices('Choose a depth to plan','A layout starting point—not the right depth for every plant or animal.',us?numbers([1,2,3,4],'in',2.54):numbers([2,3,5,8,10],'cm'));
   }

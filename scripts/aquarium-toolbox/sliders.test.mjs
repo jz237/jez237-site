@@ -4,7 +4,7 @@ import {calculators,defaults,convert} from '../../aquarium-toolbox/calculators.m
 import {sliderWindow,sliderValue} from '../../aquarium-toolbox/sliders.mjs';
 for(const us of [false,true])test(`Slider bounds preserve numeric domains and initial precision (${us?'US':'metric'})`,()=>{
   for(const c of calculators)for(const f of c.fields.filter(f=>!f.options)){
-    const a=defaults(c),r=sliderWindow(c,f,a,us),v=us?convert(a[f.key],f.unit,true):a[f.key];
+    const a=defaults(c),r=sliderWindow(c,f,a,us),v=us?convert(a[f.key],f.displayUnit||f.unit,true):a[f.key];
     assert.ok(r.min<r.max,`${c.id}.${f.key}`);assert.ok(r.step>0);assert.ok(r.min>=r.domainMin);assert.ok(r.max<=r.domainMax);assert.ok(v>=r.min&&v<=r.max,`${c.id}.${f.key} outside range`);assert.equal(r.value,v);
     for(const x of [r.min,r.max,(r.min+r.max)/2]){const moved=sliderValue(x,r);assert.ok(moved>=r.domainMin-1e-10&&moved<=r.domainMax+1e-10);}
     a[f.key]=f.max;assert.equal(sliderWindow(c,f,a,us).max,r.domainMax);
