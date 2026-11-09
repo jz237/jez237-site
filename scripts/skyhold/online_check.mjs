@@ -1,4 +1,4 @@
-// Online co-op in two real browser pages (Edge headless) through a LOCAL relay: a host and a guest join one room,
+// Online co-op (or RIVALS: last argument 'rivals') in two real browser pages (Edge headless) through a LOCAL relay: a host and a guest join one room,
 // the host starts a world, both ships are flown by the demo autopilot, and after a while we compare the two views.
 //   node scripts/skyhold/online_check.mjs [base=http://127.0.0.1:8862/games/2026-11-09/skyhold/] [relay=ws://127.0.0.1:8781] [seconds=40] [lagMs=0]
 // Start the relay first (D:/Projects/.tmp/arcade-trio-work/lancewing/relay: wrangler dev --local --port 8781) and wait for 'Ready'.
@@ -8,7 +8,7 @@ const require = createRequire('D:/Projects/.tmp/model-s-tools/node_modules/');
 const { chromium } = require('playwright');
 const base = process.argv[2] || 'http://127.0.0.1:8862/games/2026-11-09/skyhold/';
 const relay = process.argv[3] || 'ws://127.0.0.1:8781';
-const secs = +(process.argv[4] || 40), lag = +(process.argv[5] || 0), wave = +(process.argv[6] || 0), world = process.argv[7] || '1';
+const secs = +(process.argv[4] || 40), lag = +(process.argv[5] || 0), wave = +(process.argv[6] || 0), world = process.argv[7] || '1', mode = process.argv[8] || 'coop';
 const LOCK = 'D:/Projects/.tmp/arcade-trio-edge.lock';
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 for (let i = 0; ; i++) { try { fs.mkdirSync(LOCK); break; } catch { if (i > 80) { console.error('lock busy'); process.exit(3); } await sleep(15000); } }
@@ -37,7 +37,7 @@ try {
   await H.waitForFunction(() => !!window.__sh.NET.peer, null, { timeout: 30000 });
   await Gp.waitForFunction(() => !!window.__sh.NET.peer, null, { timeout: 30000 });
   ok(true, `both pages in room ${room}`);
-  await H.evaluate((world) => { window.__sh.settings.netRoute = world; window.__sh.online.hostStart(); }, world);
+  await H.evaluate(([world, mode]) => { window.__sh.settings.netRoute = world; window.__sh.settings.netMode = mode; window.__sh.online.hostStart(); }, [world, mode]);
   await Gp.waitForFunction(() => window.__sh.G.mode === 'online' && window.__sh.G.state === 'play', null, { timeout: 15000 });
   ok(true, 'the guest started the same world');
   await sleep(secs * 1000);
@@ -53,6 +53,13 @@ try {
   ok(!gs.me[2] || d < tol, `the guest's ship is where the guest flies it on the host (${d.toFixed(2)} m apart, allowed ${tol.toFixed(1)} m with ${lag} ms lag)`);
   ok(hs.kills >= 2 || wave >= 4, `machines destroyed together (${hs.kills})`);
   if (wave >= 4) { const bt = await Gp.evaluate(() => { const W = window.__sh.W; return W.boss ? W.boss.nodes.map((n) => n.hp).join(',') + ' ' + W.boss.st : W.result || W.phase; }); const bh = await H.evaluate(() => { const W = window.__sh.W; return W.boss ? W.boss.nodes.map((n) => n.hp).join(',') + ' ' + W.boss.st : W.result || W.phase; }); console.log('      carrier host', bh, '| guest', bt); ok(bt === bh || /clear/.test(bh), 'the carrier is the same on both screens'); }
+  if (mode === 'rivals') {
+    const rh = await H.evaluate(() => { const W = window.__sh.W; return [W.rivals, W.players[0].score || 0, W.players[1].score || 0]; });
+    const rg = await Gp.evaluate(() => { const W = window.__sh.W; return [W.rivals, W.players[0].score || 0, W.players[1].score || 0]; });
+    console.log('      rivals host', JSON.stringify(rh), '| guest', JSON.stringify(rg));
+    ok(rh[0] && rg[0], 'both pages play RIVALS');
+    ok(Math.abs(rh[1] - rg[1]) <= 1500 && Math.abs(rh[2] - rg[2]) <= 1500 && rh[1] + rh[2] > 0, 'each pilot has their own score, the same on both screens');
+  }
   ok(errors.length === 0, `no console errors${errors.length ? ': ' + errors.slice(0, 4).join(' | ') : ''}`);
   ok(posts === 0, 'no score posts');
   // leaving is noticed

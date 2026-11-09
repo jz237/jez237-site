@@ -9,8 +9,8 @@
 //   'human' — plays like a person: ~0.35 s reaction (scattered, sometimes late), wobbly altitude, misses things
 //             behind it, saves novas too long. The difficulty ramp is measured with this one.
 //   'demo'  — the attract mode: sharp and decisive. It never reads the world's random generator (replays stay exact).
-import { F, ENEMY, BOSSES, H } from './config.js?v=8';
-import { wd, wp, nodePos, beamRange } from './sim.js?v=8';
+import { F, ENEMY, BOSSES, H, SHIPS } from './config.js?v=9';
+import { wd, wp, nodePos, beamRange } from './sim.js?v=9';
 
 const clamp = (v, a, b) => (v < a ? a : v > b ? b : v);
 function mkr(seed) { let s = seed | 0; return () => { s = (s + 0x6D2B79F5) | 0; let t = Math.imul(s ^ (s >>> 15), s | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
@@ -74,6 +74,7 @@ export class Autopilot {
       else if (e.type === 'hive') s = 80 - d;
       else if (e.type === 'sower') s = 60 - d;
       else if (e.type === 'skimmer') { s = 30 - d * 1.2; w = 'Clearing a skimmer flock'; }
+      else if (e.type === 'meteor') { s = 480 - d * 2 - e.y * 4; w = e.st === 'lava' ? 'Shooting down a lava bomb over the colony' : 'Shooting down a meteor before it hits the colony'; }
       if (e.tell > 0 && d < 40) { s += 150; w = 'Taking out a machine that is about to fire'; }
       if (B) s -= 120;
       consider({ kind: 'enemy', o: e }, s * P.greed + (1 - P.greed) * -d, w);
@@ -81,7 +82,7 @@ export class Autopilot {
     if (B && B.st === 'fight') {
       let ni = -1, nd = 1e9;
       B.nodes.forEach((n, i) => { if (n.hp <= 0) return; const [x, y] = nodePos(B, i); const d = Math.abs(wd(x - me.x)) + Math.abs(y - me.y) * 2; if (d < nd) { nd = d; ni = i; } });
-      if (ni >= 0) consider({ kind: 'node', i: ni }, 300, `Lining up on the carrier's weak point ${ni + 1}`);
+      if (ni >= 0) consider({ kind: 'node', i: ni, ph: B.phase || 1 }, 300, `Lining up on the carrier's weak point ${ni + 1}`);
     }
     if (!best) {
       const s = W.settlers.find((q) => q.st === 'walk');
@@ -102,7 +103,7 @@ export class Autopilot {
     this.wobT -= 1 / 120;
     if (this.wobT <= 0) { this.wobT = 0.5 + this.r() * 0.6; this.yErr = (this.r() * 2 - 1) * P.aimErr; }
     let tx = me.x, ty = me.y, want = 0, fire = false;
-    const range = beamRange(W) * 0.9;
+    const SH = SHIPS[me.ship] || SHIPS.warden, range = beamRange(W) * 0.9 * SH.range;
     if (g.kind === 'land') { tx = me.x + me.face * 10; ty = 1; want = 0.4; D.target = { x: me.x, y: 0 }; }
     else if (g.kind === 'settler') {
       const s = g.o, tl = s.y / Math.max(0.5, W.R.fallV);
@@ -199,6 +200,8 @@ export class Autopilot {
     out.nova = nova && !this.novaWas; this.novaWas = nova;
     if (out.nova) D.dodge = 'Swamped: letting off a NOVA';
     out.mx = mx ? Math.sign(mx) * clamp(Math.max(0.17, Math.abs(mx) * P.slow), 0, 1) : 0; out.my = clamp(my, -1, 1);
+    if (SH.weapon === 'missile' && W.enemies.some((e) => e.hp > 0 && e.born <= 0 && e.type !== 'mine' && Math.hypot(wd(e.x - me.x), e.y - me.y) < 40)) fire = true;
+    if (SH.weapon === 'missile' && W.boss && W.boss.st === 'fight' && Math.abs(wd(W.boss.x - me.x)) < 45) fire = true;
     out.fire = fire || (this.profile === 'demo' && near > 0 && this.r() < 0.02);
     return out;
   }
@@ -206,7 +209,7 @@ export class Autopilot {
     if (!g) return true;
     if (g.kind === 'enemy') return !(g.o && g.o.hp > 0) || !W.enemies.includes(g.o);
     if (g.kind === 'settler') return g.o.st !== 'fall';
-    if (g.kind === 'node') return !W.boss || W.boss.nodes[g.i].hp <= 0;
+    if (g.kind === 'node') return !W.boss || !W.boss.nodes[g.i] || W.boss.nodes[g.i].hp <= 0 || (g.ph || 1) !== (W.boss.phase || 1);
     if (g.kind === 'land') return false;
     return false;
   }

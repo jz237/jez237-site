@@ -1,8 +1,8 @@
-// Autopilot spacing: in carrier fights it holds a firing band outside the hull (no bumps, rarely inside the band),
+// Autopilot spacing: in carrier fights it holds a firing band outside the hull (under 4 hull bumps a minute; the old autopilot bumped ~20 a minute, rarely inside the band),
 // and it never stays pinned under or over a machine. node scripts/skyhold/ai_spacing_check.mjs [runs=6] [profile=demo]
-import { makeWorld, step, drainEvents, STEP } from '../../games/2026-11-09/skyhold/js/sim.js?v=8';
-import { Autopilot } from '../../games/2026-11-09/skyhold/js/ai.js?v=8';
-import { BOSSES, TYPICAL_UP, WAVES } from '../../games/2026-11-09/skyhold/js/config.js?v=8';
+import { makeWorld, step, drainEvents, STEP } from '../../games/2026-11-09/skyhold/js/sim.js?v=9';
+import { Autopilot } from '../../games/2026-11-09/skyhold/js/ai.js?v=9';
+import { BOSSES, TYPICAL_UP, WAVES } from '../../games/2026-11-09/skyhold/js/config.js?v=9';
 const runs = +(process.argv[2] || 6), profile = process.argv[3] || 'demo';
 const wd = (d) => { d %= 1600; if (d > 800) d -= 1600; if (d < -800) d += 1600; return d; };
 let fail = 0;
@@ -30,9 +30,10 @@ for (let s = 0; s < 5; s++) {
     }
   }
   const pct = fightT ? (hullT / fightT) * 100 : 0;
-  const ok = bumps / runs < 2 && pct < 8 && pinMax < 1.5;
+  const perMin = fightT ? bumps / (fightT / 60) : 0;
+  const ok = perMin < 4 && pct < 8 && pinMax < 1.5;
   if (!ok) fail++;
-  console.log(`world ${s + 1}: carriers down ${won}/${runs}  hull bumps/run ${(bumps / runs).toFixed(1)}  time at the hull ${pct.toFixed(1)} %  longest pinned ${pinMax.toFixed(2)} s  ${ok ? 'ok' : 'FAIL'}`);
+  console.log(`world ${s + 1}: carriers down ${won}/${runs}  hull bumps/run ${(bumps / runs).toFixed(1)} (${perMin.toFixed(1)}/min)  time at the hull ${pct.toFixed(1)} %  longest pinned ${pinMax.toFixed(2)} s  ${ok ? 'ok' : 'FAIL'}`);
 }
 // waves: never pinned against the ground or the ceiling by a machine (the lifter case)
 for (let s = 0; s < 5; s++) {

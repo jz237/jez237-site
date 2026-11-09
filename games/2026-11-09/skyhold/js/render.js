@@ -5,13 +5,13 @@
 // Five looks (sky, terrain, sea, scenery, bodies in the sky), real 3D models for everything, curved beams,
 // warnings drawn in the play plane, HDR post. Nothing here changes the world.
 import * as THREE from '../vendor/three.module.min.js';
-import { Post } from './post.js?v=8';
-import * as TX from './textures.js?v=8';
-import * as MD from './models.js?v=8';
-import { FX, CALM } from './fx.js?v=8';
-import { NOISE } from './shaders.js?v=8';
-import { F, C, RP, H, ENEMY, BOSSES, POWERUPS, P2_LIVERY, LIVERIES, SETTLER } from './config.js?v=8';
-import { wd, wp, nodePos, beamRange, dronePos as dronePosR } from './sim.js?v=8';
+import { Post } from './post.js?v=9';
+import * as TX from './textures.js?v=9';
+import * as MD from './models.js?v=9';
+import { FX, CALM } from './fx.js?v=9';
+import { NOISE } from './shaders.js?v=9';
+import { F, C, RP, H, ENEMY, BOSSES, POWERUPS, P2_LIVERY, LIVERIES, SETTLER, PHASE2 } from './config.js?v=9';
+import { wd, wp, nodePos, beamRange, dronePos as dronePosR } from './sim.js?v=9';
 
 export { CALM };
 const hdr = (hex, k) => new THREE.Color(hex).multiplyScalar(k);
@@ -122,7 +122,8 @@ void main(){
 }`;
 // colony shield dome: a hex lattice with a bright rim and a scan band rising through it
 const DOME_VERT = /* glsl */ `varying vec3 vN; varying vec3 vV; varying vec3 vP; void main(){ vP = position; vec4 w = modelMatrix * vec4(position, 1.0); vN = normalize(mat3(modelMatrix) * normal); vV = normalize(cameraPosition - w.xyz); gl_Position = projectionMatrix * viewMatrix * w; }`;
-const DOME_FRAG = /* glsl */ `uniform vec3 uC; uniform float uT; varying vec3 vN; varying vec3 vV; varying vec3 vP;
+const DOME_FRAG = /* glsl */ `uniform vec3 uC; uniform float uT, uHit, uCrack, uGlow; varying vec3 vN; varying vec3 vV; varying vec3 vP;
+${NOISE}
 void main(){
   vec3 d = normalize(vP);
   float fr = pow(1.0 - abs(dot(normalize(vN), vV)), 2.2);
@@ -132,8 +133,11 @@ void main(){
   float grid = smoothstep(0.08, 0.0, min(0.5 - f.x, 0.5 - f.y));
   float scan = exp(-pow((d.y - fract(uT * 0.18)) * 14.0, 2.0));
   float base = smoothstep(0.0, 0.12, d.y);
-  float a = (fr * 0.55 + grid * (0.16 + scan * 0.5) + scan * 0.12) * base;
-  gl_FragColor = vec4(uC * a, a);
+  float a = (fr * 0.55 + grid * (0.16 + scan * 0.5) + scan * 0.12) * base * uGlow;
+  float n = fbm(d * 5.0 + vec3(3.0, 1.0, 2.0)); float crk = smoothstep(0.035, 0.0, abs(n - 0.5)) * uCrack;
+  a *= 1.0 - uHit * 0.75 * step(0.45, fract(uT * 17.0 + d.y * 3.0));
+  vec3 col = uC * a + vec3(1.0, 0.45, 0.3) * crk * 1.4 * base;
+  gl_FragColor = vec4(col, a + crk * 0.6);
 }`;
 // the sea band: water, lava or an ice sheet; lit by the day factor
 const SEA_VERT = /* glsl */ `varying vec3 vW; varying vec2 vP; void main(){ vec4 w = modelMatrix * vec4(position, 1.0); vW = w.xyz; vP = vec2(atan(w.x, w.y) * ${RP.toFixed(3)}, asin(clamp(w.z / length(w.xyz), -1.0, 1.0)) * ${RP.toFixed(3)}); gl_Position = projectionMatrix * viewMatrix * w; }`;
@@ -588,7 +592,7 @@ export class Renderer {
   }
   // the colony for this world: domes and buildings at the sim's sites
   setWorld(W) {
-    const key = W.k + ':' + W.sites.map((s) => s.toFixed(1)).join(',');
+    const key = W.k + ':' + W.sites.map((s) => s.toFixed(1)).join(',') + ':' + (this.colonyGrow || 0);
     if (key === this.colonyKey) return;
     this.colonyKey = key;
     if (this.colony) { for (const m of this.colony) { this.scene.remove(m); } }
@@ -597,7 +601,7 @@ export class Renderer {
     if (!set.length) return;
     const r = mkr(W.seed + 3), place = set.map(() => []);
     for (const site of W.sites) {
-      const n = 4 + ((r() * 3) | 0);
+      const n = 4 + ((r() * 3) | 0) + Math.min(6, Math.floor((this.colonyGrow || 0) / 6));
       for (let k = 0; k < n; k++) {
         const s = (r() * set.length) | 0;
         place[s].push([(site + (r() - 0.5) * 26) / RP, -4.5 - r() * 9, 0.85 + r() * 0.4, r() * 0.5 - 0.25]);
@@ -616,13 +620,14 @@ export class Renderer {
     });
     this.makeDomes(W, L);
   }
+  siteDamage(x) { if (!this.domes || !this.domes.length) return; let b = null, bd = 1e9; for (const d of this.domes) { const dd = Math.abs(wd(d.userData.x - x)); if (dd < bd) { bd = dd; b = d; } } if (b && bd < 40) b.userData.dmg = (b.userData.dmg || 0) + 1; }
   makeDomes(W, L) {
     if (this.domes) for (const d of this.domes) this.scene.remove(d);
     this.domes = [];
     if (!this.domeGeo) this.domeGeo = new THREE.SphereGeometry(17, 48, 16, 0, TAU, 0, Math.PI / 2);
     for (const site of W.sites) {
       const m = new THREE.Mesh(this.domeGeo, new THREE.ShaderMaterial({ vertexShader: DOME_VERT, fragmentShader: DOME_FRAG, transparent: true, depthWrite: false, side: THREE.DoubleSide, blending: THREE.AdditiveBlending, fog: false,
-        uniforms: { uC: { value: hdr(L.dome || 0x5ad8ff, 1) }, uT: { value: 0 } } }));
+        uniforms: { uC: { value: hdr(L.dome || 0x5ad8ff, 1) }, uT: { value: 0 }, uHit: { value: 0 }, uCrack: { value: 0 }, uGlow: { value: 1 } } }));
       toW(site, -0.5, m.position, -8); radial(site, _v2); m.quaternion.setFromUnitVectors(_up.set(0, 1, 0), _v2);
       m.userData.x = site; m.renderOrder = 2; m.frustumCulled = false; this.scene.add(m); this.domes.push(m);
     }
@@ -734,13 +739,14 @@ export class Renderer {
   release(v) { v.used = false; v.outer.visible = false; v.phi = undefined; }
   playerView(p) {
     let v = this.views.p.get(p.id);
+    if (v && v.ship !== (p.ship || 'warden')) { this.scene.remove(v.outer); if (v.drone) this.scene.remove(v.drone.outer); this.views.p.delete(p.id); v = null; }
     if (!v) {
       const L = p.id === 1 ? this.livery : P2_LIVERY;
-      const m = MD.ship(L.color, L.accent);
+      const m = MD.gunship(p.ship || 'warden', L.color, L.accent);
       const outer = new THREE.Group(); outer.matrixAutoUpdate = false; outer.add(m.g);
       m.g.traverse((o) => { if (o.isMesh) o.castShadow = true; });
       this.scene.add(outer);
-      v = { ...m, outer, hurt: 0, bank: 0, pitch: 0, roll: 0, trail: [[], []], ph: 0 };
+      v = { ...m, outer, hurt: 0, bank: 0, pitch: 0, roll: 0, trail: [[], []], ph: 0, ship: p.ship || 'warden' };
       this.views.p.set(p.id, v);
     }
     return v;
@@ -754,7 +760,7 @@ export class Renderer {
     let v = this.views.e.get(e.id);
     if (v && v.type !== e.type) { this.breakView(v, { soft: true }); this.release(v); this.views.e.delete(e.id); v = null; }
     if (!v) {
-      v = this.pool(e.type, () => { const m = MD[e.type](); return { ...m, type: e.type }; });
+      v = this.pool(e.type, () => { const m = MD[e.type] ? MD[e.type]() : this.rockModel(); return { ...m, type: e.type }; });
       v.hit = 0; v.born = 1;
       if (!v.halo && e.type !== 'mine') {
         v.halo = new THREE.Sprite(new THREE.SpriteMaterial({ map: this.T.glow, color: hdr(TCOL[e.type] || 0xffffff, 1.4), transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, fog: false, opacity: 0.55 }));
@@ -763,6 +769,24 @@ export class Renderer {
       this.views.e.set(e.id, v);
     }
     return v;
+  }
+  rockModel() {
+    const g = new THREE.Group();
+    const rock = new THREE.Mesh(new THREE.IcosahedronGeometry(0.75, 1), new THREE.MeshStandardMaterial({ color: 0x3a302a, roughness: 0.9, metalness: 0.1, flatShading: true, emissive: 0xff5a1a, emissiveIntensity: 0.6 }));
+    const core = new THREE.Mesh(new THREE.IcosahedronGeometry(0.5, 1), new THREE.MeshBasicMaterial({ color: hdr(0xff8a3a, 4), toneMapped: false }));
+    g.add(rock, core);
+    return { g, core, rock };
+  }
+  // chain lightning between the points of an arc, gone in a blink
+  lightning(pts) {
+    for (let k = 0; k + 1 < pts.length; k++) {
+      const rb = this.takeRibbon(); if (!rb) return;
+      const [x0, y0] = pts[k], [x1, y1] = pts[k + 1], q = [];
+      for (let j = 0; j <= 8; j++) { const f = j / 8, jx = j && j < 8 ? (Math.random() - 0.5) * 1.6 : 0, jy = j && j < 8 ? (Math.random() - 0.5) * 1.6 : 0; q.push([wp(x0 + wd(x1 - x0) * f + jx), y0 + (y1 - y0) * f + jy]); }
+      rb.keep = true; rb.set(q, 0.35, 0.4);
+      rb.mat.uniforms.uColor.value.set(0xb8e8ff).multiplyScalar(4); rb.mat.uniforms.uK.value = 1.6; rb.mat.uniforms.uDash.value = 0; rb.mat.uniforms.uSoft.value = 1.2; rb.mat.uniforms.uHead.value = 0;
+      setTimeout(() => { rb.keep = false; rb.hide(); }, 110);
+    }
   }
   cheer(id) { const v = this.views.s.get(id); if (v) v.cheer = 2.2; }
   settlerView(s) {
@@ -917,6 +941,8 @@ export class Renderer {
         this.fx.fireP.add({ x: _v.x, y: _v.y, z: _v.z, vx: 0, vy: 0, vz: 0, s0: e.type === 'skimmer' ? 0.5 : 0.65, s1: 0.06, max: 0.55, a: 0.85, r: c.r * 1.6, g: c.g * 1.6, b: c.b * 1.6, drag: 1, grav: 0, fade: 0.5 });
       }
       if (e.type === 'skimmer') v.g.rotation.x += Math.sin(t * 1.7 + (e.ph || 0)) * 0.5;
+      if (e.type === 'meteor') { v.g.rotation.set(t * 3 + e.id, t * 2, 0); if (!CALM.on && Math.random() < dt * 60) { toW(e.x, e.y, _v, 0); this.fx.fire(_v.x, _v.y, _v.z, { n: 1, s: 0.8, sp: 0.4, jit: 1, life: 0.45, r: 1, g: e.st === 'lava' ? 0.4 : 0.6, b: 0.15 }); } }
+      if ((W.stun || 0) > 0 && e.type !== 'meteor' && Math.random() < dt * 8) { toW(e.x, e.y, _v, 0); this.fx.sparks(_v.x, _v.y, _v.z, { n: 3, speed: 4, r: 0.7, g: 0.9, b: 1, life: 0.3 }); }
       // warp-in gate
       if (born) this.gate(e.x, e.y, 1 - e.born / 1.8, e.type === 'prowler' ? 0xff4a5a : e.type === 'lifter' ? 0x8dff7a : 0xffb347, 2.6);
       // a machine about to fire: a dashed red line toward the pilot it is aiming at
@@ -973,19 +999,31 @@ export class Renderer {
     }
     for (const [id, v] of this.views.pods) if (!seenQ.has(id)) { this.release(v); this.views.pods.delete(id); }
     // ---- beams
-    const range = beamRange(W);
     for (const s of W.shots) {
+      const range = beamRange(W) * (s.rk || 1) * (s.hyper ? 1.25 : 1);
       const head = Math.min(range, F.beamV * s.t), tail = Math.max(0, F.beamV * s.t - F.beamLen);
       const end = s.done ? (s.hitD ?? head) : Math.min(head, s.hitD ?? head);
       if (end <= tail) continue;
       const rb = this.takeRibbon(); if (!rb) break;
       const pts = []; for (let k = 0; k <= 6; k++) pts.push([wp(s.x0 + s.dir * (tail + (end - tail) * k / 6)), s.y]);
       if (s.dir < 0) pts.reverse();
-      rb.set(pts, s.drone ? 0.45 : 0.78, 0.35);
-      rb.mat.uniforms.uColor.value.set(s.drone ? 0x9dff7a : W.players.find((q) => q.id === s.pid)?.pw?.twin ? 0x8fe4ff : 0xff6a50).multiplyScalar(2.8);
+      rb.set(pts, (s.drone ? 0.45 : s.hyper ? 1.5 : 0.78) * (s.bk || 1), 0.35);
+      if (s.hyper) rb.mat.uniforms.uColor.value.setHSL((t * 0.9 + s.y * 0.03) % 1, 1, 0.6).multiplyScalar(3.2);
+      else rb.mat.uniforms.uColor.value.set(s.arc ? 0x9ad8ff : s.dmg > 1 ? 0xffa040 : s.drone ? 0x9dff7a : W.players.find((q) => q.id === s.pid)?.pw?.twin ? 0x8fe4ff : 0xff6a50).multiplyScalar(2.8);
       rb.mat.uniforms.uK.value = 1.5; rb.mat.uniforms.uDash.value = 0; rb.mat.uniforms.uSoft.value = 3; rb.mat.uniforms.uHead.value = 0;
       const cr = this.takeRibbon(); if (cr) { cr.set(pts, 0.2, 0.4); cr.mat.uniforms.uColor.value.set(0xfff4e8).multiplyScalar(4); cr.mat.uniforms.uK.value = 1.6; cr.mat.uniforms.uDash.value = 0; cr.mat.uniforms.uSoft.value = 2; cr.mat.uniforms.uHead.value = 0; }
     }
+    // ---- homing missiles
+    if (!this.misS) this.misS = [];
+    const ML = W.missiles || [];
+    for (let i = 0; i < ML.length; i++) {
+      const m = ML[i];
+      let sp = this.misS[i];
+      if (!sp) { sp = new THREE.Sprite(new THREE.SpriteMaterial({ map: this.T.glow, color: hdr(0xffb060, 3), transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, fog: false })); sp.scale.set(1.3, 1.3, 1); this.scene.add(sp); this.misS.push(sp); }
+      sp.visible = true; toW(m.x, m.y, sp.position, 0.3);
+      if (!CALM.on) { this.fx.fireP.add({ x: sp.position.x, y: sp.position.y, z: sp.position.z, vx: 0, vy: 0, vz: 0, s0: 0.45, s1: 0.05, max: 0.35, a: 0.9, r: 1, g: 0.6, b: 0.25, drag: 1, grav: 0, fade: 0.5 }); if (Math.random() < 0.5) this.fx.dustP.add({ x: sp.position.x, y: sp.position.y, z: sp.position.z, vx: 0, vy: 0, vz: 0, s0: 0.2, s1: 0.9, max: 0.8, a: 0.25, r: 0.6, g: 0.6, b: 0.62, drag: 1, grav: 0, fade: 0.7 }); }
+    }
+    for (let i = ML.length; i < this.misS.length; i++) this.misS[i].visible = false;
     // ---- bolts
     let n = 0;
     for (const b of W.bolts) {
@@ -1029,8 +1067,35 @@ export class Renderer {
         this.fx.dustP.add({ x: _v.x, y: _v.y, z: _v.z, vx: -_v2.x * 26, vy: -_v2.y * 26, vz: 0, s0: 0.13, s1: 0.1, max: 1.2, a: 0.5, r: 0.75, g: 0.82, b: 0.95, drag: 0, grav: 0, fade: 0.4 });
       }
     }
-    // colony shield domes shimmer over the sites (they fail when the colony falls)
-    if (this.domes) for (const d of this.domes) { d.visible = !W.fallen && Math.abs(wd(d.userData.x - this.cx)) < 140; d.material.uniforms.uT.value = t; }
+    // HYPER: a rainbow wake behind the ship
+    for (const p of W.players) if (p.alive && p.hyper > 0 && !CALM.on) for (let k = 0; k < 3; k++) {
+      toW(p.x - p.face * (1 + k * 0.6), p.y + (Math.random() - 0.5) * 0.6, _v, 0); _c2.setHSL((t * 1.3 + k * 0.1) % 1, 1, 0.6);
+      this.fx.fireP.add({ x: _v.x, y: _v.y, z: _v.z, vx: 0, vy: 0, vz: 0, s0: 0.9, s1: 0.1, max: 0.7, a: 0.9, r: _c2.r * 2, g: _c2.g * 2, b: _c2.b * 2, drag: 1, grav: 0, fade: 0.5 });
+    }
+    // colony shield domes shimmer over the sites (they fail when the colony falls); a machine inside makes one
+    // flicker, every settler lost there cracks it further, and the more settlers are safe the brighter they glow
+    if (this.domes) {
+      const alive = W.settlers.filter((s) => s.st !== 'dead').length / Math.max(1, W.settlers.length);
+      for (const d of this.domes) {
+        d.visible = !W.fallen && Math.abs(wd(d.userData.x - this.cx)) < 140;
+        const U = d.material.uniforms; U.uT.value = t;
+        const inside = W.enemies.some((e) => e.hp > 0 && (e.type === 'lifter' || e.type === 'husk') && e.y < 17 && Math.abs(wd(e.x - d.userData.x)) < 16);
+        U.uHit.value += ((inside ? 1 : 0) - U.uHit.value) * Math.min(1, dt * 5);
+        U.uCrack.value = Math.min(1, (d.userData.dmg || 0) * 0.34);
+        U.uGlow.value = 0.6 + alive * 0.6;
+        if ((d.userData.dmg || 0) > 0 && d.visible && !CALM.on && Math.random() < dt * 6 * Math.min(3, d.userData.dmg)) {
+          toW(d.userData.x + (Math.random() - 0.5) * 18, 1.5, _v, -6 - Math.random() * 6); radial(d.userData.x, _v2);
+          this.fx.dustP.add({ x: _v.x, y: _v.y, z: _v.z, vx: _v2.x * 2.2, vy: _v2.y * 2.2, vz: 0, s0: 1, s1: 5, max: 4, a: 0.35, r: 0.12, g: 0.11, b: 0.1, drag: 0.4, grav: 0, fade: 0.7 });
+          if (Math.random() < 0.4) this.fx.fire(_v.x, _v.y, _v.z, { n: 1, s: 1.1, sp: 1, jit: 1, life: 0.6 });
+        }
+      }
+    }
+    // planet events: the sandstorm's flying grit
+    if (W.event && W.event.kind === 'sandstorm' && !CALM.on) for (let k = 0; k < 6; k++) {
+      toW(this.cx + (Math.random() - 0.5) * 120, Math.random() * 36, _v, (Math.random() - 0.4) * 24); tangent(this.cx, _v2);
+      const sp = 30 * W.event.dir;
+      this.fx.dustP.add({ x: _v.x, y: _v.y, z: _v.z, vx: _v2.x * sp, vy: _v2.y * sp, vz: 0, s0: 0.2, s1: 0.5, max: 1.4, a: 0.45, r: 0.95, g: 0.62, b: 0.32, drag: 0, grav: 0, fade: 0.4 });
+    }
     // colony searchlights sweep the night sky (not once the colony has fallen)
     if ((this.nightK || 0) > 0.15 && !W.fallen) for (let si = 0; si < W.sites.length; si++) {
       const site = W.sites[si];
@@ -1070,7 +1135,7 @@ export class Renderer {
   // the carrier: weak points, the turn, its attack warnings
   syncBoss(W, dt, t) {
     const B = W.boss;
-    if (!B) { if (this.bossV) { this.scene.remove(this.bossV.outer); this.bossV = null; } this.bossLight.intensity = 0; return; }
+    if (!B) { if (this.bossV) { this.scene.remove(this.bossV.outer); this.bossV = null; } this.bossLight.intensity = 0; if (this.cores) this.cores.forEach((g) => { g.visible = false; }); this.shadowK = 0; return; }
     if (!this.bossV || this.bossV.key !== B.key) {
       if (this.bossV) this.scene.remove(this.bossV.outer);
       const v = MD.boss(B.key), outer = new THREE.Group(); outer.matrixAutoUpdate = false; outer.add(v.g); this.scene.add(outer);
@@ -1080,7 +1145,7 @@ export class Renderer {
     }
     const V = this.bossV;
     this.bossRecoil(V, dt);
-    const warp = B.st === 'warp' ? clamp(1 - B.stT / 3.2, 0, 1) : 1;
+    const warp = B.st === 'warp' ? clamp(1 - B.stT / PHASE2.warpT, 0, 1) : 1;
     const tw = this.turnSpring(V, B.face, dt, 26, 0.18);
     this.placeTurn(V.outer, B.x + (V.rx || 0), B.y + (V.ry || 0), V.phi, -0.5, V.s0 * (0.3 + 0.7 * warp));
     const fl = V.fl || 0, sink = B.st === 'dying' ? (2.6 - B.stT) * 0.15 : 0;
@@ -1089,7 +1154,29 @@ export class Renderer {
     if (B.st === 'warp') this.gate(B.x, B.y, warp, 0xff6a3a, 16);
     if (V.spin) { const ax = { ark: 'y', reaper: 'x', loom: 'z', throne: 'z' }[B.key] || 'z'; V.spin.rotation[ax] += dt * (0.6 + (B.atk ? 2.5 : 0)); }
     if (V.hatch) { const open = B.atk && (B.atk.kind === 'drop' || B.atk.kind === 'mines') ? 1.3 : 0; V.hatch.rotation.z += (open - V.hatch.rotation.z) * Math.min(1, dt * 4); }
-    if (V.nodes) V.nodes.forEach((g, i) => { const n = B.nodes[i]; g.visible = !!n && n.hp > 0; if (n && n.hp > 0) g.scale.setScalar(1 + Math.sin(t * 5 + i) * 0.08 + (B.hitT > 0 ? 0.3 : 0)); });
+    if (V.nodes) V.nodes.forEach((g, i) => { const n = B.phase === 2 ? null : B.nodes[i]; g.visible = !!n && n.hp > 0; if (n && n.hp > 0) g.scale.setScalar(1 + Math.sin(t * 5 + i) * 0.08 + (B.hitT > 0 ? 0.3 : 0)); });
+    if (!this.cores) this.cores = [0, 1, 2].map((k) => {
+      const g = new THREE.Group();
+      const m = new THREE.Mesh(new THREE.IcosahedronGeometry(k ? 0.8 : 1.35, 2), new THREE.MeshBasicMaterial({ color: hdr(k ? 0xffa03a : 0xff3a5a, 5), toneMapped: false }));
+      const s = new THREE.Sprite(new THREE.SpriteMaterial({ map: this.T.glow, color: hdr(k ? 0xffa040 : 0xff4060, 2.2), transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, fog: false }));
+      s.scale.setScalar(k ? 5 : 9); g.add(m, s); g.visible = false; this.scene.add(g); return g;
+    });
+    this.cores.forEach((g, i) => {
+      const n = B.phase === 2 && B.st !== 'dying' ? B.nodes[i] : null;
+      g.visible = !!n && n.hp > 0;
+      if (g.visible) { const [nx, ny] = nodePos(B, i); toW(nx, ny, g.position, 1.8); g.scale.setScalar((B.st === 'shed' ? 0.4 + 0.6 * (1 - B.stT / PHASE2.shedT) : 1) * (1 + Math.sin(t * 7 + i) * 0.15 + (B.hitT > 0 ? 0.35 : 0))); }
+    });
+    // the arrival: the sky tears open where the carrier comes through and its shadow falls over the colony
+    if (B.st === 'warp') {
+      const k = warp, rb = this.takeRibbon();
+      if (rb) {
+        const pts = []; for (let j = 0; j <= 12; j++) pts.push([B.x + Math.sin(j * 2.7 + t * 9) * (0.8 + k * 3.5), B.y + 26 - j * 4.6]);
+        rb.set(pts, (q) => (0.3 + k * 4.5) * Math.sin(Math.PI * q), -28);
+        rb.mat.uniforms.uColor.value.set(k < 0.7 ? 0xff6a3a : 0xffd0a0).multiplyScalar(3.5); rb.mat.uniforms.uK.value = 0.6 + k * 1.2; rb.mat.uniforms.uDash.value = 0; rb.mat.uniforms.uSoft.value = 1.3; rb.mat.uniforms.uHead.value = 0;
+      }
+      this.shadowK = Math.sin(Math.PI * Math.min(1, k * 1.1)) * 0.55;
+      if (!CALM.on && Math.random() < dt * 40) { toW(B.x + (Math.random() - 0.5) * 8, B.y + 20 - Math.random() * 40, _v, -26); this.fx.sparks(_v.x, _v.y, _v.z, { n: 2, speed: 6, r: 1, g: 0.6, b: 0.4, life: 0.5 }); }
+    } else this.shadowK = 0;
     // wounds: every destroyed weak point burns and trails smoke; an enraged carrier glows red
     if (B.st !== 'warp' && !CALM.on) B.nodes.forEach((n, i) => {
       if (n.hp > 0 || Math.random() > dt * (B.st === 'dying' ? 30 : 12)) return;
@@ -1177,6 +1264,8 @@ export class Renderer {
     this.glare.position.copy(c.position).addScaledVector(SUN, 3500);
     // day and night: how high the sun stands over this spot
     this.day = _v2.dot(SUN);
+    this.eclK = (this.eclK || 0) + (((this.W && this.W.event && this.W.event.kind === 'eclipse' && this.W.event.t < this.W.event.T - 2) ? 1 : 0) - (this.eclK || 0)) * Math.min(1, dt * 0.8);
+    if (this.eclK > 0.001) this.day = this.day + (-0.75 - this.day) * this.eclK;
     const L = this.look, day = sstep(-0.25, 0.35, this.day), dusk = Math.exp(-Math.pow(this.day * 3.2, 2)), night = 1 - sstep(-0.35, 0.1, this.day);
     const u = this.skyMat.uniforms;
     u.uUp.value.copy(_v2); u.uDay.value = this.day;
@@ -1195,7 +1284,9 @@ export class Renderer {
     this.hemi.intensity = 0.55 + 0.35 * day + night * 0.85;
     this.scene.environmentIntensity = 0.25 + 0.75 * day;
     _c.set(L.fog[0]).lerp(_c2.set(L.fog[1]), 1 - day).lerp(_c2.set(L.sky[2]), dusk * 0.35);
-    this.scene.fog.color.copy(_c); this.scene.fog.density = L.fogD * (0.62 + 0.38 * night);
+    this.scene.fog.color.copy(_c); this.sandK = (this.sandK || 0) + (((this.W && this.W.event && this.W.event.kind === 'sandstorm' && this.W.event.t < this.W.event.T - 1.5) ? 1 : 0) - (this.sandK || 0)) * Math.min(1, dt * 0.7);
+    this.scene.fog.density = L.fogD * (0.62 + 0.38 * night) * (1 + this.sandK * 1.5);
+    if (this.sandK > 0.01) this.scene.fog.color.lerp(_c2.set(0xb06a30), this.sandK * 0.5);
     const sea = this.seas[this.lookI];
     if (sea) { const su = sea.material.uniforms; su.uSky.value.set(L.sky[1]).lerp(_c2.set(L.sky[4]), 1 - day); su.uSunC.value.set(L.sun).multiplyScalar(2); su.uFog.value.copy(_c); su.uDay.value = this.day; }
     const cs = this.cloudSets[this.lookI];
@@ -1252,15 +1343,15 @@ export class Renderer {
     this.shocks = this.shocks.filter((s) => s.t < s.max);
     const night = this.nightK || 0;
     this.post.render(this.scene, this.camera, {
-      bloom: L.bloom * (1.2 + night * 0.75) * (p.bloom ?? 1), threshold: 1.12 - night * 0.22, exposure: L.exposure * (1 + night * 0.25) * (p.exposure ?? 1), chroma: 0.0019 + (p.chroma || 0), time: t, desat: p.desat || 0, fade: p.fade || 0,
-      vignette: 0.42 + (p.vignette || 0), flash: this.flash, tint: _tint.set(...L.grade), shocks, lens: [],
+      bloom: L.bloom * (1.2 + night * 0.75) * (1 + (this.hyperK || 0) * 0.6) * (p.bloom ?? 1), threshold: 1.12 - night * 0.22 - (this.hyperK || 0) * 0.2, exposure: L.exposure * (1 + night * 0.25) * (1 - (this.shadowK || 0)) * (p.exposure ?? 1), chroma: 0.0019 + (this.hyperK || 0) * 0.005 + (p.chroma || 0), time: t, desat: p.desat || 0, fade: p.fade || 0,
+      vignette: 0.42 + (p.vignette || 0), flash: this.flash, tint: (this.sandK || 0) > 0.01 && !((this.hyperK || 0) > 0.01) ? _tint.set(L.grade[0] * (1 + 0.16 * this.sandK), L.grade[1] * (1 - 0.04 * this.sandK), L.grade[2] * (1 - 0.3 * this.sandK)) : (this.hyperK || 0) > 0.01 ? (_c2.setHSL((t * 0.25) % 1, 0.9, 0.62), _tint.set(L.grade[0] + (_c2.r * 1.6 - L.grade[0]) * 0.22 * this.hyperK, L.grade[1] + (_c2.g * 1.6 - L.grade[1]) * 0.22 * this.hyperK, L.grade[2] + (_c2.b * 1.6 - L.grade[2]) * 0.22 * this.hyperK)) : _tint.set(...L.grade), shocks, lens: [],
     });
   }
 
   // compile one of everything for the current world so nothing stalls mid-play on a shader compile
   warmUp() {
-    const tmp = [MD.ship(LIVERIES[0].color, LIVERIES[0].accent).g, MD.ship(P2_LIVERY.color, P2_LIVERY.accent).g, MD.settler(0xffffff).g];
-    for (const k of Object.keys(ENEMY)) tmp.push(MD[k]().g);
+    const tmp = [MD.ship(LIVERIES[0].color, LIVERIES[0].accent).g, ...['breaker', 'arc', 'hornet'].map((k) => MD.gunship(k, LIVERIES[0].color, LIVERIES[0].accent).g), MD.ship(P2_LIVERY.color, P2_LIVERY.accent).g, MD.settler(0xffffff).g];
+    for (const k of Object.keys(ENEMY)) tmp.push((MD[k] ? MD[k]() : this.rockModel()).g);
     for (const k of Object.keys(POWERUPS)) tmp.push(MD.pod(POWERUPS[k].color).g);
     for (const k of Object.keys(BOSSES)) tmp.push(MD.boss(k).g);
     // packed close together inside the sun's shadow box, so their shadow (depth) programs compile now too

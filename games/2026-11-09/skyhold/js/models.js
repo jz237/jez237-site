@@ -1,9 +1,9 @@
-// Skyhold 2026 3D models with physically based materials: the WARDEN gunship, the alien machines (lifter,
-// husk, sower, mine, hive, stinger, prowler), settlers, power pods, the five sector bosses and the instanced
-// ground scenery for each world look. Each model is built once from many detailed parts (bevelled side
-// profiles and armour plates, turned parts, greebles, lamps), every static part is merged into one mesh per
-// material class per moving joint, and later copies are cheap clones that share geometry. A panel normal map
-// adds seams, rivets and scratches to painted metal.
+// Skyhold 2026 3D models with physically based materials: the WARDEN gunship and its BREAKER, ARC and HORNET
+// siblings, the alien machines (lifter, husk, sower, mine, hive, stinger, prowler), settlers, power pods, the
+// five sector bosses and the instanced ground scenery for each world look. Each model is built once from many
+// detailed parts (bevelled side profiles and armour plates, turned parts, greebles, lamps), every static part
+// is merged into one mesh per material class per moving joint, and later copies are cheap clones that share
+// geometry. A panel normal map adds seams, rivets and scratches to painted metal.
 // Every model faces +x with Y up. The camera looks along -z from the +z side (a side view, ~8 degrees from
 // above), so the silhouettes and the z faces carry the detail; both faces are dressed (big things turn round).
 import * as THREE from '../vendor/three.module.min.js';
@@ -564,6 +564,263 @@ export function ship(color = 0x3d7fd9, accent = 0xffc65a) {
     return K.root;
   });
   return { g, bank: by(g, 'bank'), flames: [by(g, 'flame0'), by(g, 'flame1')], nozzleL: by(g, 'nozzle0'), nozzleR: by(g, 'nozzle1'), canopy: by(g, 'canopy'), gun: by(g, 'gun'), lamps: by(g, 'lamps') };
+}
+
+// ------------------------------------------------------------------ the other player gunships
+// gunship(kind, color, accent) is a drop-in for ship(color, accent): the same parts (bank group with the lamps
+// group inside it, 'canopy' mesh, 'flame<i>' plumes, 'nozzle0' / 'nozzle1' markers at the rear engines, 'gun'
+// marker at the muzzle) and the same returned fields. 'warden' is ship() itself; 'breaker' is a heavy cannon
+// ship, 'arc' a slim chain-lightning ship with a forked coil emitter, 'hornet' a compact missile ship.
+const GS_BELL = [[0.15, 0], [0.17, 0.03], [0.2, 0.22], [0.185, 0.24], [0.13, 0.05], [0.11, 0.03]];
+// a rear engine at the nozzle plane x: bell (k times the WARDEN's), trim ring, hot disc, plume, nozzle marker
+function gsEngine(K, B, at, i, x, y, z, k, ring, hot, flameCol, hotK = 4) {
+  at(lathe('wbell', GS_BELL, 20), M.frame, x, y, z, 0, 0, PI / 2, k);
+  at(tor(0.2, 0.02, 24, 5), ring, x - 0.02 * k, y, z, 0, PI / 2, 0, k);
+  at(cyl(0.125, 0.125, 0.02, 16), glow(hot, hotK), x - 0.05 * k, y, z, 0, 0, PI / 2, k);
+  K.mesh(plume(+(0.13 * k).toFixed(3), flameCol), flameMat(), 'flame' + i, x - 0.21 * k, y, z, 0, 0, 0, B);
+  K.group('nozzle' + i, B, x - 0.24 * k, y, z);
+}
+// an anhedral wing frame for side s: W mirrors a plan polygon, wp maps a wing-local point (x, height, span)
+const gsWing = (s, TH, y0) => { const cT = Math.cos(TH), sT = Math.sin(TH); return { rx: s * TH, W: (pts) => pts.map(([x, zz]) => [x, s * zz]), wp: (x, yl, zl) => [x, y0 + yl * cT - zl * sT, s * (yl * sT + zl * cT)] }; };
+const gsRet = (g, n) => ({ g, bank: by(g, 'bank'), flames: Array.from({ length: n }, (_, i) => by(g, 'flame' + i)), nozzleL: by(g, 'nozzle0'), nozzleR: by(g, 'nozzle1'), canopy: by(g, 'canopy'), gun: by(g, 'gun'), lamps: by(g, 'lamps') });
+const gsKit = (color, accent) => {
+  const K = new Kit(), B = K.group('bank'), L = K.group('lamps', B);
+  return {
+    K, B, L, at: atK(K, B), lamp: (gm, c, k, x, y, z) => K.add(gm, glow(c, k), x, y, z, 0, 0, 0, 1, 1, 1, L),
+    hot: new THREE.Color(accent).lerp(new THREE.Color(0xffffff), 0.55).getHex(),
+    body: paint(color, 0.32, 0.52), dark: paint(0x2a2e35, 0.42, 0.7), grey: paint(0x8d949d, 0.3, 0.75), acc: paint(accent, 0.36, 0.4), blk: M.black, lite: paint(0xd6dade, 0.32, 0.4),
+  };
+};
+
+// BREAKER, 3.6 m heavy gunship: a broad faceted armoured wedge with a raised dorsal deck, a low slit canopy,
+// stubby thick wings, twin big engine nacelles and one heavy cannon under the nose with a glowing muzzle ring
+function breaker(color, accent) {
+  const { K, B, at, lamp, hot, body, dark, grey, acc, blk } = gsKit(color, accent);
+  // faceted wedge hull, dark belly, raised armoured deck with heat vents
+  at(taperZ(side([[1.66, 0.0], [1.05, 0.2], [0.35, 0.4], [-0.4, 0.46], [-1.25, 0.42], [-1.48, 0.3], [-1.48, -0.18], [-1.1, -0.3], [0.3, -0.34], [1.1, -0.2]], 0.78, 0.1, 25), 0.5, 1.7, 0.36), body);
+  at(taperZ(side([[1.22, -0.13], [1.1, -0.21], [0.3, -0.355], [-1.1, -0.315], [-1.45, -0.19], [-1.45, -0.08]], 0.81, 0.05, 25), 0.5, 1.7, 0.36), dark);
+  at(side([[0.32, 0.38], [-0.15, 0.55], [-1.05, 0.55], [-1.32, 0.38]], 0.5, 0.06, 25), dark);
+  at(side([[0.18, 0.5], [-0.12, 0.575], [-0.9, 0.575], [-1.0, 0.5]], 0.3, 0.03, 25), grey);
+  for (const x of [-0.3, -0.48, -0.66]) at(box(0.07, 0.012, 0.22), glow(hot, 2.6), x, 0.58, 0);
+  for (const x of [0.25, -1.15]) at(box(0.014, 0.05, 0.52), blk, x, 0.5, 0);
+  // armoured slit canopy on the slope, frame and a bow
+  const canopy = K.mesh(sph(0.3, 24, 12), canopyMat(), 'canopy', 0.48, 0.37, 0, 0, 0, 0, B);
+  canopy.scale.set(1.0, 0.36, 0.62);
+  at(tor(0.3, 0.022, 32, 6), grey, 0.48, 0.37, 0, PI / 2, 0, 0, 1.0, 0.62, 1);
+  at(arcT(0.3, 0.02, PI, 14, 5), grey, 0.48, 0.37, 0, 0, PI / 2, 0, 0.615, 0.357, 1);
+  // cheek armour, rivets, accent chevrons and headlights on both faces
+  for (const s of BOTH) {
+    const z = s * 0.395;
+    at(side([[0.46, -0.16], [0.44, 0.24], [-0.32, 0.36], [-0.36, -0.24]], 0.03, 0.01, 25), dark, 0, 0, z);
+    at(side([[0.42, 0.06], [0.36, 0.15], [-0.32, 0.25], [-0.32, 0.16]], 0.036, 0.008), acc, 0, 0, z);
+    for (const [x, y] of [[0.36, -0.1], [0.0, -0.13], [-0.28, -0.16], [0.36, 0.02], [-0.28, 0.0]]) at(box(0.03, 0.03, 0.044), blk, x, y, z);
+    at(box(0.008, 0.36, 0.04), blk, 0.08, 0.05, z);
+    for (let k = 0; k < 4; k++) at(box(0.024, 0.08, 0.04), blk, 0.32 - k * 0.05, -0.04, z);
+    at(sph(0.032, 8, 6), glow(0xfff2d8, 5), 1.28, -0.05, s * 0.26);
+  }
+  // stubby thick wings with armoured leading edges, accent bands, tip blocks and nav lamps
+  for (const s of BOTH) {
+    const { W, rx, wp } = gsWing(s, 0.16, -0.2);
+    at(slab(W([[0.32, 0.36], [-0.3, 0.98], [-0.62, 1.02], [-0.86, 0.98], [-0.86, 0.36]]), 0.12, 0.04), body, 0, -0.2, 0, rx);
+    at(slab(W([[0.38, 0.36], [-0.28, 1.0], [-0.38, 1.01], [0.22, 0.36]]), 0.135, 0.04), dark, 0, -0.2, 0, rx);
+    at(slab(W([[-0.12, 0.8], [-0.28, 0.94], [-0.84, 0.94], [-0.84, 0.8]]), 0.13, 0.015), acc, 0, -0.2, 0, rx);
+    at(rbox(0.5, 0.14, 0.1, 0.03), dark, ...wp(-0.62, 0, 1.03), rx);
+    lamp(sph(0.03, 8, 6), s > 0 ? 0x3dff6a : 0xff2a1a, 6, ...wp(-0.36, 0.02, 1.05));
+    lamp(sph(0.022, 8, 6), 0xffffff, 6, ...wp(-0.88, 0, 1.03));
+  }
+  // twin heavy engine nacelles: armour skin, intake, accent band, grille, big bells, plumes, squat canted fins
+  [-1, 1].forEach((s, i) => {
+    const z = s * 0.46;
+    at(side(hull([[-0.26, 0.08], [-0.62, 0.25], [-1.2, 0.28], [-1.58, 0.24]], [[-1.58, -0.24], [-1.2, -0.27], [-0.62, -0.25], [-0.26, -0.08]], 8), 0.42, 0.15, 30), body, 0, 0, z);
+    at(sph(0.13, 16, 10), blk, -0.31, 0.0, z, 0, 0, 0, 0.35, 1, 1.25);
+    at(tor(0.13, 0.022, 20, 5), grey, -0.295, 0.0, z, 0, PI / 2, 0, 1.25, 1, 1);
+    at(side([[-0.7, -0.2], [-1.45, -0.2], [-1.5, 0.2], [-0.75, 0.21]], 0.02, 0.006, 25), dark, 0, 0, s * 0.672);
+    at(side([[-0.74, -0.04], [-1.46, -0.04], [-1.46, 0.03], [-0.74, 0.03]], 0.026, 0.006), acc, 0, 0, s * 0.68);
+    for (let k = 0; k < 5; k++) at(box(0.026, 0.07, 0.03), blk, -0.86 - k * 0.055, 0.12, s * 0.675);
+    for (let k = -1; k <= 1; k++) at(box(0.44, 0.05, 0.014), M.frame, -1.15, 0.28, z + k * 0.06);
+    gsEngine(K, B, at, i, -1.56, 0.0, z, 1.32, acc, hot, accent, 4.5);
+    at(side([[-0.92, 0], [-1.36, 0], [-1.52, 0.3], [-1.32, 0.32]], 0.06, 0.02, 30), body, 0, 0.24, z, s * 0.45);
+    at(side([[-1.3, 0.2], [-1.47, 0.2], [-1.52, 0.3], [-1.32, 0.32]], 0.066, 0.012), acc, 0, 0.24, z, s * 0.45);
+    lamp(sph(0.024, 8, 6), 0xff2a1a, 6, -1.42, 0.24 + 0.32 * Math.cos(0.45), z + s * 0.32 * Math.sin(0.45));
+  });
+  at(rbox(0.14, 0.3, 0.36, 0.05), blk, -1.5, 0.08, 0);
+  lamp(sph(0.022, 8, 6), 0xffffff, 6, -1.55, 0.3, 0);
+  lamp(sph(0.024, 8, 6), 0xff2a1a, 6, -0.6, 0.6, 0);
+  // the heavy cannon: armoured housing, shrouded barrel with glowing charge coils, muzzle brake, muzzle ring
+  at(side([[-0.05, -0.28], [0.95, -0.2], [1.14, -0.3], [1.08, -0.54], [0.05, -0.56]], 0.4, 0.06, 25), dark);
+  at(side([[0.25, -0.33], [0.95, -0.28], [1.0, -0.4], [0.3, -0.48]], 0.42, 0.02, 25), grey);
+  at(cyl(0.12, 0.12, 0.34, 16), grey, 1.2, -0.42, 0, 0, 0, PI / 2);
+  for (const x of [1.08, 1.32]) at(cyl(0.135, 0.135, 0.04, 16), M.frame, x, -0.42, 0, 0, 0, PI / 2);
+  at(cyl(0.075, 0.075, 0.5, 14), M.steel, 1.58, -0.42, 0, 0, 0, PI / 2);
+  for (const x of [1.44, 1.56, 1.68]) at(tor(0.09, 0.016, 16, 5), glow(hot, 3.2), x, -0.42, 0, 0, PI / 2, 0);
+  at(cyl(0.11, 0.1, 0.14, 16), blk, 1.86, -0.42, 0, 0, 0, PI / 2);
+  for (const s of BOTH) at(box(0.06, 0.03, 0.02), M.frame, 1.86, -0.42, s * 0.105);
+  at(tor(0.1, 0.024, 24, 6), glow(hot, 5), 1.935, -0.42, 0, 0, PI / 2, 0);
+  at(cyl(0.065, 0.065, 0.012, 16), glow(0xffffff, 3), 1.93, -0.42, 0, 0, 0, PI / 2);
+  K.group('gun', B, 1.96, -0.42, 0);
+  K.build();
+  return K.root;
+}
+
+// ARC, 3.5 m chain-lightning ship: a slim needle fuselage, long teardrop canopy, slender swept wings, a tall
+// swept fin, one big bright engine, and a forward fork of two swept prongs whose gap is bridged by glowing coil
+// rings (a separate 'coils' mesh with its own material, so it can be pulsed) round an emitter orb
+const ARC_EL = 0xbfe6ff;
+function arc(color, accent) {
+  const { K, B, at, lamp, hot, body, dark, grey, acc, blk, lite } = gsKit(color, accent);
+  // fuselage, dark belly, dorsal spine
+  const top = [[1.15, 0.0], [0.9, 0.08], [0.4, 0.15], [-0.3, 0.18], [-1.0, 0.17], [-1.45, 0.13]];
+  const bot = [[-1.45, -0.12], [-0.9, -0.14], [0.0, -0.13], [0.8, -0.07], [1.15, -0.01]];
+  at(taperZ(side(hull(top, bot, 14), 0.34, 0.09), 0.3, 1.2, 0.45), body);
+  at(taperZ(side(crv(bot, 14).map(([x, y]) => [x, y - 0.006]), 0.36, 0.05), 0.3, 1.2, 0.45), dark);
+  at(side([...crv([[0.15, 0.15], [-0.4, 0.2], [-1.0, 0.2], [-1.42, 0.15]], 8), [-1.42, 0.06], [0.15, 0.06]], 0.16, 0.04), dark);
+  // long teardrop canopy and frame
+  const canopy = K.mesh(sph(0.3, 28, 14), canopyMat(), 'canopy', 0.42, 0.13, 0, 0, 0, 0, B);
+  canopy.scale.set(1.9, 0.42, 0.42);
+  at(tor(0.3, 0.016, 36, 6), grey, 0.42, 0.13, 0, PI / 2, 0, 0, 1.9, 0.42, 1);
+  at(arcT(0.3, 0.014, PI, 16, 5), grey, 0.3, 0.13, 0, 0, PI / 2, 0, 0.41, 0.41, 1);
+  // side trim: accent sweep, seams, a glowing conduit line on both faces
+  for (const s of BOTH) {
+    const z = s * 0.172;
+    at(side([[0.95, 0.02], [0.85, 0.06], [-0.9, 0.09], [-0.9, 0.04]], 0.012, 0.004), acc, 0, 0, z);
+    at(box(1.7, 0.012, 0.01), glow(ARC_EL, 3), -0.15, -0.04, z);
+    for (const x of [0.6, 0.0, -0.6]) at(box(0.008, 0.1, 0.006), blk, x, 0.02, z);
+    for (let k = 0; k < 3; k++) at(box(0.02, 0.045, 0.012), blk, 0.7 - k * 0.04, 0.0, z);
+  }
+  // the fork: two swept prongs (upper and lower) curving in at the tips, glowing tips
+  const cl = crv([[0.82, 0.05], [1.2, 0.13], [1.55, 0.225], [1.82, 0.25], [1.95, 0.225]], 12);
+  const up = [], dn = [];
+  cl.forEach(([x, y], i) => {
+    const j = Math.min(i, cl.length - 2), dx = cl[j + 1][0] - cl[j][0], dy = cl[j + 1][1] - cl[j][1], l = Math.hypot(dx, dy) || 1;
+    const w = 0.055 * (1 - i / (cl.length - 1)) + 0.014;
+    up.push([x - dy / l * w, y + dx / l * w]); dn.push([x + dy / l * w, y - dx / l * w]);
+  });
+  const prong = [...up.slice().reverse(), ...dn];
+  for (const sy of BOTH) {
+    at(side(prong.map(([x, y]) => [x, sy * y]), 0.1, 0.03), body);
+    at(side(up.slice(0, 9).reverse().concat(up.slice(0, 9).map(([x, y]) => [x, y - 0.018])).map(([x, y]) => [x, sy * y]), 0.11, 0.01), acc);
+    lamp(sph(0.026, 10, 8), ARC_EL, 6, 1.95, sy * 0.225, 0);
+  }
+  for (const s of BOTH) at(box(0.2, 0.15, 0.02), grey, 0.92, 0.0, s * 0.06);
+  // coil rings strung between the prongs, and the emitter orb and spike in the throat
+  const coilX = [1.3, 1.48, 1.66, 1.82];
+  K.mesh(combo('arccoil', coilX.map((x) => [tor(+yAt(cl, x).toFixed(3), 0.017, 24, 6), x, 0, 0, 0, PI / 2, 0])), glowM(0x6ab8ff, 2.3, 'coils'), 'coils', 0, 0, 0, 0, 0, 0, B);
+  at(sph(0.055, 14, 10), glow(ARC_EL, 5), 1.17, 0, 0);
+  at(cone(0.022, 0.24, 8), glow(0xffffff, 4), 1.34, 0, 0, 0, 0, -PI / 2);
+  K.group('gun', B, 1.9, 0, 0);
+  // slender swept wings: leading-edge strip, accent tip band, glowing trailing strip, tip lamps
+  for (const s of BOTH) {
+    const { W, rx, wp } = gsWing(s, 0.08, -0.05);
+    at(slab(W([[0.25, 0.14], [-0.78, 0.98], [-0.96, 1.04], [-1.04, 1.0], [-0.75, 0.14]]), 0.05, 0.02), body, 0, -0.05, 0, rx);
+    at(slab(W([[0.3, 0.14], [-0.76, 1.0], [-0.82, 1.0], [0.18, 0.14]]), 0.06, 0.02), dark, 0, -0.05, 0, rx);
+    at(slab(W([[-0.6, 0.84], [-0.76, 0.96], [-1.02, 0.96], [-0.92, 0.84]]), 0.058, 0.01), acc, 0, -0.05, 0, rx);
+    at(box(0.014, 0.02, 0.86), glow(ARC_EL, 3), ...wp(-0.875, -0.01, 0.57), rx, -s * 0.33, 0);
+    lamp(sph(0.024, 8, 6), s > 0 ? 0x3dff6a : 0xff2a1a, 6, ...wp(-0.8, 0.0, 1.0));
+    lamp(sph(0.018, 8, 6), 0xffffff, 6, ...wp(-1.04, 0, 1.0));
+  }
+  // tall swept dorsal fin and small ventral fin
+  at(side([[-0.55, 0.12], [-1.15, 0.12], [-1.52, 0.66], [-1.34, 0.68]], 0.04, 0.014), body);
+  at(side([[-1.28, 0.52], [-1.43, 0.52], [-1.52, 0.66], [-1.34, 0.68]], 0.046, 0.01), acc);
+  at(box(0.5, 0.01, 0.046), blk, -1.05, 0.3, 0, 0, 0, -0.6);
+  lamp(sph(0.022, 8, 6), 0xff2a1a, 6, -1.44, 0.69, 0);
+  at(side([[-0.85, -0.1], [-1.22, -0.1], [-1.4, -0.32], [-1.28, -0.33]], 0.034, 0.012), dark);
+  // the single big engine: tapered housing, intake rings, bright core
+  at(cyl(0.21, 0.15, 0.62, 20), body, -1.2, 0.02, 0, 0, 0, PI / 2);
+  for (const x of [-1.0, -1.38]) at(cyl(0.2, 0.2, 0.03, 20), M.frame, x, 0.02, 0, 0, 0, PI / 2, x < -1.2 ? 1.05 : 0.9);
+  for (const s of BOTH) at(box(0.4, 0.04, 0.012), lite, -1.2, 0.02, s * 0.2);
+  gsEngine(K, B, at, 0, -1.5, 0.02, 0, 1.15, acc, ARC_EL, 0x9fd4ff, 6);
+  at(tor(0.2, 0.016, 24, 5), glow(ARC_EL, 4), -1.6, 0.02, 0, 0, PI / 2, 0, 1.15);
+  K.group('nozzle1', B, -1.78, 0.02, 0);
+  lamp(sph(0.02, 8, 6), 0xffffff, 6, -1.4, 0.28, 0);
+  K.build();
+  return K.root;
+}
+
+// HORNET, 3.1 m missile ship: a short fat body with a bubble canopy and nose canards, stubby swept anhedral
+// wings with tip fins, a row of four missile pods (glowing warheads) under each wing, twin canted tail fins
+// and three small engines (one high on the spine, two low on the flanks)
+const HORNET_TIP = 0xff4a2a;
+function hornet(color, accent) {
+  const { K, B, at, lamp, hot, body, dark, grey, acc, blk, lite } = gsKit(color, accent);
+  // fuselage, dark belly, spine
+  const top = [[1.45, -0.02], [1.15, 0.1], [0.7, 0.22], [0.2, 0.28], [-0.5, 0.27], [-1.05, 0.21], [-1.28, 0.15]];
+  const bot = [[-1.28, -0.17], [-0.8, -0.25], [0.0, -0.26], [0.8, -0.18], [1.3, -0.06]];
+  at(taperZ(side(hull(top, bot, 14), 0.56, 0.12), 0.55, 1.5, 0.35), body);
+  at(taperZ(side(crv(bot, 14).map(([x, y]) => [x, y - 0.006]), 0.58, 0.06), 0.55, 1.5, 0.35), dark);
+  at(side([...crv([[0.25, 0.25], [-0.3, 0.33], [-0.9, 0.3], [-1.2, 0.22]], 8), [-1.2, 0.1], [0.25, 0.1]], 0.26, 0.06), dark);
+  // dorsal missile box: armoured launcher block with a grid of glowing cell hatches
+  at(rbox(0.62, 0.16, 0.36, 0.03), dark, -0.42, 0.36, 0);
+  at(rbox(0.66, 0.04, 0.4, 0.015), acc, -0.42, 0.29, 0);
+  for (const x of [-0.24, -0.42, -0.6]) for (const z of [-0.09, 0.09]) at(box(0.12, 0.012, 0.13), glow(HORNET_TIP, 2.2), x, 0.445, z);
+  for (const s of BOTH) for (const x of [-0.3, -0.54]) at(box(0.012, 0.11, 0.008), blk, x, 0.36, s * 0.181);
+  // bubble canopy and frame
+  const canopy = K.mesh(sph(0.3, 28, 14), canopyMat(), 'canopy', 0.62, 0.21, 0, 0, 0, 0, B);
+  canopy.scale.set(1.3, 0.56, 0.62);
+  at(tor(0.3, 0.02, 36, 6), grey, 0.62, 0.21, 0, PI / 2, 0, 0, 1.3, 0.62, 1);
+  at(arcT(0.3, 0.017, PI, 16, 5), grey, 0.55, 0.21, 0, 0, PI / 2, 0, 0.61, 0.55, 1);
+  // side trim on both faces: accent flash, seams, vents, chin guns with glowing muzzles, headlights
+  for (const s of BOTH) {
+    const z = s * 0.282;
+    at(side([[0.95, 0.0], [0.85, 0.07], [-0.6, 0.1], [-0.75, 0.04]], 0.012, 0.004), acc, 0, 0, z);
+    at(box(1.4, 0.006, 0.006), blk, 0.15, -0.08, z);
+    for (const x of [0.88, 0.4, -0.2]) at(box(0.008, 0.2, 0.006), blk, x, 0.0, z);
+    for (let k = 0; k < 4; k++) at(box(0.02, 0.06, 0.012), blk, 0.2 - k * 0.04, 0.03, z);
+    at(rbox(0.36, 0.08, 0.08, 0.025), dark, 0.95, -0.15, s * 0.12);
+    at(cyl(0.022, 0.022, 0.26, 8), M.steel, 1.22, -0.15, s * 0.12, 0, 0, PI / 2);
+    at(sph(0.026, 8, 6), glow(hot, 4), 1.36, -0.15, s * 0.12);
+    at(sph(0.024, 8, 6), glow(0xfff2d8, 5), 1.2, 0.02, s * 0.19);
+    // nose canards
+    at(slab([[1.12, s * 0.12], [0.92, s * 0.42], [0.82, s * 0.43], [0.84, s * 0.12]], 0.035, 0.012), body, 0, 0.0, 0, s * 0.12);
+    at(slab([[0.94, s * 0.37], [0.92, s * 0.42], [0.82, s * 0.43], [0.83, s * 0.37]], 0.04, 0.008), acc, 0, 0.0, 0, s * 0.12);
+  }
+  K.group('gun', B, 1.4, -0.15, 0);
+  // stubby swept wings with tip fins, and a row of missile pods under each
+  for (const s of BOTH) {
+    const { W, rx, wp } = gsWing(s, 0.3, -0.1);
+    at(slab(W([[0.4, 0.24], [-0.1, 0.88], [-0.38, 0.93], [-0.56, 0.88], [-0.6, 0.24]]), 0.07, 0.025), body, 0, -0.1, 0, rx);
+    at(slab(W([[0.45, 0.24], [-0.08, 0.9], [-0.15, 0.9], [0.33, 0.24]]), 0.08, 0.025), dark, 0, -0.1, 0, rx);
+    at(slab(W([[-0.04, 0.32], [-0.14, 0.44], [-0.6, 0.44], [-0.6, 0.32]]), 0.078, 0.012), acc, 0, -0.1, 0, rx);
+    const tp = wp(0, 0.03, 0.9);
+    at(side([[-0.12, 0], [-0.5, 0], [-0.58, 0.24], [-0.42, 0.26]], 0.035, 0.012), body, 0, tp[1], tp[2], rx);
+    at(side([[-0.38, 0.17], [-0.54, 0.17], [-0.58, 0.24], [-0.42, 0.26]], 0.04, 0.008), acc, 0, tp[1], tp[2], rx);
+    lamp(sph(0.026, 8, 6), s > 0 ? 0x3dff6a : 0xff2a1a, 6, ...wp(-0.47, 0.29, 0.9));
+    lamp(sph(0.018, 8, 6), 0xffffff, 6, ...wp(-0.6, 0, 0.9));
+    for (const zl of [0.38, 0.52, 0.66, 0.8]) {
+      const xf = 0.4 - (zl - 0.24) * 0.78 + 0.06;
+      at(box(0.18, 0.06, 0.022), dark, ...wp(xf - 0.26, -0.06, zl), rx);
+      at(cyl(0.05, 0.05, 0.38, 10), lite, ...wp(xf - 0.27, -0.12, zl), rx, 0, PI / 2);
+      at(cyl(0.052, 0.052, 0.045, 10), acc, ...wp(xf - 0.13, -0.12, zl), rx, 0, PI / 2);
+      at(cone(0.05, 0.1, 10), glow(HORNET_TIP, 2.8), ...wp(xf - 0.03, -0.12, zl), rx, 0, -PI / 2);
+      at(box(0.07, 0.13, 0.008), dark, ...wp(xf - 0.43, -0.12, zl), rx);
+      at(box(0.07, 0.008, 0.13), dark, ...wp(xf - 0.43, -0.12, zl), rx);
+    }
+  }
+  // twin canted tail fins
+  for (const s of BOTH) {
+    at(side([[-0.62, 0], [-1.05, 0], [-1.3, 0.36], [-1.14, 0.38]], 0.04, 0.014), body, 0, 0.2, s * 0.14, s * 0.5);
+    at(side([[-1.08, 0.26], [-1.24, 0.26], [-1.3, 0.36], [-1.14, 0.38]], 0.046, 0.01), acc, 0, 0.2, s * 0.14, s * 0.5);
+    lamp(sph(0.02, 8, 6), 0xff2a1a, 6, -1.22, 0.2 + 0.38 * Math.cos(0.5), s * (0.14 + 0.38 * Math.sin(0.5)));
+  }
+  // three small engines: housings with heat fins, bells, plumes (flame0 / flame1 low, flame2 on the spine)
+  const eng = [[-0.11, -0.21], [-0.11, 0.21], [0.13, 0]];
+  eng.forEach(([y, z], i) => {
+    at(cyl(0.15, 0.12, 0.5, 16), body, -1.06, y, z, 0, 0, PI / 2);
+    at(cyl(0.155, 0.155, 0.04, 16), acc, -1.2, y, z, 0, 0, PI / 2);
+    for (let k = -1; k <= 1; k++) at(box(0.3, 0.012, 0.03), M.frame, -1.02, y + 0.14, z + k * 0.045);
+    gsEngine(K, B, at, i, -1.3, y, z, 0.74, acc, hot, accent);
+  });
+  lamp(sph(0.02, 8, 6), 0xffffff, 6, -1.32, -0.25, 0);
+  lamp(sph(0.022, 8, 6), 0xff2a1a, 6, -0.3, 0.34, 0);
+  K.build();
+  return K.root;
+}
+
+const GS_BUILD = { breaker, arc, hornet };
+const GS_FLAMES = { breaker: 2, arc: 1, hornet: 3 };
+export function gunship(kind, color = 0x3d7fd9, accent = 0xffc65a) {
+  const f = GS_BUILD[kind];
+  if (!f) return ship(color, accent);
+  return gsRet(make('gunship:' + kind + ':' + color + ':' + accent, () => f(color, accent)), GS_FLAMES[kind]);
 }
 
 // ------------------------------------------------------------------ LIFTER (settler-snatcher)
@@ -1650,7 +1907,7 @@ export function scenery(lookKey) {
 }
 
 // nominal sizes (m): lengths along x, the settler's height, the lifter's width
-export const SIZE = { ship: 3.4, lifter: 2.4, husk: 2.0, sower: 3.0, mine: 0.6, hive: 2.6, stinger: 0.9, prowler: 3.2, skimmer: 1.4, settler: 0.9, pod: 0.9, ark: 22, reaper: 19.5, loom: 18.3, hulk: 18.8, throne: 22 };
+export const SIZE = { ship: 3.4, breaker: 3.7, arc: 3.6, hornet: 2.8, lifter: 2.4, husk: 2.0, sower: 3.0, mine: 0.6, hive: 2.6, stinger: 0.9, prowler: 3.2, skimmer: 1.4, settler: 0.9, pod: 0.9, ark: 22, reaper: 19.5, loom: 18.3, hulk: 18.8, throne: 22 };
 export const GEO = { box, cyl, sph, cap, tor, rbox, slab, side, washer, cone, ico, shard };
 // a plain mesh helper
 export function add(p, g, mat, x = 0, y = 0, z = 0, rx = 0, ry = 0, rz = 0) {

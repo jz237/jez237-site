@@ -1,6 +1,6 @@
 // Skyhold 2026 — every tunable number lives here. The RAMP table drives difficulty; nothing else in the game
 // hard-codes enemy pace, numbers, fire rate, aim or warning times.
-export const VERSION = '1.6.1';
+export const VERSION = '1.7.0';
 export const STEP = 1 / 120;
 
 // ------------------------------------------------------------------ the planet and the Warden gunship
@@ -44,11 +44,36 @@ export const ENEMY = {
   stinger: { r: 0.5, hp: 1, score: 150 },
   prowler: { r: 1.2, hp: 2, score: 200 },
   skimmer: { r: 0.85, hp: 1, score: 50 },
+  meteor: { r: 0.9, hp: 1, score: 75 },
 };
+// HYPER: every kill fills the meter (more with a chain running); full, the ship goes HYPER for `time` seconds: the
+// machines, their bolts and the carrier slow to `slow`, the beam fires every `fireCD` s, `band` x as tall and `reach` x
+// as long, ramming wrecks machines without a scratch, and every kill scores `score` x. The meter drains `decay` a second.
+// GUNSHIPS: the WARDEN and three more unlocked with medals. weapon: beam / arc (each hit leaps to `chain` more machines
+// within chainR m) / missile (`missiles` homing missiles a shot). vmax / accel scale the flying, cd the time between shots,
+// dmg the hits a beam deals, band / range its height and reach; hyperCD is the time between shots in HYPER.
+export const SHIPS = {
+  warden: { name: 'WARDEN', desc: 'The colony gunship: a fast, balanced beam cannon.', medals: 0, weapon: 'beam', vmax: 1, accel: 1, cd: 1, dmg: 1, band: 1, range: 1, hyperCD: 0.045 },
+  breaker: { name: 'BREAKER', desc: 'Heavy cannon: slow, tall shots that hit three times as hard. Heavier to fly.', medals: 2, weapon: 'beam', vmax: 0.9, accel: 0.85, cd: 2.1, dmg: 3, band: 1.9, range: 0.92, hyperCD: 0.11 },
+  arc: { name: 'ARC', desc: 'Chain lightning: every hit leaps to two more machines nearby. Shorter reach, nimble.', medals: 5, weapon: 'arc', vmax: 1.05, accel: 1.05, cd: 1.3, dmg: 1, band: 1, range: 0.72, chain: 2, chainR: 13, hyperCD: 0.06 },
+  hornet: { name: 'HORNET', desc: 'Homing swarm missiles that find their own targets. The fastest ship.', medals: 9, weapon: 'missile', vmax: 1.1, accel: 1.15, cd: 3.2, dmg: 1, band: 1, range: 1, missiles: 2, hyperCD: 0.12 },
+};
+export const SHIP_KEYS = Object.keys(SHIPS);
+// RIVALS (online): two pilots on one planet, each with their own score, for `waves` waves (no carrier). Shooting the
+// rival while they carry a settler knocks it loose (it falls, ready to be caught) and scores `steal`; being shot down costs
+// `death` points; ships never run out.
+export const RIVALS = { waves: 3, steal: 250, death: 500 };
+export const HYPER = { gain: 0.0045, decay: 0.002, time: 8, slow: 0.55, fireCD: 0.045, band: 2.4, reach: 1.25, score: 2 };
+// planet events: one per world, mid-wave in waves 2 and 4 (index 1 and 3) between `at` seconds
+export const EVENTS = { verdant: 'meteors', dune: 'sandstorm', frost: 'flare', cinder: 'eruption', umbra: 'eclipse' };
+export const EVENT = { at: [11, 20], waves: [1, 3], meteors: { n: 8, T: 9 }, eruption: { n: 7, T: 9 }, sandstorm: { T: 14, wind: 7 }, flare: { T: 10, stun: 2.6 }, eclipse: { T: 16 } };
+// carriers fight in two phases: once the outer weak points are gone the armour blows off and three core points open
+// (the heart takes heartK x the weak-point hits, the vents ventK x); phase 2 attacks come atkK x as often
+export const PHASE2 = { heartK: 3.4, ventK: 1.6, atkK: 0.7, shedT: 2.6, warpT: 5.2 };
 // SKIMMER flocks: snakes of small machines that sweep the sky so there is always something to shoot. They never
 // fire and never hold up a wave, but ramming one costs a shield. near: how many the director keeps within
 // `range` of each pilot, by world; v: their speed by world. Their points never count toward extra ships.
-export const SKIM = { near: [7, 8, 9, 11, 8], v: [8, 9.5, 11, 12, 12.5], pull: [0.3, 0.38, 0.42, 0.42, 0.32], flock: [4, 7], range: 150, gap: 1.4, life: 45 };
+export const SKIM = { near: [7, 8, 9, 11, 6], v: [8, 9.5, 11, 12, 12.5], pull: [0.3, 0.38, 0.42, 0.42, 0.32], flock: [4, 7], range: 150, gap: 1.4, life: 45 };
 export const SETTLER = { walk: 0.7, roam: 7, h: 0.9, hang: 1.9 };
 
 // the carrier at the end of each sector. nodes: weak points [dx, dy] from its centre (facing +x), body: hull
@@ -96,14 +121,14 @@ export const RAMP = [
   { lifters: [6, 8], group: [2, 2], gap: [7, 6], lV: [5.6, 6.4], liftV: [1.4, 1.6], grabT: [2.0, 1.8], hunters: [2, 2], fire: [0.22, 0.27], shooters: [1, 2], warn: [1.9, 1.65],
     aim: [0.22, 0.18], boltV: [15.5, 17.5], lead: [0.25, 0.35], hV: [11, 12], stV: [13, 14], sowers: [1, 1], hives: [0, 0], husks: [0, 0], prowlT: [65, 58], fallV: [3.2, 3.6], safeH: [20, 18], shield: [1, 1],
     sting: 4, settlers: 9, nodeHP: 16, bossV: 5, atkT: 5.0 },
-  { lifters: [8, 10], group: [2, 3], gap: [6, 5], lV: [6.6, 7.4], liftV: [1.7, 1.9], grabT: [1.7, 1.5], hunters: [2, 3], fire: [0.34, 0.4], shooters: [2, 3], warn: [1.6, 1.4],
+  { lifters: [8, 10], group: [2, 3], gap: [6, 5], lV: [6.6, 7.4], liftV: [1.7, 1.9], grabT: [1.7, 1.5], hunters: [2, 3], fire: [0.31, 0.36], shooters: [2, 3], warn: [1.6, 1.4],
     aim: [0.14, 0.115], boltV: [19, 21], lead: [0.45, 0.55], hV: [13.5, 14.5], stV: [15, 16], sowers: [1, 1], hives: [1, 1], husks: [2, 2], prowlT: [55, 48], fallV: [4, 4.5], safeH: [15, 13], shield: [0, 0],
     sting: 4, settlers: 10, nodeHP: 17, bossV: 5.8, atkT: 4.5 },
   { lifters: [8, 10], group: [3, 3], gap: [5.4, 4.6], lV: [7.6, 8.4], liftV: [2.0, 2.2], grabT: [1.4, 1.25], hunters: [3, 3], fire: [0.35, 0.41], shooters: [3, 3], warn: [1.35, 1.15],
     aim: [0.11, 0.09], boltV: [20, 22], lead: [0.5, 0.6], hV: [15, 16], stV: [17, 18], sowers: [1, 2], hives: [2, 2], husks: [3, 4], prowlT: [48, 42], fallV: [5, 5.5], safeH: [12, 10], shield: [0, 0],
     sting: 4, settlers: 10, nodeHP: 19, bossV: 6.4, atkT: 4.0 },
-  { lifters: [10, 12], group: [3, 4], gap: [4.8, 4], lV: [8.6, 9.6], liftV: [2.3, 2.6], grabT: [1.2, 1.0], hunters: [3, 4], fire: [0.38, 0.44], shooters: [3, 3], warn: [1.1, 0.72],
-    aim: [0.072, 0.058], boltV: [22, 25], lead: [0.6, 0.7], hV: [17, 19], stV: [19, 21], sowers: [2, 2], hives: [2, 2], husks: [3, 4], prowlT: [42, 34], fallV: [5.8, 6.4], safeH: [9, 8], shield: [0, 0],
+  { lifters: [10, 12], group: [3, 4], gap: [4.8, 4], lV: [8.6, 9.6], liftV: [2.3, 2.6], grabT: [1.2, 1.0], hunters: [3, 4], fire: [0.33, 0.39], shooters: [3, 3], warn: [1.1, 0.72],
+    aim: [0.072, 0.058], boltV: [22, 25], lead: [0.6, 0.7], hV: [17, 19], stV: [19, 21], sowers: [2, 2], hives: [2, 2], husks: [2, 3], prowlT: [42, 34], fallV: [5.8, 6.4], safeH: [9, 8], shield: [0, 0],
     sting: 6, settlers: 10, nodeHP: 21, bossV: 7, atkT: 3.4 },
 ];
 export const RAMP_KEYS = ['lifters', 'group', 'gap', 'lV', 'liftV', 'grabT', 'hunters', 'fire', 'shooters', 'warn', 'aim', 'boltV', 'lead', 'hV', 'stV', 'sowers', 'hives', 'husks', 'prowlT', 'fallV', 'safeH', 'shield'];

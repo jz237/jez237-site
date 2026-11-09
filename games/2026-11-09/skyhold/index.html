@@ -7,22 +7,22 @@
 <meta name="description" content="Skyhold 2026: an original planet-defence shooter in real-time 3D. Fly a gunship round and round a small planet, from the day side into the night, shoot down the machines lifting your settlers off the ground, catch the ones that fall and bring down a colossal carrier on each of five worlds. Endless Orbit, online co-op, upgrades, medals, instant replays and a smart demo mode.">
 <title>Skyhold 2026</title>
 <link rel="icon" href="data:,">
-<link rel="modulepreload" href="js/main.js?v=8">
-<link rel="modulepreload" href="js/config.js?v=8">
-<link rel="modulepreload" href="js/sim.js?v=8">
-<link rel="modulepreload" href="js/ai.js?v=8">
-<link rel="modulepreload" href="js/render.js?v=8">
-<link rel="modulepreload" href="js/audio.js?v=8">
-<link rel="modulepreload" href="js/chip.js?v=8">
-<link rel="modulepreload" href="js/input.js?v=8">
-<link rel="modulepreload" href="js/scores.js?v=8">
-<link rel="modulepreload" href="js/replay.js?v=8">
-<link rel="modulepreload" href="js/post.js?v=8">
-<link rel="modulepreload" href="js/textures.js?v=8">
-<link rel="modulepreload" href="js/models.js?v=8">
-<link rel="modulepreload" href="js/fx.js?v=8">
-<link rel="modulepreload" href="js/shaders.js?v=8">
-<link rel="modulepreload" href="js/online.js?v=8">
+<link rel="modulepreload" href="js/main.js?v=9">
+<link rel="modulepreload" href="js/config.js?v=9">
+<link rel="modulepreload" href="js/sim.js?v=9">
+<link rel="modulepreload" href="js/ai.js?v=9">
+<link rel="modulepreload" href="js/render.js?v=9">
+<link rel="modulepreload" href="js/audio.js?v=9">
+<link rel="modulepreload" href="js/chip.js?v=9">
+<link rel="modulepreload" href="js/input.js?v=9">
+<link rel="modulepreload" href="js/scores.js?v=9">
+<link rel="modulepreload" href="js/replay.js?v=9">
+<link rel="modulepreload" href="js/post.js?v=9">
+<link rel="modulepreload" href="js/textures.js?v=9">
+<link rel="modulepreload" href="js/models.js?v=9">
+<link rel="modulepreload" href="js/fx.js?v=9">
+<link rel="modulepreload" href="js/shaders.js?v=9">
+<link rel="modulepreload" href="js/online.js?v=9">
 <link rel="modulepreload" href="vendor/three.module.min.js">
 <link rel="modulepreload" href="vendor/three.core.min.js">
 
@@ -196,6 +196,11 @@ table.hs tr.me td { color: #fff; background: rgba(255, 179, 71, .1); }
 #streak { margin-top: 6px; font-family: 'Saira Condensed'; font-weight: 800; color: var(--amber); display: flex; align-items: baseline; gap: 8px; position: relative; padding-bottom: 4px; }
 #streak b { font-size: 22px; line-height: 1; } #streak span { font-size: 11px; letter-spacing: .2em; color: #ffd9a0; }
 #streak i { position: absolute; left: 0; bottom: 0; height: 2px; background: var(--amber); border-radius: 1px; }
+#hyperbar { margin-top: 6px; position: relative; height: 14px; border-radius: 3px; background: rgba(255,255,255,.07); overflow: hidden; }
+#hyperbar span { position: absolute; left: 6px; top: 0; font: 800 10px/14px 'Saira Condensed', sans-serif; letter-spacing: .3em; color: rgba(255,255,255,.75); z-index: 1; }
+#hyperbar i { position: absolute; left: 0; top: 0; bottom: 0; background: linear-gradient(90deg, #5ef0ff, #c98aff); opacity: .55; }
+#hyperbar.on i { opacity: 1; background: linear-gradient(90deg, #ff4a8a, #ffd27a, #8dff8a, #5ef0ff, #c98aff); background-size: 200% 100%; animation: hyp 0.6s linear infinite; }
+#hyperbar.on span { color: #fff; } @keyframes hyp { to { background-position: 200% 0; } }
 #streak.hot b { color: #fff; text-shadow: 0 0 12px #ff8a2a; }
 
 /* ---------------------------------------------------------------- Sini 2026 additions */
@@ -306,9 +311,11 @@ table.hs tr.me td { color: #fff; background: rgba(255, 179, 71, .1); }
     <div class="panel hl">
       <div class="lbl">SCORE</div>
       <div class="big" id="score">0</div>
+      <div id="rival-line" class="hidden" style="font:700 12px 'Saira Condensed',sans-serif;letter-spacing:.14em;color:#ffb0a0;margin:-2px 0 4px"></div>
       <div class="row"><div class="lives" id="lives"></div><div class="shield" id="shield"></div></div>
       <div id="bombs-w"><b id="bombs">0</b><span>NOVA</span><em id="blink-w">BLINK</em></div>
       <div id="streak" class="hidden"><b id="chain-n">×1</b><span id="chain-l">CHAIN</span><i id="chain-bar"></i></div>
+      <div id="hyperbar"><span>HYPER</span><i id="hyper-fill"></i></div>
       <div id="pw"></div>
     </div>
     <div class="panel mid">
@@ -347,7 +354,7 @@ table.hs tr.me td { color: #fff; background: rgba(255, 179, 71, .1); }
   <div class="screen hidden" id="title">
     <div class="card">
       <h1 class="logo">SKYHOLD<span> 2026</span></h1>
-      <div class="ver">VERSION <b id="ver">1.6.1</b> · GUARD THE COLONY · HOLD THE SKY</div>
+      <div class="ver">VERSION <b id="ver">1.7.0</b> · GUARD THE COLONY · HOLD THE SKY</div>
       <div class="diffrow">DIFFICULTY<div class="seg" data-opt="diff"><button data-v="easy">EASY</button><button data-v="normal">NORMAL</button><button data-v="hard">HARD</button><button data-v="nightmare">NIGHTMARE</button></div></div>
       <div id="diff-desc"></div>
       <div class="btns" id="title-btns">
@@ -422,7 +429,9 @@ table.hs tr.me td { color: #fff; background: rgba(255, 179, 71, .1); }
     <div class="opt">FLASHES<div class="seg" data-opt="flash"><button data-v="full">NORMAL</button><button data-v="reduced">REDUCED</button></div></div>
     <div class="opt">SCREEN SHAKE<div class="seg" data-opt="shake"><button data-v="1">ON</button><button data-v="0.4">LIGHT</button><button data-v="0">OFF</button></div></div>
     <div class="opt">VIBRATION<div class="seg" data-opt="rumble"><button data-v="on">ON</button><button data-v="off">OFF</button></div></div>
-    <div class="opt">SHIP<div class="seg" data-opt="livery" id="liveries"></div></div>
+    <div class="opt">GUNSHIP<div class="seg" data-opt="ship" id="ships"></div></div>
+    <p class="note" id="ship-desc"></p>
+    <div class="opt">LIVERY<div class="seg" data-opt="livery" id="liveries"></div></div>
     <div class="opt">AUTO-FIRE<div class="seg" data-opt="autofire"><button data-v="auto">TOUCH</button><button data-v="on">ON</button><button data-v="off">OFF</button></div></div>
     <div class="opt">AIM ASSIST<div class="seg" data-opt="assist"><button data-v="off">OFF</button><button data-v="light">LIGHT</button><button data-v="strong">STRONG</button></div></div>
     <div class="opt">SCANNER<div class="seg" data-opt="scanner"><button data-v="on">ON</button><button data-v="off">OFF</button></div></div>
@@ -440,11 +449,15 @@ table.hs tr.me td { color: #fff; background: rgba(255, 179, 71, .1); }
     <h3>WHAT TO DO NEXT</h3><p>The line under the top bar always says what to do next. The <b>SCANNER</b> strip at the top shows the whole planet: settlers (green), lifters (amber, red when they have someone), everything else, and the bracket where you are. A red marker at the screen edge points to a settler being lifted.</p>
     <h3>WARNINGS</h3><p>Nothing hits you without a warning: machines shimmer as they warp in, and glow before they fire. A carrier shows a line or a ring before each attack. Its hull is solid but safe to brush, except when it charges.</p>
     <h3>CHAINS, ENRAGED CARRIERS</h3><p>Destroy machines in quick succession for a <b>CHAIN</b>: 4 in a row doubles their points, 8 triples them, 12 quadruples them (the meter under your nova count shows it running down). Once half a carrier's weak points are gone it is <b>ENRAGED</b> and attacks faster.</p>
+    <h3>ONLINE RIVALS</h3><p>Pick RIVALS on the online screen: two pilots on one planet for three waves, each with their own score. Save settlers, shoot machines, and shoot your rival while they carry a settler to knock it loose and steal the catch. Being shot down costs points; most points wins.</p>
     <h3>ONLINE CO-OP</h3><p>Two gunships guard one colony and share the ships. Quick match pairs you with anyone looking, or host a room and share its 4-letter code. The host picks the world.</p>
     <h3>NOVA AND BLINK</h3><p><b>NOVA</b> destroys every machine on screen (and hurts a carrier's weak points); you carry a few. <b>BLINK</b> jumps you far round the planet to escape; it needs a few seconds to recharge.</p>
     <h3>POWER-UPS</h3><div class="pwgrid">
       <span><b>⁂ TWIN BEAM</b> two beams at once</span><span><b>» OVERDRIVE</b> double fire rate</span>
       <span><b>⬡ SHIELD CELL</b> +1 shield</span><span><b>✸ NOVA</b> +1 nova</span>
+      <span><b>GUNSHIPS</b> earn medals to unlock the BREAKER (heavy cannon), the ARC (chain lightning) and the HORNET (homing missiles); pick one in Options</span>
+      <span><b>HYPER</b> every kill fills the HYPER meter (faster with a chain). Full, you go HYPER for 8 seconds: everything else slows, the beam fires nonstop, ramming wrecks machines and kills score double</span>
+      <span><b>METEORS AND LAVA BOMBS</b> planet events rain rocks on the colony: shoot them before they land</span>
       <span><b>SKIMMERS</b> flocks of small machines sweep the sky: they never shoot, but ramming one costs a shield. Easy points and chain fuel</span>
       <span><b>◈ ESCORT DRONE</b> a drone flies with you and shoots the nearest machine</span></div>
     <h3>DIFFICULTY</h3><p>Easy, Normal, Hard and Nightmare each have their own high-score tables. Harder levels score more points (×0.6, ×1, ×1.5, ×2.2). Medals count on Normal and harder, and unlock new ship colours in Options.</p>
@@ -455,7 +468,8 @@ table.hs tr.me td { color: #fff; background: rgba(255, 179, 71, .1); }
   </div></div>
 
   <div class="screen hidden" id="online"><div class="card">
-    <h2>ONLINE CO-OP</h2><div class="sub">TWO GUNSHIPS · ONE COLONY · SHARED SHIPS · THE HOST PICKS THE WORLD</div>
+    <h2 id="net-title">ONLINE CO-OP</h2><div class="sub" id="net-sub">TWO GUNSHIPS · ONE COLONY · SHARED SHIPS · THE HOST PICKS THE WORLD</div>
+    <div class="opt">MODE<div class="seg" data-opt="netMode"><button data-v="coop">CO-OP</button><button data-v="rivals">RIVALS</button></div></div>
     <div class="opt">WORLD<div class="seg" data-opt="netRoute"><button data-v="0">1</button><button data-v="1">2</button><button data-v="2">3</button><button data-v="3">4</button><button data-v="4">5</button><button data-v="deep">ENDLESS</button></div></div>
     <div id="net-status"></div>
     <div id="room-wrap" class="hidden"><div class="lbl" style="text-align:center">ROOM CODE</div><div id="room-code">----</div></div>
@@ -487,6 +501,6 @@ addEventListener('error', (e) => window.__shErrors.push(String(e.message || e)))
 addEventListener('unhandledrejection', (e) => window.__shErrors.push('rejection: ' + String(e.reason && e.reason.message || e.reason)));
 (() => { const ce = console.error; console.error = (...a) => { window.__shErrors.push(a.map(String).join(' ')); ce.apply(console, a); }; })();
 </script>
-<script type="module" src="js/main.js?v=8"></script>
+<script type="module" src="js/main.js?v=9"></script>
 </body>
 </html>

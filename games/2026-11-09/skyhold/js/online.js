@@ -3,13 +3,14 @@
 // carrier, lives, score) and streams snapshots 20 times a second. The guest flies its own gunship locally (so it never
 // lags), judges the hits it takes, and reports its ship, its beams, novas, catches, landings and pickups as claims;
 // the host carries those out so every kill is decided in one place.
-import { netDeath, netShield, netCatch, netLand, netPod, netFire, netRam, netNovaAt, netAdopt } from './sim.js?v=8';
-import { PW_KEYS } from './config.js?v=8';
+import { netDeath, netShield, netCatch, netLand, netPod, netFire, netRam, netNovaAt, netAdopt } from './sim.js?v=9';
+import { PW_KEYS, SHIP_KEYS } from './config.js?v=9';
 
 export const PROTOCOL = 1;
 const RELAY = 'wss://steel-duel-online.jez237.workers.dev';
 const CODE_CHARS = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
 export const QUICK = 'SH-Q-';
+export const QUICK_R = 'SH-QR-';
 export const ROOM = 'SH-';
 export function randomCode(n) {
   const b = new Uint8Array(n);
@@ -22,12 +23,12 @@ export const cleanCode = (v) => String(v || '').toUpperCase().replace(/[^A-Z0-9]
 const clamp = (v, a, b) => (v < a ? a : v > b ? b : v);
 const r2 = (v) => Math.round(v * 100) / 100;
 const r3 = (v) => Math.round(v * 1000) / 1000;
-const TYPES = ['lifter', 'husk', 'sower', 'mine', 'hive', 'stinger', 'prowler', 'skimmer'];
-const EST = ['roam', 'seek', 'down', 'grab', 'lift', 'hunt'];
+const TYPES = ['lifter', 'husk', 'sower', 'mine', 'hive', 'stinger', 'prowler', 'skimmer', 'meteor'];
+const EST = ['roam', 'seek', 'down', 'grab', 'lift', 'hunt', 'rock', 'lava'];
 const SST = ['walk', 'fall', 'held', 'carried', 'dead'];
 const PH = ['intro', 'fight', 'break', 'boss', 'clear'];
-const BST = ['warp', 'fight', 'dying', 'gone'];
-const ATK = ['volley', 'drop', 'rush', 'sweep', 'mines'];
+const BST = ['warp', 'fight', 'dying', 'gone', 'shed'];
+const ATK = ['volley', 'drop', 'rush', 'sweep', 'mines', 'barrage'];
 const packPw = (pw) => Object.entries(pw || {}).map(([k, t]) => [PW_KEYS.indexOf(k), Math.round(t * 10) / 10]);
 const unpackPw = (a) => { const o = {}; for (const [i, t] of a || []) o[PW_KEYS[i]] = t; return o; };
 // events the guest does not need from the host (it makes its own beams, or they are invisible)
@@ -43,9 +44,11 @@ export function packWorld(W) {
     se: W.settlers.map((s) => [s.id, SST.indexOf(s.st), r2(s.x), r2(s.y), s.by, r2(s.dropY), r2(s.vx), r2(s.mark)]),
     bo: W.bolts.map((b) => [b.id, r2(b.x), r2(b.y), r2(b.vx), r2(b.vy), r2(b.t), b.from]),
     pd: W.pods.map((q) => [q.id, PW_KEYS.indexOf(q.kind), r2(q.x), r2(q.y), r2(q.t)]),
-    b: B ? [B.key, r2(B.x), r2(B.y), r2(B.vx), r2(B.vy), B.face, BST.indexOf(B.st), r2(B.stT), B.nodes.map((n) => [n.hp, n.max]), r2(B.hitT), B.atk ? [ATK.indexOf(B.atk.kind), r2(B.atk.t), r2(B.atk.T), B.atk.dir, r2(B.atk.y)] : null, r2(B.sweepX), r2(B.t), B.rage ? 1 : 0] : null,
-    p1: [r3(h.x), r3(h.y), r2(h.vx), r2(h.vy), h.face, h.alive ? 1 : 0, r2(h.inv), h.shield, h.nova, r2(h.thrust), h.carry, r2(h.hurtT)],
-    p2: g ? [g.alive ? 1 : 0, r2(g.x), r2(g.y), r2(g.inv), g.shield, g.nova] : null,
+    mi: (W.missiles || []).map((m) => [m.id, r2(m.x), r2(m.y), r2(m.vx), r2(m.vy), m.pid]),
+    b: B ? [B.key, r2(B.x), r2(B.y), r2(B.vx), r2(B.vy), B.face, BST.indexOf(B.st), r2(B.stT), B.nodes.map((n) => [n.hp, n.max]), r2(B.hitT), B.atk ? [ATK.indexOf(B.atk.kind), r2(B.atk.t), r2(B.atk.T), B.atk.dir, r2(B.atk.y)] : null, r2(B.sweepX), r2(B.t), B.rage ? 1 : 0, B.phase || 1] : null,
+    pe: W.event ? [W.event.kind, r2(W.event.t), r2(W.event.T), W.event.dir] : null, sn: r2(W.stun || 0),
+    p1: [r3(h.x), r3(h.y), r2(h.vx), r2(h.vy), h.face, h.alive ? 1 : 0, r2(h.inv), h.shield, h.nova, r2(h.thrust), h.carry, r2(h.hurtT), r2(h.hyper || 0), r2(h.hyperK || 0), SHIP_KEYS.indexOf(h.ship || 'warden'), h.score || 0],
+    p2: g ? [g.alive ? 1 : 0, r2(g.x), r2(g.y), r2(g.inv), g.shield, g.nova, r2(g.hyper || 0), r2(g.hyperK || 0), g.score || 0, g.stolenN || 0] : null,
     hs: W.shots.filter((s) => s.pid === 1 && !s.done).map((s) => [r2(s.x0), r2(s.y), s.dir, r3(s.t), s.hitD === undefined ? -1 : r2(s.hitD)]),
     pw1: packPw(h.pw), pw2: g ? packPw(g.pw) : null, ch: [W.chain, r2(Math.min(9, W.t - W.chainT)), W.bestChain],
     sx: [W.stats.caught, W.stats.landed, W.stats.lost, W.stats.lifters, W.stats.husks, W.stats.kills, W.stats.novas, W.stats.deaths],
@@ -69,16 +72,18 @@ export function applyWorld(W, S, lead) {
   });
   W.bolts = S.bo.map((q) => ({ id: q[0], x: ext(q[1], q[3]), y: ext(q[2], q[4]), vx: q[3], vy: q[4], t: q[5] + lead, from: q[6] }));
   W.pods = S.pd.map((q) => ({ id: q[0], kind: PW_KEYS[q[1]], x: q[2], y: q[3], t: q[4] }));
+  W.missiles = (S.mi || []).map((q) => ({ id: q[0], x: ext(q[1], q[3]), y: ext(q[2], q[4]), vx: q[3], vy: q[4], pid: q[5], t: 0 }));
   if (S.b) {
     const q = S.b;
     const B = W.boss && W.boss.key === q[0] ? W.boss : { t: 0 };
     Object.assign(B, { key: q[0], x: ext(q[1], q[3]), y: ext(q[2], q[4]), vx: q[3], vy: q[4], face: q[5], st: BST[q[6]], stT: q[7], nodes: q[8].map(([hp, max]) => ({ hp, max })), hitT: q[9],
-      atk: q[10] ? { kind: ATK[q[10][0]], t: q[10][1], T: q[10][2], dir: q[10][3], y: q[10][4], n: 1 } : null, sweepX: q[11], t: q[12], rage: q[13] || 0 });
+      atk: q[10] ? { kind: ATK[q[10][0]], t: q[10][1], T: q[10][2], dir: q[10][3], y: q[10][4], n: 1 } : null, sweepX: q[11], t: q[12], rage: q[13] || 0, phase: q[14] || 1 });
     W.boss = B;
   } else W.boss = null;
+  W.event = S.pe ? { kind: S.pe[0], t: S.pe[1], T: S.pe[2], dir: S.pe[3], n: 0 } : null; W.stun = S.sn || 0;
   const h = W.players[0], p = S.p1;
   h.remote = true;
-  h.x = p[0] + p[2] * lead; h.y = p[1] + p[3] * lead; h.vx = p[2]; h.vy = p[3]; h.face = p[4]; h.alive = !!p[5]; h.inv = p[6]; h.shield = p[7]; h.nova = p[8]; h.thrust = p[9]; h.carry = p[10]; h.hurtT = p[11];
+  h.x = p[0] + p[2] * lead; h.y = p[1] + p[3] * lead; h.vx = p[2]; h.vy = p[3]; h.face = p[4]; h.alive = !!p[5]; h.inv = p[6]; h.shield = p[7]; h.nova = p[8]; h.thrust = p[9]; h.carry = p[10]; h.hurtT = p[11]; h.hyper = p[12] || 0; h.hyperK = p[13] || 0; if (p[14] !== undefined && SHIP_KEYS[p[14]]) h.ship = SHIP_KEYS[p[14]]; h.score = p[15] || 0;
   h.pw = unpackPw(S.pw1);
   const m = S.p2;
   if (me && m) {
@@ -86,7 +91,8 @@ export function applyWorld(W, S, lead) {
       me.alive = true; me.x = m[1]; me.y = m[2]; me.vx = me.vy = 0; me.inv = m[3]; me.deadT = 0; me.carry = 0;
       W.ev.push({ k: 'spawn', pid: 2, x: me.x, y: me.y });
     }
-    me.nova = m[5];
+    me.nova = m[5]; me.hyper = m[6] || 0; me.hyperK = m[7] || 0; me.score = m[8] || 0;
+    if ((m[9] || 0) > (me.stolenN || 0)) { me.stolenN = m[9]; if (me.carry) { me.carry = 0; W.ev.push({ k: 'stolen', pid: me.id, x: me.x, y: me.y }); } }
     if (m[4] > me.shield) me.shield = m[4];
     const pw = unpackPw(S.pw2);
     for (const k in pw) if (!me.pw[k] || pw[k] > me.pw[k] + 0.5) me.pw[k] = pw[k];
@@ -118,19 +124,19 @@ export class Online {
   get host() { return this.role === 'p1'; }
 
   async rooms() { const r = await fetch(this.http + '/rooms', { cache: 'no-store' }); const d = await r.json(); return Array.isArray(d.rooms) ? d.rooms : []; }
-  async quick(me) {
+  async quick(me, Q = QUICK) {
     this.h.status('Looking for a wingmate…', 'wait');
     let list = [];
     try { list = await this.rooms(); } catch { /* lobby unreachable: wait in a room */ }
-    const open = list.filter((r) => String(r.room).startsWith(QUICK)).sort((a, b) => (a.updatedAt || 0) - (b.updatedAt || 0));
+    const open = list.filter((r) => String(r.room).startsWith(Q)).sort((a, b) => (a.updatedAt || 0) - (b.updatedAt || 0));
     if (open.length) { this.connect(open[0].room, 'quick', me); return; }
-    const room = QUICK + randomCode(5);
+    const room = Q + randomCode(5);
     this.connect(room, 'quick', me);
     this.pollT = setInterval(async () => {
       if (this.peer || this.room !== room) { clearInterval(this.pollT); return; }
       let l = [];
       try { l = await this.rooms(); } catch { return; }
-      const other = l.find((r) => String(r.room).startsWith(QUICK) && r.room !== room && r.room < room);
+      const other = l.find((r) => String(r.room).startsWith(Q) && r.room !== room && r.room < room);
       if (other && !this.peer && this.room === room) this.connect(other.room, 'quick', me);
     }, 2500);
   }
@@ -232,11 +238,11 @@ export class Online {
     const lag = clamp(this.rtt / 2000, 0, 0.25);
     if (this.remote && g.alive && this.remote.s[5]) {
       const q = this.remote.s, age = Math.min(0.3, lag + (performance.now() - this.remote.at) / 1000);
-      g.vx = +q[2] || 0; g.vy = +q[3] || 0; g.x = (+q[0] || 0) + g.vx * age; g.y = (+q[1] || 0) + g.vy * age; g.face = q[4] < 0 ? -1 : 1; g.thrust = +q[6] || 0; g.carry = q[7] | 0;
+      g.vx = +q[2] || 0; g.vy = +q[3] || 0; g.x = (+q[0] || 0) + g.vx * age; g.y = (+q[1] || 0) + g.vy * age; g.face = q[4] < 0 ? -1 : 1; g.thrust = +q[6] || 0; g.carry = q[7] | 0; if (q[8] !== undefined && SHIP_KEYS[q[8]]) g.ship = SHIP_KEYS[q[8]];
     }
     for (const c of this.claimQ) {
       if (W.over) break;
-      if (c.fire && g.alive) { netFire(W, g, +c.fire[0], +c.fire[1], c.fire[2] < 0 ? -1 : 1, !!c.fire[3]); this.stat.shots++; }
+      if (c.fire && g.alive) { netFire(W, g, +c.fire[0], +c.fire[1], c.fire[2] < 0 ? -1 : 1, !!c.fire[3], c.fire[4] ? 1 : 0, c.fire[5] === undefined ? undefined : c.fire[5] | 0); this.stat.shots++; }
       if (c.died) { netDeath(W, g, String(c.died)); this.stat.deaths++; }
       if (c.shield !== undefined) netShield(W, g, c.shield | 0);
       if (c.nova && g.alive) netNovaAt(W, g, +c.nova[0], +c.nova[1]);
@@ -264,7 +270,7 @@ export class Online {
     if (!claims.length && this.sendT > 0) return;
     this.sendT = 1 / 30;
     if (!me) return;
-    this.raw({ type: 'input', s: [r3(me.x), r3(me.y), r2(me.vx), r2(me.vy), me.face, me.alive ? 1 : 0, r2(me.thrust || 0), me.carry || 0], c: claims });
+    this.raw({ type: 'input', s: [r3(me.x), r3(me.y), r2(me.vx), r2(me.vy), me.face, me.alive ? 1 : 0, r2(me.thrust || 0), me.carry || 0, SHIP_KEYS.indexOf(me.ship || 'warden')], c: claims });
   }
   guestSync(W) {
     if (!this.inbox.length) return [];

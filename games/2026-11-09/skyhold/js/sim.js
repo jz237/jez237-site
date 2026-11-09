@@ -3,7 +3,7 @@
 // Nothing in here touches the DOM, WebGL or audio; it only pushes events into W.ev.
 //
 // The world is a band round a small planet: x along the ground (wraps every C metres), y altitude (0..H).
-import { F, STEP, C, H, ENEMY, SETTLER, BOSSES, B_KEYS, SECTORS, WAVES, rampAt, rampLevel, endlessLevel, ENDLESS, TUTOR, SCORE, START_LIVES, DIFFICULTY, applyDiff, POWERUPS, PW_KEYS, DROP, SKIM } from './config.js?v=8';
+import { F, STEP, C, H, ENEMY, SETTLER, BOSSES, B_KEYS, SECTORS, WAVES, rampAt, rampLevel, endlessLevel, ENDLESS, TUTOR, SCORE, START_LIVES, DIFFICULTY, applyDiff, POWERUPS, PW_KEYS, DROP, SKIM, HYPER, EVENTS, EVENT, PHASE2, B_KEYS as _BK, SHIPS, SHIP_KEYS, RIVALS } from './config.js?v=9';
 export { STEP };
 
 const clamp = (v, a, b) => (v < a ? a : v > b ? b : v);
@@ -27,10 +27,10 @@ const HOSTILE = new Set(['lifter', 'husk', 'sower', 'hive', 'stinger', 'prowler'
 export function makeWorld(o = {}) {
   const seed = (o.seed ?? 1) | 0, mode = o.mode === 'endless' ? 'endless' : 'campaign', sector = mode === 'endless' ? 0 : o.sector || 0;
   const W = {
-    n: 0, t: 0, seed, rs: (seed ^ 0x2545F491) | 0, mode, sector, k: sector, up: { ...(o.up || {}) }, demo: !!o.demo, coop: !!o.coop,
+    n: 0, t: 0, seed, rs: (seed ^ 0x2545F491) | 0, mode, sector, k: sector, up: { ...(o.up || {}) }, demo: !!o.demo, coop: !!o.coop || !!o.rivals, rivals: !!o.rivals,
     diff: DIFFICULTY[o.diff] ? o.diff : 'normal', lives: o.lives ?? START_LIVES + D_OF({ diff: o.diff }).lives, score: o.score || 0, lifePts: 0, nextLife: 0,
     wave: 0, cp: 0, phase: 'intro', phaseT: 2.4, secT: 0, waveT: 0, fightT: 0, R: null, level: 0, waveN: 0, bossN: 0,
-    players: [], enemies: [], settlers: [], sites: [], shots: [], bolts: [], pods: [], boss: null, plan: null, fallen: false,
+    players: [], enemies: [], settlers: [], sites: [], shots: [], bolts: [], pods: [], missiles: [], boss: null, plan: null, fallen: false,
     nextId: 1, ev: [], over: false, result: null, net: null, claims: [], chain: 0, chainT: -9, bestChain: 0, cpNova: [], tutorial: false, tut: {},
     stats: { kills: 0, lifters: 0, husks: 0, caught: 0, landed: 0, selfLanded: 0, lost: 0, fused: 0, fired: 0, hits: 0, novas: 0, blinks: 0, deaths: 0, shieldHits: 0, pods: 0,
       waveDeaths: [0, 0, 0, 0, 0], waveHits: [0, 0, 0, 0, 0], waveTries: [0, 0, 0, 0, 0], cause: {}, bossT: -1 },
@@ -51,7 +51,7 @@ export function makeWorld(o = {}) {
 }
 function makePlayer(W, id, x, o) {
   return { id, x, y: 13, vx: 0, vy: 0, face: 1, alive: true, inv: 1.2, shield: 0, nova: 3, fireT: 0, novaT: 0, blinkT: 0, deadT: 0, thrust: 0, hurtT: 0, carry: 0,
-    input: { mx: 0, my: 0, fire: false, nova: false, blink: false }, novaHeld: false, blinkHeld: false, remote: false, pw: {}, assist: id === 1 ? +o.assist || 0 : 0 };
+    input: { mx: 0, my: 0, fire: false, nova: false, blink: false }, novaHeld: false, blinkHeld: false, remote: false, pw: {}, assist: id === 1 ? +o.assist || 0 : 0, ship: (id === 1 ? o.ship : o.ship2) || 'warden', hyper: 0, hyperK: 0 };
 }
 export const cloneWorld = (W) => structuredClone(W);
 export function drainEvents(W) { const e = W.ev; W.ev = []; return e; }
@@ -94,12 +94,16 @@ export function step(W, dt = STEP) {
   if (W.phase === 'fight' || W.phase === 'boss') { W.waveT += dt; W.fightT += dt; }
   if (W.mode === 'endless' && W.n % 120 === 0) { const lv = W.level; W.R = ramp(W); if (Math.floor(lv) !== Math.floor(W.level)) W.ev.push({ k: 'level', level: W.level }); }
   director(W, dt);
+  planetEvent(W, dt);
   for (const p of W.players) player(W, p, dt);
-  for (let i = 0; i < W.enemies.length; i++) enemy(W, W.enemies[i], dt);
-  if (W.boss) boss(W, W.boss, dt);
+  const es = W.players.some((q) => q.hyper > 0) ? HYPER.slow : 1, ee = W.stun > 0 ? 0 : es;
+  if (W.stun > 0) W.stun -= dt;
+  for (let i = 0; i < W.enemies.length; i++) enemy(W, W.enemies[i], dt * ee);
+  if (W.boss) boss(W, W.boss, dt * es);
   settlers(W, dt);
   shots(W, dt);
-  bolts(W, dt);
+  missiles(W, dt);
+  bolts(W, dt * es);
   pods(W, dt);
   contacts(W);
   W.enemies = W.enemies.filter((e) => e.hp > 0 && !e.gone);
@@ -118,7 +122,8 @@ function director(W, dt) {
   if (W.phase === 'break') {
     W.phaseT -= dt;
     if (W.phaseT <= 0) {
-      if (W.mode === 'endless') { if ((W.waveN + 1) % ENDLESS.bossEvery === 0) startBoss(W); else startWave(W, W.wave + 1); }
+      if (W.rivals && W.wave + 1 >= RIVALS.waves) { W.phase = 'clear'; W.phaseT = 1.5; W.ev.push({ k: 'rivalend' }); }
+      else if (W.mode === 'endless') { if ((W.waveN + 1) % ENDLESS.bossEvery === 0) startBoss(W); else startWave(W, W.wave + 1); }
       else if (W.wave + 1 >= WAVES) { W.wave = WAVES; W.cp = WAVES; checkpoint(W); startBoss(W); }
       else startWave(W, W.wave + 1);
     }
@@ -126,7 +131,7 @@ function director(W, dt) {
   }
   if (W.phase === 'clear') {
     W.phaseT -= dt;
-    if (W.phaseT <= 0) { W.over = true; W.result = 'clear'; }
+    if (W.phaseT <= 0) { W.over = true; W.result = W.rivals ? 'rivals' : 'clear'; }
     return;
   }
   if (W.phase === 'boss') { skimmers(W, dt); bossDirector(W, dt); return; }
@@ -223,12 +228,14 @@ function player(W, p, dt) {
   if (p.inv > 0) p.inv -= dt;
   if (p.hurtT > 0) p.hurtT -= dt;
   for (const k in p.pw) { p.pw[k] -= dt; if (p.pw[k] <= 0) { delete p.pw[k]; W.ev.push({ k: 'pwend', pid: p.id, kind: k }); } }
+  if (p.hyper > 0) { p.hyper -= dt; if (p.hyper <= 0) { p.hyper = 0; W.ev.push({ k: 'hyperend', pid: p.id }); } }
+  else if (p.hyperK > 0) p.hyperK = Math.max(0, p.hyperK - HYPER.decay * dt);
   if (!p.alive) {
     if (p.deadT > 0) { p.deadT -= dt; if (p.deadT <= 0 && W.lives > 0 && W.phase !== 'clear') respawn(W, p); }
     return;
   }
   if (p.remote) { p.thrust = 0; return; }
-  const I = p.input, thr = 1 + 0.08 * (W.up.thrust || 0);
+  const SH = SHIPS[p.ship] || SHIPS.warden, I = p.input, thr = (1 + 0.08 * (W.up.thrust || 0)) * SH.accel;
   const mx = clamp(I.mx || 0, -1, 1), my = clamp(I.my || 0, -1, 1);
   if (Math.abs(mx) > 0.15) {
     const s = Math.sign(mx);
@@ -238,7 +245,8 @@ function player(W, p, dt) {
     else p.vx += s * F.accel * thr * a * dt;
     p.thrust = a;
   } else { p.vx *= Math.exp(-F.drag * dt); p.thrust = 0; }
-  const vmax = F.vmax * thr;
+  const vmax = F.vmax * (1 + 0.08 * (W.up.thrust || 0)) * SH.vmax;
+  if (W.event && W.event.kind === 'sandstorm' && W.event.t > 1) p.vx += W.event.dir * EVENT.sandstorm.wind * dt;
   p.vx = clamp(p.vx, -vmax, vmax);
   const vyT = my * F.vy * thr;
   p.vy += clamp(vyT - p.vy, -F.vyAcc * dt, F.vyAcc * dt);
@@ -267,7 +275,7 @@ function player(W, p, dt) {
       s.st = 'walk'; s.by = 0; s.y = 0; s.x = p.x; s.home = p.x; p.carry = 0;
       if (W.net === 'guest') { W.claims.push({ land: s.id }); W.ev.push({ k: 'land', x: s.x, y: 0, pid: p.id, score: SCORE.land, id: s.id }); }
       else {
-        addScore(W, SCORE.land); W.stats.landed++;
+        addScore(W, SCORE.land, SCORE.land, p.id); W.stats.landed++;
         W.ev.push({ k: 'land', x: s.x, y: 0, pid: p.id, score: SCORE.land, id: s.id });
       }
     }
@@ -292,8 +300,74 @@ function droneFire(W, p) {
   W.shots.push({ id: W.nextId++, pid: p.id, x0, y, dir, t: 0, done: false, vx: 0, drone: 1 });
   W.ev.push({ k: 'fire', pid: p.id, x: x0, y, dir, twin: false, drone: true, fy: dy0 });
 }
+// a shot from gunship p: beams (with the ship's damage, height, reach and chain) or a salvo of homing missiles
+function emitShots(W, p, x0, y, dir, twin, hy, vx) {
+  const S = SHIPS[p.ship] || SHIPS.warden;
+  if (S.weapon === 'missile') {
+    for (let k = 0; k < S.missiles; k++) W.missiles.push({ id: W.nextId++, pid: p.id, x: x0, y: y + (k ? -0.45 : 0.45), vx: dir * 26 + vx, vy: k ? -5 : 5, t: 0, tgt: 0, hyper: hy });
+    if (twin) W.missiles.push({ id: W.nextId++, pid: p.id, x: x0, y, vx: dir * 30 + vx, vy: 0, t: 0, tgt: 0, hyper: hy });
+    return;
+  }
+  const sh = { pid: p.id, x0, dir, t: 0, done: false, vx, hyper: hy, dmg: S.dmg, bk: S.band, rk: S.range, arc: S.chain || 0 };
+  W.shots.push({ id: W.nextId++, y, ...sh });
+  if (twin) W.shots.push({ id: W.nextId++, y: y - F.twinY, ...sh });
+}
+// chain lightning: from (x, y) to the nearest machine within chainR, n times, never the same one twice
+function arcFrom(W, x, y, n, skip, pid) {
+  const pts = [[x, y]], hit = new Set([skip ? skip.id : -1]);
+  let cx = x, cy = y;
+  for (let k = 0; k < n; k++) {
+    let best = null, bd = SHIPS.arc.chainR;
+    for (const e of W.enemies) { if (e.hp <= 0 || e.born > 0 || hit.has(e.id)) continue; const d = Math.hypot(wd(e.x - cx), e.y - cy); if (d < bd) { bd = d; best = e; } }
+    if (!best) break;
+    hit.add(best.id); pts.push([best.x, best.y]); cx = best.x; cy = best.y;
+    damage(W, best, 1, pid);
+  }
+  if (pts.length > 1) W.ev.push({ k: 'arc', pts });
+}
+// homing missiles: each locks on the nearest machine (or a live carrier weak point) within 48 m and steers to it
+function missiles(W, dt) {
+  if (!W.missiles || !W.missiles.length) return;
+  const B = W.boss;
+  for (const m of W.missiles) {
+    m.t += dt;
+    if (m.t > 1.9) { m.done = true; W.ev.push({ k: 'mfizz', x: m.x, y: m.y }); continue; }
+    let e = m.tgt ? W.enemies.find((q) => q.id === m.tgt && q.hp > 0 && !q.gone) : null;
+    if (!e && m.node === undefined) {
+      let bd = 48;
+      for (const q of W.enemies) { if (q.hp <= 0 || q.born > 0 || q.type === 'mine') continue; const d = Math.hypot(wd(q.x - m.x), q.y - m.y); if (d < bd) { bd = d; e = q; } }
+      m.tgt = e ? e.id : 0;
+    }
+    let tx = null, ty = 0;
+    if (e) { tx = e.x; ty = e.y; }
+    else if (B && B.st === 'fight') {
+      if (m.node === undefined || !B.nodes[m.node] || B.nodes[m.node].hp <= 0) {
+        let bd = 48; m.node = undefined;
+        B.nodes.forEach((n, i) => { if (n.hp <= 0) return; const [nx, ny] = nodePos(B, i); const d = Math.hypot(wd(nx - m.x), ny - m.y); if (d < bd) { bd = d; m.node = i; } });
+      }
+      if (m.node !== undefined) [tx, ty] = nodePos(B, m.node);
+    }
+    const sp = 44;
+    if (tx !== null) { const dx = wd(tx - m.x), dy = ty - m.y, l = Math.hypot(dx, dy) || 1; m.vx += clamp((dx / l) * sp - m.vx, -150 * dt, 150 * dt); m.vy += clamp((dy / l) * sp - m.vy, -150 * dt, 150 * dt); }
+    else { m.vx += Math.sign(m.vx || 1) * 40 * dt; m.vy *= 0.97; }
+    m.x = wp(m.x + m.vx * dt); m.y += m.vy * dt;
+    if (m.y < 0.3 || m.y > H + 2) { m.done = true; W.ev.push({ k: 'mfizz', x: m.x, y: clamp(m.y, 0.3, H) }); continue; }
+    if (e && Math.abs(wd(e.x - m.x)) < ENEMY[e.type].r + 0.5 && Math.abs(e.y - m.y) < ENEMY[e.type].r + 0.5) { m.done = true; W.stats.hits++; damage(W, e, 1, m.pid); W.ev.push({ k: 'mhit', x: m.x, y: m.y }); continue; }
+    if (B && B.st === 'fight') {
+      let hn = -1;
+      B.nodes.forEach((n, i) => { if (n.hp <= 0 || hn >= 0) return; const [nx, ny] = nodePos(B, i); if (Math.abs(wd(nx - m.x)) < 1.4 && Math.abs(ny - m.y) < 1.4) hn = i; });
+      if (hn < 0) for (const b of BOSSES[B.key].body) {
+        const cx = wp(B.x + b[0] * B.face), cy = B.y + b[1], u = wd(m.x - cx) / b[2], v = (m.y - cy) / b[3];
+        if (u * u + v * v < 1) { if (m.node !== undefined && B.nodes[m.node] && B.nodes[m.node].hp > 0) hn = m.node; else { m.done = true; W.ev.push({ k: 'plink', x: m.x, y: m.y }); } break; }
+      }
+      if (hn >= 0) { m.done = true; W.stats.hits++; hitNode(W, B, hn, m.pid, 1); W.ev.push({ k: 'mhit', x: m.x, y: m.y }); continue; }
+    }
+  }
+  W.missiles = W.missiles.filter((m) => !m.done);
+}
 function fire(W, p) {
-  p.fireT = fireCD(W, p);
+  const SH = SHIPS[p.ship] || SHIPS.warden;
+  p.fireT = p.hyper > 0 ? SH.hyperCD : fireCD(W, p) * SH.cd;
   const x0 = wp(p.x + p.face * 1.9);
   let y = p.y - 0.15;
   // aim assist: the beam snaps to a machine just above or below the line ahead
@@ -309,11 +383,11 @@ function fire(W, p) {
     if (best && Math.abs(best.y - y) < p.assist * 2.2) y += clamp(best.y - y, -p.assist * 2.2, p.assist * 2.2);
   }
   const twin = !!p.pw.twin;
-  if (W.net === 'guest') W.claims.push({ fire: [Math.round(x0 * 100) / 100, Math.round(y * 100) / 100, p.face, twin ? 1 : 0] });
-  W.shots.push({ id: W.nextId++, pid: p.id, x0, y, dir: p.face, t: 0, done: false, vx: p.vx });
-  if (twin) W.shots.push({ id: W.nextId++, pid: p.id, x0, y: y - F.twinY, dir: p.face, t: 0, done: false, vx: p.vx });
+  const hy = p.hyper > 0 ? 1 : 0;
+  if (W.net === 'guest') W.claims.push({ fire: [Math.round(x0 * 100) / 100, Math.round(y * 100) / 100, p.face, twin ? 1 : 0, hy, SHIP_KEYS.indexOf(p.ship)] });
+  emitShots(W, p, x0, y, p.face, twin, hy, p.vx);
   W.stats.fired++;
-  W.ev.push({ k: 'fire', pid: p.id, x: x0, y, dir: p.face, twin });
+  W.ev.push({ k: 'fire', pid: p.id, x: x0, y, dir: p.face, twin, ship: p.ship });
 }
 function nova(W, p) {
   if (p.nova <= 0) { W.ev.push({ k: 'empty', pid: p.id, x: p.x, y: p.y }); p.novaT = 0.5; return; }
@@ -368,6 +442,7 @@ function hurt(W, p, cause, fx, fy) {
 function die(W, p, cause, fx, fy) {
   if (W.net === 'guest') { W.claims.push({ died: cause }); p.alive = false; p.deadT = 99; if (p.carry) { p.carry = 0; } W.ev.push({ k: 'death', pid: p.id, x: p.x, y: p.y, vx: p.vx, vy: p.vy, cause, fx: fx ?? p.x, fy: fy ?? p.y }); return; }
   p.alive = false; p.deadT = F.respawn; W.lives--; W.stats.deaths++;
+  if (W.rivals) { W.lives = 99; p.score = Math.max(0, (p.score || 0) - RIVALS.death); }
   W.stats.waveDeaths[clamp(W.cp, 0, WAVES)]++;
   W.stats.cause[cause] = (W.stats.cause[cause] || 0) + 1;
   if (p.carry) { const s = W.settlers.find((q) => q.id === p.carry); if (s) drop(W, s); p.carry = 0; }
@@ -381,6 +456,11 @@ function settlers(W, dt) {
     s.t += dt;
     if (s.st === 'walk') {
       if (s.mark > 0) { s.mark -= dt; continue; }   // looking up at a lifter overhead
+      if ((W.n + s.id) % 20 === 0) {
+        s.flee = 0;
+        for (const e of W.enemies) if (e.hp > 0 && (e.type === 'lifter' || e.type === 'husk') && e.y < 13 && Math.abs(wd(e.x - s.x)) < 12) { s.flee = -(Math.sign(wd(e.x - s.x)) || 1); break; }
+      }
+      if (s.flee) { if (Math.abs(wd(s.x + s.flee - s.home)) < SETTLER.roam * 2.4) s.x = wp(s.x + s.flee * 2.3 * dt); s.vx = Math.abs(s.vx) * s.flee; continue; }
       if (Math.abs(wd(s.x - s.home)) > SETTLER.roam && wd(s.x - s.home) * s.vx > 0) s.vx = -s.vx;
       if ((W.n + s.id * 37) % 600 === 0 && rand(W) < 0.3) s.vx = -s.vx;
       s.x = wp(s.x + s.vx * dt);
@@ -391,7 +471,7 @@ function settlers(W, dt) {
         const cr = F.catchR * (1 + 0.3 * (W.up.tractor || 0));
         if (Math.abs(wd(p.x - s.x)) < cr && Math.abs(p.y - s.y) < cr) {
           s.st = 'carried'; s.by = p.id; p.carry = s.id;
-          addScore(W, SCORE.catch); W.stats.caught++;
+          addScore(W, SCORE.catch, SCORE.catch, p.id); W.stats.caught++;
           W.ev.push({ k: 'catch', x: s.x, y: s.y, pid: p.id, score: SCORE.catch });
           tut(W, 'caught');
           break;
@@ -449,6 +529,7 @@ function enemy(W, e, dt) {
     case 'stinger': stinger(W, e, dt); break;
     case 'prowler': prowler(W, e, dt); break;
     case 'skimmer': skimmer(W, e, dt); break;
+    case 'meteor': meteor(W, e, dt); return;
   }
   e.x = wp(e.x + e.vx * dt);
   e.y = clamp(e.y + e.vy * dt, 1, H - 0.6);
@@ -576,6 +657,46 @@ function skimmers(W, dt) {
     break;
   }
 }
+// a meteor (or a lava bomb thrown up by an eruption) falls on the colony: shoot it before it lands
+function meteor(W, e, dt) {
+  e.vy -= (e.st === 'lava' ? 9 : 2.5) * dt;
+  e.x = wp(e.x + e.vx * dt); e.y += e.vy * dt;
+  if (e.y <= 0.6 && e.vy < 0) {
+    e.hp = 0;
+    W.ev.push({ k: 'impact', x: e.x, y: 0.4, id: e.id, lava: e.st === 'lava' });
+    for (const s of W.settlers) if (s.st === 'walk' && Math.abs(wd(s.x - e.x)) < 2.4) lose(W, s, 'impact');
+  }
+}
+// one planet event per world, in waves 2 and 4: meteors, a sandstorm, a solar flare, an eruption, an eclipse
+function planetEvent(W, dt) {
+  if (W.event) {
+    const E = W.event; E.t += dt;
+    if (E.kind === 'meteors' || E.kind === 'eruption') {
+      const C2 = EVENT[E.kind];
+      if (E.n < C2.n && E.t > 1.2 + (E.n * (C2.T - 2)) / C2.n) {
+        E.n++;
+        const s = W.settlers.filter((q) => q.st === 'walk'), p = alivePlayers(W)[0];
+        let near = s.filter((q) => p && Math.abs(wd(q.x - p.x)) < 90); if (!near.length) near = s;
+        const tx = near.length ? near[(rand(W) * near.length) | 0].x + rr(W, -4, 4) : (p ? p.x : 0) + rr(W, -40, 40);
+        if (E.kind === 'meteors') { const T = rr(W, 3.2, 4.2), vx = rr(W, -7, 7), vy = -2; const e = addEnemy(W, 'meteor', wp(tx - vx * T), H + 3); e.vx = vx; e.vy = vy - (H + 3 - 1.25 * T * T) / T + 2; e.born = 0; e.st = 'rock'; }
+        else { const T = rr(W, 2.6, 3.2), vx = rr(W, -6, 6); const e = addEnemy(W, 'meteor', wp(tx - vx * T), 0.8); e.vx = vx; e.vy = 4.5 * T; e.born = 0; e.st = 'lava'; W.ev.push({ k: 'vent', x: e.x }); }
+      }
+    }
+    if (E.t >= E.T) { W.ev.push({ k: 'eventend', kind: E.kind }); W.event = null; }
+    return;
+  }
+  if (W.phase !== 'fight' || W.tutorial) return;
+  const key = W.mode === 'endless' ? ['verdant', 'dune', 'frost', 'cinder', 'umbra'][W.k % 5] : ['verdant', 'dune', 'frost', 'cinder', 'umbra'][W.sector];
+  const due = W.mode === 'endless' ? W.waveN % 2 === 1 : EVENT.waves.includes(W.wave);
+  if (!due || W.eventDone === (W.mode === 'endless' ? W.waveN : W.wave)) return;
+  if (W.eventAt === undefined || W.eventAtW !== W.wave + (W.waveN || 0) * 100) { W.eventAt = rr(W, EVENT.at[0], EVENT.at[1]); W.eventAtW = W.wave + (W.waveN || 0) * 100; }
+  if (W.waveT < W.eventAt) return;
+  W.eventDone = W.mode === 'endless' ? W.waveN : W.wave;
+  const kind = EVENTS[key], C2 = EVENT[kind];
+  W.event = { kind, t: 0, T: C2.T + (kind === 'meteors' || kind === 'eruption' ? 2 : 0), n: 0, dir: rand(W) < 0.5 ? -1 : 1 };
+  if (kind === 'flare') W.stun = C2.stun;
+  W.ev.push({ k: 'event', kind, T: W.event.T, dir: W.event.dir });
+}
 function prowler(W, e, dt) {
   const p = nearestPlayer(W, e.x, 400);
   if (!p) { e.vx *= 0.98; return; }
@@ -584,7 +705,7 @@ function prowler(W, e, dt) {
 }
 // a machine that is shooting glows (the tell) for 0.6 x warn, then fires a bolt at the pilot
 function shoot(W, e, dt) {
-  if (e.type === 'mine' || e.type === 'skimmer' || safeNow(W)) return;
+  if (e.type === 'mine' || e.type === 'skimmer' || e.type === 'meteor' || safeNow(W)) return;
   const p = nearestPlayer(W, e.x, 46);
   if (e.tell > 0) {
     e.tell -= dt;
@@ -622,7 +743,8 @@ function startBoss(W) {
   const p = alivePlayers(W)[0] || W.players[0];
   const face = p.face || 1;
   const B = { key, x: wp(p.x + face * 34), y: BOSSES[key].alt, vx: 0, vy: 0, face: -face, st: 'warp', t: 0, stT: 3.2, nodes: D.nodes.map(() => ({ hp: W.R.nodeHP, max: W.R.nodeHP })),
-    atk: null, atkT: 4, last: '', hitT: 0, rushV: 0, sweepX: 0, dyT: 0 };
+    atk: null, atkT: 4, last: '', hitT: 0, rushV: 0, sweepX: 0, dyT: 0, phase: 1 };
+  B.stT = PHASE2.warpT;
   W.boss = B;
   W.stats.bossT = W.secT;
   W.ev.push({ k: 'bosswarp', key, x: B.x, y: B.y, T: B.stT });
@@ -634,15 +756,21 @@ function bossDirector(W, dt) {
   void dt;
 }
 export const bossAlive = (B) => B && (B.st === 'fight' || B.st === 'warp');
-export function nodePos(B, i) { const n = BOSSES[B.key].nodes[i]; return [wp(B.x + n[0] * B.face), B.y + n[1]]; }
+export function nodePos(B, i) { const n = (B.phase === 2 ? coreOf(B.key) : BOSSES[B.key].nodes)[i]; return [wp(B.x + n[0] * B.face), B.y + n[1]]; }
 function boss(W, B, dt) {
   B.t += dt;
   if (B.hitT > 0) B.hitT -= dt;
   const R = W.R;
   if (B.st === 'warp') { B.stT -= dt; if (B.stT <= 0) { B.st = 'fight'; W.ev.push({ k: 'bossfight', key: B.key, x: B.x, y: B.y }); } return; }
+  if (B.st === 'shed') {
+    B.stT -= dt; B.vx *= 0.94; B.vy = (BOSSES[B.key].alt - B.y) * 0.8; B.x = wp(B.x + B.vx * dt); B.y += B.vy * dt;
+    if ((W.n % 20) === 0) W.ev.push({ k: 'cboom', x: wp(B.x + rr(W, -9, 9)), y: B.y + rr(W, -3, 3), small: 1 });
+    if (B.stT <= 0) { B.st = 'fight'; B.atkT = 1.2; W.ev.push({ k: 'bossphase2', key: B.key, x: B.x, y: B.y }); }
+    return;
+  }
   if (B.st === 'dying') {
     B.stT -= dt; B.vy = -1.5; B.y += B.vy * dt;
-    if ((W.n % 30) === 0) W.ev.push({ k: 'cboom', x: wp(B.x + rr(W, -8, 8)), y: B.y + rr(W, -2, 2) });
+    if ((W.n % 18) === 0) W.ev.push({ k: 'cboom', x: wp(B.x + rr(W, -10, 10)), y: B.y + rr(W, -3, 3) });
     if (B.stT <= 0) bossDown(W, B);
     return;
   }
@@ -661,7 +789,8 @@ function boss(W, B, dt) {
   if (!a) {
     B.atkT -= dt;
     if (B.atkT <= 0) {
-      const list = BOSSES[B.key].atk.filter((k) => k !== B.last || BOSSES[B.key].atk.length === 1);
+      const all = B.phase === 2 ? [...BOSSES[B.key].atk, 'barrage', 'barrage'] : BOSSES[B.key].atk;
+      const list = all.filter((k) => k !== B.last || all.length === 1);
       const kind = list[(rand(W) * list.length) | 0];
       B.last = kind;
       const T = kind === 'sweep' ? R.warn * 1.3 : kind === 'rush' ? R.warn * 1.1 : R.warn * 0.8;
@@ -680,6 +809,16 @@ function boss(W, B, dt) {
         W.ev.push({ k: 'bossatk', kind: 'volley', x: B.x, y: B.y });
       }
       if (a.t > a.T + 0.6) endAtk(W, B);
+    } else if (a.kind === 'barrage') {
+      // phase 2: three spinning rings of bolts
+      B.vx *= 0.96;
+      if (live && a.n < 3 && a.t > a.T + a.n * 0.32) {
+        const N = 9 + Math.min(4, W.sector);
+        for (let i = 0; i < N; i++) bolt(W, B, p, (i / N) * Math.PI * 2 + a.n * 0.21);
+        a.n++;
+        W.ev.push({ k: 'bossatk', kind: 'barrage', x: B.x, y: B.y });
+      }
+      if (a.t > a.T + 1.4) endAtk(W, B);
     } else if (a.kind === 'drop') {
       if (live && a.n === 0) {
         a.n = 1;
@@ -719,11 +858,17 @@ function boss(W, B, dt) {
   B.x = wp(B.x + B.vx * dt);
   B.y = clamp(B.y + B.vy * dt, 4, H - 1);
 }
-function endAtk(W, B) { B.atk = null; B.atkT = W.R.atkT * rr(W, 0.8, 1.2) * (B.rage ? 0.68 : 1); }
-function hitNode(W, B, i, pid) {
+function endAtk(W, B) { B.atk = null; B.atkT = W.R.atkT * rr(W, 0.8, 1.2) * (B.rage ? 0.68 : 1) * (B.phase === 2 ? PHASE2.atkK : 1); }
+// phase 2 core points from the main hull: the heart at its centre, a vent low at each end
+const CORE = {};
+export function coreOf(key) {
+  if (!CORE[key]) { const [bx, by, rx, ry] = BOSSES[key].body[0]; CORE[key] = [[bx, by], [bx + rx * 0.55, by - ry * 0.3], [bx - rx * 0.55, by - ry * 0.3]]; }
+  return CORE[key];
+}
+function hitNode(W, B, i, pid, dmg = 1) {
   const n = B.nodes[i];
   if (!n || n.hp <= 0) return;
-  n.hp--; B.hitT = 0.25;
+  n.hp = Math.max(0, n.hp - dmg); B.hitT = 0.25;
   const [x, y] = nodePos(B, i);
   addScore(W, 50);
   if (n.hp <= 0) {
@@ -731,8 +876,14 @@ function hitNode(W, B, i, pid) {
     W.ev.push({ k: 'nodebreak', i, x, y, pid, score: SCORE.node });
     const down = B.nodes.filter((q) => q.hp <= 0).length;
     if (!B.rage && down * 2 >= B.nodes.length && down < B.nodes.length) { B.rage = 1; W.ev.push({ k: 'enrage', x: B.x, y: B.y, key: B.key }); }
-    if (B.nodes.every((q) => q.hp <= 0)) {
-      B.st = 'dying'; B.stT = 2.6; B.atk = null;
+    if (B.nodes.every((q) => q.hp <= 0) && B.phase !== 2) {
+      // the armour blows off and the core opens
+      const hp = W.R.nodeHP;
+      B.phase = 2; B.st = 'shed'; B.stT = PHASE2.shedT; B.atk = null; B.rage = 0;
+      B.nodes = coreOf(B.key).map((c, k) => { const h2 = Math.ceil(hp * (k ? PHASE2.ventK : PHASE2.heartK)); return { hp: h2, max: h2 }; });
+      W.ev.push({ k: 'bossshed', x: B.x, y: B.y, key: B.key });
+    } else if (B.nodes.every((q) => q.hp <= 0)) {
+      B.st = 'dying'; B.stT = 4; B.atk = null;
       W.ev.push({ k: 'bossdying', x: B.x, y: B.y, key: B.key });
     }
   } else W.ev.push({ k: 'nodehit', i, x, y, hp: n.hp, max: n.max, pid });
@@ -759,9 +910,10 @@ function bossDown(W, B) {
 
 // ------------------------------------------------------------------ beams, bolts, pods
 function shots(W, dt) {
-  const range = beamRange(W), band = F.beamH * (1 + 0.25 * (W.up.reach || 0));
+  const range0 = beamRange(W), band0 = F.beamH * (1 + 0.25 * (W.up.reach || 0));
   for (const s of W.shots) {
     if (s.done) continue;
+    const range = (s.hyper ? range0 * HYPER.reach : range0) * (s.rk || 1), band = (s.hyper ? band0 * HYPER.band : band0) * (s.bk || 1);
     const head0 = Math.min(range, F.beamV * s.t);
     s.t += dt;
     const head = Math.min(range, F.beamV * s.t), tail = Math.max(0, F.beamV * s.t - F.beamLen);
@@ -798,6 +950,18 @@ function shots(W, dt) {
         if (node < 0 && d < bd - 0.6) { bd = d; best = null; node = -2; }
       }
     }
+    if (W.rivals) for (const q of W.players) {
+      if (q.id === s.pid || !q.alive || !q.carry || Math.abs(q.y - s.y) > 1 + band) continue;
+      const d = wd(q.x - s.x0) * s.dir;
+      if (d < head0 - 2 || d > head + 1 || d > bd) continue;
+      s.done = true; s.hitD = d;
+      const st = W.settlers.find((z) => z.id === q.carry); if (st) drop(W, st);
+      q.carry = 0; q.stolenN = (q.stolenN || 0) + 1;
+      addScore(W, RIVALS.steal, 0, s.pid);
+      W.ev.push({ k: 'stolen', pid: q.id, by: s.pid, x: q.x, y: q.y });
+      break;
+    }
+    if (s.done) continue;
     if (node === -2) {
       // the hull took the beam: a weak point at this height anywhere along the hull ahead takes it instead
       let bn = -1, bnd = 1e9;
@@ -811,12 +975,13 @@ function shots(W, dt) {
       });
       if (bn >= 0) { node = bn; bd = bnd; }
     }
-    if (node >= 0) { s.done = true; hitNode(W, B, node, s.pid); W.stats.hits++; }
+    if (node >= 0) { s.done = true; const [nx, ny] = nodePos(B, node); hitNode(W, B, node, s.pid, s.dmg || 1); W.stats.hits++; if (s.arc) arcFrom(W, nx, ny, s.arc, null, s.pid); }
     else if (node === -2) { s.done = true; W.ev.push({ k: 'plink', x: wp(s.x0 + s.dir * bd), y: s.y }); }
     else if (best) {
       s.done = true; W.stats.hits++;
-      damage(W, best, 1, s.pid);
+      damage(W, best, s.dmg || 1, s.pid);
       W.ev.push({ k: 'beamhit', x: wp(s.x0 + s.dir * Math.max(0, bd)), y: s.y, id: best.id, dead: best.hp <= 0 });
+      if (s.arc) arcFrom(W, best.x, best.y, s.arc, best, s.pid);
     }
     s.hitD = bd < 1e8 ? bd : head;
   }
@@ -848,7 +1013,10 @@ function kill(W, e, pid, by) {
     W.bestChain = Math.max(W.bestChain, W.chain);
     score *= chainMult(W.chain);
   }
-  if (pid) addScore(W, score, e.type === 'skimmer' ? 0 : ENEMY[e.type].score);
+  const kp = pid ? W.players.find((q) => q.id === pid) : null;
+  if (kp && kp.hyper > 0) score *= HYPER.score;
+  if (kp && !(kp.hyper > 0) && e.type !== 'mine') { kp.hyperK = Math.min(1, (kp.hyperK || 0) + HYPER.gain * (1 + (chainMult(W.chain) - 1) * 0.5)); if (kp.hyperK >= 1) { kp.hyperK = 0; kp.hyper = HYPER.time; W.ev.push({ k: 'hyper', pid: kp.id, x: kp.x, y: kp.y }); } }
+  if (pid) addScore(W, score, e.type === 'skimmer' || e.type === 'meteor' ? 0 : ENEMY[e.type].score, pid);
   W.stats.kills++;
   if (e.type === 'lifter') W.stats.lifters++;
   if (e.type === 'husk') W.stats.husks++;
@@ -891,7 +1059,10 @@ export function pickup(W, p, q) {
   W.ev.push({ k: 'pickup', kind: q.kind, x: q.x, y: q.y, pid: p.id });
 }
 // lifeN: the points that count toward extra ships (a kill chain's bonus does not, so chains do not make the game easier)
-export function addScore(W, n, lifeN = n) { const b = Math.round(n * D_OF(W).score); W.score += b; W.lifePts += Math.round(lifeN * D_OF(W).score); }
+export function addScore(W, n, lifeN = n, pid = 0) {
+  const b = Math.round(n * D_OF(W).score); W.score += b; W.lifePts += Math.round(lifeN * D_OF(W).score);
+  if (W.rivals && pid) { const p = W.players.find((q) => q.id === pid); if (p) p.score = (p.score || 0) + b; }
+}
 
 // ------------------------------------------------------------------ contacts
 function contacts(W) {
@@ -901,6 +1072,7 @@ function contacts(W) {
       if (e.hp <= 0 || e.born > 0) continue;
       const r = ENEMY[e.type].r + F.r * 0.8;
       if (Math.abs(wd(e.x - p.x)) < r && Math.abs(e.y - p.y) < r * 0.8) {
+        if (p.hyper > 0) { kill(W, e, p.id, 'ram'); continue; }
         if (p.inv > 0) continue;
         hurt(W, p, e.type, e.x, e.y);
         kill(W, e, p.id, 'ram');
@@ -941,21 +1113,21 @@ export function netCatch(W, p, sid) {
   const s = W.settlers.find((q) => q.id === sid);
   if (!s || s.st !== 'fall' || p.carry) return;
   s.st = 'carried'; s.by = p.id; p.carry = s.id;
-  addScore(W, SCORE.catch); W.stats.caught++;
+  addScore(W, SCORE.catch, SCORE.catch, p.id); W.stats.caught++;
   W.ev.push({ k: 'catch', x: s.x, y: s.y, pid: p.id, score: SCORE.catch });
 }
 export function netLand(W, p) {
   const s = W.settlers.find((q) => q.id === p.carry);
   if (!s) return;
   s.st = 'walk'; s.by = 0; s.y = 0; s.x = p.x; s.home = p.x; p.carry = 0;
-  addScore(W, SCORE.land); W.stats.landed++;
+  addScore(W, SCORE.land, SCORE.land, p.id); W.stats.landed++;
   W.ev.push({ k: 'land', x: s.x, y: 0, pid: p.id, score: SCORE.land, id: s.id });
 }
 export function netPod(W, id, p) { const q = W.pods.find((o) => o.id === id); if (q) { q.t = 99; pickup(W, p, q); } }
-export function netFire(W, p, x0, y, dir, twin) {
-  W.shots.push({ id: W.nextId++, pid: p.id, x0, y, dir, t: 0, done: false, vx: 0 });
-  if (twin) W.shots.push({ id: W.nextId++, pid: p.id, x0, y: y - F.twinY, dir, t: 0, done: false, vx: 0 });
-  W.ev.push({ k: 'fire', pid: p.id, x: x0, y, dir, twin });
+export function netFire(W, p, x0, y, dir, twin, hy = 0, kind) {
+  if (kind !== undefined && SHIP_KEYS[kind]) p.ship = SHIP_KEYS[kind];
+  emitShots(W, p, x0, y, dir, twin, hy, 0);
+  W.ev.push({ k: 'fire', pid: p.id, x: x0, y, dir, twin, ship: p.ship });
 }
 
 // ------------------------------------------------------------------ the online guest's step
@@ -977,7 +1149,7 @@ export function stepGuest(W, dt = STEP) {
   for (const e of W.enemies) {
     if (!me.alive || e.hp <= 0 || e.born > 0 || me.inv > 0) continue;
     const r = ENEMY[e.type].r + F.r * 0.8;
-    if (Math.abs(wd(e.x - me.x)) < r && Math.abs(e.y - me.y) < r * 0.8) { hurt(W, me, e.type, e.x, e.y); W.claims.push({ ram: e.id }); }
+    if (Math.abs(wd(e.x - me.x)) < r && Math.abs(e.y - me.y) < r * 0.8) { if (!(me.hyper > 0)) hurt(W, me, e.type, e.x, e.y); W.claims.push({ ram: e.id }); }
   }
   if (me.alive && !me.carry) {
     const cr = F.catchR * (1 + 0.3 * (W.up.tractor || 0));
