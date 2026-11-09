@@ -3,7 +3,7 @@
 // Nothing in here touches the DOM, WebGL or audio; it only pushes events into W.ev.
 //
 // The world is a band round a small planet: x along the ground (wraps every C metres), y altitude (0..H).
-import { F, STEP, C, H, ENEMY, SETTLER, BOSSES, B_KEYS, SECTORS, WAVES, rampAt, rampLevel, endlessLevel, ENDLESS, TUTOR, SCORE, START_LIVES, DIFFICULTY, applyDiff, POWERUPS, PW_KEYS, DROP, SKIM, HYPER, EVENTS, EVENT, PHASE2, B_KEYS as _BK, SHIPS, SHIP_KEYS, RIVALS } from './config.js?v=11';
+import { F, STEP, C, H, ENEMY, SETTLER, BOSSES, B_KEYS, SECTORS, WAVES, rampAt, rampLevel, endlessLevel, ENDLESS, TUTOR, SCORE, START_LIVES, DIFFICULTY, applyDiff, POWERUPS, PW_KEYS, DROP, SKIM, HYPER, EVENTS, EVENT, PHASE2, B_KEYS as _BK, SHIPS, SHIP_KEYS, RIVALS, INTERSECT } from './config.js?v=12';
 export { STEP };
 
 const clamp = (v, a, b) => (v < a ? a : v > b ? b : v);
@@ -147,7 +147,7 @@ function director(W, dt) {
       P.left -= n; P.groupT = R.gap * (W.tutorial && W.waveT < TUTOR.safe ? 1.4 : 1);
     }
   }
-  for (const x of P.extra) if (!x.done && W.waveT >= x.t) { x.done = true; spawnEnemy(W, x.type); }
+  for (const x of P.extra) if (!x.done && W.waveT >= x.t) { x.done = true; if (x.type === 'cross') podCross(W); else spawnEnemy(W, x.type); }
   // a PROWLER comes for a pilot who takes too long
   if (W.waveT > P.prowlT && !W.enemies.some((e) => e.type === 'prowler') && P.left === 0) { P.prowlT = W.waveT + 24; spawnEnemy(W, 'prowler'); }
   const busy = W.enemies.some((e) => HOSTILE.has(e.type) && e.hp > 0);
@@ -161,11 +161,28 @@ function startWave(W, w) {
   W.phase = 'fight'; W.waveT = 0;
   const extra = [];
   for (let i = 0; i < R.sowers; i++) extra.push({ t: rr(W, 3, 14), type: 'sower' });
-  for (let i = 0; i < R.hives; i++) extra.push({ t: rr(W, 6, 20), type: 'hive' });
+  const cross = !W.rivals && (W.mode === 'endless' ? W.waveN % 3 === 2 : (INTERSECT.waves[W.sector] || []).includes(w));
+  for (let i = 0; i < R.hives - (cross ? 1 : 0); i++) extra.push({ t: rr(W, 6, 20), type: 'hive' });
   for (let i = 0; i < R.husks; i++) extra.push({ t: rr(W, 4, 18), type: 'husk' });
+  if (cross) extra.push({ t: rr(W, INTERSECT.at[0], INTERSECT.at[1]), type: 'cross' });
   W.plan = { left: R.lifters, groupT: W.tutorial ? TUTOR.firstAt : 1.2, extra, prowlT: R.prowlT };
   for (const p of W.players) p.shield = Math.max(p.shield, R.shield + (W.up.deflector || 0));
   W.ev.push({ k: 'wave', w, n: W.mode === 'endless' ? W.waveN : w + 1 });
+}
+// POD INTERSECTION: two pods warp in either side of a point ahead of a pilot and drift through it on crossing paths
+function podCross(W) {
+  const p = nearestPlayer(W, rr(W, 0, C)) || W.players[0];
+  if (!p) return;
+  const I = INTERSECT, mx = wp(p.x + (p.face || 1) * rr(W, 26, 40)), my = rr(W, 13, 22), pair = W.nextId;
+  for (const s of [-1, 1]) {
+    const x0 = wp(mx + s * I.half), y0 = clamp(my - s * rr(W, 4, 7), 6, 30);
+    const e = addEnemy(W, 'hive', x0, y0);
+    e.born = W.R.warn * 1.4;
+    e.cross = { mx, my, s, hold: 0, T: 0 };
+    e.pair = pair; e.sting = I.sting[clamp(W.mode === 'endless' ? Math.floor(W.level || 0) : W.sector, 0, 4)];
+    W.ev.push({ k: 'warpin', type: 'hive', x: x0, y: y0, id: e.id, T: e.born });
+  }
+  W.ev.push({ k: 'crosswarn', x: mx, y: my, T: W.R.warn * 1.4 + I.travel });
 }
 function checkpoint(W) {
   if (W.mode !== 'campaign') return;
@@ -620,6 +637,24 @@ function sower(W, e, dt) {
   }
 }
 function hive(W, e, dt) {
+  if (e.cross) {
+    // an intersection pod closes on the meeting point, locks with its partner (circling it, linked) for `hold`
+    // seconds, then breaks away and hunts like any other
+    const X = e.cross, I = INTERSECT, q = e.pair && W.enemies.find((o) => o !== e && o.pair === e.pair && o.hp > 0);
+    X.T += dt;
+    if (!q || X.hold > I.hold || X.T > I.travel + I.hold + 4) { e.cross = null; e.link = 0; if (q) q.link = 0; }
+    else {
+      const linked = e.link && q.link === e.id;
+      if (linked) X.hold += dt;
+      const a = X.hold * 2.2 + (X.s > 0 ? 0 : Math.PI);
+      const tx = linked ? wp(X.mx + Math.cos(a) * 1.3) : wp(X.mx + X.s * 1.3), ty = linked ? X.my + Math.sin(a) * 1.3 : X.my;
+      moveTo(e, tx, ty, linked ? 4 : I.half / I.travel * 1.6, 9, dt);
+      e.face = -X.s;
+      const touch = q.born <= 0 && e.born <= 0 && Math.hypot(wd(q.x - e.x), q.y - e.y) < I.gap;
+      if (touch && !e.link) { e.link = q.id; q.link = e.id; W.ev.push({ k: 'podlink', x: wp(e.x + wd(q.x - e.x) / 2), y: (e.y + q.y) / 2, a: e.id, b: q.id }); }
+      return;
+    }
+  }
   const p = nearestPlayer(W, e.x, 200);
   if (p) moveTo(e, p.x - Math.sign(wd(p.x - e.x)) * 16, clamp(p.y + Math.sin(e.t + e.ph) * 6, 6, 30), W.R.lV * 0.6, 5, dt);
   else { e.vx = e.face * 2; e.vy = (e.yT - e.y) * 0.5; }
@@ -1015,6 +1050,8 @@ function bolts(W, dt) {
   W.bolts = W.bolts.filter((b) => b.t < 3.6);
 }
 export function damage(W, e, dmg, pid) {
+  // intersection pods are shielded until they lock together
+  if (e.cross && !e.link) { W.ev.push({ k: 'plink', x: e.x, y: e.y }); return; }
   e.hp -= dmg; e.hitT = 0.12;
   if (e.hp <= 0) kill(W, e, pid, 'beam');
   else W.ev.push({ k: 'hit', id: e.id, x: e.x, y: e.y, hp: e.hp });
@@ -1038,9 +1075,24 @@ function kill(W, e, pid, by) {
   if (e.carry) { const s = W.settlers.find((q) => q.id === e.carry); if (s && s.st === 'held') drop(W, s); e.carry = 0; }
   if (e.tgt) { const s = W.settlers.find((q) => q.id === e.tgt); if (s) s.mark = 0; }
   if (e.type === 'hive') {
-    const n = W.R.sting;
-    for (let i = 0; i < n; i++) { const q = addEnemy(W, 'stinger', wp(e.x + rr(W, -1, 1)), e.y + rr(W, -1, 1)); q.born = 0.25; q.vx = rr(W, -8, 8); q.vy = rr(W, -5, 5); }
-    W.ev.push({ k: 'hivepop', x: e.x, y: e.y, n });
+    // the pod splits open and its stingers burst out of it (away from the shooter when it was linked)
+    const n = e.sting || W.R.sting, kp = W.players.find((q) => q.id === pid), away = e.link && kp ? Math.sign(wd(e.x - kp.x)) || 1 : 0;
+    for (let i = 0; i < n; i++) {
+      const a = (i / n) * Math.PI * 2 + rr(W, -0.3, 0.3);
+      const q = addEnemy(W, 'stinger', wp(e.x + Math.cos(a) * 0.8), e.y + Math.sin(a) * 0.8);
+      q.born = 0; q.vx = Math.cos(a) * 9 + away * 12; q.vy = Math.sin(a) * 7;
+    }
+    W.ev.push({ k: 'hivepop', x: e.x, y: e.y, n, id: e.id });
+    // POD INTERSECTION: its linked partner bursts with it
+    const o = e.link && W.enemies.find((q) => q.id === e.link && q.hp > 0);
+    e.link = 0;
+    if (o) {
+      o.link = 0;
+      if (pid) { addScore(W, INTERSECT.bonus, INTERSECT.bonus, pid); W.stats.cross = (W.stats.cross || 0) + 1; }
+      W.ev.push({ k: 'intersection', x: wp(e.x + wd(o.x - e.x) / 2), y: (e.y + o.y) / 2, bonus: pid ? INTERSECT.bonus : 0, pid });
+      o.link = 0; o.sting = o.sting || n;
+      kill(W, o, pid, 'link');
+    }
   }
   const ch = DROP.chance[e.type] || 0;
   if (pid && W.pods.length < DROP.max && rand(W) < ch) addPod(W, e.x, e.y);

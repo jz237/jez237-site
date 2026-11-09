@@ -7,7 +7,7 @@
 // there). Like the cabinet's one-channel sound board, a cabinet sound cuts off the one before unless that one ranks higher.
 // The colony-command voice ducks the music and only one line plays at a time. Music loops with a crossfade; clear and
 // over are one-shot stings. (js/chip.js adds a live-synthesised retro layer on top.)
-import { Chip } from './chip.js?v=11';
+import { Chip } from './chip.js?v=12';
 
 const SFX = ['beam', 'beamhit', 'pop', 'boomS', 'boomM', 'boomL', 'debris', 'warpin', 'grab', 'distress', 'fuse', 'fall', 'catch', 'land', 'lost',
   'mine', 'minebeep', 'hivepop', 'swarm', 'prowler', 'bolt', 'tell', 'nova', 'blink', 'blinkin', 'shieldhit', 'death', 'spawn', 'pickup', 'pwend',
@@ -27,7 +27,7 @@ function body(b) {
   while (j > n - 4096 && Math.abs(d[j]) < e) j--;
   return [i / b.sampleRate, (j + 1) / b.sampleRate];
 }
-const V = '?v=11';
+const V = '?v=12';
 // the cabinet layer: file names in audio/cabinet/ and how they rank (higher cuts off lower; lower waits, so is dropped)
 const CAB = { fire: 1, explosion: 2, swarmer: 2, mutant: 3, bomber: 3, pod: 3, abduct: 4, fall: 4, credit: 4, catch: 5, delivery: 5,
   extra: 6, hyperspace: 6, bomb: 7, death: 8, planet: 9, start: 9, thrust: 0 };

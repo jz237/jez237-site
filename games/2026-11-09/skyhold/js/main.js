@@ -1,13 +1,13 @@
 // Skyhold 2026 — game flow, menus, HUD (with the scanner strip), commentary, demo director and the frame loop.
-import { VERSION, SECTORS, STEP, F, C, H, BOSSES, UPGRADES, UP_KEYS, UP_COST, MEDALS, parTime, TYPICAL_UP, START_LIVES, DIFFICULTY, POWERUPS, LIVERIES, CP_NAMES, WAVES, ENEMY, SHIPS, SHIP_KEYS, RIVALS, MASTERY, mastLevel } from './config.js?v=11';
-import { makeWorld, step, stepGuest, drainEvents, wd, wp, settlersLeft, nodePos, CHAIN_T, chainMult, beamRange } from './sim.js?v=11';
-import { Autopilot } from './ai.js?v=11';
-import { Renderer, pickQuality, CALM, LOOKS } from './render.js?v=11';
-import { Audio } from './audio.js?v=11';
-import { Input } from './input.js?v=11';
-import { Scores, NO_POST } from './scores.js?v=11';
-import { Recorder, Replay } from './replay.js?v=11';
-import { Online, ROOM, QUICK, QUICK_R, randomCode, cleanCode } from './online.js?v=11';
+import { VERSION, SECTORS, STEP, F, C, H, BOSSES, UPGRADES, UP_KEYS, UP_COST, MEDALS, parTime, TYPICAL_UP, START_LIVES, DIFFICULTY, POWERUPS, LIVERIES, CP_NAMES, WAVES, ENEMY, SHIPS, SHIP_KEYS, RIVALS, MASTERY, mastLevel } from './config.js?v=12';
+import { makeWorld, step, stepGuest, drainEvents, wd, wp, settlersLeft, nodePos, CHAIN_T, chainMult, beamRange } from './sim.js?v=12';
+import { Autopilot } from './ai.js?v=12';
+import { Renderer, pickQuality, CALM, LOOKS } from './render.js?v=12';
+import { Audio } from './audio.js?v=12';
+import { Input } from './input.js?v=12';
+import { Scores, NO_POST } from './scores.js?v=12';
+import { Recorder, Replay } from './replay.js?v=12';
+import { Online, ROOM, QUICK, QUICK_R, randomCode, cleanCode } from './online.js?v=12';
 
 const $ = (id) => document.getElementById(id);
 const params = new URLSearchParams(location.search);
@@ -394,10 +394,20 @@ function handleEvents(list, W, live) {
       case 'arc': { R.lightning(e.pts); A.play('bolt', { vol: 0.35, rate: 2, gap: 0.05, vary: 0.2 }); A.retro('beam', { vol: 0.25, rate: 2 }); for (const q of e.pts.slice(1)) { const p = P(q[0], q[1]); fx.sparks(p.x, p.y, p.z, { n: 8, speed: 6, r: 0.7, g: 0.9, b: 1, life: 0.35 }); } break; }
       case 'mhit': { const p = P(e.x, e.y); fx.explode(p.x, p.y, p.z, 0.6, { color: 0xffb070, ring: false }); snd('boomS', e, { vol: 0.3, rate: 1.3, gap: 0.04, vary: 0.2 }); break; }
       case 'shockwave': { const p = P(e.x, e.y); fx.ring(p.x, p.y, p.z, 4.5, 0xffc070); if (e.small) break; R.shock(e.x, e.y, 0.7); snd('boomM', e, { vol: 0.5, rate: 1.4, gap: 0.08 }); A.cab('bomber', { rate: 1.3 }); break; }
+      case 'crosswarn': if (live && G.mode !== 'demo') { caption('POD INTERSECTION · TWO SHIELDED HIVE PODS ARE CLOSING · HIT ONE WHILE THEY ARE LOCKED', 3.4); A.play('alarm', { vol: 0.35, gap: 0 }); } break;
+      case 'podlink': { const p = P(e.x, e.y); fx.ring(p.x, p.y, p.z, 6, 0xffb040); snd('tell', e, { vol: 0.6, rate: 1.5, gap: 0.2 }); A.cab('pod', { rate: 0.8 }); if (live && G.mode !== 'demo') popup('LINKED · HIT ONE!', e.x, e.y + 2, '#ffd27a', true); break; }
+      case 'intersection': {
+        const p = P(e.x, e.y);
+        fx.ring(p.x, p.y, p.z, 12, 0xffd27a); fx.ring(p.x, p.y, p.z, 22, 0xffa040); fx.flash(p.x, p.y, p.z, 40, 0xffc070, 0.5);
+        R.shock(e.x, e.y, 1.6); R.addTrauma(0.35 * S); R.flashScreen(0.18, 0xffd0a0);
+        snd('boomL', e, { vol: 0.9, rate: 1.1, gap: 0 }); A.play('medal', { vol: 0.6, gap: 0 }); A.cab('extra', { rate: 0.9 });
+        if (live) { if (e.bonus) popup(`POD INTERSECTION +${e.bonus.toLocaleString()}`, e.x, e.y, '#ffd27a', true); if (mine(e)) rumble(0.6, 0.6, 300); }
+        break;
+      }
       case 'mfizz': { const p = P(e.x, e.y); fx.sparks(p.x, p.y, p.z, { n: 4, speed: 3, life: 0.25 }); break; }
       case 'stolen': { const p = P(e.x, e.y); fx.sparks(p.x, p.y, p.z, { n: 18, speed: 6, r: 1, g: 0.85, b: 0.4, life: 0.5 }); A.play('shieldhit', { vol: 0.6, rate: 1.3, gap: 0.1 }); if (live) { const me = myPlayer(W); if (me && e.pid === me.id) caption('YOUR RIVAL KNOCKED YOUR SETTLER LOOSE · CATCH IT AGAIN', 2.2); else if (me && e.by === me.id) popup(`STOLEN! +${RIVALS.steal}`, e.x, e.y, '#ffd27a', true); } break; }
       case 'rivalend': A.play('waveclear', { vol: 1, gap: 0 }); break;
-      case 'hit': { const p = P(e.x, e.y); fx.sparks(p.x, p.y, p.z, { n: 6, speed: 6 }); break; }
+      case 'hit': { const p = P(e.x, e.y); fx.sparks(p.x, p.y, p.z, { n: 6, speed: 6 }); if (W.enemies.some((q) => q.id === e.id && q.type === 'hive')) { R.chipHive(e.id, 2); snd('debris', e, { vol: 0.5, rate: 1.4, gap: 0.05 }); fx.sparks(p.x, p.y, p.z, { n: 14, speed: 8, r: 1, g: 0.6, b: 0.25, life: 0.5 }); } break; }
       case 'plink': { const p = P(e.x, e.y); fx.sparks(p.x, p.y, p.z, { n: 5, speed: 5, s: 0.22, life: 0.25, r: 0.9, g: 0.85, b: 0.8 }); snd('beamhit', e, { vol: 0.25, rate: 0.6, gap: 0.08 }); break; }
       case 'kill': {
         if (live && mine(e) && e.score && e.type !== 'skimmer' && e.type !== 'mine' && e.type !== 'meteor' && me && !G.ai && G.mode !== 'demo' && G.mode !== 'playthrough' && SHIPS[me.ship]) addMastery(me.ship);
@@ -497,7 +507,8 @@ function handleEvents(list, W, live) {
       case 'blinkin': { const p = P(e.x, e.y); A.play('blinkin', { vol: 0.8, delay: 0.05, gap: 0 }); fx.ring(p.x, p.y, p.z, 5, 0x8fd8ff); R.shock(e.x, e.y, 0.5); if (live && mine(e)) R.updateCamera(0.016, { snap: true, me: myPlayer(W), chase: chaseOn() }); break; }
       case 'mine': snd('mine', e, { vol: 0.35, gap: 0.25 }); A.retro('mine', { vol: 0.15, pan: pan(e.x) }); break;
       case 'pop': { const p = P(e.x, e.y); fx.sparks(p.x, p.y, p.z, { n: 6, speed: 3, r: 1, g: 0.7, b: 0.4, life: 0.3 }); break; }
-      case 'hivepop': snd('hivepop', e, { vol: 0.9, gap: 0 }); snd('swarm', e, { vol: 0.7, delay: 0.2, gap: 0.5 }); A.retro('swarm', { vol: 0.3, pan: pan(e.x) }); cab('pod', e); if (live && G.mode !== 'demo') caption(`THE HIVE BURST · ${e.n} STINGERS`, 2); break;
+      case 'hivepop': { const p = P(e.x, e.y); fx.sparks(p.x, p.y, p.z, { n: 40, speed: 12, r: 1, g: 0.62, b: 0.25, life: 0.6 }); fx.ring(p.x, p.y, p.z, 4, 0xffa040); R.shock(e.x, e.y, 0.7); }
+        snd('hivepop', e, { vol: 0.9, gap: 0 }); snd('swarm', e, { vol: 0.7, delay: 0.2, gap: 0.5 }); A.retro('swarm', { vol: 0.3, pan: pan(e.x) }); cab('pod', e); if (live && G.mode !== 'demo') caption(`THE HIVE BURST · ${e.n} STINGERS`, 2); break;
       case 'prowler': if (live) { A.play('prowler', { vol: 0.8, gap: 0 }); if (G.mode !== 'demo') caption('A PROWLER IS HUNTING YOU · FINISH THE WAVE', 2.6); } break;
       case 'drop': { const p = P(e.x, e.y); fx.ring(p.x, p.y, p.z, 2.5, POWERUPS[e.kind].color); fx.sparks(p.x, p.y, p.z, { n: 10, speed: 3, life: 0.6 }); break; }
       case 'pickup': {
@@ -1008,6 +1019,29 @@ function wingTag(W) {
   el.textContent = (NET.peer && NET.peer.ini) || 'WINGMATE';
   el.style.transform = `translate(${PE.x.toFixed(0)}px, ${PE.y.toFixed(0)}px) translate(-50%, -100%)`;
 }
+const MACHINES = {
+  lifter: ['LIFTER', 'Comes down for your settlers and carries them up. If it reaches the top it fuses with its captive.'],
+  husk: ['HUSK', 'A lifter fused with a settler it carried off: fast, vicious, and it hunts you.'],
+  sower: ['SOWER', 'Drifts high and sows floating mines behind it.'],
+  hive: ['HIVE POD', 'Shoot it and it breaks apart: every hit knocks a plate off, then it splits open into a swarm of stingers.'],
+  stinger: ['STINGER', 'Small and fast: bursts out of a hive pod and swarms you.'],
+  prowler: ['PROWLER', 'Comes for a pilot who takes too long over a wave. Finish the wave.'],
+  skimmer: ['SKIMMER FLOCK', 'Harmless. Shoot the whole flock for points and a long chain.'],
+  meteor: ['METEOR', 'A falling rock: shoot it before it hits the colony.'],
+};
+const seenM = new Set(load('sh.seen.v1', []));
+function meetMachines(W) {
+  if (G.mode === 'demo' || G.mode === 'playthrough' || G.ai || G.capT > 0.4 || G.bannerT > 0) return;
+  const half = halfView() * 0.9;
+  for (const e of W.enemies) {
+    if (e.hp <= 0 || e.born > 0 || seenM.has(e.type) || !MACHINES[e.type] || Math.abs(wd(e.x - R.cx)) > half) continue;
+    seenM.add(e.type); store('sh.seen.v1', [...seenM]);
+    const [n, d] = MACHINES[e.type];
+    caption(`NEW MACHINE · ${n}: ${d}`, 4.2);
+    if (e.type !== 'lifter' && e.type !== 'skimmer') { R.frameShot([[e.x, e.y]], 1.0); slowmo(0.55, 0.8); }
+    return;
+  }
+}
 function updateWarnings(W) {
   const box = $('warns');
   const list = [];
@@ -1112,7 +1146,8 @@ function tickFrame(dt, draw = true) {
   loops(cur, menu, dt);
   if (draw) R.render(dt, {});
   R.beamLight.intensity *= Math.exp(-dt * 30);
-  if (G.state === 'play' || G.state === 'paused-online') { updateWarnings(cur); drawScanner(cur); wingTag(cur); } else $('wingtag').classList.add('hidden');
+  R.podLinks(cur);
+  if (G.state === 'play' || G.state === 'paused-online') { updateWarnings(cur); drawScanner(cur); wingTag(cur); meetMachines(cur); } else $('wingtag').classList.add('hidden');
   if (G.bannerT > 0) { G.bannerT -= dt; if (G.bannerT <= 0) $('banner').classList.add('hidden'); }
   if (G.tutT > 0) { G.tutT -= dt; if (G.tutT <= 0) $('tut').classList.add('hidden'); }
   if (G.capT > 0) { G.capT -= dt; if (G.capT <= 0) $('caption').classList.add('hidden'); }
@@ -1288,7 +1323,7 @@ async function boot() {
   toTitle();
   boardOf('campaign', settings.diff).fresh(); boardOf('endless', settings.diff).fresh();
   if (!G.fixed && !params.has('test')) R.prepareAll(true);
-  if (params.has('test')) { const m = await import('./tests.js?v=11'); m.runTests(window.__sh); }
+  if (params.has('test')) { const m = await import('./tests.js?v=12'); m.runTests(window.__sh); }
   else if (params.has('playthrough')) { A.unlock(); startPlaythrough(); }
   else if (params.has('room')) { act('online'); $('join-code').value = cleanCode(params.get('room')); }
   else if (G.autopilot) { A.unlock(); if (params.has('endless')) startEndless(); else startCampaign(+params.get('sector') || 0); }

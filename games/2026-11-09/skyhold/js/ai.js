@@ -9,8 +9,8 @@
 //   'human' — plays like a person: ~0.35 s reaction (scattered, sometimes late), wobbly altitude, misses things
 //             behind it, saves novas too long. The difficulty ramp is measured with this one.
 //   'demo'  — the attract mode: sharp and decisive. It never reads the world's random generator (replays stay exact).
-import { F, ENEMY, BOSSES, H, SHIPS } from './config.js?v=11';
-import { wd, wp, nodePos, beamRange } from './sim.js?v=11';
+import { F, ENEMY, BOSSES, H, SHIPS } from './config.js?v=12';
+import { wd, wp, nodePos, beamRange } from './sim.js?v=12';
 
 const clamp = (v, a, b) => (v < a ? a : v > b ? b : v);
 function mkr(seed) { let s = seed | 0; return () => { s = (s + 0x6D2B79F5) | 0; let t = Math.imul(s ^ (s >>> 15), s | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
@@ -58,6 +58,10 @@ export class Autopilot {
       consider({ kind: 'settler', o: s }, (safe ? 400 : 900) * P.catchK - d * 2, safe ? 'Catching a falling settler for points' : 'Catching a falling settler before it hits the ground');
     }
     const B = W.boss;
+    // the wave's last few machines: go and finish them rather than chasing the skimmer flocks that keep coming by
+    const HOST = ['lifter', 'husk', 'sower', 'hive', 'stinger', 'prowler'];
+    const left = W.enemies.filter((e) => e.hp > 0 && HOST.includes(e.type)).length;
+    const endgame = !B && W.plan && W.plan.left === 0 && W.plan.extra.every((x) => x.done) && left > 0 && left <= 3;
     for (const e of W.enemies) {
       if (e.hp <= 0 || e.type === 'mine') continue;
       if (!this.notice(W, e.id, e.x, me)) continue;
@@ -71,11 +75,12 @@ export class Autopilot {
         else if (e.st === 'seek') s = 120 - d;
         else s = 40 - d;
       } else if (DANGER.has(e.type) && d < 34) { s = 600 - d * 6; w = 'Fighting off a ' + e.type.toUpperCase() + ' that is on us'; }
-      else if (e.type === 'hive') s = 80 - d;
+      else if (e.type === 'hive') s = (e.link ? 400 : e.cross ? 5 : 80) - d;   // let an intersection pair link first
       else if (e.type === 'sower') s = 60 - d;
       else if (e.type === 'skimmer') { s = 30 - d * 1.2; w = 'Clearing a skimmer flock'; }
       else if (e.type === 'meteor') { s = 480 - d * 2 - e.y * 4; w = e.st === 'lava' ? 'Shooting down a lava bomb over the colony' : 'Shooting down a meteor before it hits the colony'; }
       if (e.tell > 0 && d < 40) { s += 150; w = 'Taking out a machine that is about to fire'; }
+      if (endgame && HOST.includes(e.type) && !(e.cross && !e.link) && s < 260 - d * 0.5) { s = 260 - d * 0.5; w = 'Hunting down the last machines of the wave'; }
       if (B) s -= 120;
       consider({ kind: 'enemy', o: e }, s * P.greed + (1 - P.greed) * -d, w);
     }
@@ -135,7 +140,8 @@ export class Autopilot {
     if (g.kind === 'node') {
       // the carrier: hold station in a band outside its hull, facing it, and let the weak point come to the beam
       const B = W.boss, half = BOSSES[B.key].len * 0.5, toB = wd(B.x - me.x), dB = Math.abs(toB), sB = Math.sign(toB) || me.face;
-      const near = half + 9, far = half + 22;
+      // back off earlier from a carrier that is coming at us (world 5's closes in fast)
+      const near = half + 9 + Math.max(0, -(B.vx || 0) * sB) * 0.7, far = half + 22;
       if (dB < near) mx = -sB;
       else if (dB > far) mx = sB * Math.min(1, (dB - far) / 10 + 0.3);
       else mx = me.face === sB ? 0 : sB * 0.17;

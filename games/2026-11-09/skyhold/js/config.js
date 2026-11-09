@@ -1,6 +1,6 @@
 // Skyhold 2026 — every tunable number lives here. The RAMP table drives difficulty; nothing else in the game
 // hard-codes enemy pace, numbers, fire rate, aim or warning times.
-export const VERSION = '1.8.0';
+export const VERSION = '1.9.0';
 export const STEP = 1 / 120;
 
 // ------------------------------------------------------------------ the planet and the Warden gunship
@@ -75,6 +75,12 @@ export const mastLevel = (n) => (n >= MASTERY.at[1] ? 2 : n >= MASTERY.at[0] ? 1
 // rival while they carry a settler knocks it loose (it falls, ready to be caught) and scores `steal`; being shot down costs
 // `death` points; ships never run out.
 export const RIVALS = { waves: 3, steal: 250, death: 500 };
+// POD INTERSECTION: in the listed waves (0-based, per world; endless: every third wave) two hive pods (they stand in
+// for one of the wave's own hives) warp in on
+// either side of a point ahead of a pilot (`half` m out), close on it in about `travel` s and lock together, circling
+// and linked, for `hold` s: a hit on either then bursts both, pays `bonus`, and their stingers scatter away from the
+// shooter. Left alone, they break apart and hunt as usual. sting: stingers in each of these pods, per world.
+export const INTERSECT = { waves: [[2], [2], [2], [2], [2]], at: [7, 12], half: 26, travel: 4, hold: 3.2, gap: 3.6, bonus: 2000, sting: [2, 3, 3, 3, 3] };
 export const HYPER = { gain: 0.0045, decay: 0.002, time: 8, slow: 0.55, fireCD: 0.045, band: 2.4, reach: 1.25, score: 2 };
 // planet events: one per world, mid-wave in waves 2 and 4 (index 1 and 3) between `at` seconds
 export const EVENTS = { verdant: 'meteors', dune: 'sandstorm', frost: 'flare', cinder: 'eruption', umbra: 'eclipse' };
@@ -128,10 +134,10 @@ export const CP_NAMES = ['WAVE 1', 'WAVE 2', 'WAVE 3', 'WAVE 4', 'CARRIER'];
 //   nodeHP   beam hits per carrier weak point     bossV  carrier speed     atkT  seconds between its attacks
 export const RAMP = [
   { lifters: [3, 5], group: [1, 2], gap: [8, 6.5], lV: [4.6, 5.4], liftV: [1.1, 1.3], grabT: [2.4, 2.1], hunters: [1, 2], fire: [0.1, 0.14], shooters: [1, 1], warn: [2.3, 2.0],
-    aim: [0.3, 0.26], boltV: [12, 13.5], lead: [0, 0.2], hV: [9, 10], stV: [11, 12], sowers: [0, 0], hives: [0, 0], husks: [0, 0], prowlT: [80, 70], fallV: [2.4, 2.7], safeH: [99, 99], shield: [2, 1],
+    aim: [0.3, 0.26], boltV: [12, 13.5], lead: [0, 0.2], hV: [9, 10], stV: [11, 12], sowers: [0, 1], hives: [0, 0], husks: [0, 0], prowlT: [80, 70], fallV: [2.4, 2.7], safeH: [99, 99], shield: [2, 1],
     sting: 3, settlers: 8, nodeHP: 14, bossV: 4.2, atkT: 5.6 },
   { lifters: [6, 8], group: [2, 2], gap: [7, 6], lV: [5.6, 6.4], liftV: [1.4, 1.6], grabT: [2.0, 1.8], hunters: [2, 2], fire: [0.22, 0.27], shooters: [1, 2], warn: [1.9, 1.65],
-    aim: [0.22, 0.18], boltV: [15.5, 17.5], lead: [0.25, 0.35], hV: [11, 12], stV: [13, 14], sowers: [1, 1], hives: [0, 0], husks: [0, 0], prowlT: [65, 58], fallV: [3.2, 3.6], safeH: [20, 18], shield: [1, 1],
+    aim: [0.22, 0.18], boltV: [15.5, 17.5], lead: [0.25, 0.35], hV: [11, 12], stV: [13, 14], sowers: [1, 1], hives: [0, 1], husks: [0, 1], prowlT: [65, 58], fallV: [3.2, 3.6], safeH: [20, 18], shield: [1, 1],
     sting: 4, settlers: 9, nodeHP: 16, bossV: 5, atkT: 5.0 },
   { lifters: [8, 10], group: [2, 3], gap: [6, 5], lV: [6.6, 7.4], liftV: [1.7, 1.9], grabT: [1.7, 1.5], hunters: [2, 3], fire: [0.31, 0.36], shooters: [2, 3], warn: [1.6, 1.4],
     aim: [0.14, 0.115], boltV: [19, 21], lead: [0.45, 0.55], hV: [13.5, 14.5], stV: [15, 16], sowers: [1, 1], hives: [1, 1], husks: [2, 2], prowlT: [55, 48], fallV: [4, 4.5], safeH: [15, 13], shield: [0, 0],

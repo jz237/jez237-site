@@ -1,9 +1,9 @@
 // ?test=1 self-test page: determinism, exact replays, the gentle start, the difficulty ramp shape, lifters taking
 // and fusing settlers, the carrier fight, the live loop with no console errors and no score posts.
-import { makeWorld, step, drainEvents, STEP, settlersLeft } from './sim.js?v=11';
-import { Autopilot } from './ai.js?v=11';
-import { RAMP, SECTORS, TYPICAL_UP, rampAt, endlessLevel, DIFF_KEYS, applyDiff, MIN_WARN, TUTOR, WAVES } from './config.js?v=11';
-import { Recorder, Replay } from './replay.js?v=11';
+import { makeWorld, step, drainEvents, STEP, settlersLeft } from './sim.js?v=12';
+import { Autopilot } from './ai.js?v=12';
+import { RAMP, SECTORS, TYPICAL_UP, rampAt, endlessLevel, DIFF_KEYS, applyDiff, MIN_WARN, TUTOR, WAVES } from './config.js?v=12';
+import { Recorder, Replay } from './replay.js?v=12';
 
 export const hashW = (W) => JSON.stringify([W.n, W.score, W.lives, W.cp, W.phase, W.rs, W.players.map((p) => [p.x.toFixed(6), p.y.toFixed(6), p.alive, p.shield, p.nova]),
   W.enemies.map((e) => [e.id, e.type, e.x.toFixed(4), e.y.toFixed(4), e.hp]), W.settlers.map((s) => [s.id, s.st, s.x.toFixed(4), s.y.toFixed(4)]), W.bolts.length, W.boss ? [W.boss.st, W.boss.x.toFixed(4), W.boss.nodes.map((n) => n.hp).join()] : 0]);
@@ -76,7 +76,8 @@ export async function runTests(sh) {
     }
     for (const d of DIFF_KEYS) if (applyDiff(rampAt(4, 3), d).warn < MIN_WARN) { ok = false; notes.push(d + ' warn below min'); }
     const combos = RAMP.map((r) => r.husks[1]);
-    if (combos[0] || combos[1]) { ok = false; notes.push('combined threats before world 3'); }
+    // world 1 has no husks; world 2 meets its first one only in its last wave (so every machine is met by then)
+    if (combos[0] || combos[1] > 1 || RAMP[1].husks[0]) { ok = false; notes.push('combined threats too early'); }
     return { ok, info: notes.join(', ') || `warn ${rampAt(0, 0).warn}s → ${rampAt(4, 3).warn}s, endless level after 10 min ${endlessLevel(600).toFixed(2)}` };
   });
   await T('a lifter left alone carries a settler away and fuses into a husk', () => {

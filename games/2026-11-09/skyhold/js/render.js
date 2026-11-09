@@ -5,13 +5,13 @@
 // Five looks (sky, terrain, sea, scenery, bodies in the sky), real 3D models for everything, curved beams,
 // warnings drawn in the play plane, HDR post. Nothing here changes the world.
 import * as THREE from '../vendor/three.module.min.js';
-import { Post } from './post.js?v=11';
-import * as TX from './textures.js?v=11';
-import * as MD from './models.js?v=11';
-import { FX, CALM } from './fx.js?v=11';
-import { NOISE } from './shaders.js?v=11';
-import { F, C, RP, H, ENEMY, BOSSES, POWERUPS, P2_LIVERY, LIVERIES, SETTLER, PHASE2 } from './config.js?v=11';
-import { wd, wp, nodePos, beamRange, dronePos as dronePosR } from './sim.js?v=11';
+import { Post } from './post.js?v=12';
+import * as TX from './textures.js?v=12';
+import * as MD from './models.js?v=12';
+import { FX, CALM } from './fx.js?v=12';
+import { NOISE } from './shaders.js?v=12';
+import { F, C, RP, H, ENEMY, BOSSES, POWERUPS, P2_LIVERY, LIVERIES, SETTLER, PHASE2 } from './config.js?v=12';
+import { wd, wp, nodePos, beamRange, dronePos as dronePosR } from './sim.js?v=12';
 
 export { CALM };
 const hdr = (hex, k) => new THREE.Color(hex).multiplyScalar(k);
@@ -879,6 +879,7 @@ export class Renderer {
     if (!v) {
       v = this.pool(e.type, () => { const m = MD[e.type] ? MD[e.type]() : this.rockModel(); return { ...m, type: e.type }; });
       v.hit = 0; v.born = 1;
+      if (v.chipped) { for (const m of v.chipped) m.visible = true; v.chipped = null; }
       if (!v.halo && e.type !== 'mine') {
         v.halo = new THREE.Sprite(new THREE.SpriteMaterial({ map: this.T.glow, color: hdr(TCOL[e.type] || 0xffffff, 1.4), transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, fog: false, opacity: 0.55 }));
         const hs = (MD.SIZE[e.type] || 2) * 1.5; v.halo.scale.set(hs, hs, 1); v.outer.add(v.halo);
@@ -944,6 +945,39 @@ export class Renderer {
     }
     // over the cap: drop the oldest loose pieces first (pieces that will become wrecks are kept until they land)
     while (this.pieces.length > this.q.debris * 0.4) { let i = this.pieces.findIndex((P) => !P.keep); if (i < 0) i = 0; const P = this.pieces.splice(i, 1)[0]; this.scene.remove(P.o); }
+  }
+  // knock one plate off a hive (a hit that did not burst it): the plate flies off, the pod is left more open
+  chipHive(id, k) {
+    const v = this.views.e.get(id);
+    if (!v || !v.shell) return;
+    const parts = [];
+    v.shell.traverse((m) => { if (m.isMesh && m.visible && !(m.material && m.material.name === 'hivePane')) parts.push(m); });
+    if (!parts.length) return;
+    v.chipped = v.chipped || [];
+    for (let i = 0; i < Math.min(k, parts.length); i++) {
+      const m = parts[(Math.random() * parts.length) | 0];
+      if (!m.visible) continue;
+      v.outer.updateMatrixWorld(true);
+      const c = m.clone(); m.getWorldPosition(_v); m.getWorldQuaternion(_q); m.getWorldScale(_s);
+      c.position.copy(_v); c.quaternion.copy(_q); c.scale.copy(_s); this.scene.add(c);
+      const up = _v2.set(_v.x, _v.y, 0).normalize();
+      this.pieces.push({ o: c, vx: up.x * 4 + (Math.random() - 0.5) * 6, vy: up.y * 4 + (Math.random() - 0.5) * 6, vz: (Math.random() - 0.2) * 3, wx: (Math.random() - 0.5) * 10, wy: (Math.random() - 0.5) * 10, t: 0, life: 4, rest: false, smoke: false, keep: false });
+      m.visible = false; v.chipped.push(m);
+    }
+  }
+  // the two linked pods of an intersection: a crackling bridge between them while they touch
+  podLinks(W) {
+    for (const e of W.enemies) {
+      if (e.type !== 'hive' || !e.link || e.hp <= 0) continue;
+      const q = W.enemies.find((o) => o.id === e.link);
+      if (!q || e.id > q.id) continue;
+      const rb = this.takeRibbon(); if (!rb) return;
+      const pts = [];
+      for (let j = 0; j <= 8; j++) { const f = j / 8, jx = j && j < 8 ? (Math.random() - 0.5) * 0.9 : 0, jy = j && j < 8 ? (Math.random() - 0.5) * 0.9 : 0; pts.push([wp(e.x + wd(q.x - e.x) * f + jx), e.y + (q.y - e.y) * f + jy]); }
+      rb.keep = true; rb.set(pts, 0.22, 0.4);
+      rb.mat.uniforms.uColor.value.set(0xffb040).multiplyScalar(2.2); rb.mat.uniforms.uK.value = 1.4; rb.mat.uniforms.uDash.value = 0; rb.mat.uniforms.uSoft.value = 1.2; rb.mat.uniforms.uHead.value = 0;
+      setTimeout(() => { rb.keep = false; rb.hide(); }, 40);
+    }
   }
   breakEnemy(id, o) { const v = this.views.e.get(id); if (v) { this.breakView(v, o); this.release(v); this.views.e.delete(id); } }
   breakPlayer(pid, o) { const v = this.views.p.get(pid); if (v) this.breakView(v, { ...o, max: 7 }); }
@@ -1052,7 +1086,7 @@ export class Renderer {
       if (e.type === 'mine') { v.g.rotation.y = t * 1.5 + e.id; if (v.lamp) v.lamp.visible = Math.floor(t * 4 + e.id) % 2 === 0; }
       if (e.type === 'lifter' && v.legs) { const close = e.st === 'grab' || e.st === 'lift' ? 1 : e.st === 'down' ? 0.5 : 0; v.cl = (v.cl || 0) + (close - (v.cl || 0)) * Math.min(1, dt * 4); v.legs.forEach((g) => { g.rotation.z = v.cl * 0.55; }); }
       if (v.core) { const pulse = 1 + Math.sin(t * 6 + e.id) * 0.12 + (e.tell > 0 ? 0.6 * (0.5 + 0.5 * Math.sin(t * 40)) : 0) + (e.hitT > 0 ? 0.8 : 0); v.core.scale.setScalar(pulse); }
-      if (e.type === 'hive' && v.inner) v.inner.rotation.x += dt * 1.2;
+      if (e.type === 'hive' && v.inner) v.inner.rotation.x += dt * (e.link ? 6 : 1.2);
       if (e.type === 'sower' && v.bay) v.bay.rotation.z = 0.25 + Math.sin(t * 2 + e.id) * 0.2;
       if (e.type === 'stinger' && v.wings) { const f = Math.sin(t * 40 + e.id) * 0.5; v.wings[0].rotation.x = -f; v.wings[1].rotation.x = f; }
       if (v.halo) v.halo.material.opacity = (0.45 + 0.15 * Math.sin(t * 5 + e.id) + (e.tell > 0 ? 0.5 : 0) + (e.hitT > 0 ? 0.6 : 0)) * (born ? 0.4 : 1);
