@@ -1,13 +1,13 @@
 // Skyhold 2026 — game flow, menus, HUD (with the scanner strip), commentary, demo director and the frame loop.
-import { VERSION, SECTORS, STEP, F, C, H, BOSSES, UPGRADES, UP_KEYS, UP_COST, MEDALS, parTime, TYPICAL_UP, START_LIVES, DIFFICULTY, POWERUPS, LIVERIES, CP_NAMES, WAVES, ENEMY, SHIPS, SHIP_KEYS, RIVALS, MASTERY, mastLevel } from './config.js?v=13';
-import { makeWorld, step, stepGuest, drainEvents, wd, wp, settlersLeft, nodePos, CHAIN_T, chainMult, beamRange } from './sim.js?v=13';
-import { Autopilot } from './ai.js?v=13';
-import { Renderer, pickQuality, CALM, LOOKS } from './render.js?v=13';
-import { Audio } from './audio.js?v=13';
-import { Input } from './input.js?v=13';
-import { Scores, NO_POST } from './scores.js?v=13';
-import { Recorder, Replay } from './replay.js?v=13';
-import { Online, ROOM, QUICK, QUICK_R, randomCode, cleanCode } from './online.js?v=13';
+import { VERSION, SECTORS, STEP, F, C, H, BOSSES, UPGRADES, UP_KEYS, UP_COST, MEDALS, parTime, TYPICAL_UP, START_LIVES, DIFFICULTY, POWERUPS, LIVERIES, CP_NAMES, WAVES, ENEMY, SHIPS, SHIP_KEYS, RIVALS, MASTERY, mastLevel } from './config.js?v=14';
+import { makeWorld, step, stepGuest, drainEvents, wd, wp, settlersLeft, nodePos, CHAIN_T, chainMult, beamRange } from './sim.js?v=14';
+import { Autopilot } from './ai.js?v=14';
+import { Renderer, pickQuality, CALM, LOOKS } from './render.js?v=14';
+import { Audio } from './audio.js?v=14';
+import { Input } from './input.js?v=14';
+import { Scores, NO_POST } from './scores.js?v=14';
+import { Recorder, Replay } from './replay.js?v=14';
+import { Online, ROOM, QUICK, QUICK_R, randomCode, cleanCode } from './online.js?v=14';
 
 const $ = (id) => document.getElementById(id);
 const params = new URLSearchParams(location.search);
@@ -17,7 +17,7 @@ const clamp = (v, a, b) => (v < a ? a : v > b ? b : v);
 const SKEY = 'sh.settings.v1';
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const touchFirst = matchMedia('(pointer:coarse)').matches;
-const settings = { music: 50, sfx: 90, voice: 100, talk: 'on', flash: reduceMotion ? 'reduced' : 'full', shake: '1', rumble: 'on', touch: 'auto', quality: 'auto', netRoute: '0', diff: 'normal', livery: 'sky', assist: touchFirst ? 'light' : 'off', scanner: 'on', retro: 'on', cab: 'on', camera: 'side', layers: 'on', autofire: 'auto', ship: 'warden', netMode: 'coop' };
+const settings = { music: 50, sfx: 90, voice: 100, talk: 'on', flash: reduceMotion ? 'reduced' : 'full', shake: '1', rumble: 'on', touch: 'auto', quality: 'auto', netRoute: '0', diff: 'normal', livery: 'sky', assist: touchFirst ? 'light' : 'off', scanner: 'on', retro: 'on', cab: 'on', camera: 'side', layers: 'on', aiWorld: '0', aiWave: '0', autofire: 'auto', ship: 'warden', netMode: 'coop' };
 try { Object.assign(settings, JSON.parse(localStorage.getItem(SKEY) || '{}')); } catch { /* defaults */ }
 const saveSettings = () => { try { localStorage.setItem(SKEY, JSON.stringify(settings)); } catch { /* private mode */ } };
 const load = (k, d) => { try { const v = JSON.parse(localStorage.getItem(k)); return v ?? d; } catch { return d; } };
@@ -67,7 +67,7 @@ function say(name, o = {}) {
 function rumble(strong, weak, ms) { if (settings.rumble === 'off' || G.mode === 'demo' || G.mode === 'playthrough' || G.mode === 'title') return; I.rumble(strong, weak, ms); }
 
 // ------------------------------------------------------------------ screens
-const SCREENS = ['title', 'sectors', 'upgrades', 'results', 'scores', 'medals', 'options', 'help', 'online', 'pause'];
+const SCREENS = ['title', 'aiwatch', 'sectors', 'upgrades', 'results', 'scores', 'medals', 'options', 'help', 'online', 'pause'];
 function show(id, push = true) {
   if (push && G.screen && G.screen !== id) G.back.push(G.screen);
   for (const s of SCREENS) $(s).classList.toggle('hidden', s !== id);
@@ -156,11 +156,18 @@ function beginSector(s, cp = 0, nova = null) {
   if (s > 0 && !cp) say('s' + (s + 1), { key: true, delay: 1.4 });
 }
 const AI_SHOP = ['rapid', 'deflector', 'rack', 'reach', 'rapid', 'tractor', 'thrust', 'deflector', 'rapid', 'rack', 'reach', 'thrust', 'tractor'];
-function startPlaythrough() {
-  G.run = { score: 0, lives: START_LIVES + 2, up: {}, salvage: 0, start: 0, newMedals: [], ai: true, tries: 0, continues: 0 };
-  beginSector(+params.get('sector') || 0);
-  caption('AI PLAYTHROUGH: THE AUTOPILOT DEFENDS ALL FIVE WORLDS. PRESS ESC OR PAUSE TO STOP', 6);
+// AI PLAYTHROUGH from any world and wave (the menu's picker, or ?sector= / ?wave=); a later start gets the upgrades a
+// pilot would typically have by then, and the autopilot plays on through every world after it
+function startPlaythrough(s = +params.get('sector') || 0, cp = 0) {
+  s = Math.max(0, Math.min(4, s | 0)); cp = Math.max(0, Math.min(4, cp | 0));
+  G.run = { score: 0, lives: START_LIVES + 2, up: s ? { ...TYPICAL_UP[s] } : {}, salvage: 0, start: s, newMedals: [], ai: true, tries: 0, continues: 0 };
+  beginSector(s, cp);
+  caption(`AI PLAYTHROUGH FROM WORLD ${s + 1}${cp ? ' · ' + (cp === 4 ? 'THE CARRIER' : 'WAVE ' + (cp + 1)) : ''}. PRESS ESC OR PAUSE TO STOP`, 6);
 }
+const AI_SEES = ['lifters, prowlers, a sower, a whirler ring, and hive pods crossing in a POD INTERSECTION',
+  'adds hive pods, a husk and scorchers', 'adds husks, coils with their sparks, and maws',
+  'brings every machine: more of the coils, maws, scorchers and whirler rings', 'everything at full tilt, with the last carrier'];
+function aiWatchDesc() { const el = $('aiwatch-desc'); if (el) el.textContent = `WORLD ${(+settings.aiWorld || 0) + 1} · ${SECTORS[+settings.aiWorld || 0].name}: ${AI_SEES[+settings.aiWorld || 0]}.`; }
 function aiShop() {
   const got = [];
   for (const k of AI_SHOP) {
@@ -878,8 +885,9 @@ function act(a) {
   switch (a) {
     case 'campaign': A.play('uiok', { gap: 0 }); A.cab('credit'); startCampaign(0); break;
     case 'deep': A.play('uiok', { gap: 0 }); A.cab('credit'); startEndless(); break;
-    case 'playthrough': A.play('uiok', { gap: 0 }); A.cab('credit'); startPlaythrough(); break;
+    case 'playthrough': A.play('uiok', { gap: 0 }); A.cab('credit'); startPlaythrough(+settings.aiWorld || 0, +settings.aiWave || 0); break;
     case 'sectors': buildSectors(); show('sectors'); break;
+    case 'aiwatch': A.play('uiok', { gap: 0 }); show('aiwatch'); syncSegs(); aiWatchDesc(); break;
     case 'online': show('online'); syncNetMode(); netStatus(''); $('room-wrap').classList.add('hidden'); $('net-go').classList.add('hidden'); syncSegs(); break;
     case 'scores': show('scores'); renderScores(G.scoreTab || 'campaign'); break;
     case 'medals': buildMedals(); show('medals'); break;
@@ -948,6 +956,7 @@ function buildLiveries() {
 function applySettings() {
   { const s = liveryOf(settings.livery); if (R.livery.key !== s.key) R.setLivery(s); }
   if ($('ship-desc')) $('ship-desc').innerHTML = shipDesc(shipOf(settings.ship));
+  aiWatchDesc();
   if ($('net-title')) syncNetMode();
   if ($('diff-desc')) $('diff-desc').textContent = DIFFICULTY[settings.diff].desc;
   if (G.state === 'title') $('title-best').textContent = `BEST ${Math.max(boardOf('campaign', settings.diff).best(), 0).toLocaleString()} · ${DL(settings.diff)}`;
@@ -1159,7 +1168,7 @@ function tickFrame(dt, draw = true) {
   const interp = (G.state === 'play' || G.state === 'replay') && G.mode !== 'online' && !G.fixed;
   if (interp) lerpIn(cur, Math.min(1, (G.state === 'replay' ? G.replay.acc : G.acc) / STEP));
   const me = myPlayer(cur);
-  const menu = G.state === 'title' || (['sectors', 'online', 'scores', 'medals', 'options', 'help'].includes(G.screen) && G.mode === 'title');
+  const menu = G.state === 'title' || (['aiwatch', 'sectors', 'online', 'scores', 'medals', 'options', 'help'].includes(G.screen) && G.mode === 'title');
   R.updateCamera(dt, { me: me && me.alive && !menu ? me : null, cine: menu, shake: +settings.shake, chase: !menu && chaseOn() });
   R.W = cur;
   if (draw) R.sync(cur, dt);
@@ -1345,7 +1354,7 @@ async function boot() {
   toTitle();
   boardOf('campaign', settings.diff).fresh(); boardOf('endless', settings.diff).fresh();
   if (!G.fixed && !params.has('test')) R.prepareAll(true);
-  if (params.has('test')) { const m = await import('./tests.js?v=13'); m.runTests(window.__sh); }
+  if (params.has('test')) { const m = await import('./tests.js?v=14'); m.runTests(window.__sh); }
   else if (params.has('playthrough')) { A.unlock(); startPlaythrough(); }
   else if (params.has('room')) { act('online'); $('join-code').value = cleanCode(params.get('room')); }
   else if (G.autopilot) { A.unlock(); if (params.has('endless')) startEndless(); else startCampaign(+params.get('sector') || 0); }

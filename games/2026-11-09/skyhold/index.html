@@ -7,22 +7,22 @@
 <meta name="description" content="Skyhold 2026: an original planet-defence shooter in real-time 3D. Fly a gunship round and round a small planet, from the day side into the night, shoot down the machines lifting your settlers off the ground, catch the ones that fall and bring down a colossal carrier on each of five worlds. Endless Orbit, online co-op, upgrades, medals, instant replays and a smart demo mode.">
 <title>Skyhold 2026</title>
 <link rel="icon" href="data:,">
-<link rel="modulepreload" href="js/main.js?v=13">
-<link rel="modulepreload" href="js/config.js?v=13">
-<link rel="modulepreload" href="js/sim.js?v=13">
-<link rel="modulepreload" href="js/ai.js?v=13">
-<link rel="modulepreload" href="js/render.js?v=13">
-<link rel="modulepreload" href="js/audio.js?v=13">
-<link rel="modulepreload" href="js/chip.js?v=13">
-<link rel="modulepreload" href="js/input.js?v=13">
-<link rel="modulepreload" href="js/scores.js?v=13">
-<link rel="modulepreload" href="js/replay.js?v=13">
-<link rel="modulepreload" href="js/post.js?v=13">
-<link rel="modulepreload" href="js/textures.js?v=13">
-<link rel="modulepreload" href="js/models.js?v=13">
-<link rel="modulepreload" href="js/fx.js?v=13">
-<link rel="modulepreload" href="js/shaders.js?v=13">
-<link rel="modulepreload" href="js/online.js?v=13">
+<link rel="modulepreload" href="js/main.js?v=14">
+<link rel="modulepreload" href="js/config.js?v=14">
+<link rel="modulepreload" href="js/sim.js?v=14">
+<link rel="modulepreload" href="js/ai.js?v=14">
+<link rel="modulepreload" href="js/render.js?v=14">
+<link rel="modulepreload" href="js/audio.js?v=14">
+<link rel="modulepreload" href="js/chip.js?v=14">
+<link rel="modulepreload" href="js/input.js?v=14">
+<link rel="modulepreload" href="js/scores.js?v=14">
+<link rel="modulepreload" href="js/replay.js?v=14">
+<link rel="modulepreload" href="js/post.js?v=14">
+<link rel="modulepreload" href="js/textures.js?v=14">
+<link rel="modulepreload" href="js/models.js?v=14">
+<link rel="modulepreload" href="js/fx.js?v=14">
+<link rel="modulepreload" href="js/shaders.js?v=14">
+<link rel="modulepreload" href="js/online.js?v=14">
 <link rel="modulepreload" href="vendor/three.module.min.js">
 <link rel="modulepreload" href="vendor/three.core.min.js">
 
@@ -357,7 +357,7 @@ table.hs tr.me td { color: #fff; background: rgba(255, 179, 71, .1); }
   <div class="screen hidden" id="title">
     <div class="card">
       <h1 class="logo">SKYHOLD<span> 2026</span></h1>
-      <div class="ver">VERSION <b id="ver">1.10.0</b> · GUARD THE COLONY · HOLD THE SKY</div>
+      <div class="ver">VERSION <b id="ver">1.10.1</b> · GUARD THE COLONY · HOLD THE SKY</div>
       <div class="diffrow">DIFFICULTY<div class="seg" data-opt="diff"><button data-v="easy">EASY</button><button data-v="normal">NORMAL</button><button data-v="hard">HARD</button><button data-v="nightmare">NIGHTMARE</button></div></div>
       <div id="diff-desc"></div>
       <div class="btns" id="title-btns">
@@ -365,7 +365,7 @@ table.hs tr.me td { color: #fff; background: rgba(255, 179, 71, .1); }
         <button class="mbtn" data-act="sectors">WORLD SELECT<small id="sel-sub">Replay any world you have reached</small></button>
         <button class="mbtn" data-act="deep">ENDLESS ORBIT<small>Wave after wave round world after world, slowly getting tougher</small></button>
         <button class="mbtn" data-act="online">ONLINE CO-OP<small>Two gunships guarding one colony, shared ships</small></button>
-        <button class="mbtn" data-act="playthrough">AI PLAYTHROUGH<small>Sit back and watch the autopilot defend all five worlds</small></button>
+        <button class="mbtn" data-act="aiwatch">AI PLAYTHROUGH<small>Watch the autopilot defend the worlds, from any world and wave you pick</small></button>
         <div class="btns two">
           <button class="mbtn" data-act="scores">HIGH SCORES</button>
           <button class="mbtn" data-act="medals">MEDALS <small id="med-sub">0 / 15</small></button>
@@ -382,6 +382,14 @@ table.hs tr.me td { color: #fff; background: rgba(255, 179, 71, .1); }
     <h2>WORLD SELECT</h2><div class="sub">START FROM ANY WORLD YOU HAVE REACHED · TYPICAL UPGRADES FITTED</div>
     <div class="secgrid" id="secgrid"></div>
     <div class="btns" style="margin-top:14px"><button class="mbtn" data-act="back">BACK</button></div>
+  </div></div>
+
+  <div class="screen hidden" id="aiwatch"><div class="card">
+    <h2>AI PLAYTHROUGH</h2><div class="sub">WATCH THE AUTOPILOT · START ANYWHERE · LATER WORLDS BRING MORE MACHINES</div>
+    <div class="opt">WORLD<div class="seg" data-opt="aiWorld"><button data-v="0">1</button><button data-v="1">2</button><button data-v="2">3</button><button data-v="3">4</button><button data-v="4">5</button></div></div>
+    <div class="opt">START AT<div class="seg" data-opt="aiWave"><button data-v="0">WAVE 1</button><button data-v="1">2</button><button data-v="2">3</button><button data-v="3">4</button><button data-v="4">CARRIER</button></div></div>
+    <p class="note" id="aiwatch-desc"></p>
+    <div class="btns two" style="margin-top:14px"><button class="mbtn" data-act="playthrough">WATCH<small>Then it plays on through every world after</small></button><button class="mbtn" data-act="back">BACK</button></div>
   </div></div>
 
   <div class="screen hidden" id="upgrades"><div class="card wide">
@@ -512,6 +520,6 @@ addEventListener('error', (e) => window.__shErrors.push(String(e.message || e)))
 addEventListener('unhandledrejection', (e) => window.__shErrors.push('rejection: ' + String(e.reason && e.reason.message || e.reason)));
 (() => { const ce = console.error; console.error = (...a) => { window.__shErrors.push(a.map(String).join(' ')); ce.apply(console, a); }; })();
 </script>
-<script type="module" src="js/main.js?v=13"></script>
+<script type="module" src="js/main.js?v=14"></script>
 </body>
 </html>
