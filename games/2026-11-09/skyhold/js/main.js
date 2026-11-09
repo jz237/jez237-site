@@ -1,13 +1,13 @@
 // Skyhold 2026 — game flow, menus, HUD (with the scanner strip), commentary, demo director and the frame loop.
-import { VERSION, SECTORS, STEP, F, C, H, BOSSES, UPGRADES, UP_KEYS, UP_COST, MEDALS, parTime, TYPICAL_UP, START_LIVES, DIFFICULTY, POWERUPS, LIVERIES, CP_NAMES, WAVES, ENEMY, SHIPS, SHIP_KEYS, RIVALS } from './config.js?v=10';
-import { makeWorld, step, stepGuest, drainEvents, wd, wp, settlersLeft, nodePos, CHAIN_T, chainMult, beamRange } from './sim.js?v=10';
-import { Autopilot } from './ai.js?v=10';
-import { Renderer, pickQuality, CALM, LOOKS } from './render.js?v=10';
-import { Audio } from './audio.js?v=10';
-import { Input } from './input.js?v=10';
-import { Scores, NO_POST } from './scores.js?v=10';
-import { Recorder, Replay } from './replay.js?v=10';
-import { Online, ROOM, QUICK, QUICK_R, randomCode, cleanCode } from './online.js?v=10';
+import { VERSION, SECTORS, STEP, F, C, H, BOSSES, UPGRADES, UP_KEYS, UP_COST, MEDALS, parTime, TYPICAL_UP, START_LIVES, DIFFICULTY, POWERUPS, LIVERIES, CP_NAMES, WAVES, ENEMY, SHIPS, SHIP_KEYS, RIVALS, MASTERY, mastLevel } from './config.js?v=11';
+import { makeWorld, step, stepGuest, drainEvents, wd, wp, settlersLeft, nodePos, CHAIN_T, chainMult, beamRange } from './sim.js?v=11';
+import { Autopilot } from './ai.js?v=11';
+import { Renderer, pickQuality, CALM, LOOKS } from './render.js?v=11';
+import { Audio } from './audio.js?v=11';
+import { Input } from './input.js?v=11';
+import { Scores, NO_POST } from './scores.js?v=11';
+import { Recorder, Replay } from './replay.js?v=11';
+import { Online, ROOM, QUICK, QUICK_R, randomCode, cleanCode } from './online.js?v=11';
 
 const $ = (id) => document.getElementById(id);
 const params = new URLSearchParams(location.search);
@@ -17,12 +17,13 @@ const clamp = (v, a, b) => (v < a ? a : v > b ? b : v);
 const SKEY = 'sh.settings.v1';
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const touchFirst = matchMedia('(pointer:coarse)').matches;
-const settings = { music: 50, sfx: 90, voice: 100, talk: 'on', flash: reduceMotion ? 'reduced' : 'full', shake: '1', rumble: 'on', touch: 'auto', quality: 'auto', netRoute: '0', diff: 'normal', livery: 'sky', assist: touchFirst ? 'light' : 'off', scanner: 'on', retro: 'on', cab: 'on', autofire: 'auto', ship: 'warden', netMode: 'coop' };
+const settings = { music: 50, sfx: 90, voice: 100, talk: 'on', flash: reduceMotion ? 'reduced' : 'full', shake: '1', rumble: 'on', touch: 'auto', quality: 'auto', netRoute: '0', diff: 'normal', livery: 'sky', assist: touchFirst ? 'light' : 'off', scanner: 'on', retro: 'on', cab: 'on', camera: 'side', layers: 'on', autofire: 'auto', ship: 'warden', netMode: 'coop' };
 try { Object.assign(settings, JSON.parse(localStorage.getItem(SKEY) || '{}')); } catch { /* defaults */ }
 const saveSettings = () => { try { localStorage.setItem(SKEY, JSON.stringify(settings)); } catch { /* private mode */ } };
 const load = (k, d) => { try { const v = JSON.parse(localStorage.getItem(k)); return v ?? d; } catch { return d; } };
 const store = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch { /* private mode */ } };
 const medals = new Set(load('sh.medals.v1', []));
+const mastery = load('sh.mastery.v1', {});   // machines each gunship has shot down
 const best = load('sh.best.v1', {});
 let reach = load('sh.reach.v1', 0);
 const applyCalm = () => { CALM.on = settings.flash === 'reduced'; };
@@ -145,7 +146,7 @@ function startCampaign(sector = 0) {
 }
 function beginSector(s, cp = 0, nova = null) {
   const W = makeWorld({ mode: 'campaign', sector: s, seed: newSeed(), up: G.run.up, lives: G.run.lives, score: G.run.score, cp: cp || +params.get('wave') || 0, nova: nova ?? undefined,
-    demo: !!G.run.ai, diff: G.run.diff || 'normal', assist: G.run.ai ? 0 : assistOf(), noTut: s > 0, ship: G.run.ai ? 'warden' : shipOf(settings.ship) });
+    demo: !!G.run.ai, diff: G.run.diff || 'normal', assist: G.run.ai ? 0 : assistOf(), noTut: s > 0, ship: G.run.ai ? 'warden' : shipOf(settings.ship), mast: G.run.ai ? 0 : mastOf(shipOf(settings.ship)) });
   G.run.sector = s; G.run.score0 = G.run.score;
   G.mode = G.run.ai ? 'playthrough' : 'campaign';
   R.colonyGrow = G.run.saved || 0;
@@ -172,7 +173,7 @@ function aiShop() {
 function startEndless() {
   G.run = { score: 0, lives: START_LIVES, up: {}, start: 0, newMedals: [], diff: settings.diff };
   G.mode = 'endless';
-  enterPlay(makeWorld({ mode: 'endless', seed: newSeed(), diff: settings.diff, assist: assistOf(), lives: START_LIVES + DIFFICULTY[settings.diff].lives, ship: shipOf(settings.ship) }));
+  enterPlay(makeWorld({ mode: 'endless', seed: newSeed(), diff: settings.diff, assist: assistOf(), lives: START_LIVES + DIFFICULTY[settings.diff].lives, ship: shipOf(settings.ship), mast: mastOf(shipOf(settings.ship)) }));
   banner('ENDLESS ORBIT', 'HOLD THE SKY AS LONG AS YOU CAN', 3);
   say('endless', { key: true, delay: 1 });
 }
@@ -193,7 +194,7 @@ function enterPlay(W) {
   G.W = W; G.state = 'play'; G.acc = 0; G.clip = null; G.pendingClip = null; G.lastLife = false; G.saidLift = false;
   if (!G.ai && G.autopilot) G.ai = new Autopilot(W.seed, 'demo');
   if (G.mode === 'playthrough') G.ai = new Autopilot(W.seed, 'demo');
-  REC.reset(); PREV = new WeakMap();
+  REC.reset(); PREV = new WeakMap(); R.clearScars();
   hideScreens();
   setHud(true);
   const watch = G.mode === 'demo' || G.mode === 'playthrough';
@@ -202,7 +203,7 @@ function enterPlay(W) {
   R.setLook(W.k);
   const me = myPlayer(W);
   R.cx = me.x;
-  R.updateCamera(0.016, { snap: true, me });
+  R.updateCamera(0.016, { snap: true, me, chase: chaseOn() });
   A.playMusic(SECTORS[W.k].music);
   A.loop('thrust', 'thrust', 0.85); A.loop('lift', 'liftloop', 0.6); A.loop('boss', 'bossloop', 0.7); A.loop('cabthrust', 'cab_thrust', 0.8, 'cab');
   if (G.mode !== 'demo') A.cab('start');
@@ -314,7 +315,7 @@ function drawScanner(W) {
   for (const p of W.players) if (p.alive) { g.fillStyle = p === me ? '#ffffff' : '#ffb070'; const x = X(p.x), y = Y(p.y); g.beginPath(); g.moveTo(x + p.face * 4 * dpr, y); g.lineTo(x - p.face * 3 * dpr, y - 2.5 * dpr); g.lineTo(x - p.face * 3 * dpr, y + 2.5 * dpr); g.closePath(); g.fill(); }
   g.strokeStyle = 'rgba(190,205,225,0.3)'; g.lineWidth = 1 * dpr; g.strokeRect(0.5, 0.5, S - 1, T - 1);
 }
-function halfView() { const c = R.camera, vf = c.fov * Math.PI / 180, needH = R.needH, D = Math.max((needH / 2) / Math.tan(vf / 2), 23 / (Math.tan(vf / 2) * c.aspect)); return D * Math.tan(vf / 2) * c.aspect; }
+function halfView() { const c = R.camera, vf = 40 * Math.PI / 180, needH = R.needH, D = Math.max((needH / 2) / Math.tan(vf / 2), 23 / (Math.tan(vf / 2) * c.aspect)); return D * Math.tan(vf / 2) * c.aspect; }
 
 // banners, captions, popups, tutorial prompts
 function banner(a, b, t = 2.2) {
@@ -362,6 +363,7 @@ function tutorial(key) { if (G.mode === 'demo' || G.mode === 'playthrough' || !T
 // ------------------------------------------------------------------ events from the simulation
 // the cabinet sound for each machine's wreck (Options: CABINET SOUNDS) and its pitch
 const CABK = { husk: 'mutant', sower: 'bomber', hive: 'pod', stinger: 'swarmer' }, CABR = { prowler: 0.8, skimmer: 1.25, meteor: 0.7, mine: 1.4 };
+const HOSTILE_T = new Set(['lifter', 'husk', 'sower', 'hive', 'stinger', 'prowler']);
 const SCOL = { lifter: 0x9dff7a, husk: 0xff4a8a, sower: 0xc98aff, hive: 0xff8a3a, stinger: 0xff6a6a, prowler: 0xff3a3a, skimmer: 0x5ef0ff, meteor: 0xffa040, mine: 0xffb347 };
 function handleEvents(list, W, live) {
   const me = myPlayer(W);
@@ -371,7 +373,7 @@ function handleEvents(list, W, live) {
   const P = (x, y, z = 0.4) => R.at(x, y, z);
   // your own ship's sounds play close to the listener (full volume, still panned); everything else sits in the world
   const snd = (name, e, o = {}) => { let p = P(e.x, e.y); if (mine(e)) p = nearMe(p); return A.play(name, { x: p.x, y: p.y, z: p.z, ...o }); };
-  const pan = (x) => clamp(wd(x - R.cx) / 50, -1, 1);
+  const pan = (x) => (R.chaseK > 0.5 ? 0 : clamp(wd(x - R.cx) / 50, -1, 1));
   const cab = (name, e, o = {}) => A.cab(name, { pan: e ? pan(e.x) : 0, ...o });
   const seen = (e) => Math.abs(wd(e.x - R.cx)) < 70;
   for (const e of list) {
@@ -391,15 +393,19 @@ function handleEvents(list, W, live) {
       case 'beamhit': { const p = P(e.x, e.y); fx.sparks(p.x, p.y, p.z, { n: 8, speed: 7, s: 0.28, life: 0.35, r: 1, g: 0.6, b: 0.4 }); if (!e.dead) snd('beamhit', e, { vol: 0.45, gap: 0.04 }); break; }
       case 'arc': { R.lightning(e.pts); A.play('bolt', { vol: 0.35, rate: 2, gap: 0.05, vary: 0.2 }); A.retro('beam', { vol: 0.25, rate: 2 }); for (const q of e.pts.slice(1)) { const p = P(q[0], q[1]); fx.sparks(p.x, p.y, p.z, { n: 8, speed: 6, r: 0.7, g: 0.9, b: 1, life: 0.35 }); } break; }
       case 'mhit': { const p = P(e.x, e.y); fx.explode(p.x, p.y, p.z, 0.6, { color: 0xffb070, ring: false }); snd('boomS', e, { vol: 0.3, rate: 1.3, gap: 0.04, vary: 0.2 }); break; }
+      case 'shockwave': { const p = P(e.x, e.y); fx.ring(p.x, p.y, p.z, 4.5, 0xffc070); if (e.small) break; R.shock(e.x, e.y, 0.7); snd('boomM', e, { vol: 0.5, rate: 1.4, gap: 0.08 }); A.cab('bomber', { rate: 1.3 }); break; }
       case 'mfizz': { const p = P(e.x, e.y); fx.sparks(p.x, p.y, p.z, { n: 4, speed: 3, life: 0.25 }); break; }
       case 'stolen': { const p = P(e.x, e.y); fx.sparks(p.x, p.y, p.z, { n: 18, speed: 6, r: 1, g: 0.85, b: 0.4, life: 0.5 }); A.play('shieldhit', { vol: 0.6, rate: 1.3, gap: 0.1 }); if (live) { const me = myPlayer(W); if (me && e.pid === me.id) caption('YOUR RIVAL KNOCKED YOUR SETTLER LOOSE · CATCH IT AGAIN', 2.2); else if (me && e.by === me.id) popup(`STOLEN! +${RIVALS.steal}`, e.x, e.y, '#ffd27a', true); } break; }
       case 'rivalend': A.play('waveclear', { vol: 1, gap: 0 }); break;
       case 'hit': { const p = P(e.x, e.y); fx.sparks(p.x, p.y, p.z, { n: 6, speed: 6 }); break; }
       case 'plink': { const p = P(e.x, e.y); fx.sparks(p.x, p.y, p.z, { n: 5, speed: 5, s: 0.22, life: 0.25, r: 0.9, g: 0.85, b: 0.8 }); snd('beamhit', e, { vol: 0.25, rate: 0.6, gap: 0.08 }); break; }
       case 'kill': {
+        if (live && mine(e) && e.score && e.type !== 'skimmer' && e.type !== 'mine' && e.type !== 'meteor' && me && !G.ai && G.mode !== 'demo' && G.mode !== 'playthrough' && SHIPS[me.ship]) addMastery(me.ship);
         const big = e.type === 'hive' || e.type === 'sower' || e.type === 'prowler';
         const v = R.vel(e.x, e.vx || 0, e.vy || 0);
-        R.breakEnemy(e.id, { vx: v.x * 0.4, vy: v.y * 0.4, power: big ? 1.3 : 0.9, max: big ? 6 : 4 });
+        R.breakEnemy(e.id, { vx: v.x * 0.4, vy: v.y * 0.4, power: big ? 1.3 : 0.9, max: big ? 6 : 4, keep: e.type === 'skimmer' || e.type === 'mine' || e.type === 'meteor' ? 0 : big ? 3 : 1 });
+        // the wreck comes down and scorches the ground below (bigger when it was blown up low)
+        if (live && e.type !== 'skimmer' && e.type !== 'mine') R.scar(e.x + (e.vx || 0) * 0.4, 0, (big ? 3 : 1.8) * (e.y < 7 ? 1.25 : 1));
         const p = P(e.x, e.y);
         if (seen(e)) cab(CABK[e.type] || 'explosion', e, { rate: CABR[e.type] || 1 });
         if (e.type === 'mine') { snd('pop', e, { vol: 0.4, rate: 1.3 }); fx.explode(p.x, p.y, p.z, 0.6, { color: 0xffb070 }); break; }
@@ -450,7 +456,7 @@ function handleEvents(list, W, live) {
       case 'colony': if (live) banner('A NEW COLONY', 'THE SETTLERS ARE BACK', 2.6); break;
       case 'tell': snd('tell', e, { vol: 0.4, gap: 0.12 }); A.retro('tell', { vol: 0.15, pan: pan(e.x) }); break;
       case 'bolt': snd('bolt', e, { vol: e.from === 'carrier' ? 0.6 : 0.45, gap: 0.05 }); break;
-      case 'boltground': { const p = P(e.x, 0.3); fx.sparks(p.x, p.y, p.z, { n: 5, speed: 4, r: 1, g: 0.4, b: 0.3, life: 0.3 }); fx.dust(p.x, p.y, p.z, { n: 2, s0: 0.4, s1: 1.6, life: 1.4, a: 0.3 }); break; }
+      case 'boltground': { if (live && Math.random() < 0.3) R.scar(e.x, 0, 0.55, -0.4); const p = P(e.x, 0.3); fx.sparks(p.x, p.y, p.z, { n: 5, speed: 4, r: 1, g: 0.4, b: 0.3, life: 0.3 }); fx.dust(p.x, p.y, p.z, { n: 2, s0: 0.4, s1: 1.6, life: 1.4, a: 0.3 }); break; }
       case 'shield': {
         snd('shieldhit', e, { vol: 0.9, gap: 0 });
         const v = R.views.p.get(e.pid); if (v) v.hurt = 1;
@@ -460,7 +466,8 @@ function handleEvents(list, W, live) {
       }
       case 'death': {
         const v = R.vel(e.x, e.vx || 0, e.vy || 0);
-        R.breakPlayer(e.pid, { power: 1.4, vx: v.x * 0.3, vy: v.y * 0.3 });
+        R.breakPlayer(e.pid, { power: 1.4, vx: v.x * 0.3, vy: v.y * 0.3, keep: 2 });
+        if (live && e.y < 8) R.scar(e.x, 0, 2.4);
         snd('death', e, { vol: 1, gap: 0 }); A.retro('death', { vol: 0.5 }); if (mine(e)) cab('death', e); else cab('explosion', e, { rate: 0.7 });
         const p = P(e.x, e.y); fx.explode(p.x, p.y, p.z, 2.6, { metal: true, color: 0x9fd8ff, vx: v.x * 0.3, vy: v.y * 0.3 });
         R.flashScreen(0.3, 0xffc890); R.addTrauma(0.7 * S); R.shock(e.x, e.y, 1);
@@ -487,7 +494,7 @@ function handleEvents(list, W, live) {
       }
       case 'empty': if (live && mine(e)) { A.play('uiback', { vol: 0.6, gap: 0.3 }); popup('NO NOVAS LEFT', e.x, e.y, '#ff8a80'); } break;
       case 'blink': { const p = P(e.x, e.y); snd('blink', e, { vol: 0.9, gap: 0 }); A.retro('blink', { vol: 0.45 }); cab('hyperspace', e); fx.sparks(p.x, p.y, p.z, { n: 24, speed: 9, r: 0.6, g: 0.85, b: 1 }); fx.ring(p.x, p.y, p.z, 5, 0x8fd8ff); break; }
-      case 'blinkin': { const p = P(e.x, e.y); A.play('blinkin', { vol: 0.8, delay: 0.05, gap: 0 }); fx.ring(p.x, p.y, p.z, 5, 0x8fd8ff); R.shock(e.x, e.y, 0.5); if (live && mine(e)) R.updateCamera(0.016, { snap: true, me: myPlayer(W) }); break; }
+      case 'blinkin': { const p = P(e.x, e.y); A.play('blinkin', { vol: 0.8, delay: 0.05, gap: 0 }); fx.ring(p.x, p.y, p.z, 5, 0x8fd8ff); R.shock(e.x, e.y, 0.5); if (live && mine(e)) R.updateCamera(0.016, { snap: true, me: myPlayer(W), chase: chaseOn() }); break; }
       case 'mine': snd('mine', e, { vol: 0.35, gap: 0.25 }); A.retro('mine', { vol: 0.15, pan: pan(e.x) }); break;
       case 'pop': { const p = P(e.x, e.y); fx.sparks(p.x, p.y, p.z, { n: 6, speed: 3, r: 1, g: 0.7, b: 0.4, life: 0.3 }); break; }
       case 'hivepop': snd('hivepop', e, { vol: 0.9, gap: 0 }); snd('swarm', e, { vol: 0.7, delay: 0.2, gap: 0.5 }); A.retro('swarm', { vol: 0.3, pan: pan(e.x) }); cab('pod', e); if (live && G.mode !== 'demo') caption(`THE HIVE BURST · ${e.n} STINGERS`, 2); break;
@@ -540,7 +547,7 @@ function handleEvents(list, W, live) {
         break;
       case 'bump': if (live && mine(e)) { snd('shieldhit', e, { vol: 0.35, rate: 0.6, gap: 0.3 }); rumble(0.2, 0.2, 80); } break;
       case 'bossdying': snd('boomL', e, { vol: 1, gap: 0 }); slowmo(0.45, 1.4); R.addTrauma(0.6 * S); R.frameShot([[e.x, e.y]], 2.8); if (live) rumble(0.9, 0.9, 900); break;
-      case 'cboom': { const p = P(e.x, e.y); snd('boomM', e, { vol: e.small ? 0.6 : 0.8, gap: 0.08 }); fx.explode(p.x, p.y, p.z, e.small ? 1.8 : 3, { metal: true }); R.addTrauma((e.small ? 0.12 : 0.25) * S); R.shock(e.x, e.y, 0.6); break; }
+      case 'cboom': { if (live && !e.small) R.scar(e.x + (Math.random() - 0.5) * 10, 0, 3); const p = P(e.x, e.y); snd('boomM', e, { vol: e.small ? 0.6 : 0.8, gap: 0.08 }); fx.explode(p.x, p.y, p.z, e.small ? 1.8 : 3, { metal: true }); R.addTrauma((e.small ? 0.12 : 0.25) * S); R.shock(e.x, e.y, 0.6); break; }
       case 'bossshed': {
         const p = P(e.x, e.y);
         snd('boomL', e, { vol: 1, rate: 0.9, gap: 0 }); snd('bossroar', e, { vol: 1, rate: 0.75, delay: 0.3, gap: 0 }); A.retro('bigboom', { vol: 0.5 }); cab('bomb', e, { rate: 0.85 });
@@ -569,11 +576,12 @@ function handleEvents(list, W, live) {
         if (live && T) banner(T[0], T[1], 2.6);
         break;
       }
-      case 'impact': { const p = P(e.x, 0.4); snd('boomM', e, { vol: 0.8, gap: 0.05 }); if (seen(e)) cab('explosion', e, { rate: 0.6 }); fx.explode(p.x, p.y, p.z, 2.2, { rock: true, color: e.lava ? 0xff7a30 : 0xffa060 }); R.shock(e.x, 0.4, 0.7); R.addTrauma(0.18 * S); break; }
-      case 'vent': { const p = P(e.x, 0.6); fx.fire(p.x, p.y, p.z, { n: 10, s: 1.4, sp: 1.2, jit: 4, life: 0.8 }); snd('boomS', e, { vol: 0.5, rate: 0.7, gap: 0.1 }); break; }
+      case 'impact': { if (live) R.scar(e.x, e.lava ? 2 : 1, e.lava ? 2.8 : 4); const p = P(e.x, 0.4); snd('boomM', e, { vol: 0.8, gap: 0.05 }); if (seen(e)) cab('explosion', e, { rate: 0.6 }); fx.explode(p.x, p.y, p.z, 2.2, { rock: true, color: e.lava ? 0xff7a30 : 0xffa060 }); R.shock(e.x, 0.4, 0.7); R.addTrauma(0.18 * S); break; }
+      case 'vent': { if (live && Math.random() < 0.5) R.scar(e.x, 2, 1.6); const p = P(e.x, 0.6); fx.fire(p.x, p.y, p.z, { n: 10, s: 1.4, sp: 1.2, jit: 4, life: 0.8 }); snd('boomS', e, { vol: 0.5, rate: 0.7, gap: 0.1 }); break; }
       case 'bosskill': {
         const p = P(e.x, e.y);
-        if (R.bossV) R.breakView(R.bossV, { power: 2.2, max: 12 });
+        if (R.bossV) R.breakView(R.bossV, { power: 2.2, max: 12, keep: 6 });
+        if (live) { R.scar(e.x, 1, 6, 3); R.scar(e.x - 9, 1, 4); R.scar(e.x + 10, 1, 4.5); }
         snd('boomL', e, { vol: 1, rate: 0.8, gap: 0 }); A.retro('bigboom', { vol: 0.5 }); cab('bomb', e, { rate: 0.7 });
         fx.explode(p.x, p.y, p.z, 6, { metal: true, color: 0xffb070 }); fx.explode(p.x + 4, p.y - 1, p.z, 4, { metal: true }); fx.debris(p.x, p.y, p.z, { metal: true, n: 30, speed: 12, size: 0.6, trail: true });
         fx.ring(p.x, p.y, p.z, 30, 0xffd0a0); fx.ring(p.x, p.y, p.z, 60, 0xffffff);
@@ -587,7 +595,7 @@ function handleEvents(list, W, live) {
         }
         break;
       }
-      case 'newworld': if (live) { banner('A NEW WORLD', SECTORS[e.look].name, 3); R.setLook(e.look); buildStrip(W); } break;
+      case 'newworld': if (live) { banner('A NEW WORLD', SECTORS[e.look].name, 3); R.clearScars(); R.setLook(e.look); buildStrip(W); } break;
       case 'clear': if (G.run) G.run.saved = (G.run.saved || 0) + e.alive; if (live) { banner('WORLD CLEAR', `+${e.bonus.toLocaleString()} · ${fmtT(e.t)}`, 3); if (e.alive === W.settlers.length) say('saved', { key: true, delay: 3.2 }); } break;
       case 'tut': if (live) tutorial(e.key); break;
     }
@@ -827,7 +835,7 @@ function hostStart() {
 function startOnline(cfg) {
   G.mode = 'online';
   G.run = { score: 0, lives: START_LIVES + 1, up: cfg.up || {}, newMedals: [] };
-  const W = makeWorld({ mode: cfg.gm === 'endless' ? 'endless' : 'campaign', sector: cfg.sector || 0, seed: cfg.seed, up: cfg.up || {}, coop: true, rivals: !!cfg.rivals, lives: cfg.rivals ? 99 : START_LIVES + 2 + (DIFFICULTY[cfg.diff] || DIFFICULTY.normal).lives, noTut: true, diff: cfg.diff, assist: assistOf(), cp: cfg.cp || 0, [NET.host ? 'ship' : 'ship2']: shipOf(settings.ship) });
+  const W = makeWorld({ mode: cfg.gm === 'endless' ? 'endless' : 'campaign', sector: cfg.sector || 0, seed: cfg.seed, up: cfg.up || {}, coop: true, rivals: !!cfg.rivals, lives: cfg.rivals ? 99 : START_LIVES + 2 + (DIFFICULTY[cfg.diff] || DIFFICULTY.normal).lives, noTut: true, diff: cfg.diff, assist: assistOf(), cp: cfg.cp || 0, [NET.host ? 'ship' : 'ship2']: shipOf(settings.ship), [NET.host ? 'mast' : 'mast2']: mastOf(shipOf(settings.ship)) });
   NET.bind(W);
   if (!NET.host) { W.players[1].assist = assistOf(); W.players[0].assist = 0; }
   enterPlay(W);
@@ -883,10 +891,28 @@ for (const inp of document.querySelectorAll('[data-set]')) {
 }
 function syncSegs() { for (const s of document.querySelectorAll('.seg')) for (const b of s.children) b.classList.toggle('on', String(settings[s.dataset.opt]) === b.dataset.v); }
 const UNLOCK_ALL = params.has('unlockall');
+const mastOf = (k) => (UNLOCK_ALL ? 2 : mastLevel(mastery[k] || 0));
+// one more machine down with gunship k: a new mastery level shows at once and applies from the next world
+function addMastery(k) {
+  const before = mastLevel(mastery[k] || 0);
+  mastery[k] = (mastery[k] || 0) + 1;
+  const now = mastLevel(mastery[k]);
+  if (now > before) {
+    const P = MASTERY.perks[k][now - 1];
+    store('sh.mastery.v1', mastery);
+    A.play('medal', { vol: 0.9, gap: 0 }); A.cab('credit');
+    banner(`${SHIPS[k].name} MASTERY ${now === 1 ? 'I' : 'II'}`, `${P.name}: ${P.desc.toUpperCase()} · FROM THE NEXT WORLD`, 3.2);
+  } else if (mastery[k] % 20 === 0) store('sh.mastery.v1', mastery);
+}
+function shipDesc(k) {
+  const n = mastery[k] || 0, lv = mastOf(k), P = MASTERY.perks[k];
+  const perks = P.map((q, i) => `<span class="${lv > i ? 'got' : ''}">${lv > i ? '✓' : '🔒'} ${q.name}: ${q.desc}${lv > i ? '' : ` (at ${MASTERY.at[i]})`}</span>`).join('');
+  return `${SHIPS[k].desc}<span class="mast">MASTERY ${lv}/2 · ${n.toLocaleString()} MACHINES DOWN${perks}</span>`;
+}
 function shipOf(key) { const s = SHIPS[key] ? key : 'warden'; return UNLOCK_ALL || medals.size >= SHIPS[s].medals ? s : 'warden'; }
 function buildShips() {
   $('ships').innerHTML = SHIP_KEYS.map((k) => { const s = SHIPS[k], open = UNLOCK_ALL || medals.size >= s.medals; return `<button data-v="${k}" ${open ? '' : 'disabled'}>${open ? '' : '🔒'}${s.name}${open ? '' : ' · ' + s.medals}</button>`; }).join('');
-  $('ship-desc').textContent = SHIPS[shipOf(settings.ship)].desc;
+  $('ship-desc').innerHTML = shipDesc(shipOf(settings.ship));
 }
 function liveryOf(key) { const s = LIVERIES.find((q) => q.key === key) || LIVERIES[0]; return medals.size >= s.medals ? s : LIVERIES[0]; }
 function buildLiveries() {
@@ -894,12 +920,12 @@ function buildLiveries() {
 }
 function applySettings() {
   { const s = liveryOf(settings.livery); if (R.livery.key !== s.key) R.setLivery(s); }
-  if ($('ship-desc')) $('ship-desc').textContent = SHIPS[shipOf(settings.ship)].desc;
+  if ($('ship-desc')) $('ship-desc').innerHTML = shipDesc(shipOf(settings.ship));
   if ($('net-title')) syncNetMode();
   if ($('diff-desc')) $('diff-desc').textContent = DIFFICULTY[settings.diff].desc;
   if (G.state === 'title') $('title-best').textContent = `BEST ${Math.max(boardOf('campaign', settings.diff).best(), 0).toLocaleString()} · ${DL(settings.diff)}`;
   A.vol.music = settings.music / 100 * 0.8; A.vol.sfx = settings.sfx / 100; A.vol.voice = settings.voice / 100; A.applyVolumes();
-  A.setRetro(settings.retro !== 'off'); A.setCab(settings.cab !== 'off');
+  A.setRetro(settings.retro !== 'off'); A.setCab(settings.cab !== 'off'); A.setLayersOn(settings.layers !== 'off');
   if (settings.talk === 'off') A.hush();
   applyCalm();
   if (G.state === 'play') { setHud(true); const me = G.W && myPlayer(G.W); if (me && G.mode !== 'demo' && G.mode !== 'playthrough') me.assist = assistOf(); }
@@ -939,6 +965,7 @@ I.on('confirm', () => { if (G.screen && selEl) selEl.click(); });
 I.on('back', () => { if (G.screen && G.screen !== 'title' && G.screen !== 'results' && G.screen !== 'upgrades') act('back'); });
 I.on('key', (k, e) => {
   A.unlock();
+  if (k === 'KeyC' && (G.state === 'play' || G.state === 'paused') && !G.ini && G.mode !== 'demo' && G.mode !== 'playthrough') { toggleCamera(); return; }
   if (G.state === 'replay' && (k === 'Enter' || k === 'Space' || k === 'Escape')) { endReplay(); return; }
   if (G.ini && G.screen === 'results' && (!selEl || selEl.id !== 'cont-btn' || /^Key[A-Z]$/.test(k))) {
     if (/^Key[A-Z]$/.test(k) || /^Digit[0-9]$/.test(k)) { G.ini.chars[G.ini.i] = k.slice(-1); G.ini.i = Math.min(2, G.ini.i + 1); renderIni(); A.play('uimove', { gap: 0 }); return; }
@@ -994,6 +1021,30 @@ function updateWarnings(W) {
   }
   let n = 0;
   const vw = innerWidth, vh = innerHeight, half = halfView(), top = vh < 500 ? 60 : 120, pad = 34;
+  if (R.chaseK > 0.5 && me && me.alive) {
+    // machines close behind you get one marker of their own
+    let behind = 0;
+    for (const e of W.enemies) if (e.hp > 0 && e.born <= 0 && HOSTILE_T.has(e.type) && wd(e.x - me.x) * me.face < 0 && Math.abs(wd(e.x - me.x)) < 32) behind++;
+    if (behind) list.push({ x: wp(me.x - me.face * 20), y: me.y, c: 'red', icon: '▼', d: undefined, label: behind + ' BEHIND', back: true });
+    let nb = 0, nt = 0;
+    const bottom = I.touchOn ? vh - 210 : vh - pad;
+    for (const q of list) {
+      const back = q.back || wd(q.x - me.x) * me.face < 0;
+      R.project(q.x, q.y, PE);
+      if (!back && PE.z < 1 && PE.x > pad && PE.x < vw - pad && PE.y > top && PE.y < vh - pad) continue;
+      let d = WM[n];
+      if (!d) { d = document.createElement('div'); box.appendChild(d); WM.push(d); }
+      n++;
+      const i = back ? nb++ : nt++, x = vw / 2 + Math.ceil(i / 2) * 56 * (i % 2 ? 1 : -1), y = back ? bottom : top;
+      d.className = 'wm ' + q.c; d.style.display = '';
+      d.style.left = clamp(x, pad, vw - pad) + 'px'; d.style.top = y + 'px';
+      if (q.col) d.style.setProperty('--c', q.col);
+      const html = `<em style="transform:rotate(${back ? Math.PI / 2 : -Math.PI / 2}rad)"></em><b>${q.icon}</b>${q.label ? `<small>${q.label}</small>` : q.d !== undefined ? `<small>${q.d} m</small>` : ''}`;
+      if (d._h !== html) { d.innerHTML = html; d._h = html; }
+    }
+    for (let i = n; i < WM.length; i++) WM[i].style.display = 'none';
+    return;
+  }
   for (const q of list) {
     const dx = wd(q.x - R.cx);
     if (Math.abs(dx) < half * 0.94) continue;
@@ -1053,18 +1104,35 @@ function tickFrame(dt, draw = true) {
   if (interp) lerpIn(cur, Math.min(1, (G.state === 'replay' ? G.replay.acc : G.acc) / STEP));
   const me = myPlayer(cur);
   const menu = G.state === 'title' || (['sectors', 'online', 'scores', 'medals', 'options', 'help'].includes(G.screen) && G.mode === 'title');
-  R.updateCamera(dt, { me: me && me.alive && !menu ? me : null, cine: menu, shake: +settings.shake });
+  R.updateCamera(dt, { me: me && me.alive && !menu ? me : null, cine: menu, shake: +settings.shake, chase: !menu && chaseOn() });
   R.W = cur;
   if (draw) R.sync(cur, dt);
   if (interp) lerpOut();
   A.setListener(R.camera);
-  loops(cur, menu);
+  loops(cur, menu, dt);
   if (draw) R.render(dt, {});
   R.beamLight.intensity *= Math.exp(-dt * 30);
   if (G.state === 'play' || G.state === 'paused-online') { updateWarnings(cur); drawScanner(cur); wingTag(cur); } else $('wingtag').classList.add('hidden');
   if (G.bannerT > 0) { G.bannerT -= dt; if (G.bannerT <= 0) $('banner').classList.add('hidden'); }
   if (G.tutT > 0) { G.tutT -= dt; if (G.tutT <= 0) $('tut').classList.add('hidden'); }
   if (G.capT > 0) { G.capT -= dt; if (G.capT <= 0) $('caption').classList.add('hidden'); }
+}
+// CHASE camera: with the view behind the ship, right / forward flies on the way you face and left turns you about.
+// The direction is fixed when the push starts, so holding left turns once and then flies on. The mapped input is what
+// the world records, so replays stay exact.
+// ?chase lets the demo autopilot fly under the chase camera too (for checks and screenshots)
+const CHASE_ALL = params.has('chase');
+const chaseOn = () => settings.camera === 'chase' && (CHASE_ALL || (G.mode !== 'demo' && G.mode !== 'playthrough' && !G.ai));
+function chaseMx(mx, me) {
+  if (!chaseOn() || !me) { G.chS = 0; return mx; }
+  const s = Math.sign(mx);
+  if (!s) { G.chS = 0; return 0; }
+  if (s !== G.chS) { G.chS = s; G.chL = s > 0 ? me.face : -me.face; }
+  return Math.abs(mx) * G.chL;
+}
+function toggleCamera() {
+  settings.camera = settings.camera === 'chase' ? 'side' : 'chase'; saveSettings(); syncSegs(); G.chS = 0;
+  if (G.state === 'play') caption(settings.camera === 'chase' ? 'CHASE CAMERA · RIGHT FLIES ON · LEFT TURNS ABOUT · C TO SWITCH' : 'SIDE CAMERA · C TO SWITCH', 2.4);
 }
 function playStep(dt) {
   const W = G.W;
@@ -1077,7 +1145,7 @@ function playStep(dt) {
     const me = myPlayer(W);
     if (me) {
       if (G.ai) me.input = G.ai.control(W, me);
-      else { const c = I.control(); if (G.state === 'play' && !c.fire && autoFireOn() && lined(W, me)) c.fire = true; me.input = G.state === 'play' ? c : { mx: 0, my: 0, fire: false, nova: false, blink: false }; }
+      else { const c = I.control(); c.mx = chaseMx(c.mx, me); if (G.state === 'play' && !c.fire && autoFireOn() && lined(W, me)) c.fire = true; me.input = G.state === 'play' ? c : { mx: 0, my: 0, fire: false, nova: false, blink: false }; }
     }
     if (online && NET.host) NET.hostTick(W);
     if (!online) REC.input(W);
@@ -1153,7 +1221,25 @@ function guidance(W) {
 }
 // the engine, the tractor hum of the nearest lifter at work, the carrier's drone, and the planet's own ambience
 const AMB = ['amb_verdant', 'amb_dune', 'amb_frost', 'amb_cinder', 'amb_umbra'];
-function loops(W, menu) {
+// MUSIC LAYERS: how hot the fight is right now (machines close to you, machines on the planet, a carrier, a planet
+// event, HYPER), eased in quickly and out slowly. The drums come in first, the lead pulse when it is fierce.
+function heatOf(W, me) {
+  if (!me) return 0;
+  let near = 0, total = 0;
+  for (const e of W.enemies) {
+    if (e.hp <= 0 || !HOSTILE_T.has(e.type)) continue;
+    total++;
+    const d = Math.abs(wd(e.x - me.x));
+    if (d < 45) near += 1; else if (d < 90) near += 0.45;
+  }
+  let h = Math.min(1, near / 6) * 0.75 + Math.min(1, total / 16) * 0.3;
+  const B = W.boss;
+  if (B && B.st !== 'gone' && B.st !== 'warp') h = Math.max(h, Math.abs(wd(B.x - me.x)) < 110 ? 0.72 : 0.5, B.phase === 2 || B.rage ? 0.9 : 0);
+  if (W.event && W.event.t < W.event.T) h = Math.max(h, 0.55);
+  if (me.hyper > 0) h = 1;
+  return Math.min(1, h);
+}
+function loops(W, menu, dt = 1 / 60) {
   if (!A.ctx) return;
   const live = G.state === 'play' || G.state === 'replay' || G.state === 'paused-online';
   const me = myPlayer(W) || W.players[0];
@@ -1164,6 +1250,13 @@ function loops(W, menu) {
   if (live) { const p = lf ? at(lf.x, lf.y) : at(R.cx, 10); A.setLoop('lift', p.x, p.y, p.z, lf && ld < 90 ? 0.8 : 0, 1); }
   const B = W.boss;
   if (live) { const p = B ? at(B.x, B.y) : at(R.cx, 30); A.setLoop('boss', p.x, p.y, p.z, B && B.st !== 'warp' ? 0.9 : 0, B && B.atk && B.atk.kind === 'rush' ? 1.25 : 1); }
+  {
+    const live2 = G.state === 'play' || G.state === 'replay' || G.state === 'paused-online';
+    const h = live2 && !menu ? heatOf(W, myPlayer(W) || W.players[0]) : 0;
+    G.heat = (G.heat || 0) + (h - (G.heat || 0)) * (1 - Math.exp(-dt * (h > (G.heat || 0) ? 1.4 : 0.3)));
+    const ss = (a, b, x) => { const t = clamp((x - a) / (b - a), 0, 1); return t * t * (3 - 2 * t); };
+    A.setLayers(ss(0.16, 0.42, G.heat), ss(0.6, 0.85, G.heat));
+  }
   const k = G.state === 'paused' ? 0.3 : 1;
   AMB.forEach((n, i) => { if (i === R.lookI) A.setBed(n, n, (menu ? 0.5 : 0.36) * k); else if (A.beds.has(n)) A.setBed(n, n, 0); });
 }
@@ -1195,7 +1288,7 @@ async function boot() {
   toTitle();
   boardOf('campaign', settings.diff).fresh(); boardOf('endless', settings.diff).fresh();
   if (!G.fixed && !params.has('test')) R.prepareAll(true);
-  if (params.has('test')) { const m = await import('./tests.js?v=10'); m.runTests(window.__sh); }
+  if (params.has('test')) { const m = await import('./tests.js?v=11'); m.runTests(window.__sh); }
   else if (params.has('playthrough')) { A.unlock(); startPlaythrough(); }
   else if (params.has('room')) { act('online'); $('join-code').value = cleanCode(params.get('room')); }
   else if (G.autopilot) { A.unlock(); if (params.has('endless')) startEndless(); else startCampaign(+params.get('sector') || 0); }

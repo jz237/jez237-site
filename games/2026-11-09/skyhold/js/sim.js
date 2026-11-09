@@ -3,7 +3,7 @@
 // Nothing in here touches the DOM, WebGL or audio; it only pushes events into W.ev.
 //
 // The world is a band round a small planet: x along the ground (wraps every C metres), y altitude (0..H).
-import { F, STEP, C, H, ENEMY, SETTLER, BOSSES, B_KEYS, SECTORS, WAVES, rampAt, rampLevel, endlessLevel, ENDLESS, TUTOR, SCORE, START_LIVES, DIFFICULTY, applyDiff, POWERUPS, PW_KEYS, DROP, SKIM, HYPER, EVENTS, EVENT, PHASE2, B_KEYS as _BK, SHIPS, SHIP_KEYS, RIVALS } from './config.js?v=10';
+import { F, STEP, C, H, ENEMY, SETTLER, BOSSES, B_KEYS, SECTORS, WAVES, rampAt, rampLevel, endlessLevel, ENDLESS, TUTOR, SCORE, START_LIVES, DIFFICULTY, applyDiff, POWERUPS, PW_KEYS, DROP, SKIM, HYPER, EVENTS, EVENT, PHASE2, B_KEYS as _BK, SHIPS, SHIP_KEYS, RIVALS } from './config.js?v=11';
 export { STEP };
 
 const clamp = (v, a, b) => (v < a ? a : v > b ? b : v);
@@ -51,7 +51,7 @@ export function makeWorld(o = {}) {
 }
 function makePlayer(W, id, x, o) {
   return { id, x, y: 13, vx: 0, vy: 0, face: 1, alive: true, inv: 1.2, shield: 0, nova: 3, fireT: 0, novaT: 0, blinkT: 0, deadT: 0, thrust: 0, hurtT: 0, carry: 0,
-    input: { mx: 0, my: 0, fire: false, nova: false, blink: false }, novaHeld: false, blinkHeld: false, remote: false, pw: {}, assist: id === 1 ? +o.assist || 0 : 0, ship: (id === 1 ? o.ship : o.ship2) || 'warden', hyper: 0, hyperK: 0 };
+    input: { mx: 0, my: 0, fire: false, nova: false, blink: false }, novaHeld: false, blinkHeld: false, remote: false, pw: {}, assist: id === 1 ? +o.assist || 0 : 0, ship: (id === 1 ? o.ship : o.ship2) || 'warden', mast: Math.max(0, Math.min(2, ((id === 1 ? o.mast : o.mast2) | 0))), hyper: 0, hyperK: 0 };
 }
 export const cloneWorld = (W) => structuredClone(W);
 export function drainEvents(W) { const e = W.ev; W.ev = []; return e; }
@@ -302,22 +302,27 @@ function droneFire(W, p) {
 }
 // a shot from gunship p: beams (with the ship's damage, height, reach and chain) or a salvo of homing missiles
 function emitShots(W, p, x0, y, dir, twin, hy, vx) {
-  const S = SHIPS[p.ship] || SHIPS.warden;
+  const S = SHIPS[p.ship] || SHIPS.warden, m = p.mast || 0, k1 = m >= 1, k2 = m >= 2;
   if (S.weapon === 'missile') {
-    for (let k = 0; k < S.missiles; k++) W.missiles.push({ id: W.nextId++, pid: p.id, x: x0, y: y + (k ? -0.45 : 0.45), vx: dir * 26 + vx, vy: k ? -5 : 5, t: 0, tgt: 0, hyper: hy });
-    if (twin) W.missiles.push({ id: W.nextId++, pid: p.id, x: x0, y, vx: dir * 30 + vx, vy: 0, t: 0, tgt: 0, hyper: hy });
+    // mastery: a third missile (I), faster missiles that lock on from further (II)
+    const ms = { pid: p.id, x: x0, t: 0, tgt: 0, hyper: hy, sp: k2 ? 55 : 44, lk: k2 ? 62 : 48 };
+    const n = S.missiles + (k1 ? 1 : 0);
+    for (let k = 0; k < n; k++) W.missiles.push({ id: W.nextId++, ...ms, y: y + (k === 0 ? 0.45 : k === 1 ? -0.45 : 0), vx: dir * (k === 2 ? 30 : 26) + vx, vy: k === 0 ? 5 : k === 1 ? -5 : 0 });
+    if (twin) W.missiles.push({ id: W.nextId++, ...ms, y, vx: dir * 30 + vx, vy: 0 });
     return;
   }
-  const sh = { pid: p.id, x0, dir, t: 0, done: false, vx, hyper: hy, dmg: S.dmg, bk: S.band, rk: S.range, arc: S.chain || 0 };
+  // mastery: Warden reach (I); Breaker taller shells (I) and shockwave wrecks (II); Arc one more leap (I), longer leaps (II)
+  const sh = { pid: p.id, x0, dir, t: 0, done: false, vx, hyper: hy, dmg: S.dmg, bk: S.band * (p.ship === 'breaker' && k1 ? 1.3 : 1), rk: S.range * (p.ship === 'warden' && k1 ? 1.15 : 1),
+    arc: (S.chain || 0) + (p.ship === 'arc' && k1 ? 1 : 0), ar: p.ship === 'arc' && k2 ? 1.4 : 1, sw: p.ship === 'breaker' && k2 ? 1 : 0 };
   W.shots.push({ id: W.nextId++, y, ...sh });
   if (twin) W.shots.push({ id: W.nextId++, y: y - F.twinY, ...sh });
 }
 // chain lightning: from (x, y) to the nearest machine within chainR, n times, never the same one twice
-function arcFrom(W, x, y, n, skip, pid) {
+function arcFrom(W, x, y, n, skip, pid, rk = 1) {
   const pts = [[x, y]], hit = new Set([skip ? skip.id : -1]);
   let cx = x, cy = y;
   for (let k = 0; k < n; k++) {
-    let best = null, bd = SHIPS.arc.chainR;
+    let best = null, bd = SHIPS.arc.chainR * rk;
     for (const e of W.enemies) { if (e.hp <= 0 || e.born > 0 || hit.has(e.id)) continue; const d = Math.hypot(wd(e.x - cx), e.y - cy); if (d < bd) { bd = d; best = e; } }
     if (!best) break;
     hit.add(best.id); pts.push([best.x, best.y]); cx = best.x; cy = best.y;
@@ -334,7 +339,7 @@ function missiles(W, dt) {
     if (m.t > 1.9) { m.done = true; W.ev.push({ k: 'mfizz', x: m.x, y: m.y }); continue; }
     let e = m.tgt ? W.enemies.find((q) => q.id === m.tgt && q.hp > 0 && !q.gone) : null;
     if (!e && m.node === undefined) {
-      let bd = 48;
+      let bd = m.lk || 48;
       for (const q of W.enemies) { if (q.hp <= 0 || q.born > 0 || q.type === 'mine') continue; const d = Math.hypot(wd(q.x - m.x), q.y - m.y); if (d < bd) { bd = d; e = q; } }
       m.tgt = e ? e.id : 0;
     }
@@ -342,12 +347,12 @@ function missiles(W, dt) {
     if (e) { tx = e.x; ty = e.y; }
     else if (B && B.st === 'fight') {
       if (m.node === undefined || !B.nodes[m.node] || B.nodes[m.node].hp <= 0) {
-        let bd = 48; m.node = undefined;
+        let bd = m.lk || 48; m.node = undefined;
         B.nodes.forEach((n, i) => { if (n.hp <= 0) return; const [nx, ny] = nodePos(B, i); const d = Math.hypot(wd(nx - m.x), ny - m.y); if (d < bd) { bd = d; m.node = i; } });
       }
       if (m.node !== undefined) [tx, ty] = nodePos(B, m.node);
     }
-    const sp = 44;
+    const sp = m.sp || 44;
     if (tx !== null) { const dx = wd(tx - m.x), dy = ty - m.y, l = Math.hypot(dx, dy) || 1; m.vx += clamp((dx / l) * sp - m.vx, -150 * dt, 150 * dt); m.vy += clamp((dy / l) * sp - m.vy, -150 * dt, 150 * dt); }
     else { m.vx += Math.sign(m.vx || 1) * 40 * dt; m.vy *= 0.97; }
     m.x = wp(m.x + m.vx * dt); m.y += m.vy * dt;
@@ -975,17 +980,26 @@ function shots(W, dt) {
       });
       if (bn >= 0) { node = bn; bd = bnd; }
     }
-    if (node >= 0) { s.done = true; const [nx, ny] = nodePos(B, node); hitNode(W, B, node, s.pid, s.dmg || 1); W.stats.hits++; if (s.arc) arcFrom(W, nx, ny, s.arc, null, s.pid); }
+    if (node >= 0) { s.done = true; const [nx, ny] = nodePos(B, node); hitNode(W, B, node, s.pid, s.dmg || 1); W.stats.hits++; if (s.arc) arcFrom(W, nx, ny, s.arc, null, s.pid, s.ar || 1); }
     else if (node === -2) { s.done = true; W.ev.push({ k: 'plink', x: wp(s.x0 + s.dir * bd), y: s.y }); }
     else if (best) {
       s.done = true; W.stats.hits++;
       damage(W, best, s.dmg || 1, s.pid);
       W.ev.push({ k: 'beamhit', x: wp(s.x0 + s.dir * Math.max(0, bd)), y: s.y, id: best.id, dead: best.hp <= 0 });
-      if (s.arc) arcFrom(W, best.x, best.y, s.arc, best, s.pid);
+      if (s.arc) arcFrom(W, best.x, best.y, s.arc, best, s.pid, s.ar || 1);
+      if (s.sw && best.hp <= 0) shockwave(W, best, s.pid);
     }
     s.hitD = bd < 1e8 ? bd : head;
   }
   W.shots = W.shots.filter((s) => !s.done);
+}
+// Breaker mastery II: a wreck made by its shell hits every machine within 4.5 m once
+function shockwave(W, src, pid) {
+  W.ev.push({ k: 'shockwave', x: src.x, y: src.y, small: src.type === 'skimmer' });
+  for (const e of W.enemies) {
+    if (e === src || e.hp <= 0 || e.born > 0) continue;
+    if (Math.hypot(wd(e.x - src.x), e.y - src.y) < 4.5) damage(W, e, 1, pid);
+  }
 }
 function bolts(W, dt) {
   for (const b of W.bolts) {
@@ -1015,7 +1029,7 @@ function kill(W, e, pid, by) {
   }
   const kp = pid ? W.players.find((q) => q.id === pid) : null;
   if (kp && kp.hyper > 0) score *= HYPER.score;
-  if (kp && !(kp.hyper > 0) && e.type !== 'mine') { kp.hyperK = Math.min(1, (kp.hyperK || 0) + HYPER.gain * (1 + (chainMult(W.chain) - 1) * 0.5)); if (kp.hyperK >= 1) { kp.hyperK = 0; kp.hyper = HYPER.time; W.ev.push({ k: 'hyper', pid: kp.id, x: kp.x, y: kp.y }); } }
+  if (kp && !(kp.hyper > 0) && e.type !== 'mine') { kp.hyperK = Math.min(1, (kp.hyperK || 0) + HYPER.gain * (1 + (chainMult(W.chain) - 1) * 0.5) * (kp.ship === 'warden' && kp.mast >= 2 ? 1.35 : 1)); if (kp.hyperK >= 1) { kp.hyperK = 0; kp.hyper = HYPER.time; W.ev.push({ k: 'hyper', pid: kp.id, x: kp.x, y: kp.y }); } }
   if (pid) addScore(W, score, e.type === 'skimmer' || e.type === 'meteor' ? 0 : ENEMY[e.type].score, pid);
   W.stats.kills++;
   if (e.type === 'lifter') W.stats.lifters++;

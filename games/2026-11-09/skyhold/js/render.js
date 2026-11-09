@@ -5,13 +5,13 @@
 // Five looks (sky, terrain, sea, scenery, bodies in the sky), real 3D models for everything, curved beams,
 // warnings drawn in the play plane, HDR post. Nothing here changes the world.
 import * as THREE from '../vendor/three.module.min.js';
-import { Post } from './post.js?v=10';
-import * as TX from './textures.js?v=10';
-import * as MD from './models.js?v=10';
-import { FX, CALM } from './fx.js?v=10';
-import { NOISE } from './shaders.js?v=10';
-import { F, C, RP, H, ENEMY, BOSSES, POWERUPS, P2_LIVERY, LIVERIES, SETTLER, PHASE2 } from './config.js?v=10';
-import { wd, wp, nodePos, beamRange, dronePos as dronePosR } from './sim.js?v=10';
+import { Post } from './post.js?v=11';
+import * as TX from './textures.js?v=11';
+import * as MD from './models.js?v=11';
+import { FX, CALM } from './fx.js?v=11';
+import { NOISE } from './shaders.js?v=11';
+import { F, C, RP, H, ENEMY, BOSSES, POWERUPS, P2_LIVERY, LIVERIES, SETTLER, PHASE2 } from './config.js?v=11';
+import { wd, wp, nodePos, beamRange, dronePos as dronePosR } from './sim.js?v=11';
 
 export { CALM };
 const hdr = (hex, k) => new THREE.Color(hex).multiplyScalar(k);
@@ -23,6 +23,42 @@ const _c = new THREE.Color(), _c2 = new THREE.Color(), _m = new THREE.Matrix4(),
 const ZAX = new THREE.Vector3(0, 0, 1);
 const _up = new THREE.Vector3();
 const TCOL = { lifter: 0x9dff7a, husk: 0xff4a8a, sower: 0xc98aff, hive: 0xff8a3a, stinger: 0xff6a6a, prowler: 0xff3a3a, skimmer: 0x5ef0ff, mine: 0xffb347 };
+const SIDE_FOV = 40, CHASE_FOV = 64;
+const SCAR_N = 200;
+const TERRAIN_ZS = [64, 48, 36, 27, 20, 14, 9.5, 6, 3.6, 2, 1, 0.2, -0.6, -1.6, -2.8, -4.2, -6, -8.5, -11.5, -15, -19.5, -25, -32, -40, -50, -62, -76, -92, -112, -136, -165, -200];
+const SCAR_VERT = /* glsl */ `
+attribute vec4 aInfo; varying vec2 vUv; varying vec4 vInfo;
+#include <fog_pars_vertex>
+void main(){ vUv = uv; vInfo = aInfo; vec4 mvPosition = modelViewMatrix * vec4(position, 1.0); gl_Position = projectionMatrix * mvPosition;
+#include <fog_vertex>
+}`;
+const SCAR_FRAG = /* glsl */ `
+uniform float uTime; varying vec2 vUv; varying vec4 vInfo;
+#include <fog_pars_fragment>
+${NOISE}
+void main(){
+  vec2 q = vUv * 2.0 - 1.0; float r = length(q), kind = vInfo.y, seed = vInfo.z, age = uTime - vInfo.x;
+  float n = fbm(vec3(q * 2.2 * (1.0 + vInfo.w * 0.15), seed)), n2 = fbm(vec3(q * 7.0, seed + 3.0));
+  float edge = 0.7 + (n - 0.5) * 0.55;
+  if (kind > 2.5) edge = 0.62 + (n - 0.5) * 0.7;
+  float a = smoothstep(edge, edge * 0.35, r);
+  vec3 col = mix(vec3(0.035, 0.03, 0.028), vec3(0.11, 0.09, 0.07), n2);
+  float heat;
+  if (kind < 0.5) { heat = exp(-age / 5.0); a *= 0.85; }
+  else if (kind < 1.5) {                         // a crater: a dark pit inside a scuffed rim
+    float rim = smoothstep(0.35, 0.62, r) * smoothstep(0.95, 0.66, r);
+    col = mix(vec3(0.02, 0.018, 0.016), vec3(0.2, 0.17, 0.14) * (0.7 + n2 * 0.6), rim);
+    a = max(a, rim * 0.9) * smoothstep(1.0, 0.85, r); heat = exp(-age / 10.0);
+  }
+  else if (kind < 2.5) { heat = exp(-age / 28.0) * (0.55 + 0.45 * sin(uTime * 2.0 + n2 * 9.0)); a *= 0.95; }
+  else { heat = exp(-age / 6.0); a *= 0.7; }
+  float hk = smoothstep(0.75, 0.0, r) * (0.4 + n2 * 1.2);
+  vec3 hot = mix(vec3(1.0, 0.25, 0.05), vec3(1.0, 0.75, 0.3), hk * heat) * 3.2;
+  col += hot * heat * hk;
+  if (a < 0.01) discard;
+  gl_FragColor = vec4(col, a);
+#include <fog_fragment>
+}`;
 const VIS = 1.3;   // models are drawn a little larger than their hit boxes so they read at this camera distance
 
 // sim (x, y) at depth z -> world point on the planet (y = altitude above the ground). The planet is a sphere of
@@ -323,6 +359,7 @@ export class Renderer {
     this.flash = new THREE.Vector4(1, 1, 1, 0);
     this.shocks = [];
     this.lookI = -1; this.look = LOOKS[0];
+    this.chaseK = 0; this.chF = 1; this.chV = 0; this.chY = 14; this.chaseMe = null; this.chDir = 0; this.chHold = 0;
     this.camLift = 4; this.lookLift = -1.5; this.needH = H + 15; this.cyK = 0.6; this.cx = 0; this.cy = 18; this.lead = 0; this.leadV = 0; this.zoom = 1; this.cvx = 0;
     this.shot = null; this.intent = null;
     this.fx = new FX(this.scene, this.T, { dust: q.dust, sparks: q.sparks, debris: q.debris, flashLights: q.flashLights }, () => -1e9);
@@ -339,6 +376,7 @@ export class Renderer {
     for (let i = 0; i < 72; i++) this.ribbons.push(new Ribbon(this.scene, 16, 0xffffff));
     this.makeProjectiles();
     this.makeMarks();
+    this.makeScars();
     this.trails = new Map();
     this.colony = null; this.colonyKey = '';
     this.resize();
@@ -434,7 +472,7 @@ export class Renderer {
     if (this.terrains[i]) return this.terrains[i];
     const L = LOOKS[i];
     const NT = Math.round(1100 * this.q.terrain);
-    const ZS = [64, 48, 36, 27, 20, 14, 9.5, 6, 3.6, 2, 1, 0.2, -0.6, -1.6, -2.8, -4.2, -6, -8.5, -11.5, -15, -19.5, -25, -32, -40, -50, -62, -76, -92, -112, -136, -165, -200];
+    const ZS = TERRAIN_ZS;
     const NZ = ZS.length;
     const pos = new Float32Array((NT + 1) * NZ * 3), col = new Float32Array((NT + 1) * NZ * 3), hs = new Float32Array((NT + 1) * NZ);
     const G = L.ground.map((c) => new THREE.Color(c));
@@ -655,6 +693,85 @@ export class Renderer {
     this.fx.setLook({ dust: L.key === 'cinder' ? 0x4a3a34 : L.key === 'dune' ? 0xc89a70 : 0x9a9690, dustLight: 1.1 });
   }
 
+  // ---------------------------------------------------------------- planet scars
+  // Every scar is a small 7 x 7 patch laid on the ground itself (so it follows the walkway and the slopes), all in one
+  // geometry with SCAR_N slots used in turn. kind: 0 scorch (a machine blown up low), 1 crater (a meteor or a carrier's
+  // fall), 2 lava (an eruption bomb: molten, then a black crust), 3 burn (the carrier's beam dragged along the ground).
+  // Wrecks: the biggest pieces of a machine come to rest and stay, charred and smoking. clearScars() at a new world.
+  makeScars() {
+    const N = SCAR_N, V = 7, nv = N * V * V;
+    const g = new THREE.BufferGeometry();
+    g.setAttribute('position', new THREE.BufferAttribute(new Float32Array(nv * 3), 3));
+    g.setAttribute('uv', new THREE.BufferAttribute(new Float32Array(nv * 2), 2));
+    g.setAttribute('aInfo', new THREE.BufferAttribute(new Float32Array(nv * 4), 4));
+    const idx = [];
+    for (let k = 0; k < N; k++) for (let i = 0; i < V - 1; i++) for (let j = 0; j < V - 1; j++) { const a = k * V * V + i * V + j; idx.push(a, a + 1, a + V, a + 1, a + V + 1, a + V); }   // wound to face up, out of the planet
+    g.setIndex(idx);
+    g.boundingSphere = new THREE.Sphere(new THREE.Vector3(), RP + 50);
+    const mat = new THREE.ShaderMaterial({ vertexShader: SCAR_VERT, fragmentShader: SCAR_FRAG, transparent: true, depthWrite: false, fog: true,
+      polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -4,
+      uniforms: THREE.UniformsUtils.merge([THREE.UniformsLib.fog, { uTime: { value: 0 } }]) });
+    this.scarM = new THREE.Mesh(g, mat);
+    this.scarM.frustumCulled = false; this.scarM.renderOrder = 1;
+    this.scene.add(this.scarM);
+    this.scarN = 0; this.wrecks = [];
+    this.charMat = new THREE.MeshStandardMaterial({ color: 0x1d1a17, roughness: 0.95, metalness: 0.25 });
+    this.hotMat = new THREE.MeshStandardMaterial({ color: 0x2a1a12, roughness: 0.9, metalness: 0.25, emissive: new THREE.Color(0xff5a1a), emissiveIntensity: 1.6 });
+  }
+  scar(x, kind = 0, r = 1.5, z) {
+    if (!this.scarM) return;
+    // most land on the walkway's edge and the slope in front of it, which faces both cameras
+    if (z === undefined) z = -0.5 + Math.pow(Math.random(), 0.8) * 6.5;
+    const V = 7, k = this.scarN++ % SCAR_N, g = this.scarM.geometry, P = g.attributes.position.array, U = g.attributes.uv.array, A = g.attributes.aInfo.array;
+    const seed = Math.random() * 100, L = this.look;
+    for (let i = 0; i < V; i++) for (let j = 0; j < V; j++) {
+      const u = i / (V - 1), v = j / (V - 1), sx = x + (u - 0.5) * 2 * r, sz = z + (v - 0.5) * 2 * r, th = sx / RP;
+      const q = k * V * V + i * V + j;
+      sph(th, sz / RP, RP + this.meshH(th, sz) + 0.07, _v);
+      P[q * 3] = _v.x; P[q * 3 + 1] = _v.y; P[q * 3 + 2] = _v.z;
+      U[q * 2] = u; U[q * 2 + 1] = v;
+      A[q * 4] = this.time; A[q * 4 + 1] = kind; A[q * 4 + 2] = seed; A[q * 4 + 3] = r;
+    }
+    g.attributes.position.needsUpdate = true; g.attributes.uv.needsUpdate = true; g.attributes.aInfo.needsUpdate = true;
+  }
+  // the terrain mesh's own height at (th, z): its grid corners from groundH, blended across the cell, so a scar
+  // lies on the drawn surface rather than on the finer formula underneath it
+  meshH(th, z) {
+    const L = this.look, NT = Math.round(1100 * this.q.terrain), ZS = TERRAIN_ZS;
+    const a = (((th / TAU) % 1) + 1) % 1 * NT, a0 = Math.floor(a), fa = a - a0;
+    let j = 0; while (j < ZS.length - 2 && ZS[j + 1] > z) j++;
+    const fz = clamp((ZS[j] - z) / (ZS[j] - ZS[j + 1]), 0, 1), t0 = (a0 / NT) * TAU, t1 = ((a0 + 1) / NT) * TAU;
+    const h00 = groundH(L, t0, ZS[j]), h10 = groundH(L, t1, ZS[j]), h01 = groundH(L, t0, ZS[j + 1]), h11 = groundH(L, t1, ZS[j + 1]);
+    return (h00 * (1 - fa) + h10 * fa) * (1 - fz) + (h01 * (1 - fa) + h11 * fa) * fz;
+  }
+  clearScars() {
+    if (!this.scarM) return;
+    const g = this.scarM.geometry;
+    g.attributes.position.array.fill(0); g.attributes.position.needsUpdate = true;
+    this.scarN = 0;
+    for (const w of this.wrecks) this.scene.remove(w.o);
+    this.wrecks = [];
+  }
+  // a piece that came to rest becomes a wreck that stays (glowing hot for a few seconds, then charred)
+  keepWreck(P) {
+    const o = P.o;
+    o.traverse((m) => { if (m.isMesh) { m.material = this.hotMat; m.castShadow = true; } });
+    this.wrecks.push({ o, t: 0, hot: true });
+    const cap = Math.round(this.q.debris * 0.35);
+    while (this.wrecks.length > cap) { const w = this.wrecks.shift(); this.scene.remove(w.o); }
+  }
+  updateWrecks(dt) {
+    if (this.scarM) this.scarM.material.uniforms.uTime.value = this.time;
+    for (const w of this.wrecks) {
+      w.t += dt;
+      if (w.hot && w.t > 5) { w.hot = false; w.o.traverse((m) => { if (m.isMesh) m.material = this.charMat; }); }
+      if (w.t < 30 && !CALM.on && Math.random() < dt * (w.t < 8 ? 3 : 0.8)) {
+        const p = w.o.position, r = p.length() || 1;
+        this.fx.dustP.add({ x: p.x, y: p.y, z: p.z, vx: p.x / r * 0.9, vy: p.y / r * 0.9, vz: p.z / r * 0.9, s0: 0.4, s1: 2.4, max: 3, a: 0.22, r: 0.13, g: 0.12, b: 0.12, drag: 0.5, grav: 0, fade: 0.7 });
+      }
+    }
+  }
+
   // ---------------------------------------------------------------- projectiles, marks
   makeProjectiles() {
     const boltGeo = new THREE.SphereGeometry(0.32, 10, 8);
@@ -814,6 +931,7 @@ export class Renderer {
     v.outer.updateMatrixWorld(true);
     const parts = [];
     v.g.traverse((m) => { if (m.isMesh && m.geometry && parts.length < (o.max || 5)) parts.push(m); });
+    let kept = 0;
     for (const m of parts) {
       const c = m.clone();
       m.getWorldPosition(_v); m.getWorldQuaternion(_q); m.getWorldScale(_s);
@@ -822,9 +940,10 @@ export class Renderer {
       const up = _v2.set(_v.x, _v.y, 0).normalize();
       const sp = (o.power || 1) * (o.soft ? 2 : 6);
       this.pieces.push({ o: c, vx: up.x * sp * Math.random() + (Math.random() - 0.5) * sp + (o.vx || 0), vy: up.y * sp * Math.random() + (Math.random() - 0.5) * sp + (o.vy || 0), vz: (Math.random() - 0.2) * sp * 0.6,
-        wx: (Math.random() - 0.5) * 8, wy: (Math.random() - 0.5) * 8, t: 0, life: 5 + Math.random() * 2, rest: false, smoke: Math.random() < 0.7 });
+        wx: (Math.random() - 0.5) * 8, wy: (Math.random() - 0.5) * 8, t: 0, life: 5 + Math.random() * 2, rest: false, smoke: Math.random() < 0.7, keep: o.keep !== 0 && kept++ < (o.keep || 2) });
     }
-    while (this.pieces.length > this.q.debris * 0.4) { const P = this.pieces.shift(); this.scene.remove(P.o); }
+    // over the cap: drop the oldest loose pieces first (pieces that will become wrecks are kept until they land)
+    while (this.pieces.length > this.q.debris * 0.4) { let i = this.pieces.findIndex((P) => !P.keep); if (i < 0) i = 0; const P = this.pieces.splice(i, 1)[0]; this.scene.remove(P.o); }
   }
   breakEnemy(id, o) { const v = this.views.e.get(id); if (v) { this.breakView(v, o); this.release(v); this.views.e.delete(id); } }
   breakPlayer(pid, o) { const v = this.views.p.get(pid); if (v) this.breakView(v, { ...o, max: 7 }); }
@@ -849,7 +968,8 @@ export class Renderer {
       }
       if (P.t > P.life - 1) o.scale.multiplyScalar(Math.max(0.9, 1 - dt * 2.5));
     }
-    this.pieces = this.pieces.filter((P) => { if (P.t > P.life) { this.scene.remove(P.o); return false; } return true; });
+    this.pieces = this.pieces.filter((P) => { if (P.rest && P.keep) { this.keepWreck(P); return false; } if (P.t > P.life) { this.scene.remove(P.o); return false; } return true; });
+    this.updateWrecks(dt);
   }
 
   // ---------------------------------------------------------------- sync the world into the scene
@@ -1198,6 +1318,7 @@ export class Renderer {
     } else if (a && a.kind === 'sweep') {
       const rb = this.takeRibbon(); if (rb) { rb.set([[B.sweepX, B.y - 2], [B.sweepX, 0]], 2.2 + Math.sin(t * 40) * 0.3, 0.5); rb.mat.uniforms.uColor.value.set(this.look.key === 'frost' ? 0x8ae8ff : 0xff7a3a).multiplyScalar(3); rb.mat.uniforms.uK.value = 2.2; rb.mat.uniforms.uDash.value = 0; rb.mat.uniforms.uHead.value = 0; rb.mat.uniforms.uSoft.value = 1.5; }
       if (Math.random() < dt * 30) { toW(B.sweepX, 0.2, _v, 0.5); this.fx.sparks(_v.x, _v.y, _v.z, { n: 3, speed: 6, s: 0.25, life: 0.5, r: 1, g: 0.6, b: 0.3 }); }
+      if (this.burnX === undefined || Math.abs(wd(B.sweepX - this.burnX)) > 1.5) { this.burnX = B.sweepX; this.scar(B.sweepX, 3, 1.4, 1.5); }
     }
   }
   bossKick(e, k) { const V = this.bossV, B = this.W && this.W.boss; if (!V || !B) return; const dir = Math.sign(wd(B.x - e.x)) || 1; V.rvx = (V.rvx || 0) + dir * 5 * k; V.flv = (V.flv || 0) + 10 * k; V.fdir = dir; }
@@ -1222,9 +1343,9 @@ export class Renderer {
   get portrait() { return this.camera.aspect < 0.85; }
   frameShot(pts, dur) { this.shot = { pts, t: dur }; }
   setIntent(t, me) { this.intent = t ? { t, me } : null; }
-  // o: { me: player or null, cine, snap, shake, x (fallback centre) }
+  // o: { me: player or null, cine, snap, shake, chase, x (fallback centre) }
   updateCamera(dt, o = {}) {
-    const c = this.camera, vf = THREE.MathUtils.degToRad(c.fov);
+    const c = this.camera, vf = THREE.MathUtils.degToRad(SIDE_FOV);
     // the whole sky (ground to ceiling plus room for the HUD) fits the view; a phone held upright pulls back so the
     // view is at least 46 m wide
     const needH = this.needH, Dh = (needH / 2) / Math.tan(vf / 2), Dw = (46 / 2) / (Math.tan(vf / 2) * c.aspect);
@@ -1258,6 +1379,37 @@ export class Renderer {
     c.position.copy(_v4).addScaledVector(ZAX, D).addScaledVector(_v2, this.camLift + sy).addScaledVector(_v, sx);
     toW(this.cx, this.cy + this.lookLift, _v3, 0);
     c.up.copy(_v2);
+    // CHASE camera (Options): low behind the gunship and out over the sea, looking ahead along the curve of the
+    // planet. It follows the way the ship travels, not the way it faces: a quick turn to shoot behind leaves it where
+    // it is, and only once you have flown the other way for a moment does it swing out round the side to the other
+    // end. chaseK blends the two views, and the last place it saw the ship holds the view while you wait to respawn.
+    if (o.chase && o.me) {
+      this.chaseMe = { x: o.me.x, y: o.me.y, face: o.me.face };
+      const want = Math.abs(o.me.vx || 0) > F.vmax * 0.3 ? Math.sign(o.me.vx) : this.chDir;
+      if (o.snap || !this.chDir) { this.chDir = o.me.face; this.chHold = 0; }
+      else if (want !== this.chDir) { this.chHold += dt; if (this.chHold > 0.35) { this.chDir = want; this.chHold = 0; } }
+      else this.chHold = 0;
+    }
+    const wantK = o.chase && this.chaseMe && !o.cine ? 1 : 0;
+    this.chaseK = o.snap ? wantK : this.chaseK + (wantK - this.chaseK) * (1 - Math.exp(-dt * 3));
+    if (this.chaseK > 0.002 && this.chaseMe) {
+      const me = this.chaseMe;
+      if (o.snap) { this.chF = this.chDir || me.face; this.chV = 0; this.chY = me.y; }
+      const st = Math.min(dt, 1 / 20), w0 = 3.4;
+      this.chV += (((this.chDir || me.face) - this.chF) * w0 * w0 - this.chV * 2 * w0) * st;
+      this.chF = clamp(this.chF + this.chV * st, -1, 1);
+      this.chY += (me.y - this.chY) * (1 - Math.exp(-dt * 5));
+      const f = this.chF, side = 1 - Math.abs(f), bx = me.x - f * 12.5;
+      toW(bx, clamp(this.chY + 3.4 + side * 2.5, 2.6, H + 6), _v5, 6 + side * 17);
+      radial(bx, _v); _v5.addScaledVector(_v, sy).addScaledVector(ZAX, sx);
+      toW(me.x + f * 26, this.chY + (H * 0.45 - this.chY) * 0.3 + 0.4, _v4, 0);
+      const k = sstep(0, 1, this.chaseK);
+      c.position.lerp(_v5, k);
+      _v3.lerp(_v4, k);
+      _v.copy(_v5).normalize(); c.up.lerp(_v, k).normalize();   // level with the ground under the camera
+    }
+    const fov = SIDE_FOV + (CHASE_FOV - SIDE_FOV) * sstep(0, 1, this.chaseK);
+    if (Math.abs(c.fov - fov) > 0.01) { c.fov = fov; c.updateProjectionMatrix(); }
     c.lookAt(_v3);
     void th;
     this.sky.position.copy(c.position);
@@ -1338,6 +1490,7 @@ export class Renderer {
       const f = s.t / s.max;
       if (f >= 1) continue;
       this.project(s.x, s.y, P0);
+      if (P0.z > 1) continue;
       shocks.push(new THREE.Vector4(P0.x / innerWidth, 1 - P0.y / innerHeight, f * 0.35 * s.k, (1 - f) * (CALM.on ? 0.3 : 0.8) * s.k));
     }
     this.shocks = this.shocks.filter((s) => s.t < s.max);

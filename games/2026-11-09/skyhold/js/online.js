@@ -3,8 +3,8 @@
 // carrier, lives, score) and streams snapshots 20 times a second. The guest flies its own gunship locally (so it never
 // lags), judges the hits it takes, and reports its ship, its beams, novas, catches, landings and pickups as claims;
 // the host carries those out so every kill is decided in one place.
-import { netDeath, netShield, netCatch, netLand, netPod, netFire, netRam, netNovaAt, netAdopt } from './sim.js?v=10';
-import { PW_KEYS, SHIP_KEYS } from './config.js?v=10';
+import { netDeath, netShield, netCatch, netLand, netPod, netFire, netRam, netNovaAt, netAdopt } from './sim.js?v=11';
+import { PW_KEYS, SHIP_KEYS } from './config.js?v=11';
 
 export const PROTOCOL = 1;
 const RELAY = 'wss://steel-duel-online.jez237.workers.dev';
@@ -238,7 +238,7 @@ export class Online {
     const lag = clamp(this.rtt / 2000, 0, 0.25);
     if (this.remote && g.alive && this.remote.s[5]) {
       const q = this.remote.s, age = Math.min(0.3, lag + (performance.now() - this.remote.at) / 1000);
-      g.vx = +q[2] || 0; g.vy = +q[3] || 0; g.x = (+q[0] || 0) + g.vx * age; g.y = (+q[1] || 0) + g.vy * age; g.face = q[4] < 0 ? -1 : 1; g.thrust = +q[6] || 0; g.carry = q[7] | 0; if (q[8] !== undefined && SHIP_KEYS[q[8]]) g.ship = SHIP_KEYS[q[8]];
+      g.vx = +q[2] || 0; g.vy = +q[3] || 0; g.x = (+q[0] || 0) + g.vx * age; g.y = (+q[1] || 0) + g.vy * age; g.face = q[4] < 0 ? -1 : 1; g.thrust = +q[6] || 0; g.carry = q[7] | 0; if (q[8] !== undefined && SHIP_KEYS[q[8]]) g.ship = SHIP_KEYS[q[8]]; if (q[9] !== undefined) g.mast = Math.max(0, Math.min(2, q[9] | 0));
     }
     for (const c of this.claimQ) {
       if (W.over) break;
@@ -270,7 +270,7 @@ export class Online {
     if (!claims.length && this.sendT > 0) return;
     this.sendT = 1 / 30;
     if (!me) return;
-    this.raw({ type: 'input', s: [r3(me.x), r3(me.y), r2(me.vx), r2(me.vy), me.face, me.alive ? 1 : 0, r2(me.thrust || 0), me.carry || 0, SHIP_KEYS.indexOf(me.ship || 'warden')], c: claims });
+    this.raw({ type: 'input', s: [r3(me.x), r3(me.y), r2(me.vx), r2(me.vy), me.face, me.alive ? 1 : 0, r2(me.thrust || 0), me.carry || 0, SHIP_KEYS.indexOf(me.ship || 'warden'), me.mast || 0], c: claims });
   }
   guestSync(W) {
     if (!this.inbox.length) return [];

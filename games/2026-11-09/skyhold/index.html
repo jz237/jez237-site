@@ -7,22 +7,22 @@
 <meta name="description" content="Skyhold 2026: an original planet-defence shooter in real-time 3D. Fly a gunship round and round a small planet, from the day side into the night, shoot down the machines lifting your settlers off the ground, catch the ones that fall and bring down a colossal carrier on each of five worlds. Endless Orbit, online co-op, upgrades, medals, instant replays and a smart demo mode.">
 <title>Skyhold 2026</title>
 <link rel="icon" href="data:,">
-<link rel="modulepreload" href="js/main.js?v=10">
-<link rel="modulepreload" href="js/config.js?v=10">
-<link rel="modulepreload" href="js/sim.js?v=10">
-<link rel="modulepreload" href="js/ai.js?v=10">
-<link rel="modulepreload" href="js/render.js?v=10">
-<link rel="modulepreload" href="js/audio.js?v=10">
-<link rel="modulepreload" href="js/chip.js?v=10">
-<link rel="modulepreload" href="js/input.js?v=10">
-<link rel="modulepreload" href="js/scores.js?v=10">
-<link rel="modulepreload" href="js/replay.js?v=10">
-<link rel="modulepreload" href="js/post.js?v=10">
-<link rel="modulepreload" href="js/textures.js?v=10">
-<link rel="modulepreload" href="js/models.js?v=10">
-<link rel="modulepreload" href="js/fx.js?v=10">
-<link rel="modulepreload" href="js/shaders.js?v=10">
-<link rel="modulepreload" href="js/online.js?v=10">
+<link rel="modulepreload" href="js/main.js?v=11">
+<link rel="modulepreload" href="js/config.js?v=11">
+<link rel="modulepreload" href="js/sim.js?v=11">
+<link rel="modulepreload" href="js/ai.js?v=11">
+<link rel="modulepreload" href="js/render.js?v=11">
+<link rel="modulepreload" href="js/audio.js?v=11">
+<link rel="modulepreload" href="js/chip.js?v=11">
+<link rel="modulepreload" href="js/input.js?v=11">
+<link rel="modulepreload" href="js/scores.js?v=11">
+<link rel="modulepreload" href="js/replay.js?v=11">
+<link rel="modulepreload" href="js/post.js?v=11">
+<link rel="modulepreload" href="js/textures.js?v=11">
+<link rel="modulepreload" href="js/models.js?v=11">
+<link rel="modulepreload" href="js/fx.js?v=11">
+<link rel="modulepreload" href="js/shaders.js?v=11">
+<link rel="modulepreload" href="js/online.js?v=11">
 <link rel="modulepreload" href="vendor/three.module.min.js">
 <link rel="modulepreload" href="vendor/three.core.min.js">
 
@@ -302,6 +302,9 @@ table.hs tr.me td { color: #fff; background: rgba(255, 179, 71, .1); }
   #tut { top: calc(max(10px, env(safe-area-inset-top)) + 230px); }
 }
 #wingtag { position: absolute; left: 0; top: 0; font-size: 10px; letter-spacing: .2em; color: #ffd0a0; padding: 2px 7px; border-radius: 6px; background: rgba(0,0,0,.45); border: 1px solid rgba(255,176,112,.5); white-space: nowrap; }
+  #ship-desc .mast { display: block; margin-top: 6px; font-size: 0.92em; opacity: 0.9; letter-spacing: 0.04em; }
+  #ship-desc .mast span { display: block; opacity: 0.6; text-transform: none; letter-spacing: 0; }
+  #ship-desc .mast span.got { opacity: 1; color: #ffd27a; }
 </style>
 </head>
 <body>
@@ -354,7 +357,7 @@ table.hs tr.me td { color: #fff; background: rgba(255, 179, 71, .1); }
   <div class="screen hidden" id="title">
     <div class="card">
       <h1 class="logo">SKYHOLD<span> 2026</span></h1>
-      <div class="ver">VERSION <b id="ver">1.7.1</b> · GUARD THE COLONY · HOLD THE SKY</div>
+      <div class="ver">VERSION <b id="ver">1.8.0</b> · GUARD THE COLONY · HOLD THE SKY</div>
       <div class="diffrow">DIFFICULTY<div class="seg" data-opt="diff"><button data-v="easy">EASY</button><button data-v="normal">NORMAL</button><button data-v="hard">HARD</button><button data-v="nightmare">NIGHTMARE</button></div></div>
       <div id="diff-desc"></div>
       <div class="btns" id="title-btns">
@@ -427,6 +430,7 @@ table.hs tr.me td { color: #fff; background: rgba(255, 179, 71, .1); }
     <div class="opt">VOICE<input type="range" min="0" max="100" data-set="voice"></div>
     <div class="opt">NARRATION<div class="seg" data-opt="talk"><button data-v="on">ON</button><button data-v="off">OFF</button></div></div>
     <div class="opt">FLASHES<div class="seg" data-opt="flash"><button data-v="full">NORMAL</button><button data-v="reduced">REDUCED</button></div></div>
+    <div class="opt">CAMERA<div class="seg" data-opt="camera"><button data-v="side">SIDE</button><button data-v="chase">CHASE</button></div></div>
     <div class="opt">SCREEN SHAKE<div class="seg" data-opt="shake"><button data-v="1">ON</button><button data-v="0.4">LIGHT</button><button data-v="0">OFF</button></div></div>
     <div class="opt">VIBRATION<div class="seg" data-opt="rumble"><button data-v="on">ON</button><button data-v="off">OFF</button></div></div>
     <div class="opt">GUNSHIP<div class="seg" data-opt="ship" id="ships"></div></div>
@@ -435,6 +439,7 @@ table.hs tr.me td { color: #fff; background: rgba(255, 179, 71, .1); }
     <div class="opt">AUTO-FIRE<div class="seg" data-opt="autofire"><button data-v="auto">TOUCH</button><button data-v="on">ON</button><button data-v="off">OFF</button></div></div>
     <div class="opt">AIM ASSIST<div class="seg" data-opt="assist"><button data-v="off">OFF</button><button data-v="light">LIGHT</button><button data-v="strong">STRONG</button></div></div>
     <div class="opt">SCANNER<div class="seg" data-opt="scanner"><button data-v="on">ON</button><button data-v="off">OFF</button></div></div>
+    <div class="opt">DYNAMIC MUSIC<div class="seg" data-opt="layers"><button data-v="on">ON</button><button data-v="off">OFF</button></div></div>
     <div class="opt">RETRO SOUNDS<div class="seg" data-opt="retro"><button data-v="on">ON</button><button data-v="off">OFF</button></div></div>
     <div class="opt">CABINET SOUNDS<div class="seg" data-opt="cab"><button data-v="on">ON</button><button data-v="off">OFF</button></div></div>
     <div class="opt">TOUCH CONTROLS<div class="seg" data-opt="touch"><button data-v="auto">AUTO</button><button data-v="on">ON</button><button data-v="off">OFF</button></div></div>
@@ -456,13 +461,15 @@ table.hs tr.me td { color: #fff; background: rgba(255, 179, 71, .1); }
     <h3>POWER-UPS</h3><div class="pwgrid">
       <span><b>⁂ TWIN BEAM</b> two beams at once</span><span><b>» OVERDRIVE</b> double fire rate</span>
       <span><b>⬡ SHIELD CELL</b> +1 shield</span><span><b>✸ NOVA</b> +1 nova</span>
-      <span><b>GUNSHIPS</b> earn medals to unlock the BREAKER (heavy cannon), the ARC (chain lightning) and the HORNET (homing missiles); pick one in Options</span>
+      <span><b>GUNSHIPS</b> earn medals to unlock the BREAKER (heavy cannon), the ARC (chain lightning) and the HORNET (homing missiles); pick one in Options. <b>MASTERY</b>: shooting down 150 and then 500 machines with a gunship (skimmers do not count) unlocks its two perks, shown in Options; each applies from the next world</span>
       <span><b>HYPER</b> every kill fills the HYPER meter (faster with a chain). Full, you go HYPER for 8 seconds: everything else slows, the beam fires nonstop, ramming wrecks machines and kills score double</span>
       <span><b>METEORS AND LAVA BOMBS</b> planet events rain rocks on the colony: shoot them before they land</span>
       <span><b>SKIMMERS</b> flocks of small machines sweep the sky: they never shoot, but ramming one costs a shield. Easy points and chain fuel</span>
       <span><b>◈ ESCORT DRONE</b> a drone flies with you and shoots the nearest machine</span></div>
     <h3>DIFFICULTY</h3><p>Easy, Normal, Hard and Nightmare each have their own high-score tables. Harder levels score more points (×0.6, ×1, ×1.5, ×2.2). Medals count on Normal and harder, and unlock new ship colours in Options.</p>
-    <h3>KEYBOARD</h3><p>FLY: A / D or ← / → (the ship turns to face the way you push) · CLIMB / DIVE: W / S or ↑ / ↓ · FIRE: Space or J · NOVA: Shift or K · BLINK: H or L · PAUSE: Esc or P</p>
+    <h3>KEYBOARD</h3><p>FLY: A / D or ← / → (the ship turns to face the way you push) · CLIMB / DIVE: W / S or ↑ / ↓ · FIRE: Space or J · NOVA: Shift or K · BLINK: H or L · CAMERA: C · PAUSE: Esc or P</p>
+    <h3>DYNAMIC MUSIC</h3><p>Each world's music has two more parts that join in as the fight heats up: drums when machines close in, then a pulsing lead when it gets fierce (a carrier, an event, HYPER). Options → DYNAMIC MUSIC turns them off.</p>
+    <h3>CHASE CAMERA</h3><p>Options → CAMERA → CHASE (or C in flight) puts the camera low behind your gunship, looking ahead along the curve of the planet. RIGHT (or forward on the stick) flies on the way you face and LEFT turns you about; the camera swings round with you. Markers at the bottom of the screen show machines and settlers behind you.</p>
     <h3>GAMEPAD</h3><p>FLY: left stick or d-pad · FIRE: A or the right trigger · NOVA: B or the left trigger · BLINK: Y or a bumper · PAUSE: Start</p>
     <h3>TOUCH</h3><p>Hold the phone sideways. Your left thumb flies (push left or right to fly that way, up or down to climb or dive); FIRE, NOVA and BLINK sit under your right thumb. Aim assist and AUTO-FIRE (the beam fires by itself whenever something is lined up) are on by default for touch; both are in Options.</p>
     <div class="btns" style="margin-top:14px"><button class="mbtn" data-act="back">BACK</button></div>
@@ -502,6 +509,6 @@ addEventListener('error', (e) => window.__shErrors.push(String(e.message || e)))
 addEventListener('unhandledrejection', (e) => window.__shErrors.push('rejection: ' + String(e.reason && e.reason.message || e.reason)));
 (() => { const ce = console.error; console.error = (...a) => { window.__shErrors.push(a.map(String).join(' ')); ce.apply(console, a); }; })();
 </script>
-<script type="module" src="js/main.js?v=10"></script>
+<script type="module" src="js/main.js?v=11"></script>
 </body>
 </html>

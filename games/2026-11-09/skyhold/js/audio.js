@@ -7,7 +7,7 @@
 // there). Like the cabinet's one-channel sound board, a cabinet sound cuts off the one before unless that one ranks higher.
 // The colony-command voice ducks the music and only one line plays at a time. Music loops with a crossfade; clear and
 // over are one-shot stings. (js/chip.js adds a live-synthesised retro layer on top.)
-import { Chip } from './chip.js?v=10';
+import { Chip } from './chip.js?v=11';
 
 const SFX = ['beam', 'beamhit', 'pop', 'boomS', 'boomM', 'boomL', 'debris', 'warpin', 'grab', 'distress', 'fuse', 'fall', 'catch', 'land', 'lost',
   'mine', 'minebeep', 'hivepop', 'swarm', 'prowler', 'bolt', 'tell', 'nova', 'blink', 'blinkin', 'shieldhit', 'death', 'spawn', 'pickup', 'pwend',
@@ -16,7 +16,18 @@ const SFX = ['beam', 'beamhit', 'pop', 'boomS', 'boomM', 'boomL', 'debris', 'war
 const VOICE = ['begin', 's2', 's3', 's4', 's5', 'boss', 'bossdown', 'clear', 'lastlife', 'gameover', 'newrecord', 'champion', 'colonyfall', 'saved',
   'endless', 'partner', 'replay', 'lifted'];
 const MUSIC = new Set(['title', 's1', 's2', 's3', 's4', 's5', 'boss', 'clear', 'over']);  // clear, over: stings
-const V = '?v=10';
+// tracks with intensity layers (music/drums_<t>.mp3, music/lead_<t>.mp3: the same length as the track and on its beat,
+// made by scripts/skyhold/process_layers.py). These loop natively, in step, instead of crossfading copies.
+const LAYERED = new Set(['s1', 's2', 's3', 's4', 's5', 'boss']);
+// the decoded loop without the encoder's leading and trailing silence (some browsers keep it), as [start, end] seconds
+function body(b) {
+  const d = b.getChannelData(0), n = d.length, e = 1e-6;
+  let i = 0, j = n - 1;
+  while (i < 4096 && Math.abs(d[i]) < e) i++;
+  while (j > n - 4096 && Math.abs(d[j]) < e) j--;
+  return [i / b.sampleRate, (j + 1) / b.sampleRate];
+}
+const V = '?v=11';
 // the cabinet layer: file names in audio/cabinet/ and how they rank (higher cuts off lower; lower waits, so is dropped)
 const CAB = { fire: 1, explosion: 2, swarmer: 2, mutant: 3, bomber: 3, pod: 3, abduct: 4, fall: 4, credit: 4, catch: 5, delivery: 5,
   extra: 6, hyperspace: 6, bomb: 7, death: 8, planet: 9, start: 9, thrust: 0 };
@@ -31,7 +42,7 @@ export class Audio {
     this.music = null; this.musicName = null;
     this.speaking = 0; this.voiceQ = []; this.lastPlay = new Map();
     this.rate = 1; this.loading = null; this.loops = new Map(); this.beds = new Map(); this.chip = null; this.retroOn = true; this.retroVol = 0.55;
-    this.cabOn = true; this.cabCh = null;
+    this.cabOn = true; this.cabCh = null; this.layersOn = true; this.layerK = [0, 0];
   }
 
   unlock() {
@@ -175,6 +186,7 @@ export class Audio {
   async playMusic(name, fade = 1.5) {
     if (!this.ctx || this.musicName === name) return;
     this.musicName = name;
+    if (LAYERED.has(name)) return this.playLayered(name, fade);
     const b = await this.load('music_' + name, `${this.base}music/${name}.mp3${V}`);
     if (!b || this.musicName !== name) return;
     this.stopMusic(fade);
@@ -200,6 +212,48 @@ export class Audio {
     };
     schedule(this.ctx.currentTime + 0.05);
   }
+  // a layered track: the track and its two layers start on the same sample and loop natively, so they stay in step
+  // (slow motion changes all their rates together). The layers start silent; setLayers() fades them.
+  async playLayered(name, fade) {
+    const get = (n) => this.load('music_' + n, `${this.base}music/${n}.mp3${V}`);
+    // keep only this track's layers decoded (each is ~40 MB of PCM); very low-memory devices skip them
+    for (const k of [...this.buf.keys()]) if (/^music_(drums|lead)_/.test(k) && !k.endsWith('_' + name)) this.buf.delete(k);
+    const lay = this.layersOn && !(navigator.deviceMemory && navigator.deviceMemory <= 2);
+    const [b, bd, bl] = await Promise.all([get(name), lay ? get('drums_' + name) : null, lay ? get('lead_' + name) : null]);
+    if (!b || this.musicName !== name) return;
+    this.stopMusic(fade);
+    const m = { name, b, voices: [], layers: [], stop: false };
+    this.music = m;
+    const when = this.ctx.currentTime + 0.08;
+    const start = (buf, gain, ramp) => {
+      const src = this.ctx.createBufferSource(); src.buffer = buf; src.loop = true;
+      const [a, e] = body(buf); src.loopStart = a; src.loopEnd = e;
+      src.playbackRate.value = this.rate;
+      const g = this.ctx.createGain();
+      g.gain.setValueAtTime(0, when);
+      if (ramp) g.gain.linearRampToValueAtTime(gain, when + fade);
+      src.connect(g).connect(this.musicBus);
+      src.start(when, a);
+      return { src, g };
+    };
+    m.voices.push(start(b, 1, true));
+    // both layers must be the track's own length, or they would drift out of step: skip any that is not
+    const okLen = (x) => x && Math.abs((body(x)[1] - body(x)[0]) - (body(b)[1] - body(b)[0])) < 0.01;
+    for (const [x, k] of [[bd, 'drums'], [bl, 'lead']]) if (okLen(x)) { const v = start(x, 0, false); v.k = k; m.layers.push(v); m.voices.push(v); }
+    this.setLayers(this.layerK[0], this.layerK[1], true);
+  }
+  // intensity layers 0..1 (drums, lead)
+  setLayers(d, l, snap) {
+    this.layerK = [d, l];
+    const m = this.music;
+    if (!this.ctx || !m || !m.layers) return;
+    const t = this.ctx.currentTime, on = this.layersOn ? 1 : 0;
+    for (const v of m.layers) {
+      const want = (v.k === 'drums' ? d * 0.95 : l * 0.8) * on;
+      if (snap) v.g.gain.setTargetAtTime(want, t + 0.1, 0.05); else v.g.gain.setTargetAtTime(want, t, 0.25);
+    }
+  }
+  setLayersOn(on) { this.layersOn = !!on; this.setLayers(this.layerK[0], this.layerK[1]); }
   stopMusic(fade = 1) {
     const m = this.music;
     if (!m) return;

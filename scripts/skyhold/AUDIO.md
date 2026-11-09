@@ -241,6 +241,32 @@ python scripts/skyhold/process_audio.py games/2026-11-09/skyhold [names]        
 python scripts/skyhold/process_audio.py stats games/2026-11-09/skyhold/audio    # spectral screen
 ```
 
+## Music layers: `music/drums_<t>.mp3`, `music/lead_<t>.mp3`
+
+Every stage track (s1-s5) and the boss track has two layers that the game fades in over it as the fight heats up
+(Options → DYNAMIC MUSIC). `heatOf()` in `js/main.js` scores the fight from machines close to you, machines on the
+planet, a carrier (more when it is enraged or in its core phase), a planet event and HYPER; it rises fast and falls
+slowly. The drums come in from a heat of about 0.16-0.42, the lead pulse from 0.6-0.85.
+
+- **Tempo.** Measured from the finished loops (spectral-flux onsets, best constant tempo, then every beat refined and a
+  line fitted): each track holds its asked-for BPM almost exactly (111.998, 117.999, 124.000, 129.999, 136.003,
+  142.001) with about 2 ms of beat jitter and under 2 ms of drift across the loop.
+- **Drums.** `gen_layers.py` asks ElevenLabs Music for a 150 s drums-only take per track at that BPM; the takes came back
+  at the same tempo to within 0.003%. `process_layers.py` stretches each take to the track's exact beat (a change of
+  a few parts in 100,000), picks the cut whose beats land on the track's beats (and whose kick pattern best matches the
+  track's low end, so the bars line up too), and cuts it to exactly the track's length with a 0.25 s crossfade seam.
+  The written layers sit within 2.6 ms of the track's beat. -18 LUFS.
+- **Lead pulse.** A generated lead-only take (lead_s1) came back in A minor over an A major track, with too little
+  beat to lock to; any separately generated melody would also fight the track's own chord changes. So the lead is
+  synthesised in `process_layers.py`: plucked detuned saws in sixteenths on the track's root, fifth and octave (keys from
+  whole-track chroma: s1 A major, s2 C major, s3 A minor, s4 F major, s5 and boss D minor), on the track's beat grid,
+  with a dotted-eighth ping-pong delay and a little pump after every beat. -19 LUFS.
+- **Playback.** `Audio.playLayered()` starts the track and both layers on the same sample, each looping natively
+  between the first and last non-silent samples (some browsers keep the MP3 encoder's padding), so they stay in step
+  for as long as the music plays; slow motion changes all their rates together. Only the current track's layers stay
+  decoded, and devices reporting 2 GB of memory or less skip the layers.
+- **Check.** `music_check.mjs`.
+
 ## Cabinet layer: `audio/cabinet/`
 
 Options → CABINET SOUNDS (on by default) plays the original 1980 arcade cabinet's sound effects alongside our own.

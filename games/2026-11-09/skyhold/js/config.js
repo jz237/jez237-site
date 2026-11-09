@@ -1,6 +1,6 @@
 // Skyhold 2026 — every tunable number lives here. The RAMP table drives difficulty; nothing else in the game
 // hard-codes enemy pace, numbers, fire rate, aim or warning times.
-export const VERSION = '1.7.1';
+export const VERSION = '1.8.0';
 export const STEP = 1 / 120;
 
 // ------------------------------------------------------------------ the planet and the Warden gunship
@@ -59,6 +59,18 @@ export const SHIPS = {
   hornet: { name: 'HORNET', desc: 'Homing swarm missiles that find their own targets. The fastest ship.', medals: 9, weapon: 'missile', vmax: 1.1, accel: 1.15, cd: 3.2, dmg: 1, band: 1, range: 1, missiles: 2, hyperCD: 0.12 },
 };
 export const SHIP_KEYS = Object.keys(SHIPS);
+// GUNSHIP MASTERY: machines a gunship shoots down (any mode you fly yourself; skimmers, mines and meteors do not count)
+// unlock its two perks, at `at` machines (about two and six worlds); a perk
+// applies from the next world you start. The world remembers each pilot's level (makeWorld mast / mast2), so replays and
+// online play stay exact.
+export const MASTERY = { at: [150, 500],
+  perks: {
+    warden: [{ name: 'LONG BEAM', desc: 'the beam reaches 15% further' }, { name: 'QUICK CHARGE', desc: 'HYPER charges 35% faster' }],
+    breaker: [{ name: 'WIDE SHELL', desc: 'shots are 30% taller' }, { name: 'SHOCKWAVE', desc: 'a wreck from your shell hits every machine within 4.5 m' }],
+    arc: [{ name: 'FORK', desc: 'lightning leaps to one more machine' }, { name: 'LONG ARC', desc: 'lightning leaps 40% further' }],
+    hornet: [{ name: 'THIRD MISSILE', desc: 'every salvo fires a third missile' }, { name: 'HUNTER SEEKERS', desc: 'missiles fly 25% faster and lock on from further away' }],
+  } };
+export const mastLevel = (n) => (n >= MASTERY.at[1] ? 2 : n >= MASTERY.at[0] ? 1 : 0);
 // RIVALS (online): two pilots on one planet, each with their own score, for `waves` waves (no carrier). Shooting the
 // rival while they carry a settler knocks it loose (it falls, ready to be caught) and scores `steal`; being shot down costs
 // `death` points; ships never run out.
