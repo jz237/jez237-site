@@ -1409,3 +1409,10 @@ R75 - connected mine districts
 - Three built-in GPT Image geological masters (1254px) are encoded at 1024px with derived 512px normal/roughness maps. Continuous world-space rock projection, existing cached relief geometry and the same texture-unit budget are retained. Shared steel/ceramic families are warmed during loading.
 - Natural districts omit repeated wall-mounted machinery boxes and industrial frames. Partial construction combines exposed geology with broad metal lining and open ribs. Built-out districts use their corresponding steel, worn and ceramic materials for structural frames.
 - Eight wide showroom views (49-56) inspect actual connected mine sections, with the existing pause, zoom and comparison controls. Flight controls, demo AI, level topology, collision, physics and simulation random state remain unchanged.
+
+R76 - demo firing lanes and combat positioning
+- Ship-sized local movement sweeps account for reactor and robot collision bodies, including an escape direction when already touching an object.
+- Firing tests follow the actual muzzle offsets and native projectile radii all the way to a collision with the target. Hidden targets remain ineligible; partly visible targets may be approached without authorizing shots through a corner.
+- A bounded combat-position search selects reachable firing positions and maintains a waypoint while strafing/backing away. It avoids recently failed positions, monitors damage and movement progress, and preserves smooth rotational thrust and weapon hold times.
+- Reactor damage counts as mission progress. The reactor is not temporarily blacklisted like a mobile robot when an approach is ineffective. A brief occlusion retains only the observed approach and last seen point, with firing disabled until visible again.
+- Human flight controls, native movement/weapon physics, enemy AI, audio, materials and level layouts are unchanged.
