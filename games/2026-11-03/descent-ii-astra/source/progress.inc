@@ -3,7 +3,7 @@
 extern int Endlevel_sequence;
 static double ap_check_at,ap_entered,ap_saved_at;
 static int ap_level=999,ap_keys=-1;
-static int ap_campaign(void){return !strcmp(Current_mission_filename,"overload")?2:!strcmp(Current_mission_filename,"d2x")?1:0;}
+static int ap_campaign(void){return !strcmp(Current_mission_filename,"minerva")?3:!strcmp(Current_mission_filename,"elegies")?4:!strcmp(Current_mission_filename,"overload")?2:!strcmp(Current_mission_filename,"d2x")?1:0;}
 static int ap_excluded(void){return EM_ASM_INT(return !!(Module.netSession||Module.autopilot||Module.demo||Module.encounter||Module.mineInspect>=0||Module.weaponInspect>=0||Module.pickupInspect>=0||Module.blastInspect>0||window.astraPreview?.active);)||Newdemo_state==ND_STATE_PLAYBACK;}
 int astra_checkpoint_available(void){if(Game_mode&GM_MULTI)return 0;return EM_ASM_INT(return window.astraProgress?.available($0)?1:0;,ap_campaign());}
 int astra_progress_command(void){

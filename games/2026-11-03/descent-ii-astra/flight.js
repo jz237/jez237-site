@@ -237,7 +237,7 @@ function preloadFlightEngine() {
   if(location.protocol!=="http:"&&location.protocol!=="https:")return;
   if(document.getElementById("astraEnginePreload"))return;
   const link=document.createElement("link");link.id="astraEnginePreload";
-  link.rel="preload";link.as="script";link.href="engine.js?v=pyre85";
+  link.rel="preload";link.as="script";link.href="engine.js?v=pyre86";
   document.head.append(link);
 }
 let firstBlastProfile=0;
@@ -286,7 +286,7 @@ async function launch(quick,demo=false,encounter=false,preview=false,autopilot=f
   try {
     if(quick && !demo && !preview && !autopilot && !window.astraNet?.session)captureFlightMouse();
     const selectedCampaign=$("campaign").value;
-    const campaign=selectedCampaign==='overload'&&(preview||inspect||weapons||mine)?'d2x':selectedCampaign;
+    const campaign=(selectedCampaign==='overload'&&(preview||inspect||weapons||mine)||window.astraCampaigns[selectedCampaign]?.arena&&(preview&&!mine||inspect||weapons))?'d2x':selectedCampaign;
     const astra=campaign==='overload'||$("look").value==="astra";
     // Prime the media element in the button gesture before disk I/O.
     const music=player;
@@ -304,6 +304,7 @@ async function launch(quick,demo=false,encounter=false,preview=false,autopilot=f
     const scenery = astra && campaign!=="overload" ? script("scenery-art.js?v=74").then(()=>window.astraSceneryReady) : Promise.resolve(null);
     await readPack("game","Reading game data");
     await readPack("vertigo","Reading the mission");
+    if(window.astraCampaigns[campaign]?.arena)await readPack("classics86","Reading classic arenas");
     let assetDepot=null;
     if(astra){
       await script("payload/stream24/index.js?v=69");
@@ -338,7 +339,7 @@ async function launch(quick,demo=false,encounter=false,preview=false,autopilot=f
       resumeFlight:!!window.astraResumeLast,comfort:window.astraTools?.comfort,
       resumeCheckpoint:!!window.astraResumeCheckpoint,checkpoints:document.getElementById("checkpoints").checked,
       netSession:window.astraNet?.session||null,
-      canvas,quick,demo,encounter,autopilot,openWeaponPriorities,shadowQuality:Number($("shadowQuality").value),combatInspect:window.astraCombatPending??-1,assetDepot,loadMovie,fastLaunch:true,blastInspect:preview?firstBlastProfile:0,mineInspect:mine?0:-1,mineInspectZoom:1,demoArsenal:autopilot&&$("demoArsenal").checked,weaponInspect:weapons?0:-1,difficulty:Number($("difficulty").value),mobileDemo:autopilot&&astraTouch,autoPaused:false,startLevel:mine?Number($("mineLevel").value):autopilot?Number($("demoLevel").value):1,pickupInspect:inspect?0:-1,pyroPreviewCommand:preview?1:0,campaign,wideHud:$("wideHud").checked,intro:!openWeaponPriorities && !quick && !demo && $("intro").checked,astra, arguments:["-hogdir","/mine","-pilot",autopilot?"watch":"astra","-window","-nostickykeys","-nojoystick",
+      canvas,quick,demo,encounter,autopilot,openWeaponPriorities,shadowQuality:Number($("shadowQuality").value),combatInspect:window.astraCombatPending??-1,assetDepot,loadMovie,fastLaunch:true,blastInspect:preview?firstBlastProfile:0,mineInspect:mine?0:-1,mineInspectZoom:1,demoArsenal:autopilot&&$("demoArsenal").checked,weaponInspect:weapons?0:-1,difficulty:Number($("difficulty").value),mobileDemo:autopilot&&astraTouch,autoPaused:false,startLevel:mine?Number($("mineLevel").value):autopilot?Number($("demoLevel").value):window.astraCampaigns[campaign]?.arena?Number($("classicLevel").value)||1:1,pickupInspect:inspect?0:-1,pyroPreviewCommand:preview?1:0,campaign,wideHud:$("wideHud").checked,intro:!openWeaponPriorities && !quick && !demo && $("intro").checked,astra, arguments:["-hogdir","/mine","-pilot",autopilot?"watch":"astra","-window","-nostickykeys","-nojoystick",
         "-gl_gettexlevelparam_ok","0","-gl_intensity4_ok","0","-gl_luminance4_alpha4_ok","0","-gl_rgba2_ok","0"],
       print:console.log,printErr:console.warn,onAbort:astraFail,
       onExit:()=>{Module.astraExited=true;window.astraMenus?.hide();window.astraTerminal?.fail();window.astraFlightFocus(false);syncPilot();document.body.classList.remove("flying");$("status").textContent="Flight ended."; $("retry").hidden=false;},
@@ -377,7 +378,7 @@ async function launch(quick,demo=false,encounter=false,preview=false,autopilot=f
         setInterval(syncPilot,3000);
       }
     };
-    await script("engine.js?v=pyre85");
+    await script("engine.js?v=pyre86");
   } catch(e) {console.error(e);astraFail(e.message);}
 }
 
@@ -409,7 +410,8 @@ window.addEventListener("keydown",e=>{
 },true);
 
 window.astraLaunchSquadron=()=>launch(true);
-$("start").onclick=()=>$("playMode")?.value==='coop'?window.astraNet.quickCoop():launch(true);
+$("start").onclick=()=>window.astraResumeLast||window.astraResumeCheckpoint?launch(true):window.astraCampaigns[$("campaign").value]?.arena?window.astraNet.quickArena($("playMode").value==='coop'):$("playMode")?.value==='coop'?window.astraNet.quickCoop():launch(true);
+$("classicExplore").onclick=()=>launch(true);
 function launchBlastPreview(profile){
   firstBlastProfile=profile;
   $("look").value="astra";
@@ -481,7 +483,7 @@ $('full').hidden=!$('stage').requestFullscreen;
 $('full').onclick=async()=>{try{if(document.fullscreenElement)await document.exitFullscreen?.();else await $('stage').requestFullscreen?.();}catch{}};
 const demoLevel=$('demoLevel');
 function populateDemoLevels(){
-  const count=$('campaign').value==='overload'?16:$('campaign').value==='d2'?24:20;
+  const count=window.astraCampaigns[$('campaign').value]?.levels||20;
   demoLevel.replaceChildren(...Array.from({length:count},(_,i)=>new Option('Level '+(i+1),i+1)));
 }
 $('campaign').addEventListener('change',populateDemoLevels);populateDemoLevels();
@@ -491,7 +493,7 @@ window.astraAutoStatus=(task,rooms,deaths,kills,pickups)=>{
   if(!Module.autopilot)return;
   $('autoTask').textContent=Module.autoPaused?'Paused':task;
   const level=Module.flightState?.level||Module.startLevel;
-  $('autoStats').textContent=`${Module.campaign==='overload'?'Overload':Module.campaign==='d2'?'Counterstrike':'Vertigo'} · L${level} · ${kills} kills · ${pickups} pickups · ${rooms} rooms${Module.demoArsenal?' · Full arsenal':''}`;
+  $('autoStats').textContent=`${window.astraCampaigns[Module.campaign]?.name||'Astra'} · L${level} · ${kills} kills · ${pickups} pickups · ${rooms} rooms${Module.demoArsenal?' · Full arsenal':''}`;
   Module.autoStats={task,rooms,deaths,kills,pickups};
 };
 function pauseDemo(paused){
@@ -506,7 +508,7 @@ $('watch').onclick=()=>{$('look').value='astra';$('wideHud').checked=true;watchW
 $('autoPause').onclick=()=>pauseDemo(!Module.autoPaused);
 $('autoStop').onclick=()=>window.astraNavigation.home(false);
 $('autoNext').onclick=()=>{
-  pauseDemo(false);Module.autoNext=(Module.flightState?.level||Module.startLevel)%(Module.campaign==='overload'?16:Module.campaign==='d2'?24:20)+1;
+  pauseDemo(false);Module.autoNext=(Module.flightState?.level||Module.startLevel)%(window.astraCampaigns[Module.campaign]?.levels||20)+1;
   $('autoTask').textContent='Loading next mine';
 };
 window.astraAutoFinished=()=>{Module.autoNext=1;$('autoTask').textContent='Campaign complete · Starting a new tour';};

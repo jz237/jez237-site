@@ -1,6 +1,6 @@
 /* Checkpoints use native save data; the small local index is only a launcher hint. */
 (()=>{
-  const root='/home/web_user/.d2-astra/',key='astra.checkpoints.v1',names=['d2','d2x','overload'];
+  const root='/home/web_user/.d2-astra/',key='astra.checkpoints.v1',names=Object.keys(window.astraCampaigns);
   const q=id=>document.getElementById(id);let index={},status=null;
   try{index=JSON.parse(localStorage.getItem(key)||'{}');}catch{}
   const enabled=q('checkpoints');try{enabled.checked=localStorage.getItem('astra.checkpoints.enabled')!=='0';}catch{}
@@ -21,7 +21,7 @@
   const api=window.astraProgress={
     mounted(){
       const F=Module.FS;
-      for(let c=0;c<3;c++){
+      for(let c=0;c<names.length;c++){
         const options=[];for(let s=0;s<2;s++)try{const cp=JSON.parse(F.readFile(root+file(c,s)+'.json',{encoding:'utf8'}));if(cp.campaign===c&&valid(c,cp))options.push(cp);}catch{}
         options.sort((a,b)=>b.time-a.time);if(options.length)index[c]=options[0];else delete index[c];
       }remember();
@@ -51,9 +51,9 @@
     message(text){q('checkpointStatus').textContent=text;},
     update(s){
       status=s;api.state=s;const controller=window.astraOverload?.controller;
-      const objective=s.dead?'Ship lost · Restore a checkpoint from here or the flight menu':s.reactor?'Escape the mine before the reactor detonates':s.campaign===2?window.astraOverload?.objective||'Explore the facility':'Find the reactor, destroy it and reach the exit';
+      const objective=s.dead?'Ship lost · Restore a checkpoint from here or the flight menu':s.reactor?'Escape the mine before the reactor detonates':s.campaign>=3?'Explore the classic arena · Deathmatch is available from Missions':s.campaign===2?window.astraOverload?.objective||'Explore the facility':'Find the reactor, destroy it and reach the exit';
       const brief=s.dead?'Ship lost':s.reactor?`Escape · ${Math.max(0,s.countdown)}s`:`L${s.level} · Objective`;
-      for(const [id,text] of Object.entries({objectiveBrief:brief,objectiveText:objective,objectiveSecurity:s.campaign===2?`Security clearance: ${controller?.clearance||0}`:`Keys: ${[[2,'Blue'],[4,'Red'],[8,'Gold']].filter(([f])=>s.keys&f).map(([,n])=>n).join(' · ')||'None'}`,objectiveReactor:s.reactor?`Reactor destroyed · ${Math.max(0,s.countdown)}s remaining`:'Reactor: secure'}))if(q(id).textContent!==text)q(id).textContent=text;
+      for(const [id,text] of Object.entries({objectiveBrief:brief,objectiveText:objective,objectiveSecurity:s.campaign>=3?'Classic anarchy arena':s.campaign===2?`Security clearance: ${controller?.clearance||0}`:`Keys: ${[[2,'Blue'],[4,'Red'],[8,'Gold']].filter(([f])=>s.keys&f).map(([,n])=>n).join(' · ')||'None'}`,objectiveReactor:s.reactor?`Reactor destroyed · ${Math.max(0,s.countdown)}s remaining`:s.campaign>=3?'Original pickups and spawn points':'Reactor: secure'}))if(q(id).textContent!==text)q(id).textContent=text;
       q('restoreCheckpoint').hidden=!index[s.campaign];
     }
   };

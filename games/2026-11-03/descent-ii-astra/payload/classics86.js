@@ -1,0 +1,1 @@
+astraIndex.classics86=[["classics86-000.bin"],[["missions/minerva.txt",1313],["missions/minerva.mn2",60],["missions/minerva.hog",144569],["missions/elegies.mn2",129],["missions/elegies.hog",461143],["missions/elegies.txt",6364]]];

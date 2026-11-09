@@ -1,0 +1,48 @@
+[
+  {
+    "mission": "minerva",
+    "source": "http://www.pooterman.com/ftp/descent2/levels/minerva.zip",
+    "archiveSha256": "136715ade86187e3707ef081cc5cd9b83f8e4249316f5ee329a50314ebcf2316",
+    "files": [
+      {
+        "name": "minerva.txt",
+        "bytes": 1313,
+        "sha256": "4d21051f431c4a4b08ca0699dffc18fc32653cfe35cd3744c0bfce0e20c6e3de"
+      },
+      {
+        "name": "minerva.mn2",
+        "bytes": 60,
+        "sha256": "015bd1c0c00ca475786e16a18fef74cfcca6b113432ede8821e647c9f73afd3f"
+      },
+      {
+        "name": "minerva.hog",
+        "bytes": 144569,
+        "sha256": "90382a151dea57cb7c1ae66f86d21afc9afdf2c321d10275ccf7f58ac03838b4"
+      }
+    ],
+    "note": "Original HOG, MN2 and author readme preserved byte-for-byte. Astra uses its existing Descent II soundtrack."
+  },
+  {
+    "mission": "elegies",
+    "source": "http://www.pooterman.com/ftp/descent2/levels/elegies.zip",
+    "archiveSha256": "54bb527eb49d65b64b31f99560b8213f374bd7a12b0e502621d15fb04d17d5f2",
+    "files": [
+      {
+        "name": "elegies.mn2",
+        "bytes": 129,
+        "sha256": "2c2d32eb315445525a33a64eb035be0af775ae7342dc31f7a5f3f101c76646e6"
+      },
+      {
+        "name": "elegies.hog",
+        "bytes": 461143,
+        "sha256": "3729eb0ed609315d2c9277777bc1e48ce7eb5957030374bade5fe7c6f066809e"
+      },
+      {
+        "name": "elegies.txt",
+        "bytes": 6364,
+        "sha256": "b2d64a3a6ba6b8a5c300004576df5161749f595afe31cce83cb034f9c6c130b0"
+      }
+    ],
+    "note": "Original HOG, MN2 and author readme preserved byte-for-byte. Astra uses its existing Descent II soundtrack."
+  }
+]

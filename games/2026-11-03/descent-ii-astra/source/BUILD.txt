@@ -1477,3 +1477,10 @@ R85 - normal campaign demo combat
 - Demo startup respects the selected difficulty instead of forcing Rookie.
 - Native robot hit attachments now use short hull sparks; missile detonations and actual deaths retain their separate explosions.
 - Native robot shields, weapon damage, firing rates, pickups, flight controls and AI tactics are unchanged.
+
+R86 - classic anarchy arenas
+- Added original Minerva and all six Elegies maps with their unchanged HOG, mission definitions and author readmes.
+- Classic arena selection supports online deathmatch, existing AI pilots and solo exploration.
+- Download the small classic parcel only when a classic arena is selected.
+- Mission identity, arena selection, saves, inspection and relay validation include both packs.
+- Native geometry, pickups, spawns, combat values, flight controls and demo AI are preserved.

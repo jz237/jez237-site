@@ -1,6 +1,6 @@
 /* A separate rotating suspend save; manual saves and checkpoints stay intact. */
 (()=>{
-  'use strict';const root='/home/web_user/.d2-astra/',key='astra.lastFlight.v1',campaigns=['d2','d2x','overload'],q=id=>document.getElementById(id);
+  'use strict';const root='/home/web_user/.d2-astra/',key='astra.lastFlight.v1',campaigns=Object.keys(window.astraCampaigns),q=id=>document.getElementById(id);
   let latest=null,pending=false;try{latest=JSON.parse(localStorage.getItem(key));}catch{}
   const button=document.createElement('button');button.id='resumeLastFlight';button.className='launch secondary-action';q('start').before(button);
   function refresh(){button.disabled=!latest;button.textContent=latest?`Continue last flight · ${latest.name} · Mine ${latest.level}`:'Continue last flight · No saved flight yet';}

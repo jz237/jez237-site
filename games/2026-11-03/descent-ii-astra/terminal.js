@@ -10,7 +10,13 @@
     if([...el.options].some(o=>o.value===value))el.value=value;
   }
   const mode=q('playMode');try{mode.value=localStorage.getItem('astra-play-mode-v77')==='solo'?'solo':'coop';}catch{}
-  function syncPlayMode(){const online=mode.value==='coop';q('start').querySelector('span').innerHTML=online?'<small>ONLINE CO-OP / UP TO 4</small>Join co-op campaign':'<small>SOLO FLIGHT / LEVEL 01</small>Enter mine';q('playModeHint').textContent=online?'Join an open game in this campaign, or start one for others to join. Up to four pilots.':'Fly the selected campaign on your own. No connection required.';}
+  function syncPlayMode(){
+    const online=mode.value==='coop',arena=!!window.astraCampaigns[q('campaign').value]?.arena;
+    mode.options[0].textContent=arena?'Online deathmatch · Join or start an arena':'Online co-op · Join or start a campaign';
+    mode.options[1].textContent=arena?'Practice with AI · Offline':'Solo campaign · Offline';
+    q('start').querySelector('span').innerHTML=arena?(online?'<small>CLASSIC ANARCHY / UP TO 4</small>Join arena deathmatch':'<small>OFFLINE / AI OPPONENTS</small>Play arena with AI'):(online?'<small>ONLINE CO-OP / UP TO 4</small>Join co-op campaign':'<small>SOLO FLIGHT / LEVEL 01</small>Enter mine');
+    q('playModeHint').textContent=arena?'Fight other pilots in the original arena layouts. Choose AI skill and player slots in Multiplayer & AI squadron.':online?'Join an open game in this campaign, or start one for others to join. Up to four pilots.':'Fly the selected campaign on your own. No connection required.';
+  }
   mode.onchange=()=>{try{localStorage.setItem('astra-play-mode-v77',mode.value);}catch{}syncPlayMode();};syncPlayMode();
   q('intro').checked=!!preferences.intro;
   const remember=()=>{try{localStorage.setItem(storage,JSON.stringify(Object.fromEntries(['look','res','difficulty','campaign','intro'].map(id=>[id,q(id).type==='checkbox'?q(id).checked:q(id).value]))));}catch{}};
@@ -31,7 +37,13 @@
   all('[data-go]').forEach(b=>b.onclick=()=>{tab(b.dataset.go);q('terminal').scrollIntoView({block:'start'});});
   function syncCampaign(){
     all('[data-campaign]').forEach(b=>{const active=b.dataset.campaign===q('campaign').value;b.classList.toggle('selected',active);b.setAttribute('aria-pressed',active);});
-    all('.selected-campaign').forEach(el=>el.textContent=q('campaign').value==='overload'?'OVERLOAD':q('campaign').value==='d2'?'COUNTERSTRIKE':'VERTIGO');
+    const c=window.astraCampaigns[q('campaign').value],arena=!!c?.arena;
+    all('.selected-campaign').forEach(el=>el.textContent=c.name.toUpperCase());
+    q('classicSettings').hidden=q('classicExplore').hidden=!arena;q('continueFlight').hidden=arena;
+    q('watch').disabled=arena;
+    q('panel-spectate').querySelector('.panel-description').textContent=arena?'These classic arenas have no campaign robots. Choose Play arena with AI in Missions, or explore an arena solo.':'Watch a pilot track enemies, hold its aim and choose weapons for the fight. Use normal pickups, or opt into the full arsenal showcase.';
+    if(arena){q('classicLevel').replaceChildren(...c.maps.map((name,i)=>new Option((i+1)+' · '+name,i+1)));q('classicInfo').textContent=c.name+' by '+c.author+' · Original layouts, pickups and spawn points.';q('classicCredits').href='classic-levels/'+q('campaign').value+'.txt';}
+    syncPlayMode();
   }
   all('[data-campaign]').forEach(b=>{
     b.onclick=()=>{if(launchPending)return;q('campaign').value=b.dataset.campaign;q('campaign').dispatchEvent(new Event('change'));};

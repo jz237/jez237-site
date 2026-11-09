@@ -93,7 +93,7 @@ window.astraMinePreview={
     [...$('mineScene').options].forEach((o,i)=>o.disabled=!this.has(i));
     $('mineScene').value=String(index);
     $('mineCaption').textContent=this.names[index];
-    $('mineLocation').textContent=(Module.campaign==='d2'?'Counterstrike':'Vertigo')+' · '+(level<0?'Secret mine '+(-level):'Mine '+level);
+    $('mineLocation').textContent=(window.astraCampaigns[Module.campaign]?.name||'Astra')+' · '+(level<0?'Secret mine '+(-level):'Mine '+level);
     $('mineDescription').textContent=this.descriptions[index];
       [...$('mineMaterial').options].forEach((o,i)=>o.disabled=!(Module.mineMaterialMask&(1<<i)));
       [...$('mineChamber').options].forEach((o,i)=>o.disabled=!this.has([19,20,0][i]));
@@ -110,9 +110,9 @@ window.astraMinePreview={
 const mine=astraMinePreview;
 mine.names.forEach((name,i)=>{const o=document.createElement('option');o.value=i;o.textContent=name;$('mineScene').append(o);});
 function mineLevels(){
-  const old=$('mineLevel').value,d2=$('campaign').value==='d2';$('mineLevel').replaceChildren();
-  for(let i=1;i<=(d2?24:20);i++){const o=document.createElement('option');o.value=i;o.textContent=(d2?'Counterstrike':'Vertigo')+' · Mine '+i;$('mineLevel').append(o);}
-  for(let i=1;i<=(d2?6:3);i++){const o=document.createElement('option');o.value=-i;o.textContent=(d2?'Counterstrike':'Vertigo')+' · Secret '+i;$('mineLevel').append(o);}
+  const old=$('mineLevel').value,c=window.astraCampaigns[$('campaign').value==='overload'?'d2x':$('campaign').value];$('mineLevel').replaceChildren();
+  for(let i=1;i<=c.levels;i++)$('mineLevel').append(new Option(c.name+' · '+(c.maps?.[i-1]||'Mine '+i),i));
+  for(let i=1;i<=c.secrets;i++)$('mineLevel').append(new Option(c.name+' · Secret '+i,-i));
   $('mineLevel').value=[...$('mineLevel').options].some(o=>o.value===old)?old:'1';
 }
 $('campaign').addEventListener('change',mineLevels);mineLevels();

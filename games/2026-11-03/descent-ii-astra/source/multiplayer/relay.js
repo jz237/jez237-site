@@ -1,9 +1,11 @@
 import { DurableObject } from 'cloudflare:workers';
 
+const LEVELS={d2:24,d2x:20,overload:16,minerva:1,elegies:6};
+const classic=c=>c==='minerva'||c==='elegies';
 const DEFAULT={mode:'coop',campaign:'d2',level:1,bots:[2,2,2]};
 const json=(ws,value)=>{try{ws.send(JSON.stringify(value));}catch{}};
 const error=(ws,message)=>json(ws,{type:'error',message});
-const validConfig=c=>c&&['coop','deathmatch'].includes(c.mode)&&['d2','d2x','overload'].includes(c.campaign)&&Number.isInteger(c.level)&&c.level>=1&&c.level<=(c.campaign==='overload'?16:c.campaign==='d2'?24:20)&&Array.isArray(c.bots)&&c.bots.length<=3&&c.bots.every(s=>Number.isInteger(s)&&s>=0&&s<=4);
+const validConfig=c=>c&&['coop','deathmatch'].includes(c.mode)&&Object.hasOwn(LEVELS,c.campaign)&&(!classic(c.campaign)||c.mode==='deathmatch')&&Number.isInteger(c.level)&&c.level>=1&&c.level<=LEVELS[c.campaign]&&Array.isArray(c.bots)&&c.bots.length<=3&&c.bots.every(s=>Number.isInteger(s)&&s>=0&&s<=4);
 const encode=s=>new TextEncoder().encode(s);
 const token=()=>crypto.randomUUID()+crypto.randomUUID();
 const sameToken=(a,b)=>typeof a==='string'&&typeof b==='string'&&a.length===72&&/^[0-9a-f-]{72}$/i.test(b)&&crypto.subtle.timingSafeEqual(encode(a),encode(b));
@@ -55,6 +57,7 @@ export class SquadronRoom extends DurableObject {
       await this.save();await this.ctx.storage.setAlarm(Date.now()+2*60*60*1000);
     }else if(create)return new Response('Room already exists',{status:409});
     if(this.room.config.campaign==='overload'&&Number(url.searchParams.get('build'))<77)return new Response('Reload Astra for Overload co-op',{status:409});
+    if(classic(this.room.config.campaign)&&Number(url.searchParams.get('build'))<86)return new Response('Reload Astra for classic arenas',{status:409});
     if(this.room.closed)return new Response('Room ended',{status:409});
     if(this.room.continuity&&url.searchParams.get('v')!=='54')return new Response('Reload Astra to join this updated room',{status:409});
     if(this.room.continuity&&url.searchParams.get('resume')==='1'){
@@ -147,7 +150,7 @@ export class SquadronRoom extends DurableObject {
     if(this.room.continuity&&m.type==='order-result'&&host&&Number.isInteger(m.from)&&m.from>=0&&m.from<4&&['follow','cover','attack','regroup'].includes(m.order)&&typeof m.ok==='boolean'){this.broadcast({type:'order-result',from:m.from,order:m.order,ok:m.ok});return;}
     if(this.room.continuity&&m.type==='help'){this.broadcast({type:'help',from:a.slot});return;}
     if(m.type==='state'&&host&&(this.room.public||this.room.continuity)&&this.room.started){
-      if(!Number.isInteger(m.level)||m.level===0||m.level< -6||m.level>24)return;
+      if(!Number.isInteger(m.level)||m.level===0||m.level<(classic(this.room.config.campaign)?1:this.room.config.campaign==='d2x'?-3:-6)||m.level>LEVELS[this.room.config.campaign])return;
       if(this.room.level!==m.level||this.room.accepting!==!!m.accepting){this.room.level=m.level;this.room.accepting=!!m.accepting;await this.save();}
       if(this.room.accepting)for(const s of this.peers())if(s.deserializeAttachment()?.pending)this.startPilot(s,true);
       return;
@@ -155,7 +158,7 @@ export class SquadronRoom extends DurableObject {
     if(m.type==='joined'&&(this.room.public||this.room.continuity)&&this.room.started){ws.serializeAttachment({...a,late:false,pending:false});this.roster();return;}
     if(m.type==='configure'){
       if(!host||this.room.started)return error(ws,'Only the host can configure a waiting room.');
-      if(!['coop','deathmatch'].includes(m.mode)||!['d2','d2x','overload'].includes(m.campaign)||!Number.isInteger(m.level)||m.level<1||m.level>(m.campaign==='overload'?16:m.campaign==='d2'?24:20)||!Array.isArray(m.bots)||m.bots.some(s=>!Number.isInteger(s)||s<0||s>4))return error(ws,'Invalid match configuration.');
+      if(!validConfig(m))return error(ws,'Invalid match configuration.');
       this.room.config={mode:m.mode,campaign:m.campaign,level:m.level,bots:m.bots.slice(0,4-this.room.players.length)};
       await this.save();this.lobby();return;
     }
@@ -291,7 +294,7 @@ export class SquadronLobby extends DurableObject {
 export default {
   async fetch(request,env){
     const url=new URL(request.url);
-    if(url.pathname==='/health')return Response.json({service:'astra-squadron',version:77,maxPilots:4,campaigns:['d2','d2x','overload'],matchBy:['mode','campaign']});
+    if(url.pathname==='/health')return Response.json({service:'astra-squadron',version:86,maxPilots:4,campaigns:Object.keys(LEVELS),matchBy:['mode','campaign']});
     if(url.pathname!=='/online'&&!/^\/room\/[0-9A-V]{9}$/.test(url.pathname))return new Response('Not found',{status:404});
     const origin=request.headers.get('Origin')||'';
     // The standalone Astra installation also runs from a loopback web server.
