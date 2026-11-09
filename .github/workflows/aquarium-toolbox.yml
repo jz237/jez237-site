@@ -1,0 +1,22 @@
+name: Aquarium Toolbox Calculations
+on:
+  push:
+    paths: ['aquarium-toolbox/**', 'scripts/aquarium-toolbox/**', '.github/workflows/aquarium-toolbox.yml']
+  pull_request:
+    paths: ['aquarium-toolbox/**', 'scripts/aquarium-toolbox/**', '.github/workflows/aquarium-toolbox.yml']
+permissions:
+  contents: read
+jobs:
+  calculations:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            aquarium-toolbox
+            scripts/aquarium-toolbox
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node --test scripts/aquarium-toolbox/math.test.mjs
+      - run: node --check aquarium-toolbox/app.mjs && node --check aquarium-toolbox/illustrations.mjs
