@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Sun, 08 Nov 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Mon, 09 Nov 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of July 15-21, 1985 — British Telecom prepares MUD 2: shared adventures by telephone</title>
+      <link>https://jez237.com/computer-chronicle/?date=1985-07-15</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1985-07-15</guid>
+      <pubDate>Mon, 09 Nov 2026 12:00:00 GMT</pubDate>
+      <description>A commercial multiplayer adventure is planned for September, with forty lines to start. British Telecom is preparing to turn the shared computer adventure into a commercial telephone service. Popular Computing Weekly reports on July 18 that MUD 2 is being developed for a planned unveiling at September’s Personal Computer World Show. This is a service in preparation, not a July opening. Also this week: Sinclair puts its name on a floppy drive for the QL · Credit-card software takes aim at tapes and piracy · Amstrad 6128 may reach Britain this autumn.</description>
+    </item>
     <item>
       <title>Week of July 8-14, 1985 — Atari 520ST reaches buyers as the 16-bit contest intensifies</title>
       <link>https://jez237.com/computer-chronicle/?date=1985-07-08</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1985-03-04</guid>
       <pubDate>Wed, 21 Oct 2026 12:00:00 GMT</pubDate>
       <description>SSI puts diplomacy, conquest and battlefield command on the home computer. Strategy players have two very different maps to unfold. March COMPUTE! reports that Strategic Simulations has introduced Imperium Galactum and Field of Fire, pairing a contest for interstellar power with command of an infantry company in World War II. Each carries a suggested retail price of $39.95. Also this week: SpeedScript 3.0 brings a 6K word processor to magazine readers · Color printing breaks below $300 · 2400-bps modems promise speed, but supply and service costs loom.</description>
-    </item>
-    <item>
-      <title>Week of February 25-March 3, 1985 — Inside King’s Quest: $700,000 buys a new kind of adventure</title>
-      <link>https://jez237.com/computer-chronicle/?date=1985-02-25</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1985-02-25</guid>
-      <pubDate>Tue, 20 Oct 2026 12:00:00 GMT</pubDate>
-      <description>February reporting opens the workshop behind Sierra’s ambitious adventure. A kingdom of 80 scenes comes at a very real price. Donald B. Trivette’s February COMPUTE! account puts the cost of Sierra’s King’s Quest above $700,000, with Roberta Williams and six programmers and artists working for 18 months. IBM supplied a prototype PCjr and asked for a game that could show its color graphics before the machine was announced. Also this week: Rent a PC for a month—but whose software license goes with it? · Michael Crichton takes storytelling from the cinema to Amazon · PC-Write asks users to share the software—and pays registered referrers · Online rivals bring games and conversation below three dollars an hour.</description>
     </item>
   </channel>
 </rss>

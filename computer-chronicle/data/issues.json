@@ -4,6 +4,469 @@
   "fallbackPolicy": "Use exact-day computer news when verified. If none exists, use same-week or same-month personal-computing items with confidence labels, then fall back to a wider world/business headline.",
   "issues": [
     {
+      "currentDate": "2026-11-09",
+      "historicDate": "1985-07-15",
+      "displayDate": "Week of July 15-21, 1985",
+      "edition": "Issue 155 - Weekly 1985 Computer & Culture Chronicle",
+      "masthead": {
+        "title": "Computer Chronicle",
+        "subtitle": "Issue 155 - Weekly 1985 Computer & Culture Chronicle",
+        "dateline": "Week of July 15-21, 1985",
+        "price": "75 cents"
+      },
+      "visualProfile": {
+        "tone": "Dial-up adventures and a summer of home-computer expansion",
+        "motifs": [
+          "1980s modem and CRT displaying a text adventure",
+          "telephone handset",
+          "QL floppy disks and software cards"
+        ],
+        "layout": "Dense warm aged newsprint, red and blue boxed modules, halftones, grain and slight ink bleed; no dead footer"
+      },
+      "layoutPlan": {
+        "leadPlacement": "MUD 2 gaming plans receive the biggest headline and halftone treatment",
+        "secondaryRail": "QL disks, Sofcards and CPC6128 plans",
+        "archiveNavigation": "Weekly archive and previous/next controls"
+      },
+      "sectionChrome": {
+        "primary": "brick red",
+        "secondary": "royal blue",
+        "texture": "aged newsprint, fine column rules, ink bleed"
+      },
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1985-07-15.jpg",
+        "alt": "Newspaper-style Computer Chronicle front page for July 15-21, 1985",
+        "caption": "Newspaper-style front page generated from structured Chronicle issue data.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "editorNote": "Shared adventures, new storage and software on a card crowd the home-computer desk.",
+      "morningLine": "The next adventure may arrive down the telephone line.",
+      "lead": {
+        "headline": "British Telecom prepares MUD 2: shared adventures by telephone",
+        "dek": "A commercial multiplayer adventure is planned for September, with forty lines to start.",
+        "body": [
+          "British Telecom is preparing to turn the shared computer adventure into a commercial telephone service. Popular Computing Weekly reports on July 18 that MUD 2 is being developed for a planned unveiling at September’s Personal Computer World Show. This is a service in preparation, not a July opening.",
+          "Richard Bartle and Roy Trubshaw, creators of the original MUD at Essex University, are developing the expanded game commissioned by BT. The original adventure remains available at Essex and on Compunet. The new plan places a VAX 11/750 behind an initial forty telephone lines, with expansion beyond one hundred envisaged and play scheduled for evenings and weekends.",
+          "The proposed £20 MUD Pack includes registration, instructions, a map, a personal-code card and thirty credits of six minutes each. Further play is reported at £2 per hour, with telephone charges additional. A text adventure shared with other callers makes the cost of the connection part of the gaming decision.",
+          "The magazine specifies a 1275-baud modem and terminal-emulation software. If the venture succeeds, BT envisages putting the game on computers around the country. For now, the promise is a larger shared world beyond the standalone cassette: players will have to wait for the planned launch."
+        ],
+        "confidence": "same-week",
+        "sourceRefs": [
+          0,
+          1
+        ]
+      },
+      "stories": [
+        {
+          "headline": "Sinclair puts its name on a floppy drive for the QL",
+          "body": [
+            "Sinclair is to badge a Microperipherals 3.5-inch drive and interface for the QL, according to the July 18 front-page report. Availability is expected within a month. The move gives Sinclair’s name to a disk alternative while the company continues to support Microdrives.",
+            "The double-sided, double-density system provides 720 KB formatted capacity, or 1 MB unformatted. Its interface fits the QL expansion port, and up to four drives can be daisy-chained. No retail price is established in the report.",
+            "Microperipherals technical manager Richard Miller says the underlying drive has shipped since March and that Sinclair has considered badging it for about seven months. Miller wrote its DOS, which differs from the DOS on other QL disk units. This is a change of badge and policy rather than the invention of an entirely new drive."
+          ],
+          "confidence": "same-week",
+          "sourceRefs": [
+            0,
+            1
+          ]
+        },
+        {
+          "headline": "Credit-card software takes aim at tapes and piracy",
+          "body": [
+            "Astar International’s Sofcards package software in a thin plastic card with an edge connector. Electric Software of Cambridge is distributing the format in Britain. ROM or battery-backed RAM replaces the familiar cassette or disk, with a separate adapter required for each kind of computer.",
+            "MSX ROM games are already offered at £14.95 to £19.95. Adapters are expected to cost about £10; Spectrum and QL versions remain under development. Other proposed adapters must not be mistaken for products already on the shelf.",
+            "The companies promote resistance to copying, but price is the immediate obstacle. Electric Software’s Mike Hall says the games must reach £9.95 within a year for the scheme to succeed. Battery-backed timed licensing is discussed as a possible use, not as an established shipping system."
+          ],
+          "confidence": "same-week",
+          "sourceRefs": [
+            0,
+            1
+          ]
+        },
+        {
+          "headline": "Amstrad 6128 may reach Britain this autumn",
+          "body": [
+            "A British arrival for the disk-based 128K CPC6128 may come this autumn rather than next year, Popular Computing Weekly reports. The machine was shown to the American market at Chicago’s summer CES in early June; a British launch is still a reported possibility.",
+            "The proposed newcomer brings a revised keyboard, bank-switched 128K memory and enhanced CP/M and DR Logo compared with the CPC664. That makes the timing important for buyers considering a disk-equipped CPC today.",
+            "A September show appearance remains speculation. Infocom and Kuma express interest in supporting the machine, while Rumbelows is considering stocking it. Neither a confirmed retail agreement nor a verified British launch price is established by this report."
+          ],
+          "confidence": "same-week",
+          "sourceRefs": [
+            0,
+            1
+          ]
+        }
+      ],
+      "computerItems": [
+        {
+          "title": "Sinclair QL disk system",
+          "summary": "Microperipherals Sinclair-badged 3.5-inch system planned, 720 KB formatted; see story.",
+          "confidence": "same-week",
+          "sourceRefs": [
+            0,
+            1
+          ]
+        },
+        {
+          "title": "Amstrad CPC6128",
+          "summary": "128K disk-based machine, UK autumn launch rumored, not confirmed.",
+          "confidence": "same-week",
+          "sourceRefs": [
+            0,
+            1
+          ]
+        },
+        {
+          "title": "Verbatim erasable optical-drive prototype",
+          "summary": "Chronology places a read/write/erase prototype demonstration at Chicago National Computer Conference on July 15. Secondary source only; no price or capacity verified.",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            4
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "Plu*Perfect DateStamper",
+          "detail": "Steve Sanders reviews CP/M create/access/modify timestamps, relative clock operation and optional real-time clocks; approximately 1 KB resident memory and $39 package.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            3
+          ]
+        },
+        {
+          "name": "DDraw",
+          "detail": "Dan Griffith’s Kaypro graphics program reviewed in July newsletter; Turbo Pascal source release promised after Micro Cornucopia contest, not yet confirmed.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            3
+          ]
+        },
+        {
+          "name": "Commodore 64 C compiler",
+          "detail": "Dynamite Software full C compiler reported in PCW July 11, p. 5; price not verified.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            2
+          ]
+        }
+      ],
+      "storeShelves": [
+        {
+          "label": "Top 5 Computer Games — editorial selections, not sales rankings",
+          "items": [
+            "MUD 2 — BT promotional plans announced; not yet launched. See lead for fees, creators and hosting.",
+            "Tour de France — Activision cycling simulation for Commodore and Spectrum reported launched in July 11 PCW; advertised again July 18. No exact release day verified.",
+            "Master of the Lamps — Activision advertisement on July 18 p. 15 establishes contemporary promotion, not a release date.",
+            "Frank Bruno’s Boxing — Elite advertisement July 18 p. 2 promises eight opponents; endorsement is advertising, not an independent review.",
+            "Elite on Commodore 64 — July 11 p. 47 advertisement; do not interpret “goes gold” copy as a newly verified mastering date."
+          ],
+          "confidence": "same-month",
+          "sourceRefs": [
+            0,
+            1,
+            2
+          ]
+        },
+        {
+          "label": "Top 5 Movies — July 19-21 domestic weekend",
+          "items": [
+            "1. Back to the Future",
+            "2. Mad Max Beyond Thunderdome",
+            "3. Cocoon",
+            "4. Silverado",
+            "5. Rambo: First Blood Part II"
+          ],
+          "confidence": "same-week",
+          "sourceRefs": [
+            6
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "Sofcard MSX games",
+          "price": "£14.95–19.95",
+          "note": "Advertised retail range, July 18 report",
+          "confidence": "same-week",
+          "sourceRefs": [
+            1
+          ]
+        },
+        {
+          "item": "Sofcard adapters",
+          "price": "£about 10",
+          "note": "Projected per-machine adapter price",
+          "confidence": "same-week",
+          "sourceRefs": [
+            1
+          ]
+        },
+        {
+          "item": "MUD Pack",
+          "price": "£20",
+          "note": "Planned registration package and 30 six-minute credits",
+          "confidence": "same-week",
+          "sourceRefs": [
+            1
+          ]
+        },
+        {
+          "item": "MUD 2 play",
+          "price": "£2",
+          "note": "Planned hourly charge, plus phone charges",
+          "confidence": "same-week",
+          "sourceRefs": [
+            1
+          ]
+        },
+        {
+          "item": "Courier 2400",
+          "price": "$495",
+          "note": "MicroFlash advertisement reported by newsletter",
+          "confidence": "same-month",
+          "sourceRefs": [
+            3
+          ]
+        },
+        {
+          "item": "Courier 2400 sysop offer",
+          "price": "$350",
+          "note": "Active-system operators; approximate July 15 expiration",
+          "confidence": "same-month",
+          "sourceRefs": [
+            3
+          ]
+        },
+        {
+          "item": "DataCOM membership",
+          "price": "$30",
+          "note": "Annual network access",
+          "confidence": "same-month",
+          "sourceRefs": [
+            3
+          ]
+        },
+        {
+          "item": "DateStamper",
+          "price": "$39",
+          "note": "Package including utilities and documentation",
+          "confidence": "same-month",
+          "sourceRefs": [
+            3
+          ]
+        }
+      ],
+      "briefs": [
+        {
+          "headline": "IBM PC AT chip replacement",
+          "summary": "Chronology dates report to July 19: faulty Texas Instruments chips in some ATs shipped since start of year, about 10% of shipments; affected boards to be replaced free. Single secondary source; no independently verified technical fault description.",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            4
+          ]
+        },
+        {
+          "headline": "No PC II, says Lowe",
+          "summary": "Chronology dates IBM entry-systems president William Lowe’s denial of PC II rumors to July 19; paraphrase only.",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            4
+          ]
+        },
+        {
+          "headline": "Soviet schools turn to MSX",
+          "summary": "PCW July 18 p. 5 reports first schools order goes to MSX rather than British hopefuls; precise quantity/value unverified.",
+          "confidence": "same-week",
+          "sourceRefs": [
+            0,
+            1
+          ]
+        }
+      ],
+      "musicChart": [
+        {
+          "rank": 1,
+          "title": "The Power Of Love",
+          "artist": "Huey Lewis & The News",
+          "chart": "Billboard rock chart, archival URL labels Mainstream Rock Airplay",
+          "chartDate": "1985-07-20",
+          "confidence": "same-week",
+          "song": "The Power Of Love",
+          "sourceRefs": [
+            5
+          ]
+        },
+        {
+          "rank": 2,
+          "title": "If You Love Somebody Set Them Free",
+          "artist": "Sting",
+          "chart": "Billboard rock chart, archival URL labels Mainstream Rock Airplay",
+          "chartDate": "1985-07-20",
+          "confidence": "same-week",
+          "song": "If You Love Somebody Set Them Free",
+          "sourceRefs": [
+            5
+          ]
+        },
+        {
+          "rank": 3,
+          "title": "What About Love",
+          "artist": "Heart",
+          "chart": "Billboard rock chart, archival URL labels Mainstream Rock Airplay",
+          "chartDate": "1985-07-20",
+          "confidence": "same-week",
+          "song": "What About Love",
+          "sourceRefs": [
+            5
+          ]
+        },
+        {
+          "rank": 4,
+          "title": "Money For Nothing",
+          "artist": "Dire Straits",
+          "chart": "Billboard rock chart, archival URL labels Mainstream Rock Airplay",
+          "chartDate": "1985-07-20",
+          "confidence": "same-week",
+          "song": "Money For Nothing",
+          "sourceRefs": [
+            5
+          ]
+        },
+        {
+          "rank": 5,
+          "title": "People Get Ready",
+          "artist": "Jeff Beck & Rod Stewart",
+          "chart": "Billboard rock chart, archival URL labels Mainstream Rock Airplay",
+          "chartDate": "1985-07-20",
+          "confidence": "same-week",
+          "song": "People Get Ready",
+          "sourceRefs": [
+            5
+          ]
+        }
+      ],
+      "periodAd": {
+        "headline": "Frank Bruno’s Boxing promises eight opponents",
+        "summary": "Elite’s July 18 advertisement promotes the boxing game with eight opponents. This is a contemporary advertising claim, not an independent review.",
+        "tagline": "A ringside attraction for the home-computer shelf.",
+        "sourceRefs": [
+          0,
+          1
+        ]
+      },
+      "market": {
+        "headline": "New formats must earn their place beside the cassette",
+        "summary": "Sofcards promise convenient loading but carry a price premium. Sinclair’s disk badge and Amstrad’s reported 128K plans give home-computer buyers more expansion choices, while BT tests the idea of paying for shared play by the hour.",
+        "confidence": "same-week",
+        "sourceRefs": [
+          0,
+          1
+        ]
+      },
+      "worldAnchor": {
+        "headline": "Reagan doctors report cancer",
+        "summary": "On July 15, Dr. Steven Rosenberg announces that President Reagan has cancer, UPI reports. The medical announcement places this week’s computer news against a major national bulletin.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          7
+        ]
+      },
+      "bbsNote": {
+        "headline": "MUD meets the telephone company; DataCOM doubles speed",
+        "summary": "Two genuine dated beats: BT’s September multiplayer-game plans reported July 18, and July hobbyist reports of 2400-bps BBS upgrades. Posts below are editorial summaries, NOT fabricated historical message-board quotations.",
+        "posts": [
+          {
+            "topic": "Commercial multi-user play",
+            "platform": "BT planned MUD 2 / Essex MUD / Compunet",
+            "text": "BT commissions an expanded adventure from Bartle and Trubshaw; plans £20 registration pack and £2/hour plus telephone charges."
+          },
+          {
+            "topic": "Sysop hardware economics",
+            "platform": "DataCOM Network RCP/M, System #1",
+            "text": "Steven L. Sanders reports 2400 support and US Robotics’s $350 active-sysop modem offer, expiring around July 15."
+          },
+          {
+            "topic": "CP/M meets DOS",
+            "platform": "DataCOM Network, System #2",
+            "text": "July newsletter announces a separate new-DOS-file area alongside CP/M files, showing mixed-platform user demand."
+          }
+        ],
+        "sourceRefs": [
+          0,
+          1,
+          3
+        ]
+      },
+      "curiosity": {
+        "headline": "A software card that forgets when its battery dies",
+        "summary": "Electric Software discusses an unusual way to enforce a timed software license.",
+        "detail": "PCW July 18 p. 4 describes battery-backed Sofcards with estimated two-to-three-year battery life and discusses making business software depend on the card. The writer calls it self-destruction, but the mechanism described is loss of battery-backed memory, not physical damage. A proposed application, not verified commercial deployment.",
+        "sourceRefs": [
+          0,
+          1
+        ]
+      },
+      "accuracyLedger": {
+        "items": [
+          "MUD 2 is a planned September service, not a July launch; the ambiguous introductory-free interval is omitted.",
+          "QL drive availability and CPC6128 British timing retain their prospective wording.",
+          "Games are editorial selections, not a sales chart; advertising is not proof of release.",
+          "Music uses the dated Billboard rock chart; movies use retrospective July 19-21 weekend results.",
+          "Modem notes are editorial summaries of dated reporting, not invented historical posts.",
+          "Optical-drive and IBM briefs rely on a secondary chronology; no unsupported specifications added.",
+          "No verified named cracking crew event or separate gadget launch; these desks are omitted."
+        ]
+      },
+      "sources": [
+        {
+          "title": "Popular Computing Weekly vol. 4 no. 29, museum catalog",
+          "url": "https://www.computinghistory.org.uk/det/28800/Popular-Computing-Weekly-Vol-4-No-29-18-24-July-1985",
+          "date": "1985-07-18"
+        },
+        {
+          "title": "Popular Computing Weekly vol. 4 no. 29, full scan",
+          "url": "https://www.computinghistory.org.uk/downloads/28800",
+          "date": "1985-07-18"
+        },
+        {
+          "title": "Popular Computing Weekly vol. 4 no. 28, contents transcription",
+          "url": "https://www.computinghistory.org.uk/det/28799/Popular-Computing-Weekly-Vol-4-No-28-11-17-July-1985/",
+          "date": "1985-07-11"
+        },
+        {
+          "title": "$R/O READ ONLY, Tampa Bay Kaypro User’s Group / DataCOM, Steven L. Sanders",
+          "url": "http://www.df.lth.se/~pi/cpm/files/ftp.mayn.de/pub/cpm/archive/news/jul85.mag.txt",
+          "date": "1985-07"
+        },
+        {
+          "title": "Ken Polsson, Chronology of Personal Computers, retrospective compilation",
+          "url": "https://www.islandnet.com/~kpolsson/comphist/comp1985jul.htm",
+          "date": "Retrospective; entries July 15 and July 19, 1985"
+        },
+        {
+          "title": "Billboard archival rock chart",
+          "url": "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1985-07-20/",
+          "date": "1985-07-20"
+        },
+        {
+          "title": "The Numbers domestic weekend box office",
+          "url": "https://www.the-numbers.com/box-office-chart/weekend/1985/07/19",
+          "date": "1985-07-19 to 1985-07-21"
+        },
+        {
+          "title": "UPI: The doctor who told the nation",
+          "url": "https://www.upi.com/Archives/1985/07/15/The-doctor-who-told-the-nation-The-president-has-cancer/3894490248000/",
+          "date": "1985-07-15"
+        },
+        {
+          "title": "Washington Post: After the Music, The Memories",
+          "url": "https://www.washingtonpost.com/archive/lifestyle/1985/07/15/after-the-music-the-memories/38c13d00-1285-4c5f-8101-7832c8053779/",
+          "date": "1985-07-15"
+        }
+      ]
+    },
+    {
       "masthead": {
         "title": "Computer Chronicle",
         "subtitle": "Issue 154 - Weekly 1985 Computer & Culture Chronicle",

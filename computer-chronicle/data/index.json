@@ -2,6 +2,22 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-11-09",
+      "historicDate": "1985-07-15",
+      "displayDate": "Week of July 15-21, 1985",
+      "edition": "Issue 155 - Weekly 1985 Computer & Culture Chronicle",
+      "morningLine": "The next adventure may arrive down the telephone line.",
+      "leadHeadline": "British Telecom prepares MUD 2: shared adventures by telephone",
+      "storyHeadlines": [
+        "Sinclair puts its name on a floppy drive for the QL",
+        "Credit-card software takes aim at tapes and piracy",
+        "Amstrad 6128 may reach Britain this autumn"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1985-07-15.jpg",
+      "thumb": "media/thumbs/1985-07-15.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-11-08",
       "historicDate": "1985-07-08",
       "displayDate": "Week of July 8-14, 1985",
