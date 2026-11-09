@@ -1,8 +1,8 @@
 // Autopilot spacing: in carrier fights it holds a firing band outside the hull (no bumps, rarely inside the band),
 // and it never stays pinned under or over a machine. node scripts/skyhold/ai_spacing_check.mjs [runs=6] [profile=demo]
-import { makeWorld, step, drainEvents, STEP } from '../../games/2026-11-09/skyhold/js/sim.js?v=7';
-import { Autopilot } from '../../games/2026-11-09/skyhold/js/ai.js?v=7';
-import { BOSSES, TYPICAL_UP, WAVES } from '../../games/2026-11-09/skyhold/js/config.js?v=7';
+import { makeWorld, step, drainEvents, STEP } from '../../games/2026-11-09/skyhold/js/sim.js?v=8';
+import { Autopilot } from '../../games/2026-11-09/skyhold/js/ai.js?v=8';
+import { BOSSES, TYPICAL_UP, WAVES } from '../../games/2026-11-09/skyhold/js/config.js?v=8';
 const runs = +(process.argv[2] || 6), profile = process.argv[3] || 'demo';
 const wd = (d) => { d %= 1600; if (d > 800) d -= 1600; if (d < -800) d += 1600; return d; };
 let fail = 0;

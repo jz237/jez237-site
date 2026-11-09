@@ -18,7 +18,7 @@ Same pipeline as Sini 2026 (scripts/sini-2026/process_audio.py):
 - Loops (engines, tractor hum, ambient beds): the best-matching loop seam is searched near the clip's own wrap point
   (they are generated with the seamless-loop option), then cut there with a crossfade, so the decoded PCM loops
   sample-seamlessly; engine loops -18 LUFS integrated, the quiet ambient beds -22 LUFS.
-- Voice: trimmed, 70 Hz high-pass, -16 LUFS integrated, -1 dBTP.
+- Voice: lowered and darkened (VOICE_AF), trimmed, -16 LUFS integrated, -1 dBTP.
 - Music: stage/title/boss tracks are cut to a seamless loop (generated intro/outro trimmed; loop points chosen so the
   8 s after the seam sounds like the 8 s after the loop start and the onset rhythm around the seam is on the same beat
   phase; minimum length per track in LMIN; correlation-aware 2.5 s crossfade); stings are trimmed with a short fade.
@@ -70,6 +70,10 @@ def decode(src, ch, af=None):
     args += ['-ac', str(ch), '-ar', str(SR), '-f', 'f32le', '-']
     buf = subprocess.run(args, capture_output=True).stdout
     return np.frombuffer(buf, dtype=np.float32).astype(np.float64).reshape(-1, ch)
+
+
+# the low, ominous voice: a little lower (formants too), a dark low shelf, softer highs and a faint short echo
+VOICE_AF = 'highpass=f=55,rubberband=pitch=0.9:formant=shifted,bass=g=3:f=120,treble=g=-2.5:f=5000,aecho=0.85:0.6:70|140:0.14|0.07'
 
 
 def encode(x, dst, kbps):
@@ -387,7 +391,7 @@ def main(OUT, ONLY):
                 sub = 'audio' if kind == 'sfx' else 'voice'
                 dst = os.path.join(OUT, sub, name + '.mp3')
                 if kind == 'voice':
-                    x = decode(src, 1, 'highpass=f=70')
+                    x = decode(src, 1, VOICE_AF)
                     y = trim(x, start_db=-40, end_db=-48, pre=0.04, post=0.08, fade_in=0.01, fade_out=0.05)
                     y = gain_to(y, T_VOICE_I - lufs_integrated(y), max_limit_db=6, win=0.011)
                     info['lufs_i'] = round(lufs_integrated(y), 2)

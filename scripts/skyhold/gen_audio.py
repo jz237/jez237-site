@@ -1,6 +1,6 @@
 """Generate SKYHOLD 2026 audio with ElevenLabs (music, SFX, loops, ambient beds, colony-command voice lines).
 
-Usage: python -I gen_audio.py [credits|voices|music|sfx|voice|all|stt] [--only name1,name2] [--force]
+Usage: python -I gen_audio.py [credits|voices|music|sfx|voice|all|stt [--dir d]] [--only name1,name2] [--force]
        python -I gen_audio.py takes --only beam,pop [--n 4] [--start 1]  (re-roll candidates into <raw>/takes, prompts from RETRY)
        python -I gen_audio.py pick beam 3                                  (install take 3 as the raw clip; logged in picks.json)
 Raw mp3s land in <work>/audio-raw/<kind>/<name>.mp3 (or SK_RAW). The key is read from the Windows user
@@ -243,9 +243,12 @@ LOOPS_R1 = {
 }
 
 # ---------------------------------------------------------------------------------------------------------------
-# Voice: one calm, clear colony-command voice. Alice (premade, British female, clear and confident); fallback Lily.
-VOICE_IDS = ['Xb7hH8MSUJpSbSDYk0k2', 'pFZP5JQG7iQjIQuC4Bku']
-VOICE_SETTINGS = {'stability': 0.6, 'similarity_boost': 0.8, 'style': 0.15, 'use_speaker_boost': True}
+# Voice: a low, ominous male colony-command voice (1.6.1, the owner asked for it). Brian (premade, deep and resonant;
+# measured the lowest of the deep male voices, ~90-114 Hz) delivered slower and darker; fallback Adam. process_audio.py
+# lowers it a little further (rubberband, formants shifted) with a dark low shelf and a faint short echo.
+# (Until 1.6.0: Alice Xb7hH8MSUJpSbSDYk0k2, calm British female.)
+VOICE_IDS = ['nPczCjzI2devNBz1zQrb', 'pNInz6obpgDQGcFmaJgB']
+VOICE_SETTINGS = {'stability': 0.5, 'similarity_boost': 0.85, 'style': 0.35, 'use_speaker_boost': True, 'speed': 0.88}
 VOICE = {
     'begin':      'Skyhold, you are clear to launch. Keep the colonists on the ground.',
     's2':         'Next world: the Red Dune Belt.',
@@ -369,9 +372,9 @@ def run(job, force):
         return f'FAIL {kind}/{name} {e}'
 
 
-def stt():
-    """Join every raw voice line (1.2 s gaps) into one file and transcribe it once."""
-    d = os.path.join(RAW, 'voice')
+def stt(d=None):
+    """Join every voice line in d (default: the raw lines; 1.2 s gaps) into one file and transcribe it once."""
+    d = d or os.path.join(RAW, 'voice')
     names = sorted(f for f in os.listdir(d) if f.endswith('.mp3'))
     tmpd = tempfile.mkdtemp(prefix='sk-stt-')
     lst = os.path.join(tmpd, 'list.txt')
@@ -423,7 +426,7 @@ if __name__ == '__main__':
                       lab.get('use_case', ''))
         sys.exit(0)
     if kind == 'stt':
-        stt()
+        stt(sys.argv[sys.argv.index('--dir') + 1] if '--dir' in sys.argv else None)
     else:
         if left < 0.15:
             print('fewer than 15 % of credits left: not generating')

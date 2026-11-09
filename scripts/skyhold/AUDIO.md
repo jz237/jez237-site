@@ -13,10 +13,13 @@ A live-synthesised retro layer sits on top of the samples: `js/chip.js` (see the
 
 ## Voice
 
-One colony-command voice reads every line: **Alice** (ElevenLabs premade voice "Clear, Engaging Educator", British
-female, voice id `Xb7hH8MSUJpSbSDYk0k2`). The series' other voices are Daniel (Sini) and George (Lancewing). The model
-is `eleven_multilingual_v2` with stability 0.6, similarity 0.8, style 0.15 and speaker boost on. The fallback voice,
-Lily, was not needed.
+One low, ominous colony-command voice reads every line (since 1.6.1, at the owner's request): **Brian** (ElevenLabs
+premade voice "Deep, Resonant and Comforting", American male, voice id `nPczCjzI2devNBz1zQrb`), chosen because it measured
+the lowest of the deep male voices (Brian ~90-114 Hz, Adam ~124-180 Hz, Bill ~122-148 Hz on the same two lines). The model
+is `eleven_multilingual_v2` with stability 0.5, similarity 0.85, style 0.35, speed 0.88 and speaker boost on (slower and
+darker); the fallback is Adam. process_audio.py then lowers it about 1.8 semitones with the formants (rubberband), adds a
+dark low shelf, softens the highs and lays a faint short echo under it (`VOICE_AF`). Every line still transcribes word for
+word (Scribe). Until 1.6.0 the voice was Alice (`Xb7hH8MSUJpSbSDYk0k2`, calm British female).
 
 All 18 lines were checked with one ElevenLabs Scribe transcription of the lines joined together (`gen_audio.py stt`).
 Every line came back word for word. The one difference, "Frostvale", is just how Scribe spells the invented name

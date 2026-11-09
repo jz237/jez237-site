@@ -3,7 +3,7 @@
 // Nothing in here touches the DOM, WebGL or audio; it only pushes events into W.ev.
 //
 // The world is a band round a small planet: x along the ground (wraps every C metres), y altitude (0..H).
-import { F, STEP, C, H, ENEMY, SETTLER, BOSSES, B_KEYS, SECTORS, WAVES, rampAt, rampLevel, endlessLevel, ENDLESS, TUTOR, SCORE, START_LIVES, DIFFICULTY, applyDiff, POWERUPS, PW_KEYS, DROP, SKIM } from './config.js?v=7';
+import { F, STEP, C, H, ENEMY, SETTLER, BOSSES, B_KEYS, SECTORS, WAVES, rampAt, rampLevel, endlessLevel, ENDLESS, TUTOR, SCORE, START_LIVES, DIFFICULTY, applyDiff, POWERUPS, PW_KEYS, DROP, SKIM } from './config.js?v=8';
 export { STEP };
 
 const clamp = (v, a, b) => (v < a ? a : v > b ? b : v);

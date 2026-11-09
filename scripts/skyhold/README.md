@@ -1,6 +1,6 @@
 # Skyhold 2026 scripts
 
-The game lives in `games/2026-11-09/skyhold/` (plain ES modules, three.js vendored, every local import `?v=7` (1.6.0); bump them
+The game lives in `games/2026-11-09/skyhold/` (plain ES modules, three.js vendored, every local import `?v=8` (1.6.1); bump them
 all together, plus the `modulepreload` list in `index.html` and the scripts' imports here). The design brief is in the
 work folder `D:/Projects/.tmp/skyhold-work/DESIGN.md`.
 
