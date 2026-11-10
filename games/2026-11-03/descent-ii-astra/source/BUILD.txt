@@ -1491,3 +1491,9 @@ R87 - classic arena spectator battles and original Elegies music
 - Arena pause, next-map and respawn preserve the four-pilot match; no online room or mouse capture is needed.
 - Original four embedded Elegies HMP compositions are rendered offline and streamed on demand; original level sequence 1,2,3,4,1,2.
 - Campaign controls, campaign autopilot and multiplayer combat rules are unchanged.
+
+R88 - arena spectator pilot switching
+- Minerva and Elegies demos can follow any of the four AI pilots, using touch/mouse controls or keys 1-4 and brackets.
+- Camera, native readouts, cockpit instruments and spatial audio follow the selected ship; deaths and arena changes retain the selection.
+- AI ownership, flight, inventory, damage and respawns are unchanged. Astra retains its own frustum and occlusion tests when another ship is viewed.
+- The extra perception pass does not render a second scene or update any pilot twice.

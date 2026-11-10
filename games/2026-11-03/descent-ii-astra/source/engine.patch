@@ -1126,6 +1126,72 @@ index fdb2e78..afb5ed5 100644
  }
  
  #define ENABLE_COLLISION(type1,type2)					\
+diff --git a/d2/main/digiobj.c b/d2/main/digiobj.c
+index 4bb803a..b9fd4ae 100644
+--- a/d2/main/digiobj.c
++++ b/d2/main/digiobj.c
+@@ -35,6 +35,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
+ #include "kconfig.h"
+ #include "config.h"
+ 
++extern object *astra_arena_listener(void);
+ #define SOF_USED				1 		// Set if this sample is used
+ #define SOF_PLAYING			2		// Set if this sample is playing on a channel
+ #define SOF_LINK_TO_OBJ		4		// Sound is linked to a moving object. If object dies, then finishes play and quits.
+@@ -344,7 +345,7 @@ int digi_link_sound_to_object3( int org_soundnum, short objnum, int forever, fix
+ 
+ 	if ( !forever ) { 		// && GameSounds[soundnum - SOUND_OFFSET].length < SOUND_3D_THRESHHOLD)	{
+ 		// Hack to keep sounds from building up...
+-		digi_get_sound_loc( &Viewer->orient, &Viewer->pos, Viewer->segnum, &Objects[objnum].pos, Objects[objnum].segnum, max_volume,&volume, &pan, max_distance );
++		digi_get_sound_loc( &astra_arena_listener()->orient, &astra_arena_listener()->pos, astra_arena_listener()->segnum, &Objects[objnum].pos, Objects[objnum].segnum, max_volume,&volume, &pan, max_distance );
+ 		digi_play_sample_3d( org_soundnum, pan, volume, 0 );
+ 		return -1;
+ 	}
+@@ -382,7 +383,7 @@ int digi_link_sound_to_object3( int org_soundnum, short objnum, int forever, fix
+ 	}
+ 	else {
+ 		objp = &Objects[SoundObjects[i].link_type.obj.objnum];
+-		digi_get_sound_loc( &Viewer->orient, &Viewer->pos, Viewer->segnum,
++		digi_get_sound_loc( &astra_arena_listener()->orient, &astra_arena_listener()->pos, astra_arena_listener()->segnum,
+                        &objp->pos, objp->segnum, SoundObjects[i].max_volume,
+                        &SoundObjects[i].volume, &SoundObjects[i].pan, SoundObjects[i].max_distance );
+ 
+@@ -432,7 +433,7 @@ int digi_link_sound_to_pos2( int org_soundnum, short segnum, short sidenum, vms_
+ 
+ 	if ( !forever ) { 	//&& GameSounds[soundnum - SOUND_OFFSET].length < SOUND_3D_THRESHHOLD)	{
+ 		// Hack to keep sounds from building up...
+-		digi_get_sound_loc( &Viewer->orient, &Viewer->pos, Viewer->segnum, pos, segnum, max_volume, &volume, &pan, max_distance );
++		digi_get_sound_loc( &astra_arena_listener()->orient, &astra_arena_listener()->pos, astra_arena_listener()->segnum, pos, segnum, max_volume, &volume, &pan, max_distance );
+ 		digi_play_sample_3d( org_soundnum, pan, volume, 0 );
+ 		return -1;
+ 	}
+@@ -468,7 +469,7 @@ int digi_link_sound_to_pos2( int org_soundnum, short segnum, short sidenum, vms_
+ 	}
+ 	else {
+ 
+-		digi_get_sound_loc( &Viewer->orient, &Viewer->pos, Viewer->segnum,
++		digi_get_sound_loc( &astra_arena_listener()->orient, &astra_arena_listener()->pos, astra_arena_listener()->segnum,
+                        &SoundObjects[i].link_type.pos.position, SoundObjects[i].link_type.pos.segnum, SoundObjects[i].max_volume,
+                        &SoundObjects[i].volume, &SoundObjects[i].pan, SoundObjects[i].max_distance );
+ 
+@@ -596,7 +597,7 @@ void digi_sync_sounds()
+ 			}
+ 
+ 			if ( SoundObjects[i].flags & SOF_LINK_TO_POS )	{
+-				digi_get_sound_loc( &Viewer->orient, &Viewer->pos, Viewer->segnum,
++				digi_get_sound_loc( &astra_arena_listener()->orient, &astra_arena_listener()->pos, astra_arena_listener()->segnum,
+                                 &SoundObjects[i].link_type.pos.position, SoundObjects[i].link_type.pos.segnum, SoundObjects[i].max_volume,
+                                 &SoundObjects[i].volume, &SoundObjects[i].pan, SoundObjects[i].max_distance );
+ 
+@@ -628,7 +629,7 @@ void digi_sync_sounds()
+ 					SoundObjects[i].flags = 0;	// Mark as dead, so some other sound can use this sound
+ 					continue;		// Go on to next sound...
+ 				} else {
+-					digi_get_sound_loc( &Viewer->orient, &Viewer->pos, Viewer->segnum,
++					digi_get_sound_loc( &astra_arena_listener()->orient, &astra_arena_listener()->pos, astra_arena_listener()->segnum,
+ 	                                &objp->pos, objp->segnum, SoundObjects[i].max_volume,
+                                    &SoundObjects[i].volume, &SoundObjects[i].pan, SoundObjects[i].max_distance );
+ 				}
 diff --git a/d2/main/fireball.c b/d2/main/fireball.c
 index fe9b0d1..3df53ec 100644
 --- a/d2/main/fireball.c
@@ -1667,7 +1733,7 @@ index d4c7b1f..de6ddc1 100644
  #ifdef NETWORK
  		KEY_MAC(case KEY_COMMAND+KEY_6:)
 diff --git a/d2/main/gamerend.c b/d2/main/gamerend.c
-index da0872e..87a8d34 100644
+index da0872e..4b6963b 100644
 --- a/d2/main/gamerend.c
 +++ b/d2/main/gamerend.c
 @@ -1,3 +1,4 @@
@@ -1683,7 +1749,7 @@ index da0872e..87a8d34 100644
  #include "gamefont.h"
  #include "newdemo.h"
  #include "text.h"
-@@ -533,7 +535,13 @@ void game_draw_hud_stuff()
+@@ -533,12 +535,18 @@ void game_draw_hud_stuff()
  	if (Newdemo_state == ND_STATE_PLAYBACK)
  		Game_mode = Newdemo_game_mode;
  
@@ -1698,7 +1764,22 @@ index da0872e..87a8d34 100644
  
  	if (Newdemo_state == ND_STATE_PLAYBACK)
  		Game_mode = GM_NORMAL | (Game_mode & GM_OBSERVER);
-@@ -805,6 +813,8 @@ void game_render_frame_mono(int flip)
+ 
+-	if ( Player_is_dead )
++	if ( Player_is_dead && !EM_ASM_INT(return !!Module.arenaDemo))
+ 		player_dead_message();
+ }
+ 
+@@ -783,6 +791,8 @@ int BigWindowSwitch=0;
+ extern int force_cockpit_redraw;
+ void update_cockpits();
+ 
++#include "astra_arena_view.inc"
++
+ //render a frame for the game
+ void game_render_frame_mono(int flip)
+ {
+@@ -805,6 +815,8 @@ void game_render_frame_mono(int flip)
  
  		update_rendered_data(0, Viewer, 0, 0);
  		render_frame(0, 0);
@@ -1707,7 +1788,7 @@ index da0872e..87a8d34 100644
  
  		wake_up_rendered_objects(Viewer, 0);
  		show_HUD_names();
-@@ -833,6 +843,8 @@ void game_render_frame_mono(int flip)
+@@ -833,6 +845,8 @@ void game_render_frame_mono(int flip)
  		}
  		update_rendered_data(0, Viewer, Rear_view, 0);
  		render_frame(0, 0);
@@ -1716,13 +1797,15 @@ index da0872e..87a8d34 100644
  	}
  
  	gr_set_current_canvas(&Screen_3d_window);
-@@ -854,6 +866,7 @@ void game_render_frame_mono(int flip)
+@@ -854,8 +868,7 @@ void game_render_frame_mono(int flip)
  
  	gr_set_current_canvas(&Screen_3d_window);
  
-+	{extern void astra_deck_update(int);astra_deck_update(!no_draw_hud);}
- 	if (!no_draw_hud)
- 		game_draw_hud_stuff();
+-	if (!no_draw_hud)
+-		game_draw_hud_stuff();
++	av_hud(!no_draw_hud);
+ 
+ 	gr_set_current_canvas(NULL);
  
 @@ -869,6 +882,8 @@ void game_render_frame_mono(int flip)
  
@@ -1733,7 +1816,7 @@ index da0872e..87a8d34 100644
  	int new_mode=CM_FULL_SCREEN;
  
  	if (Rear_view || Player_is_dead)
-@@ -968,9 +983,23 @@ void update_cockpits()
+@@ -968,9 +983,25 @@ void update_cockpits()
  
  void game_render_frame()
  {
@@ -1751,13 +1834,16 @@ index da0872e..87a8d34 100644
 +           astra_frame,astra_surface_count(),astra_blast_count(),astra_mesh_count(),astra_draw_count());
 +    }
  	set_screen_mode( SCREEN_GAME );
- 	play_homing_warning();
+-	play_homing_warning();
++	av_begin();
++	if(!astra_arena_remote_view())play_homing_warning();
  	game_render_frame_mono(GameArg.DbgUseDoubleBuffer);
++	av_end();
 +    extern void astra_stream_frame_end(void);astra_stream_frame_end();
  }
  
  //show a message in a nice little box
-@@ -995,3 +1024,7 @@ void show_boxed_message(char *msg, int RenderFlag)
+@@ -995,3 +1026,7 @@ void show_boxed_message(char *msg, int RenderFlag)
  	if (!RenderFlag)
  		gr_flip();
  }
@@ -2029,10 +2115,19 @@ index 64c6202..9dde716 100644
  }
  
 diff --git a/d2/main/hud.c b/d2/main/hud.c
-index 7298cc1..6a79637 100644
+index 7298cc1..7d0747f 100644
 --- a/d2/main/hud.c
 +++ b/d2/main/hud.c
-@@ -98,7 +98,11 @@ void HUD_render_message_frame()
+@@ -59,6 +59,8 @@ void HUD_clear_messages()
+ //	Writes a message on the HUD and checks its timer.
+ void HUD_render_message_frame()
+ {
++	extern int astra_arena_remote_view(void);
++	if(astra_arena_remote_view())return;
+ 	int i,j,y;
+ 
+ 	HUD_toolong = 0;
+@@ -98,7 +100,11 @@ void HUD_render_message_frame()
  		if (is_observer())
  			y = Observer_message_y_start;
  		else
@@ -2044,7 +2139,7 @@ index 7298cc1..6a79637 100644
  
  		if (Guided_missile[Player_num] && Guided_missile[Player_num]->type==OBJ_WEAPON && Guided_missile[Player_num]->id==GUIDEDMISS_ID &&
  		Guided_missile[Player_num]->signature==Guided_missile_sig[Player_num] && PlayerCfg.GuidedInBigWindow)
-@@ -156,6 +160,10 @@ int HUD_init_message_va(int class_flag, const char * format, va_list args)
+@@ -156,6 +162,10 @@ int HUD_init_message_va(int class_flag, const char * format, va_list args)
  
  static int HUD_init_message_literal_worth_showing(int class_flag, const char *message)
  {
@@ -2183,10 +2278,19 @@ index d9aafbc..fcc5213 100644
 +}
 +
 diff --git a/d2/main/laser.c b/d2/main/laser.c
-index 2841dad..43350e7 100644
+index 2841dad..1d0a782 100644
 --- a/d2/main/laser.c
 +++ b/d2/main/laser.c
-@@ -484,6 +484,7 @@ void create_omega_blobs(int firing_segnum, vms_vector *firing_pos, vms_vector *g
+@@ -52,6 +52,8 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
+ #include "playsave.h"
+ #include "hudmsg.h"
+ 
++extern object *astra_arena_listener(void);
++
+ #define NEWHOMER
+ 
+ object *Guided_missile[MAX_PLAYERS]={NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL};
+@@ -484,6 +486,7 @@ void create_omega_blobs(int firing_segnum, vms_vector *firing_pos, vms_vector *g
  	if (last_created_objnum != -1) {
  		vm_vec_scale(&Objects[last_created_objnum].mtype.phys_info.velocity, Weapon_info[OMEGA_ID].speed[Difficulty_level]/4);
  		Objects[last_created_objnum].movement_type = MT_PHYSICS;
@@ -2194,7 +2298,16 @@ index 2841dad..43350e7 100644
  	}
  
  	Doing_lighting_hack_flag = 0;
-@@ -654,6 +655,7 @@ int Laser_create_new( vms_vector * direction, vms_vector * position, int segnum,
+@@ -579,7 +582,7 @@ void do_omega_stuff(object *parent_objp, vms_vector *firing_pos, object *weapon_
+ 	firing_segnum = find_point_seg(firing_pos, parent_objp->segnum);
+ 
+ 	//	Play sound.
+-	if ( parent_objp == Viewer )
++	if ( parent_objp == astra_arena_listener() )
+ 		digi_play_sample( Weapon_info[weapon_objp->id].flash_sound, F1_0 );
+ 	else
+ 		digi_link_sound_to_pos( Weapon_info[weapon_objp->id].flash_sound, weapon_objp->segnum, 0, &weapon_objp->pos, 0, F1_0 );
+@@ -654,6 +657,7 @@ int Laser_create_new( vms_vector * direction, vms_vector * position, int segnum,
  	}
  
  	obj = &Objects[objnum];
@@ -2202,7 +2315,7 @@ index 2841dad..43350e7 100644
  
  	//	Do the special Omega Cannon stuff.  Then return on account of everything that follows does
  	//	not apply to the Omega Cannon.
-@@ -777,7 +779,7 @@ int Laser_create_new( vms_vector * direction, vms_vector * position, int segnum,
+@@ -777,7 +781,7 @@ int Laser_create_new( vms_vector * direction, vms_vector * position, int segnum,
  
  	// Create orientation matrix so we can look from this pov
  	//	Homing missiles also need an orientation matrix so they know if they can make a turn.
@@ -2211,6 +2324,15 @@ index 2841dad..43350e7 100644
  		vm_vector_2_matrix( &obj->orient,direction, &Objects[parent].orient.uvec ,NULL);
  
  	if (( &Objects[parent] != Viewer ) && (Objects[parent].type != OBJ_WEAPON) &&
+@@ -790,7 +794,7 @@ int Laser_create_new( vms_vector * direction, vms_vector * position, int segnum,
+ 	volume = F1_0;
+ 	if (Weapon_info[obj->id].flash_sound > -1 )	{
+ 		if (make_sound)	{
+-			if ( parent == (Viewer-Objects) )	{
++			if ( parent == (astra_arena_listener()-Objects) )	{
+ 				if (weapon_type == VULCAN_ID)	// Make your own vulcan gun  1/2 as loud.
+ 					volume = F1_0 / 2;
+ 				if(weapon_type == PLASMA_ID && PlayerCfg.QuietPlasma)  // Plasma's a bit loud, too
 diff --git a/d2/main/menu.c b/d2/main/menu.c
 index 8301896..85607f2 100644
 --- a/d2/main/menu.c
@@ -3336,7 +3458,7 @@ index 650f69e..7271753 100644
  }
 +
 diff --git a/d2/main/render.c b/d2/main/render.c
-index 517bc8a..40a59cc 100644
+index 517bc8a..f118bb6 100644
 --- a/d2/main/render.c
 +++ b/d2/main/render.c
 @@ -84,6 +84,7 @@ short Rotated_last[MAX_VERTICES];
@@ -3447,11 +3569,22 @@ index 517bc8a..40a59cc 100644
  	for (n=obj->attached_obj;n!=-1;n=Objects[n].ctype.expl_info.next_attach) {
  
  		Assert(Objects[n].type == OBJ_FIREBALL);
-@@ -1677,7 +1705,11 @@ void render_frame(fix eye_offset, int window_num)
+@@ -1677,7 +1705,22 @@ void render_frame(fix eye_offset, int window_num)
  		gr_clear_canvas(Clear_window_color);
  	#endif
  
-+    {extern void astra_auto_sight_begin(int);astra_auto_sight_begin(window_num);}
++    {extern void astra_auto_sight_begin(int),astra_auto_sight_object(int,int);
++     if(!window_num&&Viewer!=ConsoleObject&&EM_ASM_INT(return !!Module.arenaDemo)){
++        /* Keep Astra's own visual perception when the spectator watches a bot.
++         * This is a frustum/occlusion pass only: no second render or AI updates. */
++        object *camera=Viewer;vms_vector eye=Viewer_eye;
++        Viewer=ConsoleObject;Viewer_eye=ConsoleObject->pos;
++        g3_set_view_matrix(&Viewer_eye,&Viewer->orient,Render_zoom);
++        astra_auto_sight_begin(0);
++        for(int i=0;i<=Highest_object_index;i++)astra_auto_sight_object(i,0);
++        Viewer=camera;Viewer_eye=eye;g3_set_view_matrix(&Viewer_eye,&Viewer->orient,Render_zoom);
++     }else astra_auto_sight_begin(window_num);
++    }
  	render_mine(start_seg_num, eye_offset, window_num);
 +    {extern void astra_environment_rooms(const short*,int,int);astra_environment_rooms(Render_list,N_render_segs,window_num);}
 +    {extern void astra_render_omega(int);astra_render_omega(window_num);}
@@ -3459,7 +3592,7 @@ index 517bc8a..40a59cc 100644
  
  	g3_end_frame();
  
-@@ -1901,6 +1933,7 @@ done_list:
+@@ -1901,6 +1944,7 @@ done_list:
  //renders onto current canvas
  void render_mine(int start_seg_num,fix eye_offset, int window_num)
  {
@@ -3467,7 +3600,7 @@ index 517bc8a..40a59cc 100644
  #ifndef NDEBUG
  	int		i;
  #endif
-@@ -2253,3 +2286,15 @@ int find_seg_side_face(short x,short y,int *seg,int *side,int *face,int *poly)
+@@ -2253,3 +2297,15 @@ int find_seg_side_face(short x,short y,int *seg,int *side,int *face,int *poly)
  }
  
  #endif

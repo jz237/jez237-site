@@ -239,7 +239,7 @@ function preloadFlightEngine() {
   if(location.protocol!=="http:"&&location.protocol!=="https:")return;
   if(document.getElementById("astraEnginePreload"))return;
   const link=document.createElement("link");link.id="astraEnginePreload";
-  link.rel="preload";link.as="script";link.href="engine.js?v=pyre87";
+  link.rel="preload";link.as="script";link.href="engine.js?v=pyre88";
   document.head.append(link);
 }
 let firstBlastProfile=0;
@@ -380,7 +380,7 @@ async function launch(quick,demo=false,encounter=false,preview=false,autopilot=f
         setInterval(syncPilot,3000);
       }
     };
-    await script("engine.js?v=pyre87");
+    await script("engine.js?v=pyre88");
   } catch(e) {console.error(e);astraFail(e.message);}
 }
 
@@ -496,9 +496,10 @@ async function watchWake(){try{wakeLock=await navigator.wakeLock?.request('scree
 window.astraAutoStatus=(task,rooms,deaths,kills,pickups)=>{
   if(!Module.autopilot)return;
   if(Module.arenaDemo&&task==='Exploring the mine')task='Patrolling for opponents';
-  $('autoTask').textContent=Module.autoPaused?'Paused':task;
+  const remote=Module.arenaDemo&&(Module.arenaView|0)>0;
+  if(!remote)$('autoTask').textContent=Module.autoPaused?'Paused':task;
   const level=Module.flightState?.level||Module.startLevel;
-  $('autoStats').textContent=Module.arenaDemo?`${window.astraCampaigns[Module.campaign].name} · ${window.astraCampaigns[Module.campaign].maps[level-1]} · ${kills} kills · ${deaths} deaths · 4 AI pilots`:`${window.astraCampaigns[Module.campaign]?.name||'Astra'} · L${level} · ${kills} kills · ${pickups} pickups · ${rooms} rooms${Module.demoArsenal?' · Full arsenal':''}`;
+  if(!remote)$('autoStats').textContent=Module.arenaDemo?`${window.astraCampaigns[Module.campaign].name} · ${window.astraCampaigns[Module.campaign].maps[level-1]} · ${kills} kills · ${deaths} deaths · 4 AI pilots`:`${window.astraCampaigns[Module.campaign]?.name||'Astra'} · L${level} · ${kills} kills · ${pickups} pickups · ${rooms} rooms${Module.demoArsenal?' · Full arsenal':''}`;
   Module.autoStats={task,rooms,deaths,kills,pickups};
 };
 function pauseDemo(paused){

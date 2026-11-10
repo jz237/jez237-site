@@ -81,7 +81,7 @@ void astra_auto_sight_begin(int window_num){
     aa_sight_level=Current_level_num;aa_sight_time=GameTime64;aa_sight_eye=Viewer_eye;
 }
 void astra_auto_sight_object(int i,int window_num){
-    if(window_num||!aa_sight_active||(!aa_combat_object(i)&&!aa_enemy_shot(i)))return;
+    if(window_num||Viewer!=ConsoleObject||!aa_sight_active||(!aa_combat_object(i)&&!aa_enemy_shot(i)))return;
     object *o=&Objects[i];
     if(o->render_type==RT_NONE||(o->type==OBJ_ROBOT&&o->ctype.ai_info.CLOAKED))return;
     if(vm_vec_dist_quick(&o->pos,&aa_sight_eye)>i2f(210))return;
