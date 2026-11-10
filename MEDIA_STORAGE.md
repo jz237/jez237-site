@@ -64,3 +64,21 @@ GitHub's reported storage may lag until server-side garbage collection.
 Deployment watch paths skip root documentation, local agent instructions and
 test-only changes. Public content, runtime code and deployment guards still run
 their existing validation; genuine site updates are not delayed.
+
+## GitHub Pages sync-timeout recovery (November 9, evening)
+
+The under-budget mirror can still stall in GitHub's `deployment_queued` or
+`syncing_files` states. Observed uploads around 823 MB passed all build/size
+checks but hit `deploy-pages`' ten-minute client timeout; a later near-identical
+payload succeeded in 23 seconds. This is separate from the repaired size issue.
+
+The mirror workflow now permits twenty minutes per deploy attempt, inside a
+45-minute job cap. On an action failure, `.github/scripts/pages_recovery.py`
+reads the backend status for that exact repository/commit. A late `succeed`
+result is accepted without another submission. Only a confirmed
+`deployment_cancelled` permits a single retry of the same artifact after a
+30-second backoff. Active, unknown, missing, or explicitly failed status blocks
+retry. User/run cancellation never triggers recovery. Build/size/auth errors
+are not weakened; a final success gate keeps exhausted or blocked recovery red.
+Recovery is recorded in the job summary, not silently reported as first-try
+success. The workflow keeps serialization and all existing payload/media guards.
