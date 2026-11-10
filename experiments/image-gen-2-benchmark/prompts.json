@@ -30788,5 +30788,76 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-11-10-factual-infographic-factual-infographic-ocean-internal-wave",
+    "title": "Factual infographic: Ocean Internal Waves",
+    "tests": "; archive_slot=2026-11-10T00:20; concept=ocean-internal-wave-ridge-propagation; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: factual-infographic",
+    "prompt": "Create a finished factual science infographic, not a photographed poster. Title: OCEAN INTERNAL WAVES. A sweeping luminous ocean cross-section dominates: deep indigo water over a rugged submerged ridge, with a tidal current passing across the ridge and a large undulating boundary between subtly different density layers extending away. Illustrate the layer displacement as a schematic, not a breaking surface wave. Open, elegant callouts woven into the water identify “Tidal flow over a ridge”, “Density layers”, “Internal wave propagation”, and “Mixing of water masses”. A small satellite above the sea and subtle surface streaks illustrate that some internal waves create detectable surface patterns. Fine technical ink, translucent watercolor and carefully shaded bathymetry; sweeping curved leader lines, varied scale, generous negative space and clear legible typography. Scientifically restrained, no unsupported numbers, invented species, grids, boxes, bibliography or tiny filler text.",
+    "image": "images/2026-11-10-factual-infographic-factual-infographic-ocean-internal-wave.jpg",
+    "thumb": "thumbs/2026-11-10-factual-infographic-factual-infographic-ocean-internal-wave.webp",
+    "color": "#508494",
+    "date": "2026-11-10",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1672x941",
+    "dedup": {
+      "conceptKey": "ocean-internal-wave-ridge-propagation",
+      "imageSha256": "1e38765695c9b9d293e5e611032ab063b8c23778f4496a832c35bab75c073555",
+      "imageDHash": "eb4d33312f3a2cf5"
+    },
+    "factualInfographic": {
+      "topic": "How ocean internal waves propagate along density layers after tidal flow crosses a submarine ridge",
+      "description": "Tidal generation and propagation of ocean internal waves",
+      "sourceNote": "UC San Diego https://nopp-giw.ucsd.edu/ and San José State University https://mlml.sjsu.edu/physoce/internal-waves-in-monterey-bay/ verify generation, propagation, mixing and surface detection.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-10T05:20:37.692369+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "University of California San Diego",
+            "title": "Global Internal Waves",
+            "sourceType": "university",
+            "url": "https://nopp-giw.ucsd.edu/"
+          },
+          {
+            "id": "S2",
+            "publisher": "San José State University",
+            "title": "Internal Waves in Monterey Bay",
+            "sourceType": "university",
+            "url": "https://mlml.sjsu.edu/physoce/internal-waves-in-monterey-bay/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Internal waves are vertical disturbances within ocean density layers.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Tidal flow over a submarine ridge can generate internal waves.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Internal waves propagate through the ocean and can contribute to mixing water masses.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Internal waves can produce surface patterns detectable in satellite imagery.",
+            "sourceIds": [
+              "S2"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
