@@ -4541,5 +4541,30 @@
       "continuity": "Chalk-white seasonal CO2 ice over charcoal basaltic fines; restrained lavender shadows and pale gold low spring sunlight from upper left. Crescent Scarp curves along upper right, three dark low basalt knobs called Three Teeth stand at mid-left, branching Basin Loom drains toward a central vent called Pin Eye. No liquid water, vegetation, animals, people, cities, machinery or lava.",
       "entryDescription": "Scientifically labeled section at Basin Loom shows shallow gas pathways beneath continuous ice, not a liquid river."
     }
+  },
+  {
+    "id": "2026-11-09-weekly-world-rime-aperture-pin-eye-opens",
+    "title": "Rime Aperture: Pin Eye Opens",
+    "tests": "Continuity follows established week 2026-W46 world bible and introductory beat. Mars analog sources and evidence retained in 2026-11-09T0020/world-evidence.json; no new factual claims or invented observations.; archive_slot=2026-11-09T21:20; concept=rime-aperture-pin-eye-fracture-dust-eruption; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; Story beat: 3/7",
+    "prompt": "Create a finished richly detailed scientific-documentary artist's impression of RIME APERTURE — PIN EYE OPENS, fourth image in the coherent seven-image abiotic world sequence. A dominant oblique environmental photograph-like view across Basin Loom captures the FIRST small restrained pulse of dark sediment emerging through a narrow fresh fracture in seasonal carbon-dioxide slab ice. No section or cutaway this time: the viewer is above the intact surface looking slightly downward. Pin Eye is a slim irregular slit near center-right, not a volcanic crater, sinkhole or vast torn canyon. A finely resolved smoky charcoal dust pulse rises locally from this slit and bends slightly toward the right, with a few individually lit sand grains tracing short falling arcs. The CO2 gas itself is mostly invisible: show entrained sediment, never a white steam geyser or luminous gas. Keep the plume compact, partially transparent and modest compared with the broad surrounding plain; this is the initial opening, not the later broad veil. Most of the ivory seasonal slab remains seated on the ground, with subtle radial hairline cracks near the slit and a light fresh dark sediment dusting. No giant levitating slabs or unsupported shelves. Render solid translucent ice at the small fracture edges, matte frosted surfaces, densely tactile tiny frost grains, charcoal basalt fines and low coherent terrain relief.\n\nPreserve the established geography: exactly three low dark basalt knobs, Three Teeth, cluster at mid-left in middle distance; curved Crescent Scarp follows the upper-right background; subtle branching Basin Loom traces are glimpsed under translucent patches and lead toward central Pin Eye. Low pale gold sunlight from upper left casts restrained lavender shadows to the right. Ivory ice, charcoal dust, pale gold highlights and lavender shadows; thin pale neutral atmospheric haze, no Earth-blue sky. Camera-like physically credible illumination, natural grain textures, finely resolved dust scattering, deep landscape detail with nuanced scale; beautiful asymmetry and generous unoccupied ice around the event, not a generic explosive movie still. No organisms or civilization.\n\nMinimal elegant open typography in natural negative space: title “RIME APERTURE”, subordinate “Pin Eye Opens”. A delicate leader identifies “Pin Eye: dust escapes through a fracture”. A concise note reads “Gas mostly invisible • dark grains trace the flow”. Footer “Science-informed speculative world / artist’s impression”; smaller line “Mars terrain observed • venting mechanism modeled • this world invented”. These are explanatory overlays, never physical signs. Artwork strongly dominates with readable uncluttered text, no boxes, grid, inset diagrams, instrument displays, poster mockup or frame. This imagined cold rocky exoplanet's geography is hypothetical, not a claimed observation. The Mars-inspired modeled mechanism is basal CO2 sublimation pressurizing gas beneath seasonal ice and venting sediment. No numeric invented measurements. No liquid water, liquid CO2 rivers, wet splashes, steam fountain, volcano, lava, plants, animals, literal spiders, humans, machinery, buildings, spacecraft, fantasy crystals or magical light. Continue the prior hidden-gas-pathway beat by showing its first visible surface consequence, leaving the major dust veil for the next image.",
+    "image": "images/2026-11-09-weekly-world-rime-aperture-pin-eye-opens.jpg",
+    "thumb": "thumbs/2026-11-09-weekly-world-rime-aperture-pin-eye-opens.webp",
+    "color": "#a79592",
+    "date": "2026-11-09",
+    "batch": "Daily Prompt",
+    "slot": "weekly-world",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1672x941",
+    "dedup": {
+      "conceptKey": "rime-aperture-pin-eye-fracture-dust-eruption",
+      "imageSha256": "43cc135cb39e4da52ec9fe8a44b3a602ef10b2ef68a0d4dbcb800bbf7bb233e6",
+      "imageDHash": "fffc87c4cc961903"
+    },
+    "world": {
+      "name": "Rime Aperture",
+      "description": "An explicitly hypothetical cold rocky exoplanet reveals a branching landscape as seasonal carbon-dioxide slab ice vents and retreats.",
+      "continuity": "Chalk-white seasonal CO2 ice over charcoal basaltic fines; restrained lavender shadows and pale gold low spring sunlight from upper left. Crescent Scarp curves along upper right, three dark low basalt knobs called Three Teeth stand at mid-left, branching Basin Loom drains toward a central vent called Pin Eye. No liquid water, vegetation, animals, people, cities, machinery or lava.",
+      "entryDescription": "First restrained dust-laden gas eruption through a narrow fracture; gas itself mostly invisible."
+    }
   }
 ]
