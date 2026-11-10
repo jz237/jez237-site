@@ -86,12 +86,16 @@ use these instructions before writing code or snippets.
 - `/stock-market/` - Stock Command Center.
 - `/ops/` - operations, stats, runtime notes, and dashboard material.
 - `/plex/` - Plex/media utility page.
-- `/how-ai-works/` - interactive "How AI Works" explainer.
-- `/how-ai-works/training-alignment.html` - alignment/training
-  interactive explainer.
-- `/experiments/ai-explainer/` - interactive "How AI Works" explainer.
-- `/experiments/ai-explainer/training-alignment.html` - alternate
-  training/alignment explainer route.
+- `/how-ai-works/` - animated "How AI Works" guide. A real, tiny
+  transformer language model runs in the page: visitors type a prompt and
+  watch tokenization, embeddings, attention, layers and sampling, then
+  retrain the model in the browser.
+- `/how-ai-works/training-alignment.html` - training and alignment deep
+  dive (pretraining, fine-tuning, human feedback, evals, retrieval), using
+  the same in-page model.
+- `/how-ai-works/classic/` - the earlier (September 2026) version of the
+  guide, with demos built on precomputed data from larger models.
+- `/experiments/ai-explainer/` - retired; redirects to `/how-ai-works/`.
 - `/samples/aquarium/` - aquarium sample page.
 - `/prototypes/hidden-reef/` - Hidden Reef aquarium store prototype.
 - Hidden Reef prototype subpages include
