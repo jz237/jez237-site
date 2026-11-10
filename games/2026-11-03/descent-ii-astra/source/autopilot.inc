@@ -14,6 +14,9 @@ void astra_auto_pause_frame(void){
     if(want&&!paused){stop_time();paused=1;}
     if(!want&&paused){start_time();paused=0;}
 }
+static int aa_arena;
+static int aa_kill_total(void){return aa_arena?Players[Player_num].net_kills_total:Players[Player_num].num_kills_total;}
+static int aa_player_foe(object *o){return aa_arena&&o->type==OBJ_PLAYER&&o!=ConsoleObject&&o->id<N_players&&Players[o->id].connected==CONNECT_PLAYING&&Players[o->id].shields>0&&!(Players[o->id].flags&PLAYER_FLAGS_CLOAKED);}
 static int aa_level=-999,aa_segment=-1,aa_goal=-1,aa_object=-1,aa_wall=-1,aa_mode,aa_route_mode;
 static int aa_graph_generation;
 static int aa_dist[MAX_SEGMENTS],aa_parent[MAX_SEGMENTS],aa_queue[MAX_SEGMENTS],aa_visits[MAX_SEGMENTS];
@@ -51,9 +54,9 @@ static int aa_incoming=-1,aa_dodges,aa_bursts,aa_gaze_changes,aa_gaze_room=-1,aa
 static int aa_enemy_shot(int i){
     if(i<0||i>Highest_object_index)return 0;object *o=&Objects[i];
     return o->type==OBJ_WEAPON&&o->movement_type==MT_PHYSICS&&
-        o->ctype.laser_info.parent_type==OBJ_ROBOT&&!(o->flags&OF_SHOULD_BE_DEAD);
+        (o->ctype.laser_info.parent_type==OBJ_ROBOT||(aa_arena&&o->ctype.laser_info.parent_type==OBJ_PLAYER&&o->ctype.laser_info.parent_num!=ConsoleObject-Objects))&&!(o->flags&OF_SHOULD_BE_DEAD);
 }
-static int aa_hostile(int i){return i>=0&&i<=Highest_object_index&&Objects[i].type==OBJ_ROBOT&&!(Objects[i].flags&(OF_SHOULD_BE_DEAD|OF_EXPLODING))&&!Robot_info[Objects[i].id].companion;}
+static int aa_hostile(int i){return i>=0&&i<=Highest_object_index&&!(Objects[i].flags&(OF_SHOULD_BE_DEAD|OF_EXPLODING))&&((Objects[i].type==OBJ_ROBOT&&!Robot_info[Objects[i].id].companion)||aa_player_foe(&Objects[i]));}
 /* Perception comes from the main cockpit render, never the object database.
  * Frustum tests use the renderer's actual aspect/zoom. Several body samples
  * allow a partly exposed robot while native ray tests reject walls, closed
@@ -63,7 +66,7 @@ static int aa_sight_signature[MAX_OBJECTS],aa_sight_active,aa_sight_level,aa_sig
 static fix64 aa_sight_time;
 static vms_vector aa_sight_eye;
 extern vms_vector Viewer_eye;
-static int aa_combat_object(int i){return aa_hostile(i)||(i>=0&&i<=Highest_object_index&&Objects[i].type==OBJ_CNTRLCEN&&!(Objects[i].flags&(OF_SHOULD_BE_DEAD|OF_EXPLODING)));}
+static int aa_combat_object(int i){return aa_hostile(i)||(!aa_arena&&i>=0&&i<=Highest_object_index&&Objects[i].type==OBJ_CNTRLCEN&&!(Objects[i].flags&(OF_SHOULD_BE_DEAD|OF_EXPLODING)));}
 static int aa_perceived(int i){
     return i>=0&&i<=Highest_object_index&&aa_sight_active&&aa_sight_level==Current_level_num&&
         GameTime64>=aa_sight_time&&GameTime64-aa_sight_time<=F1_0/4&&
@@ -112,7 +115,7 @@ void astra_auto_contact(object *source,int ram){
         if(!aa_hostile(attacker))return;
         vm_vec_sub(&direction,&source->pos,&ConsoleObject->pos);
     }else{
-        if(source->type!=OBJ_WEAPON||source->ctype.laser_info.parent_type!=OBJ_ROBOT||source->movement_type!=MT_PHYSICS)return;
+        if(source->type!=OBJ_WEAPON||(source->ctype.laser_info.parent_type!=OBJ_ROBOT&&!(aa_arena&&source->ctype.laser_info.parent_type==OBJ_PLAYER))||source->movement_type!=MT_PHYSICS)return;
         /* The incoming trajectory is physically sensed even if its owner has
          * moved behind cover. Do not read that owner's current coordinates. */
         attacker=source->ctype.laser_info.parent_num;
@@ -420,7 +423,7 @@ static void aa_plan(void){
     if(aa_phase==5&&!Control_center_destroyed)valid=0;
     if(Control_center_destroyed&&aa_phase!=5)valid=0;
     int reactor=-1;
-    if(!Control_center_destroyed)for(int i=0;i<=Highest_object_index;i++)if(aa_object_available(i)&&Objects[i].type==OBJ_CNTRLCEN&&aa_dist[Objects[i].segnum]>=0){
+    if(!aa_arena&&!Control_center_destroyed)for(int i=0;i<=Highest_object_index;i++)if(aa_object_available(i)&&Objects[i].type==OBJ_CNTRLCEN&&aa_dist[Objects[i].segnum]>=0){
         if(reactor<0||aa_dist[Objects[i].segnum]<aa_dist[Objects[reactor].segnum])reactor=i;
     }
     /* Reachable reactor takes precedence over further exploration. Emergency
@@ -428,7 +431,7 @@ static void aa_plan(void){
     if(reactor>=0&&aa_phase!=3&&aa_phase!=6)valid=0;
     if(reactor<0&&aa_boss_room>=0&&GameTime64-aa_boss_seen<i2f(8)&&aa_phase==0)valid=0;
     if(!valid){
-        int goal=-1,obj=-1,wallno=-1,phase=0;float best=1e20f;int gate=Control_center_destroyed?-1:aa_required_gate();
+        int goal=-1,obj=-1,wallno=-1,phase=0;float best=1e20f;int gate=aa_arena||Control_center_destroyed?-1:aa_required_gate();
         if(Control_center_destroyed){
             for(int i=0;i<Num_walls;i++){
                 wall *w=&Walls[i];if(w->trigger<0||w->trigger>=Num_triggers||aa_dist[w->segnum]<0)continue;
@@ -441,7 +444,7 @@ static void aa_plan(void){
             aa_objective step,chosen={.cost=1000000};aa_dependency_budget=64;memset(aa_dependency_visiting,0,sizeof aa_dependency_visiting);
             /* Resolve reactor -> required key -> its gate -> its switch as a
              * chain. Unrelated optional switches are not equivalent progress. */
-            for(int i=0;i<=Highest_object_index;i++)if(aa_object_available(i)&&Objects[i].type==OBJ_CNTRLCEN){
+            for(int i=0;i<=Highest_object_index;i++)if(!aa_arena&&aa_object_available(i)&&Objects[i].type==OBJ_CNTRLCEN){
                 if(aa_resolve_room(Objects[i].segnum,i,-1,3,0,&step)&&step.cost<chosen.cost)chosen=step;
             }
             if(chosen.cost==1000000)for(int i=0;i<=Highest_object_index;i++){
@@ -1032,7 +1035,7 @@ static int aa_shot_lane(int enemy,int wallno,vms_vector *aim,int missile){
     if(aa_lane_reason){aa_blocked_shots++;return 0;}aa_clear_shots++;return 1;
 }
 static int aa_weapon_effective(int info,int enemy){
-    if(!aa_hostile(enemy))return 1;
+    if(!aa_hostile(enemy)||Objects[enemy].type!=OBJ_ROBOT)return 1;
     int boss=Robot_info[Objects[enemy].id].boss_flag-BOSS_D2;
     if(boss<0||boss>=NUM_D2_BOSSES||Boss_invulnerable_spot[boss])return 1;
     return !(Weapon_info[info].matter?Boss_invulnerable_matter[boss]:Boss_invulnerable_energy[boss]);
@@ -1052,7 +1055,7 @@ static float aa_weapon_score(int w,float distance,int enemy){
       case OMEGA_INDEX:score=distance<48?3.2f:1.5f;if(distance>65)score=-10;break;
     }
     if(Players[Player_num].energy<i2f(35))score+=(w==VULCAN_INDEX||w==GAUSS_INDEX)?1.5f:-1.2f;
-    if(aa_hostile(enemy)){
+    if(aa_hostile(enemy)&&Objects[enemy].type==OBJ_ROBOT){
         int boss=Robot_info[Objects[enemy].id].boss_flag-BOSS_D2;
         if(boss>=0&&boss<NUM_D2_BOSSES){
             int matter=Weapon_info[Primary_weapon_to_weapon_info[w]].matter;
@@ -1145,12 +1148,12 @@ static void aa_route_reset(void){
     aa_mission=-1;aa_mission_object=aa_mission_wall=-1;aa_boss_room=-1;aa_boss_seen=0;aa_supply_next=aa_supply_until=0;
     aa_recent_count=aa_recent_serial=0;aa_route_sample=aa_loop_next=aa_detour_until=aa_tour_next=0;
     aa_progress_time=GameTime64;aa_detour_goal=-1;aa_loop_count=0;aa_progress_target=-1;
-    aa_progress_rooms=aa_seen;aa_progress_kills=Players[Player_num].num_kills_total;aa_progress_pickups=aa_collects;
+    aa_progress_rooms=aa_seen;aa_progress_kills=aa_kill_total();aa_progress_pickups=aa_collects;
 }
 static int aa_recent_has(int room){for(int i=0;i<aa_recent_count;i++)if(aa_recent_rooms[i]==room)return 1;return 0;}
 static void aa_route_watch(void){
-    if(aa_seen!=aa_progress_rooms||Players[Player_num].num_kills_total!=aa_progress_kills||aa_collects!=aa_progress_pickups){
-        aa_progress_time=GameTime64;aa_progress_rooms=aa_seen;aa_progress_kills=Players[Player_num].num_kills_total;aa_progress_pickups=aa_collects;
+    if(aa_seen!=aa_progress_rooms||aa_kill_total()!=aa_progress_kills||aa_collects!=aa_progress_pickups){
+        aa_progress_time=GameTime64;aa_progress_rooms=aa_seen;aa_progress_kills=aa_kill_total();aa_progress_pickups=aa_collects;
     }
     int enemy=aa_combat_target;
     if(aa_combat_object(enemy)&&aa_can_see(enemy)){
@@ -1371,6 +1374,7 @@ static int aa_cover_step(int enemy,vms_vector *target,vms_vector *aim,float *spe
 
 void astra_auto_frame(void){
     if(!astra_auto_enabled()||!ConsoleObject)return;
+    aa_arena=EM_ASM_INT(return !!Module.arenaDemo)&&(Game_mode&GM_MULTI)&&!(Game_mode&GM_MULTI_COOP);
     memset(&Controls,0,sizeof Controls);
     if(Player_is_dead){
         aa_line_count=0;aa_line_room=-1;aa_line_next=0;aa_cover_reset();aa_fire_reset();aa_pressure_until=0;aa_pressure_shields=Players[Player_num].shields;
@@ -1382,7 +1386,7 @@ void astra_auto_frame(void){
         return;
     }
     if(aa_dead_since){aa_attack_reset();aa_route_reset();aa_flare_next=GameTime64+i2f(3);aa_door_flare_next=0;aa_door_flare_wall=-1;}
-    if(aa_dead_since){aa_sliding=0;aa_slide_until=0;aa_slide_goal=-2;aa_escape_until=0;aa_escape_room=-1;aa_arsenal_signature=-1;aa_combat_target=-1;aa_next=0;aa_pick_object=aa_object=aa_goal=-1;aa_up_ready=0;aa_last_kills=Players[Player_num].num_kills_total;aa_weapon_next=GameTime64+i2f(8);}
+    if(aa_dead_since){aa_sliding=0;aa_slide_until=0;aa_slide_goal=-2;aa_escape_until=0;aa_escape_room=-1;aa_arsenal_signature=-1;aa_combat_target=-1;aa_next=0;aa_pick_object=aa_object=aa_goal=-1;aa_up_ready=0;aa_last_kills=aa_kill_total();aa_weapon_next=GameTime64+i2f(8);}
     aa_dead_since=0;if(Endlevel_sequence)return;
     if(aa_level!=Current_level_num){
         aa_line_count=0;aa_line_room=-1;aa_line_next=0;aa_cover_reset();aa_fire_reset();aa_pressure_until=0;aa_pressure_shields=Players[Player_num].shields;
@@ -1390,7 +1394,7 @@ void astra_auto_frame(void){
         aa_sense_next=aa_evade_next=aa_gaze_next=aa_evade_until=aa_boost_until=aa_boost_next=aa_gaze_until=0;aa_incoming=-1;aa_gaze_room=-1;
         aa_sliding=0;aa_slide_until=0;aa_slide_goal=-2;aa_escape_until=0;aa_escape_room=-1;memset(aa_blocked,0,sizeof aa_blocked);
         aa_weapon_next=GameTime64+i2f(8);aa_missile_next=0;aa_pending_missile=-1;aa_watch_until=0;aa_up_ready=0;
-        aa_last_target=-1;aa_last_kills=Players[Player_num].num_kills_total;aa_weapon_changed=GameTime64;
+        aa_last_target=-1;aa_last_kills=aa_kill_total();aa_weapon_changed=GameTime64;
         aa_arsenal_signature=-1;aa_recent_attacker=aa_combat_target=-1;memset(aa_attack_until,0,sizeof aa_attack_until);
         memset(aa_combat_defer,0,sizeof aa_combat_defer);memset(aa_engage_signature,255,sizeof aa_engage_signature);memset(aa_engage_elapsed,0,sizeof aa_engage_elapsed);
         aa_flare_next=GameTime64+i2f(2);aa_door_flare_next=0;aa_door_flare_wall=-1;
@@ -1401,13 +1405,13 @@ void astra_auto_frame(void){
     aa_demo_arsenal();aa_sense_fire();aa_pressure_update();
     /* Keep a confirmed destruction in frame before moving to the next target.
      * This is a short tactical pause, cancelled by an immediate close threat. */
-    if(Players[Player_num].num_kills_total>aa_last_kills && aa_combat_target>=0){
+    if(aa_kill_total()>aa_last_kills && aa_combat_target>=0){
         object *last=&Objects[aa_combat_target];
         if(last->signature!=aa_combat_signature || !aa_hostile(aa_combat_target) || last->shields<0){
             aa_watch_point=aa_last_foe;aa_watch_until=GameTime64+F1_0*3/2;aa_watch_count++;aa_pending_missile=-1;
         }
     }
-    aa_last_kills=Players[Player_num].num_kills_total;
+    aa_last_kills=aa_kill_total();
     int seg=ConsoleObject->segnum;
     if(seg!=aa_segment){if(!aa_visits[seg])aa_seen++;aa_visits[seg]++;aa_segment=seg;aa_next=0;}
     aa_route_watch();
@@ -1496,7 +1500,7 @@ void astra_auto_frame(void){
     }
     int enemy=-1;float threat=0;
     for(int i=0;i<=Highest_object_index;i++){
-        object *o=&Objects[i];if(o->type!=OBJ_ROBOT&&o->type!=OBJ_CNTRLCEN)continue;
+        object *o=&Objects[i];if(!aa_combat_object(i))continue;
         if(o->flags&(OF_SHOULD_BE_DEAD|OF_EXPLODING))continue;
         if(o->type==OBJ_ROBOT&&Robot_info[o->id].companion)continue;
         float d=aa_len(&o->pos,&ConsoleObject->pos);if(!aa_can_see(i)||(aa_combat_defer[i]>GameTime64&&aa_combat_defer_signature[i]==o->signature))continue;
@@ -1751,7 +1755,7 @@ void astra_auto_frame(void){
     extern void do_weapon_n_item_stuff(void);do_weapon_n_item_stuff();
     if(GameTime64>aa_status_next){
         static const char *labels[]={"Exploring the mine","Collecting supplies","Rescuing hostages","Engaging hostile","Activating switch","Escaping to exit","Opening door","Finding clearance","Watching destruction","Recharging energy","Navigating to reactor","Tracking reactor guardian","Checking incoming attack","Using cover"};
-        aa_kills=Players[Player_num].num_kills_total;
+        aa_kills=aa_kill_total();
         EM_ASM(Module.autoMission=({version:41,phase:$0,room:$1,wall:$2,changes:$3,age:$4,blockedShots:$5,clearShots:$6,reposition:$7,reactorDestroyed:!!$8,routeDistance:$9});,
             aa_phase,aa_mission,aa_mission_wall,aa_goal_changes,(double)(GameTime64-aa_mission_since)/F1_0,aa_blocked_shots,aa_clear_shots,aa_reposition,Control_center_destroyed,aa_goal>=0?aa_dist[aa_goal]:-1);
         vms_vector travel=ConsoleObject->mtype.phys_info.velocity;float velocity=f2fl(vm_vec_mag(&travel));
@@ -1784,3 +1788,5 @@ void astra_auto_pickup_result(object *o,int useful){
     if(useful){aa_collects++;aa_next=0;}
     else if(o->type==OBJ_POWERUP)aa_skip_pickup(o-Objects,20);
 }
+
+void astra_auto_arena_reset(void){aa_level=-999;aa_dead_since=0;aa_deaths=aa_kills=aa_collects=0;}

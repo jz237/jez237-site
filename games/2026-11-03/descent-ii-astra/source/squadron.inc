@@ -13,6 +13,7 @@ typedef struct {
     fix64 ignored[MAX_OBJECTS];
 } squad_pilot;
 static squad_pilot sq[4];
+int astra_squad_silent_pickup=0;
 static int sq_handoff=0;
 static int sq_command[4],sq_leader[4]={-1,-1,-1,-1},sq_focus[4]={-1,-1,-1,-1},sq_focus_sig[4];
 static fix64 sq_command_until[4];
@@ -264,8 +265,12 @@ int astra_squad_pickup(object *ship,object *item){
     if(!sq_owner(ship->id)||Endlevel_sequence||sq[ship->id].spawn)return 0;
     if(sq_need(ship->id,item)<=0)return 1;
     int saved=Player_num,dead=Player_is_dead;object *console=ConsoleObject;
+    int quiet=EM_ASM_INT(return !!Module.arenaDemo),pr=PaletteRedAdd,pg=PaletteGreenAdd,pb=PaletteBlueAdd;
     Player_num=ship->id;ConsoleObject=ship;Player_is_dead=0;
+    astra_squad_silent_pickup=quiet;
     if(do_powerup(item)){item->flags|=OF_SHOULD_BE_DEAD;multi_send_remobj(item-Objects);sq[ship->id].pickups++;sq[ship->id].think=0;}
     else sq[ship->id].ignored[item-Objects]=GameTime64+i2f(20);
+    astra_squad_silent_pickup=0;
+    if(quiet){PaletteRedAdd=pr;PaletteGreenAdd=pg;PaletteBlueAdd=pb;}
     Player_num=saved;ConsoleObject=console;Player_is_dead=dead;return 1;
 }

@@ -57,6 +57,8 @@ function discardSource() {
 const splitTracks = {"3":[16777216,14290380],"7":[16777216,13559687],"8":[16777216,10501226],"9":[16777216,16777216,569642]};
 function setSource(track) {
   discardSource();
+  player.loop=window.Module?.campaign==='elegies'&&track>=4;
+  if(player.loop){player.src='music/elegies/'+String((track-4)%4+1).padStart(2,'0')+'.mp3';return;}
   const path = "music/" + String(track).padStart(2,"0") + ".flac";
   if (!splitTracks[track]) { player.src=path; return; }
   const controller=new AbortController(), {signal}=controller;
@@ -237,7 +239,7 @@ function preloadFlightEngine() {
   if(location.protocol!=="http:"&&location.protocol!=="https:")return;
   if(document.getElementById("astraEnginePreload"))return;
   const link=document.createElement("link");link.id="astraEnginePreload";
-  link.rel="preload";link.as="script";link.href="engine.js?v=pyre86";
+  link.rel="preload";link.as="script";link.href="engine.js?v=pyre87";
   document.head.append(link);
 }
 let firstBlastProfile=0;
@@ -338,8 +340,8 @@ async function launch(quick,demo=false,encounter=false,preview=false,autopilot=f
     window.Module={
       resumeFlight:!!window.astraResumeLast,comfort:window.astraTools?.comfort,
       resumeCheckpoint:!!window.astraResumeCheckpoint,checkpoints:document.getElementById("checkpoints").checked,
-      netSession:window.astraNet?.session||null,
-      canvas,quick,demo,encounter,autopilot,openWeaponPriorities,shadowQuality:Number($("shadowQuality").value),combatInspect:window.astraCombatPending??-1,assetDepot,loadMovie,fastLaunch:true,blastInspect:preview?firstBlastProfile:0,mineInspect:mine?0:-1,mineInspectZoom:1,demoArsenal:autopilot&&$("demoArsenal").checked,weaponInspect:weapons?0:-1,difficulty:Number($("difficulty").value),mobileDemo:autopilot&&astraTouch,autoPaused:false,startLevel:mine?Number($("mineLevel").value):autopilot?Number($("demoLevel").value):window.astraCampaigns[campaign]?.arena?Number($("classicLevel").value)||1:1,pickupInspect:inspect?0:-1,pyroPreviewCommand:preview?1:0,campaign,wideHud:$("wideHud").checked,intro:!openWeaponPriorities && !quick && !demo && $("intro").checked,astra, arguments:["-hogdir","/mine","-pilot",autopilot?"watch":"astra","-window","-nostickykeys","-nojoystick",
+      netSession:window.astraNet?.session||null,arenaDemo:!!window.astraNet?.session?.spectator,
+      canvas,quick,demo,encounter,autopilot,openWeaponPriorities,shadowQuality:Number($("shadowQuality").value),combatInspect:window.astraCombatPending??-1,assetDepot,loadMovie,fastLaunch:true,blastInspect:preview?firstBlastProfile:0,mineInspect:mine?0:-1,mineInspectZoom:1,demoArsenal:autopilot&&!window.astraNet?.session?.spectator&&$("demoArsenal").checked,weaponInspect:weapons?0:-1,difficulty:Number($("difficulty").value),mobileDemo:autopilot&&astraTouch,autoPaused:false,startLevel:mine?Number($("mineLevel").value):autopilot?Number($("demoLevel").value):window.astraCampaigns[campaign]?.arena?Number($("classicLevel").value)||1:1,pickupInspect:inspect?0:-1,pyroPreviewCommand:preview?1:0,campaign,wideHud:$("wideHud").checked,intro:!openWeaponPriorities && !quick && !demo && $("intro").checked,astra, arguments:["-hogdir","/mine","-pilot",autopilot?"watch":"astra","-window","-nostickykeys","-nojoystick",
         "-gl_gettexlevelparam_ok","0","-gl_intensity4_ok","0","-gl_luminance4_alpha4_ok","0","-gl_rgba2_ok","0"],
       print:console.log,printErr:console.warn,onAbort:astraFail,
       onExit:()=>{Module.astraExited=true;window.astraMenus?.hide();window.astraTerminal?.fail();window.astraFlightFocus(false);syncPilot();document.body.classList.remove("flying");$("status").textContent="Flight ended."; $("retry").hidden=false;},
@@ -378,7 +380,7 @@ async function launch(quick,demo=false,encounter=false,preview=false,autopilot=f
         setInterval(syncPilot,3000);
       }
     };
-    await script("engine.js?v=pyre86");
+    await script("engine.js?v=pyre87");
   } catch(e) {console.error(e);astraFail(e.message);}
 }
 
@@ -409,7 +411,7 @@ window.addEventListener("keydown",e=>{
   }
 },true);
 
-window.astraLaunchSquadron=()=>launch(true);
+window.astraLaunchSquadron=()=>launch(true,false,false,false,!!window.astraNet?.session?.spectator);
 $("start").onclick=()=>window.astraResumeLast||window.astraResumeCheckpoint?launch(true):window.astraCampaigns[$("campaign").value]?.arena?window.astraNet.quickArena($("playMode").value==='coop'):$("playMode")?.value==='coop'?window.astraNet.quickCoop():launch(true);
 $("classicExplore").onclick=()=>launch(true);
 function launchBlastPreview(profile){
@@ -452,6 +454,8 @@ $("view").addEventListener("webglcontextlost",e=>{e.preventDefault();syncPilot()
 // Demo controls stay out of the flight view until requested.
 function setAutoControls(open, restoreFocus=false){
   const visible=!!window.Module?.autopilot && document.body.classList.contains('flying') && !window.astraPreview?.active;
+  $('autoMine').hidden=$('autoWeapons').hidden=!!window.Module?.arenaDemo;
+  $('autoNext').textContent=window.Module?.arenaDemo?'Next arena':'Next mine';
   $('autoToggle').hidden=!visible;
   $('autoPanel').hidden=!(open && visible);
   $('autoToggle').setAttribute('aria-expanded',String(open && visible));
@@ -483,17 +487,18 @@ $('full').hidden=!$('stage').requestFullscreen;
 $('full').onclick=async()=>{try{if(document.fullscreenElement)await document.exitFullscreen?.();else await $('stage').requestFullscreen?.();}catch{}};
 const demoLevel=$('demoLevel');
 function populateDemoLevels(){
-  const count=window.astraCampaigns[$('campaign').value]?.levels||20;
-  demoLevel.replaceChildren(...Array.from({length:count},(_,i)=>new Option('Level '+(i+1),i+1)));
+  const c=window.astraCampaigns[$('campaign').value],count=c?.levels||20;
+  demoLevel.replaceChildren(...Array.from({length:count},(_,i)=>new Option(c?.maps?.[i]?(i+1)+' · '+c.maps[i]:'Level '+(i+1),i+1)));
 }
 $('campaign').addEventListener('change',populateDemoLevels);populateDemoLevels();
 let wakeLock;
 async function watchWake(){try{wakeLock=await navigator.wakeLock?.request('screen');}catch{}}
 window.astraAutoStatus=(task,rooms,deaths,kills,pickups)=>{
   if(!Module.autopilot)return;
+  if(Module.arenaDemo&&task==='Exploring the mine')task='Patrolling for opponents';
   $('autoTask').textContent=Module.autoPaused?'Paused':task;
   const level=Module.flightState?.level||Module.startLevel;
-  $('autoStats').textContent=`${window.astraCampaigns[Module.campaign]?.name||'Astra'} · L${level} · ${kills} kills · ${pickups} pickups · ${rooms} rooms${Module.demoArsenal?' · Full arsenal':''}`;
+  $('autoStats').textContent=Module.arenaDemo?`${window.astraCampaigns[Module.campaign].name} · ${window.astraCampaigns[Module.campaign].maps[level-1]} · ${kills} kills · ${deaths} deaths · 4 AI pilots`:`${window.astraCampaigns[Module.campaign]?.name||'Astra'} · L${level} · ${kills} kills · ${pickups} pickups · ${rooms} rooms${Module.demoArsenal?' · Full arsenal':''}`;
   Module.autoStats={task,rooms,deaths,kills,pickups};
 };
 function pauseDemo(paused){
@@ -504,7 +509,7 @@ function pauseDemo(paused){
   if(paused){astraDisc.audio.pause();$('autoTask').textContent='Paused';}
   else {if(astraDisc.track)astraDisc.audio.play().catch(()=>{});watchWake();}
 }
-$('watch').onclick=()=>{$('look').value='astra';$('wideHud').checked=true;watchWake();launch(true,false,false,false,true);};
+$('watch').onclick=()=>{$('look').value='astra';$('wideHud').checked=true;watchWake();if(window.astraCampaigns[$('campaign').value]?.arena)window.astraNet.watchArena();else launch(true,false,false,false,true);};
 $('autoPause').onclick=()=>pauseDemo(!Module.autoPaused);
 $('autoStop').onclick=()=>window.astraNavigation.home(false);
 $('autoNext').onclick=()=>{

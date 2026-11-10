@@ -43,6 +43,6 @@
         "sha256": "b2d64a3a6ba6b8a5c300004576df5161749f595afe31cce83cb034f9c6c130b0"
       }
     ],
-    "note": "Original HOG, MN2 and author readme preserved byte-for-byte. Astra uses its existing Descent II soundtrack."
+    "note": "Original HOG, MN2 and author readme preserved byte-for-byte. Original embedded music restored using offline General MIDI rendering; see music/elegies/sources.json."
   }
 ]

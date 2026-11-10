@@ -1484,3 +1484,10 @@ R86 - classic anarchy arenas
 - Download the small classic parcel only when a classic arena is selected.
 - Mission identity, arena selection, saves, inspection and relay validation include both packs.
 - Native geometry, pickups, spawns, combat values, flight controls and demo AI are preserved.
+
+R87 - classic arena spectator battles and original Elegies music
+- Minerva and all six Elegies arenas support cockpit-view demos with three native AI opponents, selectable novice through expert.
+- Spectator autopilot recognizes visible hostile player ships and incoming player shots, with normal pickups, shields and damage.
+- Arena pause, next-map and respawn preserve the four-pilot match; no online room or mouse capture is needed.
+- Original four embedded Elegies HMP compositions are rendered offline and streamed on demand; original level sequence 1,2,3,4,1,2.
+- Campaign controls, campaign autopilot and multiplayer combat rules are unchanged.

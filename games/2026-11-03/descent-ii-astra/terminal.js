@@ -40,8 +40,10 @@
     const c=window.astraCampaigns[q('campaign').value],arena=!!c?.arena;
     all('.selected-campaign').forEach(el=>el.textContent=c.name.toUpperCase());
     q('classicSettings').hidden=q('classicExplore').hidden=!arena;q('continueFlight').hidden=arena;
-    q('watch').disabled=arena;
-    q('panel-spectate').querySelector('.panel-description').textContent=arena?'These classic arenas have no campaign robots. Choose Play arena with AI in Missions, or explore an arena solo.':'Watch a pilot track enemies, hold its aim and choose weapons for the fight. Use normal pickups, or opt into the full arsenal showcase.';
+    q('watch').disabled=false;q('arenaDemoSettings').hidden=!arena;q('demoArsenal').closest('label').hidden=arena;
+    q('demoModeHint').textContent=arena?'Normal arena pickups and damage. Choose your opponent skill above. Rotate your phone for the widest cockpit view.':'Normal campaign weapons and pickups by default. Uses your selected difficulty. Rotate your phone for the widest cockpit view.';
+    q('watch').textContent=arena?'Watch AI arena battle →':'Watch live demo →';
+    q('panel-spectate').querySelector('.panel-description').textContent=arena?'Watch from the cockpit as Astra fights three AI pilots. Native weapons, shields, pickups and respawns. Pause, skip to the next arena, or return to Missions at any time.':'Watch a pilot track enemies, hold its aim and choose weapons for the fight. Use normal pickups, or opt into the full arsenal showcase.';
     if(arena){q('classicLevel').replaceChildren(...c.maps.map((name,i)=>new Option((i+1)+' · '+name,i+1)));q('classicInfo').textContent=c.name+' by '+c.author+' · Original layouts, pickups and spawn points.';q('classicCredits').href='classic-levels/'+q('campaign').value+'.txt';}
     syncPlayMode();
   }

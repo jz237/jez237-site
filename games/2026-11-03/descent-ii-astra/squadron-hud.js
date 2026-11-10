@@ -19,7 +19,7 @@
   for(const type of ['keydown','keyup'])dialog.addEventListener(type,e=>e.stopPropagation());
   window.addEventListener('keydown',e=>{if(!e.altKey||e.ctrlKey||e.metaKey||e.repeat||!window.Module?.netSession||e.target.closest?.('input,textarea,select')||document.querySelector('dialog[open]'))return;const index=['Digit1','Digit2','Digit3','Digit4'].indexOf(e.code);if(index<0&&e.code!=='KeyH')return;e.preventDefault();e.stopImmediatePropagation();if(index>=0)issue(orders[index]);else window.astraNet.help();},true);
   setInterval(()=>{
-    const m=window.Module,n=window.astraNet,s=n?.session,shown=!!s&&!!m?.netPilots&&document.body.classList.contains('flying')&&!window.astraMenus?.active&&!window.astraPreview?.active;
+    const m=window.Module,n=window.astraNet,s=n?.session,shown=!!s&&!m?.arenaDemo&&!!m?.netPilots&&document.body.classList.contains('flying')&&!window.astraMenus?.active&&!window.astraPreview?.active;
     panel.hidden=!shown;markers.hidden=!shown||s?.mode!=='coop';if(!shown)return;
     q('squadHUDTitle').textContent=n.reconnecting?'Reconnecting…':`${s.mode==='coop'?'Squadron':'Pilots'} · ${Number.isFinite(n.latency)?n.latency+' ms':'AI flight'}${s.self===s.host?' · Host':''}`;
     q('wingmanOpen').hidden=s.mode!=='coop';q('squadHUDHelp').hidden=s.mode!=='coop';
