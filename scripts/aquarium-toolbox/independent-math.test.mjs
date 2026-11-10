@@ -163,7 +163,7 @@ test('Laminar head agrees with the independent Hagen–Poiseuille equation',()=>
 test('Unit-converted endpoints remain in domain without admitting real out-of-range values',()=>{
  for(const c of calculators)for(const f of c.fields.filter(f=>!f.options))for(const endpoint of [f.min,f.max]){
   const back=convert(convert(endpoint,f.displayUnit||f.unit,true),f.displayUnit||f.unit,false);
-  try{calculate(c.id,{...defaults(c),[f.key]:back},true);}catch(e){assert.doesNotMatch(e.message,/must be between/,c.id+'.'+f.key+' converted endpoint');}
+  try{calculate(c.id,{...defaults(c),[f.key]:back},true);}catch(e){assert.doesNotMatch(e.message,/” (must be|cannot be) /,c.id+'.'+f.key+' converted endpoint');}
  }
  const c=calculators.find(c=>c.id==='salt');
  assert.doesNotThrow(()=>calculate('salt',{...defaults(c),target:pptFromSg(sgFromPpt(1))},false,true));
@@ -174,7 +174,7 @@ test('CO2 status matches its stated 20–30 ppm comparison band',()=>{
  for(const [kh,word]of [[4,'low side'],[6,'Just under the 20–30 ppm'],[8,'Right in the 20–30 ppm range'],[11,'A little above the usual 20–30 ppm'],[14,'High'],[20/3,'Right in'],[10,'Right in']])assert.match(run('co2',{ph:7,kh}).message,new RegExp(word));
 });
 test('Evaporation does not extrapolate dissolved salinity to impossible concentrations',()=>{
- assert.throws(()=>run('ato',{v:100,daily:99,days:1,salinity:35}),/outside this dissolved-salt approximation/);
+ assert.throws(()=>run('ato',{v:100,daily:99,days:1,salinity:35}),/saltier than 100 ppt/);
  near(run('ato',{v:100,daily:20,days:1,salinity:35}).metrics[2].value,43.75);
  near(run('ato',{v:100,daily:99,days:1,salinity:0}).metrics[2].value,0);
 });
