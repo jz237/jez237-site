@@ -3,7 +3,7 @@
 // Nothing in here touches the DOM, WebGL or audio; it only pushes events into W.ev.
 //
 // The world is a band round a small planet: x along the ground (wraps every C metres), y altitude (0..H).
-import { F, STEP, C, H, ENEMY, SETTLER, BOSSES, B_KEYS, SECTORS, WAVES, rampAt, rampLevel, endlessLevel, ENDLESS, TUTOR, SCORE, START_LIVES, DIFFICULTY, applyDiff, POWERUPS, PW_KEYS, DROP, SKIM, HYPER, EVENTS, EVENT, PHASE2, B_KEYS as _BK, SHIPS, SHIP_KEYS, RIVALS, INTERSECT, WHIRL, COIL, SCORCH, MAW, GATE, SPECIALS, SPECIAL } from './config.js?v=22';
+import { F, STEP, C, H, ENEMY, SETTLER, BOSSES, B_KEYS, SECTORS, WAVES, rampAt, rampLevel, endlessLevel, ENDLESS, TUTOR, SCORE, START_LIVES, DIFFICULTY, applyDiff, POWERUPS, PW_KEYS, DROP, SKIM, HYPER, EVENTS, EVENT, PHASE2, B_KEYS as _BK, SHIPS, SHIP_KEYS, RIVALS, INTERSECT, WHIRL, COIL, SCORCH, MAW, GATE, SPECIALS, SPECIAL } from './config.js?v=23';
 export { STEP };
 
 const clamp = (v, a, b) => (v < a ? a : v > b ? b : v);
@@ -239,7 +239,7 @@ function rings(W, dt) {
       const tx = p ? wp(p.x + r.side * 22) : wp(r.x + 10), ty = p ? clamp(p.y + 4, 8, 29) : r.y;
       const dx = wd(tx - r.x), dy = ty - r.y, l = Math.hypot(dx, dy) || 1, v = Math.min(WHIRL.v[i], l * 2);
       r.x = wp(r.x + (dx / l) * v * dt); r.y += (dy / l) * v * dt;
-      if (p && r.t > WHIRL.every[i] * (r.k || 1) && Math.abs(wd(p.x - r.x)) < 40) { r.st = 'dive'; r.t = 0; r.tx = p.x; r.ty = p.y; W.ev.push({ k: 'whirldive', x: r.x, y: r.y, id: r.id }); }
+      if (p && r.t > WHIRL.every[i] * (r.k || 1) && Math.abs(wd(p.x - r.x)) < 40 && !safeNow(W)) { r.st = 'dive'; r.t = 0; r.tx = p.x; r.ty = p.y; W.ev.push({ k: 'whirldive', x: r.x, y: r.y, id: r.id }); }   // (no dives in the tutorial's safe half minute)
     } else {
       const dx = wd(r.tx - r.x), dy = r.ty - r.y, l = Math.hypot(dx, dy) || 1, v = WHIRL.dive[i];
       r.x = wp(r.x + (dx / l) * v * dt); r.y = clamp(r.y + (dy / l) * v * dt, 4, H - 3);
