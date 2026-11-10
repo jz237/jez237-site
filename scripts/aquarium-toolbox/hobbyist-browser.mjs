@@ -207,6 +207,27 @@ try{
   await go('stocking');await page.locator('.result-panel').scrollIntoViewIfNeeded();await page.screenshot({path:`${dir}/phone-${width}-stocking.png`});
   check(`phone ${width}px: pickers, toggles and results fit`);await context.close();
  }
+ // The flow check asks the tank type first, names what to add up, and its slider reaches the usual range.
+ {
+  const {context,page,go,fill,value,metric,message,chip,label}=await open();
+  await go('turnover');
+  assert.deepEqual(await page.locator('#calc-form .field > label').allInnerTexts(),['Water in your tank','What kind of tank?','Flow rating of your filter']);
+  const sliderMax=async()=>Number(await page.locator('#slider-flow').getAttribute('max'));
+  assert.equal(await sliderMax(),500);await chip('v','125 US gal');assert.equal(await sliderMax(),2000);assert.equal(await value('flow'),100);
+  // Said once: the note about the size on the box.
+  const notes=await page.locator('.field:has(#field-v) small').allInnerTexts();assert.equal(notes.length,1);assert.match(notes[0],/size printed on the box.*Work out my volume/s);
+  await page.locator('#field-kind').selectOption('sps');
+  assert.equal(await label('flow'),'Total flow of all your pumps and wavemakers');assert.match(await page.locator('#help-flow').innerText(),/return pump and every powerhead or wavemaker/);
+  assert.equal(await sliderMax(),10000);await fill({flow:2000});
+  assert.match(await metric(0),/16\s*×\/hour/);assert.match(await metric(1),/3,750\s*US GPH/);assert.match(await metric(2),/5,000\s*US GPH/);assert.match(await message(),/below the usual 30–40 times an hour.*powerhead or wavemaker/);
+  // The slider itself now reaches past the usual range.
+  await page.locator('#slider-flow').press('End');assert.equal(await value('flow'),10000);assert.match(await message(),/More than the usual 30–40/);
+  await page.locator('#slider-flow').press('Home');await page.locator('#slider-flow').press('PageUp');assert.equal(await value('flow'),1000);
+  await page.locator('#field-kind').selectOption('return');assert.equal(await label('flow'),'Flow from your return pump');assert.match(await page.locator('#help-flow').innerText(),/head height/);assert.equal(await sliderMax(),2000);
+  await page.locator('#field-kind').selectOption('messy');assert.equal(await label('flow'),'Flow rating of your filter');assert.match(await page.locator('#help-flow').innerText(),/more than one filter/);
+  await page.screenshot({path:`${dir}/desktop-turnover.png`,fullPage:true});
+  check('flow check: tank type first, wording and slider follow the tank');await context.close();
+ }
  {
   const {context,page,go}=await open();
   await go('tank');await page.screenshot({path:`${dir}/desktop-tank.png`,fullPage:true});await go('heater');await page.screenshot({path:`${dir}/desktop-heater.png`,fullPage:true});await go('salt');

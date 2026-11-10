@@ -1,4 +1,4 @@
-import {calculators,categories,defaults,calculate,convert,usUnit,GAL,migrateInputs,isVisible,labelFor,popular,sgFromPpt,pptFromSg,PROFILE_DEFAULT} from './calculators.mjs';
+import {calculators,categories,defaults,calculate,convert,usUnit,GAL,migrateInputs,isVisible,labelFor,helpFor,popular,sgFromPpt,pptFromSg,PROFILE_DEFAULT} from './calculators.mjs';
 import {icon,illustration,escape as e} from './illustrations.mjs';
 import {sliderWindow,sliderValue} from './sliders.mjs';
 import {fieldChoices,extraHelp,bagComparison,formPresets} from './presets.mjs';
@@ -125,7 +125,7 @@ function renderLibrary(){
 function fieldHTML(field,a){
   const c=current();
   if(!isVisible(c.id,field.key,a))return '';
-  const id=`field-${field.key}`,helpText=[field.help,extraHelp(c,field)].filter(Boolean).join(' ');
+  const id=`field-${field.key}`,helpText=[helpFor(c.id,field,a),extraHelp(c,field)].filter(Boolean).join(' ');
   const help=helpText?`<small id="help-${field.key}">${e(helpText)}${field.profile?' <a href="#tool=tank" data-tool="tank">Work out my volume →</a>':''}</small>`:'';
   const desc=helpText?`aria-describedby="help-${field.key}"`:'';
   const label=labelFor(c.id,field,a);
@@ -233,6 +233,7 @@ const scaleExamples={
   consumption:{parameter:{'mg/L':{start:430,end:420},dKH:{start:8.5,end:7.8}}},
   mix:{measure:{'mg/L':{high:250,low:5,target:120},dGH:{high:12,low:0,target:6},dKH:{high:8,low:0,target:4}}}
 };
+const linkedSliders={turnover:{v:['flow']}};
 function onInput(ev){
   const c=current(),field=c.fields.find(f=>f.key===ev.target.name);if(!field)return;
   const raw=ev.target.value;
@@ -244,6 +245,8 @@ function onInput(ev){
     repairHidden();save();renderCalculator();$(`field-${field.key}`).focus();return;
   }
   syncSlider(field,!ev.fromSlider);
+  // A slider whose useful range depends on this measurement gets its new range.
+  for(const key of linkedSliders[c.id]?.[field.key]||[])syncSlider(c.fields.find(f=>f.key===key),true);
   syncChoices();
   // Do not let a partially blank form produce a result from previously saved values.
   const blank=[...$('calc-form').querySelectorAll('input[type=number]')].find(x=>x.value.trim()==='');

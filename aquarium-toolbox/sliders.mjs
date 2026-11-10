@@ -1,6 +1,6 @@
 // Slider bounds are convenient editing windows, never safety recommendations or
 // replacements for the calculator's full validated numeric domain.
-import {convert,sgFromPpt} from './calculators.mjs';
+import {convert,sgFromPpt,flowGuide} from './calculators.mjs';
 const unitWindows={
   '%':[100,1],L:[400,1],'L/h':[4000,10],cm:[200,.5],mm:[50,.5],m:[10,.1],kg:[100,.1],
   '°C':[40,.5],pH:[10,.05],dKH:[30,.1],ppt:[50,.1],'mg/L':[100,.5],mL:[100,.5],
@@ -42,6 +42,8 @@ export function sliderWindow(calc,field,a,us=false,sg=false){
     high=nice(display(high));step=nice(display(step));
   }else if(us&&field.unit==='°C'){high=display(high);step=1;}
   if(us&&calc.id==='substrate'&&field.key==='bagWeight'){high=50;step=.5;}
+  // The flow window follows the tank, so the usual range sits mid-slider for a nano tank and a large reef alike.
+  if(calc.id==='turnover'&&field.key==='flow'&&flowGuide[a.kind]&&Number.isFinite(a.v)&&a.v>0){high=nice(display(a.v*flowGuide[a.kind][1]*2));step=nice(high/100);}
   // Tape measures read in quarter inches.
   if(us&&unit==='cm')step=.25;
   // The low edge lies on the editing increment where practical. Tiny manually

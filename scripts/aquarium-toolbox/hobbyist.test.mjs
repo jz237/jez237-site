@@ -4,7 +4,7 @@
 // implementation formulas.
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {calculators,categories,defaults,calculate,convert,migrateInputs,isVisible,labelFor,popular,sgFromPpt,pptFromSg,GAL,PROFILE_DEFAULT} from '../../aquarium-toolbox/calculators.mjs';
+import {calculators,categories,defaults,calculate,convert,migrateInputs,isVisible,labelFor,helpFor,popular,sgFromPpt,pptFromSg,GAL,PROFILE_DEFAULT} from '../../aquarium-toolbox/calculators.mjs';
 import {fieldChoices,formPresets,standardTanks,extraHelp} from '../../aquarium-toolbox/presets.mjs';
 import {sliderWindow} from '../../aquarium-toolbox/sliders.mjs';
 import {firstExamples,isFirstExample} from '../../aquarium-toolbox/legacy.mjs';
@@ -111,6 +111,30 @@ test('Filter flow is judged against the usual range for the kind of tank',()=>{
   assert.match(flow('community',40).message,/below the usual 4–6/);assert.match(flow('community',300).message,/More than the usual 4–6/);
   near(flow('messy',100).metrics[2].value/GAL,200);near(flow('softreef',100,50).metrics[1].value/GAL,1000);near(flow('sps',100,50).metrics[2].value/GAL,2000);near(flow('return',100,50).metrics[1].value/GAL,150);
   assert.match(flow('sps',100,50).message,/powerhead/);assert.match(flow('return',100,50).message,/return pump/);
+});
+
+test('Filter flow asks for the right number for the kind of tank, and says where the answer stands',()=>{
+  const c=calc('turnover'),keys=c.fields.map(f=>f.key),flow=c.fields.find(f=>f.key==='flow');
+  // The tank type decides what to add up, so it is asked before the flow.
+  assert.deepEqual(keys,['v','kind','flow']);
+  assert.equal(labelFor('turnover',flow,{kind:'community'}),'Flow rating of your filter');assert.match(helpFor('turnover',flow,{kind:'messy'}),/more than one filter/);
+  for(const kind of ['softreef','sps']){assert.match(labelFor('turnover',flow,{kind}),/all your pumps and wavemakers/);assert.match(helpFor('turnover',flow,{kind}),/return pump and every powerhead or wavemaker/);}
+  assert.match(labelFor('turnover',flow,{kind:'return'}),/return pump/);assert.match(helpFor('turnover',flow,{kind:'return'}),/head height/);
+  // A validation message names the field the way it is shown.
+  assert.throws(()=>calculate('turnover',{v:20*GAL,kind:'sps',flow:-1},true),/Total flow of all your pumps and wavemakers must be between/);
+  // 2,000 GPH on 125 gallons is 16 times an hour, which is low for SPS corals (30–40).
+  const at=(kind,gph,gal)=>run('turnover',{v:gal*GAL,flow:gph*GAL,kind}).graphic;
+  assert.deepEqual([at('sps',2000,125).status,at('sps',4000,125).status,at('sps',6000,125).status],['low','ok','high']);
+  assert.equal(at('community',100,20).status,'ok');assert.equal(at('softreef',100,50).kind,'softreef');assert.equal(at('return',100,50).mark,1);
+  near(run('turnover',{v:125*GAL,flow:2000*GAL,kind:'sps'}).metrics[0].value,16);
+});
+
+test('The box-size note under a tank volume is said once',()=>{
+  for(const c of calculators)for(const f of c.fields.filter(f=>f.profile))for(const us of [false,true]){
+    const chips=fieldChoices(c,f,us,defaults(c,us)),help=[helpFor(c.id,f,defaults(c,us)),extraHelp(c,f)].join(' ');
+    assert.equal(chips.title,'Know the size on the box?');assert.equal(chips.note,'');
+    assert.equal(help.match(/size printed on the box/g).length,1);assert.match(help,/Tank volume/);
+  }
 });
 
 test('Stocking check applies the classic volume and surface rules',()=>{

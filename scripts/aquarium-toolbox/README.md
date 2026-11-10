@@ -85,6 +85,16 @@ Blank or invalid numeric fields cannot leave a stale result visible. The mobile
 summary is shown only when inputs intersect the viewport and the full result
 does not, and repeats no live region. Sliders/summary are excluded from printing.
 
+The Filter & flow check asks the tank type before the flow, because the type decides
+what to add up: one filter, every pump and wavemaker in a reef, or the return pump
+alone (`labelFor` / `helpFor`). Its flow slider follows the tank: the window is twice
+the top of the usual range for that tank type (`flowGuide`), so the range can be
+reached by dragging on a nano tank and a large reef alike, and changing the tank
+volume gives the flow slider its new window. The result graphic carries `kind`,
+`mark` (the visitor's bar) and `status` (`low`, `ok`, `high`) for renderers that
+show a picture or a colour by answer. The note about the size on the box is said
+once, in the volume field's help.
+
 `node scripts/aquarium-toolbox/sliders-browser.mjs [base-URL] [evidence-directory]`
 checks all numeric sliders in US/metric, keyboard steps, actual mouse dragging,
 touch input, precision, adaptive ranges, persistence, invalid input, mobile

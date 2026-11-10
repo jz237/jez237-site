@@ -14,7 +14,7 @@ export const categories = [
 const f = (key,label,value,unit='',min=0,max=1e9,help='',extra={}) => ({key,label,value,unit,min,max,help,...extra});
 const pick = (key,label,value,options) => ({key,label,value,options});
 // `profile` marks the field that follows the saved working tank.
-const volume = () => f('v','Water in your tank',100,'L',0.01,1e7,'The water actually in the tank. It is usually less than the size printed on the box.',{profile:true});
+const volume = () => f('v','Water in your tank',100,'L',0.01,1e7,'The water actually in the tank. It is a little less than the size printed on the box once gravel and décor are in.',{profile:true});
 const metric = (label,value,unit='',extra={}) => ({label,value,unit,...extra});
 const out = (metrics,message,graphic={},steps=[]) => ({metrics,message,graphic,steps});
 const ensure = (ok,message) => { if (!ok) throw new Error(message); };
@@ -157,14 +157,17 @@ add('consumption','Reef daily consumption','reef','Work out how much alkalinity,
 ],a=>{const daily=(a.start-a.end)*24/a.hours;return out([metric('Used per day',daily,a.parameter+'/day'),metric('Used over your plan',daily*a.days,a.parameter)],daily<0?'The reading went up, not down. Recheck the tests, and whether anything was dosed or changed between them.':'Do not dose or change water between the two tests. Repeat over a few days to confirm the trend before setting a doser.',{type:'line',values:[a.start,a.end],labels:['First test','Second test']});},'Used per day = (first − second) × 24 ÷ hours between tests.','Coral growth, precipitation and test error all show up in this number.');
 
 // ---------- Filters, pumps & plumbing ----------
-const flowGuide={community:[4,6],messy:[6,10],softreef:[20,30],sps:[30,40],return:[3,5]};
-add('turnover','Filter & flow check','flow','See whether your filter or pump moves enough water for your tank.',[
-  volume(),f('flow','Flow rating of your filter or pump',600,'L/h',0,1e8,'The gallons per hour (GPH) or litres per hour on the box. Add them up if you run more than one.'),
-  pick('kind','What kind of tank?','community',[['community','Freshwater community or planted tank'],['messy','Goldfish, cichlids or other messy fish'],['softreef','Reef with soft corals or LPS (all pumps combined)'],['sps','Reef with SPS corals (all pumps combined)'],['return','Sump return pump only (flow after head loss)']])
+export const flowGuide={community:[4,6],messy:[6,10],softreef:[20,30],sps:[30,40],return:[3,5]};
+// What to add up depends on the tank: one filter, every pump in a reef, or the return pump alone.
+const flowLabels={softreef:'Total flow of all your pumps and wavemakers',sps:'Total flow of all your pumps and wavemakers',return:'Flow from your return pump'};
+const flowHelp={softreef:'Add up the return pump and every powerhead or wavemaker, using the gallons per hour (GPH) or litres per hour each one is rated for.',sps:'Add up the return pump and every powerhead or wavemaker, using the gallons per hour (GPH) or litres per hour each one is rated for.',return:'Use what the pump delivers at your head height, not the maximum on the box. Pump flow at your head height works that out.'};
+add('turnover','Filter & flow check','flow','See whether your filter or pumps move enough water for your tank.',[
+  volume(),pick('kind','What kind of tank?','community',[['community','Freshwater community or planted tank'],['messy','Goldfish, cichlids or other messy fish'],['softreef','Reef with soft corals or LPS'],['sps','Reef with SPS corals'],['return','Sump return pump only']]),
+  f('flow','Flow rating of your filter',600,'L/h',0,1e8,'The gallons per hour (GPH) or litres per hour on the box. If you run more than one filter, add them together.')
 ],a=>{const [lo,hi]=flowGuide[a.kind],t=a.flow/a.v;
   const over={community:'Extra flow is fine in most tanks as long as the fish are not being pushed around; bettas and other slow swimmers prefer it gentle.',messy:'Extra filtration is welcome with messy fish, as long as they are not being pushed around.',softreef:'Fine if the corals are not being blasted; soft corals and LPS should sway, not fold over.',sps:'SPS tanks are often run even higher. Spread the flow so no coral takes a direct blast.',return:'That works as long as the overflow and drain keep up quietly; many keepers leave in-tank flow to powerheads instead.'}[a.kind];
   const message=t<lo?`That is below the usual ${lo}–${hi} times an hour for this kind of tank. ${a.kind==='return'?'A stronger return pump, wider pipe or fewer elbows would raise it.':['softreef','sps'].includes(a.kind)?'Adding a powerhead or wavemaker is the usual fix.':'A larger filter, or a second one, would help.'}`:t<=hi?`Right in the usual range of ${lo}–${hi} times an hour for this kind of tank.`:`More than the usual ${lo}–${hi} times an hour. ${over}`;
-  return out([metric('Your tank turns over',t,'×/hour'),metric('Usual low end for this tank',a.v*lo,'L/h'),metric('Usual high end for this tank',a.v*hi,'L/h')],message,{type:'bars',values:[a.v*lo,a.flow,a.v*hi],labels:['Usual low','Yours','Usual high']});},'Turnover = flow ÷ water in the tank. Usual range = tank water × the low and high multiples for the tank type.','Box ratings are measured with an empty filter and no height to pump against, so real flow is lower, especially once the media is dirty. The ranges are common starting points (filter makers suggest 4–6 times an hour for community tanks; reef suppliers suggest 20–40 times for corals), not requirements.');
+  return out([metric('Your tank turns over',t,'×/hour'),metric('Usual low end for this tank',a.v*lo,'L/h'),metric('Usual high end for this tank',a.v*hi,'L/h')],message,{type:'bars',values:[a.v*lo,a.flow,a.v*hi],labels:['Usual low','Yours','Usual high'],kind:a.kind,mark:1,status:t<lo?'low':t<=hi?'ok':'high'});},'Turnover = flow ÷ water in the tank. Usual range = tank water × the low and high multiples for the tank type.','Box ratings are measured with an empty filter and no height to pump against, so real flow is lower, especially once the media is dirty. The ranges are common starting points (filter makers suggest 4–6 times an hour for community tanks; reef suppliers suggest 20–40 times for corals), not requirements.');
 add('head','Return pump head height','flow','Work out the “head” your return pump pushes against, so you can read its flow chart.',[
   f('flow','Flow you want at the tank',1500,'L/h',0,1e8),f('diameter','Inside diameter of the pipe or tubing',25,'mm',0.5,1000),f('length','Total length of pipe',3,'m',0,1e5),f('lift','Height from the sump water up to the outlet',1.2,'m',0,1000),
   f('e90','Number of 90° elbows',3,'',0,500),f('e45','Number of 45° elbows',0,'',0,500),f('valves','Number of ball or gate valves',1,'',0,500),f('checks','Number of check valves',0,'',0,500)
@@ -264,7 +267,8 @@ export function isVisible(id,key,a){
   return true;
 }
 const tankLabels={l:{rectangle:'Inside length',bowfront:'Inside length (side to side)',hexagon:'Width across two flat sides',corner:'Length of one straight side',cylinder:'Inside diameter',ellipse:'Longest inside width'},w:{rectangle:'Inside width (front to back)',bowfront:'Width at the ends',ellipse:'Shortest inside width'}};
-export const labelFor=(id,field,a)=>id==='tank'&&tankLabels[field.key]?.[a.shape]||field.label;
+export const labelFor=(id,field,a)=>id==='tank'&&tankLabels[field.key]?.[a.shape]||id==='turnover'&&field.key==='flow'&&flowLabels[a.kind]||field.label;
+export const helpFor=(id,field,a)=>id==='turnover'&&field.key==='flow'&&flowHelp[a.kind]||field.help;
 export function calculate(id,input,us=false,sg=false){
   const calc=tools.find(c=>c.id===id); if(!calc)throw new Error('Unknown calculator.');
   const a={};
