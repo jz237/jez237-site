@@ -1,0 +1,399 @@
+{
+  "currentDate": "2026-11-10",
+  "historicDate": "1985-07-22",
+  "displayDate": "Week of July 22-28, 1985",
+  "edition": "Issue 156 - Weekly 1985 Computer & Culture Chronicle",
+  "masthead": {
+    "title": "Computer Chronicle",
+    "subtitle": "Issue 156 - Weekly 1985 Computer & Culture Chronicle",
+    "dateline": "Week of July 22-28, 1985",
+    "price": "75 cents"
+  },
+  "visualProfile": {
+    "tone": "Extra Edition: Amiga brings color, sound and creative computing to the stage",
+    "motifs": [
+      "original 1985 Amiga keyboard computer and CRT",
+      "digitized portrait painting demonstration",
+      "Kennedy Approach radar display"
+    ],
+    "layout": "Full-page warm aged newsprint, dense columns, red and blue headers, boxed modules, halftone photographs, paper grain and slight ink bleed; no dead footer"
+  },
+  "layoutPlan": {
+    "leadPlacement": "AMIGA TAKES THE STAGE dominates the front page with creative graphics and home-entertainment emphasis",
+    "secondaryRail": "Kennedy Approach, Atari 130XE and HomePak; print feature headlines verbatim",
+    "archiveNavigation": "Weekly archive and previous/next controls"
+  },
+  "sectionChrome": {
+    "primary": "brick red",
+    "secondary": "royal blue",
+    "texture": "aged newsprint, fine column rules, ink bleed"
+  },
+  "heroImage": {
+    "src": "media/computer-chronicle-gpt-image-2-week-1985-07-22.jpg",
+    "alt": "Newspaper front page for the week of July 22-28, 1985",
+    "caption": "Newspaper-style front page generated from structured Chronicle issue data.",
+    "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+  },
+  "editorNote": "Color, sound and the promise of a new home-computer platform take center stage.",
+  "morningLine": "Amiga arrives on stage; the home-computer future gets a vivid new palette.",
+  "milestone": {
+    "title": "Commodore unveils the Amiga",
+    "note": "The July 23 introduction established a landmark multimedia personal-computer platform whose color graphics, sound and creative demonstrations helped define the next era of home computing."
+  },
+  "lead": {
+    "headline": "Amiga takes the stage: Commodore bets on color and creativity",
+    "dek": "A $1,295 computer makes its New York debut, with September shipments promised.",
+    "body": [
+      "Commodore unveiled its Amiga on July 23 at the Vivian Beaumont Theater in New York’s Lincoln Center. The Motorola 68000-based computer arrives with a striking brief: make color graphics, sound and creative work central to the personal-computer experience. The announced computer price is $1,295; that figure should not be confused with a monitor-inclusive package.",
+      "The stage demonstration gave that ambition a familiar face. Andy Warhol digitized and recolored a portrait of Blondie singer Debbie Harry with ProPaint, a paint system still being tested. Rather than presenting the computer only as an office appliance, Commodore put image-making before the audience.",
+      "The entertainment industry is watching, too. Electronic Arts founder Trip Hawkins has championed the machine’s home-entertainment potential. For game makers, an ambitious new platform offers another direction beyond the established 8-bit machines, although a demonstration is not a shelf full of finished games.",
+      "Commodore acquired Amiga in August 1984 and is now positioning the machine against Apple’s Macintosh. The company says shipments will begin in September. This week marks the unveiling, not verified retail availability: buyers must still wait to see the promised machine reach dealers."
+    ],
+    "confidence": "exact-date",
+    "sourceRefs": [
+      0,
+      1
+    ]
+  },
+  "stories": [
+    {
+      "headline": "Kennedy Approach puts talking aircraft on the home-computer radar",
+      "body": [
+        "MicroProse is promoting Kennedy Approach for Commodore 64 and Atari computers in July’s Antic. The $34.95 suggested-retail simulation asks the player to manage aircraft around busy airports, bringing them in and sending them out while keeping traffic safely separated.",
+        "The advertisement makes speech part of the attraction, crediting Electronic Speech Systems of Berkeley, California. Multiple aircraft and emergencies supply the pressure. The printed screenshot is labeled Commodore-64; it is not evidence of how the Atari edition looks.",
+        "This is a publisher’s advertisement, not an independent flight test or proof of a particular July release day. Still, it captures an appealing change in home-computer play: the drama comes from directing a complicated system rather than firing at it."
+      ],
+      "confidence": "same-month",
+      "sourceRefs": [
+        2
+      ]
+    },
+    {
+      "headline": "Atari 130XE keeps 8-bit compatibility while doubling memory",
+      "body": [
+        "While 16-bit machines compete for attention, Atari’s 130XE offers a different path: more room for an established 8-bit family. Jack Powell’s July Antic technical report describes 128K of RAM, with the extra 64K reached through bank switching.",
+        "A 16K window exposes the extended memory, and both the processor and ANTIC display chip can use it in different combinations. Atari says software that does not use the extra memory will be compatible with the 64K 65XE, which in turn is billed as compatible with the 800XL.",
+        "The Enhanced Cartridge Interface extends the cartridge slot, but Powell leaves physical compatibility with existing XL peripheral-bus equipment unresolved. These are July specifications, not a fresh announcement pinned to this week: prospective owners should keep the distinction between documented design and accessory promises in mind."
+      ],
+      "confidence": "same-month",
+      "sourceRefs": [
+        3
+      ]
+    },
+    {
+      "headline": "One disk, three jobs: HomePak courts the home office",
+      "body": [
+        "Batteries Included is advertising HomePak at $49.95 in July’s Antic, offering three everyday applications on one diskette. HomeText handles word processing, HomeFind information management, and HomeTerm telecommunications.",
+        "The pitch is convenience: simple-English commands and on-screen menus for the newcomer, with additional commands for experienced users. Combining writing, filing and communications gives a home computer more to do between game sessions.",
+        "The advertisement cites a 1984 readers’ choice award and reproduces selected praise. This is an existing package receiving July promotion, not a newly established launch, and advertiser-selected reviews are no substitute for trying the software."
+      ],
+      "confidence": "same-month",
+      "sourceRefs": [
+        2
+      ]
+    }
+  ],
+  "computerItems": [
+    {
+      "title": "Commodore Amiga",
+      "summary": "Motorola 68000-based computer unveiled July 23; announced base price $1,295 and planned September shipping.",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        0,
+        1
+      ]
+    },
+    {
+      "title": "Atari 130XE",
+      "summary": "128K RAM and Enhanced Cartridge Interface; bank-switched expansion documented by Jack Powell.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        3
+      ]
+    },
+    {
+      "title": "Atari 1030 modem",
+      "summary": "ADD-ON Systems advertises modem/software package for $79.95, with no interface required.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        2
+      ]
+    }
+  ],
+  "softwareList": [
+    {
+      "name": "HomePak",
+      "detail": "HomeText, HomeFind and HomeTerm integrated on one disk, advertised $49.95 by Batteries Included.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        2
+      ]
+    },
+    {
+      "name": "ProPaint",
+      "detail": "Pre-release/testing paint software used by Warhol during the July 23 Amiga demonstration; no verified retail price.",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        1
+      ]
+    },
+    {
+      "name": "Atari DOS 2.5",
+      "detail": "Eric Clausen’s July Antic survey, page 40, includes the new Atari DOS 2.5. Do not assign an exact release day.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        2
+      ]
+    }
+  ],
+  "storeShelves": [
+    {
+      "label": "Top 5 Computer Games — editorial selections, not sales rankings",
+      "items": [
+        "Kennedy Approach — C64 and Atari speaking air-traffic simulation, advertised $34.95.",
+        "Miniature Golf — David Plotkin’s July Antic type-in game.",
+        "Miniature Golf construction set — companion course-building program, not a separate boxed release.",
+        "Star Venture — Ronald Saari’s July Antic type-in bonus game.",
+        "Darkstar — Michael Mitchell’s July Antic type-in bonus game."
+      ],
+      "confidence": "same-month",
+      "sourceRefs": [
+        2
+      ]
+    },
+    {
+      "label": "Top 5 Movies — July 26-28 domestic weekend",
+      "items": [
+        "1. National Lampoon’s European Vacation",
+        "2. Back to the Future",
+        "3. The Black Cauldron",
+        "4. Mad Max Beyond Thunderdome",
+        "5. Silverado"
+      ],
+      "confidence": "same-week",
+      "sourceRefs": [
+        5
+      ]
+    }
+  ],
+  "priceWatch": [
+    {
+      "item": "Amiga base system",
+      "price": "$1295.00",
+      "note": "$1,295 announced computer price; monitor-inclusive price not independently verified.",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "item": "Kennedy Approach",
+      "price": "$34.95",
+      "note": "$34.95 suggested retail in MicroProse July advertisement.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        2
+      ]
+    },
+    {
+      "item": "HomePak",
+      "price": "$49.95",
+      "note": "$49.95 advertised for the three-application disk.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        2
+      ]
+    },
+    {
+      "item": "Atari 1030 modem and software",
+      "price": "$79.95",
+      "note": "$79.95 ADD-ON Systems advertisement; introductory CompuServe and Dow Jones subscriptions included, not unlimited free online use.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        2
+      ]
+    }
+  ],
+  "briefs": [
+    {
+      "headline": "Spinnaker responds to Atari owners",
+      "summary": "In a July Antic letter, chairman William Bowman says the company is talking with Atari about products for the new machines; he explains platform decisions in terms of market growth, audience and development costs. Do not turn discussions into announced software commitments.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        2
+      ]
+    }
+  ],
+  "musicChart": [
+    {
+      "rank": 1,
+      "title": "The Power Of Love",
+      "song": "The Power Of Love",
+      "artist": "Huey Lewis & The News",
+      "chart": "Billboard Top Rock Tracks (archive now titled Mainstream Rock Airplay)",
+      "chartDate": "1985-07-27",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        4
+      ]
+    },
+    {
+      "rank": 2,
+      "title": "Money For Nothing",
+      "song": "Money For Nothing",
+      "artist": "Dire Straits",
+      "chart": "Billboard Top Rock Tracks (archive now titled Mainstream Rock Airplay)",
+      "chartDate": "1985-07-27",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        4
+      ]
+    },
+    {
+      "rank": 3,
+      "title": "What About Love",
+      "song": "What About Love",
+      "artist": "Heart",
+      "chart": "Billboard Top Rock Tracks (archive now titled Mainstream Rock Airplay)",
+      "chartDate": "1985-07-27",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        4
+      ]
+    },
+    {
+      "rank": 4,
+      "title": "St. Elmo’s Fire (Man In Motion)",
+      "song": "St. Elmo’s Fire (Man In Motion)",
+      "artist": "John Parr",
+      "chart": "Billboard Top Rock Tracks (archive now titled Mainstream Rock Airplay)",
+      "chartDate": "1985-07-27",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        4
+      ]
+    },
+    {
+      "rank": 5,
+      "title": "People Get Ready",
+      "song": "People Get Ready",
+      "artist": "Jeff Beck & Rod Stewart",
+      "chart": "Billboard Top Rock Tracks (archive now titled Mainstream Rock Airplay)",
+      "chartDate": "1985-07-27",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        4
+      ]
+    }
+  ],
+  "periodAd": {
+    "headline": "Three jobs on one disk: HomePak",
+    "summary": "Batteries Included advertises HomeText, HomeFind and HomeTerm for $49.95 in July Antic.",
+    "tagline": "Write, organize, connect.",
+    "sourceRefs": [
+      2
+    ]
+  },
+  "market": {
+    "headline": "A new platform must turn demonstrations into a software shelf",
+    "summary": "The Amiga unveiling puts creative computing and entertainment in the spotlight. September shipping is a company plan, while Atari owners can already study July promotions for familiar-machine software and modems.",
+    "confidence": "same-week",
+    "sourceRefs": [
+      0,
+      1,
+      2
+    ]
+  },
+  "worldAnchor": {
+    "headline": "Rock Hudson’s spokesman confirms AIDS diagnosis",
+    "summary": "On July 25 in Paris, spokesman Yanou Collart confirmed that actor Rock Hudson had AIDS, according to an Associated Press dispatch. The announcement brought the illness into a new national spotlight.",
+    "confidence": "exact-date",
+    "sourceRefs": [
+      7
+    ]
+  },
+  "bbsNote": {
+    "headline": "A $79.95 modem and a magazine that keeps updating online",
+    "summary": "July Antic ties low-cost Atari communications hardware to CompuServe, Dow Jones information access and an online editorial service. These are documented July offers and publication notes, not July 22–28 launch claims.",
+    "posts": [
+      {
+        "topic": "Budget modem offer",
+        "platform": "Atari 8-bit / Atari 1030",
+        "text": "ADD-ON Systems advertises the Atari 1030 modem/software package for $79.95. The ad specifies at least 16K and a telephone line; disk communication software is included for disk-drive owners. Introductory subscriptions to CompuServe and Dow Jones Retrieval Services are included."
+      },
+      {
+        "topic": "An online magazine desk",
+        "platform": "ANTIC ONLINE / CompuServe",
+        "text": "July Help! says ANTIC ONLINE carries current Atari news, including ST developments, with no surcharge beyond standard CompuServe hourly fees. Affiliated Worldwide Users Network groups can download special bulletins for newsletter reprinting."
+      },
+      {
+        "topic": "Coming telecomputing issue",
+        "platform": "Antic / Atari BBS culture",
+        "text": "The July column previews August material on Russ Wetmore and the 1030, a terminal program, and a program for animated cartoons on BBSs. These are previews, not claims that the August articles were already published."
+      }
+    ],
+    "sourceRefs": [
+      2
+    ]
+  },
+  "curiosity": {
+    "headline": "A miniature-golf game that lets you redesign the course",
+    "summary": "July Antic gives readers a construction set alongside its type-in Miniature Golf game.",
+    "detail": "David Plotkin’s construction program generates data statements to append to the game. The article recommends graph paper and lays out a Graphics 7 design grid of 160 by 80 positions with seven prefabricated obstacle types. The game even allows a START-button do-over that does not add to the score—if opponents agree.",
+    "sourceRefs": [
+      2
+    ]
+  },
+  "accuracyLedger": {
+    "items": [
+      "Research covers July 22–28 inclusive. Same-month material is explicitly marked and should not be represented as breaking within the week.",
+      "Historical copy should use Amiga, not imply that the later model-number branding was necessarily the launch headline. Do not import subsequent 1987 variants or later sales results.",
+      "Billboard ranks were verified by parsing all chart rows from the original HTML after readable extraction omitted them. Tunecaster is a different chart and must not substitute for Billboard.",
+      "No verified breaking non-computer consumer-electronics event was found for the week; gadgetCandidates deliberately omitted.",
+      "Original NYT July 22 Amiga article was located but blocked by 403; its URL alone was not used as evidence. Amiga launch details are cross-checked against CHM and attributed retrospective reporting.",
+      "Game shelf is editorial, not ranked sales; the Miniature Golf construction set is a companion type-in, not a separate commercial title."
+    ]
+  },
+  "sources": [
+    {
+      "title": "Commodore Unveiled The First Amiga Computer 40 Years Ago Today",
+      "url": "https://www.timeextension.com/news/2025/07/anniversary-commodore-unveiled-the-first-amiga-computer-40-years-ago-today",
+      "date": "2025-07-23"
+    },
+    {
+      "title": "Warhol & The Computer — Chris Garcia, Computer History Museum",
+      "url": "https://computerhistory.org/blog/warhol-the-computer/",
+      "date": "2013-06-25"
+    },
+    {
+      "title": "Antic Vol. 4 No. 3 — July 1985, full issue OCR",
+      "url": "https://archive.org/stream/1985-07-anticmagazine/Antic_Vol_4-03_1985-07_Computer_Challenges_djvu.txt",
+      "date": "1985-07"
+    },
+    {
+      "title": "130XE: How Atari’s New 8-Bit Does It — Jack Powell",
+      "url": "https://www.atarimagazines.com/v4n3/130XE.php",
+      "date": "1985-07"
+    },
+    {
+      "title": "Billboard Mainstream Rock Airplay archive / Top Rock Tracks",
+      "url": "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1985-07-27/",
+      "date": "1985-07-27"
+    },
+    {
+      "title": "The Numbers — Weekend Domestic Box Office",
+      "url": "https://www.the-numbers.com/box-office-chart/weekend/1985/07/26",
+      "date": "1985-07-26"
+    },
+    {
+      "title": "Youths Charged With Computer Billing Crimes — Los Angeles Times",
+      "url": "https://www.latimes.com/archives/la-xpm-1985-07-18-mn-7169-story.html",
+      "date": "1985-07-18"
+    },
+    {
+      "title": "Hudson Has AIDS, Spokesman Says — Associated Press, NYT archive",
+      "url": "https://archive.nytimes.com/www.nytimes.com/library/national/science/aids/072585sci-aids.html",
+      "date": "1985-07-25"
+    }
+  ]
+}
