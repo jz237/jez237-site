@@ -74,7 +74,7 @@ export function fieldChoices(c,f,us,a,sg=false){
   }
   if((f.unit==='L'&&['salt','ro','mix','heatup'].includes(c.id)&&f.key==='v')||(c.id==='ato'&&f.key==='reserve'))return choices('Common containers','A 5-gallon bucket filled to a safe carrying level holds about 4.5 gallons.',us?numbers([1,2,5,10,20,32],'US gal',GAL):numbers([5,10,20,40,60,100],'L'));
   if(c.id==='fertilizer'&&f.key==='fraction')return choices('Common dry fertilizers','The share of the named nutrient in the pure chemical.',named([['Potassium nitrate → nitrate · 61.3%',61.3],['Monopotassium phosphate → phosphate · 69.8%',69.8],['Potassium sulfate → potassium · 44.9%',44.9],['Epsom salt → magnesium · 9.86%',9.86]]));
-  if(f.unit==='mL'&&['bottle','reserve','final'].includes(f.key))return choices('Common bottle sizes',c.id==='fertilizer'?'The final solution volume after dissolving and topping up, not water added to the powder.':c.id==='stock'?'How much diluted solution you want to end up with.':'Adjust for how much is actually left.',numbers([100,250,500,1000],'mL'));
+  if(f.unit==='mL'&&['bottle','reserve','final'].includes(f.key))return choices('Common bottle sizes',c.id==='fertilizer'?'The finished volume, after topping up.':c.id==='stock'?'How much diluted solution you want to end up with.':'Adjust for how much is actually left.',numbers([100,250,500,1000],'mL'));
   if(c.id==='doser'&&f.key==='seconds')return choices('Calibration timer','Measure what your pump actually dispenses during the chosen interval.',numbers([30,60,120,300],'seconds'));
   if(c.id==='co2cylinder'&&f.key==='reserve')return choices('Reserve examples','Plan to refill before you reach this. Run nearly empty, some regulators release a sudden burst of CO₂.',numbers([25,50,100],'g'));
   return null;

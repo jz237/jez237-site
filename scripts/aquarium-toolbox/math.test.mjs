@@ -13,7 +13,7 @@ const fixtures=[
  // converted from NH3-N mass to NH3 mass (17.0305 / 14.0067).
  ['ammonia',{tan:1,basis:'N',ph:8,temp:25},0.06525,.00002],['co2',{kh:4,ph:7},12],
  ['salt',{},1520],['salinity',{},26.25],['adjust',{},100/36],['consumption',{},.7],['ato',{},10],
- ['turnover',{},6],['pipe',{flow:3600,diameter:100},.12732395447351627],
+ ['turnover',{flow:600},6],['pipe',{flow:3600,diameter:100},.12732395447351627],
  ['head',{flow:0,lift:2},2],['pump',{},1600],
  // 2 drops/s at 20 drops/mL is 6 mL/min, so 2 L takes 2,000 ÷ 6 minutes.
  ['drip',{drops:2,size:20,v:2},2000/6],

@@ -288,3 +288,33 @@ The source change remains on a task branch for a **Lab-only** release. Do not
 merge it to personal-site main merely to record Lab provenance: a later automatic
 build can publish a skipped main commit. The Lab sync records the exact source
 commit, and source and Lab releases are separate decisions.
+
+## Follow-up check (2026-11-10, Jez: "Check your work. Fix all remaining issues")
+
+Every formula was re-derived by hand against the code's raw SI outputs and a
+sweep of about 200 realistic and boundary scenarios was read for answers that
+contradict themselves. The formulas held; the fixes are in logic and wording.
+
+- Wording rule: lead with the verdict in plain words and keep one short caveat.
+  Do not put a disclaimer on every line ("this is not a stocking approval",
+  "this number alone does not prove…"); two passes in a row swapped plain
+  verdicts for hedges and back. Keep the math fixes, keep the words plain.
+- Stocking: the whole-fish allowance decides the verdict, so the percentage, the
+  count and the sentence cannot disagree. It says how many more fish of that
+  size fit, or that the tank is fully stocked. A 4 in fish and a 10 cm fish get
+  the same answer (the inch rules stop above 4 in, `BIG_FISH`). With no goldfish
+  entered, the tool says how many the tank suits instead of "0 gal".
+- Flow check: more flow than the usual range is `status:'above'`, not `'high'`,
+  because the message says it is fine; only `low`, `ok` and `high` are coloured.
+- Nitrate schedule, repeated changes, water change, pipe speed and dosing pump:
+  the message follows the numbers (peak above or below 40/20 ppm; "4 changes of
+  25% replace about 68.4% of the old water, not 100%"; a change that raises the
+  reading says so; over 6 ft/s is called fast; runs under one second are flagged).
+- CO2 from KH/pH: five bands around the stated 20–30 ppm, so 19 ppm is "just
+  under" and 33 ppm "a little above" rather than "low" and "high".
+- Display: the heater chart and card show the same rounded watts; drip time and
+  cylinder days are whole numbers once they pass 10; one bag/dose/day is singular.
+- Product dose: advice fits the unit (syringe, level spoon, small scale) and a
+  fraction is only mentioned when there is one.
+- Metric starting examples (10 fish, a 450 L/h filter) are in range for both the
+  100 L example tank and the 75.7 L starter tank kept after a unit switch.

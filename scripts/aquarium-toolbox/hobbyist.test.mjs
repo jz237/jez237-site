@@ -100,7 +100,7 @@ test('Heater size follows published sizing charts',()=>{
   // No heater when the room is already warm enough, and several heaters for very large needs.
   assert.equal(run('heater',{room:26,target:25}).metrics[0].value,0);assert.match(run('heater',{room:26,target:25}).message,/cannot cool/);
   const big=size(300,20);assert.ok(big.metrics[1].value>300);assert.equal(big.metrics[0].value%2,0);assert.match(big.message,/Use \d heaters of about \d+ W each/);assert.ok(big.metrics[0].value>=big.metrics[1].value);
-  assert.match(size(75,18).message,/Splitting the wattage between two heaters/);
+  assert.match(size(75,18).message,/two heaters of half the wattage/);
   assert.match(run('heater',{v:20*GAL,room:20,target:30,installed:50}).message,/too small/);assert.match(run('heater',{v:20*GAL,room:20,target:30,installed:150}).message,/should cope/);assert.match(run('heater',{v:5*GAL,room:20,target:25,installed:300}).message,/far bigger than needed/);
 });
 
@@ -124,7 +124,7 @@ test('Filter flow asks for the right number for the kind of tank, and says where
   assert.throws(()=>calculate('turnover',{v:20*GAL,kind:'sps',flow:-1},true),/Total flow of all your pumps and wavemakers must be between/);
   // 2,000 GPH on 125 gallons is 16 times an hour, which is low for SPS corals (30–40).
   const at=(kind,gph,gal)=>run('turnover',{v:gal*GAL,flow:gph*GAL,kind}).graphic;
-  assert.deepEqual([at('sps',2000,125).status,at('sps',4000,125).status,at('sps',6000,125).status],['low','ok','high']);
+  assert.deepEqual([at('sps',2000,125).status,at('sps',4000,125).status,at('sps',6000,125).status],['low','ok','above']);
   assert.equal(at('community',100,20).status,'ok');assert.equal(at('softreef',100,50).kind,'softreef');assert.equal(at('return',100,50).mark,1);
   near(run('turnover',{v:125*GAL,flow:2000*GAL,kind:'sps'}).metrics[0].value,16);
 });

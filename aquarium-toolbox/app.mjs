@@ -71,13 +71,15 @@ const sgText=ppt=>sgFromPpt(ppt).toFixed(4).replace(/0$/,'');
 function quarters(x){const q=Math.round(x*4),whole=Math.floor(q/4),part=['','¼','½','¾'][q%4];return q===0?'':`${whole||''}${part}`||'0';}
 function smallVolume(l){const cups=l/(GAL/16);if(cups<.125)return '';const text=cups<4?quarters(cups):quarters(cups/4);return text?`about ${text} ${cups<4?(text==='1'||/^[¼½¾]$/.test(text)?'cup':'cups'):(text==='1'?'quart':'quarts')}`:'';}
 function spoons(ml){if(!(ml>0))return '';if(ml<1.25)return 'use a graduated syringe; drop sizes vary';const tsp=ml/4.92892;if(tsp<3)return `about ${quarters(tsp)} tsp`;const tbsp=ml/14.7868;if(tbsp<8)return `about ${quarters(tbsp)} tbsp`;return `about ${quarters(ml/236.588)} cups`;}
+const ONE={bags:'bag',doses:'dose',days:'day',hours:'hour',minutes:'minute',seconds:'second',cups:'cup',changes:'change',weeks:'week',months:'month'};
+const counted=(text,unit)=>`${text} ${String(text)==='1'&&ONE[unit]||unit}`;
 function duration(v,unit){
   if(!(v>0))return '';
   const hm=h=>{const total=Math.round(h*60),hours=Math.floor(total/60),min=total%60;return min?`${hours} h ${min} min`:`${hours} h`;};
   if(unit==='seconds')return v>=90?`${Math.floor(Math.round(v)/60)} min ${Math.round(v)%60} s`:'';
-  if(unit==='minutes')return v>=60?hm(v/60):v<1?v*60<1?'less than 1 second':`${Math.round(v*60)} seconds`:'';
-  if(unit==='hours')return v<1?v*60<1?'less than 1 minute':`${Math.round(v*60)} minutes`:v>=48?`about ${format(v/24,1)} days`:Number.isInteger(v)?'':hm(v);
-  if(unit==='days')return v>=60?`about ${format(v/30.4375,1)} months`:v>=14?`about ${format(v/7,1)} weeks`:v<1?`about ${format(v*24,1)} hours`:'';
+  if(unit==='minutes')return v>=60?hm(v/60):v<1?v*60<1?'less than 1 second':counted(Math.round(v*60),'seconds'):'';
+  if(unit==='hours')return v<1?v*60<1?'less than 1 minute':counted(Math.round(v*60),'minutes'):v>=48?`about ${format(v/24,1)} days`:Number.isInteger(v)?'':hm(v);
+  if(unit==='days')return v>=60?`about ${format(v/30.4375,1)} months`:v>=14?`about ${format(v/7,1)} weeks`:v<1?`about ${counted(format(v*24,1),'hours')}`:'';
   return '';
 }
 // One description of a result in the visitor's units: main value, unit and the
@@ -96,7 +98,7 @@ function metricParts(m){
   if(m.kitchen){const spoon=spoons(m.value);if(spoon)extra.push(spoon);}
   if(m.note)extra.push(m.note);
   const text=unit==='$'?money(value):unit==='SG'&&typeof value==='number'?value.toFixed(4).replace(/0$/,''):typeof value==='number'?format(value,m.digits??2):value;
-  return {text,unit:plain(unit),extra:extra.join(' · ')};
+  return {text,unit:plain(text==='1'&&ONE[unit]||unit),extra:extra.join(' · ')};
 }
 function displayMetric(m){
   const p=metricParts(m);
@@ -207,7 +209,7 @@ function renderCalculator(){
   $('calculator-content').innerHTML=`<article class="calculator-shell"><header class="calc-heading"><div><div class="calc-eyebrow">${icon(cat[2])}${e(cat[1].toUpperCase())}</div><h2>${e(c.title)}</h2><p>${e(descriptionFor(c,isUS()))}</p></div><button id="favorite" class="favorite icon-button" aria-pressed="${state.favorites.includes(c.id)}" aria-label="${state.favorites.includes(c.id)?'Remove from':'Add to'} favorites">${icon('star')}</button></header>
   <div class="calc-body"><section class="input-panel" aria-label="Calculation inputs"><div class="panel-heading"><span class="step-label"><span class="step-no">1</span>Your measurements</span><button id="reset" class="text-button">Reset</button></div><p id="slider-guide" class="slider-guide">Tap a shortcut, drag a slider, or type your own number.</p>${presetHTML(a)}${salinityToggleHTML()}<form id="calc-form" novalidate><div class="input-fields">${c.fields.map(f=>fieldHTML(f,a)).join('')}</div></form>${hasProfile(c)?`<div class="tank-fill-control">Saved tank: <strong>${e(profile().name)}</strong><br>${isUS()?e(gallons(profile().volume))+' US gal · '+format(profile().volume)+' L':format(profile().volume)+' L · '+e(gallons(profile().volume))+' US gal'}<br><button id="use-profile" class="text-button">Use saved tank volume →</button></div>`:''}<p class="validation-note">Changes calculate automatically. Your measurements are processed in this browser.</p></section>
   <section class="result-panel" aria-label="Calculation result"><div class="panel-heading"><span class="step-label"><span class="step-no">2</span>Your answer</span><span class="live-label">LIVE RESULT</span></div><div id="result" aria-live="polite" aria-atomic="true"></div></section></div>
-  <div class="details-area"><details id="math-details"><summary>The math & sources</summary><div><p class="formula">${e(formulaFor(c,isUS()))}</p>${c.note?`<p class="note">${e(noteFor(c,isUS()))}</p>`:''}${c.reference?`<p><a class="source-link" href="${e(c.reference[1])}" target="_blank" rel="noopener noreferrer">Reference: ${e(c.reference[0])} ↗</a></p>`:'<p>Method: the geometry, unit conversion, rule of thumb or proportional calculation shown above.</p>'}<p>Results are rounded for reading; the calculations keep full precision. US gallons show one decimal below ten gallons and whole gallons above. For dilute freshwater, ppm and mg/L are approximately equivalent. Use the same test basis for every reading.</p></div></details><div id="steps-details"></div></div>
+  <div class="details-area"><details id="math-details"><summary>The math & sources</summary><div><p class="formula">${e(formulaFor(c,isUS()))}</p>${c.note?`<p class="note">${e(noteFor(c,isUS()))}</p>`:''}${c.reference?`<p><a class="source-link" href="${e(c.reference[1])}" target="_blank" rel="noopener noreferrer">Reference: ${e(c.reference[0])} ↗</a></p>`:'<p>Method: the geometry, unit conversion, rule of thumb or proportional calculation shown above.</p>'}<p>Results are rounded for reading; the calculations keep full precision. US gallons show one decimal below ten gallons and whole gallons above. Aquarium test kits use ppm and mg/L to mean the same thing.</p></div></details><div id="steps-details"></div></div>
   <div class="calc-footer"><span>${icon('check')} No account · saved on this device</span><button id="guide-inline" class="text-button">A quick guide →</button></div></article>
   <section class="related"><h3 class="related-heading">ALSO IN YOUR TOOLBOX</h3><div class="related-grid">${related.map(x=>`<a href="#tool=${x.id}" data-tool="${x.id}">${icon(cat[2])}<span>${e(x.title)}</span></a>`).join('')}</div>`;
   $('calc-form').addEventListener('submit',ev=>ev.preventDefault());
