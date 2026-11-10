@@ -43,3 +43,17 @@ Ramp (60 runs): Normal 100/95/90/77/38 %, Hard 100/87/65/25/10 %.
 - `node scripts/swarmbreak/crowd_check.mjs [trials] [difficulty]`: how crowded the arena gets - average and peak machines alive per wave, per sector (human-like autopilot).
 
 v1.7.0 (enemy AI): RAMP `smart` (0.55 in S1 up to 1.0 in S5; Easy x0.55, Hard x1.1, Nightmare x1.25; sector 1 keeps it at 0 for its first 30 s of fighting and eases it in over 20 s, for the idle-player self-test) sharpens the machines' tactics in sim.js `enemy()`. Crawlers wander less, close on the Warden's predicted position (`leadPos`) from spread flank angles and pounce over the last 2.6 m. Brutes hunt a Warden within 6-10 m. Spitters keep closer, strafe out of the Warden's line of fire (`inFire`) and lead 60 % of the way. Darts, splitters, shards and mimics cut the Warden off and weave out of its fire. Leapers lead further and recover faster; bulwarks plod faster. SWARM SURGES (`swarmSurge`, not in boss fights): every 19 - 7*smart s a tell (`surgetell`: low crawl + alarm, caption, red edge glow `#surgeglow`), then the 5-9 nearest crawlers / shards / splitters / mimics rush (`e.sg`, faster, no wandering) for 1.8-2.6 s (`surgego`). Paid for with smaller later hordes (S2 ends at 38 ... S5 48-54), slower spitter fire in S3-S5 (0.46-0.53) and a free shield on the early waves of S3-S5. `aggro_check.mjs [runs] [sectors]` compares the tactics at smart 0 with now. Ramp (100 runs): Normal 100/85/61/43/28 %, Hard (60 runs) 100/65/30/10/12 %.
+
+v2.0.0: the visual overhaul, all in the renderer (the simulation is untouched: same RAMP, same clear rates, replays still bit-exact).
+`js/gfx.js` holds the new pieces: the sky (sun, clouds, stars; `heaven` in each `LOOKS` row), the living floor (`livingFloor()` injects
+into the floor's standard material: cloud shadows / standing water with rain rings / heat in the seams / data along the lines / energy
+under the grate, plus up to 3 pulses of light, `Renderer.pulse()`; off on the low tier), `Warp` (instanced warp-in beams and floor
+rings, 72), `Trails` (instanced shot and bolt streaks), `Traffic`, `crownGeometry`, sign / water / lightning helpers.
+fx.js: `glow()` light pools on the floor (instanced, 56) and instanced scorch marks (96, kept until replaced).
+Scenery is built once per sector and cached (`makeProps` / `propSets`); lights still come from the fixed pool (never add or toggle a light).
+Wall lights react (`stripFlash`, red throb in boss fights and surges). Results show a rank (main.js `rankOf`: rescues 35, Wardens kept 30,
+best streak 20, accuracy 15). A beat of slow motion when a wave is cleared (not online, not with reduced flashes).
+Programs: 53 after warm-up and fixed (was 43). Draw calls / triangles / CPU per frame unchanged (measure with a per-frame
+`renderer.info` hook; `info.autoReset = false`). GLSL: never `pow(x, 2.0)` with a possibly negative x (NaN on some GPUs), write `x * x`.
+Capture hook: `__sb.scenic(sector)` shows a sector on the title.
+

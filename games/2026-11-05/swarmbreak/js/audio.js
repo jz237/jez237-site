@@ -6,7 +6,7 @@ const SFX = ['gun', 'hit', 'clang', 'pop', 'boomS', 'boomM', 'boomL', 'scrap', '
   'portal', 'enter', 'rescue', 'rescue5', 'lost', 'pulse', 'shieldhit', 'death', 'spawn', 'wave', 'waveclear', 'alarm', 'bossroar', 'bosshit', 'stomp', 'bosscharge', 'slam', 'beam',
   'molten', 'life', 'upgrade', 'medal', 'step', 'uimove', 'uiok', 'uiback', 'rewind', 'pickup', 'pwend', 'drop', 'warp', 'surge', 'laser', 'thunder', 'hazwarn', 'leap', 'reveal', 'block'];
 const VOICE = ['begin', 's2', 's3', 's4', 's5', 'stand', 'boss', 'bossdown', 'clear', 'lastlife', 'gameover', 'newrecord', 'champion', 'replay', 'partner', 'halfway', 'chain'];
-const V = '?v=12';
+const V = '?v=13';
 
 export class Audio {
   constructor(base) {

@@ -2,9 +2,9 @@
 // the seconds per wave, kills per minute of play, machines alive, the share of play time spent waiting
 // (wave intros and clears) and how long after a wave starts the first machine is within 6 m.
 //   node scripts/swarmbreak/action_check.mjs [trials=4] [difficulty=normal]
-import { makeWorld, step, drainEvents, STEP } from '../../games/2026-11-05/swarmbreak/js/sim.js?v=12';
-import { Autopilot } from '../../games/2026-11-05/swarmbreak/js/ai.js?v=12';
-import { TYPICAL_UP, WAVES } from '../../games/2026-11-05/swarmbreak/js/config.js?v=12';
+import { makeWorld, step, drainEvents, STEP } from '../../games/2026-11-05/swarmbreak/js/sim.js?v=13';
+import { Autopilot } from '../../games/2026-11-05/swarmbreak/js/ai.js?v=13';
+import { TYPICAL_UP, WAVES } from '../../games/2026-11-05/swarmbreak/js/config.js?v=13';
 const trials = +(process.argv[2] || 4), diff = process.argv[3] || 'normal';
 for (let s = 0; s < 5; s++) {
   let fight = 0, wait = 0, kills = 0, alive = 0, n = 0, waves = 0, contact = 0, cn = 0;

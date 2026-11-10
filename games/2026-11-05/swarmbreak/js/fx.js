@@ -2,7 +2,7 @@
 // debris that bounces on the real ground, shock rings, scorch marks and a few flash lights.
 // Purely visual (uses Math.random), never touches the simulation.
 import * as THREE from '../vendor/three.module.min.js';
-import { rockGeometry } from './models.js?v=12';
+import { rockGeometry } from './models.js?v=13';
 
 export const CALM = { on: false };
 
@@ -100,12 +100,24 @@ export class FX {
     // shock rings + scorch decals
     this.rings = [];
     const ringMat = new THREE.MeshBasicMaterial({ map: T.ring, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, color: 0xffc890 });
-    for (let i = 0; i < 6; i++) { const m = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), ringMat.clone()); m.rotation.x = -Math.PI / 2; m.visible = false; scene.add(m); this.rings.push({ m, t: 0, max: 1, r: 1 }); }
+    for (let i = 0; i < 12; i++) { const m = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), ringMat.clone()); m.rotation.x = -Math.PI / 2; m.visible = false; scene.add(m); this.rings.push({ m, t: 0, max: 1, r: 1 }); }
     this.ri = 0;
-    this.scorches = [];
-    const sc = new THREE.MeshBasicMaterial({ map: T.glow, transparent: true, depthWrite: false, color: 0x000000, opacity: 0.55, polygonOffset: true, polygonOffsetFactor: -2 });
-    for (let i = 0; i < 24; i++) { const m = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), sc); m.rotation.x = -Math.PI / 2; m.visible = false; m.renderOrder = 1; scene.add(m); this.scorches.push(m); }
-    this.si = 0;
+    // scorch marks: one instanced draw. They stay until newer ones replace them, so a long fight leaves its mark
+    const flat = new THREE.PlaneGeometry(1, 1); flat.rotateX(-Math.PI / 2);
+    this.scorchN = q.scorch || 96;
+    this.scorchI = new THREE.InstancedMesh(flat, new THREE.MeshBasicMaterial({ map: T.soft, transparent: true, depthWrite: false, color: 0x000000, opacity: 0.5, polygonOffset: true, polygonOffsetFactor: -2 }), this.scorchN);
+    this.scorchI.frustumCulled = false; this.scorchI.renderOrder = 1; this.scorchI.count = 0; this.scorchI.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
+    scene.add(this.scorchI);
+    this.si = 0; this.sn = 0;
+    // light pools: soft additive glows on the floor that flare and fade (explosions, impacts, pick-ups)
+    this.glowN = q.glows || 56;
+    this.glowI = new THREE.InstancedMesh(flat, new THREE.MeshBasicMaterial({ map: T.glow, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, toneMapped: false }), this.glowN);
+    this.glowI.instanceColor = new THREE.InstancedBufferAttribute(new Float32Array(this.glowN * 3), 3);
+    this.glowI.frustumCulled = false; this.glowI.renderOrder = 2; this.glowI.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
+    scene.add(this.glowI);
+    this.glows = [];
+    for (let i = 0; i < this.glowN; i++) this.glows.push({ t: 0, T: 1, x: 0, z: 0, r: 1, c: new THREE.Color(), k: 1 });
+    this.gi = 0;
     this.dustColor = new THREE.Color(0.75, 0.73, 0.7);
   }
   setLook(L) { this.dustColor.set(L.dust); this.dustP.mat.uniforms.uLight.value.set(L.dustLight, L.dustLight, L.dustLight * 1.02); }
@@ -159,14 +171,23 @@ export class FX {
     R.m.position.set(x, y + 0.08, z); R.t = 0; R.max = 0.6; R.r = r; R.m.visible = true; R.m.material.color.set(color);
   }
   scorch(x, z, r) {
-    const m = this.scorches[this.si]; this.si = (this.si + 1) % this.scorches.length;
-    m.position.set(x, this.heightAt(x, z) + 0.04, z); m.scale.set(r * 2.4, r * 2.4, 1); m.rotation.z = Math.random() * 6; m.visible = true;
+    const i = this.si; this.si = (this.si + 1) % this.scorchN; this.sn = Math.min(this.scorchN, this.sn + 1);
+    const s = r * 2.6 * (0.8 + Math.random() * 0.5);
+    this._e.set(0, Math.random() * 6.28, 0); this._q.setFromEuler(this._e);
+    this._m.compose(this._p.set(x, this.heightAt(x, z) + 0.022 + (i % 7) * 0.0012, z), this._q, this._s.set(s, 1, s * (0.75 + Math.random() * 0.5)));
+    this.scorchI.setMatrixAt(i, this._m); this.scorchI.count = this.sn; this.scorchI.instanceMatrix.needsUpdate = true;
+  }
+  // a pool of light on the floor at (x, z): radius r metres, fades over dur seconds
+  glow(x, z, r, color = 0xffa060, dur = 0.45, k = 1) {
+    const G = this.glows[this.gi]; this.gi = (this.gi + 1) % this.glowN;
+    G.x = x; G.z = z; G.r = r; G.c.set(color); G.t = dur; G.T = dur; G.k = k * (CALM.on ? 0.5 : 1);
   }
 
   // a full explosion: flash, fire ball, sparks, debris, a slow dust cloud that hangs around
   explode(x, y, z, size, o = {}) {
     const g = this.heightAt(x, z);
     this.flash(x, y, z, 26 * size, o.color || 0xffa060, 0.3 + size * 0.1);
+    this.glow(x, z, 3.2 + size * 2.4, o.color || 0xffa060, 0.4 + size * 0.14, 0.9 + size * 0.25);
     this.fire(x, y, z, { n: Math.round(6 + size * 6), s: 0.9 + size * 0.7, sp: 0.6 * size, vx: o.vx });
     this.sparks(x, y, z, { n: Math.round(10 + size * 10), speed: 6 + size * 3, vx: o.vx });
     if (o.metal) this.debris(x, y, z, { metal: true, n: Math.round(4 + size * 4), speed: 5 + size * 2, size: 0.25 + size * 0.08, vx: o.vx, trail: true });
@@ -184,7 +205,8 @@ export class FX {
     for (const k of ['rock', 'metal']) for (const d of this.deb[k]) d.life = 0;
     for (const L of this.lights) L.t = 0;
     for (const R of this.rings) R.m.visible = false;
-    for (const m of this.scorches) m.visible = false;
+    this.sn = 0; this.si = 0; this.scorchI.count = 0;
+    for (const G of this.glows) G.t = 0;
   }
   update(dt) {
     this.dustP.update(dt);
@@ -217,6 +239,15 @@ export class FX {
       const f = Math.max(0, L.t / L.max);
       L.l.intensity = L.i0 * f * f;
     }
+    for (let i = 0; i < this.glowN; i++) {
+      const G = this.glows[i];
+      if (G.t <= 0) { this._m.makeScale(0, 0, 0); this.glowI.setMatrixAt(i, this._m); continue; }
+      G.t -= dt;
+      const f = Math.max(0, G.t / G.T), s = G.r * 2 * (1.25 - 0.25 * f), b = f * f * G.k;
+      this._m.compose(this._p.set(G.x, 0.05, G.z), this._q.identity(), this._s.set(s, 1, s));
+      this.glowI.setMatrixAt(i, this._m); this.glowI.instanceColor.setXYZ(i, G.c.r * b, G.c.g * b, G.c.b * b);
+    }
+    this.glowI.instanceMatrix.needsUpdate = true; this.glowI.instanceColor.needsUpdate = true;
     for (const R of this.rings) {
       if (!R.m.visible) continue;
       R.t += dt;

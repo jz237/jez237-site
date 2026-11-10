@@ -120,6 +120,11 @@ table.hs tr.me td { color: #fff; background: rgba(255, 179, 71, .1); }
 .stat { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid rgba(255, 255, 255, .06); font-size: 14px; }
 .stat span { color: var(--dim); letter-spacing: .1em; font-size: 12px; }
 .medrow { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+#res-rank { display: flex; align-items: center; gap: 14px; margin: 10px 0 6px; }
+#res-rank i { font-style: normal; font-family: 'Saira Condensed'; font-weight: 800; font-size: 54px; line-height: 1; width: 72px; height: 72px; display: grid; place-items: center; border: 2px solid; border-radius: 14px; background: rgba(255, 255, 255, .04); text-shadow: 0 0 18px currentColor; box-shadow: 0 0 22px -6px currentColor, inset 0 0 18px -8px currentColor; animation: rankin .5s cubic-bezier(.2, 1.6, .4, 1) both; }
+#res-rank span { display: grid; gap: 2px; color: var(--dim); letter-spacing: .16em; font-size: 12px; }
+#res-rank b { color: #fff; font-size: 16px; letter-spacing: .06em; }
+@keyframes rankin { from { transform: scale(2.2) rotate(-8deg); opacity: 0; } to { transform: none; opacity: 1; } }
 .medal { padding: 6px 10px; border-radius: 9px; border: 1px solid rgba(255, 214, 107, .25); color: var(--dim); font-size: 11px; letter-spacing: .12em; }
 .medal.on { color: #ffe08a; border-color: #ffd66b; background: rgba(255, 214, 107, .1); }
 .medal.new { animation: pulse .5s 4 alternate; }
@@ -242,7 +247,7 @@ table.hs tr.me td { color: #fff; background: rgba(255, 179, 71, .1); }
   <div class="screen hidden" id="title">
     <div class="card">
       <h1 class="logo">SWARM<span>BREAK</span></h1>
-      <div class="ver">VERSION <b id="ver">1.8.0</b> · HOLD THE LINE · BRING THEM HOME</div>
+      <div class="ver">VERSION <b id="ver">2.0.0</b> · HOLD THE LINE · BRING THEM HOME</div>
       <div class="diffrow">DIFFICULTY<div class="seg" data-opt="diff"><button data-v="easy">EASY</button><button data-v="normal">NORMAL</button><button data-v="hard">HARD</button><button data-v="nightmare">NIGHTMARE</button></div></div>
       <div id="diff-desc"></div>
       <div class="btns" id="title-btns">
@@ -282,6 +287,7 @@ table.hs tr.me td { color: #fff; background: rgba(255, 179, 71, .1); }
 
   <div class="screen hidden" id="results"><div class="card">
     <h2 id="res-title">OVERRUN</h2><div class="sub" id="res-sub"></div>
+    <div id="res-rank"></div>
     <div id="res-stats"></div>
     <div class="medrow" id="res-medals"></div>
     <div id="ini-wrap" class="hidden"><h3>NEW HIGH SCORE · ENTER YOUR INITIALS</h3><div class="ini" id="ini"><b></b><b></b><b></b></div><p style="text-align:center;margin:0">Type letters, or use ↑ ↓ and ENTER (tap a letter on touch)</p></div>
@@ -377,6 +383,6 @@ addEventListener('error', (e) => window.__sbErrors.push(String(e.message || e)))
 addEventListener('unhandledrejection', (e) => window.__sbErrors.push('rejection: ' + String(e.reason && e.reason.message || e.reason)));
 (() => { const ce = console.error; console.error = (...a) => { window.__sbErrors.push(a.map(String).join(' ')); ce.apply(console, a); }; })();
 </script>
-<script type="module" src="js/main.js?v=12"></script>
+<script type="module" src="js/main.js?v=13"></script>
 </body>
 </html>
