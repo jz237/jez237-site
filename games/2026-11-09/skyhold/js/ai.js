@@ -13,8 +13,8 @@
 //   'human' — plays like a person: ~0.35 s reaction (scattered, sometimes late), wobbly altitude, misses things
 //             behind it, saves novas too long. The difficulty ramp is measured with this one.
 //   'demo'  — the attract mode: sharp and decisive. It never reads the world's random generator (replays stay exact).
-import { F, ENEMY, BOSSES, H, SHIPS, WAVES, SPECIAL } from './config.js?v=22';
-import { wd, wp, nodePos, beamRange } from './sim.js?v=22';
+import { F, ENEMY, BOSSES, H, SHIPS, WAVES, SPECIAL } from './config.js?v=26';
+import { wd, wp, nodePos, beamRange } from './sim.js?v=26';
 
 const clamp = (v, a, b) => (v < a ? a : v > b ? b : v);
 function mkr(seed) { let s = seed | 0; return () => { s = (s + 0x6D2B79F5) | 0; let t = Math.imul(s ^ (s >>> 15), s | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
@@ -25,6 +25,8 @@ const PROFILES = {
 };
 // the demo lets a hive pod's fresh stingers be seen before it opens fire on them (seconds after the burst)
 const SWARM_HOLD = 1.7;
+// ...but not once a stinger is within SWARM_CLOSE m, and at most one watched swarm every SWARM_GAP s
+const SWARM_CLOSE = 24, SWARM_GAP = 8;
 const DANGER = new Set(['husk', 'prowler', 'stinger', 'whirler', 'spark', 'maw', 'scorcher']);
 // NOVA PLAN (demo): what each machine a nova would destroy is worth (a lifter carrying a settler most of all; a hive pod
 // counts with the swarm inside it; a coil with the sparks it would let out)
@@ -76,7 +78,7 @@ export class Autopilot {
     const endgame = !B && W.plan && W.plan.left === 0 && W.plan.extra.every((x) => x.done) && left > 0 && left <= 3;
     for (const e of W.enemies) {
       if (e.hp <= 0 || e.type === 'mine') continue;
-      if (this.profile === 'demo' && e.type === 'stinger' && e.t < SWARM_HOLD) continue;   // let the watcher see a fresh swarm
+      if (this.profile === 'demo' && e.type === 'stinger' && e.t < SWARM_HOLD && this.holding) continue;   // let the watcher see a fresh swarm
       if (!this.notice(W, e.id, e.x, me)) continue;
       const d = Math.abs(wd(e.x - me.x));
       if (e.born > 0 && d > 30) continue;
@@ -114,10 +116,22 @@ export class Autopilot {
     }
     return { ...best, why };
   }
+  // a fresh swarm (a pod burst less than SWARM_HOLD s ago) near enough to be watched
+  swarmFresh(W, me) { return W.enemies.some((e) => e.type === 'stinger' && e.hp > 0 && e.t < SWARM_HOLD - 0.3 && Math.abs(wd(e.x - me.x)) < 60); }
+  // ...and one of its stingers already close: no more waiting, fight
+  swarmClose(W, me) { return W.enemies.some((e) => e.type === 'stinger' && e.hp > 0 && Math.abs(wd(e.x - me.x)) < SWARM_CLOSE && Math.abs(e.y - me.y) < 9); }
+  // at most one watched swarm every SWARM_GAP s (with a hive or more a wave, waiting on every one gets the demo killed)
+  swarmHold(W, me) {
+    this.hcd = (this.hcd || 0) - 1 / 120;
+    const want = this.swarmFresh(W, me) && !this.swarmClose(W, me);
+    if (want && (this.holding || this.hcd <= 0)) { this.holding = true; return true; }
+    if (this.holding) { this.holding = false; this.hcd = SWARM_GAP; }
+    return false;
+  }
   control(W, me) {
     const out = this.control0(W, me);
     // a pod has just burst near us: hold fire (and the nova) for a moment so its swarm can be seen
-    if (this.profile === 'demo' && W.enemies.some((e) => e.type === 'stinger' && e.hp > 0 && e.t < SWARM_HOLD - 0.3 && Math.abs(wd(e.x - me.x)) < 60)) { out.fire = false; out.nova = false; }
+    if (this.profile === 'demo' && this.swarmHold(W, me)) { out.fire = false; out.nova = false; }
     return out;
   }
   control0(W, me) {
@@ -156,8 +170,16 @@ export class Autopilot {
       ty = ey + evy * 0.25 + this.yErr;
       tx = ex - Math.sign(dx || me.face) * stand;
       want = d > stand + 4 ? 1 : 0.16;
+      // a STINGER only turns round once we are well behind it and only fires ahead: get in close behind it and stay
+      // there; one coming at us: get out of its height, let it go past, then follow it
+      if (g.kind === 'enemy' && g.o.type === 'stinger' && g.o.dir) {
+        const sd = g.o.dir;
+        if (Math.sign(dx) === sd || d < 3) { tx = ex - sd * Math.min(stand, 9); want = 1; }
+        else if (d < 26) { ty = ey + (me.y > ey ? 5 : -5); tx = me.x; want = 0.2; }
+      }
       // a husk or prowler right on top of us: get out of its altitude band and keep going
-      if (g.kind === 'enemy' && d < 5) { ty = ey + (me.y > ey ? 4 : -4); want = 1; tx = me.x + me.face * 20; }
+      // (to the side with room: never into the ground or the ceiling with it on top of us)
+      if (g.kind === 'enemy' && d < 5) { const up = ey < 7 ? true : ey > H - 7 ? false : me.y > ey; ty = ey + (up ? 4 : -4); want = 1; tx = me.x + me.face * 20; }
       const facing = Math.sign(dx) === me.face;
       const r = g.kind === 'node' ? 1.15 : ENEMY[g.o.type].r;
       if (facing && d < range && Math.abs(ey - me.y) < r + F.beamH * 0.9) fire = true;

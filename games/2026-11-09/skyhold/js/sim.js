@@ -3,7 +3,7 @@
 // Nothing in here touches the DOM, WebGL or audio; it only pushes events into W.ev.
 //
 // The world is a band round a small planet: x along the ground (wraps every C metres), y altitude (0..H).
-import { F, STEP, C, H, ENEMY, SETTLER, BOSSES, B_KEYS, SECTORS, WAVES, rampAt, rampLevel, endlessLevel, ENDLESS, TUTOR, SCORE, START_LIVES, DIFFICULTY, applyDiff, POWERUPS, PW_KEYS, DROP, SKIM, HYPER, EVENTS, EVENT, PHASE2, B_KEYS as _BK, SHIPS, SHIP_KEYS, RIVALS, INTERSECT, WHIRL, COIL, SCORCH, MAW, GATE, SPECIALS, SPECIAL } from './config.js?v=22';
+import { F, STEP, C, H, ENEMY, SETTLER, BOSSES, B_KEYS, SECTORS, WAVES, rampAt, rampLevel, endlessLevel, ENDLESS, TUTOR, SCORE, START_LIVES, DIFFICULTY, applyDiff, POWERUPS, PW_KEYS, DROP, SKIM, HYPER, EVENTS, EVENT, PHASE2, B_KEYS as _BK, SHIPS, SHIP_KEYS, RIVALS, INTERSECT, WHIRL, COIL, SCORCH, MAW, GATE, SPECIALS, SPECIAL, SPAWN, STING, PACK } from './config.js?v=26';
 export { STEP };
 
 const clamp = (v, a, b) => (v < a ? a : v > b ? b : v);
@@ -155,10 +155,13 @@ function director(W, dt) {
   for (const x of P.extra) if (!x.done && W.waveT >= x.t) { x.done = true; if (x.type === 'cross') podCross(W); else if (x.type === 'whirl') whirlRing(W); else if (x.type === 'squad') squad(W, x); else spawnEnemy(W, x.type); }
   // a special wave counts its fighters down (those still to come plus those in the sky)
   if (W.special) W.special.left = P.extra.reduce((a, x) => a + (x.done ? 0 : x.kind === 'whirler' ? WHIRL.n : x.n), 0) + W.enemies.reduce((a, e) => a + (e.hp > 0 && HOSTILE.has(e.type) ? 1 : 0), 0);
+  if (P.packs > 0) packs(W, P, dt);
   // a PROWLER comes for a pilot who takes too long
   if (W.waveT > P.prowlT && !W.enemies.some((e) => e.type === 'prowler') && P.left === 0) { P.prowlT = W.waveT + 24; spawnEnemy(W, 'prowler'); }
   const busy = W.enemies.some((e) => HOSTILE.has(e.type) && e.hp > 0);
-  if (!busy && P.left === 0 && P.extra.every((x) => x.done)) waveClear(W);
+  const sent = P.left === 0 && !(P.packs > 0) && P.extra.every((x) => x.done);
+  if (!busy && sent) waveClear(W);
+  else if (sent) stragglers(W, P, dt);
 }
 function startWave(W, w) {
   if (W.mode === 'endless') { W.waveN++; W.wave = w; }
@@ -180,7 +183,8 @@ function startWave(W, w) {
   for (let i = 0; i < (R.coils || 0); i++) extra.push({ t: rr(W, 4, 12), type: 'coil' });
   for (let i = 0; i < (R.maws || 0); i++) extra.push({ t: rr(W, 10, 22), type: 'maw' });
   for (let i = 0; i < fn; i++) if (fx !== 'lifter') extra.push({ t: rr(W, 3, 20), type: fx });
-  W.plan = { left: R.lifters + (fx === 'lifter' ? fn + 1 : 0), groupT: W.tutorial ? TUTOR.firstAt : 1.2, extra, prowlT: R.prowlT };
+  W.plan = { left: R.lifters + (fx === 'lifter' ? fn + 1 : 0), groupT: W.tutorial ? TUTOR.firstAt : 1.2, extra, prowlT: R.prowlT,
+    packs: W.rivals ? Math.round((R.packs || 0) * 0.6) : R.packs || 0, packI: 0, packT: PACK.first, packCD: PACK.first, dryT: 0 };
   for (const p of W.players) p.shield = Math.max(p.shield, R.shield + (W.up.deflector || 0));
   W.ev.push({ k: 'wave', w, n: W.mode === 'endless' ? W.waveN : w + 1 });
 }
@@ -212,6 +216,50 @@ function squad(W, x) {
     if (x.kind === 'husk') e.st = 'hunt';
   }
 }
+// hostile machines within `r` m of x (those still warping in count too)
+function around(W, x, r) { let n = 0; for (const e of W.enemies) if (e.hp > 0 && !e.gone && HOSTILE.has(e.type) && Math.abs(wd(e.x - x)) < r) n++; return n; }
+// FIGHTER PACKS: whenever the sky round a pilot thins out (and at least every PACK.wait s), a pack warps in ahead of it
+function packs(W, P, dt) {
+  if (W.tutorial && W.waveT < TUTOR.safe) return;
+  P.packT -= dt; P.packCD -= dt;
+  const ps = alivePlayers(W);
+  if (!ps.length || P.packCD > 0) return;
+  const p = ps.length > 1 ? ps[(rand(W) * ps.length) | 0] : ps[0];
+  if (P.packT > 0 && around(W, p.x, PACK.see) >= PACK.low) return;
+  const L = PACK.kinds[wi(W)], kind = L[P.packI % L.length];
+  P.packI++; P.packs--; P.packT = PACK.wait; P.packCD = PACK.cd;
+  if (kind === 'whirler') { whirlRing(W); return; }
+  const side = rand(W) < 0.7 ? p.face || 1 : -(p.face || 1);
+  const cx = wp(p.x + side * rr(W, PACK.ahead[0], PACK.ahead[1])), cy = clamp(p.y + rr(W, -6, 6), 10, 27);
+  const n = PACK.n[kind] + ((kind === 'spark' || kind === 'stinger') && wi(W) >= 2 ? 1 : 0);
+  for (let k = 0; k < n; k++) {
+    const e = spawnEnemy(W, kind, wp(cx + rr(W, -6, 6)), clamp(cy + rr(W, -5, 5), 4, 31));
+    if (kind === 'spark') e.life = PACK.sparkLife + rr(W, 0, 3);
+    if (kind === 'husk') e.st = 'hunt';
+    // a stinger pack flies on away from the pilot, a long first run: come in close behind it and shoot
+    if (kind === 'stinger') { e.dir = side; e.over = rr(W, PACK.run[0], PACK.run[1]); e.vx = side * W.R.stV * 0.6; }
+  }
+}
+// STRAGGLERS: the wave has sent everything and nothing is in sight: the machines far away warp back in close
+function stragglers(W, P, dt) {
+  const ps = alivePlayers(W);
+  if (!ps.length) return;
+  if (ps.some((p) => around(W, p.x, PACK.see) > 0)) { P.dryT = 0; return; }
+  P.dryT += dt;
+  if (P.dryT < PACK.dry) return;
+  P.dryT = 0;
+  let k = 0;
+  for (const e of W.enemies.slice()) {
+    if (k >= PACK.strag || e.hp <= 0 || e.gone || e.born > 0 || !HOSTILE.has(e.type) || e.ring || e.carry) continue;
+    if (e.type === 'lifter' && e.st !== 'roam' && e.st !== 'seek') continue;
+    if (ps.some((p) => Math.abs(wd(e.x - p.x)) < PACK.far)) continue;
+    const p = ps[k % ps.length], side = rand(W) < 0.7 ? p.face || 1 : -(p.face || 1);
+    e.gone = true; k++;
+    const q = spawnEnemy(W, e.type, wp(p.x + side * rr(W, PACK.ahead[0], PACK.ahead[1])), clamp(p.y + rr(W, -6, 6), 8, 28));
+    if (e.sting) q.sting = e.sting;
+    if (e.type === 'spark') q.life = Math.max(8, e.life || 0);
+  }
+}
 // POD INTERSECTION: two pods warp in either side of a point ahead of a pilot and drift through it on crossing paths
 const wi = (W) => clamp(W.mode === 'endless' ? Math.floor(W.level || 0) : W.sector, 0, 4);
 // a ring of whirlers warps in away from the pilots and starts to shadow one
@@ -239,7 +287,7 @@ function rings(W, dt) {
       const tx = p ? wp(p.x + r.side * 22) : wp(r.x + 10), ty = p ? clamp(p.y + 4, 8, 29) : r.y;
       const dx = wd(tx - r.x), dy = ty - r.y, l = Math.hypot(dx, dy) || 1, v = Math.min(WHIRL.v[i], l * 2);
       r.x = wp(r.x + (dx / l) * v * dt); r.y += (dy / l) * v * dt;
-      if (p && r.t > WHIRL.every[i] * (r.k || 1) && Math.abs(wd(p.x - r.x)) < 40) { r.st = 'dive'; r.t = 0; r.tx = p.x; r.ty = p.y; W.ev.push({ k: 'whirldive', x: r.x, y: r.y, id: r.id }); }
+      if (p && r.t > WHIRL.every[i] * (r.k || 1) && Math.abs(wd(p.x - r.x)) < 40 && !safeNow(W)) { r.st = 'dive'; r.t = 0; r.tx = p.x; r.ty = p.y; W.ev.push({ k: 'whirldive', x: r.x, y: r.y, id: r.id }); }   // (no dives in the tutorial's safe half minute)
     } else {
       const dx = wd(r.tx - r.x), dy = r.ty - r.y, l = Math.hypot(dx, dy) || 1, v = WHIRL.dive[i];
       r.x = wp(r.x + (dx / l) * v * dt); r.y = clamp(r.y + (dy / l) * v * dt, 4, H - 3);
@@ -380,11 +428,12 @@ function spawnSpot(W, type) {
     if (type === 'lifter') {
       let s = W.settlers.filter((q) => q.st === 'walk');
       const p0 = alivePlayers(W)[0];
-      if (p0 && rand(W) < 0.6) { const nr = s.filter((q) => Math.abs(wd(q.x - p0.x)) < 240); if (nr.length) s = nr; }
+      // most come down on the settlers near a pilot, so the fight is on screen
+      if (p0 && rand(W) < SPAWN.lifterNear) { const nr = s.filter((q) => Math.abs(wd(q.x - p0.x)) < SPAWN.lifterR); if (nr.length) s = nr; }
       x = s.length ? wp(s[(rand(W) * s.length) | 0].x + rr(W, -60, 60)) : rr(W, 0, C);
     }
     else if (type === 'prowler') { const p = nearestPlayer(W, 0) || W.players[0]; x = wp(p.x - (p.face || 1) * rr(W, 46, 54)); }
-    else { const p = alivePlayers(W)[0]; x = p && rand(W) < 0.6 ? wp(p.x + (rand(W) < 0.5 ? -1 : 1) * rr(W, 26, 70)) : rr(W, 0, C); }
+    else { const p = alivePlayers(W)[0]; x = p && rand(W) < SPAWN.near ? wp(p.x + (rand(W) < 0.5 ? -1 : 1) * rr(W, SPAWN.r[0], SPAWN.r[1])) : rr(W, 0, C); }
     const p = nearestPlayer(W, x);
     if (type === 'prowler' || !p || Math.abs(wd(p.x - x)) > 22) return x;
   }
@@ -744,6 +793,8 @@ function lifter(W, e, dt) {
   if (e.st !== 'roam' && e.st !== 'lift' && (!s || s.st !== 'walk')) { e.st = 'roam'; e.tgt = 0; }
   switch (e.st) {
     case 'roam': {
+      const np = nearestPlayer(W, e.x);
+      if (np && Math.abs(wd(np.x - e.x)) > SPAWN.leash) e.face = Math.sign(wd(np.x - e.x)) || e.face;
       e.vx += clamp(e.face * R.lV - e.vx, -6 * dt, 6 * dt);
       e.vy = (e.yT + Math.sin(e.t * 0.8 + e.ph) * 2 - e.y) * 1.2;
       if ((W.n + e.id * 13) % 60 === 0 && !(W.tutorial && W.waveT < TUTOR.grabAt)) {
@@ -752,7 +803,7 @@ function lifter(W, e, dt) {
           let best = null, bd = 520;
           for (const q of W.settlers) {
             if (q.st !== 'walk' || W.enemies.some((o) => o.tgt === q.id)) continue;
-            const d = Math.abs(wd(q.x - e.x));
+            const qp = nearestPlayer(W, q.x), d = Math.abs(wd(q.x - e.x)) + (qp ? Math.max(0, Math.abs(wd(qp.x - q.x)) - 90) * 1.5 : 0);
             if (d < bd) { bd = d; best = q; }
           }
           if (best) { e.tgt = best.id; e.st = 'seek'; }
@@ -833,10 +884,21 @@ function hive(W, e, dt) {
   if (p) moveTo(e, p.x - Math.sign(wd(p.x - e.x)) * 16, clamp(p.y + Math.sin(e.t + e.ph) * 6, 6, 30), W.R.lV * 0.6, 5, dt);
   else { e.vx = e.face * 2; e.vy = (e.yT - e.y) * 0.5; }
 }
+// a stinger's run: it holds its direction (e.dir) and only homes on the pilot's height; once the pilot is e.over m behind
+// it, it turns round in a wide sweep. A pilot who stays close behind it is never turned on.
 function stinger(W, e, dt) {
-  const p = nearestPlayer(W, e.x, 160);
-  if (!p) { e.vx += clamp(e.face * W.R.stV * 0.5 - e.vx, -20 * dt, 20 * dt); e.vy *= 0.98; return; }
-  moveTo(e, p.x + e.ox + Math.sin(e.t * 2 + e.ph) * 3, p.y + e.oy, W.R.stV, 30, dt);
+  const p = nearestPlayer(W, e.x, 160), v = W.R.stV;
+  if (!e.dir) { e.dir = p ? (Math.sign(wd(p.x - e.x)) || 1) : (e.face || 1); e.over = rr(W, STING.over[0], STING.over[1]); }
+  if (p) {
+    const dx = wd(p.x - e.x);
+    if (Math.sign(dx) === -e.dir && Math.abs(dx) > e.over) { e.dir = -e.dir; e.over = rr(W, STING.over[0], STING.over[1]); W.ev.push({ k: 'stturn', id: e.id, x: e.x, y: e.y }); }
+    const ahead = Math.sign(dx) === e.dir;
+    const ty = clamp((ahead ? p.y : e.yT ?? e.y) + e.oy + Math.sin(e.t * 2 + e.ph) * 1.6, 2, H - 2);
+    e.vy += clamp((ty - e.y) * 2 - e.vy, -v * 2.5 * dt, v * 2.5 * dt);
+    e.vy = clamp(e.vy, -v * STING.climb, v * STING.climb);
+    if (ahead) e.yT = e.y;
+  } else e.vy *= 0.98;
+  e.vx += clamp(e.dir * v - e.vx, -STING.turn * dt, STING.turn * dt);
 }
 // a skimmer flock sweeps round the planet in a weaving line; a member that sees a pilot ahead of it bends toward them
 function skimmer(W, e, dt) {
@@ -933,6 +995,7 @@ function shoot(W, e, dt) {
   const rate = W.R.fire * (e.type === 'husk' ? 1.4 : e.type === 'prowler' ? 2.4 : e.type === 'stinger' ? 0.5 : e.type === 'hive' ? 0.6 : 1);
   e.fireT = rr(W, 0.7, 1.3) / Math.max(0.02, rate);
   if (!p || e.type === 'lifter' && e.st === 'lift') return;
+  if (e.type === 'stinger' && Math.sign(wd(p.x - e.x)) !== e.face) return;   // a stinger only fires ahead of it
   const telling = W.enemies.filter((q) => q.tell > 0).length;
   if (telling >= W.R.shooters) return;
   e.tell = W.R.warn * 0.6;
@@ -1324,7 +1387,7 @@ function contacts(W) {
       if (e.hp <= 0 || e.born > 0) continue;
       const r = ENEMY[e.type].r + F.r * 0.8;
       if (Math.abs(wd(e.x - p.x)) < r && Math.abs(e.y - p.y) < r * 0.8) {
-        if (p.hyper > 0) { kill(W, e, p.id, 'ram'); continue; }
+        if (p.hyper > 0 || safeNow(W)) { kill(W, e, p.id, 'ram'); continue; }   // (nothing hurts in the tutorial's safe half minute)
         if (p.inv > 0) continue;
         hurt(W, p, e.type, e.x, e.y);
         kill(W, e, p.id, 'ram');
