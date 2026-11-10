@@ -3,7 +3,7 @@
 // in the same composite shader (so no extra programs): heat haze, a zoom blur away from a point (HYPER, big moments), a
 // light sharpen, anamorphic streaks and lens dirt on the bloom, a colour punch, and a coloured edge when the ship is hurt.
 import * as THREE from '../vendor/three.module.min.js';
-import { TONE, NOISE } from './shaders.js?v=18';
+import { TONE, NOISE } from './shaders.js?v=19';
 
 const VERT = /* glsl */ `varying vec2 vUv; void main(){ vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }`;
 
@@ -42,7 +42,7 @@ void main(){
 }`;
 
 const COMP = /* glsl */ `
-uniform sampler2D tScene; uniform sampler2D tBloom;
+uniform sampler2D tScene; uniform sampler2D tBloom; uniform sampler2D tStreak;
 uniform float uBloom, uExposure, uChroma, uVignette, uGrain, uTime, uDesat, uFade, uAspect, uScan;
 uniform vec4 uFlash; uniform vec3 uTint;
 uniform vec4 uShock[6]; uniform vec4 uLens[3];
@@ -98,11 +98,12 @@ void main(){
   vec3 bl = texture2D(tBloom, uv).rgb;
   if (any(isnan(col)) || any(isinf(col))) col = vec3(0.0);
   col += bl * uBloom;
-  // anamorphic streaks: the bloom smeared sideways, cool-tinted
+  // anamorphic streaks: the glow smeared sideways, cool-tinted. It reads a low, already wide-blurred level of the bloom
+  // chain with close, jittered taps: taps on the sharp top level showed every small light as a row of ghost copies.
   if (uStreak > 0.0) {
-    vec3 sk = vec3(0.0);
-    for (int i = 1; i <= 4; i++) { float o = float(i) * 0.028, w = 1.0 - float(i) * 0.2; sk += (texture2D(tBloom, uv + vec2(o, 0.0)).rgb + texture2D(tBloom, uv - vec2(o, 0.0)).rgb) * w; }
-    col += sk * vec3(0.5, 0.72, 1.0) * uStreak * uBloom * 0.3;
+    vec3 sk = vec3(0.0); float js = hash12(gl_FragCoord.xy + fract(uTime) * 173.0) - 0.5, ws = 0.0;
+    for (int i = -8; i <= 8; i++) { float fi = float(i) + js, w = exp(-fi * fi * 0.045); sk += texture2D(tStreak, uv + vec2(fi * 0.011, 0.0)).rgb * w; ws += w; }
+    col += (sk / ws) * vec3(0.5, 0.72, 1.0) * uStreak * uBloom * 1.1;
   }
   // lens dirt: specks on the glass that catch the bloom
   if (uDirt > 0.0) {
@@ -156,7 +157,7 @@ export class Post {
     const lens = []; for (let i = 0; i < 3; i++) lens.push(new THREE.Vector4());
     this.comp = new THREE.ShaderMaterial({ vertexShader: VERT, fragmentShader: COMP, depthTest: false, depthWrite: false,
       uniforms: {
-        tScene: { value: this.rt.texture }, tBloom: { value: this.mips[0].texture },
+        tScene: { value: this.rt.texture }, tBloom: { value: this.mips[0].texture }, tStreak: { value: this.mips[Math.min(2, this.mips.length - 1)].texture },
         uBloom: { value: 0.9 }, uExposure: { value: 1.0 }, uChroma: { value: 0.004 }, uVignette: { value: 0.45 },
         uGrain: { value: 0.016 }, uTime: { value: 0 }, uDesat: { value: 0 }, uFade: { value: 0 }, uAspect: { value: 1 },
         uScan: { value: 0.025 }, uFlash: { value: new THREE.Vector4(1, 1, 1, 0) }, uTint: { value: new THREE.Vector3(1, 1, 1) },
