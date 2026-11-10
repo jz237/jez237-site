@@ -7,22 +7,22 @@
 <meta name="description" content="Skyhold 2026: an original planet-defence shooter in real-time 3D. Fly a gunship round and round a small planet, from the day side into the night, shoot down the machines lifting your settlers off the ground, catch the ones that fall and bring down a colossal carrier on each of five worlds. Endless Orbit, online co-op, upgrades, medals, instant replays and a smart demo mode.">
 <title>Skyhold 2026</title>
 <link rel="icon" href="data:,">
-<link rel="modulepreload" href="js/main.js?v=21">
-<link rel="modulepreload" href="js/config.js?v=21">
-<link rel="modulepreload" href="js/sim.js?v=21">
-<link rel="modulepreload" href="js/ai.js?v=21">
-<link rel="modulepreload" href="js/render.js?v=21">
-<link rel="modulepreload" href="js/audio.js?v=21">
-<link rel="modulepreload" href="js/chip.js?v=21">
-<link rel="modulepreload" href="js/input.js?v=21">
-<link rel="modulepreload" href="js/scores.js?v=21">
-<link rel="modulepreload" href="js/replay.js?v=21">
-<link rel="modulepreload" href="js/post.js?v=21">
-<link rel="modulepreload" href="js/textures.js?v=21">
-<link rel="modulepreload" href="js/models.js?v=21">
-<link rel="modulepreload" href="js/fx.js?v=21">
-<link rel="modulepreload" href="js/shaders.js?v=21">
-<link rel="modulepreload" href="js/online.js?v=21">
+<link rel="modulepreload" href="js/main.js?v=22">
+<link rel="modulepreload" href="js/config.js?v=22">
+<link rel="modulepreload" href="js/sim.js?v=22">
+<link rel="modulepreload" href="js/ai.js?v=22">
+<link rel="modulepreload" href="js/render.js?v=22">
+<link rel="modulepreload" href="js/audio.js?v=22">
+<link rel="modulepreload" href="js/chip.js?v=22">
+<link rel="modulepreload" href="js/input.js?v=22">
+<link rel="modulepreload" href="js/scores.js?v=22">
+<link rel="modulepreload" href="js/replay.js?v=22">
+<link rel="modulepreload" href="js/post.js?v=22">
+<link rel="modulepreload" href="js/textures.js?v=22">
+<link rel="modulepreload" href="js/models.js?v=22">
+<link rel="modulepreload" href="js/fx.js?v=22">
+<link rel="modulepreload" href="js/shaders.js?v=22">
+<link rel="modulepreload" href="js/online.js?v=22">
 <link rel="modulepreload" href="vendor/three.module.min.js">
 <link rel="modulepreload" href="vendor/three.core.min.js">
 
@@ -416,7 +416,7 @@ table.hs tr.me td { color: #fff; background: rgba(255, 179, 71, .1); }
   <div class="screen hidden" id="title">
     <div class="card">
       <h1 class="logo">SKYHOLD<span> 2026</span></h1>
-      <div class="ver">VERSION <b id="ver">1.13.1</b> · GUARD THE COLONY · HOLD THE SKY</div>
+      <div class="ver">VERSION <b id="ver">1.13.2</b> · GUARD THE COLONY · HOLD THE SKY</div>
       <div class="diffrow">DIFFICULTY<div class="seg" data-opt="diff"><button data-v="easy">EASY</button><button data-v="normal">NORMAL</button><button data-v="hard">HARD</button><button data-v="nightmare">NIGHTMARE</button></div></div>
       <div id="diff-desc"></div>
       <div class="btns" id="title-btns">
@@ -600,6 +600,6 @@ addEventListener('error', (e) => window.__shErrors.push(String(e.message || e)))
 addEventListener('unhandledrejection', (e) => window.__shErrors.push('rejection: ' + String(e.reason && e.reason.message || e.reason)));
 (() => { const ce = console.error; console.error = (...a) => { window.__shErrors.push(a.map(String).join(' ')); ce.apply(console, a); }; })();
 </script>
-<script type="module" src="js/main.js?v=21"></script>
+<script type="module" src="js/main.js?v=22"></script>
 </body>
 </html>
