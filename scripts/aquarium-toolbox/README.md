@@ -47,11 +47,15 @@ Paths are host-specific QA tooling, never imported by the browser app.
   laminar and Swamee–Jain turbulent friction; flag the transition regime.
 - A pump curve is bracketed interpolation, never extrapolation or a guaranteed
   operating point. Sump reserve needs a real supervised power-off test.
-- Show litres with US gallons and L/h with US GPH. Round displayed US gallons to
-  whole gallons; positive sub-gallon amounts display `<1`. Calculation precision
-  is retained internally. Converted input display is rounded separately.
+- Show litres with US gallons and L/h with US GPH. US gallons show one decimal
+  below ten, whole gallons above, and `<0.1` for positive amounts below 0.05 gallon.
+  Calculation precision is retained internally. Converted input display is rounded separately.
 
 ## State and privacy
+
+The saved/link validation and numeric stability follow-up is documented in
+[RECHECK_20261110.md](RECHECK_20261110.md). Its workflow tests must accompany math
+tests when changing units, normalization, persistence or shared-link handling.
 
 Browser storage key: `aquarium-toolbox-v1`. No tank data leaves the device through
 the application. Explicit shared links include only one calculation's inputs and
