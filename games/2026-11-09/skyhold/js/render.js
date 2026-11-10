@@ -5,13 +5,13 @@
 // Five looks (sky, terrain, sea, scenery, bodies in the sky), real 3D models for everything, curved beams,
 // warnings drawn in the play plane, HDR post. Nothing here changes the world.
 import * as THREE from '../vendor/three.module.min.js';
-import { Post } from './post.js?v=15';
-import * as TX from './textures.js?v=15';
-import * as MD from './models.js?v=15';
-import { FX, CALM } from './fx.js?v=15';
-import { NOISE, TONE } from './shaders.js?v=15';
-import { F, C, RP, H, ENEMY, BOSSES, POWERUPS, P2_LIVERY, LIVERIES, SETTLER, PHASE2 } from './config.js?v=15';
-import { wd, wp, nodePos, beamRange, dronePos as dronePosR } from './sim.js?v=15';
+import { Post } from './post.js?v=21';
+import * as TX from './textures.js?v=21';
+import * as MD from './models.js?v=21';
+import { FX, CALM } from './fx.js?v=21';
+import { NOISE, TONE } from './shaders.js?v=21';
+import { F, C, RP, H, ENEMY, BOSSES, POWERUPS, P2_LIVERY, LIVERIES, SETTLER, PHASE2 } from './config.js?v=21';
+import { wd, wp, nodePos, beamRange, dronePos as dronePosR } from './sim.js?v=21';
 
 export { CALM };
 const hdr = (hex, k) => new THREE.Color(hex).multiplyScalar(k);
@@ -24,6 +24,7 @@ const ZAX = new THREE.Vector3(0, 0, 1);
 const _up = new THREE.Vector3();
 const TCOL = { lifter: 0x9dff7a, husk: 0xff4a8a, sower: 0xc98aff, hive: 0xff8a3a, stinger: 0xff6a6a, prowler: 0xff3a3a, skimmer: 0x5ef0ff, mine: 0xffb347, whirler: 0x6af0e0, coil: 0xb07aff, spark: 0xe0c0ff, scorcher: 0xff7a2a, maw: 0xff4060 };
 const SIDE_FOV = 40, CHASE_FOV = 64;
+const _zoom = new THREE.Vector3(0.5, 0.5, 0), _hurt = new THREE.Vector4(1, 0.12, 0.06, 0);
 const JAW = { u: 0.44, l: 0.44 };   // how far the maw's jaws open (radians about Z)
 const SCAR_N = 200;
 // title-screen pictures: their size, their own layer, where the model sits (far off the planet) and the directions
@@ -117,7 +118,7 @@ const MOON = new THREE.Vector3(-0.3, -1, 0.5).normalize();
 const SKY_VERT = /* glsl */ `varying vec3 vD; void main(){ vD = position; vec4 p = projectionMatrix * modelViewMatrix * vec4(position, 1.0); gl_Position = p.xyww; }`;
 const SKY_FRAG = /* glsl */ `
 uniform vec3 uZen, uHor, uDusk, uNZen, uNHor, uSunC, uUp, uSun, uSun2, uNeb1, uNeb2;
-uniform float uDay, uTime, uAurora, uSun2K;
+uniform float uDay, uTime, uAurora, uSun2K, uSpace;
 varying vec3 vD;
 ${NOISE}
 void main(){
@@ -160,6 +161,12 @@ void main(){
   }
   // under the horizon: the planet's own haze
   c = mix(c, mix(uNHor, uHor, day) * 0.6, smoothstep(0.0, -0.25, el));
+  // SPACE (the planet is gone): stars and nebula all round, no air
+  if (uSpace > 0.0) {
+    vec3 sc = (vec3(st) * 1.5 + vec3(0.6, 0.7, 1.0) * mw * 0.8) + neb * 0.32 + uNZen * 0.1;
+    sc += uSunC * (pow(sd, 900.0) * 40.0 + pow(sd, 40.0) * 0.4);
+    c = mix(c, sc, uSpace);
+  }
   gl_FragColor = vec4(c, 1.0);
 }`;
 // colony shield dome: a hex lattice with a bright rim and a scan band rising through it
@@ -412,7 +419,7 @@ export class Renderer {
   }
   buildSky() {
     const u = { uZen: new THREE.Color(), uHor: new THREE.Color(), uDusk: new THREE.Color(), uNZen: new THREE.Color(), uNHor: new THREE.Color(), uSunC: new THREE.Color(),
-      uUp: new THREE.Vector3(0, 1, 0), uSun: SUN.clone(), uSun2: new THREE.Vector3(), uNeb1: new THREE.Color(), uNeb2: new THREE.Color(), uDay: 1, uTime: 0, uAurora: 0, uSun2K: 0 };
+      uUp: new THREE.Vector3(0, 1, 0), uSun: SUN.clone(), uSun2: new THREE.Vector3(), uNeb1: new THREE.Color(), uNeb2: new THREE.Color(), uDay: 1, uTime: 0, uAurora: 0, uSun2K: 0, uSpace: 0 };
     const uniforms = {}; for (const k in u) uniforms[k] = { value: u[k] };
     this.skyMat = new THREE.ShaderMaterial({ vertexShader: SKY_VERT, fragmentShader: SKY_FRAG, side: THREE.BackSide, depthWrite: false, uniforms });
     this.sky = new THREE.Mesh(new THREE.SphereGeometry(6000, 48, 24), this.skyMat);
@@ -1067,11 +1074,12 @@ export class Renderer {
       P.t += dt;
       const o = P.o, r = o.position.length() || 1, nx = o.position.x / r, ny = o.position.y / r, nz = o.position.z / r;
       if (!P.rest) {
-        P.vx -= nx * 14 * dt; P.vy -= ny * 14 * dt; P.vz -= nz * 14 * dt;
+        const gk = (this.spaceK || 0) > 0.5 ? 0 : 14;   // no planet, no gravity: wreckage drifts
+        P.vx -= nx * gk * dt; P.vy -= ny * gk * dt; P.vz -= nz * gk * dt;
         o.position.x += P.vx * dt; o.position.y += P.vy * dt; o.position.z += P.vz * dt;
         o.rotation.x += P.wx * dt; o.rotation.y += P.wy * dt;
         const th = Math.atan2(o.position.x, o.position.y), gh = RP + Math.max(-0.35, groundH(this.look, th, Math.asin(clamp(nz, -1, 1)) * RP)) + 0.15;
-        if (r < gh) {
+        if (r < gh && gk) {
           const vn = P.vx * nx + P.vy * ny + P.vz * nz;
           o.position.set(nx * gh, ny * gh, nz * gh);
           if (vn < -2.5) { P.vx -= 1.4 * vn * nx; P.vy -= 1.4 * vn * ny; P.vz -= 1.4 * vn * nz; P.vx *= 0.5; P.vy *= 0.5; P.vz *= 0.5; P.wx *= 0.5; P.wy *= 0.5; if (!P.landed) { P.landed = true; if (this.sfx) this.sfx('debris', { x: o.position.x, y: o.position.y, z: o.position.z }); } }
@@ -1277,6 +1285,7 @@ export class Renderer {
     }
     this.boltI.count = this.boltGlowI.count = n;
     this.boltI.instanceMatrix.needsUpdate = this.boltGlowI.instanceMatrix.needsUpdate = true;
+    this.space(W, dt);
     this.syncGate(W, dt, t);
     this.syncBoss(W, dt, t);
     this.syncGates(dt);
@@ -1307,6 +1316,30 @@ export class Renderer {
         toW(this.cx + (Math.random() - 0.5) * 110, 20 + Math.random() * 30, _v, (Math.random() - 0.4) * 20);
         radial(this.cx, _v2);
         this.fx.dustP.add({ x: _v.x, y: _v.y, z: _v.z, vx: -_v2.x * 26, vy: -_v2.y * 26, vz: 0, s0: 0.13, s1: 0.1, max: 1.2, a: 0.5, r: 0.75, g: 0.82, b: 0.95, drag: 0, grav: 0, fade: 0.4 });
+      }
+    }
+    // AMBIENT LIFE: something small in the air of every world (not in space, not with reduced flashes)
+    if (!CALM.on && (this.spaceK || 0) < 0.5) {
+      const K = this.q.dust / 2400, ngt = this.nightK || 0, roll = (n) => Math.random() < dt * n * K;
+      const at = (span, y, z) => toW(this.cx + (Math.random() - 0.5) * span, y, _v, z);
+      radial(this.cx, _v2); tangent(this.cx, _v3);
+      const j = () => (Math.random() - 0.5);
+      if (Lk === 'verdant') {
+        // drifting seeds by day, fireflies low over the ground at night
+        if (roll(8 * (1 - ngt))) { at(130, 2 + Math.random() * 26, -30 + Math.random() * 40); this.fx.dustP.add({ x: _v.x, y: _v.y, z: _v.z, vx: _v3.x * 1.6 + j(), vy: _v3.y * 1.6 + j() * 0.6, vz: j(), s0: 0.45, s1: 0.45, max: 5, a: 0.8, r: 1.2, g: 1.18, b: 1, drag: 0, grav: 0, fade: 0.4 }); }
+        if (roll(18 * ngt)) { at(120, 0.6 + Math.random() * 5, -14 + Math.random() * 18); this.fx.fireP.add({ x: _v.x, y: _v.y, z: _v.z, vx: j() * 1.6, vy: j() * 1.6, vz: j() * 1.6, s0: 0.55, s1: 0.12, max: 1.4 + Math.random() * 1.2, a: 0.95, r: 1.4, g: 2.6, b: 0.5, drag: 0.3, grav: 0, fade: 0.5 }); }
+      } else if (Lk === 'dune') {
+        // sand streaming low over the dunes
+        if (roll(24)) { at(130, 0.3 + Math.random() * 2.4, -8 + Math.random() * 14); this.fx.dustP.add({ x: _v.x, y: _v.y, z: _v.z, vx: _v3.x * 13 + _v2.x * 0.5, vy: _v3.y * 13 + _v2.y * 0.5, vz: j(), s0: 0.3, s1: 0.8, max: 1.6, a: 0.26, r: 0.95, g: 0.72, b: 0.44, drag: 0, grav: 0, fade: 0.5 }); }
+      } else if (Lk === 'frost') {
+        // snow falling on a slant
+        for (let q = 0; q < 3; q++) if (roll(40)) { at(130, 3 + Math.random() * 38, -22 + Math.random() * 60); this.fx.dustP.add({ x: _v.x, y: _v.y, z: _v.z, vx: -_v2.x * 4.6 + _v3.x * 2.4, vy: -_v2.y * 4.6 + _v3.y * 2.4, vz: j() * 0.8, s0: 0.5, s1: 0.5, max: 3.4, a: 0.95, r: 1.5, g: 1.55, b: 1.7, drag: 0, grav: 0, fade: 0.3 }); }   // (the spark sprite is warm-tinted: snow uses the dust sprite)
+      } else if (Lk === 'cinder') {
+        // embers rising off the lava
+        if (roll(20)) { at(130, -1.5, 2 + Math.random() * 18); const u = 2.4 + Math.random() * 3.2; this.fx.fireP.add({ x: _v.x, y: _v.y, z: _v.z, vx: _v2.x * u + j(), vy: _v2.y * u + j(), vz: j() * 1.4, s0: 0.5, s1: 0.1, max: 2.4, a: 0.95, r: 2.4, g: 0.85, b: 0.2, drag: 0.2, grav: 0, fade: 0.6 }); }
+      } else if (Lk === 'umbra') {
+        // glowing spores drifting up from the crystal fields
+        if (roll(16)) { at(130, 0.5 + Math.random() * 10, -20 + Math.random() * 24); this.fx.fireP.add({ x: _v.x, y: _v.y, z: _v.z, vx: _v2.x * 0.9 + j() * 0.5, vy: _v2.y * 0.9 + j() * 0.5, vz: j() * 0.5, s0: 0.5, s1: 0.12, max: 3.6, a: 0.85, r: 1.5, g: 0.8, b: 2.6, drag: 0.1, grav: 0, fade: 0.5 }); }
       }
     }
     // HYPER: a rainbow wake behind the ship
@@ -1464,6 +1497,61 @@ export class Renderer {
     if (V.inner) V.inner.rotation.x -= dt * (0.9 + V.flash * 10);
     V.o.scale.setScalar(1 + V.flash * 0.08);
   }
+  // SPACE: when the colony falls the planet shatters; spaceK fades the world out and the wreckage field in
+  spaceField() {
+    if (this.spaceG) return this.spaceG;
+    const g = new THREE.Group(), geo = new THREE.IcosahedronGeometry(1, 1), r = mkr(91);
+    const mat = new THREE.MeshStandardMaterial({ color: 0x8a7a6c, roughness: 0.9, metalness: 0.1, flatShading: true, emissive: 0xff5a1a, emissiveIntensity: 0.6 });
+    const rocks = [];
+    for (let k = 0; k < 190; k++) {
+      // deep: big fragments far below; far: drifting behind the fight; the rest: a rubble band where the ground was
+      const deep = k < 40, far = k >= 150, th = r() * TAU, z = deep ? (r() - 0.5) * 160 : far ? -70 - r() * 120 : -40 + r() * 52;
+      const rad = deep ? RP * (0.45 + r() * 0.4) : far ? RP + r() * 50 : RP - 3 - r() * 26, sc = deep ? 8 + r() * 22 : far ? 2 + r() * 6 : 0.6 + Math.pow(r(), 2) * 5;
+      const m = new THREE.Mesh(geo, mat); m.scale.set(sc, sc * (0.6 + r() * 0.6), sc * (0.7 + r() * 0.5));
+      sph(th, z / RP, rad, m.position); m.rotation.set(r() * 6, r() * 6, r() * 6);
+      m.userData.w = [(r() - 0.5) * 0.6, (r() - 0.5) * 0.6]; m.frustumCulled = false; g.add(m); rocks.push(m);
+    }
+    // what is left of the planet's heart, glowing far below the fight
+    const core = new THREE.Mesh(new THREE.IcosahedronGeometry(RP * 0.28, 3), new THREE.MeshBasicMaterial({ color: hdr(0xff6a2a, 2.2), toneMapped: false }));
+    core.frustumCulled = false; g.add(core);
+    const halo = new THREE.Sprite(new THREE.SpriteMaterial({ map: this.T.glow, color: hdr(0xff7a3a, 1.2), transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, fog: false }));
+    halo.scale.set(RP * 1.6, RP * 1.6, 1); g.add(halo);
+    g.visible = false; this.scene.add(g);
+    this.spaceG = g; this.spaceRocks = rocks; this.spaceMat = mat; this.spaceCore = core;
+    return g;
+  }
+  space(W, dt) {
+    const want = W.fallen ? 1 : 0;
+    if (W !== this.spaceW) { this.spaceW = W; this.spaceK = want; this.spaceT = 0; }   // a new world or a replay: no fade
+    if (want && this.spaceK < 1) { this.spaceT = (this.spaceT || 0) + dt; if (this.spaceT > 0.7) this.spaceK = Math.min(1, this.spaceK + dt / 1.6); }
+    else if (!want && this.spaceK > 0) { this.spaceK = Math.max(0, this.spaceK - dt / 1.2); this.spaceT = 0; }
+    const k = this.spaceK || 0, on = k > 0.5;
+    this.skyMat.uniforms.uSpace.value = k;
+    // the planet's surface, sea, scenery, clouds, city lights and colony go; the wreckage comes
+    const i = this.lookI, hide = (m) => { if (m) { if (Array.isArray(m)) for (const x of m) x.visible = !on; else m.visible = !on; } };
+    hide(this.terrains[i]); hide(this.seas[i]); hide(this.propSets[i]); hide(this.cloudSets[i]); hide(this.lightSets[i]); hide(this.colony);
+    if (this.scarM) this.scarM.visible = !on;
+    if (this.wrecks) for (const w of this.wrecks) w.o.visible = !on;
+    if (k > 0.01 || this.spaceG) {
+      const g = this.spaceField(); g.visible = k > 0.01;
+      if (g.visible) {
+        for (const m of this.spaceRocks) { m.rotation.x += m.userData.w[0] * dt; m.rotation.y += m.userData.w[1] * dt; }
+        g.scale.setScalar(0.85 + 0.15 * k);
+        this.spaceCore.scale.setScalar(1 + 0.03 * Math.sin(this.time * 1.7));
+        this.spaceMat.emissiveIntensity = 0.04 + 0.05 * Math.sin(this.time * 2.1) ** 2;   // a faint glow of heat in the cracks
+      }
+    }
+  }
+  // the planet breaking apart, all along the view (the moment the last settler is lost)
+  shatter(x) {
+    for (let k = 0; k < 14; k++) {
+      toW(x + (Math.random() - 0.5) * 120, Math.random() * 2, _v, (Math.random() - 0.6) * 30);
+      this.fx.explode(_v.x, _v.y, _v.z, 3 + Math.random() * 4, { rock: true, color: 0xff7a30 });
+      this.fx.debris(_v.x, _v.y, _v.z, { n: 6, speed: 18, size: 0.9, trail: true });
+    }
+    for (const r of [20, 45, 80]) { toW(x, 0, _v, 0); this.fx.ring(_v.x, _v.y, _v.z, r, 0xffa060); }
+    this.shock(x, 0, 3); this.addTrauma(1);
+  }
   gateFlash() { if (this.gateV) this.gateV.flash = 1; }
   bossKick(e, k) { const V = this.bossV, B = this.W && this.W.boss; if (!V || !B) return; const dir = Math.sign(wd(B.x - e.x)) || 1; V.rvx = (V.rvx || 0) + dir * 5 * k; V.flv = (V.flv || 0) + 10 * k; V.fdir = dir; }
   bossRecoil(V, dt) {
@@ -1486,6 +1574,9 @@ export class Renderer {
   setScale(s) { if (Math.abs(s - this.scale) < 0.02) return; this.scale = s; this.resize(); }
   get portrait() { return this.camera.aspect < 0.85; }
   frameShot(pts, dur) { this.shot = { pts, t: dur }; }
+  // screen feedback: a zoom-blur kick for big moments, a red edge when the ship is hurt
+  kick(k) { this.zoomKick = Math.max(this.zoomKick || 0, k); }
+  hurt(k = 1) { this.hurtK = Math.max(this.hurtK || 0, k); }
   setIntent(t, me) { this.intent = t ? { t, me } : null; }
   // o: { me: player or null, cine, snap, shake, chase, x (fallback centre) }
   updateCamera(dt, o = {}) {
@@ -1554,6 +1645,16 @@ export class Renderer {
     }
     const fov = SIDE_FOV + (CHASE_FOV - SIDE_FOV) * sstep(0, 1, this.chaseK);
     if (Math.abs(c.fov - fov) > 0.01) { c.fov = fov; c.updateProjectionMatrix(); }
+    this.meP = o.me || this.meP;
+    // PHOTO MODE: orbit, tilt, dolly and slide the paused view (photo: { yaw, pitch, dolly, pan })
+    if (this.photo) {
+      const Q = this.photo;
+      tangent(this.cx, _v); _v3.addScaledVector(_v, Q.pan); c.position.addScaledVector(_v, Q.pan);
+      _v4.copy(c.position).sub(_v3);
+      _v4.applyAxisAngle(_v5.copy(c.up).normalize(), Q.yaw);
+      _v5.crossVectors(c.up, _v4).normalize(); _v4.applyAxisAngle(_v5, Q.pitch);
+      c.position.copy(_v3).addScaledVector(_v4, Q.dolly);
+    }
     c.lookAt(_v3);
     void th;
     this.sky.position.copy(c.position);
@@ -1562,6 +1663,7 @@ export class Renderer {
     this.day = _v2.dot(SUN);
     this.eclK = (this.eclK || 0) + (((this.W && this.W.event && this.W.event.kind === 'eclipse' && this.W.event.t < this.W.event.T - 2) ? 1 : 0) - (this.eclK || 0)) * Math.min(1, dt * 0.8);
     if (this.eclK > 0.001) this.day = this.day + (-0.75 - this.day) * this.eclK;
+    if ((this.spaceK || 0) > 0.001) this.day = this.day + (0.3 - this.day) * this.spaceK;   // in space the sun always shines
     const L = this.look, day = sstep(-0.25, 0.35, this.day), dusk = Math.exp(-Math.pow(this.day * 3.2, 2)), night = 1 - sstep(-0.35, 0.1, this.day);
     const u = this.skyMat.uniforms;
     u.uUp.value.copy(_v2); u.uDay.value = this.day;
@@ -1581,7 +1683,7 @@ export class Renderer {
     this.scene.environmentIntensity = 0.25 + 0.75 * day;
     _c.set(L.fog[0]).lerp(_c2.set(L.fog[1]), 1 - day).lerp(_c2.set(L.sky[2]), dusk * 0.35);
     this.scene.fog.color.copy(_c); this.sandK = (this.sandK || 0) + (((this.W && this.W.event && this.W.event.kind === 'sandstorm' && this.W.event.t < this.W.event.T - 1.5) ? 1 : 0) - (this.sandK || 0)) * Math.min(1, dt * 0.7);
-    this.scene.fog.density = L.fogD * (0.62 + 0.38 * night) * (1 + this.sandK * 1.5);
+    this.scene.fog.density = L.fogD * (0.62 + 0.38 * night) * (1 + this.sandK * 1.5) * (1 - 0.8 * (this.spaceK || 0));
     if (this.sandK > 0.01) this.scene.fog.color.lerp(_c2.set(0xb06a30), this.sandK * 0.5);
     const sea = this.seas[this.lookI];
     if (sea) { const su = sea.material.uniforms; su.uSky.value.set(L.sky[1]).lerp(_c2.set(L.sky[4]), 1 - day); su.uSunC.value.set(L.sun).multiplyScalar(2); su.uFog.value.copy(_c); su.uDay.value = this.day; }
@@ -1639,7 +1741,16 @@ export class Renderer {
     }
     this.shocks = this.shocks.filter((s) => s.t < s.max);
     const night = this.nightK || 0;
+    // screen effects (Options: CINEMATIC EFFECTS; lighter on lower graphics tiers; calmer with reduced flashes)
+    const cine = this.cine === false ? 0 : 1, hi = this.q.name === 'high', lo = this.q.name === 'low', calm = CALM.on ? 0.4 : 1;
+    this.zoomKick = Math.max(0, (this.zoomKick || 0) - dt * 1.8); this.hurtK = Math.max(0, (this.hurtK || 0) - dt * 1.5);
+    const zk = cine * calm * ((this.hyperK || 0) * 0.28 + this.zoomKick * 0.6), me = this.meP;
+    if (zk > 0.001 && me) { this.project(me.x, me.y, P0); _zoom.set(clamp(P0.x / innerWidth, 0, 1), clamp(1 - P0.y / innerHeight, 0, 1), P0.z > 1 ? 0 : zk); } else _zoom.z = 0;
+    const hazeW = L.key === 'cinder' ? 1 : L.key === 'dune' ? 0.6 * (this.dayK || 0) : 0;
+    _hurt.set(1, 0.12, 0.06, calm * (this.hurtK * 0.5 + (this.danger ? 0.09 + 0.07 * Math.sin(t * 5) : 0)));
     this.post.render(this.scene, this.camera, {
+      streak: cine * (lo ? 0 : 0.55) * calm, haze: cine * (lo ? 0 : hazeW) * (1 - (this.spaceK || 0)) * (CALM.on ? 0 : 1), sharp: cine * (lo ? 0 : hi ? 0.4 : 0.3), punch: cine * 0.55, dirt: cine * (hi ? 0.5 : 0) * calm,
+      zoom: _zoom, hurt: _hurt,
       bloom: L.bloom * (1.2 + night * 0.75) * (1 + (this.hyperK || 0) * 0.6) * (p.bloom ?? 1), threshold: 1.12 - night * 0.22 - (this.hyperK || 0) * 0.2, exposure: L.exposure * (1 + night * 0.25) * (1 - (this.shadowK || 0)) * (p.exposure ?? 1), chroma: 0.0019 + (this.hyperK || 0) * 0.005 + (p.chroma || 0), time: t, desat: p.desat || 0, fade: p.fade || 0,
       vignette: 0.42 + (p.vignette || 0), flash: this.flash, tint: (this.sandK || 0) > 0.01 && !((this.hyperK || 0) > 0.01) ? _tint.set(L.grade[0] * (1 + 0.16 * this.sandK), L.grade[1] * (1 - 0.04 * this.sandK), L.grade[2] * (1 - 0.3 * this.sandK)) : (this.hyperK || 0) > 0.01 ? (_c2.setHSL((t * 0.25) % 1, 0.9, 0.62), _tint.set(L.grade[0] + (_c2.r * 1.6 - L.grade[0]) * 0.22 * this.hyperK, L.grade[1] + (_c2.g * 1.6 - L.grade[1]) * 0.22 * this.hyperK, L.grade[2] + (_c2.b * 1.6 - L.grade[2]) * 0.22 * this.hyperK)) : _tint.set(...L.grade), shocks, lens: [],
     });
