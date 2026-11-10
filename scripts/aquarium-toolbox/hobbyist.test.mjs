@@ -98,7 +98,7 @@ test('Heater size follows published sizing charts',()=>{
   // Small tanks need more watts per gallon than big ones.
   assert.ok(size(10,10).metrics[2].value>size(75,10).metrics[2].value);
   // No heater when the room is already warm enough, and several heaters for very large needs.
-  assert.equal(run('heater',{room:26,target:25}).metrics[0].value,0);assert.match(run('heater',{room:26,target:25}).message,/does not need a heater/);
+  assert.equal(run('heater',{room:26,target:25}).metrics[0].value,0);assert.match(run('heater',{room:26,target:25}).message,/cannot cool/);
   const big=size(300,20);assert.ok(big.metrics[1].value>300);assert.equal(big.metrics[0].value%2,0);assert.match(big.message,/Use \d heaters of about \d+ W each/);assert.ok(big.metrics[0].value>=big.metrics[1].value);
   assert.match(size(75,18).message,/two heaters of half the wattage/);
   assert.match(run('heater',{v:20*GAL,room:20,target:30,installed:50}).message,/too small/);assert.match(run('heater',{v:20*GAL,room:20,target:30,installed:150}).message,/should cope/);assert.match(run('heater',{v:5*GAL,room:20,target:25,installed:300}).message,/far bigger than needed/);
@@ -141,20 +141,6 @@ test('Results that depend on a choice say which one, so a picture can follow it'
   for(const kind of ['tropical','goldfish','marine'])assert.equal(run('stocking',{kind}).graphic.kind,kind);
   for(const material of ['gravel','sand','soil','custom'])assert.equal(run('substrate',{material}).graphic.kind,material);
   assert.equal(run('turnover',{kind:'sps'}).graphic.kind,'sps');
-});
-
-test('Stocking check applies the classic volume and surface rules',()=>{
-  const stock=(gal,l,w,kind,size,count)=>run('stocking',{v:gal*GAL,l:l*IN,w:w*IN,kind,size:size*IN,count});
-  // 20 gallons, 24 × 12 in: one inch per gallon allows 20 in; 288 sq in ÷ 12 allows 24 in.
-  let r=stock(20,24,12,'tropical',1.5,10);near(r.metrics[0].value,75);near(r.metrics[1].value/IN,15);near(r.metrics[2].value/IN,20);assert.equal(r.metrics[3].value,3);assert.match(r.message,/Comfortably stocked/);
-  assert.match(stock(20,24,12,'tropical',1.5,6).message,/Lightly stocked/);assert.match(stock(20,24,12,'tropical',1.5,15).message,/Right at the limit/);assert.match(stock(20,24,12,'tropical',1.5,20).message,/Overstocked by both/);assert.equal(stock(20,24,12,'tropical',1.5,20).metrics[3].value,0);
-  // 40 breeder (36 × 18 in) with fancy goldfish: 40 ÷ 3 = 13.3 in by volume, 648 ÷ 30 = 21.6 in by surface.
-  r=stock(40,36,18,'goldfish',6,2);near(r.metrics[2].value/IN,40/3);near(r.graphic.values[2]/IN,21.6);assert.match(r.message,/20 gallons \(75 L\) for the first fish/);
-  // 75 gallons (48 × 18 in) of saltwater: 15 in by volume, 18 in by surface.
-  r=stock(75,48,18,'marine',3,4);near(r.metrics[2].value/IN,15);near(r.graphic.values[2]/IN,18);near(r.metrics[0].value,80);
-  // Big fish get an explicit warning that the rule breaks down.
-  assert.match(stock(55,48,13,'tropical',8,2).message,/minimum tank size recommended for the species/);assert.doesNotMatch(stock(20,24,12,'tropical',2,5).message,/minimum tank size/);
-  assert.equal(stock(20,24,12,'tropical',2,0).metrics[0].value,0);
 });
 
 test('Specific gravity and ppt agree with the standard seawater table at 77 °F',()=>{

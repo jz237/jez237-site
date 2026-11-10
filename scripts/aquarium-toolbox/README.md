@@ -1,7 +1,7 @@
 # Aquarium Toolbox
 
 Standalone preview at `https://jez237.com/aquarium-toolbox/`, requested by Jez on
-2026-11-09. This is not installed on Hidden Reef. Keep the preview `noindex`
+2026-11-09. The Hidden Reef Lab has its own generated adapter; the main store does not. Keep the preview `noindex`
 until an intentional final publishing decision. No accounts, backend writes,
 analytics added by this application, third-party fonts, dependencies, or build step.
 
@@ -217,3 +217,31 @@ and search words, and runs with `node --test scripts/aquarium-toolbox/*.test.mjs
 checks the first visit, the tank picker, the new shapes, everyday units, heater /
 flow / stocking guidance, specific gravity entry, legacy settings, search, the
 library following the open tool, phone widths and print.
+
+## Customer edge-case audit (2026-11-09)
+
+The Lab sync uses this directory as its single source. Unit toggles now preserve
+ALL canonical inputs and saved-tank volume, including untouched examples; Reset
+still chooses round examples in the active units. Blank edits remain incomplete
+through a rerender rather than resurrecting a previous valid number. Changing a
+product dose unit requires re-entering the amount from that label.
+
+Stocking guidance supersedes the earlier rework: small tropical fish get a
+limited length-rule comparison, not a spare-fish allowance or approval. Marine,
+coldwater and large fish get species-specific planning guidance without an
+unsupported inches-per-gallon capacity. Count inputs must be whole numbers.
+
+Other regression cases: missing sump margin versus actual overflow; heater
+cooling/equal-temperature cases; zero evaporation and zero dosing; dosing-pump
+runtimes longer than a day; exhausted CO2 reserve; equal-source blends; calcium/
+magnesium versus alkalinity instructions; physically impossible glass thickness;
+large calculated volumes that cannot be saved as a working tank; fractional
+product units; precise nonzero chart values, zero-height bars and pump interpolation
+positions. Context-specific Lab artwork and HTML graphs live in the Lab adapter.
+
+Run `node --test scripts/aquarium-toolbox/*.test.mjs` and
+`node scripts/aquarium-toolbox/edge-cases-browser.mjs <toolbox-url> <evidence-dir>`.
+The latter exercises all 38 tools, visible numeric fields, selector choices,
+blank/negative inputs, slider endpoints, unit conservation and narrow layouts.
+The Lab's own browser suite additionally checks photographs, colour, contrast,
+Help Center placement, noindex and the unmodified main menu.

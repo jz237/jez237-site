@@ -94,7 +94,7 @@ try{
   await go('label');assert.match(await metric(0),/2\s*mL\s*about ½ tsp/);assert.match(await metric(1),/125\s*doses/);
   await page.locator('#field-unit').selectOption('tbsp');assert.equal(await unit('dose'),'tbsp');assert.equal(await page.locator('#field-bottle').count(),0);
   await fill({v:20,dose:1,labelV:5});assert.match(await metric(0),/4\s*tbsp/);assert.equal(await page.locator('.metric').count(),1);
-  await page.locator('#field-unit').selectOption('mL');assert.equal(await page.locator('#field-bottle').count(),1);await fill({dose:.5,labelV:10,v:5});assert.match(await metric(0),/0\.25\s*mL\s*about 5 drops/);
+  await page.locator('#field-unit').selectOption('mL');assert.equal(await page.locator('#field-bottle').count(),1);await fill({dose:.5,labelV:10,v:5});assert.match(await metric(0),/0\.25\s*mL\s*use a graduated syringe/);
   check('product dose scales in mL, spoons and drops');await context.close();
  }
  // 6. Heater size, filter flow and stocking give an answer and say what it means.
@@ -104,14 +104,14 @@ try{
   await fill({v:40});await chip('room','65 °F');await chip('target','80 °F');assert.match(await metric(0),/150\s*W/);assert.match(await metric(2),/3\.7\s*W\/US gal/);
   await chip('installed','100 W');assert.match(await message(),/probably too small/);await chip('installed','150 W');assert.match(await message(),/should cope/);
   near((await saved()).inputs.heater.room,(65-32)/1.8);
-  await fill({room:82});assert.match(await metric(0),/Suggested heater size\s*0\s*W/);assert.match(await message(),/does not need a heater/);
+  await fill({room:82});assert.match(await metric(0),/Suggested heater size\s*0\s*W/);assert.match(await message(),/cannot cool/);
   await go('turnover');assert.match(await metric(0),/5\s*×\/hour/);assert.match(await message(),/Right in the usual range of 4–6 times an hour/);assert.match(await metric(1),/80\s*US GPH/);
   await page.locator('#field-kind').selectOption('messy');assert.match(await message(),/below the usual 6–10/);assert.match(await metric(2),/200\s*US GPH/);
   await page.locator('#field-kind').selectOption('sps');assert.match(await metric(1),/600\s*US GPH/);
-  await go('stocking');assert.match(await metric(0),/75\s*%/);assert.match(await metric(3),/3\s*fish/);assert.match(await message(),/Comfortably stocked/);
-  await chip('size','3 in');assert.match(await metric(0),/150\s*%/);assert.match(await message(),/Overstocked by both/);
-  await page.locator('#field-kind').selectOption('goldfish');assert.match(await message(),/20 gallons \(75 L\) for the first fish/);
-  await fill({size:8,count:2});await page.locator('#field-kind').selectOption('tropical');assert.match(await message(),/minimum tank size recommended for the species/);
+  await go('stocking');assert.match(await metric(0),/75\s*%/);assert.equal(await page.locator('.metric').count(),3);assert.match(await message(),/does not establish spare capacity/);
+  await chip('size','3 in');assert.match(await metric(0),/150\s*%/);assert.match(await message(),/Above at least one classic/);
+  await page.locator('#field-kind').selectOption('goldfish');assert.match(await message(),/cannot give a reliable stocking limit/);
+  await fill({size:8,count:2});await page.locator('#field-kind').selectOption('tropical');assert.match(await message(),/minimum tank size recommended for each species/);
   check('heater size, filter flow and stocking results with plain guidance');await context.close();
  }
  // 7. Reef tools work in specific gravity or ppt without changing the saved quantity.
@@ -156,15 +156,15 @@ try{
   await page.goto(`${base}#${new URLSearchParams({tool:'head',units:'us',data:JSON.stringify(firstExamples.head)})}`);await page.reload();await page.locator('.primary-metric').waitFor();assert.equal(await page.locator('#toast').isHidden(),true);assert.equal(await value('e90'),3);
   check('first-preview settings, backups and links upgrade without losing entered values');await context.close();
  }
- // 9. Untouched examples follow the measurement system; typed values keep their exact size.
+ // 9. Unit switches preserve both starting examples and entered measurements.
  {
   const {context,page,go,fill,value}=await open();
   await page.goto(base);await page.locator('.primary-metric').waitFor();await page.locator('#unit-metric').click();
-  assert.equal(await value('l'),80);assert.equal(await value('w'),35);assert.match(await page.locator('#profile-select option:checked').textContent(),/100 L/);
+  assert.equal(await value('l'),60.96);assert.equal(await value('w'),30.48);assert.match(await page.locator('#profile-select option:checked').textContent(),/75\.71 L/);
   await fill({l:61});await page.locator('#unit-us').click();assert.ok(Math.abs(await value('l')-61/2.54)<.001);assert.match(await page.locator('#profile-select option:checked').textContent(),/20 US gal/);
   await page.locator('#unit-metric').click();assert.equal(await value('l'),61);
-  await go('heater','&units=us');assert.equal(await value('room'),68);await page.locator('#unit-metric').click();assert.equal(await value('room'),20);assert.equal(await value('target'),25.5);
-  check('unit switch keeps round examples and exact entered values');await context.close();
+  await go('heater','&units=us');assert.equal(await value('room'),68);await page.locator('#unit-metric').click();assert.equal(await value('room'),20);assert.ok(Math.abs(await value('target')-25.555556)<.0005);
+  check('unit switch preserves examples, saved tank and entered values');await context.close();
  }
  // 10. Search understands everyday words from any list; specialist tools are tagged.
  {

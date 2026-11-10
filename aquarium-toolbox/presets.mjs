@@ -35,7 +35,7 @@ export function formPresets(c,us){
     return {label:t.label,values};
   });
   return {title:c.id==='sump'?'Standard display tank':'Standard tank size',placeholder:'Pick your tank to fill in its measurements',options,
-    note:c.id==='weight'?'Fills in the advertised volume, the empty weight of a typical glass tank and its footprint. Adjust anything that differs.':c.id==='stocking'?'Fills in the advertised volume and the size of the water surface.':'Typical inside measurements for that size. Brands differ slightly, so measure yours for the best answer.'};
+    note:c.id==='weight'&&!us?'Fills in the advertised volume and footprint. Enter your tank’s actual empty weight separately.':c.id==='weight'?'Fills in the advertised volume, the empty weight of a typical glass tank and its footprint. Adjust anything that differs.':c.id==='stocking'?'Fills in the advertised volume and the size of the water surface.':'Typical inside measurements for that size. Brands differ slightly, so measure yours for the best answer.'};
 }
 const salinityChoices=sg=>sg?[[1.020,'fish-only low'],[1.023,''],[1.025,''],[1.026,'reef / seawater']].map(([gravity,label])=>({label:`${gravity.toFixed(3)}${label?' · '+label:''}`,value:pptFromSg(gravity)})):[[30,'fish-only low'],[32,''],[34,''],[35,'reef / seawater']].map(([ppt,label])=>({label:`${ppt} ppt${label?' · '+label:''}`,value:ppt}));
 export function fieldChoices(c,f,us,a,sg=false){
@@ -46,7 +46,7 @@ export function fieldChoices(c,f,us,a,sg=false){
   }
   if(c.id==='tank'&&f.key==='fill')return choices('How full?','Most tanks are filled to about an inch below the rim, which is roughly 95%.',named([['To the brim · 100%',100],['Normal · 95%',95],['A little low · 90%',90]]));
   if(c.id==='tank'&&f.key==='displacement')return choices('What is in the tank?','A rough guide. Solid rock and deep gravel take up the most room.',named([['Bare tank · 0%',0],['Gravel & a few ornaments · 10%',10],['Lots of rock or wood · 15%',15],['Reef rockwork · 20%',20]]));
-  if(c.id==='stocking'&&f.key==='size')return choices('Typical adult sizes','Look up your own fish if you are not sure. Store fish are usually babies.',us?named([['1 in · nano fish',1],['1.5 in · neon tetra, guppy',1.5],['2 in · most tetras, danios, platies',2],['3 in · corydoras, mollies',3],['6 in · angelfish, fancy goldfish',6]],INCH):named([['2.5 cm · nano fish',2.5],['4 cm · neon tetra, guppy',4],['5 cm · most tetras, danios, platies',5],['8 cm · corydoras, mollies',8],['15 cm · angelfish, fancy goldfish',15]]));
+  if(c.id==='stocking'&&f.key==='size'&&a.kind==='tropical')return choices('Typical adult sizes','Look up your own fish if you are not sure. Store fish are usually babies.',us?named([['1 in · nano fish',1],['1.5 in · neon tetra, guppy',1.5],['2 in · most tetras, danios, platies',2],['3 in · corydoras, mollies',3],['6 in · angelfish, fancy goldfish',6]],INCH):named([['2.5 cm · nano fish',2.5],['4 cm · neon tetra, guppy',4],['5 cm · most tetras, danios, platies',5],['8 cm · corydoras, mollies',8],['15 cm · angelfish, fancy goldfish',15]]));
   if(f.profile)return choices('Know the size on the box?','',us?numbers([5,10,20,29,40,55,75,125],'US gal',GAL):numbers([30,60,100,120,180,240,300,450],'L'));
   if(c.id==='heater'&&f.key==='room')return choices('Typical room lows','Use the coldest it gets where the tank sits.',us?numbers([60,65,68,72],'°F').map(x=>({...x,value:convert(x.value,'°C',false)})):numbers([16,18,20,22],'°C'));
   if(c.id==='heater'&&f.key==='target')return choices('Common tank temperatures','Most tropical fish and reef tanks do well at 76–80 °F (24–27 °C). Bettas and discus like it warmer; goldfish usually need no heater.',us?numbers([76,78,80,82],'°F').map(x=>({...x,value:convert(x.value,'°C',false)})):numbers([24,25,26,28],'°C'));
@@ -69,15 +69,15 @@ export function fieldChoices(c,f,us,a,sg=false){
   if(c.id==='fertilizer'&&f.key==='fraction')return choices('Common dry fertilizers','The share of the named nutrient in the pure chemical.',named([['Potassium nitrate → nitrate · 61.3%',61.3],['Monopotassium phosphate → phosphate · 69.8%',69.8],['Potassium sulfate → potassium · 44.9%',44.9],['Epsom salt → magnesium · 9.86%',9.86]]));
   if(f.unit==='mL'&&['bottle','reserve','final'].includes(f.key))return choices('Common bottle sizes','Adjust for how much is actually left.',numbers([100,250,500,1000],'mL'));
   if(c.id==='doser'&&f.key==='seconds')return choices('Calibration timer','Measure what your pump actually dispenses during the chosen interval.',numbers([30,60,120,300],'seconds'));
-  if(c.id==='co2cylinder'&&f.key==='reserve')return choices('Reserve examples','A small reserve avoids the end-of-cylinder surge of gas.',numbers([25,50,100],'g'));
+  if(c.id==='co2cylinder'&&f.key==='reserve')return choices('Reserve examples','A planning allowance for refilling; it does not prevent regulator end-of-tank dump.',numbers([25,50,100],'g'));
   return null;
 }
-export function extraHelp(c,f){
+export function extraHelp(c,f,a={}){
   if(f.profile)return 'Not sure? Use Tank volume to work it out from a tape measure, then save it as your tank.';
   if(c.id==='tank'&&f.key==='l')return 'A tape measure across the inside is best. Measuring the outside reads a few percent high.';
   if(c.id==='substrate'&&['l','w'].includes(f.key))return 'Measure across the inside bottom of the tank. A ruler or tape measure is enough.';
   if(c.id==='substrate'&&f.key==='bagMode')return 'Most gravel and sand bags show a weight (lb or kg). Some planted-tank soils show litres. Either works here.';
-  if(c.id==='label'&&f.key==='dose')return 'Example: a label that says “5 mL treats 50 gallons” means 5 here and 50 in the next box. Doses are not interchangeable between brands.';
+  if(c.id==='label'&&f.key==='dose')return `Enter the amount in ${a.unit||'the units'} selected above and the water volume from the same label. Doses are not interchangeable between products.`;
   if(c.id==='supplement'&&['dose','labelV','rise'].includes(f.key))return 'Read the dose, the water volume and the rise together from this exact product’s label. They differ between brands.';
   if(['change','target','series'].includes(c.id)&&['current'].includes(f.key))return 'Your test-kit result, for example nitrate in ppm. The example is not a reading from your tank.';
   if(['mix','consumption','supplement'].includes(c.id)&&!f.options&&['high','low','target','start','end','current'].includes(f.key))return 'Use your own test result. The example is not a reading from your tank.';

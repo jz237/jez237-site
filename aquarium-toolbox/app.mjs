@@ -63,14 +63,14 @@ function unitLabel(calc,field,a){
 function inputs(calc=current()){if(!state.inputs[calc.id]){state.inputs[calc.id]=defaults(calc,isUS());if(hasProfile(calc))state.inputs[calc.id].v=profile().volume;}return state.inputs[calc.id];}
 function format(v,digits=2){if(v!==0&&Math.abs(v)<.0001)return v.toExponential(3);const size=Math.abs(v);return v.toLocaleString('en-US',{maximumFractionDigits:size<.01?5:size<.1?4:size>=1000?Math.min(digits,0):size>=100?Math.min(digits,1):digits});}
 const money=v=>v.toLocaleString('en-US',{minimumFractionDigits:Number.isInteger(v)?0:2,maximumFractionDigits:2});
-function inputNumber(value,unit){if(asSG(unit))return Number(value.toFixed(4));return Number(value.toFixed(usUnit(unit)!==unit?(Math.abs(value)<.001?9:3):6));}
+function inputNumber(value,unit){if(!Number.isFinite(value))return '';if(asSG(unit))return Number(value.toFixed(4));return Number(value.toFixed(usUnit(unit)!==unit?(Math.abs(value)<.001?9:3):6));}
 // Whole gallons for larger amounts; one decimal below ten, where a rounded
 // gallon would be a large share of a small tank or water change.
 function gallons(l){const g=l/GAL;if(g===0)return '0';if(g<.05)return '<0.1';return g<9.95?format(Math.round(g*10)/10,1):format(Math.round(g),0);}
 const sgText=ppt=>sgFromPpt(ppt).toFixed(4).replace(/0$/,'');
 function quarters(x){const q=Math.round(x*4),whole=Math.floor(q/4),part=['','¼','½','¾'][q%4];return q===0?'':`${whole||''}${part}`||'0';}
 function smallVolume(l){const cups=l/(GAL/16);if(cups<.125)return '';const text=cups<4?quarters(cups):quarters(cups/4);return text?`about ${text} ${cups<4?(text==='1'||/^[¼½¾]$/.test(text)?'cup':'cups'):(text==='1'?'quart':'quarts')}`:'';}
-function spoons(ml){if(!(ml>0))return '';if(ml<1.25)return `about ${Math.max(1,Math.round(ml*20))} drops`;const tsp=ml/4.92892;if(tsp<3)return `about ${quarters(tsp)} tsp`;const tbsp=ml/14.7868;if(tbsp<8)return `about ${quarters(tbsp)} tbsp`;return `about ${quarters(ml/236.588)} cups`;}
+function spoons(ml){if(!(ml>0))return '';if(ml<1.25)return 'use a graduated syringe; drop sizes vary';const tsp=ml/4.92892;if(tsp<3)return `about ${quarters(tsp)} tsp`;const tbsp=ml/14.7868;if(tbsp<8)return `about ${quarters(tbsp)} tbsp`;return `about ${quarters(ml/236.588)} cups`;}
 function duration(v,unit){
   if(!(v>0))return '';
   const hm=h=>{const total=Math.round(h*60),hours=Math.floor(total/60),min=total%60;return min?`${hours} h ${min} min`:`${hours} h`;};
@@ -125,7 +125,7 @@ function renderLibrary(){
 function fieldHTML(field,a){
   const c=current();
   if(!isVisible(c.id,field.key,a))return '';
-  const id=`field-${field.key}`,helpText=[helpFor(c.id,field,a),extraHelp(c,field)].filter(Boolean).join(' ');
+  const id=`field-${field.key}`,helpText=[helpFor(c.id,field,a),extraHelp(c,field,a)].filter(Boolean).join(' ');
   const help=helpText?`<small id="help-${field.key}">${e(helpText)}${field.profile?' <a href="#tool=tank" data-tool="tank">Work out my volume →</a>':''}</small>`:'';
   const desc=helpText?`aria-describedby="help-${field.key}"`:'';
   const label=labelFor(c.id,field,a);
@@ -168,7 +168,7 @@ function shoppingGuide(){if(state.current!=='substrate')return '';
 const windowFor=(field,a=inputs())=>sliderWindow(current(),field,a,isUS(),asSG(field.unit));
 function sliderHTML(field,a,label,unit){
   const r=windowFor(field,a);
-  return `<div class="slider-control"><input type="range" class="measurement-slider" id="slider-${field.key}" data-slider="${field.key}" min="${r.min}" max="${r.max}" step="any" data-increment="${r.step}" value="${r.value}" aria-label="Adjust ${e(label)}${unit?' ('+e(unit)+')':''}" aria-describedby="slider-guide"><div class="slider-scale" aria-hidden="true"><span>${e(format(r.min,asSG(field.unit)?3:2))}</span><span>${e(format(r.max,asSG(field.unit)?3:2))} ${e(unit)}</span></div></div>`;
+  return `<div class="slider-control"><input type="range" class="measurement-slider" id="slider-${field.key}" data-slider="${field.key}" min="${r.min}" max="${r.max}" step="any" data-increment="${r.step}" value="${Number.isFinite(r.value)?r.value:r.min}" aria-label="Adjust ${e(label)}${unit?' ('+e(unit)+')':''}" aria-describedby="slider-guide"><div class="slider-scale" aria-hidden="true"><span>${e(format(r.min,asSG(field.unit)?3:2))}</span><span>${e(format(r.max,asSG(field.unit)?3:2))} ${e(unit)}</span></div></div>`;
 }
 function syncSlider(field,expand=false){
   const slider=$(`slider-${field.key}`),number=$(`field-${field.key}`);if(!slider||!number)return;
@@ -236,12 +236,13 @@ const scaleExamples={
 const linkedSliders={turnover:{v:['flow']}};
 function onInput(ev){
   const c=current(),field=c.fields.find(f=>f.key===ev.target.name);if(!field)return;
-  const raw=ev.target.value;
-  if(!field.options&&(raw.trim()===''||!Number.isFinite(Number(raw)))){syncSlider(field);syncChoices();showError(`Enter a number for ${labelFor(c.id,field,inputs()).toLowerCase()}.`);return;}
+  const raw=ev.target.value,previous=inputs()[field.key];
+  if(!field.options&&(raw.trim()===''||!Number.isFinite(Number(raw)))){inputs()[field.key]=NaN;save();syncSlider(field);syncChoices();showError(`Enter a number for ${labelFor(c.id,field,inputs()).toLowerCase()}.`);return;}
   inputs()[field.key]=field.options?raw:(ev.canonicalValue??fromDisplay(Number(raw),unitOf(field)));
   if(field.options){
+    if(c.id==='label'&&field.key==='unit'&&raw!==previous){inputs().dose=NaN;toast('Enter the dose from the label in the newly selected unit.');}
     // A choice can change which measurements apply and the units beside them.
-    const examples=scaleExamples[c.id]?.[field.key]?.[raw];if(examples)Object.assign(inputs(),examples);
+    const examples=scaleExamples[c.id]?.[field.key]?.[raw];if(examples){Object.assign(inputs(),examples);toast('Example readings changed for this measurement. Enter your own tests and product strength.');}
     repairHidden();save();renderCalculator();$(`field-${field.key}`).focus();return;
   }
   syncSlider(field,!ev.fromSlider);
@@ -255,7 +256,7 @@ function onInput(ev){
 }
 function showError(message){result=null;$('result').innerHTML=`<div class="error-card" role="alert"><h3>Let’s check that measurement</h3><p>${e(message)}</p><p>No result is shown until the inputs are valid.</p></div>`;$('steps-details').innerHTML='';updateQuickResult();}
 const mixLegends={
-  ammonia:['toxic free ammonia','Harmless ammonium','Toxic free ammonia'],stock:['stock solution','Water','Stock solution'],mix:['RO / distilled water','Tap water','RO / distilled'],
+  ammonia:['toxic free ammonia','Ammonium fraction','Toxic free ammonia'],stock:['stock solution','Water','Stock solution'],mix:['RO / distilled water','Tap water','RO / distilled'],
   change:['changed','Old tank water','New water'],target:['changed','Old tank water','New water'],adjust:['swapped','Old tank water','Added water'],salinity:['second water','First water','Second water']
 };
 function renderResult(){try{
@@ -265,23 +266,16 @@ function renderResult(){try{
   const graph={...result.graphic};
   const legend=mixLegends[state.current];if(legend&&graph.type==='mix'){graph.fractionLabel=legend[0];graph.legend=[legend[1],legend[2]];}
   if(state.current==='hardness'){graph.type='equivalence';graph.values=result.metrics.map(m=>`${format(m.value)} ${plain(m.unit)}`);}
-  if(graph.valueUnit==='ppt'&&graph.values&&state.salinity==='sg'){graph.values=graph.values.map(sgText);delete graph.valueUnit;}
+  if(graph.valueUnit==='ppt'&&graph.values&&state.salinity==='sg'){graph.values=graph.values.map(sgText);graph.valueUnit='SG';}
   $('result').innerHTML=`<div class="diagram">${illustration(graph,diagramLabel,isUS())}</div><div class="metrics">${metricHTML}</div><p class="result-message">${e(result.message)}</p>${shoppingGuide()}<div class="result-actions"><button id="share-result">Share calculation</button><button id="print-result">Print result</button>${['tank','system'].includes(state.current)?'<button id="apply-volume">Save as my tank volume</button>':''}</div>`;
   $('steps-details').innerHTML=(result.steps?.length?`<details><summary>Step by step</summary><div><ol class="steps">${result.steps.map(s=>`<li>${e(s)}</li>`).join('')}</ol></div></details>`:'')+(result.table?`<details><summary>Change-by-change breakdown</summary><div><table class="results-table"><caption>Predicted reading after each change</caption><tbody>${result.table.map(r=>`<tr>${r.map(s=>`<td>${e(s)}</td>`).join('')}</tr>`).join('')}</tbody></table></div></details>`:'');
-  $('share-result').onclick=share;$('print-result').onclick=()=>window.print();if($('apply-volume'))$('apply-volume').onclick=()=>{const v=result.metrics[0].value;if(v<.01){toast('Volume is too small to save as a working tank.');return;}profile().volume=v;applyProfile();save();renderPreferences();toast('Saved. The other calculators now use this volume for your tank.');};
+  $('share-result').onclick=share;$('print-result').onclick=()=>window.print();if($('apply-volume'))$('apply-volume').onclick=()=>{const v=result.metrics[0].value;if(!Number.isFinite(v)||v<.01||v>1e7){toast('This volume is outside the supported saved-tank range.');return;}profile().volume=v;applyProfile();save();renderPreferences();toast('Saved. The other calculators now use this volume for your tank.');};
 updateQuickResult();
 }catch(err){showError(err.message);}}
 function selectTool(id,scroll=false){if(!ids.has(id))return;state.current=id;showListFor(id);inputs();save();history.replaceState(null,'',`#tool=${id}`);renderLibrary();renderCalculator();if(scroll){$('calculator').scrollIntoView({behavior:'instant',block:'start'});$('calculator').focus({preventScroll:true});}}
-const starterProfile=units=>state.profiles.length===1&&state.profiles[0].id==='default'&&state.profiles[0].name==='My aquarium'&&state.profiles[0].volume===PROFILE_DEFAULT[units];
 function setUnits(units){
-  if(units!==state.units){
-    // Untouched starting examples follow the measurement system, so they stay
-    // round numbers. Anything the visitor entered keeps its exact quantity.
-    const was=isUS(),starter=starterProfile(state.units);
-    for(const c of calculators){const a=state.inputs[c.id];if(!a)continue;const example=defaults(c,was);if(c.fields.every(f=>f.profile?a[f.key]===profile().volume:a[f.key]===example[f.key]))delete state.inputs[c.id];}
-    if(starter)state.profiles[0].volume=PROFILE_DEFAULT[units];
-    state.units=units;
-  }
+  // A unit switch changes presentation, never the tank or an existing calculation.
+  state.units=units;
   save();renderPreferences();renderLibrary();renderCalculator();
 }
 function openProfile(){$('tank-name').value=profile().name;$('tank-volume').value=Number((isUS()?profile().volume/GAL:profile().volume).toFixed(6));$('profile-unit').textContent=isUS()?'(US gal)':'(litres)';$('tank-volume').min=isUS()?.01/GAL:.01;$('tank-volume').max=isUS()?1e7/GAL:1e7;$('tank-type').value=profile().type;$('profile-error').textContent='';
