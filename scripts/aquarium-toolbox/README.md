@@ -38,7 +38,7 @@ Paths are host-specific QA tooling, never imported by the browser app.
   volume and surface rules of thumb and says so; it is not a species guide.
 - Dosing scales a supplied label/analysis; it does not pick the correct product,
   safe target or dose interval. Disclose units and purity.
-- Ammonia is freshwater-only, 0–40°C / pH6–10, with N and NH3 mass bases distinct.
+- Ammonia is freshwater-only, 0–40°C / pH 4–10 (soft-water and blackwater tanks run below 6), with N and NH3 mass bases distinct.
 - CO2 from KH/pH assumes carbonate-only buffering; it is not a direct measurement.
 - Salinity mixing uses volume-weighted approximation, not exact density balance.
 - Heater sizing is a rule of thumb fitted to published heater charts for covered
@@ -322,3 +322,31 @@ contradict themselves. The formulas held; the fixes are in logic and wording.
   fraction is only mentioned when there is one.
 - Metric starting examples (10 fish, a 450 L/h filter) are in range for both the
   100 L example tank and the 75.7 L starter tank kept after a unit switch.
+
+## Visitor journeys (2026-11-10, Jez: "Any remaining issues a user could run in to?")
+
+Checked in Chrome, Firefox and WebKit (Safari's engine) on the live Lab: all 38 tools answer at phone and
+desktop widths with no page errors. What a visitor could still run into, now fixed:
+
+- A link to one tool (Help Center tiles, shared calculations) opened at the top of the page; on a phone the
+  calculator was about 1,300 px down. It now opens on the calculator (`revealCalculator`, honouring
+  `scroll-padding-top` for a fixed site menu), and again after images load if the visitor has not scrolled.
+- On desktop, picking a tool far down the library left the new calculator's heading above the window.
+  Selecting a tool now brings the calculator into view whenever its heading is out of sight.
+- Back left the toolbox. Each tool picked is now its own history entry (`pushState`), the open tool is always
+  in the address, and a shared calculation is read once and then tidied to `#tool=…`, so Back or a reload never
+  re-applies an old shared link over the visitor's own edits.
+- Chrome and Safari silently drop a typed comma from a number field (24,5 became 245); Firefox empties the
+  field. A comma is now blocked with a hint: "Type numbers without commas, and use a point for decimals".
+- The ammonia check refused pH below 6; it now accepts 4–10.
+- The phone summary button says "See answer", not "See diagram".
+
+`node scripts/aquarium-toolbox/journeys-browser.mjs <toolbox-url> <evidence-dir> [chromium|firefox|webkit]`
+covers these at 390 and 1440 px. WebKit on this host needs libavif16, libbacktrace0 and libgav1-2 next to
+Playwright's own WebKit libraries (`apt download` + `dpkg-deb -x`, no system install) and
+`PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS=1`.
+
+`Object.hasOwn` and `Array.prototype.at` were replaced by older equivalents, so the calculators also run in
+Safari 14–15.3 (they need `?.`, `??` and `??=`); the share, guide and backup dialogs use `<dialog>` and need
+Safari 15.4 or newer. Known limits a visitor can still meet:
+volumes are US gallons, not UK (imperial) gallons; stocking, heater and flow guidance remain rules of thumb.

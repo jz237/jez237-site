@@ -200,7 +200,7 @@ function updateQuickResult(){
   if(result){
     const metric=displayMetric(result.metrics[0]).split('|');
     $('quick-value').innerHTML=`<small>${e(result.metrics[0].label)}</small><strong>${metric[0]}</strong>${metric[1]?`<small>${metric[1]}</small>`:''}`;
-    $('quick-result-button').textContent='See diagram ↓';
+    $('quick-result-button').textContent='See answer ↓';
   }else{$('quick-value').innerHTML='<small>Check your measurements</small><strong>Inputs need attention</strong>';$('quick-result-button').textContent='See details ↓';}
 }
 function renderCalculator(){
@@ -214,7 +214,10 @@ function renderCalculator(){
   <section class="related"><h3 class="related-heading">ALSO IN YOUR TOOLBOX</h3><div class="related-grid">${related.map(x=>`<a href="#tool=${x.id}" data-tool="${x.id}">${icon(cat[2])}<span>${e(x.title)}</span></a>`).join('')}</div>`;
   $('calc-form').addEventListener('submit',ev=>ev.preventDefault());
   $('calc-form').addEventListener('input',ev=>{if(ev.target.dataset.slider)moveSlider(ev.target,Number(ev.target.value));else onInput(ev);});
-  $('calc-form').addEventListener('keydown',ev=>{const el=ev.target;if(!el.dataset.slider)return;const step=Number(el.dataset.increment),v=Number(el.value);
+  $('calc-form').addEventListener('keydown',ev=>{const el=ev.target;
+    // Chrome and Safari drop a typed comma from number fields (24,5 becomes 245) and Firefox empties the field.
+    if(el.type==='number'&&ev.key===','){ev.preventDefault();toast('Type numbers without commas, and use a point for decimals: 24.5');return;}
+    if(!el.dataset.slider)return;const step=Number(el.dataset.increment),v=Number(el.value);
     const keys={ArrowLeft:v-step,ArrowDown:v-step,ArrowRight:v+step,ArrowUp:v+step,PageDown:v-10*step,PageUp:v+10*step,Home:Number(el.min),End:Number(el.max)};
     if(ev.key in keys){ev.preventDefault();moveSlider(el,keys[ev.key]);}
   });
@@ -278,7 +281,12 @@ function renderResult(){try{
   $('share-result').onclick=share;$('print-result').onclick=()=>window.print();if($('apply-volume'))$('apply-volume').onclick=()=>{const v=result.metrics[0].value;if(!Number.isFinite(v)||v<.01||v>1e7){toast('This volume is outside the supported saved-tank range.');return;}profile().volume=v;applyProfile();save();renderPreferences();toast('Saved. The other calculators now use this volume for your tank.');};
 updateQuickResult();
 }catch(err){showError(err.message);}}
-function selectTool(id,scroll=false){if(!ids.has(id))return;state.current=id;showListFor(id);inputs();save();history.replaceState(null,'',`#tool=${id}`);renderLibrary();renderCalculator();if(scroll){$('calculator').scrollIntoView({behavior:'instant',block:'start'});$('calculator').focus({preventScroll:true});}}
+// The calculator heading is out of sight: above the window (a tool picked far down the list) or near its bottom
+// (a link that opens the page at its top). scroll-padding-top keeps it clear of a fixed site menu.
+function calculatorHidden(){const h=document.querySelector('.calc-heading');if(!h)return false;const r=h.getBoundingClientRect();return r.top<0||r.top>innerHeight*.6;}
+function revealCalculator(){$('calculator').scrollIntoView({behavior:'instant',block:'start'});}
+// Each tool picked from the library is its own history entry, so Back returns to the previous calculator.
+function selectTool(id,scroll=false){if(!ids.has(id))return;const changed=state.current!==id||!location.hash.includes(`tool=${id}`);state.current=id;showListFor(id);inputs();save();if(changed)history.pushState(null,'',`#tool=${id}`);renderLibrary();renderCalculator();if(scroll||calculatorHidden()){revealCalculator();$('calculator').focus({preventScroll:true});}}
 function setUnits(units){
   // A unit switch changes presentation, never the tank or an existing calculation.
   state.units=units;
@@ -316,8 +324,15 @@ $('guide-open').onclick=()=>$('guide-dialog').showModal();$('settings-guide').on
 $('export').onclick=()=>{const blob=new Blob([JSON.stringify(snapshot(),null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='aquarium-toolbox-backup.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);$('import-status').textContent='Backup downloaded. Keep it somewhere you can find it.';};
 $('import').onchange=async ev=>{const file=ev.target.files[0];if(!file)return;try{if(file.size>100000)throw new Error('This file is too large for a toolbox backup.');const imported=validateBackup(JSON.parse(await file.text()));if(!window.confirm('Restore this backup? It will replace the saved tanks, favorites, and inputs in this toolbox.'))return;state=imported;showListFor(state.current);save();renderPreferences();renderLibrary();renderCalculator();$('import-status').textContent='Backup restored.';}catch(err){$('import-status').textContent=`Could not restore: ${err.message}`;}finally{ev.target.value='';}};
 $('copy-link').onclick=async()=>{try{await navigator.clipboard.writeText($('share-url').value);$('copy-status').textContent='Link copied.';}catch{$('share-url').focus();$('share-url').select();$('copy-status').textContent='Select and copy the link above using your browser.';}};
-window.addEventListener('hashchange',()=>{loadHash();showListFor(state.current);renderPreferences();renderLibrary();renderCalculator();});
-loadHash();showListFor(state.current);renderPreferences();renderLibrary();renderCalculator();
+// Every view keeps its tool in the address. A shared calculation is read once, then the address is tidied
+// to #tool=…, so Back or a reload never re-applies an old shared link over the visitor's own changes.
+const tidyAddress=()=>{if(location.hash!==`#tool=${state.current}`)history.replaceState(null,'',`#tool=${state.current}`);};
+window.addEventListener('hashchange',()=>{loadHash();tidyAddress();showListFor(state.current);renderPreferences();renderLibrary();renderCalculator();if(calculatorHidden())revealCalculator();});
+const linkedTool=/(^|[#&])tool=/.test(location.hash);
+loadHash();tidyAddress();showListFor(state.current);renderPreferences();renderLibrary();renderCalculator();
+// A link to one tool (Help Center tiles, shared calculations) opens on that calculator, not the top of the
+// page. Once images above it have loaded, bring it back only if the visitor has not scrolled meanwhile.
+if(linkedTool){if(calculatorHidden())revealCalculator();const landed=scrollY;const settle=()=>{if(Math.abs(scrollY-landed)<4&&calculatorHidden())revealCalculator();};if(document.readyState==='complete')requestAnimationFrame(settle);else addEventListener('load',settle,{once:true});}
 if(!storageAvailable)toast('Saved settings could not be read. You can still calculate and export a backup.');
 let printDetails=[];
 window.addEventListener('beforeprint',()=>{printDetails=[...document.querySelectorAll('.details-area details')].map(el=>({el,open:el.open}));for(const {el}of printDetails)el.open=true;});
