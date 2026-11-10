@@ -118,6 +118,14 @@ int astra_net_start(int level){
         Netgame.players[i].color=i;player_tokens[i]=an_seed;
         if(i<4)astra_net_bot_skill[i]=EM_ASM_INT(return Module.netSession.roster[$0].skill??-1,i);
     }
+    if(EM_ASM_INT(return !!Module.arenaDemo)){
+        extern void astra_auto_arena_reset(void);astra_auto_arena_reset();
+        init_player_stats_game(an_self);
+        PlayerCfg.HudMode=3;PlayerCfg.Cockpit3DView[0]=PlayerCfg.Cockpit3DView[1]=CV_NONE;
+        PlayerCfg.PreferredCockpitMode=CM_FULL_SCREEN;select_cockpit(CM_FULL_SCREEN);
+        extern int astra_invert_mouse(int),astra_saved_flip(void);extern void astra_input_ready(int);
+        astra_input_ready(astra_invert_mouse(astra_saved_flip()));
+    }
     N_players=astra_net_count;Netgame.game_status=Network_status=NETSTAT_STARTING;
     udp_open_socket(0,UDP_PORT_DEFAULT);net_udp_set_game_mode(Netgame.gamemode,0);
     Endlevel_sequence=Control_center_destroyed=0;do{an_retarget=0;StartNewLevel(level);level=an_retarget;}while(level);return 1;

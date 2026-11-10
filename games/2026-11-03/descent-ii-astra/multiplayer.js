@@ -13,6 +13,12 @@
     abort:message=>fail(message),
     quickCoop(){if(this.session||socket)return;$('squadMode').value='coop';$('squadCampaign').value=$('campaign').value;$('squadLevel').value='1';setup.onchange();ui.showModal();connect(false,true);},
     quickArena(online){if(this.session||socket)return;$('squadCampaign').value=$('campaign').value;$('squadLevel').value=$('classicLevel').value||'1';$('squadMode').value='deathmatch';setup.onchange();ui.showModal();if(online)connect(false,true);else practice();},
+    watchArena(){
+      if(this.session||socket)return;
+      const campaign=$('campaign').value,c=campaigns[campaign];if(!c?.arena)return;
+      const skill=Math.max(0,Math.min(4,Number($('arenaSkill').value)||0)),level=Math.max(1,Math.min(c.levels,Number($('demoLevel').value)||1));
+      this.launch({mode:'deathmatch',campaign,level,spectator:true,seed:crypto.getRandomValues(new Uint32Array(1))[0]&0x7fffffff,humans:1,bots:[skill,skill,skill],roster:[{name:'Astra',skill:-1},...['Viper','Orbit','Nova'].map(name=>({name,skill}))]},0);
+    },
     campaignState(payload){if(socket&&this.session?.campaign==='overload'&&this.session.self===this.session.host)send({type:'campaign-state',level:this.targetLevel,payload});},
     campaignHit(go,damage){if(socket&&this.session?.campaign==='overload')send({type:'campaign-hit',level:this.targetLevel,go,damage});},
     campaignRequest(){send({type:'campaign-request',level:this.targetLevel});},
@@ -42,7 +48,7 @@
     launch(config,self){
       this.session={...config,host:config.host??0,self};this.targetLevel=config.level;this.failed=false;queue=[];out=[];bytes=0;
       $('campaign').value=config.campaign;$('look').value='astra';$('intro').checked=false;
-      ui.close();ui.classList.add('squad-in-flight');document.body.classList.add('squadron');playBar.hidden=false;
+      ui.close();ui.classList.add('squad-in-flight');document.body.classList.add('squadron');playBar.hidden=!!config.spectator;
       window.astraLaunchSquadron();
     }
   };

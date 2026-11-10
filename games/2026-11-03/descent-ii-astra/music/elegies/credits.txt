@@ -1,0 +1,9 @@
+Elegies maps and original embedded HMP music: NuKE & Karash, 1996.
+Original archive: http://www.pooterman.com/ftp/descent2/levels/elegies.zip
+See classic-levels/elegies.txt for the original author credits and track names.
+
+Original HMP compositions rendered using FluidSynth 2.6.2 and GeneralUser GS 2.0.3 by S. Christian Collins.
+https://github.com/FluidSynth/fluidsynth
+https://github.com/mrbumpy409/GeneralUser-GS
+Original compositions with General MIDI instruments; not exact AWE32 hardware emulation.
+The soundfont and renderer are not downloaded or run by the game.

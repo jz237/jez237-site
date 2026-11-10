@@ -1,0 +1,65 @@
+{
+  "archive": "http://www.pooterman.com/ftp/descent2/levels/elegies.zip",
+  "levelTracks": [
+    1,
+    2,
+    3,
+    4,
+    1,
+    2
+  ],
+  "mapping": "Original descent.sng supplies four level slots; the mission overrides all four HMP files.",
+  "renderer": "FluidSynth 2.6.2, GeneralUser GS 2.0.3 (offline rendering; no runtime synthesizer)",
+  "soundfontSource": "https://github.com/mrbumpy409/GeneralUser-GS",
+  "soundfontSha256": "9575028c7a1f589f5770fccc8cff2734566af40cd26ed836944e9a5152688cfe",
+  "tracks": [
+    {
+      "file": "01.mp3",
+      "source": "game01.hmp",
+      "sourceSha256": "c8da78bb7b896bfd66e49735d6ab199e2cee3e40f75611ff2ddf5febd4aa7f69",
+      "midiSha256": "f392acac2a75e092a9690a615b94c9b9e109cc95f40b3a7917f85401930f457e",
+      "sha256": "6320d58befa22cb04ce12f8c5eacf39dc24772c6d870b16fea67151612ffd2c0",
+      "bytes": 6895742,
+      "seconds": 287.259977,
+      "tracks": 11,
+      "events": 17067,
+      "tempo": 120
+    },
+    {
+      "file": "02.mp3",
+      "source": "game02.hmp",
+      "sourceSha256": "294d9bcab683af8177f5cd5dda066a1792e6acec26830f62a15799f1af85e71b",
+      "midiSha256": "73216d9438cd371e67d62e26187866f60717062aed8a2de1c08f81bf0ce4d42f",
+      "sha256": "ef1c4d7270ac7108f35693ab54adb6262e42ec45a6e1a3b4bae751a207a66dd6",
+      "bytes": 2847599,
+      "seconds": 118.593061,
+      "tracks": 14,
+      "events": 14606,
+      "tempo": 120
+    },
+    {
+      "file": "03.mp3",
+      "source": "game03.hmp",
+      "sourceSha256": "da1e2aafa22d9d6a095d8bd4f052dd8b2393aece92edfbebf0a9367f3e99fbd3",
+      "midiSha256": "c50344b1c33a22717a685b49aa00381f44381acba4584ba4e6d07bf3080aebee",
+      "sha256": "524345b915bcfd465dba762edbff03ca1936e94777e8338da263154602463813",
+      "bytes": 23632500,
+      "seconds": 984.621383,
+      "tracks": 14,
+      "events": 21793,
+      "tempo": 120
+    },
+    {
+      "file": "04.mp3",
+      "source": "game04.hmp",
+      "sourceSha256": "19ad95f7fc47e438a6eef08b2d8ffdd2609736403fee549f3f04c409a03b40c7",
+      "midiSha256": "7e1fff9d1c9012bec8ce3cc9dc7d8125f1ee61b9e2ac99bbd34d44632d8b089b",
+      "sha256": "9ae13b8f9166068f69368ecd1ae544392c78c9627f9ad4b8d0200a7e0675741f",
+      "bytes": 7452464,
+      "seconds": 310.462358,
+      "tracks": 19,
+      "events": 5954,
+      "tempo": 120
+    }
+  ]
+}
