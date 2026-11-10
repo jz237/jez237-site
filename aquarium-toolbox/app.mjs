@@ -1,4 +1,4 @@
-import {calculators,categories,defaults,calculate,convert,usUnit,GAL,migrateInputs,isVisible,labelFor,helpFor,popular,sgFromPpt,pptFromSg,PROFILE_DEFAULT,convertHardness} from './calculators.mjs';
+import {calculators,categories,defaults,calculate,convert,usUnit,GAL,migrateInputs,isVisible,labelFor,helpFor,popular,sgFromPpt,pptFromSg,PROFILE_DEFAULT,convertHardness,normalizeInputs} from './calculators.mjs';
 import {icon,illustration,escape as e} from './illustrations.mjs';
 import {sliderWindow,sliderValue} from './sliders.mjs';
 import {fieldChoices,extraHelp,bagComparison,formPresets} from './presets.mjs';
@@ -29,7 +29,7 @@ export function validateBackup(raw){
       if(hasProfile(calc)&&!(starter&&saved.v===100)){const v=defaults(calc,true);v.v=saved.v;if(typeof v.v==='number'&&Number.isFinite(v.v)&&v.v>=.01&&v.v<=1e7)result.inputs[calc.id]=v;}
       continue;
     }
-    const a=migrateInputs(calc.id,saved);if(a){const v={};for(const f of calc.fields){const x=a[f.key];if(f.options){if(!f.options.some(o=>o[0]===x))throw new Error('The backup contains an invalid selection.');}else if(typeof x!=='number'||!Number.isFinite(x)||x<f.min||x>f.max)throw new Error('The backup contains an invalid number.');v[f.key]=x;}result.inputs[calc.id]=v;}
+    const a=migrateInputs(calc.id,saved);if(a)result.inputs[calc.id]=normalizeInputs(calc.id,a);
   }
   return result;
 }
@@ -38,7 +38,7 @@ try{const saved=localStorage.getItem(KEY);if(saved)state=validateBackup(JSON.par
 let category='popular',query='',result=null,toastTimer,resultObserver;
 let inputVisible=false,resultVisible=false;
 function toast(message){$('toast').textContent=message;$('toast').hidden=false;clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').hidden=true,4500);}
-function snapshot(){const clean={...state,inputs:{}};for(const [id,a]of Object.entries(state.inputs)){try{calculate(id,a);clean.inputs[id]={...a};}catch{/* Incomplete edits must not corrupt otherwise valid tank backups. */}}return clean;}
+function snapshot(){const clean={...state,inputs:{}};for(const [id,a]of Object.entries(state.inputs)){try{const value=normalizeInputs(id,a);calculate(id,value);clean.inputs[id]=value;}catch{/* Incomplete edits must not corrupt otherwise valid tank backups. */}}return clean;}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(snapshot()));storageAvailable=true;}catch{storageAvailable=false;toast('Browser storage is unavailable. Download a backup to keep your settings.');}}
 const current=()=>calculators.find(c=>c.id===state.current);
 const profile=()=>state.profiles.find(p=>p.id===state.activeProfile)||state.profiles[0];
@@ -284,12 +284,14 @@ function setUnits(units){
   state.units=units;
   save();renderPreferences();renderLibrary();renderCalculator();
 }
+let profileVolumeDraft=null;
 function openProfile(){$('tank-name').value=profile().name;$('tank-volume').value=Number((isUS()?profile().volume/GAL:profile().volume).toFixed(6));$('profile-unit').textContent=isUS()?'(US gal)':'(litres)';$('tank-volume').min=isUS()?.01/GAL:.01;$('tank-volume').max=isUS()?1e7/GAL:1e7;$('tank-type').value=profile().type;$('profile-error').textContent='';
   const c=calculators.find(c=>c.id==='change'),f=c.fields.find(f=>f.profile),choice=fieldChoices(c,f,isUS(),{});
   $('profile-presets').innerHTML=`<div class="choices-title">Size on the box</div><div class="choice-buttons">${choice.options.map(x=>`<button type="button" data-profile-volume="${x.value}">${e(x.label)}</button>`).join('')}</div><small>The advertised size is close enough for most things. For careful dosing, use Tank volume to work out the real amount of water.</small>`;
+  profileVolumeDraft={text:$('tank-volume').value,value:profile().volume};
   $('profile-dialog').showModal();}
 function saveProfile(asNew=false){
-  const name=$('tank-name').value.trim(),raw=$('tank-volume').value,volume=Number(raw)*(isUS()?GAL:1);
+  const name=$('tank-name').value.trim(),raw=$('tank-volume').value,volume=profileVolumeDraft?.text===raw?profileVolumeDraft.value:Number(raw)*(isUS()?GAL:1);
   if(!name||name.length>60||!raw||!Number.isFinite(volume)||volume<.01||volume>1e7){$('profile-error').textContent=isUS()?'Enter a name and a water volume between 0.002642 and 2,641,720 US gallons.':'Enter a name and a water volume between 0.01 and 10,000,000 litres.';return;}
   if(asNew&&state.profiles.length>=20){$('profile-error').textContent='This toolbox supports up to 20 saved tanks.';return;}
   const p={id:asNew?`tank-${Date.now()}`:profile().id,name,volume,type:$('tank-type').value};
@@ -298,14 +300,15 @@ function saveProfile(asNew=false){
 }
 function applyProfile(){for(const c of calculators){if(hasProfile(c)&&state.inputs[c.id])state.inputs[c.id].v=profile().volume;}}
 function share(){const params=new URLSearchParams({tool:state.current,units:state.units,data:JSON.stringify(inputs())});if(current().fields.some(f=>f.unit==='ppt'))params.set('sal',state.salinity);$('share-url').value=`${location.origin}${location.pathname}#${params}`;$('copy-status').textContent='';$('share-dialog').showModal();$('share-url').select();}
-function loadHash(){try{const params=new URLSearchParams(location.hash.slice(1)),id=params.get('tool');if(!id||!ids.has(id))return;state.current=id;if(['us','metric'].includes(params.get('units')))state.units=params.get('units');if(['sg','ppt'].includes(params.get('sal')))state.salinity=params.get('sal');if(params.has('data')){if(params.get('data').length>8000)throw new Error('Link is too large.');const input=migrateInputs(id,JSON.parse(params.get('data'))),c=current(),clean={};for(const f of c.fields)clean[f.key]=input[f.key]??f.value;calculate(id,clean);state.inputs[id]=clean;}save();}catch{toast('That shared calculation is invalid. Example inputs are shown instead.');state.inputs[state.current]=defaults(current(),isUS());}}
+function loadHash(){try{const params=new URLSearchParams(location.hash.slice(1)),id=params.get('tool');if(!id||!ids.has(id))return;state.current=id;if(['us','metric'].includes(params.get('units')))state.units=params.get('units');if(['sg','ppt'].includes(params.get('sal')))state.salinity=params.get('sal');if(params.has('data')){if(params.get('data').length>8000)throw new Error('Link is too large.');const clean=normalizeInputs(id,migrateInputs(id,JSON.parse(params.get('data'))));calculate(id,clean);state.inputs[id]=clean;}save();}catch{toast('That shared calculation is invalid. Enter your measurements, or choose Reset for an example.');const c=current(),a=defaults(c,isUS());for(const f of c.fields)if(!f.options&&isVisible(c.id,f.key,a))a[f.key]=NaN;state.inputs[state.current]=a;}}
 $('quick-result-button').onclick=()=>document.querySelector('.result-panel').scrollIntoView({behavior:'smooth',block:'start'});
 $('search-icon').innerHTML=icon('search');$('tool-count').textContent=calculators.length;
-document.addEventListener('click',ev=>{const profileChoice=ev.target.closest('[data-profile-volume]');if(profileChoice){$('tank-volume').value=isUS()?Number((Number(profileChoice.dataset.profileVolume)/GAL).toFixed(6)):Number(profileChoice.dataset.profileVolume);return;}const choice=ev.target.closest('[data-choice-field]');if(choice){applyChoice(choice.dataset.choiceField,Number(choice.dataset.choiceIndex));return;}const bag=ev.target.closest('[data-bag-index]');if(bag){applyChoice(inputs().bagMode==='weight'?'bagWeight':'bag',Number(bag.dataset.bagIndex));document.querySelector(`[data-bag-index="${bag.dataset.bagIndex}"]`)?.focus({preventScroll:true});return;}const sal=ev.target.closest('[data-salinity]');if(sal){state.salinity=sal.dataset.salinity;save();renderCalculator();document.querySelector(`[data-salinity="${state.salinity}"]`)?.focus({preventScroll:true});return;}const cat=ev.target.closest('[data-category]');if(cat){category=cat.dataset.category;renderLibrary();return;}const link=ev.target.closest('[data-tool]');if(link){ev.preventDefault();selectTool(link.dataset.tool,matchMedia('(max-width:760px)').matches);}const close=ev.target.closest('[data-close]');if(close)close.closest('dialog').close();});
+document.addEventListener('click',ev=>{const profileChoice=ev.target.closest('[data-profile-volume]');if(profileChoice){const value=Number(profileChoice.dataset.profileVolume);$('tank-volume').value=isUS()?Number((value/GAL).toFixed(6)):value;profileVolumeDraft={text:$('tank-volume').value,value};return;}const choice=ev.target.closest('[data-choice-field]');if(choice){applyChoice(choice.dataset.choiceField,Number(choice.dataset.choiceIndex));return;}const bag=ev.target.closest('[data-bag-index]');if(bag){applyChoice(inputs().bagMode==='weight'?'bagWeight':'bag',Number(bag.dataset.bagIndex));document.querySelector(`[data-bag-index="${bag.dataset.bagIndex}"]`)?.focus({preventScroll:true});return;}const sal=ev.target.closest('[data-salinity]');if(sal){state.salinity=sal.dataset.salinity;save();renderCalculator();document.querySelector(`[data-salinity="${state.salinity}"]`)?.focus({preventScroll:true});return;}const cat=ev.target.closest('[data-category]');if(cat){category=cat.dataset.category;renderLibrary();return;}const link=ev.target.closest('[data-tool]');if(link){ev.preventDefault();selectTool(link.dataset.tool,matchMedia('(max-width:760px)').matches);}const close=ev.target.closest('[data-close]');if(close)close.closest('dialog').close();});
 $('search').addEventListener('input',ev=>{query=ev.target.value;renderLibrary();});
 document.addEventListener('keydown',ev=>{if(ev.key==='/'&&!['INPUT','TEXTAREA','SELECT'].includes(document.activeElement.tagName)&&!document.querySelector('dialog[open]')){ev.preventDefault();$('search').focus();}});
 $('unit-us').onclick=()=>setUnits('us');$('unit-metric').onclick=()=>setUnits('metric');
 $('profile-select').onchange=ev=>{state.activeProfile=ev.target.value;applyProfile();save();renderPreferences();renderCalculator();toast('Working tank changed. Tank-volume inputs updated.');};
+$('tank-volume').oninput=()=>{profileVolumeDraft=null;};
 $('profiles-open').onclick=openProfile;$('edit-profile').onclick=openProfile;
 $('profile-form').onsubmit=ev=>{ev.preventDefault();saveProfile();};$('new-profile').onclick=()=>saveProfile(true);
 for(const id of ['settings-open','backup-open'])$(id).onclick=()=>$('settings-dialog').showModal();

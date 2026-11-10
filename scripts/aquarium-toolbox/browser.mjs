@@ -39,7 +39,7 @@ try{
     data.profiles[1].name=originalName;page.once('dialog',d=>d.accept());await page.locator('#import').setInputFiles({name:'backup.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(data))});await page.waitForFunction(()=>document.querySelector('#import-status').textContent==='Backup restored.');await page.locator('#settings-dialog [data-close]').click();
     await page.pdf({path:`${dir}/water-change.pdf`,format:'A4',printBackground:true,margin:{top:'15mm',right:'12mm',bottom:'15mm',left:'12mm'}});
     await page.evaluate(()=>location.hash='tool=tank');await page.waitForFunction(()=>document.querySelector('.calc-heading h2')?.textContent==='Tank volume');await page.locator('#field-shape').selectOption('cylinder');assert.equal(await page.locator('#field-w').count(),0);await page.screenshot({path:`${dir}/desktop-cylinder.png`,fullPage:true});
-    await page.goto(`${base}#tool=change&data=%7Bbad`);await page.locator('.primary-metric').waitFor();assert.match(await page.locator('#toast').innerText(),/invalid/);
+    await page.goto(`${base}#tool=change&data=%7Bbad`);await page.locator('.error-card').waitFor();assert.equal(await page.locator('.primary-metric').count(),0);assert.match(await page.locator('#toast').innerText(),/invalid/);
     results.push({viewport:label,interaction:'backup download, restore, malformed backup, untrusted text, print PDF, shape controls, invalid shared data',passed:true});
   }
   results.push({viewport:label,interaction:'validation, live math, favorites, search, share, profiles, reload, unit roundtrip',passed:true});await context.close();

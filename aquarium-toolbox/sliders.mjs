@@ -57,5 +57,9 @@ export function sliderWindow(calc,field,a,us=false,sg=false){
   return {min,max,step,value,domainMin,domainMax};
 }
 export function sliderValue(value,{min,max,step}){
-  return Number(Math.max(min,Math.min(max,Math.round(value/step)*step)).toPrecision(12));
+  // Home/End retain the exact endpoints. Rounding AFTER clamping could put a
+  // converted inch/gallon endpoint outside the calculator's numeric domain.
+  if(value<=min)return min;
+  if(value>=max)return max;
+  return Math.max(min,Math.min(max,Number((Math.round(value/step)*step).toPrecision(12))));
 }
