@@ -84,7 +84,7 @@ try{
   await go('series');await page.locator('#steps-details summary').filter({hasText:'Change-by-change'}).click();assert.match(await page.locator('.results-table').innerText(),/After 1 change\s+60 ppm/);
   await go('target');assert.match(await page.locator('.result-message').innerText(),/big change to do in one go/);
   await go('ro');assert.equal(await unit('rate'),'US gal/day');assert.match(await metric(0),/6\.4\s*hours\s*6 h 24 min/);
-  await go('drip');assert.equal(await unit('v'),'cups');assert.match(await metric(0),/53\s*minutes/);
+  await go('drip');assert.equal(await unit('v'),'cups');assert.match(await metric(0),/52\.6\s*minutes/);
   await go('co2cylinder');assert.match(await metric(0),/277\s*days\s*about 9\.1 months/);
   check('small gallons, buckets, ppm readings and plain durations');await context.close();
  }
@@ -108,9 +108,9 @@ try{
   await go('turnover');assert.match(await metric(0),/5\s*×\/hour/);assert.match(await message(),/Right in the usual range of 4–6 times an hour/);assert.match(await metric(1),/80\s*US GPH/);
   await page.locator('#field-kind').selectOption('messy');assert.match(await message(),/below the usual 6–10/);assert.match(await metric(2),/200\s*US GPH/);
   await page.locator('#field-kind').selectOption('sps');assert.match(await metric(1),/600\s*US GPH/);
-  await go('stocking');assert.match(await metric(0),/75\s*%/);assert.equal(await page.locator('.metric').count(),3);assert.match(await message(),/Comfortably stocked/);assert.match(await metric(2),/13\s*fish/);
+  await go('stocking');assert.match(await metric(0),/75\s*%/);assert.equal(await page.locator('.metric').count(),3);assert.match(await message(),/Within the classic length allowance/);assert.match(await metric(2),/13\s*fish/);
   await chip('size','3.5 in');assert.match(await metric(0),/175\s*%/);assert.match(await message(),/Overstocked by both/);
-  await page.locator('#field-kind').selectOption('goldfish');assert.match(await message(),/Too small for 10 fancy goldfish by the usual guideline; it suits 1/);assert.match(await metric(0),/110\s*US gal/);assert.equal(await page.locator('#field-size').count(),0);
+  await page.locator('#field-kind').selectOption('goldfish');assert.match(await message(),/Too small for 10 fancy goldfish by the usual guideline; the volume guideline allows 1/);assert.match(await metric(0),/110\s*US gal/);assert.equal(await page.locator('#field-size').count(),0);
   await page.locator('#field-kind').selectOption('marine');assert.match(await message(),/1 inch of adult fish per 5 gallons/);assert.equal(await page.locator('#field-l').count(),0);
   await fill({size:8,count:2});await page.locator('#field-kind').selectOption('tropical');assert.match(await message(),/minimum tank size recommended for each species/);
   check('heater size, filter flow and stocking results with plain guidance');await context.close();

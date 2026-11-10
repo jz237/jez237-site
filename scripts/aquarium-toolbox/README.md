@@ -272,3 +272,19 @@ Help Center placement, noindex and the unmodified main menu.
   usually rated 96–99%, Bulk Reef Supply), salinity help reads correctly in
   specific gravity, sump fields say how to measure them, wattage shortcuts suit
   lights and pumps, bottle-size notes fit fertilizer and stock solutions.
+
+## Independent math/logic audit (2026-11-10)
+
+See [MATH_AUDIT_20261110.md](MATH_AUDIT_20261110.md) for confirmed failures,
+repairs, assumptions and publication scope. `independent-math.test.mjs` supplies
+a separately specified numerical example for every calculator, 500 deterministic
+randomized conservation/inverse scenarios and boundary regressions.
+
+`node scripts/aquarium-toolbox/math-logic-browser.mjs <toolbox-url> <evidence-dir>`
+proves the fixes through real desktop/phone controls, including product-strength
+reset, hardness-unit conservation and consistent chart values.
+
+The source change remains on a task branch for a **Lab-only** release. Do not
+merge it to personal-site main merely to record Lab provenance: a later automatic
+build can publish a skipped main commit. The Lab sync records the exact source
+commit, and source and Lab releases are separate decisions.
