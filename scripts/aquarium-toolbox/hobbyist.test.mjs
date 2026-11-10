@@ -137,6 +137,12 @@ test('The box-size note under a tank volume is said once',()=>{
   }
 });
 
+test('Results that depend on a choice say which one, so a picture can follow it',()=>{
+  for(const kind of ['tropical','goldfish','marine'])assert.equal(run('stocking',{kind}).graphic.kind,kind);
+  for(const material of ['gravel','sand','soil','custom'])assert.equal(run('substrate',{material}).graphic.kind,material);
+  assert.equal(run('turnover',{kind:'sps'}).graphic.kind,'sps');
+});
+
 test('Stocking check applies the classic volume and surface rules',()=>{
   const stock=(gal,l,w,kind,size,count)=>run('stocking',{v:gal*GAL,l:l*IN,w:w*IN,kind,size:size*IN,count});
   // 20 gallons, 24 × 12 in: one inch per gallon allows 20 in; 288 sq in ÷ 12 allows 24 in.

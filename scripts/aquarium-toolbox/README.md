@@ -92,7 +92,8 @@ the top of the usual range for that tank type (`flowGuide`), so the range can be
 reached by dragging on a nano tank and a large reef alike, and changing the tank
 volume gives the flow slider its new window. The result graphic carries `kind`,
 `mark` (the visitor's bar) and `status` (`low`, `ok`, `high`) for renderers that
-show a picture or a colour by answer. The note about the size on the box is said
+show a picture or a colour by answer. The Stocking check (kind of fish) and Gravel &
+substrate (material) results carry `kind` for the same reason. The note about the size on the box is said
 once, in the volume field's help.
 
 `node scripts/aquarium-toolbox/sliders-browser.mjs [base-URL] [evidence-directory]`
