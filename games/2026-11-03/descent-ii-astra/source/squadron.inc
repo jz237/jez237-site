@@ -8,11 +8,17 @@ typedef struct {
     int level,signature,target,target_sig,goal,last_room,door,route_side,pick,shots,missiles,pickups,stuck;
     fix64 think,seen,react,fire,missile,flare,spawn,progress,roam_until,weapon_until,contact_until,report,escape_until;
     vms_vector last,move,aim,up,contact,escape;
-    float rates[3];unsigned short visits[MAX_SEGMENTS];
+    vms_vector route[8],gaze,cruise,right,turn_goal;
+    int route_count,gaze_ready,turn_side,polar,rear_seen,dodges;
+    fix64 evade_until;vms_vector evade;
+    fix64 gaze_until,turn_until,avoid_next;
+    float rates[3],accels[3],command_velocity[3],command_accel[3],remaining,view_depth;
+    unsigned short visits[MAX_SEGMENTS];
     fix64 blocked[MAX_SEGMENTS][6];
     fix64 ignored[MAX_OBJECTS];
 } squad_pilot;
 static squad_pilot sq[4];
+int astra_squad_silent_pickup=0;
 static int sq_handoff=0;
 static int sq_command[4],sq_leader[4]={-1,-1,-1,-1},sq_focus[4]={-1,-1,-1,-1},sq_focus_sig[4];
 static fix64 sq_command_until[4];
@@ -34,6 +40,7 @@ void astra_squad_takeover(void){sq_handoff=1;memset(sq,0,sizeof sq);}
 int astra_squad_respawn_left(int id){return sq[id].spawn?(int)max(1,min(i2f(5),sq[id].spawn-GameTime64)):0;}
 static int sq_bot(int id){return astra_net_active&&id>0&&id<astra_net_count&&id<4&&astra_net_bot_skill[id]>=0;}
 static int sq_owner(int id){return sq_bot(id)&&astra_net_owner==astra_net_host;}
+int astra_squad_owns(int id){return sq_owner(id);}
 static float sq_clamp(float x,float a,float b){return fmaxf(a,fminf(b,x));}
 static float sq_distance(vms_vector *a,vms_vector *b){return f2fl(vm_vec_dist_quick(a,b));}
 static float sq_need(int id,object *o){
@@ -49,11 +56,33 @@ static float sq_need(int id,object *o){
     return aa_pickup_need(p,o,GameTime64);
 }
 static int sq_clear(object *ship,vms_vector *point,fix radius,int target){
-    fvi_query q={&ship->pos,point,ship->segnum,radius,ship-Objects,NULL,FQ_TRANSPOINT};fvi_info hit;
+    fvi_query q={&ship->pos,point,ship->segnum,radius,ship-Objects,NULL,radius?0:FQ_TRANSPOINT};fvi_info hit;
     if(find_vector_intersection(&q,&hit)!=HIT_NONE)return 0;
     if(target<0)return 1;
     q.flags|=FQ_CHECK_OBJS|FQ_IGNORE_POWERUPS;int r=find_vector_intersection(&q,&hit);
     return r==HIT_NONE||(r==HIT_OBJECT&&hit.hit_object==target);
+}
+static int sq_seen(object *ship,int target,int skill){
+    vms_vector d;vm_vec_normalized_dir(&d,&Objects[target].pos,&ship->pos);
+    return (vm_vec_dot(&d,&ship->orient.fvec)>=fl2f(.25f-.05f*skill)||aa_in_rear_view(ship,&Objects[target].pos))&&sq_clear(ship,&Objects[target].pos,0,target);
+}
+static void sq_sense_fire(int id,object *ship){
+    squad_pilot *b=&sq[id];int skill=astra_net_bot_skill[id];float earliest=1.3f;
+    if(GameTime64<b->evade_until)return;
+    for(int i=0;i<=Highest_object_index;i++){
+        object *o=&Objects[i];if(o->type!=OBJ_WEAPON||o->movement_type!=MT_PHYSICS||o->flags&OF_SHOULD_BE_DEAD)continue;
+        int parent=o->ctype.laser_info.parent_num;
+        if(parent<0||parent>Highest_object_index||Objects[parent].signature!=o->ctype.laser_info.parent_signature)continue;
+        if((Game_mode&GM_MULTI_COOP)?o->ctype.laser_info.parent_type!=OBJ_ROBOT:(o->ctype.laser_info.parent_type!=OBJ_PLAYER||parent==ship-Objects))continue;
+        if(sq_distance(&o->pos,&ship->pos)>150||!sq_seen(ship,i,skill))continue;
+        vms_vector offset,velocity,miss;float time;vm_vec_sub(&offset,&o->pos,&ship->pos);vm_vec_sub(&velocity,&o->mtype.phys_info.velocity,&ship->mtype.phys_info.velocity);
+        if(!aa_collision_course(offset,velocity,f2fl(ship->size+o->size)+3,&time,&miss)||time>=earliest)continue;
+        vms_vector side;vm_vec_cross(&side,&velocity,&b->up);if(vm_vec_normalize(&side)<F1_0/10)side=ship->orient.rvec;
+        if(id&1)vm_vec_scale(&side,-F1_0);
+        vms_vector end;vm_vec_scale_add(&end,&ship->pos,&side,i2f(13));
+        if(!sq_clear(ship,&end,ship->size,-1)){vm_vec_scale(&side,-F1_0);vm_vec_scale_add(&end,&ship->pos,&side,i2f(13));if(!sq_clear(ship,&end,ship->size,-1))continue;}
+        earliest=time;b->evade=side;b->evade_until=GameTime64+fl2f(.4f+.1f*skill);b->dodges++;
+    }
 }
 static int sq_enemy(int id,int obj){
     if(obj<0||obj>Highest_object_index)return 0;object *o=&Objects[obj];
@@ -69,19 +98,99 @@ static int sq_pass(int id,int room,int side){
     return !d->keys||d->keys==KEY_NONE||(Players[id].flags&d->keys)==d->keys;
 }
 static int sq_parent[MAX_SEGMENTS],sq_dist[MAX_SEGMENTS],sq_queue[MAX_SEGMENTS];
+int astra_squad_pickup(object*,object*);
+/* Route anchors are portals, not stop signs. Look through several rooms and
+ * pursue a point ahead on the hull-checked line, braking only for its end. */
+static void sq_route(int id,object *o,vms_vector end){
+    squad_pilot *b=&sq[id];b->route_count=0;b->remaining=0;
+    int path[MAX_SEGMENTS],n=0,at=b->goal,from=o->segnum;
+    while(at>=0&&at!=from&&n<MAX_SEGMENTS){path[n++]=at;at=sq_parent[at];}
+    if(at!=from)return;
+    for(int p=n-1;p>=0&&b->route_count<6;p--){
+        int next=path[p],side=-1;for(int s=0;s<6;s++)if(Segments[from].children[s]==next){side=s;break;}
+        if(side<0)break;
+        vms_vector point;compute_center_point_on_side(&point,&Segments[from],side);
+        if(!(WALL_IS_DOORWAY(&Segments[from],side)&WID_FLY_FLAG))break;
+        b->route[b->route_count++]=point;from=next;
+    }
+    vms_vector last=end;if(from!=b->goal)compute_segment_center(&last,&Segments[from]);
+    if(b->route_count<8)b->route[b->route_count++]=last;
+}
+static vms_vector sq_pursuit(squad_pilot *b,object *o){
+    vms_vector chosen=b->move,from=o->pos;b->remaining=0;
+    float look=sq_clamp(13+f2fl(vm_vec_mag(&o->mtype.phys_info.velocity))*.45f,15,36),walk=0;
+    int picked=0;
+    for(int i=0;i<b->route_count;i++){
+        vms_vector direction;float length=f2fl(vm_vec_normalized_dir(&direction,&b->route[i],&from));
+        if(!picked){
+            vms_vector point;vm_vec_scale_add(&point,&from,&direction,fl2f(fminf(length,fmaxf(0,look-walk))));
+            if(sq_clear(o,&point,o->size,-1)){chosen=point;if(walk+length>=look)picked=1;}
+            else picked=1;
+        }
+        walk+=length;from=b->route[i];
+    }
+    b->remaining=walk;return chosen;
+}
+static float sq_depth(object *o,vms_vector direction,float range,fix radius,fvi_info *result){
+    if(vm_vec_normalize(&direction)<F1_0/100)return 0;
+    vms_vector end;vm_vec_scale_add(&end,&o->pos,&direction,fl2f(range));
+    fvi_query q={&o->pos,&end,o->segnum,radius,o-Objects,NULL,0};fvi_info hit;
+    int kind=find_vector_intersection(&q,&hit);if(result)*result=hit;
+    return kind==HIT_NONE?range:kind==HIT_BAD_P0?0:sq_distance(&o->pos,&hit.hit_pnt);
+}
+/* Eye direction is independent of a short pickup/avoidance correction. Only
+ * geometry is surveyed here: enemies still need native visibility tests. */
+static vms_vector sq_gaze(int id,object *o,vms_vector route){
+    squad_pilot *b=&sq[id];vms_vector desired;vm_vec_normalized_dir(&desired,&route,&o->pos);
+    if(b->gaze_ready&&GameTime64<b->gaze_until){
+        vms_vector held;float d=f2fl(vm_vec_normalized_dir(&held,&b->gaze,&o->pos));
+        if(d>12&&vm_vec_dot(&held,&desired)>-F1_0/4&&sq_depth(o,held,65,0,NULL)>24)return b->gaze;
+    }
+    float best=-1e9f;vms_vector selected=route;
+    for(int k=-2;k<6+b->route_count;k++){
+        vms_vector point,d;
+        if(k==-2)point=route;
+        else if(k==-1)vm_vec_scale_add(&point,&o->pos,&o->orient.fvec,i2f(65));
+        else if(k>=6)point=b->route[k-6];
+        else {int child=Segments[o->segnum].children[k];if(child<0||!(WALL_IS_DOORWAY(&Segments[o->segnum],k)&WID_FLY_FLAG))continue;
+            compute_center_point_on_side(&point,&Segments[o->segnum],k);vms_vector center;compute_segment_center(&center,&Segments[child]);vm_vec_sub(&d,&center,&point);vm_vec_scale_add2(&point,&d,F1_0/2);}
+        if(vm_vec_normalized_dir(&d,&point,&o->pos)<i2f(4)||!sq_clear(o,&point,0,-1))continue;
+        float depth=sq_depth(o,d,100,0,NULL),alignment=f2fl(vm_vec_dot(&d,&desired));
+        float score=fminf(depth,70)*.65f+alignment*27+f2fl(vm_vec_dot(&d,&o->orient.fvec))*12;
+        if(score>best){best=score;vm_vec_scale_add(&selected,&o->pos,&d,fl2f(fminf(depth*.85f,75)));}
+    }
+    b->gaze=selected;b->gaze_ready=1;b->gaze_until=GameTime64+F1_0/2;return selected;
+}
+static float sq_arc(object *o,float angle,float rise){
+    float score=0,nearest=100;
+    for(int n=1;n<=5;n++){float a=angle*n/6.f;vms_vector d;vm_vec_copy_scale(&d,&o->orient.fvec,fl2f(cosf(a)));vm_vec_scale_add2(&d,&o->orient.rvec,fl2f(sinf(a)));vm_vec_scale_add2(&d,&o->orient.uvec,fl2f(rise*n/6.f));float depth=sq_depth(o,d,80,0,NULL);score+=fminf(depth,60);nearest=fminf(nearest,depth);}
+    return score/5+fminf(nearest,35)*.8f-fabsf(angle)*5;
+}
 static void sq_plan(int id,object *ship){
     squad_pilot *b=&sq[id];int skill=astra_net_bot_skill[id];
     b->think=GameTime64+fl2f(.12f+.035f*(4-skill));
+    /* A pursuit can finish already inside a pickup's collision sphere. A
+     * zero-length physics sweep then misses it. Use the same native pickup
+     * handler for actual overlap, or move on if it cannot be collected. */
+    if(b->pick>=0&&b->pick<=Highest_object_index){
+        object *item=&Objects[b->pick];
+        if(item->type==OBJ_POWERUP&&!(item->flags&OF_SHOULD_BE_DEAD)&&sq_need(id,item)>0&&
+           sq_distance(&ship->pos,&item->pos)<f2fl(ship->size+item->size)&&sq_clear(ship,&item->pos,0,-1)){
+            astra_squad_pickup(ship,item);
+            if(!(item->flags&OF_SHOULD_BE_DEAD)&&sq_need(id,item)>0)b->ignored[item-Objects]=GameTime64+i2f(30);
+        }
+    }
     if(b->last_room!=ship->segnum){b->visits[ship->segnum]++;b->last_room=ship->segnum;}
-    int enemy=-1;float best=1e10f;
+    int enemy=-1;float best=1e10f;b->rear_seen=0;sq_sense_fire(id,ship);
     if(GameTime64>sq_command_until[id])sq_command[id]=0;
     if(sq_leader[id]>=0&&Players[sq_leader[id]].connected!=CONNECT_PLAYING)sq_leader[id]=-1;
     for(int i=0;i<=Highest_object_index;i++)if(sq_enemy(id,i)){
         vms_vector direction;float distance=f2fl(vm_vec_normalized_dir(&direction,&Objects[i].pos,&ship->pos));
         int marked=sq_command[id]==2&&i==sq_focus[id]&&Objects[i].signature==sq_focus_sig[id];
         if(sq_command[id]==3&&b->contact_until<GameTime64)continue;
-        if(distance>170||(!marked&&sq_command[id]!=1&&vm_vec_dot(&direction,&ship->orient.fvec)<fl2f(.25f-.05f*skill))||!sq_clear(ship,&Objects[i].pos,0,i))continue;
-        float cost=distance*(i==b->target?.6f:1)*(marked?.08f:1);
+        if(distance>170||!sq_seen(ship,i,skill))continue;
+        int rear=aa_in_rear_view(ship,&Objects[i].pos);if(rear)b->rear_seen++;
+        float cost=distance*(i==b->target?.6f:1)*(marked?.08f:1)*(rear&&(distance<45||vm_vec_dot(&direction,&Objects[i].orient.fvec)<-fl2f(.86f))?.45f:1);
         if(sq_command[id]==1&&sq_leader[id]>=0)cost+=sq_distance(&Objects[i].pos,&Objects[Players[sq_leader[id]].objnum].pos)*.7f;if(cost<best){best=cost;enemy=i;}
     }
     if(enemy>=0){
@@ -93,6 +202,7 @@ static void sq_plan(int id,object *ship){
     while(first<last){int r=sq_queue[first++];for(int side=0;side<6;side++){
         int child=Segments[r].children[side];if(child>=0&&sq_dist[child]<0&&sq_pass(id,r,side)){sq_parent[child]=r;sq_dist[child]=sq_dist[r]+1;sq_queue[last++]=child;}
     }}
+    int previous_pick=b->pick;
     b->door=b->route_side=b->pick=-1;int goal=ship->segnum,follow_look=0;vms_vector end=ship->pos,follow_aim=ship->pos;float cost=1e9f;
     /* Only useful, nearby supplies: a wingman leaves the human's supplies alone
      * while healthy. Full ammunition can never trap a pilot in a pickup loop. */
@@ -102,6 +212,7 @@ static void sq_plan(int id,object *ship){
         if((Game_mode&GM_MULTI_COOP)&&(sq_command[id]==3||(Players[id].shields>i2f(65)&&Players[id].energy>i2f(40))))continue;
         if(sq_dist[o->segnum]>6)continue;
         float score=sq_dist[o->segnum]*20+sq_distance(&o->pos,&ship->pos)*.12f-need*.15f;
+        if(i==previous_pick)score-=12; /* Finish a useful approach before swapping supplies. */
         if(score<cost){cost=score;goal=o->segnum;end=o->pos;b->pick=i;}
     }
     if(cost==1e9f&&(Game_mode&GM_MULTI_COOP)){
@@ -121,6 +232,7 @@ static void sq_plan(int id,object *ship){
         compute_segment_center(&end,&Segments[goal]);
     }
     b->goal=goal;b->move=end;
+    sq_route(id,ship,end);
     if(goal!=ship->segnum){
         int next=goal;while(sq_parent[next]>=0&&sq_parent[next]!=ship->segnum)next=sq_parent[next];
         for(int side=0;side<6;side++)if(Segments[ship->segnum].children[side]==next){
@@ -132,10 +244,12 @@ static void sq_plan(int id,object *ship){
             break;
         }
     }
+    if(b->door<0&&b->route_count)b->move=sq_pursuit(b,ship);
     if(b->target<0)b->aim=follow_look&&b->door<0?follow_aim:b->move;
-    if(b->contact_until>GameTime64&&enemy<0)b->aim=b->contact;
+    /* An impact bearing can draw attention only while that point is visible. */
+    if(b->contact_until>GameTime64&&enemy<0&&sq_clear(ship,&b->contact,0,-1))b->aim=b->contact;
     if(sq_distance(&ship->pos,&b->last)>5){b->last=ship->pos;b->progress=GameTime64;}
-    if(GameTime64-b->progress>i2f(4)&&(goal!=ship->segnum||sq_distance(&ship->pos,&b->move)>3)){
+    if(GameTime64-b->progress>i2f(4)&&(goal!=ship->segnum||b->pick>=0||sq_distance(&ship->pos,&b->move)>3)){
         b->stuck++;b->progress=GameTime64;b->roam_until=0;
         if(b->route_side>=0)b->blocked[ship->segnum][b->route_side]=GameTime64+i2f(8);
         if(b->pick>=0)b->ignored[b->pick]=GameTime64+i2f(15);
@@ -143,46 +257,109 @@ static void sq_plan(int id,object *ship){
         if(sq_distance(&b->move,&ship->pos)<5)vm_vec_scale_add2(&b->move,&ship->orient.rvec,i2f((b->stuck&1)?8:-8));
         b->escape=b->move;b->escape_until=GameTime64+fl2f(1.2f);
     }
-    if(GameTime64<b->escape_until){b->move=b->escape;b->aim=b->move;b->door=-1;}
+    if(GameTime64<b->escape_until){b->move=b->escape;b->door=-1;b->route_count=0;}
 }
-static float sq_turn(object *o,squad_pilot *b,int axis,float error,float limit){
+static float sq_turn(object *o,squad_pilot *b,int axis,float error,float limit,float feed){
     float dt=sq_clamp(f2fl(FrameTime),0,.1f),rate=axis==0?f2fl(o->mtype.phys_info.rotvel.x):axis==1?f2fl(o->mtype.phys_info.rotvel.y):f2fl(o->mtype.phys_info.rotvel.z);
-    float desired=sq_clamp(error*.45f,-limit,limit);b->rates[axis]+=sq_clamp(desired-b->rates[axis],-.35f*dt,.35f*dt);
+    float acceleration=axis==2?.055f:.28f;
+    float brake=sqrtf(2*acceleration*fabsf(error)/6.2831853f);
+    float desired=sq_clamp(copysignf(fminf(fabsf(error)*.5f,brake),error)+feed/6.2831853f,-limit,limit);
+    float gap=desired-b->rates[axis],a=sq_clamp(gap/.14f,-acceleration,acceleration),jerk=axis==2?.35f:1.8f;
+    b->accels[axis]+=sq_clamp(a-b->accels[axis],-jerk*dt,jerk*dt);
+    float step=b->accels[axis]*dt;
+    if(step*gap>=0&&fabsf(step)>fabsf(gap)){b->rates[axis]=desired;b->accels[axis]=0;}
+    else b->rates[axis]+=step;
     float drag=sq_clamp(f2fl(o->mtype.phys_info.drag)*2.5f,.01f,.9f),gain=64*(1-drag)*f2fl(Player_ship->max_rotthrust)/fmaxf(.01f,f2fl(o->mtype.phys_info.mass));
     return sq_clamp((64*drag*b->rates[axis]+(b->rates[axis]-rate)*8)/fmaxf(.01f,gain),-1,1);
 }
+static void sq_look(object *o,squad_pilot *b,vms_vector direction,int visible,int skill,float distance,vms_vector target_velocity){
+    float x=f2fl(vm_vec_dot(&direction,&o->orient.rvec)),y=f2fl(vm_vec_dot(&direction,&o->orient.uvec)),z=f2fl(vm_vec_dot(&direction,&o->orient.fvec));
+    float ux=f2fl(vm_vec_dot(&b->up,&o->orient.rvec)),uy=f2fl(vm_vec_dot(&b->up,&o->orient.uvec)),projection=sqrtf(ux*ux+uy*uy);
+    if(!b->polar&&projection<.36f)b->polar=1;if(b->polar&&projection>.62f)b->polar=0;
+    float yaw=atan2f(x,z),pitch=-atan2f(y,sqrtf(x*x+z*z)),roll=0,bank_feed=0;
+    if(!b->polar){
+        vms_vector flat=o->orient.fvec;float rise=f2fl(vm_vec_dot(&flat,&b->up));
+        vm_vec_scale_add2(&flat,&b->up,-fl2f(rise));vm_vec_normalize(&flat);vm_vec_cross(&b->right,&b->up,&flat);vm_vec_normalize(&b->right);
+        float bearing=atan2f(f2fl(vm_vec_dot(&direction,&b->right)),f2fl(vm_vec_dot(&direction,&flat)));
+        if(b->turn_side&&(z>.65f||GameTime64>=b->turn_until||vm_vec_dot(&b->turn_goal,&direction)<F1_0/2))b->turn_side=0;
+        if(!b->turn_side&&fabsf(bearing)>1.8f){
+            float left=bearing<0?bearing:bearing-6.2831853f,right=bearing>0?bearing:bearing+6.2831853f;
+            float ls=sq_arc(o,left,y),rs=sq_arc(o,right,y);b->turn_side=fabsf(rs-ls)>8?(rs>ls?1:-1):(bearing>0?1:-1);b->turn_goal=direction;b->turn_until=GameTime64+i2f(5);
+        }
+        if(b->turn_side>0&&bearing<0)bearing+=6.2831853f;if(b->turn_side<0&&bearing>0)bearing-=6.2831853f;
+        float elevation=asinf(sq_clamp(rise,-1,1))-asinf(sq_clamp(f2fl(vm_vec_dot(&direction,&b->up)),-.9986f,.9986f));
+        yaw=bearing*uy-elevation*ux/projection;pitch=bearing*ux+elevation*uy/projection;
+        roll=atan2f(-ux,uy);
+        bank_feed=sq_clamp(6.2831853f*rise*(f2fl(o->mtype.phys_info.rotvel.y)*uy+f2fl(o->mtype.phys_info.rotvel.x)*ux)/fmaxf(.1296f,projection*projection),-.7f,.7f);
+        bank_feed*=sq_clamp((projection-.36f)/.26f,0,1);
+    }else{
+        vms_vector right=b->right;vm_vec_scale_add2(&right,&o->orient.fvec,-vm_vec_dot(&right,&o->orient.fvec));if(vm_vec_normalize(&right)<F1_0/10)right=o->orient.rvec;b->right=right;
+        roll=atan2f(f2fl(vm_vec_dot(&right,&o->orient.uvec)),f2fl(vm_vec_dot(&right,&o->orient.rvec)));
+    }
+    float dt=f2fl(FrameTime),limit=visible?.16f+.018f*skill:.16f,fy=0,fp=0;
+    if(visible&&distance>5){vms_vector relative;vm_vec_sub(&relative,&target_velocity,&o->mtype.phys_info.velocity);float weight=sq_clamp(z,0,1);weight=weight*weight/distance;fy=f2fl(vm_vec_dot(&relative,&o->orient.rvec))*weight;fp=-f2fl(vm_vec_dot(&relative,&o->orient.uvec))*weight;}
+    Controls.heading_time=fl2f(sq_turn(o,b,1,yaw,limit,fy)*dt);Controls.pitch_time=fl2f(sq_turn(o,b,0,pitch,limit,fp)*dt);
+    Controls.bank_time=fl2f(sq_turn(o,b,2,copysignf(fmaxf(0,fabsf(roll)-.025f),roll),b->polar?.025f:.07f,bank_feed)*dt);
+}
 static void sq_drive(int id,object *o){
     squad_pilot *b=&sq[id];int skill=astra_net_bot_skill[id];float dt=f2fl(FrameTime),speed=30+skill*5;
-    vms_vector aim=b->aim,travel;float distance=f2fl(vm_vec_normalized_dir(&travel,&b->move,&o->pos));
-    int visible=b->target>=0&&sq_enemy(id,b->target)&&Objects[b->target].signature==b->target_sig&&sq_clear(o,&Objects[b->target].pos,0,b->target);
+    if(b->door<0&&b->route_count&&GameTime64>=b->escape_until)b->move=sq_pursuit(b,o);
+    vms_vector aim=b->aim,travel,target_velocity={0,0,0};float distance=f2fl(vm_vec_normalized_dir(&travel,&b->move,&o->pos));
+    int visible=b->target>=0&&sq_enemy(id,b->target)&&Objects[b->target].signature==b->target_sig&&sq_seen(o,b->target,skill);
     if(visible){
-        object *foe=&Objects[b->target];aim=foe->pos;float d=sq_distance(&foe->pos,&o->pos);
+        object *foe=&Objects[b->target];aim=foe->pos;target_velocity=foe->mtype.phys_info.velocity;float d=sq_distance(&foe->pos,&o->pos);
         int weapon=Players[id].primary_weapon,wi=Primary_weapon_to_weapon_info[weapon];
         if(skill>=2)vm_vec_scale_add2(&aim,&foe->mtype.phys_info.velocity,fl2f(fminf(.5f,d/fmaxf(60,f2fl(Weapon_info[wi].speed[Difficulty_level])))*(.45f+.1f*skill)));
-        if(d>60){vm_vec_normalized_dir(&travel,&foe->pos,&o->pos);speed=25+skill*3;}
-        else if(d<25){vm_vec_normalized_dir(&travel,&o->pos,&foe->pos);speed=20;}
-        else {travel=o->orient.rvec;vm_vec_scale(&travel,((id+(int)(GameTime64/i2f(3)))&1)?F1_0:-F1_0);speed=skill>=2?12+skill*2:3;}
-        distance=20;
+        /* Continuous range keeping avoids the old approach/back-off/orbit
+         * switches. Orbit direction stays stable for the engagement. */
+        vms_vector line,lateral;vm_vec_normalized_dir(&line,&foe->pos,&o->pos);vm_vec_cross(&lateral,&b->up,&line);if(vm_vec_normalize(&lateral)<F1_0/10)lateral=o->orient.rvec;
+        vm_vec_copy_scale(&travel,&line,fl2f(sq_clamp((d-43)*.7f,-21,25+skill*3)));
+        vm_vec_scale_add2(&travel,&lateral,fl2f((id&1?1:-1)*(skill>=2?12+skill*1.5f:5)));
+        speed=f2fl(vm_vec_normalize(&travel));distance=70;
+    }else{
+        if(b->door<0){if(b->target>=0&&GameTime64-b->seen<F1_0&&sq_clear(o,&b->aim,0,-1))aim=b->aim;else aim=sq_gaze(id,o,b->target<0?b->aim:b->move);}
+        else aim=b->move;
     }
-    vms_vector direction;vm_vec_normalized_dir(&direction,&aim,&o->pos);
-    float x=f2fl(vm_vec_dot(&direction,&o->orient.rvec)),y=f2fl(vm_vec_dot(&direction,&o->orient.uvec)),z=f2fl(vm_vec_dot(&direction,&o->orient.fvec));
-    Controls.heading_time=fl2f(sq_turn(o,b,1,atan2f(x,z),.15f+.025f*skill)*dt);
-    Controls.pitch_time=fl2f(sq_turn(o,b,0,-atan2f(y,sqrtf(x*x+z*z)),.15f+.025f*skill)*dt);
-    Controls.bank_time=fl2f(sq_turn(o,b,2,atan2f(-f2fl(vm_vec_dot(&b->up,&o->orient.rvec)),f2fl(vm_vec_dot(&b->up,&o->orient.uvec))),.07f)*dt);
-    speed=fminf(speed,distance*2.2f);
-    if(Game_mode&GM_MULTI_COOP){
+    vms_vector direction;float aim_distance=f2fl(vm_vec_normalized_dir(&direction,&aim,&o->pos));if(aim_distance<.1f)direction=o->orient.fvec;
+    float z=f2fl(vm_vec_dot(&direction,&o->orient.fvec));sq_look(o,b,direction,visible,skill,aim_distance,target_velocity);
+    float remaining=b->door<0&&b->route_count?b->remaining:distance;
+    if(!visible)speed=fminf(speed,sqrtf(65*fmaxf(0,remaining-.6f)));
+    {
         vms_vector desire;vm_vec_copy_scale(&desire,&travel,fl2f(speed));
-        for(int p=0;p<N_players;p++)if(p!=id&&Players[p].connected==CONNECT_PLAYING){object *friend=&Objects[Players[p].objnum];if(friend->type!=OBJ_PLAYER)continue;vms_vector away;float d=f2fl(vm_vec_normalized_dir(&away,&o->pos,&friend->pos));if(d>1&&d<15)vm_vec_scale_add2(&desire,&away,fl2f((15-d)*3));}
+        if(GameTime64<b->evade_until)vm_vec_scale_add2(&desire,&b->evade,i2f(18+skill*2));
+        for(int p=0;p<N_players;p++)if(p!=id&&Players[p].connected==CONNECT_PLAYING){object *friend=&Objects[Players[p].objnum];if(friend->type!=OBJ_PLAYER)continue;vms_vector away;float d=f2fl(vm_vec_normalized_dir(&away,&o->pos,&friend->pos)),space=(Game_mode&GM_MULTI_COOP)?15:f2fl(o->size+friend->size)+2;
+            if(d<space&&sq_clear(o,&friend->pos,0,friend-Objects)){if(d<.1f){away=Player_init[0].orient.rvec;vm_vec_scale(&away,id>p?F1_0:-F1_0);}vm_vec_scale_add2(&desire,&away,fl2f((space-d)*3));}}
         speed=fminf(speed+15,f2fl(vm_vec_normalize(&desire)));travel=desire;
     }
-    if(b->door>=0){speed=fminf(speed,fmaxf(0,distance-12)*2);if(z>.97f&&GameTime64>b->flare){Flare_create(o);b->flare=GameTime64+F1_0;}}
-    vms_vector probe;vm_vec_scale_add(&probe,&o->pos,&travel,i2f(9));if(!sq_clear(o,&probe,o->size,-1))speed=0;
-    vms_vector axes[3]={o->orient.rvec,o->orient.uvec,o->orient.fvec};fix *outputs[3]={&Controls.sideways_thrust_time,&Controls.vertical_thrust_time,&Controls.forward_thrust_time};
-    for(int i=0;i<3;i++){
-        float goal=f2fl(vm_vec_dot(&travel,&axes[i]))*speed,velocity=f2fl(vm_vec_dot(&o->mtype.phys_info.velocity,&axes[i]));
-        float drag=f2fl(o->mtype.phys_info.drag),mass=f2fl(o->mtype.phys_info.mass),hold=goal*mass*drag/fmaxf(.01f,(1-drag)*f2fl(Player_ship->max_thrust));
-        *outputs[i]=fl2f(sq_clamp(hold+(goal-velocity)*.12f,-1,1)*dt);
+    if(b->door>=0&&!visible){speed=fminf(speed,sqrtf(60*fmaxf(0,distance-12)));if(z>.97f&&GameTime64>b->flare){Flare_create(o);b->flare=GameTime64+F1_0;}}
+    /* Inspect enough space to brake, then favor a safe tangent instead of
+     * slamming the requested velocity to zero at a fixed nine-unit probe. */
+    float look=sq_clamp(12+speed*.3f+speed*speed/100,14,55);
+    fvi_info obstruction;float clearance=sq_depth(o,travel,look,o->size,&obstruction);
+    if(clearance<look-1&&b->door<0&&GameTime64<b->avoid_next){
+        float held=sq_depth(o,b->cruise,look,o->size,NULL);
+        if(held>clearance+2){travel=b->cruise;clearance=held;}
+    }else if(clearance<look-1&&b->door<0){
+        b->avoid_next=GameTime64+F1_0/5;
+        vms_vector best=travel;float quality=-1e9f;
+        for(int candidate=0;candidate<9;candidate++){
+            vms_vector d=travel;
+            if(candidate==0){if(obstruction.hit_type!=HIT_WALL)continue;fix toward=vm_vec_dot(&d,&obstruction.hit_wallnorm);vm_vec_scale_add2(&d,&obstruction.hit_wallnorm,-toward);}
+            else if(candidate==1)d=b->cruise;
+            else if(candidate==2){vms_vector center;compute_segment_center(&center,&Segments[o->segnum]);vm_vec_normalized_dir(&d,&center,&o->pos);}
+            else {int side=candidate-3,child=Segments[o->segnum].children[side];if(child<0||!(WALL_IS_DOORWAY(&Segments[o->segnum],side)&WID_FLY_FLAG))continue;vms_vector portal;compute_center_point_on_side(&portal,&Segments[o->segnum],side);vm_vec_normalized_dir(&d,&portal,&o->pos);}
+            if(vm_vec_normalize(&d)<F1_0/100)continue;
+            float space=sq_depth(o,d,look,o->size,NULL),alignment=f2fl(vm_vec_dot(&d,&travel));
+            float score=space+alignment*16+f2fl(vm_vec_dot(&d,&b->cruise))*5;
+            if(space>6&&score>quality){quality=score;best=d;}
+        }
+        if(quality>-1e8f){travel=best;clearance=sq_depth(o,travel,look,o->size,NULL);}
     }
+    b->cruise=travel;speed=fminf(speed,sqrtf(70*fmaxf(0,clearance-1.5f)));
+    /* A bounded world-space acceleration keeps thrusters continuous through
+     * portal changes and strafes. Native D2 physics still moves the ship. */
+    vms_vector desired;vm_vec_copy_scale(&desired,&travel,fl2f(speed));
+    aa_velocity_control(o,b->command_velocity,b->command_accel,desired);
     read_flying_controls(o);
     if(!visible||GameTime64<b->react||z<.985f-.003f*(4-skill))return;
     if(GameTime64>=b->weapon_until){
@@ -214,7 +391,7 @@ void astra_squad_frame(void){
         if(!sq_bot(id))continue;
         object *o=&Objects[Players[id].objnum];squad_pilot *b=&sq[id];
         if(b->level!=Current_level_num||b->signature!=o->signature){
-            memset(b,0,sizeof(*b));b->level=Current_level_num;b->signature=o->signature;b->target=b->goal=b->last_room=-1;b->progress=GameTime64;b->last=o->pos;b->up=o->orient.uvec;
+            memset(b,0,sizeof(*b));b->level=Current_level_num;b->signature=o->signature;b->target=b->goal=b->last_room=b->pick=-1;b->progress=GameTime64;b->last=o->pos;b->up=Player_init[0].orient.uvec;b->right=o->orient.rvec;
             if(!sq_handoff)init_player_stats_new_ship(id);
             else {EM_ASM({const p=Module.netBotInventory?.[$0];if(p){HEAP32[$1>>2]=p.shields;HEAP32[$2>>2]=p.energy;HEAP32[$3>>2]=p.flags;HEAP8[$4]=p.laser;HEAP16[$5>>1]=p.primary;HEAP16[$6>>1]=p.secondary;for(let i=0;i<10;i++){HEAP16[($7>>1)+i]=p.pa[i];HEAP16[($8>>1)+i]=p.sa[i];}}},id,&Players[id].shields,&Players[id].energy,&Players[id].flags,&Players[id].laser_level,&Players[id].primary_weapon_flags,&Players[id].secondary_weapon_flags,Players[id].primary_ammo,Players[id].secondary_ammo);}
             if(sq_handoff){
@@ -233,6 +410,8 @@ void astra_squad_frame(void){
             o->pos=Player_init[pos].pos;o->orient=Player_init[pos].orient;obj_relink(o-Objects,Player_init[pos].segnum);
             Players[id].flags|=PLAYER_FLAGS_INVULNERABLE;Players[id].invulnerable_time=GameTime64-INVULNERABLE_TIME_MAX+i2f(2);o->shields=Players[id].shields;
             Player_num=id;ConsoleObject=o;multi_send_reappear();create_player_appearance_effect(o);b->target=-1;b->think=0;
+            memset(b->rates,0,sizeof b->rates);memset(b->accels,0,sizeof b->accels);memset(b->command_velocity,0,sizeof b->command_velocity);memset(b->command_accel,0,sizeof b->command_accel);
+            b->gaze_ready=b->turn_side=b->polar=b->route_count=0;b->right=o->orient.rvec;b->cruise=o->orient.fvec;b->last=o->pos;b->progress=GameTime64;b->escape_until=0;
         }
         if(o->type!=OBJ_PLAYER)continue;
         if((Players[id].flags&PLAYER_FLAGS_INVULNERABLE)&&GameTime64-Players[id].invulnerable_time>INVULNERABLE_TIME_MAX)Players[id].flags&=~PLAYER_FLAGS_INVULNERABLE;
@@ -242,7 +421,7 @@ void astra_squad_frame(void){
         if(Game_mode&GM_MULTI_COOP)Players[id].flags|=Players[saved].flags&(PLAYER_FLAGS_BLUE_KEY|PLAYER_FLAGS_RED_KEY|PLAYER_FLAGS_GOLD_KEY);
         if(GameTime64>=b->think)sq_plan(id,o);sq_drive(id,o);
         if(GameTime64>=b->report){b->report=GameTime64+F1_0/4;
-        EM_ASM({Module.netBots=Module.netBots||[];Module.netBots[$0]=({skill:$1,goal:$2,target:$3,shots:$4,missiles:$5,pickups:$6,stuck:$7,energy:$8,order:$9,leader:$10});},id,astra_net_bot_skill[id],b->goal,b->target,b->shots,b->missiles,b->pickups,b->stuck,f2fl(Players[id].energy),sq_command[id],sq_leader[id]);}
+        EM_ASM({Module.netBots=Module.netBots||[];Module.netBots[$0]=({skill:$1,goal:$2,target:$3,shots:$4,missiles:$5,pickups:$6,stuck:$7,energy:$8,order:$9,leader:$10,rearVisible:$11,dodges:$12});},id,astra_net_bot_skill[id],b->goal,b->target,b->shots,b->missiles,b->pickups,b->stuck,f2fl(Players[id].energy),sq_command[id],sq_leader[id],b->rear_seen,b->dodges);}
     }
     sq_handoff=0;
     Player_num=saved;ConsoleObject=console;Player_is_dead=dead;Controls=controls;
@@ -252,7 +431,10 @@ int astra_squad_damage(object *ship,object *killer,fix damage,int friendly){
     if(!sq_owner(id)||sq[id].spawn||damage<=0||Players[id].flags&PLAYER_FLAGS_INVULNERABLE||Endlevel_sequence)return 1;
     if(friendly&&(Game_mode&GM_MULTI_COOP)&&killer&&killer->type==OBJ_PLAYER)return 1;
     Players[id].shields-=damage;ship->shields=Players[id].shields;
-    if(killer&&killer!=ship){sq[id].contact=killer->pos;sq[id].contact_until=GameTime64+i2f(2);sq[id].think=0;}
+    /* Damage does not reveal the live location of an occluded attacker. */
+    if(killer&&killer!=ship&&sq_enemy(id,killer-Objects)&&sq_seen(ship,killer-Objects,astra_net_bot_skill[id])){
+        sq[id].contact=killer->pos;sq[id].contact_until=GameTime64+i2f(2);sq[id].think=0;
+    }
     if(Players[id].shields>=0)return 1;
     sq[id].spawn=GameTime64+i2f(5);
     int saved=Player_num;object *console=ConsoleObject;Player_num=id;ConsoleObject=ship;Players[id].killer_objnum=killer?killer-Objects:-1;
@@ -264,8 +446,12 @@ int astra_squad_pickup(object *ship,object *item){
     if(!sq_owner(ship->id)||Endlevel_sequence||sq[ship->id].spawn)return 0;
     if(sq_need(ship->id,item)<=0)return 1;
     int saved=Player_num,dead=Player_is_dead;object *console=ConsoleObject;
+    int quiet=EM_ASM_INT(return !!Module.arenaDemo),pr=PaletteRedAdd,pg=PaletteGreenAdd,pb=PaletteBlueAdd;
     Player_num=ship->id;ConsoleObject=ship;Player_is_dead=0;
+    astra_squad_silent_pickup=quiet;
     if(do_powerup(item)){item->flags|=OF_SHOULD_BE_DEAD;multi_send_remobj(item-Objects);sq[ship->id].pickups++;sq[ship->id].think=0;}
     else sq[ship->id].ignored[item-Objects]=GameTime64+i2f(20);
+    astra_squad_silent_pickup=0;
+    if(quiet){PaletteRedAdd=pr;PaletteGreenAdd=pg;PaletteBlueAdd=pb;}
     Player_num=saved;ConsoleObject=console;Player_is_dead=dead;return 1;
 }

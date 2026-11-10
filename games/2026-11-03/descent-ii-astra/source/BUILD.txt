@@ -1484,3 +1484,34 @@ R86 - classic anarchy arenas
 - Download the small classic parcel only when a classic arena is selected.
 - Mission identity, arena selection, saves, inspection and relay validation include both packs.
 - Native geometry, pickups, spawns, combat values, flight controls and demo AI are preserved.
+
+R87 - classic arena spectator battles and original Elegies music
+- Minerva and all six Elegies arenas support cockpit-view demos with three native AI opponents, selectable novice through expert.
+- Spectator autopilot recognizes visible hostile player ships and incoming player shots, with normal pickups, shields and damage.
+- Arena pause, next-map and respawn preserve the four-pilot match; no online room or mouse capture is needed.
+- Original four embedded Elegies HMP compositions are rendered offline and streamed on demand; original level sequence 1,2,3,4,1,2.
+- Campaign controls, campaign autopilot and multiplayer combat rules are unchanged.
+
+R88 - arena spectator pilot switching
+- Minerva and Elegies demos can follow any of the four AI pilots, using touch/mouse controls or keys 1-4 and brackets.
+- Camera, native readouts, cockpit instruments and spatial audio follow the selected ship; deaths and arena changes retain the selection.
+- AI ownership, flight, inventory, damage and respawns are unchanged. Astra retains its own frustum and occlusion tests when another ship is viewed.
+- The extra perception pass does not render a second scene or update any pilot twice.
+
+R89 - continuous arena AI flight
+- Host-owned pilots look ahead through connected portals and keep looking into visible corridors while making short pickup and avoidance corrections.
+- Hull-checked pursuit, gradual braking, wall tangents and bounded acceleration replace waypoint stops and the binary near-wall brake.
+- Combat range keeping and orbiting use continuous velocity targets; aiming and horizon control have bounded angular acceleration and anticipate moving targets.
+- Large reversals choose the more open side of the room and retain that turn direction until it is safe to straighten.
+- Host-owned pilots' flare and weapon impacts can open doors through the normal key/lock checks; remote human ownership is unchanged.
+- Overlapping pickup approaches use the native collection handler instead of waiting for a zero-length collision sweep; close ships keep space between them.
+- Death-camera placement relinks across portals, and deletion invalidates its borrowed object slot so repeated spectator respawns cannot delete it twice.
+- Native player controls, weapon damage, pickup rules, campaign autopilot, level geometry and graphics quality are preserved.
+
+
+R90 - rear-aware AI and smooth campaign flight
+- Every live demo pilot has a native auxiliary rear camera, including all four arena perspectives. Its ownership follows the viewed ship without changing simulation ownership or the user's manual-play settings.
+- Rear perception uses the camera cone and native wall/object occlusion. Visible rear pursuers can be engaged, and visible incoming shots can prompt evasive thrust. Closed walls, doors and cloaking still block detection; damage does not reveal an unseen attacker's live position.
+- Original, Vertigo and Overload demos use the arena pilots' acceleration-limited world-space thrust controller, hull-aware braking and wall-tangent avoidance. Their mission/combat planner, native controls, damage and inventory rules remain intact.
+- Corridor gaze is independent of nearby pickup and translation corrections. Bounded turn acceleration and the persistent mine horizon keep the view steady through turns.
+- Traversable water curtains render as a translucent layer without writing solid-wall depth. Explosion fire/smoke can extend across water while solid walls still occlude them. Native blast damage already crossed traversable water and is preserved.
