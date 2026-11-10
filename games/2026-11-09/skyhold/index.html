@@ -7,22 +7,22 @@
 <meta name="description" content="Skyhold 2026: an original planet-defence shooter in real-time 3D. Fly a gunship round and round a small planet, from the day side into the night, shoot down the machines lifting your settlers off the ground, catch the ones that fall and bring down a colossal carrier on each of five worlds. Endless Orbit, online co-op, upgrades, medals, instant replays and a smart demo mode.">
 <title>Skyhold 2026</title>
 <link rel="icon" href="data:,">
-<link rel="modulepreload" href="js/main.js?v=24">
-<link rel="modulepreload" href="js/config.js?v=24">
-<link rel="modulepreload" href="js/sim.js?v=24">
-<link rel="modulepreload" href="js/ai.js?v=24">
-<link rel="modulepreload" href="js/render.js?v=24">
-<link rel="modulepreload" href="js/audio.js?v=24">
-<link rel="modulepreload" href="js/chip.js?v=24">
-<link rel="modulepreload" href="js/input.js?v=24">
-<link rel="modulepreload" href="js/scores.js?v=24">
-<link rel="modulepreload" href="js/replay.js?v=24">
-<link rel="modulepreload" href="js/post.js?v=24">
-<link rel="modulepreload" href="js/textures.js?v=24">
-<link rel="modulepreload" href="js/models.js?v=24">
-<link rel="modulepreload" href="js/fx.js?v=24">
-<link rel="modulepreload" href="js/shaders.js?v=24">
-<link rel="modulepreload" href="js/online.js?v=24">
+<link rel="modulepreload" href="js/main.js?v=25">
+<link rel="modulepreload" href="js/config.js?v=25">
+<link rel="modulepreload" href="js/sim.js?v=25">
+<link rel="modulepreload" href="js/ai.js?v=25">
+<link rel="modulepreload" href="js/render.js?v=25">
+<link rel="modulepreload" href="js/audio.js?v=25">
+<link rel="modulepreload" href="js/chip.js?v=25">
+<link rel="modulepreload" href="js/input.js?v=25">
+<link rel="modulepreload" href="js/scores.js?v=25">
+<link rel="modulepreload" href="js/replay.js?v=25">
+<link rel="modulepreload" href="js/post.js?v=25">
+<link rel="modulepreload" href="js/textures.js?v=25">
+<link rel="modulepreload" href="js/models.js?v=25">
+<link rel="modulepreload" href="js/fx.js?v=25">
+<link rel="modulepreload" href="js/shaders.js?v=25">
+<link rel="modulepreload" href="js/online.js?v=25">
 <link rel="modulepreload" href="vendor/three.module.min.js">
 <link rel="modulepreload" href="vendor/three.core.min.js">
 
@@ -416,7 +416,7 @@ table.hs tr.me td { color: #fff; background: rgba(255, 179, 71, .1); }
   <div class="screen hidden" id="title">
     <div class="card">
       <h1 class="logo">SKYHOLD<span> 2026</span></h1>
-      <div class="ver">VERSION <b id="ver">1.14.0</b> · GUARD THE COLONY · HOLD THE SKY</div>
+      <div class="ver">VERSION <b id="ver">1.15.0</b> · GUARD THE COLONY · HOLD THE SKY</div>
       <div class="diffrow">DIFFICULTY<div class="seg" data-opt="diff"><button data-v="easy">EASY</button><button data-v="normal">NORMAL</button><button data-v="hard">HARD</button><button data-v="nightmare">NIGHTMARE</button></div></div>
       <div id="diff-desc"></div>
       <div class="btns" id="title-btns">
@@ -550,7 +550,7 @@ table.hs tr.me td { color: #fff; background: rgba(255, 179, 71, .1); }
       <span><b>◈ ESCORT DRONE</b> a drone flies with you and shoots the nearest machine</span></div>
     <h3>DIFFICULTY</h3><p>Easy, Normal, Hard and Nightmare each have their own high-score tables. Harder levels score more points (×0.6, ×1, ×1.5, ×2.2). Medals count on Normal and harder, and unlock new ship colours in Options.</p>
     <h3>KEYBOARD</h3><p>FLY: A / D or ← / → (the ship turns to face the way you push) · CLIMB / DIVE: W / S or ↑ / ↓ · FIRE: Space or J · NOVA: Shift or K · BLINK: H or L · CAMERA: C · PAUSE: Esc or P</p>
-    <h3>THE MACHINES</h3><p><b>LIFTER</b> comes down for your settlers and carries them up; at the top it fuses with its captive into a <b>HUSK</b>, fast and vicious (when a colony falls, every lifter becomes one). <b>SOWER</b> drifts high and sows floating mines. <b>HIVE POD</b> breaks apart as you hit it and splits open into a swarm of <b>STINGERS</b>. <b>PROWLER</b> comes for a pilot who takes too long over a wave. Later worlds add a second wave: <b>WHIRLER</b> rings that spin around you and dive together, the <b>COIL</b>, a slow generator that keeps letting out <b>SPARKS</b> (destroy it first), the <b>SCORCHER</b>, which hops about and throws firebrands that curve after you, and the <b>MAW</b>, which opens its jaws and dashes in to bite. The first time you meet each one, a card names it.</p>
+    <h3>THE MACHINES</h3><p><b>LIFTER</b> comes down for your settlers and carries them up; at the top it fuses with its captive into a <b>HUSK</b>, fast and vicious (when a colony falls, every lifter becomes one). <b>SOWER</b> drifts high and sows floating mines. <b>HIVE POD</b> breaks apart as you hit it and splits open into a swarm of <b>STINGERS</b>: each one holds its course and only fires ahead, turning round once it is well past you, so get in close behind a stinger and it never turns on you. <b>PROWLER</b> comes for a pilot who takes too long over a wave. Later worlds add a second wave: <b>WHIRLER</b> rings that spin around you and dive together, the <b>COIL</b>, a slow generator that keeps letting out <b>SPARKS</b> (destroy it first), the <b>SCORCHER</b>, which hops about and throws firebrands that curve after you, and the <b>MAW</b>, which opens its jaws and dashes in to bite. The first time you meet each one, a card names it.</p>
     <h3>THE SKYGATE</h3><p>A great ring hangs in the sky on the far side of the planet (a ring on the scanner). Fly through it and it throws you straight to wherever a settler needs you most: a lifter carrying someone off, a settler falling, or a lifter going down. It needs a few seconds to recharge.</p>
     <h3>SPECIAL WAVES</h3><p>Every fourth wave is a massed attack by one kind of fighter, squadron after squadron, with no lifters: the WHIRLER STORM, the STINGER SWARM, the SPARK STORM, the HUSK RAID and, on the last world, THE ARMADA (a squadron of everything). In the campaign it is each world's last wave before the carrier; in ENDLESS ORBIT it is every fourth wave and they grow. The line under the top bar counts the fighters left.</p>
     <h3>LOSING THE COLONY</h3><p>If every settler is lost, the planet shatters. You fight on in open space among its wreckage, and every lifter left becomes a husk. In the campaign the planet is back for the next world; in ENDLESS ORBIT it returns every fifth wave.</p>
@@ -599,6 +599,6 @@ addEventListener('error', (e) => window.__shErrors.push(String(e.message || e)))
 addEventListener('unhandledrejection', (e) => window.__shErrors.push('rejection: ' + String(e.reason && e.reason.message || e.reason)));
 (() => { const ce = console.error; console.error = (...a) => { window.__shErrors.push(a.map(String).join(' ')); ce.apply(console, a); }; })();
 </script>
-<script type="module" src="js/main.js?v=24"></script>
+<script type="module" src="js/main.js?v=25"></script>
 </body>
 </html>

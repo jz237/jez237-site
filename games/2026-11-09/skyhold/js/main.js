@@ -1,13 +1,13 @@
 // Skyhold 2026 — game flow, menus, HUD (with the scanner strip), commentary, demo director and the frame loop.
-import { VERSION, SECTORS, STEP, F, C, H, BOSSES, UPGRADES, UP_KEYS, UP_COST, MEDALS, parTime, TYPICAL_UP, START_LIVES, DIFFICULTY, POWERUPS, LIVERIES, CP_NAMES, WAVES, ENEMY, SHIPS, SHIP_KEYS, RIVALS, MASTERY, mastLevel, SPECIALS } from './config.js?v=24';
-import { makeWorld, step, stepGuest, drainEvents, wd, wp, settlersLeft, nodePos, CHAIN_T, chainMult, beamRange } from './sim.js?v=24';
-import { Autopilot } from './ai.js?v=24';
-import { Renderer, pickQuality, CALM, LOOKS, PW, PH } from './render.js?v=24';
-import { Audio } from './audio.js?v=24';
-import { Input } from './input.js?v=24';
-import { Scores, NO_POST } from './scores.js?v=24';
-import { Recorder, Replay } from './replay.js?v=24';
-import { Online, ROOM, QUICK, QUICK_R, randomCode, cleanCode } from './online.js?v=24';
+import { VERSION, SECTORS, STEP, F, C, H, BOSSES, UPGRADES, UP_KEYS, UP_COST, MEDALS, parTime, TYPICAL_UP, START_LIVES, DIFFICULTY, POWERUPS, LIVERIES, CP_NAMES, WAVES, ENEMY, SHIPS, SHIP_KEYS, RIVALS, MASTERY, mastLevel, SPECIALS } from './config.js?v=25';
+import { makeWorld, step, stepGuest, drainEvents, wd, wp, settlersLeft, nodePos, CHAIN_T, chainMult, beamRange } from './sim.js?v=25';
+import { Autopilot } from './ai.js?v=25';
+import { Renderer, pickQuality, CALM, LOOKS, PW, PH } from './render.js?v=25';
+import { Audio } from './audio.js?v=25';
+import { Input } from './input.js?v=25';
+import { Scores, NO_POST } from './scores.js?v=25';
+import { Recorder, Replay } from './replay.js?v=25';
+import { Online, ROOM, QUICK, QUICK_R, randomCode, cleanCode } from './online.js?v=25';
 
 const $ = (id) => document.getElementById(id);
 const params = new URLSearchParams(location.search);
@@ -1128,7 +1128,7 @@ const MACHINES = {
   husk: ['HUSK', 'A lifter fused with a settler it carried off: fast, vicious, and it hunts you.'],
   sower: ['SOWER', 'Drifts high and sows floating mines behind it.'],
   hive: ['HIVE POD', 'Shoot it and it breaks apart: every hit knocks a plate off, then it splits open into a swarm of stingers.'],
-  stinger: ['STINGER', 'Small and fast: bursts out of a hive pod and swarms you.'],
+  stinger: ['STINGER', 'Bursts out of a hive pod. Stay close behind one: it never turns round.'],
   prowler: ['PROWLER', 'Comes for a pilot who takes too long over a wave. Finish the wave.'],
   skimmer: ['SKIMMER FLOCK', 'Harmless. Shoot the whole flock for points and a long chain.'],
   meteor: ['METEOR', 'A falling rock: shoot it before it hits the colony.'],
@@ -1486,7 +1486,7 @@ async function boot() {
   toTitle();
   boardOf('campaign', settings.diff).fresh(); boardOf('endless', settings.diff).fresh();
   if (!G.fixed && !params.has('test')) R.prepareAll(true);
-  if (params.has('test')) { const m = await import('./tests.js?v=24'); m.runTests(window.__sh); }
+  if (params.has('test')) { const m = await import('./tests.js?v=25'); m.runTests(window.__sh); }
   else if (params.has('playthrough')) { A.unlock(); startPlaythrough(); }
   else if (params.has('room')) { act('online'); $('join-code').value = cleanCode(params.get('room')); }
   else if (G.autopilot) { A.unlock(); if (params.has('endless')) startEndless(); else startCampaign(+params.get('sector') || 0); }

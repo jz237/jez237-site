@@ -2,9 +2,9 @@
 // nova, novas into the special wave and the carrier, lifters carrying a settler destroyed by one, what each was let off
 // for (the demo's reasons), deaths by novas still in hand, and where runs ended.
 //   node scripts/skyhold/nova_check.mjs [runs=12] [profile=demo] [sectors=1,2,3,4,5]
-import { makeWorld, step, drainEvents, STEP } from '../../games/2026-11-09/skyhold/js/sim.js?v=24';
-import { Autopilot } from '../../games/2026-11-09/skyhold/js/ai.js?v=24';
-import { TYPICAL_UP, START_LIVES } from '../../games/2026-11-09/skyhold/js/config.js?v=24';
+import { makeWorld, step, drainEvents, STEP } from '../../games/2026-11-09/skyhold/js/sim.js?v=25';
+import { Autopilot } from '../../games/2026-11-09/skyhold/js/ai.js?v=25';
+import { TYPICAL_UP, START_LIVES } from '../../games/2026-11-09/skyhold/js/config.js?v=25';
 const runs = +(process.argv[2] || 12), profile = process.argv[3] || 'demo';
 const sectors = (process.argv[4] || '1,2,3,4,5').split(',').map((n) => +n - 1);
 for (const s of sectors) {

@@ -3,7 +3,7 @@
 // Nothing in here touches the DOM, WebGL or audio; it only pushes events into W.ev.
 //
 // The world is a band round a small planet: x along the ground (wraps every C metres), y altitude (0..H).
-import { F, STEP, C, H, ENEMY, SETTLER, BOSSES, B_KEYS, SECTORS, WAVES, rampAt, rampLevel, endlessLevel, ENDLESS, TUTOR, SCORE, START_LIVES, DIFFICULTY, applyDiff, POWERUPS, PW_KEYS, DROP, SKIM, HYPER, EVENTS, EVENT, PHASE2, B_KEYS as _BK, SHIPS, SHIP_KEYS, RIVALS, INTERSECT, WHIRL, COIL, SCORCH, MAW, GATE, SPECIALS, SPECIAL, SPAWN } from './config.js?v=24';
+import { F, STEP, C, H, ENEMY, SETTLER, BOSSES, B_KEYS, SECTORS, WAVES, rampAt, rampLevel, endlessLevel, ENDLESS, TUTOR, SCORE, START_LIVES, DIFFICULTY, applyDiff, POWERUPS, PW_KEYS, DROP, SKIM, HYPER, EVENTS, EVENT, PHASE2, B_KEYS as _BK, SHIPS, SHIP_KEYS, RIVALS, INTERSECT, WHIRL, COIL, SCORCH, MAW, GATE, SPECIALS, SPECIAL, SPAWN, STING } from './config.js?v=25';
 export { STEP };
 
 const clamp = (v, a, b) => (v < a ? a : v > b ? b : v);
@@ -834,10 +834,21 @@ function hive(W, e, dt) {
   if (p) moveTo(e, p.x - Math.sign(wd(p.x - e.x)) * 16, clamp(p.y + Math.sin(e.t + e.ph) * 6, 6, 30), W.R.lV * 0.6, 5, dt);
   else { e.vx = e.face * 2; e.vy = (e.yT - e.y) * 0.5; }
 }
+// a stinger's run: it holds its direction (e.dir) and only homes on the pilot's height; once the pilot is e.over m behind
+// it, it turns round in a wide sweep. A pilot who stays close behind it is never turned on.
 function stinger(W, e, dt) {
-  const p = nearestPlayer(W, e.x, 160);
-  if (!p) { e.vx += clamp(e.face * W.R.stV * 0.5 - e.vx, -20 * dt, 20 * dt); e.vy *= 0.98; return; }
-  moveTo(e, p.x + e.ox + Math.sin(e.t * 2 + e.ph) * 3, p.y + e.oy, W.R.stV, 30, dt);
+  const p = nearestPlayer(W, e.x, 160), v = W.R.stV;
+  if (!e.dir) { e.dir = p ? (Math.sign(wd(p.x - e.x)) || 1) : (e.face || 1); e.over = rr(W, STING.over[0], STING.over[1]); }
+  if (p) {
+    const dx = wd(p.x - e.x);
+    if (Math.sign(dx) === -e.dir && Math.abs(dx) > e.over) { e.dir = -e.dir; e.over = rr(W, STING.over[0], STING.over[1]); W.ev.push({ k: 'stturn', id: e.id, x: e.x, y: e.y }); }
+    const ahead = Math.sign(dx) === e.dir;
+    const ty = clamp((ahead ? p.y : e.yT ?? e.y) + e.oy + Math.sin(e.t * 2 + e.ph) * 1.6, 2, H - 2);
+    e.vy += clamp((ty - e.y) * 2 - e.vy, -v * 2.5 * dt, v * 2.5 * dt);
+    e.vy = clamp(e.vy, -v * STING.climb, v * STING.climb);
+    if (ahead) e.yT = e.y;
+  } else e.vy *= 0.98;
+  e.vx += clamp(e.dir * v - e.vx, -STING.turn * dt, STING.turn * dt);
 }
 // a skimmer flock sweeps round the planet in a weaving line; a member that sees a pilot ahead of it bends toward them
 function skimmer(W, e, dt) {
@@ -934,6 +945,7 @@ function shoot(W, e, dt) {
   const rate = W.R.fire * (e.type === 'husk' ? 1.4 : e.type === 'prowler' ? 2.4 : e.type === 'stinger' ? 0.5 : e.type === 'hive' ? 0.6 : 1);
   e.fireT = rr(W, 0.7, 1.3) / Math.max(0.02, rate);
   if (!p || e.type === 'lifter' && e.st === 'lift') return;
+  if (e.type === 'stinger' && Math.sign(wd(p.x - e.x)) !== e.face) return;   // a stinger only fires ahead of it
   const telling = W.enemies.filter((q) => q.tell > 0).length;
   if (telling >= W.R.shooters) return;
   e.tell = W.R.warn * 0.6;
