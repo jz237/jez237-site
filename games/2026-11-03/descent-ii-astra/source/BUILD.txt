@@ -1497,3 +1497,13 @@ R88 - arena spectator pilot switching
 - Camera, native readouts, cockpit instruments and spatial audio follow the selected ship; deaths and arena changes retain the selection.
 - AI ownership, flight, inventory, damage and respawns are unchanged. Astra retains its own frustum and occlusion tests when another ship is viewed.
 - The extra perception pass does not render a second scene or update any pilot twice.
+
+R89 - continuous arena AI flight
+- Host-owned pilots look ahead through connected portals and keep looking into visible corridors while making short pickup and avoidance corrections.
+- Hull-checked pursuit, gradual braking, wall tangents and bounded acceleration replace waypoint stops and the binary near-wall brake.
+- Combat range keeping and orbiting use continuous velocity targets; aiming and horizon control have bounded angular acceleration and anticipate moving targets.
+- Large reversals choose the more open side of the room and retain that turn direction until it is safe to straighten.
+- Host-owned pilots' flare and weapon impacts can open doors through the normal key/lock checks; remote human ownership is unchanged.
+- Overlapping pickup approaches use the native collection handler instead of waiting for a zero-length collision sweep; close ships keep space between them.
+- Death-camera placement relinks across portals, and deletion invalidates its borrowed object slot so repeated spectator respawns cannot delete it twice.
+- Native player controls, weapon damage, pickup rules, campaign autopilot, level geometry and graphics quality are preserved.

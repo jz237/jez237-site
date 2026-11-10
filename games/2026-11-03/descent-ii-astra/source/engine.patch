@@ -3257,7 +3257,7 @@ index 163e08a..b4b8672 100644
  	lb->item = items;
  	lb->citem = default_item;
 diff --git a/d2/main/object.c b/d2/main/object.c
-index 602b2d5..1c1f5ee 100644
+index 602b2d5..56acfe6 100644
 --- a/d2/main/object.c
 +++ b/d2/main/object.c
 @@ -425,6 +425,12 @@ void draw_cloaked_object(object *obj,g3s_lrgb light,fix *glow,fix64 cloak_start_
@@ -3314,7 +3314,54 @@ index 602b2d5..1c1f5ee 100644
  	int i;
  
  	collide_init();
-@@ -1962,6 +1979,7 @@ void object_move_one( object * obj )
+@@ -1433,6 +1450,7 @@ void obj_delete(int objnum)
+ {
+ 	int pnum;
+ 	object *obj = &Objects[objnum];
++	extern object *Dead_player_camera, *Viewer_save;
+ 
+ 	Assert(objnum != -1);
+ 	Assert(objnum != 0 );
+@@ -1454,6 +1472,11 @@ void obj_delete(int objnum)
+ 	if (obj == Viewer)		//deleting the viewer?
+ 		Viewer = ConsoleObject;						//..make the player the viewer
+ 
++	/* Physics can retire a death camera. Invalidate its borrowed slot before
++	 * reuse; the next death frame will allocate a replacement. */
++	if (Player_is_dead && obj == Dead_player_camera)
++		Dead_player_camera = Viewer_save;
++
+ 	if (obj->flags & OF_ATTACHED)		//detach this from object
+ 		obj_detach_one(obj);
+ 
+@@ -1498,7 +1521,8 @@ void dead_player_end(void)
+ 
+ 	Player_is_dead = 0;
+ 	Player_exploded = 0;
+-	obj_delete(Dead_player_camera-Objects);
++	if (Dead_player_camera && Dead_player_camera != Viewer_save && Dead_player_camera->type == OBJ_CAMERA)
++		obj_delete(Dead_player_camera-Objects);
+ 	//Dead_player_camera = NULL;
+ 	select_cockpit(PlayerCfg.PreferredCockpitMode);
+ 	Viewer = Viewer_save;
+@@ -1609,8 +1633,15 @@ void dead_player_frame(void)
+ 
+ 		Camera_to_player_dist_goal = min(time_dead*8, F1_0*20) + ConsoleObject->size;
+ 
+-		if(turn_camera)
++		if(turn_camera) {
+ 			set_camera_pos(&Dead_player_camera->pos, ConsoleObject);
++			/* Placement can cross a portal. Keep the camera linked to its actual
++			 * room so its next physics step cannot retire it as outside the mine. */
++			int room = find_point_seg(&Dead_player_camera->pos, ConsoleObject->segnum);
++			if (room < 0) {Dead_player_camera->pos = ConsoleObject->pos;room = ConsoleObject->segnum;}
++			if (Dead_player_camera != Viewer_save && room != Dead_player_camera->segnum)
++				obj_relink(Dead_player_camera-Objects,room);
++		}
+ 
+ 		// the following line uncommented by WraithX, 4-12-00
+ 		if (time_dead < DEATH_SEQUENCE_EXPLODE_TIME + F1_0 * 2)
+@@ -1962,6 +1993,7 @@ void object_move_one( object * obj )
  			//NOTE LINK TO CT_MORPH ABOVE!!!
  			if (Game_suspended & SUSP_ROBOTS) return;
  			do_ai_frame(obj);
@@ -3322,7 +3369,7 @@ index 602b2d5..1c1f5ee 100644
  			break;
  
  		case CT_WEAPON:		Laser_do_weapon_sequence(obj, doHomerFrame, idealHomerFrameTime, homerFrameCount); break; // CED
-@@ -2145,7 +2163,11 @@ void object_move_all()
+@@ -2145,7 +2177,11 @@ void object_move_all()
  
  	obj_delete_all_that_should_be_dead();
  
@@ -3335,7 +3382,7 @@ index 602b2d5..1c1f5ee 100644
  		ConsoleObject->mtype.phys_info.flags |= PF_LEVELLING;
  	else
  		ConsoleObject->mtype.phys_info.flags &= ~PF_LEVELLING;
-@@ -2630,3 +2652,5 @@ void set_homing_update_rate(int update_rate) {
+@@ -2630,3 +2666,5 @@ void set_homing_update_rate(int update_rate) {
  
  	con_printf(CON_DEBUG, "Homing update rate: %d\n", update_rate);
  }
@@ -3657,6 +3704,22 @@ index fde0fd3..9c7fc53 100644
  	return state_game_id;
  }
 +
+diff --git a/d2/main/wall.c b/d2/main/wall.c
+index 6d1b0f7..53aaf05 100644
+--- a/d2/main/wall.c
++++ b/d2/main/wall.c
+@@ -1072,7 +1072,10 @@ int wall_hit_process(segment *seg, int side, fix damage, int playernum, object *
+ 		return WHP_BLASTABLE;
+ 	}
+ 
+-	if (playernum != Player_num)	//return if was robot fire
++	/* Host-owned pilots have no remote client to open doors for their shots.
++	 * Keep the normal key/lock checks below, and let only their owner act. */
++	extern int astra_squad_owns(int);
++	if (playernum != Player_num && !astra_squad_owns(playernum))
+ 		return WHP_NOT_SPECIAL;
+ 
+ 	Assert( playernum > -1 );
 diff --git a/d2/main/weapon.c b/d2/main/weapon.c
 index f3ad3c7..7a844d7 100644
 --- a/d2/main/weapon.c
