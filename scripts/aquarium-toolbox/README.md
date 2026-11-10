@@ -338,6 +338,7 @@ desktop widths with no page errors. What a visitor could still run into, now fix
   re-applies an old shared link over the visitor's own edits.
 - Chrome and Safari silently drop a typed comma from a number field (24,5 became 245); Firefox empties the
   field. A comma is now blocked with a hint: "Type numbers without commas, and use a point for decimals".
+  (Since the final pass only where the comma is not the visitor's decimal mark.)
 - The ammonia check refused pH below 6; it now accepts 4–10.
 - The phone summary button says "See answer", not "See diagram".
 
@@ -348,5 +349,21 @@ Playwright's own WebKit libraries (`apt download` + `dpkg-deb -x`, no system ins
 
 `Object.hasOwn` and `Array.prototype.at` were replaced by older equivalents, so the calculators also run in
 Safari 14–15.3 (they need `?.`, `??` and `??=`); the share, guide and backup dialogs use `<dialog>` and need
-Safari 15.4 or newer. Known limits a visitor can still meet:
+Safari 15.4 or newer (a fallback was added in the final pass, below). Known limits a visitor can still meet:
 volumes are US gallons, not UK (imperial) gallons; stocking, heater and flow guidance remain rules of thumb.
+
+## Final pass (2026-11-10, Jez: "Do another pass. Try to make this the final pass")
+
+Read end to end what the earlier passes had not: every message a wrong number can produce, every "math &
+sources" note and link, the search box and the printed page. Details and the message rule are in
+`FINAL_PASS_20261110.md`.
+
+- Search reads `co2`, `decor` and plurals the way people type them and ignores the word "calculator".
+- Wrong-number messages say what to fix (`“Inside length” must be more than 0.`) instead of showing a
+  converted internal limit (`0.03937008 and 1968.504 in`). Stated limits are rounded inward.
+- A typed comma is only stopped where the browser would drop it; where it is the decimal mark it works.
+- US formula text is in US units throughout; three tools no longer cite the dilution article.
+- The four panels open without `<dialog>` (Safari before 15.4).
+
+`node --test scripts/aquarium-toolbox/final.test.mjs` and
+`node scripts/aquarium-toolbox/final-browser.mjs <toolbox-url> [evidence-dir] [chromium|firefox|webkit]`.

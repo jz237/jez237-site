@@ -87,7 +87,8 @@ export function extraHelp(c,f,a={},us=true){
   if(c.id==='label'&&f.key==='dose'){const water=us?['10 gallons','10']:['40 litres','40'],dose={mL:['5 mL','5'],tsp:['1 teaspoon','1'],tbsp:['1 tablespoon','1'],drops:['10 drops','10'],capfuls:['1 capful','1'],pumps:['1 pump','1'],g:['1 gram','1'],scoops:['1 scoop','1'],tablets:['1 tablet','1']}[a.unit]||['5 mL','5'];return `Example: a label that says “${dose[0]} treats ${water[0]}” means ${dose[1]} here and ${water[1]} in the next box. Doses are not interchangeable between products.`;}
   if(c.id==='supplement'&&['dose','labelV','rise'].includes(f.key))return 'Read the dose, the water volume and the rise together from this exact product’s label. They differ between brands.';
   if(['change','target','series'].includes(c.id)&&['current'].includes(f.key))return 'Your test-kit result, for example nitrate in ppm. The example is not a reading from your tank.';
-  if(['mix','consumption','supplement'].includes(c.id)&&!f.options&&['high','low','target','start','end','current'].includes(f.key))return 'Use your own test result. The example is not a reading from your tank.';
+  if(['mix','supplement'].includes(c.id)&&f.key==='target')return 'The reading you are aiming for. The example is not a recommendation for your tank.';
+  if(['mix','consumption','supplement'].includes(c.id)&&!f.options&&['high','low','start','end','current'].includes(f.key))return 'Use your own test result. The example is not a reading from your tank.';
   if(c.id==='energy'&&f.key==='price')return 'The price per kWh on your electricity bill. The US average is around 17–18 cents.';
   if(c.id==='energy'&&f.key==='duty')return 'A heater cycles on and off. Around 25% is typical in a normal room; in a cold room it runs far more.';
   if(c.id==='energy'&&['lights','pumps','heater','other'].includes(f.key))return '';

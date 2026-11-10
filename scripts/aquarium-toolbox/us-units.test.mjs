@@ -46,7 +46,8 @@ test('Presets keep package litres while showing US equivalents; dosing stays con
  assert.match(formulaFor(calc('tank'),true),/231/);assert.match(formulaFor(calc('tank'),false),/1,000/);
 });
 test('US validation names the matching display unit, while saved quantities remain SI',()=>{
- assert.throws(()=>calculate('salt',{...defaults(calc('salt')),bag:-1},true),/lb/);
- assert.throws(()=>calculate('tank',{...defaults(calc('tank')),l:-1},true),/in\./);
+ assert.throws(()=>calculate('salt',{...defaults(calc('salt')),bag:1e12},true),/no more than 22,000 lb\./);
+ assert.throws(()=>calculate('tank',{...defaults(calc('tank')),l:1e12},true),/no more than 1,960 in\./);
+ assert.throws(()=>calculate('tank',{...defaults(calc('tank')),l:1e12},false),/no more than 5,000 cm\./);
  for(const c of calculators){const a=defaults(c);assert.deepEqual(calculate(c.id,a,true).metrics,calculate(c.id,a,false).metrics);}
 });

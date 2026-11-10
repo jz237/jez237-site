@@ -117,9 +117,12 @@ function renderLibrary(){
   const opts=[['popular','Most used','home'],['all','All calculators','grid'],...categories,['favorites','Favorites','star']];
   $('categories').innerHTML=opts.map(([id,label,img])=>`<button class="category" data-category="${id}" aria-pressed="${id===category}">${icon(img)}<span>${e(label)}</span><span class="count">${members(id).length}</span></button>`).join('');
   // Searching always looks through every calculator, whichever list is open.
-  const words=query.toLowerCase().trim().split(/\s+/).filter(Boolean);
-  const text=c=>[c.title,c.description,categories.find(x=>x[0]===c.category)[1],c.keywords,...c.fields.map(f=>f.label)].join(' ').toLowerCase();
-  const matches=words.length?calculators.filter(c=>words.every(w=>text(c).includes(w))):members(category);
+  // People type "co2 calculator", "decor" and "heaters", not "CO₂", "décor" and "heater".
+  const typed=s=>s.normalize('NFKD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+  // Each word may also match without its plural ending: "heaters" finds "heater", "inches" finds "inch".
+  const words=typed(query).trim().split(/\s+/).filter(w=>w&&!/^(calculators?|calc|tools?)$/.test(w)).map(w=>w.length>4?[w.replace(/s$/,''),w.replace(/es$/,'')]:w.length>3?[w.replace(/s$/,'')]:[w]);
+  const text=c=>typed([c.title,c.description,categories.find(x=>x[0]===c.category)[1],c.keywords,...c.fields.map(f=>f.label)].join(' '));
+  const matches=words.length?calculators.filter(c=>{const all=text(c);return words.every(forms=>forms.some(w=>all.includes(w)));}):members(category);
   $('tool-list').innerHTML=matches.map(c=>`<a class="tool-link" href="#tool=${c.id}" data-tool="${c.id}" aria-current="${c.id===state.current}">${e(c.title)}${c.advanced?' <em class="tool-tag">Advanced</em>':''}<span>${e(descriptionFor(c,isUS()))}</span></a>`).join('');
   $('empty-search').hidden=matches.length>0;$('empty-search').textContent=words.length?'No matches. Try “gravel”, “heater”, or “water change”.':'Nothing here yet. Tap the star on a calculator to keep it in Favorites.';
   $('list-caption').textContent=words.length?`${matches.length} MATCHING ${matches.length===1?'TOOL':'TOOLS'}`:opts.find(o=>o[0]===category)[1].toUpperCase();$('library-count').textContent=calculators.length;
@@ -215,8 +218,9 @@ function renderCalculator(){
   $('calc-form').addEventListener('submit',ev=>ev.preventDefault());
   $('calc-form').addEventListener('input',ev=>{if(ev.target.dataset.slider)moveSlider(ev.target,Number(ev.target.value));else onInput(ev);});
   $('calc-form').addEventListener('keydown',ev=>{const el=ev.target;
-    // Chrome and Safari drop a typed comma from number fields (24,5 becomes 245) and Firefox empties the field.
-    if(el.type==='number'&&ev.key===','){ev.preventDefault();toast('Type numbers without commas, and use a point for decimals: 24.5');return;}
+    // Where the decimal mark is a point, Chrome and Safari drop a typed comma from number fields (24,5 becomes 245)
+    // and Firefox empties the field. Where it is a comma, the browser reads 24,5 correctly, so it is left alone.
+    if(el.type==='number'&&ev.key===','&&!commaIsDecimal(el)){ev.preventDefault();toast('Type numbers without commas, and use a point for decimals: 24.5');return;}
     if(!el.dataset.slider)return;const step=Number(el.dataset.increment),v=Number(el.value);
     const keys={ArrowLeft:v-step,ArrowDown:v-step,ArrowRight:v+step,ArrowUp:v+step,PageDown:v-10*step,PageUp:v+10*step,Home:Number(el.min),End:Number(el.max)};
     if(ev.key in keys){ev.preventDefault();moveSlider(el,keys[ev.key]);}
@@ -242,7 +246,7 @@ const linkedSliders={turnover:{v:['flow']}};
 function onInput(ev){
   const c=current(),field=c.fields.find(f=>f.key===ev.target.name);if(!field)return;
   const raw=ev.target.value,previous=inputs()[field.key];
-  if(!field.options&&(raw.trim()===''||!Number.isFinite(Number(raw)))){inputs()[field.key]=NaN;save();syncSlider(field);syncChoices();showError(`Enter a number for ${labelFor(c.id,field,inputs()).toLowerCase()}.`);return;}
+  if(!field.options&&(raw.trim()===''||!Number.isFinite(Number(raw)))){inputs()[field.key]=NaN;save();syncSlider(field);syncChoices();showError(`Enter a number for “${labelFor(c.id,field,inputs())}”.`);return;}
   inputs()[field.key]=field.options?raw:(ev.canonicalValue??fromDisplay(Number(raw),unitOf(field)));
   if(field.options){
     if(c.id==='hardness'&&field.key==='unit'&&raw!==previous)inputs().value=convertHardness(inputs().value,previous,raw);
@@ -263,6 +267,8 @@ function onInput(ev){
   if(blank){showError('Complete every measurement to calculate a result.');return;}
   renderResult();save();
 }
+// Chrome and Safari read number fields in the visitor's own language; Firefox uses the language of the page.
+function commaIsDecimal(el){try{return !(1.1).toLocaleString(/\bGecko\/\d/.test(navigator.userAgent)?el.closest('[lang]')?.lang||undefined:undefined).includes('.');}catch{return false;}}
 function showError(message){result=null;$('result').innerHTML=`<div class="error-card" role="alert"><h3>Let’s check that measurement</h3><p>${e(message)}</p><p>No result is shown until the inputs are valid.</p></div>`;$('steps-details').innerHTML='';updateQuickResult();}
 const mixLegends={
   ammonia:['toxic free ammonia','Ammonium (far less toxic)','Toxic free ammonia (NH₃)'],stock:['stock solution','Water','Stock solution'],mix:['RO / distilled water','Tap water','RO / distilled'],
@@ -300,8 +306,14 @@ function openProfile(){$('tank-name').value=profile().name;$('tank-volume').valu
   $('profile-dialog').showModal();}
 function saveProfile(asNew=false){
   const name=$('tank-name').value.trim(),raw=$('tank-volume').value,volume=profileVolumeDraft?.text===raw?profileVolumeDraft.value:Number(raw)*(isUS()?GAL:1);
-  if(!name||name.length>60||!raw||!Number.isFinite(volume)||volume<.01||volume>1e7){$('profile-error').textContent=isUS()?'Enter a name and a water volume between 0.002642 and 2,641,720 US gallons.':'Enter a name and a water volume between 0.01 and 10,000,000 litres.';return;}
-  if(asNew&&state.profiles.length>=20){$('profile-error').textContent='This toolbox supports up to 20 saved tanks.';return;}
+  // Say which box to fix, in the units on screen (the browser's own message would quote 0.00264172052).
+  const fail=(message,field)=>{$('profile-error').textContent=message;if(field)$(field).focus();};
+  if(!name||name.length>60)return fail(name?'Keep the tank name to 60 characters or fewer.':'Give the tank a name.','tank-name');
+  if(!raw||!Number.isFinite(volume))return fail('Enter how much water the tank holds, as a number.','tank-volume');
+  if(volume<=0)return fail('The water in the tank must be more than 0.','tank-volume');
+  if(volume<.01)return fail(isUS()?'The water in the tank must be at least 0.0027 US gallons.':'The water in the tank must be at least 0.01 litres.','tank-volume');
+  if(volume>1e7)return fail(isUS()?'The water in the tank must be no more than 2,640,000 US gallons.':'The water in the tank must be no more than 10,000,000 litres.','tank-volume');
+  if(asNew&&state.profiles.length>=20)return fail('This toolbox supports up to 20 saved tanks.');
   const p={id:asNew?`tank-${Date.now()}`:profile().id,name,volume,type:$('tank-type').value};
   if(asNew)state.profiles.push(p);else state.profiles[state.profiles.findIndex(x=>x.id===p.id)]=p;
   state.activeProfile=p.id;applyProfile();save();renderPreferences();renderCalculator();$('profile-dialog').close();toast(asNew?'New tank saved.':'Tank saved and tank-volume inputs updated.');
@@ -324,6 +336,13 @@ $('guide-open').onclick=()=>$('guide-dialog').showModal();$('settings-guide').on
 $('export').onclick=()=>{const blob=new Blob([JSON.stringify(snapshot(),null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='aquarium-toolbox-backup.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);$('import-status').textContent='Backup downloaded. Keep it somewhere you can find it.';};
 $('import').onchange=async ev=>{const file=ev.target.files[0];if(!file)return;try{if(file.size>100000)throw new Error('This file is too large for a toolbox backup.');const imported=validateBackup(JSON.parse(await file.text()));if(!window.confirm('Restore this backup? It will replace the saved tanks, favorites, and inputs in this toolbox.'))return;state=imported;showListFor(state.current);save();renderPreferences();renderLibrary();renderCalculator();$('import-status').textContent='Backup restored.';}catch(err){$('import-status').textContent=`Could not restore: ${err.message}`;}finally{ev.target.value='';}};
 $('copy-link').onclick=async()=>{try{await navigator.clipboard.writeText($('share-url').value);$('copy-status').textContent='Link copied.';}catch{$('share-url').focus();$('share-url').select();$('copy-status').textContent='Select and copy the link above using your browser.';}};
+// Safari before 15.4 has no <dialog>: open and close the four panels by hand there.
+for(const dialog of document.querySelectorAll('dialog')){
+  if(typeof dialog.showModal==='function')continue;
+  dialog.showModal=()=>{dialog.setAttribute('open','');dialog.classList.add('dialog-fallback');dialog.setAttribute('role','dialog');dialog.setAttribute('aria-modal','true');dialog.tabIndex=-1;dialog.focus();};
+  dialog.close=()=>dialog.removeAttribute('open');
+}
+document.addEventListener('keydown',ev=>{const open=ev.key==='Escape'&&document.querySelector('dialog.dialog-fallback[open]');if(open)open.close();});
 // Every view keeps its tool in the address. A shared calculation is read once, then the address is tidied
 // to #tool=…, so Back or a reload never re-applies an old shared link over the visitor's own changes.
 const tidyAddress=()=>{if(location.hash!==`#tool=${state.current}`)history.replaceState(null,'',`#tool=${state.current}`);};

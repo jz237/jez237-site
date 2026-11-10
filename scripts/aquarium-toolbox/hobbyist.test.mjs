@@ -61,9 +61,11 @@ test('Only the measurements that apply are shown, with labels that match the sha
 
 test('Range messages use the label the visitor actually sees',()=>{
   const t=calc('tank');
-  assert.throws(()=>calculate('tank',{...defaults(t),shape:'cylinder',l:-1},true),/Inside diameter must be between .* in\./);
-  assert.throws(()=>calculate('adjust',{...defaults(calc('adjust')),target:-5},true,true),/between 1 and 1\.0754 specific gravity/);
-  assert.throws(()=>calculate('adjust',{...defaults(calc('adjust')),target:-5},true,false),/between 0 and 100 ppt/);
+  assert.throws(()=>calculate('tank',{...defaults(t),shape:'cylinder',l:-1},true),/^Error: “Inside diameter” must be more than 0\.$/);
+  assert.throws(()=>calculate('tank',{...defaults(t),shape:'cylinder',l:1e6},true),/^Error: “Inside diameter” must be no more than 1,960 in\.$/);
+  assert.throws(()=>calculate('adjust',{...defaults(calc('adjust')),target:-5},true,true),/between 1\.000 and 1\.0754 specific gravity/);
+  assert.throws(()=>calculate('adjust',{...defaults(calc('adjust')),target:-5},true,false),/^Error: “Salinity you want” cannot be negative\.$/);
+  assert.throws(()=>calculate('adjust',{...defaults(calc('adjust')),target:500},true,false),/^Error: “Salinity you want” must be no more than 100 ppt\.$/);
 });
 
 test('Standard tank choices fill real sizes and stay inside every field range',()=>{
@@ -121,7 +123,7 @@ test('Filter flow asks for the right number for the kind of tank, and says where
   for(const kind of ['softreef','sps']){assert.match(labelFor('turnover',flow,{kind}),/all your pumps and wavemakers/);assert.match(helpFor('turnover',flow,{kind}),/return pump and every powerhead or wavemaker/);}
   assert.match(labelFor('turnover',flow,{kind:'return'}),/return pump/);assert.match(helpFor('turnover',flow,{kind:'return'}),/head height/);
   // A validation message names the field the way it is shown.
-  assert.throws(()=>calculate('turnover',{v:20*GAL,kind:'sps',flow:-1},true),/Total flow of all your pumps and wavemakers must be between/);
+  assert.throws(()=>calculate('turnover',{v:20*GAL,kind:'sps',flow:-1},true),/^Error: “Total flow of all your pumps and wavemakers” cannot be negative\.$/);
   // 2,000 GPH on 125 gallons is 16 times an hour, which is low for SPS corals (30–40).
   const at=(kind,gph,gal)=>run('turnover',{v:gal*GAL,flow:gph*GAL,kind}).graphic;
   assert.deepEqual([at('sps',2000,125).status,at('sps',4000,125).status,at('sps',6000,125).status],['low','ok','above']);
