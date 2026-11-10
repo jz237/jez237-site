@@ -3,7 +3,7 @@
 // in the same composite shader (so no extra programs): heat haze, a zoom blur away from a point (HYPER, big moments), a
 // light sharpen, anamorphic streaks and lens dirt on the bloom, a colour punch, and a coloured edge when the ship is hurt.
 import * as THREE from '../vendor/three.module.min.js';
-import { TONE, NOISE } from './shaders.js?v=25';
+import { TONE, NOISE } from './shaders.js?v=26';
 
 const VERT = /* glsl */ `varying vec2 vUv; void main(){ vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }`;
 

@@ -1,6 +1,6 @@
 // Skyhold 2026 — every tunable number lives here. The RAMP table drives difficulty; nothing else in the game
 // hard-codes enemy pace, numbers, fire rate, aim or warning times.
-export const VERSION = '1.15.0';
+export const VERSION = '1.16.0';
 export const STEP = 1 / 120;
 
 // ------------------------------------------------------------------ the planet and the Warden gunship
@@ -127,8 +127,26 @@ export const SKIM = { near: [0, 0, 0, 0, 0], v: [8, 9.5, 11, 12, 12.5], pull: [0
 // STINGERS fly committed runs: each picks a direction and holds it, homing only on height, until the pilot is `over`
 // m BEHIND it; only then does it turn round, in a wide sweep (turn m/s2 across). It fires only ahead. So the trick:
 // stay close behind a stinger and it never turns; shoot it from there. A pilot ahead of it gets its bolts and its run.
-export const STING = { over: [16, 28], turn: 11, climb: 0.75 };
-export const SPAWN = { near: 0.8, r: [26, 80], lifterNear: 0.8, lifterR: 200 };
+export const STING = { over: [16, 28], turn: 11, climb: 0.55 };
+export const SPAWN = { near: 0.95, r: [28, 60], lifterNear: 1, lifterR: 110, leash: 75 };
+// FIGHTER PACKS (since 1.16.0): through every ordinary wave, packs of fighters warp in ahead of a pilot (`ahead` m, the
+// way the ship faces most of the time) whenever fewer than `low` machines are within `see` m of it, never closer than
+// `cd` s apart and never more than `wait` s apart, until the wave's `packs` (RAMP) have all come. kinds[world] is the
+// order they come in; n the machines in a pack of each kind (+1 spark / stinger from world 3); sparks in a pack burn out
+// after `sparkLife` s; a stinger pack flies on away from the pilot and only turns once it is `run` m ahead. STRAGGLERS: once a wave has
+// sent everything, machines left more than `far` m from every pilot warp back in close (`strag` at a time) after `dry` s
+// with nothing in sight.
+export const PACK = {
+  kinds: [
+    ['spark', 'stinger', 'spark', 'stinger', 'whirler'],
+    ['spark', 'stinger', 'scorcher', 'spark', 'whirler', 'spark'],
+    ['spark', 'stinger', 'husk', 'scorcher', 'spark', 'whirler'],
+    ['spark', 'husk', 'stinger', 'maw', 'scorcher', 'whirler'],
+    ['spark', 'husk', 'stinger', 'maw', 'scorcher', 'whirler', 'stinger'],
+  ],
+  n: { spark: 3, stinger: 3, scorcher: 2, husk: 2, maw: 1 }, sparkLife: 12, run: [60, 75],
+  low: 4, see: 60, cd: 3, wait: 8, first: 3, ahead: [34, 52], dry: 2.5, far: 80, strag: 4,
+};
 export const SETTLER = { walk: 0.7, roam: 7, h: 0.9, hang: 1.9 };
 
 // the carrier at the end of each sector. nodes: weak points [dx, dy] from its centre (facing +x), body: hull
@@ -170,24 +188,24 @@ export const CP_NAMES = ['WAVE 1', 'WAVE 2', 'WAVE 3', 'WAVE 4', 'CARRIER'];
 //   shield   shield charges at each wave start
 //   nodeHP   beam hits per carrier weak point     bossV  carrier speed     atkT  seconds between its attacks
 export const RAMP = [
-  { lifters: [18, 22], group: [5, 6], gap: [5, 4], lV: [4.6, 5.4], liftV: [1.1, 1.3], grabT: [2.4, 2.1], hunters: [1, 2], fire: [0.1, 0.14], shooters: [1, 1], warn: [2.3, 2.0],
-    aim: [0.3, 0.26], boltV: [12, 13.5], lead: [0, 0.2], hV: [9, 10], stV: [11, 12], sowers: [2, 3], hives: [3, 3], husks: [0, 0], whirls: [3, 4], scorchers: [2, 2], coils: [1, 2], maws: [1, 1], prowlT: [80, 70], fallV: [2.4, 2.7], safeH: [99, 99], shield: [2, 1],
+  { lifters: [9, 11], group: [3, 4], packs: [10, 12], gap: [5, 4], lV: [4.6, 5.4], liftV: [1.1, 1.3], grabT: [2.4, 2.1], hunters: [1, 2], fire: [0.1, 0.14], shooters: [1, 1], warn: [2.3, 2.0],
+    aim: [0.3, 0.26], boltV: [12, 13.5], lead: [0, 0.2], hV: [9, 10], stV: [11, 12], sowers: [1, 2], hives: [2, 2], husks: [0, 0], whirls: [2, 2], scorchers: [1, 1], coils: [1, 1], maws: [0, 1], prowlT: [80, 70], fallV: [2.4, 2.7], safeH: [99, 99], shield: [2, 1],
     sting: 3, settlers: 8, nodeHP: 14, bossV: 4.2, atkT: 5.6 },
-  { lifters: [26, 30], group: [6, 6], gap: [4.6, 4], lV: [5.6, 6.4], liftV: [1.4, 1.6], grabT: [2.0, 1.8], hunters: [2, 2], fire: [0.14, 0.17], shooters: [1, 2], warn: [1.9, 1.65],
-    aim: [0.21, 0.17], boltV: [15.5, 17.5], lead: [0.25, 0.35], hV: [11, 12], stV: [11, 12], sowers: [4, 4], hives: [4, 4], husks: [0, 1], whirls: [4, 4], scorchers: [2, 3], coils: [2, 2], maws: [2, 2], prowlT: [58, 50], fallV: [3.2, 3.6], safeH: [20, 18], shield: [3, 3],
+  { lifters: [12, 14], group: [4, 4], packs: [8, 10], gap: [4.6, 4], lV: [5.6, 6.4], liftV: [1.4, 1.6], grabT: [2.0, 1.8], hunters: [2, 2], fire: [0.12, 0.15], shooters: [1, 1], warn: [1.9, 1.65],
+    aim: [0.21, 0.17], boltV: [15.5, 17.5], lead: [0.25, 0.35], hV: [11, 12], stV: [10, 11], sowers: [2, 2], hives: [2, 2], husks: [0, 1], whirls: [2, 3], scorchers: [1, 2], coils: [1, 1], maws: [1, 1], prowlT: [58, 50], fallV: [3.2, 3.6], safeH: [20, 18], shield: [4, 4],
     sting: 4, settlers: 9, nodeHP: 16, bossV: 5, atkT: 5.0 },
-  { lifters: [28, 32], group: [6, 7], gap: [4.2, 3.6], lV: [6.6, 7.4], liftV: [1.7, 1.9], grabT: [1.7, 1.5], hunters: [2, 3], fire: [0.18, 0.2], shooters: [2, 2], warn: [1.6, 1.4],
-    aim: [0.14, 0.115], boltV: [19, 21], lead: [0.45, 0.55], hV: [13.5, 14.5], stV: [13, 14], sowers: [4, 4], hives: [5, 5], husks: [5, 6], whirls: [4, 5], scorchers: [3, 4], coils: [3, 3], maws: [3, 3], prowlT: [55, 48], fallV: [4, 4.5], safeH: [15, 13], shield: [3, 3],
+  { lifters: [13, 15], group: [4, 5], packs: [9, 11], gap: [4.2, 3.6], lV: [6.6, 7.4], liftV: [1.7, 1.9], grabT: [1.7, 1.5], hunters: [2, 3], fire: [0.16, 0.18], shooters: [2, 2], warn: [1.6, 1.4],
+    aim: [0.14, 0.115], boltV: [19, 21], lead: [0.45, 0.55], hV: [13.5, 14.5], stV: [13, 14], sowers: [2, 3], hives: [3, 3], husks: [3, 3], whirls: [2, 3], scorchers: [2, 2], coils: [2, 2], maws: [2, 2], prowlT: [55, 48], fallV: [4, 4.5], safeH: [15, 13], shield: [4, 4],
     sting: 4, settlers: 10, nodeHP: 17, bossV: 5.8, atkT: 4.5 },
-  { lifters: [28, 32], group: [6, 7], gap: [4, 3.5], lV: [7.6, 8.4], liftV: [2.0, 2.2], grabT: [1.4, 1.25], hunters: [3, 3], fire: [0.25, 0.29], shooters: [2, 3], warn: [1.35, 1.15],
-    aim: [0.11, 0.09], boltV: [20, 22], lead: [0.5, 0.6], hV: [15, 16], stV: [14, 15], sowers: [5, 6], hives: [5, 6], husks: [7, 8], whirls: [4, 5], scorchers: [4, 4], coils: [3, 4], maws: [4, 4], prowlT: [48, 42], fallV: [5, 5.5], safeH: [12, 10], shield: [2, 2],
+  { lifters: [13, 15], group: [4, 5], packs: [10, 12], gap: [4, 3.5], lV: [7.6, 8.4], liftV: [2.0, 2.2], grabT: [1.4, 1.25], hunters: [3, 3], fire: [0.25, 0.29], shooters: [2, 3], warn: [1.35, 1.15],
+    aim: [0.11, 0.09], boltV: [20, 22], lead: [0.5, 0.6], hV: [15, 16], stV: [14, 15], sowers: [3, 3], hives: [3, 3], husks: [4, 4], whirls: [3, 3], scorchers: [2, 2], coils: [2, 2], maws: [2, 2], prowlT: [48, 42], fallV: [5, 5.5], safeH: [12, 10], shield: [2, 2],
     sting: 4, settlers: 10, nodeHP: 19, bossV: 6.4, atkT: 4.0 },
-  { lifters: [30, 34], group: [7, 7], gap: [3.8, 3.2], lV: [8.6, 9.6], liftV: [2.3, 2.6], grabT: [1.2, 1.0], hunters: [3, 4], fire: [0.14, 0.16], shooters: [2, 3], warn: [1.1, 0.72],
-    aim: [0.095, 0.08], boltV: [22, 25], lead: [0.6, 0.7], hV: [17, 19], stV: [16, 18], sowers: [5, 6], hives: [5, 5], husks: [6, 7], whirls: [4, 5], scorchers: [4, 4], coils: [3, 4], maws: [4, 4], prowlT: [42, 34], fallV: [5.8, 6.4], safeH: [9, 8], shield: [2, 2],
+  { lifters: [14, 16], group: [4, 5], packs: [12, 14], gap: [3.8, 3.2], lV: [8.6, 9.6], liftV: [2.3, 2.6], grabT: [1.2, 1.0], hunters: [3, 4], fire: [0.15, 0.17], shooters: [2, 3], warn: [1.1, 0.72],
+    aim: [0.095, 0.08], boltV: [22, 25], lead: [0.6, 0.7], hV: [17, 19], stV: [16, 18], sowers: [3, 3], hives: [3, 3], husks: [4, 4], whirls: [3, 3], scorchers: [2, 2], coils: [2, 2], maws: [2, 2], prowlT: [42, 34], fallV: [5.8, 6.4], safeH: [9, 8], shield: [2, 2],
     sting: 5, settlers: 10, nodeHP: 21, bossV: 7, atkT: 3.4 },
 ];
-export const RAMP_KEYS = ['lifters', 'group', 'gap', 'lV', 'liftV', 'grabT', 'hunters', 'fire', 'shooters', 'warn', 'aim', 'boltV', 'lead', 'hV', 'stV', 'sowers', 'hives', 'husks', 'prowlT', 'fallV', 'safeH', 'shield', 'whirls', 'scorchers', 'coils', 'maws'];
-const ROUND = ['lifters', 'group', 'hunters', 'shooters', 'sowers', 'hives', 'husks', 'shield', 'whirls', 'scorchers', 'coils', 'maws'];
+export const RAMP_KEYS = ['lifters', 'group', 'gap', 'lV', 'liftV', 'grabT', 'hunters', 'fire', 'shooters', 'warn', 'aim', 'boltV', 'lead', 'hV', 'stV', 'sowers', 'hives', 'husks', 'prowlT', 'fallV', 'safeH', 'shield', 'whirls', 'scorchers', 'coils', 'maws', 'packs'];
+const ROUND = ['lifters', 'group', 'hunters', 'shooters', 'sowers', 'hives', 'husks', 'shield', 'whirls', 'scorchers', 'coils', 'maws', 'packs'];
 export const MIN_WARN = 0.6;
 
 // the values in wave w (0..4, 4 = the carrier) of sector s (0-based)
@@ -244,7 +262,7 @@ export function applyDiff(R, key) {
   const n = (v) => Math.max(v > 0 ? 1 : 0, Math.round(v * d.count));
   return { ...R, lV: R.lV * d.speed, hV: R.hV * d.speed, stV: R.stV * d.speed, bossV: R.bossV * d.speed, fire: R.fire * d.fire, aim: R.aim * d.aim, boltV: R.boltV * d.boltV,
     warn: Math.max(MIN_WARN, R.warn * d.warn), liftV: R.liftV * d.lift, grabT: R.grabT / d.lift, safeH: R.safeH * d.safeH, nodeHP: Math.max(4, R.nodeHP + d.nodeHP * 3),
-    lifters: n(R.lifters), sowers: n(R.sowers), hives: n(R.hives), husks: n(R.husks), whirls: n(R.whirls), scorchers: n(R.scorchers), coils: n(R.coils), maws: n(R.maws), shield: R.shield + d.shield, atkT: R.atkT / d.fire ** 0.5 };
+    lifters: n(R.lifters), sowers: n(R.sowers), hives: n(R.hives), husks: n(R.husks), whirls: n(R.whirls), scorchers: n(R.scorchers), coils: n(R.coils), maws: n(R.maws), packs: n(R.packs), shield: R.shield + d.shield, atkT: R.atkT / d.fire ** 0.5 };
 }
 
 // power-up pods (rare drops). time = seconds it lasts (0 = instant), w = how often

@@ -13,8 +13,8 @@
 //   'human' — plays like a person: ~0.35 s reaction (scattered, sometimes late), wobbly altitude, misses things
 //             behind it, saves novas too long. The difficulty ramp is measured with this one.
 //   'demo'  — the attract mode: sharp and decisive. It never reads the world's random generator (replays stay exact).
-import { F, ENEMY, BOSSES, H, SHIPS, WAVES, SPECIAL } from './config.js?v=25';
-import { wd, wp, nodePos, beamRange } from './sim.js?v=25';
+import { F, ENEMY, BOSSES, H, SHIPS, WAVES, SPECIAL } from './config.js?v=26';
+import { wd, wp, nodePos, beamRange } from './sim.js?v=26';
 
 const clamp = (v, a, b) => (v < a ? a : v > b ? b : v);
 function mkr(seed) { let s = seed | 0; return () => { s = (s + 0x6D2B79F5) | 0; let t = Math.imul(s ^ (s >>> 15), s | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
@@ -178,7 +178,8 @@ export class Autopilot {
         else if (d < 26) { ty = ey + (me.y > ey ? 5 : -5); tx = me.x; want = 0.2; }
       }
       // a husk or prowler right on top of us: get out of its altitude band and keep going
-      if (g.kind === 'enemy' && d < 5) { ty = ey + (me.y > ey ? 4 : -4); want = 1; tx = me.x + me.face * 20; }
+      // (to the side with room: never into the ground or the ceiling with it on top of us)
+      if (g.kind === 'enemy' && d < 5) { const up = ey < 7 ? true : ey > H - 7 ? false : me.y > ey; ty = ey + (up ? 4 : -4); want = 1; tx = me.x + me.face * 20; }
       const facing = Math.sign(dx) === me.face;
       const r = g.kind === 'node' ? 1.15 : ENEMY[g.o.type].r;
       if (facing && d < range && Math.abs(ey - me.y) < r + F.beamH * 0.9) fire = true;
