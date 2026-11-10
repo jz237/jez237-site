@@ -3,7 +3,7 @@
 // Nothing in here touches the DOM, WebGL or audio; it only pushes events into W.ev.
 //
 // The world is a band round a small planet: x along the ground (wraps every C metres), y altitude (0..H).
-import { F, STEP, C, H, ENEMY, SETTLER, BOSSES, B_KEYS, SECTORS, WAVES, rampAt, rampLevel, endlessLevel, ENDLESS, TUTOR, SCORE, START_LIVES, DIFFICULTY, applyDiff, POWERUPS, PW_KEYS, DROP, SKIM, HYPER, EVENTS, EVENT, PHASE2, B_KEYS as _BK, SHIPS, SHIP_KEYS, RIVALS, INTERSECT, WHIRL, COIL, SCORCH, MAW, GATE } from './config.js?v=15';
+import { F, STEP, C, H, ENEMY, SETTLER, BOSSES, B_KEYS, SECTORS, WAVES, rampAt, rampLevel, endlessLevel, ENDLESS, TUTOR, SCORE, START_LIVES, DIFFICULTY, applyDiff, POWERUPS, PW_KEYS, DROP, SKIM, HYPER, EVENTS, EVENT, PHASE2, B_KEYS as _BK, SHIPS, SHIP_KEYS, RIVALS, INTERSECT, WHIRL, COIL, SCORCH, MAW, GATE } from './config.js?v=16';
 export { STEP };
 
 const clamp = (v, a, b) => (v < a ? a : v > b ? b : v);
@@ -20,6 +20,9 @@ export function rand(W) {
 }
 const rr = (W, a, b) => a + (b - a) * rand(W);
 const D_OF = (W) => DIFFICULTY[W.diff] || DIFFICULTY.normal;
+// FEATURED MACHINE (the AI PLAYTHROUGH picker): every wave also brings 2 + (wave / 2) of this machine, as what makes it
+// (sparks come from coils, stingers from hive pods, whirlers in rings, lifters as extra lifters)
+const FEAT = { lifter: 'lifter', husk: 'husk', sower: 'sower', hive: 'hive', stinger: 'hive', prowler: 'prowler', whirler: 'whirl', coil: 'coil', spark: 'coil', scorcher: 'scorcher', maw: 'maw' };
 const HOSTILE = new Set(['lifter', 'husk', 'sower', 'hive', 'stinger', 'prowler', 'whirler', 'coil', 'spark', 'scorcher', 'maw']);
 
 // ------------------------------------------------------------------ world
@@ -27,7 +30,7 @@ const HOSTILE = new Set(['lifter', 'husk', 'sower', 'hive', 'stinger', 'prowler'
 export function makeWorld(o = {}) {
   const seed = (o.seed ?? 1) | 0, mode = o.mode === 'endless' ? 'endless' : 'campaign', sector = mode === 'endless' ? 0 : o.sector || 0;
   const W = {
-    n: 0, t: 0, seed, rs: (seed ^ 0x2545F491) | 0, mode, sector, k: sector, up: { ...(o.up || {}) }, demo: !!o.demo, coop: !!o.coop || !!o.rivals, rivals: !!o.rivals,
+    n: 0, t: 0, seed, rs: (seed ^ 0x2545F491) | 0, mode, sector, k: sector, up: { ...(o.up || {}) }, demo: !!o.demo, coop: !!o.coop || !!o.rivals, rivals: !!o.rivals, feat: FEAT[o.feat] ? o.feat : null,
     diff: DIFFICULTY[o.diff] ? o.diff : 'normal', lives: o.lives ?? START_LIVES + D_OF({ diff: o.diff }).lives, score: o.score || 0, lifePts: 0, nextLife: 0,
     wave: 0, cp: 0, phase: 'intro', phaseT: 2.4, secT: 0, waveT: 0, fightT: 0, R: null, level: 0, waveN: 0, bossN: 0,
     players: [], enemies: [], settlers: [], sites: [], shots: [], bolts: [], pods: [], missiles: [], rings: [], gate: null, boss: null, plan: null, fallen: false,
@@ -167,11 +170,13 @@ function startWave(W, w) {
   for (let i = 0; i < R.hives - (cross ? 1 : 0); i++) extra.push({ t: rr(W, 6, 20), type: 'hive' });
   for (let i = 0; i < R.husks; i++) extra.push({ t: rr(W, 4, 18), type: 'husk' });
   if (cross) extra.push({ t: rr(W, INTERSECT.at[0], INTERSECT.at[1]), type: 'cross' });
+  const fx = W.feat && W.mode === 'campaign' ? FEAT[W.feat] : null, fn = fx ? 2 + Math.floor(w / 2) : 0;
   for (let i = 0; i < (R.whirls || 0); i++) extra.push({ t: rr(W, 5, 16), type: 'whirl' });
   for (let i = 0; i < (R.scorchers || 0); i++) extra.push({ t: rr(W, 6, 18), type: 'scorcher' });
   for (let i = 0; i < (R.coils || 0); i++) extra.push({ t: rr(W, 4, 12), type: 'coil' });
   for (let i = 0; i < (R.maws || 0); i++) extra.push({ t: rr(W, 10, 22), type: 'maw' });
-  W.plan = { left: R.lifters, groupT: W.tutorial ? TUTOR.firstAt : 1.2, extra, prowlT: R.prowlT };
+  for (let i = 0; i < fn; i++) if (fx !== 'lifter') extra.push({ t: rr(W, 3, 20), type: fx });
+  W.plan = { left: R.lifters + (fx === 'lifter' ? fn + 1 : 0), groupT: W.tutorial ? TUTOR.firstAt : 1.2, extra, prowlT: R.prowlT };
   for (const p of W.players) p.shield = Math.max(p.shield, R.shield + (W.up.deflector || 0));
   W.ev.push({ k: 'wave', w, n: W.mode === 'endless' ? W.waveN : w + 1 });
 }
