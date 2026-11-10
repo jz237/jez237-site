@@ -11,7 +11,7 @@ static const char *astra_liquid_fragment=
 "varying highp vec2 uv;\n"
 "varying mediump vec4 light;\n"
 "uniform sampler2D baseMap,overlayMap,env0,env1,env2,env3,env4,env5;\n"
-"uniform float clock,kind,overlay,turn,cascade;uniform vec2 downhill;\n"
+"uniform float clock,kind,overlay,turn,cascade,barrier;uniform vec2 downhill;\n"
 "uniform vec3 eye,normal,tangent,bitangent;\n"
 "uniform vec4 shore[4],planes[6],origins[6],pu[6],pv[6],texuv[6],texduv[6],rect[6],tints[6];\n"
 "uniform vec4 lamps[3],lampColors[3];\n"
@@ -145,7 +145,7 @@ static const char *astra_liquid_fragment=
 "  col=mix(col,cover.rgb*light.rgb,smoothstep(.004,.08,cover.a));\n"
 " }\n"
 " col=mix(col,vec3(.055,.082,.09),min(.10,1.-exp(-max(0.,-pos.z-25.)*.001)));\n"
-" gl_FragColor=vec4(col,native.a*light.a);\n"
+" gl_FragColor=vec4(col,native.a*light.a*(barrier>.5?.46:1.));\n"
 "}\n"
 ;
 /* Render-only water/lava. World-space fields continue over shared edges.
@@ -232,10 +232,12 @@ int astra_liquid_face(int count,const g3s_point **view,const int *ids,const g3s_
     if(face->wall_num>=0&&Walls[face->wall_num].type==WALL_DOOR)return 0;
     if(!warm_astra_liquid_face_program&&!warm_astra_liquid_face()){return 0;}
     al_catalog();al_reflection_room(room);
+    int barrier=kind==1&&Segments[room].children[sidenum]>=0&&(WALL_IS_DOORWAY(&Segments[room],sidenum)&WID_FLY_FLAG)&&
+        (face->wall_num<0||Walls[face->wall_num].type==WALL_ILLUSION);
     PIGGY_PAGE_IN(Textures[face->tmap_num]);grs_bitmap *base=&GameBitmaps[Textures[face->tmap_num].index];ogl_bindbmtex(base);ogl_texture *tex=base->gltexture;
     GLuint native=tex->native_color?tex->native_color:tex->handle,toptex=native;int top=face->tmap_num2&0x3fff,mode=0;
     if(top>0&&top<NumTextures){PIGGY_PAGE_IN(Textures[top]);grs_bitmap *bm=&GameBitmaps[Textures[top].index];ogl_bindbmtex(bm);toptex=bm->gltexture->handle;mode=(bm->bm_flags&BM_FLAG_SUPER_TRANSPARENT)?2:1;}
-    glUseProgram(warm_astra_liquid_face_program);glUniform1i(AS_UNIFORM(warm_astra_liquid_face_program,"baseMap"),0);glUniform1i(AS_UNIFORM(warm_astra_liquid_face_program,"overlayMap"),1);
+    glUseProgram(warm_astra_liquid_face_program);glUniform1f(AS_UNIFORM(warm_astra_liquid_face_program,"barrier"),barrier);glUniform1i(AS_UNIFORM(warm_astra_liquid_face_program,"baseMap"),0);glUniform1i(AS_UNIFORM(warm_astra_liquid_face_program,"overlayMap"),1);
     static GLint environmentUnits[6];static int unitsReady;if(!unitsReady){for(int i=0;i<6;i++){char name[12];snprintf(name,sizeof name,"env%d",i);environmentUnits[i]=glGetUniformLocation(warm_astra_liquid_face_program,name);}unitsReady=1;}for(int i=0;i<6;i++){glUniform1i(environmentUnits[i],2+i);glActiveTexture(GL_TEXTURE2+i);glBindTexture(GL_TEXTURE_2D,al_probe.textures[i]?al_probe.textures[i]:native);}
     glActiveTexture(GL_TEXTURE1);glBindTexture(GL_TEXTURE_2D,toptex);glActiveTexture(GL_TEXTURE0);glBindTexture(GL_TEXTURE_2D,native);
     glUniform4fv(AS_UNIFORM(warm_astra_liquid_face_program,"planes[0]"),6,&al_probe.planes[0][0]);glUniform4fv(AS_UNIFORM(warm_astra_liquid_face_program,"origins[0]"),6,&al_probe.origins[0][0]);

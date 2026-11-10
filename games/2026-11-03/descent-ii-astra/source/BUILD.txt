@@ -1507,3 +1507,11 @@ R89 - continuous arena AI flight
 - Overlapping pickup approaches use the native collection handler instead of waiting for a zero-length collision sweep; close ships keep space between them.
 - Death-camera placement relinks across portals, and deletion invalidates its borrowed object slot so repeated spectator respawns cannot delete it twice.
 - Native player controls, weapon damage, pickup rules, campaign autopilot, level geometry and graphics quality are preserved.
+
+
+R90 - rear-aware AI and smooth campaign flight
+- Every live demo pilot has a native auxiliary rear camera, including all four arena perspectives. Its ownership follows the viewed ship without changing simulation ownership or the user's manual-play settings.
+- Rear perception uses the camera cone and native wall/object occlusion. Visible rear pursuers can be engaged, and visible incoming shots can prompt evasive thrust. Closed walls, doors and cloaking still block detection; damage does not reveal an unseen attacker's live position.
+- Original, Vertigo and Overload demos use the arena pilots' acceleration-limited world-space thrust controller, hull-aware braking and wall-tangent avoidance. Their mission/combat planner, native controls, damage and inventory rules remain intact.
+- Corridor gaze is independent of nearby pickup and translation corrections. Bounded turn acceleration and the persistent mine horizon keep the view steady through turns.
+- Traversable water curtains render as a translucent layer without writing solid-wall depth. Explosion fire/smoke can extend across water while solid walls still occlude them. Native blast damage already crossed traversable water and is preserved.

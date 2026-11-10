@@ -1733,7 +1733,7 @@ index d4c7b1f..de6ddc1 100644
  #ifdef NETWORK
  		KEY_MAC(case KEY_COMMAND+KEY_6:)
 diff --git a/d2/main/gamerend.c b/d2/main/gamerend.c
-index da0872e..4b6963b 100644
+index da0872e..fe1994f 100644
 --- a/d2/main/gamerend.c
 +++ b/d2/main/gamerend.c
 @@ -1,3 +1,4 @@
@@ -1770,6 +1770,15 @@ index da0872e..4b6963b 100644
  		player_dead_message();
  }
  
+@@ -717,7 +725,7 @@ void show_extra_views()
+ 			continue;		//if showing missile view in right window, can't show anything else
+ 
+ 		//show special views if selected
+-		switch (PlayerCfg.Cockpit3DView[w]) {
++		switch (EM_ASM_INT(return !!Module.autopilot)&&w==0?CV_REAR:PlayerCfg.Cockpit3DView[w]) {
+ 			case CV_NONE:
+ 				RenderingType=255;
+ 				do_cockpit_window_view(w,NULL,0,WBU_WEAPON,NULL);
 @@ -783,6 +791,8 @@ int BigWindowSwitch=0;
  extern int force_cockpit_redraw;
  void update_cockpits();
@@ -1797,7 +1806,7 @@ index da0872e..4b6963b 100644
  	}
  
  	gr_set_current_canvas(&Screen_3d_window);
-@@ -854,8 +868,7 @@ void game_render_frame_mono(int flip)
+@@ -854,12 +868,11 @@ void game_render_frame_mono(int flip)
  
  	gr_set_current_canvas(&Screen_3d_window);
  
@@ -1807,6 +1816,11 @@ index da0872e..4b6963b 100644
  
  	gr_set_current_canvas(NULL);
  
+-	show_extra_views();		//missile view, buddy bot, etc.
++	av_extra();		// auxiliary cameras follow the selected AI ship
+ 
+ #ifdef NETWORK
+ 	if (netplayerinfo_on && Game_mode & GM_MULTI)
 @@ -869,6 +882,8 @@ void game_render_frame_mono(int flip)
  
  void toggle_cockpit()
@@ -2002,7 +2016,7 @@ index 30de489..cb9c4fe 100644
  }
 +
 diff --git a/d2/main/gauges.c b/d2/main/gauges.c
-index 3ece085..1c141b9 100644
+index 3ece085..758a779 100644
 --- a/d2/main/gauges.c
 +++ b/d2/main/gauges.c
 @@ -4520,6 +4520,31 @@ void observer_show_bomb_highlights()
@@ -2090,6 +2104,14 @@ index 3ece085..1c141b9 100644
  
  		gr_init_sub_canvas(&window_canv,&grd_curscreen->sc_canvas,window_x,window_y,w,h);
  	}
+@@ -4878,6 +4904,7 @@ void do_cockpit_window_view(int win,object *viewer,int rear_view_flag,int user,c
+ 	gr_set_current_canvas(&window_canv);
+ 
+ 	render_frame(0, win+1);
++    if(user==WBU_REAR)EM_ASM(Module.rearCamera=({pilot:$0,object:$1,rear:!!$2,frame:Module.renderFrames});,Player_num,viewer-Objects,rear_view_flag);
+ 
+ 	//	HACK! If guided missile, wake up robots as necessary.
+ 	if (viewer->type == OBJ_WEAPON) {
 diff --git a/d2/main/gauges.h b/d2/main/gauges.h
 index 7e3393c..7a21264 100644
 --- a/d2/main/gauges.h
@@ -3505,7 +3527,7 @@ index 650f69e..7271753 100644
  }
 +
 diff --git a/d2/main/render.c b/d2/main/render.c
-index 517bc8a..f118bb6 100644
+index 517bc8a..37e4458 100644
 --- a/d2/main/render.c
 +++ b/d2/main/render.c
 @@ -84,6 +84,7 @@ short Rotated_last[MAX_VERTICES];
@@ -3516,17 +3538,29 @@ index 517bc8a..f118bb6 100644
  object * Viewer = NULL;
  
  vms_vector Viewer_eye;  //valid during render
-@@ -197,6 +198,7 @@ void flash_frame()
+@@ -197,6 +198,15 @@ void flash_frame()
  //	they are used for our hideously hacked in headlight system.
  //	vp is a pointer to vertex ids.
  //	tmap1, tmap2 are texture map ids.  tmap2 is the pasty one.
 +#include "astra_light.inc"
++static int astra_water_pass;
++static int astra_water_portal(int room,int side){
++    extern int astra_liquid_kind(int),astra_native_compare;
++    segment *s=&Segments[room];int w=s->sides[side].wall_num;
++    return !astra_native_compare&&s->children[side]>=0&&(WALL_IS_DOORWAY(s,side)&WID_FLY_FLAG)&&
++        (w<0||Walls[w].type==WALL_ILLUSION)&&astra_liquid_kind(s->sides[side].tmap_num)==1;
++}
++static void astra_render_water(void);
  void render_face(int segnum, int sidenum, int nv, int *vp, int tmap1, int tmap2, uvl *uvlp, int wid_flags)
  {
  	grs_bitmap  *bm;
-@@ -210,6 +212,9 @@ void render_face(int segnum, int sidenum, int nv, int *vp, int tmap1, int tmap2,
+@@ -209,7 +219,13 @@ void render_face(int segnum, int sidenum, int nv, int *vp, int tmap1, int tmap2,
+ 	int			i;
  	const g3s_point		*pointlist[8];
  
++    /* Water that can be flown through is a transparent film, never a depth
++     * wall clipping fire, smoke or ships on its far side. Solid pools stay solid. */
++    if(astra_drawing_mine&&astra_water_portal(segnum,sidenum)&&!astra_water_pass)return;
  	Assert(nv <= 8);
 +	astra_room_lights(segnum);
 +    {extern void astra_door_face(int,int);astra_door_face(segnum,sidenum);extern void astra_fixture_lights(int);astra_fixture_lights(segnum);extern void astra_room_materials(int);astra_room_materials(segnum);}
@@ -3534,7 +3568,7 @@ index 517bc8a..f118bb6 100644
  
  	for (i=0; i<nv; i++) {
  		uvl_copy[i].u = uvlp[i].u;
-@@ -232,11 +237,17 @@ void render_face(int segnum, int sidenum, int nv, int *vp, int tmap1, int tmap2,
+@@ -232,11 +248,17 @@ void render_face(int segnum, int sidenum, int nv, int *vp, int tmap1, int tmap2,
  		return;
  	}
  
@@ -3553,7 +3587,7 @@ index 517bc8a..f118bb6 100644
  	}
  
  #ifdef OGL
-@@ -249,7 +260,8 @@ void render_face(int segnum, int sidenum, int nv, int *vp, int tmap1, int tmap2,
+@@ -249,7 +271,8 @@ void render_face(int segnum, int sidenum, int nv, int *vp, int tmap1, int tmap2,
  			PIGGY_PAGE_IN(Textures[tmap1]); // in case textures just got flushed
  		}
  #ifndef OGL_MERGE
@@ -3563,7 +3597,7 @@ index 517bc8a..f118bb6 100644
  			bm = texmerge_get_cached_bitmap( tmap1, tmap2 );
  			bm2 = NULL;
  		}
-@@ -326,13 +338,22 @@ void render_face(int segnum, int sidenum, int nv, int *vp, int tmap1, int tmap2,
+@@ -326,13 +349,23 @@ void render_face(int segnum, int sidenum, int nv, int *vp, int tmap1, int tmap2,
  #endif
  
  #ifdef OGL
@@ -3577,6 +3611,7 @@ index 517bc8a..f118bb6 100644
  			g3_draw_tmap(nv,pointlist,uvl_copy,dyn_light,bm);
  
  	gr_settransblend(GR_FADE_OFF, GR_BLEND_NORMAL); // revert any transparency/blending setting back to normal
++    if(astra_water_pass)return;
 +    if(astra_drawing_mine && !(wid_flags&(WID_CLOAKED_FLAG|WID_RENDPAST_FLAG))){
 +        extern void astra_light_face(int,const g3s_point**,const int*);
 +        astra_light_face(nv,pointlist,vp);
@@ -3588,7 +3623,7 @@ index 517bc8a..f118bb6 100644
  
  #ifndef NDEBUG
  	if (Outline_mode) draw_outline(nv, pointlist);
-@@ -409,6 +430,7 @@ extern fix	Obj_light_xlate[16];
+@@ -409,6 +442,7 @@ extern fix	Obj_light_xlate[16];
  //	Check for normal facing.  If so, render faces on side dictated by sidep->type.
  void render_side(segment *segp, int sidenum)
  {
@@ -3596,7 +3631,7 @@ index 517bc8a..f118bb6 100644
  	int		vertnum_list[4];
  	side		*sidep = &segp->sides[sidenum];
  	vms_vector	tvec;
-@@ -633,6 +655,10 @@ extern ubyte DemoDoingRight,DemoDoingLeft;
+@@ -633,6 +667,10 @@ extern ubyte DemoDoingRight,DemoDoingLeft;
  
  void do_render_object(int objnum, int window_num)
  {
@@ -3607,7 +3642,7 @@ index 517bc8a..f118bb6 100644
  	#ifdef EDITOR
  	int save_3d_outline=0;
  	#endif
-@@ -701,6 +727,8 @@ void do_render_object(int objnum, int window_num)
+@@ -701,6 +739,8 @@ void do_render_object(int objnum, int window_num)
  		//NOTE LINK TO ABOVE
  		render_object(obj);
  
@@ -3616,7 +3651,7 @@ index 517bc8a..f118bb6 100644
  	for (n=obj->attached_obj;n!=-1;n=Objects[n].ctype.expl_info.next_attach) {
  
  		Assert(Objects[n].type == OBJ_FIREBALL);
-@@ -1677,7 +1705,22 @@ void render_frame(fix eye_offset, int window_num)
+@@ -1677,7 +1717,23 @@ void render_frame(fix eye_offset, int window_num)
  		gr_clear_canvas(Clear_window_color);
  	#endif
  
@@ -3635,11 +3670,12 @@ index 517bc8a..f118bb6 100644
  	render_mine(start_seg_num, eye_offset, window_num);
 +    {extern void astra_environment_rooms(const short*,int,int);astra_environment_rooms(Render_list,N_render_segs,window_num);}
 +    {extern void astra_render_omega(int);astra_render_omega(window_num);}
++    astra_render_water();
 +    {extern void astra_render_plumes(const short*,int,int);astra_render_plumes(Render_list,N_render_segs,window_num);}
  
  	g3_end_frame();
  
-@@ -1901,6 +1944,7 @@ done_list:
+@@ -1901,6 +1957,7 @@ done_list:
  //renders onto current canvas
  void render_mine(int start_seg_num,fix eye_offset, int window_num)
  {
@@ -3647,7 +3683,7 @@ index 517bc8a..f118bb6 100644
  #ifndef NDEBUG
  	int		i;
  #endif
-@@ -2253,3 +2297,15 @@ int find_seg_side_face(short x,short y,int *seg,int *side,int *face,int *poly)
+@@ -2253,3 +2310,30 @@ int find_seg_side_face(short x,short y,int *seg,int *side,int *face,int *poly)
  }
  
  #endif
@@ -3662,6 +3698,21 @@ index 517bc8a..f118bb6 100644
 +    render_mine(room,1,0);
 +    {extern void astra_environment_rooms(const short*,int,int);astra_environment_rooms(Render_list,N_render_segs,0);}
 +    g3_end_frame();Viewer=saved;Viewer_eye=saved_eye;memcpy(Window_rendered_data,rendered,sizeof rendered);
++}
++
++/* Render each visible water curtain after opaque geometry, then allow the
++ * depth-tested explosion volumes to extend across it. Opaque walls retain depth. */
++static void astra_render_water(void){
++    GLboolean saved_depth;glGetBooleanv(GL_DEPTH_WRITEMASK,&saved_depth);
++    astra_water_pass=1;glDepthMask(GL_FALSE);
++    Window_clip_left=Window_clip_top=0;Window_clip_right=grd_curcanv->cv_bitmap.bm_w-1;Window_clip_bot=grd_curcanv->cv_bitmap.bm_h-1;
++    for(int n=N_render_segs;n--;){
++        int room=Render_list[n];if(room<0)continue;
++        segment *s=&Segments[room];int found=0;for(int side=0;side<6;side++)if(astra_water_portal(room,side)){found=1;break;}
++        if(!found||rotate_list(8,s->verts).uand)continue;
++        for(int side=0;side<6;side++)if(astra_water_portal(room,side))render_side(s,side);
++    }
++    glDepthMask(saved_depth);astra_water_pass=0;
 +}
 diff --git a/d2/main/state.c b/d2/main/state.c
 index fde0fd3..9c7fc53 100644
@@ -3705,10 +3756,21 @@ index fde0fd3..9c7fc53 100644
  }
 +
 diff --git a/d2/main/wall.c b/d2/main/wall.c
-index 6d1b0f7..53aaf05 100644
+index 6d1b0f7..c7a8543 100644
 --- a/d2/main/wall.c
 +++ b/d2/main/wall.c
-@@ -1072,7 +1072,10 @@ int wall_hit_process(segment *seg, int side, fix damage, int playernum, object *
+@@ -151,6 +151,10 @@ int wall_is_doorway ( segment * seg, int side )
+ 		return WID_NO_WALL;
+ 
+ 	if (type == WALL_ILLUSION) {
++        /* Traversable water is visibly translucent in Astra. Keep its native
++         * flight/blast passage and let the renderer visit the connected room. */
++        extern int astra_liquid_kind(int),astra_native_compare;
++        if(!astra_native_compare&&seg->children[side]>=0&&astra_liquid_kind(seg->sides[side].tmap_num)==1&&!(flags&WALL_ILLUSION_OFF))return WID_TRANSILLUSORY_WALL;
+ 		if (Walls[seg->sides[side].wall_num].flags & WALL_ILLUSION_OFF)
+ 			return WID_NO_WALL;
+ 		else {
+@@ -1072,7 +1076,10 @@ int wall_hit_process(segment *seg, int side, fix damage, int playernum, object *
  		return WHP_BLASTABLE;
  	}
  

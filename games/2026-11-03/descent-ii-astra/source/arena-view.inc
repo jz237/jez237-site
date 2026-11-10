@@ -44,4 +44,12 @@ static void av_hud(int ordinary){
     if(ordinary)game_draw_hud_stuff();
     Player_num=saved;ConsoleObject=console;Player_is_dead=dead;Rear_view=rear;
 }
+static void av_extra(void){
+    extern void show_extra_views(void);
+    int saved=Player_num,dead=Player_is_dead,rear=Rear_view;object *console=ConsoleObject;
+    if(av_selected>0){Player_num=av_selected;ConsoleObject=&Objects[Players[av_selected].objnum];Player_is_dead=ConsoleObject->type!=OBJ_PLAYER||Players[av_selected].shields<=0;Rear_view=0;}
+    EM_ASM(Module.rearCamera=null;);
+    show_extra_views();
+    Player_num=saved;ConsoleObject=console;Player_is_dead=dead;Rear_view=rear;
+}
 static void av_end(void){Viewer=av_saved_view;}
