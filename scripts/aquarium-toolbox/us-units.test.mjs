@@ -34,7 +34,7 @@ test('US tariff, salt and area prices preserve actual charges',()=>{
  close(convert(calculate('salt',s).metrics[0].value,'bulk-g',true),2.5);close(convert(calculate('salt',s).metrics[1].value,'L',true),20);
 });
 test('Diagrams change numbers with units and never mutate canonical graphics',()=>{
- const g={type:'tank',l:30.48,w:30.48,h:30.48};assert.match(illustration(g,'Tank',true),/12 × 12 × 12 in/);assert.match(illustration(g,'Tank',false),/30.48 × 30.48 × 30.48 cm/);
+ const g={type:'tank',l:30.48,w:30.48,h:30.48};assert.match(illustration(g,'Tank',true),/12 × 12 × 12 in/);assert.match(illustration(g,'Tank',false),/30\.5 × 30\.5 × 30\.5 cm/);
  const flow={type:'flow',rate:100*GAL,diameter:25.4};assert.match(illustration(flow,'Flow',true),/100 US GPH/);assert.match(illustration(flow,'Flow',true),/1 in internal bore/);
  const heat={type:'line',valueUnit:'°C',values:[20,25],labels:['Start','End']};const before=JSON.stringify(heat);const svg=illustration(heat,'Temperature',true);assert.match(svg,/>68</);assert.match(svg,/>77</);assert.match(svg,/°F/);assert.equal(JSON.stringify(heat),before);
  const small=illustration({type:'bars',valueUnit:'L',values:[.1,2.5*GAL,12.4*GAL]},'Volumes',true);assert.match(small,/&lt;0\.1/);assert.match(small,/>2\.5</);assert.match(small,/>12</);

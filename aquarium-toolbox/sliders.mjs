@@ -10,7 +10,8 @@ const unitWindows={
   '×/hour':[30,.5],'drops/s':[10,.1],'drops/mL':[40,1],'µmol/m²/s':[500,5]
 };
 const overrides={
-  substrate:{front:[20,.5],back:[30,.5],bag:[30,.5],bagWeight:[25,.1]},head:{e90:[12,1],e45:[12,1],valves:[6,1],checks:[6,1]},
+  // Front and back depths share one window so the two sliders read alike.
+  tank:{displacement:[50,1]},substrate:{front:[25,.5],back:[25,.5],bag:[30,.5],bagWeight:[25,.1]},head:{e90:[12,1],e45:[12,1],valves:[6,1],checks:[6,1]},
   sump:{drop:[10,.1],pipe:[30,.1],reserve:[100,1]},ro:{rate:[40,.1],feed:[1000,5],product:[100,1]},
   label:{bottle:[1000,5],dose:[50,.5]},stock:{stock:[5000,10],target:[1000,5],final:[1000,5]},
   ammonia:{tan:[8,.05]},salt:{bag:[25000,100],target:[45,.5]},ato:{daily:[10,.1],reserve:[100,1]},sg:{value:[45,.5]},

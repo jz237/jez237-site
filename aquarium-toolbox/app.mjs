@@ -61,7 +61,7 @@ function unitLabel(calc,field,a){
   return plain(isUS()?usUnit(unitOf(field)):field.unit);
 }
 function inputs(calc=current()){if(!state.inputs[calc.id]){state.inputs[calc.id]=defaults(calc,isUS());if(hasProfile(calc))state.inputs[calc.id].v=profile().volume;}return state.inputs[calc.id];}
-function format(v,digits=2){if(v!==0&&Math.abs(v)<.0001)return v.toExponential(3);const size=Math.abs(v);return v.toLocaleString('en-US',{maximumFractionDigits:size<.01?5:size<.1?4:size>=1000?Math.min(digits,0):size>=100?Math.min(digits,1):digits});}
+function format(v,digits=2){if(v!==0&&Math.abs(v)<.0001)return v.toExponential(3);const size=Math.abs(v);return v.toLocaleString('en-US',{maximumFractionDigits:size<.01?5:size<.1?4:size>=100?0:size>=10?Math.min(digits,1):digits});}
 const money=v=>v.toLocaleString('en-US',{minimumFractionDigits:Number.isInteger(v)?0:2,maximumFractionDigits:2});
 function inputNumber(value,unit){if(!Number.isFinite(value))return '';if(asSG(unit))return Number(value.toFixed(4));return Number(value.toFixed(usUnit(unit)!==unit?(Math.abs(value)<.001?9:3):6));}
 // Whole gallons for larger amounts; one decimal below ten, where a rounded
@@ -125,7 +125,7 @@ function renderLibrary(){
 function fieldHTML(field,a){
   const c=current();
   if(!isVisible(c.id,field.key,a))return '';
-  const id=`field-${field.key}`,helpText=[helpFor(c.id,field,a),extraHelp(c,field,a)].filter(Boolean).join(' ');
+  const id=`field-${field.key}`,helpText=[helpFor(c.id,field,a),extraHelp(c,field,a,isUS())].filter(Boolean).join(' ');
   const help=helpText?`<small id="help-${field.key}">${e(helpText)}${field.profile?' <a href="#tool=tank" data-tool="tank">Work out my volume →</a>':''}</small>`:'';
   const desc=helpText?`aria-describedby="help-${field.key}"`:'';
   const label=labelFor(c.id,field,a);
@@ -163,7 +163,7 @@ function salinityToggleHTML(){
   return `<div class="salinity-toggle" role="group" aria-label="Show salinity as"><span class="choices-title">Salinity shown as</span><div class="segmented"><button type="button" data-salinity="sg" aria-pressed="${state.salinity==='sg'}">Specific gravity</button><button type="button" data-salinity="ppt" aria-pressed="${state.salinity==='ppt'}">ppt</button></div></div>`;
 }
 function shoppingGuide(){if(state.current!=='substrate')return '';
- const a=inputs();return `<section class="bag-guide"><h3>Compare common bag sizes</h3><p>${a.bagMode==='weight'?'Estimated counts for the material you picked.':'Counts using the labelled bag volume.'} Tap a size to use it above.</p><div class="bag-options">${bagComparison(a,isUS()).map((x,i)=>`<button type="button" data-bag-index="${i}" aria-label="Use ${e(x.label)} bag"><span>${e(x.label)} bag</span><strong>${x.bags} ${x.bags===1?'bag':'bags'}</strong></button>`).join('')}</div><small>Typical package examples, not an inventory or availability list. No size chosen yet? Use this comparison to plan your shopping.</small></section>`;
+ const a=inputs();return `<section class="bag-guide"><h3>Compare common bag sizes</h3><p>${a.bagMode==='weight'?'Estimated counts for the material you picked.':'Counts using the labelled bag volume.'} Tap a size to use it above.</p><div class="bag-options">${bagComparison(a,isUS()).map((x,i)=>`<button type="button" data-bag-index="${i}" aria-label="Use ${e(x.label)} bag"><span>${e(x.label)} bag</span><strong>${x.bags} ${x.bags===1?'bag':'bags'}</strong></button>`).join('')}</div><small>Bag sizes vary by brand; check the weight or volume printed on yours.</small></section>`;
 }
 const windowFor=(field,a=inputs())=>sliderWindow(current(),field,a,isUS(),asSG(field.unit));
 function sliderHTML(field,a,label,unit){
@@ -205,7 +205,7 @@ function renderCalculator(){
   const c=current(),a=inputs(),cat=categories.find(x=>x[0]===c.category);
   const related=calculators.filter(x=>x.category===c.category&&x.id!==c.id).slice(0,3);
   $('calculator-content').innerHTML=`<article class="calculator-shell"><header class="calc-heading"><div><div class="calc-eyebrow">${icon(cat[2])}${e(cat[1].toUpperCase())}</div><h2>${e(c.title)}</h2><p>${e(descriptionFor(c,isUS()))}</p></div><button id="favorite" class="favorite icon-button" aria-pressed="${state.favorites.includes(c.id)}" aria-label="${state.favorites.includes(c.id)?'Remove from':'Add to'} favorites">${icon('star')}</button></header>
-  <div class="calc-body"><section class="input-panel" aria-label="Calculation inputs"><div class="panel-heading"><span class="step-label"><span class="step-no">1</span>Your measurements</span><button id="reset" class="text-button">Reset</button></div><p id="slider-guide" class="slider-guide">Tap a common size, drag a slider, or type your own number.</p>${presetHTML(a)}${salinityToggleHTML()}<form id="calc-form" novalidate><div class="input-fields">${c.fields.map(f=>fieldHTML(f,a)).join('')}</div></form>${hasProfile(c)?`<div class="tank-fill-control">Saved tank: <strong>${e(profile().name)}</strong><br>${isUS()?e(gallons(profile().volume))+' US gal · '+format(profile().volume)+' L':format(profile().volume)+' L · '+e(gallons(profile().volume))+' US gal'}<br><button id="use-profile" class="text-button">Use saved tank volume →</button></div>`:''}<p class="validation-note">Changes calculate automatically. Your measurements are processed in this browser.</p></section>
+  <div class="calc-body"><section class="input-panel" aria-label="Calculation inputs"><div class="panel-heading"><span class="step-label"><span class="step-no">1</span>Your measurements</span><button id="reset" class="text-button">Reset</button></div><p id="slider-guide" class="slider-guide">Tap a shortcut, drag a slider, or type your own number.</p>${presetHTML(a)}${salinityToggleHTML()}<form id="calc-form" novalidate><div class="input-fields">${c.fields.map(f=>fieldHTML(f,a)).join('')}</div></form>${hasProfile(c)?`<div class="tank-fill-control">Saved tank: <strong>${e(profile().name)}</strong><br>${isUS()?e(gallons(profile().volume))+' US gal · '+format(profile().volume)+' L':format(profile().volume)+' L · '+e(gallons(profile().volume))+' US gal'}<br><button id="use-profile" class="text-button">Use saved tank volume →</button></div>`:''}<p class="validation-note">Changes calculate automatically. Your measurements are processed in this browser.</p></section>
   <section class="result-panel" aria-label="Calculation result"><div class="panel-heading"><span class="step-label"><span class="step-no">2</span>Your answer</span><span class="live-label">LIVE RESULT</span></div><div id="result" aria-live="polite" aria-atomic="true"></div></section></div>
   <div class="details-area"><details id="math-details"><summary>The math & sources</summary><div><p class="formula">${e(formulaFor(c,isUS()))}</p>${c.note?`<p class="note">${e(noteFor(c,isUS()))}</p>`:''}${c.reference?`<p><a class="source-link" href="${e(c.reference[1])}" target="_blank" rel="noopener noreferrer">Reference: ${e(c.reference[0])} ↗</a></p>`:'<p>Method: the geometry, unit conversion, rule of thumb or proportional calculation shown above.</p>'}<p>Results are rounded for reading; the calculations keep full precision. US gallons show one decimal below ten gallons and whole gallons above. For aquarium water, ppm and mg/L are the same thing.</p></div></details><div id="steps-details"></div></div>
   <div class="calc-footer"><span>${icon('check')} No account · saved on this device</span><button id="guide-inline" class="text-button">A quick guide →</button></div></article>
@@ -256,7 +256,7 @@ function onInput(ev){
 }
 function showError(message){result=null;$('result').innerHTML=`<div class="error-card" role="alert"><h3>Let’s check that measurement</h3><p>${e(message)}</p><p>No result is shown until the inputs are valid.</p></div>`;$('steps-details').innerHTML='';updateQuickResult();}
 const mixLegends={
-  ammonia:['toxic free ammonia','Ammonium fraction','Toxic free ammonia'],stock:['stock solution','Water','Stock solution'],mix:['RO / distilled water','Tap water','RO / distilled'],
+  ammonia:['toxic free ammonia','Ammonium (far less toxic)','Toxic free ammonia (NH₃)'],stock:['stock solution','Water','Stock solution'],mix:['RO / distilled water','Tap water','RO / distilled'],
   change:['changed','Old tank water','New water'],target:['changed','Old tank water','New water'],adjust:['swapped','Old tank water','Added water'],salinity:['second water','First water','Second water']
 };
 function renderResult(){try{

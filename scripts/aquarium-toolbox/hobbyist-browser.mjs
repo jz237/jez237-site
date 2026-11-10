@@ -81,7 +81,7 @@ try{
   assert.match(await metric(0),/After the change\s*30\s*ppm/);assert.match(await metric(1),/2\.5\s*US gal/);
   await fill({v:55,pct:40});assert.match(await metric(1),/22\s*US gal/);assert.match(await metric(1),/about 4\.4 five-gallon buckets/);
   await fill({v:2.5,pct:20});assert.match(await metric(1),/0\.5\s*US gal/);assert.match(await metric(1),/about 2 quarts/);
-  await go('series');await page.locator('#steps-details summary').filter({hasText:'Change-by-change'}).click();assert.match(await page.locator('.results-table').innerText(),/After 1 change\s+60\.00 ppm/);
+  await go('series');await page.locator('#steps-details summary').filter({hasText:'Change-by-change'}).click();assert.match(await page.locator('.results-table').innerText(),/After 1 change\s+60 ppm/);
   await go('target');assert.match(await page.locator('.result-message').innerText(),/big change to do in one go/);
   await go('ro');assert.equal(await unit('rate'),'US gal/day');assert.match(await metric(0),/6\.4\s*hours\s*6 h 24 min/);
   await go('drip');assert.equal(await unit('v'),'cups');assert.match(await metric(0),/53\s*minutes/);
@@ -108,9 +108,10 @@ try{
   await go('turnover');assert.match(await metric(0),/5\s*×\/hour/);assert.match(await message(),/Right in the usual range of 4–6 times an hour/);assert.match(await metric(1),/80\s*US GPH/);
   await page.locator('#field-kind').selectOption('messy');assert.match(await message(),/below the usual 6–10/);assert.match(await metric(2),/200\s*US GPH/);
   await page.locator('#field-kind').selectOption('sps');assert.match(await metric(1),/600\s*US GPH/);
-  await go('stocking');assert.match(await metric(0),/75\s*%/);assert.equal(await page.locator('.metric').count(),3);assert.match(await message(),/does not establish spare capacity/);
-  await chip('size','3 in');assert.match(await metric(0),/150\s*%/);assert.match(await message(),/Above at least one classic/);
-  await page.locator('#field-kind').selectOption('goldfish');assert.match(await message(),/cannot give a reliable stocking limit/);
+  await go('stocking');assert.match(await metric(0),/75\s*%/);assert.equal(await page.locator('.metric').count(),3);assert.match(await message(),/Comfortably stocked/);assert.match(await metric(2),/13\s*fish/);
+  await chip('size','3.5 in');assert.match(await metric(0),/175\s*%/);assert.match(await message(),/Overstocked by both/);
+  await page.locator('#field-kind').selectOption('goldfish');assert.match(await message(),/Too small for 10 fancy goldfish by the usual guideline; it suits 1/);assert.match(await metric(0),/110\s*US gal/);assert.equal(await page.locator('#field-size').count(),0);
+  await page.locator('#field-kind').selectOption('marine');assert.match(await message(),/1 inch of adult fish per 5 gallons/);assert.equal(await page.locator('#field-l').count(),0);
   await fill({size:8,count:2});await page.locator('#field-kind').selectOption('tropical');assert.match(await message(),/minimum tank size recommended for each species/);
   check('heater size, filter flow and stocking results with plain guidance');await context.close();
  }
@@ -119,14 +120,14 @@ try{
   const {context,page,go,fill,metric,unit,value,saved,chip}=await open();
   await go('salinity');assert.equal(await unit('sa'),'SG');assert.equal(await value('sa'),1.0264);assert.equal(await page.locator('[data-salinity=sg]').getAttribute('aria-pressed'),'true');
   await fill({sa:1.025,sb:1});near((await saved()).inputs.salinity.sa,(1.025-1)/.000754);assert.match(await metric(0),/1\.020\s*SG\s*26\.5 ppt/);assert.match(await page.locator('.diagram').innerText(),/First: 1\.025/);
-  await page.locator('[data-salinity=ppt]').click();assert.equal(await unit('sa'),'ppt');assert.ok(Math.abs(await value('sa')-33.156)<.001);assert.match(await metric(0),/26\.53\s*ppt\s*SG 1\.020/);near((await saved()).inputs.salinity.sa,(1.025-1)/.000754);assert.equal((await saved()).salinity,'ppt');
+  await page.locator('[data-salinity=ppt]').click();assert.equal(await unit('sa'),'ppt');assert.ok(Math.abs(await value('sa')-33.156)<.001);assert.match(await metric(0),/26\.5\s*ppt\s*SG 1\.020/);near((await saved()).inputs.salinity.sa,(1.025-1)/.000754);assert.equal((await saved()).salinity,'ppt');
   await page.reload();await page.locator('.primary-metric').waitFor();assert.equal(await unit('sa'),'ppt');
   await page.locator('#share-result').click();const link=await page.locator('#share-url').inputValue();assert.match(link,/sal=ppt/);await page.locator('#share-dialog [data-close]').click();
   const other=await open();await other.page.goto(link);await other.page.locator('.primary-metric').waitFor();assert.equal(await other.unit('sa'),'ppt');assert.ok(Math.abs(await other.value('sa')-33.156)<.001);await other.context.close();
   await page.locator('[data-salinity=sg]').click();
   await go('adjust');await chip('target','1.025');await chip('fresh','1.000 · fresh RO water');assert.equal(await value('target'),1.025);assert.equal(await page.locator('.error-card').count(),0);assert.match(await metric(0),/US gal/);
   await fill({target:1.03});assert.match(await page.locator('.error-card').innerText(),/To lower salinity, add water that is less salty/);
-  await go('sg');await fill({value:1.02});assert.match(await metric(0),/1\.020\s*SG/);assert.match(await metric(1),/26\.53\s*ppt/);await page.locator('[data-salinity=ppt]').click();await fill({value:35});assert.match(await metric(0),/1\.0264\s*SG/);assert.match(await metric(1),/35\s*ppt/);
+  await go('sg');await fill({value:1.02});assert.match(await metric(0),/1\.020\s*SG/);assert.match(await metric(1),/26\.5\s*ppt/);await page.locator('[data-salinity=ppt]').click();await fill({value:35});assert.match(await metric(0),/1\.0264\s*SG/);assert.match(await metric(1),/35\s*ppt/);
   await page.locator('[data-salinity=sg]').click();await go('salt');assert.equal(await unit('target'),'SG');assert.match(await metric(0),/1\.56\s*lb\s*about 25 oz/);await chip('target','1.020 · fish-only low');assert.match(await metric(0),/1\.18\s*lb/);
   await go('ato');assert.equal(await unit('salinity'),'SG');assert.match(await metric(2),/SG/);
   check('specific gravity and ppt: entry, results, diagram, saved preference, shared link');await context.close();
@@ -160,7 +161,7 @@ try{
  {
   const {context,page,go,fill,value}=await open();
   await page.goto(base);await page.locator('.primary-metric').waitFor();await page.locator('#unit-metric').click();
-  assert.equal(await value('l'),60.96);assert.equal(await value('w'),30.48);assert.match(await page.locator('#profile-select option:checked').textContent(),/75\.71 L/);
+  assert.equal(await value('l'),60.96);assert.equal(await value('w'),30.48);assert.match(await page.locator('#profile-select option:checked').textContent(),/75\.7 L/);
   await fill({l:61});await page.locator('#unit-us').click();assert.ok(Math.abs(await value('l')-61/2.54)<.001);assert.match(await page.locator('#profile-select option:checked').textContent(),/20 US gal/);
   await page.locator('#unit-metric').click();assert.equal(await value('l'),61);
   await go('heater','&units=us');assert.equal(await value('room'),68);await page.locator('#unit-metric').click();assert.equal(await value('room'),20);assert.ok(Math.abs(await value('target')-25.555556)<.0005);

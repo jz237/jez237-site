@@ -69,22 +69,63 @@ test('Count fields reject partial fish and fittings; glass must leave inside spa
  for(const k of ['e90','e45','valves','checks'])assert.throws(()=>run('head',{[k]:.5}),/whole number/);
  assert.throws(()=>run('glass',{l:1,w:1,h:1,t:10}),/inside space/);
 });
-test('No stocking green-light or spare fish count for unsupported species',()=>{
- for(const values of [{kind:'marine'},{kind:'goldfish'},{kind:'tropical',size:30}]){
-  const r=run('stocking',values);assert.equal(r.metrics.length,2);assert.match(r.message,/cannot give a reliable stocking limit/);
-  assert.doesNotMatch(r.message,/Comfortably|room to add/);assert.ok(!r.metrics.some(m=>/limit|Room/.test(m.label)));
- }
- const r=run('stocking',{kind:'tropical',v:20*GAL,l:24*2.54,w:12*2.54,size:1.5*2.54,count:10});near(r.metrics[0].value,75);assert.match(r.message,/does not establish spare capacity/);
+test('Stocking gives every kind of fish a useful, honest answer',()=>{
+ // Small community fish: 20 US gal, 24 × 12 in, ten 1.5 in fish = 15 in against 20 (volume) and 24 (surface): 75%, 13 allowed.
+ const IN=2.54;let r=run('stocking',{kind:'tropical',v:20*GAL,l:24*IN,w:12*IN,size:1.5*IN,count:10});
+ near(r.metrics[0].value,75);assert.equal(r.metrics[2].value,13);assert.match(r.message,/Comfortably stocked/);assert.equal(r.graphic.status,'ok');
+ r=run('stocking',{kind:'tropical',v:20*GAL,l:24*IN,w:12*IN,size:1.5*IN,count:20});assert.match(r.message,/Overstocked by both/);assert.equal(r.graphic.status,'high');
+ assert.match(run('stocking',{kind:'tropical',v:20*GAL,l:24*IN,w:12*IN,size:1.5*IN,count:0}).message,/about 13 fish of this size/);
+ // Fancy goldfish (Aquarium Co-Op): 20 US gal for the first and 10 for each one after.
+ r=run('stocking',{kind:'goldfish',v:20*GAL,count:3});near(r.metrics[0].value/GAL,40);assert.equal(r.metrics[1].value,1);assert.match(r.message,/Too small for 3 fancy goldfish by the usual guideline; it suits 1/);assert.equal(r.graphic.status,'low');assert.equal(r.graphic.valueUnit,'L');
+ r=run('stocking',{kind:'goldfish',v:55*GAL,count:4});near(r.metrics[0].value/GAL,50);assert.equal(r.metrics[1].value,4);assert.match(r.message,/Room for 4 fancy goldfish/);assert.equal(r.graphic.status,'ok');
+ assert.equal(run('stocking',{kind:'goldfish',v:15*GAL,count:1}).metrics[1].value,0);
+ // Saltwater: a cautious 1 in per 5 US gal, and no inch rule at all for big fish.
+ r=run('stocking',{kind:'marine',v:40*GAL,size:3*IN,count:2});near(r.metrics[0].value,75);assert.equal(r.metrics[2].value,2);assert.match(r.message,/1 inch of adult fish per 5 gallons/);assert.equal(r.graphic.values.length,2);
+ for(const kind of ['tropical','marine']){r=run('stocking',{kind,size:15,count:3});assert.equal(r.metrics.length,2);assert.doesNotMatch(r.message,/Comfortably|room to add/);assert.ok(!('status' in r.graphic));}
+ // Inputs that do not apply are hidden.
+ assert.equal(isVisible('stocking','size',{kind:'goldfish'}),false);assert.equal(isVisible('stocking','l',{kind:'marine'}),false);assert.equal(isVisible('stocking','w',{kind:'tropical'}),true);
 });
 test('Choices and instructions match the selected unit and fish type',()=>{
- const c=calculators.find(c=>c.id==='stocking'),f=c.fields.find(f=>f.key==='size');
- assert.equal(fieldChoices(c,f,true,{kind:'marine'}),null);assert.equal(fieldChoices(c,f,true,{kind:'goldfish'}),null);
- assert.match(extraHelp({id:'label'},{key:'dose'},{unit:'tablets'}),/tablets/);
+ const c=calculators.find(c=>c.id==='stocking'),f=c.fields.find(f=>f.key==='size'),labels=(kind,us=true)=>fieldChoices(c,f,us,{kind}).options.map(o=>o.label).join(' | ');
+ assert.match(labels('marine'),/clownfish/);assert.doesNotMatch(labels('marine'),/tetra|goldfish/);assert.doesNotMatch(labels('tropical'),/goldfish|clownfish/);
+ assert.match(labels('tropical',false),/^2\.5 cm · ember tetra/);near(fieldChoices(c,f,true,{kind:'tropical'}).options[1].value,1.5*2.54);
+ assert.match(extraHelp({id:'label'},{key:'dose'},{unit:'tablets'},true),/1 tablet treats 10 gallons/);assert.match(extraHelp({id:'label'},{key:'dose'},{unit:'mL'},false),/5 mL treats 40 litres/);
  assert.match(formPresets({id:'weight'},false).note,/Enter your tank’s actual empty weight separately/);
- assert.match(run('label',{unit:'tablets',dose:1,v:10,labelV:40}).message,/do not round up/);
+ assert.match(run('label',{unit:'tablets',dose:1,v:10,labelV:40}).message,/not to split tablets/);assert.match(run('label').message,/scaled to your water/);
+ // Container notes fit what each field means.
+ for(const [id,key,note] of [['fertilizer','bottle',/dissolved/],['stock','final',/end up with/],['label','bottle',/left/],['doser','reserve',/left/]]){const t=calculators.find(c=>c.id===id);assert.match(fieldChoices(t,t.fields.find(f=>f.key===key),true,defaults(t)).note,note);}
+ // Wattage shortcuts suit the equipment.
+ const en=calculators.find(c=>c.id==='energy'),w=key=>fieldChoices(en,en.fields.find(f=>f.key===key),true,defaults(en));
+ assert.match(w('lights').title,/lights/);assert.match(w('pumps').title,/pumps/);assert.equal(w('other'),null);
 });
 test('RO low rejection, water-cost illustration and pump graph reflect actual inputs',()=>{
- assert.match(run('ro',{feed:250,product:250}).message,/below 95%/);
+ assert.match(run('ro',{feed:250,product:250}).message,/Below the 96–99%/);assert.match(run('ro',{feed:250,product:5}).message,/healthy/);
  assert.equal(run('watercost',{salt:0}).graphic.kind,'fresh');assert.equal(run('watercost',{salt:38}).graphic.kind,'salt');
  near(run('pump',{h1:1,h2:3,head:1.2}).graphic.positions[1],.1);
+});
+test('Figures name what they show and stay readable',()=>{
+ // Drip timer and CO2 cylinder are not product doses.
+ const drip=run('drip');assert.equal(drip.graphic.caption,'Drip time');assert.equal(drip.graphic.amount,Math.round(drip.metrics[0].value));
+ const cyl=run('co2cylinder');assert.equal(cyl.graphic.unit,'kg');near(cyl.metrics[1].value,1.2);assert.match(illustration(cyl.graphic,'',true),/2\.65/);assert.match(illustration(cyl.graphic,'',true),/CO₂ left in the cylinder/);
+ // Heat-up shows the time it takes, not an invented midpoint.
+ const heat=run('heatup',{v:5*GAL,start:(60-32)/1.8,target:(78-32)/1.8,power:200,eff:80});assert.deepEqual(heat.graphic.labels,['Now','After 1 h 23 min']);assert.equal(heat.graphic.values.length,2);
+ assert.deepEqual(run('heatup',{start:25,target:25}).graphic.labels,['Now','Now']);
+ // Pump chart labels carry the chart heights; the visitor's point is always labelled.
+ const pump=run('pump',{h1:3*.3048,q1:500*GAL,h2:6*.3048,q2:350*GAL,head:4.5*.3048});const svg=illustration({...pump.graphic},'',true);
+ assert.match(svg,/>3 ft</);assert.match(svg,/>Yours · 4\.5 ft</);assert.match(svg,/>6 ft</);assert.match(svg,/Head height/);
+ assert.match(illustration({...run('pump',{h1:1,h2:3,head:1.05}).graphic},'',false),/Yours · 1\.05 m/);
+ // Units read the way hobbyists say them, with the period where it matters.
+ assert.match(illustration(run('energy').graphic,'',true),/kWh per day/);assert.match(illustration(run('watercost').graphic,'',true),/\$ per month/);assert.match(illustration(run('watercost').graphic,'',true),/>\$0\.\d\d</);
+ assert.match(illustration(run('change').graphic,'',true),/Before: 40 ppm/);assert.doesNotMatch(illustration(run('change').graphic,'',true),/mg\/L/);
+ // Series and nitrate charts explain their axis.
+ assert.equal(run('series').graphic.labels[0],'Start');assert.equal(run('series').graphic.axis,'Water changes');
+ const nit=illustration(run('nitrate').graphic,'',false);assert.match(nit,/After a change/);assert.match(nit,/Before the next/);assert.equal((nit.match(/svg-number/g)||[]).length,2);
+ // One bar colour; the visitor's bar is green when fine and orange when not.
+ const flow=v=>illustration(run('turnover',{v:125*GAL,flow:v*GAL,kind:'sps'}).graphic,'',true);assert.match(flow(2000),/#e07a3f/);assert.match(flow(4500),/#3fa66b/);assert.doesNotMatch(flow(4500),/#87c4ae/);
+ // A glass estimate draws an empty tank with its outside size, not a 0% water level.
+ const glass=illustration(run('glass').graphic,'',true);assert.doesNotMatch(glass,/>0%</);assert.match(glass,/Outside size/);
+ // Weight shows every entry on its own bar; the toxic share of ammonia is drawn as a warning.
+ assert.deepEqual(run('weight').graphic.labels,['Water','Tank','Stand','Rock & sand','Gear']);assert.match(illustration(run('ammonia').graphic,'',true),/#e07a3f/);
+ // Chart numbers at hobby precision.
+ assert.match(illustration({type:'bars',values:[166.91,25.31,4.567]},'',false),/>167<.*>25\.3<.*>4\.57</s);
 });

@@ -43,7 +43,8 @@ try{
   click('reset');edit('w','');edit('shape','cylinder');valid('irrelevant hidden dimension repaired');
   go('substrate');edit('bagWeight','');edit('bagMode','volume');valid('hidden bag weight not blocking volume bags');
   go('label');edit('bottle','');edit('unit','tablets');noStale('new dose unit requires label amount');edit('dose',1);valid('hidden bottle not blocking tablets');
-  go('stocking');for(const kind of ['goldfish','marine']){edit('kind',kind);ok(!/Comfortably|Room for more|Comfortable limit/.test(read()),'no stocking green light '+kind);ok(!document.querySelector('[data-choice-field="size"]'),'no tropical fish presets '+kind);}
+  go('stocking');edit('kind','goldfish');ok(!el('field-size'),'goldfish hides the fish-size input');ok(/fancy goldfish/.test(read()),'goldfish get the gallons-per-fish guideline');
+  edit('kind','marine');ok(!/tetra|guppy|goldfish/.test([...document.querySelectorAll('[data-choice-field="size"]')].map(b=>b.textContent).join(' ')),'saltwater size shortcuts are saltwater fish');ok(/5 gallons/.test(read()),'saltwater gets the cautious rule');
   go('doser');edit('collected',.001);edit('seconds',60);edit('daily',100);noStale('impossible pump runtime');
   go('ato');edit('daily',0);valid('zero evaporation');ok(/no top-off/.test(read()),'zero evaporation says no top off');
   go('heater');edit('room',90);edit('target',78);ok(/cannot cool/.test(read()),'heater cannot cool');
@@ -56,7 +57,7 @@ try{
    ok(!!document.querySelector('.aqt-bar.is-low'),'below range warning colour');
    go('watercost');ok(/water-change/.test(document.querySelector('.aqt-art img').src),'freshwater cost image');edit('salt',5);ok(/\/salt.webp/.test(document.querySelector('.aqt-art img').src),'marine cost image');
    go('energy');for(const k of ['lights','pumps','heater','other'])edit(k,0);ok([...document.querySelectorAll('.aqt-bar__col span')].every(e=>e.style.height==='0%'),'zero bars truly zero');
-   go('ammonia');edit('tan',.001);ok(!/Free fraction: 0\b(?!\.)/.test(document.querySelector('.aqt-chips').textContent),'tiny toxic fraction remains nonzero');
+   go('ammonia');edit('tan',.001);ok(/Toxic part: \S/.test(document.querySelector('.aqt-chips').textContent)&&!/Toxic part: 0 ppm/.test(document.querySelector('.aqt-chips').textContent),'tiny toxic fraction remains nonzero');
    go('pump');click('unit-metric');edit('h1',1);edit('h2',3);edit('head',1.2);ok(Math.abs(parseFloat(document.querySelectorAll('.aqt-trend__dot')[1].style.left)-10)<.01,'pump graph x position proportional');
    go('consumption');edit('start',8);edit('end',8);ok([...document.querySelectorAll('.aqt-trend__dot')].every(e=>e.style.top==='50%'),'flat line visible in centre');
   }

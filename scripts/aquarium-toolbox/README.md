@@ -226,10 +226,8 @@ still chooses round examples in the active units. Blank edits remain incomplete
 through a rerender rather than resurrecting a previous valid number. Changing a
 product dose unit requires re-entering the amount from that label.
 
-Stocking guidance supersedes the earlier rework: small tropical fish get a
-limited length-rule comparison, not a spare-fish allowance or approval. Marine,
-coldwater and large fish get species-specific planning guidance without an
-unsupported inches-per-gallon capacity. Count inputs must be whole numbers.
+Count inputs must be whole numbers. (The stocking change made in this audit is
+superseded by the re-audit below.)
 
 Other regression cases: missing sump margin versus actual overflow; heater
 cooling/equal-temperature cases; zero evaporation and zero dosing; dosing-pump
@@ -245,3 +243,32 @@ The latter exercises all 38 tools, visible numeric fields, selector choices,
 blank/negative inputs, slider endpoints, unit conservation and narrow layouts.
 The Lab's own browser suite additionally checks photographs, colour, contrast,
 Help Center placement, noindex and the unmodified main menu.
+
+## Re-audit (2026-11-09, Jez: "Re audit everything again with the calculators and fix anything that's wrong")
+
+- Stocking check answers every kind of fish again. Small community fish: 1 in of
+  adult fish per US gallon (Aqueon) and 1 in per 12 sq in of surface; the stricter
+  one is the limit, with "Fish this size the rule allows". Fancy goldfish: 20 US
+  gal for the first and 10 for each one after (Aquarium Co-Op), as a gallons
+  answer; size and tank dimensions are hidden for goldfish. Saltwater: a cautious
+  1 in per 5 US gal, said to be a convention, not an agreed rule. Fish over 4 in
+  (10 cm) get species advice, never an inch-rule number. Size shortcuts follow
+  the kind of fish.
+- Number display follows hobby precision everywhere (cards, charts and the
+  repeated-change table): whole numbers from 100 up, one decimal from 10 up, two
+  below 10, more only for small values. Specific gravity keeps four decimals.
+- Result graphics may carry: `caption` (what a dose drawing shows, e.g. "Drip
+  time"), `unitSuffix` ("per day", "per month", "of adult fish"), `axis` (line
+  chart axis name), `xValues`/`xUnit` (x labels in the visitor's units, e.g. pump
+  chart heights), `mark` (the visitor's own bar or point, always labelled) with
+  `status` (`ok` green, `low`/`high` orange; nothing else is coloured), `warn`
+  (a proportion that is a hazard, e.g. toxic ammonia) and `empty` (an empty tank,
+  no water level). Charts in ppm say ppm, not mg/L. Proportion bars put the unit
+  next to each number.
+- Heat-up shows the time it takes (Now → After 1 h 23 min) instead of an invented
+  midpoint; the nitrate schedule is a saw-tooth that drops at each change; the
+  weight chart has one bar per entry; the CO2 cylinder reports kg (US: lb).
+- Wording: product dose and RO messages give practical advice (RO membranes are
+  usually rated 96–99%, Bulk Reef Supply), salinity help reads correctly in
+  specific gravity, sump fields say how to measure them, wattage shortcuts suit
+  lights and pumps, bottle-size notes fit fertilizer and stock solutions.
