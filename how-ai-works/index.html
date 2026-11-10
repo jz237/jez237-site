@@ -4,1253 +4,23 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <script>(function(){try{if(localStorage.getItem("theme")==="light")document.documentElement.setAttribute("data-theme","light");}catch(e){}})();</script>
-  <title>How AI Works - Interactive Guide</title>
+  <title>How AI Works - Animated Interactive Guide</title>
   <link rel="icon" type="image/svg+xml" href="../assets/brand.svg" />
   <link rel="stylesheet" href="../assets/styles.css" />
   <link rel="stylesheet" href="../assets/site-enhance.css" />
   <link rel="stylesheet" href="../assets/workbench-theme.css" />
-  <style>
-    :root {
-      --lab-bg: #020813;
-      --lab-panel: rgba(4, 17, 34, 0.82);
-      --lab-panel-2: rgba(8, 27, 48, 0.78);
-      --lab-line: rgba(74, 151, 242, 0.34);
-      --lab-line-hot: rgba(61, 208, 255, 0.72);
-      --lab-text: #eef7fb;
-      --lab-muted: #9fb8c9;
-      --lab-dim: #6f8da3;
-      --lab-cyan: #39cfff;
-      --lab-gold: #e6bd67;
-      --lab-green: #84e37a;
-      --lab-rose: #ff7f9c;
-      --lab-violet: #9d86ff;
-      --lab-orange: #ffb060;
-      --lab-shadow: 0 24px 70px rgba(0,0,0,0.42);
-    }
-    * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; background: var(--lab-bg); }
-    body {
-      position: relative;
-      margin: 0;
-      min-height: 100vh;
-      overflow-x: hidden;
-      color: var(--lab-text);
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background:
-        radial-gradient(circle at 12% 4%, rgba(57,207,255,0.16), transparent 28%),
-        radial-gradient(circle at 88% 8%, rgba(230,189,103,0.12), transparent 26%),
-        linear-gradient(180deg, #020813 0%, #051427 52%, #020813 100%);
-    }
-    body::before,
-    body::after {
-      content: "";
-      position: fixed;
-      pointer-events: none;
-      z-index: 0;
-    }
-    body::before {
-      inset: -8vh -18vw -14vh;
-      background:
-        linear-gradient(90deg, rgba(2,7,17,0.82), rgba(2,7,17,0.02) 17%, rgba(2,7,17,0.0) 84%, rgba(2,7,17,0.82)),
-        linear-gradient(180deg, rgba(2,7,17,0.62), rgba(2,7,17,0.02) 24%, rgba(2,7,17,0.18) 70%, rgba(2,7,17,0.84)),
-        url("../assets/galaxy-home-20260702.webp") center 42% / cover no-repeat;
-      opacity: 0.96;
-      filter: saturate(1.28) contrast(1.08);
-      -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
-      mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
-      animation: galaxy-drift 28s ease-in-out infinite alternate;
-    }
-    body::after {
-      inset: -38vmax -42vmax;
-      background:
-        linear-gradient(90deg, rgba(1,4,12,0.52), rgba(1,4,12,0.0) 17%, rgba(1,4,12,0.0) 83%, rgba(1,4,12,0.52)),
-        radial-gradient(ellipse at 50% 50%, rgba(255,255,255,0.08), transparent 34%),
-        url("../assets/galaxy-home-20260702.webp") center 50% / cover no-repeat;
-      opacity: 0.3;
-      filter: saturate(1.22) contrast(1.06) blur(0.4px);
-      mix-blend-mode: screen;
-      transform-origin: 50% 50%;
-      animation: galaxy-slow-turn 210s linear infinite;
-      -webkit-mask-image: radial-gradient(ellipse at 50% 50%, #000 0 43%, rgba(0,0,0,0.72) 58%, transparent 83%);
-      mask-image: radial-gradient(ellipse at 50% 50%, #000 0 43%, rgba(0,0,0,0.72) 58%, transparent 83%);
-    }
-    /* Match the home/sound-page galaxy: the single body layer above reads dim, so
-       add a second bright galaxy layer bleeding into the gutters, and host the
-       twinkling stars + meteors above it (z -1) but below the .ai-lab content. */
-    .ai-lab::before {
-      content: "";
-      position: fixed;
-      inset: -8vh -18vw -14vh;
-      z-index: -2;
-      pointer-events: none;
-      background:
-        linear-gradient(90deg, rgba(2,7,17,0.8), rgba(2,7,17,0.0) 16%, rgba(2,7,17,0.0) 84%, rgba(2,7,17,0.8)),
-        linear-gradient(180deg, rgba(2,7,17,0.76), rgba(2,7,17,0.0) 24%, rgba(2,7,17,0.18) 72%, rgba(2,7,17,0.86)),
-        url("../assets/galaxy-home-20260702.webp") center 42% / cover no-repeat;
-      opacity: 0.96;
-      filter: saturate(1.28) contrast(1.08);
-      -webkit-mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
-      mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
-      animation: galaxy-drift 28s ease-in-out infinite alternate;
-    }
-    .ai-lab [data-space-fx] {
-      position: fixed;
-      inset: 0;
-      z-index: -1;
-      pointer-events: none;
-    }
-    a { color: var(--lab-cyan); }
-    button, textarea, input { font: inherit; }
-    .ai-lab {
-      position: relative;
-      z-index: 1;
-      max-width: 1240px;
-      margin: 0 auto;
-      padding: 24px clamp(14px, 3vw, 40px) 80px;
-    }
-    .lab-shell {
-      display: grid;
-      grid-template-columns: 270px minmax(0, 1fr);
-      gap: 22px;
-      align-items: start;
-    }
-    .lab-rail {
-      position: sticky;
-      top: 18px;
-      padding: 18px;
-      border: 1px solid var(--lab-line);
-      border-radius: 14px;
-      background: linear-gradient(160deg, rgba(8,28,48,0.92), rgba(3,12,24,0.94));
-      box-shadow: var(--lab-shadow);
-    }
-    .rail-brand {
-      display: block;
-      padding-bottom: 16px;
-      border-bottom: 1px solid rgba(255,255,255,0.08);
-      text-decoration: none;
-    }
-    .rail-brand strong {
-      display: block;
-      color: #f8ecd8;
-      font: 800 1.35rem/1.05 Georgia, serif;
-    }
-    .rail-brand span {
-      display: block;
-      margin-top: 6px;
-      color: var(--lab-muted);
-      font-size: 12px;
-    }
-    .lab-nav {
-      display: grid;
-      gap: 8px;
-      margin-top: 16px;
-    }
-    .lab-nav a {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      min-height: 38px;
-      padding: 9px 10px;
-      border: 1px solid rgba(96,156,216,0.28);
-      border-radius: 8px;
-      color: #d8eaf2;
-      text-decoration: none;
-      background: rgba(255,255,255,0.035);
-      font-size: 13px;
-      font-weight: 700;
-    }
-    .lab-nav a:hover {
-      border-color: var(--lab-line-hot);
-      background: rgba(57,207,255,0.11);
-    }
-    .lab-nav svg {
-      width: 18px;
-      height: 18px;
-      flex: 0 0 auto;
-      stroke: currentColor;
-      stroke-width: 1.8;
-      fill: none;
-    }
-    .lab-main { min-width: 0; }
-    .lab-hero {
-      position: relative;
-      overflow: hidden;
-      min-height: 390px;
-      padding: clamp(24px, 4vw, 46px);
-      border: 1px solid var(--lab-line);
-      border-radius: 18px;
-      background:
-        linear-gradient(115deg, rgba(2,8,19,0.98) 0%, rgba(5,18,34,0.9) 42%, rgba(8,25,45,0.56) 100%),
-        url("../assets/home-cards/ai-explainer.jpg?v=neural-network-20260526") center/cover;
-      box-shadow: var(--lab-shadow);
-    }
-    .lab-hero::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background:
-        linear-gradient(90deg, rgba(57,207,255,0.08) 1px, transparent 1px),
-        linear-gradient(0deg, rgba(57,207,255,0.06) 1px, transparent 1px);
-      background-size: 42px 42px;
-      mask-image: linear-gradient(90deg, transparent, #000 52%, transparent);
-      pointer-events: none;
-    }
-    .hero-copy {
-      position: relative;
-      z-index: 1;
-      max-width: 720px;
-    }
-    .kicker {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 14px;
-      color: var(--lab-gold);
-      font-size: 12px;
-      font-weight: 900;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-    }
-    .kicker::before {
-      content: "";
-      width: 9px;
-      height: 9px;
-      border-radius: 50%;
-      background: var(--lab-green);
-      box-shadow: 0 0 18px rgba(132,227,122,0.8);
-    }
-    h1, h2, h3 {
-      margin: 0;
-      color: #f8ecd8;
-      font-family: Georgia, "Times New Roman", serif;
-      letter-spacing: 0;
-    }
-    h1 {
-      max-width: 760px;
-      font-size: clamp(2.6rem, 7vw, 5.6rem);
-      line-height: 0.94;
-    }
-    @keyframes galaxy-slow-turn {
-      from { transform: rotate(-1deg) scale(1.03); }
-      to { transform: rotate(359deg) scale(1.03); }
-    }
-    @keyframes galaxy-drift {
-      from { transform: translate3d(-1.5%, -1%, 0) scale(1.02); }
-      to { transform: translate3d(1.5%, 1%, 0) scale(1.08); }
-    }
-    .hero-copy p {
-      max-width: 640px;
-      margin: 18px 0 0;
-      color: #c1d3df;
-      font-size: clamp(1rem, 2vw, 1.18rem);
-      line-height: 1.58;
-    }
-    .hero-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 24px;
-    }
-    .tour-panel {
-      position: relative;
-      z-index: 1;
-      max-width: 720px;
-      margin-top: 28px;
-      padding: 14px;
-      border: 1px solid rgba(86,163,232,0.34);
-      border-radius: 12px;
-      background: rgba(3, 13, 26, 0.72);
-      backdrop-filter: blur(10px);
-    }
-    .tour-panel strong {
-      display: block;
-      color: #fff;
-      font-size: 14px;
-    }
-    .tour-panel p {
-      margin: 6px 0 0;
-      color: var(--lab-muted);
-      font-size: 13px;
-      line-height: 1.45;
-    }
-    .tour-progress {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(14px, 1fr));
-      gap: 6px;
-      margin: 12px 0;
-    }
-    .tour-dot {
-      display: block;
-      height: 6px;
-      min-height: 0 !important;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.12) !important;
-      border: 0 !important;
-      padding: 0 !important;
-      cursor: pointer;
-    }
-    .tour-dot.active { background: linear-gradient(90deg, var(--lab-gold), var(--lab-cyan)) !important; }
-    .lab-button, .hero-actions a {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      min-height: 40px;
-      padding: 10px 14px;
-      border: 1px solid rgba(86,163,232,0.42);
-      border-radius: 8px;
-      color: var(--lab-text);
-      background: rgba(255,255,255,0.06) !important;
-      text-decoration: none;
-      font-weight: 800;
-      cursor: pointer;
-    }
-    .lab-button:hover, .lab-button.active, .hero-actions a:hover {
-      border-color: var(--lab-line-hot);
-      background: rgba(57,207,255,0.14) !important;
-      color: #fff;
-    }
-    .lab-button.primary, .hero-actions a.primary {
-      color: #10202b !important;
-      border-color: rgba(230,189,103,0.8) !important;
-      background: linear-gradient(135deg, var(--lab-gold), #ff8b74) !important;
-    }
-    .lab-grid {
-      display: grid;
-      gap: 18px;
-      margin-top: 22px;
-    }
-    .scope-callout {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
-      gap: 18px;
-      align-items: center;
-      padding: 18px;
-      border: 1px solid rgba(230,189,103,0.42);
-      border-radius: 12px;
-      background: linear-gradient(135deg, rgba(230,189,103,0.13), rgba(57,207,255,0.07));
-    }
-    .scope-callout p {
-      margin: 8px 0 0;
-      color: var(--lab-muted);
-      line-height: 1.5;
-    }
-    .scope-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 12px;
-    }
-    .scope-tags span {
-      display: inline-flex;
-      align-items: center;
-      min-height: 26px;
-      padding: 5px 9px;
-      border: 1px solid rgba(255,255,255,0.12);
-      border-radius: 999px;
-      color: #dbeaf2;
-      background: rgba(255,255,255,0.055);
-      font-size: 12px;
-      font-weight: 800;
-    }
-    .lab-card {
-      border: 1px solid var(--lab-line);
-      border-radius: 14px;
-      background: linear-gradient(145deg, var(--lab-panel), rgba(2,10,22,0.9));
-      box-shadow: 0 18px 50px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.04);
-      scroll-margin-top: 20px;
-    }
-    .lab-card + .lab-card { margin-top: 22px; }
-    .lab-card.tour-active {
-      border-color: var(--lab-line-hot);
-      box-shadow: 0 24px 70px rgba(57,207,255,0.18), inset 0 1px 0 rgba(255,255,255,0.08);
-    }
-    .mobile-tour-bar { display: none; }
-    .lab-card-header {
-      display: flex;
-      justify-content: space-between;
-      gap: 18px;
-      padding: 22px 22px 0;
-    }
-    .lab-card h2 { font-size: clamp(1.45rem, 3vw, 2.1rem); }
-    .lab-card-header p {
-      max-width: 720px;
-      margin: 8px 0 0;
-      color: var(--lab-muted);
-      line-height: 1.55;
-    }
-    .status-pill {
-      flex: 0 0 auto;
-      align-self: start;
-      padding: 7px 10px;
-      border: 1px solid rgba(132,227,122,0.36);
-      border-radius: 999px;
-      color: #caffc3;
-      background: rgba(132,227,122,0.08);
-      font-size: 11px;
-      font-weight: 900;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      white-space: nowrap;
-    }
-    .lab-card-body { padding: 20px 22px 22px; }
-    .agent-board {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) 320px;
-      gap: 18px;
-    }
-    .scenario-picker,
-    .preset-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 14px;
-    }
-    .agent-flow {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 12px;
-    }
-    .flow-step {
-      min-height: 112px;
-      padding: 14px;
-      border: 1px solid rgba(110,159,205,0.22);
-      border-radius: 10px;
-      background: rgba(255,255,255,0.035);
-      transition: border-color .2s ease, background .2s ease, transform .2s ease;
-    }
-    .flow-step.active {
-      border-color: var(--lab-line-hot);
-      background: rgba(57,207,255,0.12);
-      transform: translateY(-2px);
-      box-shadow: 0 12px 32px rgba(57,207,255,0.12);
-    }
-    .flow-step.done {
-      border-color: rgba(132,227,122,0.38);
-      background: rgba(132,227,122,0.07);
-    }
-    .flow-step span {
-      color: var(--lab-gold);
-      font-size: 11px;
-      font-weight: 900;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-    }
-    .flow-step strong {
-      display: block;
-      margin-top: 8px;
-      color: #fff;
-      font-size: 1rem;
-    }
-    .flow-step p {
-      margin: 7px 0 0;
-      color: var(--lab-muted);
-      font-size: 13px;
-      line-height: 1.4;
-    }
-    .agent-console {
-      display: grid;
-      align-content: start;
-      gap: 12px;
-      min-height: 100%;
-      padding: 16px;
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 10px;
-      background: #020812;
-    }
-    .console-readout {
-      min-height: 172px;
-      padding: 14px;
-      border-radius: 8px;
-      background: rgba(255,255,255,0.04);
-      color: #d8eaf2;
-      font: 13px/1.55 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-      white-space: pre-wrap;
-    }
-    .control-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-    .two-col {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 18px;
-    }
-    .three-col {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 14px;
-    }
-    .diagram-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 14px;
-    }
-    .diagram-panel {
-      min-width: 0;
-      padding: 16px;
-      border: 1px solid rgba(110,159,205,0.24);
-      border-radius: 10px;
-      background: rgba(255,255,255,0.035);
-      overflow: hidden;
-    }
-    .diagram-panel-wide { grid-column: 1 / -1; }
-    .diagram-panel h3 { font-size: 1.08rem; }
-    .diagram-panel p {
-      margin: 12px 0 0;
-      color: var(--lab-muted);
-      line-height: 1.5;
-      font-size: 14px;
-    }
-    .pipeline-diagram {
-      display: grid;
-      grid-template-columns: minmax(92px, 1fr) 28px minmax(92px, 1fr) 28px minmax(92px, 1fr) 28px minmax(92px, 1fr);
-      gap: 10px;
-      align-items: center;
-      margin-top: 14px;
-    }
-    .pipeline-diagram span,
-    .loop-diagram span,
-    .memory-diagram span {
-      display: grid;
-      place-items: center;
-      min-height: 42px;
-      padding: 8px;
-      border: 1px solid rgba(57,207,255,0.3);
-      border-radius: 8px;
-      color: #e2f8ff;
-      background: rgba(57,207,255,0.08);
-      font-size: 12px;
-      font-weight: 900;
-      text-align: center;
-    }
-    .pipeline-diagram i {
-      display: block;
-      height: 2px;
-      background: linear-gradient(90deg, var(--lab-cyan), transparent);
-      position: relative;
-    }
-    .pipeline-diagram i::after {
-      content: "";
-      position: absolute;
-      right: 0;
-      top: -4px;
-      border-left: 7px solid var(--lab-cyan);
-      border-top: 5px solid transparent;
-      border-bottom: 5px solid transparent;
-    }
-    .loop-diagram {
-      position: relative;
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 10px;
-      margin-top: 14px;
-      padding: 8px;
-      border: 1px dashed rgba(230,189,103,0.35);
-      border-radius: 12px;
-    }
-    .loop-diagram span:nth-child(1) { border-color: rgba(132,227,122,0.36); background: rgba(132,227,122,0.08); }
-    .loop-diagram span:nth-child(2) { border-color: rgba(230,189,103,0.36); background: rgba(230,189,103,0.08); }
-    .loop-diagram span:nth-child(3) { border-color: rgba(157,134,255,0.38); background: rgba(157,134,255,0.08); }
-    .loop-diagram span:nth-child(4) { border-color: rgba(57,207,255,0.36); background: rgba(57,207,255,0.08); }
-    .loop-diagram b {
-      grid-column: 1 / -1;
-      display: block;
-      color: var(--lab-gold);
-      font-size: 12px;
-      font-weight: 900;
-      letter-spacing: 0.08em;
-      text-align: center;
-      text-transform: uppercase;
-    }
-    .memory-diagram {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 10px;
-      margin-top: 14px;
-    }
-    .memory-diagram div {
-      display: grid;
-      gap: 8px;
-      padding: 10px;
-      border: 1px solid rgba(255,255,255,0.09);
-      border-radius: 10px;
-      background: rgba(0,0,0,0.16);
-    }
-    .memory-diagram strong {
-      color: #fff;
-      font-size: 13px;
-    }
-    .memory-diagram .faded { opacity: 0.45; }
-    .map-layout {
-      display: grid;
-      grid-template-columns: minmax(0, 1.45fr) minmax(280px, 0.55fr);
-      gap: 16px;
-      align-items: stretch;
-    }
-    .map-figure {
-      position: relative;
-      min-height: 360px;
-      overflow: hidden;
-      border: 1px solid rgba(86,163,232,0.3);
-      border-radius: 12px;
-      background: #020812;
-    }
-    .map-figure img {
-      display: block;
-      width: 100%;
-      height: 100%;
-      min-height: 360px;
-      object-fit: cover;
-    }
-    .map-marker {
-      position: absolute;
-      left: var(--x);
-      top: var(--y);
-      display: grid;
-      place-items: center;
-      width: 34px;
-      height: 34px;
-      border: 1px solid rgba(57,207,255,0.7);
-      border-radius: 50%;
-      color: #fff;
-      background: rgba(3, 13, 26, 0.72);
-      box-shadow: 0 0 0 6px rgba(57,207,255,0.12), 0 0 22px rgba(57,207,255,0.42);
-      transform: translate(-50%, -50%);
-      cursor: pointer;
-    }
-    .map-marker.active {
-      border-color: var(--lab-gold);
-      color: #10202b;
-      background: linear-gradient(135deg, var(--lab-gold), var(--lab-cyan));
-      box-shadow: 0 0 0 8px rgba(230,189,103,0.16), 0 0 28px rgba(230,189,103,0.44);
-    }
-    .map-side {
-      display: grid;
-      align-content: start;
-      gap: 12px;
-    }
-    .map-buttons {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 8px;
-    }
-    .map-readout {
-      min-height: 194px;
-      padding: 16px;
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 10px;
-      background: #020812;
-    }
-    .map-readout h3 { font-size: 1.2rem; }
-    .map-readout p {
-      margin: 10px 0 0;
-      color: var(--lab-muted);
-      line-height: 1.55;
-      font-size: 14px;
-    }
-    .map-readout .trace-note { margin-top: 12px; }
-    .mini-panel {
-      padding: 16px;
-      border: 1px solid rgba(110,159,205,0.24);
-      border-radius: 10px;
-      background: rgba(255,255,255,0.035);
-    }
-    .mini-panel h3 {
-      font-size: 1.08rem;
-      margin-bottom: 8px;
-    }
-    .mini-panel p {
-      margin: 0;
-      color: var(--lab-muted);
-      line-height: 1.5;
-      font-size: 14px;
-    }
-    textarea {
-      width: 100%;
-      min-height: 116px;
-      resize: vertical;
-      padding: 13px;
-      border: 1px solid rgba(110,159,205,0.34);
-      border-radius: 8px;
-      color: var(--lab-text);
-      background: rgba(2,8,18,0.92);
-      line-height: 1.5;
-    }
-    .token-output {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 7px;
-      min-height: 104px;
-      align-content: start;
-      padding: 12px;
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 8px;
-      background: rgba(0,0,0,0.2);
-    }
-    .token {
-      padding: 5px 8px;
-      border: 1px solid rgba(57,207,255,0.28);
-      border-radius: 7px;
-      color: #dcf8ff;
-      background: rgba(57,207,255,0.09);
-      font: 12px/1.2 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-    }
-    .meter {
-      height: 10px;
-      overflow: hidden;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.08);
-      margin-top: 12px;
-    }
-    .meter span {
-      display: block;
-      height: 100%;
-      width: 0%;
-      border-radius: inherit;
-      background: linear-gradient(90deg, var(--lab-green), var(--lab-cyan), var(--lab-gold));
-      transition: width .2s ease;
-    }
-    .metric-row {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 10px;
-      margin-top: 12px;
-    }
-    .metric {
-      padding: 10px;
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 8px;
-      background: rgba(255,255,255,0.035);
-    }
-    .metric span {
-      display: block;
-      color: var(--lab-dim);
-      font-size: 11px;
-      font-weight: 900;
-      text-transform: uppercase;
-    }
-    .metric strong {
-      display: block;
-      margin-top: 4px;
-      color: #fff;
-      font-size: 1rem;
-    }
-    .context-stack {
-      display: grid;
-      gap: 8px;
-      margin-top: 14px;
-    }
-    .context-controls {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
-      gap: 14px;
-      align-items: end;
-      margin-bottom: 12px;
-    }
-    .context-legend {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 10px;
-    }
-    .legend-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 6px 8px;
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 999px;
-      color: var(--lab-muted);
-      background: rgba(255,255,255,0.035);
-      font-size: 12px;
-      font-weight: 800;
-    }
-    .legend-pill::before {
-      content: "";
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: var(--pill-color, var(--lab-cyan));
-    }
-    .context-item {
-      display: grid;
-      grid-template-columns: 90px minmax(0, 1fr) 96px;
-      gap: 10px;
-      align-items: center;
-      padding: 10px;
-      border: 1px solid rgba(110,159,205,0.2);
-      border-radius: 8px;
-      background: rgba(255,255,255,0.035);
-      color: var(--lab-muted);
-      font-size: 13px;
-    }
-    .context-item.visible { border-color: rgba(132,227,122,0.42); color: #dfffe0; }
-    .context-item.summary { border-color: rgba(230,189,103,0.38); color: #f4dfb5; opacity: 0.78; }
-    .context-item.memory { border-color: rgba(157,134,255,0.56); color: #e8e1ff; opacity: 1; }
-    .context-item.dropped { color: #73879a; opacity: 0.42; }
-    .context-state {
-      justify-self: end;
-      font-size: 11px;
-      font-weight: 900;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-    }
-    input[type="range"] {
-      width: 100%;
-      accent-color: var(--lab-cyan);
-    }
-    .prompt-output {
-      min-height: 180px;
-      padding: 14px;
-      border-radius: 8px;
-      border: 1px solid rgba(255,255,255,0.08);
-      background: rgba(0,0,0,0.22);
-      color: #d8eaf2;
-      line-height: 1.55;
-      font-size: 14px;
-    }
-    .tool-grid {
-      display: grid;
-      grid-template-columns: 210px minmax(0, 1fr);
-      gap: 16px;
-    }
-    .tool-list {
-      display: grid;
-      gap: 8px;
-    }
-    .tool-readout {
-      min-height: 252px;
-      padding: 16px;
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 10px;
-      background: #020812;
-      color: #d8eaf2;
-      font: 13px/1.55 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-      white-space: pre-wrap;
-    }
-    .tool-compare {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 14px;
-      margin-top: 14px;
-    }
-    .compare-panel {
-      min-height: 158px;
-      padding: 14px;
-      border-radius: 10px;
-      border: 1px solid rgba(255,255,255,0.08);
-      background: rgba(0,0,0,0.2);
-    }
-    .compare-panel strong {
-      display: block;
-      margin-bottom: 8px;
-      color: #fff;
-    }
-    .compare-panel p {
-      margin: 0;
-      color: var(--lab-muted);
-      line-height: 1.5;
-      font-size: 14px;
-    }
-    .trace-grid {
-      display: grid;
-      grid-template-columns: 330px minmax(0, 1fr);
-      gap: 16px;
-    }
-    .trace-list {
-      display: grid;
-      gap: 8px;
-      align-content: start;
-    }
-    .trace-row {
-      display: grid;
-      grid-template-columns: 44px minmax(0, 1fr);
-      gap: 10px;
-      padding: 11px;
-      border: 1px solid rgba(110,159,205,0.22);
-      border-radius: 10px;
-      color: var(--lab-muted);
-      background: rgba(255,255,255,0.035);
-      cursor: pointer;
-      text-align: left;
-    }
-    .trace-row.active {
-      border-color: var(--lab-line-hot);
-      color: #e8f8ff;
-      background: rgba(57,207,255,0.1);
-    }
-    .trace-row b {
-      display: grid;
-      place-items: center;
-      width: 34px;
-      height: 34px;
-      border-radius: 8px;
-      color: #10202b;
-      background: linear-gradient(135deg, var(--lab-gold), var(--lab-cyan));
-      font-size: 12px;
-    }
-    .trace-row strong {
-      display: block;
-      color: #fff;
-      font-size: 14px;
-    }
-    .trace-row span {
-      display: block;
-      margin-top: 4px;
-      font-size: 12px;
-      line-height: 1.35;
-    }
-    .trace-output {
-      min-height: 330px;
-      padding: 16px;
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 10px;
-      background: #020812;
-    }
-    .trace-output .status-pill { margin-bottom: 12px; }
-    .trace-output h3 { font-size: 1.15rem; }
-    .trace-output p {
-      margin: 10px 0 0;
-      color: var(--lab-muted);
-      line-height: 1.55;
-    }
-    .trace-note {
-      margin-top: 14px;
-      padding: 12px;
-      border: 1px solid rgba(230,189,103,0.28);
-      border-radius: 10px;
-      color: #f5ddb0;
-      background: rgba(230,189,103,0.055);
-      font-size: 13px;
-      line-height: 1.45;
-    }
-    .quiz-card {
-      display: grid;
-      gap: 12px;
-      padding: 16px;
-      border: 1px solid rgba(230,189,103,0.32);
-      border-radius: 10px;
-      background: rgba(230,189,103,0.055);
-      margin-top: 14px;
-    }
-    .quiz-card h3 { font-size: 1.1rem; }
-    .quiz-result {
-      min-height: 52px;
-      color: #f5ddb0;
-      line-height: 1.5;
-      font-size: 14px;
-    }
-    .failure-tabs {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 14px;
-    }
-    .failure-card {
-      padding: 16px;
-      border: 1px solid rgba(255,127,156,0.28);
-      border-radius: 10px;
-      background: rgba(255,127,156,0.055);
-    }
-    .failure-card h3 { color: #ffe3e9; }
-    .failure-card p {
-      margin: 8px 0 0;
-      color: #f1bec9;
-      line-height: 1.55;
-    }
-    .system-strip {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 12px;
-    }
-    .system-tile {
-      padding: 16px;
-      border-radius: 10px;
-      border: 1px solid rgba(110,159,205,0.24);
-      background: rgba(255,255,255,0.035);
-    }
-    .system-tile:nth-child(1) { border-color: rgba(132,227,122,0.34); }
-    .system-tile:nth-child(2) { border-color: rgba(57,207,255,0.34); }
-    .system-tile:nth-child(3) { border-color: rgba(157,134,255,0.34); }
-    .system-tile:nth-child(4) { border-color: rgba(230,189,103,0.34); }
-    .system-tile h3 { font-size: 1rem; }
-    .system-tile p {
-      margin: 8px 0 0;
-      color: var(--lab-muted);
-      font-size: 13px;
-      line-height: 1.45;
-    }
-    .concept-grid {
-      display: grid;
-      grid-template-columns: 320px minmax(0, 1fr);
-      gap: 16px;
-    }
-    .concept-list {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 8px;
-      align-content: start;
-    }
-    .concept-card {
-      min-height: 78px;
-      padding: 12px;
-      border: 1px solid rgba(110,159,205,0.22);
-      border-radius: 10px;
-      color: var(--lab-muted);
-      background: rgba(255,255,255,0.035);
-      cursor: pointer;
-      text-align: left;
-    }
-    .concept-card.active {
-      border-color: var(--lab-line-hot);
-      color: #e8f8ff;
-      background: rgba(57,207,255,0.1);
-    }
-    .concept-card strong {
-      display: block;
-      color: #fff;
-      font-size: 14px;
-    }
-    .concept-card span {
-      display: block;
-      margin-top: 6px;
-      color: var(--lab-dim);
-      font-size: 12px;
-      line-height: 1.35;
-    }
-    .concept-detail {
-      min-height: 338px;
-      padding: 18px;
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 10px;
-      background: #020812;
-    }
-    .concept-detail h3 { font-size: 1.35rem; }
-    .concept-detail p {
-      margin: 12px 0 0;
-      color: var(--lab-muted);
-      line-height: 1.58;
-    }
-    .concept-example {
-      margin-top: 16px;
-      padding: 14px;
-      border: 1px solid rgba(132,227,122,0.26);
-      border-radius: 10px;
-      color: #dfffe0;
-      background: rgba(132,227,122,0.055);
-      font-size: 14px;
-      line-height: 1.5;
-    }
-    .concept-pair {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 10px;
-      margin-top: 14px;
-    }
-    .concept-pair div {
-      padding: 12px;
-      border: 1px solid rgba(230,189,103,0.22);
-      border-radius: 10px;
-      background: rgba(230,189,103,0.045);
-    }
-    .concept-pair strong {
-      display: block;
-      color: #fff;
-      font-size: 12px;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-    .concept-pair span {
-      display: block;
-      margin-top: 7px;
-      color: #f5ddb0;
-      font-size: 13px;
-      line-height: 1.4;
-    }
-    .builder-grid {
-      display: grid;
-      grid-template-columns: 310px minmax(0, 1fr);
-      gap: 16px;
-    }
-    .builder-options {
-      display: grid;
-      gap: 10px;
-    }
-    .builder-option {
-      display: grid;
-      grid-template-columns: auto minmax(0, 1fr);
-      gap: 10px;
-      align-items: start;
-      padding: 12px;
-      border: 1px solid rgba(110,159,205,0.24);
-      border-radius: 10px;
-      background: rgba(255,255,255,0.035);
-      cursor: pointer;
-    }
-    .builder-option input {
-      margin-top: 3px;
-      accent-color: var(--lab-cyan);
-    }
-    .builder-option strong {
-      display: block;
-      color: #fff;
-      font-size: 14px;
-    }
-    .builder-option span {
-      display: block;
-      margin-top: 4px;
-      color: var(--lab-muted);
-      font-size: 12px;
-      line-height: 1.4;
-    }
-    .builder-output {
-      display: grid;
-      align-content: start;
-      gap: 14px;
-      padding: 16px;
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 10px;
-      background: #020812;
-    }
-    .stack-visual {
-      display: grid;
-      gap: 8px;
-    }
-    .stack-layer {
-      display: grid;
-      grid-template-columns: 120px minmax(0, 1fr);
-      gap: 10px;
-      align-items: center;
-      padding: 10px;
-      border: 1px solid rgba(57,207,255,0.22);
-      border-left: 4px solid var(--layer-color, var(--lab-cyan));
-      border-radius: 9px;
-      background: rgba(255,255,255,0.035);
-    }
-    .stack-layer strong {
-      color: #fff;
-      font-size: 13px;
-    }
-    .stack-layer span {
-      color: var(--lab-muted);
-      font-size: 13px;
-      line-height: 1.35;
-    }
-    .builder-summary {
-      min-height: 92px;
-      padding: 14px;
-      border: 1px solid rgba(230,189,103,0.28);
-      border-radius: 10px;
-      color: #f5ddb0;
-      background: rgba(230,189,103,0.055);
-      line-height: 1.5;
-      font-size: 14px;
-    }
-    .pipeline-diagram span {
-      cursor: pointer;
-      transition: border-color .2s ease, background .2s ease, box-shadow .2s ease;
-    }
-    .pipeline-diagram span.active {
-      border-color: rgba(230,189,103,0.72);
-      background: rgba(230,189,103,0.15);
-      color: #fff;
-      box-shadow: 0 0 18px rgba(230,189,103,0.28);
-    }
-    .system-tile {
-      transition: border-color .2s ease, background .2s ease, transform .2s ease;
-    }
-    .system-tile.active {
-      border-color: var(--lab-line-hot);
-      background: rgba(57,207,255,0.1);
-      transform: translateY(-2px);
-      box-shadow: 0 12px 32px rgba(57,207,255,0.12);
-    }
-    footer {
-      margin-top: 38px;
-      padding-top: 24px;
-      border-top: 1px solid rgba(255,255,255,0.08);
-      color: var(--lab-muted);
-      font-size: 13px;
-      text-align: center;
-    }
-    @media (max-width: 980px) {
-      .lab-shell { grid-template-columns: 1fr; }
-      .lab-rail { position: static; }
-      .lab-nav { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .agent-board, .two-col, .map-layout, .tool-grid, .tool-compare, .trace-grid, .concept-grid, .builder-grid { grid-template-columns: 1fr; }
-      .diagram-grid { grid-template-columns: 1fr; }
-      .context-controls { grid-template-columns: 1fr; }
-      .system-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    }
-    @media (max-width: 680px) {
-      .ai-lab { padding: 14px 12px 94px; }
-      .lab-hero { min-height: 0; padding: 24px; }
-      .lab-hero h1 { font-size: clamp(2.1rem, 13vw, 3.2rem); }
-      .hero-actions a,
-      .hero-actions button,
-      .control-row .lab-button { flex: 1 1 145px; }
-      .mobile-tour-bar {
-        position: sticky;
-        bottom: 10px;
-        z-index: 20;
-        display: grid;
-        grid-template-columns: 1.2fr 0.9fr 0.9fr;
-        gap: 8px;
-        margin: 12px 0;
-        padding: 10px;
-        border: 1px solid rgba(86,163,232,0.34);
-        border-radius: 12px;
-        background: rgba(3,13,26,0.9);
-        backdrop-filter: blur(12px);
-      }
-      .lab-card-header { display: block; }
-      .lab-card-body { padding: 16px; }
-      .status-pill { display: inline-flex; margin-top: 12px; }
-      .agent-flow, .three-col, .metric-row, .system-strip, .lab-nav, .pipeline-diagram, .memory-diagram { grid-template-columns: 1fr; }
-      .pipeline-diagram i {
-        width: 2px;
-        height: 20px;
-        margin: 0 auto;
-        background: linear-gradient(180deg, var(--lab-cyan), transparent);
-      }
-      .pipeline-diagram i::after {
-        right: -4px;
-        top: auto;
-        bottom: 0;
-        border-left: 5px solid transparent;
-        border-right: 5px solid transparent;
-        border-top: 7px solid var(--lab-cyan);
-        border-bottom: 0;
-      }
-      .context-item { grid-template-columns: 1fr; }
-      .context-state { justify-self: start; }
-      .scope-callout { grid-template-columns: 1fr; }
-      .map-figure, .map-figure img { min-height: 240px; }
-      .map-buttons { grid-template-columns: 1fr; }
-      .trace-row { grid-template-columns: 38px minmax(0, 1fr); }
-      .concept-list, .concept-pair { grid-template-columns: 1fr; }
-      .stack-layer { grid-template-columns: 1fr; }
-    }
-  </style>
-  <link rel="stylesheet" href="lab.css?v=20260929" />
-  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
-
-<meta name="description" content="An interactive, plain-English guide to how AI language models actually work — tokens, embeddings, attention, and training, with hands-on visual demos." />
-<link rel="canonical" href="https://jez237.com/how-ai-works/" />
-<meta property="og:type" content="website" />
-<meta property="og:site_name" content="Jez237" />
-<meta property="og:title" content="How AI Works — Interactive Guide" />
-<meta property="og:description" content="An interactive, plain-English guide to how AI language models actually work — tokens, embeddings, attention, and training, with hands-on visual demos." />
-<meta property="og:url" content="https://jez237.com/how-ai-works/" />
-<meta property="og:image" content="https://jez237.com/how-ai-works/media/og.jpg?v=20260929" />
-<meta property="og:image:width" content="1200" />
-<meta property="og:image:height" content="630" />
-<meta property="og:image:alt" content="The How AI Works next-token machine: a probability wheel sampling the next word of a sentence." />
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="How AI Works — Interactive Guide" />
-<meta name="twitter:image" content="https://jez237.com/how-ai-works/media/og.jpg?v=20260929" />
+  <link rel="stylesheet" href="lab.css?v=20261110b" />
+  <meta name="description" content="A real language model runs in this page. Type a prompt and watch it become tokens, vectors, attention, layers and odds, then retrain the model yourself. Animated, step by step." />
+  <link rel="canonical" href="https://jez237.com/how-ai-works/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Jez237" />
+  <meta property="og:title" content="How AI Works — Animated Interactive Guide" />
+  <meta property="og:description" content="A real, tiny language model runs in this page. Type a prompt and watch every step: tokens, embeddings, attention, layers, sampling — then retrain it yourself." />
+  <meta property="og:url" content="https://jez237.com/how-ai-works/" />
+  <meta property="og:image" content="https://jez237.com/assets/galaxy-home-20260702.webp" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="How AI Works — Animated Interactive Guide" />
+  <meta name="twitter:image" content="https://jez237.com/assets/galaxy-home-20260702.webp" />
 </head>
 <body>
   <header id="site-nav"></header>
@@ -1258,669 +28,723 @@
   <main class="ai-lab">
     <div data-space-fx aria-hidden="true"></div>
     <div class="lab-shell">
-      <aside class="lab-rail" aria-label="AI guide sections">
+      <aside class="lab-rail" aria-label="Guide chapters">
         <a class="rail-brand" href="../">
           <strong>Jez237</strong>
-          <span>AI workbench / interactive guide</span>
+          <span>How AI Works / animated lab</span>
         </a>
-        <div class="rail-progress" aria-hidden="true"><span id="railProgress"></span></div>
-        <button class="calm-toggle" id="calmToggle" type="button" aria-pressed="false"><span class="calm-dot"></span>Calm mode: pause animations</button>
+        <div class="rail-progress" aria-hidden="true"><span id="railFill"></span></div>
+        <label class="rail-prompt"><span>Your prompt</span><input id="railPrompt" type="text" maxlength="80" autocomplete="off" spellcheck="false" /></label>
         <nav class="lab-nav">
-          <a href="#map"><svg viewBox="0 0 24 24"><path d="M4 7l5-3 6 3 5-3v13l-5 3-6-3-5 3z"/><path d="M9 4v13"/><path d="M15 7v13"/></svg>System map</a>
-          <span class="rail-act">Act I · Inside the model</span>
-          <a href="#tokens"><svg viewBox="0 0 24 24"><path d="M5 7h14"/><path d="M7 12h10"/><path d="M9 17h6"/></svg>Tokens</a>
-          <a href="#next-token"><svg viewBox="0 0 24 24"><path d="M4 20V14"/><path d="M9 20V6"/><path d="M14 20v-9"/><path d="M19 20v-4"/></svg>Next token</a>
-          <a href="#attention"><svg viewBox="0 0 24 24"><path d="M4 17c3-9 13-9 16 0"/><path d="M8 17c1.5-4 6.5-4 8 0"/><circle cx="4" cy="18" r="1"/><circle cx="20" cy="18" r="1"/></svg>Attention</a>
-          <a href="#diagrams"><svg viewBox="0 0 24 24"><path d="M4 6h5v5H4z"/><path d="M15 4h5v5h-5z"/><path d="M15 15h5v5h-5z"/><path d="M9 8.5h6"/><path d="M12 11v6h3"/></svg>Putting it together</a>
-          <a href="#training-roadmap"><svg viewBox="0 0 24 24"><path d="M4 19V7"/><path d="M8 19V5"/><path d="M12 19V9"/><path d="M16 19V4"/><path d="M20 19v-7"/></svg>Training</a>
-          <span class="rail-act">Act II · Around the model</span>
-          <a href="#context"><svg viewBox="0 0 24 24"><path d="M5 5h14v14H5z"/><path d="M8 9h8"/><path d="M8 13h5"/></svg>Context &amp; memory</a>
-          <a href="#embeddings"><svg viewBox="0 0 24 24"><circle cx="6" cy="7" r="1.6"/><circle cx="9" cy="10" r="1.6"/><circle cx="17" cy="15" r="1.6"/><circle cx="15" cy="18" r="1.6"/><circle cx="18" cy="6" r="1.6"/></svg>Finding notes</a>
-          <a href="#prompts"><svg viewBox="0 0 24 24"><path d="M4 6h16v12H4z"/><path d="m8 10 2 2-2 2"/><path d="M13 14h3"/></svg>Prompts</a>
-          <a href="#tools"><svg viewBox="0 0 24 24"><path d="M14.5 5.5 18 2l4 4-3.5 3.5"/><path d="M3 21l8.5-8.5"/><path d="M12 8l4 4"/></svg>Tools</a>
-          <span class="rail-act">Act III · Agents in the wild</span>
-          <a href="#agent-loop"><svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 0 1 13.6-5.7"/><path d="M18 3v5h-5"/><path d="M20 12a8 8 0 0 1-13.6 5.7"/><path d="M6 21v-5h5"/></svg>Agent loop</a>
-          <a href="#trace"><svg viewBox="0 0 24 24"><path d="M5 4v16"/><path d="M9 6h10"/><path d="M9 12h10"/><path d="M9 18h10"/><path d="M5 6h.01"/><path d="M5 12h.01"/><path d="M5 18h.01"/></svg>Trace viewer</a>
-          <a href="#systems"><svg viewBox="0 0 24 24"><path d="M4 6h16"/><path d="M4 12h16"/><path d="M4 18h16"/><path d="M8 6v12"/><path d="M16 6v12"/></svg>Systems</a>
-          <a href="#builder"><svg viewBox="0 0 24 24"><path d="M4 18V8"/><path d="M10 18V4"/><path d="M16 18v-7"/><path d="M4 8h4"/><path d="M10 4h4"/><path d="M16 11h4"/><path d="M2 18h20"/></svg>Build stack</a>
-          <a href="#failure"><svg viewBox="0 0 24 24"><path d="M12 3 2.8 20h18.4z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>Failure modes</a>
-          <a href="#hallucination"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="m20 20-4.5-4.5"/><path d="M9 11h4"/></svg>Spot the fake</a>
-          <span class="rail-act">Reference</span>
-          <a href="#concepts"><svg viewBox="0 0 24 24"><path d="M4 5h16"/><path d="M4 12h10"/><path d="M4 19h16"/><path d="M17 9l3 3-3 3"/></svg>Glossary</a>
+          <span class="nav-group">Inside the model</span>
+          <a href="#journey"><b>01</b>One token at a time</a>
+          <a href="#tokens"><b>02</b>Tokens</a>
+          <a href="#embeddings"><b>03</b>Embeddings</a>
+          <a href="#attention"><b>04</b>Attention</a>
+          <a href="#layers"><b>05</b>Layers</a>
+          <a href="#sampling"><b>06</b>Choosing a token</a>
+          <a href="#training"><b>07</b>Training</a>
+          <span class="nav-group">Around the model</span>
+          <a href="#chat"><b>08</b>A chat is one string</a>
+          <a href="#context"><b>09</b>Context window</a>
+          <a href="#prompts"><b>10</b>Prompts</a>
+          <a href="#agents"><b>11</b>Tools &amp; agents</a>
+          <a href="#systems"><b>12</b>Systems</a>
+          <a href="#failure"><b>13</b>Failure modes</a>
+          <a href="#glossary"><b>14</b>Glossary</a>
         </nav>
+        <div class="motion-box">
+          <button class="lab-button" id="motionPause" type="button" aria-pressed="false">Pause all motion</button>
+          <div class="speed-row" role="group" aria-label="Animation speed">
+            <button class="lab-button" data-speed="0.4" type="button">Slow</button>
+            <button class="lab-button active" data-speed="1" type="button">1×</button>
+            <button class="lab-button" data-speed="2" type="button">Fast</button>
+          </div>
+          <p class="predict-score"><span id="predictScore"></span> <button class="link-btn" id="predictReset" type="button">reset</button></p>
+        </div>
       </aside>
 
       <div class="lab-main">
         <section class="lab-hero">
           <div class="hero-copy">
-            <span class="kicker">Interactive AI lab</span>
+            <span class="kicker">Animated AI lab</span>
             <h1>How AI Works</h1>
-            <p>AI chatbots can feel like magic. This page opens one up: how it reads your words, how it picks each next word, and how apps turn that into assistants that use tools and check their work. Everything here is clickable, and nothing needs an account.</p>
+            <p>A chatbot does one thing: it predicts the next piece of text, over and over. A real language model — a very small one — is running inside this page. Give it a prompt and watch every step: text into tokens, tokens into numbers, numbers through layers, and one word chosen. Then wipe its memory and train it again yourself.</p>
             <div class="hero-actions">
-              <button class="lab-button primary" id="startTour" type="button">Take the 6-stop tour</button>
-              <button class="lab-button" id="watchTour" type="button"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>Watch the 60-second tour</button>
-            </div>
-            <p class="hero-links">Or jump to <a href="#next-token">the next-token machine</a> · <a href="training-alignment">how models are trained</a> · <a href="../">home</a></p>
-            <div class="tour-panel" aria-live="polite">
-              <strong id="tourTitle">Tour ready</strong>
-              <p id="tourCopy">Six quick stops cover the essentials. Prefer everything? Switch to the full tour.</p>
-              <div class="tour-progress" id="tourProgress" aria-label="Tour progress"></div>
-              <div class="control-row">
-                <button class="lab-button" id="prevTour" type="button">Previous</button>
-                <button class="lab-button" id="nextTour" type="button">Next stop</button>
-                <button class="tour-mode" id="tourMode" type="button">Switch to the full tour (17 stops)</button>
-              </div>
+              <a class="primary" href="#prompt">Start with a prompt</a>
+              <a href="training-alignment.html">Training &amp; alignment deep dive</a>
+              <a href="../">Back to Home</a>
             </div>
           </div>
+          <canvas id="heroCanvas" class="hero-canvas" aria-hidden="true"></canvas>
         </section>
 
-        <div class="mobile-tour-bar" aria-label="Guided tour controls">
-          <button class="lab-button primary" id="mobileTour" type="button">Tour</button>
-          <button class="lab-button" id="mobilePrev" type="button">Prev</button>
-          <button class="lab-button" id="mobileNext" type="button">Next</button>
-        </div>
-
-        <section id="map" class="lab-card">
-          <div class="lab-card-header">
-            <div>
-              <span class="kicker">Illustrated overview</span>
-              <h2>AI System Map</h2>
-              <p>The illustration shows an agent system as a physical workbench. Press play to watch a request travel through it, or pick a station to zoom in.</p>
-              <p class="gist"><b>In one line</b>Your words go in, get turned into numbers, run through a model, and come back out as an answer. Agents add tools and checks along the way.</p>
+        <section id="prompt" class="lab-card prompt-card" aria-labelledby="promptLabel">
+          <div class="lab-card-body">
+            <label id="promptLabel" for="promptInput" class="kicker">Your prompt — every chapter below runs on it</label>
+            <div class="prompt-row">
+              <input id="promptInput" class="prompt-input" type="text" maxlength="80" autocomplete="off" spellcheck="false" aria-describedby="promptHint" />
+              <button class="lab-button primary" id="promptGo" type="button">Use this prompt</button>
             </div>
-            <span class="status-pill">Generated illustration</span>
-          </div>
-          <div class="lab-card-body map-layout">
-            <figure class="map-figure" aria-label="Illustrated AI agent system map">
-              <div class="map-zoom" id="mapZoom">
-                <img src="../assets/ai-explainer/ai-system-map.jpg?v=ai-system-map-20260526" alt="Illustrated AI agent system with input, token blocks, context window, model core, tools, memory, verification, and final output stations." />
-                <svg class="map-flow" id="mapFlow" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"></svg>
-                <div class="map-sparks" id="mapSparks" aria-hidden="true"></div>
-                <button class="map-marker active" style="--x: 10%; --y: 47%" data-map="input" type="button" aria-label="Input station">1</button>
-                <button class="map-marker" style="--x: 27%; --y: 56%" data-map="tokens" type="button" aria-label="Token station">2</button>
-                <button class="map-marker" style="--x: 43%; --y: 48%" data-map="context" type="button" aria-label="Context station">3</button>
-                <button class="map-marker" style="--x: 59%; --y: 43%" data-map="model" type="button" aria-label="Model core">4</button>
-                <button class="map-marker" style="--x: 74%; --y: 28%" data-map="tools" type="button" aria-label="Tool station">5</button>
-                <button class="map-marker" style="--x: 76%; --y: 61%" data-map="memory" type="button" aria-label="Memory station">6</button>
-                <button class="map-marker" style="--x: 84%; --y: 66%" data-map="verify" type="button" aria-label="Verification station">7</button>
-                <button class="map-marker" style="--x: 93%; --y: 55%" data-map="answer" type="button" aria-label="Final answer station">8</button>
-              </div>
-              <button class="lab-button map-unzoom" id="mapUnzoom" type="button" hidden>Zoom out</button>
-            </figure>
-            <div class="map-side">
-              <div class="control-row">
-                <button class="lab-button primary" id="mapPlay" type="button">Play a request through</button>
-              </div>
-              <div class="map-buttons" id="mapButtons"></div>
-              <div class="map-readout" id="mapReadout" aria-live="polite"></div>
+            <div class="preset-row" aria-label="Example prompts">
+              <button class="lab-button" data-ptext="the cat sat on the" type="button">the cat sat on the</button>
+              <button class="lab-button" data-ptext="the gardener was tired so" type="button">the gardener was tired so</button>
+              <button class="lab-button" data-ptext="the farmer was tired so" type="button">the farmer was tired so</button>
+              <button class="lab-button" data-ptext="the dog ate the food because it was" type="button">the dog ate the food because it was</button>
+              <button class="lab-button" data-ptext="the dragon sat on the" type="button">the dragon sat on the</button>
             </div>
-          </div>
-        </section>
-
-        <div class="act-banner" id="act-1">
-          <span>Act I</span>
-          <h2>Inside the model</h2>
-          <p>Inside, a language model does one thing: it looks at the text so far and gives odds for every possible next piece of text. Everything else is built around that.</p>
-        </div>
-
-        <section id="tokens" class="lab-card">
-          <div class="lab-card-header">
-            <div>
-              <span class="kicker">Text becomes numbers</span>
-              <h2>Token Playground</h2>
-              <p>Models never see letters. A tokenizer chops text into pieces it learned from data: <em>common</em> chunks become one token, rare ones get split. In English a token averages about three-quarters of a word. Type anything below. This uses a real tokenizer (OpenAI's <code>o200k</code>). Every model family has its own, but they all work this way.</p>
-              <p class="gist"><b>In one line</b>Models read numbered chunks of text, not letters.</p>
-            </div>
-            <span class="status-pill" id="tokStatus">Loading tokenizer…</span>
-          </div>
-          <div class="lab-card-body two-col">
-            <div>
-              <div class="preset-row" aria-label="Token examples">
-                <button class="lab-button active" data-token-preset="clear" type="button">Plain English</button>
-                <button class="lab-button" data-token-preset="strawberry" type="button">Strawberry</button>
-                <button class="lab-button" data-token-preset="numbers" type="button">Numbers</button>
-                <button class="lab-button" data-token-preset="rare" type="button">Rare words</button>
-                <button class="lab-button" data-token-preset="languages" type="button">Other languages</button>
-                <button class="lab-button" data-token-preset="code" type="button">Code</button>
-              </div>
-              <textarea id="tokenInput" aria-label="Text to tokenize"></textarea>
-              <div class="metric-row">
-                <div class="metric"><span>Tokens</span><strong id="tokenCount">0</strong></div>
-                <div class="metric"><span>Characters / token</span><strong id="tokenRatio">0</strong></div>
-                <div class="metric"><span>Words / token</span><strong id="tokenWords">0</strong></div>
-              </div>
-              <div class="trace-note" id="tokenHint"></div>
-            </div>
-            <div>
-              <div class="control-row" style="margin-bottom: 10px">
-                <button class="lab-button" id="tokenIdsToggle" type="button" aria-pressed="false">Show what the model sees (IDs)</button>
-              </div>
-              <div class="token-output" id="tokenOutput" aria-live="polite"></div>
-              <p class="fine-print">Each colour is one token. A <b>·</b> marks a leading space: most tokens carry the space in front of them, so " cat" and "cat" are different tokens.</p>
-            </div>
-          </div>
-          <div class="lab-card-body deeper-wrap">
-            <details class="deeper" id="mathsDrawer">
-              <summary><span>Go deeper</span>Why do AI models flub maths?</summary>
-              <div class="deeper-body">
-                <p>Look at how a sum gets chopped up. Asked for the answer in one go, a model can't line up the digits and carry the one like you would on paper. It guesses the answer's tokens the same way it guesses words. (Bigger models that write out their working step by step do much better, and a calculator tool is exact.)</p>
-                <div class="preset-row" id="mathsPicker" aria-label="Pick a sum"></div>
-                <div class="maths-card" id="mathsCard" aria-live="polite"></div>
-              </div>
+            <div class="prompt-tokens" id="promptTokens" aria-hidden="true"></div>
+            <p class="fine" id="promptHint"></p>
+            <details class="vocab-box">
+              <summary>The <span id="promptVocabCount"></span> words this model knows (tap to add)</summary>
+              <div class="concept-chips" id="promptVocab"></div>
             </details>
           </div>
         </section>
 
-        <section id="next-token" class="lab-card">
-          <div class="lab-card-header">
-            <div>
-              <span class="kicker">Probabilities, then a dice roll</span>
-              <h2>Next-Token Machine</h2>
-              <p>At every step the model gives a probability to <em>every</em> token in its vocabulary (about 150,000 of them). Then the app <strong>samples</strong> one. <strong>Temperature</strong> reshapes those odds: at 0 it always takes the top pick, and higher values flatten the curve so unlikely tokens get a real chance. That's why the same prompt can give different answers.</p>
-              <p class="gist"><b>In one line</b>The model gives odds for every possible next word, then the app rolls the dice.</p>
-            </div>
-            <span class="status-pill" id="ntStatus">Loading model data…</span>
-          </div>
-          <div class="lab-card-body">
-            <div class="preset-row" id="ntPrompts" aria-label="Prompts"></div>
-            <div class="nt-grid">
-              <div class="nt-left">
-                <p class="nt-raw">This is a <b>raw</b> model, not a chatbot: it continues text instead of answering, a bit like autocomplete. The before-and-after demo further down shows the difference.</p>
-                <div class="nt-text" id="ntText" aria-live="polite"></div>
-                <div class="nt-temp">
-                  <label for="ntTemp">Temperature <strong id="ntTempLabel">1.0</strong></label>
-                  <input id="ntTemp" type="range" min="0" max="7" step="1" value="4" />
-                  <div class="nt-temp-scale"><span>0 · greedy</span><span>1 · raw odds</span><span>2 · chaos</span></div>
-                  <p id="ntTempNote"></p>
-                </div>
-                <div class="control-row">
-                  <button class="lab-button primary" id="ntStep" type="button">Sample next token</button>
-                  <button class="lab-button" id="ntAuto" type="button">Auto-generate</button>
-                  <button class="lab-button" id="ntReset" type="button">Reset</button>
-                  <button class="lab-button" id="ntFive" type="button">Run it 5 times</button>
-                </div>
-              </div>
-              <div class="nt-right">
-                <div class="nt-wheel-wrap">
-                  <svg class="nt-wheel" id="ntWheel" viewBox="-110 -110 220 220" aria-hidden="true"><g id="ntWheelSpin"></g></svg>
-                  <div class="nt-pointer" aria-hidden="true"></div>
-                  <div class="nt-wheel-hub" id="ntHub">spin</div>
-                </div>
-                <div class="nt-bars" id="ntBars"></div>
-                <p class="nt-hint" id="ntHint"></p>
-              </div>
-            </div>
-            <div class="nt-runs" id="ntRuns" aria-live="polite"></div>
-            <p class="fine-print" id="ntSource"></p>
-          </div>
-        </section>
-
-        <section id="attention" class="lab-card">
-          <div class="lab-card-header">
-            <div>
-              <span class="kicker">How words find each other</span>
-              <h2>Attention</h2>
-              <p>Each layer lets every token look back at every earlier token and pull in what's relevant. That's <strong>attention</strong>. Many "heads" run in parallel, each learning a different kind of lookup. Click a word to see where it looks, then flip the last word and watch the link move.</p>
-              <p class="gist"><b>In one line</b>Each word looks back at earlier words to work out what they mean together.</p>
-            </div>
-            <span class="status-pill">Click a word</span>
-          </div>
-          <div class="lab-card-body">
-            <div class="preset-row" aria-label="Attention heads">
-              <button class="lab-button active" data-head="coref" type="button">Reference head</button>
-              <button class="lab-button" data-head="prev" type="button">Previous-word head</button>
-              <button class="lab-button" data-head="syntax" type="button">Grammar head</button>
-            </div>
-            <div class="attn-stage">
-              <div class="attn-inner" id="attnInner">
-                <svg class="attn-arcs" id="attnArcs" aria-hidden="true"></svg>
-                <div class="attn-words" id="attnWords"></div>
-              </div>
-            </div>
-            <div class="control-row" style="margin-top: 12px">
-              <button class="lab-button active" data-adj="big" type="button">…too big</button>
-              <button class="lab-button" data-adj="small" type="button">…too small</button>
-            </div>
-            <div class="attn-probe" id="attnProbe"></div>
-            <p class="fine-print">The arcs show, in simplified form, what a well-trained model learns to do. Real attention is messier and spread across dozens of layers. The percentages come from a real (tiny) model, measured by asking it to finish "The thing that was too big was the…".</p>
-          </div>
-        </section>
-
-        <section id="diagrams" class="lab-card">
-          <div class="lab-card-header">
-            <div>
-              <span class="kicker">Putting it together</span>
-              <h2>The Generation Loop</h2>
-              <p>Now the whole trip, start to finish. The text becomes token numbers, each number becomes a list of meaning-numbers, the layers let the words compare notes (that's attention), and out come odds for the next token. One is picked, glued onto the end, and the whole thing runs again. Real token IDs and probabilities from the same small model.</p>
-              <p class="gist"><b>In one line</b>The model writes one token at a time, and each new token is added to the text before it guesses the next.</p>
-            </div>
-            <span class="status-pill">Real model data</span>
-          </div>
-          <div class="lab-card-body">
-            <div class="genloop" id="genloop">
-              <div class="gl-text" id="glText" aria-live="polite"></div>
-              <div class="gl-stages">
-                <button class="gl-stage" data-gl="0" type="button"><b>1</b><strong>Token IDs</strong><em>text as numbers</em><div class="gl-ids" id="glIds"></div></button>
-                <button class="gl-stage" data-gl="1" type="button"><b>2</b><strong>Vectors</strong><em>each number becomes a meaning list</em><div class="gl-vecs" id="glVecs"></div></button>
-                <button class="gl-stage" data-gl="2" type="button"><b>3</b><strong>Transformer layers</strong><em>words compare notes</em><div class="gl-layers" id="glLayers"></div></button>
-                <button class="gl-stage" data-gl="3" type="button"><b>4</b><strong>Next-token scores</strong><em>odds for every token</em><div class="gl-probs" id="glProbs"></div></button>
-              </div>
-              <svg class="gl-return" viewBox="0 0 100 10" preserveAspectRatio="none" aria-hidden="true"><path d="M97 1 V6 H3 V1"/></svg>
-              <div class="gl-return-label">picked token is appended → the loop runs again</div>
-            </div>
-            <div class="control-row" style="margin-top: 14px">
-              <button class="lab-button primary" id="glPlay" type="button">Play</button>
-              <button class="lab-button" id="glStep" type="button">One stage</button>
-              <button class="lab-button" id="glReset" type="button">Reset</button>
-            </div>
-            <div class="trace-note" id="glNote" aria-live="polite"></div>
-          </div>
-        </section>
-
-        <section id="training-roadmap" class="lab-card">
-          <div class="lab-card-header">
-            <div>
-              <span class="kicker">How it learned</span>
-              <h2>Where the Model Came From</h2>
-              <p>Everything above uses a model that was already trained. Training tuned its billions of internal numbers (called <em>weights</em>) by showing it huge amounts of text. That's a big topic with its own page, but the biggest single change is easy to see right here.</p>
-              <p class="gist"><b>In one line</b>Training is where the model learned. Chatting with it does not change it.</p>
-            </div>
-            <span class="status-pill">Deep dive live</span>
-          </div>
-          <div class="lab-card-body">
-            <div class="chat-compare" id="chatCompare">
-              <div class="cc-head">
-                <h3>Same size model, before and after training to chat</h3>
-                <div class="preset-row" id="ccQuestions" aria-label="Pick a question"></div>
-              </div>
-              <div class="cc-cols">
-                <div class="cc-col cc-base"><span class="cc-label">Raw base model: just continues the text</span><div class="cc-text" id="ccBase"></div></div>
-                <div class="cc-col cc-chat"><span class="cc-label">After chat training: answers you</span><div class="cc-text" id="ccChat"></div></div>
-              </div>
-              <p class="fine-print" id="ccSource"></p>
-            </div>
-            <div class="scope-callout">
-              <div>
-                <h3>How models are made</h3>
-                <p>The deep dive covers pretraining, fine-tuning, RLHF, safety tuning, evaluation, data quality, and the difference between base models and chat assistants. It includes a tiny model you can train yourself and a preference-ranking demo.</p>
-                <div class="scope-tags" aria-label="Training outline topics">
-                  <span>Pretraining</span><span>Fine-tuning</span><span>RLHF</span><span>Alignment</span><span>Evals</span><span>RAG</span>
-                </div>
-              </div>
-              <a class="lab-button primary" href="training-alignment">Open the deep dive</a>
-            </div>
-          </div>
-        </section>
-
-        <div class="act-banner" id="act-2">
-          <span>Act II</span>
-          <h2>Around the model</h2>
-          <p>The model only ever sees one thing: its context window. Apps decide what goes into it: your chat, saved notes, search results, and tool results.</p>
+        <div class="mobile-tour-bar" aria-label="Chapter controls">
+          <button class="lab-button" id="mobilePrev" type="button">Prev</button>
+          <span id="mobileTitle"></span>
+          <button class="lab-button primary" id="mobileNext" type="button">Next</button>
         </div>
 
-        <section id="context" class="lab-card">
+        <!-- 01 -->
+        <section id="journey" class="lab-card chapter" data-short="One token at a time">
           <div class="lab-card-header">
             <div>
-              <span class="kicker">What the model can see</span>
-              <h2>Context Window &amp; Memory</h2>
-              <p>Everything inside the window is visible to the model <em>at once</em>. Nothing fades until the window is full. Then the <strong>app</strong> (not the model) decides what to cut or summarize. Memory survives because the app loads it back in at the start of every session.</p>
-              <p class="gist"><b>In one line</b>The model only sees what fits in its window right now.</p>
+              <span class="kicker"><i class="ch-num">01</i>The whole machine in twenty seconds</span>
+              <h2>One Token at a Time</h2>
+              <p>Every reply you have read from a language model came out of this loop. It runs once for each token it writes. Let it play, then step through it — each stage has its own chapter below.</p>
             </div>
-            <span class="status-pill" id="ctxPill">0% full</span>
+            <span class="status-pill">Real model</span>
           </div>
           <div class="lab-card-body">
-            <div class="ctx-controls">
-              <div class="ctx-field">
-                <span>Window size <i class="ctx-hint">1K tokens ≈ 750 words</i></span>
-                <div class="control-row" id="ctxSizes"></div>
-              </div>
-              <div class="ctx-field">
-                <span>When it overflows, the app will…</span>
-                <div class="control-row">
-                  <button class="lab-button active" data-ctx-policy="truncate" type="button">Drop oldest</button>
-                  <button class="lab-button" data-ctx-policy="compact" type="button">Summarize oldest</button>
-                </div>
-              </div>
-              <div class="ctx-field">
-                <span>Extras</span>
-                <div class="control-row">
-                  <button class="lab-button" id="ctxMemory" type="button" aria-pressed="false">Memory file: off</button>
-                  <button class="lab-button" id="ctxHeat" type="button" aria-pressed="false">Show what gets remembered best</button>
-                </div>
-              </div>
+            <canvas id="journeyCanvas" class="stage stage-journey" role="img" aria-label="Animation of the generation loop for your prompt" aria-describedby="journeyNote"></canvas>
+            <div class="control-row">
+              <button class="lab-button primary" id="journeyPlay" type="button" aria-pressed="true">Pause</button>
+              <button class="lab-button" id="journeyStep" type="button">Step</button>
+              <button class="lab-button" id="journeyReset" type="button">Restart</button>
             </div>
-            <div class="ctx-grid">
+            <div class="trace-note" id="journeyNote" aria-live="off"></div>
+            <ol class="journey-steps" id="journeySteps">
+              <li><button type="button"><b>Text in</b><span>one long string</span></button></li>
+              <li><button type="button"><b>Tokens</b><span>pieces with ID numbers</span></button></li>
+              <li><button type="button"><b>Vectors</b><span>a list of numbers each</span></button></li>
+              <li><button type="button"><b>Layers</b><span>attention, then a small network</span></button></li>
+              <li><button type="button"><b>Scores</b><span>one per possible token</span></button></li>
+              <li><button type="button"><b>Pick one</b><span>a weighted dice roll</span></button></li>
+              <li><button type="button"><b>Append</b><span>and run it all again</span></button></li>
+            </ol>
+            <div class="ch-foot">
+              <div class="key-idea"><b>Key idea</b>A model never writes a sentence. It writes one token, reads everything again including that token, and writes one more.</div>
+              <div class="fine-print">Everything drawn here is computed live by the transformer in this page: the token IDs, the first six numbers of each embedding, the attention weights in each layer, and the odds. Only the drawing is simplified. A large model does exactly this with thousands of times more of everything.</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 02 -->
+        <section id="tokens" class="lab-card chapter" data-short="Tokens">
+          <div class="lab-card-header">
+            <div>
+              <span class="kicker"><i class="ch-num">02</i>Text becomes pieces</span>
+              <h2>Tokens</h2>
+              <p>A model never sees letters or words. A tokenizer chops text into pieces from a fixed vocabulary and hands the model a list of ID numbers. Most tokenizers are built by <em>byte-pair encoding</em>: start with single characters, then keep gluing together whichever pair shows up most often. Watch it happen to your prompt, or type anything.</p>
+            </div>
+            <span class="status-pill">Real BPE</span>
+          </div>
+          <div class="lab-card-body">
+            <div class="preset-row" aria-label="Example texts">
+              <button class="lab-button active" data-token-preset="mine" type="button">Your prompt</button>
+              <button class="lab-button" data-token-preset="clear" type="button">A longer sentence</button>
+              <button class="lab-button" data-token-preset="rare" type="button">Rare words</button>
+              <button class="lab-button" data-token-preset="code" type="button">Code</button>
+            </div>
+            <div class="tok-layout">
               <div>
-                <div class="ctx-tank" id="ctxTank" aria-label="Context window cells"></div>
-                <div class="ctx-heat-legend" id="ctxHeatLegend" hidden><span>strong recall</span><i></i><span>weaker in the middle</span><i></i><span>strong recall</span></div>
-                <div class="context-legend">
-                  <span class="legend-pill" style="--pill-color: #8fb3c9">system prompt</span>
-                  <span class="legend-pill" style="--pill-color: var(--lab-violet)">memory</span>
-                  <span class="legend-pill" style="--pill-color: var(--lab-green)">you</span>
-                  <span class="legend-pill" style="--pill-color: var(--lab-cyan)">assistant</span>
-                  <span class="legend-pill" style="--pill-color: var(--lab-orange)">tool result</span>
-                  <span class="legend-pill" style="--pill-color: var(--lab-gold)">summary</span>
-                </div>
-                <p class="fine-print">The <b>system prompt</b> is the app's own instructions, sent before your first message every time.</p>
-              </div>
-              <div class="ctx-side">
+                <label class="sr-only" for="tokenInput">Text to tokenize</label>
+                <textarea id="tokenInput" maxlength="240" spellcheck="false"></textarea>
                 <div class="control-row">
-                  <button class="lab-button primary" id="ctxAdd" type="button">Next turn</button>
-                  <button class="lab-button" id="ctxAuto" type="button">Auto chat</button>
-                  <button class="lab-button" id="ctxNew" type="button">New session</button>
+                  <button class="lab-button primary" id="tokRun" type="button">Replay merges</button>
+                  <button class="lab-button" id="tokStep" type="button">One merge</button>
+                  <button class="lab-button" id="tokSkip" type="button">Skip to end</button>
                 </div>
-                <div class="ctx-meter"><span id="ctxMeter"></span></div>
-                <div class="ctx-readout" id="ctxReadout" aria-live="polite"></div>
-                <div class="ctx-log" id="ctxLog"></div>
+                <div class="tok-stage" id="tokStage" aria-hidden="true"></div>
+                <div class="trace-note" id="tokStatus" aria-live="polite"></div>
+                <div class="tok-ids"><span>What the model actually receives</span><code id="tokIds"></code></div>
+                <div class="metric-row four">
+                  <div class="metric"><span>Characters</span><strong id="tokChars">0</strong></div>
+                  <div class="metric"><span>Tokens now</span><strong id="tokCount">0</strong></div>
+                  <div class="metric"><span>Chars per token</span><strong id="tokRatio">0</strong></div>
+                  <div class="metric"><span>Merges applied</span><strong id="tokMerges">0</strong></div>
+                </div>
               </div>
+              <aside class="mini-panel">
+                <h3>The first rules it learned</h3>
+                <p>Ranked by how often each pair appeared in the sample text. Rule #1 is always applied first.</p>
+                <ol class="tok-rules" id="tokRules"></ol>
+              </aside>
+            </div>
+            <div class="ch-foot">
+              <div class="key-idea"><b>Key idea</b>Common words become a single token. Rare words, odd names, typos, and long numbers shatter into many — which costs more and gives the model less to hold on to. In ordinary English a token averages about three-quarters of a word.</div>
+              <div class="fine-print">This is a genuine BPE tokenizer, trained when the page loaded: <span id="tokTrainNote"></span>. The model in this page uses exactly these tokens. Production tokenizers learn on the order of 100,000 rules from vastly more text, so they split things differently — but they are built by this same procedure.</div>
             </div>
           </div>
         </section>
 
-        <section id="embeddings" class="lab-card">
+        <!-- 03 -->
+        <section id="embeddings" class="lab-card chapter" data-short="Embeddings">
           <div class="lab-card-header">
             <div>
-              <span class="kicker">Finding the right notes</span>
-              <h2>Embedding Map</h2>
-              <p>An app can't paste everything you own into the window, so it searches for what's relevant first. Many search systems turn each piece of text into a long list of numbers (an <em>embedding</em>), where similar meanings land close together even with no words in common. Each star below is a real one, squashed from 384 numbers down to 2D. Pick a search to see what's closest.</p>
-              <p class="gist"><b>In one line</b>Similar meanings get similar numbers, which is how apps find the right notes to show the model.</p>
+              <span class="kicker"><i class="ch-num">03</i>Numbers that carry meaning</span>
+              <h2>Embeddings</h2>
+              <p>Each token ID selects one row of a table. That row is the token's <em>embedding</em>: its coordinates in a space where tokens that behave alike sit close together. Nobody types those numbers in. Below is the table this page's model learned, squashed flat so you can look at it.</p>
             </div>
-            <span class="status-pill">Real embeddings</span>
+            <span class="status-pill">Real model</span>
           </div>
           <div class="lab-card-body">
-            <div class="preset-row" id="embQueries" aria-label="Search queries"></div>
-            <div class="emb-grid">
-              <div class="emb-map" id="embMap"><svg id="embSvg" viewBox="0 0 1000 640" preserveAspectRatio="xMidYMid meet" aria-label="Embedding scatter plot"></svg><div class="emb-tip" id="embTip" hidden></div></div>
-              <div class="emb-side">
-                <div class="emb-legend" id="embLegend"></div>
-                <div class="emb-results" id="embResults" aria-live="polite"><p>Pick a search above, or click any star.</p></div>
+            <div class="emb-layout">
+              <div>
+                <canvas id="embReal" class="stage stage-emb" role="img" aria-label="Map of every token the model knows, placed by its learned embedding" aria-describedby="embSim"></canvas>
+                <div class="control-row slider-row">
+                  <label class="inline-pick">Inspect a word <select id="embPick" class="lab-select"></select></label>
+                  <a class="lab-button" href="#training">Watch this map form during training →</a>
+                </div>
               </div>
+              <aside class="emb-side">
+                <div class="mini-panel">
+                  <h3>What is stored for a token</h3>
+                  <p class="tight">The model's real 24 numbers. No single cell means anything on its own; the pattern as a whole is the meaning.</p>
+                  <div class="strip-row"><b id="embNameA"></b><div class="vstrip wide" id="embStripA"></div></div>
+                  <div class="strip-row"><b id="embNameB"></b><div class="vstrip wide" id="embStripB"></div><span class="strip-tag">nearest</span></div>
+                  <div class="strip-row"><b id="embNameC"></b><div class="vstrip wide" id="embStripC"></div><span class="strip-tag far">furthest</span></div>
+                  <p class="tight" id="embSim" aria-live="polite"></p>
+                </div>
+              </aside>
             </div>
-            <p class="fine-print" id="embSource">Sentence embeddings from all-MiniLM-L6-v2, projected to 2D with t-SNE. The 2D layout is approximate; the similarity scores come from the full 384 dimensions.</p>
+
+            <div class="sub-block">
+              <h3>Directions mean something too</h3>
+              <p>In a large model, the <em>gap</em> between two points carries meaning, so you can do arithmetic with words. Our model's world is too small to show that, so this map is a hand-built example space.</p>
+              <canvas id="embCanvas" class="stage stage-toy" role="img" aria-label="A hand-built map of thirty words used to demonstrate vector arithmetic" aria-describedby="embReadout"></canvas>
+              <div class="preset-row" aria-label="Analogy examples" style="margin-top:12px">
+                <button class="lab-button" data-analogy="king,man,woman" type="button">king − man + woman</button>
+                <button class="lab-button" data-analogy="Paris,France,Italy" type="button">Paris − France + Italy</button>
+                <button class="lab-button" data-analogy="walked,walk,swim" type="button">walked − walk + swim</button>
+                <button class="lab-button" data-analogy="kitten,cat,dog" type="button">kitten − cat + dog</button>
+              </div>
+              <div class="analogy-row">
+                <select id="embA" class="lab-select" aria-label="First word"></select><span>−</span>
+                <select id="embB" class="lab-select" aria-label="Word to subtract"></select><span>+</span>
+                <select id="embC" class="lab-select" aria-label="Word to add"></select>
+              </div>
+              <div class="trace-note" id="embReadout" aria-live="polite">Pick an example, or build your own from any three words. The arrows are drawn on the map above.</div>
+            </div>
+
+            <div class="sub-block">
+              <h3>Order has to be added by hand</h3>
+              <p>The table has one row per token and no idea where in the sentence that token sits. So a second learned row, one per position, is added on top. These are the first three tokens of your prompt.</p>
+              <div class="pos-row" id="posRow"></div>
+              <div class="control-row"><button class="lab-button" id="posSwap" type="button">Swap the first and last of these words</button></div>
+              <div class="trace-note" id="posNote" aria-live="polite"></div>
+            </div>
+
+            <div class="ch-foot">
+              <div class="key-idea"><b>Key idea</b>Tokens used in similar ways end up at nearby points — the model worked out that cats and dogs belong together purely from where they appear in sentences. And in larger models the gap between points is meaningful too: the step from <em>man</em> to <em>king</em> matches the step from <em>woman</em> to <em>queen</em>.</div>
+              <div class="fine-print">The first map, the number strips, and the position rows are this model's actual weights; the map is a two-dimensional projection (principal components) of 24, so some real neighbours look further apart than they are. The colours are our labels, not something the model knows. The arithmetic map is hand-built so the sums come out exact; in real embeddings they are approximate. This model learns its position rows; other models use fixed wave patterns or rotate the vectors instead.</div>
+            </div>
           </div>
         </section>
 
-        <section id="prompts" class="lab-card">
+        <!-- 04 -->
+        <section id="attention" class="lab-card chapter" data-short="Attention">
           <div class="lab-card-header">
             <div>
-              <span class="kicker">Same model, better instructions</span>
-              <h2>Prompt Pruning</h2>
-              <p>A vague request fits dozens of reasonable plans, so the model has to guess which one you meant. Every constraint you add prunes wrong branches. Better prompts don't make the model smarter; they leave it less to guess.</p>
-              <p class="gist"><b>In one line</b>Say what you want, what not to touch, and how to check it.</p>
+              <span class="kicker"><i class="ch-num">04</i>Tokens read each other</span>
+              <h2>Attention</h2>
+              <p>An embedding on its own knows nothing about its neighbours. Attention fixes that. At every layer, each token asks a question of all the tokens before it and pulls in information from the ones that answer best. It is the only place in the model where information moves from one position to another. These are the real weights for your prompt.</p>
             </div>
-            <span class="status-pill" id="promptPill">12 possible plans</span>
+            <span class="status-pill">Real model</span>
           </div>
           <div class="lab-card-body">
-            <div class="preset-row" aria-label="Prompt presets">
+            <div class="att-controls">
+              <div class="preset-row" role="group" aria-label="Which attention head to show" id="attHeads"></div>
+              <div class="preset-row" role="group" aria-label="Try a prompt where one earlier word decides the answer">
+                <button class="lab-button" data-attprompt="the gardener was tired so" type="button">the <b>gardener</b> was tired so …</button>
+                <button class="lab-button" data-attprompt="the farmer was tired so" type="button">the <b>farmer</b> was tired so …</button>
+                <button class="lab-button" data-attprompt="the cat was tired so" type="button">the <b>cat</b> was tired so …</button>
+                <button class="lab-button primary" id="attPlay" type="button">Sweep left to right</button>
+              </div>
+            </div>
+            <div class="att-scroll">
+              <div class="att-stage">
+                <svg id="attArcs" class="att-arcs" aria-hidden="true"></svg>
+                <div class="att-row" id="attRow"></div>
+              </div>
+            </div>
+            <div class="trace-note" id="attNote" aria-live="polite"></div>
+
+            <div class="two-col sub-block">
+              <div>
+                <h3>Every token's attention at once</h3>
+                <p>Each row is one token's question; each cell is how much it took from the token in that column. The hatched half is the future: a token can never look at what has not been written yet.</p>
+                <div class="att-grid" id="attGrid" role="img" aria-label="Attention weight matrix with the upper triangle masked"></div>
+              </div>
+              <div>
+                <h3>The arithmetic, in slow motion</h3>
+                <p>What "asks a question" means in numbers. This is a hand-sized example with three numbers per vector, so every sum fits on screen; the model above does the same thing with twelve.</p>
+                <div class="qkv" id="qkv" data-step="0"></div>
+                <div class="control-row">
+                  <button class="lab-button" id="qkvPrev" type="button">Back</button>
+                  <button class="lab-button primary" id="qkvNext" type="button">Next step</button>
+                </div>
+                <div class="trace-note" id="qkvNote" aria-live="polite"></div>
+              </div>
+            </div>
+
+            <div class="ch-foot">
+              <div class="key-idea"><b>Key idea</b>Attention is a weighted copy. Each token scores the earlier tokens for relevance, turns the scores into shares, and blends in that much of each one's information. A layer runs several of these "heads" side by side, each free to learn a different question.</div>
+              <div class="fine-print">The arcs, percentages, and matrix are this model's real attention weights; nothing was arranged by hand, and no one told a head what to look for. If you retrain the model in chapter 7, the heads may divide the work differently. The slow-motion arithmetic is a constructed example, and real models also divide the scores by the square root of the vector size before the softmax.</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 05 -->
+        <section id="layers" class="lab-card chapter" data-short="Layers">
+          <div class="lab-card-header">
+            <div>
+              <span class="kicker"><i class="ch-num">05</i>The stack that does the work</span>
+              <h2>Layers</h2>
+              <p>One round of attention is not enough. A model repeats the same two-part block several times: attention gathers information, then a small neural network (the <em>MLP</em>) digests it. Each block adds its result to a running vector kept for every token — a shared scratchpad that grows more useful with every layer.</p>
+            </div>
+            <span class="status-pill">Real model</span>
+          </div>
+          <div class="lab-card-body">
+            <div class="sub-block first">
+              <h3>Start with one neuron</h3>
+              <p>The MLP is built from these. A neuron multiplies each input by a weight, adds them up, and passes the total through a curve that silences negative results. The weights are what training adjusts.</p>
+              <div class="neuron-layout">
+                <svg id="neuronSvg" class="neuron-svg" viewBox="0 0 570 220" role="img" aria-label="Three inputs are multiplied by weights, summed with a bias, and passed through an activation curve to give one output." aria-describedby="neuronNote"></svg>
+                <div class="neuron-sliders">
+                  <label><span>input 1 <output data-for="nx1"></output></span><input id="nx1" type="range" min="-1" max="1" step="0.1" value="0.8"></label>
+                  <label><span>weight 1 <output data-for="nw1"></output></span><input id="nw1" type="range" min="-2" max="2" step="0.1" value="1.4"></label>
+                  <label><span>input 2 <output data-for="nx2"></output></span><input id="nx2" type="range" min="-1" max="1" step="0.1" value="-0.4"></label>
+                  <label><span>weight 2 <output data-for="nw2"></output></span><input id="nw2" type="range" min="-2" max="2" step="0.1" value="-1.1"></label>
+                  <label><span>input 3 <output data-for="nx3"></output></span><input id="nx3" type="range" min="-1" max="1" step="0.1" value="0.5"></label>
+                  <label><span>weight 3 <output data-for="nw3"></output></span><input id="nw3" type="range" min="-2" max="2" step="0.1" value="0.6"></label>
+                  <label><span>bias <output data-for="nb"></output></span><input id="nb" type="range" min="-2" max="2" step="0.1" value="-0.3"></label>
+                  <button class="lab-button" id="neuronShuffle" type="button">Randomise weights</button>
+                </div>
+              </div>
+              <div class="trace-note" id="neuronNote" aria-live="polite"></div>
+            </div>
+
+            <div class="sub-block">
+              <h3>Now the whole stack, on your prompt</h3>
+              <p>One running vector per token, rising through this model's layers. Gold arcs are the attention the last position really pays in that layer; the green flicker is the MLP. On the right is what the model would say if it were cut off at that depth.</p>
+              <div class="stack-layout">
+                <div>
+                  <canvas id="stackCanvas" class="stage stage-stack" role="img" aria-label="Token columns rising through the model's layers" aria-describedby="stackNote"></canvas>
+                  <div class="control-row slider-row">
+                    <button class="lab-button primary" id="stackPlay" type="button">Send the prompt up the stack</button>
+                    <label class="inline-range">Depth <input id="layerRange" type="range" min="0" max="2" step="1" value="0" aria-label="How many layers have run"></label>
+                  </div>
+                </div>
+                <aside class="mini-panel lens">
+                  <h3 id="lensTitle"></h3>
+                  <p class="tight">Top guesses for the token after “<span id="lensFor"></span>”</p>
+                  <div id="lensBars" class="lens-bars"></div>
+                </aside>
+              </div>
+              <div class="trace-note" id="stackNote" aria-live="polite"></div>
+            </div>
+
+            <div class="sub-block">
+              <h3>How big is the real thing?</h3>
+              <div class="scale-grid three">
+                <div class="scale-card mine"><span>The model in this page</span><dl id="tinyScale"></dl></div>
+                <div class="scale-card"><span>GPT-2 small · 2019</span>
+                  <dl><div><dt>layers</dt><dd data-count="12">12</dd></div><div><dt>numbers per token</dt><dd data-count="768">768</dd></div><div><dt>attention heads per layer</dt><dd data-count="12">12</dd></div><div><dt>neurons per MLP</dt><dd data-count="3072">3,072</dd></div><div><dt>weights</dt><dd data-count="124" data-suffix=" million">124 million</dd></div></dl></div>
+                <div class="scale-card"><span>GPT-3 · 2020</span>
+                  <dl><div><dt>layers</dt><dd data-count="96">96</dd></div><div><dt>numbers per token</dt><dd data-count="12288">12,288</dd></div><div><dt>attention heads per layer</dt><dd data-count="96">96</dd></div><div><dt>neurons per MLP</dt><dd data-count="49152">49,152</dd></div><div><dt>weights</dt><dd data-count="175" data-suffix=" billion">175 billion</dd></div></dl></div>
+              </div>
+            </div>
+
+            <div class="ch-foot">
+              <div class="key-idea"><b>Key idea</b>Depth is refinement. No single layer "knows the answer". Each one reads the scratchpad, adds a correction, and passes it up — and you can watch the guess go from an echo of the last word to a real prediction.</div>
+              <div class="fine-print">The arcs and the per-depth guesses are computed from this model: the read-out decodes the last position's running vector at each depth with the model's own output layer, a technique called the logit lens. It is a peek, not something the model does when it runs. Sizes of today's largest models are mostly unpublished.</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 06 -->
+        <section id="sampling" class="lab-card chapter" data-short="Choosing a token">
+          <div class="lab-card-header">
+            <div>
+              <span class="kicker"><i class="ch-num">06</i>Scores, odds, dice</span>
+              <h2>Choosing the Next Token</h2>
+              <p>The stack ends with one score for every token in the vocabulary. A function called <em>softmax</em> turns the scores into probabilities. Then a sampler rolls weighted dice. The settings below change the dice — the model has already finished its work.</p>
+            </div>
+            <span class="status-pill">Real model</span>
+          </div>
+          <div class="lab-card-body">
+            <div class="samp-text" id="sampText" aria-live="polite"></div>
+            <div class="samp-layout">
+              <div>
+                <div class="samp-head"><span>next token</span><span>score</span><span>probability</span></div>
+                <div class="samp-bars" id="sampBars"></div>
+                <div class="samp-strip" id="sampStrip" aria-hidden="true"><i class="needle" id="sampNeedle"></i></div>
+                <p class="strip-cap">The dice: each surviving token owns a slice as wide as its probability. A roll is a random point on this strip.</p>
+              </div>
+              <aside class="samp-side">
+                <label class="dial"><span>Temperature <output data-for="sampTemp"></output></span><input id="sampTemp" type="range" min="0.1" max="2" step="0.05" value="1"><small>divides every score before softmax</small></label>
+                <label class="dial"><span>Top-k <output data-for="sampTopK"></output></span><input id="sampTopK" type="range" min="1" max="10" step="1" value="10"><small>keep only the k best tokens</small></label>
+                <label class="dial"><span>Top-p <output data-for="sampTopP"></output></span><input id="sampTopP" type="range" min="0.3" max="1" step="0.05" value="1"><small>keep the best tokens until their odds add up to p</small></label>
+                <div class="control-row">
+                  <button class="lab-button" id="sampOnce" type="button">Roll once</button>
+                  <button class="lab-button" id="samp100" type="button">Roll 100×</button>
+                </div>
+                <div class="control-row">
+                  <button class="lab-button primary" id="sampGen" type="button">Generate a whole sentence</button>
+                  <button class="lab-button" id="sampReset" type="button">Reset</button>
+                </div>
+                <a class="lab-button" href="#prompt">Change the prompt</a>
+              </aside>
+            </div>
+            <div class="trace-note" id="sampNote" aria-live="polite"></div>
+            <div class="ch-foot">
+              <div class="key-idea"><b>Key idea</b>The model does not look up an answer. It produces odds, and a sampler picks. Same prompt, different roll, different reply — which is why asking twice can give two answers.</div>
+              <div class="fine-print">These are the real odds from this page's model (<span id="sampModelNote"></span>) for your prompt, and temperature, top-k, and top-p are applied to them exactly as a production sampler applies them. A tiny model trained on a tiny world is often far more certain than a large one, so try a short prompt such as “the” to see a wide spread.</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 07 -->
+        <section id="training" class="lab-card chapter" data-short="Training">
+          <div class="lab-card-header">
+            <div>
+              <span class="kicker"><i class="ch-num">07</i>Where the numbers come from</span>
+              <h2>Training</h2>
+              <p>Every weight used in the chapters above began as a random number. Training shows the model real text with the next token hidden, measures how surprised it was by the truth (the <em>loss</em>), and nudges every weight a tiny step in the direction that would have made it less surprised. Then it does that again and again.</p>
+            </div>
+            <span class="status-pill">Train it yourself</span>
+          </div>
+          <div class="lab-card-body">
+            <div class="sub-block first">
+              <h3>First, the idea with just two weights</h3>
+              <p>Height on this map is the loss. Training can only feel the slope under its feet, and steps downhill.</p>
+              <div class="train-layout">
+                <canvas id="trainCanvas" class="stage stage-train" role="img" aria-label="A contour map of prediction error over two weights. A ball rolls downhill by gradient descent." aria-describedby="trainNote"></canvas>
+                <aside class="samp-side">
+                  <label class="dial"><span>Learning rate <output data-for="trainLR"></output></span><input id="trainLR" type="range" min="0.02" max="1.3" step="0.01" value="0.3"><small>how big each nudge is</small></label>
+                  <button class="lab-button primary" id="trainDrop" type="button">New random weights</button>
+                  <div class="start-grid" role="group" aria-label="Start from a corner of the map">
+                    <button class="lab-button" data-train-start="-2.6,-2.3" type="button">↖ start</button>
+                    <button class="lab-button" data-train-start="2.7,-2.5" type="button">↗ start</button>
+                    <button class="lab-button" data-train-start="-2.6,2.2" type="button">↙ start</button>
+                    <button class="lab-button" data-train-start="2.6,2.4" type="button">↘ start</button>
+                  </div>
+                  <div class="metric"><span>Training steps</span><strong id="trainStep">0</strong></div>
+                  <div class="metric"><span>Loss (surprise)</span><strong id="trainLoss">0</strong></div>
+                  <div class="metric"><span>Odds given to the right token</span><strong id="trainProb">0%</strong></div>
+                </aside>
+              </div>
+              <div class="trace-note" id="trainNote" aria-live="polite"></div>
+            </div>
+
+            <div class="sub-block">
+              <h3>Now the real thing: train this page's model</h3>
+              <p>Same idea, every weight at once. Wipe the model back to random numbers and train it from nothing, here, in your browser. Watch three things: the loss falling, the sentences going from noise to sense, and the word map sorting itself out. When it finishes, every chapter above is running on the weights you made.</p>
+              <div id="trainLive"></div>
+            </div>
+
+            <div class="scope-callout">
+              <div>
+                <h3>The full story of how models are made</h3>
+                <p>Pretraining, fine-tuning, learning from human feedback, safety tuning, and evaluation have their own page — including fine-tuning this same model on a word it has never seen.</p>
+              </div>
+              <a class="lab-button primary" href="training-alignment.html">Open the deep dive</a>
+            </div>
+            <div class="ch-foot">
+              <div class="key-idea"><b>Key idea</b>Nobody programs what a model knows. Training only ever asks one question — "which way is downhill from here?" — and everything the model can do is what was left behind after answering it many, many times.</div>
+              <div class="fine-print">The second panel is real training: backpropagation and the Adam optimiser running on this model's actual weights, the same code that produced the weights the page shipped with. Loss is the negative logarithm of the probability the model gave the correct token. The two-weight map is a made-up surface for intuition; a real loss landscape has as many dimensions as there are weights.</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 08 -->
+        <section id="chat" class="lab-card chapter" data-short="A chat is one string">
+          <div class="lab-card-header">
+            <div>
+              <span class="kicker"><i class="ch-num">08</i>What a conversation really is</span>
+              <h2>A Chat Is One Long String</h2>
+              <p>Everything so far only <em>continues text</em>. So how does that become a conversation? A chat app glues the whole exchange into a single string, with special marker tokens saying who is speaking, and asks the model to continue it. When the model writes the end-of-turn marker, the app cuts it off and shows you the reply.</p>
+            </div>
+            <span class="status-pill">Send a message</span>
+          </div>
+          <div class="lab-card-body">
+            <div class="preset-row" role="group" aria-label="System prompt">
+              <button class="lab-button active" data-sys="plain" type="button">System: helpful</button>
+              <button class="lab-button" data-sys="pirate" type="button">System: answer like a pirate</button>
+              <button class="lab-button" data-sys="brief" type="button">System: five words or fewer</button>
+              <button class="lab-button toggle active" id="chatStop" type="button" aria-pressed="true">Stop at the end marker: on</button>
+            </div>
+            <div class="chat-layout">
+              <div>
+                <div class="chat-cap">What you see</div>
+                <div class="chat-bubbles" id="chatBubbles" aria-live="polite"></div>
+              </div>
+              <div>
+                <div class="chat-cap">What the model is given — <strong id="chatSent">0</strong> tokens</div>
+                <pre class="chat-raw" id="chatRaw" aria-hidden="true"></pre>
+              </div>
+            </div>
+            <div class="control-row">
+              <button class="lab-button primary" id="chatPlay" type="button">Send the first message</button>
+              <button class="lab-button" id="chatReset" type="button">Reset</button>
+            </div>
+            <div class="trace-note" id="chatNote" aria-live="polite"></div>
+            <div class="ch-foot">
+              <div class="key-idea"><b>Key idea</b>The model has no idea it is "in a chat". It is continuing a document that happens to be formatted as one. Roles, turns, and even stopping are conventions in the string, enforced by the app around the model.</div>
+              <div class="fine-print">The replies here are scripted — this page's model knows about cats and gardeners, not tomatoes — and the marker spellings are illustrative; each model family has its own. The mechanism is real: one growing string, role markers, a system prompt you usually cannot see, and a stop marker. The token counts use this page's tokenizer.</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 09 -->
+        <section id="context" class="lab-card chapter" data-short="Context window">
+          <div class="lab-card-header">
+            <div>
+              <span class="kicker"><i class="ch-num">09</i>What the model can see</span>
+              <h2>The Context Window</h2>
+              <p>That one long string has a hard size limit. When a chat outgrows it, older turns are squeezed into a summary or fall out altogether — and the model carries on as if nothing were missing.</p>
+            </div>
+            <span class="status-pill">Drag to lengthen</span>
+          </div>
+          <div class="lab-card-body">
+            <div class="context-controls">
+              <div>
+                <label for="ctxRange" class="range-label">Conversation length: <strong id="ctxLabel">6</strong> turns</label>
+                <input id="ctxRange" type="range" min="3" max="14" value="6" />
+              </div>
+              <div class="control-row">
+                <button class="lab-button primary" id="ctxPlay" type="button">Play the conversation</button>
+                <button class="lab-button" id="memoryToggle" type="button" aria-pressed="false">Save turn 3 to memory</button>
+              </div>
+            </div>
+            <div class="ctx-frame">
+              <div class="ctx-cap"><span>the window — <strong id="ctxUsed">0</strong> tokens</span><span>hard limit</span></div>
+              <div class="ctx-bar" id="ctxBar" aria-hidden="true"></div>
+              <div class="meter"><span id="ctxMeter"></span></div>
+            </div>
+            <div class="context-legend">
+              <span class="legend-pill" style="--pill-color: var(--lab-dim)">system prompt</span>
+              <span class="legend-pill" style="--pill-color: var(--lab-violet)">saved memory</span>
+              <span class="legend-pill" style="--pill-color: var(--lab-gold)">summary</span>
+              <span class="legend-pill" style="--pill-color: var(--lab-cyan)">your turns</span>
+              <span class="legend-pill" style="--pill-color: var(--lab-green)">assistant turns</span>
+            </div>
+            <div class="ctx-probe" id="ctxProbe" aria-live="polite"></div>
+            <div class="context-stack" id="ctxList"></div>
+            <div class="ch-foot">
+              <div class="key-idea"><b>Key idea</b>If it is not in the window, the model does not know it. "Memory" features work by saving a note somewhere else and pasting it back into the window on every request.</div>
+              <div class="fine-print">A 700-token limit is used so the effect is visible within fourteen turns, and this panel is a scripted simulation. Real windows range from thousands of tokens to over a million, and products differ in how and when they summarise — but every one of them has an edge. For the same effect on the real model, see “Missing context” under Failure modes.</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 10 -->
+        <section id="prompts" class="lab-card chapter" data-short="Prompts">
+          <div class="lab-card-header">
+            <div>
+              <span class="kicker"><i class="ch-num">10</i>Same model, narrower odds</span>
+              <h2>Prompts Steer the Odds</h2>
+              <p>You have seen that the output is sampled from probabilities, and that the probabilities come from the context. So a prompt is not a command to a mind — it is the thing that decides which continuations are likely. Each line below is one possible run of the same model on the same prompt.</p>
+            </div>
+            <span class="status-pill">Toggle the parts</span>
+          </div>
+          <div class="lab-card-body">
+            <div class="preset-row" role="group" aria-label="Prompt presets">
               <button class="lab-button active" data-prompt="weak" type="button">Vague</button>
               <button class="lab-button" data-prompt="clear" type="button">Clear</button>
               <button class="lab-button" data-prompt="agent" type="button">Agent-ready</button>
             </div>
-            <div class="prompt-chips" id="promptChips" aria-label="Constraints"></div>
-            <div class="prompt-grid">
-              <div class="mini-panel">
-                <h3>The prompt</h3>
-                <div class="prompt-output" id="promptText"></div>
-                <div class="ambiguity"><span>Ambiguity</span><div class="meter"><span id="ambiguityMeter"></span></div></div>
-                <p class="prompt-result" id="promptResult"></p>
+            <canvas id="promptCanvas" class="stage stage-prompt" role="img" aria-label="Sixty possible outputs fan out from one prompt; more specific prompts narrow the fan." aria-describedby="promptNote"></canvas>
+            <div class="prompt-build">
+              <div class="part-row" role="group" aria-label="Prompt ingredients">
+                <button class="lab-button p-goal" data-part="goal" type="button" aria-pressed="false">+ Goal</button>
+                <button class="lab-button p-scope" data-part="scope" type="button" aria-pressed="false">+ Scope</button>
+                <button class="lab-button p-constraints" data-part="constraints" type="button" aria-pressed="false">+ Constraints</button>
+                <button class="lab-button p-verify" data-part="verify" type="button" aria-pressed="false">+ Verification</button>
+                <button class="lab-button p-format" data-part="format" type="button" aria-pressed="false">+ Reply format</button>
               </div>
-              <div class="prompt-tree-wrap"><svg class="prompt-tree" id="promptTree" viewBox="0 0 560 420" aria-label="Interpretation tree"></svg></div>
+              <div class="prompt-output" id="promptText"></div>
+              <div class="metric hit"><span>Runs that land on what you wanted</span><strong id="promptHit">0</strong></div>
+            </div>
+            <div class="trace-note" id="promptNote" aria-live="polite"></div>
+            <div class="ch-foot">
+              <div class="key-idea"><b>Key idea</b>A better prompt does not make the model smarter. It removes other things the reply could plausibly have been.</div>
+              <div class="fine-print">The fan is a schematic, not a measurement: the spread shrinks by a fixed factor for each ingredient you add. The direction of the effect is real — “Weak prompt” under Failure modes measures it on this page's model — but the numbers here are for illustration.</div>
             </div>
           </div>
         </section>
 
-        <section id="tools" class="lab-card">
+        <!-- 11 -->
+        <section id="agents" class="lab-card chapter" data-short="Tools &amp; agents">
           <div class="lab-card-header">
             <div>
-              <span class="kicker">Guessing vs checking</span>
-              <h2>Tool Use Simulator</h2>
-              <p>A model can't touch anything by itself. It only writes text. To use a tool it writes a structured request; the app around it (the <strong>harness</strong>) checks permissions, runs it, and pastes the result back into the context. Then the model reads that evidence and carries on.</p>
-              <p class="gist"><b>In one line</b>Tools let AI check instead of guess, but what a tool brings back is information, never orders.</p>
+              <span class="kicker"><i class="ch-num">11</i>Guessing versus checking</span>
+              <h2>Tools and the Agent Loop</h2>
+              <p>On its own, a model can only produce text from its training and its context. Give it tools and wrap it in a loop, and it becomes an <em>agent</em>: it can ask for a file, a search, or a command, read the result, and decide what to do next. Watch who says what to whom.</p>
             </div>
+            <span class="status-pill">Scripted runs</span>
           </div>
           <div class="lab-card-body">
-            <div class="tool-grid">
-              <div class="tool-list">
-                <button class="lab-button active" data-tool="guess" type="button">No tool</button>
-                <button class="lab-button" data-tool="files" type="button">Search files</button>
-                <button class="lab-button" data-tool="web" type="button">Check web</button>
-                <button class="lab-button" data-tool="image" type="button">Generate image</button>
-                <button class="lab-button" data-tool="approve" type="button">Needs approval</button>
-                <button class="lab-button trap-btn" data-tool="trap" type="button">Booby-trapped page</button>
-              </div>
+            <div class="preset-row" aria-label="Agent scenarios">
+              <button class="lab-button active" data-scenario="garden" type="button">Caption a photo</button>
+              <button class="lab-button" data-scenario="weather" type="button">Water tonight?</button>
+              <button class="lab-button" data-scenario="layout" type="button">Fix a layout</button>
+              <button class="lab-button" data-scenario="restart" type="button">Restart a service</button>
+              <button class="lab-button toggle" id="toolsToggle" type="button" aria-pressed="true">Tools: on</button>
+            </div>
+            <div class="agent-layout">
               <div>
-                <div class="control-row trap-modes" id="trapModes" hidden>
-                  <span>Which agent reads it?</span>
-                  <button class="lab-button active" data-trap="careful" type="button">Careful agent</button>
-                  <button class="lab-button" data-trap="careless" type="button">Careless agent</button>
-                </div>
-                <div class="toolcall" id="toolCall">
-                  <div class="tc-step" data-tc="0"><b>Model writes</b><pre id="tcJson"></pre></div>
-                  <div class="tc-pipe"><i></i></div>
-                  <div class="tc-step" data-tc="1"><b>Harness runs it</b><span id="tcRun"></span><div class="control-row tc-approve" id="tcApprove" hidden><button class="lab-button primary" id="tcYes" type="button">Approve</button><button class="lab-button" id="tcNo" type="button">Deny</button></div></div>
-                  <div class="tc-pipe"><i></i></div>
-                  <div class="tc-step" data-tc="2"><b>Result → context</b><pre id="tcResult"></pre></div>
-                  <div class="tc-pipe"><i></i></div>
-                  <div class="tc-step" data-tc="3"><b>Model answers</b><span id="tcAnswer"></span></div>
-                </div>
-                <div class="control-row" style="margin-top: 12px"><button class="lab-button" id="tcReplay" type="button">Replay</button></div>
-                <div class="tool-compare">
-                  <div class="compare-panel"><strong>Model guesses</strong><p id="guessPanel"></p></div>
-                  <div class="compare-panel"><strong>Agent checks</strong><p id="checkPanel"></p></div>
-                </div>
+                <div class="ag-head"><span>You</span><span>Model</span><span>Tools</span></div>
+                <div class="ag-lanes" id="agentLanes" aria-live="polite"></div>
               </div>
-            </div>
-          </div>
-        </section>
-
-        <div class="act-banner" id="act-3">
-          <span>Act III</span>
-          <h2>Agents in the wild</h2>
-          <p>An agent is a model in a loop with tools, memory, and boundaries. The interesting part is what it checks, and when it stops.</p>
-        </div>
-
-        <section id="agent-loop" class="lab-card">
-          <div class="lab-card-header">
-            <div>
-              <span class="kicker">Step through it</span>
-              <h2>Agent Loop Circuit</h2>
-              <p>Watch the loop run. Every lap adds to the context window: plans, tool calls, results. When a check fails, the agent goes around again. When an action is risky, it stops at the gate and waits for you.</p>
-              <p class="gist"><b>In one line</b>Agents repeat plan → act → check until the job is really done, or stop to ask you.</p>
-            </div>
-            <span class="status-pill">Watch it loop</span>
-          </div>
-          <div class="lab-card-body">
-            <div class="scenario-picker" aria-label="Agent scenarios">
-              <button class="lab-button active" data-scenario="garden" type="button">Garden photo</button>
-              <button class="lab-button" data-scenario="weather" type="button">Watering check</button>
-              <button class="lab-button" data-scenario="recipe" type="button">Dinner recipe (2 laps)</button>
-              <button class="lab-button" data-scenario="booking" type="button">Book &amp; pay (gate)</button>
-            </div>
-            <div class="circuit-board">
-              <div class="circuit-wrap">
-                <svg class="circuit" id="circuit" viewBox="0 0 400 400" aria-label="Agent loop circuit"></svg>
-                <div class="circuit-lap" id="circuitLap">Lap 1</div>
-              </div>
-              <div class="agent-console">
-                <div class="console-readout" id="agentConsole"></div>
-                <div class="control-row circuit-gate" id="circuitGate" hidden>
-                  <button class="lab-button primary" id="gateYes" type="button">Approve payment</button>
-                  <button class="lab-button" id="gateNo" type="button">Deny</button>
-                </div>
+              <aside class="agent-side">
+                <svg id="agentRing" class="agent-ring" viewBox="0 0 160 160" role="img" aria-label="The agent loop: read, plan, act, observe"></svg>
+                <div class="metric"><span>Context so far</span><strong><span id="agentCtx">0</span> tokens</strong><div class="meter"><span id="agentCtxMeter"></span></div></div>
                 <div class="control-row">
-                  <button class="lab-button primary" id="nextStep" type="button">Next step</button>
-                  <button class="lab-button" id="autoStep" type="button">Auto run</button>
-                  <button class="lab-button" id="resetStep" type="button">Reset</button>
+                  <button class="lab-button primary" id="agentPlay" type="button">Play the run</button>
+                  <button class="lab-button" id="agentStep" type="button">Step</button>
+                  <button class="lab-button" id="agentReset" type="button">Reset</button>
                 </div>
-                <div class="ctx-strip-label"><span>Context window this run</span><strong id="stripTokens">0 tokens</strong></div>
-                <div class="ctx-strip" id="ctxStrip"></div>
-              </div>
+              </aside>
+            </div>
+            <div class="trace-note" id="agentNote" aria-live="polite"></div>
+            <div class="ch-foot">
+              <div class="key-idea"><b>Key idea</b>An agent is the same next-token predictor, run in a loop. A tool call is just text in a special format; the program around the model does the actual work and pastes the result back in. Every lap re-reads the whole, growing string.</div>
+              <div class="fine-print">Tool names, outputs, and token counts in these runs are scripted examples. The message pattern — request, call, result, call, result, answer — is how real agent systems work, and it is also the audit trail: you can judge the work from what was checked without seeing inside the model.</div>
             </div>
           </div>
         </section>
 
-        <section id="trace" class="lab-card">
+        <!-- 12 -->
+        <section id="systems" class="lab-card chapter" data-short="Systems">
           <div class="lab-card-header">
             <div>
-              <span class="kicker">Observable work</span>
-              <h2>Trace Viewer</h2>
-              <p>A useful AI run leaves an outside trail: what was requested, what it checked, what it observed, and how it verified the result. You don't need to see inside the model's head to judge whether the work can be trusted.</p>
-              <p class="gist"><b>In one line</b>Trust work you can see being checked.</p>
-            </div>
-            <span class="status-pill">Audit trail</span>
-          </div>
-          <div class="lab-card-body">
-            <div class="scenario-picker" aria-label="Trace examples">
-              <button class="lab-button active" data-trace="good" type="button">Good trace</button>
-              <button class="lab-button" data-trace="bad" type="button">Bad trace</button>
-              <button class="lab-button" data-trace="blocked" type="button">Approval stop</button>
-            </div>
-            <div class="trace-grid">
-              <div class="trace-list" id="traceList"></div>
-              <div class="trace-output" id="traceOutput" aria-live="polite"></div>
-            </div>
-          </div>
-        </section>
-
-        <section id="systems" class="lab-card">
-          <div class="lab-card-header">
-            <div>
-              <span class="kicker">Different jobs, different tradeoffs</span>
-              <h2>Local, Cloud, Agent, Media</h2>
-              <p>AI is not one thing. The useful question is what kind of system you are using and what constraints come with it. Pick a job below and see which system fits. Some jobs need two at once.</p>
-              <p class="gist"><b>In one line</b>Pick the kind of AI that fits the job.</p>
+              <span class="kicker"><i class="ch-num">12</i>Different jobs, different machines</span>
+              <h2>Systems: Pick One, Build One</h2>
+              <p>"AI" is not one thing. The useful questions are where the model runs, where your text travels, and what is bolted on around it.</p>
             </div>
             <span class="status-pill">Match the job</span>
           </div>
           <div class="lab-card-body">
             <div class="preset-row" aria-label="Pick a job">
               <button class="lab-button" data-job="journal" type="button">Private journaling helper</button>
-              <button class="lab-button" data-job="bug" type="button">Crack a hard bug</button>
+              <button class="lab-button active" data-job="bug" type="button">Crack a hard bug</button>
               <button class="lab-button" data-job="site" type="button">Update my website</button>
               <button class="lab-button" data-job="thumb" type="button">Make a thumbnail</button>
             </div>
+            <svg id="sysDiagram" class="sys-diagram smil" viewBox="0 0 640 190" role="img" aria-label="Where your text travels for the chosen kind of system" aria-describedby="systemNote"></svg>
             <div class="system-strip">
-              <article class="system-tile"><h3>Local model</h3><p>Private and hardware-bound. Good for experiments, automation, and offline control. Quality depends on the model and machine.</p></article>
-              <article class="system-tile"><h3>Cloud model</h3><p>Usually stronger and faster to update. Great for hard reasoning, coding, and multimodal work, with external service tradeoffs.</p></article>
-              <article class="system-tile"><h3>Agent</h3><p>A model with tools, memory, permissions, and a loop. Powerful because it can act, risky if guardrails are sloppy.</p></article>
-              <article class="system-tile"><h3>Media model</h3><p>Image, voice, music, and video models turn prompts into pixels or sound. They need visual direction, not just facts.</p></article>
+              <article class="system-tile"><h3>Local model</h3><p>Runs on your own hardware. Private and offline; quality limited by the machine.</p></article>
+              <article class="system-tile active"><h3>Cloud model</h3><p>Runs in a data centre. Usually the strongest reasoning, at the cost of sending your text out.</p></article>
+              <article class="system-tile"><h3>Agent</h3><p>A model plus tools, memory, permissions, and a loop. It can act — and so needs guardrails.</p></article>
+              <article class="system-tile"><h3>Media model</h3><p>Turns prompts into pixels or sound. Needs visual direction, not just facts.</p></article>
             </div>
-            <div class="race" id="systemRace" hidden></div>
-            <div class="trace-note" id="systemNote" aria-live="polite">Pick a job above to see which kind of system fits it best, and why the others are a worse match.</div>
-          </div>
-        </section>
+            <div class="trace-note" id="systemNote" aria-live="polite"><strong>Best fit: Cloud model.</strong> A gnarly bug benefits from the strongest reasoning available, and the largest models live in data centres. Your text makes a round trip; nothing acts on your machine.</div>
 
-        <section id="builder" class="lab-card">
-          <div class="lab-card-header">
-            <div>
-              <span class="kicker">Assemble the system</span>
-              <h2>Build an Agent Stack</h2>
-              <p>Most real AI systems are a stack of choices. It starts with just a model and its context. Add layers and watch what you gain, and what new risks need checks.</p>
-              <p class="gist"><b>In one line</b>More power needs more safety checks.</p>
-            </div>
-            <span class="status-pill">Interactive model</span>
-          </div>
-          <div class="lab-card-body builder-grid">
-            <div class="builder-options" id="builderOptions"></div>
-            <div class="builder-output">
-              <div class="builder-visuals">
-                <div class="iso-stage"><div class="iso-stack" id="stackVisual" aria-label="Agent stack layers"></div></div>
-                <svg class="radar" id="builderRadar" viewBox="-120 -110 240 220" aria-label="Capability, risk and oversight radar"></svg>
+            <div class="sub-block">
+              <h3>Build an agent stack</h3>
+              <p>Switch capabilities on and off and watch the profile change.</p>
+              <div class="builder-grid">
+                <div class="builder-options" id="builderOptions"></div>
+                <div class="builder-output">
+                  <div class="stack-visual" id="stackVisual" aria-label="Agent stack layers"></div>
+                  <div class="metric-row">
+                    <div class="metric"><span>Capability</span><strong id="builderCapability">0</strong><div class="meter"><span id="builderCapabilityBar"></span></div></div>
+                    <div class="metric"><span>Risk</span><strong id="builderRisk">0</strong><div class="meter risk"><span id="builderRiskBar"></span></div></div>
+                    <div class="metric"><span>Oversight</span><strong id="builderOversight">0</strong><div class="meter"><span id="builderOversightBar"></span></div></div>
+                  </div>
+                  <div class="builder-summary" id="builderSummary" aria-live="polite"></div>
+                </div>
               </div>
-              <p class="fine-print" style="margin:0">Scores are illustrative, to show the trade-off, not measurements.</p>
-              <div class="metric-row">
-                <div class="metric"><span>Capability</span><strong id="builderCapability">0</strong></div>
-                <div class="metric"><span>Risk</span><strong id="builderRisk">0</strong></div>
-                <div class="metric"><span>Oversight</span><strong id="builderOversight">0</strong></div>
-              </div>
-              <div class="builder-summary" id="builderSummary"></div>
             </div>
           </div>
         </section>
 
-        <section id="failure" class="lab-card">
+        <!-- 13 -->
+        <section id="failure" class="lab-card chapter" data-short="Failure modes">
           <div class="lab-card-header">
             <div>
-              <span class="kicker">Where it goes wrong</span>
+              <span class="kicker"><i class="ch-num">13</i>Where it goes wrong</span>
               <h2>Failure Modes</h2>
-              <p>Most AI mistakes are not mysterious. They usually come from missing context, stale information, weak instructions, bad tool choice, untrusted input, or permission boundaries.</p>
-              <p class="gist"><b>In one line</b>Most mistakes come from missing, stale, or unchecked information.</p>
+              <p>Once you know the machinery, the mistakes stop being mysterious. The first three below are not illustrations: they are this page's model, failing live, in exactly the ways large models fail.</p>
             </div>
+            <span class="status-pill">3 run live</span>
           </div>
           <div class="lab-card-body">
             <div class="failure-tabs" id="failureTabs"></div>
-            <div class="failure-card" id="failureCard"></div>
+            <div class="failure-card" id="failureCard" aria-live="polite"></div>
             <div class="quiz-card">
               <h3>Quick checkpoint</h3>
               <p id="quizQuestion"></p>
               <div class="preset-row" id="quizPicker" aria-label="Checkpoint questions"></div>
               <div class="control-row">
-                <button class="lab-button" data-quiz="guess" type="button">Let the model guess</button>
-                <button class="lab-button" data-quiz="tool" type="button">Use a tool</button>
+                <button class="lab-button" data-quiz="guess" type="button">Let the model answer from memory</button>
+                <button class="lab-button" data-quiz="tool" type="button">Use a tool first</button>
               </div>
-              <div class="quiz-result" id="quizResult">Pick the safer approach.</div>
+              <div class="quiz-result" id="quizResult" aria-live="polite">Pick the safer approach.</div>
             </div>
           </div>
         </section>
 
-        <section id="hallucination" class="lab-card">
+        <!-- 14 -->
+        <section id="glossary" class="lab-card chapter" data-short="Glossary">
           <div class="lab-card-header">
             <div>
-              <span class="kicker">A game about grounding</span>
-              <h2>Spot the Hallucination</h2>
-              <p>An assistant summarized the notes on the left. Every sentence sounds fine, but some aren't backed by the source. Tap the ones you think are unsupported, then turn on grounding to check each claim against the evidence.</p>
-              <p class="gist"><b>In one line</b>Sounding sure is not the same as being right.</p>
+              <span class="kicker"><i class="ch-num">14</i>Plain terms</span>
+              <h2>Concept Decoder</h2>
+              <p>The vocabulary, with the common misunderstanding next to each term and a link back to the animation that shows it. Or let it quiz you.</p>
             </div>
-            <span class="status-pill" id="halScore">Round 1 of 3</span>
+            <span class="status-pill">Search or quiz</span>
           </div>
           <div class="lab-card-body">
-            <div class="hal-grid">
-              <div class="hal-source">
-                <span class="hal-label" id="halSourceTitle">Source</span>
-                <ol id="halSource"></ol>
-              </div>
-              <div class="hal-claims">
-                <span class="hal-label">Assistant's summary: tap the unsupported claims</span>
-                <div id="halClaims"></div>
-                <div class="control-row" style="margin-top: 12px">
-                  <button class="lab-button primary" id="halCheck" type="button">Turn on grounding</button>
-                  <button class="lab-button" id="halNext" type="button" hidden>Next round</button>
-                </div>
-                <div class="quiz-result" id="halResult" aria-live="polite">Fluent is not the same as supported.</div>
-              </div>
+            <div class="glossary-tools">
+              <label class="sr-only" for="conceptSearch">Search the glossary</label>
+              <input id="conceptSearch" class="prompt-input" type="search" placeholder="Search terms and definitions…" autocomplete="off" />
+              <button class="lab-button primary" id="conceptQuiz" type="button">Quiz me</button>
             </div>
-          </div>
-        </section>
-
-        <section id="concepts" class="lab-card">
-          <div class="lab-card-header">
-            <div>
-              <span class="kicker">Reference</span>
-              <h2>Glossary</h2>
-              <p>AI terms get thrown around loosely. Pick a concept to see the useful definition, a practical example, and the common misunderstanding to avoid.</p>
-              <p class="gist"><b>In one line</b>Plain-English definitions for the buzzwords.</p>
-            </div>
-            <span class="status-pill">Tap a term</span>
-          </div>
-          <div class="lab-card-body concept-grid">
-            <div class="concept-list" id="conceptList"></div>
+            <div class="concept-chips" id="conceptList"></div>
             <div class="concept-detail" id="conceptDetail" aria-live="polite"></div>
           </div>
         </section>
 
         <footer>
-          <a href="../">Home</a> · <a href="training-alignment">Training &amp; alignment</a> · <a href="https://github.com/jz237/jez237-site" target="_blank" rel="noopener">Source repo</a>
+          <a href="../">Home</a> · <a href="training-alignment.html">Training &amp; alignment</a> · <a href="classic/">Earlier version of this guide</a> · <a href="https://github.com/jz237/jez237-site" target="_blank" rel="noopener">Source repo</a>
         </footer>
       </div>
     </div>
-    <dialog class="tour-video" id="tourVideo" aria-label="60-second video tour">
-      <div class="tv-head"><strong>How AI Works in 60 seconds</strong><button class="lab-button" id="tourVideoClose" type="button">Close</button></div>
-      <video id="tourVideoEl" controls playsinline preload="none" poster="media/tour-poster.jpg?v=20260929" src="media/tour.mp4?v=20260929"></video>
-      <p class="fine-print">A silent, captioned run-through of the page. Everything in it is interactive below.</p>
-    </dialog>
   </main>
 
-  <script src="lab.js?v=20260928c" defer></script>
+  <script src="js/data.js?v=20261110b" defer></script>
+  <script src="js/tinygpt.js?v=20261110b" defer></script>
+  <script src="js/weights.js?v=20261110b" defer></script>
+  <script src="js/core.js?v=20261110b" defer></script>
+  <script src="js/trainer.js?v=20261110b" defer></script>
+  <script src="js/chapters.js?v=20261110b" defer></script>
+  <script src="js/journey.js?v=20261110b" defer></script>
+  <script src="js/tokens.js?v=20261110b" defer></script>
+  <script src="js/embeddings.js?v=20261110b" defer></script>
+  <script src="js/attention.js?v=20261110b" defer></script>
+  <script src="js/layers.js?v=20261110b" defer></script>
+  <script src="js/sampling.js?v=20261110b" defer></script>
+  <script src="js/training.js?v=20261110b" defer></script>
+  <script src="js/chat.js?v=20261110b" defer></script>
+  <script src="js/context.js?v=20261110b" defer></script>
+  <script src="js/agents.js?v=20261110b" defer></script>
+  <script src="js/shell.js?v=20261110b" defer></script>
   <script src="../assets/site-enhance.js" defer></script>
   <script src="../assets/nav.js?v=nav-20260702b" defer></script>
   <script src="../assets/space-fx.js?v=20260702b" defer></script>

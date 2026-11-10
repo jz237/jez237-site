@@ -16,6 +16,7 @@ https://www.jez237.com/* https://jez237.com/:splat 301
 /photos/garden/images/* https://media.jez237.com/photos/garden/images/:splat 302
 /stock-command-center/* /stock-market/:splat 301
 /experiments/vauxhall-cat/* /experiments/particle-graphics-cat/:splat 301
+/experiments/ai-explainer/* /how-ai-works/:splat 301
 
 /games/demos/philadelphia-relief /demos/philadelphia-relief/ 301
 /games/demos/philadelphia-relief/* /demos/philadelphia-relief/:splat 301
