@@ -3,7 +3,7 @@
 // Nothing in here touches the DOM, WebGL or audio; it only pushes events into W.ev.
 //
 // The world is a band round a small planet: x along the ground (wraps every C metres), y altitude (0..H).
-import { F, STEP, C, H, ENEMY, SETTLER, BOSSES, B_KEYS, SECTORS, WAVES, rampAt, rampLevel, endlessLevel, ENDLESS, TUTOR, SCORE, START_LIVES, DIFFICULTY, applyDiff, POWERUPS, PW_KEYS, DROP, SKIM, HYPER, EVENTS, EVENT, PHASE2, B_KEYS as _BK, SHIPS, SHIP_KEYS, RIVALS, INTERSECT, WHIRL, COIL, SCORCH, MAW, GATE, SPECIALS, SPECIAL } from './config.js?v=23';
+import { F, STEP, C, H, ENEMY, SETTLER, BOSSES, B_KEYS, SECTORS, WAVES, rampAt, rampLevel, endlessLevel, ENDLESS, TUTOR, SCORE, START_LIVES, DIFFICULTY, applyDiff, POWERUPS, PW_KEYS, DROP, SKIM, HYPER, EVENTS, EVENT, PHASE2, B_KEYS as _BK, SHIPS, SHIP_KEYS, RIVALS, INTERSECT, WHIRL, COIL, SCORCH, MAW, GATE, SPECIALS, SPECIAL, SPAWN } from './config.js?v=24';
 export { STEP };
 
 const clamp = (v, a, b) => (v < a ? a : v > b ? b : v);
@@ -380,11 +380,12 @@ function spawnSpot(W, type) {
     if (type === 'lifter') {
       let s = W.settlers.filter((q) => q.st === 'walk');
       const p0 = alivePlayers(W)[0];
-      if (p0 && rand(W) < 0.6) { const nr = s.filter((q) => Math.abs(wd(q.x - p0.x)) < 240); if (nr.length) s = nr; }
+      // most come down on the settlers near a pilot, so the fight is on screen
+      if (p0 && rand(W) < SPAWN.lifterNear) { const nr = s.filter((q) => Math.abs(wd(q.x - p0.x)) < SPAWN.lifterR); if (nr.length) s = nr; }
       x = s.length ? wp(s[(rand(W) * s.length) | 0].x + rr(W, -60, 60)) : rr(W, 0, C);
     }
     else if (type === 'prowler') { const p = nearestPlayer(W, 0) || W.players[0]; x = wp(p.x - (p.face || 1) * rr(W, 46, 54)); }
-    else { const p = alivePlayers(W)[0]; x = p && rand(W) < 0.6 ? wp(p.x + (rand(W) < 0.5 ? -1 : 1) * rr(W, 26, 70)) : rr(W, 0, C); }
+    else { const p = alivePlayers(W)[0]; x = p && rand(W) < SPAWN.near ? wp(p.x + (rand(W) < 0.5 ? -1 : 1) * rr(W, SPAWN.r[0], SPAWN.r[1])) : rr(W, 0, C); }
     const p = nearestPlayer(W, x);
     if (type === 'prowler' || !p || Math.abs(wd(p.x - x)) > 22) return x;
   }
@@ -1324,7 +1325,7 @@ function contacts(W) {
       if (e.hp <= 0 || e.born > 0) continue;
       const r = ENEMY[e.type].r + F.r * 0.8;
       if (Math.abs(wd(e.x - p.x)) < r && Math.abs(e.y - p.y) < r * 0.8) {
-        if (p.hyper > 0) { kill(W, e, p.id, 'ram'); continue; }
+        if (p.hyper > 0 || safeNow(W)) { kill(W, e, p.id, 'ram'); continue; }   // (nothing hurts in the tutorial's safe half minute)
         if (p.inv > 0) continue;
         hurt(W, p, e.type, e.x, e.y);
         kill(W, e, p.id, 'ram');

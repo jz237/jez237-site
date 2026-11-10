@@ -1,10 +1,10 @@
 // ?test=1 self-test page: determinism, exact replays, the gentle start, the difficulty ramp shape, lifters taking
 // and fusing settlers, the carrier fight, the live loop with no console errors and no score posts, and the title
 // screen naming every gunship, machine and carrier with its picture drawn.
-import { makeWorld, step, drainEvents, STEP, settlersLeft } from './sim.js?v=23';
-import { Autopilot } from './ai.js?v=23';
-import { RAMP, SECTORS, TYPICAL_UP, rampAt, endlessLevel, DIFF_KEYS, applyDiff, MIN_WARN, TUTOR, WAVES, SHIPS, SHIP_KEYS } from './config.js?v=23';
-import { Recorder, Replay } from './replay.js?v=23';
+import { makeWorld, step, drainEvents, STEP, settlersLeft } from './sim.js?v=24';
+import { Autopilot } from './ai.js?v=24';
+import { RAMP, SECTORS, TYPICAL_UP, rampAt, endlessLevel, DIFF_KEYS, applyDiff, MIN_WARN, TUTOR, WAVES, SHIPS, SHIP_KEYS } from './config.js?v=24';
+import { Recorder, Replay } from './replay.js?v=24';
 
 export const hashW = (W) => JSON.stringify([W.n, W.score, W.lives, W.cp, W.phase, W.rs, W.players.map((p) => [p.x.toFixed(6), p.y.toFixed(6), p.alive, p.shield, p.nova]),
   W.enemies.map((e) => [e.id, e.type, e.x.toFixed(4), e.y.toFixed(4), e.hp]), W.settlers.map((s) => [s.id, s.st, s.x.toFixed(4), s.y.toFixed(4)]), W.bolts.length, W.boss ? [W.boss.st, W.boss.x.toFixed(4), W.boss.nodes.map((n) => n.hp).join()] : 0]);
@@ -108,10 +108,10 @@ export async function runTests(sh) {
     // a drawn model covers a good part of its picture; an empty or failed one is clear
     const drawn = (t) => { const c = t.querySelector('canvas'), d = c.getContext('2d').getImageData(0, 0, c.width, c.height).data; let n = 0; for (let i = 3; i < d.length; i += 4) if (d[i] > 128) n++; return n > c.width * c.height * 0.04; };
     const check = (sel, want) => { const tiles = [...document.querySelectorAll(sel)], names = tiles.map((t) => t.querySelector('b').textContent); return { ok: names.length === want && names.every(Boolean) && tiles.every(drawn), names, n: tiles.filter(drawn).length }; };
-    const g = check('#gs-grid .gs', SHIP_KEYS.length), m = check('#en-machines .en', 12), c = check('#en-carriers .en', SECTORS.length);
+    const g = check('#gs-grid .gs', SHIP_KEYS.length), m = check('#en-machines .en', 11), c = check('#en-carriers .en', SECTORS.length);
     const want = SHIP_KEYS.map((k) => SHIPS[k].name).join();
     const shown = !document.getElementById('title-side').closest('.hidden');
-    return { ok: shown && g.ok && g.names.join() === want && m.ok && c.ok, info: `gunships ${g.n}/${SHIP_KEYS.length} (${g.names.join(', ')}), machines ${m.n}/12, carriers ${c.n}/${SECTORS.length} drawn${shown ? '' : ' · HIDDEN'}` };
+    return { ok: shown && g.ok && g.names.join() === want && m.ok && c.ok, info: `gunships ${g.n}/${SHIP_KEYS.length} (${g.names.join(', ')}), machines ${m.n}/11, carriers ${c.n}/${SECTORS.length} drawn${shown ? '' : ' · HIDDEN'}` };
   });
   void SECTORS;
   const pass = results.filter((r) => r.ok).length;

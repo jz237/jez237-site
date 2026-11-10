@@ -13,8 +13,8 @@
 //   'human' — plays like a person: ~0.35 s reaction (scattered, sometimes late), wobbly altitude, misses things
 //             behind it, saves novas too long. The difficulty ramp is measured with this one.
 //   'demo'  — the attract mode: sharp and decisive. It never reads the world's random generator (replays stay exact).
-import { F, ENEMY, BOSSES, H, SHIPS, WAVES, SPECIAL } from './config.js?v=23';
-import { wd, wp, nodePos, beamRange } from './sim.js?v=23';
+import { F, ENEMY, BOSSES, H, SHIPS, WAVES, SPECIAL } from './config.js?v=24';
+import { wd, wp, nodePos, beamRange } from './sim.js?v=24';
 
 const clamp = (v, a, b) => (v < a ? a : v > b ? b : v);
 function mkr(seed) { let s = seed | 0; return () => { s = (s + 0x6D2B79F5) | 0; let t = Math.imul(s ^ (s >>> 15), s | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
@@ -25,6 +25,8 @@ const PROFILES = {
 };
 // the demo lets a hive pod's fresh stingers be seen before it opens fire on them (seconds after the burst)
 const SWARM_HOLD = 1.7;
+// ...but not once a stinger is within SWARM_CLOSE m, and at most one watched swarm every SWARM_GAP s
+const SWARM_CLOSE = 24, SWARM_GAP = 8;
 const DANGER = new Set(['husk', 'prowler', 'stinger', 'whirler', 'spark', 'maw', 'scorcher']);
 // NOVA PLAN (demo): what each machine a nova would destroy is worth (a lifter carrying a settler most of all; a hive pod
 // counts with the swarm inside it; a coil with the sparks it would let out)
@@ -76,7 +78,7 @@ export class Autopilot {
     const endgame = !B && W.plan && W.plan.left === 0 && W.plan.extra.every((x) => x.done) && left > 0 && left <= 3;
     for (const e of W.enemies) {
       if (e.hp <= 0 || e.type === 'mine') continue;
-      if (this.profile === 'demo' && e.type === 'stinger' && e.t < SWARM_HOLD) continue;   // let the watcher see a fresh swarm
+      if (this.profile === 'demo' && e.type === 'stinger' && e.t < SWARM_HOLD && this.holding) continue;   // let the watcher see a fresh swarm
       if (!this.notice(W, e.id, e.x, me)) continue;
       const d = Math.abs(wd(e.x - me.x));
       if (e.born > 0 && d > 30) continue;
@@ -114,10 +116,22 @@ export class Autopilot {
     }
     return { ...best, why };
   }
+  // a fresh swarm (a pod burst less than SWARM_HOLD s ago) near enough to be watched
+  swarmFresh(W, me) { return W.enemies.some((e) => e.type === 'stinger' && e.hp > 0 && e.t < SWARM_HOLD - 0.3 && Math.abs(wd(e.x - me.x)) < 60); }
+  // ...and one of its stingers already close: no more waiting, fight
+  swarmClose(W, me) { return W.enemies.some((e) => e.type === 'stinger' && e.hp > 0 && Math.abs(wd(e.x - me.x)) < SWARM_CLOSE && Math.abs(e.y - me.y) < 9); }
+  // at most one watched swarm every SWARM_GAP s (with a hive or more a wave, waiting on every one gets the demo killed)
+  swarmHold(W, me) {
+    this.hcd = (this.hcd || 0) - 1 / 120;
+    const want = this.swarmFresh(W, me) && !this.swarmClose(W, me);
+    if (want && (this.holding || this.hcd <= 0)) { this.holding = true; return true; }
+    if (this.holding) { this.holding = false; this.hcd = SWARM_GAP; }
+    return false;
+  }
   control(W, me) {
     const out = this.control0(W, me);
     // a pod has just burst near us: hold fire (and the nova) for a moment so its swarm can be seen
-    if (this.profile === 'demo' && W.enemies.some((e) => e.type === 'stinger' && e.hp > 0 && e.t < SWARM_HOLD - 0.3 && Math.abs(wd(e.x - me.x)) < 60)) { out.fire = false; out.nova = false; }
+    if (this.profile === 'demo' && this.swarmHold(W, me)) { out.fire = false; out.nova = false; }
     return out;
   }
   control0(W, me) {

@@ -1,13 +1,13 @@
 // Skyhold 2026 — game flow, menus, HUD (with the scanner strip), commentary, demo director and the frame loop.
-import { VERSION, SECTORS, STEP, F, C, H, BOSSES, UPGRADES, UP_KEYS, UP_COST, MEDALS, parTime, TYPICAL_UP, START_LIVES, DIFFICULTY, POWERUPS, LIVERIES, CP_NAMES, WAVES, ENEMY, SHIPS, SHIP_KEYS, RIVALS, MASTERY, mastLevel, SPECIALS } from './config.js?v=23';
-import { makeWorld, step, stepGuest, drainEvents, wd, wp, settlersLeft, nodePos, CHAIN_T, chainMult, beamRange } from './sim.js?v=23';
-import { Autopilot } from './ai.js?v=23';
-import { Renderer, pickQuality, CALM, LOOKS, PW, PH } from './render.js?v=23';
-import { Audio } from './audio.js?v=23';
-import { Input } from './input.js?v=23';
-import { Scores, NO_POST } from './scores.js?v=23';
-import { Recorder, Replay } from './replay.js?v=23';
-import { Online, ROOM, QUICK, QUICK_R, randomCode, cleanCode } from './online.js?v=23';
+import { VERSION, SECTORS, STEP, F, C, H, BOSSES, UPGRADES, UP_KEYS, UP_COST, MEDALS, parTime, TYPICAL_UP, START_LIVES, DIFFICULTY, POWERUPS, LIVERIES, CP_NAMES, WAVES, ENEMY, SHIPS, SHIP_KEYS, RIVALS, MASTERY, mastLevel, SPECIALS } from './config.js?v=24';
+import { makeWorld, step, stepGuest, drainEvents, wd, wp, settlersLeft, nodePos, CHAIN_T, chainMult, beamRange } from './sim.js?v=24';
+import { Autopilot } from './ai.js?v=24';
+import { Renderer, pickQuality, CALM, LOOKS, PW, PH } from './render.js?v=24';
+import { Audio } from './audio.js?v=24';
+import { Input } from './input.js?v=24';
+import { Scores, NO_POST } from './scores.js?v=24';
+import { Recorder, Replay } from './replay.js?v=24';
+import { Online, ROOM, QUICK, QUICK_R, randomCode, cleanCode } from './online.js?v=24';
 
 const $ = (id) => document.getElementById(id);
 const params = new URLSearchParams(location.search);
@@ -981,7 +981,7 @@ function buildShips() {
 const HANGAR = { livery: '', enemy: null, narrow: matchMedia('(max-width: 739px)') };
 // the machines in about the order a campaign brings them (names as the NEW MACHINE card gives them, the description
 // as a tooltip); a mine or a meteor is not a machine of its own
-const ROSTER = ['lifter', 'husk', 'sower', 'hive', 'stinger', 'prowler', 'skimmer', 'whirler', 'coil', 'spark', 'scorcher', 'maw'];
+const ROSTER = ['lifter', 'husk', 'sower', 'hive', 'stinger', 'prowler', 'whirler', 'coil', 'spark', 'scorcher', 'maw'];
 const ROSTER_NAME = { skimmer: 'SKIMMER', whirler: 'WHIRLER' };
 function placeHangar() {
   const h = $('title-side'), title = $('title'), card = title.querySelector('.card');
@@ -1486,7 +1486,7 @@ async function boot() {
   toTitle();
   boardOf('campaign', settings.diff).fresh(); boardOf('endless', settings.diff).fresh();
   if (!G.fixed && !params.has('test')) R.prepareAll(true);
-  if (params.has('test')) { const m = await import('./tests.js?v=23'); m.runTests(window.__sh); }
+  if (params.has('test')) { const m = await import('./tests.js?v=24'); m.runTests(window.__sh); }
   else if (params.has('playthrough')) { A.unlock(); startPlaythrough(); }
   else if (params.has('room')) { act('online'); $('join-code').value = cleanCode(params.get('room')); }
   else if (G.autopilot) { A.unlock(); if (params.has('endless')) startEndless(); else startCampaign(+params.get('sector') || 0); }
