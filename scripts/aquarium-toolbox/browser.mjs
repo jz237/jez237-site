@@ -15,14 +15,14 @@ try{
   await page.goto(base);await page.locator('.primary-metric').waitFor();
   await page.screenshot({path:`${dir}/${label}-tank.png`,fullPage:true});
   for(const c of calculators){await page.evaluate(id=>{location.hash=`tool=${id}`;},c.id);await page.waitForFunction(title=>document.querySelector('.calc-heading h2')?.textContent===title,c.title);await page.locator('.primary-metric').waitFor();assert.equal(await page.locator('.error-card').count(),0,c.id);assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),`${label} overflow: ${c.id}`);results.push({viewport:label,tool:c.id,passed:true});}
-  await page.evaluate(()=>{location.hash='tool=change';});await page.waitForFunction(()=>document.querySelector('.calc-heading h2')?.textContent==='Water-change mixer');
+  await page.evaluate(()=>{location.hash='tool=change';});await page.waitForFunction(()=>document.querySelector('.calc-heading h2')?.textContent==='Water change planner');
   await page.locator('#unit-metric').click();await page.locator('#field-pct').fill('50');await page.locator('#field-current').fill('40');await page.locator('#field-fresh').fill('0');
   assert.match(await page.locator('.primary-metric .metric-value').innerText(),/20/);
   await page.screenshot({path:`${dir}/${label}-water-change.png`,fullPage:true});
   await page.locator('#field-v').fill('');assert.equal(await page.locator('.primary-metric').count(),0);assert.equal(await page.locator('.error-card').count(),1);
   await page.locator('#field-pct').fill('25');assert.equal(await page.locator('.primary-metric').count(),0);
   await page.locator('#field-v').fill('100');await page.locator('.primary-metric').waitFor();
-  await page.locator('#favorite').click();await page.locator('#search').fill('nitrate');assert.equal(await page.locator('.tool-link').count(),1);await page.locator('#search').fill('');
+  await page.locator('#favorite').click();await page.locator('#search').fill('paintball');assert.equal(await page.locator('.tool-link').count(),1);assert.match(await page.locator('.tool-link').innerText(),/CO₂ cylinder/);await page.locator('#search').fill('zzzz');assert.equal(await page.locator('#empty-search').isVisible(),true);await page.locator('#search').fill('');
   await page.locator('#share-result').click();const url=await page.locator('#share-url').inputValue();assert.ok(url.includes('data='));await page.locator('#share-dialog [data-close]').click();
   const shared=await context.newPage();await shared.goto(url);await shared.locator('.primary-metric').waitFor();assert.equal(await shared.locator('#field-v').inputValue(),'100');assert.equal(await shared.locator('#field-pct').inputValue(),'25');await shared.close();
   await page.locator('#profiles-open').click();await page.locator('#tank-name').fill('Planted 40');await page.locator('#tank-volume').fill('151.41647136');await page.locator('#new-profile').click();assert.match(await page.locator('#profile-select option:checked').textContent(),/Planted 40/);

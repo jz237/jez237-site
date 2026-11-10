@@ -4,21 +4,29 @@ import {calculators,defaults,calculate,convert,GAL} from '../../aquarium-toolbox
 const run=(id,values={})=>calculate(id,{...defaults(calculators.find(c=>c.id===id)),...values});
 const near=(actual,expected,tolerance=1e-8)=>assert.ok(Math.abs(actual-expected)<=tolerance*Math.max(1,Math.abs(expected)),`${actual} != ${expected}`);
 const first=(id,a)=>run(id,a).metrics[0].value;
-test('36 distinct working tools with finite, meaningful default results',()=>{assert.equal(calculators.length,36);assert.equal(new Set(calculators.map(c=>c.id)).size,36);for(const c of calculators){const r=run(c.id);assert.ok(r.message.length>20,c.id);assert.ok(r.graphic.type,c.id);for(const m of r.metrics)assert.ok(Number.isFinite(m.value),c.id);}});
+test('38 distinct working tools with finite, meaningful default results',()=>{assert.equal(calculators.length,38);assert.equal(new Set(calculators.map(c=>c.id)).size,38);for(const c of calculators){const r=run(c.id);assert.ok(r.message.length>20,c.id);assert.ok(r.graphic.type,c.id);for(const m of r.metrics)assert.ok(Number.isFinite(m.value),c.id);}});
 const fixtures=[
  ['tank',{},95.76],['system',{},220],['substrate',{},14],['weight',{},175],['sump',{},15],['glass',{},1.2],
- ['change',{},29.5],['target',{},200/3],['series',{},25.3125],['nitrate',{},100/3],['mix',{},50],['ro',{},7.5],
+ ['change',{},29.5],['target',{},200/3],['series',{},25.3125],['nitrate',{},100/3],['mix',{v:100},50],['ro',{},7.5],
  ['label',{},12.5],['supplement',{},10],['stock',{},50],['hardness',{},8],
  // Emerson equilibrium at 25°C / pH 8: approximately 5.366% un-ionized,
  // converted from NH3-N mass to NH3 mass (17.0305 / 14.0067).
  ['ammonia',{tan:1,basis:'N',ph:8,temp:25},0.06525,.00002],['co2',{kh:4,ph:7},12],
  ['salt',{},1520],['salinity',{},26.25],['adjust',{},100/36],['consumption',{},.7],['ato',{},10],
  ['turnover',{},6],['pipe',{flow:3600,diameter:100},.12732395447351627],
- ['head',{flow:0,lift:2},2],['pump',{},1600],['drip',{},.36],
+ ['head',{flow:0,lift:2},2],['pump',{},1600],
+ // 2 drops/s at 20 drops/mL is 6 mL/min, so 2 L takes 2,000 ÷ 6 minutes.
+ ['drip',{drops:2,size:20,v:2},2000/6],
  ['energy',{lights:100,lightHours:10,pumps:0,heater:0,other:0,price:.2},6.0875],
- ['heatup',{v:100,start:20,target:30,power:1000,eff:100},1.1627777777777777],['heater',{},100],
+ ['heatup',{v:100,start:20,target:30,power:1000,eff:100},1.1627777777777777],
+ // 20 US gal held 18 °F above the room: 0.85 × 20^(2/3) × 18 ≈ 113 W, so the next common size is 150 W.
+ ['heater',{v:20*GAL,room:20,target:30,installed:0},150],
  ['watercost',{v:100,pct:20,days:7,evap:0,waste:0,waterprice:0,salt:35,saltprice:4},12.175],
- ['fertilizer',{v:100,rise:10,fraction:50,stock:50,bottle:500},2],['dli',{},1.44],['co2cylinder',{},143.75],['doser',{},12]
+ ['fertilizer',{v:100,rise:10,fraction:50,stock:50,bottle:500},2],['dli',{},1.44],['co2cylinder',{},143.75],
+ // 12 mL in 60 s is 0.2 mL/s; four 2 mL doses a day need 10 s each.
+ ['doser',{},10],
+ // Ten 4 cm fish in 100 L with an 80 × 35 cm surface: volume rule 26.4 in, so 15.7 in is 59.6%.
+ ['stocking',{v:100,l:80,w:35,kind:'tropical',size:4,count:10},40/2.54/(100/GAL)*100],['sg',{value:35},1.02639]
 ];
 for(const [id,values,expected,tolerance] of fixtures)test(`${id}: independent worked example`,()=>near(first(id,values),expected,tolerance));
 test('tank shapes and displacement are distinct, and US gallon definition is exact',()=>{near(first('tank',{shape:'rectangle',l:10,w:10,h:10,fill:100,displacement:0}),1);near(first('tank',{shape:'cylinder',l:20,h:10,fill:100,displacement:0}),Math.PI);near(first('tank',{shape:'ellipse',l:20,w:10,h:10,fill:100,displacement:0}),Math.PI/2);near(GAL,3.785411784);});

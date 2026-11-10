@@ -7,7 +7,7 @@ analytics added by this application, third-party fonts, dependencies, or build s
 
 ## Source
 
-- `aquarium-toolbox/calculators.mjs`: 36 calculators, field schema, domain limits,
+- `aquarium-toolbox/calculators.mjs`: 38 calculators, field schema, domain limits,
   formulas, assumptions and references. Internal SI units never depend on UI units.
 - `aquarium-toolbox/illustrations.mjs`: original SVG diagrams, updated from results.
 - `aquarium-toolbox/app.mjs`: saved working tanks, search, favorites, validated
@@ -33,14 +33,16 @@ Paths are host-specific QA tooling, never imported by the browser app.
 
 ## Scientific limits
 
-- No generic stocking-per-gallon rule, prescribed medication dose, floor-safety
-  verdict, structural glass specification or pH mixing calculation.
+- No prescribed medication dose, floor-safety verdict, structural glass
+  specification or pH mixing calculation. The stocking check applies the classic
+  volume and surface rules of thumb and says so; it is not a species guide.
 - Dosing scales a supplied label/analysis; it does not pick the correct product,
   safe target or dose interval. Disclose units and purity.
 - Ammonia is freshwater-only, 0–40°C / pH6–10, with N and NH3 mass bases distinct.
 - CO2 from KH/pH assumes carbonate-only buffering; it is not a direct measurement.
 - Salinity mixing uses volume-weighted approximation, not exact density balance.
-- Heater sizing is a user-selected allowance, not a heat-loss model.
+- Heater sizing is a rule of thumb fitted to published heater charts for covered
+  glass tanks, not a heat-loss model.
 - Pipe head uses 20°C water, single full-bore line, Darcy–Weisbach with 64/Re
   laminar and Swamee–Jain turbulent friction; flag the transition regime.
 - A pump curve is bracketed interpolation, never extrapolation or a guaranteed
@@ -147,3 +149,60 @@ meaning and original source units. Browser tests include both US/metric bag mode
 legacy data, billing equivalents, label units, phone widths and printed diagrams.
 Run `node scripts/aquarium-toolbox/us-units-browser.mjs [base] [evidence-dir]`
 alongside unit/conversion and existing browser/preset/slider suites.
+
+
+## Everyday-use rework (2026-11-09)
+
+Jez asked that the calculators be truly useful to the average hobbyist. Every tool
+was read as a US hobbyist would see it; the rework keeps the math and changes what
+is asked, how it is worded and what leads the page.
+
+- **Starting examples.** `defaults(calc, us)` gives round numbers in the selected
+  system (24 x 12 x 16 in tank, 20 US gal saved tank, 100 GPH filter) instead of
+  converted metric values. `legacy.mjs` holds the first preview's examples so an
+  untouched one saved by an earlier visit is replaced; anything a visitor typed
+  never matches and is kept exactly.
+- **Standard tanks.** `standardTanks` in `presets.mjs` fills length, width, height,
+  volume and empty weight for 5.5 to 180 gal glass tanks (Aqueon's 2023 dimension
+  chart). Tank volume also handles bow-front, hexagon and corner tanks, and shows
+  only the measurements that apply to the chosen shape.
+- **New tools.** Stocking check (1 in of adult fish per US gal and 12 in² of surface
+  per inch for small tropicals; 3 gal / 30 in² coldwater; 5 gal / 48 in² marine) and
+  a salinity / specific gravity converter. 38 tools in all.
+- **Heater size** asks for the coldest room temperature and the water temperature
+  wanted: W = 0.85 x (US gal)^(2/3) x °F rise, rounded up to a common size, split
+  into two heaters above 300 W.
+- **Filter & flow check** compares turnover with the usual range for the tank type:
+  community 4-6x, messy fish 6-10x, soft coral / LPS 20-30x, SPS 30-40x, sump
+  return 3-5x after head loss.
+- **Reef tools** accept specific gravity or ppt (`sg = 1 + 0.000754 x ppt` at
+  77 °F); the choice is saved and travels in shared links as `sal=`.
+- **Return pump head** counts elbows and valves (K = 0.9, 0.4, 0.2 and 2 for a
+  90° elbow, 45° elbow, open valve and check valve) and offers Schedule 40 pipe
+  sizes, instead of asking for a loss coefficient and roughness.
+- **Everyday units.** Test readings say ppm, RO units are rated in gallons per
+  day (default waste ratio 4 : 1), small amounts read in cups, quarts, teaspoons
+  and five-gallon buckets, durations in hours and minutes.
+- **Library.** "Most used" opens first, specialist tools carry an Advanced tag,
+  and search matches plain words (`keywords` in `calculators.mjs`). A tool opened
+  from a link, a search result or a saved visit switches the library to its own
+  category, so the open tool is always marked in the list.
+
+Reference numbers were checked on 2026-11-09 against Aqueon (tank chart, heater
+charts, stocking and turnover guidance), Bulk Reef Supply (reef flow, return
+pumps, RO units), Randy Holmes-Farley (specific gravity table), Red Sea and
+Tropic Marin directions (salt per gallon), Seachem (free-ammonia alert scale),
+GF Harvel (pipe sizes) and EIA (electricity price). Read second-hand only: Fritz
+and Instant Ocean directions (retailer copies of the label) and CaribSea, Seachem
+and Oase substrate weights (a third-party compilation). Instant Ocean needs about
+0.6 cup per gallon for 35 ppt, more than the 1/2 cup most reef salts use; the
+salt tool says so. Not confirmed from a maker: glass thickness for standard tanks
+(inferred from empty weights), whether hobby ammonia kits report as NH3 or as
+nitrogen, and any authoritative marine inches-per-gallon figure.
+
+`hobbyist.test.mjs` covers the new formulas, standard-tank data, legacy upgrades
+and search words, and runs with `node --test scripts/aquarium-toolbox/*.test.mjs`.
+`node scripts/aquarium-toolbox/hobbyist-browser.mjs [base-URL] [evidence-directory]`
+checks the first visit, the tank picker, the new shapes, everyday units, heater /
+flow / stocking guidance, specific gravity entry, legacy settings, search, the
+library following the open tool, phone widths and print.

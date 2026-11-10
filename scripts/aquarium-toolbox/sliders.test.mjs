@@ -14,13 +14,22 @@ test('Exact entry beyond the useful window expands it without altering the value
  const c=calculators.find(c=>c.id==='change'),f=c.fields[0],a=defaults(c);a.v=12345.6789;const r=sliderWindow(c,f,a);assert.ok(r.max>=a.v);assert.equal(r.value,a.v);
  a.v=.01357;assert.equal(sliderWindow(c,f,a).min,a.v);assert.equal(sliderWindow(c,f,a).value,a.v);
 });
-test('pH, roughness, temperature, and integer controls have practical increments',()=>{
+test('pH, temperature, inch and whole-number controls have practical increments',()=>{
  const check=(id,key,us=false)=>{const c=calculators.find(c=>c.id===id);return sliderWindow(c,c.fields.find(f=>f.key===key),defaults(c),us);};
- assert.equal(check('ammonia','ph').step,.05);assert.equal(check('head','rough').step,.0005);assert.equal(check('ammonia','temp',true).step,1);assert.equal(check('series','n').step,1);
+ assert.equal(check('ammonia','ph').step,.05);assert.equal(check('head','e90').step,1);assert.equal(check('stocking','count').step,1);assert.equal(check('ammonia','temp',true).step,1);assert.equal(check('series','n').step,1);
+ assert.equal(check('tank','l',true).step,.25);assert.equal(check('heater','room',true).step,1);
  assert.equal(sliderValue(7.537,check('ammonia','ph')),7.55);
 });
 test('Selector-driven scales suit alkalinity, calcium, hardness and TDS',()=>{
  for(const [id,key,selection,newValue]of [['supplement','current','parameter','mg/L'],['consumption','start','parameter','mg/L'],['hardness','value','unit','ppm'],['mix','high','measure','mg/L']]){
   const c=calculators.find(c=>c.id===id),f=c.fields.find(f=>f.key===key),a=defaults(c),before=sliderWindow(c,f,a);a[selection]=newValue;assert.ok(sliderWindow(c,f,a).max>before.max);
  }
+});
+test('US starting examples sit inside their slider windows',()=>{
+ for(const c of calculators)for(const f of c.fields.filter(f=>!f.options)){const a=defaults(c,true),r=sliderWindow(c,f,a,true);assert.ok(r.value>=r.min&&r.value<=r.max,`${c.id}.${f.key}`);}
+});
+test('Salinity sliders can work in specific gravity without changing the saved ppt',()=>{
+ const c=calculators.find(c=>c.id==='adjust'),f=c.fields.find(f=>f.key==='target'),a=defaults(c),r=sliderWindow(c,f,a,true,true);
+ assert.equal(r.step,.0005);assert.equal(r.min,1);assert.equal(r.max,1.035);assert.equal(r.value,1.0264);assert.equal(a.target,35);
+ a.target=60;assert.ok(sliderWindow(c,f,a,true,true).max>=1.045);
 });

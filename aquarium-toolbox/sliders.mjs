@@ -1,25 +1,32 @@
 // Slider bounds are convenient editing windows, never safety recommendations or
 // replacements for the calculator's full validated numeric domain.
-import {convert} from './calculators.mjs';
+import {convert,sgFromPpt} from './calculators.mjs';
 const unitWindows={
   '%':[100,1],L:[400,1],'L/h':[4000,10],cm:[200,.5],mm:[50,.5],m:[10,.1],kg:[100,.1],
   '°C':[40,.5],pH:[10,.05],dKH:[30,.1],ppt:[50,.1],'mg/L':[100,.5],mL:[100,.5],
   g:[100,.5],'kg/L':[3,.01],'g/L':[60,.5],days:[30,1],hours:[72,.5],changes:[20,1],
-  heaters:[10,1],doses:[24,1],seconds:[300,1],W:[1000,5],'W/L':[5,.1],
+  heaters:[10,1],doses:[24,1],seconds:[300,1],W:[1000,5],'W/L':[5,.1],fish:[60,1],
   '$/kWh':[1,.01],'$/m³':[20,.1],'$/kg':[30,.1],'$/m²':[200,1],': 1':[10,.1],
   '×/hour':[30,.5],'drops/s':[10,.1],'drops/mL':[40,1],'µmol/m²/s':[500,5]
 };
 const overrides={
-  substrate:{front:[20,.5],back:[30,.5],bag:[30,.5],bagWeight:[25,.1]},weight:{density:[1.1,.001]},
+  substrate:{front:[20,.5],back:[30,.5],bag:[30,.5],bagWeight:[25,.1]},head:{e90:[12,1],e45:[12,1],valves:[6,1],checks:[6,1]},
   sump:{drop:[10,.1],pipe:[30,.1],reserve:[100,1]},ro:{rate:[40,.1],feed:[1000,5],product:[100,1]},
-  label:{bottle:[1000,5]},stock:{stock:[5000,10],target:[1000,5],final:[1000,5]},
-  ammonia:{tan:[5,.01]},salt:{bag:[25000,100]},ato:{daily:[10,.1],reserve:[100,1]},
-  head:{rough:[.05,.0005],k:[30,.5]},drip:{v:[20,.1]},watercost:{evap:[10,.1]},
+  label:{bottle:[1000,5],dose:[50,.5]},stock:{stock:[5000,10],target:[1000,5],final:[1000,5]},
+  ammonia:{tan:[8,.05]},salt:{bag:[25000,100],target:[45,.5]},ato:{daily:[10,.1],reserve:[100,1]},sg:{value:[45,.5]},
+  stocking:{size:[40,.5]},heater:{room:[35,.5],target:[35,.5]},drip:{v:[4,.05]},watercost:{evap:[10,.1],salt:[60,1]},
   co2cylinder:{full:[10,.01],tare:[10,.01],daily:[30,.1],reserve:[200,1]},
   doser:{collected:[100,.1],daily:[100,.1],reserve:[2000,10]}
 };
 const nice=v=>{if(v<=0)return 1;const p=10**Math.floor(Math.log10(v));return [1,2,5,10].find(n=>n*p>=v-1e-10)*p;};
-export function sliderWindow(calc,field,a,us=false){
+export function sliderWindow(calc,field,a,us=false,sg=false){
+  // Salinity can be shown as specific gravity. The saved value stays in ppt.
+  if(sg&&field.unit==='ppt'){
+    const domainMin=sgFromPpt(field.min),domainMax=sgFromPpt(field.max),value=Number(sgFromPpt(a[field.key]).toFixed(4));
+    let min=domainMin,max=Math.min(domainMax,1.035);
+    if(Number.isFinite(value)&&value>=domainMin&&value<=domainMax)max=Math.max(max,value);
+    return {min:Number(min.toFixed(4)),max:Number(max.toFixed(4)),step:.0005,value,domainMin,domainMax};
+  }
   let [high,step]=overrides[calc.id]?.[field.key]||unitWindows[field.unit]||[Math.max(20,nice(field.value*2)),.1];
   // These selectors change the measurement scale without changing its field schema.
   if(calc.id==='supplement'&&['current','target','rise'].includes(field.key)){
@@ -35,6 +42,8 @@ export function sliderWindow(calc,field,a,us=false){
     high=nice(display(high));step=nice(display(step));
   }else if(us&&field.unit==='°C'){high=display(high);step=1;}
   if(us&&calc.id==='substrate'&&field.key==='bagWeight'){high=50;step=.5;}
+  // Tape measures read in quarter inches.
+  if(us&&unit==='cm')step=.25;
   // The low edge lies on the editing increment where practical. Tiny manually
   // entered values remain representable; exact typing never changes precision.
   let min=Math.max(domainMin,Math.ceil(domainMin/step-1e-9)*step);
