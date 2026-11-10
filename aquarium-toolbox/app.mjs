@@ -4,6 +4,7 @@ import {sliderWindow,sliderValue} from './sliders.mjs';
 import {fieldChoices,extraHelp,bagComparison,formPresets} from './presets.mjs';
 import {formulaFor,noteFor,descriptionFor} from './us-copy.mjs';
 import {isFirstExample} from './legacy.mjs';
+import {termsFor} from './glossary.mjs';
 const $=id=>document.getElementById(id);
 const KEY='aquarium-toolbox-v1';
 const ids=new Set(calculators.map(c=>c.id));
@@ -269,7 +270,7 @@ function onInput(ev){
 }
 // Chrome and Safari read number fields in the visitor's own language; Firefox uses the language of the page.
 function commaIsDecimal(el){try{return !(1.1).toLocaleString(/\bGecko\/\d/.test(navigator.userAgent)?el.closest('[lang]')?.lang||undefined:undefined).includes('.');}catch{return false;}}
-function showError(message){result=null;$('result').innerHTML=`<div class="error-card" role="alert"><h3>Let’s check that measurement</h3><p>${e(message)}</p><p>No result is shown until the inputs are valid.</p></div>`;$('steps-details').innerHTML='';updateQuickResult();}
+function showError(message){result=null;hideTip();$('result').innerHTML=`<div class="error-card" role="alert"><h3>Let’s check that measurement</h3><p>${e(message)}</p><p>No result is shown until the inputs are valid.</p></div>`;$('steps-details').innerHTML='';updateQuickResult();}
 const mixLegends={
   ammonia:['toxic free ammonia','Ammonium (far less toxic)','Toxic free ammonia (NH₃)'],stock:['stock solution','Water','Stock solution'],mix:['RO / distilled water','Tap water','RO / distilled'],
   change:['changed','Old tank water','New water'],target:['changed','Old tank water','New water'],adjust:['swapped','Old tank water','Added water'],salinity:['second water','First water','Second water']
@@ -285,6 +286,7 @@ function renderResult(){try{
   $('result').innerHTML=`<div class="diagram">${illustration(graph,diagramLabel,isUS())}</div><div class="metrics">${metricHTML}</div><p class="result-message">${e(result.message)}</p>${shoppingGuide()}<div class="result-actions"><button id="share-result">Share calculation</button><button id="print-result">Print result</button>${['tank','system'].includes(state.current)?'<button id="apply-volume">Save as my tank volume</button>':''}</div>`;
   $('steps-details').innerHTML=(result.steps?.length?`<details><summary>Step by step</summary><div><ol class="steps">${result.steps.map(s=>`<li>${e(s)}</li>`).join('')}</ol></div></details>`:'')+(result.table?`<details><summary>Change-by-change breakdown</summary><div><table class="results-table"><caption>Predicted reading after each change</caption><tbody>${result.table.map(r=>`<tr>${r.map(s=>`<td>${e(s)}</td>`).join('')}</tr>`).join('')}</tbody></table></div></details>`:'');
   $('share-result').onclick=share;$('print-result').onclick=()=>window.print();if($('apply-volume'))$('apply-volume').onclick=()=>{const v=result.metrics[0].value;if(!Number.isFinite(v)||v<.01||v>1e7){toast('This volume is outside the supported saved-tank range.');return;}profile().volume=v;applyProfile();save();renderPreferences();toast('Saved. The other calculators now use this volume for your tank.');};
+decorateTerms($('result'));
 updateQuickResult();
 }catch(err){showError(err.message);}}
 // The calculator heading is out of sight: above the window (a tool picked far down the list) or near its bottom
@@ -336,6 +338,48 @@ $('guide-open').onclick=()=>$('guide-dialog').showModal();$('settings-guide').on
 $('export').onclick=()=>{const blob=new Blob([JSON.stringify(snapshot(),null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='aquarium-toolbox-backup.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);$('import-status').textContent='Backup downloaded. Keep it somewhere you can find it.';};
 $('import').onchange=async ev=>{const file=ev.target.files[0];if(!file)return;try{if(file.size>100000)throw new Error('This file is too large for a toolbox backup.');const imported=validateBackup(JSON.parse(await file.text()));if(!window.confirm('Restore this backup? It will replace the saved tanks, favorites, and inputs in this toolbox.'))return;state=imported;showListFor(state.current);save();renderPreferences();renderLibrary();renderCalculator();$('import-status').textContent='Backup restored.';}catch(err){$('import-status').textContent=`Could not restore: ${err.message}`;}finally{ev.target.value='';}};
 $('copy-link').onclick=async()=>{try{await navigator.clipboard.writeText($('share-url').value);$('copy-status').textContent='Link copied.';}catch{$('share-url').focus();$('share-url').select();$('copy-status').textContent='Select and copy the link above using your browser.';}};
+// ---------- Explanations for rules of thumb and terms in an answer ----------
+// Each phrase from glossary.mjs is underlined where it first appears in the answer (chart label, result card
+// or message). Hovering, focusing or tapping it shows the explanation; a phone has no hover, so a tap pins it.
+const tip=document.createElement('div');tip.id='term-tip';tip.className='term-tip';tip.setAttribute('role','tooltip');tip.hidden=true;$('toast').after(tip);
+let tipFor=null,tipPinned=false;
+function decorateTerms(root){
+  hideTip();
+  const list=termsFor(state.current,isUS(),inputs());if(!list.length)return;
+  const used=new Set(),mark=(el,[phrase,text])=>{used.add(phrase);el.classList.add('term');el.dataset.term=text;el.setAttribute('aria-expanded','false');};
+  // Drawn chart labels are whole SVG text elements.
+  for(const el of root.querySelectorAll('svg text')){const hit=list.find(([phrase])=>phrase===el.textContent.trim()&&!used.has(phrase));if(hit){mark(el,hit);el.setAttribute('tabindex','0');el.setAttribute('role','button');}}
+  const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{acceptNode:n=>n.parentElement.closest('svg,button,a,input,select,.result-actions')?NodeFilter.FILTER_REJECT:NodeFilter.FILTER_ACCEPT});
+  const nodes=[];for(let n=walker.nextNode();n;n=walker.nextNode())nodes.push(n);
+  while(nodes.length){
+    const node=nodes.shift();let best=null;
+    for(const entry of list){if(used.has(entry[0]))continue;const at=node.data.indexOf(entry[0]);if(at>=0&&(!best||at<best.at))best={at,entry};}
+    if(!best)continue;
+    const rest=node.splitText(best.at),after=rest.splitText(best.entry[0].length),button=document.createElement('button');
+    button.type='button';button.textContent=rest.data;mark(button,best.entry);rest.replaceWith(button);nodes.unshift(after);
+  }
+}
+function placeTip(){
+  if(!tipFor||!tipFor.isConnected){hideTip();return;}
+  const r=tipFor.getBoundingClientRect(),w=tip.offsetWidth,h=tip.offsetHeight,vw=document.documentElement.clientWidth,vh=innerHeight;
+  // Keep clear of a fixed site menu (scroll-padding-top) and of the phone summary bar at the bottom.
+  const top=parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop)||0,bar=$('quick-result'),bottom=vh-(bar&&!bar.hidden?bar.offsetHeight:0);
+  const below=r.bottom+8+h<=bottom-4||r.top-8-h<top+4;
+  tip.style.left=`${Math.round(Math.min(Math.max(10,r.left+r.width/2-w/2),vw-w-10))}px`;
+  tip.style.top=`${Math.round(below?Math.min(r.bottom+8,vh-h-6):r.top-8-h)}px`;
+}
+function showTip(el,pin){if(tipFor&&tipFor!==el)hideTip();tipFor=el;tipPinned=pin;tip.textContent=el.dataset.term;tip.hidden=false;el.setAttribute('aria-expanded','true');el.setAttribute('aria-describedby','term-tip');placeTip();}
+function hideTip(){if(tipFor){tipFor.setAttribute('aria-expanded','false');tipFor.removeAttribute('aria-describedby');}tipFor=null;tipPinned=false;tip.hidden=true;}
+// Safari only counts a pointer as on a drawn chart label when it is on a letter, so the gap between two words
+// misses it: inside a chart, find the label by its box instead.
+const termFrom=ev=>{const direct=ev.target.closest?.('.term');if(direct)return direct;const svg=ev.target.closest?.('svg');if(!svg||ev.clientX===undefined)return null;
+  return [...svg.querySelectorAll('text.term')].find(t=>{const r=t.getBoundingClientRect();return ev.clientX>=r.left-4&&ev.clientX<=r.right+4&&ev.clientY>=r.top-4&&ev.clientY<=r.bottom+4;})||null;};
+document.addEventListener('click',ev=>{const el=termFrom(ev);if(!el){if(!ev.target.closest?.('#term-tip'))hideTip();return;}if(tipFor===el&&tipPinned)hideTip();else showTip(el,true);});
+document.addEventListener('keydown',ev=>{if(ev.key==='Escape'&&tipFor){hideTip();return;}const el=ev.target.closest?.('svg .term');if(el&&(ev.key==='Enter'||ev.key===' ')){ev.preventDefault();if(tipFor===el&&tipPinned)hideTip();else showTip(el,true);}});
+document.addEventListener('mousemove',ev=>{if(tipPinned||!matchMedia('(hover:hover)').matches)return;const el=termFrom(ev);if(el&&el!==tipFor)showTip(el,false);else if(!el&&tipFor&&!tipFor.matches(':focus-visible'))hideTip();});
+document.addEventListener('focusin',ev=>{const el=ev.target.closest?.('.term');if(el&&!tipPinned&&el.matches(':focus-visible'))showTip(el,false);});
+document.addEventListener('focusout',ev=>{if(tipFor&&ev.target===tipFor&&!tipPinned)hideTip();});
+addEventListener('scroll',()=>{if(tipFor)placeTip();},{passive:true});addEventListener('resize',hideTip);
 // Safari before 15.4 has no <dialog>: open and close the four panels by hand there.
 for(const dialog of document.querySelectorAll('dialog')){
   if(typeof dialog.showModal==='function')continue;
