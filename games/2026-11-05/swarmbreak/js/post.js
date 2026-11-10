@@ -1,7 +1,7 @@
 // HDR post (shared with Asteroids 2026): scene -> MSAA half-float target -> dual-filter bloom chain -> composite with
 // shockwave refraction, chromatic aberration, ACES, grade, vignette and grain (lens slots unused here).
 import * as THREE from '../vendor/three.module.min.js';
-import { TONE, NOISE } from './shaders.js?v=12';
+import { TONE, NOISE } from './shaders.js?v=13';
 
 const VERT = /* glsl */ `varying vec2 vUv; void main(){ vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }`;
 
@@ -56,7 +56,8 @@ void main(){
     if (s.w <= 0.0) continue;
     vec2 d = uv - s.xy; d.x *= uAspect;
     float r = length(d);
-    float ring = exp(-pow((r - s.z) * 26.0, 2.0));
+    float rq = (r - s.z) * 26.0;
+    float ring = exp(-rq * rq);
     off += normalize(d + 1e-5) * ring * s.w * 0.035 * vec2(1.0 / uAspect, 1.0);
   }
   // gravitational lensing around black holes

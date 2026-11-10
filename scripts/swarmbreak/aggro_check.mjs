@@ -4,9 +4,9 @@
 // Per sector: hostiles within 4 m of the Warden (average count), the share of crawlers closing in (moving toward the
 // Warden at > 40 % of their speed), distinct sides the close machines come from (of 8 sectors round the Warden),
 // spitter bolts that pass within 0.8 m of the Warden, and hits taken per minute.
-import { makeWorld, step, drainEvents, STEP } from '../../games/2026-11-05/swarmbreak/js/sim.js?v=12';
-import { Autopilot } from '../../games/2026-11-05/swarmbreak/js/ai.js?v=12';
-import { TYPICAL_UP } from '../../games/2026-11-05/swarmbreak/js/config.js?v=12';
+import { makeWorld, step, drainEvents, STEP } from '../../games/2026-11-05/swarmbreak/js/sim.js?v=13';
+import { Autopilot } from '../../games/2026-11-05/swarmbreak/js/ai.js?v=13';
+import { TYPICAL_UP } from '../../games/2026-11-05/swarmbreak/js/config.js?v=13';
 
 const runs = +(process.argv[2] || 12);
 const sectors = (process.argv[3] || '1,2,3,4,5').split(',').map((n) => +n - 1);

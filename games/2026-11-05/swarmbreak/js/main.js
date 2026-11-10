@@ -1,13 +1,13 @@
 // Swarmbreak — game flow, menus, HUD, commentary, demo director and the frame loop.
-import { VERSION, SECTORS, STEP, F, WAVES, UPGRADES, UP_KEYS, UP_COST, MEDALS, parTime, TYPICAL_UP, START_LIVES, BOSSES, DIFFICULTY, DIFF_KEYS, POWERUPS, STREAK, streakMul, SUITS } from './config.js?v=12';
-import { makeWorld, step, drainEvents, waveLabel, isBossWave, angDiff } from './sim.js?v=12';
-import { Autopilot } from './ai.js?v=12';
-import { Renderer, pickQuality, CALM } from './render.js?v=12';
-import { Audio } from './audio.js?v=12';
-import { Input } from './input.js?v=12';
-import { Scores, NO_POST } from './scores.js?v=12';
-import { Recorder, Replay } from './replay.js?v=12';
-import { Online, ROOM, randomCode, cleanCode } from './online.js?v=12';
+import { VERSION, SECTORS, STEP, F, WAVES, UPGRADES, UP_KEYS, UP_COST, MEDALS, parTime, TYPICAL_UP, START_LIVES, BOSSES, DIFFICULTY, DIFF_KEYS, POWERUPS, STREAK, streakMul, SUITS } from './config.js?v=13';
+import { makeWorld, step, drainEvents, waveLabel, isBossWave, angDiff } from './sim.js?v=13';
+import { Autopilot } from './ai.js?v=13';
+import { Renderer, pickQuality, CALM } from './render.js?v=13';
+import { Audio } from './audio.js?v=13';
+import { Input } from './input.js?v=13';
+import { Scores, NO_POST } from './scores.js?v=13';
+import { Recorder, Replay } from './replay.js?v=13';
+import { Online, ROOM, randomCode, cleanCode } from './online.js?v=13';
 
 const $ = (id) => document.getElementById(id);
 const params = new URLSearchParams(location.search);
@@ -341,10 +341,11 @@ function handleEvents(list, W, live) {
       case 'fire': {
         A.play('gun', { x: e.x, y: 1.3, z: e.z, vol: mine(e) ? 0.32 : 0.22, gap: 0.04, vary: 0.1 });
         const v = R.views.p.get(e.pid); if (v) v.flash = 1;
+        fx.glow(e.x + Math.cos(e.a) * 0.9, e.z + Math.sin(e.a) * 0.9, 2.1, R.look.shot, 0.1, 0.55);
         fx.sparks(e.x, 1.3, e.z, { n: 2, speed: 3, s: 0.2, life: 0.1, vx: Math.cos(e.a) * 6, vz: Math.sin(e.a) * 6, r: 0.6, g: 0.9, b: 1 });
         break;
       }
-      case 'hit': A.play(e.type === 'brute' || e.type === 'hive' ? 'clang' : 'hit', { x: e.x, y: 1, z: e.z, vol: 0.5, gap: 0.03 }); fx.sparks(e.x, 1.1, e.z, { n: 6, speed: 5 }); break;
+      case 'hit': A.play(e.type === 'brute' || e.type === 'hive' ? 'clang' : 'hit', { x: e.x, y: 1, z: e.z, vol: 0.5, gap: 0.03 }); fx.sparks(e.x, 1.1, e.z, { n: 6, speed: 5 }); fx.glow(e.x, e.z, 1.7, 0xffc890, 0.16, 0.7); break;
       case 'wallhit': if (Math.random() < 0.25) fx.sparks(e.x, 0.8, e.z, { n: 2, speed: 3, life: 0.2 }); break;
       case 'deflect': A.play('clang', { x: e.x, y: 1, z: e.z, vol: 0.35, gap: 0.08, rate: 1.4 }); fx.sparks(e.x, 1.5, e.z, { n: 5, speed: 6, r: 0.6, g: 0.8, b: 1 }); break;
       case 'kill': {
@@ -361,7 +362,7 @@ function handleEvents(list, W, live) {
       case 'rescue': {
         const top = e.chain >= 5;
         A.play(top ? 'rescue5' : 'rescue', { x: e.x, y: 1, z: e.z, vol: 0.85, rate: 1 + Math.min(4, e.chain - 1) * 0.06, gap: 0 });
-        fx.ring(e.x, 0, e.z, 2.5, 0x7dff9a);
+        fx.ring(e.x, 0, e.z, 2.5, 0x7dff9a); fx.glow(e.x, e.z, 3.2, 0x7dff9a, 0.55, 1);
         fx.sparks(e.x, 1.4, e.z, { n: 14, speed: 3, vy: 2, r: 0.5, g: 1, b: 0.6, life: 0.8 });
         if (live) { popup(`+${e.bonus}`, e.x, e.z, '#8dff8a', e.chain > 2); if (e.chain === 5) say('chain', { cd: 90, chance: 0.6, delay: 0.4 }); }
         break;
@@ -372,14 +373,15 @@ function handleEvents(list, W, live) {
         fx.ring(e.x, 0, e.z, F.pulseR * 1.05, 0xb48aff); fx.ring(e.x, 0, e.z, F.pulseR * 0.6, 0xe0d0ff);
         fx.sparks(e.x, 1, e.z, { n: 40, speed: 14, r: 0.75, g: 0.6, b: 1, life: 0.5 });
         R.shock(e.x, e.z, 1.3); R.flashScreen(0.18, 0xc8b0ff); R.addTrauma(0.3 * +settings.shake);
-        fx.flash(e.x, 1, e.z, 40, 0xb48aff, 0.4);
+        fx.flash(e.x, 1, e.z, 40, 0xb48aff, 0.4); fx.glow(e.x, e.z, F.pulseR * 1.2, 0xb48aff, 0.5, 1.4);
+        R.pulse(e.x, e.z, 0xb48aff, F.pulseR * 2.4, 0.6, 2.4);
         if (live && mine(e)) rumble(0.6, 0.8, 260);
         break;
       }
       case 'shield': {
         A.play('shieldhit', { x: e.x, y: 1, z: e.z, vol: 0.9, gap: 0 });
         const v = R.views.p.get(e.pid); if (v) v.hurt = 1;
-        fx.sparks(e.x, 1.2, e.z, { n: 16, speed: 6, r: 0.6, g: 0.85, b: 1 });
+        fx.sparks(e.x, 1.2, e.z, { n: 16, speed: 6, r: 0.6, g: 0.85, b: 1 }); fx.glow(e.x, e.z, 4, 0x9fd8ff, 0.4, 1.2); R.stripFlash(0x6fc8ff, 0.8);
         if (live) {
           if (mine(e)) { rumble(0.5, 0.6, 200); popup(e.left ? `SHIELD ${e.left} LEFT` : 'SHIELD GONE', e.x, e.z, '#9fd8ff'); }
           if (G.mode === 'demo') { R.frameShot([[e.x, e.z], [e.fx, e.fz]], 1.0); slowmo(0.4, 0.55); }
@@ -391,7 +393,7 @@ function handleEvents(list, W, live) {
         A.play('death', { x: e.x, y: 1, z: e.z, vol: 1, gap: 0 });
         fx.explode(e.x, 1, e.z, 2.6, { metal: true, rock: false, color: 0x8fd8ff });
         fx.debris(e.x, 1, e.z, { metal: true, n: 14, speed: 7, size: 0.3, trail: true });
-        R.flashScreen(0.3, 0xffc890); R.addTrauma(0.7 * +settings.shake); R.shock(e.x, e.z, 1);
+        R.flashScreen(0.3, 0xffc890); R.addTrauma(0.7 * +settings.shake); R.shock(e.x, e.z, 1); R.pulse(e.x, e.z, 0xff5a3a, 34, 1.3, 2); R.stripFlash(0xff3a2a, 1.4);
         if (live) {
           if (mine(e)) { rumble(1, 1, 520); slowmo(0.4, 0.6); }
           if (G.mode === 'demo') R.frameShot([[e.x, e.z], [e.fx ?? e.x, e.fz ?? e.z]], 1.2);
@@ -401,13 +403,13 @@ function handleEvents(list, W, live) {
         }
         break;
       }
-      case 'spawn': A.play('spawn', { x: e.x, y: 1, z: e.z, vol: 0.8 }); fx.ring(e.x, 0, e.z, F.clearR, 0x9fd8ff); R.shock(e.x, e.z, 0.8); fx.sparks(e.x, 1, e.z, { n: 20, speed: 5, r: 0.6, g: 0.9, b: 1 }); break;
+      case 'spawn': A.play('spawn', { x: e.x, y: 1, z: e.z, vol: 0.8 }); R.pulse(e.x, e.z, 0x9fd8ff, F.clearR * 1.6, 0.7, 2); fx.ring(e.x, 0, e.z, F.clearR, 0x9fd8ff); R.shock(e.x, e.z, 0.8); fx.sparks(e.x, 1, e.z, { n: 20, speed: 5, r: 0.6, g: 0.9, b: 1 }); break;
       // (no extra warning chirp: the glowing gate and its hum are the warning)
       case 'portal': A.play('portal', { x: e.x, y: 1, z: e.z, vol: e.type === 'dummy' ? 0.4 : 0.55, gap: 0.15 }); break;
-      case 'enter': A.play('enter', { x: e.x, y: 1, z: e.z, vol: 0.6, gap: 0.08 }); fx.ring(e.x, 0, e.z, 2.2, 0xff6a4a); fx.sparks(e.x, 1, e.z, { n: 10, speed: 4, r: 1, g: 0.4, b: 0.3 }); break;
+      case 'enter': A.play('enter', { x: e.x, y: 1, z: e.z, vol: 0.6, gap: 0.08 }); fx.glow(e.x, e.z, 2.6 + Math.min(6, e.n || 1) * 0.35, 0xff5a3a, 0.45, 1.1); fx.ring(e.x, 0, e.z, 2.2, 0xff6a4a); fx.sparks(e.x, 1, e.z, { n: 10, speed: 4, r: 1, g: 0.4, b: 0.3 }); break;
       case 'aim': A.play('spitcharge', { x: e.x, y: 1, z: e.z, vol: 0.4, gap: 0.12 }); break;
       case 'surgetell': A.play('crawl', { vol: 1, rate: 0.7, gap: 1 }); A.play('alarm', { vol: 0.3, rate: 1.2, gap: 1 }); if (live && !W.demo) caption('THE SWARM IS GATHERING', 1.4); break;
-      case 'surgego': A.play('crawl', { vol: 1, rate: 1.15, gap: 1 }); R.addTrauma(0.12); break;
+      case 'surgego': A.play('crawl', { vol: 1, rate: 1.15, gap: 1 }); R.addTrauma(0.12); if (me) R.pulse(me.x, me.z, 0xff3a2a, 2, 0.8, 1.6, 24); break;
       case 'bolt': A.play('spitfire', { x: e.x, y: 1, z: e.z, vol: 0.5, gap: 0.05 }); break;
       case 'hivetell': A.play('hivetell', { x: e.x, y: 1, z: e.z, vol: 0.45, gap: 0.5 }); break;
       case 'dart': A.play('hivespawn', { x: e.x, y: 1, z: e.z, vol: 0.4, gap: 0.2 }); break;
@@ -419,11 +421,14 @@ function handleEvents(list, W, live) {
           if (e.boss) banner('WARNING', `${BOSSES[W.boss ? W.boss.key : (W.mode === 'campaign' ? SECTORS[W.sector].boss : 'foreman')].name} IS COMING`, 2.6);
           else banner(e.label, W.mode === 'stand' ? (W.k !== R.lookI ? SECTORS[W.k].name : 'HOLD THE LINE') : `${W.R.count + Math.round(W.R.horde || 0)} MACHINES · ${W.survivors.length} SURVIVORS`, 2);
           A.play('wave', { vol: 0.7, gap: 0 });
+          R.pulse(me ? me.x : 0, me ? me.z : 0, e.boss ? 0xff3a2a : R.look.accent, 46, 1.5, 1.5);
           if (W.mode === 'campaign' && W.wave === 2 && !e.boss) say('halfway', { chance: 0.4, delay: 1.2 });
         }
         break;
       case 'waveclear':
         A.play('waveclear', { vol: 0.85, gap: 0 });
+        R.pulse(me ? me.x : 0, me ? me.z : 0, 0x7dff9a, 46, 1.1, 2); R.stripFlash(0x9dffb4, 1.3);
+        if (live && G.mode !== 'online' && !CALM.on) slowmo(0.4, 0.28);
         if (live) { banner(`${e.label} CLEAR`, `+${e.bonus.toLocaleString()}${e.evac ? ` · ${e.evac} SURVIVOR${e.evac > 1 ? 'S' : ''} WALKED OUT` : ''}`, 1.8); }
         break;
       case 'tut': if (live) tutorial(e.key); break;
@@ -434,6 +439,7 @@ function handleEvents(list, W, live) {
       case 'leapland': A.play('stomp', { x: e.x, y: 0, z: e.z, vol: 0.55, rate: 1.5, gap: 0.08 }); R.fx.ring(e.x, 0, e.z, e.r * 1.6, 0xffa020); R.fx.dust(e.x, 0.1, e.z, { n: 12, s0: 0.6, s1: 2, life: 1.6, spread: 1.2, jit: 2.5, a: 0.4 }); R.shock(e.x, e.z, 0.5); R.addTrauma(0.12 * +settings.shake); break;
       case 'reveal': A.play('reveal', { x: e.x, y: 1.2, z: e.z, vol: 0.9, gap: 0 }); R.fx.sparks(e.x, 1.2, e.z, { n: 16, speed: 5, r: 1, g: 0.3, b: 0.2 }); R.fx.debris(e.x, 1, e.z, { n: 6, speed: 4, size: 0.12 }); if (live) popup('MIMIC!', e.x, e.z, '#ff5a4a', true); break;
       case 'streak': if (live && e.mul === 1.5 && !G.tutStreak) { G.tutStreak = 1; tutorial('streak'); }
+        if (e.mul >= 2) { R.pulse(e.x, e.z, 0xffb347, 9 + e.mul * 3, 0.55, 0.9 + e.mul * 0.25); if (e.mul >= 3) R.stripFlash(0xffc24a, 0.5 + e.mul * 0.12); }
         if (live) { A.play('upgrade', { vol: 0.5, rate: 0.8 + e.mul * 0.04, gap: 0 }); if (e.mul >= 2) popup(`×${e.mul} STREAK`, e.x, e.z, '#ffb347', true); if (e.mul >= 3) rumble(0.2, 0.3, 90); }
         break;
       case 'streakend': if (live && e.why === 'hit') caption(`STREAK BROKEN · ${e.n} IN A ROW`, 1.6); break;
@@ -447,7 +453,7 @@ function handleEvents(list, W, live) {
       case 'pickup': {
         const P = POWERUPS[e.kind];
         A.play(e.kind === 'warp' ? 'warp' : 'pickup', { x: e.x, y: 1, z: e.z, vol: 0.9, gap: 0 });
-        R.fx.ring(e.x, 0, e.z, 3, P.color); R.fx.sparks(e.x, 1.2, e.z, { n: 24, speed: 5, vy: 2, life: 0.7 }); R.fx.flash(e.x, 1, e.z, 14, P.color, 0.3);
+        R.fx.ring(e.x, 0, e.z, 3, P.color); R.fx.sparks(e.x, 1.2, e.z, { n: 24, speed: 5, vy: 2, life: 0.7 }); R.fx.flash(e.x, 1, e.z, 14, P.color, 0.3); R.fx.glow(e.x, e.z, 4.5, P.color, 0.6, 1.3); R.pulse(e.x, e.z, P.color, 12, 0.5, 1.3);
         if (live) { popup(P.name, e.x, e.z, '#' + P.color.toString(16).padStart(6, '0'), true); if (mine(e)) rumble(0.2, 0.4, 120); }
         break;
       }
@@ -480,7 +486,7 @@ function handleEvents(list, W, live) {
         R.breakBoss();
         A.play('boomL', { x: e.x, y: 2, z: e.z, vol: 1, rate: 0.85, gap: 0 });
         fx.explode(e.x, 2, e.z, 4, { metal: true }); fx.explode(e.x + 1.5, 3, e.z, 3, { metal: true, rock: false }); fx.debris(e.x, 2, e.z, { metal: true, n: 30, speed: 10, size: 0.5, trail: true });
-        R.flashScreen(0.4, 0xffd0a0); R.addTrauma(0.8 * +settings.shake); R.shock(e.x, e.z, 2);
+        R.flashScreen(0.4, 0xffd0a0); R.addTrauma(0.8 * +settings.shake); R.shock(e.x, e.z, 2); R.pulse(e.x, e.z, 0xffd27a, 50, 1.6, 2.6);
         if (live) {
           if (G.mode !== 'online') G.pendingClip = { n: W.n, kind: 'boss' };
           popup('+' + e.bonus.toLocaleString(), e.x, e.z, null, true);
@@ -583,7 +589,7 @@ function playthroughNext(W) {
 function upgrades(W) {
   G.state = 'upgrade'; setHud(false);
   $('up-title').textContent = `SECTOR ${W.sector + 1} CLEAR`;
-  $('up-sub').textContent = `${fmtT(G.run.lastTime)} · ${G.run.got.length ? 'MEDAL: ' + G.run.got.map((id) => MEDALS.find((m) => m.id === id).name).join(', ') : 'SPEND SALVAGE ON YOUR SUIT'}`;
+  $('up-sub').textContent = `RANK ${rankOf(W).g} · ${fmtT(G.run.lastTime)} · ${G.run.got.length ? 'MEDAL: ' + G.run.got.map((id) => MEDALS.find((m) => m.id === id).name).join(', ') : 'SPEND SALVAGE ON YOUR SUIT'}`;
   $('next-sub').textContent = `Sector ${W.sector + 2} · ${SECTORS[W.sector + 1].name}`;
   renderUpgrades();
   show('upgrades', false);
@@ -610,14 +616,24 @@ function buy(k) {
   renderUpgrades();
   if (sel) setSel(document.querySelector(`[data-up="${sel}"]`));
 }
+// a letter grade for the run: rescues count most, then Wardens kept, the best streak and accuracy
+function rankOf(W) {
+  const s = W.stats, resc = s.surv ? s.rescued / s.surv : 1, acc = s.shots ? Math.min(1, s.hits / s.shots) : 0;
+  const pts = 35 * resc + 30 * Math.max(0, 1 - s.deaths / 4) + 20 * Math.min(1, (s.bestStreak || 0) / 36) + 15 * Math.min(1, acc / 0.5);
+  const g = pts >= 88 ? 'S' : pts >= 74 ? 'A' : pts >= 60 ? 'B' : pts >= 45 ? 'C' : 'D';
+  return { g, pts: Math.round(pts), acc };
+}
+const RANK_COL = { S: '#ffd23f', A: '#7dff9a', B: '#8fe4ff', C: '#d7a6ff', D: '#ff8a80' };
 function results(W, title, sub) {
   G.state = 'results'; setHud(false);
   $('res-title').textContent = title; $('res-sub').textContent = sub + ' · ' + DL(W.diff);
+  const rk = rankOf(W);
+  $('res-rank').innerHTML = `<i style="color:${RANK_COL[rk.g]};border-color:${RANK_COL[rk.g]}">${rk.g}</i><span>RANK<b>${rk.pts} / 100</b></span>`;
   const st = [['SCORE', W.score.toLocaleString()]];
   if (W.mode === 'stand') st.push(['WAVES HELD', W.waveN], ['TIME', fmtT(W.fightT)]);
   else st.push(['SECTOR TIME', fmtT(W.secT)]);
   st.push(['BEST STREAK', `${W.stats.bestStreak || 0} (×${streakMul(W.stats.bestStreak || 0)})`]);
-  st.push(['MACHINES SCRAPPED', W.stats.kills], ['SURVIVORS RESCUED', `${W.stats.rescued} / ${W.stats.surv}`], ['WARDENS LOST', W.stats.deaths]);
+  st.push(['MACHINES SCRAPPED', W.stats.kills], ['SURVIVORS RESCUED', `${W.stats.rescued} / ${W.stats.surv}`], ['ACCURACY', Math.round(rk.acc * 100) + '%'], ['WARDENS LOST', W.stats.deaths]);
   $('res-stats').innerHTML = st.map(([a, b]) => `<div class="stat"><span>${a}</span><b>${b}</b></div>`).join('');
   const got = G.run ? G.run.newMedals : [];
   $('res-medals').innerHTML = got.map((id) => { const m = MEDALS.find((q) => q.id === id); return `<span class="medal on new">🏅 ${m.name} · S${m.sector + 1}</span>`; }).join('');
@@ -715,6 +731,7 @@ function startOnline(cfg) {
   banner('CO-OP', cfg.gm === 'stand' ? 'LAST STAND' : SECTORS[cfg.sector || 0].name, 3);
 }
 window.__sb.online = { hostStart, startOnline };
+window.__sb.scenic = scenic;   // (captures: show a sector on the title)
 
 // ------------------------------------------------------------------ menus wiring
 function act(a) {
@@ -1039,7 +1056,7 @@ async function boot() {
   setTimeout(() => $('loading').remove(), 700);
   toTitle();
   boardOf('campaign', settings.diff).fresh(); boardOf('stand', settings.diff).fresh();
-  if (params.has('test')) { const m = await import('./tests.js?v=12'); m.runTests(window.__sb); }
+  if (params.has('test')) { const m = await import('./tests.js?v=13'); m.runTests(window.__sb); }
   else if (params.has('playthrough')) { A.unlock(); startPlaythrough(); }
   else if (G.autopilot) { A.unlock(); if (params.has('stand')) startStand(); else startCampaign(+params.get('sector') || 0); }
   else if (params.has('room')) { act('online'); $('join-code').value = cleanCode(params.get('room')); }

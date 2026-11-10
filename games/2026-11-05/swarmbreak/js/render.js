@@ -4,12 +4,13 @@
 // the simulation; floor decals for every warning (gates, boss tells, aim lines, arcs); HDR post.
 // Nothing here changes the world.
 import * as THREE from '../vendor/three.module.min.js';
-import { Post } from './post.js?v=12';
-import * as TX from './textures.js?v=12';
-import * as MD from './models.js?v=12';
-import { FX, CALM } from './fx.js?v=12';
-import { F, GATES, POWERUPS } from './config.js?v=12';
-import { dronePos } from './sim.js?v=12';
+import { Post } from './post.js?v=13';
+import * as TX from './textures.js?v=13';
+import * as MD from './models.js?v=13';
+import { FX, CALM } from './fx.js?v=13';
+import { SKY_VERT, SKY_FRAG, livingFloor, floorUniforms, Warp, Trails, Traffic, crownGeometry, signTex, waterNormal, boltGeometry } from './gfx.js?v=13';
+import { F, GATES, POWERUPS } from './config.js?v=13';
+import { dronePos } from './sim.js?v=13';
 
 // crawlers come in hordes, so they are all drawn together: one instanced mesh per part of the model,
 // about twenty draw calls however many there are (a full model per crawler cost ~15 draw calls each).
@@ -82,19 +83,24 @@ export function pickQuality(name) {
 export const LOOKS = [
   { key: 'roof', floor: 'pavers', tint: 0xffffff, outer: 0x6f6a62, wall: 0x8c8378, accent: 0xffb347, sky: [0x18203c, 0x6a4e78, 0xff9a5a], fog: 0x5a4250, fogD: 0.006,
     sun: 0xffdcb8, keyI: 3.3, keyDir: [-0.75, 0.45, 0.48], hemi: [0x8fa0d8, 0x4a3a30, 0.55], fill: 0x6f8cff, fillI: 0.5, exposure: 1.0, grade: [1.03, 0.99, 0.95],
-    dust: 0x9b9184, dustLight: 1.3, env: [0xffb070, 0x3a4a80, 0x201a20], shot: 0x8fe4ff, bloom: 0.75 },
+    dust: 0x9b9184, dustLight: 1.3, env: [0xffb070, 0x3a4a80, 0x201a20], shot: 0x8fe4ff, bloom: 0.75,
+    heaven: { sun: [-0.62, 0.2, -0.76], col: 0xffb070, k: 1.0, cloud: 0.52, stars: 0.25 } },
   { key: 'metro', floor: 'tiles', tint: 0xffffff, outer: 0x2e3434, wall: 0x2b5e5a, accent: 0x3ff0c8, sky: [0x020405, 0x061012, 0x0b1a1c], fog: 0x081414, fogD: 0.014,
     sun: 0xd8f0ff, keyI: 1.9, keyDir: [-0.35, 1, 0.3], hemi: [0x5a8a88, 0x101818, 0.4], fill: 0x3ff0c8, fillI: 0.35, exposure: 1.0, grade: [0.96, 1.02, 1.02],
-    dust: 0x70807c, dustLight: 0.9, env: [0xd8f0ff, 0x1d5a54, 0x050808], shot: 0x8fe4ff, bloom: 0.85 },
+    dust: 0x70807c, dustLight: 0.9, env: [0xd8f0ff, 0x1d5a54, 0x050808], cineR: 30, shot: 0x8fe4ff, bloom: 0.85,
+    heaven: { sun: [0, 1, 0], col: 0x000000, k: 0, cloud: 0, stars: 0 } },
   { key: 'foundry', floor: 'plate', tint: 0xffffff, outer: 0x2a2420, wall: 0x4a3f36, accent: 0xff7a2a, sky: [0x0a0606, 0x2a1408, 0x6a2a0a], fog: 0x2a1508, fogD: 0.012,
     sun: 0xffd2a0, keyI: 1.5, keyDir: [0.4, 0.8, -0.5], hemi: [0x604038, 0x150a05, 0.4], fill: 0xff6a1a, fillI: 0.35, exposure: 0.95, grade: [1.05, 0.98, 0.92],
-    dust: 0x5a4a40, dustLight: 1.0, env: [0xff7a2a, 0x3a2418, 0x080504], shot: 0x8fe4ff, bloom: 0.95 },
+    dust: 0x5a4a40, dustLight: 1.0, env: [0xff7a2a, 0x3a2418, 0x080504], shot: 0x8fe4ff, bloom: 0.95,
+    heaven: { sun: [0.4, 0.3, -0.8], col: 0xff5a1a, k: 0.25, cloud: 0.6, stars: 0 } },
   { key: 'vault', floor: 'panel', tint: 0xffffff, outer: 0x101318, wall: 0x1c2430, accent: 0x3fb8ff, sky: [0x010205, 0x040a14, 0x0a1830], fog: 0x040a14, fogD: 0.013,
     sun: 0xb0d0ff, keyI: 1.7, keyDir: [-0.3, 0.9, 0.35], hemi: [0x40608a, 0x05070a, 0.4], fill: 0x3fb8ff, fillI: 0.5, exposure: 1.25, grade: [0.95, 1.0, 1.06],
-    dust: 0x5a6070, dustLight: 0.8, env: [0x9fd0ff, 0x1a2a40, 0x020304], shot: 0xffd27a, bloom: 0.9 },
+    dust: 0x5a6070, dustLight: 0.8, env: [0x9fd0ff, 0x1a2a40, 0x020304], shot: 0xffd27a, bloom: 0.9,
+    heaven: { sun: [0, 1, 0], col: 0x000000, k: 0, cloud: 0, stars: 0 } },
   { key: 'reactor', floor: 'grate', tint: 0xffffff, outer: 0x1a1c22, wall: 0x2a2838, accent: 0x9f7bff, sky: [0x04050a, 0x121428, 0x2a2850], fog: 0x0c0e1c, fogD: 0.011,
     sun: 0x9fb0ff, keyI: 1.6, keyDir: [0.5, 0.75, 0.42], hemi: [0x50589a, 0x08080c, 0.45], fill: 0x6fe8ff, fillI: 0.7, exposure: 1.3, grade: [0.94, 0.98, 1.08],
-    dust: 0x6a6a80, dustLight: 0.8, env: [0x9fb0ff, 0x2a2850, 0x030306], shot: 0xffd27a, bloom: 0.95 },
+    dust: 0x6a6a80, dustLight: 0.8, env: [0x9fb0ff, 0x2a2850, 0x030306], shot: 0xffd27a, bloom: 0.95,
+    heaven: { sun: [0.5, 0.42, -0.75], col: 0xb8c4ff, k: 0.5, cloud: 0.8, stars: 0.6 } },
 ];
 
 // ------------------------------------------------------------------ shaders
@@ -139,17 +145,6 @@ void main(){
   }
   gl_FragColor = vec4(uColor * a * uAlpha, 1.0);
 }`;
-const SKY_VERT = /* glsl */ `varying vec3 vD; void main(){ vD = normalize(position); vec4 p = projectionMatrix * modelViewMatrix * vec4(position, 1.0); gl_Position = p.xyww; }`;
-const SKY_FRAG = /* glsl */ `
-uniform vec3 uTop, uMid, uLow; uniform float uFlash;
-varying vec3 vD;
-void main(){
-  float h = vD.y;
-  vec3 c = mix(uLow, uMid, smoothstep(-0.05, 0.18, h));
-  c = mix(c, uTop, smoothstep(0.18, 0.7, h));
-  c += vec3(0.6, 0.65, 1.0) * uFlash * smoothstep(-0.1, 0.5, h);
-  gl_FragColor = vec4(c, 1.0);
-}`;
 const SHIELD_FRAG = /* glsl */ `
 uniform vec3 uColor; uniform float uK, uTime;
 varying vec3 vN; varying vec3 vV;
@@ -160,7 +155,7 @@ void main(){
 }`;
 const SHIELD_VERT = /* glsl */ `varying vec3 vN; varying vec3 vV; void main(){ vec4 mv = modelViewMatrix * vec4(position, 1.0); vN = normalMatrix * normal; vV = -mv.xyz; gl_Position = projectionMatrix * mv; }`;
 const FLOW_FRAG = /* glsl */ `
-uniform float uTime; varying vec2 vUv;
+uniform float uTime, uK; varying vec2 vUv;
 float h(vec2 p){ return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
 float n(vec2 p){ vec2 i = floor(p), f = fract(p); f = f*f*(3.0-2.0*f); return mix(mix(h(i), h(i+vec2(1,0)), f.x), mix(h(i+vec2(0,1)), h(i+vec2(1,1)), f.x), f.y); }
 void main(){
@@ -168,7 +163,7 @@ void main(){
   float v = n(p) * 0.6 + n(p * 2.3 + 7.0) * 0.4;
   float crust = smoothstep(0.55, 0.75, v);
   vec3 hot = mix(vec3(6.0, 1.6, 0.25), vec3(9.0, 4.0, 1.0), n(p * 4.0));
-  gl_FragColor = vec4(mix(hot, vec3(0.08, 0.03, 0.02), crust), 1.0);
+  gl_FragColor = vec4(mix(hot * uK, vec3(0.08, 0.03, 0.02), crust), 1.0);
 }`;
 
 const _v = new THREE.Vector3(), _c = new THREE.Color(), _m = new THREE.Matrix4(), _q = new THREE.Quaternion(), _s = new THREE.Vector3(), _p = new THREE.Vector3(), _e = new THREE.Euler(), _tint = new THREE.Vector3();
@@ -241,7 +236,8 @@ export class Renderer {
   }
   buildSky() {
     this.skyMat = new THREE.ShaderMaterial({ vertexShader: SKY_VERT, fragmentShader: SKY_FRAG, side: THREE.BackSide, depthWrite: false,
-      uniforms: { uTop: { value: new THREE.Color() }, uMid: { value: new THREE.Color() }, uLow: { value: new THREE.Color() }, uFlash: { value: 0 } } });
+      uniforms: { uTop: { value: new THREE.Color() }, uMid: { value: new THREE.Color() }, uLow: { value: new THREE.Color() }, uFlash: { value: 0 },
+        uSunDir: { value: new THREE.Vector3(0, 1, 0) }, uSunCol: { value: new THREE.Color(0, 0, 0) }, uTime: { value: 0 }, uCloud: { value: 0 }, uStars: { value: 0 } } });
     this.sky = new THREE.Mesh(new THREE.SphereGeometry(600, 32, 16), this.skyMat);
     this.sky.frustumCulled = false; this.sky.renderOrder = -10;
     this.scene.add(this.sky);
@@ -269,6 +265,10 @@ export class Renderer {
     this.floorMat = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 1, metalness: 0.1, normalScale: new THREE.Vector2(1, 1) });
     const fg = new THREE.PlaneGeometry(AW * 2, AH * 2, 1, 1); fg.rotateX(-Math.PI / 2);
     const uv = fg.attributes.uv; for (let i = 0; i < uv.count; i++) uv.setXY(i, uv.getX(i) * (AW * 2) / TX.TILE, uv.getY(i) * (AH * 2) / TX.TILE);
+    // the living floor (gfx.js): animated per sector, and it carries pulses of light. Off on the low tier
+    this.floorU = floorUniforms();
+    this.pulses = [];
+    if (this.q.name !== 'low') livingFloor(this.floorMat, this.floorU);
     this.floor = new THREE.Mesh(fg, this.floorMat); this.floor.receiveShadow = true;
     S.add(this.floor);
     this.outerMat = new THREE.MeshStandardMaterial({ color: 0x555555, roughness: 1, metalness: 0.1 });
@@ -306,6 +306,7 @@ export class Renderer {
     S.add(this.props);
     this.lookLights = [];
     this.anim = [];
+    this.propSets = [];
   }
 
   setLook(i) {
@@ -319,9 +320,11 @@ export class Renderer {
     Object.assign(this.outerMat, { map: fs.map, normalMap: fs.normalMap, roughnessMap: fs.roughnessMap });
     this.outerMat.color.set(L.outer); this.outerMat.needsUpdate = true;
     this.wallMat.color.set(L.wall);
-    this.stripMat.color.copy(hdr(L.accent, 2.6));
+    this.stripMat.color.copy(hdr(L.accent, 2.6)); this.stripBase = hdr(L.accent, 2.6); this.stripF = 0;
     this.skyMat.uniforms.uTop.value.set(L.sky[0]); this.skyMat.uniforms.uMid.value.set(L.sky[1]); this.skyMat.uniforms.uLow.value.set(L.sky[2]);
     this.scene.fog.color.set(L.fog); this.scene.fog.density = L.fogD;
+    { const u = this.skyMat.uniforms, S = L.heaven; u.uSunDir.value.set(...S.sun).normalize(); u.uSunCol.value.set(S.col).multiplyScalar(S.k); u.uCloud.value = S.cloud; u.uStars.value = S.stars; }
+    this.floorU.uFStyle.value = i; this.floorU.uFAcc.value.set(L.accent); this.pulses.length = 0;
     this.key.color.set(L.sun); this.key.intensity = L.keyI;
     this.key.position.set(...L.keyDir).normalize().multiplyScalar(80); this.key.target.position.set(0, 0, 0);
     this.hemi.color.set(L.hemi[0]); this.hemi.groundColor.set(L.hemi[1]); this.hemi.intensity = L.hemi[2];
@@ -332,75 +335,192 @@ export class Renderer {
   }
 
   // ---------------------------------------------------------------- scenery per sector
+  // Each sector's scenery is built once and kept: changing sector swaps the group in and re-aims the fixed
+  // light pool (the number of lights never changes, so nothing recompiles).
   buildProps(i) {
-    const P = this.props, q = this.q.props;
+    const P = this.props;
     for (const c of [...P.children]) P.remove(c);
     for (const l of this.lightPool) { l.intensity = 0; l.position.set(0, -50, 0); }
-    this.lookLights = []; this.anim = []; this.rain = null;
+    const S = this.propSets[i] || (this.propSets[i] = this.makeProps(i));
+    P.add(S.g);
+    S.lights.forEach((d, k) => { const l = this.lightPool[k]; if (!l) return; l.color.set(d.color); l.intensity = d.I; l.distance = d.d; l.position.set(d.x, d.y, d.z); d.l = l; });
+    this.lookLights = S.lights; this.anim = S.anim; this.rain = S.rain; this.embers = S.embers; this.amb = S.amb; this.farBolts = S.bolts; this.lightningT = 4;
+    this.outer.visible = S.outer;
+  }
+  makeProps(i) {
+    const P = new THREE.Group(), q = this.q.props;
+    const S = { g: P, lights: [], anim: [], rain: null, embers: false, amb: null, bolts: null, outer: true };
     const r = mkr(i * 31 + 7);
-    const light = (color, I, x, y, z, d = 30) => { const l = this.lightPool[this.lookLights.length]; if (!l) return null; l.color.set(color); l.intensity = I; l.distance = d; l.position.set(x, y, z); this.lookLights.push(l); return l; };
+    const light = (color, I, x, y, z, d = 30) => { if (S.lights.length >= this.lightPool.length) return null; const o = { color, I, x, y, z, d, l: null }; S.lights.push(o); return o; };
     const inst = (geo, mat, list, shadow = true) => {
       const m = new THREE.InstancedMesh(geo, mat, list.length);
-      list.forEach((t, k) => { _e.set(t.rx || 0, t.ry || 0, t.rz || 0); _q.setFromEuler(_e); _s.set(t.sx, t.sy, t.sz); _p.set(t.x, t.y, t.z); _m.compose(_p, _q, _s); m.setMatrixAt(k, _m); });
+      list.forEach((t, k) => {
+        _e.set(t.rx || 0, t.ry || 0, t.rz || 0); _q.setFromEuler(_e); _s.set(t.sx, t.sy, t.sz); _p.set(t.x, t.y, t.z); _m.compose(_p, _q, _s); m.setMatrixAt(k, _m);
+        if (t.c !== undefined) m.setColorAt(k, _c.set(t.c));
+      });
       m.castShadow = shadow; m.receiveShadow = true;
       P.add(m); return m;
     };
-    const ring = (n, inner, fn) => { const out = []; for (let k = 0; k < n; k++) { const t = fn(k, r); if (t && (Math.abs(t.x) > AW + inner || Math.abs(t.z) > AH + inner)) out.push(t); } return out; };
+    // a flat piece of ground with the floor texture at its real scale
+    const ground = (w, d, mat, y, x = 0, z = 0) => {
+      const g = new THREE.PlaneGeometry(w, d); g.rotateX(-Math.PI / 2);
+      const uv = g.attributes.uv; for (let k = 0; k < uv.count; k++) uv.setXY(k, uv.getX(k) * w / TX.TILE, uv.getY(k) * d / TX.TILE);
+      const m = new THREE.Mesh(g, mat); m.position.set(x, y, z); m.receiveShadow = true; P.add(m); return m;
+    };
+    const sign = (text, color, sub, w, h, x, y, z, ry = 0) => {
+      const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({ map: signTex(text, color, sub), color: hdr(0xffffff, 2.2), transparent: true, toneMapped: false, depthWrite: false, side: THREE.DoubleSide }));
+      m.position.set(x, y, z); m.rotation.y = ry; P.add(m); return m;
+    };
     const L = LOOKS[i];
     if (L.key === 'roof') {
-      // planters with shrubs and trees around the roof edge, HVAC boxes, string lights, the skyline
-      const planters = [], shrubs = [], trunks = [], crowns = [], hvac = [];
-      for (let k = 0; k < 26 * q; k++) {
-        const side = k % 4, f = (Math.floor(k / 4) + 0.5) / Math.ceil(26 * q / 4);
+      // A rooftop garden high over the city: the roof runs a few metres past the walls to a parapet, then
+      // drops away to lower rooftops and the streets far below. Planters, trees, a water tower, string lights.
+      S.outer = false;
+      const RX = AW + 8.5, RZ = AH + 8;
+      ground(RX * 2, RZ * 2, this.outerMat, -0.02);
+      const win = TX.windowTex(7); win.repeat.set(1.6, 2.2);
+      const tower = new THREE.Mesh(new THREE.BoxGeometry(RX * 2, 90, RZ * 2), new THREE.MeshStandardMaterial({ color: 0x3a3440, roughness: 0.7, metalness: 0.2, emissiveMap: win, emissive: hdr(0xffffff, 1.1) }));
+      tower.position.y = -45.06; P.add(tower);
+      const para = [];
+      for (const s of [-1, 1]) { para.push({ x: 0, y: 0.3, z: s * RZ, sx: RX * 2 + 0.5, sy: 0.7, sz: 0.5 }); para.push({ x: s * RX, y: 0.3, z: 0, sx: 0.5, sy: 0.7, sz: RZ * 2 }); }
+      inst(MD.GEO.box(1, 1, 1), MD.paint(0x7a7168, 0.8, 0.1), para);
+      // planters, shrubs and trees with lumpy crowns in mixed greens (a few turning amber)
+      const planters = [], shrubs = [], trunks = [], crowns = [];
+      const GREENS = [0x3d6a2c, 0x4d7a34, 0x5b8a3a, 0x2f5a2a, 0x6b8f3a, 0xb07a2c, 0x8a9a3a];
+      const np = Math.round(26 * q);
+      for (let k = 0; k < np; k++) {
+        const side = k % 4, f = (Math.floor(k / 4) + 0.5) / Math.ceil(np / 4);
         const x = side < 2 ? -AW + f * AW * 2 : (side === 2 ? -1 : 1) * (AW + 3.2), z = side < 2 ? (side ? 1 : -1) * (AH + 3.2) : -AH + f * AH * 2;
         planters.push({ x, y: 0.4, z, sx: side < 2 ? 3 : 1.4, sy: 0.8, sz: side < 2 ? 1.4 : 3 });
-        for (let j = 0; j < 3; j++) shrubs.push({ x: x + (r() - 0.5) * 2, y: 1.0, z: z + (r() - 0.5) * 1.6, sx: 0.5 + r() * 0.4, sy: 0.4 + r() * 0.3, sz: 0.5 + r() * 0.4 });
-        if (k % 3 === 0) { trunks.push({ x, y: 1.6, z, sx: 0.12, sy: 1.6, sz: 0.12 }); crowns.push({ x, y: 3.0, z, sx: 1.3, sy: 1.5, sz: 1.3 }); }
+        for (let j = 0; j < 4; j++) shrubs.push({ x: x + (r() - 0.5) * (side < 2 ? 2.4 : 1), y: 1.0, z: z + (r() - 0.5) * (side < 2 ? 1 : 2.4), sx: 0.5 + r() * 0.4, sy: 0.42 + r() * 0.3, sz: 0.5 + r() * 0.4, ry: r() * 6, c: GREENS[(r() * 5) | 0] });
+        if (k % 3 === 0) {
+          const hgt = 2.6 + r() * 1.2;
+          trunks.push({ x, y: hgt / 2 + 0.6, z, sx: 0.13, sy: hgt, sz: 0.13 });
+          const c0 = GREENS[(r() * GREENS.length) | 0];
+          crowns.push({ x, y: hgt + 0.9, z, sx: 1.35, sy: 1.3, sz: 1.35, ry: r() * 6, c: c0 });
+          for (let j = 0; j < 3; j++) { const a = r() * 6.28; crowns.push({ x: x + Math.cos(a) * 0.8, y: hgt + 0.5 + r() * 0.9, z: z + Math.sin(a) * 0.8, sx: 0.8 + r() * 0.3, sy: 0.75 + r() * 0.3, sz: 0.8 + r() * 0.3, ry: r() * 6, c: r() < 0.5 ? c0 : GREENS[(r() * 5) | 0] }); }
+        }
       }
-      for (let k = 0; k < 8; k++) hvac.push({ x: (k % 2 ? 1 : -1) * (AW + 9 + r() * 6), y: 0.8, z: -AH + r() * AH * 2, sx: 2.5, sy: 1.6, sz: 2 });
-      const soil = new THREE.MeshStandardMaterial({ color: 0x6b5e52, roughness: 0.9 }), leaf = new THREE.MeshStandardMaterial({ color: 0x3d6a2c, roughness: 0.8 }), leaf2 = new THREE.MeshStandardMaterial({ color: 0x55803a, roughness: 0.75 });
-      inst(MD.GEO.box(1, 1, 1), soil, planters); inst(MD.GEO.sph(1, 10, 8), leaf, shrubs); inst(MD.GEO.cyl(1, 1, 1, 8), MD.paint(0x4a3524, 0.9, 0), trunks); inst(MD.GEO.sph(1, 12, 9), leaf2, crowns);
-      inst(MD.GEO.box(1, 1, 1), MD.paint(0x8a9098, 0.45, 0.7), hvac);
+      const leaf = new THREE.MeshStandardMaterial({ color: 0xffffff, vertexColors: true, roughness: 0.82 });
+      inst(MD.GEO.box(1, 1, 1), new THREE.MeshStandardMaterial({ color: 0x6b5e52, roughness: 0.9 }), planters);
+      inst(crownGeometry(3, 1), leaf, shrubs); inst(MD.GEO.cyl(1, 1, 1, 8), MD.paint(0x4a3524, 0.9, 0), trunks); inst(crownGeometry(5, 2), leaf, crowns);
+      // roof furniture: HVAC units, a stair hut with a lit door, a water tower
+      const hvac = [], steel = MD.paint(0x8a9098, 0.45, 0.7);
+      for (let k = 0; k < 6; k++) hvac.push({ x: (k % 2 ? 1 : -1) * (AW + 6.2), y: 0.75, z: -AH + 3 + Math.floor(k / 2) * (AH - 3), sx: 2.2, sy: 1.5, sz: 1.7 });
+      for (const h of [...hvac]) hvac.push({ x: h.x, y: 1.62, z: h.z, sx: 1.2, sy: 0.24, sz: 1.2 });
+      inst(MD.GEO.box(1, 1, 1), steel, hvac);
+      const hut = new THREE.Mesh(MD.GEO.box(3.4, 2.8, 3), MD.paint(0x6f6a62, 0.8, 0.1)); hut.position.set(AW + 5.6, 1.4, -AH - 5.2); hut.castShadow = true; P.add(hut);
+      const door = new THREE.Mesh(new THREE.PlaneGeometry(1.1, 2), MD.glow(0xffc070, 2.4)); door.position.set(AW + 5.6, 1.05, -AH - 3.69); P.add(door);
+      const wt = new THREE.Group(); wt.position.set(-AW - 5.6, 0, -AH - 5.0);
+      const tank = new THREE.Mesh(MD.GEO.cyl(1.5, 1.5, 2.6, 18), MD.paint(0x6a4a34, 0.75, 0.1)); tank.position.y = 4.1; tank.castShadow = true; wt.add(tank);
+      const cone = new THREE.Mesh(new THREE.ConeGeometry(1.7, 0.9, 18), MD.paint(0x4a4038, 0.7, 0.3)); cone.position.y = 5.85; wt.add(cone);
+      for (const [lx, lz] of [[-1, -1], [1, -1], [-1, 1], [1, 1]]) { const leg = new THREE.Mesh(MD.GEO.box(0.14, 2.9, 0.14), steel); leg.position.set(lx, 1.45, lz); leg.castShadow = true; wt.add(leg); }
+      P.add(wt);
       // string lights along the long walls
       const bulbs = [];
       for (const s of [-1, 1]) for (let k = 0; k < 40; k++) { const x = -AW + (k / 39) * AW * 2; bulbs.push({ x, y: 2.6 - Math.sin((k % 8) / 7 * Math.PI) * 0.5, z: s * (AH + 1.6), sx: 0.09, sy: 0.09, sz: 0.09 }); }
       inst(MD.GEO.sph(1, 8, 6), MD.glow(0xffc070, 6), bulbs, false);
-      this.skyline(r, 70, 0x2c303a, true);
+      // the neighbours: lower rooftops with lit windows, dark roofs and their own clutter
+      const bodies = [], caps = [], clutter = [], tanks = [];
+      for (let k = 0; k < Math.round(30 * q); k++) {
+        const a = (k / Math.round(30 * q)) * 6.283 + r() * 0.15, d = 1 + r() * 0.75;
+        const x = Math.cos(a) * (RX + 16) * d * 1.25, z = Math.sin(a) * (RZ + 15) * d * 1.25;
+        const w = 12 + r() * 12, dp = 12 + r() * 10, top = -3 - r() * 24 - (z > 0 ? 6 : 0), h = 70;
+        if (Math.abs(x) < RX + w / 2 + 3 && Math.abs(z) < RZ + dp / 2 + 3) continue;
+        bodies.push({ x, y: top - h / 2, z, sx: w, sy: h, sz: dp });
+        caps.push({ x, y: top + 0.15, z, sx: w + 0.5, sy: 0.3, sz: dp + 0.5 });
+        for (let j = 0; j < 3; j++) clutter.push({ x: x + (r() - 0.5) * (w - 4), y: top + 0.9, z: z + (r() - 0.5) * (dp - 4), sx: 1.6 + r() * 2, sy: 1.2 + r(), sz: 1.6 + r() * 2 });
+        if (r() < 0.4) tanks.push({ x: x + (r() - 0.5) * (w - 5), y: top + 2.2, z: z + (r() - 0.5) * (dp - 5), sx: 1.5, sy: 3, sz: 1.5 });
+      }
+      const win2 = TX.windowTex(11); win2.repeat.set(0.6, 1.7);
+      inst(MD.GEO.box(1, 1, 1), new THREE.MeshStandardMaterial({ color: 0x2c2a34, roughness: 0.6, metalness: 0.3, emissiveMap: win2, emissive: hdr(0xffffff, 1.6) }), bodies, false);
+      inst(MD.GEO.box(1, 1, 1), new THREE.MeshStandardMaterial({ color: 0x35323a, roughness: 0.9 }), caps, false);
+      inst(MD.GEO.box(1, 1, 1), steel, clutter, false); inst(MD.GEO.cyl(1, 1, 1, 12), MD.paint(0x5a4636, 0.8, 0.1), tanks, false);
+      // the streets far below, picked out by rows of lamps
+      const street = new THREE.Mesh(new THREE.PlaneGeometry(700, 600), new THREE.MeshBasicMaterial({ color: 0x18141c })); street.rotation.x = -Math.PI / 2; street.position.y = -52; P.add(street);
+      const lamps = [];
+      for (let a = -5; a <= 5; a++) for (let b = -28; b <= 28; b++) { lamps.push({ x: a * 44 + 22, y: -51.5, z: b * 7, sx: 0.5, sy: 0.3, sz: 0.5 }); lamps.push({ x: b * 9, y: -51.5, z: a * 40 + 20, sx: 0.5, sy: 0.3, sz: 0.5 }); }
+      inst(MD.GEO.box(1, 1, 1), MD.glow(0xffb060, 7), lamps, false);
+      // neon on the faces of two neighbours across the street to the north
+      const north = bodies.filter((b) => b.z < -RZ - 12 && Math.abs(b.x) < 60).sort((a, b) => (b.y + b.sy / 2) - (a.y + a.sy / 2));
+      if (north[0]) sign('ORBIT HOTEL', '#ff5ad0', '', Math.min(north[0].sx - 1, 13), 3.2, north[0].x, north[0].y + north[0].sy / 2 - 2.6, north[0].z + north[0].sz / 2 + 0.15);
+      if (north[1]) sign('NOODLES', '#3ff0c8', 'OPEN ALL NIGHT', Math.min(north[1].sx - 1, 11), 2.75, north[1].x, north[1].y + north[1].sy / 2 - 2.4, north[1].z + north[1].sz / 2 + 0.15);
+      this.skyline(P, r, 70, 0x2c303a, true);
+      // air traffic crossing the sunset
+      const traffic = new Traffic(P, Math.round(12 * q), MD.glow(0xfff0c0, 6), MD.glow(0xff3020, 5), MD.paint(0x30343c, 0.5, 0.6), r);
+      S.anim.push((t) => traffic.update(t));
       light(0xffb060, 30, -AW - 4, 3, 0, 26); light(0xffb060, 30, AW + 4, 3, 0, 26);
+      // fireflies drifting over the planters
+      S.amb = { rate: 5, spawn: (fx) => { const s = Math.random() < 0.5 ? -1 : 1, lg = Math.random() < 0.6; fx.fireP.add({ x: lg ? (Math.random() - 0.5) * AW * 2 : s * (AW + 3.2), y: 0.9 + Math.random() * 2.4, z: lg ? s * (AH + 3.2) : (Math.random() - 0.5) * AH * 2, vx: (Math.random() - 0.5) * 0.6, vy: (Math.random() - 0.3) * 0.4, vz: (Math.random() - 0.5) * 0.6, s0: 0.1, s1: 0.16, max: 2.5 + Math.random() * 2, a: 0.9, r: 1, g: 0.85, b: 0.4, drag: 0.2, grav: 0, fade: 0.5 }); } };
     } else if (L.key === 'metro') {
-      // tiled station walls, columns, a stopped train along the top, strip lights, water
+      // A flooded station: the platform stands in black water that mirrors the lights. Tiled walls, columns,
+      // a train that pulls in, waits and leaves through the tunnel, hanging signs, mist on the water.
+      S.outer = false;
+      const PX = AW + 2.8, PZ = AH + 2.8;
+      ground(PX * 2, PZ * 2, this.outerMat, -0.02);
+      const edge = new THREE.Mesh(new THREE.BoxGeometry(PX * 2, 1.4, PZ * 2), MD.paint(0x2e3434, 0.6, 0.2)); edge.position.y = -0.74; P.add(edge);
+      const lip = [];
+      for (const s of [-1, 1]) { lip.push({ x: 0, y: 0.0, z: s * (PZ - 0.25), sx: PX * 2 - 0.2, sy: 0.02, sz: 0.3 }); lip.push({ x: s * (PX - 0.25), y: 0.0, z: 0, sx: 0.3, sy: 0.02, sz: PZ * 2 - 0.2 }); }
+      inst(MD.GEO.box(1, 1, 1), MD.glow(0xffd23f, 1.1), lip, false);
+      const wn = waterNormal(); wn.repeat.set(16, 12);
+      const water = new THREE.Mesh(new THREE.PlaneGeometry(300, 240), new THREE.MeshStandardMaterial({ color: 0x4f807a, roughness: 0.13, metalness: 1, normalMap: wn, normalScale: new THREE.Vector2(0.5, 0.5) }));
+      water.rotation.x = -Math.PI / 2; water.position.y = -0.55; water.receiveShadow = true; P.add(water);
+      S.anim.push((t) => { wn.offset.set(t * 0.011, t * 0.017); });
       const wt = TX.wallTileTex(); wt.repeat.set(16, 2);
       const wallM = new THREE.MeshStandardMaterial({ map: wt, roughness: 0.3, metalness: 0.05 });
-      for (const s of [-1, 1]) { const w = new THREE.Mesh(new THREE.BoxGeometry(AW * 2 + 30, 9, 0.6), wallM); w.position.set(0, 4.5, s * (AH + 13)); w.receiveShadow = true; P.add(w); }
-      for (const s of [-1, 1]) { const w = new THREE.Mesh(new THREE.BoxGeometry(0.6, 9, AH * 2 + 26), wallM); w.position.set(s * (AW + 14), 4.5, 0); P.add(w); }
+      for (const s of [-1, 1]) { const w = new THREE.Mesh(new THREE.BoxGeometry(AW * 2 + 30, 10, 0.6), wallM); w.position.set(0, 4.4, s * (AH + 13)); w.receiveShadow = true; P.add(w); }
+      for (const s of [-1, 1]) { const w = new THREE.Mesh(new THREE.BoxGeometry(0.6, 10, AH * 2 + 26), wallM); w.position.set(s * (AW + 14), 4.4, 0); P.add(w); }
+      // tunnel mouths where the track leaves the station
+      const dark = new THREE.MeshBasicMaterial({ color: 0x010202 }), frame = MD.paint(0x244a46, 0.5, 0.4);
+      for (const s of [-1, 1]) {
+        const hole = new THREE.Mesh(new THREE.PlaneGeometry(4.6, 4.6), dark); hole.position.set(s * (AW + 13.68), 2.1, -AH - 7.5); hole.rotation.y = -s * Math.PI / 2; P.add(hole);
+        const arch = new THREE.Mesh(MD.GEO.box(0.5, 0.5, 5.6), frame); arch.position.set(s * (AW + 13.6), 4.6, -AH - 7.5); P.add(arch);
+      }
       const cols = [];
-      for (let k = 0; k < 14; k++) { const x = -AW + 2 + k * (AW * 2 - 4) / 13; cols.push({ x, y: 4, z: AH + 3.2, sx: 0.55, sy: 8, sz: 0.55 }); cols.push({ x, y: 2.2, z: -AH - 4.5, sx: 0.55, sy: 4.4, sz: 0.55 }); }
+      for (let k = 0; k < 14; k++) { const x = -AW + 2 + k * (AW * 2 - 4) / 13; cols.push({ x, y: 3.6, z: AH + 4.6, sx: 0.55, sy: 9, sz: 0.55 }); cols.push({ x, y: 1.8, z: -AH - 4.4, sx: 0.55, sy: 5.2, sz: 0.55 }); }
       inst(MD.GEO.box(1, 1, 1), MD.paint(0x2b5e5a, 0.35, 0.4), cols);
-      // the train: carriages with lit windows
+      // the train
       const win = TX.windowTex(12); win.repeat.set(3, 0.4);
       const carM = MD.paint(0xb8bec6, 0.3, 0.8), winM = new THREE.MeshBasicMaterial({ map: win, color: hdr(0xffffff, 1.8), toneMapped: false });
+      const train = new THREE.Group();
       for (let k = 0; k < 3; k++) {
         const c = new THREE.Group(); c.position.set(-AW + 6 + k * 16.5, 0, -AH - 7.5);
         const b = new THREE.Mesh(MD.GEO.box(16, 3.4, 3.2), carM); b.position.y = 1.9; b.castShadow = true; c.add(b);
         const w = new THREE.Mesh(new THREE.PlaneGeometry(14.5, 1.0), winM); w.position.set(0, 2.3, 1.62); c.add(w);
         const stripe = new THREE.Mesh(MD.GEO.box(16.02, 0.3, 3.22), MD.paint(0x2b7c76, 0.4, 0.4)); stripe.position.y = 1.2; c.add(stripe);
-        P.add(c);
+        train.add(c);
       }
-      const rails = new THREE.Mesh(MD.GEO.box(AW * 2 + 30, 0.15, 2.0), MD.paint(0x3a3430, 0.8, 0.5)); rails.position.set(0, 0.05, -AH - 7.5); P.add(rails);
+      for (const z of [-0.9, 0.9]) { const hl = new THREE.Mesh(MD.GEO.sph(0.22, 10, 8), MD.glow(0xfff4d0, 9)); hl.position.set(-AW + 6 + 2 * 16.5 + 8.05, 1.5, -AH - 7.5 + z); train.add(hl); }
+      P.add(train);
+      const head = light(0xfff0d0, 0, 60, 2, -AH - 7.5, 26);
+      S.anim.push((t) => {
+        const c = t % 48; let x = 400;
+        if (c < 7) x = -120 * Math.pow(1 - c / 7, 2); else if (c < 30) x = 0; else if (c < 37) x = 120 * Math.pow((c - 30) / 7, 2);
+        train.position.x = x; train.position.y = x === 0 ? 0 : Math.sin(t * 31) * 0.012;
+        if (head && head.l) { head.l.position.set(x + AW + 22, 2, -AH - 7.5); head.l.intensity = Math.abs(x) < 110 ? 26 : 0; }
+      });
+      const rails = new THREE.Mesh(MD.GEO.box(AW * 2 + 30, 0.15, 2.0), MD.paint(0x3a3430, 0.8, 0.5)); rails.position.set(0, -0.5, -AH - 7.5); P.add(rails);
       const bars = [];
       for (let k = 0; k < 8; k++) bars.push({ x: -AW + 3 + k * (AW * 2 - 6) / 7, y: 6.5, z: AH + 4.5, sx: 3.2, sy: 0.12, sz: 0.3 });
-      for (let k = 0; k < 8; k++) bars.push({ x: -AW + 3 + k * (AW * 2 - 6) / 7, y: 2.6, z: -AH - 3.2, sx: 3.2, sy: 0.12, sz: 0.3 });
+      for (let k = 0; k < 8; k++) bars.push({ x: -AW + 3 + k * (AW * 2 - 6) / 7, y: 3.9, z: -AH - 4.2, sx: 3.2, sy: 0.12, sz: 0.3 });
       inst(MD.GEO.box(1, 1, 1), MD.glow(0xd8f0ff, 3), bars, false);
+      sign('PLATFORM 2', '#3ff0c8', 'LINE M · NO SERVICE · FLOODING', 9, 2.25, -11, 5.6, -AH - 4.3);
+      sign('WAY OUT', '#ffd23f', '', 5, 1.25, 12, 5.4, -AH - 4.3);
       for (const s of [-1, 1]) for (let k = -1; k <= 1; k++) light(k ? 0x3ff0c8 : 0xd8f0ff, 25, k * 16, 5, s * (AH + 2), 22);
+      // mist lying on the water
+      S.amb = { rate: 2.2, spawn: (fx) => { const a = Math.random() * 6.283, x = Math.cos(a) * (PX + 2 + Math.random() * 9), z = Math.sin(a) * (PZ + 2 + Math.random() * 7); fx.dustP.add({ x, y: -0.2, z, vx: (Math.random() - 0.5) * 0.5, vy: 0.05, vz: (Math.random() - 0.5) * 0.5, s0: 3, s1: 7, max: 7 + Math.random() * 4, a: 0.1, r: 0.45, g: 0.75, b: 0.7, drag: 0.1, grav: 0, fade: 0.5 }); } };
     } else if (L.key === 'foundry') {
-      // molten channels on the long sides, crucible vats, I-beam columns, a crane rail
-      const flow = new THREE.ShaderMaterial({ vertexShader: DECAL_VERT, fragmentShader: FLOW_FRAG, uniforms: { uTime: { value: 0 } } });
-      this.anim.push((t) => { flow.uniforms.uTime.value = t; });
+      // molten channels on the long sides, crucible vats throwing sparks, I-beam columns, a furnace wall
+      const flow = new THREE.ShaderMaterial({ vertexShader: DECAL_VERT, fragmentShader: FLOW_FRAG, uniforms: { uTime: { value: 0 }, uK: { value: 0.17 } } });
+      const fire = new THREE.ShaderMaterial({ vertexShader: DECAL_VERT, fragmentShader: FLOW_FRAG, uniforms: { uTime: { value: 0 }, uK: { value: 0.22 } } });
+      S.anim.push((t) => { flow.uniforms.uTime.value = t; fire.uniforms.uTime.value = t * 1.6; });
+      const lips = [];
       for (const s of [-1, 1]) {
-        const ch = new THREE.Mesh(new THREE.PlaneGeometry(AW * 2 + 20, 3.2), flow); ch.rotation.x = -Math.PI / 2; ch.position.set(0, -0.25, s * (AH + 3.4)); P.add(ch);
-        const lip = new THREE.Mesh(MD.GEO.box(AW * 2 + 20, 0.5, 0.4), MD.paint(0x3a332c, 0.7, 0.6)); lip.position.set(0, 0.0, s * (AH + 5.2)); P.add(lip);
+        const ch = new THREE.Mesh(new THREE.PlaneGeometry(AW * 2 + 20, 3.2), flow); ch.rotation.x = -Math.PI / 2; ch.position.set(0, 0.03, s * (AH + 3.4)); P.add(ch);
+        lips.push({ x: 0, y: 0.12, z: s * (AH + 5.15), sx: AW * 2 + 20, sy: 0.3, sz: 0.36 }, { x: 0, y: 0.12, z: s * (AH + 1.65), sx: AW * 2 + 20, sy: 0.3, sz: 0.36 });
         for (let k = -2; k <= 2; k++) light(0xff6a1a, 9, k * 10, 1.2, s * (AH + 3.4), 12);
       }
+      inst(MD.GEO.box(1, 1, 1), MD.paint(0x3a332c, 0.7, 0.6), lips);
       const vats = [], beams = [];
       for (const s of [-1, 1]) for (let k = 0; k < 3; k++) vats.push({ x: s * (AW + 6), y: 1.6, z: -AH + 4 + k * (AH - 4), sx: 2.4, sy: 3.2, sz: 2.4 });
       inst(MD.GEO.cyl(1, 1.1, 1, 20), MD.paint(0x403833, 0.6, 0.7), vats);
@@ -409,12 +529,26 @@ export class Renderer {
       for (let k = 0; k < 8; k++) for (const s of [-1, 1]) beams.push({ x: -AW + 2 + k * (AW * 2 - 4) / 7, y: s > 0 ? 6 : 4, z: s * (AH + 7), sx: 0.6, sy: s > 0 ? 12 : 8, sz: 0.6 });
       inst(MD.GEO.box(1, 1, 1), MD.paint(0x5a4a3a, 0.5, 0.8), beams);
       for (const s of [-1, 1]) { const g = new THREE.Mesh(MD.GEO.box(AW * 2 + 6, 0.8, 0.6), MD.paint(0xc8a030, 0.5, 0.6)); g.position.set(0, s > 0 ? 11.5 : 7.6, s * (AH + 7)); P.add(g); }
-      this.embers = true;
+      // the furnace wall along the back: glowing mouths, buttresses and flues
+      const BZ = -AH - 27;   // (beyond the title camera's orbit)
+      const back = new THREE.Mesh(MD.GEO.box(AW * 2 + 90, 24, 1.4), MD.paint(0x2a2420, 0.85, 0.3)); back.position.set(0, 12, BZ); back.receiveShadow = true; P.add(back);
+      const frames = [], flues = [];
+      for (let k = -2; k <= 2; k++) {
+        const x = k * 15;
+        const mouth = new THREE.Mesh(new THREE.PlaneGeometry(7.6, 3.8), fire); mouth.position.set(x, 3.2, BZ + 0.72); P.add(mouth);
+        frames.push({ x, y: 5.5, z: BZ + 0.8, sx: 9.4, sy: 0.8, sz: 0.6 }, { x: x - 4.3, y: 3, z: BZ + 0.8, sx: 0.8, sy: 5.8, sz: 0.6 }, { x: x + 4.3, y: 3, z: BZ + 0.8, sx: 0.8, sy: 5.8, sz: 0.6 });
+        flues.push({ x: x + 7.5, y: 16, z: BZ + 1.6, sx: 1.1, sy: 32, sz: 1.1 });
+      }
+      inst(MD.GEO.box(1, 1, 1), MD.paint(0x4a3f36, 0.6, 0.7), frames);
+      inst(MD.GEO.cyl(1, 1, 1, 12), MD.paint(0x3a3430, 0.5, 0.8), flues);
+      S.embers = true;
+      // a vat spits sparks now and then
+      S.amb = { rate: 0.55, spawn: (fx) => { const v = vats[(Math.random() * vats.length) | 0]; fx.sparks(v.x, 3.4, v.z, { n: 16, speed: 4.5, vy: 5, s: 0.2, life: 1.3, g: 0.55, b: 0.15 }); fx.glow(v.x, v.z, 4, 0xff6a1a, 0.5, 0.8); } };
     } else if (L.key === 'vault') {
-      // rows of server racks with blinking lights, cable trays overhead
+      // rows of server racks with blinking lights, cable trays overhead, the vault's core turning at the back
       const em = TX.rackTex(), alb = TX.rackAlbedo();
       const rackM = new THREE.MeshStandardMaterial({ map: alb, emissiveMap: em, emissive: hdr(0xffffff, 2.2), roughness: 0.4, metalness: 0.7 });
-      this.anim.push((t) => { rackM.emissiveIntensity = 0.75 + 0.25 * Math.sin(t * 3.1) * Math.sin(t * 1.7); em.offset.y = Math.floor(t * 2) * 0.13; });
+      S.anim.push((t) => { rackM.emissiveIntensity = 0.75 + 0.25 * Math.sin(t * 3.1) * Math.sin(t * 1.7); em.offset.y = Math.floor(t * 2) * 0.13; });
       const racks = [];
       for (let row = 0; row < 3; row++) for (const s of [-1, 1]) for (let k = 0; k < 16 * q; k++) racks.push({ x: -AW - 4 + k * 3.2, y: 1.3, z: s * (AH + 3 + row * 3.4), sx: 1.2, sy: 2.6, sz: 1.0, ry: 0 });
       for (let row = 0; row < 2; row++) for (const s of [-1, 1]) for (let k = 0; k < 8 * q; k++) racks.push({ x: s * (AW + 3 + row * 3.4), y: 1.3, z: -AH + k * 3.6, sx: 1.0, sy: 2.6, sz: 1.2 });
@@ -422,53 +556,80 @@ export class Renderer {
       const trays = [];
       for (const s of [-1, 1]) for (let k = 0; k < 2; k++) trays.push({ x: 0, y: 4.2, z: s * (AH + 4.7 + k * 3.4), sx: AW * 2 + 20, sy: 0.12, sz: 0.6 });
       inst(MD.GEO.box(1, 1, 1), MD.paint(0x3a4250, 0.4, 0.8), trays);
-      const lines = [];
-      for (let k = -5; k <= 5; k++) lines.push({ x: k * 4, y: 0.012, z: 0, sx: 0.03, sy: 0.01, sz: AH * 2 - 0.2 });
-      inst(MD.GEO.box(1, 1, 1), MD.glow(0x3fb8ff, 0.7), lines, false);
+      // the core: nested rings and a wire shell turning slowly, on a column of light
+      const core = new THREE.Group(); core.position.set(0, 9, -AH - 16);
+      const ringM = new THREE.MeshBasicMaterial({ color: hdr(0x3fb8ff, 3.2), toneMapped: false }), rings = [];
+      for (let k = 0; k < 3; k++) { const m = new THREE.Mesh(new THREE.TorusGeometry(4.6 - k * 1.1, 0.07, 6, 72), ringM); core.add(m); rings.push(m); }
+      const shell = new THREE.Mesh(new THREE.IcosahedronGeometry(2.0, 1), new THREE.MeshBasicMaterial({ color: hdr(0x9fe0ff, 1.6), wireframe: true, toneMapped: false })); core.add(shell);
+      const heart = new THREE.Mesh(MD.GEO.sph(0.8, 16, 12), new THREE.MeshBasicMaterial({ color: hdr(0xd8f4ff, 5), toneMapped: false })); core.add(heart);
+      const shaft = new THREE.Mesh(new THREE.CylinderGeometry(0.5, 1.6, 9, 16, 1, true), new THREE.MeshBasicMaterial({ color: hdr(0x3fb8ff, 0.5), transparent: true, opacity: 0.5, blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide, toneMapped: false })); shaft.position.y = -4.5; core.add(shaft);
+      P.add(core);
+      S.anim.push((t) => { rings[0].rotation.set(t * 0.31, t * 0.2, 0); rings[1].rotation.set(0, t * 0.43, t * 0.27); rings[2].rotation.set(t * 0.5, 0, t * 0.36); shell.rotation.set(t * 0.15, t * 0.22, 0); heart.scale.setScalar(1 + 0.12 * Math.sin(t * 2.4)); });
       for (const s of [-1, 1]) for (let k = -1; k <= 1; k++) light(0x3fb8ff, 22, k * 14, 4, s * (AH + 3), 20);
+      // motes of data rising off the racks
+      S.amb = { rate: 9, spawn: (fx) => { const s = Math.random() < 0.5 ? -1 : 1; fx.fireP.add({ x: (Math.random() - 0.5) * (AW * 2 + 12), y: 0.4 + Math.random() * 2.4, z: s * (AH + 2.6 + Math.random() * 8), vx: 0, vy: 0.7 + Math.random() * 0.9, vz: 0, s0: 0.1, s1: 0.05, max: 2 + Math.random() * 2, a: 0.8, r: 0.3, g: 0.75, b: 1, drag: 0, grav: 0, fade: 0.5 }); } };
     } else {
-      // the storm reactor: a glowing ring structure, pylons, catwalks, rain and lightning
+      // the storm reactor: a glowing ring structure, pylons, the reactor column firing into the clouds,
+      // rain and lightning that forks down over the city
       const torus = new THREE.Mesh(new THREE.TorusGeometry(AW + 10, 1.1, 16, 120), MD.paint(0x2a2838, 0.35, 0.8));
       torus.rotation.x = Math.PI / 2; torus.position.y = -0.6; torus.scale.set(1, (AH + 10) / (AW + 10), 1); P.add(torus);
-      const core = new THREE.Mesh(new THREE.TorusGeometry(AW + 10, 0.32, 10, 160), MD.glow(0x6fe8ff, 4));
+      const core = new THREE.Mesh(new THREE.TorusGeometry(AW + 10, 0.32, 10, 160), new THREE.MeshBasicMaterial({ color: hdr(0x6fe8ff, 4), toneMapped: false }));
       core.rotation.x = Math.PI / 2; core.position.y = 0.6; core.scale.copy(torus.scale); P.add(core);
-      this.anim.push((t) => { core.material.color.copy(hdr(0x6fe8ff, 3 + Math.sin(t * 2.3) * 1.2)); });
+      S.anim.push((t) => { core.material.color.copy(hdr(0x6fe8ff, 3 + Math.sin(t * 2.3) * 1.2)); });
       const towers = [];
       for (let k = 0; k < 10; k++) { const a = (k / 10) * Math.PI * 2; towers.push({ x: Math.cos(a) * (AW + 16), y: 6, z: Math.sin(a) * (AH + 14), sx: 1.6, sy: 12, sz: 1.6 }); }
       inst(MD.GEO.cyl(1, 1.3, 1, 8), MD.paint(0x34324a, 0.4, 0.8), towers);
       const caps = towers.map((t) => ({ ...t, y: 12.3, sx: 0.7, sy: 0.7, sz: 0.7 }));
       inst(MD.GEO.sph(1, 10, 8), MD.glow(0x9f7bff, 5), caps, false);
-      this.skyline(r, 50, 0x14161e, false);
+      // the reactor column behind the arena: stacked rings that light in turn, and a beam into the storm
+      const col = new THREE.Group(); col.position.set(0, 0, -AH - 36);   // (beyond the title camera's orbit)
+      const stack = new THREE.Mesh(MD.GEO.cyl(3.2, 4.2, 30, 20), MD.paint(0x24222e, 0.4, 0.85)); stack.position.y = 15; col.add(stack);
+      const hoops = [];
+      for (let k = 0; k < 8; k++) { const m = new THREE.Mesh(new THREE.TorusGeometry(4.3 - k * 0.11, 0.2, 8, 40), new THREE.MeshBasicMaterial({ color: 0x000000, toneMapped: false })); m.rotation.x = Math.PI / 2; m.position.y = 3 + k * 3.6; col.add(m); hoops.push(m); }
+      const beam = new THREE.Mesh(new THREE.CylinderGeometry(0.9, 1.5, 140, 14, 1, true), new THREE.MeshBasicMaterial({ color: hdr(0x9f8bff, 1.4), transparent: true, opacity: 0.55, blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide, toneMapped: false })); beam.position.y = 100; col.add(beam);
+      P.add(col);
+      const hc = new THREE.Color();
+      S.anim.push((t) => { hoops.forEach((m, k) => { const f = (t * 1.4 - k * 0.32) % 2.6; m.material.color.copy(hc.set(0x6fe8ff)).multiplyScalar(0.5 + (f > 0 && f < 0.6 ? 5 * (1 - f / 0.6) : 0)); }); beam.material.opacity = 0.4 + 0.2 * Math.sin(t * 9) * Math.sin(t * 3.7); beam.scale.x = beam.scale.z = 1 + 0.15 * Math.sin(t * 13); });
+      this.skyline(P, r, 50, 0x14161e, false);
       for (let k = 0; k < 4; k++) { const a = (k / 4) * Math.PI * 2 + 0.4; light(0x6fe8ff, 22, Math.cos(a) * (AW + 8), 2, Math.sin(a) * (AH + 8), 22); }
-      this.makeRain();
+      S.rain = this.makeRain(P);
+      // forks of lightning out over the city, shown for a blink when the sky flashes
+      S.bolts = [];
+      const bm = new THREE.MeshBasicMaterial({ color: hdr(0xd8e0ff, 7), toneMapped: false, side: THREE.DoubleSide, fog: false });
+      for (let k = 0; k < 5; k++) { const a = -Math.PI * (0.12 + 0.76 * (k / 4)), d = 150 + r() * 60; const m = new THREE.Mesh(boltGeometry(130, k + 3), bm); m.position.set(Math.cos(a) * d * 1.3, -6, Math.sin(a) * d); m.userData.t = 0; P.add(m); S.bolts.push(m); }
     }
-    if (L.key !== 'foundry') this.embers = false;
-    void ring;
+    return S;
   }
-  // distant buildings around the arena (lit windows at night)
-  skyline(r, n, color, day) {
-    const win = TX.windowTex(7), list = [];
+  // distant buildings around the arena (lit windows at night), the tallest with a red beacon
+  skyline(P, r, n, color, day) {
+    const win = TX.windowTex(7), list = [], beacons = [];
     for (let k = 0; k < n * this.q.props; k++) {
-      const a = r() * Math.PI * 2, d = 70 + r() * 90;
+      const a = r() * Math.PI * 2, d = 78 + r() * 90;
       const h = 20 + r() * 70;
-      list.push({ x: Math.cos(a) * d * 1.5, y: h / 2 - 30, z: Math.sin(a) * d, sx: 8 + r() * 10, sy: h, sz: 8 + r() * 10 });
+      const t = { x: Math.cos(a) * d * 1.5, y: h / 2 - 30, z: Math.sin(a) * d, sx: 8 + r() * 10, sy: h, sz: 8 + r() * 10 };
+      list.push(t);
+      if (h > 62) beacons.push({ x: t.x, y: h - 29.4, z: t.z });
     }
-    const m = new THREE.MeshStandardMaterial({ color, roughness: 0.6, metalness: 0.3, emissiveMap: win, emissive: hdr(0xffffff, day ? 1.4 : 2.0) });
-    win.repeat.set(2, 3);
+    const m = new THREE.MeshStandardMaterial({ color, roughness: 0.6, metalness: 0.3, emissiveMap: win, emissive: hdr(0xffffff, day ? 1.0 : 2.0) });
+    win.repeat.set(0.5, 1.1);
     const im = new THREE.InstancedMesh(MD.GEO.box(1, 1, 1), m, list.length);
     list.forEach((t, k) => { _m.compose(_p.set(t.x, t.y, t.z), _q.identity(), _s.set(t.sx, t.sy, t.sz)); im.setMatrixAt(k, _m); });
-    this.props.add(im);
+    P.add(im);
+    if (beacons.length) {
+      const bi = new THREE.InstancedMesh(MD.GEO.sph(0.6, 8, 6), new THREE.MeshBasicMaterial({ color: hdr(0xff2a1a, 6), toneMapped: false, fog: false }), beacons.length);
+      beacons.forEach((t, k) => { _m.compose(_p.set(t.x, t.y, t.z), _q.identity(), _s.set(1, 1, 1)); bi.setMatrixAt(k, _m); });
+      P.add(bi);
+    }
   }
-  makeRain() {
+  makeRain(P) {
     const n = this.q.rain, pos = new Float32Array(n * 6);
     const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.BufferAttribute(pos, 3).setUsage(THREE.DynamicDrawUsage));
     const drops = [];
     for (let k = 0; k < n; k++) drops.push({ x: (Math.random() - 0.5) * 80, y: Math.random() * 30, z: (Math.random() - 0.5) * 56, v: 22 + Math.random() * 10 });
     const lines = new THREE.LineSegments(g, new THREE.LineBasicMaterial({ color: hdr(0x9fb0ff, 0.9), transparent: true, opacity: 0.35, blending: THREE.AdditiveBlending, depthWrite: false }));
     lines.frustumCulled = false;
-    this.props.add(lines);
-    this.rain = { drops, pos, g };
-    this.lightningT = 4;
+    P.add(lines);
+    return { drops, pos, g };
   }
 
   // ---------------------------------------------------------------- shots, bolts, decals, arcs
@@ -484,8 +645,12 @@ export class Renderer {
     // a soft halo under every bolt so they read on any floor
     const hg = new THREE.PlaneGeometry(1, 1); hg.rotateX(-Math.PI / 2);
     this.haloMat = new THREE.MeshBasicMaterial({ map: this.T.glow, color: hdr(0xff4ae0, 1.2), transparent: true, blending: THREE.AdditiveBlending, depthWrite: false });
-    this.haloI = new THREE.InstancedMesh(hg, this.haloMat, 600); this.haloI.frustumCulled = false; this.haloI.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
-    this.haloI.instanceColor = new THREE.InstancedBufferAttribute(new Float32Array(600 * 3), 3);
+    this.haloI = new THREE.InstancedMesh(hg, this.haloMat, 900); this.haloI.frustumCulled = false; this.haloI.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
+    this.haloI.instanceColor = new THREE.InstancedBufferAttribute(new Float32Array(900 * 3), 3);
+    this.haloI.renderOrder = 2;
+    // 2.0: a glowing streak behind every shot
+    this.trails = new Trails(this.scene, 700);
+    this.shotCol = new THREE.Color();
     this.scene.add(this.shotI, this.boltI, this.boltBI, this.haloI);
     // RAIL LANCE shots are long violet lances, SEEKERS orange darts
     const rg = new THREE.CapsuleGeometry(0.09, 1.5, 3, 6); rg.rotateZ(Math.PI / 2);
@@ -538,8 +703,9 @@ export class Renderer {
       uniforms: { uColor: { value: new THREE.Color() }, uK: { value: 1 }, uTime: { value: 0 } },
       vertexShader: 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }',
       fragmentShader: 'uniform vec3 uColor; uniform float uK, uTime; varying vec2 vUv; void main(){ float a = (1.0 - vUv.y) * (0.55 + 0.45 * sin(vUv.y * 20.0 - uTime * 8.0)); gl_FragColor = vec4(uColor * a * uK, 1.0); }' });
-    this.cols = [];
-    for (let k = 0; k < 16; k++) { const m = new THREE.Mesh(cg, this.colMat.clone()); m.visible = false; this.scene.add(m); this.cols.push(m); }
+    void cg;
+    // 2.0: every arriving group gets a beam and a floor ring, all in two instanced draws (gfx.js)
+    this.warp = new Warp(this.scene, 72);
     // aim lines (spitters)
     const ag = new THREE.PlaneGeometry(1, 1); ag.rotateX(-Math.PI / 2); ag.translate(0.5, 0, 0);
     this.aimMat = new THREE.MeshBasicMaterial({ color: hdr(0xff3df0, 1.6), transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, toneMapped: false });
@@ -981,25 +1147,39 @@ export class Renderer {
   }
 
   syncShots(W) {
-    let n = 0, nr = 0, ns = 0;
+    let n = 0, nr = 0, ns = 0, h = 0;
+    const T = this.trails, sc = this.shotCol.copy(this.shotMat.color), H = this.haloI;
+    T.begin();
     for (const s of W.shots) {
-      const a = Math.atan2(s.vz, s.vx);
+      const a = Math.atan2(s.vz, s.vx), y = s.drone ? 1.8 : 1.3;
       _q.setFromAxisAngle(UP, -a);
-      _m.compose(_p.set(s.x, s.drone ? 1.8 : 1.3, s.z), _q, _s.set(1, 1, 1));
-      if (s.rail) { if (nr < 200) this.railI.setMatrixAt(nr++, _m); }
-      else if (s.seek) { if (ns < 200) this.seekI.setMatrixAt(ns++, _m); }
-      else if (n < 400) this.shotI.setMatrixAt(n++, _m);
+      _m.compose(_p.set(s.x, y, s.z), _q, _s.set(1, 1, 1));
+      // how far it has flown: the streak grows out of the muzzle instead of starting behind the Warden
+      const flown = Math.min(1, Math.max(0, F.shotLife - (s.life ?? 0)) * F.shotV / 3.2 + 0.15);
+      if (s.rail) { if (nr < 200) this.railI.setMatrixAt(nr++, _m); T.add(s.x, y, s.z, a, 5.5 * flown, 0.55, 2.6, 2.1, 3.6); }
+      else if (s.seek) { if (ns < 200) this.seekI.setMatrixAt(ns++, _m); T.add(s.x, y, s.z, a, 3.4 * flown, 0.5, 3.4, 1.5, 0.5); }
+      else { if (n < 400) this.shotI.setMatrixAt(n++, _m); T.add(s.x, y, s.z, a, 3.2 * flown, 0.42, sc.r * 0.55, sc.g * 0.55, sc.b * 0.55); }
+      // light spilling on the floor under it
+      if (h < 500) { _m.compose(_p.set(s.x, 0.045, s.z), _q, _s.set(s.rail ? 5 : 3.4, 1, s.rail ? 3 : 2.3)); H.setMatrixAt(h, _m); const k = s.rail ? 0.2 : 0.11; if (s.seek) H.instanceColor.setXYZ(h, 0.5, 0.22, 0.08); else if (s.rail) H.instanceColor.setXYZ(h, 0.42, 0.34, 0.6); else H.instanceColor.setXYZ(h, sc.r * k, sc.g * k, sc.b * k); h++; }
     }
     this.shotI.count = n; this.shotI.instanceMatrix.needsUpdate = true;
     this.railI.count = nr; this.railI.instanceMatrix.needsUpdate = true;
     this.seekI.count = ns; this.seekI.instanceMatrix.needsUpdate = true;
-    let a = 0, b = 0, h = 0;
+    let a = 0, b = 0;
     for (const q of W.bolts) {
       const big = !!q.big, I = big ? this.boltBI : this.boltI, k = big ? b++ : a++;
       if (k >= 300) continue;
       _m.compose(_p.set(q.x, 1.15, q.z), _q.identity(), _s.setScalar(q.r * 1.15));
       I.setMatrixAt(k, _m);
-      if (h < 600) { _m.compose(_p.set(q.x, 0.05, q.z), _q.identity(), _s.setScalar(q.r * 9)); this.haloI.setMatrixAt(h, _m); this.haloI.instanceColor.setXYZ(h, big ? 1.4 : 1.2, big ? 0.5 : 0.25, big ? 0.15 : 1.0); h++; }
+      if (h < 900) { _m.compose(_p.set(q.x, 0.05, q.z), _q.identity(), _s.setScalar(q.r * 9)); this.haloI.setMatrixAt(h, _m); this.haloI.instanceColor.setXYZ(h, big ? 1.4 : 1.2, big ? 0.5 : 0.25, big ? 0.15 : 1.0); h++; }
+      if (q.vx || q.vz) { if (big) T.add(q.x, 1.15, q.z, Math.atan2(q.vz, q.vx), 2.0, q.r * 3.2, 2.4, 0.9, 0.25); else T.add(q.x, 1.15, q.z, Math.atan2(q.vz, q.vx), 1.7, q.r * 3.2, 2.2, 0.45, 1.9); }
+    }
+    T.end();
+    for (const q of W.pickups) {
+      if (h >= 900) break;
+      const P = POWERUPS[q.kind]; if (!P) continue;
+      const k = (0.3 + 0.12 * Math.sin(this.time * 5 + q.id)) * (q.life < 3 ? 0.5 + 0.5 * Math.sin(this.time * 18) : 1);
+      _c.set(P.color); _m.compose(_p.set(q.x, 0.05, q.z), _q.identity(), _s.setScalar(4.6)); this.haloI.setMatrixAt(h, _m); this.haloI.instanceColor.setXYZ(h, _c.r * k, _c.g * k, _c.b * k); h++;
     }
     this.boltI.count = Math.min(a, 300); this.boltBI.count = Math.min(b, 300);
     this.haloI.count = h;
@@ -1014,18 +1194,15 @@ export class Renderer {
     const use = (kind, color) => { const m = this.decalPool[d++]; if (!m) return null; m.visible = true; const u = m.material.uniforms; u.uKind.value = kind; u.uColor.value.set(color); u.uTime.value = t; u.uLive.value = 0; u.uAlpha.value = 1; m.rotation.set(0, 0, 0); return m; };
     // gates: portals opening
     for (const G of this.gates) G.k = Math.max(0, G.k - 0.02);
-    let c = 0;
+    this.warp.begin();
     for (const P of W.portals) {
       const prog = clamp(P.t / P.T, 0, 1);
       const col = P.types[0] === 'dummy' ? 0xffd070 : P.types[0] === 'pylon' ? 0x6fe8ff : P.types[0] === 'hive' ? 0xc070ff : 0xff3a2a;
-      const m = use(3, col);
-      if (m) { m.position.set(P.x, 0.03, P.z); m.scale.setScalar(1.3 + P.types.length * 0.25); m.material.uniforms.uProg.value = prog; }
-      if (P.x2 !== undefined) { const m2 = use(3, col); if (m2) { m2.position.set(P.x2, 0.03, P.z2); m2.scale.setScalar(1.2); m2.material.uniforms.uProg.value = prog; } }
-      const cm = this.cols[c++];
-      if (cm) { cm.visible = true; cm.position.set(P.x, 0, P.z); cm.scale.set(0.9 + P.types.length * 0.15, 2 + prog * 4, 0.9 + P.types.length * 0.15); cm.material.uniforms.uColor.value.set(col); cm.material.uniforms.uK.value = 0.25 + prog * 0.9; cm.material.uniforms.uTime.value = t; }
+      this.warp.add(P.x, P.z, 1.3 + Math.min(6, P.types.length) * 0.28, col, prog);
+      if (P.x2 !== undefined) this.warp.add(P.x2, P.z2, 1.2, col, prog);
       for (const G of this.gates) if (Math.hypot(G.x - P.x, G.z - P.z) < 2) G.k = Math.max(G.k, prog);
     }
-    for (; c < this.cols.length; c++) this.cols[c].visible = false;
+    this.warp.end(t);
     for (const G of this.gates) G.door.material.color.copy(hdr(G.k > 0 ? 0xff3a2a : this.look.accent, G.k > 0 ? 0.6 + G.k * 2.5 * (0.7 + 0.3 * Math.sin(t * 16)) : 0.12));
     // boss tells and live hazards
     this.laneMesh.visible = false; this.beam.visible = false; this.beamGlow.visible = false;
@@ -1169,8 +1346,9 @@ export class Renderer {
     let want;
     if (o.cine) {
       const a = this.time * 0.045;
-      const r = 46;
-      want = { pos: new THREE.Vector3(Math.sin(a) * r, 15 + Math.sin(a * 1.3) * 3, Math.cos(a) * r * 0.8), look: new THREE.Vector3(0, 0, 0), fov: 44, speed: 1.5 };
+      const r = this.look.cineR || 46;
+      // a low, slow orbit that keeps the sky and the scenery in the frame
+      want = { pos: new THREE.Vector3(Math.sin(a) * r, 10.5 + Math.sin(a * 1.3) * 2.5, Math.cos(a) * r * 0.8), look: new THREE.Vector3(0, 4.2, 0), fov: 46, speed: 1.5 };
     } else if (this.shot && this.shot.t > 0) {
       this.shot.t -= dt;
       const pts = this.shot.pts;
@@ -1210,6 +1388,13 @@ export class Renderer {
     out.x = (_v.x * 0.5 + 0.5) * innerWidth; out.y = (-_v.y * 0.5 + 0.5) * innerHeight; out.z = _v.z;
     return out;
   }
+  // flash the arena's wall lights in a colour (they fade back to the sector's own)
+  stripFlash(color, k = 1) { this.stripC = (this.stripC || new THREE.Color()).set(color).multiplyScalar(5.5); this.stripF = Math.max(this.stripF || 0, k); }
+  // a ring of light that runs out across the floor from (x, z) to radius r1 in T seconds
+  pulse(x, z, color, r1 = 30, T = 1.1, k = 1.6, r0 = 0) {
+    this.pulses.unshift({ x, z, c: new THREE.Color(color), r0, r1, T, k, t: 0 });
+    if (this.pulses.length > 3) this.pulses.length = 3;
+  }
   shock(x, z, k = 1) { this.shocks.push({ x, z, t: 0, max: 0.55, k }); if (this.shocks.length > 6) this.shocks.shift(); }
   flashScreen(a, color = 0xffffff) { _c.set(color); this.flash.set(_c.r, _c.g, _c.b, Math.max(this.flash.w, a * (CALM.on ? 0.25 : 0.55))); }
 
@@ -1218,10 +1403,31 @@ export class Renderer {
     const t = this.time;
     this.fx.update(dt);
     this.updatePieces(dt);
-    for (const f of this.anim) f(t);
+    for (const f of this.anim) f(t, dt);
+    this.skyMat.uniforms.uTime.value = t;
+    { // wall lights
+      const W = this.W, al = W && !W.over ? (W.boss ? 1 : W.surgeTell > 0 || W.surgeOn > 0 ? 0.8 : 0) : 0;
+      this.alertK = (this.alertK || 0) + (al - (this.alertK || 0)) * Math.min(1, dt * 3);
+      this.stripF = Math.max(0, (this.stripF || 0) - dt * 1.8);
+      const c = this.stripMat.color.copy(this.stripBase);
+      if (this.alertK > 0.01) c.lerp(_c.setRGB(4.2, 0.5, 0.3), this.alertK * (0.45 + 0.4 * Math.sin(t * 5)) * (CALM.on ? 0.4 : 1));
+      if (this.stripF > 0 && this.stripC) c.lerp(this.stripC, Math.min(1, this.stripF) * (CALM.on ? 0.4 : 1));
+    }
+    // the floor: time, and the pulses of light running across it
+    { const U = this.floorU; U.uFT.value = t; U.uFAmt.value = CALM.on ? 0.5 : 1;
+      this.pulses = this.pulses.filter((q) => (q.t += dt) < q.T);
+      for (let i = 0; i < 3; i++) {
+        const q = this.pulses[i], v = U.uFPulse.value[i];
+        if (!q) { v.w = 0; continue; }
+        const f = q.t / q.T;
+        v.set(q.x, q.z, q.r0 + (q.r1 - q.r0) * (1 - (1 - f) * (1 - f)), q.k * (1 - f) * (CALM.on ? 0.4 : 1));
+        U.uFPulseCol.value[i].copy(q.c);
+      } }
     for (const m of this.decalPool) if (m.visible) m.material.uniforms.uTime.value = t;
     // ambient particles: embers over the foundry, rain over the reactor
     if (this.embers && Math.random() < dt * 14) this.fx.sparks((Math.random() - 0.5) * AW * 2.4, 0.2, (Math.random() < 0.5 ? -1 : 1) * (AH + 3.4), { n: 1, speed: 1.5, vy: 3, s: 0.16, life: 2.2, g: 0.5, b: 0.15 });
+    if (this.amb && !CALM.on && Math.random() < dt * this.amb.rate) this.amb.spawn(this.fx);
+    if (this.farBolts) for (const m of this.farBolts) { m.userData.t -= dt; m.visible = m.userData.t > 0; }
     if (this.rain) {
       const R = this.rain, P = R.pos;
       R.drops.forEach((d, i) => {
@@ -1232,11 +1438,10 @@ export class Renderer {
       R.g.attributes.position.needsUpdate = true;
       this.lightningT -= dt;
       let fl = this.skyMat.uniforms.uFlash.value * Math.exp(-dt * 6);
-      if (this.lightningT <= 0) { this.lightningT = 5 + Math.random() * 9; fl = CALM.on ? 0.25 : 0.8; }
+      if (this.lightningT <= 0) { this.lightningT = 5 + Math.random() * 9; fl = CALM.on ? 0.25 : 0.8; if (this.farBolts && !CALM.on) { const m = this.farBolts[(Math.random() * this.farBolts.length) | 0]; m.userData.t = 0.16; m.scale.x = Math.random() < 0.5 ? -1 : 1; } }
       this.skyMat.uniforms.uFlash.value = fl;
       this.hemi.intensity = LOOKS[this.lookI].hemi[2] + fl * 1.2;
     }
-    this.colMat.uniforms.uTime.value = t;
     this.flash.w = Math.max(0, this.flash.w - dt * 3);
     const shocks = [];
     for (const s of this.shocks) {
@@ -1260,7 +1465,7 @@ export class Renderer {
     for (const k of ['foreman', 'tramline', 'crucible', 'archivist', 'overseer']) tmp.push(MD.boss(k).g);
     tmp.forEach((o, i) => { o.position.set(-20 + i * 2.5, 0, 0); this.scene.add(o); });
     const pv = this.playerView({ id: 1 }), sv = this.survivorView({ look: 0 });
-    for (const m of [...this.decalPool.slice(0, 3), this.laneMesh, this.beam, this.beamGlow, ...this.cols.slice(0, 1), ...this.aims.slice(0, 1), this.strips[0], this.lasers[0], this.bolts3[0]]) m.visible = true;
+    for (const m of [...this.decalPool.slice(0, 3), this.laneMesh, this.beam, this.beamGlow, ...this.aims.slice(0, 1), this.strips[0], this.lasers[0], this.bolts3[0]]) m.visible = true;
     this.setArc(this.arcs[0], 0, 0, 3, 3, 0.05, 0.3);
     this.fx.explode(0, 1, 0, 1, { metal: true });
     this.fx.flash(0, 1, 0, 1);
@@ -1268,7 +1473,7 @@ export class Renderer {
     const pv2 = MD.warden(0xff5a3a, 0xffd27a); pv2.g.position.set(4, 0, 4); tmp.push(pv2.g); this.scene.add(pv2.g);
     const icon = new THREE.Sprite(this.iconFor('triple')); icon.position.set(0, 2, 0); tmp.push(icon); this.scene.add(icon);
     for (const I of [this.railI, this.seekI, this.blobI, this.shotI, this.boltI, this.boltBI, this.haloI]) { I.count = 1; I.setMatrixAt(0, _m.identity()); }
-    this.crowd.warm(true);
+    this.crowd.warm(true); this.warp.warm(true); this.trails.warm(true);
     // build and compile every sector's floor, environment and scenery now, behind the loading screen, so
     // nothing compiles a shader in the middle of play (each compile was a visible freeze)
     const pr = { bloom: 0.7, threshold: 1.2, exposure: 1, chroma: 0, time: 0, desat: 0, fade: 1, vignette: 0.4, flash: this.flash, tint: _tint.set(1, 1, 1), shocks: [], lens: [] };
@@ -1281,10 +1486,10 @@ export class Renderer {
     }
     if (first !== 0) this.setLook(first);
     for (const I of [this.railI, this.seekI, this.blobI, this.shotI, this.boltI, this.boltBI, this.haloI]) I.count = 0;
-    this.crowd.warm(false);
+    this.crowd.warm(false); this.warp.warm(false); this.trails.warm(false);
     for (const o of tmp) this.scene.remove(o);
     this.scene.remove(pv.g); this.scene.remove(sv.g);
-    for (const m of [...this.decalPool, this.laneMesh, this.beam, this.beamGlow, ...this.cols, ...this.aims, ...this.strips, ...this.lasers, ...this.bolts3]) m.visible = false;
+    for (const m of [...this.decalPool, this.laneMesh, this.beam, this.beamGlow, ...this.aims, ...this.strips, ...this.lasers, ...this.bolts3]) m.visible = false;
     this.arcs[0].m.visible = false;
     this.fx.clear();
   }
