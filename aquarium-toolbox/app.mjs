@@ -113,6 +113,28 @@ function renderPreferences(){
 const members=id=>id==='all'?calculators:id==='popular'?popular.map(p=>calculators.find(c=>c.id===p)):id==='favorites'?calculators.filter(c=>state.favorites.includes(c.id)):calculators.filter(c=>c.category===id);
 // A tool opened from a link, a search result or “related” may not be in the open
 // list. Switch to its own category so the library always shows where you are.
+// Picking a category changes the list below it, which can be out of sight: start the list at the top, bring its
+// heading into view inside the library and flash it once, so it is clear what changed.
+function revealList(picked){
+  const lib=document.querySelector('.library'),list=$('tool-list'),box=document.querySelector('.library-results'),caption=$('list-caption');
+  list.scrollTop=0;
+  // Scroll only as far as needed: the whole list if it fits, otherwise its first three calculators, and keep the
+  // category just picked in view whenever both fit.
+  // On a wide screen the panel sticks below the menu and fits the window. Until it sticks, the window cuts off its
+  // lower part, where the list is: bring the panel up to its resting place first.
+  if(getComputedStyle(lib).position==='sticky'){const gap=lib.getBoundingClientRect().top-parseFloat(getComputedStyle(lib).top);if(gap>1)scrollBy({top:gap,behavior:'instant'});}
+  if(lib.scrollHeight>lib.clientHeight+1){const l=lib.getBoundingClientRect(),c=caption.getBoundingClientRect(),b=box.getBoundingClientRect();
+    const third=[...list.children].slice(0,3).pop()?.getBoundingClientRect()||b,button=document.querySelector(`.category[data-category="${picked}"]`)?.getBoundingClientRect();
+    const most=c.top-l.top-8,least=Math.max(0,third.bottom-l.bottom+24),keep=button?button.top-l.top-8:most;
+    const by=c.top<l.top?c.top-l.top-8:Math.min(most,Math.max(least,Math.min(b.bottom-l.bottom+24,keep)));if(by>0||c.top<l.top)lib.scrollTop+=by;}
+  // A phone shows the library in the page flow: keep the list on screen there.
+  const r=box.getBoundingClientRect(),top=parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop)||0;
+  if(getComputedStyle(lib).position!=='sticky'&&(r.top<top||r.top>innerHeight-80))scrollBy({top:r.top-top-12,behavior:matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth'});
+  box.classList.remove('is-updated');void box.offsetWidth;box.classList.add('is-updated');
+  markMore();
+}
+// A quiet fade replaces scroll bars: it shows only while there is more to scroll to.
+function markMore(){for(const el of [document.querySelector('.library'),$('tool-list')]){if(!el)continue;const more=el.scrollHeight-el.clientHeight-el.scrollTop>24&&getComputedStyle(el).overflowY!=='visible';el.toggleAttribute('data-more-below',more);}}
 function showListFor(id){if(!members(category).some(c=>c.id===id))category=calculators.find(c=>c.id===id).category;}
 function renderLibrary(){
   const opts=[['popular','Most used','home'],['all','All calculators','grid'],...categories,['favorites','Favorites','star']];
@@ -127,6 +149,7 @@ function renderLibrary(){
   $('tool-list').innerHTML=matches.map(c=>`<a class="tool-link" href="#tool=${c.id}" data-tool="${c.id}" aria-current="${c.id===state.current}">${e(c.title)}${c.advanced?' <em class="tool-tag">Advanced</em>':''}<span>${e(descriptionFor(c,isUS()))}</span></a>`).join('');
   $('empty-search').hidden=matches.length>0;$('empty-search').textContent=words.length?'No matches. Try “gravel”, “heater”, or “water change”.':'Nothing here yet. Tap the star on a calculator to keep it in Favorites.';
   $('list-caption').textContent=words.length?`${matches.length} MATCHING ${matches.length===1?'TOOL':'TOOLS'}`:opts.find(o=>o[0]===category)[1].toUpperCase();$('library-count').textContent=calculators.length;
+  requestAnimationFrame(markMore);
 }
 function fieldHTML(field,a){
   const c=current();
@@ -325,8 +348,9 @@ function share(){const params=new URLSearchParams({tool:state.current,units:stat
 function loadHash(){try{const params=new URLSearchParams(location.hash.slice(1)),id=params.get('tool');if(!id||!ids.has(id))return;state.current=id;if(['us','metric'].includes(params.get('units')))state.units=params.get('units');if(['sg','ppt'].includes(params.get('sal')))state.salinity=params.get('sal');if(params.has('data')){if(params.get('data').length>8000)throw new Error('Link is too large.');const clean=normalizeInputs(id,migrateInputs(id,JSON.parse(params.get('data'))));calculate(id,clean);state.inputs[id]=clean;}save();}catch{toast('That shared calculation is invalid. Enter your measurements, or choose Reset for an example.');const c=current(),a=defaults(c,isUS());for(const f of c.fields)if(!f.options&&isVisible(c.id,f.key,a))a[f.key]=NaN;state.inputs[state.current]=a;}}
 $('quick-result-button').onclick=()=>document.querySelector('.result-panel').scrollIntoView({behavior:'smooth',block:'start'});
 $('search-icon').innerHTML=icon('search');$('tool-count').textContent=calculators.length;
-document.addEventListener('click',ev=>{const profileChoice=ev.target.closest('[data-profile-volume]');if(profileChoice){const value=Number(profileChoice.dataset.profileVolume);$('tank-volume').value=isUS()?Number((value/GAL).toFixed(6)):value;profileVolumeDraft={text:$('tank-volume').value,value};return;}const choice=ev.target.closest('[data-choice-field]');if(choice){applyChoice(choice.dataset.choiceField,Number(choice.dataset.choiceIndex));return;}const bag=ev.target.closest('[data-bag-index]');if(bag){applyChoice(inputs().bagMode==='weight'?'bagWeight':'bag',Number(bag.dataset.bagIndex));document.querySelector(`[data-bag-index="${bag.dataset.bagIndex}"]`)?.focus({preventScroll:true});return;}const sal=ev.target.closest('[data-salinity]');if(sal){state.salinity=sal.dataset.salinity;save();renderCalculator();document.querySelector(`[data-salinity="${state.salinity}"]`)?.focus({preventScroll:true});return;}const cat=ev.target.closest('[data-category]');if(cat){category=cat.dataset.category;renderLibrary();return;}const link=ev.target.closest('[data-tool]');if(link){ev.preventDefault();selectTool(link.dataset.tool,matchMedia('(max-width:760px)').matches);}const close=ev.target.closest('[data-close]');if(close)close.closest('dialog').close();});
-$('search').addEventListener('input',ev=>{query=ev.target.value;renderLibrary();});
+document.addEventListener('click',ev=>{const profileChoice=ev.target.closest('[data-profile-volume]');if(profileChoice){const value=Number(profileChoice.dataset.profileVolume);$('tank-volume').value=isUS()?Number((value/GAL).toFixed(6)):value;profileVolumeDraft={text:$('tank-volume').value,value};return;}const choice=ev.target.closest('[data-choice-field]');if(choice){applyChoice(choice.dataset.choiceField,Number(choice.dataset.choiceIndex));return;}const bag=ev.target.closest('[data-bag-index]');if(bag){applyChoice(inputs().bagMode==='weight'?'bagWeight':'bag',Number(bag.dataset.bagIndex));document.querySelector(`[data-bag-index="${bag.dataset.bagIndex}"]`)?.focus({preventScroll:true});return;}const sal=ev.target.closest('[data-salinity]');if(sal){state.salinity=sal.dataset.salinity;save();renderCalculator();document.querySelector(`[data-salinity="${state.salinity}"]`)?.focus({preventScroll:true});return;}const cat=ev.target.closest('[data-category]');if(cat){category=cat.dataset.category;renderLibrary();revealList(cat.dataset.category);return;}const link=ev.target.closest('[data-tool]');if(link){ev.preventDefault();selectTool(link.dataset.tool,matchMedia('(max-width:760px)').matches);}const close=ev.target.closest('[data-close]');if(close)close.closest('dialog').close();});
+$('search').addEventListener('input',ev=>{query=ev.target.value;renderLibrary();$('tool-list').scrollTop=0;markMore();});
+for(const el of [document.querySelector('.library'),$('tool-list')])el.addEventListener('scroll',markMore,{passive:true});addEventListener('resize',markMore);
 document.addEventListener('keydown',ev=>{if(ev.key==='/'&&!['INPUT','TEXTAREA','SELECT'].includes(document.activeElement.tagName)&&!document.querySelector('dialog[open]')){ev.preventDefault();$('search').focus();}});
 $('unit-us').onclick=()=>setUnits('us');$('unit-metric').onclick=()=>setUnits('metric');
 $('profile-select').onchange=ev=>{state.activeProfile=ev.target.value;applyProfile();save();renderPreferences();renderCalculator();toast('Working tank changed. Tank-volume inputs updated.');};

@@ -391,3 +391,16 @@ An answer named its rules of thumb ("Gallon rule", "Surface rule", "Usual low") 
 `node --test scripts/aquarium-toolbox/terms.test.mjs` fails when a phrase no longer appears in any answer or a
 quoted number drifts from the calculator. `node scripts/aquarium-toolbox/terms-browser.mjs <toolbox-url>
 [evidence-dir] [chromium|firefox|webkit]` taps, hovers and tabs to the terms at 390, 320 and 1280 px.
+
+## Calculator list (2026-11-10, Jez: "The text on the left it's hard to read. Also I don't like blatant scroll bars. And when you select calculators on the left … it changes the selection far below it which isn't always visible")
+
+- Wide screens: the whole list column is one sticky panel that fits the window (`--library-top` for a fixed
+  site menu) and scrolls as a unit with no visible scroll bar; a fade at its bottom edge shows only while more is
+  hidden (`data-more-below`, set by `markMore`). The calculator list no longer has its own fixed-height box.
+- Picking a category (`revealList`): the list starts at its top, the panel settles below the menu, scrolls only as
+  far as needed to show the list (or at least its first three calculators) while keeping the picked category in
+  view when both fit, and the list flashes once. On phones the page brings the list on screen instead.
+- The Lab and store add a solid panel behind the list (`lab-theme.css`) so it reads clearly over the photograph.
+
+`node scripts/aquarium-toolbox/sidebar-browser.mjs <toolbox-url> [evidence-dir] [chromium|firefox|webkit]` checks
+every category at 1440×900, 1366×768, 1280×620, 390×844 and 320×568.
