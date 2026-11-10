@@ -1,5 +1,6 @@
 import json
 import os
+import re
 from pathlib import Path
 import subprocess
 import tempfile
@@ -9,6 +10,15 @@ from pages_recovery import decision, final_success, inspect
 
 
 class PagesRecoveryTests(unittest.TestCase):
+    def test_workflow_respects_upstream_timeout_cap(self):
+        workflow = Path(__file__).parents[1] / 'workflows/pages.yml'
+        text = workflow.read_text()
+        limits = [int(v) for v in re.findall(r'^          timeout: (\d+)$', text, re.M)]
+        self.assertEqual(len(limits), 2)
+        self.assertTrue(all(0 < value <= 600000 for value in limits))
+        job_minutes = int(re.search(r'timeout-minutes: (\d+)', text).group(1))
+        self.assertGreaterEqual(job_minutes * 60000, sum(limits) + 300000)
+
     def test_cancelled_allows_one_retry(self):
         self.assertEqual(decision({'status': 'deployment_cancelled'}), 'retry')
 

@@ -29,7 +29,7 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 25
     steps:
       - name: Blobless sparse checkout
         env:
@@ -204,8 +204,8 @@ jobs:
         uses: actions/deploy-pages@v5
         with:
           artifact_name: github-pages-${{ github.run_id }}-${{ github.run_attempt }}
-          # GitHub queue/sync latency can exceed the action's ten-minute default.
-          timeout: 1200000
+          # deploy-pages v5 hard-caps each attempt at ten minutes; recover below.
+          timeout: 600000
 
       - name: Reconcile failed deployment before any retry
         id: recovery
@@ -224,7 +224,7 @@ jobs:
         uses: actions/deploy-pages@v5
         with:
           artifact_name: github-pages-${{ github.run_id }}-${{ github.run_attempt }}
-          timeout: 1200000
+          timeout: 600000
 
       - name: Require a successful deployment
         id: deployment

@@ -72,8 +72,9 @@ The under-budget mirror can still stall in GitHub's `deployment_queued` or
 checks but hit `deploy-pages`' ten-minute client timeout; a later near-identical
 payload succeeded in 23 seconds. This is separate from the repaired size issue.
 
-The mirror workflow now permits twenty minutes per deploy attempt, inside a
-45-minute job cap. On an action failure, `.github/scripts/pages_recovery.py`
+The action hard-caps each attempt at ten minutes (`MAX_TIMEOUT = 600000`),
+even when its input requests more. The workflow uses that supported limit
+inside a 25-minute job cap, with a separate bounded recovery attempt. On an action failure, `.github/scripts/pages_recovery.py`
 reads the backend status for that exact repository/commit. A late `succeed`
 result is accepted without another submission. Only a confirmed
 `deployment_cancelled` permits a single retry of the same artifact after a
