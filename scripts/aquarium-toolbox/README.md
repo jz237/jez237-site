@@ -367,3 +367,27 @@ sources" note and link, the search box and the printed page. Details and the mes
 
 `node --test scripts/aquarium-toolbox/final.test.mjs` and
 `node scripts/aquarium-toolbox/final-browser.mjs <toolbox-url> [evidence-dir] [chromium|firefox|webkit]`.
+
+## Explanations for rules and terms (2026-11-10, Jez: "What is the surface rule. All of these rules … should have some sort of hover over with an explanation of what they are")
+
+An answer named its rules of thumb ("Gallon rule", "Surface rule", "Usual low") without saying what they are.
+
+- `aquarium-toolbox/glossary.mjs` holds one short explanation per phrase, per calculator (35 calculators, 69
+  phrases; whole-system volume, DIY glass and the drip timer print nothing that needs one). A phrase must be written exactly as the
+  calculator prints it. Text may depend on units and inputs: the usual-flow range quotes the range for the kind of
+  tank chosen, and metric visitors get the stocking rules in centimetres and litres.
+- `app.mjs` (`decorateTerms`) marks each phrase where it first appears in the answer (chart label, result card
+  or message) as a real button with a dotted underline and an info mark. Hover (mouse), focus (keyboard) or tap
+  (phone, which has no hover) opens the bubble; a tap or click pins it; a second tap, a tap elsewhere or Escape
+  closes it. The bubble stays on screen and clear of a fixed site menu (`scroll-padding-top`) and the phone
+  summary bar. Drawn chart labels are SVG text: Safari only counts a pointer as on them when it is on a letter,
+  so inside a chart the label is found by its box (`termFrom`).
+- Stocking check, from the same screenshot: the tank footprint and the water volume are typed separately, and a
+  footprint of 158 × 12 in with 10 gallons gave a surface rule of 158 in, flattening the two bars that mattered.
+  The answer now starts with "Check the tank length and width…" when the water would stand under 3 in deep or
+  more than three times deeper than the tank is long, and a rule more than twice the larger of the fish and the
+  limit is drawn cut short (`scaleMax`, a slanted break; its number is still printed).
+
+`node --test scripts/aquarium-toolbox/terms.test.mjs` fails when a phrase no longer appears in any answer or a
+quoted number drifts from the calculator. `node scripts/aquarium-toolbox/terms-browser.mjs <toolbox-url>
+[evidence-dir] [chromium|firefox|webkit]` taps, hovers and tabs to the terms at 390, 320 and 1280 px.
