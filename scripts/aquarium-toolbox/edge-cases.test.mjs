@@ -72,16 +72,25 @@ test('Count fields reject partial fish and fittings; glass must leave inside spa
 test('Stocking gives every kind of fish a useful, honest answer',()=>{
  // Small community fish: 20 US gal, 24 × 12 in, ten 1.5 in fish = 15 in against 20 (volume) and 24 (surface): 75%, 13 allowed.
  const IN=2.54;let r=run('stocking',{kind:'tropical',v:20*GAL,l:24*IN,w:12*IN,size:1.5*IN,count:10});
- near(r.metrics[0].value,75);assert.equal(r.metrics[2].value,13);assert.match(r.message,/Within the classic length allowance/);assert.equal(r.graphic.status,'ok');
+ near(r.metrics[0].value,75);assert.equal(r.metrics[2].value,13);assert.match(r.message,/Comfortably stocked by the classic rules of thumb, with room for about 3 more fish of this size/);assert.equal(r.graphic.status,'ok');
+ // The count, the percentage and the words agree at the limit: 13 fit, 14 do not.
+ r=run('stocking',{kind:'tropical',v:20*GAL,l:24*IN,w:12*IN,size:1.5*IN,count:13});assert.match(r.message,/Fully stocked/);assert.equal(r.graphic.status,'ok');assert.doesNotMatch(r.message,/room for/);
+ r=run('stocking',{kind:'tropical',v:20*GAL,l:24*IN,w:12*IN,size:1.5*IN,count:14});assert.match(r.message,/Over the stricter of the two rules of thumb \(the gallon rule\)/);assert.equal(r.graphic.status,'high');
+ r=run('stocking',{kind:'tropical',v:20*GAL,l:24*IN,w:12*IN,size:1.5*IN,count:5});assert.match(r.message,/Lightly stocked.*room for about 8 more/);
  r=run('stocking',{kind:'tropical',v:20*GAL,l:24*IN,w:12*IN,size:1.5*IN,count:20});assert.match(r.message,/Overstocked by both/);assert.equal(r.graphic.status,'high');
- assert.match(run('stocking',{kind:'tropical',v:20*GAL,l:24*IN,w:12*IN,size:1.5*IN,count:0}).message,/numerical allowance is 13 fish of this size/);
+ assert.match(run('stocking',{kind:'tropical',v:20*GAL,l:24*IN,w:12*IN,size:1.5*IN,count:0}).message,/about 13 fish of this size would fit/);
  // Fancy goldfish (Aquarium Co-Op): 20 US gal for the first and 10 for each one after.
- r=run('stocking',{kind:'goldfish',v:20*GAL,count:3});near(r.metrics[0].value/GAL,40);assert.equal(r.metrics[1].value,1);assert.match(r.message,/Too small for 3 fancy goldfish by the usual guideline; the volume guideline allows 1/);assert.equal(r.graphic.status,'low');assert.equal(r.graphic.valueUnit,'L');
- r=run('stocking',{kind:'goldfish',v:55*GAL,count:4});near(r.metrics[0].value/GAL,50);assert.equal(r.metrics[1].value,4);assert.match(r.message,/Meets the volume guideline for 4 fancy goldfish/);assert.equal(r.graphic.status,'ok');
+ r=run('stocking',{kind:'goldfish',v:20*GAL,count:3});near(r.metrics[0].value/GAL,40);assert.equal(r.metrics[1].value,1);assert.match(r.message,/Too small for 3 fancy goldfish by the usual guideline; it suits 1/);assert.equal(r.graphic.status,'low');assert.equal(r.graphic.valueUnit,'L');
+ r=run('stocking',{kind:'goldfish',v:55*GAL,count:4});near(r.metrics[0].value/GAL,50);assert.equal(r.metrics[1].value,4);assert.match(r.message,/Room for 4 fancy goldfish by the usual guideline/);assert.equal(r.graphic.status,'ok');
  assert.equal(run('stocking',{kind:'goldfish',v:15*GAL,count:1}).metrics[1].value,0);
+ // No goldfish entered: say how many the tank suits instead of asking for a 0-gallon tank.
+ r=run('stocking',{kind:'goldfish',v:40*GAL,count:0});assert.equal(r.metrics.length,2);assert.equal(r.metrics[0].value,3);assert.match(r.message,/this tank suits 3 fancy goldfish/);near(r.graphic.values[0]/GAL,20);
  // Saltwater: a cautious 1 in per 5 US gal, and no inch rule at all for big fish.
  r=run('stocking',{kind:'marine',v:40*GAL,size:3*IN,count:2});near(r.metrics[0].value,75);assert.equal(r.metrics[2].value,2);assert.match(r.message,/1 inch of adult fish per 5 gallons/);assert.equal(r.graphic.values.length,2);
- for(const kind of ['tropical','marine']){r=run('stocking',{kind,size:15,count:3});assert.equal(r.metrics.length,2);assert.doesNotMatch(r.message,/Comfortably|room to add/);assert.ok(!('status' in r.graphic));}
+ // A 4 in fish gets the same answer whether it was entered as 4 in or as 10 cm.
+ for(const size of [4*IN,10]){r=run('stocking',{kind:'marine',v:75*GAL,size,count:3});assert.equal(r.metrics.length,3,'4 in / 10 cm is still within the inch rule');assert.equal(r.metrics[2].value,size>10?3:3);}
+ assert.equal(run('stocking',{kind:'marine',v:75*GAL,size:4.5*IN,count:2}).metrics.length,2);
+ for(const kind of ['tropical','marine']){r=run('stocking',{kind,size:15,count:3});assert.equal(r.metrics.length,2);assert.doesNotMatch(r.message,/Comfortably|room for/);assert.ok(!('status' in r.graphic));}
  // Inputs that do not apply are hidden.
  assert.equal(isVisible('stocking','size',{kind:'goldfish'}),false);assert.equal(isVisible('stocking','l',{kind:'marine'}),false);assert.equal(isVisible('stocking','w',{kind:'tropical'}),true);
 });
@@ -91,21 +100,24 @@ test('Choices and instructions match the selected unit and fish type',()=>{
  assert.match(labels('tropical',false),/^2\.5 cm · ember tetra/);near(fieldChoices(c,f,true,{kind:'tropical'}).options[1].value,1.5*2.54);
  assert.match(extraHelp({id:'label'},{key:'dose'},{unit:'tablets'},true),/1 tablet treats 10 gallons/);assert.match(extraHelp({id:'label'},{key:'dose'},{unit:'mL'},false),/5 mL treats 40 litres/);
  assert.match(formPresets({id:'weight'},false).note,/Enter your tank’s actual empty weight separately/);
- assert.match(run('label',{unit:'tablets',dose:1,v:10,labelV:40}).message,/not to split tablets/);assert.match(run('label').message,/scaled to your water/);
+ assert.match(run('label',{unit:'tablets',dose:1,v:10,labelV:40}).message,/not a whole number of tablets; most labels say not to split them/);assert.match(run('label').message,/scaled to your water/);
+ // A fraction is only mentioned when there is one, and the advice fits the unit.
+ assert.doesNotMatch(run('label',{unit:'tablets',dose:1,v:40,labelV:40}).message,/whole number/);assert.match(run('label',{unit:'drops',dose:3,v:10,labelV:40}).message,/measure as closely as you can/);
+ assert.match(run('label',{unit:'g'}).message,/small scale/);assert.match(run('label',{unit:'tsp'}).message,/measuring spoon/);assert.match(run('label',{unit:'mL'}).message,/syringe/);
  // Container notes fit what each field means.
- for(const [id,key,note] of [['fertilizer','bottle',/final solution volume/],['stock','final',/end up with/],['label','bottle',/left/],['doser','reserve',/left/]]){const t=calculators.find(c=>c.id===id);assert.match(fieldChoices(t,t.fields.find(f=>f.key===key),true,defaults(t)).note,note);}
+ for(const [id,key,note] of [['fertilizer','bottle',/finished volume/],['stock','final',/end up with/],['label','bottle',/left/],['doser','reserve',/left/]]){const t=calculators.find(c=>c.id===id);assert.match(fieldChoices(t,t.fields.find(f=>f.key===key),true,defaults(t)).note,note);}
  // Wattage shortcuts suit the equipment.
  const en=calculators.find(c=>c.id==='energy'),w=key=>fieldChoices(en,en.fields.find(f=>f.key===key),true,defaults(en));
  assert.match(w('lights').title,/lights/);assert.match(w('pumps').title,/pumps/);assert.equal(w('other'),null);
 });
 test('RO low rejection, water-cost illustration and pump graph reflect actual inputs',()=>{
- assert.match(run('ro',{feed:250,product:250}).message,/Below the 96–99%/);assert.match(run('ro',{feed:250,product:5}).message,/common 96–99% rated range/);
+ assert.match(run('ro',{feed:250,product:250}).message,/Below the 96–99%/);assert.match(run('ro',{feed:250,product:5}).message,/A healthy result/);
  assert.equal(run('watercost',{salt:0}).graphic.kind,'fresh');assert.equal(run('watercost',{salt:38}).graphic.kind,'salt');
  near(run('pump',{h1:1,h2:3,head:1.2}).graphic.positions[1],.1);
 });
 test('Figures name what they show and stay readable',()=>{
  // Drip timer and CO2 cylinder are not product doses.
- const drip=run('drip');assert.equal(drip.graphic.caption,'Drip time');assert.equal(drip.graphic.amount,drip.metrics[0].value);
+ const drip=run('drip');assert.equal(drip.graphic.caption,'Drip time');assert.equal(drip.graphic.amount,Math.round(drip.metrics[0].value));assert.equal(drip.metrics[0].digits,0);
  const cyl=run('co2cylinder');assert.equal(cyl.graphic.unit,'kg');near(cyl.metrics[1].value,1.2);assert.match(illustration(cyl.graphic,'',true),/2\.65/);assert.match(illustration(cyl.graphic,'',true),/CO₂ left in the cylinder/);
  // Heat-up shows the time it takes, not an invented midpoint.
  const heat=run('heatup',{v:5*GAL,start:(60-32)/1.8,target:(78-32)/1.8,power:200,eff:80});assert.deepEqual(heat.graphic.labels,['Now','After 1 h 23 min']);assert.equal(heat.graphic.values.length,2);

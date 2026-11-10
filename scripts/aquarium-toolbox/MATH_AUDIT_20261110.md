@@ -112,3 +112,10 @@ into `jez237-site/main`. A main commit can be published later by an unrelated
 personal-site auto-build even when its own build was skipped. Lab sync records
 this task's exact source commit and file hashes. Promote the source branch to the
 personal site only when that publication is authorized.
+
+## Follow-up check, same day
+
+Superseded by the follow-up check recorded in README.md ("Follow-up check"):
+the stocking, heater-splitting and RO messages are plain verdicts again, flow
+above the usual range is no longer coloured as a fault, and the CO2 bands were
+widened to five. The numerical fixes listed above are unchanged and still tested.

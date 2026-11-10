@@ -14,7 +14,7 @@ const examples={
  system:[{display:10,sump:2,refugium:3,pipe:4},[19,9]],
  sump:[{l:100,w:50,drop:2,pipe:5,margin:20,reserve:20},[15,18,2]],
  glass:[{l:100,w:50,h:50,t:5,price:10},[2,25,20]],
- change:[{v:100,pct:30,current:40,fresh:10},[31,30,-9]],
+ change:[{v:100,pct:30,current:40,fresh:10},[31,30,9]], // comes down by 9; the label carries the direction
  target:[{v:100,current:50,target:20,fresh:10},[75,75]],
  series:[{v:100,current:80,fresh:0,pct:50,n:3},[10,50,150]],
  nitrate:[{rise:12,fresh:5,pct:25,days:6},[53,41,2]],
@@ -87,7 +87,7 @@ test('Chemistry semantics: nitrogen basis, observed increase, stock volume and l
  for(let i=0;i<3;i++)near(n.metrics[i].value,nh.metrics[i].value);
  n.graphic.values.forEach((v,i)=>near(v,nh.graphic.values[i]));
  const rise=run('consumption',{start:8,end:9,hours:24,days:2});assert.equal(rise.metrics[0].value,1);assert.match(rise.metrics[0].label,/rise/);assert.match(rise.message,/not a negative dose/);
- const fert=run('fertilizer',{v:100,rise:10,fraction:50,stock:1,bottle:100});assert.equal(fert.metrics[1].value,200);assert.match(fert.message,/exceeds.*one full bottle/);
+ const fert=run('fertilizer',{v:100,rise:10,fraction:50,stock:1,bottle:100});assert.equal(fert.metrics[1].value,200);assert.match(fert.message,/more than the whole bottle of stock solution holds/);
  const salt=run('salt',{bag:3800,v:10,recipe:38,target:35});assert.match(salt.metrics[1].label,/this salt supply/);
 });
 
@@ -112,7 +112,8 @@ test('Goldfish volume boundaries agree with counts and verdicts; guidelines are 
   assert.equal(r.metrics[1].value,delta<0?count-1:count);
   assert.equal(r.graphic.status,delta<0?'low':'ok');
  }
- assert.doesNotMatch(run('stocking',{count:1}).message,/room to add|Comfortably/);
+ // The room left is the allowance minus the fish entered, never a vague promise.
+ const one=run('stocking',{count:1});assert.match(one.message,new RegExp(`room for about ${one.metrics[2].value-1} more fish of this size`));
 });
 
 test('Heater capacity below estimate is not reported adequate',()=>{
@@ -169,7 +170,8 @@ test('Unit-converted endpoints remain in domain without admitting real out-of-ra
  assert.throws(()=>calculate('salt',{...defaults(c),target:.999999},false,true),/must be between/);
 });
 test('CO2 status matches its stated 20–30 ppm comparison band',()=>{
- for(const [kh,word]of [[6,'low side'],[8,'range'],[11,'High']])assert.match(run('co2',{ph:7,kh}).message,new RegExp(word));
+ // At pH 7 the estimate is 3 × KH: 12, 18, 24, 33 and 42 ppm.
+ for(const [kh,word]of [[4,'low side'],[6,'Just under the 20–30 ppm'],[8,'Right in the 20–30 ppm range'],[11,'A little above the usual 20–30 ppm'],[14,'High'],[20/3,'Right in'],[10,'Right in']])assert.match(run('co2',{ph:7,kh}).message,new RegExp(word));
 });
 test('Evaporation does not extrapolate dissolved salinity to impossible concentrations',()=>{
  assert.throws(()=>run('ato',{v:100,daily:99,days:1,salinity:35}),/outside this dissolved-salt approximation/);
@@ -178,4 +180,29 @@ test('Evaporation does not extrapolate dissolved salinity to impossible concentr
 });
 test('Huge whole-dose counts are not presented as precise unsafe integers',()=>{
  assert.throws(()=>run('label',{v:.01,labelV:1e7,dose:.001,bottle:1e7}),/count is outside/);
+});
+test('Messages follow the numbers: direction, peaks, short runs and the visitor’s own figures',()=>{
+ // Water change: the third card says which way the reading moves.
+ let r=run('change',{v:100,pct:30,current:40,fresh:10});assert.equal(r.metrics[2].label,'Reading comes down by');assert.doesNotMatch(r.message,/raises it/);
+ r=run('change',{v:100,pct:30,current:10,fresh:40});assert.equal(r.metrics[2].label,'Reading goes up by');near(r.metrics[2].value,9,'rise');assert.match(r.message,/new water has a higher reading than the tank/);
+ // Repeated changes: 4 × 25% replaces 1 − 0.75⁴ = 68.4% of the old water, not 100%.
+ assert.match(run('series',{pct:25,n:4}).message,/4 changes of 25% replace about 68\.4% of the old water, not 100%/);
+ assert.match(run('series',{pct:10,n:2}).message,/2 changes of 10% replace about 19% of the old water, not 20%/);
+ for(const v of [{pct:25,n:1},{pct:100,n:4},{pct:0,n:4}])assert.match(run('series',v).message,/Each change replaces that share/);
+ // Nitrate: the verdict follows the peak (rise ÷ share changed + new water).
+ assert.match(run('nitrate',{rise:10,fresh:0,pct:10,days:7}).message,/above the roughly 40 ppm/);          // peak 100
+ assert.match(run('nitrate',{rise:10,fresh:0,pct:30,days:7}).message,/stays under about 40 ppm/);          // peak 33.3
+ assert.match(run('nitrate',{rise:5,fresh:0,pct:50,days:7}).message,/stays under about 20 ppm/);           // peak 10
+ assert.match(run('nitrate',{rise:10,fresh:45,pct:50,days:7}).message,/new water itself is at or above 40 ppm/);
+ assert.equal(run('nitrate',{days:7}).graphic.axis,'Water changes every 7 days');assert.equal(run('nitrate',{days:1}).graphic.axis,'Water changes every 1 day');
+ // Dosing pump: 8 mL a day in 1,440 doses at 12 mL/min is a 0.028 s run.
+ assert.match(run('doser',{events:1440}).message,/shorter than one second/);assert.doesNotMatch(run('doser').message,/shorter than one second/);
+ // Flow above the usual range is not a fault; heater chart and card agree.
+ assert.equal(run('turnover',{v:100,flow:5000,kind:'community'}).graphic.status,'above');
+ const h=run('heater',{v:20*3.785411784,room:20,target:20+50/9});assert.equal(h.graphic.values[0],63);assert.equal(h.metrics[1].digits,0);
+ const tiny=run('heater',{v:20*3.785411784,room:25,target:25+.5/1.8});assert.equal(tiny.metrics[1].digits,1);near(tiny.graphic.values[0],3.1,'tiny need');
+ // Substrate: a custom material is described as the visitor's own weight.
+ assert.match(run('substrate',{material:'custom'}).message,/weight you entered/);assert.match(run('substrate',{material:'sand'}).message,/typical weight/);
+ // Ammonia figure labels.
+ assert.deepEqual(run('ammonia').graphic.labels,['Your test','Toxic part']);assert.deepEqual(run('ammonia',{basis:'N'}).graphic.labels,['Your test as NH₃','Toxic part']);
 });
