@@ -5,13 +5,13 @@
 // Five looks (sky, terrain, sea, scenery, bodies in the sky), real 3D models for everything, curved beams,
 // warnings drawn in the play plane, HDR post. Nothing here changes the world.
 import * as THREE from '../vendor/three.module.min.js';
-import { Post } from './post.js?v=17';
-import * as TX from './textures.js?v=17';
-import * as MD from './models.js?v=17';
-import { FX, CALM } from './fx.js?v=17';
-import { NOISE, TONE } from './shaders.js?v=17';
-import { F, C, RP, H, ENEMY, BOSSES, POWERUPS, P2_LIVERY, LIVERIES, SETTLER, PHASE2 } from './config.js?v=17';
-import { wd, wp, nodePos, beamRange, dronePos as dronePosR } from './sim.js?v=17';
+import { Post } from './post.js?v=18';
+import * as TX from './textures.js?v=18';
+import * as MD from './models.js?v=18';
+import { FX, CALM } from './fx.js?v=18';
+import { NOISE, TONE } from './shaders.js?v=18';
+import { F, C, RP, H, ENEMY, BOSSES, POWERUPS, P2_LIVERY, LIVERIES, SETTLER, PHASE2 } from './config.js?v=18';
+import { wd, wp, nodePos, beamRange, dronePos as dronePosR } from './sim.js?v=18';
 
 export { CALM };
 const hdr = (hex, k) => new THREE.Color(hex).multiplyScalar(k);
@@ -24,6 +24,7 @@ const ZAX = new THREE.Vector3(0, 0, 1);
 const _up = new THREE.Vector3();
 const TCOL = { lifter: 0x9dff7a, husk: 0xff4a8a, sower: 0xc98aff, hive: 0xff8a3a, stinger: 0xff6a6a, prowler: 0xff3a3a, skimmer: 0x5ef0ff, mine: 0xffb347, whirler: 0x6af0e0, coil: 0xb07aff, spark: 0xe0c0ff, scorcher: 0xff7a2a, maw: 0xff4060 };
 const SIDE_FOV = 40, CHASE_FOV = 64;
+const _zoom = new THREE.Vector3(0.5, 0.5, 0), _hurt = new THREE.Vector4(1, 0.12, 0.06, 0);
 const JAW = { u: 0.44, l: 0.44 };   // how far the maw's jaws open (radians about Z)
 const SCAR_N = 200;
 // title-screen pictures: their size, their own layer, where the model sits (far off the planet) and the directions
@@ -1317,6 +1318,30 @@ export class Renderer {
         this.fx.dustP.add({ x: _v.x, y: _v.y, z: _v.z, vx: -_v2.x * 26, vy: -_v2.y * 26, vz: 0, s0: 0.13, s1: 0.1, max: 1.2, a: 0.5, r: 0.75, g: 0.82, b: 0.95, drag: 0, grav: 0, fade: 0.4 });
       }
     }
+    // AMBIENT LIFE: something small in the air of every world (not in space, not with reduced flashes)
+    if (!CALM.on && (this.spaceK || 0) < 0.5) {
+      const K = this.q.dust / 2400, ngt = this.nightK || 0, roll = (n) => Math.random() < dt * n * K;
+      const at = (span, y, z) => toW(this.cx + (Math.random() - 0.5) * span, y, _v, z);
+      radial(this.cx, _v2); tangent(this.cx, _v3);
+      const j = () => (Math.random() - 0.5);
+      if (Lk === 'verdant') {
+        // drifting seeds by day, fireflies low over the ground at night
+        if (roll(8 * (1 - ngt))) { at(130, 2 + Math.random() * 26, -30 + Math.random() * 40); this.fx.dustP.add({ x: _v.x, y: _v.y, z: _v.z, vx: _v3.x * 1.6 + j(), vy: _v3.y * 1.6 + j() * 0.6, vz: j(), s0: 0.45, s1: 0.45, max: 5, a: 0.8, r: 1.2, g: 1.18, b: 1, drag: 0, grav: 0, fade: 0.4 }); }
+        if (roll(18 * ngt)) { at(120, 0.6 + Math.random() * 5, -14 + Math.random() * 18); this.fx.fireP.add({ x: _v.x, y: _v.y, z: _v.z, vx: j() * 1.6, vy: j() * 1.6, vz: j() * 1.6, s0: 0.55, s1: 0.12, max: 1.4 + Math.random() * 1.2, a: 0.95, r: 1.4, g: 2.6, b: 0.5, drag: 0.3, grav: 0, fade: 0.5 }); }
+      } else if (Lk === 'dune') {
+        // sand streaming low over the dunes
+        if (roll(24)) { at(130, 0.3 + Math.random() * 2.4, -8 + Math.random() * 14); this.fx.dustP.add({ x: _v.x, y: _v.y, z: _v.z, vx: _v3.x * 13 + _v2.x * 0.5, vy: _v3.y * 13 + _v2.y * 0.5, vz: j(), s0: 0.3, s1: 0.8, max: 1.6, a: 0.26, r: 0.95, g: 0.72, b: 0.44, drag: 0, grav: 0, fade: 0.5 }); }
+      } else if (Lk === 'frost') {
+        // snow falling on a slant
+        for (let q = 0; q < 3; q++) if (roll(40)) { at(130, 3 + Math.random() * 38, -22 + Math.random() * 60); this.fx.dustP.add({ x: _v.x, y: _v.y, z: _v.z, vx: -_v2.x * 4.6 + _v3.x * 2.4, vy: -_v2.y * 4.6 + _v3.y * 2.4, vz: j() * 0.8, s0: 0.5, s1: 0.5, max: 3.4, a: 0.95, r: 1.5, g: 1.55, b: 1.7, drag: 0, grav: 0, fade: 0.3 }); }   // (the spark sprite is warm-tinted: snow uses the dust sprite)
+      } else if (Lk === 'cinder') {
+        // embers rising off the lava
+        if (roll(20)) { at(130, -1.5, 2 + Math.random() * 18); const u = 2.4 + Math.random() * 3.2; this.fx.fireP.add({ x: _v.x, y: _v.y, z: _v.z, vx: _v2.x * u + j(), vy: _v2.y * u + j(), vz: j() * 1.4, s0: 0.5, s1: 0.1, max: 2.4, a: 0.95, r: 2.4, g: 0.85, b: 0.2, drag: 0.2, grav: 0, fade: 0.6 }); }
+      } else if (Lk === 'umbra') {
+        // glowing spores drifting up from the crystal fields
+        if (roll(16)) { at(130, 0.5 + Math.random() * 10, -20 + Math.random() * 24); this.fx.fireP.add({ x: _v.x, y: _v.y, z: _v.z, vx: _v2.x * 0.9 + j() * 0.5, vy: _v2.y * 0.9 + j() * 0.5, vz: j() * 0.5, s0: 0.5, s1: 0.12, max: 3.6, a: 0.85, r: 1.5, g: 0.8, b: 2.6, drag: 0.1, grav: 0, fade: 0.5 }); }
+      }
+    }
     // HYPER: a rainbow wake behind the ship
     for (const p of W.players) if (p.alive && p.hyper > 0 && !CALM.on) for (let k = 0; k < 3; k++) {
       toW(p.x - p.face * (1 + k * 0.6), p.y + (Math.random() - 0.5) * 0.6, _v, 0); _c2.setHSL((t * 1.3 + k * 0.1) % 1, 1, 0.6);
@@ -1549,6 +1574,9 @@ export class Renderer {
   setScale(s) { if (Math.abs(s - this.scale) < 0.02) return; this.scale = s; this.resize(); }
   get portrait() { return this.camera.aspect < 0.85; }
   frameShot(pts, dur) { this.shot = { pts, t: dur }; }
+  // screen feedback: a zoom-blur kick for big moments, a red edge when the ship is hurt
+  kick(k) { this.zoomKick = Math.max(this.zoomKick || 0, k); }
+  hurt(k = 1) { this.hurtK = Math.max(this.hurtK || 0, k); }
   setIntent(t, me) { this.intent = t ? { t, me } : null; }
   // o: { me: player or null, cine, snap, shake, chase, x (fallback centre) }
   updateCamera(dt, o = {}) {
@@ -1617,6 +1645,16 @@ export class Renderer {
     }
     const fov = SIDE_FOV + (CHASE_FOV - SIDE_FOV) * sstep(0, 1, this.chaseK);
     if (Math.abs(c.fov - fov) > 0.01) { c.fov = fov; c.updateProjectionMatrix(); }
+    this.meP = o.me || this.meP;
+    // PHOTO MODE: orbit, tilt, dolly and slide the paused view (photo: { yaw, pitch, dolly, pan })
+    if (this.photo) {
+      const Q = this.photo;
+      tangent(this.cx, _v); _v3.addScaledVector(_v, Q.pan); c.position.addScaledVector(_v, Q.pan);
+      _v4.copy(c.position).sub(_v3);
+      _v4.applyAxisAngle(_v5.copy(c.up).normalize(), Q.yaw);
+      _v5.crossVectors(c.up, _v4).normalize(); _v4.applyAxisAngle(_v5, Q.pitch);
+      c.position.copy(_v3).addScaledVector(_v4, Q.dolly);
+    }
     c.lookAt(_v3);
     void th;
     this.sky.position.copy(c.position);
@@ -1703,7 +1741,16 @@ export class Renderer {
     }
     this.shocks = this.shocks.filter((s) => s.t < s.max);
     const night = this.nightK || 0;
+    // screen effects (Options: CINEMATIC EFFECTS; lighter on lower graphics tiers; calmer with reduced flashes)
+    const cine = this.cine === false ? 0 : 1, hi = this.q.name === 'high', lo = this.q.name === 'low', calm = CALM.on ? 0.4 : 1;
+    this.zoomKick = Math.max(0, (this.zoomKick || 0) - dt * 1.8); this.hurtK = Math.max(0, (this.hurtK || 0) - dt * 1.5);
+    const zk = cine * calm * ((this.hyperK || 0) * 0.28 + this.zoomKick * 0.6), me = this.meP;
+    if (zk > 0.001 && me) { this.project(me.x, me.y, P0); _zoom.set(clamp(P0.x / innerWidth, 0, 1), clamp(1 - P0.y / innerHeight, 0, 1), P0.z > 1 ? 0 : zk); } else _zoom.z = 0;
+    const hazeW = L.key === 'cinder' ? 1 : L.key === 'dune' ? 0.6 * (this.dayK || 0) : 0;
+    _hurt.set(1, 0.12, 0.06, calm * (this.hurtK * 0.5 + (this.danger ? 0.09 + 0.07 * Math.sin(t * 5) : 0)));
     this.post.render(this.scene, this.camera, {
+      streak: cine * (lo ? 0 : 0.55) * calm, haze: cine * (lo ? 0 : hazeW) * (1 - (this.spaceK || 0)) * (CALM.on ? 0 : 1), sharp: cine * (lo ? 0 : hi ? 0.4 : 0.3), punch: cine * 0.55, dirt: cine * (hi ? 0.5 : 0) * calm,
+      zoom: _zoom, hurt: _hurt,
       bloom: L.bloom * (1.2 + night * 0.75) * (1 + (this.hyperK || 0) * 0.6) * (p.bloom ?? 1), threshold: 1.12 - night * 0.22 - (this.hyperK || 0) * 0.2, exposure: L.exposure * (1 + night * 0.25) * (1 - (this.shadowK || 0)) * (p.exposure ?? 1), chroma: 0.0019 + (this.hyperK || 0) * 0.005 + (p.chroma || 0), time: t, desat: p.desat || 0, fade: p.fade || 0,
       vignette: 0.42 + (p.vignette || 0), flash: this.flash, tint: (this.sandK || 0) > 0.01 && !((this.hyperK || 0) > 0.01) ? _tint.set(L.grade[0] * (1 + 0.16 * this.sandK), L.grade[1] * (1 - 0.04 * this.sandK), L.grade[2] * (1 - 0.3 * this.sandK)) : (this.hyperK || 0) > 0.01 ? (_c2.setHSL((t * 0.25) % 1, 0.9, 0.62), _tint.set(L.grade[0] + (_c2.r * 1.6 - L.grade[0]) * 0.22 * this.hyperK, L.grade[1] + (_c2.g * 1.6 - L.grade[1]) * 0.22 * this.hyperK, L.grade[2] + (_c2.b * 1.6 - L.grade[2]) * 0.22 * this.hyperK)) : _tint.set(...L.grade), shocks, lens: [],
     });

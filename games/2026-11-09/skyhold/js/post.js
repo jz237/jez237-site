@@ -1,7 +1,9 @@
 // HDR post (shared with Asteroids 2026): scene -> MSAA half-float target -> dual-filter bloom chain -> composite with
-// shockwave refraction, chromatic aberration, ACES, grade, vignette and grain (lens slots unused here).
+// shockwave refraction, chromatic aberration, ACES, grade, vignette and grain (lens slots unused here). Skyhold adds, all
+// in the same composite shader (so no extra programs): heat haze, a zoom blur away from a point (HYPER, big moments), a
+// light sharpen, anamorphic streaks and lens dirt on the bloom, a colour punch, and a coloured edge when the ship is hurt.
 import * as THREE from '../vendor/three.module.min.js';
-import { TONE, NOISE } from './shaders.js?v=17';
+import { TONE, NOISE } from './shaders.js?v=18';
 
 const VERT = /* glsl */ `varying vec2 vUv; void main(){ vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }`;
 
@@ -44,6 +46,7 @@ uniform sampler2D tScene; uniform sampler2D tBloom;
 uniform float uBloom, uExposure, uChroma, uVignette, uGrain, uTime, uDesat, uFade, uAspect, uScan;
 uniform vec4 uFlash; uniform vec3 uTint;
 uniform vec4 uShock[6]; uniform vec4 uLens[3];
+uniform float uStreak, uHaze, uSharp, uPunch, uDirt; uniform vec3 uZoom; uniform vec4 uHurt; uniform vec2 uPx;
 varying vec2 vUv;
 ${NOISE}
 ${TONE}
@@ -68,6 +71,11 @@ void main(){
     float k = L.w * L.z * L.z / (r * r + L.z * L.z * 0.25);
     off -= (d / r) * min(k, r * 0.95) * vec2(1.0 / uAspect, 1.0);
   }
+  // heat haze: a rising shimmer over the lower part of the picture (the lava and desert worlds)
+  if (uHaze > 0.0) {
+    float hz = smoothstep(0.6, 0.0, vUv.y) * uHaze;
+    off += vec2(sin(vUv.y * 95.0 - uTime * 5.0 + vUv.x * 17.0), cos(vUv.y * 70.0 - uTime * 4.0 + vUv.x * 9.0)) * 0.0014 * hz;
+  }
   uv += off;
   vec2 cd = (uv - 0.5);
   float ca = uChroma * (0.35 + dot(cd, cd) * 2.5);
@@ -75,17 +83,45 @@ void main(){
   col.r = texture2D(tScene, uv + cd * ca).r;
   col.g = texture2D(tScene, uv).g;
   col.b = texture2D(tScene, uv - cd * ca).b;
+  // zoom blur streaming away from a point (the ship in HYPER, the heart of a big blast); sharp close to the point
+  if (uZoom.z > 0.001) {
+    vec2 dz = uv - uZoom.xy; float wz = smoothstep(0.05, 0.6, length(dz * vec2(uAspect, 1.0)));
+    vec3 acc = col; float jz = hash12(gl_FragCoord.xy + fract(uTime) * 311.0);   // jittered taps: grain, not ghost copies
+    for (int i = 0; i < 8; i++) acc += texture2D(tScene, uv - dz * (uZoom.z * 0.02 * (float(i) + jz)) * wz).rgb;
+    col = acc / 9.0;
+  }
+  // a light sharpen (the difference from the four neighbours, limited so HDR beams grow no halos)
+  if (uSharp > 0.0) {
+    vec3 nb = texture2D(tScene, uv + vec2(uPx.x, 0.0)).rgb + texture2D(tScene, uv - vec2(uPx.x, 0.0)).rgb + texture2D(tScene, uv + vec2(0.0, uPx.y)).rgb + texture2D(tScene, uv - vec2(0.0, uPx.y)).rgb;
+    col += clamp(col - nb * 0.25, -0.12, 0.12) * uSharp;
+  }
   vec3 bl = texture2D(tBloom, uv).rgb;
   if (any(isnan(col)) || any(isinf(col))) col = vec3(0.0);
   col += bl * uBloom;
+  // anamorphic streaks: the bloom smeared sideways, cool-tinted
+  if (uStreak > 0.0) {
+    vec3 sk = vec3(0.0);
+    for (int i = 1; i <= 4; i++) { float o = float(i) * 0.028, w = 1.0 - float(i) * 0.2; sk += (texture2D(tBloom, uv + vec2(o, 0.0)).rgb + texture2D(tBloom, uv - vec2(o, 0.0)).rgb) * w; }
+    col += sk * vec3(0.5, 0.72, 1.0) * uStreak * uBloom * 0.3;
+  }
+  // lens dirt: specks on the glass that catch the bloom
+  if (uDirt > 0.0) {
+    vec2 dq = vUv * vec2(uAspect, 1.0);
+    float dn = vnoise(vec3(dq * 7.0, 2.0)) * vnoise(vec3(dq * 19.0, 9.0));
+    col += bl * smoothstep(0.18, 0.6, dn) * uDirt * uBloom * 1.5;
+  }
+  if (any(isnan(col)) || any(isinf(col))) col = vec3(0.0);
   col *= uExposure;
   col = aces(col * uTint);
   float l = dot(col, vec3(0.2126, 0.7152, 0.0722));
   col = mix(col, vec3(l), uDesat);
+  // colour punch: a little more saturation and contrast
+  if (uPunch > 0.0) { col = mix(vec3(l), col, 1.0 + 0.22 * uPunch); col = clamp(col, 0.0, 1.0); col = mix(col, col * col * (3.0 - 2.0 * col), 0.3 * uPunch); }
   col = mix(col, uFlash.rgb, uFlash.a);
   // vignette + scanlines + grain
   float v = smoothstep(1.25, 0.25, length(cd * vec2(uAspect * 0.8, 1.0)));
   col *= mix(1.0 - uVignette, 1.0, v);
+  col += uHurt.rgb * uHurt.a * (1.0 - v);   // hurt: the edges of the picture flush
   col *= 1.0 - uScan * (0.5 + 0.5 * sin(gl_FragCoord.y * 3.14159));
   col += (hash12(gl_FragCoord.xy + fract(uTime) * 917.0) - 0.5) * uGrain;
   col *= 1.0 - uFade;
@@ -125,6 +161,8 @@ export class Post {
         uGrain: { value: 0.016 }, uTime: { value: 0 }, uDesat: { value: 0 }, uFade: { value: 0 }, uAspect: { value: 1 },
         uScan: { value: 0.025 }, uFlash: { value: new THREE.Vector4(1, 1, 1, 0) }, uTint: { value: new THREE.Vector3(1, 1, 1) },
         uShock: { value: shocks }, uLens: { value: lens },
+        uStreak: { value: 0 }, uHaze: { value: 0 }, uSharp: { value: 0 }, uPunch: { value: 0 }, uDirt: { value: 0 },
+        uZoom: { value: new THREE.Vector3(0.5, 0.5, 0) }, uHurt: { value: new THREE.Vector4(1, 0.1, 0.05, 0) }, uPx: { value: new THREE.Vector2(0.001, 0.001) },
       } });
     this.w = 0; this.h = 0;
   }
@@ -135,7 +173,7 @@ export class Post {
     this.rt.setSize(w, h);
     let mw = Math.max(1, w >> 1), mh = Math.max(1, h >> 1);
     for (const m of this.mips) { m.setSize(mw, mh); mw = Math.max(1, mw >> 1); mh = Math.max(1, mh >> 1); }
-    this.comp.uniforms.uAspect.value = w / h;
+    this.comp.uniforms.uAspect.value = w / h; this.comp.uniforms.uPx.value.set(1 / w, 1 / h);
   }
 
   pass(mat, target) {
@@ -173,6 +211,9 @@ export class Post {
     u.uFlash.value.copy(p.flash); u.uTint.value.copy(p.tint);
     for (let i = 0; i < 6; i++) u.uShock.value[i].copy(p.shocks[i] || ZERO4);
     for (let i = 0; i < 3; i++) u.uLens.value[i].copy(p.lens[i] || ZERO4);
+    u.uStreak.value = p.streak || 0; u.uHaze.value = p.haze || 0; u.uSharp.value = p.sharp || 0; u.uPunch.value = p.punch || 0; u.uDirt.value = p.dirt || 0;
+    if (p.zoom) u.uZoom.value.copy(p.zoom); else u.uZoom.value.z = 0;
+    if (p.hurt) u.uHurt.value.copy(p.hurt); else u.uHurt.value.w = 0;
     this.pass(this.comp, null);
   }
 }

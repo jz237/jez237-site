@@ -7,22 +7,22 @@
 <meta name="description" content="Skyhold 2026: an original planet-defence shooter in real-time 3D. Fly a gunship round and round a small planet, from the day side into the night, shoot down the machines lifting your settlers off the ground, catch the ones that fall and bring down a colossal carrier on each of five worlds. Endless Orbit, online co-op, upgrades, medals, instant replays and a smart demo mode.">
 <title>Skyhold 2026</title>
 <link rel="icon" href="data:,">
-<link rel="modulepreload" href="js/main.js?v=17">
-<link rel="modulepreload" href="js/config.js?v=17">
-<link rel="modulepreload" href="js/sim.js?v=17">
-<link rel="modulepreload" href="js/ai.js?v=17">
-<link rel="modulepreload" href="js/render.js?v=17">
-<link rel="modulepreload" href="js/audio.js?v=17">
-<link rel="modulepreload" href="js/chip.js?v=17">
-<link rel="modulepreload" href="js/input.js?v=17">
-<link rel="modulepreload" href="js/scores.js?v=17">
-<link rel="modulepreload" href="js/replay.js?v=17">
-<link rel="modulepreload" href="js/post.js?v=17">
-<link rel="modulepreload" href="js/textures.js?v=17">
-<link rel="modulepreload" href="js/models.js?v=17">
-<link rel="modulepreload" href="js/fx.js?v=17">
-<link rel="modulepreload" href="js/shaders.js?v=17">
-<link rel="modulepreload" href="js/online.js?v=17">
+<link rel="modulepreload" href="js/main.js?v=18">
+<link rel="modulepreload" href="js/config.js?v=18">
+<link rel="modulepreload" href="js/sim.js?v=18">
+<link rel="modulepreload" href="js/ai.js?v=18">
+<link rel="modulepreload" href="js/render.js?v=18">
+<link rel="modulepreload" href="js/audio.js?v=18">
+<link rel="modulepreload" href="js/chip.js?v=18">
+<link rel="modulepreload" href="js/input.js?v=18">
+<link rel="modulepreload" href="js/scores.js?v=18">
+<link rel="modulepreload" href="js/replay.js?v=18">
+<link rel="modulepreload" href="js/post.js?v=18">
+<link rel="modulepreload" href="js/textures.js?v=18">
+<link rel="modulepreload" href="js/models.js?v=18">
+<link rel="modulepreload" href="js/fx.js?v=18">
+<link rel="modulepreload" href="js/shaders.js?v=18">
+<link rel="modulepreload" href="js/online.js?v=18">
 <link rel="modulepreload" href="vendor/three.module.min.js">
 <link rel="modulepreload" href="vendor/three.core.min.js">
 
@@ -96,6 +96,18 @@ button { appearance: none; border: 0; background: none; font: inherit; color: in
 .mbtn:hover, .mbtn.sel { border-color: var(--amber); background: rgba(255, 179, 71, .1); }
 .mbtn.primary { background: linear-gradient(90deg, rgba(255, 179, 71, .25), rgba(255, 179, 71, .06)); border-color: rgba(255, 179, 71, .6); }
 .mbtn[disabled] { opacity: .4; cursor: default; }
+#hitdir { position: absolute; z-index: 5; width: 150px; height: 150px; border-radius: 50%; border: 7px solid transparent; border-top-color: #ff5a4a; pointer-events: none; opacity: 0; filter: drop-shadow(0 0 8px #ff3a2a); }
+#hitdir.go { animation: hitdir .7s ease-out; }
+@keyframes hitdir { 0% { opacity: 1; width: 110px; height: 110px; } 100% { opacity: 0; width: 170px; height: 170px; } }
+#photobar { position: fixed; z-index: 70; left: 50%; bottom: max(14px, env(safe-area-inset-bottom)); transform: translateX(-50%); display: flex; gap: 8px; align-items: center; flex-wrap: wrap; justify-content: center;
+  padding: 8px 12px; border-radius: 12px; background: rgba(6, 8, 12, .72); border: 1px solid rgba(255, 255, 255, .14); backdrop-filter: blur(6px); max-width: 94vw; pointer-events: auto; }
+#photobar span { font-size: 10px; letter-spacing: .16em; opacity: .75; }
+#photobar button { font: inherit; font-size: 11px; letter-spacing: .14em; color: #fff; padding: 8px 12px; border-radius: 8px; border: 1px solid rgba(255, 255, 255, .2); background: rgba(255, 255, 255, .06); cursor: pointer; }
+#photobar button.pri { border-color: var(--amber); color: var(--amber); }
+#photobar.snap { animation: snap .35s ease-out; }
+@keyframes snap { 0% { box-shadow: 0 0 0 200vmax rgba(255, 255, 255, .5); } 100% { box-shadow: 0 0 0 200vmax rgba(255, 255, 255, 0); } }
+@media (max-width: 700px) { #photobar span { display: none; } }
+@media (max-height: 460px) { #pause .mbtn small { display: none; } #pause .mbtn { padding-top: 9px; padding-bottom: 9px; } }
 #title { justify-content: flex-start; padding-left: max(5vw, env(safe-area-inset-left)); }
 #title .card { width: min(430px, 92vw); background: linear-gradient(170deg, rgba(16, 20, 28, .72), rgba(4, 5, 8, .8)); }
 .logo { font-family: 'Saira Condensed'; font-weight: 800; font-size: clamp(46px, 7vw, 66px); line-height: .9; letter-spacing: .05em; margin: 0; color: #fff; text-shadow: 0 4px 30px rgba(0, 0, 0, .6); }
@@ -384,6 +396,8 @@ table.hs tr.me td { color: #fff; background: rgba(255, 179, 71, .1); }
   <div id="warns"></div>
   <div id="wingtag" class="hidden">WINGMATE</div>
   <div id="popups"></div>
+  <div id="hitdir" class="hidden"></div>
+  <div id="photobar" class="hidden"><span>PHOTO MODE · DRAG OR ARROWS TURN · WHEEL OR W / S ZOOM · A / D SLIDE</span><button data-act="photoin">ZOOM +</button><button data-act="photoout">ZOOM −</button><button class="pri" data-act="photosave">SAVE PICTURE</button><button data-act="photoback">BACK</button></div>
   <div id="tut" class="hidden"></div>
   <div id="banner" class="hidden"><div class="b1"></div><div class="b2"></div></div>
   <div id="caption" class="hidden"></div>
@@ -402,7 +416,7 @@ table.hs tr.me td { color: #fff; background: rgba(255, 179, 71, .1); }
   <div class="screen hidden" id="title">
     <div class="card">
       <h1 class="logo">SKYHOLD<span> 2026</span></h1>
-      <div class="ver">VERSION <b id="ver">1.11.2</b> · GUARD THE COLONY · HOLD THE SKY</div>
+      <div class="ver">VERSION <b id="ver">1.12.0</b> · GUARD THE COLONY · HOLD THE SKY</div>
       <div class="diffrow">DIFFICULTY<div class="seg" data-opt="diff"><button data-v="easy">EASY</button><button data-v="normal">NORMAL</button><button data-v="hard">HARD</button><button data-v="nightmare">NIGHTMARE</button></div></div>
       <div id="diff-desc"></div>
       <div class="btns" id="title-btns">
@@ -507,6 +521,7 @@ table.hs tr.me td { color: #fff; background: rgba(255, 179, 71, .1); }
     <div class="opt">AUTO-FIRE<div class="seg" data-opt="autofire"><button data-v="auto">TOUCH</button><button data-v="on">ON</button><button data-v="off">OFF</button></div></div>
     <div class="opt">AIM ASSIST<div class="seg" data-opt="assist"><button data-v="off">OFF</button><button data-v="light">LIGHT</button><button data-v="strong">STRONG</button></div></div>
     <div class="opt">SCANNER<div class="seg" data-opt="scanner"><button data-v="on">ON</button><button data-v="off">OFF</button></div></div>
+    <div class="opt">CINEMATIC EFFECTS<div class="seg" data-opt="cine"><button data-v="on">ON</button><button data-v="off">OFF</button></div></div>
     <div class="opt">DYNAMIC MUSIC<div class="seg" data-opt="layers"><button data-v="on">ON</button><button data-v="off">OFF</button></div></div>
     <div class="opt">RETRO SOUNDS<div class="seg" data-opt="retro"><button data-v="on">ON</button><button data-v="off">OFF</button></div></div>
     <div class="opt">CABINET SOUNDS<div class="seg" data-opt="cab"><button data-v="on">ON</button><button data-v="off">OFF</button></div></div>
@@ -540,6 +555,8 @@ table.hs tr.me td { color: #fff; background: rgba(255, 179, 71, .1); }
     <h3>THE SKYGATE</h3><p>A great ring hangs in the sky on the far side of the planet (a ring on the scanner). Fly through it and it throws you straight to wherever a settler needs you most: a lifter carrying someone off, a settler falling, or a lifter going down. It needs a few seconds to recharge.</p>
     <h3>LOSING THE COLONY</h3><p>If every settler is lost, the planet shatters. You fight on in open space among its wreckage, and every lifter left becomes a husk. In the campaign the planet is back for the next world; in ENDLESS ORBIT it returns every fifth wave.</p>
     <h3>POD INTERSECTION</h3><p>Some waves send two shielded hive pods closing on one point (a warning says so). When they meet they lock together for about three seconds, circling, linked by a crackling bridge: hit either one and both burst together for a 2,000 bonus, their stingers scattering away from you. Miss the moment and they drift apart and hunt you as usual.</p>
+    <h3>PHOTO MODE</h3><p>Pause, then PHOTO MODE: the HUD goes and you can turn the camera (drag, or the arrow keys), zoom (wheel, or W / S) and slide along the planet (A / D). SAVE PICTURE (or Enter) downloads what you see as a PNG.</p>
+    <h3>CINEMATIC EFFECTS</h3><p>Lens streaks on bright lights, a zoom blur in HYPER and on the biggest blasts, heat haze over the lava and the desert, and a red edge when you are hit (a slow red pulse means last ship, no shield). Options → CINEMATIC EFFECTS turns the lens effects off; FLASHES · REDUCED calms them.</p>
     <h3>DYNAMIC MUSIC</h3><p>Each world's music has two more parts that join in as the fight heats up: drums when machines close in, then a pulsing lead when it gets fierce (a carrier, an event, HYPER). Options → DYNAMIC MUSIC turns them off.</p>
     <h3>CHASE CAMERA</h3><p>Options → CAMERA → CHASE (or C in flight) puts the camera low behind your gunship, looking ahead along the curve of the planet. RIGHT (or forward on the stick) flies on the way you face and LEFT turns you about; the camera swings round with you. Markers at the bottom of the screen show machines and settlers behind you.</p>
     <h3>GAMEPAD</h3><p>FLY: left stick or d-pad · FIRE: A or the right trigger · NOVA: B or the left trigger · BLINK: Y or a bumper · PAUSE: Start</p>
@@ -568,6 +585,7 @@ table.hs tr.me td { color: #fff; background: rgba(255, 179, 71, .1); }
     <div class="btns">
       <button class="mbtn primary" data-act="resume">RESUME</button>
       <button class="mbtn" data-act="replay" id="pause-replay">INSTANT REPLAY<small>The last hit</small></button>
+      <button class="mbtn" data-act="photo" id="pause-photo">PHOTO MODE<small>Hide the HUD, turn the camera, save a picture</small></button>
       <button class="mbtn" data-act="options">OPTIONS</button>
       <button class="mbtn" data-act="quit">QUIT TO TITLE</button>
     </div>
@@ -581,6 +599,6 @@ addEventListener('error', (e) => window.__shErrors.push(String(e.message || e)))
 addEventListener('unhandledrejection', (e) => window.__shErrors.push('rejection: ' + String(e.reason && e.reason.message || e.reason)));
 (() => { const ce = console.error; console.error = (...a) => { window.__shErrors.push(a.map(String).join(' ')); ce.apply(console, a); }; })();
 </script>
-<script type="module" src="js/main.js?v=17"></script>
+<script type="module" src="js/main.js?v=18"></script>
 </body>
 </html>
