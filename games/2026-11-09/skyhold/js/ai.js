@@ -9,8 +9,8 @@
 //   'human' — plays like a person: ~0.35 s reaction (scattered, sometimes late), wobbly altitude, misses things
 //             behind it, saves novas too long. The difficulty ramp is measured with this one.
 //   'demo'  — the attract mode: sharp and decisive. It never reads the world's random generator (replays stay exact).
-import { F, ENEMY, BOSSES, H, SHIPS } from './config.js?v=16';
-import { wd, wp, nodePos, beamRange } from './sim.js?v=16';
+import { F, ENEMY, BOSSES, H, SHIPS } from './config.js?v=17';
+import { wd, wp, nodePos, beamRange } from './sim.js?v=17';
 
 const clamp = (v, a, b) => (v < a ? a : v > b ? b : v);
 function mkr(seed) { let s = seed | 0; return () => { s = (s + 0x6D2B79F5) | 0; let t = Math.imul(s ^ (s >>> 15), s | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
@@ -19,6 +19,8 @@ const PROFILES = {
   human: { react: 0.36, jit: 0.12, late: 0.16, lateT: 0.32, blind: 0.4, aimErr: 0.42, wob: 0.55, dodge: 1.6, nova: 5, novaDanger: 0.35, stand: 17, greed: 0.6, slow: 0.82, catchK: 0.85 },
   demo: { react: 0.12, jit: 0.04, late: 0, lateT: 0, blind: 0.05, aimErr: 0.12, wob: 0.15, dodge: 2.4, nova: 4, novaDanger: 1, stand: 15, greed: 1, slow: 1, catchK: 1 },
 };
+// the demo lets a hive pod's fresh stingers be seen before it opens fire on them (seconds after the burst)
+const SWARM_HOLD = 1.7;
 const DANGER = new Set(['husk', 'prowler', 'stinger', 'whirler', 'spark', 'maw', 'scorcher']);
 
 export class Autopilot {
@@ -64,6 +66,7 @@ export class Autopilot {
     const endgame = !B && W.plan && W.plan.left === 0 && W.plan.extra.every((x) => x.done) && left > 0 && left <= 3;
     for (const e of W.enemies) {
       if (e.hp <= 0 || e.type === 'mine') continue;
+      if (this.profile === 'demo' && e.type === 'stinger' && e.t < SWARM_HOLD) continue;   // let the watcher see a fresh swarm
       if (!this.notice(W, e.id, e.x, me)) continue;
       const d = Math.abs(wd(e.x - me.x));
       if (e.born > 0 && d > 30) continue;
@@ -97,6 +100,12 @@ export class Autopilot {
     return { ...best, why };
   }
   control(W, me) {
+    const out = this.control0(W, me);
+    // a pod has just burst near us: hold fire (and the nova) for a moment so its swarm can be seen
+    if (this.profile === 'demo' && W.enemies.some((e) => e.type === 'stinger' && e.hp > 0 && e.t < SWARM_HOLD - 0.3 && Math.abs(wd(e.x - me.x)) < 60)) { out.fire = false; out.nova = false; }
+    return out;
+  }
+  control0(W, me) {
     const out = { mx: 0, my: 0, fire: false, nova: false, blink: false };
     const D = this.debug, P = this.P;
     if (!me.alive) { D.intent = 'Waiting to come back in'; D.target = null; return out; }

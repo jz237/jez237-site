@@ -1,13 +1,13 @@
 // Skyhold 2026 — game flow, menus, HUD (with the scanner strip), commentary, demo director and the frame loop.
-import { VERSION, SECTORS, STEP, F, C, H, BOSSES, UPGRADES, UP_KEYS, UP_COST, MEDALS, parTime, TYPICAL_UP, START_LIVES, DIFFICULTY, POWERUPS, LIVERIES, CP_NAMES, WAVES, ENEMY, SHIPS, SHIP_KEYS, RIVALS, MASTERY, mastLevel } from './config.js?v=16';
-import { makeWorld, step, stepGuest, drainEvents, wd, wp, settlersLeft, nodePos, CHAIN_T, chainMult, beamRange } from './sim.js?v=16';
-import { Autopilot } from './ai.js?v=16';
-import { Renderer, pickQuality, CALM, LOOKS, PW, PH } from './render.js?v=16';
-import { Audio } from './audio.js?v=16';
-import { Input } from './input.js?v=16';
-import { Scores, NO_POST } from './scores.js?v=16';
-import { Recorder, Replay } from './replay.js?v=16';
-import { Online, ROOM, QUICK, QUICK_R, randomCode, cleanCode } from './online.js?v=16';
+import { VERSION, SECTORS, STEP, F, C, H, BOSSES, UPGRADES, UP_KEYS, UP_COST, MEDALS, parTime, TYPICAL_UP, START_LIVES, DIFFICULTY, POWERUPS, LIVERIES, CP_NAMES, WAVES, ENEMY, SHIPS, SHIP_KEYS, RIVALS, MASTERY, mastLevel } from './config.js?v=17';
+import { makeWorld, step, stepGuest, drainEvents, wd, wp, settlersLeft, nodePos, CHAIN_T, chainMult, beamRange } from './sim.js?v=17';
+import { Autopilot } from './ai.js?v=17';
+import { Renderer, pickQuality, CALM, LOOKS, PW, PH } from './render.js?v=17';
+import { Audio } from './audio.js?v=17';
+import { Input } from './input.js?v=17';
+import { Scores, NO_POST } from './scores.js?v=17';
+import { Recorder, Replay } from './replay.js?v=17';
+import { Online, ROOM, QUICK, QUICK_R, randomCode, cleanCode } from './online.js?v=17';
 
 const $ = (id) => document.getElementById(id);
 const params = new URLSearchParams(location.search);
@@ -484,11 +484,12 @@ function handleEvents(list, W, live) {
       case 'selfland': R.cheer(e.id); if (live && G.mode !== 'demo') popup('LANDED SAFELY', e.x, 1, '#c8ffc8'); break;
       case 'lost': { R.siteDamage(e.x); const p = P(e.x, Math.max(0.3, e.y)); snd('lost', e, { vol: 0.8, gap: 0.2 }); A.retro('lost', { vol: 0.4 }); fx.sparks(p.x, p.y, p.z, { n: 10, speed: 3, r: 1, g: 0.5, b: 0.4 }); if (live && e.why === 'fall' && G.mode !== 'demo') caption('A SETTLER FELL TOO FAR', 2.4); break; }
       case 'colonyfall':
+        R.shatter(R.cx); A.play('boomL', { vol: 1, rate: 0.55, gap: 0 }); A.play('boomL', { vol: 0.8, rate: 0.7, delay: 0.5, gap: 0 }); slowmo(0.4, 1.6);
         A.play('colonyfall', { vol: 1, gap: 0 }); A.cab('planet'); A.play('alarm', { vol: 0.7, delay: 0.4, gap: 0 });
         R.flashScreen(0.3, 0xff3a2a); R.addTrauma(0.5 * S);
-        if (live) { banner('THE COLONY HAS FALLEN', 'EVERY LIFTER LEFT IS NOW A HUSK', 3.4); say('colonyfall', { key: true, delay: 0.8 }); rumble(0.7, 0.7, 600); }
+        if (live) { banner('THE PLANET IS LOST', 'FIGHT ON IN SPACE · EVERY LIFTER IS NOW A HUSK', 3.6); say('colonyfall', { key: true, delay: 0.8 }); rumble(0.7, 0.7, 600); }
         break;
-      case 'colony': if (live) banner('A NEW COLONY', 'THE SETTLERS ARE BACK', 2.6); break;
+      case 'colony': if (live) { banner('THE PLANET RETURNS', 'A NEW COLONY · THE SETTLERS ARE BACK', 2.8); R.flashScreen(0.6, 0xffffff); } break;
       case 'tell': snd('tell', e, { vol: 0.4, gap: 0.12 }); A.retro('tell', { vol: 0.15, pan: pan(e.x) }); break;
       case 'bolt': snd('bolt', e, { vol: e.from === 'carrier' ? 0.6 : 0.45, gap: 0.05 }); break;
       case 'boltground': { if (live && Math.random() < 0.3) R.scar(e.x, 0, 0.55, -0.4); const p = P(e.x, 0.3); fx.sparks(p.x, p.y, p.z, { n: 5, speed: 4, r: 1, g: 0.4, b: 0.3, life: 0.3 }); fx.dust(p.x, p.y, p.z, { n: 2, s0: 0.4, s1: 1.6, life: 1.4, a: 0.3 }); break; }
@@ -533,6 +534,7 @@ function handleEvents(list, W, live) {
       case 'mine': snd('mine', e, { vol: 0.35, gap: 0.25 }); A.retro('mine', { vol: 0.15, pan: pan(e.x) }); break;
       case 'pop': { const p = P(e.x, e.y); fx.sparks(p.x, p.y, p.z, { n: 6, speed: 3, r: 1, g: 0.7, b: 0.4, life: 0.3 }); break; }
       case 'hivepop': { const p = P(e.x, e.y); fx.sparks(p.x, p.y, p.z, { n: 40, speed: 12, r: 1, g: 0.62, b: 0.25, life: 0.6 }); fx.ring(p.x, p.y, p.z, 4, 0xffa040); R.shock(e.x, e.y, 0.7); }
+        if (live && (G.mode === 'demo' || G.mode === 'playthrough')) { R.frameShot([[e.x, e.y]], 1.7); slowmo(0.5, 1.1); }
         snd('hivepop', e, { vol: 0.9, gap: 0 }); snd('swarm', e, { vol: 0.7, delay: 0.2, gap: 0.5 }); A.retro('swarm', { vol: 0.3, pan: pan(e.x) }); cab('pod', e); if (live && G.mode !== 'demo') caption(`THE HIVE BURST · ${e.n} STINGERS`, 2); break;
       case 'prowler': if (live) { A.play('prowler', { vol: 0.8, gap: 0 }); if (G.mode !== 'demo') caption('A PROWLER IS HUNTING YOU · FINISH THE WAVE', 2.6); } break;
       case 'drop': { const p = P(e.x, e.y); fx.ring(p.x, p.y, p.z, 2.5, POWERUPS[e.kind].color); fx.sparks(p.x, p.y, p.z, { n: 10, speed: 3, life: 0.6 }); break; }
@@ -1409,7 +1411,7 @@ async function boot() {
   toTitle();
   boardOf('campaign', settings.diff).fresh(); boardOf('endless', settings.diff).fresh();
   if (!G.fixed && !params.has('test')) R.prepareAll(true);
-  if (params.has('test')) { const m = await import('./tests.js?v=16'); m.runTests(window.__sh); }
+  if (params.has('test')) { const m = await import('./tests.js?v=17'); m.runTests(window.__sh); }
   else if (params.has('playthrough')) { A.unlock(); startPlaythrough(); }
   else if (params.has('room')) { act('online'); $('join-code').value = cleanCode(params.get('room')); }
   else if (G.autopilot) { A.unlock(); if (params.has('endless')) startEndless(); else startCampaign(+params.get('sector') || 0); }

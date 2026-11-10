@@ -5,13 +5,13 @@
 // Five looks (sky, terrain, sea, scenery, bodies in the sky), real 3D models for everything, curved beams,
 // warnings drawn in the play plane, HDR post. Nothing here changes the world.
 import * as THREE from '../vendor/three.module.min.js';
-import { Post } from './post.js?v=16';
-import * as TX from './textures.js?v=16';
-import * as MD from './models.js?v=16';
-import { FX, CALM } from './fx.js?v=16';
-import { NOISE, TONE } from './shaders.js?v=16';
-import { F, C, RP, H, ENEMY, BOSSES, POWERUPS, P2_LIVERY, LIVERIES, SETTLER, PHASE2 } from './config.js?v=16';
-import { wd, wp, nodePos, beamRange, dronePos as dronePosR } from './sim.js?v=16';
+import { Post } from './post.js?v=17';
+import * as TX from './textures.js?v=17';
+import * as MD from './models.js?v=17';
+import { FX, CALM } from './fx.js?v=17';
+import { NOISE, TONE } from './shaders.js?v=17';
+import { F, C, RP, H, ENEMY, BOSSES, POWERUPS, P2_LIVERY, LIVERIES, SETTLER, PHASE2 } from './config.js?v=17';
+import { wd, wp, nodePos, beamRange, dronePos as dronePosR } from './sim.js?v=17';
 
 export { CALM };
 const hdr = (hex, k) => new THREE.Color(hex).multiplyScalar(k);
@@ -117,7 +117,7 @@ const MOON = new THREE.Vector3(-0.3, -1, 0.5).normalize();
 const SKY_VERT = /* glsl */ `varying vec3 vD; void main(){ vD = position; vec4 p = projectionMatrix * modelViewMatrix * vec4(position, 1.0); gl_Position = p.xyww; }`;
 const SKY_FRAG = /* glsl */ `
 uniform vec3 uZen, uHor, uDusk, uNZen, uNHor, uSunC, uUp, uSun, uSun2, uNeb1, uNeb2;
-uniform float uDay, uTime, uAurora, uSun2K;
+uniform float uDay, uTime, uAurora, uSun2K, uSpace;
 varying vec3 vD;
 ${NOISE}
 void main(){
@@ -160,6 +160,12 @@ void main(){
   }
   // under the horizon: the planet's own haze
   c = mix(c, mix(uNHor, uHor, day) * 0.6, smoothstep(0.0, -0.25, el));
+  // SPACE (the planet is gone): stars and nebula all round, no air
+  if (uSpace > 0.0) {
+    vec3 sc = (vec3(st) * 1.5 + vec3(0.6, 0.7, 1.0) * mw * 0.8) + neb * 0.32 + uNZen * 0.1;
+    sc += uSunC * (pow(sd, 900.0) * 40.0 + pow(sd, 40.0) * 0.4);
+    c = mix(c, sc, uSpace);
+  }
   gl_FragColor = vec4(c, 1.0);
 }`;
 // colony shield dome: a hex lattice with a bright rim and a scan band rising through it
@@ -412,7 +418,7 @@ export class Renderer {
   }
   buildSky() {
     const u = { uZen: new THREE.Color(), uHor: new THREE.Color(), uDusk: new THREE.Color(), uNZen: new THREE.Color(), uNHor: new THREE.Color(), uSunC: new THREE.Color(),
-      uUp: new THREE.Vector3(0, 1, 0), uSun: SUN.clone(), uSun2: new THREE.Vector3(), uNeb1: new THREE.Color(), uNeb2: new THREE.Color(), uDay: 1, uTime: 0, uAurora: 0, uSun2K: 0 };
+      uUp: new THREE.Vector3(0, 1, 0), uSun: SUN.clone(), uSun2: new THREE.Vector3(), uNeb1: new THREE.Color(), uNeb2: new THREE.Color(), uDay: 1, uTime: 0, uAurora: 0, uSun2K: 0, uSpace: 0 };
     const uniforms = {}; for (const k in u) uniforms[k] = { value: u[k] };
     this.skyMat = new THREE.ShaderMaterial({ vertexShader: SKY_VERT, fragmentShader: SKY_FRAG, side: THREE.BackSide, depthWrite: false, uniforms });
     this.sky = new THREE.Mesh(new THREE.SphereGeometry(6000, 48, 24), this.skyMat);
@@ -1067,11 +1073,12 @@ export class Renderer {
       P.t += dt;
       const o = P.o, r = o.position.length() || 1, nx = o.position.x / r, ny = o.position.y / r, nz = o.position.z / r;
       if (!P.rest) {
-        P.vx -= nx * 14 * dt; P.vy -= ny * 14 * dt; P.vz -= nz * 14 * dt;
+        const gk = (this.spaceK || 0) > 0.5 ? 0 : 14;   // no planet, no gravity: wreckage drifts
+        P.vx -= nx * gk * dt; P.vy -= ny * gk * dt; P.vz -= nz * gk * dt;
         o.position.x += P.vx * dt; o.position.y += P.vy * dt; o.position.z += P.vz * dt;
         o.rotation.x += P.wx * dt; o.rotation.y += P.wy * dt;
         const th = Math.atan2(o.position.x, o.position.y), gh = RP + Math.max(-0.35, groundH(this.look, th, Math.asin(clamp(nz, -1, 1)) * RP)) + 0.15;
-        if (r < gh) {
+        if (r < gh && gk) {
           const vn = P.vx * nx + P.vy * ny + P.vz * nz;
           o.position.set(nx * gh, ny * gh, nz * gh);
           if (vn < -2.5) { P.vx -= 1.4 * vn * nx; P.vy -= 1.4 * vn * ny; P.vz -= 1.4 * vn * nz; P.vx *= 0.5; P.vy *= 0.5; P.vz *= 0.5; P.wx *= 0.5; P.wy *= 0.5; if (!P.landed) { P.landed = true; if (this.sfx) this.sfx('debris', { x: o.position.x, y: o.position.y, z: o.position.z }); } }
@@ -1277,6 +1284,7 @@ export class Renderer {
     }
     this.boltI.count = this.boltGlowI.count = n;
     this.boltI.instanceMatrix.needsUpdate = this.boltGlowI.instanceMatrix.needsUpdate = true;
+    this.space(W, dt);
     this.syncGate(W, dt, t);
     this.syncBoss(W, dt, t);
     this.syncGates(dt);
@@ -1464,6 +1472,61 @@ export class Renderer {
     if (V.inner) V.inner.rotation.x -= dt * (0.9 + V.flash * 10);
     V.o.scale.setScalar(1 + V.flash * 0.08);
   }
+  // SPACE: when the colony falls the planet shatters; spaceK fades the world out and the wreckage field in
+  spaceField() {
+    if (this.spaceG) return this.spaceG;
+    const g = new THREE.Group(), geo = new THREE.IcosahedronGeometry(1, 1), r = mkr(91);
+    const mat = new THREE.MeshStandardMaterial({ color: 0x8a7a6c, roughness: 0.9, metalness: 0.1, flatShading: true, emissive: 0xff5a1a, emissiveIntensity: 0.6 });
+    const rocks = [];
+    for (let k = 0; k < 190; k++) {
+      // deep: big fragments far below; far: drifting behind the fight; the rest: a rubble band where the ground was
+      const deep = k < 40, far = k >= 150, th = r() * TAU, z = deep ? (r() - 0.5) * 160 : far ? -70 - r() * 120 : -40 + r() * 52;
+      const rad = deep ? RP * (0.45 + r() * 0.4) : far ? RP + r() * 50 : RP - 3 - r() * 26, sc = deep ? 8 + r() * 22 : far ? 2 + r() * 6 : 0.6 + Math.pow(r(), 2) * 5;
+      const m = new THREE.Mesh(geo, mat); m.scale.set(sc, sc * (0.6 + r() * 0.6), sc * (0.7 + r() * 0.5));
+      sph(th, z / RP, rad, m.position); m.rotation.set(r() * 6, r() * 6, r() * 6);
+      m.userData.w = [(r() - 0.5) * 0.6, (r() - 0.5) * 0.6]; m.frustumCulled = false; g.add(m); rocks.push(m);
+    }
+    // what is left of the planet's heart, glowing far below the fight
+    const core = new THREE.Mesh(new THREE.IcosahedronGeometry(RP * 0.28, 3), new THREE.MeshBasicMaterial({ color: hdr(0xff6a2a, 2.2), toneMapped: false }));
+    core.frustumCulled = false; g.add(core);
+    const halo = new THREE.Sprite(new THREE.SpriteMaterial({ map: this.T.glow, color: hdr(0xff7a3a, 1.2), transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, fog: false }));
+    halo.scale.set(RP * 1.6, RP * 1.6, 1); g.add(halo);
+    g.visible = false; this.scene.add(g);
+    this.spaceG = g; this.spaceRocks = rocks; this.spaceMat = mat; this.spaceCore = core;
+    return g;
+  }
+  space(W, dt) {
+    const want = W.fallen ? 1 : 0;
+    if (W !== this.spaceW) { this.spaceW = W; this.spaceK = want; this.spaceT = 0; }   // a new world or a replay: no fade
+    if (want && this.spaceK < 1) { this.spaceT = (this.spaceT || 0) + dt; if (this.spaceT > 0.7) this.spaceK = Math.min(1, this.spaceK + dt / 1.6); }
+    else if (!want && this.spaceK > 0) { this.spaceK = Math.max(0, this.spaceK - dt / 1.2); this.spaceT = 0; }
+    const k = this.spaceK || 0, on = k > 0.5;
+    this.skyMat.uniforms.uSpace.value = k;
+    // the planet's surface, sea, scenery, clouds, city lights and colony go; the wreckage comes
+    const i = this.lookI, hide = (m) => { if (m) { if (Array.isArray(m)) for (const x of m) x.visible = !on; else m.visible = !on; } };
+    hide(this.terrains[i]); hide(this.seas[i]); hide(this.propSets[i]); hide(this.cloudSets[i]); hide(this.lightSets[i]); hide(this.colony);
+    if (this.scarM) this.scarM.visible = !on;
+    if (this.wrecks) for (const w of this.wrecks) w.o.visible = !on;
+    if (k > 0.01 || this.spaceG) {
+      const g = this.spaceField(); g.visible = k > 0.01;
+      if (g.visible) {
+        for (const m of this.spaceRocks) { m.rotation.x += m.userData.w[0] * dt; m.rotation.y += m.userData.w[1] * dt; }
+        g.scale.setScalar(0.85 + 0.15 * k);
+        this.spaceCore.scale.setScalar(1 + 0.03 * Math.sin(this.time * 1.7));
+        this.spaceMat.emissiveIntensity = 0.04 + 0.05 * Math.sin(this.time * 2.1) ** 2;   // a faint glow of heat in the cracks
+      }
+    }
+  }
+  // the planet breaking apart, all along the view (the moment the last settler is lost)
+  shatter(x) {
+    for (let k = 0; k < 14; k++) {
+      toW(x + (Math.random() - 0.5) * 120, Math.random() * 2, _v, (Math.random() - 0.6) * 30);
+      this.fx.explode(_v.x, _v.y, _v.z, 3 + Math.random() * 4, { rock: true, color: 0xff7a30 });
+      this.fx.debris(_v.x, _v.y, _v.z, { n: 6, speed: 18, size: 0.9, trail: true });
+    }
+    for (const r of [20, 45, 80]) { toW(x, 0, _v, 0); this.fx.ring(_v.x, _v.y, _v.z, r, 0xffa060); }
+    this.shock(x, 0, 3); this.addTrauma(1);
+  }
   gateFlash() { if (this.gateV) this.gateV.flash = 1; }
   bossKick(e, k) { const V = this.bossV, B = this.W && this.W.boss; if (!V || !B) return; const dir = Math.sign(wd(B.x - e.x)) || 1; V.rvx = (V.rvx || 0) + dir * 5 * k; V.flv = (V.flv || 0) + 10 * k; V.fdir = dir; }
   bossRecoil(V, dt) {
@@ -1562,6 +1625,7 @@ export class Renderer {
     this.day = _v2.dot(SUN);
     this.eclK = (this.eclK || 0) + (((this.W && this.W.event && this.W.event.kind === 'eclipse' && this.W.event.t < this.W.event.T - 2) ? 1 : 0) - (this.eclK || 0)) * Math.min(1, dt * 0.8);
     if (this.eclK > 0.001) this.day = this.day + (-0.75 - this.day) * this.eclK;
+    if ((this.spaceK || 0) > 0.001) this.day = this.day + (0.3 - this.day) * this.spaceK;   // in space the sun always shines
     const L = this.look, day = sstep(-0.25, 0.35, this.day), dusk = Math.exp(-Math.pow(this.day * 3.2, 2)), night = 1 - sstep(-0.35, 0.1, this.day);
     const u = this.skyMat.uniforms;
     u.uUp.value.copy(_v2); u.uDay.value = this.day;
@@ -1581,7 +1645,7 @@ export class Renderer {
     this.scene.environmentIntensity = 0.25 + 0.75 * day;
     _c.set(L.fog[0]).lerp(_c2.set(L.fog[1]), 1 - day).lerp(_c2.set(L.sky[2]), dusk * 0.35);
     this.scene.fog.color.copy(_c); this.sandK = (this.sandK || 0) + (((this.W && this.W.event && this.W.event.kind === 'sandstorm' && this.W.event.t < this.W.event.T - 1.5) ? 1 : 0) - (this.sandK || 0)) * Math.min(1, dt * 0.7);
-    this.scene.fog.density = L.fogD * (0.62 + 0.38 * night) * (1 + this.sandK * 1.5);
+    this.scene.fog.density = L.fogD * (0.62 + 0.38 * night) * (1 + this.sandK * 1.5) * (1 - 0.8 * (this.spaceK || 0));
     if (this.sandK > 0.01) this.scene.fog.color.lerp(_c2.set(0xb06a30), this.sandK * 0.5);
     const sea = this.seas[this.lookI];
     if (sea) { const su = sea.material.uniforms; su.uSky.value.set(L.sky[1]).lerp(_c2.set(L.sky[4]), 1 - day); su.uSunC.value.set(L.sun).multiplyScalar(2); su.uFog.value.copy(_c); su.uDay.value = this.day; }
