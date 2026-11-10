@@ -39,6 +39,7 @@ jobs:
             !/.github/
             /.github/scripts/pages_recovery.py
             /.github/scripts/pages_recovery_test.py
+            /.github/workflows/pages.yml
             !/.wrangler/
             !/games/
             !/demos/
