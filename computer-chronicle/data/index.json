@@ -2,6 +2,22 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-11-10",
+      "historicDate": "1985-07-22",
+      "displayDate": "Week of July 22-28, 1985",
+      "edition": "Issue 156 - Weekly 1985 Computer & Culture Chronicle",
+      "morningLine": "Amiga arrives on stage; the home-computer future gets a vivid new palette.",
+      "leadHeadline": "Amiga takes the stage: Commodore bets on color and creativity",
+      "storyHeadlines": [
+        "Kennedy Approach puts talking aircraft on the home-computer radar",
+        "Atari 130XE keeps 8-bit compatibility while doubling memory",
+        "One disk, three jobs: HomePak courts the home office"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1985-07-22.jpg",
+      "thumb": "media/thumbs/1985-07-22.webp",
+      "milestone": true
+    },
+    {
       "currentDate": "2026-11-09",
       "historicDate": "1985-07-15",
       "displayDate": "Week of July 15-21, 1985",
