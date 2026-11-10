@@ -1,4 +1,4 @@
-import {calculators,categories,defaults,calculate,convert,usUnit,GAL,migrateInputs,isVisible,labelFor,helpFor,popular,sgFromPpt,pptFromSg,PROFILE_DEFAULT} from './calculators.mjs';
+import {calculators,categories,defaults,calculate,convert,usUnit,GAL,migrateInputs,isVisible,labelFor,helpFor,popular,sgFromPpt,pptFromSg,PROFILE_DEFAULT,convertHardness} from './calculators.mjs';
 import {icon,illustration,escape as e} from './illustrations.mjs';
 import {sliderWindow,sliderValue} from './sliders.mjs';
 import {fieldChoices,extraHelp,bagComparison,formPresets} from './presets.mjs';
@@ -75,8 +75,8 @@ function duration(v,unit){
   if(!(v>0))return '';
   const hm=h=>{const total=Math.round(h*60),hours=Math.floor(total/60),min=total%60;return min?`${hours} h ${min} min`:`${hours} h`;};
   if(unit==='seconds')return v>=90?`${Math.floor(Math.round(v)/60)} min ${Math.round(v)%60} s`:'';
-  if(unit==='minutes')return v>=60?hm(v/60):v<1?`${Math.round(v*60)} seconds`:'';
-  if(unit==='hours')return v<1?`${Math.round(v*60)} minutes`:v>=48?`about ${format(v/24,1)} days`:Number.isInteger(v)?'':hm(v);
+  if(unit==='minutes')return v>=60?hm(v/60):v<1?v*60<1?'less than 1 second':`${Math.round(v*60)} seconds`:'';
+  if(unit==='hours')return v<1?v*60<1?'less than 1 minute':`${Math.round(v*60)} minutes`:v>=48?`about ${format(v/24,1)} days`:Number.isInteger(v)?'':hm(v);
   if(unit==='days')return v>=60?`about ${format(v/30.4375,1)} months`:v>=14?`about ${format(v/7,1)} weeks`:v<1?`about ${format(v*24,1)} hours`:'';
   return '';
 }
@@ -207,7 +207,7 @@ function renderCalculator(){
   $('calculator-content').innerHTML=`<article class="calculator-shell"><header class="calc-heading"><div><div class="calc-eyebrow">${icon(cat[2])}${e(cat[1].toUpperCase())}</div><h2>${e(c.title)}</h2><p>${e(descriptionFor(c,isUS()))}</p></div><button id="favorite" class="favorite icon-button" aria-pressed="${state.favorites.includes(c.id)}" aria-label="${state.favorites.includes(c.id)?'Remove from':'Add to'} favorites">${icon('star')}</button></header>
   <div class="calc-body"><section class="input-panel" aria-label="Calculation inputs"><div class="panel-heading"><span class="step-label"><span class="step-no">1</span>Your measurements</span><button id="reset" class="text-button">Reset</button></div><p id="slider-guide" class="slider-guide">Tap a shortcut, drag a slider, or type your own number.</p>${presetHTML(a)}${salinityToggleHTML()}<form id="calc-form" novalidate><div class="input-fields">${c.fields.map(f=>fieldHTML(f,a)).join('')}</div></form>${hasProfile(c)?`<div class="tank-fill-control">Saved tank: <strong>${e(profile().name)}</strong><br>${isUS()?e(gallons(profile().volume))+' US gal · '+format(profile().volume)+' L':format(profile().volume)+' L · '+e(gallons(profile().volume))+' US gal'}<br><button id="use-profile" class="text-button">Use saved tank volume →</button></div>`:''}<p class="validation-note">Changes calculate automatically. Your measurements are processed in this browser.</p></section>
   <section class="result-panel" aria-label="Calculation result"><div class="panel-heading"><span class="step-label"><span class="step-no">2</span>Your answer</span><span class="live-label">LIVE RESULT</span></div><div id="result" aria-live="polite" aria-atomic="true"></div></section></div>
-  <div class="details-area"><details id="math-details"><summary>The math & sources</summary><div><p class="formula">${e(formulaFor(c,isUS()))}</p>${c.note?`<p class="note">${e(noteFor(c,isUS()))}</p>`:''}${c.reference?`<p><a class="source-link" href="${e(c.reference[1])}" target="_blank" rel="noopener noreferrer">Reference: ${e(c.reference[0])} ↗</a></p>`:'<p>Method: the geometry, unit conversion, rule of thumb or proportional calculation shown above.</p>'}<p>Results are rounded for reading; the calculations keep full precision. US gallons show one decimal below ten gallons and whole gallons above. For aquarium water, ppm and mg/L are the same thing.</p></div></details><div id="steps-details"></div></div>
+  <div class="details-area"><details id="math-details"><summary>The math & sources</summary><div><p class="formula">${e(formulaFor(c,isUS()))}</p>${c.note?`<p class="note">${e(noteFor(c,isUS()))}</p>`:''}${c.reference?`<p><a class="source-link" href="${e(c.reference[1])}" target="_blank" rel="noopener noreferrer">Reference: ${e(c.reference[0])} ↗</a></p>`:'<p>Method: the geometry, unit conversion, rule of thumb or proportional calculation shown above.</p>'}<p>Results are rounded for reading; the calculations keep full precision. US gallons show one decimal below ten gallons and whole gallons above. For dilute freshwater, ppm and mg/L are approximately equivalent. Use the same test basis for every reading.</p></div></details><div id="steps-details"></div></div>
   <div class="calc-footer"><span>${icon('check')} No account · saved on this device</span><button id="guide-inline" class="text-button">A quick guide →</button></div></article>
   <section class="related"><h3 class="related-heading">ALSO IN YOUR TOOLBOX</h3><div class="related-grid">${related.map(x=>`<a href="#tool=${x.id}" data-tool="${x.id}">${icon(cat[2])}<span>${e(x.title)}</span></a>`).join('')}</div>`;
   $('calc-form').addEventListener('submit',ev=>ev.preventDefault());
@@ -240,9 +240,13 @@ function onInput(ev){
   if(!field.options&&(raw.trim()===''||!Number.isFinite(Number(raw)))){inputs()[field.key]=NaN;save();syncSlider(field);syncChoices();showError(`Enter a number for ${labelFor(c.id,field,inputs()).toLowerCase()}.`);return;}
   inputs()[field.key]=field.options?raw:(ev.canonicalValue??fromDisplay(Number(raw),unitOf(field)));
   if(field.options){
+    if(c.id==='hardness'&&field.key==='unit'&&raw!==previous)inputs().value=convertHardness(inputs().value,previous,raw);
     if(c.id==='label'&&field.key==='unit'&&raw!==previous){inputs().dose=NaN;toast('Enter the dose from the label in the newly selected unit.');}
     // A choice can change which measurements apply and the units beside them.
-    const examples=scaleExamples[c.id]?.[field.key]?.[raw];if(examples){Object.assign(inputs(),examples);toast('Example readings changed for this measurement. Enter your own tests and product strength.');}
+    const examples=scaleExamples[c.id]?.[field.key]?.[raw];if(examples&&raw!==previous){Object.assign(inputs(),examples);
+      if(c.id==='supplement'){for(const key of ['dose','labelV','rise'])inputs()[key]=NaN;toast('Enter all three strength numbers from the new supplement’s label.');}
+      else toast('Example readings changed for this measurement. Enter your own test readings.');
+    }
     repairHidden();save();renderCalculator();$(`field-${field.key}`).focus();return;
   }
   syncSlider(field,!ev.fromSlider);
