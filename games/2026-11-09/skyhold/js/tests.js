@@ -1,10 +1,10 @@
 // ?test=1 self-test page: determinism, exact replays, the gentle start, the difficulty ramp shape, lifters taking
 // and fusing settlers, the carrier fight, the live loop with no console errors and no score posts, and the title
 // screen naming every gunship, machine and carrier with its picture drawn.
-import { makeWorld, step, drainEvents, STEP, settlersLeft } from './sim.js?v=20';
-import { Autopilot } from './ai.js?v=20';
-import { RAMP, SECTORS, TYPICAL_UP, rampAt, endlessLevel, DIFF_KEYS, applyDiff, MIN_WARN, TUTOR, WAVES, SHIPS, SHIP_KEYS } from './config.js?v=20';
-import { Recorder, Replay } from './replay.js?v=20';
+import { makeWorld, step, drainEvents, STEP, settlersLeft } from './sim.js?v=21';
+import { Autopilot } from './ai.js?v=21';
+import { RAMP, SECTORS, TYPICAL_UP, rampAt, endlessLevel, DIFF_KEYS, applyDiff, MIN_WARN, TUTOR, WAVES, SHIPS, SHIP_KEYS } from './config.js?v=21';
+import { Recorder, Replay } from './replay.js?v=21';
 
 export const hashW = (W) => JSON.stringify([W.n, W.score, W.lives, W.cp, W.phase, W.rs, W.players.map((p) => [p.x.toFixed(6), p.y.toFixed(6), p.alive, p.shield, p.nova]),
   W.enemies.map((e) => [e.id, e.type, e.x.toFixed(4), e.y.toFixed(4), e.hp]), W.settlers.map((s) => [s.id, s.st, s.x.toFixed(4), s.y.toFixed(4)]), W.bolts.length, W.boss ? [W.boss.st, W.boss.x.toFixed(4), W.boss.nodes.map((n) => n.hp).join()] : 0]);

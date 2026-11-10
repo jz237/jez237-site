@@ -2,9 +2,9 @@
 // must be able to clear it, and no ship should be far stronger than the rest.
 // mast (0-2) gives every ship that gunship-mastery level, so the perks can be weighed too.
 //   node scripts/skyhold/ship_check.mjs [runs=8] [world=3] [mast=0]
-import { makeWorld, step, drainEvents, STEP } from '../../games/2026-11-09/skyhold/js/sim.js?v=20';
-import { Autopilot } from '../../games/2026-11-09/skyhold/js/ai.js?v=20';
-import { TYPICAL_UP, SHIP_KEYS } from '../../games/2026-11-09/skyhold/js/config.js?v=20';
+import { makeWorld, step, drainEvents, STEP } from '../../games/2026-11-09/skyhold/js/sim.js?v=21';
+import { Autopilot } from '../../games/2026-11-09/skyhold/js/ai.js?v=21';
+import { TYPICAL_UP, SHIP_KEYS } from '../../games/2026-11-09/skyhold/js/config.js?v=21';
 const runs = +(process.argv[2] || 8), s = +(process.argv[3] || 3) - 1, mast = +(process.argv[4] || 0);
 let fail = 0;
 for (const ship of SHIP_KEYS) {

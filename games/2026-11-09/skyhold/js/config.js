@@ -1,6 +1,6 @@
 // Skyhold 2026 — every tunable number lives here. The RAMP table drives difficulty; nothing else in the game
 // hard-codes enemy pace, numbers, fire rate, aim or warning times.
-export const VERSION = '1.13.0';
+export const VERSION = '1.13.1';
 export const STEP = 1 / 120;
 
 // ------------------------------------------------------------------ the planet and the Warden gunship
@@ -163,20 +163,20 @@ export const CP_NAMES = ['WAVE 1', 'WAVE 2', 'WAVE 3', 'WAVE 4', 'CARRIER'];
 //   shield   shield charges at each wave start
 //   nodeHP   beam hits per carrier weak point     bossV  carrier speed     atkT  seconds between its attacks
 export const RAMP = [
-  { lifters: [3, 5], group: [1, 2], gap: [8, 6.5], lV: [4.6, 5.4], liftV: [1.1, 1.3], grabT: [2.4, 2.1], hunters: [1, 2], fire: [0.1, 0.14], shooters: [1, 1], warn: [2.3, 2.0],
-    aim: [0.3, 0.26], boltV: [12, 13.5], lead: [0, 0.2], hV: [9, 10], stV: [11, 12], sowers: [0, 1], hives: [0, 0], husks: [0, 0], whirls: [0, 1], scorchers: [0, 0], coils: [0, 0], maws: [0, 0], prowlT: [80, 70], fallV: [2.4, 2.7], safeH: [99, 99], shield: [2, 1],
+  { lifters: [5, 8], group: [1, 2], gap: [6.5, 5.2], lV: [4.6, 5.4], liftV: [1.1, 1.3], grabT: [2.4, 2.1], hunters: [1, 2], fire: [0.1, 0.14], shooters: [1, 1], warn: [2.3, 2.0],
+    aim: [0.3, 0.26], boltV: [12, 13.5], lead: [0, 0.2], hV: [9, 10], stV: [11, 12], sowers: [0, 1], hives: [0, 1], husks: [0, 0], whirls: [1, 1], scorchers: [0, 0], coils: [0, 0], maws: [0, 0], prowlT: [80, 70], fallV: [2.4, 2.7], safeH: [99, 99], shield: [2, 1],
     sting: 3, settlers: 8, nodeHP: 14, bossV: 4.2, atkT: 5.6 },
-  { lifters: [6, 8], group: [2, 2], gap: [7, 6], lV: [5.6, 6.4], liftV: [1.4, 1.6], grabT: [2.0, 1.8], hunters: [2, 2], fire: [0.22, 0.27], shooters: [1, 2], warn: [1.9, 1.65],
-    aim: [0.22, 0.18], boltV: [15.5, 17.5], lead: [0.25, 0.35], hV: [11, 12], stV: [13, 14], sowers: [1, 1], hives: [0, 1], husks: [0, 1], whirls: [1, 1], scorchers: [0, 1], coils: [0, 0], maws: [0, 0], prowlT: [65, 58], fallV: [3.2, 3.6], safeH: [20, 18], shield: [1, 1],
+  { lifters: [9, 12], group: [2, 3], gap: [6, 5], lV: [5.6, 6.4], liftV: [1.4, 1.6], grabT: [2.0, 1.8], hunters: [2, 2], fire: [0.16, 0.2], shooters: [1, 2], warn: [1.9, 1.65],
+    aim: [0.26, 0.21], boltV: [15.5, 17.5], lead: [0.25, 0.35], hV: [11, 12], stV: [13, 14], sowers: [1, 2], hives: [1, 1], husks: [0, 1], whirls: [1, 1], scorchers: [0, 1], coils: [0, 0], maws: [0, 0], prowlT: [65, 58], fallV: [3.2, 3.6], safeH: [20, 18], shield: [1, 1],
     sting: 4, settlers: 9, nodeHP: 16, bossV: 5, atkT: 5.0 },
-  { lifters: [8, 10], group: [2, 3], gap: [6, 5], lV: [6.6, 7.4], liftV: [1.7, 1.9], grabT: [1.7, 1.5], hunters: [2, 3], fire: [0.31, 0.36], shooters: [2, 3], warn: [1.6, 1.4],
-    aim: [0.14, 0.115], boltV: [19, 21], lead: [0.45, 0.55], hV: [13.5, 14.5], stV: [15, 16], sowers: [1, 1], hives: [1, 1], husks: [2, 2], whirls: [1, 1], scorchers: [1, 1], coils: [0, 1], maws: [0, 1], prowlT: [55, 48], fallV: [4, 4.5], safeH: [15, 13], shield: [0, 0],
+  { lifters: [11, 14], group: [3, 3], gap: [5.2, 4.4], lV: [6.6, 7.4], liftV: [1.7, 1.9], grabT: [1.7, 1.5], hunters: [2, 3], fire: [0.27, 0.31], shooters: [2, 3], warn: [1.6, 1.4],
+    aim: [0.14, 0.115], boltV: [19, 21], lead: [0.45, 0.55], hV: [13.5, 14.5], stV: [15, 16], sowers: [1, 2], hives: [1, 2], husks: [2, 3], whirls: [1, 2], scorchers: [1, 1], coils: [1, 1], maws: [1, 1], prowlT: [55, 48], fallV: [4, 4.5], safeH: [15, 13], shield: [0, 0],
     sting: 4, settlers: 10, nodeHP: 17, bossV: 5.8, atkT: 4.5 },
-  { lifters: [8, 10], group: [3, 3], gap: [5.4, 4.6], lV: [7.6, 8.4], liftV: [2.0, 2.2], grabT: [1.4, 1.25], hunters: [3, 3], fire: [0.35, 0.41], shooters: [3, 3], warn: [1.35, 1.15],
-    aim: [0.11, 0.09], boltV: [20, 22], lead: [0.5, 0.6], hV: [15, 16], stV: [17, 18], sowers: [1, 2], hives: [2, 2], husks: [3, 4], whirls: [1, 1], scorchers: [1, 1], coils: [1, 1], maws: [1, 1], prowlT: [48, 42], fallV: [5, 5.5], safeH: [12, 10], shield: [0, 0],
+  { lifters: [11, 14], group: [3, 4], gap: [4.8, 4.2], lV: [7.6, 8.4], liftV: [2.0, 2.2], grabT: [1.4, 1.25], hunters: [3, 3], fire: [0.35, 0.41], shooters: [3, 3], warn: [1.35, 1.15],
+    aim: [0.11, 0.09], boltV: [20, 22], lead: [0.5, 0.6], hV: [15, 16], stV: [17, 18], sowers: [2, 2], hives: [2, 3], husks: [3, 4], whirls: [1, 2], scorchers: [1, 2], coils: [1, 1], maws: [1, 2], prowlT: [48, 42], fallV: [5, 5.5], safeH: [12, 10], shield: [0, 0],
     sting: 4, settlers: 10, nodeHP: 19, bossV: 6.4, atkT: 4.0 },
-  { lifters: [10, 12], group: [3, 4], gap: [4.8, 4], lV: [8.6, 9.6], liftV: [2.3, 2.6], grabT: [1.2, 1.0], hunters: [3, 4], fire: [0.33, 0.39], shooters: [3, 3], warn: [1.1, 0.72],
-    aim: [0.072, 0.058], boltV: [22, 25], lead: [0.6, 0.7], hV: [17, 19], stV: [19, 21], sowers: [2, 2], hives: [2, 2], husks: [2, 3], whirls: [1, 1], scorchers: [0, 1], coils: [0, 1], maws: [1, 1], prowlT: [42, 34], fallV: [5.8, 6.4], safeH: [9, 8], shield: [0, 0],
+  { lifters: [12, 15], group: [4, 4], gap: [4.4, 3.8], lV: [8.6, 9.6], liftV: [2.3, 2.6], grabT: [1.2, 1.0], hunters: [3, 4], fire: [0.26, 0.31], shooters: [3, 3], warn: [1.1, 0.72],
+    aim: [0.085, 0.07], boltV: [22, 25], lead: [0.6, 0.7], hV: [17, 19], stV: [19, 21], sowers: [2, 3], hives: [2, 3], husks: [2, 3], whirls: [1, 2], scorchers: [1, 1], coils: [1, 1], maws: [1, 1], prowlT: [42, 34], fallV: [5.8, 6.4], safeH: [9, 8], shield: [0, 0],
     sting: 6, settlers: 10, nodeHP: 21, bossV: 7, atkT: 3.4 },
 ];
 export const RAMP_KEYS = ['lifters', 'group', 'gap', 'lV', 'liftV', 'grabT', 'hunters', 'fire', 'shooters', 'warn', 'aim', 'boltV', 'lead', 'hV', 'stV', 'sowers', 'hives', 'husks', 'prowlT', 'fallV', 'safeH', 'shield', 'whirls', 'scorchers', 'coils', 'maws'];
