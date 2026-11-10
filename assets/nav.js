@@ -17,7 +17,7 @@
     { href: ROOT + '/computer-chronicle/', label: 'Chronicle', sections: ['computer-chronicle'] },
     { href: ROOT + '/photos/', label: 'Photos', sections: ['photos', 'plants/past-years'] },
     { href: ROOT + '/games/', label: 'Arcade', sections: ['games'] },
-    { href: ROOT + '/experiments/ai-explainer/', label: 'How AI Works', sections: ['experiments/ai-explainer'] },
+    { href: ROOT + '/how-ai-works/', label: 'How AI Works', sections: ['how-ai-works', 'experiments/ai-explainer'] },
     { href: 'https://hidden-reef.pages.dev/', label: 'Hidden Reef', sections: ['prototypes/hidden-reef'], external: true },
     { href: ROOT + '/network/', label: 'Network', sections: ['network', 'ops'] },
     { href: ROOT + '/stock-market/', label: 'Stocks', sections: ['stock-market'] },

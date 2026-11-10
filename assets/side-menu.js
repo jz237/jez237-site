@@ -47,7 +47,7 @@
         ['multimedia', 'multimedia/', 'multimedia', 'Multimedia'],
         ['photos', 'photos/', 'photos', 'Photos, kept casual'],
         ['games', 'games/', 'games', 'GameMaster Arcade'],
-        ['ai-explainer', 'experiments/ai-explainer/', 'aiExplainer', 'How AI Works']
+        ['ai-explainer', 'how-ai-works/', 'aiExplainer', 'How AI Works']
       ]
     },
     {

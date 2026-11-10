@@ -11,9 +11,9 @@
     },
     {
       "name": "How AI Works",
-      "desc": "Interactive explainer covering AI runtime concepts, agents, tokens, tools, hallucinations, and a roadmap for model training and alignment.",
+      "desc": "Animated guide with a real, tiny language model running in the page: tokens, embeddings, attention, layers, sampling, training, context, tools, and failure modes.",
       "status": "live",
-      "link": "/experiments/ai-explainer/"
+      "link": "/how-ai-works/"
     },
     {
       "name": "AI News Feed",
