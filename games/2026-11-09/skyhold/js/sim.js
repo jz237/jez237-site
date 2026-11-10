@@ -3,7 +3,7 @@
 // Nothing in here touches the DOM, WebGL or audio; it only pushes events into W.ev.
 //
 // The world is a band round a small planet: x along the ground (wraps every C metres), y altitude (0..H).
-import { F, STEP, C, H, ENEMY, SETTLER, BOSSES, B_KEYS, SECTORS, WAVES, rampAt, rampLevel, endlessLevel, ENDLESS, TUTOR, SCORE, START_LIVES, DIFFICULTY, applyDiff, POWERUPS, PW_KEYS, DROP, SKIM, HYPER, EVENTS, EVENT, PHASE2, B_KEYS as _BK, SHIPS, SHIP_KEYS, RIVALS, INTERSECT, WHIRL, COIL, SCORCH, MAW, GATE } from './config.js?v=19';
+import { F, STEP, C, H, ENEMY, SETTLER, BOSSES, B_KEYS, SECTORS, WAVES, rampAt, rampLevel, endlessLevel, ENDLESS, TUTOR, SCORE, START_LIVES, DIFFICULTY, applyDiff, POWERUPS, PW_KEYS, DROP, SKIM, HYPER, EVENTS, EVENT, PHASE2, B_KEYS as _BK, SHIPS, SHIP_KEYS, RIVALS, INTERSECT, WHIRL, COIL, SCORCH, MAW, GATE, SPECIALS, SPECIAL } from './config.js?v=20';
 export { STEP };
 
 const clamp = (v, a, b) => (v < a ? a : v > b ? b : v);
@@ -33,7 +33,7 @@ export function makeWorld(o = {}) {
     n: 0, t: 0, seed, rs: (seed ^ 0x2545F491) | 0, mode, sector, k: sector, up: { ...(o.up || {}) }, demo: !!o.demo, coop: !!o.coop || !!o.rivals, rivals: !!o.rivals, feat: FEAT[o.feat] ? o.feat : null,
     diff: DIFFICULTY[o.diff] ? o.diff : 'normal', lives: o.lives ?? START_LIVES + D_OF({ diff: o.diff }).lives, score: o.score || 0, lifePts: 0, nextLife: 0,
     wave: 0, cp: 0, phase: 'intro', phaseT: 2.4, secT: 0, waveT: 0, fightT: 0, R: null, level: 0, waveN: 0, bossN: 0,
-    players: [], enemies: [], settlers: [], sites: [], shots: [], bolts: [], pods: [], missiles: [], rings: [], gate: null, boss: null, plan: null, fallen: false,
+    players: [], enemies: [], settlers: [], sites: [], shots: [], bolts: [], pods: [], missiles: [], rings: [], gate: null, boss: null, plan: null, special: null, fallen: false,
     nextId: 1, ev: [], over: false, result: null, net: null, claims: [], chain: 0, chainT: -9, bestChain: 0, cpNova: [], tutorial: false, tut: {},
     stats: { kills: 0, lifters: 0, husks: 0, caught: 0, landed: 0, selfLanded: 0, lost: 0, fused: 0, fired: 0, hits: 0, novas: 0, blinks: 0, deaths: 0, shieldHits: 0, pods: 0,
       waveDeaths: [0, 0, 0, 0, 0], waveHits: [0, 0, 0, 0, 0], waveTries: [0, 0, 0, 0, 0], cause: {}, bossT: -1 },
@@ -152,7 +152,9 @@ function director(W, dt) {
       P.left -= n; P.groupT = R.gap * (W.tutorial && W.waveT < TUTOR.safe ? 1.4 : 1);
     }
   }
-  for (const x of P.extra) if (!x.done && W.waveT >= x.t) { x.done = true; if (x.type === 'cross') podCross(W); else if (x.type === 'whirl') whirlRing(W); else spawnEnemy(W, x.type); }
+  for (const x of P.extra) if (!x.done && W.waveT >= x.t) { x.done = true; if (x.type === 'cross') podCross(W); else if (x.type === 'whirl') whirlRing(W); else if (x.type === 'squad') squad(W, x); else spawnEnemy(W, x.type); }
+  // a special wave counts its fighters down (those still to come plus those in the sky)
+  if (W.special) W.special.left = P.extra.reduce((a, x) => a + (x.done ? 0 : x.kind === 'whirler' ? WHIRL.n : x.n), 0) + W.enemies.reduce((a, e) => a + (e.hp > 0 && HOSTILE.has(e.type) ? 1 : 0), 0);
   // a PROWLER comes for a pilot who takes too long
   if (W.waveT > P.prowlT && !W.enemies.some((e) => e.type === 'prowler') && P.left === 0) { P.prowlT = W.waveT + 24; spawnEnemy(W, 'prowler'); }
   const busy = W.enemies.some((e) => HOSTILE.has(e.type) && e.hp > 0);
@@ -164,6 +166,8 @@ function startWave(W, w) {
   W.R = ramp(W);
   const R = W.R;
   W.phase = 'fight'; W.waveT = 0;
+  W.special = null;
+  if (!W.rivals && (W.mode === 'endless' ? W.waveN % SPECIAL.every === 0 : w === SPECIAL.every - 1)) { specialWave(W, w); return; }
   const extra = [];
   for (let i = 0; i < R.sowers; i++) extra.push({ t: rr(W, 3, 14), type: 'sower' });
   const cross = !W.rivals && (W.mode === 'endless' ? W.waveN % 3 === 2 : (INTERSECT.waves[W.sector] || []).includes(w));
@@ -180,12 +184,41 @@ function startWave(W, w) {
   for (const p of W.players) p.shield = Math.max(p.shield, R.shield + (W.up.deflector || 0));
   W.ev.push({ k: 'wave', w, n: W.mode === 'endless' ? W.waveN : w + 1 });
 }
+// SPECIAL WAVE: no lifters; squadrons of one kind of fighter, `gap` seconds apart
+function specialWave(W, w) {
+  const cyc = W.mode === 'endless' ? Math.floor(W.waveN / SPECIAL.every) - 1 : 0;
+  const S = SPECIALS[W.mode === 'endless' ? cyc % SPECIALS.length : clamp(W.sector, 0, SPECIALS.length - 1)];
+  // harder difficulties send more squadrons; endless adds two a cycle through the list
+  const squads = Math.max(2, Math.round((S.squads + (W.mode === 'endless' ? Math.min(6, Math.floor(cyc / SPECIALS.length) * 2) : 0)) * (D_OF(W).count || 1))), extra = [];
+  let total = 0;
+  for (let i = 0; i < squads; i++) {
+    const kind = S.kind === 'mix' ? SPECIAL.mix[i % SPECIAL.mix.length] : S.kind;
+    const n = kind === 'whirler' ? 1 : kind === 'maw' ? 2 : kind === 'husk' ? Math.min(S.n, 4) : S.n;
+    extra.push({ t: SPECIAL.first + i * S.gap, type: 'squad', kind, n });
+    total += kind === 'whirler' ? WHIRL.n : n;
+  }
+  W.special = { key: S.key, total, left: total };
+  W.plan = { left: 0, groupT: 99, extra, prowlT: W.R.prowlT + squads * S.gap };
+  for (const p of W.players) p.shield = Math.max(p.shield, W.R.shield + (W.up.deflector || 0));
+  W.ev.push({ k: 'wave', w, n: W.mode === 'endless' ? W.waveN : w + 1, special: S.key, total });
+}
+// one squadron warps in together, away from the pilots
+function squad(W, x) {
+  if (x.kind === 'whirler') { whirlRing(W, 1); return; }
+  const cx = spawnSpot(W, x.kind), cy = rr(W, 11, 26);
+  for (let k = 0; k < x.n; k++) {
+    const e = spawnEnemy(W, x.kind, wp(cx + rr(W, -7, 7)), clamp(cy + rr(W, -6, 6), 4, 31));
+    if (x.kind === 'spark') e.life = SPECIAL.sparkLife + rr(W, 0, 4);
+    if (x.kind === 'husk') e.st = 'hunt';
+  }
+}
 // POD INTERSECTION: two pods warp in either side of a point ahead of a pilot and drift through it on crossing paths
 const wi = (W) => clamp(W.mode === 'endless' ? Math.floor(W.level || 0) : W.sector, 0, 4);
 // a ring of whirlers warps in away from the pilots and starts to shadow one
-function whirlRing(W) {
+function whirlRing(W, storm = 0) {
   const x = spawnSpot(W, 'whirler'), y = rr(W, 14, 26), id = W.nextId++;
-  W.rings.push({ id, x, y, a: rr(W, 0, 6.28), st: 'cruise', t: rr(W, -2, 0), side: rand(W) < 0.5 ? -1 : 1, tx: x, ty: y });
+  // storm rings (a special wave) dive more than twice as often
+  W.rings.push({ id, x, y, a: rr(W, 0, 6.28), st: 'cruise', t: rr(W, -2, 0), side: rand(W) < 0.5 ? -1 : 1, tx: x, ty: y, k: storm ? 0.42 : 1 });
   for (let k = 0; k < WHIRL.n; k++) {
     const a = (k / WHIRL.n) * Math.PI * 2;
     const e = addEnemy(W, 'whirler', wp(x + Math.cos(a) * WHIRL.rad), y + Math.sin(a) * WHIRL.rad * 0.6);
@@ -206,7 +239,7 @@ function rings(W, dt) {
       const tx = p ? wp(p.x + r.side * 22) : wp(r.x + 10), ty = p ? clamp(p.y + 4, 8, 29) : r.y;
       const dx = wd(tx - r.x), dy = ty - r.y, l = Math.hypot(dx, dy) || 1, v = Math.min(WHIRL.v[i], l * 2);
       r.x = wp(r.x + (dx / l) * v * dt); r.y += (dy / l) * v * dt;
-      if (p && r.t > WHIRL.every[i] && Math.abs(wd(p.x - r.x)) < 40) { r.st = 'dive'; r.t = 0; r.tx = p.x; r.ty = p.y; W.ev.push({ k: 'whirldive', x: r.x, y: r.y, id: r.id }); }
+      if (p && r.t > WHIRL.every[i] * (r.k || 1) && Math.abs(wd(p.x - r.x)) < 40) { r.st = 'dive'; r.t = 0; r.tx = p.x; r.ty = p.y; W.ev.push({ k: 'whirldive', x: r.x, y: r.y, id: r.id }); }
     } else {
       const dx = wd(r.tx - r.x), dy = r.ty - r.y, l = Math.hypot(dx, dy) || 1, v = WHIRL.dive[i];
       r.x = wp(r.x + (dx / l) * v * dt); r.y = clamp(r.y + (dy / l) * v * dt, 4, H - 3);

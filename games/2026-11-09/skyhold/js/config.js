@@ -1,6 +1,6 @@
 // Skyhold 2026 — every tunable number lives here. The RAMP table drives difficulty; nothing else in the game
 // hard-codes enemy pace, numbers, fire rate, aim or warning times.
-export const VERSION = '1.12.1';
+export const VERSION = '1.13.0';
 export const STEP = 1 / 120;
 
 // ------------------------------------------------------------------ the planet and the Warden gunship
@@ -99,6 +99,18 @@ export const COIL = { every: [6, 6, 5.5, 5, 4.5], max: 3, life: 11, v: [10, 11, 
 export const SCORCH = { hop: [1.1, 1.0, 0.9, 0.85, 0.8], fire: [5, 4.6, 4.2, 3.8, 3.4], v: 9, home: 1.8, turn: 2.2, warn: 0.55 };
 export const MAW = { stalk: 18, dash: [20, 21, 23, 25, 27], dashT: 0.85, rest: [3.2, 3, 2.7, 2.4, 2.2], warn: 0.5 };
 export const GATE = { y: 17, r: 4.2, cd: 6, back: 14 };
+// SPECIAL WAVES: every fourth wave (the campaign's wave 4 of each world, right before the carrier; in ENDLESS ORBIT every
+// fourth wave) is a massed attack by one kind of fighter: no lifters, `squads` squadrons of `n` arriving `gap` s apart.
+// kind: the machine ('whirler' comes as rings of six, so its n is rings per squadron; 'mix' = the armada, a squadron of
+// each kind in turn). The campaign uses SPECIALS[world]; endless cycles through them and adds a squadron a cycle.
+export const SPECIALS = [
+  { key: 'whirl', name: 'WHIRLER STORM', kind: 'whirler', squads: 6, n: 1, gap: 5 },
+  { key: 'swarm', name: 'STINGER SWARM', kind: 'stinger', squads: 6, n: 6, gap: 4.6 },
+  { key: 'sparks', name: 'SPARK STORM', kind: 'spark', squads: 9, n: 8, gap: 3.4 },
+  { key: 'raid', name: 'HUSK RAID', kind: 'husk', squads: 11, n: 4, gap: 3.6 },
+  { key: 'armada', name: 'THE ARMADA', kind: 'mix', squads: 11, n: 6, gap: 3.6 },
+];
+export const SPECIAL = { every: 4, first: 2.2, sparkLife: 26, mix: ['stinger', 'whirler', 'husk', 'spark', 'stinger', 'whirler', 'husk', 'maw'] };
 export const HYPER = { gain: 0.0045, decay: 0.002, time: 8, slow: 0.55, fireCD: 0.045, band: 2.4, reach: 1.25, score: 2 };
 // planet events: one per world, mid-wave in waves 2 and 4 (index 1 and 3) between `at` seconds
 export const EVENTS = { verdant: 'meteors', dune: 'sandstorm', frost: 'flare', cinder: 'eruption', umbra: 'eclipse' };

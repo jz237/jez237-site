@@ -3,8 +3,8 @@
 // carrier, lives, score) and streams snapshots 20 times a second. The guest flies its own gunship locally (so it never
 // lags), judges the hits it takes, and reports its ship, its beams, novas, catches, landings and pickups as claims;
 // the host carries those out so every kill is decided in one place.
-import { netDeath, netShield, netCatch, netLand, netPod, netFire, netRam, netNovaAt, netAdopt } from './sim.js?v=19';
-import { PW_KEYS, SHIP_KEYS } from './config.js?v=19';
+import { netDeath, netShield, netCatch, netLand, netPod, netFire, netRam, netNovaAt, netAdopt } from './sim.js?v=20';
+import { PW_KEYS, SHIP_KEYS } from './config.js?v=20';
 
 export const PROTOCOL = 1;
 const RELAY = 'wss://steel-duel-online.jez237.workers.dev';
@@ -39,7 +39,7 @@ export function packWorld(W) {
   const h = W.players[0], g = W.players[1], B = W.boss;
   return {
     wt: r3(W.t), ph: PH.indexOf(W.phase), pt: r2(W.phaseT), lv: W.lives, sc: W.score, k: W.k, wv: W.wave, ov: W.over ? 1 : 0, rs: W.result, st: r2(W.secT), ft: r2(W.fightT), wn: W.waveN, lvl: r3(W.level || 0), fa: W.fallen ? 1 : 0,
-    si: W.n % 60 === 0 ? W.sites.map(r2) : null, pl: W.plan ? W.plan.left : 0,
+    si: W.n % 60 === 0 ? W.sites.map(r2) : null, pl: W.plan ? W.plan.left : 0, sw: W.special ? [W.special.key, W.special.total, W.special.left] : 0,
     en: W.enemies.filter((e) => e.hp > 0).map((e) => [e.id, TYPES.indexOf(e.type), r2(e.x), r2(e.y), r2(e.vx), r2(e.vy), e.hp, r2(e.born), EST.indexOf(e.st), r2(e.tell), e.carry, e.face, r2(e.hitT), e.tgt, r2(e.t), e.link || 0]),
     se: W.settlers.map((s) => [s.id, SST.indexOf(s.st), r2(s.x), r2(s.y), s.by, r2(s.dropY), r2(s.vx), r2(s.mark)]),
     bo: W.bolts.map((b) => [b.id, r2(b.x), r2(b.y), r2(b.vx), r2(b.vy), r2(b.t), b.from]),
@@ -60,6 +60,7 @@ export function applyWorld(W, S, lead) {
   W.t = S.wt + lead; W.phase = PH[S.ph]; W.phaseT = S.pt; W.lives = S.lv; W.score = S.sc; W.over = !!S.ov; W.result = S.rs; W.secT = S.st; W.fightT = S.ft; W.waveN = S.wn; W.fallen = !!S.fa;
   netAdopt(W, S.wv, S.k, S.lvl, S.si);
   W.plan = { left: S.pl, extra: [], groupT: 0, prowlT: 0 };
+  W.special = S.sw ? { key: S.sw[0], total: S.sw[1], left: S.sw[2] } : null;
   const old = new Map(W.enemies.map((e) => [e.id, e]));
   W.enemies = S.en.map((q) => Object.assign(old.get(q[0]) || {}, { id: q[0], type: TYPES[q[1]], x: ext(q[2], q[4]), y: ext(q[3], q[5]), vx: q[4], vy: q[5], hp: q[6], born: q[7], st: EST[q[8]] || 'hunt', tell: q[9], carry: q[10], face: q[11], hitT: q[12], tgt: q[13], t: q[14], link: q[15] || 0, remote: true }));
   const me = W.players[1];

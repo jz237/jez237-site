@@ -1,13 +1,13 @@
 // Skyhold 2026 — game flow, menus, HUD (with the scanner strip), commentary, demo director and the frame loop.
-import { VERSION, SECTORS, STEP, F, C, H, BOSSES, UPGRADES, UP_KEYS, UP_COST, MEDALS, parTime, TYPICAL_UP, START_LIVES, DIFFICULTY, POWERUPS, LIVERIES, CP_NAMES, WAVES, ENEMY, SHIPS, SHIP_KEYS, RIVALS, MASTERY, mastLevel } from './config.js?v=19';
-import { makeWorld, step, stepGuest, drainEvents, wd, wp, settlersLeft, nodePos, CHAIN_T, chainMult, beamRange } from './sim.js?v=19';
-import { Autopilot } from './ai.js?v=19';
-import { Renderer, pickQuality, CALM, LOOKS, PW, PH } from './render.js?v=19';
-import { Audio } from './audio.js?v=19';
-import { Input } from './input.js?v=19';
-import { Scores, NO_POST } from './scores.js?v=19';
-import { Recorder, Replay } from './replay.js?v=19';
-import { Online, ROOM, QUICK, QUICK_R, randomCode, cleanCode } from './online.js?v=19';
+import { VERSION, SECTORS, STEP, F, C, H, BOSSES, UPGRADES, UP_KEYS, UP_COST, MEDALS, parTime, TYPICAL_UP, START_LIVES, DIFFICULTY, POWERUPS, LIVERIES, CP_NAMES, WAVES, ENEMY, SHIPS, SHIP_KEYS, RIVALS, MASTERY, mastLevel, SPECIALS } from './config.js?v=20';
+import { makeWorld, step, stepGuest, drainEvents, wd, wp, settlersLeft, nodePos, CHAIN_T, chainMult, beamRange } from './sim.js?v=20';
+import { Autopilot } from './ai.js?v=20';
+import { Renderer, pickQuality, CALM, LOOKS, PW, PH } from './render.js?v=20';
+import { Audio } from './audio.js?v=20';
+import { Input } from './input.js?v=20';
+import { Scores, NO_POST } from './scores.js?v=20';
+import { Recorder, Replay } from './replay.js?v=20';
+import { Online, ROOM, QUICK, QUICK_R, randomCode, cleanCode } from './online.js?v=20';
 
 const $ = (id) => document.getElementById(id);
 const params = new URLSearchParams(location.search);
@@ -382,7 +382,8 @@ function handleEvents(list, W, live) {
   const S = +settings.shake;
   const P = (x, y, z = 0.4) => R.at(x, y, z);
   // your own ship's sounds play close to the listener (full volume, still panned); everything else sits in the world
-  const snd = (name, e, o = {}) => { let p = P(e.x, e.y); if (mine(e)) p = nearMe(p); return A.play(name, { x: p.x, y: p.y, z: p.z, ...o }); };
+  // (an event without a height, like a lava vent, sounds from the ground)
+  const snd = (name, e, o = {}) => { let p = P(e.x ?? R.cx, e.y ?? 1); if (mine(e)) p = nearMe(p); return A.play(name, { x: p.x, y: p.y, z: p.z, ...o }); };
   const pan = (x) => (R.chaseK > 0.5 ? 0 : clamp(wd(x - R.cx) / 50, -1, 1));
   const cab = (name, e, o = {}) => A.cab(name, { pan: e ? pan(e.x) : 0, ...o });
   const seen = (e) => Math.abs(wd(e.x - R.cx)) < 70;
@@ -551,7 +552,15 @@ function handleEvents(list, W, live) {
       }
       case 'pwend': if (live && mine(e)) A.play('pwend', { vol: 0.5, gap: 0.2 }); break;
       case 'life': if (live) { A.play('life', { vol: 0.9, gap: 0 }); A.retro('life', { vol: 0.45 }); A.cab('extra'); caption('+1 SHIP', 2.5); } break;
-      case 'wave': if (live) { A.play('alarm', { vol: 0.35, gap: 0 }); banner(W.mode === 'endless' ? `WAVE ${e.n}` : `WAVE ${e.w + 1}`, W.mode === 'endless' ? SECTORS[W.k].name : `${SECTORS[W.sector].name} · ${W.R.lifters} LIFTERS`, 2.2); } break;
+      case 'wave': if (live && e.special) {
+        const S = SPECIALS.find((q) => q.key === e.special) || SPECIALS[0];
+        A.play('alarm', { vol: 0.8, gap: 0 }); A.play('bossroar', { vol: 0.5, rate: 1.5, delay: 0.3, gap: 0 }); A.cab('start', { rate: 1.2 });
+        R.flashScreen(0.22, 0xff7a4a); R.addTrauma(0.3 * +settings.shake); R.kick(0.7);
+        banner(S.name, `SPECIAL WAVE · ${e.total} FIGHTERS · NO LIFTERS · DESTROY THEM ALL`, 3.4);
+        rumble(0.6, 0.5, 400);
+        break;
+      }
+      if (live) { A.play('alarm', { vol: 0.35, gap: 0 }); banner(W.mode === 'endless' ? `WAVE ${e.n}` : `WAVE ${e.w + 1}`, W.mode === 'endless' ? SECTORS[W.k].name : `${SECTORS[W.sector].name} · ${W.R.lifters} LIFTERS`, 2.2); } break;
       case 'checkpoint': if (live) A.play('upgrade', { vol: 0.5, gap: 0 }); break;
       case 'waveclear': {
         A.play('waveclear', { vol: 0.8, gap: 0 });
@@ -1387,6 +1396,7 @@ function objective(W, me) {
   if (lift) return `A SETTLER IS BEING LIFTED · SHOOT THE LIFTER ${dir(lift.x)}`;
   const B = W.boss;
   if (B) { if (B.st === 'warp') return 'THE CARRIER IS ARRIVING · GET CLEAR'; const n = B.nodes.filter((q) => q.hp > 0).length; return `LINE UP WITH THE CARRIER'S GLOWING WEAK POINTS AND FIRE · ${n} LEFT`; }
+  if (W.special && W.phase === 'fight') { const S = SPECIALS.find((q) => q.key === W.special.key); return `${S ? S.name : 'SPECIAL WAVE'} · ${W.special.left} OF ${W.special.total} FIGHTERS LEFT`; }
   if (W.fallen) return 'THE COLONY HAS FALLEN · DESTROY EVERY MACHINE';
   const l = W.enemies.filter((e) => e.hp > 0 && (e.type === 'lifter' || e.type === 'husk')).length + (W.plan ? W.plan.left : 0);
   return `SHOOT THE LIFTERS BEFORE THEY REACH THE SETTLERS · ${l} TO GO`;
@@ -1423,6 +1433,7 @@ function heatOf(W, me) {
   const B = W.boss;
   if (B && B.st !== 'gone' && B.st !== 'warp') h = Math.max(h, Math.abs(wd(B.x - me.x)) < 110 ? 0.72 : 0.5, B.phase === 2 || B.rage ? 0.9 : 0);
   if (W.event && W.event.t < W.event.T) h = Math.max(h, 0.55);
+  if (W.special && W.phase === 'fight') h = Math.max(h, 0.8);
   if (me.hyper > 0) h = 1;
   return Math.min(1, h);
 }
@@ -1475,7 +1486,7 @@ async function boot() {
   toTitle();
   boardOf('campaign', settings.diff).fresh(); boardOf('endless', settings.diff).fresh();
   if (!G.fixed && !params.has('test')) R.prepareAll(true);
-  if (params.has('test')) { const m = await import('./tests.js?v=19'); m.runTests(window.__sh); }
+  if (params.has('test')) { const m = await import('./tests.js?v=20'); m.runTests(window.__sh); }
   else if (params.has('playthrough')) { A.unlock(); startPlaythrough(); }
   else if (params.has('room')) { act('online'); $('join-code').value = cleanCode(params.get('room')); }
   else if (G.autopilot) { A.unlock(); if (params.has('endless')) startEndless(); else startCampaign(+params.get('sector') || 0); }
