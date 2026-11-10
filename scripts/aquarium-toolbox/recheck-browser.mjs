@@ -52,7 +52,9 @@ try{
   await p.waitForFunction(()=>document.querySelector('#import-status').textContent==='Backup restored.');
   equal((await saved()).inputs.glass.t,1,'old backup endpoint repaired');equal((await saved()).inputs.salt.target,1,'old SG backup repaired');
   raw.inputs.salt.target=.999999;await p.locator('#import').setInputFiles({name:'invalid-backup.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(raw))});
-  check((await p.locator('#import-status').textContent()).startsWith('Could not restore:'),'genuinely out-of-range backup still fails');
+  // The restore reads the file asynchronously: wait for its verdict instead of sampling the previous status.
+  await p.waitForFunction(()=>document.querySelector('#import-status').textContent!=='Backup restored.',null,{timeout:10000}).catch(()=>{});
+  check((await p.locator('#import-status').textContent()).startsWith('Could not restore:'),'genuinely out-of-range backup still fails: '+await p.locator('#import-status').textContent());
   equal((await saved()).inputs.salt.target,1,'failed import is atomic');await p.locator('#settings-dialog [data-close]').click();
   for(const data of ['{bad',JSON.stringify({v:100,dose:5})]){
    await p.goto(base+'#tool=label&data='+encodeURIComponent(data));await p.locator('.error-card').waitFor();
