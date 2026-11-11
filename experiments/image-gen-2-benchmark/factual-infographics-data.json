@@ -21038,5 +21038,125 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-11-11-factual-infographic-factual-infographic-mandarinfish",
+    "title": "Factual infographic: Mandarinfish",
+    "tests": "Permanent species and alias reservations and archive-wide factual topics checked. No tank minimum. Aquarium implications identified; size attributed to publisher rather than universal maximum.; archive_slot=2026-11-11T16:20; concept=mandarinfish-microprey-foraging-reef-rubble; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: reef-fish-infographic; fish_scientific_name: Synchiropus splendidus",
+    "prompt": "Create a fancy, richly colorful, exquisitely detailed PHOTOREALISTIC educational reef-fish atlas, the finished infographic itself, not a photographed print. Flowing unboxed composition, premium editorial typography, organically integrated explanations and biological close-ups, absolutely no rigid grid, no detached dashboard cards. Title prominently “MANDARINFISH”, scientific binomial “Synchiropus splendidus” directly underneath, then a smaller lyrical subtitle “A tiny hunter in the reef rubble”.\nA dominant male mandarinfish sweeps diagonally upward from the lower left across a luminous reef-rubble slope; anatomical credibility is paramount. Broad depressed head, high-set alert eyes, small protruding mouth, two distinct dorsal fins with elongated male first dorsal spine, large fanlike pelvic fins meeting the substrate, delicate translucent pectoral fin rays. Skin is smooth and scaleless, with wet minute texture and intensely saturated turquoise/blue-green meanders and orange-red wavy bands; reproduce real diagnostic markings, never ornamental fantasy markings or metallic scales. A magnificent emerald, cobalt and burnt-orange hero with realistic caustic light, fin translucency, shallow-water suspended particles, cyan distance and warm coral bounce light. Rose, violet and amber reef accents remain background context; no second fish species, no anemone partnership. Let dark ocean-blue negative space breathe at upper right.\nWeave a natural visual journey around this hero: a large organic magnified view of the small mouth picking a tiny crustacean from porous live rock, connected by a fine curved leader. Copepod and worm studies with believable appendages and clear label “Microprey — enlarged, not to scale”; no fictional organ cross section. Near the pelvic fins use delicate open callout “Pelvic fins support bottom perching”; by the dorsal spine “Male: elongated first dorsal spine”. A softly merged skin close-up and concise text “Scaleless skin • thick mucus coating” and “Secretions may deter predators”. Do not show needles, venom injection or invented glands.\nReadable explanatory text integrated into currents of light and dark reef water, not tiny essay paragraphs: “WILD HABITAT — Western Pacific coral reefs and shallow lagoons; among coral and rubble.” “SMALL ADULT — 6–9 cm (2.4–3.5 in), reported by Aquarium of the Pacific.” A modest scale silhouette, labeled approximate adult length, complements rather than crowds the hero. “FEEDING — Picks tiny crustaceans and other invertebrates from the bottom during the day.” Use a gently curving substrate-to-mouth pathway to explain the feeding mechanism without implying filter feeding.\nIn the lower-right negative space integrate an elegant aquarium-cautions annotation over the reef, headed “AQUARIUM CONSIDERATIONS”. Include “Shy, but males may fight — avoid housing males together.” “Feeding is the challenge: many individuals refuse prepared food.” “Plan a sustained supply of tiny suitable prey; confirm the fish is eating.” “Reef compatibility is not a guarantee: tiny invertebrates are food.” Visually separate these husbandry implications from wild observations with typography, not boxes. Small concluding line “Small does not mean easy to keep.” No unsourced tank-volume minimum, no universal reef-safe badge, no unsupported temperature or lifespan or conservation status. No myth that live rock alone guarantees adequate nutrition. Omit secondary trivia for artistic breathing room, but retain feeding and compatibility cautions. Main labels clearly readable, elegant concise type, substantial informative detail, beautiful integrated biological studies, richly realistic reef photography aesthetic rather than painting/cartoon. Subtle footer “Sources: Animal Diversity Web • Aquarium of the Pacific • FishBase”.",
+    "image": "images/2026-11-11-factual-infographic-factual-infographic-mandarinfish.jpg",
+    "thumb": "thumbs/2026-11-11-factual-infographic-factual-infographic-mandarinfish.webp",
+    "color": "#3e4347",
+    "date": "2026-11-11",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "mandarinfish-microprey-foraging-reef-rubble",
+      "imageSha256": "465ec91e32fb39faf48fd7e114b913f4aa9eaf68c87ab27cafbfda01257cd01e",
+      "imageDHash": "1550cfd76bc97332"
+    },
+    "factualInfographic": {
+      "topic": "Mandarinfish (Synchiropus splendidus) benthic microprey foraging and aquarium feeding challenges",
+      "description": "Photorealistic species atlas connecting benthic anatomy and microprey feeding to qualified aquarium care.",
+      "sourceNote": "Read authoritative university and aquarium accounts, museum taxonomy and FishBase synonym list. https://animaldiversity.org/accounts/Synchiropus_splendidus/ ; https://www.aquariumofpacific.org/onlinelearningcenter/species/mandarin_goby ; https://www.fishbase.se/Nomenclature/SynonymsList.php?GenusName=Synchiropus&ID=12644&SpeciesName=splendidus&SynCode=28574 ; https://lifg.australian.museum/Group.html?groupId=pAxiqGOy",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-11T21:21:35.449972+00:00",
+        "sources": [
+          {
+            "id": "adw",
+            "publisher": "University of Michigan, Animal Diversity Web",
+            "title": "Synchiropus splendidus (Mandarin-fish)",
+            "sourceType": "university",
+            "url": "https://animaldiversity.org/accounts/Synchiropus_splendidus/"
+          },
+          {
+            "id": "aop",
+            "publisher": "Aquarium of the Pacific",
+            "title": "Mandarinfish — Online Learning Center",
+            "sourceType": "museum",
+            "url": "https://www.aquariumofpacific.org/onlinelearningcenter/species/mandarin_goby"
+          },
+          {
+            "id": "fishbase",
+            "publisher": "FishBase scientific consortium",
+            "title": "Synonyms of Synchiropus splendidus",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://www.fishbase.se/Nomenclature/SynonymsList.php?GenusName=Synchiropus&ID=12644&SpeciesName=splendidus&SynCode=28574"
+          },
+          {
+            "id": "am",
+            "publisher": "Australian Museum",
+            "title": "Lizard Island Field Guide — Mandarinfish",
+            "sourceType": "museum",
+            "url": "https://lifg.australian.museum/Group.html?groupId=pAxiqGOy"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Accepted species Synchiropus splendidus; synonyms Callionymus splendidus, Neosynchiropus splendidus and Pterosynchiropus splendidus.",
+            "sourceIds": [
+              "fishbase",
+              "am"
+            ]
+          },
+          {
+            "claim": "Western Pacific tropical coral reefs and shallow lagoons; bottom dwelling among coral and rubble.",
+            "sourceIds": [
+              "adw",
+              "aop"
+            ]
+          },
+          {
+            "claim": "Small adult fish; Aquarium of the Pacific reports 6–9 cm (2.4–3.5 inches); ADW reports maximum 6 cm, so do not claim a universal maximum.",
+            "sourceIds": [
+              "aop",
+              "adw"
+            ]
+          },
+          {
+            "claim": "Broad depressed head, small mouth, blue-green and orange wavy markings, male elongated first dorsal spine and fanlike pelvic fins used at the bottom.",
+            "sourceIds": [
+              "adw",
+              "aop"
+            ]
+          },
+          {
+            "claim": "Scaleless skin with a thick mucus coating; secretion may deter predators. Do not depict invented scales or injection apparatus.",
+            "sourceIds": [
+              "adw"
+            ]
+          },
+          {
+            "claim": "Daytime bottom feeding on small crustaceans and other tiny invertebrates, including copepods and worms; food from substrate/live rock.",
+            "sourceIds": [
+              "adw",
+              "aop"
+            ]
+          },
+          {
+            "claim": "Usually shy and mostly passive, but aquarium males can fight; avoid pairing males.",
+            "sourceIds": [
+              "adw"
+            ]
+          },
+          {
+            "claim": "Aquarium feeding can be difficult; many individuals do not accept prepared food. Husbandry implication: verify sustained intake of appropriately tiny food, not mere presence of live rock; small body size does not mean easy care.",
+            "sourceIds": [
+              "adw"
+            ]
+          },
+          {
+            "claim": "Reef compatibility is diet-specific: tiny invertebrates are prey; do not promise universal reef safety. This caution is an inference from documented diet, not a blanket safety classification.",
+            "sourceIds": [
+              "adw",
+              "aop"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
