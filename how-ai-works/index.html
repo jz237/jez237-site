@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="../assets/styles.css" />
   <link rel="stylesheet" href="../assets/site-enhance.css" />
   <link rel="stylesheet" href="../assets/workbench-theme.css" />
-  <link rel="stylesheet" href="lab.css?v=20261111d" />
+  <link rel="stylesheet" href="lab.css?v=20261111e" />
   <link rel="stylesheet" href="extras.css?v=20261111b" />
   <meta name="description" content="A real language model runs in this page. Type a prompt and watch it become tokens, vectors, attention, layers and odds, then retrain the model yourself. Animated, step by step." />
   <link rel="canonical" href="https://jez237.com/how-ai-works/" />
@@ -102,7 +102,9 @@
             <div class="net-more" role="group" aria-label="More to try">
               <span class="net-cap">More to try</span>
               <button class="lab-button" id="netWhyBtn" type="button" aria-pressed="false">Why this answer?</button>
+              <button class="lab-button" id="netTraceBtn" type="button" aria-pressed="false">Follow the signal</button>
               <button class="lab-button" id="netBreakBtn" type="button" aria-expanded="false" aria-controls="netBreak">Break it</button>
+              <button class="lab-button" id="netFoolBtn" type="button" aria-expanded="false" aria-controls="netFool">Fool it</button>
               <button class="lab-button" id="netGalleryBtn" type="button" aria-expanded="false" aria-controls="netGalleryBox">What the neurons learned</button>
               <button class="lab-button" id="netTeachBtn" type="button" aria-expanded="false" aria-controls="netTeach">Teach it a new shape</button>
               <button class="lab-button" id="netSound" type="button" aria-pressed="false">Sound: off</button>
@@ -110,6 +112,7 @@
               <button class="lab-button" id="netTourGo" type="button">Show me around</button>
             </div>
             <p class="net-why" id="netWhy" aria-live="polite" hidden></p>
+            <p class="net-why net-trace" id="netTrace" aria-live="polite" hidden></p>
             <p class="net-share" id="netShareBox" hidden>
               <input id="netLink" type="text" readonly aria-label="Link to this drawing">
               <span id="netShareNote" aria-live="polite"></span>
@@ -122,9 +125,18 @@
               <p id="netBreakNote" aria-live="polite"></p>
               <button class="lab-button" id="netFix" type="button" hidden>Repair it</button>
             </div>
+            <div class="net-panel" id="netFool" hidden>
+              <p id="foolNote" aria-live="polite"></p>
+              <div class="net-teach-row">
+                <button class="lab-button primary" id="foolStart" type="button">Start with this drawing</button>
+                <button class="lab-button" id="foolBest" type="button" hidden>Show the page’s best</button>
+                <button class="lab-button" id="foolBack" type="button" hidden>Put the drawing back</button>
+              </div>
+            </div>
             <div class="net-panel net-gallery" id="netGalleryBox" hidden>
-              <canvas id="netGallery" role="img" aria-label="The 144 neurons of the first hidden layer, each drawn as an eight by eight picture of its weights on the input squares"></canvas>
+              <canvas id="netGallery" role="img" aria-label="The neurons of one hidden layer. Each tile is the average of the drawings that make that neuron fire hardest."></canvas>
               <div class="net-gallery-side">
+                <div class="net-tabs" id="netGalTabs" role="group" aria-label="Which hidden layer to show"></div>
                 <p id="netGalNote" aria-live="polite"></p>
               </div>
             </div>
@@ -937,10 +949,10 @@
   <script src="js/tinygpt.js?v=20261110b" defer></script>
   <script src="js/weights.js?v=20261110b" defer></script>
   <script src="js/core.js?v=20261111b" defer></script>
-  <script src="js/mlp.js?v=20261111d" defer></script>
+  <script src="js/mlp.js?v=20261111e" defer></script>
   <script src="js/hero-weights.js?v=20261111c" defer></script>
-  <script src="js/net3d.js?v=20261111d" defer></script>
-  <script src="js/hero.js?v=20261111d" defer></script>
+  <script src="js/net3d.js?v=20261111e" defer></script>
+  <script src="js/hero.js?v=20261111e" defer></script>
   <script src="js/trainer.js?v=20261110c" defer></script>
   <script src="js/chapters.js?v=20261110c" defer></script>
   <script src="js/journey.js?v=20261110b" defer></script>

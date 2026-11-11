@@ -1,0 +1,30 @@
+name: How AI Works Maths
+
+# The page at /how-ai-works/ trains and runs two small networks in the browser. These tests check
+# the arithmetic behind them (gradients, the shipped weights, and the questions the page asks of
+# the shape network) with plain Node: no install step and no browser.
+on:
+  push:
+    branches:
+      - main
+    paths: ['how-ai-works/js/**', 'how-ai-works/tools/**', '.github/workflows/how-ai-works-tests.yml']
+  pull_request:
+    paths: ['how-ai-works/js/**', 'how-ai-works/tools/**', '.github/workflows/how-ai-works-tests.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  maths:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            how-ai-works/js
+            how-ai-works/tools
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node --test how-ai-works/tools/maths.test.js

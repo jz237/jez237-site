@@ -14,6 +14,7 @@
        onPin:   k => {}                     // a neuron was clicked (k = -1 when cleared)
      });
      view.setPass({ vals, mags, edges, dir, tint, keep })   // start a wave through the network
+     view.setTrace({ nodes: [[layer, index, 0..1]], edges: [[gap, from, to, 0..1]] })   // a few paths picked out in gold; null clears them
 */
 (function () {
   'use strict';
@@ -48,6 +49,8 @@
     let dir = 1, tint = [C.cyan, C.rose], keep = 0, clock = 1e9, limit = Infinity, stepping = false, stage = 0, told = -1, cycled = true, passes = 0;
     let yaw = YAW0, pitch = PITCH0, vyaw = 0, phase = 0, drift = 1, drag = null, mouse = null, over = false, hover = -1, pinned = -1, used = false, hint = 1;
     let quality = 2, cost = 2, slow = 0, quick = 0;
+    let trail = null, trailT = 0, dimmed = 0;            // a handful of paths picked out in gold (setTrace)
+    const onTrail = new Float32Array(N);
     const touches = new Map(); let pinch = 0;
     const coarse = !!(window.matchMedia && matchMedia('(pointer: coarse)').matches);
 
@@ -114,6 +117,16 @@
       if (p.settled) { clock = T_IN + G * T_GAP + 400; shownV = vals.map(a => Float32Array.from(a)); shownM = mags.map(a => Float32Array.from(a)); told = G; }
       else clock = 0;
       if (stepping) { stage = 0; limit = T_IN; blank(); }
+      L.kick();
+    }
+    // t.edges: [gap, from, to, strength 0..1], t.nodes: [layer, index, strength 0..1]. The paths are drawn outward from the last layer.
+    function setTrace(t) {
+      const was = !!trail;
+      onTrail.fill(0);
+      if (!t || !t.edges || !t.edges.length) { trail = null; L.kick(); return; }
+      trail = t.edges.map(e => [off[e[0]] + e[1], off[e[0] + 1] + e[2], e[0], L.clamp(e[3], 0, 1)]);
+      (t.nodes || []).forEach(q => { onTrail[off[q[0]] + q[1]] = Math.max(0.2, L.clamp(q[2], 0, 1)); });
+      if (!was || t.fresh) trailT = 0;
       L.kick();
     }
     // in step mode the layers the wave has not reached yet go dark, so it is clear where the signal is
@@ -247,9 +260,11 @@
         for (let n = 0; n < e.length; n += 2) { ctx.moveTo(px[e[n]], py[e[n]]); ctx.lineTo(px[e[n + 1]], py[e[n + 1]]); }
         ctx.strokeStyle = 'rgba(86,170,235,' + (lvl ? 0.1 : 0.045) + ')'; ctx.lineWidth = 1; ctx.stroke();
       }
-      // the signal: each lit connection is drawn as far as the wave has reached
+      // the signal: each lit connection is drawn as far as the wave has reached (held back while paths are picked out)
       ctx.globalCompositeOperation = 'lighter';
       const floor = stepping ? 0.6 : keep;
+      dimmed += ((trail ? 1 : 0) - dimmed) * (L.reduce ? 1 : 1 - Math.exp(-(dt || 16) / 180));
+      const calm = 1 - 0.6 * dimmed;
       for (let g = 0; g < G; g++) {
         const q = dir > 0 ? g : G - 1 - g, t0 = T_IN + q * T_GAP, p = L.clamp((clock - t0) / T_GAP, 0, 1);
         const fade = L.reduce ? 0.7 : Math.max(floor, 1 - L.clamp((clock - t0 - T_GAP) / T_FADE, 0, 1));
@@ -259,12 +274,27 @@
           if (!e.length) continue;
           ctx.beginPath();
           for (let n = 0; n < e.length; n += 2) { const a = e[n], c = e[n + 1]; ctx.moveTo(px[a], py[a]); ctx.lineTo(px[a] + (px[c] - px[a]) * p, py[a] + (py[c] - py[a]) * p); }
-          ctx.strokeStyle = L.rgba(tint[b & 1], (0.04 + 0.12 * lvl) * fade); ctx.lineWidth = 0.7 + lvl * 0.4; ctx.stroke();
+          ctx.strokeStyle = L.rgba(tint[b & 1], (0.04 + 0.12 * lvl) * fade * calm); ctx.lineWidth = 0.7 + lvl * 0.4; ctx.stroke();
         }
         if (p < 1) { const hd = heads[g], cnt = Math.min(hd.length, [14, 36, 70][quality]); for (let n = 0; n < cnt; n++) {
           const h = hd[n], a = h[0], c = h[1], s = ps[a] + (ps[c] - ps[a]) * p;
           stamp(ctx, tint[h[2] ? 1 : 0], px[a] + (px[c] - px[a]) * p, py[a] + (py[c] - py[a]) * p, (8 + h[3] * 11) * s, 0.3 + h[3] * 0.55);
         } }
+      }
+      // picked-out paths: gold, heavier the more they carry, drawn back from the answer one gap at a time,
+      // with a glint running forward along each to show which way the signal travels
+      if (trail) {
+        trailT += dt;
+        for (let n = 0; n < trail.length; n++) {
+          const e = trail[n], a = e[0], b = e[1], s = e[3], p = L.reduce ? 1 : L.clamp((trailT - (G - 1 - e[2]) * 190) / 260, 0, 1);
+          if (p <= 0) continue;
+          ctx.beginPath(); ctx.moveTo(px[b], py[b]); ctx.lineTo(px[b] + (px[a] - px[b]) * p, py[b] + (py[a] - py[b]) * p);
+          ctx.strokeStyle = L.rgba(C.gold, 0.22 + 0.6 * s); ctx.lineWidth = 0.9 + 2.3 * s; ctx.stroke();
+          if (p >= 1 && !L.reduce && quality > 0 && s > 0.3) {
+            const q = (trailT / 1100 + e[2] / G + n * 0.13) % 1, sc = ps[a] + (ps[b] - ps[a]) * q;
+            stamp(ctx, C.gold, px[a] + (px[b] - px[a]) * q, py[a] + (py[b] - py[a]) * q, (7 + 9 * s) * sc, 0.25 + 0.5 * s);
+          }
+        }
       }
       // the hovered or pinned neuron shows every weight into and out of it
       if (focus >= 0) {
@@ -299,6 +329,7 @@
         ctx.beginPath(); ctx.arc(px[k], py[k], r + (on || pin ? 2 : 0), 0, 6.2832); ctx.fillStyle = '#04101f'; ctx.fill();
         ctx.strokeStyle = pin ? C.gold : L.rgba(col, on ? 1 : 0.4 + 0.55 * m); ctx.lineWidth = on || pin ? 2 : 1.1; ctx.stroke();
         ctx.beginPath(); ctx.arc(px[k], py[k], Math.max(0.5, (r - 1.2) * (0.16 + 0.84 * m)), 0, 6.2832); ctx.fillStyle = L.rgba(col, 0.3 + 0.7 * m); ctx.fill();
+        if (trail && onTrail[k] && (L.reduce || trailT > (G - l) * 190)) { ctx.beginPath(); ctx.arc(px[k], py[k], r + 2.6, 0, 6.2832); ctx.strokeStyle = L.rgba(C.gold, 0.45 + 0.55 * onTrail[k]); ctx.lineWidth = 1.5; ctx.stroke(); }
       }
 
       // labels, drawn flat on top: nearest layer first, skipping one that would land on a name already drawn
@@ -335,7 +366,7 @@
     });
 
     return {
-      setPass, refreshWeb,
+      setPass, setTrace, refreshWeb,
       // step mode: the wave waits at each layer until step() is called
       step() {
         if (!stepping) { stepping = true; stage = 0; clock = 0; told = -1; limit = T_IN; blank(); L.kick(); return; }   // first press: back to the input
