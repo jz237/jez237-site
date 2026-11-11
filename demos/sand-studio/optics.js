@@ -17,7 +17,7 @@ export function createOptics(renderer,scene,camera,model){
   vec2 px=1.5/vec2(textureSize(depth,0));float here=distanceZ(gl_FragCoord.z);float d=clamp((distanceZ(texture2D(depth,q).r)*2.+distanceZ(texture2D(depth,q+vec2(px.x,0.)).r)+distanceZ(texture2D(depth,q-vec2(px.x,0.)).r)+distanceZ(texture2D(depth,q+vec2(0.,px.y)).r)+distanceZ(texture2D(depth,q-vec2(0.,px.y)).r))/6.-here,0.,2.4);
   vec3 transmission=hrAbsorb(behind.rgb,d*.55);
   float ca=hrCaustic(p+grad*d*2.,time)*surface*behind.a*(1.-exp(-d*6.))*exp(-d*.8);
-  transmission+=transmission*ca*1.5+vec3(.45,.7,.68)*ca*.07;
+  transmission+=min(transmission*ca*1.5,vec3(.3))+vec3(.45,.7,.68)*ca*.07;
   vec3 H=normalize(V+normalize(vec3(-.4,1.,.65)));float nh=max(0.,dot(N,H));float spec=(pow(nh,420.)*1.5+pow(nh,48.)*.05)*surface+pow(nh,190.)*.25*(1.-surface);
   float contact=surface*behind.a*(1.-smoothstep(.0,.05,d));
   float visibility=.07+fresnel*.16;float coverage=behind.a*(surface>.5?.9:.28);float alpha=coverage+(1.-coverage)*visibility;

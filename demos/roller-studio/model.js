@@ -85,5 +85,5 @@ export function buildModel(){
   trapped.forEach((o,i)=>o.visible=i<8+s.loading*34);microArrows.forEach((o,i)=>{let t=(i/14+s.time*.18)%1;o.position.set(Math.sin(i*2.4)*1.6,1.5+(i%5)*.45,.9-t*1.8);});
   diag={macro:micro,water:liquids.visible&&!micro,frontWall:front.visible,arrows:routes.visible&&!micro,mechanics:!driveCover.visible,web:web.visible,cleanRadius:s.clean,usedRadius:s.dirty,rollLift:pose.lift,assemblies:Object.keys(groups).length,rollAngles:spools.map(o=>o.angle),guideAngle:guideRotors[0].rotation.z,webTravel:travelUniform.value,webOffset:webMap.offset.y,...detail.snapshot(),...wetDetail.snapshot(),...driveDetail.snapshot(),layers:rollDetail.layerCount,tension,webLength:pathLength,servicePhase:pose.phase,threading:pose.thread,clipOpen:pose.clip,particles:particleTransport.snapshot(),trackedParticlePhase:particleTransport.particles[0].phase,trackingPhase,trackingPosition:trackedPosition.toArray()};
  }
- return {root,groups,anchors,pickables,render,trackingTarget:()=>trackedPosition.clone(),snapshot:()=>diag};
+ return {root,groups,anchors,pickables,render,opticalSurfaces:[[outerSurface,1],[innerSurface,1]],opticalHidden:[liquids,routes,marker],waterVisible:()=>machine.visible&&liquids.visible,trackingTarget:()=>trackedPosition.clone(),snapshot:()=>diag};
 }

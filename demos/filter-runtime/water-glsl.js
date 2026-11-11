@@ -31,6 +31,12 @@ vec3 hrStudio(vec3 r){
   c+=vec3(.6)*smoothstep(.975,.995,r.y);
   return c;
 }
+// Bubble domes, 0..1, for the foam where falling water meets the surface.
+float hrFoam(vec2 p,float t){
+  vec2 q=p*14.+vec2(t*.6,-t*.4),i=floor(q),f=fract(q);float d=1.;
+  for(int y=-1;y<=1;y++)for(int x=-1;x<=1;x++){vec2 g=vec2(float(x),float(y));vec2 o=fract(sin(vec2(dot(i+g,vec2(127.1,311.7)),dot(i+g,vec2(269.5,183.3))))*43758.5453);o=.5+.4*sin(t*2.+6.2831*o);d=min(d,length(g+o-f));}
+  return smoothstep(.45,.05,d);
+}
 // Light lost and scattered over a path of the given length through the water.
 vec3 hrAbsorb(vec3 behind,float thick){
   vec3 a=exp(-thick*vec3(.42,.085,.06));

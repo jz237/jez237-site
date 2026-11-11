@@ -50,11 +50,12 @@ export function createWaterOptics(renderer,scene,camera,water,excluded=[]){
         float visibility=sheet>.5?.17+gleam:.065+.07*fresnel+gleam;
         vec3 tint=sheet>.5?vec3(.08,.34,.40):vec3(.045,.22,.28);
         tint+=vec3(.30,.46,.46)*min(1.,gleam*3.);
+        float foam=top*delivery*exp(-radius*radius*9.)*(.3+.7*hrFoam(worldPoint.xz,waterTime));
         float alpha=coverage*(1.-visibility)+visibility;
         color=(color*coverage*(1.-visibility)+tint*visibility)/max(alpha,.001);
-        color+=sparkle+gleam*.25+contact*vec3(.42,.56,.55)*.22;
+        color+=sparkle+gleam*.25+contact*vec3(.42,.56,.55)*.22;color=mix(color,vec3(.86,.93,.92),clamp(foam*.8,0.,.8));
         float edge=sheet>.5?1.:smoothstep(0.,.025,min(min(waterUV.x,1.-waterUV.x),min(waterUV.y,1.-waterUV.y)));
-        gl_FragColor=vec4(color,edge*clamp(alpha+sparkle,.0,1.));
+        gl_FragColor=vec4(color,edge*clamp(alpha+sparkle+foam*.7,.0,1.));
         #include <tonemapping_fragment>
         #include <colorspace_fragment>
       }`});}
