@@ -93,8 +93,8 @@ use these instructions before writing code or snippets.
 - `/how-ai-works/training-alignment.html` - training and alignment deep
   dive (pretraining, fine-tuning, human feedback, evals, retrieval), using
   the same in-page model.
-- `/how-ai-works/classic/` - the earlier (September 2026) version of the
-  guide, with demos built on precomputed data from larger models.
+- `/how-ai-works/classic/` - retired; redirects to `/how-ai-works/`. Its
+  recorded larger-model demos now live in the main guide.
 - `/experiments/ai-explainer/` - retired; redirects to `/how-ai-works/`.
 - `/samples/aquarium/` - aquarium sample page.
 - `/prototypes/hidden-reef/` - Hidden Reef aquarium store prototype.
