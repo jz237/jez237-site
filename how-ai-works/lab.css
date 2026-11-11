@@ -749,10 +749,64 @@ body::after {
     radial-gradient(120% 90% at 78% 0%, rgba(34,104,180,0.2), transparent 60%),
     linear-gradient(180deg, #020914 0%, #04101e 58%, #071a2e 100%);
 }
-.net-hero .hero-canvas { height: clamp(340px, 42vw, 520px); touch-action: pan-y; cursor: grab; outline: none; -webkit-user-select: none; user-select: none; }
+.net-hero .hero-canvas { height: clamp(360px, 40vw, 490px); touch-action: pan-y; cursor: grab; outline: none; -webkit-user-select: none; user-select: none; }
 .net-hero .hero-canvas:focus-visible { box-shadow: inset 0 0 0 2px var(--lab-line-hot); border-radius: 17px 17px 0 0; }
 .net-hero .hero-copy { padding: clamp(18px, 2.6vw, 30px) clamp(20px, 3.6vw, 44px) clamp(22px, 3.4vw, 40px); border-top: 1px solid rgba(74,151,242,0.16); }
 .net-hero .hero-copy p { max-width: 760px; }
 @media (max-width: 680px) {
   .net-hero .hero-canvas { height: 340px; }
+}
+
+/* ---------- v4: the hero network is trained, and you can draw on it ---------- */
+.net-stage { position: relative; }
+.net-hero .net-in, .net-hero .net-out { position: absolute; bottom: 12px; z-index: 1; padding: 8px 10px 10px; border: 1px solid rgba(74,151,242,0.24); border-radius: 10px; background: rgba(3,11,22,0.8); }
+.net-hero .net-in { left: 14px; }
+.net-hero .net-out { right: 14px; }
+.net-cap { display: block; margin-bottom: 7px; color: var(--lab-muted); font: 700 10px var(--mono); letter-spacing: .08em; text-transform: uppercase; }
+.net-pad { display: grid; grid-template-columns: repeat(6, 17px); gap: 2px; touch-action: none; }
+.ai-lab .net-cell {
+  width: 17px; height: 17px; min-width: 0 !important; min-height: 0 !important; padding: 0 !important; margin: 0 !important;
+  border: 1px solid rgba(132,227,122,0.3) !important; border-radius: 3px !important; box-shadow: none !important;
+  background: rgba(132,227,122,var(--v, 0.05)) !important; cursor: crosshair; transform: none !important;
+}
+.ai-lab .net-cell:focus-visible { outline: 2px solid var(--lab-gold); outline-offset: 1px; }
+.net-outs { display: grid; grid-template-columns: repeat(3, 58px); gap: 3px; }
+.net-o { display: flex; align-items: center; justify-content: space-between; gap: 4px; padding: 3px 6px; border: 1px solid transparent; border-radius: 5px; background: rgba(157,134,255,calc(0.1 + 0.6 * var(--v, 0))); color: var(--lab-text); font: 600 11px var(--mono); }
+.net-o span { font-size: 13px; line-height: 1; }
+.net-o b { font-weight: 700; }
+.net-o.hot { background: rgba(230,189,103,calc(0.25 + 0.7 * var(--v, 0))); border-color: var(--lab-gold); color: #10202b; }
+.net-bar { display: grid; gap: 10px; padding: 12px clamp(14px, 3.6vw, 44px) 14px; border-top: 1px solid rgba(74,151,242,0.16); }
+.net-note, .net-status { margin: 0; color: #d6e6f0; font-size: 14px; line-height: 1.5; }
+.net-note { min-height: 21px; }
+.net-note strong, .net-status strong { color: #fff; }
+.net-status { color: var(--lab-muted); font-size: 13px; }
+.net-shapes, .net-controls { display: flex; flex-wrap: wrap; gap: 6px; }
+.ai-lab .net-bar [hidden] { display: none !important; }
+.ai-lab .net-bar .lab-button { min-height: 32px; padding: 5px 10px; font-size: 12px; }
+.ai-lab .net-shape span { font-size: 14px; margin-right: 2px; }
+.net-neuron { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 14px; align-items: start; padding: 12px 14px; border: 1px solid rgba(230,189,103,0.28); border-radius: 10px; background: rgba(230,189,103,0.06); }
+.net-neuron[hidden] { display: none; }
+.net-neuron canvas { width: 96px; height: 96px; border: 1px solid rgba(86,163,232,0.3); border-radius: 6px; background: var(--lab-ink); }
+.net-neuron canvas[hidden] { display: none; }
+.net-neuron canvas[hidden] + p { grid-column: 1 / -1; }
+.net-neuron p { margin: 0; color: #f5e3bf; font-size: 13.5px; line-height: 1.55; }
+.net-neuron strong { color: #fff; }
+.net-math { font-family: var(--mono); font-size: 12.5px; color: #cfe6f5; }
+@media (max-width: 680px) {
+  /* on a phone the pad and the answer sit under the network, so the network gets the whole canvas */
+  .net-stage { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 10px; padding: 0 12px 12px; }
+  .net-stage .hero-canvas { grid-column: 1 / -1; margin: 0 -12px; width: calc(100% + 24px); }
+  .net-hero .net-in, .net-hero .net-out { position: static; }
+  .net-hero .net-out { justify-self: end; }
+  .net-hero .net-in, .net-hero .net-out { padding: 8px; }
+  .net-pad { grid-template-columns: repeat(6, 17px); }
+  .net-outs { grid-template-columns: repeat(3, 48px); }
+  .net-o { padding: 3px 4px; gap: 2px; font-size: 10px; }
+  .net-o span { font-size: 12px; }
+  /* title and intro come straight after the network; the controls follow them */
+  .lab-hero.net-hero { display: flex; flex-direction: column; }
+  .net-hero .hero-copy { order: 2; border-top: 0; padding-top: 6px; }
+  .net-hero .net-bar { order: 3; }
+  .net-neuron { grid-template-columns: 72px minmax(0, 1fr); gap: 10px; }
+  .net-neuron canvas { width: 72px; height: 72px; }
 }
