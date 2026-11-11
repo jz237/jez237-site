@@ -29,7 +29,7 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 27
     steps:
       - name: Blobless sparse checkout
         env:
@@ -39,6 +39,8 @@ jobs:
             !/.github/
             /.github/scripts/pages_recovery.py
             /.github/scripts/pages_recovery_test.py
+            /.github/scripts/pages_artifact_ready.py
+            /.github/scripts/pages_artifact_ready_test.py
             /.github/workflows/pages.yml
             !/.wrangler/
             !/games/
@@ -136,7 +138,7 @@ jobs:
         run: python3 -m unittest discover -s scripts -p prepare_pages_mirror_test.py -v
 
       - name: Check bounded deployment recovery
-        run: python3 -m unittest discover -s .github/scripts -p pages_recovery_test.py -v
+        run: python3 -m unittest discover -s .github/scripts -p 'pages_*test.py' -v
 
       - name: Prepare GitHub Pages payload
         run: |
@@ -193,11 +195,18 @@ jobs:
           du -ah _site | sort -h | tail -n 25
 
       - name: Upload artifact
+        id: upload
         uses: actions/upload-pages-artifact@v5
         with:
           name: github-pages-${{ github.run_id }}-${{ github.run_attempt }}
           path: _site
           retention-days: 1
+
+      - name: Wait for the exact uploaded artifact to become visible
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PAGES_ARTIFACT_ID: ${{ steps.upload.outputs.artifact_id }}
+        run: python3 .github/scripts/pages_artifact_ready.py
 
       - name: Deploy to GitHub Pages
         id: deployment_attempt
