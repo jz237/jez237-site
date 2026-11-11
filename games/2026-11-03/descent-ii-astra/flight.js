@@ -239,7 +239,7 @@ function preloadFlightEngine() {
   if(location.protocol!=="http:"&&location.protocol!=="https:")return;
   if(document.getElementById("astraEnginePreload"))return;
   const link=document.createElement("link");link.id="astraEnginePreload";
-  link.rel="preload";link.as="script";link.href="engine.js?v=pyre90";
+  link.rel="preload";link.as="script";link.href="engine.js?v=pyre98";
   document.head.append(link);
 }
 let firstBlastProfile=0;
@@ -328,7 +328,7 @@ async function launch(quick,demo=false,encounter=false,preview=false,autopilot=f
       mounted.set("collectibles.mesh",mesh);
       window.astraLoad?.progress("download","Explosion and collectible artwork ready",2,2);
     }
-    if(astra){await script("generated-materials.js?v=80");assetDepot=astraGeneratedLibrary(assetDepot);}
+    if(astra){await script("generated-materials.js?v=93");assetDepot=astraGeneratedLibrary(assetDepot);}
     if(astra)await loadAstraShipAssets();
     const districtMaps=await districtArt;if(districtMaps)for(const [name,bytes] of districtMaps)mounted.set(name,bytes);
     const sceneryBytes=await scenery;if(sceneryBytes)mounted.set("scenery74.png",sceneryBytes);
@@ -341,7 +341,7 @@ async function launch(quick,demo=false,encounter=false,preview=false,autopilot=f
       resumeFlight:!!window.astraResumeLast,comfort:window.astraTools?.comfort,
       resumeCheckpoint:!!window.astraResumeCheckpoint,checkpoints:document.getElementById("checkpoints").checked,
       netSession:window.astraNet?.session||null,arenaDemo:!!window.astraNet?.session?.spectator,
-      canvas,quick,demo,encounter,autopilot,openWeaponPriorities,shadowQuality:Number($("shadowQuality").value),combatInspect:window.astraCombatPending??-1,assetDepot,loadMovie,fastLaunch:true,blastInspect:preview?firstBlastProfile:0,mineInspect:mine?0:-1,mineInspectZoom:1,demoArsenal:autopilot&&!window.astraNet?.session?.spectator&&$("demoArsenal").checked,weaponInspect:weapons?0:-1,difficulty:Number($("difficulty").value),mobileDemo:autopilot&&astraTouch,autoPaused:false,startLevel:mine?Number($("mineLevel").value):autopilot?Number($("demoLevel").value):window.astraCampaigns[campaign]?.arena?Number($("classicLevel").value)||1:1,pickupInspect:inspect?0:-1,pyroPreviewCommand:preview?1:0,campaign,wideHud:$("wideHud").checked,intro:!openWeaponPriorities && !quick && !demo && $("intro").checked,astra, arguments:["-hogdir","/mine","-pilot",autopilot?"watch":"astra","-window","-nostickykeys","-nojoystick",
+      canvas,quick,demo,encounter,autopilot,openWeaponPriorities,fullWarmup:$("fullWarmup").checked,shadowQuality:Number($("shadowQuality").value),combatInspect:window.astraCombatPending??-1,assetDepot,loadMovie,fastLaunch:true,blastInspect:preview?firstBlastProfile:0,mineInspect:mine?0:-1,mineInspectZoom:1,demoArsenal:autopilot&&!window.astraNet?.session?.spectator&&$("demoArsenal").checked,weaponInspect:weapons?0:-1,difficulty:Number($("difficulty").value),mobileDemo:autopilot&&astraTouch,autoPaused:false,startLevel:mine?Number($("mineLevel").value):autopilot?Number($("demoLevel").value):window.astraCampaigns[campaign]?.arena?Number($("classicLevel").value)||1:1,pickupInspect:inspect?0:-1,pyroPreviewCommand:preview?1:0,campaign,wideHud:$("wideHud").checked,intro:!openWeaponPriorities && !quick && !demo && $("intro").checked,astra, arguments:["-hogdir","/mine","-pilot",autopilot?"watch":"astra","-window","-nostickykeys","-nojoystick",
         "-gl_gettexlevelparam_ok","0","-gl_intensity4_ok","0","-gl_luminance4_alpha4_ok","0","-gl_rgba2_ok","0"],
       print:console.log,printErr:console.warn,onAbort:astraFail,
       onExit:()=>{Module.astraExited=true;window.astraMenus?.hide();window.astraTerminal?.fail();window.astraFlightFocus(false);syncPilot();document.body.classList.remove("flying");$("status").textContent="Flight ended."; $("retry").hidden=false;},
@@ -380,7 +380,7 @@ async function launch(quick,demo=false,encounter=false,preview=false,autopilot=f
         setInterval(syncPilot,3000);
       }
     };
-    await script("engine.js?v=pyre90");
+    await script("engine.js?v=pyre98");
   } catch(e) {console.error(e);astraFail(e.message);}
 }
 
@@ -436,11 +436,20 @@ $("menus").onclick=()=>launchCampaignMenu(false);
 $("weaponPriorities").onclick=()=>launchCampaignMenu(true);
 $("demo").onclick=()=>launch(false,true);
 $("retry").onclick=()=>window.astraNavigation.home(false);
-$("full").onclick=()=>document.fullscreenElement?document.exitFullscreen():$("stage").requestFullscreen();
 $("view").oncontextmenu=e=>e.preventDefault();
 document.addEventListener("visibilitychange",()=>{if(document.hidden)syncPilot();});
 window.addEventListener("pagehide",syncPilot);
-window.addEventListener("error",e=>{if(window.Module && e.message)astraFail(e.message);});
+// Only a fault that passed through the engine ends the flight. An error raised
+// by a launcher or HUD script alone is left in the console and the mine keeps running.
+function astraEngineFault(e) {
+  return e.error instanceof WebAssembly.RuntimeError ||
+    /engine\.js/.test(e.filename||"") || /engine\.js/.test(String(e.error?.stack||""));
+}
+window.addEventListener("error",e=>{if(window.Module && e.message && astraEngineFault(e))astraFail(e.message);});
+// SDL renames the tab after the engine build. Keep the game's own title.
+const astraTitle=document.title;
+new MutationObserver(()=>{if(document.title!==astraTitle)document.title=astraTitle;})
+  .observe(document.querySelector("title"),{childList:true,characterData:true,subtree:true});
 $("view").addEventListener("webglcontextlost",e=>{e.preventDefault();syncPilot();astraFail("The graphics device reset. Reopen the flight terminal to continue.");});
 
 
@@ -483,6 +492,12 @@ for(const type of ['keydown','keyup'])window.addEventListener(type,event=>{
 // Touch-friendly controls for the autonomous pilot and the pickup inspection view.
 const astraTouch=matchMedia('(pointer:coarse)').matches;
 if(astraTouch)$('res').value='960';
+// Decoding artwork inside a flight frame stalls it. By default the engine
+// prepares everything a mine can show behind the loading screen instead.
+// Phones keep the lighter on-demand loading unless the pilot chooses otherwise.
+const warmupKey="astra.fullWarmup",savedWarmup=getSetting(warmupKey);
+$('fullWarmup').checked=savedWarmup===null?!astraTouch:savedWarmup==="1";
+$('fullWarmup').onchange=()=>saveSetting(warmupKey,$('fullWarmup').checked);
 $('full').hidden=!$('stage').requestFullscreen;
 $('full').onclick=async()=>{try{if(document.fullscreenElement)await document.exitFullscreen?.();else await $('stage').requestFullscreen?.();}catch{}};
 const demoLevel=$('demoLevel');

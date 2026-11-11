@@ -46,7 +46,9 @@ window.astraGeneratedLibrary = function(nativeDepot) {
     async level(names,robots){
       // Download independent material sets together, but retain the two-image
       // decode limit and await every material before exposing the flight view.
-      const generated=async()=>{const ids=window.astraDistrictReady?[0,1,2,3,4,5,6,7,8,9,12]:[0,1,2,3,4,5,6,7];let done=0;
+      // Whole-mine preparation mounts every family, so none is fetched and
+      // converted in the middle of a flight (a stall of about a second).
+      const generated=async()=>{const ids=Module.fullWarmup?Array.from({length:16},(_,id)=>id):window.astraDistrictReady?[0,1,2,3,4,5,6,7,8,9,12]:[0,1,2,3,4,5,6,7];let done=0;
         const prepare=async id=>{await family(id);window.astraLoad?.progress('textures','Preparing this mine’s surface artwork',++done,ids.length);};
         for(let at=0;at<ids.length;at+=2)await Promise.all(ids.slice(at,at+2).map(prepare));};
       window.astraLoad?.begin("Preparing this mine.");
