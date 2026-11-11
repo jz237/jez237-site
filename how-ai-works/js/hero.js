@@ -11,7 +11,7 @@
   const neurons = SIZES.reduce((s, n) => s + n, 0);
   let state = shipped && net.unpack(shipped) ? 'trained' : 'random';
   let x = new Float32Array(SIZES[0]), auto = true, truth = -1, training = false, steps = 0, credit = 0, lastAcc = 0;
-  let acc = state === 'trained' ? shipped.accuracy : M.accuracy(net, L.rng(9), 300), pass = null, winner = 0, said = false;
+  let acc = state === 'trained' ? shipped.accuracy : M.accuracy(net, L.rng(9), 300), pass = null, winner = 0, said = false, spoke = '';
   const names = ['INPUT', 'HIDDEN 1', 'HIDDEN 2', 'HIDDEN 3', 'HIDDEN 4', 'OUTPUT'], shorts = ['IN', 'H1', 'H2', 'H3', 'H4', 'OUT'];
   const signed = v => (v >= 0 ? '+' : '−') + Math.abs(v).toFixed(2);
   const an = name => (/^[aeiou]/.test(name) ? 'an ' : 'a ') + name;
@@ -136,7 +136,9 @@
     const p = pass.vals[G]; winner = 0;
     for (let c = 1; c < K; c++) if (p[c] > p[winner]) winner = c;
     outCells.forEach((d, c) => { d.classList.toggle('hot', c === winner); d.style.setProperty('--v', Math.min(1, p[c] * 1.6).toFixed(2)); d.lastChild.textContent = Math.round(p[c] * 100) + '%'; });
-    if (said) return;                      // one announcement per pass
+    const key = winner + ':' + Math.round(p[winner] * 100) + ':' + truth;
+    if (said && key === spoke) return;     // one announcement per pass; a replay speaks again only if training changed the answer
+    spoke = key;
     said = true;
     const ans = an(S.NAMES[winner]) + ' (' + L.pct(p[winner], 0) + ' sure)', blank = !x.some(v => v > 0.5);
     L.$('#netNote').innerHTML =
