@@ -988,10 +988,26 @@ index 522a2b7..482b177 100644
  	//	Hook in the rumble sound effect here.
  
 diff --git a/d2/main/collide.c b/d2/main/collide.c
-index fdb2e78..afb5ed5 100644
+index fdb2e78..5ad8914 100644
 --- a/d2/main/collide.c
 +++ b/d2/main/collide.c
-@@ -649,6 +649,10 @@ int check_effect_blowup(segment *seg,int side,vms_vector *pnt, object *blower, i
+@@ -451,8 +451,15 @@ int check_volatile_wall(object *obj,int segnum,int sidenum,vms_vector *hitpt)
+ 				PALETTE_FLASH_ADD(f2i(damage*4), 0, 0);	//flash red
+ 			}
+ 
++			/* Astra: touching water or lava rocks the console ship at random on
++			 * every frame of contact. With the autopilot flying that only shakes
++			 * the picture, so a hands-free demo skips the rocking. Lava damage
++			 * above is unchanged. */
++			{extern int astra_auto_enabled(void);
++			if (!astra_auto_enabled()) {
+ 			obj->mtype.phys_info.rotvel.x = (d_rand() - 16384)/2;
+ 			obj->mtype.phys_info.rotvel.z = (d_rand() - 16384)/2;
++			}}
+ 		}
+ 
+ 		return (d>0)?1:2;
+@@ -649,6 +656,10 @@ int check_effect_blowup(segment *seg,int side,vms_vector *pnt, object *blower, i
  void collide_weapon_and_wall( object * weapon, fix hitspeed, short hitseg, short hitwall, vms_vector * hitpt)
  {
  	segment *seg = &Segments[hitseg];
@@ -1002,7 +1018,7 @@ index fdb2e78..afb5ed5 100644
  	int blew_up;
  	int wall_type;
  	int playernum;
-@@ -745,6 +749,10 @@ void collide_weapon_and_wall( object * weapon, fix hitspeed, short hitseg, short
+@@ -745,6 +756,10 @@ void collide_weapon_and_wall( object * weapon, fix hitspeed, short hitseg, short
  		smega_rock_stuff();
  
  	wall_type = wall_hit_process( seg, hitwall, weapon->shields, playernum, weapon );
@@ -1013,7 +1029,7 @@ index fdb2e78..afb5ed5 100644
  
  	// Wall is volatile if either tmap 1 or 2 is volatile
  	if ((TmapInfo[seg->sides[hitwall].tmap_num].flags & TMI_VOLATILE) || (seg->sides[hitwall].tmap_num2 && (TmapInfo[seg->sides[hitwall].tmap_num2&0x3fff].flags & TMI_VOLATILE))) {
-@@ -996,6 +1004,7 @@ void collide_robot_and_player( object * robot, object * playerobj, vms_vector *c
+@@ -996,6 +1011,7 @@ void collide_robot_and_player( object * robot, object * playerobj, vms_vector *c
  				Last_thief_hit_time = GameTime64;
  		}
  
@@ -1021,7 +1037,7 @@ index fdb2e78..afb5ed5 100644
  		create_awareness_event(playerobj, PA_PLAYER_COLLISION);			// object robot can attract attention to player
  		do_ai_robot_hit_attack(robot, playerobj, collision_point);
  		do_ai_robot_hit(robot, PA_WEAPON_ROBOT_COLLISION);
-@@ -1048,6 +1057,7 @@ void net_destroy_controlcen(object *controlcen)
+@@ -1048,6 +1064,7 @@ void net_destroy_controlcen(object *controlcen)
  //	-----------------------------------------------------------------------------
  void apply_damage_to_controlcen(object *controlcen, fix damage, short who)
  {
@@ -1029,7 +1045,7 @@ index fdb2e78..afb5ed5 100644
  	int	whotype;
  
  	//	Only allow a player to damage the control center.
-@@ -1190,6 +1200,7 @@ void maybe_kill_weapon(object *weapon, object *other_obj)
+@@ -1190,6 +1207,7 @@ void maybe_kill_weapon(object *weapon, object *other_obj)
  
  void collide_weapon_and_controlcen( object * weapon, object *controlcen, vms_vector *collision_point  )
  {
@@ -1037,7 +1053,7 @@ index fdb2e78..afb5ed5 100644
  
  	if (weapon->id == OMEGA_ID)
  		if (!ok_to_do_omega_damage(weapon)) // see comment in laser.c
-@@ -1239,6 +1250,7 @@ void collide_weapon_and_controlcen( object * weapon, object *controlcen, vms_vec
+@@ -1239,6 +1257,7 @@ void collide_weapon_and_controlcen( object * weapon, object *controlcen, vms_vec
  }
  
  void collide_weapon_and_clutter( object * weapon, object *clutter, vms_vector *collision_point  )	{
@@ -1045,7 +1061,7 @@ index fdb2e78..afb5ed5 100644
  	short exp_vclip = VCLIP_SMALL_EXPLOSION;
  
  	if ( clutter->shields >= 0 )
-@@ -1341,6 +1353,7 @@ int apply_damage_to_robot(object *robot, fix damage, int killer_objnum)
+@@ -1341,6 +1360,7 @@ int apply_damage_to_robot(object *robot, fix damage, int killer_objnum)
  //		Boss_been_hit = 1;
  
  	robot->shields -= damage;
@@ -1053,7 +1069,7 @@ index fdb2e78..afb5ed5 100644
  
  	//	Do unspeakable hacks to make sure player doesn't die after killing boss.  Or before, sort of.
  	if (Robot_info[robot->id].boss_flag)
-@@ -1656,10 +1669,11 @@ void collide_robot_and_weapon( object * robot, object * weapon, vms_vector *coll
+@@ -1656,10 +1676,11 @@ void collide_robot_and_weapon( object * robot, object * weapon, vms_vector *coll
  			multi_robot_request_change(robot, Objects[weapon->ctype.laser_info.parent_num].id);
  #endif
  
@@ -1067,7 +1083,7 @@ index fdb2e78..afb5ed5 100644
  
  		if (expl_obj)
  			obj_attach(robot,expl_obj);
-@@ -1789,6 +1803,7 @@ void collide_hostage_and_player( object * hostage, object * player, vms_vector *
+@@ -1789,6 +1810,7 @@ void collide_hostage_and_player( object * hostage, object * player, vms_vector *
  
  void collide_player_and_player( object * player1, object * player2, vms_vector *collision_point )
  {
@@ -1075,7 +1091,7 @@ index fdb2e78..afb5ed5 100644
  	if ((player1->id == Player_num || player2->id == Player_num) && is_observer()) {
  		return;
  	}
-@@ -2215,6 +2230,10 @@ extern fix64 Buddy_sorry_time;
+@@ -2215,6 +2237,10 @@ extern fix64 Buddy_sorry_time;
  
  void apply_damage_to_player(object *playerobj, object *killer, fix damage, ubyte possibly_friendly)
  {
@@ -1086,7 +1102,7 @@ index fdb2e78..afb5ed5 100644
  	if (Player_is_dead)
  		return;
  
-@@ -2238,6 +2257,7 @@ void apply_damage_to_player(object *playerobj, object *killer, fix damage, ubyte
+@@ -2238,6 +2264,7 @@ void apply_damage_to_player(object *playerobj, object *killer, fix damage, ubyte
  
  	if (playerobj->id == Player_num) {		//is this the local player?
  		Players[Player_num].shields -= damage;
@@ -1094,7 +1110,7 @@ index fdb2e78..afb5ed5 100644
  		PALETTE_FLASH_ADD(f2i(damage)*4,-f2i(damage/2),-f2i(damage/2));	//flash red
  
  		if (Players[Player_num].shields < 0)	{
-@@ -2403,6 +2423,7 @@ void collide_player_and_weapon( object * playerobj, object * weapon, vms_vector
+@@ -2403,6 +2430,7 @@ void collide_player_and_weapon( object * playerobj, object * weapon, vms_vector
  
  	maybe_kill_weapon(weapon,playerobj);
  
@@ -1102,7 +1118,7 @@ index fdb2e78..afb5ed5 100644
  	bump_two_objects(playerobj, weapon, 0);	//no damage from bump
  
  	if ( !Weapon_info[weapon->id].damage_radius ) {
-@@ -2567,6 +2588,7 @@ void collide_robot_and_materialization_center(object *objp)
+@@ -2567,6 +2595,7 @@ void collide_robot_and_materialization_center(object *objp)
  extern int Network_got_powerup; // HACK!!!
  
  void collide_player_and_powerup( object * playerobj, object * powerup, vms_vector *collision_point ) {
@@ -1110,7 +1126,7 @@ index fdb2e78..afb5ed5 100644
  	if (object_is_observer(playerobj)) {
  		return;
  	}
-@@ -2768,6 +2790,7 @@ void collide_two_objects( object * A, object * B, vms_vector *collision_point )
+@@ -2768,6 +2797,7 @@ void collide_two_objects( object * A, object * B, vms_vector *collision_point )
  		return;
  	}
  
@@ -1118,7 +1134,7 @@ index fdb2e78..afb5ed5 100644
  	collision_type = COLLISION_OF(A->type,B->type);
  
  	switch( collision_type )	{
-@@ -2825,6 +2848,7 @@ void collide_two_objects( object * A, object * B, vms_vector *collision_point )
+@@ -2825,6 +2855,7 @@ void collide_two_objects( object * A, object * B, vms_vector *collision_point )
  	default:
  		Int3();	//Error( "Unhandled collision_type in collide.c!\n" );
  	}
@@ -1544,7 +1560,7 @@ index 535d1ae..221fafc 100644
 +
 +#include "overload_fields.inc"
 diff --git a/d2/main/game.c b/d2/main/game.c
-index f15d413..1b06d7b 100644
+index f15d413..c5a8130 100644
 --- a/d2/main/game.c
 +++ b/d2/main/game.c
 @@ -853,7 +853,7 @@ void show_help()
@@ -1683,7 +1699,27 @@ index f15d413..1b06d7b 100644
  		powerup_grab_cheat_all();
  
  		if (Endlevel_sequence)	//might have been started during move
-@@ -1713,6 +1764,7 @@ void FireLaser()
+@@ -1434,6 +1485,11 @@ void GameProcessFrame(void)
+ 
+ 				Global_laser_firing_count = 0;
+ 
++				/* Astra: the charge-up rumble kicks only the camera ship. With the
++				 * autopilot flying it just shakes the picture, so a hands-free demo
++				 * charges without it. The weapon itself is unchanged. */
++				extern int astra_auto_enabled(void);
++				if (!astra_auto_enabled()) {
+ 				ConsoleObject->mtype.phys_info.rotvel.x += (d_rand() - 16384)/8;
+ 				ConsoleObject->mtype.phys_info.rotvel.z += (d_rand() - 16384)/8;
+ 
+@@ -1445,6 +1501,7 @@ void GameProcessFrame(void)
+ 					bump_amount = Fusion_charge*4;
+ 
+ 				bump_one_object(ConsoleObject, &rand_vec, bump_amount);
++				}
+ 			}
+ 			else
+ 			{
+@@ -1713,6 +1770,7 @@ void FireLaser()
  	if ((Players[Player_num].primary_weapon == FUSION_INDEX) && (Global_laser_firing_count)) {
  		if ((Players[Player_num].energy < F1_0*2) && (Auto_fire_fusion_cannon_time == 0)) {
  			Global_laser_firing_count = 0;
@@ -1691,7 +1727,7 @@ index f15d413..1b06d7b 100644
  		} else {
  			static fix64 Fusion_next_sound_time = 0;
  			int flash_val;
-@@ -1731,7 +1783,16 @@ void FireLaser()
+@@ -1731,7 +1789,16 @@ void FireLaser()
  
  			flash_val = !(Game_mode & GM_MULTI) || !Netgame.ReducedFlash ? Fusion_charge >> 11 :
  				PaletteRedAdd < 10 ? 10 - PaletteRedAdd : 0;
@@ -3783,7 +3819,7 @@ index 6d1b0f7..c7a8543 100644
  
  	Assert( playernum > -1 );
 diff --git a/d2/main/weapon.c b/d2/main/weapon.c
-index f3ad3c7..7a844d7 100644
+index f3ad3c7..199d566 100644
 --- a/d2/main/weapon.c
 +++ b/d2/main/weapon.c
 @@ -461,142 +461,45 @@ void do_weapon_select(int weapon_num, int secondary_flag)
@@ -4050,7 +4086,20 @@ index f3ad3c7..7a844d7 100644
  
  					//	Shake the buddy!
  					if (Buddy_objnum != -1) {
-@@ -1115,8 +1020,9 @@ void seismic_disturbance_frame(void)
+@@ -1093,7 +998,11 @@ int start_seismic_disturbance(void)
+ 
+ void seismic_disturbance_frame(void)
+ {
+-	if (Level_shake_frequency) {
++	/* Astra: a level's ambient tremors rock only the camera ship. With the
++	 * autopilot flying there is nobody at the controls to ride them out, so a
++	 * hands-free demo skips them. Earthshaker tremors are handled above. */
++	extern int astra_auto_enabled(void);
++	if (Level_shake_frequency && !astra_auto_enabled()) {
+ 		if (((Seismic_disturbance_start_time < GameTime64) && (Seismic_disturbance_end_time > GameTime64)) || start_seismic_disturbance()) {
+ 			fix	delta_time;
+ 			int	fc, rx, rz;
+@@ -1115,8 +1024,9 @@ void seismic_disturbance_frame(void)
  				rx = fixmul(d_rand() - 16384, 3*F1_0/16 + (F1_0*(16-fc))/32);
  				rz = fixmul(d_rand() - 16384, 3*F1_0/16 + (F1_0*(16-fc))/32);
  
