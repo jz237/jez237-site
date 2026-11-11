@@ -1,23 +1,27 @@
 /* The hero: a feed-forward network that has really been trained to tell nine 8x8 shapes apart.
    The visitor can draw on its input, step a pass through it one layer at a time, pin any neuron to
    see the sum it computes, scramble the weights and train it again. They can also ask which squares
-   an answer leans on, damage the network, look at what the first layer learned, and teach it a
-   symbol of their own. js/mlp.js does the arithmetic, js/net3d.js draws it, and this file joins
+   an answer leans on, follow an answer back through the layers, try to fool it, damage it, see what
+   makes each hidden neuron fire, and teach it a symbol of their own. The questions it asks of the
+   network (why, trace, fool, excite) live in js/mlp.js, where tests can reach them. js/mlp.js does the arithmetic, js/net3d.js draws it, and this file joins
    the two to the controls under the canvas. */
 (function () {
   'use strict';
   const L = Lab, C = L.C, M = window.LabMLP, cv = L.$('#heroCanvas');
   if (!cv || !M || !L.net3d || !L.$('#netBar')) return;
-  const S = M.shapes, GRID = M.GRID, SIZES = M.SIZES, G = SIZES.length - 1, K = S.NAMES.length, N0 = GRID[0];
+  const S = M.shapes, P = M.probe, GRID = M.GRID, SIZES = M.SIZES, G = SIZES.length - 1, K = S.NAMES.length, N0 = GRID[0];
   const NAMES = S.NAMES.slice(), GLYPHS = S.GLYPHS.slice(), SLOT = K - 1;   // the last output is the one a visitor's own shape takes over
   const net = new M.MLP(SIZES, 7), shipped = window.HERO_WEIGHTS, rnd = L.rng(4242), trnd = L.rng(Date.now() & 0xfffff), nrnd = L.rng(99);
   const neurons = SIZES.reduce((s, n) => s + n, 0);
   let state = shipped && net.unpack(shipped) ? 'trained' : 'random';
   let x = new Float32Array(SIZES[0]), fed = x, auto = true, truth = -1, training = false, teaching = false, steps = 0, credit = 0, lastAcc = 0;
   let acc = state === 'trained' ? shipped.accuracy : 0, pass = null, winner = 0, said = false, spoke = '';
-  let mine = null;                       // { name, ex: [Float32Array] } once the visitor has taught it a shape
+  let mine = null;                       // { ex: [Float32Array], link } once it has been taught a shape (link: the drawings came in a link)
   let flip = 0, cut = 0, mask = null;    // damage: share of input squares flipped, share of hidden neurons switched off
   let why = false, sound = false, audio = null, tour = 0, galOpen = false;
+  let follow = false, followCls = -1;    // follow the signal back from an output (-1 = whichever one wins)
+  let foolBase = null, foolBest = null;  // fool it: the drawing the game started from, and the page's own best attempt
+  let foolShown = false, foolMine = 0;   // the grid is showing the page's attempt; the fewest squares the visitor has managed
   const names = ['INPUT', 'HIDDEN 1', 'HIDDEN 2', 'HIDDEN 3', 'HIDDEN 4', 'OUTPUT'], shorts = ['IN', 'H1', 'H2', 'H3', 'H4', 'OUT'];
   const signed = v => (v >= 0 ? '+' : '−') + Math.abs(v).toFixed(2);
   const an = c => (mine && c === SLOT ? '“' + NAMES[c] + '”' : (/^[aeiou]/.test(NAMES[c]) ? 'an ' : 'a ') + NAMES[c]);
@@ -46,32 +50,24 @@
   /* ---------- shapes: the nine that ship, or eight of them plus the visitor's own ---------- */
   function sample(c, r, clean) {
     if (!mine || c !== SLOT) return S.make(c, r, clean);
-    const src = mine.ex[Math.floor(r() * mine.ex.length)], out = new Float32Array(SIZES[0]);
-    if (clean) { out.set(src); return out; }
-    // a copy of one of their drawings, moved up to two squares if there is room, then speckled like the others
-    let r0 = N0, r1 = -1, c0 = N0, c1 = -1;
-    for (let i = 0; i < src.length; i++) if (src[i]) { const rr = Math.floor(i / N0), cc = i % N0; r0 = Math.min(r0, rr); r1 = Math.max(r1, rr); c0 = Math.min(c0, cc); c1 = Math.max(c1, cc); }
-    const pick = (lo, hi) => lo + Math.floor(r() * (hi - lo + 1));
-    const dr = pick(Math.max(-2, -r0), Math.min(2, N0 - 1 - r1)), dc = pick(Math.max(-2, -c0), Math.min(2, N0 - 1 - c1));
-    for (let i = 0; i < src.length; i++) if (src[i]) out[i + dr * N0 + dc] = 1;
-    for (let i = 0; i < out.length; i++) {
-      if (out[i]) out[i] = r() < 0.04 ? 0 : 0.8 + 0.2 * r();
-      else if (r() < 0.05) out[i] = 0.15 + 0.35 * r();
-    }
-    return out;
+    // one of their drawings: as it is for the example button, otherwise resized a little, moved and speckled
+    const src = mine.ex[Math.floor(r() * mine.ex.length)];
+    return clean ? Float32Array.from(src) : S.variant(src, r);
   }
   function damage(src, r) { const out = Float32Array.from(src); for (let i = 0; i < out.length; i++) if (r() < flip) out[i] = out[i] > 0.5 ? 0 : 1; return out; }
-  function best(p) { let b = 0; for (let j = 1; j < p.length; j++) if (p[j] > p[b]) b = j; return b; }
+  const best = P.best;
   // share of fresh shapes it gets right; hurt = with the damage sliders applied
   function accuracy(r, n, hurt) {
     let ok = 0;
     for (let i = 0; i < n; i++) { const c = Math.floor(r() * K); let v = sample(c, r); if (hurt && flip) v = damage(v, r); if (best(net.forward(v, hurt ? mask : null)) === c) ok++; }
     return ok / n;
   }
+  const TEACH = 1500;                    // steps given to learning a visitor's shape
   function trainStep() {
     const xs = [], ys = [];
     for (let i = 0; i < M.BATCH; i++) { const c = Math.floor(trnd() * K); xs.push(sample(c, trnd)); ys.push(c); }
-    return net.trainBatch(xs, ys, M.LR);
+    // teaching ends on smaller nudges, which settles the new shape in without unsettling the other eight
+    return net.trainBatch(xs, ys, teaching && steps >= TEACH * 0.6 ? M.LR * 0.35 : M.LR);
   }
   if (state !== 'trained') acc = accuracy(L.rng(9), 300);
 
@@ -82,11 +78,15 @@
     const vals = net.a.map(a => Float32Array.from(a));
     pass = { vals };
     said = !!replay;
-    if (!replay) { clearWhy(); if (why) L.$('#netWhy').innerHTML = '<strong>Why?</strong> Waiting for this pass to reach the output…'; }
+    if (!replay) {
+      clearWhy(); if (why) L.$('#netWhy').innerHTML = '<strong>Why?</strong> Waiting for this pass to reach the output…';
+      clearTrace(); if (follow) L.$('#netTrace').innerHTML = '<strong>Following the signal.</strong> Waiting for this pass to reach the output…';
+    }
     view.setPass({ vals, mags: vals.map((a, l) => Float32Array.from(a, v => Math.min(1, Math.abs(l === G ? v * 2.2 : v)))), keep: !auto, settled: !!settled });
     paintPad();
     if (settled || L.reduce) paintOut();
     else if (!replay) L.$('#netNote').innerHTML = (truth >= 0 ? 'Shown: ' + an(truth) + '. ' : '') + 'The signal is working its way through the layers…';
+    foolRead();
   }
   function nextShape() { truth = Math.floor(rnd() * K); x = sample(truth, rnd); }
   function strongest(l) { let b = 0; const a = pass.vals[l]; for (let i = 1; i < a.length; i++) if (Math.abs(a[i]) > Math.abs(a[b])) b = i; return b; }
@@ -106,7 +106,7 @@
       b.classList.toggle('flipped', (fed[i] > 0.5) !== (x[i] > 0.5));
     });
   }
-  function drew() { auto = false; truth = -1; syncButtons(); run(); if (tour === 1) tourSet(2); }
+  function drew() { auto = false; truth = -1; foolShown = false; syncButtons(); run(); if (tour === 1) tourSet(2); }
   let paint = null;
   pad.addEventListener('pointerdown', ev => {
     const el = ev.target.closest('.net-cell'); if (!el) return;
@@ -132,7 +132,7 @@
     shapesBox.append(b); shapeBtns.push(b);
   }
   const bAuto = L.$('#netAuto'), bClear = L.$('#netClear'), bStep = L.$('#netStep'), bPlay = L.$('#netPlay'), bScr = L.$('#netScramble'), bTrain = L.$('#netTrain'), bRest = L.$('#netRestore');
-  const bWhy = L.$('#netWhyBtn'), bSound = L.$('#netSound');
+  const bWhy = L.$('#netWhyBtn'), bSound = L.$('#netSound'), bTrace = L.$('#netTraceBtn');
   function syncButtons() {
     bAuto.classList.toggle('active', auto); bAuto.setAttribute('aria-pressed', auto ? 'true' : 'false');
     bPlay.hidden = !view.stepping;
@@ -140,6 +140,7 @@
     bTrain.textContent = training ? 'Pause training' : state === 'random' && steps ? 'Keep training' : state === 'random' ? 'Train it' : 'Train some more';
     bRest.hidden = !shipped || (state === 'trained' && !training);
     bWhy.classList.toggle('active', why); bWhy.setAttribute('aria-pressed', why ? 'true' : 'false');
+    bTrace.classList.toggle('active', follow); bTrace.setAttribute('aria-pressed', follow ? 'true' : 'false');
     bSound.classList.toggle('active', sound); bSound.setAttribute('aria-pressed', sound ? 'true' : 'false'); bSound.textContent = sound ? 'Sound: on' : 'Sound: off';
     teachRead();
   }
@@ -167,18 +168,19 @@
   bRest.addEventListener('click', restore);
 
   /* ---------- training, a few real steps per frame so the page stays responsive ---------- */
-  function webChanged() { view.refreshWeb(); drawGallery(); if (!L.$('#netBreak').hidden) breakRead(); }
+  function webChanged() { view.refreshWeb(); galStale = true; drawGallery(); if (!L.$('#netBreak').hidden) breakRead(); foolRead(); }
   function finish() { if (steps) { state = 'custom'; acc = accuracy(L.rng(steps + 5), 300); webChanged(); } }
   L.scene(L.$('#netBar'), dt => {
     if (!training || !dt) return;
-    // slow at first, while the answers are changing fastest, then quicker
-    credit = Math.min(12, credit + dt / 16.7 * (steps < 200 ? 1 : steps < 800 ? 3 : 8));
+    // slow at first, while the answers are changing fastest, then quicker. Teaching starts from a working network,
+    // so there is no slow start to watch and it is given a little more of each frame.
+    credit = Math.min(12, credit + dt / 16.7 * (steps < 200 && !teaching ? 1 : steps < 800 ? 3 : 8));
     const t0 = performance.now();
-    while (credit >= 1 && performance.now() - t0 < 6) { trainStep(); steps++; credit--; }
+    while (credit >= 1 && performance.now() - t0 < (teaching ? 8 : 6)) { trainStep(); steps++; credit--; }
     if (steps - lastAcc >= 40) {
       lastAcc = steps; acc = accuracy(L.rng(steps), 100); webChanged();
-      // teaching starts from a network that already knows eight of the nine, so it needs fewer steps
-      const enough = teaching ? steps >= 1500 || (acc >= 0.97 && steps >= 600) : steps >= 2400 || (acc >= 0.975 && steps >= 900);
+      // teaching runs a fixed course: a score from 100 shapes is too rough to tell when a brand-new shape has settled
+      const enough = teaching ? steps >= TEACH : steps >= 2400 || (acc >= 0.975 && steps >= 900);
       if (enough) { training = false; teaching = false; finish(); syncButtons(); }
       status();
     }
@@ -186,30 +188,38 @@
   function status() {
     const pct = L.pct(acc, 0);
     L.$('#netStatus').innerHTML =
-      training ? '<strong>Training: step ' + steps + '.</strong> Each step shows it ' + M.BATCH + ' fresh shapes with the right answers and nudges all ' + net.weights.toLocaleString() + ' weights a little. Right on ' + pct + ' of fresh shapes so far.' :
+      training ? '<strong>Training: step ' + steps + (teaching ? ' of ' + TEACH.toLocaleString() : '') + '.</strong> Each step shows it ' + M.BATCH + ' fresh shapes with the right answers and nudges all ' + net.weights.toLocaleString() + ' weights a little. Right on ' + pct + ' of fresh shapes so far.' :
       state === 'random' ? '<strong>These weights are random.</strong> It is right on ' + pct + ' of shapes, which is what guessing among nine answers gets you. Press Train it.' :
       state === 'trained' ? '<strong>Trained ahead of time</strong> with the same code this page runs: ' + shipped.steps.toLocaleString() + ' practice steps, right on ' + pct + ' of shapes it has never seen. Scramble the weights to watch it learn from nothing.' :
-      '<strong>You trained this in your browser:</strong> ' + steps.toLocaleString() + ' steps, right on ' + pct + ' of shapes it has never seen. ' +
-      (mine ? 'That includes “' + NAMES[SLOT] + '”, which it knows only from your ' + mine.ex.length + ' drawings.' : 'Nobody told it what a cross looks like; the weights found it.');
+      '<strong>' + (mine && mine.link ? 'Trained in your browser just now:' : 'You trained this in your browser:') + '</strong> ' + steps.toLocaleString() + ' steps, right on ' + pct + ' of shapes it has never seen. ' +
+      (mine ? 'That includes “' + NAMES[SLOT] + '”, which it knows only from ' + (mine.link ? 'the ' + mine.ex.length + ' drawings that came in the link.' : 'your ' + mine.ex.length + ' drawings.') : 'Nobody told it what a cross looks like; the weights found it.');
   }
 
   /* ---------- the answer ---------- */
   const outs = L.$('#netOuts'), outCells = [];
   for (let c = 0; c < K; c++) {
-    const d = L.h('div', { class: 'net-o' });
+    const d = L.h('div', { class: 'net-o', role: 'button', tabindex: '0' });
     d.innerHTML = '<span aria-hidden="true"></span><b>0%</b>';
+    const go = () => { const on = follow && (followCls >= 0 ? followCls : winner) === c; follow = !on; followCls = on ? -1 : c; if (follow) hold(); syncButtons(); showTrace(true); };
+    d.addEventListener('click', go);
+    d.addEventListener('keydown', ev => { if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); go(); } });
     outs.append(d); outCells.push(d);
   }
   function labels() {
     shapeBtns.forEach((b, c) => { b.innerHTML = '<span aria-hidden="true">' + GLYPHS[c] + '</span> ' + L.esc(NAMES[c]); b.title = 'Show ' + an(c); b.setAttribute('aria-label', 'Show ' + an(c)); });
-    outCells.forEach((d, c) => { d.title = NAMES[c]; d.firstChild.textContent = GLYPHS[c]; });
+    outCells.forEach((d, c) => { d.title = NAMES[c] + ': click to follow its signal back'; d.firstChild.textContent = GLYPHS[c]; });
   }
   function paintOut() {
     if (!pass) return;
     const p = pass.vals[G]; winner = best(p);
-    outCells.forEach((d, c) => { d.classList.toggle('hot', c === winner); d.style.setProperty('--v', Math.min(1, p[c] * 1.6).toFixed(2)); d.lastChild.textContent = Math.round(p[c] * 100) + '%'; });
+    outCells.forEach((d, c) => {
+      d.classList.toggle('hot', c === winner); d.style.setProperty('--v', Math.min(1, p[c] * 1.6).toFixed(2)); d.lastChild.textContent = Math.round(p[c] * 100) + '%';
+      d.setAttribute('aria-label', NAMES[c] + ', ' + Math.round(p[c] * 100) + '%. Press to follow its signal back through the network.');
+    });
     const key = winner + ':' + Math.round(p[winner] * 100) + ':' + truth;
-    if (said && key === spoke) return;     // one announcement per pass; a replay speaks again only if training changed the answer
+    // one announcement per pass; a replay speaks again only if training changed the answer.
+    // The why and follow notes are worked out from the weights, so while those are moving they are redone on every replay.
+    if (said && key === spoke) { if (training) { showWhy(); showTrace(); } return; }
     spoke = key;
     said = true;
     const ans = an(winner) + ' (' + L.pct(p[winner], 0) + ' sure)', blank = !x.some(v => v > 0.5);
@@ -217,7 +227,7 @@
       truth >= 0 ? 'Shown: ' + an(truth) + '. The network says <strong>' + ans + '</strong>. ' + (winner === truth ? 'Correct.' : 'Wrong.') :
       blank ? 'Nothing is drawn, yet the network says <strong>' + ans + '</strong>. It has no way to answer “none of these”.' :
       'The network says <strong>' + ans + '</strong>. It can only ever answer with one of the nine shapes it practised on.';
-    showWhy();
+    showWhy(); showTrace();
   }
 
   /* ---------- one neuron's sum, spelled out ---------- */
@@ -255,16 +265,11 @@
     const box = L.$('#netWhy');
     clearWhy();
     if (!why || !pass) { box.hidden = true; return; }
-    // the baseline is recomputed here, not taken from the saved pass: while training, the weights have moved on
-    // since that pass began, and the flips below must be compared against the same weights
-    const tmp = Float32Array.from(pass.vals[0]), base = net.forward(tmp, mask)[winner], d = new Float32Array(SIZES[0]);
+    // P.why runs its own baseline pass with the weights as they are now. While training they have moved on since
+    // the saved pass began, and the flips must be compared against the same weights.
+    const res = P.why(net, pass.vals[0], winner, mask), base = res.base, d = res.d;
     let down = 0, at = -1, up = 0;
-    for (let i = 0; i < d.length; i++) {
-      const keep = tmp[i]; tmp[i] = keep > 0.5 ? 0 : 1;
-      d[i] = net.forward(tmp, mask)[winner] - base; tmp[i] = keep;
-      if (-d[i] > down) { down = -d[i]; at = i; }
-      if (d[i] > up) up = d[i];
-    }
+    for (let i = 0; i < d.length; i++) { if (-d[i] > down) { down = -d[i]; at = i; } if (d[i] > up) up = d[i]; }
     // ring the squares whose flip costs the answer most (gold), and the few whose flip would help it most (pink)
     const idx = Array.from(d, (_, i) => i);
     const lean = idx.filter(i => -d[i] >= Math.max(0.05, down * 0.3)).sort((a, b) => d[a] - d[b]), pro = lean.slice(0, 12);
@@ -282,6 +287,89 @@
       (con.length ? ' Flipping ' + (con.length === 1 ? 'the square ringed in pink' : 'any of the ' + con.length + ' ringed in pink') + ' would make it more sure.' : '');
   }
   bWhy.addEventListener('click', () => { why = !why; syncButtons(); showWhy(); });
+
+  /* ---------- follow the signal: the strongest paths from one output back to the input squares ---------- */
+  // a shape that changes every few seconds leaves no time to look, so following (and the game below) holds the current one
+  function hold() { auto = false; }
+  function clearTrace() { cells.forEach(b => { b.removeAttribute('data-path'); }); outCells.forEach(d => d.classList.remove('traced')); view.setTrace(null); }
+  function showTrace(fresh) {
+    const box = L.$('#netTrace');
+    cells.forEach(b => { b.removeAttribute('data-path'); }); outCells.forEach(d => d.classList.remove('traced'));
+    if (!follow || !pass) { box.hidden = true; view.setTrace(null); return; }
+    const cls = followCls >= 0 ? followCls : winner, t = P.trace(net, pass.vals[0], cls, mask), nm = '“' + L.esc(NAMES[cls]) + '”';
+    const nodes = [], edges = [];
+    t.nodes.forEach((list, l) => { const top = list.reduce((m, q) => Math.max(m, q.r), 1e-9); list.forEach(q => nodes.push([l, q.i, q.r / top])); });
+    t.edges.forEach((list, g) => { const top = list.reduce((m, q) => Math.max(m, q.r), 1e-9); list.forEach(q => edges.push([g, q.from, q.to, q.r / top])); });
+    view.setTrace({ nodes, edges, fresh: !!fresh });
+    t.nodes[0].forEach(q => { cells[q.i].dataset.path = '1'; });
+    outCells[cls].classList.add('traced');
+    const last = t.nodes[G - 1].length, sq = t.nodes[0].length, odds = L.pct(pass.vals[G][cls], 0);
+    box.hidden = false;
+    box.innerHTML = '<strong>Following ' + nm + ' back.</strong> ' +
+      (cls === winner ? '' : nm + ' is not the answer here (it got ' + odds + '), but some of the network still pushes for it. ') +
+      (!last ? 'Nothing in the last hidden layer is pushing for it at the moment, so there is no path to draw.' :
+        'The gold lines are the connections that did most to push that output up, followed back one layer at a time, keeping the ' + (last === 1 ? 'strongest neuron' : last + ' strongest neurons') + ' in each layer. ' +
+        'In the last hidden layer ' + (last === 1 ? 'that one neuron supplies ' : 'those ' + last + ' supply ') + '<strong>' + L.pct(t.share, 0) + '</strong> of everything pushing ' + nm + ' up; the other ' + (SIZES[G - 1] - last) + ' supply the rest. ' +
+        (sq ? 'The paths end at the ' + (sq === 1 ? 'input square' : sq + ' input squares') + ' marked with a gold dot.' : 'They stop short of the input: with nothing lit there, the first layer is running on its fixed offsets alone.') +
+        ' It is a sketch, not the whole story: every one of the ' + net.weights.toLocaleString() + ' weights takes part in every answer.') +
+      ' Click any output to follow that one.';
+  }
+  bTrace.addEventListener('click', () => { follow = !follow; followCls = -1; if (follow) hold(); syncButtons(); showTrace(true); });
+
+  /* ---------- fool it: change the answer by flipping as few squares as you can ---------- */
+  const fNote = L.$('#foolNote'), fStart = L.$('#foolStart'), fBest = L.$('#foolBest'), fBack = L.$('#foolBack');
+  const lit = v => v > 0.5;
+  function foolRead() {
+    cells.forEach((b, i) => { b.classList.toggle('moved', !!foolBase && lit(x[i]) !== lit(foolBase[i])); });
+    if (L.$('#netFool').hidden) return;
+    fStart.textContent = foolBase ? 'Start again with this drawing' : 'Start with this drawing';
+    fBest.hidden = !foolBase; fBack.hidden = !foolBase;
+    if (!foolBase) {
+      fNote.innerHTML = '<strong>Can you change its mind?</strong> Put a shape on the input grid that it gets right, then press <em>Start</em>. The game is to flip as few squares as you can, on or off, until it gives a different answer. Then ask for the page’s best and see who needed fewer.';
+      return;
+    }
+    const was = best(net.forward(foolBase, mask)), p = net.forward(x, mask), now = best(p), sure = L.pct(p[now], 0);
+    let moved = 0;
+    for (let i = 0; i < x.length; i++) if (lit(x[i]) !== lit(foolBase[i])) moved++;
+    const sq = k => k + (k === 1 ? ' square' : ' squares'), a = '“' + L.esc(NAMES[was]) + '”', b = '“' + L.esc(NAMES[now]) + '”';
+    if (!foolShown && moved && now !== was) foolMine = foolMine ? Math.min(foolMine, moved) : moved;
+    const f = foolBest, k = f && f.flips ? f.flips.length : 0;
+    let t = foolShown ? 'This is the page’s attempt, not yours: the ' + sq(k) + ' with a dashed outline ' + (k === 1 ? 'was' : 'were') + ' flipped, and ' + a + ' became <strong>' + b + '</strong> (' + sure + ' sure).' :
+      !moved ? 'It says <strong>' + a + '</strong> (' + sure + ' sure). Flip squares on the input grid until it says something else. Every square you have changed gets a dashed outline, and changing it back takes it off the count.' :
+      now === was ? '<strong>' + sq(moved) + ' changed.</strong> It still says ' + a + ' (' + sure + ' sure).' :
+      '<strong>You fooled it with ' + sq(moved) + '.</strong> It started at ' + a + ' and now says ' + b + ' (' + sure + ' sure).';
+    if (f && !f.flips) t += ' The page’s search flipped up to 16 squares, one at a time, and could not change this answer.';
+    else if (f) {
+      t += ' <strong>The page’s best is ' + sq(k) + '</strong>' + (foolShown ? '. ' : ', turning ' + a + ' into “' + L.esc(NAMES[f.to]) + '”. ') +
+        (f.exact ? (k === 1 ? 'One is the fewest there could be.' : k === 2 ? 'It tried every single square first and none was enough, so two is the true minimum.' :
+          'It tried every single square and every pair (2,080 drawings) and none worked, so three is the true minimum.') :
+          'It tried every single square and every pair (2,080 drawings) and none worked, so the true minimum is somewhere from 3 to ' + k + '. Past pairs the search is a good guess, not a proof.') +
+        (!foolMine ? (foolShown ? ' Put the drawing back and see whether you can do as well.' : '') :
+          foolMine < k ? ' Your ' + foolMine + ' beats it.' : foolMine === k ? ' Your best is ' + foolMine + ' too: a match.' : ' Your best so far is ' + foolMine + '.') +
+        ' To a person the drawing has hardly changed. The network never learned what the shape <em>is</em>, only which squares tend to be lit, so the right few squares tip it over. Large models can be tipped the same way: see <a href="#failure">Failure modes</a>.';
+    }
+    fNote.innerHTML = t;
+  }
+  function foolEnd() { foolBase = null; foolBest = null; foolShown = false; foolMine = 0; foolRead(); }
+  fStart.addEventListener('click', () => {
+    if (!x.some(lit)) { fNote.innerHTML = 'Draw something on the input grid first, or pick one of the example shapes.'; return; }
+    hold();
+    if (flip) { sFlip.value = 0; setBreak(); }        // random noise would flip squares for you
+    x = Float32Array.from(x, v => (lit(v) ? 1 : 0));
+    foolBase = Float32Array.from(x); foolBest = null; foolShown = false; foolMine = 0;
+    syncButtons(); run(true);
+  });
+  fBest.addEventListener('click', () => {
+    if (!foolBase) return;
+    fNote.innerHTML = 'Searching: every single square, then every pair…';
+    setTimeout(() => {
+      if (!foolBase) return;
+      foolBest = P.fool(net, foolBase, mask);
+      if (foolBest.flips) { x = Float32Array.from(foolBase); foolBest.flips.forEach(i => { x[i] = lit(x[i]) ? 0 : 1; }); foolShown = true; }
+      truth = -1; run(true);
+    }, 30);
+  });
+  fBack.addEventListener('click', () => { if (foolBase) { x = Float32Array.from(foolBase); truth = -1; foolShown = false; run(true); } });
 
   /* ---------- break it: flip input squares at random, switch hidden neurons off ---------- */
   // one fixed order per layer, so pushing the slider further only ever switches more neurons off
@@ -306,34 +394,57 @@
   sFlip.addEventListener('input', setBreak); sCut.addEventListener('input', setBreak);
   L.$('#netFix').addEventListener('click', () => { sFlip.value = 0; sCut.value = 0; setBreak(); });
 
-  /* ---------- what the first hidden layer learned: every neuron's 64 weights as a picture ---------- */
-  const gal = L.$('#netGallery');
+  /* ---------- what the hidden neurons learned: for each one, the average of the drawings that fire it hardest ---------- */
+  const gal = L.$('#netGallery'), galTabs = L.$('#netGalTabs'), galBtns = [];
+  let galLayer = 1, galData = null, galStale = true, galAt = 0, galN = 0, galTop = 0, galChance = null;
+  const favourites = d => { let k = 0; for (let j = 0; j < d.share.length; j++) if (d.share[j] >= 2 / 3) k++; return k; };
+  for (let l = 1; l < G; l++) {
+    const b = L.h('button', { class: 'lab-button', type: 'button', text: 'Hidden ' + l });
+    b.addEventListener('click', () => { galLayer = l; drawGallery(); });
+    galTabs.append(b); galBtns[l] = b;
+  }
   function drawGallery() {
     if (!galOpen) return;
-    const v = L.fit(gal), ctx = v.ctx, n = GRID[1], gap = v.w > 420 ? 4 : 2, t = (v.w - gap * (n - 1)) / n, c = t / N0, W = net.W[0], nIn = SIZES[0];
-    const pin = view.pinned >= 0 ? view.where(view.pinned) : null;
-    L.$('#netGalNote').innerHTML = 'Each tile is one neuron of the first hidden layer, placed as it sits in the layer. A tile is that neuron’s 64 weights drawn over the input grid: blue squares are ones it wants lit, pink ones it wants dark. ' +
-      (state === 'random' && !steps ? 'These weights are random, so every tile is static. Train it and watch faint patterns form.' :
-        'Nobody designed these. Most look like static, and that is the honest picture: this network spreads each shape across many neurons instead of growing one tidy detector per shape. A few show something readable, such as a checkerboard or a diagonal streak.') +
-      ' Click a tile to pin that neuron in the network above.';
+    // 900 passes take a moment, so while training the pictures are refreshed less often and from fewer drawings
+    if (!galData || (galStale && (!training || steps - galAt >= 200))) {
+      const r = L.rng(2024);
+      galN = training ? 360 : 900; galTop = training ? 16 : 30;
+      galData = P.excite(net, c => sample(c, r), galN, K, galTop); galStale = false; galAt = steps;
+    }
+    // for comparison, the same count on a network of the same size that has never been trained (worked out once)
+    if (!galChance && !training) { const r = L.rng(2024), e = P.excite(new M.MLP(SIZES, 12345), c => sample(c, r), 900, K, 30); galChance = e.map(favourites); }
+    const d = galData[galLayer], n = GRID[galLayer], count = SIZES[galLayer], nIn = SIZES[0];
+    const v = L.fit(gal), ctx = v.ctx, gap = v.w > 420 ? 4 : 2, t = (v.w - gap * (n - 1)) / n, c = t / N0;
+    const pin = view.pinned >= 0 ? view.where(view.pinned) : null, here = pin && pin.layer === galLayer ? pin.index : -1;
+    const clear = favourites(d);
     ctx.clearRect(0, 0, v.w, v.h);
-    for (let p = 0; p < SIZES[1]; p++) {
-      const j = p, ox = (p % n) * (t + gap), oy = Math.floor(p / n) * (t + gap);
+    for (let j = 0; j < count; j++) {
+      const ox = (j % n) * (t + gap), oy = Math.floor(j / n) * (t + gap), fav = d.share[j] >= 2 / 3;
       let top = 1e-9;
-      for (let q = 0; q < nIn; q++) top = Math.max(top, Math.abs(W[j * nIn + q]));
+      for (let q = 0; q < nIn; q++) top = Math.max(top, d.pics[j * nIn + q]);
       for (let q = 0; q < nIn; q++) {
-        const w = W[j * nIn + q];
-        ctx.fillStyle = L.rgba(w < 0 ? C.rose : C.cyan, 0.04 + 0.96 * Math.pow(Math.abs(w) / top, 1.3));
+        ctx.fillStyle = L.rgba(C.green, 0.03 + 0.97 * Math.pow(d.pics[j * nIn + q] / top, 1.5));
         ctx.fillRect(ox + (q % N0) * c, oy + Math.floor(q / N0) * c, c + 0.4, c + 0.4);
       }
-      if (pin && pin.layer === 1 && pin.index === j) { ctx.strokeStyle = C.gold; ctx.lineWidth = 2; ctx.strokeRect(ox - 1, oy - 1, t + 2, t + 2); }
+      if (fav) { ctx.strokeStyle = L.rgba(C.cyan, 0.55); ctx.lineWidth = 1; ctx.strokeRect(ox + 0.5, oy + 0.5, t - 1, t - 1); }
+      if (j === here) { ctx.strokeStyle = C.gold; ctx.lineWidth = 2; ctx.strokeRect(ox - 1, oy - 1, t + 2, t + 2); }
     }
+    galBtns.forEach((b, l) => { b.classList.toggle('active', l === galLayer); b.setAttribute('aria-pressed', l === galLayer ? 'true' : 'false'); });
+    gal.setAttribute('aria-label', 'The ' + count + ' neurons of hidden layer ' + galLayer + '. Each tile is the average of the drawings that make that neuron fire hardest.');
+    const random = state === 'random' && !steps;
+    L.$('#netGalNote').innerHTML = 'Each tile is one neuron of hidden layer ' + galLayer + ', placed as it sits in the layer. To make a tile, the page showed the network ' + galN + ' fresh shapes and averaged the ' + galTop + ' that pushed that neuron highest. ' +
+      'A sharp picture means the neuron fires for one particular thing; a smear means it fires for a mix. ' +
+      '<strong>' + clear + ' of ' + count + '</strong> here have a clear favourite (outlined in blue): at least two-thirds of their top ' + galTop + ' are the same shape. ' +
+      (random ? 'These weights are random, so few do, and most tiles are smears. Train it and look again.' :
+        training ? 'Watch the count change as it trains.' :
+        'A network of the same size with random weights manages about ' + galChance[galLayer] + ', so most of these preferences were learned. Nobody chose what any neuron should look for; training did.') +
+      (here >= 0 ? ' <strong>Pinned:</strong> ' + cell(galLayer, here) + '. Of its top ' + galTop + ', ' + Math.round(d.share[here] * galTop) + ' were “' + L.esc(NAMES[d.fav[here]]) + '”. Its weights are drawn underneath.' : ' Click a tile to pin that neuron in the network above.');
   }
   gal.addEventListener('click', ev => {
-    const r = gal.getBoundingClientRect(), n = GRID[1], col = Math.floor((ev.clientX - r.left) / r.width * n), row = Math.floor((ev.clientY - r.top) / r.height * n);
+    const r = gal.getBoundingClientRect(), n = GRID[galLayer], col = Math.floor((ev.clientX - r.left) / r.width * n), row = Math.floor((ev.clientY - r.top) / r.height * n);
     if (col < 0 || col >= n || row < 0 || row >= n) return;
     const j = row * n + col;
-    view.pin(view.index(1, j)); explain(1, j); drawGallery();
+    view.pin(view.index(galLayer, j)); explain(galLayer, j); drawGallery();
   });
   window.addEventListener('resize', drawGallery);
 
@@ -345,8 +456,9 @@
     tWipe.hidden = !draft.length; tForget.hidden = !mine || !shipped;
     const k = draft.length, was = '“' + S.NAMES[SLOT] + '”';
     tNote.innerHTML = tMsg ? tMsg :
-      teaching ? 'Training on your ' + mine.ex.length + ' drawings, mixed in with the other eight shapes. Each practice copy is moved a square or two and speckled, so it learns the shape and not one exact picture. Watch the answer line above change.' :
-      mine ? '<strong>Done.</strong> The last output now answers “' + NAMES[SLOT] + '”. It learned that from ' + mine.ex.length + ' drawings, and not one line of code changed. Move it a square or two and it should still know it. Change its proportions and it may not: it has only ever seen what you drew.' + (shipped ? ' <em>Forget it</em> puts ' + was + ' back.' : '') :
+      teaching ? (mine.link ? 'This link carries a shape someone taught this network: <strong>“' + NAMES[SLOT] + '”</strong>. The weights themselves are far too many to fit in a link, so the page is teaching it again now from their ' + mine.ex.length + ' drawings. ' : 'Training on your ' + mine.ex.length + ' drawings, mixed in with the other eight shapes. ') +
+        'Each practice copy is moved somewhere else on the grid, often made a row or two taller, shorter, wider or narrower, and speckled, so it learns the shape and not one exact picture. Watch the answer line above change.' :
+      mine ? '<strong>Done.</strong> The last output now answers “' + NAMES[SLOT] + '”. It learned that from ' + mine.ex.length + ' drawings, and not one line of code changed. Move it, or draw it a little bigger or smaller, and it should still know it. Draw it very differently and it may not: those ' + mine.ex.length + ' drawings are all it has to go on.' + (shipped ? ' <em>Forget it</em> puts ' + was + ' back.' : '') + ' <em>Copy link to this drawing</em> now carries the shape too.' :
       !k ? 'Draw a symbol of your own on the input grid, one that is not among the nine, then add it here. Three drawings is the least it will accept; five or six, each a little different, works better.' :
       k < 3 ? k + ' added. Change the drawing a little (thicker, thinner, a square bigger or smaller) and add it again. ' + (3 - k) + ' more needed.' :
       k + ' drawings. Name it and press <em>Teach it</em>. It will take the place of ' + was + ', because this network has exactly nine outputs; adding a tenth would mean building a different network.';
@@ -373,20 +485,23 @@
     teachRead(); tMsg = '';
   });
   tWipe.addEventListener('click', () => { draft = []; thumbs(); teachRead(); });
-  tGo.addEventListener('click', () => {
-    if (draft.length < 3 || training) return;
-    const name = (tName.value || '').replace(/[^\p{L}\p{N} \-]/gu, '').replace(/\s+/g, ' ').trim().slice(0, 14) || 'my shape';
-    mine = { ex: draft.map(e => Float32Array.from(e)) };
+  const tidy = t => (t || '').replace(/[^\p{L}\p{N} \-]/gu, '').replace(/\s+/g, ' ').trim().slice(0, 14) || 'my shape';
+  // start teaching: the drawings take over the last output and training begins from the weights as they are
+  function teach(name, ex, viaLink, keepInput) {
+    mine = { ex: ex.map(e => Float32Array.from(e)), link: !!viaLink };
     NAMES[SLOT] = name; GLYPHS[SLOT] = '✎'; labels();
-    x = Float32Array.from(mine.ex[0]); auto = false; truth = SLOT;
+    auto = false;
+    if (keepInput) truth = -1; else { x = Float32Array.from(mine.ex[0]); truth = SLOT; }
     if (view.stepping) view.play();
+    foolEnd();
     teaching = true; training = true; state = 'random'; steps = 0; lastAcc = 0;
     run(); status(); syncButtons(); L.kick();
-  });
+  }
+  tGo.addEventListener('click', () => { if (draft.length >= 3 && !training) teach(tidy(tName.value), draft); });
   tForget.addEventListener('click', restore);
 
-  /* ---------- the three panels under the controls: one open at a time ---------- */
-  const panels = { netBreakBtn: 'netBreak', netGalleryBtn: 'netGalleryBox', netTeachBtn: 'netTeach' };
+  /* ---------- the four panels under the controls: one open at a time ---------- */
+  const panels = { netBreakBtn: 'netBreak', netFoolBtn: 'netFool', netGalleryBtn: 'netGalleryBox', netTeachBtn: 'netTeach' };
   function openPanel(id) {
     Object.keys(panels).forEach(k => {
       const on = k === id, b = L.$('#' + k);
@@ -396,6 +511,7 @@
     if (galOpen) drawGallery();
     if (id === 'netBreakBtn') breakRead();
     if (id === 'netTeachBtn') teachRead();
+    if (id === 'netFoolBtn') foolRead(); else if (foolBase) foolEnd();       // the game ends when its panel closes
   }
   Object.keys(panels).forEach(id => L.$('#' + id).addEventListener('click', () => openPanel(L.$('#' + panels[id]).hidden ? id : null)));
 
@@ -419,29 +535,33 @@
     syncButtons();
   });
 
-  /* ---------- a link that reopens the page with this drawing and viewing angle ---------- */
+  /* ---------- a link that reopens the page with this drawing and viewing angle, and with a taught shape if there is one ---------- */
   function link() {
-    let hex = '';
-    for (let i = 0; i < SIZES[0]; i += 4) hex += ((x[i] > 0.5 ? 8 : 0) | (x[i + 1] > 0.5 ? 4 : 0) | (x[i + 2] > 0.5 ? 2 : 0) | (x[i + 3] > 0.5 ? 1 : 0)).toString(16);
     const a = view.viewAngle();
-    return location.origin + location.pathname + '?net=' + hex + '.' + Math.round(a.yaw * 100) + '.' + Math.round(a.pitch * 100) + '.' + Math.round(a.zoom * 100);
+    return location.origin + location.pathname + '?net=' + S.toHex(x) + '.' + Math.round(a.yaw * 100) + '.' + Math.round(a.pitch * 100) + '.' + Math.round(a.zoom * 100) +
+      (mine ? '&mine=' + encodeURIComponent(NAMES[SLOT]) + '~' + mine.ex.map(S.toHex).join('~') : '');
   }
   L.$('#netShare').addEventListener('click', () => {
     const url = link(), field = L.$('#netLink'), note = L.$('#netShareNote');
+    const what = 'It reopens the page with this drawing, seen from this angle' + (mine ? ', and teaches the network “' + NAMES[SLOT] + '” again from the ' + mine.ex.length + ' drawings.' : '.');
     L.$('#netShareBox').hidden = false; field.value = url;
-    const fallback = () => { field.focus(); field.select(); note.textContent = 'Copy this link by hand. It reopens the page with this drawing, seen from this angle.'; };
-    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url).then(() => { note.textContent = 'Link copied. It reopens the page with this drawing, seen from this angle.'; }, fallback);
+    const fallback = () => { field.focus(); field.select(); note.textContent = 'Copy this link by hand. ' + what; };
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url).then(() => { note.textContent = 'Link copied. ' + what; }, fallback);
     else fallback();
   });
-  let shared = false;
+  let shared = false, linked = null;
   (function () {
-    let q = null;
-    try { q = new URLSearchParams(location.search).get('net'); } catch (e) { /* very old browser */ }
+    let q = null, own = null;
+    try { const u = new URLSearchParams(location.search); q = u.get('net'); own = u.get('mine'); } catch (e) { /* very old browser */ }
     const m = q && /^([0-9a-f]{16})(?:\.(-?\d{1,3})\.(-?\d{1,3})\.(\d{2,3}))?$/.exec(q);
-    if (!m) return;
-    for (let i = 0; i < SIZES[0]; i++) x[i] = (parseInt(m[1][i >> 2], 16) >> (3 - (i & 3))) & 1;
-    if (m[2] != null) view.setView({ yaw: m[2] / 100, pitch: m[3] / 100, zoom: m[4] / 100 });
-    auto = false; truth = -1; shared = true;
+    if (m) {
+      x = S.fromHex(m[1]);
+      if (m[2] != null) view.setView({ yaw: m[2] / 100, pitch: m[3] / 100, zoom: m[4] / 100 });
+      auto = false; truth = -1; shared = true;
+    }
+    // a taught shape: its name, then three to eight drawings, each as 16 hex digits
+    const parts = own ? own.split('~') : [], ex = parts.slice(1).map(S.fromHex);
+    if (ex.length >= 3 && ex.length <= 8 && ex.every(e => e && e.reduce((s, v) => s + v, 0) >= 3)) linked = { name: tidy(parts[0]), ex, keep: !!m };
   })();
 
   /* ---------- a first minute: three things to try, shown once ---------- */
@@ -468,7 +588,8 @@
   labels();
   if (!shared) nextShape();
   run(true); status(); syncButtons();
-  let seen = shared;
+  if (linked) { draft = linked.ex.map(e => Float32Array.from(e)); thumbs(); tName.value = linked.name; openPanel('netTeachBtn'); teach(linked.name, linked.ex, true, linked.keep); }
+  let seen = shared || !!linked;
   try { seen = seen || localStorage.getItem('lab-net-tour') === '1'; } catch (e) { /* private mode */ }
   if (!seen) tourSet(1);
 })();
