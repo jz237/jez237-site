@@ -1,5 +1,7 @@
 # How AI Works data generators
 
+> November 2026: the guide these were written for (the September version) has been retired. The current guide still uses two of their outputs, `nexttoken.json` and `chat.json`, in `how-ai-works/data/`. It no longer uses `embeddings.json`, `maths.json`, the tour video or `og.jpg`; the steps for those are kept below for reference only.
+
 Offline scripts that produce the real-model data behind `how-ai-works/`. Run them outside the repo checkout (models download to `node_modules/@huggingface/transformers/.cache`, ~2.5 GB for Qwen fp32), then copy the JSON into `how-ai-works/data/`.
 
 ```bash
