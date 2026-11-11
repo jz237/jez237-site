@@ -1,4 +1,4 @@
-/* Trains the hero's feed-forward network on the nine 6x6 shapes and writes js/hero-weights.js.
+/* Trains the hero's feed-forward network on the nine 8x8 shapes and writes js/hero-weights.js.
    Uses the same js/mlp.js the page runs, so a visitor pressing "Train" in the hero repeats this.
 
      node how-ai-works/tools/build-hero-weights.js            train and write the weights
@@ -8,7 +8,7 @@ const fs = require('fs'), path = require('path');
 const M = require('../js/mlp.js');
 
 function gradCheck() {
-  const net = new M.MLP([36, 10, 8, 9], 3), r = M.rng(5), x = M.shapes.make(4, r), y = 4;
+  const net = new M.MLP([M.SIZES[0], 10, 8, 9], 3), r = M.rng(5), x = M.shapes.make(4, r), y = 4;
   net.forward(x); net.backward(y);
   let worst = 0;
   for (let g = 0; g < net.G; g++) for (let n = 0; n < 40; n++) {
@@ -26,7 +26,7 @@ function gradCheck() {
 gradCheck();
 if (process.argv.includes('--check')) process.exit(0);
 
-const STEPS = 4000, net = new M.MLP(M.SIZES, 11), r = M.rng(2026);
+const STEPS = 5000, net = new M.MLP(M.SIZES, 11), r = M.rng(2026);
 let loss = 0;
 for (let s = 1; s <= STEPS; s++) {
   const l = M.trainStep(net, r, M.BATCH, s > STEPS * 0.75 ? M.LR * 0.35 : M.LR);

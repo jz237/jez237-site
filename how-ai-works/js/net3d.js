@@ -38,7 +38,7 @@
 
   L.net3d = function (cv, o) {
     const layers = o.layers, G = layers.length - 1, shape = layers.map(l => l.r * l.c), off = [];
-    const YAW0 = o.yaw == null ? -0.8 : o.yaw, PITCH0 = o.pitch == null ? 0.3 : o.pitch, HOLD = o.hold || 2100, SPEED = o.speed || 1;
+    const YAW0 = o.yaw == null ? -0.8 : o.yaw, PITCH0 = o.pitch == null ? 0.3 : o.pitch, HOLD = o.hold || 1400, SPEED = o.speed || 1.7;
     let N = 0; shape.forEach(n => { off.push(N); N += n; });
     const wx = new Float32Array(N), wy = new Float32Array(N), wz = new Float32Array(N), nl = new Uint8Array(N);
     const px = new Float32Array(N), py = new Float32Array(N), ps = new Float32Array(N), pz = new Float32Array(N), order = new Uint16Array(N);
@@ -64,9 +64,12 @@
         const W = o.weights(g), nIn = shape[g], nOut = shape[g + 1], faint = [], strong = [];
         let sq = 0; for (let n = 0; n < W.length; n++) sq += W[n] * W[n];
         const rms = Math.sqrt(sq / W.length) || 1;
+        // a budget per gap, so a large layer does not turn into a solid sheet: the heaviest 300, then the next 900
+        const mag = Float32Array.from(W, Math.abs).sort(), cut = n => (W.length > n ? mag[W.length - n] : 0);
+        const hi = Math.max(2.1 * rms, cut(300)), lo = Math.max(1.5 * rms, cut(1200));
         for (let j = 0; j < nOut; j++) for (let i = 0; i < nIn; i++) {
-          const m = Math.abs(W[j * nIn + i]) / rms;
-          if (m > 2.1) strong.push(off[g] + i, off[g + 1] + j); else if (m > 1.5) faint.push(off[g] + i, off[g + 1] + j);
+          const m = Math.abs(W[j * nIn + i]);
+          if (m > hi) strong.push(off[g] + i, off[g + 1] + j); else if (m > lo) faint.push(off[g] + i, off[g + 1] + j);
         }
         rest.push([Int32Array.from(faint), Int32Array.from(strong), rms]);
       }
@@ -91,13 +94,19 @@
           if (Math.abs(con[n]) > top) top = Math.abs(con[n]);
         }
         // only connections carrying a real share of the signal light up; sorted once into strength buckets
+        // at most about 900 lit connections per gap: raise the cut-off until that many are left
+        const hist = new Uint32Array(64);
+        for (let n = 0; n < con.length; n++) hist[Math.min(63, Math.floor(Math.abs(con[n]) / top * 64))]++;
+        let floor = 63, kept = 0;
+        while (floor > 23 && kept + hist[floor] <= 900) kept += hist[floor--];
+        const low = (floor + 1) / 64, span = (1 - low) / 4, hot = low + span * 2;
         const buckets = [[], [], [], [], [], [], [], []], hd = [];
         for (let j = 0; j < nOut; j++) for (let i = 0; i < nIn; i++) {
           const c = con[j * nIn + i], m = Math.abs(c) / top;
-          if (m < 0.36) continue;
+          if (m < low) continue;
           const a = dir > 0 ? off[g] + i : off[g + 1] + j, b = dir > 0 ? off[g + 1] + j : off[g] + i;
-          buckets[(Math.min(3, Math.floor((m - 0.36) / 0.16)) << 1) | (c < 0 ? 1 : 0)].push(a, b);
-          if (m > 0.66 && hd.length < 70) hd.push([a, b, c < 0, m]);
+          buckets[(Math.min(3, Math.floor((m - low) / span)) << 1) | (c < 0 ? 1 : 0)].push(a, b);
+          if (m > hot && hd.length < 70) hd.push([a, b, c < 0, m]);
         }
         lit.push(buckets.map(b => Int32Array.from(b))); heads.push(hd);
       }
@@ -197,7 +206,7 @@
       // the camera: a slow sway that stops while the pointer is on the network, plus drag and a little coast
       const still = L.reduce || drag || over || focused || pinned >= 0 || stepping || o.sway === false;
       drift += ((still ? 0 : 1) - drift) * (1 - Math.exp(-dt / 500));
-      phase += dt / 5200 * drift;
+      phase += dt / (o.swayMs || 3400) * drift;
       if (!drag && dt) { yaw += vyaw; vyaw *= Math.exp(-dt / 260); if (Math.abs(vyaw) < 0.0002) vyaw = 0; }
       if (used && hint > 0) hint = Math.max(0, hint - (dt || 16) / 700);
       const yawNow = yaw + (L.reduce ? 0 : 0.24 * Math.sin(phase)), pitchNow = pitch + (L.reduce ? 0 : 0.06 * Math.sin(phase * 0.7 + 1));
