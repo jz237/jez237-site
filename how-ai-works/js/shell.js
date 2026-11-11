@@ -9,40 +9,293 @@
     set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { /* private mode */ } }
   };
 
-  /* ---------- hero: signals crossing a small network ---------- */
+  /* ---------- hero: a 3D feed-forward network running real forward passes ----------
+     Each layer is a square grid of neurons (6x6 in, 8x8 hidden, 3x3 out) and the layers are stacked
+     in depth. Nothing is decorative data: every few seconds a new 6x6 input pattern is fed in and the
+     drawn network computes it layer by layer. A neuron's brightness is its activation, a lit
+     connection is weight x activation (blue pushes the next neuron up, pink pushes it down), and the
+     grid at the bottom right is the softmax of the last layer. The weights are random, not trained.
+     Drag (or use the arrow keys) to turn it; hover or tap a neuron to see its own connections. */
   const hero = L.$('#heroCanvas');
   if (hero) {
-    const shape = [3, 5, 5, 4, 2], pulses = [], r = L.rng(9);
-    let spawn = 0;
+    const mono = 'ui-monospace, SFMono-Regular, Menlo, Consolas, monospace';
+    const T_IN = 700, T_GAP = 640, T_HOLD = 2100, T_FADE = 1350, WS = 1.5, CAM = 58, YAW0 = -0.8, PITCH0 = 0.3;
+    const rnd = L.rng(23), gauss = () => (rnd() + rnd() + rnd() + rnd() - 2) * 1.22;
+    const coarse = !!(window.matchMedia && matchMedia('(pointer: coarse)').matches);
+    let dims = null, shape = null, off = null, N = 0, Wt = null, rest = null, key = '', unit = 30, gapX = 4.6, small = false;
+    let wx, wy, wz, px, py, ps, pz, nl, order;
+    let A = null, shown = null, x = null, lit = null, heads = null, clock = 0, passes = 0;
+    let yaw = YAW0, pitch = PITCH0, vyaw = 0, phase = 0, drift = 1, drag = null, mouse = null, over = false, hover = -1, used = false, hint = 1, fresh = true;
+
+    // a soft glow drawn once per colour, then stamped (much cheaper than shadowBlur on every dot)
+    const sprite = {};
+    const glowOf = hex => {
+      if (sprite[hex]) return sprite[hex];
+      const c = document.createElement('canvas'); c.width = c.height = 64;
+      const g = c.getContext('2d'), gr = g.createRadialGradient(32, 32, 0, 32, 32, 32);
+      gr.addColorStop(0, L.rgba(hex, 0.95)); gr.addColorStop(0.22, L.rgba(hex, 0.5)); gr.addColorStop(0.55, L.rgba(hex, 0.12)); gr.addColorStop(1, L.rgba(hex, 0));
+      g.fillStyle = gr; g.fillRect(0, 0, 64, 64);
+      return (sprite[hex] = c);
+    };
+    const stamp = (ctx, hex, cx, cy, size, alpha) => {
+      if (alpha <= 0.015) return;
+      ctx.globalAlpha = Math.min(1, alpha); ctx.drawImage(glowOf(hex), cx - size / 2, cy - size / 2, size, size); ctx.globalAlpha = 1;
+    };
+
+    function build(d) {
+      dims = d; shape = d.map(n => n * n); off = []; N = 0;
+      shape.forEach(n => { off.push(N); N += n; });
+      wx = new Float32Array(N); wy = new Float32Array(N); wz = new Float32Array(N); nl = new Uint8Array(N);
+      px = new Float32Array(N); py = new Float32Array(N); ps = new Float32Array(N); pz = new Float32Array(N); order = new Uint16Array(N);
+      d.forEach((n, l) => { for (let r = 0; r < n; r++) for (let c = 0; c < n; c++) {
+        const k = off[l] + r * n + c;
+        wx[k] = (l - (d.length - 1) / 2) * gapX; wy[k] = r - (n - 1) / 2; wz[k] = c - (n - 1) / 2; nl[k] = l; order[k] = k;
+      } });
+      Wt = []; rest = [];
+      for (let g = 0; g < d.length - 1; g++) {
+        const nIn = shape[g], nOut = shape[g + 1], W = new Float32Array(nIn * nOut), faint = [], strong = [];
+        for (let j = 0; j < nOut; j++) for (let i = 0; i < nIn; i++) {
+          const w = gauss() * WS / Math.sqrt(nIn); W[j * nIn + i] = w;
+          const m = Math.abs(w) * Math.sqrt(nIn) / WS;        // the resting web shows only the heavier weights
+          if (m > 1.3) strong.push(off[g] + i, off[g + 1] + j); else if (m > 0.92) faint.push(off[g] + i, off[g + 1] + j);
+        }
+        Wt.push(W); rest.push([Int32Array.from(faint), Int32Array.from(strong)]);
+      }
+      x = new Float32Array(shape[0]);
+      feed(); shown = A.map(a => Float32Array.from(a)); clock = T_IN + (d.length - 1) * T_GAP + T_FADE;   // start settled, then run
+    }
+    // one real forward pass: a blobby input "image", tanh hidden layers, softmax on the last
+    function feed() {
+      const n = dims[0], blobs = [];
+      for (let b = 0, nb = 2 + (rnd() < 0.5 ? 1 : 0); b < nb; b++) blobs.push([rnd() * (n - 1), rnd() * (n - 1), 0.7 + rnd() * 0.9, 0.6 + rnd() * 0.5]);
+      for (let r = 0; r < n; r++) for (let c = 0; c < n; c++) {
+        let s = 0;
+        blobs.forEach(q => { s += q[3] * Math.exp(-((r - q[0]) * (r - q[0]) + (c - q[1]) * (c - q[1])) / (2 * q[2] * q[2])); });
+        x[r * n + c] = Math.min(1, s);
+      }
+      A = [Float32Array.from(x)]; lit = []; heads = [];
+      for (let g = 0; g < Wt.length; g++) {
+        const src = A[g], nIn = shape[g], nOut = shape[g + 1], W = Wt[g], out = new Float32Array(nOut), con = new Float32Array(nIn * nOut), last = g === Wt.length - 1;
+        let top = 1e-6;
+        for (let j = 0; j < nOut; j++) {
+          let z = 0;
+          for (let i = 0; i < nIn; i++) { const c = W[j * nIn + i] * src[i]; z += c; con[j * nIn + i] = c; if (Math.abs(c) > top) top = Math.abs(c); }
+          out[j] = last ? z * 3 : Math.tanh(z * 1.8);
+        }
+        // only connections carrying a real share of the signal light up; sorted once into strength buckets
+        const buckets = [[], [], [], [], [], [], [], []], hd = [];
+        for (let j = 0; j < nOut; j++) for (let i = 0; i < nIn; i++) {
+          const c = con[j * nIn + i], m = Math.abs(c) / top;
+          if (m < 0.36) continue;
+          buckets[(Math.min(3, Math.floor((m - 0.36) / 0.16)) << 1) | (c < 0 ? 1 : 0)].push(off[g] + i, off[g + 1] + j);
+          if (m > 0.66 && hd.length < 70) hd.push([off[g] + i, off[g + 1] + j, c < 0, m]);
+        }
+        lit.push(buckets.map(b => Int32Array.from(b))); heads.push(hd);
+        if (last) { const p = L.softmax(Array.from(out)); for (let j = 0; j < nOut; j++) out[j] = p[j]; }
+        A.push(out);
+      }
+      passes++;
+    }
+    function layout(v) {
+      const sm = v.w < 560, k = (sm ? 's' : 'l') + v.w + 'x' + v.h;
+      if (k === key) return;
+      key = k;
+      if (!dims || sm !== small) { small = sm; gapX = sm ? 4.3 : 4.6; build(sm ? [4, 5, 5, 4, 3] : [6, 8, 8, 8, 6, 3]); }
+      fresh = true;
+    }
+    const midY = v => (small ? (v.h - 78) / 2 + 14 : v.h / 2 + 4);
+    function project(v, cyaw, syaw, cp, sp, X, Y, Z) {
+      const x1 = X * cyaw + Z * syaw, z1 = -X * syaw + Z * cyaw, y1 = Y * cp - z1 * sp, z2 = Y * sp + z1 * cp, s = CAM / (CAM + z2);
+      return [v.w / 2 + x1 * unit * s, midY(v) + y1 * unit * s, s, z2];
+    }
+
+    const at = ev => { const b = hero.getBoundingClientRect(); mouse = [ev.clientX - b.left, ev.clientY - b.top]; };
+    hero.addEventListener('pointerdown', ev => {
+      at(ev); drag = { x: ev.clientX, y: ev.clientY }; vyaw = 0; used = true;
+      try { hero.setPointerCapture(ev.pointerId); } catch (e) { /* older browsers */ }
+      L.kick();
+    });
+    hero.addEventListener('pointermove', ev => {
+      at(ev); over = true;
+      if (drag) {
+        const dx = ev.clientX - drag.x, dy = ev.clientY - drag.y;
+        drag.x = ev.clientX; drag.y = ev.clientY;
+        yaw += dx * 0.0085; vyaw = dx * 0.0085; pitch = L.clamp(pitch + dy * 0.006, -1.15, 1.15);
+      }
+      L.kick();
+    });
+    const drop = () => { drag = null; };
+    hero.addEventListener('pointerup', drop);
+    hero.addEventListener('pointercancel', drop);
+    hero.addEventListener('pointerleave', ev => { over = false; if (ev.pointerType !== 'touch') mouse = null; L.kick(); });
+    hero.addEventListener('dblclick', () => { yaw = YAW0; pitch = PITCH0; vyaw = 0; L.kick(); });
+    hero.addEventListener('keydown', ev => {
+      const k = ev.key;
+      if (k === 'ArrowLeft') yaw -= 0.14; else if (k === 'ArrowRight') yaw += 0.14;
+      else if (k === 'ArrowUp') pitch = L.clamp(pitch - 0.1, -1.15, 1.15); else if (k === 'ArrowDown') pitch = L.clamp(pitch + 0.1, -1.15, 1.15);
+      else if (k === 'Home' || k === '0') { yaw = YAW0; pitch = PITCH0; } else return;
+      ev.preventDefault(); used = true; vyaw = 0; L.kick();
+    });
+
     L.scene(hero, dt => {
       const v = L.fit(hero), ctx = v.ctx;
-      ctx.clearRect(0, 0, v.w, v.h);
-      const node = (l, i) => [v.w * (0.1 + 0.8 * l / (shape.length - 1)), v.h * (0.5 + (i - (shape[l] - 1) / 2) * 0.19)];
-      for (let l = 0; l < shape.length - 1; l++) for (let i = 0; i < shape[l]; i++) for (let j = 0; j < shape[l + 1]; j++) {
-        const a = node(l, i), b = node(l + 1, j);
-        ctx.strokeStyle = 'rgba(57,207,255,0.13)'; ctx.lineWidth = 1;
-        ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]); ctx.stroke();
+      layout(v);
+      const G = Wt.length, total = T_IN + G * T_GAP + T_HOLD, focused = document.activeElement === hero;
+      // the forward pass
+      if (L.reduce) { clock = T_IN + G * T_GAP + 200; shown = A.map(a => Float32Array.from(a)); }   // one settled pass, no travel
+      else {
+        clock += dt;
+        if (clock >= total) { clock = 0; feed(); }
+        const kk = 1 - Math.exp(-dt / 110);
+        for (let l = 0; l <= G; l++) if (clock >= (l ? T_IN + l * T_GAP : 0)) for (let i = 0; i < shape[l]; i++) shown[l][i] += (A[l][i] - shown[l][i]) * kk;
       }
-      spawn -= dt;
-      if (spawn <= 0 && !L.reduce) { spawn = 170; pulses.push({ l: 0, i: Math.floor(r() * shape[0]), j: Math.floor(r() * shape[1]), p: 0, c: r() < 0.3 ? C.gold : C.cyan }); }
-      const glow = {};
-      for (let n = pulses.length - 1; n >= 0; n--) {
-        const q = pulses[n];
-        q.p += dt / 620;
-        if (q.p >= 1) {
-          glow[(q.l + 1) + ':' + q.j] = 1;
-          if (q.l + 2 < shape.length) { q.l++; q.i = q.j; q.j = Math.floor(r() * shape[q.l + 1]); q.p = 0; } else { pulses.splice(n, 1); continue; }
+      // the camera: a slow sway that stops while the pointer is on the network, plus drag and a little coast
+      const still = L.reduce || drag || over || focused;
+      drift += ((still ? 0 : 1) - drift) * (1 - Math.exp(-dt / 500));
+      phase += dt / 5200 * drift;
+      if (!drag && dt) { yaw += vyaw; vyaw *= Math.exp(-dt / 260); if (Math.abs(vyaw) < 0.0002) vyaw = 0; }
+      if (used && hint > 0) hint = Math.max(0, hint - dt / 700);
+      const yawNow = yaw + (L.reduce ? 0 : 0.24 * Math.sin(phase)), pitchNow = pitch + (L.reduce ? 0 : 0.06 * Math.sin(phase * 0.7 + 1));
+      const cyaw = Math.cos(yawNow), syaw = Math.sin(yawNow), cp = Math.cos(pitchNow), sp = Math.sin(pitchNow);
+      let ex = 0.01, ey = 0.01;
+      for (let k = 0; k < N; k++) {
+        const x1 = wx[k] * cyaw + wz[k] * syaw, z1 = -wx[k] * syaw + wz[k] * cyaw, y1 = wy[k] * cp - z1 * sp, z2 = wy[k] * sp + z1 * cp, s = CAM / (CAM + z2);
+        px[k] = x1 * s; py[k] = y1 * s; ps[k] = s; pz[k] = z2;
+        if (Math.abs(px[k]) > ex) ex = Math.abs(px[k]);
+        if (Math.abs(py[k]) > ey) ey = Math.abs(py[k]);
+      }
+      const want = Math.min((v.w / 2 - (small ? 20 : 46)) / (ex + 0.8), (small ? (v.h - 78) / 2 - 24 : v.h / 2 - 38) / (ey + 0.8));
+      unit = fresh || L.reduce ? want : unit + (want - unit) * (1 - Math.exp(-(dt || 16) / 260));
+      fresh = false;
+      for (let k = 0; k < N; k++) { px[k] = v.w / 2 + px[k] * unit; py[k] = midY(v) + py[k] * unit; }
+      const R = L.clamp(unit * 0.17, 2.6, 6.5);
+      // which neuron is under the pointer (the nearer one wins when two overlap)
+      hover = -1;
+      if (mouse && !drag) {
+        let best = 1e9;
+        for (let k = 0; k < N; k++) {
+          const dx = px[k] - mouse[0], dy = py[k] - mouse[1], d = dx * dx + dy * dy, lim = Math.max(11, R * ps[k] * 2.1);
+          if (d < lim * lim && d + pz[k] * 3 < best) { best = d + pz[k] * 3; hover = k; }
         }
-        const a = node(q.l, q.i), b = node(q.l + 1, q.j), e = L.ease.io(q.p);
-        ctx.beginPath(); ctx.arc(L.lerp(a[0], b[0], e), L.lerp(a[1], b[1], e), 3, 0, 6.2832);
-        ctx.fillStyle = q.c; ctx.shadowColor = q.c; ctx.shadowBlur = 12; ctx.fill(); ctx.shadowBlur = 0;
       }
-      shape.forEach((n, l) => { for (let i = 0; i < n; i++) {
-        const p = node(l, i), g = glow[l + ':' + i];
-        ctx.beginPath(); ctx.arc(p[0], p[1], g ? 8 : 6, 0, 6.2832);
-        ctx.fillStyle = g ? C.gold : 'rgba(8,27,48,0.95)'; ctx.fill();
-        ctx.strokeStyle = L.rgba(l === shape.length - 1 ? C.rose : C.cyan, 0.75); ctx.lineWidth = 1.5; ctx.stroke();
-      } });
+      hero.style.cursor = drag ? 'grabbing' : hover >= 0 ? 'pointer' : 'grab';
+
+      ctx.clearRect(0, 0, v.w, v.h);
+      // the layer plates, far ones first
+      const plates = dims.map((n, l) => {
+        const X = (l - G / 2) * gapX, hf = (n - 1) / 2 + 0.72;
+        return { l, n, c: [[-hf, -hf], [-hf, hf], [hf, hf], [hf, -hf]].map(q => project(v, cyaw, syaw, cp, sp, X, q[0], q[1])), mid: project(v, cyaw, syaw, cp, sp, X, 0, 0), top: project(v, cyaw, syaw, cp, sp, X, -hf - 0.62, 0) };
+      });
+      plates.slice().sort((a, b) => b.mid[3] - a.mid[3]).forEach(pl => {
+        const arrive = pl.l ? T_IN + pl.l * T_GAP : 0, flash = L.reduce || clock < arrive ? 0 : 1 - L.clamp((clock - arrive) / 700, 0, 1);
+        ctx.beginPath(); pl.c.forEach((q, i) => (i ? ctx.lineTo(q[0], q[1]) : ctx.moveTo(q[0], q[1]))); ctx.closePath();
+        ctx.fillStyle = 'rgba(22,66,126,' + (0.09 + 0.07 * flash) + ')'; ctx.fill();
+        ctx.strokeStyle = flash > 0.02 ? L.rgba(C.gold, 0.25 + 0.55 * flash) : 'rgba(86,170,235,0.3)'; ctx.lineWidth = 1; ctx.stroke();
+      });
+      // the resting web
+      for (let g = 0; g < G; g++) for (let lvl = 0; lvl < 2; lvl++) {
+        const e = rest[g][lvl];
+        ctx.beginPath();
+        for (let n = 0; n < e.length; n += 2) { ctx.moveTo(px[e[n]], py[e[n]]); ctx.lineTo(px[e[n + 1]], py[e[n + 1]]); }
+        ctx.strokeStyle = 'rgba(86,170,235,' + (lvl ? 0.1 : 0.045) + ')'; ctx.lineWidth = 1; ctx.stroke();
+      }
+      // the signal: each lit connection is drawn as far as the wave has reached
+      ctx.globalCompositeOperation = 'lighter';
+      for (let g = 0; g < G; g++) {
+        const t0 = T_IN + g * T_GAP, p = L.clamp((clock - t0) / T_GAP, 0, 1), fade = L.reduce ? 0.7 : 1 - L.clamp((clock - t0 - T_GAP) / T_FADE, 0, 1);
+        if (p <= 0 || fade <= 0) continue;
+        for (let b = 0; b < 8; b++) {
+          const e = lit[g][b], lvl = b >> 1;
+          if (!e.length) continue;
+          ctx.beginPath();
+          for (let n = 0; n < e.length; n += 2) { const a = e[n], c = e[n + 1]; ctx.moveTo(px[a], py[a]); ctx.lineTo(px[a] + (px[c] - px[a]) * p, py[a] + (py[c] - py[a]) * p); }
+          ctx.strokeStyle = L.rgba(b & 1 ? C.rose : C.cyan, (0.04 + 0.12 * lvl) * fade); ctx.lineWidth = 0.7 + lvl * 0.4; ctx.stroke();
+        }
+        if (p < 1) heads[g].forEach(q => {
+          const a = q[0], c = q[1], s = ps[a] + (ps[c] - ps[a]) * p;
+          stamp(ctx, q[2] ? C.rose : C.cyan, px[a] + (px[c] - px[a]) * p, py[a] + (py[c] - py[a]) * p, (8 + q[3] * 11) * s, 0.3 + q[3] * 0.55);
+        });
+      }
+      // a hovered neuron shows every weight into and out of it
+      if (hover >= 0) {
+        const hl = nl[hover], loc = hover - off[hl];
+        [[hl - 1, true], [hl, false]].forEach(side => {
+          const g = side[0]; if (g < 0 || g >= G) return;
+          const nIn = shape[g], cnt = side[1] ? nIn : shape[g + 1];
+          for (let b = 0; b < 6; b++) {
+            ctx.beginPath();
+            for (let q = 0; q < cnt; q++) {
+              const w = side[1] ? Wt[g][loc * nIn + q] : Wt[g][q * nIn + loc], m = Math.abs(w) * Math.sqrt(nIn) / WS;
+              if ((w < 0 ? 1 : 0) !== (b & 1) || (m < 0.45 ? 0 : m < 1 ? 1 : 2) !== (b >> 1)) continue;
+              const o = side[1] ? off[g] + q : off[g + 1] + q;
+              ctx.moveTo(px[hover], py[hover]); ctx.lineTo(px[o], py[o]);
+            }
+            ctx.strokeStyle = L.rgba(b & 1 ? C.rose : C.cyan, [0.1, 0.36, 0.85][b >> 1]); ctx.lineWidth = 0.8 + (b >> 1) * 0.5; ctx.stroke();
+          }
+        });
+      }
+      // neurons: glow first, then the discs from the back of the scene to the front
+      let win = 0; for (let i = 1; i < shape[G]; i++) if (shown[G][i] > shown[G][win]) win = i;
+      const colOf = (l, i, a) => l === G ? (i === win ? C.gold : C.violet) : l === 0 ? C.green : (a < 0 ? C.rose : C.cyan);
+      const magOf = (l, a) => Math.min(1, Math.abs(l === G ? a * 2.4 : a));
+      for (let k = 0; k < N; k++) {
+        const l = nl[k], i = k - off[l], a = shown[l][i], m = magOf(l, a);
+        if (m < 0.08) continue;
+        const arrive = l ? T_IN + l * T_GAP : 0, flash = L.reduce || clock < arrive ? 0 : 1 - L.clamp((clock - arrive) / 520, 0, 1);
+        stamp(ctx, colOf(l, i, a), px[k], py[k], R * ps[k] * (3.6 + 4.2 * m + flash * 3), 0.1 + 0.5 * m + flash * 0.25);
+      }
+      ctx.globalCompositeOperation = 'source-over';
+      order.sort((a, b) => pz[b] - pz[a]);
+      for (let n = 0; n < N; n++) {
+        const k = order[n], l = nl[k], i = k - off[l], a = shown[l][i], m = magOf(l, a), col = colOf(l, i, a), r = R * ps[k], on = k === hover;
+        ctx.beginPath(); ctx.arc(px[k], py[k], r + (on ? 2 : 0), 0, 6.2832); ctx.fillStyle = '#04101f'; ctx.fill();
+        ctx.strokeStyle = L.rgba(col, on ? 1 : 0.4 + 0.55 * m); ctx.lineWidth = on ? 2 : 1.1; ctx.stroke();
+        ctx.beginPath(); ctx.arc(px[k], py[k], Math.max(0.5, (r - 1.2) * (0.16 + 0.84 * m)), 0, 6.2832); ctx.fillStyle = L.rgba(col, 0.3 + 0.7 * m); ctx.fill();
+      }
+
+      // labels and read-outs, drawn flat on top
+      ctx.textBaseline = 'middle'; ctx.textAlign = 'center'; ctx.font = '700 ' + (small ? 8 : 10) + 'px ' + mono;
+      const front = Math.floor(L.clamp((clock - T_IN) / T_GAP, 0, G));
+      const placed = [];
+      plates.slice().sort((a, b) => a.mid[3] - b.mid[3]).forEach(pl => {
+        if (placed.some(q => Math.abs(q[0] - pl.top[0]) < (small ? 44 : 78) && Math.abs(q[1] - pl.top[1]) < 13)) return;
+        placed.push(pl.top);
+        const name = (pl.l === 0 ? (small ? 'IN' : 'INPUT') : pl.l === G ? (small ? 'OUT' : 'OUTPUT') : (small ? 'H' + pl.l : 'HIDDEN ' + pl.l)) + ' ' + pl.n + '×' + pl.n;
+        ctx.fillStyle = !L.reduce && pl.l === front && clock < T_IN + G * T_GAP + 400 ? L.rgba(C.gold, 0.95) : L.rgba(C.muted, 0.85);
+        ctx.fillText(name, pl.top[0], pl.top[1]);
+      });
+      ctx.textAlign = 'left'; ctx.fillStyle = L.rgba(C.dim, 0.95);
+      const nW = Wt.reduce((s, w) => s + w.length, 0);
+      ctx.fillText((small ? 'FEED-FORWARD' : 'FEED-FORWARD NETWORK') + '  ·  ' + N + ' NEURONS  ·  ' + nW.toLocaleString() + ' WEIGHTS' + (small ? '' : '  ·  RANDOM, UNTRAINED  ·  FORWARD PASS ' + passes), small ? 10 : 16, 14);
+      // the input pattern, bottom left
+      const n0 = dims[0], cs = small ? 6 : 8, ix = small ? 10 : 16, iy = v.h - 12 - n0 * cs;
+      ctx.fillText('INPUT PATTERN', ix, iy - 10);
+      for (let r = 0; r < n0; r++) for (let c = 0; c < n0; c++) { ctx.fillStyle = L.rgba(C.green, 0.1 + 0.9 * L.clamp(shown[0][r * n0 + c], 0, 1)); ctx.fillRect(ix + c * cs, iy + r * cs, cs - 1, cs - 1); }
+      // the output probabilities, bottom right, laid out like the output layer
+      const nG = dims[G], cw = small ? 27 : 38, ch = small ? 15 : 19, ox = v.w - (small ? 10 : 16) - nG * cw, oy = v.h - 12 - nG * ch;
+      ctx.fillStyle = L.rgba(C.dim, 0.95); ctx.textAlign = 'right'; ctx.fillText(small ? 'OUTPUT %' : 'OUTPUT, AS PROBABILITIES', ox + nG * cw - 2, oy - 10);
+      ctx.textAlign = 'center';
+      for (let r = 0; r < nG; r++) for (let c = 0; c < nG; c++) {
+        const i = r * nG + c, q = L.clamp(shown[G][i], 0, 1), hot = i === win;
+        ctx.fillStyle = L.rgba(hot ? C.gold : C.violet, 0.1 + 0.75 * Math.min(1, q * 1.8)); ctx.fillRect(ox + c * cw, oy + r * ch, cw - 2, ch - 2);
+        ctx.fillStyle = hot ? '#10202b' : L.rgba(C.text, 0.9); ctx.font = (hot ? '800 ' : '600 ') + (small ? 8 : 10) + 'px ' + mono;
+        ctx.fillText(Math.round(q * 100) + '%', ox + c * cw + (cw - 2) / 2, oy + r * ch + (ch - 2) / 2 + 0.5);
+      }
+      if (hint > 0.01) {
+        ctx.font = '700 ' + (small ? 8 : 10) + 'px ' + mono; ctx.fillStyle = L.rgba(C.gold, 0.85 * hint);
+        ctx.fillText(coarse ? 'SWIPE TO TURN  ·  TAP A NEURON' : 'DRAG TO TURN  ·  HOVER A NEURON  ·  DOUBLE-CLICK TO RESET', v.w / 2, small ? 32 : v.h - 14);
+      }
+      if (hover >= 0) {
+        const hl = nl[hover], loc = hover - off[hl], n = dims[hl], a = shown[hl][loc], where = 'row ' + (Math.floor(loc / n) + 1) + ', col ' + (loc % n + 1);
+        const line1 = hl === G ? 'output  ·  ' + where + ':  ' + Math.round(a * 100) + '%' : hl === 0 ? 'input  ·  ' + where + ':  ' + a.toFixed(2) : 'hidden ' + hl + '  ·  ' + where + ':  ' + (a >= 0 ? '+' : '−') + Math.abs(a).toFixed(2);
+        const line2 = (hl ? shape[hl - 1] + ' weights in' : 'fed from outside') + (hl < G ? '  ·  ' + shape[hl + 1] + ' weights out' : '');
+        ctx.textAlign = 'left'; ctx.font = '700 11px ' + mono;
+        const tw = Math.max(ctx.measureText(line1).width, ctx.measureText(line2).width) + 18, r = R * ps[hover];
+        const bx = L.clamp(px[hover] - tw / 2, 6, v.w - tw - 6), by = py[hover] > 70 ? py[hover] - r - 48 : py[hover] + r + 10;
+        L.rr(ctx, bx, by, tw, 38, 7); ctx.fillStyle = 'rgba(3,12,24,0.94)'; ctx.fill(); ctx.strokeStyle = L.rgba(C.cyan, 0.6); ctx.lineWidth = 1; ctx.stroke();
+        ctx.fillStyle = C.text; ctx.fillText(line1, bx + 9, by + 13);
+        ctx.fillStyle = L.rgba(C.muted, 0.95); ctx.font = '600 10px ' + mono; ctx.fillText(line2, bx + 9, by + 27);
+      }
     });
   }
 
