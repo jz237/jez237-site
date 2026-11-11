@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="../assets/styles.css" />
   <link rel="stylesheet" href="../assets/site-enhance.css" />
   <link rel="stylesheet" href="../assets/workbench-theme.css" />
-  <link rel="stylesheet" href="lab.css?v=20261111c" />
+  <link rel="stylesheet" href="lab.css?v=20261111d" />
   <link rel="stylesheet" href="extras.css?v=20261111b" />
   <meta name="description" content="A real language model runs in this page. Type a prompt and watch it become tokens, vectors, attention, layers and odds, then retrain the model yourself. Animated, step by step." />
   <link rel="canonical" href="https://jez237.com/how-ai-works/" />
@@ -82,6 +82,11 @@
             </div>
           </div>
           <div class="net-bar" id="netBar">
+            <div class="net-tour" id="netTour" hidden>
+              <b id="netTourN"></b>
+              <span id="netTourText" aria-live="polite"></span>
+              <button class="lab-button" id="netTourSkip" type="button">Skip</button>
+            </div>
             <p class="net-note" id="netNote" aria-live="polite"></p>
             <div class="net-shapes" id="netShapes" role="group" aria-label="Example shapes"></div>
             <div class="net-controls">
@@ -94,6 +99,48 @@
               <button class="lab-button" id="netRestore" type="button" hidden>Restore trained weights</button>
             </div>
             <p class="net-status" id="netStatus" aria-live="polite"></p>
+            <div class="net-more" role="group" aria-label="More to try">
+              <span class="net-cap">More to try</span>
+              <button class="lab-button" id="netWhyBtn" type="button" aria-pressed="false">Why this answer?</button>
+              <button class="lab-button" id="netBreakBtn" type="button" aria-expanded="false" aria-controls="netBreak">Break it</button>
+              <button class="lab-button" id="netGalleryBtn" type="button" aria-expanded="false" aria-controls="netGalleryBox">What the neurons learned</button>
+              <button class="lab-button" id="netTeachBtn" type="button" aria-expanded="false" aria-controls="netTeach">Teach it a new shape</button>
+              <button class="lab-button" id="netSound" type="button" aria-pressed="false">Sound: off</button>
+              <button class="lab-button" id="netShare" type="button">Copy link to this drawing</button>
+              <button class="lab-button" id="netTourGo" type="button">Show me around</button>
+            </div>
+            <p class="net-why" id="netWhy" aria-live="polite" hidden></p>
+            <p class="net-share" id="netShareBox" hidden>
+              <input id="netLink" type="text" readonly aria-label="Link to this drawing">
+              <span id="netShareNote" aria-live="polite"></span>
+            </p>
+            <div class="net-panel" id="netBreak" hidden>
+              <div class="net-dials">
+                <label class="dial"><span>Flip input squares <output data-for="netFlip">0%</output></span><input id="netFlip" type="range" min="0" max="50" step="1" value="0"><small>noise on the drawing; at 50% it is pure static</small></label>
+                <label class="dial"><span>Switch off hidden neurons <output data-for="netCut">0%</output></span><input id="netCut" type="range" min="0" max="90" step="1" value="0"><small>the same share of every hidden layer</small></label>
+              </div>
+              <p id="netBreakNote" aria-live="polite"></p>
+              <button class="lab-button" id="netFix" type="button" hidden>Repair it</button>
+            </div>
+            <div class="net-panel net-gallery" id="netGalleryBox" hidden>
+              <canvas id="netGallery" role="img" aria-label="The 144 neurons of the first hidden layer, each drawn as an eight by eight picture of its weights on the input squares"></canvas>
+              <div class="net-gallery-side">
+                <p id="netGalNote" aria-live="polite"></p>
+              </div>
+            </div>
+            <div class="net-panel" id="netTeach" hidden>
+              <p id="teachNote" aria-live="polite"></p>
+              <div class="net-teach-row">
+                <button class="lab-button" id="teachAdd" type="button">Add this drawing</button>
+                <div class="net-thumbs" id="teachList" aria-label="Drawings added so far"></div>
+                <button class="lab-button" id="teachWipe" type="button" hidden>Start over</button>
+              </div>
+              <div class="net-teach-row">
+                <label class="net-name">Call it <input id="teachName" type="text" maxlength="14" value="my shape" autocomplete="off" spellcheck="false"></label>
+                <button class="lab-button primary" id="teachGo" type="button" disabled>Teach it</button>
+                <button class="lab-button" id="teachForget" type="button" hidden>Forget it</button>
+              </div>
+            </div>
             <div class="net-neuron" id="netNeuron" hidden>
               <canvas id="netWeights" width="192" height="192" role="img" aria-label="The weights coming into this neuron"></canvas>
               <p id="netSum" aria-live="polite"></p>
@@ -535,6 +582,43 @@
               <div id="trainLive"></div>
             </div>
 
+            <div class="sub-block" id="sameLoop">
+              <h3>Same loop, different job</h3>
+              <p>The shape network at the top of this page and the language model in these chapters are trained by exactly the same four moves: show an example with the answer hidden, read off the odds it gave the right answer, turn that into a loss, nudge every weight. Here are fresh copies of both, starting from random numbers. The copies are private to this panel, so nothing else on the page changes.</p>
+              <div class="loop-grid">
+                <div class="loop-col" data-loop="shape">
+                  <h4>Recognising a shape</h4>
+                  <dl>
+                    <dt>Example</dt><dd><canvas data-k="pic" width="72" height="72" role="img" aria-label="The shape being shown"></canvas></dd>
+                    <dt>Right answer</dt><dd data-k="right"></dd>
+                    <dt>Its guess</dt><dd data-k="guess"></dd>
+                    <dt>Odds on the right answer</dt><dd data-k="odds"></dd>
+                    <dt>Loss</dt><dd data-k="loss"></dd>
+                    <dt>Then</dt><dd data-k="nudge"></dd>
+                  </dl>
+                </div>
+                <div class="loop-col" data-loop="text">
+                  <h4>Predicting the next word</h4>
+                  <dl>
+                    <dt>Example</dt><dd data-k="pic" class="loop-text"></dd>
+                    <dt>Right answer</dt><dd data-k="right"></dd>
+                    <dt>Its guess</dt><dd data-k="guess"></dd>
+                    <dt>Odds on the right answer</dt><dd data-k="odds"></dd>
+                    <dt>Loss</dt><dd data-k="loss"></dd>
+                    <dt>Then</dt><dd data-k="nudge"></dd>
+                  </dl>
+                </div>
+              </div>
+              <div class="control-row">
+                <button class="lab-button" id="loopStep" type="button">One step each</button>
+                <button class="lab-button primary" id="loopRun" type="button">Run both</button>
+                <button class="lab-button" id="loopNext" type="button">Another example</button>
+                <button class="lab-button" id="loopReset" type="button">Back to random</button>
+              </div>
+              <canvas id="loopCanvas" class="stage stage-loop" role="img" aria-label="Two lines rising as both models train: the average odds each gives the right answer" aria-describedby="loopNote"></canvas>
+              <div class="trace-note" id="loopNote" aria-live="polite"></div>
+            </div>
+
             <div class="scope-callout">
               <div>
                 <h3>The full story of how models are made</h3>
@@ -853,10 +937,10 @@
   <script src="js/tinygpt.js?v=20261110b" defer></script>
   <script src="js/weights.js?v=20261110b" defer></script>
   <script src="js/core.js?v=20261111b" defer></script>
-  <script src="js/mlp.js?v=20261111c" defer></script>
+  <script src="js/mlp.js?v=20261111d" defer></script>
   <script src="js/hero-weights.js?v=20261111c" defer></script>
-  <script src="js/net3d.js?v=20261111c" defer></script>
-  <script src="js/hero.js?v=20261111c" defer></script>
+  <script src="js/net3d.js?v=20261111d" defer></script>
+  <script src="js/hero.js?v=20261111d" defer></script>
   <script src="js/trainer.js?v=20261110c" defer></script>
   <script src="js/chapters.js?v=20261110c" defer></script>
   <script src="js/journey.js?v=20261110b" defer></script>
@@ -866,6 +950,7 @@
   <script src="js/layers.js?v=20261111c" defer></script>
   <script src="js/sampling.js?v=20261110b" defer></script>
   <script src="js/training.js?v=20261110b" defer></script>
+  <script src="js/sameloop.js?v=20261111d" defer></script>
   <script src="js/chat.js?v=20261110b" defer></script>
   <script src="js/context.js?v=20261110b" defer></script>
   <script src="js/agents.js?v=20261110b" defer></script>

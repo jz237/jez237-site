@@ -346,6 +346,9 @@
       play() { stepping = false; limit = Infinity; L.kick(); },
       pin(k) { pinned = k; L.kick(); },
       resetView() { yaw = YAW0; pitch = PITCH0; zoom = 1; vyaw = 0; L.kick(); },
+      // the angle the visitor has turned it to, for a link that reopens the same view
+      viewAngle() { return { yaw: Math.atan2(Math.sin(yaw), Math.cos(yaw)), pitch, zoom }; },
+      setView(a) { yaw = +a.yaw || 0; pitch = L.clamp(+a.pitch || 0, -1.15, 1.15); zoom = L.clamp(+a.zoom || 1, 0.6, 3); vyaw = 0; used = true; L.kick(); },
       where(k) { const l = nl[k], i = k - off[l]; return { layer: l, index: i, row: Math.floor(i / layers[l].c), col: i % layers[l].c }; },
       index(l, i) { return off[l] + i; },
       get stepping() { return stepping; }, get stage() { return stage; }, get pinned() { return pinned; }, get passes() { return passes; }, get quality() { return quality; }
