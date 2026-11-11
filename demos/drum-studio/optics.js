@@ -1,4 +1,5 @@
 import * as T from '../aquaclear-studio/vendor/three.module.js';
+import {WATER_GLSL} from '../filter-runtime/water-glsl.js?v=1';
 
 // Two scene captures: projected planar reflection and depth-guarded screen refraction.
 // All render state and temporary visibility are restored before the main render.
@@ -15,6 +16,7 @@ export function createWaterOptics(renderer,scene,camera,water,excluded=[]){
     fragmentShader:`uniform sampler2D sceneTexture,sceneDepth,reflectionTexture,reflectionDepth;uniform float dirtySide,sheet,waterTime,reflectionWeight,impactZ,delivery,dirtyLoad,nearPlane,farPlane;uniform vec2 viewSize;
       varying vec3 worldPoint,worldNormal,viewNormal;varying vec4 projected,reflectedPoint;varying vec2 waterUV;
       float waterNoise(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);vec4 h=fract(sin(vec4(dot(i,vec2(127.1,311.7)),dot(i+vec2(1,0),vec2(127.1,311.7)),dot(i+vec2(0,1),vec2(127.1,311.7)),dot(i+vec2(1,1),vec2(127.1,311.7))))*43758.5453);return mix(mix(h.x,h.y,f.x),mix(h.z,h.w,f.x),f.y);}
+      ${WATER_GLSL}
       float linearDepth(float d){return nearPlane*farPlane/(farPlane-d*(farPlane-nearPlane));}
       float waterHeight(vec2 p){float t=waterTime;float broad=sin(p.x*4.3+p.y*2.7-t*1.4)*.006+sin(p.x*-3.1+p.y*6.1+t*1.8)*.004;float fine=(waterNoise(p*19.+vec2(t*.65,-t*.4))-.5)*.0035+(waterNoise(p*31.+vec2(-t*.8,t*.45))-.5)*.0013;return (broad+fine)*(.18+.82*delivery);}
       void main(){float halfWidth=sqrt(max(0.,1.275*1.275-pow(worldPoint.y-1.8,2.)));bool interior=worldPoint.x< -1.86||(worldPoint.x<1.5&&abs(worldPoint.z)<halfWidth);if(dirtySide>.5&&!interior)discard;if(dirtySide<.5&&interior)discard;vec2 p=worldPoint.xz;float e=.018;float gx=(waterHeight(p+vec2(e,0))-waterHeight(p-vec2(e,0)))/(2.*e),gz=(waterHeight(p+vec2(0,e))-waterHeight(p-vec2(0,e)))/(2.*e);vec3 N=normalize(worldNormal+vec3(-gx,0.,-gz));vec3 V=normalize(cameraPosition-worldPoint);float cosine=abs(dot(N,V));float fresnel=.0204+.9796*pow(1.-cosine,5.);
@@ -27,6 +29,7 @@ export function createWaterOptics(renderer,scene,camera,water,excluded=[]){
         vec4 transmitted=texture2D(sceneTexture,refractedUV);
         float distanceThroughWater=clamp(linearDepth(texture2D(sceneDepth,refractedUV).r)-linearDepth(gl_FragCoord.z),0.,5.);vec3 attenuation=exp(-distanceThroughWater*(dirtySide>.5?vec3(.19,.16,.22)*(1.+dirtyLoad*.6):vec3(.10,.04,.025)));vec3 scatter=dirtySide>.5?vec3(.13,.15,.095):vec3(.045,.16,.18);transmitted.rgb=transmitted.rgb*attenuation+scatter*(1.-attenuation);
         transmitted.a*=1.-step(.99999,texture2D(sceneDepth,refractedUV).r);
+        float top=(sheet<.5&&abs(worldNormal.y)>.6)?1.:0.;float hc=hrCaustic(worldPoint.xz+vec2(gx,gz)*distanceThroughWater*2.,waterTime)*top*transmitted.a*(1.-exp(-distanceThroughWater*6.))*exp(-distanceThroughWater*.8)*(dirtySide>.5?.3:1.);transmitted.rgb+=transmitted.rgb*hc*1.5+vec3(.45,.7,.68)*hc*.07;float contact=top*transmitted.a*(1.-smoothstep(0.,.05,distanceThroughWater));
         vec2 reflectUV=reflectedPoint.xy/reflectedPoint.w+micro*2.+N.xz*.012;
         vec4 reflection=texture2D(reflectionTexture,clamp(reflectUV,vec2(.002),vec2(.998)));
         reflection.a*=1.-step(.99999,texture2D(reflectionDepth,clamp(reflectUV,vec2(.002),vec2(.998))).r);
@@ -52,7 +55,7 @@ export function createWaterOptics(renderer,scene,camera,water,excluded=[]){
         float alpha=coverage*(1.-visibility)+visibility;
         color=(color*coverage*(1.-visibility)+tint*visibility)/max(alpha,.001);
         float bubbleFilm=0.;
-        color+=sparkle+gleam*.25+vec3(.23,.31,.30)*bubbleFilm;
+        color+=sparkle+gleam*.25+vec3(.23,.31,.30)*bubbleFilm+contact*vec3(.42,.56,.55)*.22;
         float edge=sheet>.5?1.:smoothstep(0.,.025,min(min(waterUV.x,1.-waterUV.x),min(waterUV.y,1.-waterUV.y)));
         gl_FragColor=vec4(color,edge*clamp(alpha+sparkle,.0,1.));
         #include <tonemapping_fragment>
