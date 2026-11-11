@@ -3,15 +3,15 @@
   'use strict';const q=id=>document.getElementById(id),key='astra.comfort.v1',resultKey='astra.performance.v1';
   const clamp=(n,d)=>Number.isFinite(+n)?Math.max(0,Math.min(1,+n)):d;
   let stored={};try{stored=JSON.parse(localStorage.getItem(key))||{};}catch{}
-  const comfort={glare:clamp(stored.glare,1),shake:clamp(stored.shake,1),smooth:clamp(stored.smooth,0)};
+  const comfort={glare:clamp(stored.glare,1),shake:clamp(stored.shake,1),smooth:clamp(stored.smooth,0),brightness:clamp(stored.brightness,.4)};
   const dialog=document.createElement('dialog');dialog.id='comfortDialog';dialog.className='astra-tool-dialog';
   dialog.innerHTML='<header><h2>Flight comfort</h2><button id="comfortClose">Close</button></header><p>Applies immediately. Textures and distant explosion detail stay at your selected quality.</p>'+[
-    ['glare','Nearby explosion glare','Lower this to see through blasts close to your cockpit.'],['shake','Screen shake','Adjust Earthshaker and reactor tremors affecting your ship. Mine sounds and lighting remain.'],['smooth','Demo camera smoothing','Higher values soften demo turns. Your manual controls stay the same.']
+    ['brightness','Mine brightness','Raises dark rooms and leaves lamps and blasts as they are. Astra enhanced materials only.'],['glare','Nearby explosion glare','Lower this to see through blasts close to your cockpit.'],['shake','Screen shake','Adjust Earthshaker and reactor tremors affecting your ship. Mine sounds and lighting remain.'],['smooth','Demo camera smoothing','Higher values soften demo turns. Your manual controls stay the same.']
   ].map(([id,title,description])=>`<label><span>${title}<output id="comfort-${id}-value"></output></span><input id="comfort-${id}" type="range" min="0" max="100" step="5"><small>${description}</small></label>`).join('')+'<button id="comfortReset">Restore original intensity</button>';
   document.body.append(dialog);
-  function update(){for(const id of ['glare','shake','smooth']){q('comfort-'+id).value=Math.round(comfort[id]*100);q('comfort-'+id+'-value').textContent=Math.round(comfort[id]*100)+'%';}if(window.Module)Module.comfort={...comfort};try{localStorage.setItem(key,JSON.stringify(comfort));}catch{}}
-  for(const id of ['glare','shake','smooth'])q('comfort-'+id).oninput=e=>{comfort[id]=Number(e.target.value)/100;update();};
-  q('comfortClose').onclick=()=>dialog.close();q('comfortReset').onclick=()=>{Object.assign(comfort,{glare:1,shake:1,smooth:0});update();};
+  function update(){for(const id of ['brightness','glare','shake','smooth']){q('comfort-'+id).value=Math.round(comfort[id]*100);q('comfort-'+id+'-value').textContent=Math.round(comfort[id]*100)+'%';}if(window.Module)Module.comfort={...comfort};try{localStorage.setItem(key,JSON.stringify(comfort));}catch{}}
+  for(const id of ['brightness','glare','shake','smooth'])q('comfort-'+id).oninput=e=>{comfort[id]=Number(e.target.value)/100;update();};
+  q('comfortClose').onclick=()=>dialog.close();q('comfortReset').onclick=()=>{Object.assign(comfort,{glare:1,shake:1,smooth:0,brightness:.4});update();};
   window.astraTools={get comfort(){return {...comfort};},open(){releaseFlightMouse();window.Module?._astra_reset_flight_input?.();dialog.showModal();}};
   function addButton(id,title,parent){const b=document.createElement('button');b.id=id;b.textContent=title;b.className='secondary-action';parent.append(b);return b;}
   addButton('comfortSetup','Flight comfort',q('panel-settings')).onclick=()=>astraTools.open();
