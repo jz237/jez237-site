@@ -4,6 +4,420 @@
   "fallbackPolicy": "Use exact-day computer news when verified. If none exists, use same-week or same-month personal-computing items with confidence labels, then fall back to a wider world/business headline.",
   "issues": [
     {
+      "sectionChrome": {
+        "primary": "brick red",
+        "secondary": "royal blue",
+        "texture": "aged newsprint, fine column rules, ink bleed"
+      },
+      "currentDate": "2026-11-11",
+      "historicDate": "1985-07-29",
+      "displayDate": "Week of July 29-August 4, 1985",
+      "edition": "Issue 157 - Weekly 1985 Computer & Culture Chronicle",
+      "masthead": {
+        "title": "Computer Chronicle",
+        "subtitle": "Issue 157 - Weekly 1985 Computer & Culture Chronicle",
+        "dateline": "Week of July 29-August 4, 1985",
+        "price": "75 cents"
+      },
+      "visualProfile": {
+        "tone": "Acorn rescue leads; karate gaming supplies a large vivid secondary illustration",
+        "motifs": [
+          "BBC Micro keyboard and CRT",
+          "Commodore 64 karate fighters",
+          "cassette and modem"
+        ],
+        "layout": "Warm aged newsprint, dense columns, red and blue headers, halftone blocks, fine rules and ink bleed; no dead footer"
+      },
+      "layoutPlan": {
+        "leadPlacement": "ACORN SAVED AGAIN leads as the stronger historical business story; large secondary karate screenshot treatment",
+        "secondaryRail": "Exploding Fist, HomePak and WordStar; print feature headlines verbatim",
+        "archiveNavigation": "Weekly archive and previous/next controls"
+      },
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1985-07-29.jpg",
+        "alt": "Computer Chronicle newspaper front page for July 29-August 4, 1985",
+        "caption": "Newspaper-style front page generated from structured Chronicle issue data.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "editorNote": "A second rescue for Acorn, a five-star karate contender and a home-office suite for the 8-bit desk.",
+      "morningLine": "Acorn survives another crisis as home computing keeps writing, fighting and dialing.",
+      "sources": [
+        {
+          "title": "Popular Computing Weekly 4(31), contents and scanned-page links",
+          "url": "https://www.computinghistory.org.uk/det/28802/Popular-Computing-Weekly-Vol-4-No-31-1-7-August-1985",
+          "date": "1985-08-01"
+        },
+        {
+          "title": "Your Computer 5(8), full issue OCR",
+          "url": "https://archive.org/stream/your-computer-magazine-1985-08/YourComputer_1985_08_djvu.txt",
+          "date": "1985-08"
+        },
+        {
+          "title": "COMPUTE! issue 62, full scanned issue and OCR",
+          "url": "https://archive.org/details/1985-07-compute-magazine",
+          "date": "1985-07"
+        },
+        {
+          "title": "Michael Schrage: Commodore Unveils Amiga Computer",
+          "url": "https://www.washingtonpost.com/archive/business/1985/07/24/commodore-unveils-amiga-computer/d5acea5d-b5f1-4721-89fb-4b7c28436916/",
+          "date": "1985-07-24 (URL); heading/dateline July 23"
+        },
+        {
+          "title": "Billboard rock chart archive",
+          "url": "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1985-08-03/",
+          "date": "1985-08-03"
+        },
+        {
+          "title": "Radio Underground: 1985 rock number ones",
+          "url": "https://radio-underground.com/albumrock1985_topsongs.php",
+          "date": "retrospective; chart dates 1985"
+        },
+        {
+          "title": "My Favorite Decade: Billboard #1 Top Rock Tracks of 1985",
+          "url": "https://myfavoritedecade.blogspot.com/2020/03/list-of-billboard-1-top-rock-tracks-of.html",
+          "date": "2020-03-19"
+        },
+        {
+          "title": "Box Office Mojo: August 2–4 weekend",
+          "url": "https://www.boxofficemojo.com/weekend/1985W31/?sort=gross",
+          "date": "1985-08-02/1985-08-04"
+        },
+        {
+          "title": "NASA STS-51F mission record",
+          "url": "https://www.nasa.gov/mission/sts-51f/",
+          "date": "mission launched 1985-07-29"
+        },
+        {
+          "title": "CRASH 19, full issue OCR",
+          "url": "https://archive.org/stream/crash-magazine-19/Crash_19_Aug_1985_djvu.txt",
+          "date": "1985-08"
+        }
+      ],
+      "lead": {
+        "headline": "Acorn saved again as Olivetti raises its stake to 78.9%",
+        "body": [
+          "Acorn has been saved from liquidation by a complex financial restructuring, according to the August 1 issue of Popular Computing Weekly. The magazine describes the arrangement as the BBC Micro maker’s second rescue package of the year, with Olivetti increasing its stake to 78.9 percent.",
+          "For households and classrooms already invested in the BBC Micro, the immediate importance is continuity. A computer system is more than its keyboard: owners depend on an ongoing supply of software, peripherals and support. The rescue keeps the company behind that system in the picture, without settling every question about its future.",
+          "The magazine’s cover links the rescue to new BBC micros. Its exhibition report also looks back at the preceding week’s Acorn User Exhibition at London’s Barbican, where the 32016 processor and BBC B Plus drew attention. Those previews should not be mistaken for fresh launches during this week.",
+          "Olivetti’s enlarged holding makes the Italian company still more central to Acorn’s prospects. The available report establishes the rescue and ownership percentage, not a precise signing date, cash injection or staffing settlement. For now, the week’s decisive news is that Acorn has another chance."
+        ],
+        "sourceRefs": [
+          0
+        ],
+        "confidence": "same-week",
+        "dek": "BBC Micro maker avoids liquidation in its second rescue package of the year."
+      },
+      "stories": [
+        {
+          "headline": "The Way of the Exploding Fist earns its five stars",
+          "body": [
+            "Melbourne House’s Commodore 64 karate game earns five stars in August’s Your Computer. At £9.95, The Way of the Exploding Fist offers 18 joystick-controlled blows, jumps, blocks and kicks, with either computer opposition or a second human at the controls.",
+            "Four background scenes frame the contests, while progressively ranked Dan opponents give solitary players a ladder to climb. This is a contemporary review, not evidence that the game first went on sale during July 29-August 4.",
+            "Programmer Gregg Barnett tells the magazine that making the computer play intelligently was the hardest task. The report describes 72-pixel-high fighters assembled from nine sprites apiece and 740 sprite shapes for their moves. BBC computers linked to Commodore 64s served as development equipment.",
+            "The magazine credits Greg Holland with music and reports separate 3K allocations for music and digitised vocal effects. Those are the contemporary account’s figures. The result brings animation, timing and a recognisable martial-arts contest together on a familiar home machine."
+          ],
+          "sourceRefs": [
+            1
+          ],
+          "confidence": "same-month"
+        },
+        {
+          "headline": "HomePak brings three jobs to one disk",
+          "body": [
+            "Sheldon Leemon’s July COMPUTE! review examines a $49.95 package that combines HomeText writing, HomeFind filing and HomeTerm telecommunications. Russ Wetmore’s HomePak is reviewed for Atari machines with at least 48K and a disk drive, and for the Commodore 64 with disk drive.",
+            "The communications module supplies an online timer, XMODEM transfers, keyboard macros and an outgoing edit window. These are practical tools when connection time costs money. On Atari, roughly 7K buffers in HomeText and HomeTerm show the compromises involved in squeezing several jobs into an 8-bit computer.",
+            "The reviewed programs are not copy-protected. Buyers should nevertheless check versions: the review says the initial Commodore release cannot dial the 1650 modem and reports a free update. IBM PC, enhanced PCjr and Macintosh editions are forthcoming; the quoted $69.95 Macintosh price is not proof of present availability."
+          ],
+          "sourceRefs": [
+            2
+          ],
+          "confidence": "same-month"
+        },
+        {
+          "headline": "WordStar heads for the Amstrad CPC",
+          "body": [
+            "MicroPro has announced plans to launch WordStar for the Amstrad CPC 464 and 664, Popular Computing Weekly reports on August 1. A familiar word-processing name is thus being directed toward machines often associated with the home and hobby desk.",
+            "The announcement is not a confirmed shipment. No verified price, retail date, memory requirement or bundled spelling checker accompanies the available report. Prospective buyers have a product to watch, not a complete purchase specification."
+          ],
+          "sourceRefs": [
+            0
+          ],
+          "confidence": "same-week"
+        }
+      ],
+      "computerItems": [
+        {
+          "title": "Acorn exhibition previews",
+          "summary": "32016 processor and BBC B Plus covered on p.4 of August 1 PCW, describing the preceding week’s Barbican show.",
+          "confidence": "same-week",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "title": "Amiga and Atari ST comparison",
+          "summary": "Andrew Pennell’s preview in August 1 PCW p.12; contemporary comparison, not evidence either first shipped this week.",
+          "confidence": "same-week",
+          "sourceRefs": [
+            0
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "HomePak",
+          "detail": "HomeText, HomeFind, HomeTerm; $49.95 reviewed price; forthcoming Macintosh $69.95.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            2
+          ]
+        },
+        {
+          "name": "WordStar for CPC",
+          "detail": "MicroPro announcement for Amstrad 464/664; price and shipping date unverified.",
+          "confidence": "same-week",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "name": "ZX! Basic",
+          "detail": "Stuart Nicholls’s Spectrum BASIC extension begins in Popular Computing Weekly August 1 p.18; catalogue credits 28 new or improved commands. Type-in feature, not a retail launch.",
+          "confidence": "same-week",
+          "sourceRefs": [
+            0
+          ]
+        }
+      ],
+      "storeShelves": [
+        {
+          "label": "Top 5 Computer Games — editorial review and preview selections, not sales rankings",
+          "items": [
+            "The Way of the Exploding Fist — five-star Commodore 64 review, £9.95.",
+            "Gridbase — Dragon 32 type-in in August 1 Popular Computing Weekly.",
+            "Multi-User Dungeon — British Telecom commercial service planned in August reporting, not a verified launch.",
+            "Sky Fox — previewed in August Your Computer, not a verified new release this week.",
+            "Shadow of the Unicorn — Mikro-Plus adventure promised for mid-September, not yet a shelf arrival."
+          ],
+          "confidence": "same-month",
+          "sourceRefs": [
+            0,
+            1
+          ]
+        },
+        {
+          "label": "Top 5 Movies — August 2-4 domestic weekend",
+          "items": [
+            "1. Back to the Future",
+            "2. National Lampoon’s European Vacation",
+            "3. Fright Night",
+            "4. Weird Science",
+            "5. The Black Cauldron"
+          ],
+          "confidence": "same-week",
+          "sourceRefs": [
+            7
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "HomePak",
+          "price": "$49.95",
+          "note": "Reviewed 8-bit package; forthcoming Macintosh edition quoted at $69.95.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            2
+          ]
+        },
+        {
+          "item": "The Way of the Exploding Fist",
+          "price": "£9.95",
+          "note": "Commodore 64 review price in August Your Computer.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            1
+          ]
+        },
+        {
+          "item": "Hayes Smartmodem 1200",
+          "price": "$389",
+          "note": "July COMPUTE! retail advertisement asking price, not manufacturer list price.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            2
+          ]
+        }
+      ],
+      "briefs": [
+        {
+          "headline": "Sinclair appoints Bill Jeffrey",
+          "summary": "PCW August 1 p.5 names the incoming chief executive, 40, previously managing director of the television and communications division.",
+          "confidence": "same-week",
+          "sourceRefs": [
+            0
+          ]
+        }
+      ],
+      "musicChart": [
+        {
+          "rank": 1,
+          "title": "Money For Nothing",
+          "song": "Money For Nothing",
+          "artist": "Dire Straits",
+          "chart": "Billboard Top Rock Tracks",
+          "chartDate": "1985-08-03",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            4
+          ]
+        },
+        {
+          "rank": 2,
+          "title": "St. Elmo’s Fire (Man In Motion)",
+          "song": "St. Elmo’s Fire (Man In Motion)",
+          "artist": "John Parr",
+          "chart": "Billboard Top Rock Tracks",
+          "chartDate": "1985-08-03",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            4
+          ]
+        },
+        {
+          "rank": 3,
+          "title": "The Power Of Love",
+          "song": "The Power Of Love",
+          "artist": "Huey Lewis & The News",
+          "chart": "Billboard Top Rock Tracks",
+          "chartDate": "1985-08-03",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            4
+          ]
+        },
+        {
+          "rank": 4,
+          "title": "Invincible",
+          "song": "Invincible",
+          "artist": "Pat Benatar",
+          "chart": "Billboard Top Rock Tracks",
+          "chartDate": "1985-08-03",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            4
+          ]
+        },
+        {
+          "rank": 5,
+          "title": "People Get Ready",
+          "song": "People Get Ready",
+          "artist": "Jeff Beck & Rod Stewart",
+          "chart": "Billboard Top Rock Tracks",
+          "chartDate": "1985-08-03",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            4
+          ]
+        }
+      ],
+      "periodAd": {
+        "headline": "A modem for every budget",
+        "summary": "July COMPUTE! retail advertisement quotes Hayes Smartmodem 300 at $145, 1200 at $389 and 2400 at $699. These are advertised asking prices.",
+        "tagline": "Connect the home computer.",
+        "sourceRefs": [
+          2
+        ]
+      },
+      "market": {
+        "headline": "Owners need continuity as well as new machines",
+        "summary": "Acorn’s second rescue highlights the business behind the home-computer shelf. Meanwhile the August 1 press compares the preceding week’s Amiga unveiling with Atari ST, as established 8-bit owners weigh practical software and modem purchases.",
+        "confidence": "same-week",
+        "sourceRefs": [
+          0,
+          2
+        ]
+      },
+      "worldAnchor": {
+        "headline": "Challenger reaches orbit after main-engine shutdown",
+        "summary": "Challenger launched July 29 at 5 p.m. EDT. A main engine shut down 5 minutes 45 seconds into ascent, requiring an abort-to-orbit maneuver; the seven-person crew carried the Spacelab-2 science payload.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          8
+        ]
+      },
+      "bbsNote": {
+        "headline": "Typing time is money on commercial online services",
+        "summary": "COMPUTE! July p.88, Arlan R. Levitan’s Saving Money With E-Mail, explains connect-time billing and long-distance costs even on free BBSs; HomeTerm’s timer and offline text handling provide a practical companion. Posts below are editorial summaries of printed reporting, not fabricated historical BBS messages.",
+        "posts": [
+          {
+            "topic": "Connect-time costs",
+            "platform": "Commercial information services and BBSs",
+            "text": "Levitan notes that spending 15 minutes entering a long message can cost a couple of dollars; composing before connecting avoids paying while thinking and typing. This is illustrative cost commentary, not a universal service tariff."
+          },
+          {
+            "topic": "HomeTerm review",
+            "platform": "Atari and Commodore 64",
+            "text": "HomePak’s communications module includes an online timer, XMODEM transfer support and an edit window that sends a composed line when RETURN is pressed."
+          },
+          {
+            "topic": "Online multiplayer plans",
+            "platform": "British Telecom MUD",
+            "text": "Your Computer August announces a planned commercial MUD with £20 joining cost and more than 100 simultaneous players claimed. It is an announced service, not a verified launch in this week."
+          }
+        ],
+        "sourceRefs": [
+          1,
+          2
+        ]
+      },
+      "curiosity": {
+        "headline": "A toy robot that sings to the wastepaper basket",
+        "summary": "Fred D’Ignazio’s July COMPUTE! column treats personality, not useful chores, as home robotics’ selling point.",
+        "detail": "Here Come the Toy Robots!, p.83, describes HEROjr singing Old MacDonald Has a Robot to a wastepaper basket; Maxx Steele stands two feet tall with a 150-word vocabulary and 20 prerecorded phrases; Tomy’s remote-controlled Omnibot 2000 is quoted at about $500. These are July magazine observations and Toy Fair previews for fall, not launches this week.",
+        "sourceRefs": [
+          2
+        ]
+      },
+      "gadgetWatch": {
+        "headline": "High-speed twin-cassette decks face copyright ruling",
+        "summary": "August’s Your Computer reports Mr Justice Whitford’s ruling against Amstrad over twin-cassette decks capable of copying prerecorded tapes. Amstrad intends to appeal the ruling.",
+        "confidence": "same-month",
+        "sourceRefs": [
+          1
+        ]
+      },
+      "undergroundDesk": {
+        "headline": "The Cracker’s memoir reaches the hobbyist press",
+        "body": [
+          "August’s Your Computer notices Out of the Inner Circle, Bill Landreth’s Penguin book. The magazine identifies Landreth as The Cracker and says he wrote it while on probation after the FBI caught him accessing Telemail.",
+          "This is a contemporary book notice recalling earlier events, not a new arrest this week. The named handle belongs to the author; the report does not establish an additional crew. The story concerns the scene and its consequences, not instructions for entering somebody else’s computer."
+        ],
+        "sourceRefs": [
+          1
+        ],
+        "confidence": "same-month",
+        "dek": "A book notice recalls an earlier collision between teenage computing and federal investigators.",
+        "groups": [
+          {
+            "name": "The Cracker",
+            "note": "Bill Landreth’s handle as identified by Your Computer."
+          }
+        ]
+      },
+      "accuracyLedger": {
+        "items": [
+          "Exact event dates must not be inferred from magazine cover dates. August magazine coverage is appropriate same-month evidence for this July/August boundary week.",
+          "No milestone: the Amiga unveiling belongs to the previous issue week; Acorn’s follow-on financing is important but does not justify an extra edition by itself.",
+          "No release date for Exploding Fist inside July 29–August 4 was verified. Gaming coverage should be a contemporary review/developer feature, not a falsely dated launch.",
+          "Period scene check included CRASH August 1985 OCR; it contains magazine/editorial piracy allegations but no securely verified additional crew identities worth publishing.",
+          "Full Billboard rock positions below number one, exact rescue cash terms and WordStar shipping details remain unverified and should be omitted or researched by the composer.",
+          "Billboard August 3 top five independently read from original chart HTML during composition; ranks below number one now verified.",
+          "Game shelf combines reviews, type-ins and announced previews; it is not a sales chart."
+        ]
+      }
+    },
+    {
       "currentDate": "2026-11-10",
       "historicDate": "1985-07-22",
       "displayDate": "Week of July 22-28, 1985",
