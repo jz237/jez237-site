@@ -1,4 +1,5 @@
 """Build the independently fetched stock DXX-Redux D2 target for a browser."""
+import argparse
 import os
 import re
 import subprocess
@@ -6,14 +7,35 @@ import sys
 from pathlib import Path
 
 here = Path(__file__).resolve().parent
-tree = Path(sys.argv[1]).resolve()
+parser = argparse.ArgumentParser(description=__doc__)
+parser.add_argument('tree', type=Path, help='Prepared Astra build tree')
+parser.add_argument('--output', type=Path, help='Alternate engine.js output for verification builds')
+parser.add_argument('--check-sources', action='store_true', help='Check critical include copies without compiling')
+args = parser.parse_args()
+tree = args.tree.resolve()
 game = tree / "redux/d2"
+# These includes can be changed in an isolated build without updating the main
+# tree. Refuse a stale copy before Ninja can silently reuse or compile it.
+stale = []
+for name in ('warmup.inc', 'liquids.inc'):
+    source, prepared = here / name, game / 'arch/ogl' / ('astra_' + name)
+    if not source.is_file() or not prepared.is_file():
+        stale.append(f'{name}: missing source or prepared include ({source}; {prepared})')
+    elif source.read_bytes().replace(b'\r\n', b'\n') != prepared.read_bytes().replace(b'\r\n', b'\n'):
+        stale.append(f'{name}: {prepared} differs from {source}')
+if stale:
+    raise SystemExit('Astra source mismatch; engine build stopped.\n' + '\n'.join(stale)
+                     + '\nReview and synchronize these sources before rebuilding; no files were overwritten.')
+if args.check_sources:
+    print('Astra warmup and liquid sources match the prepared build tree.')
+    raise SystemExit(0)
 phys = tree / "physfs/src"
-sdk = Path(os.environ["EMSDK"])
+sdk = Path(os.environ.get("EMSDK", r"D:\Projects\_web_amiga_research\emsdk"))
 ems = sdk / "upstream/emscripten"
 obj = tree / "objects"
 obj.mkdir(exist_ok=True)
-output = here.parent / "engine.js"
+output = args.output.resolve() if args.output else here.parent / "engine.js"
+output.parent.mkdir(parents=True, exist_ok=True)
 env = os.environ.copy()
 env.update(EM_CONFIG=str(sdk / ".emscripten"), EMCC_CORES="4", EM_CACHE=str(tree / "cache"))
 (tree / "temp").mkdir(exist_ok=True)

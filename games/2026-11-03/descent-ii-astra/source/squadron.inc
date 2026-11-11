@@ -13,11 +13,15 @@ typedef struct {
     fix64 evade_until;vms_vector evade;
     fix64 gaze_until,turn_until,avoid_next;
     float rates[3],accels[3],command_velocity[3],command_accel[3],remaining,view_depth;
+    vms_vector track;int track_target,track_signature;
+    vms_vector eased;fix64 eased_time;
+    int item_seen[MAX_OBJECTS];
     unsigned short visits[MAX_SEGMENTS];
     fix64 blocked[MAX_SEGMENTS][6];
     fix64 ignored[MAX_OBJECTS];
 } squad_pilot;
 static squad_pilot sq[4];
+static aq_log sq_quality[4];
 int astra_squad_silent_pickup=0;
 static int sq_handoff=0;
 static int sq_command[4],sq_leader[4]={-1,-1,-1,-1},sq_focus[4]={-1,-1,-1,-1},sq_focus_sig[4];
@@ -62,9 +66,30 @@ static int sq_clear(object *ship,vms_vector *point,fix radius,int target){
     q.flags|=FQ_CHECK_OBJS|FQ_IGNORE_POWERUPS;int r=find_vector_intersection(&q,&hit);
     return r==HIT_NONE||(r==HIT_OBJECT&&hit.hit_object==target);
 }
+/* A bot sees what its own cockpit would show: the 16:9 forward view (45 degrees
+ * to either side and 29 up and down at the native zoom) or the square rear
+ * display. It used to see a cone up to 87 degrees wide in every direction, and
+ * wider at higher skill. Skill now changes how fast a pilot reacts and how
+ * well it aims, not how much of the mine it can see. */
+static int sq_in_view(object *ship,vms_vector *point,fix radius,int *rear){
+    extern fix Render_zoom;
+    vms_vector d;vm_vec_sub(&d,point,&ship->pos);
+    fix z=vm_vec_dot(&d,&ship->orient.fvec),half=fixmul(z,Render_zoom),edge=radius/2;
+    if(rear)*rear=0;
+    if(z>0&&abs(vm_vec_dot(&d,&ship->orient.rvec))-edge<half*16/9&&abs(vm_vec_dot(&d,&ship->orient.uvec))-edge<half)return 1;
+    if(aa_in_rear_view(ship,point,radius)){if(rear)*rear=1;return 1;}
+    return 0;
+}
 static int sq_seen(object *ship,int target,int skill){
-    vms_vector d;vm_vec_normalized_dir(&d,&Objects[target].pos,&ship->pos);
-    return (vm_vec_dot(&d,&ship->orient.fvec)>=fl2f(.25f-.05f*skill)||aa_in_rear_view(ship,&Objects[target].pos))&&sq_clear(ship,&Objects[target].pos,0,target);
+    object *o=&Objects[target];
+    if(!sq_in_view(ship,&o->pos,o->size,NULL))return 0;
+    if(sq_clear(ship,&o->pos,0,target))return 1;
+    /* A partly exposed hull is on the screen too. */
+    for(int sample=0;sample<4;sample++){
+        vms_vector point=o->pos;vm_vec_scale_add2(&point,sample<2?&ship->orient.rvec:&ship->orient.uvec,fixmul(o->size,sample&1?F1_0/2:-F1_0/2));
+        if(sq_clear(ship,&point,0,target))return 1;
+    }
+    return 0;
 }
 static void sq_sense_fire(int id,object *ship){
     squad_pilot *b=&sq[id];int skill=astra_net_bot_skill[id];float earliest=1.3f;
@@ -146,7 +171,8 @@ static vms_vector sq_gaze(int id,object *o,vms_vector route){
         vms_vector held;float d=f2fl(vm_vec_normalized_dir(&held,&b->gaze,&o->pos));
         if(d>12&&vm_vec_dot(&held,&desired)>-F1_0/4&&sq_depth(o,held,65,0,NULL)>24)return b->gaze;
     }
-    float best=-1e9f;vms_vector selected=route;
+    float best=-1e9f;vms_vector selected=route,held={0,0,0};
+    if(b->gaze_ready)vm_vec_normalized_dir(&held,&b->gaze,&o->pos);
     for(int k=-2;k<6+b->route_count;k++){
         vms_vector point,d;
         if(k==-2)point=route;
@@ -156,10 +182,11 @@ static vms_vector sq_gaze(int id,object *o,vms_vector route){
             compute_center_point_on_side(&point,&Segments[o->segnum],k);vms_vector center;compute_segment_center(&center,&Segments[child]);vm_vec_sub(&d,&center,&point);vm_vec_scale_add2(&point,&d,F1_0/2);}
         if(vm_vec_normalized_dir(&d,&point,&o->pos)<i2f(4)||!sq_clear(o,&point,0,-1))continue;
         float depth=sq_depth(o,d,100,0,NULL),alignment=f2fl(vm_vec_dot(&d,&desired));
-        float score=fminf(depth,70)*.65f+alignment*27+f2fl(vm_vec_dot(&d,&o->orient.fvec))*12;
+        /* Stay with the current line of sight unless another is clearly better. */
+        float score=fminf(depth,70)*.65f+alignment*27+f2fl(vm_vec_dot(&d,&o->orient.fvec))*12+f2fl(vm_vec_dot(&d,&held))*9;
         if(score>best){best=score;vm_vec_scale_add(&selected,&o->pos,&d,fl2f(fminf(depth*.85f,75)));}
     }
-    b->gaze=selected;b->gaze_ready=1;b->gaze_until=GameTime64+F1_0/2;return selected;
+    b->gaze=selected;b->gaze_ready=1;b->gaze_until=GameTime64+F1_0*9/10;return selected;
 }
 static float sq_arc(object *o,float angle,float rise){
     float score=0,nearest=100;
@@ -189,7 +216,7 @@ static void sq_plan(int id,object *ship){
         int marked=sq_command[id]==2&&i==sq_focus[id]&&Objects[i].signature==sq_focus_sig[id];
         if(sq_command[id]==3&&b->contact_until<GameTime64)continue;
         if(distance>170||!sq_seen(ship,i,skill))continue;
-        int rear=aa_in_rear_view(ship,&Objects[i].pos);if(rear)b->rear_seen++;
+        int rear=aa_in_rear_view(ship,&Objects[i].pos,Objects[i].size);if(rear)b->rear_seen++;
         float cost=distance*(i==b->target?.6f:1)*(marked?.08f:1)*(rear&&(distance<45||vm_vec_dot(&direction,&Objects[i].orient.fvec)<-fl2f(.86f))?.45f:1);
         if(sq_command[id]==1&&sq_leader[id]>=0)cost+=sq_distance(&Objects[i].pos,&Objects[Players[sq_leader[id]].objnum].pos)*.7f;if(cost<best){best=cost;enemy=i;}
     }
@@ -211,6 +238,11 @@ static void sq_plan(int id,object *ship){
         float need=sq_need(id,o);if(need<=0)continue;
         if((Game_mode&GM_MULTI_COOP)&&(sq_command[id]==3||(Players[id].shields>i2f(65)&&Players[id].energy>i2f(40))))continue;
         if(sq_dist[o->segnum]>6)continue;
+        /* A supply has to have been on this pilot's screen before it can be fetched. */
+        if(b->item_seen[i]!=o->signature){
+            if(sq_distance(&o->pos,&ship->pos)>170||!sq_in_view(ship,&o->pos,o->size,NULL)||!sq_clear(ship,&o->pos,0,-1))continue;
+            b->item_seen[i]=o->signature;
+        }
         float score=sq_dist[o->segnum]*20+sq_distance(&o->pos,&ship->pos)*.12f-need*.15f;
         if(i==previous_pick)score-=12; /* Finish a useful approach before swapping supplies. */
         if(score<cost){cost=score;goal=o->segnum;end=o->pos;b->pick=i;}
@@ -259,20 +291,31 @@ static void sq_plan(int id,object *ship){
     }
     if(GameTime64<b->escape_until){b->move=b->escape;b->door=-1;b->route_count=0;}
 }
-static float sq_turn(object *o,squad_pilot *b,int axis,float error,float limit,float feed){
+static float sq_turn(object *o,squad_pilot *b,int axis,float error,float limit,float feed,int visible,int skill){
     float dt=sq_clamp(f2fl(FrameTime),0,.1f),rate=axis==0?f2fl(o->mtype.phys_info.rotvel.x):axis==1?f2fl(o->mtype.phys_info.rotvel.y):f2fl(o->mtype.phys_info.rotvel.z);
-    float acceleration=axis==2?.055f:.28f;
-    float brake=sqrtf(2*acceleration*fabsf(error)/6.2831853f);
-    float desired=sq_clamp(copysignf(fminf(fabsf(error)*.5f,brake),error)+feed/6.2831853f,-limit,limit);
-    float gap=desired-b->rates[axis],a=sq_clamp(gap/.14f,-acceleration,acceleration),jerk=axis==2?.35f:1.8f;
-    b->accels[axis]+=sq_clamp(a-b->accels[axis],-jerk*dt,jerk*dt);
-    float step=b->accels[axis]*dt;
-    if(step*gap>=0&&fabsf(step)>fabsf(gap)){b->rates[axis]=desired;b->accels[axis]=0;}
-    else b->rates[axis]+=step;
+    /* Gentle while cruising, firmer on a visible opponent, and firmer again
+     * with skill. Gain times follower lag stays under a quarter in each case,
+     * so the nose settles from one side instead of crossing and coming back. */
+    float acceleration=axis==2?.055f:visible?.24f+.008f*skill:.18f;
+    float stiffness=axis==2?3.1f:visible?3.0f+.1f*skill:2.2f,omega=axis==2?12:visible?26+skill:18;
+    float jerk=axis==2?.35f:visible?1.7f+.1f*skill:1.0f;
+    float brake=sqrtf(2*.7f*acceleration*fabsf(error)/6.2831853f);
+    float desired=sq_clamp(copysignf(fminf(fabsf(error)*stiffness/6.2831853f,brake),error)+feed/6.2831853f,-limit,limit);
+    aa_follow(&b->rates[axis],&b->accels[axis],desired,omega,acceleration,jerk,dt);
     float drag=sq_clamp(f2fl(o->mtype.phys_info.drag)*2.5f,.01f,.9f),gain=64*(1-drag)*f2fl(Player_ship->max_rotthrust)/fmaxf(.01f,f2fl(o->mtype.phys_info.mass));
     return sq_clamp((64*drag*b->rates[axis]+(b->rates[axis]-rate)*8)/fmaxf(.01f,gain),-1,1);
 }
 static void sq_look(object *o,squad_pilot *b,vms_vector direction,int visible,int skill,float distance,vms_vector target_velocity){
+    /* Ease the line of sight toward a new route or survey point instead of
+     * stepping to it. An opponent in view is tracked directly. */
+    if(visible||GameTime64-b->eased_time>F1_0/4||GameTime64<b->eased_time||vm_vec_dot(&direction,&b->eased)<F1_0/5)b->eased=direction;
+    else {
+        vms_vector change;vm_vec_sub(&change,&direction,&b->eased);
+        vm_vec_scale_add2(&b->eased,&change,fl2f(1-expf(-f2fl(FrameTime)/.22f)));
+        if(vm_vec_normalize(&b->eased)<F1_0/10)b->eased=direction;
+        direction=b->eased;
+    }
+    b->eased_time=GameTime64;
     float x=f2fl(vm_vec_dot(&direction,&o->orient.rvec)),y=f2fl(vm_vec_dot(&direction,&o->orient.uvec)),z=f2fl(vm_vec_dot(&direction,&o->orient.fvec));
     float ux=f2fl(vm_vec_dot(&b->up,&o->orient.rvec)),uy=f2fl(vm_vec_dot(&b->up,&o->orient.uvec)),projection=sqrtf(ux*ux+uy*uy);
     if(!b->polar&&projection<.36f)b->polar=1;if(b->polar&&projection>.62f)b->polar=0;
@@ -298,8 +341,8 @@ static void sq_look(object *o,squad_pilot *b,vms_vector direction,int visible,in
     }
     float dt=f2fl(FrameTime),limit=visible?.16f+.018f*skill:.16f,fy=0,fp=0;
     if(visible&&distance>5){vms_vector relative;vm_vec_sub(&relative,&target_velocity,&o->mtype.phys_info.velocity);float weight=sq_clamp(z,0,1);weight=weight*weight/distance;fy=f2fl(vm_vec_dot(&relative,&o->orient.rvec))*weight;fp=-f2fl(vm_vec_dot(&relative,&o->orient.uvec))*weight;}
-    Controls.heading_time=fl2f(sq_turn(o,b,1,yaw,limit,fy)*dt);Controls.pitch_time=fl2f(sq_turn(o,b,0,pitch,limit,fp)*dt);
-    Controls.bank_time=fl2f(sq_turn(o,b,2,copysignf(fmaxf(0,fabsf(roll)-.025f),roll),b->polar?.025f:.07f,bank_feed)*dt);
+    Controls.heading_time=fl2f(sq_turn(o,b,1,yaw,limit,fy,visible,skill)*dt);Controls.pitch_time=fl2f(sq_turn(o,b,0,pitch,limit,fp,visible,skill)*dt);
+    Controls.bank_time=fl2f(sq_turn(o,b,2,copysignf(fmaxf(0,fabsf(roll)-.025f),roll),b->polar?.025f:.07f,bank_feed,visible,skill)*dt);
 }
 static void sq_drive(int id,object *o){
     squad_pilot *b=&sq[id];int skill=astra_net_bot_skill[id];float dt=f2fl(FrameTime),speed=30+skill*5;
@@ -309,7 +352,15 @@ static void sq_drive(int id,object *o){
     if(visible){
         object *foe=&Objects[b->target];aim=foe->pos;target_velocity=foe->mtype.phys_info.velocity;float d=sq_distance(&foe->pos,&o->pos);
         int weapon=Players[id].primary_weapon,wi=Primary_weapon_to_weapon_info[weapon];
-        if(skill>=2)vm_vec_scale_add2(&aim,&foe->mtype.phys_info.velocity,fl2f(fminf(.5f,d/fmaxf(60,f2fl(Weapon_info[wi].speed[Difficulty_level])))*(.45f+.1f*skill)));
+        /* Lead by the opponent's observed course, averaged over a quarter
+         * second, and solve the intercept. A novice applies a little over half
+         * of the lead and an expert nearly all of it. */
+        if(b->track_target!=b->target||b->track_signature!=foe->signature){b->track_target=b->target;b->track_signature=foe->signature;b->track=foe->mtype.phys_info.velocity;}
+        else {vms_vector change;vm_vec_sub(&change,&foe->mtype.phys_info.velocity,&b->track);vm_vec_scale_add2(&b->track,&change,fl2f(1-expf(-f2fl(FrameTime)/.22f)));}
+        {vms_vector offset,led;vm_vec_sub(&offset,&foe->pos,&o->pos);
+         float flight=fminf(.8f,aa_intercept(offset,b->track,fmaxf(60,f2fl(Weapon_info[wi].speed[Difficulty_level]))));
+         vm_vec_scale_add(&led,&aim,&b->track,fl2f(flight*(.55f+.11f*skill)));
+         if(sq_clear(o,&led,0,-1))aim=led;}
         /* Continuous range keeping avoids the old approach/back-off/orbit
          * switches. Orbit direction stays stable for the engagement. */
         vms_vector line,lateral;vm_vec_normalized_dir(&line,&foe->pos,&o->pos);vm_vec_cross(&lateral,&b->up,&line);if(vm_vec_normalize(&lateral)<F1_0/10)lateral=o->orient.rvec;
@@ -361,7 +412,15 @@ static void sq_drive(int id,object *o){
     vms_vector desired;vm_vec_copy_scale(&desired,&travel,fl2f(speed));
     aa_velocity_control(o,b->command_velocity,b->command_accel,desired);
     read_flying_controls(o);
-    if(!visible||GameTime64<b->react||z<.985f-.003f*(4-skill))return;
+    if(!visible||GameTime64<b->react||z<.94f)return;
+    {
+        /* Hold fire until the shot would pass inside the opponent's hull, and
+         * the way to it is open. The old gate was a 10 to 13 degree cone,
+         * several hull widths at fighting range. A novice still accepts a
+         * near miss; an expert waits for about two thirds of a radius. */
+        float miss=aim_distance*sqrtf(fmaxf(0,1-z*z)),allow=f2fl(Objects[b->target].size)*(1.25f-.15f*skill);
+        if(miss>allow||!sq_clear(o,&aim,0,b->target))return;
+    }
     if(GameTime64>=b->weapon_until){
         static const int choice[]={PLASMA_INDEX,SPREADFIRE_INDEX,GAUSS_INDEX,LASER_INDEX};int best=LASER_INDEX;
         for(int i=0;i<4;i++)if(Players[id].primary_weapon_flags&(1<<choice[i])){if(choice[i]==GAUSS_INDEX&&Players[id].primary_ammo[VULCAN_INDEX]<20)continue;best=choice[i];break;}
@@ -420,7 +479,11 @@ void astra_squad_frame(void){
         o->movement_type=MT_PHYSICS;o->mtype.phys_info.flags|=PF_USES_THRUST;
         if(Game_mode&GM_MULTI_COOP)Players[id].flags|=Players[saved].flags&(PLAYER_FLAGS_BLUE_KEY|PLAYER_FLAGS_RED_KEY|PLAYER_FLAGS_GOLD_KEY);
         if(GameTime64>=b->think)sq_plan(id,o);sq_drive(id,o);
+        aq_sample(&sq_quality[id],o,b->target>=0,Players[id].shields);aq_shots(&sq_quality[id],o,sq_enemy,id);
         if(GameTime64>=b->report){b->report=GameTime64+F1_0/4;
+        {aq_log *q=&sq_quality[id];EM_ASM({Module.netBotQuality=Module.netBotQuality||[];Module.netBotQuality[$13]=({seconds:[$0,$1],turnAccel:[$2,$3],turnJerk:[$4,$5],moveAccel:[$6,$7],moveJerk:[$8,$9],reversals:$10,shots:$11,hits:$12});},
+            q->seconds[0],q->seconds[1],q->turn_accel[0],q->turn_accel[1],q->turn_jerk[0],q->turn_jerk[1],q->move_accel[0],q->move_accel[1],q->move_jerk[0],q->move_jerk[1],q->reversals,q->shots,q->hits,id);
+        EM_ASM({Module.netBotQualityMean=Module.netBotQualityMean||[];Module.netBotQualityMean[$6]=({turn:[$0,$1],move:[$2,$3],jolts:[$4,$5]});},q->turn_mean[0],q->turn_mean[1],q->move_mean[0],q->move_mean[1],q->jolts[0],q->jolts[1],id);}
         EM_ASM({Module.netBots=Module.netBots||[];Module.netBots[$0]=({skill:$1,goal:$2,target:$3,shots:$4,missiles:$5,pickups:$6,stuck:$7,energy:$8,order:$9,leader:$10,rearVisible:$11,dodges:$12});},id,astra_net_bot_skill[id],b->goal,b->target,b->shots,b->missiles,b->pickups,b->stuck,f2fl(Players[id].energy),sq_command[id],sq_leader[id],b->rear_seen,b->dodges);}
     }
     sq_handoff=0;
