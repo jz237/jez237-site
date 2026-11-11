@@ -168,7 +168,7 @@
   bRest.addEventListener('click', restore);
 
   /* ---------- training, a few real steps per frame so the page stays responsive ---------- */
-  function webChanged() { view.refreshWeb(); galStale = true; drawGallery(); if (!L.$('#netBreak').hidden) breakRead(); foolRead(); }
+  function webChanged() { view.refreshWeb(); galStale = true; drawGallery(); if (!L.$('#netBreak').hidden) breakRead(); foolStale(); }
   function finish() { if (steps) { state = 'custom'; acc = accuracy(L.rng(steps + 5), 300); webChanged(); } }
   L.scene(L.$('#netBar'), dt => {
     if (!training || !dt) return;
@@ -349,6 +349,13 @@
         ' To a person the drawing has hardly changed. The network never learned what the shape <em>is</em>, only which squares tend to be lit, so the right few squares tip it over. Large models can be tipped the same way: see <a href="#failure">Failure modes</a>.';
     }
     fNote.innerHTML = t;
+  }
+  // the weights have changed under the game: the page's attempt and both scores were worked out for the old ones
+  function foolStale() {
+    if (!foolBase) return;
+    const shown = foolShown;
+    foolBest = null; foolShown = false; foolMine = 0;
+    if (shown) { x = Float32Array.from(foolBase); run(true); } else foolRead();
   }
   function foolEnd() { foolBase = null; foolBest = null; foolShown = false; foolMine = 0; foolRead(); }
   fStart.addEventListener('click', () => {
