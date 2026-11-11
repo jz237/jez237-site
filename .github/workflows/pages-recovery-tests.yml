@@ -1,0 +1,26 @@
+name: Pages Recovery Safeguards
+
+on:
+  pull_request:
+    paths:
+      - '.github/scripts/pages_*.py'
+      - '.github/workflows/pages.yml'
+      - '.github/workflows/pages-recovery-tests.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  safeguards:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          filter: blob:none
+          sparse-checkout: |
+            .github/scripts
+            .github/workflows
+          persist-credentials: false
+      - name: Test artifact readiness and deployment recovery without publishing
+        run: python3 -m unittest discover -s .github/scripts -p 'pages_*test.py' -v
