@@ -20906,5 +20906,137 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-11-11-factual-infographic-factual-infographic-firefish",
+    "title": "Factual infographic: Firefish",
+    "tests": "Species and spelling-alias guards checked against permanent reservations and all factual topics. No tank minimum asserted. Husbandry inferences explicitly labeled; no universal reef-safety claim.; archive_slot=2026-11-11T12:20; concept=firefish-current-feeding-rubble-bolt-hole; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: reef-fish-infographic; fish_scientific_name: Nemateleotris magnifica",
+    "prompt": "Create the finished premium Reef Fish Atlas infographic itself, with exceptionally detailed, colorful PHOTOREALISTIC underwater imagery and elegant, genuinely readable educational typography. Not a poster photographed in a room, not a book mockup. One featured species: firefish, Nemateleotris magnifica. Put the bold common-name headline “FIREFISH” at the top with italic “Nemateleotris magnifica” directly underneath, and small “Red Firegoby • Reef Fish Atlas”.\n\nA luminous, anatomically accurate huge side-oblique hero fish hovers diagonally in clear blue water immediately above a sandy coral-rubble refuge on an outer reef slope. Build a sweeping unboxed composition around its rising white dorsal pennant and the soft arc of current-borne plankton. Yellow snout, white head and pale anterior body transitioning naturally into vivid orange-red posteriorly; preserve the true diagnostic color boundary, slender proportions, credible paired fins and continuous natural fin membranes. The very elongated white first dorsal fin is the distinguishing feature: render it as fish anatomy, not an extra antenna. Tiny surface texture, translucent fin rays, wet reflective eyes, restrained caustics, jewel-toned surrounding reef, deep turquoise negative space and gorgeous underwater light. Coral context is habitat, not a claim of symbiosis or universal aquarium compatibility. Do not add other featured fish species.\n\nWeave precise open labels and supporting photographic studies through the surrounding water rather than rigid grids, cards or boxes. An enlarged close-up of the white first dorsal fin folds organically from the upper edge, with delicate leader “Elongate first dorsal fin” and readable text “Raised and waved; used in signaling.” A curving arrow of drifting particles leads toward the hero mouth, with a beautiful enlarged copepod study labeled “Zooplankton prey • enlarged, not to scale”. Label this connected biological scene “Face the flow” and “Hovers close to the seabed, taking copepods and other crustacean larvae from the current.” Do not depict algae grazing or coral biting.\n\nBelow the hero, show a smaller SAME-species refuge study, visibly a separate moment, with the fish retreating into a natural hole in rubble. Mark the motion with a subtle dotted curve, not fantasy speed effects. Text “A nearby bolt-hole” and “Retreats into a burrow when disturbed. Adults usually live alone or in pairs.” All figures are Nemateleotris magnifica, not another morph or dartfish species. A discreet open habitat ribbon follows the reef contour: “Tropical Indo-Pacific & Central Pacific • Outer reef slopes • 6–61 m deep”. A fine size annotation near the silhouette reads “Reported upper size: about 7.6 cm / 3 in”. Keep size and depth units distinct.\n\nAt the lower-right in calm deep-blue water integrate a compact readable passage headed “Aquarium planning” and subheading “Recommendations from natural history”. Exact concise copy: “Provide accessible rock refuges and appropriately small planktonic foods. Avoid large predatory tankmates. Wild pairs do not mean arbitrary groups are compatible.” Follow with smaller but readable “Reef caveat: plankton feeding is not a blanket guarantee of coral or invertebrate safety.” Do not add unsupported numerical aquarium capacity, temperature, lifespan, toxin or conservation claims. No invented tank-minimum numbers; no aquarium-volume label is needed.\n\nBalance warm orange-red fish and amber flecks against cobalt, turquoise, violet and living-reef colors. Educational details should reward zooming but main labels remain legible at normal viewing size. Use refined ivory type, restrained gold leaders, varied study scales, natural asymmetry and breathing room around the immense hero. Not a rigid scientific-plate grid, not flat illustration, cartoon or generic sparse title poster. Show the actual infographic directly, opaque background. Small footer “Sources: Australian Museum • Colorado State University • Clearwater Marine Aquarium; taxonomy: WoRMS & California Academy of Sciences”. All biological claims must stay within the specified text; omit decorative filler facts.",
+    "image": "images/2026-11-11-factual-infographic-factual-infographic-firefish.jpg",
+    "thumb": "thumbs/2026-11-11-factual-infographic-factual-infographic-firefish.webp",
+    "color": "#3c5361",
+    "date": "2026-11-11",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1086x1448",
+    "dedup": {
+      "conceptKey": "firefish-current-feeding-rubble-bolt-hole",
+      "imageSha256": "a839e9df4921e9d7b8adc5fc33a2525528a9edac1cf8ff029782c0f8df6cd270",
+      "imageDHash": "56668d8ea611973d"
+    },
+    "factualInfographic": {
+      "topic": "Firefish (Nemateleotris magnifica) current-facing plankton feeding and reef refuge biology",
+      "description": "Current-facing plankton feeding, distinctive dorsal fin and burrow refuge biology, with explicitly inferred aquarium planning and no blanket reef-safety guarantee.",
+      "sourceNote": "Read actual sources on 2026-11-11. https://australian.museum/learn/animals/fishes/nemateleotris-magnifica-fowler-1938/ https://aquariums.colostate.edu/sample-page/biology-aquariums/1200-gallon-marine-saltwater-tank/firefish-goby-3/ https://www.cmaquarium.org/animals/more-marine-animals/firefish/ https://researcharchive.calacademy.org/research/ichthyology/catalog/fishcatget.asp?spid=21740 https://www.marinespecies.org/rest/AphiaRecordByAphiaID/219611 https://www.marinespecies.org/rest/AphiaSynonymsByAphiaID/219611",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-11T17:22:21.232952+00:00",
+        "sources": [
+          {
+            "id": "am",
+            "publisher": "Australian Museum",
+            "title": "Red Firegoby, Nemateleotris magnifica Fowler, 1938",
+            "sourceType": "museum",
+            "url": "https://australian.museum/learn/animals/fishes/nemateleotris-magnifica-fowler-1938/"
+          },
+          {
+            "id": "csu",
+            "publisher": "Colorado State University",
+            "title": "Firefish Goby",
+            "sourceType": "university",
+            "url": "https://aquariums.colostate.edu/sample-page/biology-aquariums/1200-gallon-marine-saltwater-tank/firefish-goby-3/"
+          },
+          {
+            "id": "cma",
+            "publisher": "Clearwater Marine Aquarium",
+            "title": "Firefish",
+            "sourceType": "museum",
+            "url": "https://www.cmaquarium.org/animals/more-marine-animals/firefish/"
+          },
+          {
+            "id": "cas",
+            "publisher": "California Academy of Sciences",
+            "title": "Eschmeyer’s Catalog of Fishes: Nemateleotris magnifica",
+            "sourceType": "museum",
+            "url": "https://researcharchive.calacademy.org/research/ichthyology/catalog/fishcatget.asp?spid=21740"
+          },
+          {
+            "id": "worms",
+            "publisher": "World Register of Marine Species / Flanders Marine Institute",
+            "title": "Accepted taxon AphiaID 219611",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://www.marinespecies.org/rest/AphiaRecordByAphiaID/219611"
+          },
+          {
+            "id": "syn",
+            "publisher": "World Register of Marine Species / Flanders Marine Institute",
+            "title": "Synonyms of AphiaID 219611",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://www.marinespecies.org/rest/AphiaSynonymsByAphiaID/219611"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Nemateleotris magnifica is the accepted marine species; Nemateleotris magnificus and Nemaeleotris magnifica are unaccepted spelling aliases returned by WoRMS, included in duplicate protection, not distinct species.",
+            "sourceIds": [
+              "worms",
+              "syn",
+              "cas"
+            ]
+          },
+          {
+            "claim": "Firefish / Red Firegoby has an elongate white first dorsal fin, yellow snout, white head, and white body grading to bright orange-red posteriorly.",
+            "sourceIds": [
+              "am"
+            ]
+          },
+          {
+            "claim": "Coral-reef fish of tropical Indo-Pacific and Central Pacific, including East Africa to Pitcairn; outer reef slopes at 6–61 m.",
+            "sourceIds": [
+              "am",
+              "cas",
+              "cma"
+            ]
+          },
+          {
+            "claim": "Clearwater Marine Aquarium gives maximum size up to 3 inches (about 7.6 cm); this is an approximate reported upper size, not a precise universal adult measurement.",
+            "sourceIds": [
+              "cma"
+            ]
+          },
+          {
+            "claim": "Often hovers within 0.5 m above the bottom, facing into current to eat zooplankton, especially copepods and other crustacean larvae.",
+            "sourceIds": [
+              "am",
+              "cma"
+            ]
+          },
+          {
+            "claim": "Uses substrate holes as burrows and retreats when disturbed; adults solitary or paired, while multiple juveniles may share a hole.",
+            "sourceIds": [
+              "am",
+              "cma"
+            ]
+          },
+          {
+            "claim": "Raises and waves elongated first dorsal fin; aquarium/university sources describe fin signaling.",
+            "sourceIds": [
+              "am",
+              "csu",
+              "cma"
+            ]
+          },
+          {
+            "claim": "Aquarium recommendations inferred from cited biology: supply accessible refuges and appropriately small planktonic foods; avoid large predators (Clearwater lists triggerfish, lionfish and large angelfish as threats). Wild pairing is not a guarantee of arbitrary group compatibility; plankton feeding alone does not establish universal reef safety. No numeric tank minimum or blanket coral/invertebrate safety guarantee is asserted.",
+            "sourceIds": [
+              "am",
+              "cma",
+              "csu"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
