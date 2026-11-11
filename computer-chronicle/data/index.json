@@ -2,6 +2,22 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-11-11",
+      "historicDate": "1985-07-29",
+      "displayDate": "Week of July 29-August 4, 1985",
+      "edition": "Issue 157 - Weekly 1985 Computer & Culture Chronicle",
+      "morningLine": "Acorn survives another crisis as home computing keeps writing, fighting and dialing.",
+      "leadHeadline": "Acorn saved again as Olivetti raises its stake to 78.9%",
+      "storyHeadlines": [
+        "The Way of the Exploding Fist earns its five stars",
+        "HomePak brings three jobs to one disk",
+        "WordStar heads for the Amstrad CPC"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1985-07-29.jpg",
+      "thumb": "media/thumbs/1985-07-29.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-11-10",
       "historicDate": "1985-07-22",
       "displayDate": "Week of July 22-28, 1985",
