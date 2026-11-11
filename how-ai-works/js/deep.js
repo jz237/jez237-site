@@ -19,30 +19,6 @@
     io.observe(el);
   }
 
-  /* ---------- hero: a loss curve being drawn ---------- */
-  const hero = L.$('#ddHero');
-  if (hero) L.scene(hero, (dt, t) => {
-    const v = L.fit(hero), ctx = v.ctx, x0 = 34, x1 = v.w - 14, y0 = 18, y1 = v.h - 30;
-    ctx.clearRect(0, 0, v.w, v.h);
-    ctx.strokeStyle = 'rgba(255,255,255,0.22)'; ctx.lineWidth = 1;
-    ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x0, y1); ctx.lineTo(x1, y1); ctx.stroke();
-    ctx.font = '700 10px ' + mono; ctx.fillStyle = L.rgba(C.muted, 0.9); ctx.textBaseline = 'middle';
-    ctx.textAlign = 'center'; ctx.fillText('training steps →', (x0 + x1) / 2, v.h - 12);
-    ctx.save(); ctx.translate(14, (y0 + y1) / 2); ctx.rotate(-Math.PI / 2); ctx.fillText('loss', 0, 0); ctx.restore();
-    const f = x => 0.1 + 0.82 * Math.exp(-4.4 * x) + 0.035 * Math.sin(x * 46) * Math.exp(-2.4 * x);
-    const p = L.reduce ? 1 : L.clamp(((t / 5600) % 1.25));
-    ctx.strokeStyle = C.rose; ctx.lineWidth = 2.5; ctx.lineJoin = 'round'; ctx.beginPath();
-    for (let i = 0; i <= 120; i++) {
-      const x = i / 120;
-      if (x > p) break;
-      const px = L.lerp(x0, x1, x), py = L.lerp(y1, y0, f(x));
-      if (i) ctx.lineTo(px, py); else ctx.moveTo(px, py);
-    }
-    ctx.stroke();
-    const bx = L.lerp(x0, x1, p), by = L.lerp(y1, y0, f(p));
-    ctx.beginPath(); ctx.arc(bx, by, 6, 0, 6.2832); ctx.fillStyle = C.gold; ctx.shadowColor = C.gold; ctx.shadowBlur = 14; ctx.fill(); ctx.shadowBlur = 0;
-  });
-
   /* ---------- 01 pipeline ---------- */
   const STAGES = [
     ['Data', 'Collect and filter data', 'Trillions of tokens of text, code, and media are gathered, deduplicated, and filtered for quality. The mixture recipe — how much code, how many languages, which sources — is one of the most consequential decisions in the whole process.', 'data', 'raw text'],

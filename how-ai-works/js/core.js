@@ -113,7 +113,7 @@ window.Lab = (function () {
   const scenes = [];
   let rafOn = false, last = 0;
   function frame(now) {
-    const dt = Math.min(50, now - last) || 16;
+    const dt = Math.max(0, Math.min(50, now - last)) || 16;     // a frame stamp can sit a hair before the clock read in kick()
     last = now;
     let any = false;
     if (!document.hidden) {

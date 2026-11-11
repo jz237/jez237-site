@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="../assets/styles.css" />
   <link rel="stylesheet" href="../assets/site-enhance.css" />
   <link rel="stylesheet" href="../assets/workbench-theme.css" />
-  <link rel="stylesheet" href="lab.css?v=20261110b" />
+  <link rel="stylesheet" href="lab.css?v=20261111b" />
   <link rel="stylesheet" href="deep.css?v=20261110b" />
   <meta name="description" content="How a language model is made: training data, pretraining, fine-tuning, human feedback, evals, and deployment. Train and fine-tune a real tiny transformer in your browser as you read." />
   <link rel="canonical" href="https://jez237.com/how-ai-works/training-alignment" />
@@ -61,7 +61,23 @@
       </aside>
 
       <div class="lab-main">
-        <section class="lab-hero">
+        <section class="lab-hero net-hero">
+          <div class="net-stage">
+            <canvas id="ddNet" class="hero-canvas" tabindex="0" role="img" aria-label="An animated 3D neural network being trained. A shape passes forward through six layers, then the error is traced backwards through the same connections, and the weights are adjusted. Drag, or use the arrow keys, to turn it."></canvas>
+            <div class="net-in">
+              <span class="net-cap">The shape it is shown</span>
+              <div class="net-pad" id="ddPad" aria-hidden="true"></div>
+            </div>
+            <div class="net-out">
+              <span class="net-cap">Fresh shapes it gets right</span>
+              <canvas id="ddAcc" class="net-acc" role="img" aria-label="A line climbing as the share of correct answers rises with training"></canvas>
+              <span class="net-acc-text" id="ddAccText"></span>
+            </div>
+          </div>
+          <div class="net-bar">
+            <p class="net-note" id="ddNote" aria-live="off"></p>
+            <div class="net-controls"><button class="lab-button" id="ddRestart" type="button">Start again from random weights</button></div>
+          </div>
           <div class="hero-copy">
             <span class="kicker">Deep dive</span>
             <h1>AI Training and Alignment</h1>
@@ -72,7 +88,6 @@
               <a href="#pretraining">Jump to live training</a>
             </div>
           </div>
-          <canvas id="ddHero" class="hero-canvas" aria-hidden="true"></canvas>
         </section>
 
         <div class="mobile-tour-bar" aria-label="Chapter controls">
@@ -434,10 +449,14 @@
   <script src="js/data.js?v=20261110b" defer></script>
   <script src="js/tinygpt.js?v=20261110b" defer></script>
   <script src="js/weights.js?v=20261110b" defer></script>
-  <script src="js/core.js?v=20261110b" defer></script>
+  <script src="js/core.js?v=20261111b" defer></script>
+  <script src="js/mlp.js?v=20261111b" defer></script>
+  <script src="js/hero-weights.js?v=20261111b" defer></script>
+  <script src="js/net3d.js?v=20261111b" defer></script>
+  <script src="js/deephero.js?v=20261111b" defer></script>
   <script src="js/trainer.js?v=20261110c" defer></script>
   <script src="js/chapters.js?v=20261110c" defer></script>
-  <script src="js/deep.js?v=20261110b" defer></script>
+  <script src="js/deep.js?v=20261111b" defer></script>
   <script src="../assets/site-enhance.js" defer></script>
   <script src="../assets/nav.js?v=nav-20260702b" defer></script>
   <script src="../assets/space-fx.js?v=20260702b" defer></script>

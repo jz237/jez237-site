@@ -38,12 +38,12 @@
 
   L.net3d = function (cv, o) {
     const layers = o.layers, G = layers.length - 1, shape = layers.map(l => l.r * l.c), off = [];
-    const YAW0 = o.yaw == null ? -0.8 : o.yaw, PITCH0 = o.pitch == null ? 0.3 : o.pitch, HOLD = o.hold || 2100;
+    const YAW0 = o.yaw == null ? -0.8 : o.yaw, PITCH0 = o.pitch == null ? 0.3 : o.pitch, HOLD = o.hold || 2100, SPEED = o.speed || 1;
     let N = 0; shape.forEach(n => { off.push(N); N += n; });
     const wx = new Float32Array(N), wy = new Float32Array(N), wz = new Float32Array(N), nl = new Uint8Array(N);
     const px = new Float32Array(N), py = new Float32Array(N), ps = new Float32Array(N), pz = new Float32Array(N), order = new Uint16Array(N);
     for (let k = 0; k < N; k++) order[k] = k;
-    let small = false, gapX = 4.6, key = '', unit = 30, fresh = true, zoom = 1;
+    let small = false, gapX = 4.6, key = '', unit = 30, fresh = true, zoom = 1, placed = false;
     let rest = [], lit = [], heads = [], vals = null, mags = null, shownV = null, shownM = null;
     let dir = 1, tint = [C.cyan, C.rose], keep = 0, clock = 1e9, limit = Infinity, stepping = false, stage = 0, told = -1, cycled = true, passes = 0;
     let yaw = YAW0, pitch = PITCH0, vyaw = 0, phase = 0, drift = 1, drag = null, mouse = null, over = false, hover = -1, pinned = -1, used = false, hint = 1;
@@ -114,7 +114,7 @@
       const sm = v.w < 560, k = (sm ? 's' : 'l') + v.w + 'x' + v.h;
       if (k === key) return;
       key = k; fresh = true;
-      if (sm !== small || !rest.length) { small = sm; gapX = sm ? (o.gapSmall || 3.7) : (o.gap || 4.6); place(); refreshWeb(); }
+      if (sm !== small || !placed) { placed = true; small = sm; gapX = sm ? (o.gapSmall || 3.7) : (o.gap || 4.6); place(); refreshWeb(); }
     }
     const midY = v => v.h / 2 + 6;
     function project(v, cyaw, syaw, cp, sp, X, Y, Z) {
@@ -188,8 +188,8 @@
       const settle = T_IN + G * T_GAP, total = settle + HOLD, focused = document.activeElement === cv;
       // the pass
       if (L.reduce) clock = Math.min(stepping ? limit : settle + 400, settle + 400);
-      else clock = Math.min(clock + dt, stepping ? limit : 1e9);
-      const kk = L.reduce ? 1 : 1 - Math.exp(-dt / 110);
+      else clock = Math.min(clock + dt * SPEED, stepping ? limit : 1e9);
+      const kk = L.reduce ? 1 : 1 - Math.exp(-dt * SPEED / 110);
       for (let l = 0; l <= G; l++) if (clock >= arrive(l)) for (let i = 0; i < shape[l]; i++) { shownV[l][i] += (vals[l][i] - shownV[l][i]) * kk; shownM[l][i] += (mags[l][i] - shownM[l][i]) * kk; }
       const reached = Math.floor(L.clamp((clock - T_IN) / T_GAP, 0, G));       // hops completed
       if (reached > told) { for (let h = told + 1; h <= reached; h++) if (o.onStage) o.onStage(dir > 0 ? h : G - h); told = reached; }
