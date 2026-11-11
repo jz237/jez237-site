@@ -810,3 +810,13 @@ body::after {
   .net-neuron { grid-template-columns: 72px minmax(0, 1fr); gap: 10px; }
   .net-neuron canvas { width: 72px; height: 72px; }
 }
+
+/* ---------- v5: the training page's hero, and the 3D feed-forward step in the Layers chapter ---------- */
+.net-px { display: block; width: 17px; height: 17px; border: 1px solid rgba(132,227,122,0.3); border-radius: 3px; background: rgba(132,227,122,var(--v, 0.05)); }
+.net-acc { display: block; width: 170px; height: 62px; }
+.net-acc-text { display: block; margin-top: 4px; color: var(--lab-gold); font: 700 11px var(--mono); }
+.stage-ff { height: clamp(300px, 36vw, 430px); margin-top: 14px; touch-action: pan-y; cursor: grab; outline: none; -webkit-user-select: none; user-select: none; }
+.stage-ff:focus-visible { box-shadow: inset 0 0 0 2px var(--lab-line-hot); }
+@media (max-width: 680px) {
+  .net-acc { width: 150px; height: 52px; }
+}

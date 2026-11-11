@@ -9,7 +9,8 @@
   <link rel="stylesheet" href="../assets/styles.css" />
   <link rel="stylesheet" href="../assets/site-enhance.css" />
   <link rel="stylesheet" href="../assets/workbench-theme.css" />
-  <link rel="stylesheet" href="lab.css?v=20261111a" />
+  <link rel="stylesheet" href="lab.css?v=20261111b" />
+  <link rel="stylesheet" href="extras.css?v=20261111b" />
   <meta name="description" content="A real language model runs in this page. Type a prompt and watch it become tokens, vectors, attention, layers and odds, then retrain the model yourself. Animated, step by step." />
   <link rel="canonical" href="https://jez237.com/how-ai-works/" />
   <meta property="og:type" content="website" />
@@ -17,10 +18,13 @@
   <meta property="og:title" content="How AI Works — Animated Interactive Guide" />
   <meta property="og:description" content="A real, tiny language model runs in this page. Type a prompt and watch every step: tokens, embeddings, attention, layers, sampling — then retrain it yourself." />
   <meta property="og:url" content="https://jez237.com/how-ai-works/" />
-  <meta property="og:image" content="https://jez237.com/assets/galaxy-home-20260702.webp" />
+  <meta property="og:image" content="https://jez237.com/how-ai-works/media/og-network.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="A 3D neural network with six layers of glowing neurons, titled How AI Works" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="How AI Works — Animated Interactive Guide" />
-  <meta name="twitter:image" content="https://jez237.com/assets/galaxy-home-20260702.webp" />
+  <meta name="twitter:image" content="https://jez237.com/how-ai-works/media/og-network.jpg" />
 </head>
 <body>
   <header id="site-nav"></header>
@@ -387,6 +391,18 @@
             </div>
 
             <div class="sub-block">
+              <h3>Inside one layer: the feed-forward step</h3>
+              <p>Attention moves information between tokens. Then each token is worked on alone, by a small feed-forward network of the same kind as the one at the top of this page. This is the real one from this page’s model, running on the last token of your prompt: 24 numbers go in, are spread across 64 working neurons, and 24 numbers come out to be added back to that token’s running vector. Drag to turn it. Click a neuron to keep its connections lit.</p>
+              <div class="control-row">
+                <button class="lab-button active" data-ff="0" type="button" aria-pressed="true">Layer 1</button>
+                <button class="lab-button" data-ff="1" type="button" aria-pressed="false">Layer 2</button>
+                <button class="lab-button" id="ffReplay" type="button">Send it through again</button>
+              </div>
+              <canvas id="ffCanvas" class="stage stage-ff" tabindex="0" role="img" aria-label="A 3D view of the feed-forward step inside one of this model’s layers: a four by six grid of inputs, an eight by eight grid of working neurons, and a four by six grid of outputs. Drag, or use the arrow keys, to turn it."></canvas>
+              <div class="trace-note" id="ffNote" aria-live="polite"></div>
+            </div>
+
+            <div class="sub-block">
               <h3>How big is the real thing?</h3>
               <div class="scale-grid three">
                 <div class="scale-card mine"><span>The model in this page</span><dl id="tinyScale"></dl></div>
@@ -439,6 +455,40 @@
               </aside>
             </div>
             <div class="trace-note" id="sampNote" aria-live="polite"></div>
+            <div class="sub-block" id="bigModel">
+              <h3>The same step in a much larger model</h3>
+              <p>The model in this page is tiny<span id="bmTiny"></span>. Here is the same step — scores, then odds, then a pick — in a real model called Qwen2.5-0.5B, which has about half a billion weights. It is far too big to run inside this page, so its output was recorded ahead of time. Nothing below is computed live. The page replays the recording.</p>
+              <div class="preset-row" id="bmPrompts" role="group" aria-label="Starting text"></div>
+              <div>
+                <div class="samp-text"><span class="bm-line" id="bmLine" aria-live="polite"></span><span class="caret" aria-hidden="true">▁</span></div>
+                <p class="strip-cap">White is the starting text. Gold is what the model added. A dotted underline marks a long shot: a token the model itself gave less than a 5% chance.</p>
+              </div>
+              <div class="samp-layout">
+                <div>
+                  <div class="bm-head"><span>next token</span><span class="s">score</span><span id="bmProbHead">chance</span></div>
+                  <div class="bm-bars" id="bmBars" role="group" aria-label="The ten most likely next tokens, with their chances"></div>
+                  <p class="strip-cap" id="bmHint"></p>
+                  <p class="strip-cap">This model scores every token it knows at every step, about 150,000 of them. Only the ten highest are listed. The last row adds up all the others.</p>
+                </div>
+                <aside class="samp-side">
+                  <label class="dial"><span>Temperature <output id="bmTempOut" for="bmTemp">1</output></span><input id="bmTemp" type="range" min="0" max="7" step="1" value="4"><small>0 always takes the top row · 1 uses the model's own odds · 2 is close to random</small></label>
+                  <div class="control-row">
+                    <button class="lab-button primary" id="bmNext" type="button">Next token</button>
+                    <button class="lab-button" id="bmAuto" type="button">Write the rest</button>
+                  </div>
+                  <div class="control-row">
+                    <button class="lab-button" id="bmAgain" type="button">Start again</button>
+                    <button class="lab-button" id="bmFive" type="button">Show 5 recorded runs</button>
+                  </div>
+                </aside>
+              </div>
+              <div class="trace-note" id="bmNote" aria-live="polite"></div>
+              <div class="mini-panel bm-runs" id="bmRuns" aria-live="polite" hidden></div>
+              <div class="ch-foot">
+                <div class="fine-print">Every score and percentage in this block is real output from <span data-bm="model">Qwen2.5-0.5B (base, not instruction-tuned)</span>, recorded ahead of time. The page does not run that model. It can only replay what was saved: the ten top-scoring tokens at each step, and a few short continuations that were sampled from those odds at each temperature. “Start again” picks one of the saved runs. It does not roll new dice. Scores were saved to two decimal places, so a percentage can be off by a point or two at low temperatures. This is a “base” model: it was not trained to follow instructions or to chat, so it continues text instead of answering. That is why it sometimes writes a quiz question, or a blank to fill in (____). The ⏎ sign marks a line break.</div>
+              </div>
+            </div>
+
             <div class="ch-foot">
               <div class="key-idea"><b>Key idea</b>The model does not look up an answer. It produces odds, and a sampler picks. Same prompt, different roll, different reply — which is why asking twice can give two answers.</div>
               <div class="fine-print">These are the real odds from this page's model (<span id="sampModelNote"></span>) for your prompt, and temperature, top-k, and top-p are applied to them exactly as a production sampler applies them. A tiny model trained on a tiny world is often far more certain than a large one, so try a short prompt such as “the” to see a wide spread.</div>
@@ -531,6 +581,26 @@
               <button class="lab-button" id="chatReset" type="button">Reset</button>
             </div>
             <div class="trace-note" id="chatNote" aria-live="polite"></div>
+            <div class="sub-block" id="baseVsChat">
+              <h3>The same model, before and after it was trained to chat</h3>
+              <p>These are recorded replies from two versions of one small model. The first is the base model, trained only to continue text. The second is the same model after extra training on conversations. Pick a question and compare.</p>
+              <div class="preset-row" id="bcQuestions" role="group" aria-label="Question"></div>
+              <div class="bc-cols" aria-live="polite">
+                <div class="mini-panel bc-col bc-base">
+                  <div class="x-cap">Base model: it just continues the text</div>
+                  <div class="bc-text" id="bcBase"></div>
+                </div>
+                <div class="mini-panel bc-col bc-chat">
+                  <div class="x-cap">After chat training: it answers you</div>
+                  <div class="bc-text" id="bcChat"></div>
+                </div>
+              </div>
+              <div class="trace-note" id="bcNote">The base model treats your question as the start of a page and keeps writing: the same lines again, or more of a web forum. After chat training, the likely continuation of a question is an answer. The answer is fluent. It is not always right.</div>
+              <div class="ch-foot">
+                <div class="fine-print">Both columns are real output, recorded ahead of time with each model always taking its most likely token. The first is <span data-bc="base">SmolLM2-360M (base)</span>. The second is <span data-bc="chat">SmolLM2-360M-Instruct (same model after chat training)</span>. They are the same size and the same design; the only difference is the chat training. “…” marks where a recording stops. Look closely at the chat-trained answers. One says a token is a label for a concept, when it is really a chunk of text. Another explains an error message from one programming language (JavaScript) as if it came from a different one (Python). Training teaches the shape of a helpful answer, not guaranteed facts.</div>
+              </div>
+            </div>
+
             <div class="ch-foot">
               <div class="key-idea"><b>Key idea</b>The model has no idea it is "in a chat". It is continuing a document that happens to be formatted as one. Roles, turns, and even stopping are conventions in the string, enforced by the app around the model.</div>
               <div class="fine-print">The replies here are scripted — this page's model knows about cats and gardeners, not tomatoes — and the marker spellings are illustrative; each model family has its own. The mechanism is real: one growing string, role markers, a system prompt you usually cannot see, and a stop marker. The token counts use this page's tokenizer.</div>
@@ -725,6 +795,29 @@
               </div>
               <div class="quiz-result" id="quizResult" aria-live="polite">Pick the safer approach.</div>
             </div>
+            <div class="sub-block spot-game" id="spotGame">
+              <h3>Spot the hallucination</h3>
+              <p>A hallucination is a confident claim with nothing behind it. An assistant has summarised the short source below. Every sentence sounds fine, but some are not backed by the source. Tick the ones you think are unsupported, then check each claim against the source.</p>
+              <div class="spot-grid">
+                <div class="mini-panel">
+                  <div class="x-cap" id="spotTitle">Source</div>
+                  <ol class="spot-lines" id="spotLines"></ol>
+                </div>
+                <div>
+                  <div class="x-cap" id="spotCap">Assistant's summary: tick the unsupported claims</div>
+                  <div class="spot-claims" id="spotClaims" role="group" aria-labelledby="spotCap"></div>
+                </div>
+              </div>
+              <div class="control-row">
+                <button class="lab-button primary" id="spotGo" type="button">Check against the source</button>
+                <span class="spot-round" id="spotRound">Round 1 of 3</span>
+              </div>
+              <div class="trace-note" id="spotResult" aria-live="polite">Fluent is not the same as supported.</div>
+              <div class="ch-foot">
+                <div class="fine-print">The sources and the summaries were written by hand for this game. No model produced them. They copy a real pattern: a model writes the sentence that is likely to come next, and a likely sentence can still be wrong. Checking each claim against a source, as you just did, is called grounding.</div>
+              </div>
+            </div>
+
           </div>
         </section>
 
@@ -759,23 +852,26 @@
   <script src="js/data.js?v=20261110b" defer></script>
   <script src="js/tinygpt.js?v=20261110b" defer></script>
   <script src="js/weights.js?v=20261110b" defer></script>
-  <script src="js/core.js?v=20261110b" defer></script>
-  <script src="js/mlp.js?v=20261111a" defer></script>
-  <script src="js/hero-weights.js?v=20261111a" defer></script>
-  <script src="js/net3d.js?v=20261111a" defer></script>
-  <script src="js/hero.js?v=20261111a" defer></script>
+  <script src="js/core.js?v=20261111b" defer></script>
+  <script src="js/mlp.js?v=20261111b" defer></script>
+  <script src="js/hero-weights.js?v=20261111b" defer></script>
+  <script src="js/net3d.js?v=20261111b" defer></script>
+  <script src="js/hero.js?v=20261111b" defer></script>
   <script src="js/trainer.js?v=20261110c" defer></script>
   <script src="js/chapters.js?v=20261110c" defer></script>
   <script src="js/journey.js?v=20261110b" defer></script>
   <script src="js/tokens.js?v=20261110b" defer></script>
   <script src="js/embeddings.js?v=20261110b" defer></script>
   <script src="js/attention.js?v=20261110b" defer></script>
-  <script src="js/layers.js?v=20261110b" defer></script>
+  <script src="js/layers.js?v=20261111b" defer></script>
   <script src="js/sampling.js?v=20261110b" defer></script>
   <script src="js/training.js?v=20261110b" defer></script>
   <script src="js/chat.js?v=20261110b" defer></script>
   <script src="js/context.js?v=20261110b" defer></script>
   <script src="js/agents.js?v=20261110b" defer></script>
+  <script src="js/bigmodel.js?v=20261111b" defer></script>
+  <script src="js/basechat.js?v=20261111b" defer></script>
+  <script src="js/spot.js?v=20261111b" defer></script>
   <script src="js/shell.js?v=20261111a" defer></script>
   <script src="../assets/site-enhance.js" defer></script>
   <script src="../assets/nav.js?v=nav-20260702b" defer></script>

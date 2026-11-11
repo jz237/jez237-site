@@ -206,4 +206,49 @@
       .map(r => '<div><dt>' + r[0] + '</dt><dd>' + r[1] + '</dd></div>').join('');
   }
   lens(0);
+
+  /* ---------- inside one layer: the feed-forward step, drawn in 3D with the model's own weights ---------- */
+  const ffCv = L.$('#ffCanvas');
+  if (ffCv && L.net3d) {
+    const m = ai.model, d = m.cfg.d, F = m.cfg.F, NLAY = m.cfg.L, ffNote = L.$('#ffNote');
+    let lay = 0, W = [new Float32Array(d * F), new Float32Array(F * d)];
+    // the model stores each matrix as [from][to]; the 3D view wants [to][from]
+    function loadWeights() {
+      const o1 = m.lay['W1' + lay], o2 = m.lay['W2' + lay];
+      for (let k = 0; k < d; k++) for (let j = 0; j < F; j++) W[0][j * d + k] = m.w[o1 + k * F + j];
+      for (let k = 0; k < F; k++) for (let j = 0; j < d; j++) W[1][j * F + k] = m.w[o2 + k * d + j];
+    }
+    const view3 = L.net3d(ffCv, {
+      layers: [{ r: 4, c: 6, name: 'IN', short: 'IN' }, { r: 8, c: 8, name: 'WORKING NEURONS', short: 'WORK' }, { r: 4, c: 6, name: 'OUT', short: 'OUT' }],
+      weights: g => W[g], gap: 7, gapSmall: 5.6, yaw: -0.72, hold: 2600,
+      header: small => 'LAYER ' + (lay + 1) + (small ? ' FEED-FORWARD' : ' FEED-FORWARD STEP  ·  ' + (2 * d + F) + ' NEURONS  ·  ' + (2 * d * F).toLocaleString() + ' WEIGHTS  ·  THIS MODEL’S REAL NUMBERS'),
+      describe: (l, i, v) => [
+        (l === 0 ? 'input ' : l === 1 ? 'working neuron ' : 'output ') + (i + 1) + ':  ' + (v >= 0 ? '+' : '−') + Math.abs(v).toFixed(2),
+        l === 0 ? 'one of the 24 numbers describing this token' : l === 1 ? d + ' weights in  ·  ' + d + ' weights out' : 'added back to the token’s running vector'
+      ],
+      onCycle: () => send()
+    });
+    function send() {
+      ai.trace(L.prompt.mids);                 // runs the model on the prompt; its working values are then readable
+      const n = m.n, last = n - 1, c = m.c[lay], nextIn = lay + 1 < NLAY ? m.c[lay + 1].xin : m.xout;
+      const vin = new Float32Array(d), hid = new Float32Array(F), out = new Float32Array(d);
+      for (let j = 0; j < d; j++) { vin[j] = c.mm[last * d + j]; out[j] = nextIn[last * d + j] - c.xmid[last * d + j]; }
+      for (let j = 0; j < F; j++) hid[j] = c.ha[last * F + j];
+      const vals = [vin, hid, out];
+      const mags = vals.map(a => { let mx = 1e-9; for (let i = 0; i < a.length; i++) if (Math.abs(a[i]) > mx) mx = Math.abs(a[i]); return Float32Array.from(a, v => Math.abs(v) / mx); });
+      view3.setPass({ vals, mags });
+      const piece = L.prompt.pieces[L.prompt.pieces.length - 1], busy = Array.from(mags[1]).filter(v => v > 0.3).length;
+      ffNote.innerHTML = '<strong>Layer ' + (lay + 1) + ', working on “' + L.esc(L.bpe.show(piece.s).replace(/^[^a-z']+/i, '') || piece.s) + '”, the last token of your prompt.</strong> Of the ' + F + ' working neurons, ' + (busy === 1 ? 'one is' : busy + ' are') + ' doing most of the work for this token (brighter than a third of the brightest). A different prompt lights a different set, and that is the whole trick: which neurons fire decides what gets written back.';
+    }
+    function refresh() { loadWeights(); view3.refreshWeb(); send(); }
+    L.$$('[data-ff]').forEach(b => b.addEventListener('click', () => {
+      lay = Number(b.dataset.ff);
+      L.$$('[data-ff]').forEach(o => { o.classList.toggle('active', o === b); o.setAttribute('aria-pressed', o === b ? 'true' : 'false'); });
+      refresh();
+    }));
+    L.$('#ffReplay').addEventListener('click', send);
+    L.onPrompt(send);
+    ai.onChange(st => { if (st !== 'training') refresh(); });
+    refresh();
+  }
 })();
