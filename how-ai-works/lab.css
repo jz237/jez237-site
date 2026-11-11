@@ -763,9 +763,9 @@ body::after {
 .net-hero .net-in { left: 14px; }
 .net-hero .net-out { right: 14px; }
 .net-cap { display: block; margin-bottom: 7px; color: var(--lab-muted); font: 700 10px var(--mono); letter-spacing: .08em; text-transform: uppercase; }
-.net-pad { display: grid; grid-template-columns: repeat(6, 17px); gap: 2px; touch-action: none; }
+.net-pad { display: grid; grid-template-columns: repeat(var(--n, 8), var(--cell, 14px)); gap: 2px; touch-action: none; }
 .ai-lab .net-cell {
-  width: 17px; height: 17px; min-width: 0 !important; min-height: 0 !important; padding: 0 !important; margin: 0 !important;
+  width: var(--cell, 14px); height: var(--cell, 14px); min-width: 0 !important; min-height: 0 !important; padding: 0 !important; margin: 0 !important;
   border: 1px solid rgba(132,227,122,0.3) !important; border-radius: 3px !important; box-shadow: none !important;
   background: rgba(132,227,122,var(--v, 0.05)) !important; cursor: crosshair; transform: none !important;
 }
@@ -799,7 +799,7 @@ body::after {
   .net-hero .net-in, .net-hero .net-out { position: static; }
   .net-hero .net-out { justify-self: end; }
   .net-hero .net-in, .net-hero .net-out { padding: 8px; }
-  .net-pad { grid-template-columns: repeat(6, 17px); }
+  .net-pad { --cell: 13px; }
   .net-outs { grid-template-columns: repeat(3, 48px); }
   .net-o { padding: 3px 4px; gap: 2px; font-size: 10px; }
   .net-o span { font-size: 12px; }
@@ -812,7 +812,7 @@ body::after {
 }
 
 /* ---------- v5: the training page's hero, and the 3D feed-forward step in the Layers chapter ---------- */
-.net-px { display: block; width: 17px; height: 17px; border: 1px solid rgba(132,227,122,0.3); border-radius: 3px; background: rgba(132,227,122,var(--v, 0.05)); }
+.net-px { display: block; width: var(--cell, 14px); height: var(--cell, 14px); border: 1px solid rgba(132,227,122,0.3); border-radius: 3px; background: rgba(132,227,122,var(--v, 0.05)); }
 .net-acc { display: block; width: 170px; height: 62px; }
 .net-acc-text { display: block; margin-top: 4px; color: var(--lab-gold); font: 700 11px var(--mono); }
 .stage-ff { height: clamp(300px, 36vw, 430px); margin-top: 14px; touch-action: pan-y; cursor: grab; outline: none; -webkit-user-select: none; user-select: none; }

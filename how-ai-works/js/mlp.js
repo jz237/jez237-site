@@ -1,4 +1,4 @@
-/* A small feed-forward network (a "multilayer perceptron") and the nine 6x6 shapes it learns to
+/* A small feed-forward network (a "multilayer perceptron") and the nine 8x8 shapes it learns to
    tell apart. No DOM in here: the page and tools/build-hero-weights.js both run this same file,
    so the weights that ship were trained by exactly the code the visitor can re-run in the hero. */
 (function (root, factory) {
@@ -148,34 +148,34 @@
     return true;
   };
 
-  /* ---------- the nine shapes, drawn on a 6x6 grid ---------- */
-  const N = 6;
+  /* ---------- the nine shapes, drawn on an 8x8 grid ---------- */
+  const N = 8;
   const NAMES = ['flat line', 'upright line', 'falling slope', 'rising slope', 'plus', 'cross', 'box', 'block', 'checks'];
   const GLYPHS = ['─', '│', '╲', '╱', '┼', '╳', '□', '■', '▦'];
   // clean = no speckle and full brightness (used for the example buttons)
   function make(cls, r, clean) {
     const x = new Float32Array(N * N), on = (rr, cc) => { if (rr >= 0 && rr < N && cc >= 0 && cc < N) x[rr * N + cc] = 1; }, int = n => Math.floor(r() * n);
     if (cls === 0 || cls === 1) {
-      const line = int(N), len = 4 + int(3), s = int(N - len + 1);
+      const line = int(N), len = N - 2 + int(3), s = int(N - len + 1);
       for (let i = 0; i < len; i++) cls ? on(s + i, line) : on(line, s + i);
     } else if (cls === 2 || cls === 3) {
-      const len = 4 + int(3), r0 = int(N - len + 1), c0 = int(N - len + 1);
+      const len = N - 2 + int(3), r0 = int(N - len + 1), c0 = int(N - len + 1);
       for (let i = 0; i < len; i++) on(r0 + i, cls === 2 ? c0 + i : c0 + len - 1 - i);
     } else if (cls === 4 || cls === 5) {
-      const cr = 1 + int(4), cc = 1 + int(4), arm = 1 + int(2);
+      const cr = 1 + int(N - 2), cc = 1 + int(N - 2), arm = 1 + int(N / 2 - 1);
       on(cr, cc);
       for (let k = 1; k <= arm; k++) {
         if (cls === 4) { on(cr, cc - k); on(cr, cc + k); on(cr - k, cc); on(cr + k, cc); }
         else { on(cr - k, cc - k); on(cr + k, cc + k); on(cr - k, cc + k); on(cr + k, cc - k); }
       }
     } else if (cls === 6) {
-      const h = 3 + int(3), w = 3 + int(3), r0 = int(N - h + 1), c0 = int(N - w + 1);
+      const h = 3 + int(N - 3), w = 3 + int(N - 3), r0 = int(N - h + 1), c0 = int(N - w + 1);
       for (let i = 0; i < h; i++) for (let j = 0; j < w; j++) if (!i || !j || i === h - 1 || j === w - 1) on(r0 + i, c0 + j);
     } else if (cls === 7) {
-      const h = 2 + int(2), w = 2 + int(2), r0 = int(N - h + 1), c0 = int(N - w + 1);
+      const h = 2 + int(N / 2 - 1), w = 2 + int(N / 2 - 1), r0 = int(N - h + 1), c0 = int(N - w + 1);
       for (let i = 0; i < h; i++) for (let j = 0; j < w; j++) on(r0 + i, c0 + j);
     } else {
-      const h = 4 + int(3), w = 4 + int(3), r0 = int(N - h + 1), c0 = int(N - w + 1), par = int(2);
+      const h = N - 2 + int(3), w = N - 2 + int(3), r0 = int(N - h + 1), c0 = int(N - w + 1), par = int(2);
       for (let i = 0; i < h; i++) for (let j = 0; j < w; j++) if ((i + j) % 2 === par) on(r0 + i, c0 + j);
     }
     if (!clean) for (let i = 0; i < x.length; i++) {
@@ -196,5 +196,5 @@
     return net.trainBatch(xs, ys, lr);
   }
 
-  return { MLP, rng, shapes: { N, NAMES, GLYPHS, make }, accuracy, trainStep, SIZES: [36, 64, 64, 64, 36, 9], GRID: [6, 8, 8, 8, 6, 3], LR: 0.003, BATCH: 16 };
+  return { MLP, rng, shapes: { N, NAMES, GLYPHS, make }, accuracy, trainStep, SIZES: [64, 144, 144, 144, 64, 9], GRID: [8, 12, 12, 12, 8, 3], LR: 0.003, BATCH: 16 };
 });

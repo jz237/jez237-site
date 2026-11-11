@@ -2,7 +2,7 @@
    while you watch. Each round is real: a shape goes forward (blue and pink), the error for the
    right answer is traced backwards through the same connections (gold and orange), and then the
    weights really are nudged, by this one example and a batch of others. It starts from random
-   weights, gets to about 97% in a couple of minutes, pauses, and starts again. */
+   weights, gets to about 95% in a few minutes, pauses, and starts again. */
 (function () {
   'use strict';
   const L = Lab, C = L.C, M = window.LabMLP, cv = L.$('#ddNet');
@@ -17,12 +17,12 @@
 
   const view = L.net3d(cv, {
     layers: GRID.map((n, l) => ({ r: n, c: n, name: names[l], short: shorts[l] })),
-    weights: g => net.W[g], speed: 1.45, hold: 700,
-    header: small => (small ? 'TRAINING' : 'TRAINING A FEED-FORWARD NETWORK') + '  ·  ' + neurons + ' NEURONS  ·  ' + net.weights.toLocaleString() + ' WEIGHTS' + (small ? '' : '  ·  STEP ' + steps.toLocaleString() + '  ·  ' + (phase === 'forward' ? 'FORWARD: THE GUESS' : 'BACKWARD: THE BLAME')),
-    color: (l, i, v) => (phase === 'backward' ? (v < 0 ? C.orange : C.gold) : l === G ? (i === guess ? C.gold : C.violet) : l === 0 ? C.green : v < 0 ? C.rose : C.cyan),
+    weights: g => net.W[g], gap: 6, gapSmall: 4.8, speed: 2.1, hold: 600,
+    header: small => (small ? 'TRAINING' : 'TRAINING A FEED-FORWARD NETWORK') + '  ·  ' + neurons + ' NEURONS  ·  ' + net.weights.toLocaleString() + ' WEIGHTS' + (small ? '' : '  ·  STEP ' + steps.toLocaleString() + '  ·  ' + (phase === 'forward' ? 'FORWARD: THE GUESS' : phase === 'backward' ? 'BACKWARD: THE BLAME' : 'NUDGING THE WEIGHTS')),
+    color: (l, i, v) => (phase !== 'forward' ? (v < 0 ? C.orange : C.gold) : l === G ? (i === guess ? C.gold : C.violet) : l === 0 ? C.green : v < 0 ? C.rose : C.cyan),
     describe: (l, i, v) => [
-      (l === G ? 'output “' + S.NAMES[i] + '”' : l === 0 ? 'input ' + (i + 1) : 'hidden ' + l + ', neuron ' + (i + 1)) + (phase === 'backward' ? ':  blame ' : ':  ') + (l === G && phase !== 'backward' ? Math.round(v * 100) + '%' : (v >= 0 ? '+' : '−') + Math.abs(v).toFixed(3)),
-      phase === 'backward' ? 'how much this neuron contributed to the error' : (l ? SIZES[l - 1] + ' weights in' : 'fed from outside') + (l < G ? '  ·  ' + SIZES[l + 1] + ' weights out' : '')
+      (l === G ? 'output “' + S.NAMES[i] + '”' : l === 0 ? 'input ' + (i + 1) : 'hidden ' + l + ', neuron ' + (i + 1)) + (phase !== 'forward' ? ':  blame ' : ':  ') + (l === G && phase === 'forward' ? Math.round(v * 100) + '%' : (v >= 0 ? '+' : '−') + Math.abs(v).toFixed(3)),
+      phase !== 'forward' ? 'how much this neuron contributed to the error' : (l ? SIZES[l - 1] + ' weights in' : 'fed from outside') + (l < G ? '  ·  ' + SIZES[l + 1] + ' weights out' : '')
     ],
     onCycle: next,
     onStage(l) {
@@ -32,6 +32,7 @@
 
   // the small read-outs in the corners: the shape being shown, and the share of fresh shapes it gets right
   const pad = L.$('#ddPad'), cells = [];
+  pad.style.setProperty('--n', GRID[0]);
   for (let i = 0; i < SIZES[0]; i++) { const s = L.h('span', { class: 'net-px' }); pad.append(s); cells.push(s); }
   const accCv = L.$('#ddAcc');
   function readouts() {
@@ -66,25 +67,35 @@
     view.setPass({ vals, mags, edges, dir: -1, tint: [C.gold, C.orange] });
     note('<strong>2. Backward.</strong> The gap between its answer and the right one is traced back through the same connections, right to left. Each neuron and weight gets its share of the blame.');
   }
+  let owed = 0;
   function learn() {
     net.step(M.LR, 1); steps++;                             // the nudge from the example you just watched
-    const more = Math.min(60, 10 + 8 * round);               // plus a batch of others, so it learns in minutes, not hours
-    for (let i = 0; i < more; i++) { M.trainStep(net, trnd, M.BATCH, M.LR); steps++; }
-    round++; acc = M.accuracy(net, L.rng(1000 + round), 250); hist.push(acc);
-    view.refreshWeb();
+    owed = Math.min(60, 10 + 8 * round);                     // plus a batch of others, so it learns in minutes, not hours
+    phase = 'learning';
+    note('<strong>3. Nudge.</strong> Every weight is being moved a little against its blame, for that shape and ' + owed * M.BATCH + ' others…');
   }
+  // those extra steps are spread over frames, a few milliseconds at a time, so the page never stalls
+  L.scene(accCv, dt => {
+    if (phase !== 'learning' || !dt) return;
+    const t0 = performance.now();
+    while (owed > 0 && performance.now() - t0 < 7) { M.trainStep(net, trnd, M.BATCH, M.LR); steps++; owed--; }
+    if (owed > 0) return;
+    round++; acc = M.accuracy(net, L.rng(1000 + round), 150); hist.push(acc);
+    view.refreshWeb();
+    good = acc >= 0.95 ? good + 1 : 0;
+    if (good >= 6 || round > 70) return restart();
+    const was = acc;
+    forward();
+    note('<strong>3. Nudge.</strong> Done. It now gets <strong>' + L.pct(was, 0) + '</strong> of fresh shapes right. Next shape…');
+  });
   function restart() {
-    net.init(((Date.now() & 0xffff) << 1) | 1); steps = 0; round = 0; good = 0; acc = M.accuracy(net, L.rng(3), 250); hist = [acc];
+    net.init(((Date.now() & 0xffff) << 1) | 1); steps = 0; round = 0; good = 0; owed = 0; acc = M.accuracy(net, L.rng(3), 150); hist = [acc];
     view.refreshWeb(); forward();
     note('<strong>Starting again from random weights.</strong> Right now it is guessing: about 1 in 9.');
   }
   function next() {
     if (phase === 'forward') return backward();
-    learn();
-    good = acc >= 0.97 ? good + 1 : 0;
-    if (good >= 6 || round > 70) return restart();
-    forward();
-    note('<strong>3. Nudge.</strong> Every weight was just moved a little against its blame, for that shape and ' + Math.min(60, 2 + 8 * round) * M.BATCH + ' or so others. It now gets <strong>' + L.pct(acc, 0) + '</strong> of fresh shapes right. Next shape…');
+    if (phase === 'backward') learn();
   }
   const again = L.$('#ddRestart');
   if (again) again.addEventListener('click', restart);

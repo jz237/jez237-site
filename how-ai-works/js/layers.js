@@ -220,7 +220,7 @@
     }
     const view3 = L.net3d(ffCv, {
       layers: [{ r: 4, c: 6, name: 'IN', short: 'IN' }, { r: 8, c: 8, name: 'WORKING NEURONS', short: 'WORK' }, { r: 4, c: 6, name: 'OUT', short: 'OUT' }],
-      weights: g => W[g], gap: 7, gapSmall: 5.6, yaw: -0.72, hold: 2600,
+      weights: g => W[g], gap: 7, gapSmall: 5.6, yaw: -0.72, hold: 2200, speed: 1.4,
       header: small => 'LAYER ' + (lay + 1) + (small ? ' FEED-FORWARD' : ' FEED-FORWARD STEP  ·  ' + (2 * d + F) + ' NEURONS  ·  ' + (2 * d * F).toLocaleString() + ' WEIGHTS  ·  THIS MODEL’S REAL NUMBERS'),
       describe: (l, i, v) => [
         (l === 0 ? 'input ' : l === 1 ? 'working neuron ' : 'output ') + (i + 1) + ':  ' + (v >= 0 ? '+' : '−') + Math.abs(v).toFixed(2),
