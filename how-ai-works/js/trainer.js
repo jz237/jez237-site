@@ -209,7 +209,14 @@
           (opts.data === 'finetune' ? 'Compare the lines above with what they said before.' : 'Scroll up — every chapter is now running on the weights you just trained.'));
       }
       L.scene(root, dt => {
-        if (running && dt) {
+        if (running && L.reduce && !L.state.paused) {
+          // reduced motion: no pacing for show and no mid-run redraws of the rest of the page, but the
+          // work is still sliced across frames so the page keeps painting and the Pause button works
+          const t0 = performance.now();
+          do batch(); while (done < total && performance.now() - t0 < 12);
+          if (done >= total) finish();
+          else readout('<strong>Training…</strong> Step ' + done + ' of ' + total + '. The sample sentences and the rest of the page update when it finishes.');
+        } else if (running && dt) {
           // paced to be watchable: one step per frame while the loss is plunging, two after that
           // (dt already carries the page's speed setting), and never more than fits in a frame
           const t0 = performance.now();
@@ -228,7 +235,6 @@
       $('run').addEventListener('click', () => {
         if (done >= total) { done = 0; hist = []; ema = null; order = []; lastSample = -99; lastEmit = 0; }
         running = !running;
-        if (L.reduce && running) { while (done < total) batch(); finish(); L.kick(); return; }
         readout(running ? '' : describe());
         L.kick();
       });

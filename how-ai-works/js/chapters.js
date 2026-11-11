@@ -60,6 +60,12 @@
     if (ch && acc()) { open(chapters.indexOf(ch), false); el.scrollIntoView({ block: 'start' }); }
   };
   window.addEventListener('hashchange', jump);
+  // Prev/Next and the chapter headers move around without touching the address, so a link to the
+  // hash that is already in it fires no hashchange; open its chapter directly
+  document.addEventListener('click', ev => {
+    const a = ev.target.closest && ev.target.closest('a[href*="#"]');
+    if (a && acc() && a.hash.length > 1 && a.hash === location.hash && a.pathname === location.pathname) jump();
+  });
   if (mq.addEventListener) mq.addEventListener('change', layout); else if (mq.addListener) mq.addListener(layout);
   if ('IntersectionObserver' in window && chapters.length) {
     const io = new IntersectionObserver(es => {
