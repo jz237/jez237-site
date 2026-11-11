@@ -43,7 +43,8 @@
     this.t = 0;
   };
   // x: Float32Array of inputs. Leaves every layer's values in this.a (the last layer is probabilities).
-  MLP.prototype.forward = function (x) {
+  // off (optional): per layer, a Uint8Array marking hidden neurons to switch off (they send 0). For looking only: backward() ignores it.
+  MLP.prototype.forward = function (x, off) {
     this.a[0].set(x);
     for (let g = 0; g < this.G; g++) {
       const src = this.a[g], out = this.a[g + 1], z = this.z[g], W = this.W[g], nIn = src.length, nOut = out.length, last = g === this.G - 1;
@@ -51,7 +52,7 @@
         let s = this.b[g][j];
         for (let i = 0, o = j * nIn; i < nIn; i++) s += W[o + i] * src[i];
         z[j] = s;
-        if (!last) out[j] = Math.tanh(s);
+        if (!last) out[j] = off && off[g + 1] && off[g + 1][j] ? 0 : Math.tanh(s);
       }
       if (last) {
         let m = -Infinity, sum = 0;
