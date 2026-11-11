@@ -1,5 +1,121 @@
 [
   {
+    "id": "2026-11-11-factual-infographic-factual-infographic-royal-gramma",
+    "title": "Factual infographic: Royal gramma",
+    "tests": "Same-day prepared transaction resumed by explicit authorization; no earlier image requested. USGS reports no synonyms. No numeric tank minimum asserted.; archive_slot=2026-11-11T00:20; concept=royal-gramma-plankton-hunting-reef-overhang; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: reef-fish-infographic; fish_scientific_name: Gramma loreto",
+    "prompt": "Create a fancy, richly colorful, exceptionally detailed PHOTOREALISTIC aquarium reef-fish atlas infographic, directly rendered finished artwork, not a photo of a poster. Subject is one real species only: Royal gramma, Gramma loreto. Premium marine natural-history art direction with flowing asymmetric composition, open callouts and natural visual pathways, never a grid of cards. Photographic fish and reef, with elegant readable editorial typography integrated into dark clear-water negative space. Do not turn this into a sparse title poster.\n\nAt upper left set large clear title ROYAL GRAMMA with italic Gramma loreto directly underneath, then smaller Fairy basslet. A magnificent enlarged lateral three-quarter hero fish sweeps diagonally from upper right toward the center-left above a Caribbean limestone ledge. It dominates more than half the composition: anatomically credible slender compressed body, large moist reflective eye, short snout, small terminal mouth, fine overlapping scales, correctly attached transparent fin membranes and delicate fin rays. Head and anterior half luminous violet-purple, rear half and tail golden yellow; natural speckled transition, large black spot at the FRONT of the dorsal fin, fine golden lines around the eye. Elongate purple pelvic-fin rays, not invented whiskers. No extra fins, no invented electric markings, no false coloration of the yellow rear. Underwater caustic shafts from upper left, cobalt and turquoise water, violet shadow, amber rimlight. Reef limestone with subtle ochre sponges and warm coral accents provides authentic texture without concealing the silhouette. No other fish species.\n\nCurving down from the hero, integrate a smaller photographic habitat view of the SAME species naturally belly-up beneath a shaded overhang, its belly toward the rock roof. Label 'Life beneath a ledge' and 'Western Atlantic • Caribbean reefs'. Include a graceful thin belly-to-roof annotation and short explanation 'May swim upside down beneath overhangs.' Do not portray a sick floating fish at the surface.\n\nUse a beautifully enlarged open-edge detail of the anterior dorsal fin and face, organically nested into upper-right negative space, with fine precise leader lines labeled 'Black dorsal spot', 'Purple forebody → golden tail', and 'Long pelvic rays'. An understated size line says 'Up to about 8 cm / 3 in'. Fish hero is enlarged, not falsely life-size.\n\nAcross the left-middle water, a curved current trail of realistic tiny copepod-like plankton leads toward the mouth, with a close-up biological study of a small crustacean marked 'Plankton detail • enlarged'. Place readable 'A plankton hunter' followed by 'Mostly tiny crustaceans; occasionally takes parasites from other fishes.' Do not depict corals as its primary food or imply obligate cleaning.\n\nA subtle secondary crevice study nestled into the lower reef shows the same species male beside a tiny patch of eggs in a protected hole, captioned 'Male guards eggs in a crevice nest'. Keep it modest and plausible, not huge fish eggs or live birth. A delicate curved annotation from ledge to cave reads 'Territorial around shelter • larger fish dominate feeding positions'. Do not claim routine sex change.\n\nWeave a well-spaced lower-right typographic pathway titled 'Planning a reef aquarium' into open water, visually connected to rock shelter and feeding trail, not enclosed in boxes. Exact concise statements: 'Provide sheltered rockwork and access to small meaty foods.' 'Wild groups do not guarantee aquarium group compatibility.' 'Reef-safe is not absolute: assess small fish and invertebrate tankmates.' Add smaller qualifier 'Care implications from wild biology; individual behavior varies.' Make recommendations distinct from observed biology, no unsupported tank-volume minimum or invented water parameters. Footer: 'Captive breeding is documented. Never release aquarium fish.' Small source line 'Sources: USGS • Smithsonian STRI • University of the West Indies'.\n\nComposition should have rich reef depth, exquisite photographic microtexture and beautiful lighting while preserving readable names, labels and substantive education. Vary study scale, give hero breathing room and let the reef contour guide the reader. Avoid box borders, dashboards, uniform panels, clip art, cartoon fish, painting effects, museum rooms, frames, product mockups, excessive words, unverified statistics or biological inventions. Omit decorative clutter before reducing label legibility.",
+    "image": "images/2026-11-11-factual-infographic-factual-infographic-royal-gramma.jpg",
+    "thumb": "thumbs/2026-11-11-factual-infographic-factual-infographic-royal-gramma.webp",
+    "color": "#454243",
+    "date": "2026-11-11",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "royal-gramma-plankton-hunting-reef-overhang",
+      "imageSha256": "3bdcd93b128a7ce0e549ee38a619d7cf0f2cd81b4447245b6be857c68e225643",
+      "imageDHash": "f8e2c38892d9db7b"
+    },
+    "factualInfographic": {
+      "topic": "Royal gramma (Gramma loreto) reef biology and aquarium compatibility",
+      "description": "A photorealistic species atlas of diagnostic anatomy, ledge-oriented behavior, plankton feeding, male egg care and cautiously framed aquarium implications.",
+      "sourceNote": "Verified USGS, Smithsonian STRI and UWI; aquarium suggestions explicitly distinguished as biology-based planning implications. Sources: https://nas.er.usgs.gov/queries/factsheet.aspx?SpeciesID=723 ; https://biogeodb.stri.si.edu/caribbean/en/thefishes/species/3566 ; https://sta.uwi.edu/fst/lifesciences/sites/default/files/lifesciences/documents/ogatt/Gramma_loreto%20-%20Fairy%20Basslet.pdf",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-11T13:22:27.168929+00:00",
+        "sources": [
+          {
+            "id": "usgs",
+            "publisher": "U.S. Geological Survey",
+            "title": "Fairy Basslet (Gramma loreto) Species Profile",
+            "sourceType": "government-agency",
+            "url": "https://nas.er.usgs.gov/queries/factsheet.aspx?SpeciesID=723"
+          },
+          {
+            "id": "stri",
+            "publisher": "Smithsonian Tropical Research Institute",
+            "title": "Shorefishes of the Greater Caribbean: Gramma loreto",
+            "sourceType": "museum",
+            "url": "https://biogeodb.stri.si.edu/caribbean/en/thefishes/species/3566"
+          },
+          {
+            "id": "uwi",
+            "publisher": "University of the West Indies",
+            "title": "Gramma loreto (Fairy Basslet), Online Guide to the Animals of Trinidad and Tobago",
+            "sourceType": "university",
+            "url": "https://sta.uwi.edu/fst/lifesciences/sites/default/files/lifesciences/documents/ogatt/Gramma_loreto%20-%20Fairy%20Basslet.pdf"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Accepted species Gramma loreto Poey, 1868; royal gramma and fairy basslet are common names, no scientific synonyms reported by USGS.",
+            "sourceIds": [
+              "usgs",
+              "stri"
+            ]
+          },
+          {
+            "claim": "Elongate compressed body, large eye, short snout; purple anterior and yellow posterior with a black spot at front of dorsal fin and yellow lines radiating from the eye; elongated pelvic rays.",
+            "sourceIds": [
+              "usgs",
+              "stri"
+            ]
+          },
+          {
+            "claim": "Reaches approximately 8 cm total length (about 3 inches); western Atlantic and Caribbean reef fish.",
+            "sourceIds": [
+              "usgs",
+              "stri",
+              "uwi"
+            ]
+          },
+          {
+            "claim": "Lives close to reef ledges, walls, caves and overhangs; may swim upside down with belly facing roof.",
+            "sourceIds": [
+              "usgs",
+              "uwi"
+            ]
+          },
+          {
+            "claim": "Feeds primarily on planktonic crustaceans; may also remove ectoparasites from other fishes; not an obligate cleaner.",
+            "sourceIds": [
+              "usgs",
+              "uwi"
+            ]
+          },
+          {
+            "claim": "Territorial reef groups have size-based dominance hierarchies; larger fish occupy prime feeding positions.",
+            "sourceIds": [
+              "usgs",
+              "uwi"
+            ]
+          },
+          {
+            "claim": "Males build nests in crevices and care for demersal eggs; sexes are separate after differentiation, not routine female-to-male sex change.",
+            "sourceIds": [
+              "usgs",
+              "uwi"
+            ]
+          },
+          {
+            "claim": "Aquarium planning implications, not tested minimum standards: provide shelter and feeding access consistent with ledge habitat and plankton diet; territorial behavior means wild aggregations do not imply aquarium group compatibility; small fish and invertebrates can be prey, so reef-safe is not an absolute guarantee.",
+            "sourceIds": [
+              "usgs",
+              "uwi"
+            ]
+          },
+          {
+            "claim": "Species has been bred in captivity. Never release aquarium fish: occurrence outside native range has been associated with possible aquarium release as well as natural expansion.",
+            "sourceIds": [
+              "usgs"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
     "id": "2026-11-10-factual-infographic-factual-infographic-ocean-internal-wave",
     "title": "Factual infographic: Ocean Internal Waves",
     "tests": "; archive_slot=2026-11-10T00:20; concept=ocean-internal-wave-ridge-propagation; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: factual-infographic",
