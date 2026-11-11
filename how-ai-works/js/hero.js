@@ -255,7 +255,9 @@
     const box = L.$('#netWhy');
     clearWhy();
     if (!why || !pass) { box.hidden = true; return; }
-    const base = pass.vals[G][winner], tmp = Float32Array.from(pass.vals[0]), d = new Float32Array(SIZES[0]);
+    // the baseline is recomputed here, not taken from the saved pass: while training, the weights have moved on
+    // since that pass began, and the flips below must be compared against the same weights
+    const tmp = Float32Array.from(pass.vals[0]), base = net.forward(tmp, mask)[winner], d = new Float32Array(SIZES[0]);
     let down = 0, at = -1, up = 0;
     for (let i = 0; i < d.length; i++) {
       const keep = tmp[i]; tmp[i] = keep > 0.5 ? 0 : 1;
