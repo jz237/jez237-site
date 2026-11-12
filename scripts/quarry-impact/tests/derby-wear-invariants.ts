@@ -1,3 +1,4 @@
+import {restoreLoadingSpeedBytes} from './loading-speed-invariants';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {gunzipSync} from 'node:zlib';
@@ -10,15 +11,16 @@ export function readDerbyWearPrevious(file:string):Buffer{
  const bytes=gunzipSync(read(entry.snapshot));assert.equal(hash(bytes),entry.before,file);return bytes;
 }
 export function restoreDerbyWearBytes(file:string,bytes:Buffer):Buffer{
+ bytes=restoreLoadingSpeedBytes(file,bytes);
  const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
  return readDerbyWearPrevious(file);
 }
 export function verifyDerbyWearRevision(){
  const manifest=revision();assert.equal(manifest.baseline,'d7a1c4b8579ac118bcfab54f6ced23af58519c08');
  for(const [file,entry]of Object.entries<any>(manifest.files)){
-  const bytes=readFileSync(new URL('../'+file,import.meta.url));assert.equal(hash(bytes),entry.after,file);
+  const bytes=restoreLoadingSpeedBytes(file,readFileSync(new URL('../'+file,import.meta.url)));assert.equal(hash(bytes),entry.after,file);
   assert.equal(hash(restoreDerbyWearBytes(file,bytes)),entry.before,file);
  }
- for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(readFileSync(new URL('../'+file,import.meta.url))),expected,file+' is outside the DerbyWear release');
+ for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(restoreLoadingSpeedBytes(file,readFileSync(new URL('../'+file,import.meta.url)))),expected,file+' is outside the DerbyWear release');
  assert.equal(manifest.previousFixtureCount,9536);assert.equal(Object.keys(manifest.protected).filter(file=>file.startsWith('tests/fixtures/')).length,9536);
 }

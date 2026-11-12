@@ -7,7 +7,7 @@
 <meta name="description" content="Skyhold 2026: an original planet-defence shooter in real-time 3D. Fly a gunship round and round a small planet, from the day side into the night, shoot down the machines lifting your settlers off the ground, catch the ones that fall and bring down a colossal carrier on each of five worlds. Endless Orbit, online co-op, upgrades, medals, instant replays and a smart demo mode.">
 <title>Skyhold 2026</title>
 <link rel="icon" href="data:,">
-<link rel="modulepreload" href="js/main.js?v=26">
+<link rel="modulepreload" href="js/main.js?v=arcade-polish-1">
 <link rel="modulepreload" href="js/config.js?v=26">
 <link rel="modulepreload" href="js/sim.js?v=26">
 <link rel="modulepreload" href="js/ai.js?v=26">
@@ -362,6 +362,9 @@ table.hs tr.me td { color: #fff; background: rgba(255, 179, 71, .1); }
 .card .en-grid { grid-template-columns: repeat(4, 1fr); } .card .en-grid.car { grid-template-columns: repeat(3, 1fr); }
 .card .gs i em { display: none; }
 .card .gs b { font-size: 13px; letter-spacing: .06em; } .card .gs small { font-size: 8px; letter-spacing: .04em; } .card .gs i { top: 3px; right: 3px; padding: 1px 4px; font-size: 8px; }
+
+.diffrow{flex-wrap:wrap;gap:8px}.diffrow .seg{flex-wrap:wrap}
+@media(max-width:480px){.diffrow .seg{width:100%;justify-content:space-between}.diffrow .seg button{padding:7px 6px;letter-spacing:.04em}}
 </style>
 </head>
 <body>
@@ -532,7 +535,7 @@ table.hs tr.me td { color: #fff; background: rgba(255, 179, 71, .1); }
   </div></div>
 
   <div class="screen hidden" id="help"><div class="card">
-    <h2>HOW TO PLAY</h2>
+    <h2>HOW TO PLAY</h2><p><b>Start here:</b> fly toward a settler being lifted, shoot the lifting machine, then catch the falling settler. Bring settlers safely back to the ground. The in-game prompts explain each action as you need it.</p>
     <p>You fly the <b>WARDEN</b> gunship round and round a small planet (it wraps: fly on and you come back round, through day and night). <b>Settlers</b> live in domed colonies on the ground. <b>LIFTERS</b> warp in, go down for a settler and carry it up: one that reaches the top of the sky fuses with its captive into a fast, vicious <b>HUSK</b>. Shoot the lifter and the settler falls: <b>catch</b> it and fly low to set it down. A settler dropped from low down lands safely by itself.</p>
     <p>Clear every machine to end a wave. After four waves a <b>CARRIER</b> arrives: shoot its glowing <b>weak points</b> (line up with them; the hull stops other shots). Lose every settler and the colony falls: lifters turn into husks for the rest of that world.</p>
     <h3>WHAT TO DO NEXT</h3><p>The line under the top bar always says what to do next. The <b>SCANNER</b> strip at the top shows the whole planet: settlers (green), lifters (amber, red when they have someone), everything else, and the bracket where you are. A red marker at the screen edge points to a settler being lifted.</p>
@@ -600,6 +603,6 @@ addEventListener('error', (e) => window.__shErrors.push(String(e.message || e)))
 addEventListener('unhandledrejection', (e) => window.__shErrors.push('rejection: ' + String(e.reason && e.reason.message || e.reason)));
 (() => { const ce = console.error; console.error = (...a) => { window.__shErrors.push(a.map(String).join(' ')); ce.apply(console, a); }; })();
 </script>
-<script type="module" src="js/main.js?v=26"></script>
+<script type="module" src="js/main.js?v=arcade-polish-1"></script>
 </body>
 </html>

@@ -1073,6 +1073,7 @@ async function renderScores(tab, diff = G.scoreDiff || settings.diff) {
 }
 
 // keyboard / pad in menus and in play
+for (const event of ['pointermove','focusin','wheel','scroll']) document.addEventListener(event, () => { G.idleT = 0; }, { passive: true, capture: true });
 I.on('any', () => { G.idleT = 0; if (G.mode === 'demo' && G.state === 'play' && performance.now() - G.demoStartT > 600) { A.unlock(); toTitle(); } });
 I.on('pause', () => { if (G.photo) exitPhoto(); else if (G.state === 'play') pause(); else if (G.state === 'paused' || G.state === 'paused-online') resume(); else if (G.state === 'replay') endReplay(); else if (G.screen && G.screen !== 'title') act('back'); });
 I.on('confirm', () => { if (G.screen && selEl) selEl.click(); });
@@ -1379,7 +1380,7 @@ function scenicStep(dt) {
   if (W.over || W.phase === 'clear') scenic(R.lookI);
   if (G.state === 'title' && G.screen === 'title') {
     G.idleT += dt;
-    if (G.idleT > (params.has('demo') ? 1 : 22)) { G.demoStartT = performance.now(); startDemo(); }
+    if (G.idleT > (params.has('demo') ? 1 : 90)) { G.demoStartT = performance.now(); startDemo(); }
   }
 }
 // what to do right now: for the autopilot its goal (and what it is dodging), for a player the next objective

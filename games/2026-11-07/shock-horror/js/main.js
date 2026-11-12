@@ -20,7 +20,7 @@ const store = { get(k, d) { try { const v = localStorage.getItem('sh.' + k); ret
 const FIXED = Q.has('fixed');
 
 // ------------------------------------------------------------------ settings and saves
-const settings = Object.assign({ music: 60, sfx: 90, voice: 90, talk: 'on', flash: 'full', shake: '1', tips: 'on', rumble: 'on', touch: 'auto', quality: 'auto', diff: 'normal', scares: 'full', subs: 'on' }, store.get('settings', {}));
+const settings = Object.assign({ music: 60, sfx: 90, voice: 90, talk: 'on', flash: 'full', shake: '1', tips: 'on', rumble: 'on', touch: 'auto', quality: 'auto', diff: 'normal', scares: 'full', subs: 'on', hud: 'immersive' }, store.get('settings', {}));
 const saveSettings = () => store.set('settings', settings);
 const journal = Object.assign({ relic: [], fossil: [], wonder: [], note: [], creature: [], secret: 0, endless: [], cache: [], fear: [] }, store.get('journal', {}));
 const saveJournal = () => { store.set('journal', journal); if (typeof checkUnlocks === 'function') checkUnlocks(); };
@@ -68,6 +68,7 @@ const G = { state: 'boot', screen: 'title', mode: 'title', W: null, run: null, a
 window.__gd = { G, R, A, I, S, VERSION, settings, journal };
 
 function applySettings() {
+  document.body.classList.toggle('immersive-hud', settings.hud === 'immersive');
   A.vol.music = settings.music / 100; A.vol.sfx = settings.sfx / 100; A.vol.voice = settings.voice / 100; A.applyVolumes();
   CALM.on = settings.flash === 'reduced';
   R.view.shake = +settings.shake;
@@ -544,7 +545,7 @@ function onFind(e) {
   if (e.kind === 'map') { caption('X MARKS THE SPOT · CHECK YOUR MAP'); }
   if (e.kind === 'cache' && journal.cache.length >= 5) award('caches5');
   const f = $('find');
-  f.className = e.kind === 'note' ? 'note' : '';
+  f.className = e.kind === 'note' ? 'note' : 'collection-only';
   f.querySelector('.k').textContent = (isNew ? 'NEW ' : '') + kindName + ' FOUND';
   f.querySelector('.n').textContent = e.kind === 'note' ? 'Scrawled in pencil, the page is stained:' : e.name;
   f.querySelector('.t').textContent = e.text;
@@ -568,6 +569,7 @@ function popWorld(x, y, text, cls) {
   setTimeout(() => { d.remove(); popN--; }, 1200);
 }
 function popBanner(a, b) {
+  if (settings.hud === 'immersive' && ['MEDAL','UNLOCKED','SECRET ROOM'].includes(a)) return;
   const el = $('banner'); el.querySelector('.b1').textContent = a; el.querySelector('.b2').textContent = b;
   el.classList.remove('hidden', 'go'); void el.offsetWidth; el.classList.add('go');
   clearTimeout(G.bannerT); G.bannerT = setTimeout(() => el.classList.add('hidden'), 2200);
@@ -576,7 +578,7 @@ function caption(t, death) { const c = $('caption'); c.textContent = t; c.classN
 // a coin (or gem) flies from the pickup to the gold counter
 let flyN = 0;
 function flyCoin(x, y, gem) {
-  if (flyN > 10 || !document.body.animate) return;
+  if (settings.hud === 'immersive' || flyN > 10 || !document.body.animate) return;
   const [sx, sy, vis] = R.toScreen(x, y); if (!vis) return;
   const box = $('popups').getBoundingClientRect(), t = $('score').getBoundingClientRect();
   const tx = t.left - box.left + Math.min(40, t.width * 0.5), ty = t.top - box.top + t.height / 2;
@@ -609,7 +611,7 @@ function tips(W) {
   const P = W.players[0], M = W.M, k = KEYN();
   const near = (kind, r) => { const cx = Math.floor(P.x), cy = Math.floor(P.y); for (let y = cy - r; y <= cy + r; y++) for (let x = cx - r; x <= cx + r; x++) if (x >= 0 && y >= 0 && x < M.w && y < M.h && M.tiles[y * M.w + x] === kind) return true; return false; };
   if (P.inCage) return;
-  tip('move', `Move with <kbd>A</kbd> <kbd>D</kbd>, jump with <kbd>${k.jump}</kbd>. Find the <b>lift down</b> at the bottom of the level.`, I.lastKind !== 'touch' || true)
+  tip('move', `${I.lastKind === 'touch' ? 'Drag with your left thumb to move' : I.lastKind === 'pad' ? 'Move with the left stick or D-pad' : 'Move with <kbd>A</kbd> <kbd>D</kbd>'}, jump with <kbd>${k.jump}</kbd>. Find the <b>lift down</b> at the bottom of the level.`, true)
   || tip('ladder', `Hold <kbd>${k.up}</kbd> on a ladder to climb. Ladders always catch a fall.`, near(T.LADDER, 2))
   || tip('soft', `Loose rubble: swing your <b>PICK</b> <kbd>${k.pick}</kbd> to clear it.`, near(T.SOFT, 2))
   || tip('hard', `A cracked boulder. Throw <b>DYNAMITE</b> <kbd>${k.dyn}</kbd> at it — then <b>run</b>, it hurts you too.`, near(T.HARD, 3))
@@ -772,7 +774,7 @@ function tick(dt) {
     }
   } else if (G.state === 'title') {
     G.idleT += dt;
-    if (G.idleT > 14 && G.screen === 'title' && !Q.has('test')) startDemo();
+    if (G.idleT > 90 && G.screen === 'title' && !Q.has('test')) startDemo();
   }
   // draw the world as it is NOW (the tick may have just started a new level, e.g. the demo into a guardian lair)
   const Wn = G.W;
@@ -858,6 +860,7 @@ document.addEventListener('input', (e) => { const r = e.target.closest('[data-se
 I.on('tap', (k) => { if (k === 'pause') { if (G.state === 'play') pause(); else if (G.state === 'paused') resume(); } if (k === 'map') act('map'); });
 I.on('pause', () => { if (G.state === 'museum') { if (G.screen === 'locker') back(); else toTitle(); return; } if (G.replay) { endReplay(); return; } if (G.state === 'play') pause(); else if (G.state === 'paused' && G.screen === 'pause') resume(); else if (G.screen && G.screen !== 'title' && G.screen !== 'results' && G.screen !== 'shop') back(); });
 I.on('map', () => { if (G.state === 'play' && G.mode !== 'demo') act('map'); else if (G.screen === 'map') back(); });
+for (const event of ['pointermove','focusin','wheel','scroll']) document.addEventListener(event, () => { if (G.state === 'title') G.idleT = 0; }, { passive: true, capture: true });
 I.on('any', () => { G.idleT = 0; if (G.mode === 'demo') endDemo(); });
 I.on('back', () => { if (G.screen && !['title', 'results', 'shop'].includes(G.screen)) back(); });
 // keyboard / pad menu navigation

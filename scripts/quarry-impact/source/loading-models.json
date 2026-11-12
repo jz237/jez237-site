@@ -1,0 +1,47 @@
+{
+  "method": "Meshopt with 16-bit positions, 12-bit normals, 14-bit UVs; no triangle reduction; original assets retained",
+  "models": [
+    {
+      "name": "fir-medium-a",
+      "previousBytes": 11554818,
+      "bytes": 5009495,
+      "optimized": true,
+      "triangles": 190000
+    },
+    {
+      "name": "fir-medium-b",
+      "previousBytes": 10121924,
+      "bytes": 4412462,
+      "optimized": true,
+      "triangles": 190000
+    },
+    {
+      "name": "fir-medium-c",
+      "previousBytes": 10170703,
+      "bytes": 4472791,
+      "optimized": true,
+      "triangles": 190000
+    },
+    {
+      "name": "quarry-north-fir-0",
+      "previousBytes": 12082830,
+      "bytes": 12082830,
+      "optimized": false,
+      "triangles": 1316590
+    },
+    {
+      "name": "quarry-north-fir-1",
+      "previousBytes": 10002235,
+      "bytes": 10002235,
+      "optimized": false,
+      "triangles": 1075378
+    },
+    {
+      "name": "quarry-north-fir-2",
+      "previousBytes": 6974381,
+      "bytes": 6974381,
+      "optimized": false,
+      "triangles": 750233
+    }
+  ]
+}

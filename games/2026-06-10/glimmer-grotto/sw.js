@@ -1,5 +1,5 @@
 const CACHE_PREFIX = "glimmer-grotto-";
-const CACHE = "glimmer-grotto-v45";
+const CACHE = "glimmer-grotto-v46";
 const SCOPE_URL = new URL("./", self.registration.scope);
 const SHELL_URL = new URL("./", SCOPE_URL);
 const ASSET_DIRECTORY_URL = new URL("assets/", SCOPE_URL);

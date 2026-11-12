@@ -5,7 +5,7 @@ import {QUARRY_DAYLIGHT} from './quarry-art-direction';
 import { GLTFLoader } from './model-loader';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { HDRLoader } from 'three/addons/loaders/HDRLoader.js';
-import type { CarKind } from './rules';
+import { CAR_KINDS, type CarKind } from './rules';
 import { finishGlass, finishPaint } from './car-materials';
 import { configureCoupe } from './coupe-realism';
 import { prepareWreckGeometry } from './wreck-geometry';
@@ -106,42 +106,53 @@ function batchRigidChildren(group: THREE.Object3D) {
   }
 }
 
-export async function loadCars(progress: (s: string) => void) {
-  const loader = new GLTFLoader();
-  const loadedKinds: CarKind[] = ['coupe', 'sedan', 'hatch', 'muscle', 'wagon', 'utility', 'compact', 'van', 'tern', 'marten', 'buggy', 'shuttle', 'regent', 'trail', 'kite', 'morrow', 'alder', 'saber', 'starfin', 'tordal', 'linnet', 'pipit', 'ravenhill', 'fernleigh', 'cornet', 'hollins'];
-  const kinds: CarKind[] = loadedKinds;
-  // Start independent transfers together; preserve template processing order.
-  const [loaded] = await Promise.all([Promise.all(loadedKinds.map(kind => loader.loadAsync(url('models/' + kind + '.glb')))),prepareWheelPresentation()]);
-  for (const [index, kind] of kinds.entries()) {
-    progress('Preparing ' + kind + ' bodywork');
-    const gltf = loaded[index];
-    alignWreckSeams(gltf.scene);
-    // Keep the window seals with the moving door instead of batching them
-    // into a fixed material group across the whole car.
-    gltf.scene.traverse(o=>{if(o.name.startsWith('seal_BodyDoor'))o.name='panel_'+o.name;});
-    batch(gltf.scene, true);
-    if (kind === 'buggy') for (const corner of ['FL', 'FR', 'RL', 'RR']) {
-      const shock = gltf.scene.getObjectByName('suspension_' + corner + '_shock');
-      if (shock) batchRigidChildren(shock);
-    }
-    // Shared refined templates are built once. Cars clone their deformable
-    // buffers; no remeshing, loading or asynchronous work occurs during a hit.
-    // A 28cm skin grid still resolves the 70cm light-contact footprint. Avoid
-    // adding dense vertices to every opponent for sub-pixel crease detail.
-    gltf.scene.traverse(o => {
-      if (!(o instanceof THREE.Mesh) || o.name.startsWith('suspension_')) return;
-      let parent = o.parent;
-      while (parent && parent !== gltf.scene) {
-        if (parent.name.startsWith('wheel_') || parent.name.startsWith('suspension_')) return;
-        parent = parent.parent;
+const pendingCars = new Map<CarKind, Promise<void>>();
+let wheelsReady: Promise<void> | undefined;
+/** Load exactly the requested roster; concurrent requests share work and failures can retry. */
+export async function loadCars(progress: (s: string) => void, kinds: readonly CarKind[] = CAR_KINDS) {
+  const results = await Promise.allSettled([...new Set(kinds)].map(kind => {
+    if (templates.has(kind)) return;
+    const existing = pendingCars.get(kind);
+    if (existing) return existing;
+    const pending = (async () => {
+      const [gltf] = await Promise.all([
+        new GLTFLoader().loadAsync(url('models/' + kind + '.glb')),
+        wheelsReady ??= prepareWheelPresentation().catch(error => { wheelsReady = undefined; throw error; }),
+      ]);
+      progress('Preparing ' + kind + ' bodywork');
+      alignWreckSeams(gltf.scene);
+      // Keep the window seals with the moving door instead of batching them
+      // into a fixed material group across the whole car.
+      gltf.scene.traverse(o=>{if(o.name.startsWith('seal_BodyDoor'))o.name='panel_'+o.name;});
+      batch(gltf.scene, true);
+      if (kind === 'buggy') for (const corner of ['FL', 'FR', 'RL', 'RR']) {
+        const shock = gltf.scene.getObjectByName('suspension_' + corner + '_shock');
+        if (shock) batchRigidChildren(shock);
       }
-      const old = o.geometry;
-      o.geometry = wreckTopology(old, o.name.startsWith('detail_') ? .46 : .28);
-      old.dispose();
-    });
-    templates.set(kind, gltf.scene);
-  }
+      // Shared refined templates are built once. Cars clone their deformable
+      // buffers; no remeshing, loading or asynchronous work occurs during a hit.
+      // A 28cm skin grid still resolves the 70cm light-contact footprint. Avoid
+      // adding dense vertices to every opponent for sub-pixel crease detail.
+      gltf.scene.traverse(o => {
+        if (!(o instanceof THREE.Mesh) || o.name.startsWith('suspension_')) return;
+        let parent = o.parent;
+        while (parent && parent !== gltf.scene) {
+          if (parent.name.startsWith('wheel_') || parent.name.startsWith('suspension_')) return;
+          parent = parent.parent;
+        }
+        const old = o.geometry;
+        o.geometry = wreckTopology(old, o.name.startsWith('detail_') ? .46 : .28);
+        old.dispose();
+      });
+      templates.set(kind, gltf.scene);
+    })().finally(() => pendingCars.delete(kind));
+    pendingCars.set(kind, pending);
+    return pending;
+  }));
+  const failure = results.find((result): result is PromiseRejectedResult => result.status === 'rejected');
+  if (failure) throw failure.reason;
 }
+
 function hasNamedParent(object:THREE.Object3D,prefix:string){for(let p:THREE.Object3D|null=object;p;p=p.parent)if(p.name.startsWith(prefix))return true;return false;}
 export function cloneCar(kind: CarKind, color: number, armor = 0) {
   const root = templates.get(kind)!.clone(true);

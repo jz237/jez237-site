@@ -1,0 +1,12 @@
+/* Keep every puzzle tile visible while using touch controls in portrait. */
+@media (pointer:coarse) and (orientation:portrait) and (max-width:700px){
+ .game-stage{display:flex;flex-direction:column;gap:10px}
+ .game-frame{order:0;aspect-ratio:auto;display:flex;flex-direction:column;gap:10px;overflow:visible;background:none;border:0;box-shadow:none}
+ .game-mount{height:auto!important;aspect-ratio:16/9;border:1px solid #acffcb33;border-radius:16px;overflow:hidden;background:#061414}
+ .game-mount canvas{height:100%!important}
+ .game-tools{position:static;transform:none;align-self:center;order:1}
+ .tutorial-card,.mechanic-status{position:static;inset:auto;transform:none;width:100%;max-width:none;order:2;margin:0;animation:none}
+ .touch-controls{position:relative;inset:auto;order:3;width:100%;padding:4px 8px;min-height:140px}
+ .play-screen{padding-top:12px}
+ .play-screen .level-header{margin-bottom:10px}
+}
