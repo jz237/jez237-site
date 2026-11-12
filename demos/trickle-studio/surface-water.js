@@ -1,8 +1,9 @@
 import * as T from '../aquaclear-studio/vendor/three.module.js';
+import {liquify} from '../filter-runtime/liquid.js?v=1';
 import {outletActive,padLoading,transport} from './dynamics.js?v=3';
 const V=(...a)=>new T.Vector3(...a),clamp=T.MathUtils.clamp,TAU=Math.PI*2;
 export function createSurfaceWater({group,parts}){
- const mat=new T.MeshPhysicalMaterial({color:'#a8e1df',roughness:.055,metalness:.08,transparent:true,opacity:.62,depthWrite:false,clearcoat:1,side:T.DoubleSide});
+ const mat=liquify(new T.MeshPhysicalMaterial({color:'#a8e1df',roughness:.055,metalness:.08,transparent:true,opacity:.62,depthWrite:false,clearcoat:1,side:T.DoubleSide}));
  const o=new T.Object3D(),up=V(0,1,0);
  const pendants=new T.InstancedMesh(new T.SphereGeometry(1,12,8),mat,63);pendants.name='tray-pendant-drops';group.add(pendants);
  const lips=new T.InstancedMesh(new T.TorusGeometry(.043,.006,6,20),mat,63);lips.name='wet-outlet-rims';group.add(lips);
