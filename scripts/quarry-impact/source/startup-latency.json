@@ -1,0 +1,54 @@
+{
+  "baseline": "ebd928195894a87362a3cbd45c02c1bfd73fef85",
+  "method": "Three alternating pairs of fresh muted Chrome processes. Mobile viewport 390x844, touch enabled, deviceScaleFactor 1, no network/CPU throttle. Same local server serves the committed baseline and new dist. menuMs includes the first rendered menu frame; Start tested on the first pair.",
+  "samples": [
+    {
+      "version": "before",
+      "menuMs": 6571,
+      "bytes": 141690946,
+      "startMs": 3036,
+      "errors": []
+    },
+    {
+      "version": "after",
+      "menuMs": 5178,
+      "bytes": 141692136,
+      "startMs": 3090,
+      "errors": []
+    },
+    {
+      "version": "after",
+      "menuMs": 5454,
+      "bytes": 141692136,
+      "errors": []
+    },
+    {
+      "version": "before",
+      "menuMs": 6528,
+      "bytes": 141690946,
+      "errors": []
+    },
+    {
+      "version": "before",
+      "menuMs": 6910,
+      "bytes": 141690946,
+      "errors": []
+    },
+    {
+      "version": "after",
+      "menuMs": 5477,
+      "bytes": 141692136,
+      "errors": []
+    }
+  ],
+  "medianMenuMs": {
+    "before": 6571,
+    "after": 5454
+  },
+  "changes": [
+    "Start independent assets before physics construction",
+    "Fetch northern geometry, textures and atlases together",
+    "Compile fullscreen effects with world shaders",
+    "Capture one reflection cube face per frame, including initial capture"
+  ]
+}

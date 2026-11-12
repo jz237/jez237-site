@@ -115,7 +115,9 @@ export class LocalReflections {
     this.renderer.shadowMap.autoUpdate = false;
     this.renderer.shadowMap.needsUpdate = false;
     try {
-      if (!this.initialized || force) {
+      // Keep the sky reflection until the first complete six-face capture.
+      // Initializing must obey the same one-face budget as later updates.
+      if (force) {
         this.camera.update(this.renderer, this.scene);
         this.face = 0;
       } else {
