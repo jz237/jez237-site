@@ -1,3 +1,4 @@
+import {createPractice, advancePractice} from './practice.js?v=1';
 // Skyhold 2026 — game flow, menus, HUD (with the scanner strip), commentary, demo director and the frame loop.
 import { VERSION, SECTORS, STEP, F, C, H, BOSSES, UPGRADES, UP_KEYS, UP_COST, MEDALS, parTime, TYPICAL_UP, START_LIVES, DIFFICULTY, POWERUPS, LIVERIES, CP_NAMES, WAVES, ENEMY, SHIPS, SHIP_KEYS, RIVALS, MASTERY, mastLevel, SPECIALS } from './config.js?v=26';
 import { makeWorld, step, stepGuest, drainEvents, wd, wp, settlersLeft, nodePos, CHAIN_T, chainMult, beamRange } from './sim.js?v=26';
@@ -67,7 +68,7 @@ function say(name, o = {}) {
 function rumble(strong, weak, ms) { if (settings.rumble === 'off' || G.mode === 'demo' || G.mode === 'playthrough' || G.mode === 'title') return; I.rumble(strong, weak, ms); }
 
 // ------------------------------------------------------------------ screens
-const SCREENS = ['title', 'aiwatch', 'sectors', 'upgrades', 'results', 'scores', 'medals', 'options', 'help', 'online', 'pause'];
+const SCREENS = ['title', 'aiwatch', 'sectors', 'upgrades', 'results', 'scores', 'medals', 'options', 'help', 'online', 'pause', 'practice-coach'];
 function show(id, push = true) {
   if (push && G.screen && G.screen !== id) G.back.push(G.screen);
   for (const s of SCREENS) $(s).classList.toggle('hidden', s !== id);
@@ -133,6 +134,7 @@ function scenic(look) {
 
 // ------------------------------------------------------------------ starting play
 function stopPlay() {
+  G.practice=null; $('practice-coach').classList.add('hidden'); $('practice-target').classList.add('hidden');
   A.stopLoops();
   G.replay = null; G.ai = null; G.timeScale = 1; A.setRate(1); R.shot = null;
   for (const id of ['letterbox', 'bossbar', 'tut', 'banner', 'caption', 'intent', 'objective']) $(id).classList.add('hidden');
@@ -140,6 +142,33 @@ function stopPlay() {
 }
 function newSeed() { return params.has('seed') ? +params.get('seed') : (Math.random() * 1e9) | 0; }
 const assistOf = () => ASSIST[settings.assist] || 0;
+function startPractice() {
+  G.mode='practice';G.run=null;
+  const session=createPractice();enterPlay(session.world);G.ai=null;G.practice=session;
+  $('practice-coach').classList.remove('hidden');updatePracticeCoach();
+}
+function updatePracticeCoach() {
+  const session=G.practice;if(!session)return;
+  const stage=session.stage, key=stage+':'+I.lastKind;
+  if(session.label!==key){
+    session.label=key;
+    const messages={
+      move:['1 / 3 · FLY',`Move with ${keyName('fly')}. Climb or dive with ${keyName('climb')}.`],
+      fire:['2 / 3 · FIRE',`Fire three beams with ${keyName('fire')}. Your ship shoots in the direction it faces.`],
+      catch:['3 / 3 · RESCUE','Fly into the green settler to catch them. Take your time; missed catches reset.'],
+      land:['3 / 3 · LAND SAFELY',`You caught them! Use ${keyName('climb')} to fly down close to the ground.`],
+      done:['READY TO DEFEND THE COLONY','You can fly, fire, catch and land. In a campaign, shoot lifters to free their settlers.'],
+    };
+    $('practice-step').textContent=messages[stage][0];$('practice-instruction').innerHTML=messages[stage][1];
+    $('practice-start').classList.toggle('hidden',stage!=='done');$('practice-again').classList.toggle('hidden',stage!=='done');
+  }
+  if(stage==='done'&&G.state==='play'){setHud(false);G.state='practice-done';show('practice-coach',false);}
+  const target=$('practice-target');target.classList.toggle('hidden',stage!=='catch'||G.state!=='play');
+  if(stage==='catch'){
+    const point={x:0,y:0,z:0};R.project(session.settler.x,session.settler.y+2,point);
+    target.style.left=clamp(point.x,30,innerWidth-30)+'px';target.style.top=clamp(point.y,70,innerHeight-70)+'px';
+  }
+}
 function startCampaign(sector = 0) {
   G.run = { score: 0, lives: START_LIVES + DIFFICULTY[settings.diff].lives, up: sector ? { ...TYPICAL_UP[sector] } : {}, salvage: sector ? 500 * sector : 0, start: sector, newMedals: [], diff: settings.diff, continues: 0 };
   say('begin', { key: true, delay: 1 });
@@ -232,6 +261,7 @@ function setHud(on) {
   if (!on) for (const id of ['bossbar', 'intent', 'objective']) $(id).classList.add('hidden');
 }
 function buildStrip(W) {
+  if(G.mode==='practice'){$('sector-name').textContent='GUIDED PRACTICE · UNRANKED';$('cpstrip').innerHTML='';return;}
   const dl = W.diff !== 'normal' ? ' · ' + DL(W.diff) : '';
   $('sector-name').textContent = W.mode === 'endless' ? 'ENDLESS ORBIT · ' + SECTORS[W.k].name + dl : `WORLD ${W.sector + 1} · ${SECTORS[W.sector].name}${dl}`;
   $('cpstrip').innerHTML = W.mode === 'endless' ? '' : CP_NAMES.map((n, i) => `<b>${i < WAVES ? i + 1 : '◆'}</b>`).join('');
@@ -436,7 +466,7 @@ function handleEvents(list, W, live) {
       case 'hit': { const p = P(e.x, e.y); fx.sparks(p.x, p.y, p.z, { n: 6, speed: 6 }); if (W.enemies.some((q) => q.id === e.id && q.type === 'hive')) { R.chipHive(e.id, 2); snd('debris', e, { vol: 0.5, rate: 1.4, gap: 0.05 }); fx.sparks(p.x, p.y, p.z, { n: 14, speed: 8, r: 1, g: 0.6, b: 0.25, life: 0.5 }); } break; }
       case 'plink': { const p = P(e.x, e.y); fx.sparks(p.x, p.y, p.z, { n: 5, speed: 5, s: 0.22, life: 0.25, r: 0.9, g: 0.85, b: 0.8 }); snd('beamhit', e, { vol: 0.25, rate: 0.6, gap: 0.08 }); break; }
       case 'kill': {
-        if (live && mine(e) && e.score && e.type !== 'skimmer' && e.type !== 'mine' && e.type !== 'meteor' && me && !G.ai && G.mode !== 'demo' && G.mode !== 'playthrough' && SHIPS[me.ship]) addMastery(me.ship);
+        if (live && mine(e) && e.score && e.type !== 'skimmer' && e.type !== 'mine' && e.type !== 'meteor' && me && !G.ai && G.mode !== 'demo' && G.mode !== 'playthrough' && G.mode !== 'practice' && SHIPS[me.ship]) addMastery(me.ship);
         const big = e.type === 'hive' || e.type === 'sower' || e.type === 'prowler' || e.type === 'coil' || e.type === 'maw';
         const v = R.vel(e.x, e.vx || 0, e.vy || 0);
         R.breakEnemy(e.id, { vx: v.x * 0.4, vy: v.y * 0.4, power: big ? 1.3 : 0.9, max: big ? 6 : 4, keep: e.type === 'skimmer' || e.type === 'mine' || e.type === 'meteor' ? 0 : big ? 3 : 1 });
@@ -684,6 +714,7 @@ function slowmo(scale, t) { G.timeScale = scale; G.slowT = t; A.setRate(Math.max
 
 // ------------------------------------------------------------------ the end of a world / run
 function onWorldOver(W) {
+  if (G.mode === 'practice') { toTitle(); return; }
   if (G.mode === 'demo') { if (G.demoI % 2 === 0) toTitle(); else startDemo(); return; }
   A.stopLoops();
   if (G.mode === 'playthrough') { playthroughNext(W); return; }
@@ -852,6 +883,7 @@ function pause() {
   if (G.state !== 'play' || G.mode === 'demo') return;
   if (G.mode === 'playthrough') { toTitle(); return; }
   $('pause-photo').classList.toggle('hidden', G.mode === 'online');
+  $('practice-coach').classList.add('hidden');
   if (G.mode === 'online') { show('pause'); $('pause-sub').textContent = 'ONLINE · THE FIGHT KEEPS GOING'; G.state = 'paused-online'; return; }
   G.state = 'paused';
   A.muffle(true);
@@ -859,7 +891,13 @@ function pause() {
   $('pause-replay').classList.toggle('hidden', !G.clip);
   show('pause', false);
 }
-function resume() { if (G.photo) { G.photo = false; R.photo = null; $('photobar').classList.add('hidden'); setHud(true); } if (G.state === 'paused' || G.state === 'paused-online') { G.state = 'play'; A.muffle(false); hideScreens(); } }
+function resume() {
+  if(G.photo){G.photo=false;R.photo=null;$('photobar').classList.add('hidden');setHud(true);}
+  if(G.state==='paused'||G.state==='paused-online'){
+    G.state='play';A.muffle(false);hideScreens();
+    if(G.mode==='practice')$('practice-coach').classList.remove('hidden');
+  }
+}
 
 // ------------------------------------------------------------------ online co-op
 function netStatus(text, kind) {
@@ -903,6 +941,7 @@ window.__sh.online = { hostStart, startOnline };
 function act(a) {
   A.unlock();
   switch (a) {
+    case 'practice': startPractice(); break;
     case 'campaign': A.play('uiok', { gap: 0 }); A.cab('credit'); startCampaign(0); break;
     case 'deep': A.play('uiok', { gap: 0 }); A.cab('credit'); startEndless(); break;
     case 'playthrough': A.play('uiok', { gap: 0 }); A.cab('credit'); startPlaythrough(+settings.aiWorld || 0, +settings.aiWave || 0); break;
@@ -1348,6 +1387,7 @@ function playStep(dt) {
     if (!online) REC.input(W);
     snapPrev(W);
     if (guest) stepGuest(W, STEP); else step(W, STEP);
+    if(G.mode==='practice'&&G.practice)advancePractice(G.practice);
     const ev = drainEvents(W);
     if (online && NET.host) NET.hostEvents(ev);
     handleEvents(ev, W, true);
@@ -1403,6 +1443,7 @@ function objective(W, me) {
   return `SHOOT THE LIFTERS BEFORE THEY REACH THE SETTLERS · ${l} TO GO`;
 }
 function guidance(W) {
+  if(G.mode==='practice'){ setText('score','—');setText('hiscore','—');$('objective').classList.add('hidden');$('intent').classList.add('hidden');updatePracticeCoach();return; }
   const me = myPlayer(W);
   const watch = G.ai && (G.mode === 'demo' || G.mode === 'playthrough' || G.autopilot);
   $('intent').classList.toggle('hidden', !watch);

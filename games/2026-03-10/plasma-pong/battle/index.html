@@ -269,6 +269,11 @@ body.calm .odbar.full i, body.calm #t-od.ready, body.calm .vsmark { animation: n
   .mbtn { padding: 8px 14px; }
   .caption { top: 76px; }
 }
+#opening-coach{position:absolute;z-index:8;left:50%;top:136px;transform:translateX(-50%);width:min(420px,calc(100vw - 32px));box-sizing:border-box;padding:10px 12px;border:1px solid #85b7d1;border-radius:10px;background:rgba(3,12,26,.9);pointer-events:none;}
+#opening-step{color:#c5efff;font-size:11px;letter-spacing:.08em;}#opening-text{font-size:13px;line-height:1.4;margin:7px 24px 0 0;}
+#opening-coach button{position:absolute;right:6px;top:6px;pointer-events:auto;border:1px solid #829bb3;border-radius:5px;padding:6px 10px;min-height:32px;font:inherit;font-size:12px;color:#cfe8ff;background:transparent;cursor:pointer;}
+@media(max-width:720px){#opening-coach{top:122px;width:calc(100vw - 32px);}#opening-text{font-size:12px;}}
+@media(max-height:480px){#opening-coach{top:auto;bottom:8px;width:min(480px,calc(100vw - 220px));padding:8px 12px;}#opening-text{margin:5px 0;font-size:12px;}}
 </style>
 </head>
 <body>
@@ -289,6 +294,7 @@ body.calm .odbar.full i, body.calm #t-od.ready, body.calm .vsmark { animation: n
   <div id="popups"></div>
   <div id="toasts"><div id="toast-1"></div><div id="toast--1"></div></div>
   <div id="banner" class="hidden"><div class="b1"></div><div class="b2"></div></div>
+  <aside id="opening-coach" class="hidden"><div role="status" aria-live="polite"><strong id="opening-step"></strong><p id="opening-text"></p></div><button data-act="tips-dismiss" aria-label="Dismiss opening tips" title="Dismiss tips">×</button></aside>
   <div id="tip" class="hidden"></div>
   <div id="attract-board" class="hidden"><div class="card"><h2>🌐 GLOBAL HIGH SCORES</h2><table class="hs" id="ab-rows"></table><p class="abfoot">PLAY THE CAMPAIGN TO JOIN THE BOARD</p></div></div>
   <div id="demo-badge" class="hidden"><span>DEMO</span> · PRESS ANY KEY OR TAP</div>
@@ -407,7 +413,7 @@ body.calm .odbar.full i, body.calm #t-od.ready, body.calm .vsmark { animation: n
       <div class="keys" id="keys"></div>
       <h3>POWER-UPS</h3>
       <div class="pugrid" id="pugrid"></div>
-      <div class="cardfoot"><button class="mbtn" data-act="back">BACK</button></div>
+      <div class="cardfoot"><button class="mbtn" data-act="tips-enable">REPLAY OPENING TIPS</button><button class="mbtn" data-act="back">BACK</button></div>
     </div>
   </section>
 
@@ -480,6 +486,6 @@ body.calm .odbar.full i, body.calm #t-od.ready, body.calm .vsmark { animation: n
     </div>
   </section>
 </div>
-<script type="module" src="js/main.js?v=arcade-polish-1"></script>
+<script type="module" src="js/main.js?v=arcade-guidance-1"></script>
 </body>
 </html>
