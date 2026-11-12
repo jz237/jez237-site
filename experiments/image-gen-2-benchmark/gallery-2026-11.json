@@ -1,5 +1,96 @@
 [
   {
+    "id": "2026-11-12-factual-infographic-factual-infographic-hypertension-pressu",
+    "title": "Factual infographic: Hypertension — Pressure That Can Go Unnoticed",
+    "tests": "factual_subtype: medical-health-infographic; source-backed anatomical schematic; archive_slot=2026-11-12T02:20; concept=hypertension-arterial-pressure-organ-risk; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: medical-health-infographic",
+    "prompt": "Create a finished artwork-led medical infographic titled \"HYPERTENSION\" with subtitle \"Pressure that can go unnoticed\". Refined contemporary anatomical gouache and precise medical ink on cool ivory, deep navy vascular shadows, coral arterial lumen and restrained teal annotation. Not a photographed poster. A large elegant branching arterial tree rising from a realistically illustrated heart dominates an asymmetric vertical composition. One oversized oblique cutaway of a muscular artery reveals the open lumen and layered wall with subtle outward arrows labeled \"Blood pressure: force against artery walls\". Arrows indicate pressure, not a plaque blockage; do not imply hypertension always comes from narrowed or clogged arteries. Render realistic heart and vessel textures without unsupported microscopic disease details. A flowing open typographic arc beside the heart says \"Systolic: heart pumps\" and \"Diastolic: heart fills between beats\"; schematic timing only, no fabricated patient waveform or data. Nest small anatomically faithful brain and kidney studies along fine open leader lines labeled \"Over time: higher risk of stroke\", \"Heart attack / heart failure\", \"Kidney damage\"; these are risks, not inevitable outcomes. A quiet dominant callout in generous negative space reads \"Usually no symptoms. Measure to know.\" Beneath it integrate a realistic upper-arm cuff and monitor with a blank display, labeled \"Repeated readings + clinician assessment; validated home monitoring may help\". Weave a sparse risk-factor ribbon among the branches: \"Age & family history • excess sodium • inactivity • excess alcohol\" with subordinate note \"Multiple factors contribute\". At the lower curve of the arterial tree, an open-care pathway uses small food and walking motifs and concise labels: \"DASH-style eating • less sodium & alcohol • regular activity • prescribed medicines when needed\" and \"Care is individualized\". All labels should be readable, restrained, clearly connected to their referents, never rigid cards or a boxed grid. At bottom place a clearly legible red-accent open safety note: \"Higher than 180 systolic and/or 120 diastolic + chest pain, breathlessness, weakness, vision change or speech trouble: CALL 911. Without symptoms: contact a healthcare professional.\" Do not make these the only emergency symptoms. Footer \"General education — not a diagnosis or personal treatment plan\". Keep ample breathing room, sophisticated scale changes, detailed vessel material and polished anatomical shading. No invented numerical risk statistics, no doses, no cure promises, no citations or URLs, no decorative invented anatomy, no recurring human protagonist. The artery tree and organ studies are a schematic educational arrangement, not literal connected anatomy. Produce the infographic itself, with rich artwork and integrated unboxed explanation.",
+    "image": "images/2026-11-12-factual-infographic-factual-infographic-hypertension-pressu.jpg",
+    "thumb": "thumbs/2026-11-12-factual-infographic-factual-infographic-hypertension-pressu.webp",
+    "color": "#d5bdae",
+    "date": "2026-11-12",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "hypertension-arterial-pressure-organ-risk",
+      "imageSha256": "8b344bc4b2667b5c4dce54cae18ad2920f7d7a7fcc6e12b20f4ca2633a1e620d",
+      "imageDHash": "2494cce8cad8e0f8"
+    },
+    "factualInfographic": {
+      "topic": "How hypertension raises arterial pressure, threatens organs, and is measured and managed",
+      "description": "Arterial pressure, silent presentation, organ risks, measurement and evidence-based care with emergency context.",
+      "sourceNote": "NHLBI https://www.nhlbi.nih.gov/health/high-blood-pressure and CDC https://www.cdc.gov/high-blood-pressure/about/index.html; verified pressure physiology, symptoms, risks, assessment, management and emergency guidance.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-12T07:21:10.210662+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "National Heart, Lung, and Blood Institute",
+            "title": "High Blood Pressure - What Is High Blood Pressure?",
+            "sourceType": "government-agency",
+            "url": "https://www.nhlbi.nih.gov/health/high-blood-pressure"
+          },
+          {
+            "id": "S2",
+            "publisher": "Centers for Disease Control and Prevention",
+            "title": "About High Blood Pressure",
+            "sourceType": "government-agency",
+            "url": "https://www.cdc.gov/high-blood-pressure/about/index.html"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Hypertension means persistently high pressure of blood against artery walls; arteries carry blood away from the heart.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Systolic pressure is the pressure during heart pumping; diastolic pressure is measured between beats while the heart fills.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "High blood pressure usually has no symptoms; measurements, often repeated over visits and with a validated home monitor, help establish diagnosis.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "High blood pressure can damage heart, brain and kidneys over time and increases risk of heart attack, heart failure, stroke and kidney disease.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Risk factors include family history, increasing age, excess sodium, inactivity and excess alcohol; multiple factors can contribute.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Care can include a heart-healthy DASH eating pattern, limiting sodium and alcohol, physical activity and medicines prescribed to the individual.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Pressure higher than 180 systolic and/or higher than 120 diastolic with chest pain, shortness of breath, weakness, vision change or difficulty speaking is an emergency: call 911; without symptoms, contact a healthcare professional.",
+            "sourceIds": [
+              "S2"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
     "id": "2026-11-11-factual-infographic-factual-infographic-royal-gramma",
     "title": "Factual infographic: Royal gramma",
     "tests": "Same-day prepared transaction resumed by explicit authorization; no earlier image requested. USGS reports no synonyms. No numeric tank minimum asserted.; archive_slot=2026-11-11T00:20; concept=royal-gramma-plankton-hunting-reef-overhang; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: reef-fish-infographic; fish_scientific_name: Gramma loreto",
