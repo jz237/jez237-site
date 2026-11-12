@@ -1,11 +1,72 @@
 {
   "version": 1,
   "title": "AI Discoveries, Explained",
-  "updated": "2026-11-11",
+  "updated": "2026-11-12",
   "coverageStart": "2026-09-21",
-  "coverageEnd": "2026-11-11",
+  "coverageEnd": "2026-11-12",
   "editorialNote": "Source-linked discoveries, research demonstrations, follow-ups and corrections from AI Discovery Watch. Historical milestones posted before the fresh-news brief are not included. Coverage dates are when a story was shared, not necessarily when its discovery occurred. Evidence labels reflect the linked report at that time; read later updates too.",
   "stories": [
+    {
+      "category": "Physics & materials",
+      "evidenceKind": "followup",
+      "modelNote": "Original OpenAI research model unspecified; OpenAI Astra assisted reviewers. Lean checks proofs, not physical truth.",
+      "sources": [
+        "https://github.com/yang-mills-group/YM",
+        "https://github.com/yang-mills-group/YM/blob/main/docs/assessment-1.pdf",
+        "https://www.scientificamerican.com/article/openais-shepherds-affirm-blockbuster-physics-result/"
+      ],
+      "status": "Reviewers report formal checks passed; broader scrutiny remains. Uniqueness of the unlimited-space construction is also unproved.",
+      "takeaway": "An outside review group says an AI-generated proof puts a simplified theory of force-carrying particles on firm mathematical foundations in four-dimensional spacetime. Released November 10, its public assessment and computer-checkable proof open the work to wider scrutiny after an earlier closed review. OpenAI supplied the proof; human experts examined its definitions and added checks, with AI helping them read the code. The reviewers say they do not fully understand it yet. The separate question of a minimum energy needed to excite the system remains unresolved, so this does not solve the full million-dollar problem.",
+      "title": "Outside reviewers release checks of an AI physics proof",
+      "id": "d-1570457386060357653-yang-mills-public-proof-review",
+      "coveredOn": "2026-11-12",
+      "context": "🔬 **AI Discovery Watch · November 12, 2026**\n\n**Outside reviewers release checks of an AI physics proof**\nAn outside review group says an AI-generated proof puts a simplified theory of force-carrying particles on firm mathematical foundations in four-dimensional spacetime. Released November 10, its public assessment and computer-checkable proof open the work to wider scrutiny after an earlier closed review. OpenAI supplied the proof; human experts examined its definitions and added checks, with AI helping them read the code. The reviewers say they do not fully understand it yet. The separate question of a minimum energy needed to excite the system remains unresolved, so this does not solve the full million-dollar problem.\n\n**AI used:** Original OpenAI research model unspecified; OpenAI Astra assisted reviewers. Lean checks proofs, not physical truth.\n**Evidence:** Reviewers report formal checks passed; broader scrutiny remains. Uniqueness of the unlimited-space construction is also unproved.\nOriginal source: <https://github.com/yang-mills-group/YM>\nSupporting source: <https://github.com/yang-mills-group/YM/blob/main/docs/assessment-1.pdf>\nSupporting source: <https://www.scientificamerican.com/article/openais-shepherds-affirm-blockbuster-physics-result/>"
+    },
+    {
+      "category": "Physics & materials",
+      "evidenceKind": "early",
+      "modelNote": "Opus-5.5 found O159; Codex (GPT-6-Astra) ran a separate search.",
+      "sources": [
+        "https://arxiv.org/abs/2611.13329",
+        "https://arxiv.org/html/2611.13329v1"
+      ],
+      "status": "Early preprint; author-run calculations, not independently confirmed. No universal accuracy improvement.",
+      "takeaway": "AI agents devised a small correction to formulas used to estimate molecular energies, a basic ingredient in predicting chemical behaviour. A November 9 preprint reports roughly 12% lower error on one test set kept separate from the search. People supplied the starting equations, suggested search directions and built the testing machinery; the AI proposed and refined the mathematical forms. The improvement was not universal: broader tests were comparable to an established method overall, and some predictions became worse. This is an early computational result, not a laboratory discovery.",
+      "title": "AI finds a compact way to improve molecular energy calculations",
+      "id": "d-1570457711223775233-o159-ai-molecular-energy-formula",
+      "coveredOn": "2026-11-12",
+      "context": "🔬 **AI Discovery Watch · November 12, 2026**\n\n**AI finds a compact way to improve molecular energy calculations**\nAI agents devised a small correction to formulas used to estimate molecular energies, a basic ingredient in predicting chemical behaviour. A November 9 preprint reports roughly 12% lower error on one test set kept separate from the search. People supplied the starting equations, suggested search directions and built the testing machinery; the AI proposed and refined the mathematical forms. The improvement was not universal: broader tests were comparable to an established method overall, and some predictions became worse. This is an early computational result, not a laboratory discovery.\n\n**AI used:** Opus-5.5 found O159; Codex (GPT-6-Astra) ran a separate search.\n**Evidence:** Early preprint; author-run calculations, not independently confirmed. No universal accuracy improvement.\nOriginal source: <https://arxiv.org/abs/2611.13329>\nSupporting source: <https://arxiv.org/html/2611.13329v1>"
+    },
+    {
+      "category": "Mathematics",
+      "evidenceKind": "early",
+      "modelNote": "Claude Opus 4.7 proposed and wrote main refinements; Claude Sonnet 4.6 evaluated them. Lean and Arb supply partial checks.",
+      "sources": [
+        "https://arxiv.org/abs/2611.10961",
+        "https://github.com/alan2326/proof-refinement"
+      ],
+      "status": "Early result, not independently confirmed. One proof retains two gaps; the other headline estimate lacks a rigorous numerical certificate.",
+      "takeaway": "Researchers report tighter limits on two mathematical numbers by having AI repair loose steps inside existing proofs, rather than invent an entirely new argument. Like tightening links in a chain, small improvements carry through to the final answer while leaving a route people can follow. The paper and public code appeared November 7. Humans supplied the proof structure, chose what the AI could change and helped with difficult steps. Stronger limits already exist; the news is this more inspectable way of doing mathematics, not a current world record or a fully verified proof.",
+      "title": "AI sharpens mathematical estimates while leaving a readable trail",
+      "id": "d-1570458037867642932-readable-ai-proof-refinement",
+      "coveredOn": "2026-11-12",
+      "context": "🔬 **AI Discovery Watch · November 12, 2026**\n\n**AI sharpens mathematical estimates while leaving a readable trail**\nResearchers report tighter limits on two mathematical numbers by having AI repair loose steps inside existing proofs, rather than invent an entirely new argument. Like tightening links in a chain, small improvements carry through to the final answer while leaving a route people can follow. The paper and public code appeared November 7. Humans supplied the proof structure, chose what the AI could change and helped with difficult steps. Stronger limits already exist; the news is this more inspectable way of doing mathematics, not a current world record or a fully verified proof.\n\n**AI used:** Claude Opus 4.7 proposed and wrote main refinements; Claude Sonnet 4.6 evaluated them. Lean and Arb supply partial checks.\n**Evidence:** Early result, not independently confirmed. One proof retains two gaps; the other headline estimate lacks a rigorous numerical certificate.\nOriginal source: <https://arxiv.org/abs/2611.10961>\nSupporting source: <https://github.com/alan2326/proof-refinement>"
+    },
+    {
+      "category": "Medicine & biology",
+      "evidenceKind": "lab",
+      "modelNote": "Bonbon, 1.6-billion-parameter interaction model, ranked candidates only; separate molecule generator not identified.",
+      "sources": [
+        "https://arxiv.org/abs/2611.14504",
+        "https://arxiv.org/html/2611.14504v1#A8"
+      ],
+      "status": "Early laboratory result reported by authors; testing contractor unnamed. No demonstrated treatment benefit.",
+      "takeaway": "An AI-guided search produced molecules that blocked nine disease-related proteins in laboratory tests, including some unlike previously known blockers. A November 10 paper reports confirmed activity for 131 of 213 tested compounds. Bonbon ranked candidates made by a separate molecule-generating system; people built the models, set the selection rules and specified experiments carried out by a contractor. These are promising starting points for research, not medicines: the tests do not establish safety, effectiveness in patients or independent replication. The training data and the separate generator are not publicly explained in full.",
+      "title": "AI-guided search finds new molecules that block disease-related proteins",
+      "id": "d-1570458392554770464-bonbon-lab-tested-protein-blockers",
+      "coveredOn": "2026-11-12",
+      "context": "🔬 **AI Discovery Watch · November 12, 2026**\n\n**AI-guided search finds new molecules that block disease-related proteins**\nAn AI-guided search produced molecules that blocked nine disease-related proteins in laboratory tests, including some unlike previously known blockers. A November 10 paper reports confirmed activity for 131 of 213 tested compounds. Bonbon ranked candidates made by a separate molecule-generating system; people built the models, set the selection rules and specified experiments carried out by a contractor. These are promising starting points for research, not medicines: the tests do not establish safety, effectiveness in patients or independent replication. The training data and the separate generator are not publicly explained in full.\n\n**AI used:** Bonbon, 1.6-billion-parameter interaction model, ranked candidates only; separate molecule generator not identified.\n**Evidence:** Early laboratory result reported by authors; testing contractor unnamed. No demonstrated treatment benefit.\nOriginal source: <https://arxiv.org/abs/2611.14504>\nSupporting source: <https://arxiv.org/html/2611.14504v1#A8>"
+    },
     {
       "category": "Computing & engineering",
       "evidenceKind": "proof",
