@@ -9,6 +9,8 @@ Ten studies use `createFilterAnimation` in `runtime.js`; UV retains its tested v
 - Simulation state starts unpaused; Reset resumes normal operation. Camera orbit and narrated tours are not forced on.
 - Reduced-motion, four-or-fewer reported CPU cores, or four-or-fewer reported GB of RAM select Light 3D initially. Other computers start with adaptive Balanced graphics.
 - Auto measures sustained frame timing after a startup grace period. It lowers render resolution, shadows and refraction capture frequency before switching to a Canvas diagram at sustained very low frame rates. Quality changes never set the user's Pause state.
+- Auto also steps up (November 11, 2026): a computer that starts Balanced and stays smooth for two 3-second windows (median frame under 1/50 s) gets Detailed, and goes back to Balanced for good if the median there rises above 1/45 s. A Light start and manual choices are never promoted. Shadow maps return to their original size when quality rises.
+- `ambient.js` adds depth-only ambient occlusion over the finished frame in the Detailed tier only. If its shader or render fails it switches itself off and the 3D view carries on; `snapshot().ambient` reports whether it is drawing. `water-glsl.js` is GLSL shared by the studies' water (ripples, studio reflection, depth colour, caustics, contact line, return foam). It is a look, not a fluid or optics solution.
 - Missing WebGL 2, context loss, shader failure or an exception in rendering use the animated diagram. Explicit Detailed/Light choices bypass the automatic governor. Retry 3D reloads the page.
 - Hidden documents suspend animation; the reef sump also suspends when its scene is offscreen. Explicit pause, maintenance and assembly inspection retain their native behavior in 3D.
 

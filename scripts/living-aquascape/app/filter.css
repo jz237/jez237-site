@@ -22,3 +22,8 @@
 @media(min-width:1200px){.filter-dialog.filter-dialog .filter-layout{grid-template-columns:minmax(0,1fr) minmax(335px,20vw)}}
 
 @media(max-width:800px){.filter-canvas{top:76px;bottom:174px}.filter-view-label{gap:5px}.filter-view-label strong{font-size:20px}}
+
+/* November 11, 2026: windows about 800x600 (601-800px wide). The phone rules above left the model a 270px band between the fixed 76px and 174px insets. Here the stage fills the window below a shorter header, and the legend and toolbar sit under the canvas in normal flow, so the canvas takes all the remaining height whatever the toolbar wraps to. */
+@media(min-width:601px) and (max-width:800px){.filter-dialog.filter-dialog>header{height:72px;padding:12px 16px}.filter-dialog header .filter-kicker{max-width:none;margin-bottom:6px}.filter-dialog.filter-dialog .filter-stage{display:flex;flex-direction:column;height:clamp(440px,calc(100dvh - 72px),640px);min-height:0}.filter-canvas{position:relative;inset:auto;flex:1 1 0;min-height:0}.filter-legend{position:relative;inset:auto;margin:6px 18px 8px}.filter-toolbar{position:relative;inset:auto;margin:0 10px 10px}}
+/* Narrower than about 720px the hoses reach the heading drawn over the canvas, so it becomes one line above the canvas. */
+@media(min-width:601px) and (max-width:720px){.filter-view-label{position:relative;inset:auto;order:-1;display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 14px;margin:12px 18px 2px}}

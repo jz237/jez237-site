@@ -1,4 +1,5 @@
 import * as T from '../aquaclear-studio/vendor/three.module.js';
+import {WATER_GLSL} from '../filter-runtime/water-glsl.js?v=1';
 
 // The aquarium reflects the actual filter. A separate depth capture lets the
 // falling sheet bend the scene behind it, without displacing foreground parts.
@@ -8,12 +9,14 @@ export function createWaterOptics(renderer,scene,camera,water){
  behind.depthTexture=new T.DepthTexture(1,1,T.UnsignedIntType);reflected.depthTexture=new T.DepthTexture(1,1,T.UnsignedIntType);
  const mirror=new T.PerspectiveCamera(),size=new T.Vector2(),up=new T.Vector3(0,1,0),look=new T.Vector3(),plane=new T.Plane(),clip=new T.Vector4(),q=new T.Vector4();
  const textureMatrix=new T.Matrix4(),bias=new T.Matrix4().set(.5,0,0,.5,0,.5,0,.5,0,0,.5,.5,0,0,0,1);
- const uniforms={sceneTexture:{value:behind.texture},sceneDepth:{value:behind.depthTexture},reflectionTexture:{value:reflected.texture},reflectionDepth:{value:reflected.depthTexture},reflectionMatrix:{value:textureMatrix},reflectionWeight:{value:1},waterTime:{value:0},delivery:{value:1},impactZ:{value:2.1}};
+ const uniforms={sceneTexture:{value:behind.texture},sceneDepth:{value:behind.depthTexture},reflectionTexture:{value:reflected.texture},reflectionDepth:{value:reflected.depthTexture},reflectionMatrix:{value:textureMatrix},reflectionWeight:{value:1},waterTime:{value:0},delivery:{value:1},impactZ:{value:2.1},hrNear:{value:camera.near},hrFar:{value:camera.far}};
  function material(kind){return new T.ShaderMaterial({uniforms:{...uniforms,kind:{value:kind}},transparent:true,depthWrite:false,side:T.DoubleSide,
  vertexShader:`varying vec3 wPoint,wNormal;varying vec4 projected,reflectedPoint;varying vec2 waterUV;uniform mat4 reflectionMatrix;
  void main(){vec4 world=modelMatrix*vec4(position,1.);wPoint=world.xyz;wNormal=normalize(mat3(modelMatrix)*normal);waterUV=uv;projected=projectionMatrix*viewMatrix*world;reflectedPoint=reflectionMatrix*world;gl_Position=projected;}`,
- fragmentShader:`uniform sampler2D sceneTexture,sceneDepth,reflectionTexture,reflectionDepth;uniform float kind,waterTime,delivery,impactZ,reflectionWeight;
+ fragmentShader:`uniform sampler2D sceneTexture,sceneDepth,reflectionTexture,reflectionDepth;uniform float kind,waterTime,delivery,impactZ,reflectionWeight,hrNear,hrFar;
  varying vec3 wPoint,wNormal;varying vec4 projected,reflectedPoint;varying vec2 waterUV;
+ ${WATER_GLSL}
+ float hrLin(float d){return hrNear*hrFar/(hrFar-d*(hrFar-hrNear));}
  float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
  float noise(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(hash(i),hash(i+vec2(1,0)),f.x),mix(hash(i+vec2(0,1)),hash(i+1.),f.x),f.y);}
  float height(vec2 p){float t=waterTime;return noise(p*10.+vec2(t*.27,-t*.46))*.52+noise(p*23.+vec2(-t*.39,t*.14))*.22+noise(p*47.+vec2(t*.31,t*.53))*.09;}
@@ -29,6 +32,7 @@ export function createWaterOptics(renderer,scene,camera,water){
    vec2 bend=viewN.xy*(sheet?.009:.014)+vec2(hx,hy)*(sheet?.05:.10);
    vec2 refractUV=clamp(screenUV+bend,vec2(.002),vec2(.998));if(texture2D(sceneDepth,refractUV).r<gl_FragCoord.z-.0001)refractUV=screenUV;
    vec4 transmitted=texture2D(sceneTexture,refractUV);transmitted.a*=1.-step(.99999,texture2D(sceneDepth,refractUV).r);
+   float top=(kind<.5&&abs(wNormal.y)>.6)?1.:0.;float hd=clamp(hrLin(texture2D(sceneDepth,refractUV).r)-hrLin(gl_FragCoord.z),0.,3.);transmitted.rgb=hrAbsorb(transmitted.rgb,hd*.4*top);float hc=hrCaustic(wPoint.xz+vec2(hx,hy)*hd*8.,waterTime)*top*transmitted.a*(1.-exp(-hd*6.))*exp(-hd*.8);transmitted.rgb+=transmitted.rgb*hc*1.5+vec3(.45,.7,.68)*hc*.07;float contact=top*transmitted.a*(1.-smoothstep(0.,.05,hd));
    vec2 reflectUV=reflectedPoint.xy/reflectedPoint.w+N.xz*.024+vec2(hx,hy)*.035;
    vec4 reflection=texture2D(reflectionTexture,clamp(reflectUV,vec2(.002),vec2(.998)));reflection.a*=1.-step(.99999,texture2D(reflectionDepth,clamp(reflectUV,vec2(.002),vec2(.998))).r);
    float valid=step(0.,reflectUV.x)*step(reflectUV.x,1.)*step(0.,reflectUV.y)*step(reflectUV.y,1.)*reflectionWeight*(kind<.5?1.:0.);
@@ -42,9 +46,9 @@ export function createWaterOptics(renderer,scene,camera,water){
    float visibility=sheet?.10+gleam:.045+.10*fresnel;
    vec3 tint=vec3(.075,.18,.19)+vec3(.28,.36,.35)*gleam;
    float alpha=coverage*(1.-visibility)+visibility;color=(color*(1.-visibility)+tint*visibility)/max(alpha,.001);
-   color+=vec3(.81,.92,.88)*(softbox*(.07+.34*fresnel)+key*.7+gleam*.17);
+   color+=vec3(.81,.92,.88)*(softbox*(.07+.34*fresnel)+key*.7+gleam*.17)+contact*vec3(.42,.56,.55)*.22;float foam=top*agitation*agitation*(.3+.7*hrFoam(wPoint.xz,waterTime));color=mix(color,vec3(.86,.93,.92),clamp(foam*.8,0.,.8));
    float edge=1.;if(sheet){float ragged=(noise(vec2(v*48.-waterTime*2.,waterTime*.4))-.25)*.006*smoothstep(.52,.8,v);edge=smoothstep(ragged,ragged+.003,min(waterUV.x,1.-waterUV.x));}else{edge=smoothstep(0.,.008,min(min(waterUV.x,1.-waterUV.x),min(waterUV.y,1.-waterUV.y)));}
-   gl_FragColor=vec4(color,edge*clamp(alpha+key*.15+softbox*.08,0.,1.));
+   gl_FragColor=vec4(color,edge*clamp(alpha+key*.15+softbox*.08+foam*.7,0.,1.));
    #include <tonemapping_fragment>
    #include <colorspace_fragment>
  }`});}

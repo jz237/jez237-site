@@ -50,9 +50,11 @@ function fit(){
  key.position.copy(center).add(new T.Vector3(-5,10,7));key.target.position.copy(center);
  Object.assign(key.shadow.camera,{left:-extent,right:extent,top:extent,bottom:-extent,near:.1,far:40});key.shadow.camera.updateProjectionMatrix();if(renderer)renderer.shadowMap.needsUpdate=true;
  const dir=view==='front'?new T.Vector3(0,.055,1):view==='top'?new T.Vector3(.001,1,.001):(system==='roller'?new T.Vector3(1.4,.6,.85):new T.Vector3(system==='system'?.32:.7,system==='system'?.30:.48,1)).normalize();
- dir.normalize();const right=new T.Vector3().crossVectors(new T.Vector3(0,1,0),dir).normalize(),up=new T.Vector3().crossVectors(dir,right).normalize(),tanV=Math.tan(T.MathUtils.degToRad(camera.fov/2)),tanH=tanV*camera.aspect;let distance=1;
- for(const b of bounds)for(const x of [b.min.x,b.max.x])for(const y of [b.min.y,b.max.y])for(const z of [b.min.z,b.max.z]){const corner=new T.Vector3(x,y,z).sub(center),depth=corner.dot(dir);distance=Math.max(distance,Math.abs(corner.dot(right))/(tanH*.92)+depth,Math.abs(corner.dot(up))/(tanV*.85)+depth);}
+ dir.normalize();const right=new T.Vector3().crossVectors(new T.Vector3(0,1,0),dir).normalize(),up=new T.Vector3().crossVectors(dir,right).normalize(),tanV=Math.tan(T.MathUtils.degToRad(camera.fov/2)),tanH=tanV*camera.aspect,corners:T.Vector3[]=[];let distance=1;
+ for(const b of bounds)for(const x of [b.min.x,b.max.x])for(const y of [b.min.y,b.max.y])for(const z of [b.min.z,b.max.z]){const corner=new T.Vector3(x,y,z).sub(center),depth=corner.dot(dir);corners.push(corner);distance=Math.max(distance,Math.abs(corner.dot(right))/(tanH*.92)+depth,Math.abs(corner.dot(up))/(tanV*.85)+depth);}
  distance*=.94;
+ // Centre what is drawn, not the box centre: seen from above, tall parts at the back left the model in the lower half of the view.
+ let low=Infinity,high=-Infinity;for(const corner of corners){const y=corner.dot(up)/Math.max(.01,distance-corner.dot(dir));low=Math.min(low,y);high=Math.max(high,y);}center.addScaledVector(up,(low+high)/2*distance);
  controls.target.copy(center);camera.position.copy(center).addScaledVector(dir,distance);camera.near=Math.max(.03,distance/200);camera.far=Math.max(100,distance*6);camera.updateProjectionMatrix();controls.update();changed();
 }
 function lessonUI(){const a=systems[system],l=a.lessons[lesson];$('lesson-count').textContent=`HOW IT WORKS / ${lesson+1} OF ${a.lessons.length}`;$('lesson-title').textContent=l[0];$('lesson-text').textContent=l[1];$<HTMLButtonElement>('lesson-prev').disabled=lesson===0;$<HTMLButtonElement>('lesson-next').disabled=lesson===a.lessons.length-1;}

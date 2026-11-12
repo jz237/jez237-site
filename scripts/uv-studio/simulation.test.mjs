@@ -26,5 +26,9 @@ assert.equal(serviceWipe(13/24).coverage,0);assert.equal(serviceWipe(16/24).cove
 const governor=createPerformanceGovernor();let changes=[];for(let i=0;i<360;i++){const change=governor.sample(.08);if(change)changes.push(change);}assert.deepEqual(changes,['light']);
 for(let i=0;i<200;i++){const change=governor.sample(.14);if(change)changes.push(change);}assert.deepEqual(changes,['light','diagram']);
 governor.choose('high');for(let i=0;i<300;i++)assert.equal(governor.sample(.2),null);assert.equal(governor.snapshot().tier,'high');
-const fastGovernor=createPerformanceGovernor();for(let i=0;i<1200;i++)assert.equal(fastGovernor.sample(1/60),null);assert.equal(fastGovernor.snapshot().tier,'balanced');
+// Auto steps up once after sustained smooth frames, gives Detailed back for good if it cannot hold it, and never promotes a Light start.
+const fastGovernor=createPerformanceGovernor();changes=[];const run=(g,dt,n)=>{for(let i=0;i<n;i++){const change=g.sample(dt);if(change)changes.push(change);}};
+run(fastGovernor,1/60,280);assert.deepEqual(changes,[]);run(fastGovernor,1/60,920);assert.deepEqual(changes,['high']);assert.equal(fastGovernor.snapshot().tier,'high');
+run(fastGovernor,1/30,600);assert.deepEqual(changes,['high','balanced']);run(fastGovernor,1/60,2400);assert.deepEqual(changes,['high','balanced']);assert.equal(fastGovernor.snapshot().tier,'balanced');
+const lightGovernor=createPerformanceGovernor('light');changes=[];run(lightGovernor,1/60,2400);assert.deepEqual(changes,[]);assert.equal(lightGovernor.snapshot().tier,'light');
 console.log('Parcel integration, stopped-flow hold, lamp-off transport, spatial wipe and adaptive performance passed.');

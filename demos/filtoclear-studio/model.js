@@ -11,10 +11,11 @@ function noiseTexture(foam=false){
  const t=new THREE.CanvasTexture(c);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.repeat.set(foam?2:4,foam?2:4);t.anisotropy=4;return t;
 }
 // Open-cell pores: coarse, fine and medium foams retain different surface scales.
-function foamTexture(pitch){
+function foamTexture(pitch,repeat=2.2){
  const c=document.createElement('canvas');c.width=c.height=512;const x=c.getContext('2d');
  let seed=173;const rnd=()=>((seed=(Math.imul(1664525,seed)+1013904223)>>>0)/4294967296);
  x.fillStyle='#c1c1c1';x.fillRect(0,0,512,512);
+ for(let i=0;i<70;i++){const bx=rnd()*512,by=rnd()*512,br=40+rnd()*90,g=x.createRadialGradient(bx,by,0,bx,by,br),tone=rnd()>.5?'255,255,255':'0,0,0';g.addColorStop(0,`rgba(${tone},${.05+rnd()*.07})`);g.addColorStop(1,`rgba(${tone},0)`);x.fillStyle=g;x.fillRect(bx-br,by-br,br*2,br*2);}
  for(let y=-pitch;y<512+pitch;y+=pitch)for(let a=-pitch;a<512+pitch;a+=pitch){
   const px=a+(rnd()-.5)*pitch*.75,py=y+(rnd()-.5)*pitch*.75,r=pitch*(.24+rnd()*.19);
   x.beginPath();x.ellipse(px,py,r,r*(.65+rnd()*.5),rnd()*TAU,0,TAU);
@@ -22,7 +23,7 @@ function foamTexture(pitch){
   x.strokeStyle='#e0e0e0';x.lineWidth=.65;x.stroke();
   x.beginPath();x.ellipse(px+.35,py+.5,r*.60,r*.45,0,0,TAU);x.fillStyle='#303030';x.fill();
  }
- const t=new THREE.CanvasTexture(c);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.repeat.set(2.2,2.2);t.anisotropy=4;return t;
+ const t=new THREE.CanvasTexture(c);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.repeat.set(repeat,repeat);t.anisotropy=8;return t;
 }
 // Radial sectors have real, closed cross-section faces, including the foam core.
 function ringSector(radius,inner,height,start,length,lobed=false){
@@ -48,7 +49,7 @@ export function buildFilter({textures=true}={}){
  const mat=(color,roughness=.45,metalness=.0)=>new THREE.MeshStandardMaterial({color,roughness,metalness});
  const plastic=new THREE.MeshPhysicalMaterial({color:0x171d20,roughness:.46,metalness:.03,clearcoat:.17,clearcoatRoughness:.38,bumpMap:tex,bumpScale:.004});
  const dark=mat(0x101719,.48),blue=mat(0x136da3,.30),steel=mat(0x89989b,.28,.82),coatedSteel=mat(0x141b1f,.31,.56),rubber=mat(0x244956,.85),blackRubber=mat(0x142226,.95),foamBlue=mat(0x197fc6,.97),foamRed=mat(0xae435c,.98),foamPurple=mat(0x7954a8,.98);
- for(const [m,pitch] of [[foamBlue,12],[foamRed,7],[foamPurple,9]]){const pores=textures?foamTexture(pitch):null;m.map=pores;m.bumpMap=pores;m.bumpScale=.016;}
+ for(const [m,pitch,repeat] of [[foamBlue,14,.8],[foamRed,10,1.05],[foamPurple,8,1.25]]){const pores=textures?foamTexture(pitch,repeat):null;m.map=pores;m.bumpMap=pores;m.bumpScale=.05;m.roughnessMap=pores;}
  const glass=new THREE.MeshPhysicalMaterial({color:0xc1e6e9,roughness:.08,metalness:.05,transparent:true,opacity:.29,side:THREE.DoubleSide,depthWrite:false});
  const clearPlastic=new THREE.MeshPhysicalMaterial({color:0xc8dde0,roughness:.12,transparent:true,opacity:.38,metalness:.05,side:THREE.DoubleSide,depthWrite:false});
  const lampMat=mat(0xcedbe3,.18,.12),gold=mat(0xc6aa73,.36,.65);
