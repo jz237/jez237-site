@@ -111,7 +111,7 @@ index 1812c5d..cac69b8 100644
  #include "fix.h"
  #include "event.h"
 diff --git a/d2/arch/ogl/gr.c b/d2/arch/ogl/gr.c
-index c5cca0b..99dbdc7 100644
+index c5cca0b..0db0c0e 100644
 --- a/d2/arch/ogl/gr.c
 +++ b/d2/arch/ogl/gr.c
 @@ -54,6 +54,10 @@
@@ -187,16 +187,80 @@ index c5cca0b..99dbdc7 100644
  }
  
  void ogl_ulinec(int left,int top,int right,int bot,int c)
-@@ -962,6 +966,8 @@ int do_pal_step=0;
+@@ -960,9 +964,71 @@ void ogl_ulinec(int left,int top,int right,int bot,int c)
+ GLfloat last_r=0, last_g=0, last_b=0;
+ int do_pal_step=0;
  
++/* Astra: a hit adds red to the palette, and under steady fire that was up to
++ * half-scale red on every pixel: the whole picture turned red and the mine
++ * could not be seen. A damage flash (red only, as collide.c asks for it) is
++ * now drawn as a red border that fades toward the middle of the screen. All
++ * other flashes, including the Flash missile's white-out, are unchanged. */
++static float astra_flash_red;
++static void astra_damage_vignette(void)
++{
++	static const float ring[8][2] = { {0,0},{.5f,0},{1,0},{1,.5f},{1,1},{.5f,1},{0,1},{0,.5f} };
++	float edge = astra_flash_red > .44f ? .28f : astra_flash_red * .64f, middle = edge * .10f;
++	GLfloat vertex[48*2], color[48*4];
++	int n = 0;
++	for (int i = 0; i < 8; i++) {
++		const float *a = ring[i], *b = ring[(i+1)&7];
++		float quad[6][3] = {
++			{a[0],a[1],edge},{b[0],b[1],edge},{.5f+(b[0]-.5f)*.62f,.5f+(b[1]-.5f)*.62f,middle},
++			{a[0],a[1],edge},{.5f+(b[0]-.5f)*.62f,.5f+(b[1]-.5f)*.62f,middle},{.5f+(a[0]-.5f)*.62f,.5f+(a[1]-.5f)*.62f,middle} };
++		for (int k = 0; k < 6; k++, n++) {
++			vertex[n*2] = quad[k][0]; vertex[n*2+1] = quad[k][1];
++			color[n*4] = quad[k][2]; color[n*4+1] = 0; color[n*4+2] = 0; color[n*4+3] = 1;
++		}
++	}
++	GLfloat inner[4*2] = { .19f,.19f, .19f,.81f, .81f,.81f, .81f,.19f };
++	GLfloat inner_color[4*4] = { middle,0,0,1, middle,0,0,1, middle,0,0,1, middle,0,0,1 };
++	OGL_DISABLE(TEXTURE_2D);
++	glEnableClientState(GL_VERTEX_ARRAY);
++	glEnableClientState(GL_COLOR_ARRAY);
++	glEnable(GL_BLEND);
++	glBlendFunc(GL_ONE,GL_ONE);
++	glVertexPointer(2, GL_FLOAT, 0, vertex);
++	glColorPointer(4, GL_FLOAT, 0, color);
++	glDrawArrays(GL_TRIANGLES, 0, 48);
++	glVertexPointer(2, GL_FLOAT, 0, inner);
++	glColorPointer(4, GL_FLOAT, 0, inner_color);
++	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
++	glDisableClientState(GL_VERTEX_ARRAY);
++	glDisableClientState(GL_COLOR_ARRAY);
++	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
++}
++
  void ogl_do_palfx(void)
  {
+-	GLfloat color_array[] = { last_r, last_g, last_b, 1.0, last_r, last_g, last_b, 1.0, last_r, last_g, last_b, 1.0, last_r, last_g, last_b, 1.0 };
 +	/* R68: an inactive tint pass must not leave client arrays enabled. */
 +	if (!do_pal_step) return;
- 	GLfloat color_array[] = { last_r, last_g, last_b, 1.0, last_r, last_g, last_b, 1.0, last_r, last_g, last_b, 1.0, last_r, last_g, last_b, 1.0 };
++	/* Split the tint into the brightness level, the red a hit added beyond
++	 * the other two colours, and the rest (a pickup's, a missile's or the
++	 * reactor's flash). The red is drawn as the border. The rest is drawn
++	 * over the whole picture as before but capped: pickups collected one
++	 * after another used to add up to half-scale white over everything. The
++	 * Flash missile's white-out is a weapon effect and is left alone. */
++	extern int Flash_effect;
++	float level = gr_palette_gamma > 0 ? gr_palette_gamma / 63.0f : 0;
++	float flash_r = last_r - level, flash_g = last_g - level, flash_b = last_b - level;
++	if (flash_r < 0) flash_r = 0; if (flash_g < 0) flash_g = 0; if (flash_b < 0) flash_b = 0;
++	astra_flash_red = flash_r - (flash_g > flash_b ? flash_g : flash_b);
++	if (astra_flash_red < 0) astra_flash_red = 0;
++	flash_r -= astra_flash_red;
++	if (!Flash_effect) {
++		float top = flash_r > flash_g ? flash_r : flash_g; if (flash_b > top) top = flash_b;
++		if (top > .12f) { float scale = .12f / top; flash_r *= scale; flash_g *= scale; flash_b *= scale; }
++	}
++	float base_r = (last_r < level ? last_r : level) + flash_r, base_g = (last_g < level ? last_g : level) + flash_g, base_b = (last_b < level ? last_b : level) + flash_b;
++	if (astra_flash_red > 0) astra_damage_vignette();
++	if (base_r <= 0 && base_g <= 0 && base_b <= 0) return;
++	GLfloat color_array[] = { base_r, base_g, base_b, 1.0, base_r, base_g, base_b, 1.0, base_r, base_g, base_b, 1.0, base_r, base_g, base_b, 1.0 };
  	GLfloat vertex_array[] = { 0,0,0,1,1,1,1,0 };
  
-@@ -970,13 +976,8 @@ void ogl_do_palfx(void)
+ 	OGL_DISABLE(TEXTURE_2D);
+@@ -970,13 +1036,8 @@ void ogl_do_palfx(void)
  	glEnableClientState(GL_VERTEX_ARRAY);
  	glEnableClientState(GL_COLOR_ARRAY);
   
@@ -212,7 +276,7 @@ index c5cca0b..99dbdc7 100644
   
  	glVertexPointer(2, GL_FLOAT, 0, vertex_array);
  	glColorPointer(4, GL_FLOAT, 0, color_array);
-@@ -1167,10 +1168,12 @@ void save_screen_shot(int automap_flag)
+@@ -1167,10 +1228,12 @@ void save_screen_shot(int automap_flag)
  		HUD_init_message(HM_DEFAULT, "%s '%s'", TXT_DUMPING_SCREEN, savename + strlen(SCRNS_DIR));
  
  #ifndef OGLES
@@ -2052,18 +2116,30 @@ index 30de489..cb9c4fe 100644
  }
 +
 diff --git a/d2/main/gauges.c b/d2/main/gauges.c
-index 3ece085..758a779 100644
+index 3ece085..8251e64 100644
 --- a/d2/main/gauges.c
 +++ b/d2/main/gauges.c
-@@ -4520,6 +4520,31 @@ void observer_show_bomb_highlights()
+@@ -4520,6 +4520,43 @@ void observer_show_bomb_highlights()
  }
  
  //draw all the things on the HUD
 +/* Reuse the pilot's actual inventory and native cockpit mode, including F3 and rear view. */
 +static int astra_deck_visible;
++/* A hands-free demo is a picture to watch, not a ship to fly: with the flight
++ * deck hidden it used to fall back to the 1995 status text and a rear-view
++ * box across the bottom of the action. The status text is left out there and
++ * the rear view becomes a small mirror at the top of the screen. The reticle,
++ * an arena's score list and its messages stay. */
++int astra_demo_quiet(void)
++{
++    extern int astra_auto_enabled(void);
++    return !astra_deck_visible && astra_auto_enabled();
++}
++static int astra_hud_quiet(void) { return astra_deck_visible || astra_demo_quiet(); }
 +int astra_hud_message_inset(void)
 +{
 +    /* Match the 48-unit top rail of the 1672 x 941 flight deck, plus spacing. */
++    if (astra_demo_quiet()) return SHEIGHT/60 + HUD_SCALE_Y_AR(HIRESMODE?106:44)*7/10 + SHEIGHT/90;
 +    return astra_deck_visible ? (SHEIGHT * 58 + 940) / 941 : 0;
 +}
 +void astra_deck_update(int ordinary_view)
@@ -2087,21 +2163,23 @@ index 3ece085..758a779 100644
  void draw_hud()
  {
  	int pnum = get_pnum_for_hud();
-@@ -4616,7 +4641,7 @@ void draw_hud()
+@@ -4616,8 +4653,8 @@ void draw_hud()
  
  	//	Show score so long as not in rearview
  	if ( !Rear_view && PlayerCfg.CurrentCockpitMode!=CM_REAR_VIEW && PlayerCfg.CurrentCockpitMode!=CM_STATUS_BAR) {
 -		hud_show_score();
-+		if(!astra_deck_visible)hud_show_score();
- 		if (score_time)
+-		if (score_time)
++		if(!astra_hud_quiet())hud_show_score();
++		if (score_time && !astra_demo_quiet())
  			hud_show_score_added();
  	}
-@@ -4630,15 +4655,15 @@ void draw_hud()
+ 
+@@ -4630,15 +4667,15 @@ void draw_hud()
  		show_HUD_names();
  
  		if (PlayerCfg.CurrentCockpitMode==CM_STATUS_BAR || PlayerCfg.CurrentCockpitMode==CM_FULL_SCREEN)
 -			hud_show_homing_warning();
-+			if(!astra_deck_visible)hud_show_homing_warning();
++			if(!astra_hud_quiet())hud_show_homing_warning();
  
  		if (PlayerCfg.CurrentCockpitMode==CM_FULL_SCREEN) {
 -			hud_show_energy();
@@ -2110,25 +2188,25 @@ index 3ece085..758a779 100644
 -			hud_show_weapons();
 -			hud_show_keys();
 -			hud_show_cloak_invuln();
-+			if(!astra_deck_visible)hud_show_energy();
-+			if(!astra_deck_visible)hud_show_shield();
-+			if(!astra_deck_visible)hud_show_afterburner();
-+			if(!astra_deck_visible)hud_show_weapons();
-+			if(!astra_deck_visible)hud_show_keys();
-+			if(!astra_deck_visible)hud_show_cloak_invuln();
++			if(!astra_hud_quiet())hud_show_energy();
++			if(!astra_hud_quiet())hud_show_shield();
++			if(!astra_hud_quiet())hud_show_afterburner();
++			if(!astra_hud_quiet())hud_show_weapons();
++			if(!astra_hud_quiet())hud_show_keys();
++			if(!astra_hud_quiet())hud_show_cloak_invuln();
  
  			if (Newdemo_state==ND_STATE_RECORDING)
  			{
-@@ -4660,7 +4685,7 @@ void draw_hud()
+@@ -4660,7 +4697,7 @@ void draw_hud()
  		HUD_render_message_frame();
  
  		if (PlayerCfg.CurrentCockpitMode!=CM_STATUS_BAR)
 -			hud_show_lives();
-+			if(!astra_deck_visible)hud_show_lives();
++			if(!astra_hud_quiet())hud_show_lives();
  		if (Game_mode&GM_MULTI && Show_kill_list)
  			hud_show_kill_list();
  		if (PlayerCfg.CurrentCockpitMode != CM_LETTERBOX)
-@@ -4858,8 +4883,9 @@ void do_cockpit_window_view(int win,object *viewer,int rear_view_flag,int user,c
+@@ -4858,8 +4895,17 @@ void do_cockpit_window_view(int win,object *viewer,int rear_view_flag,int user,c
  
  		dx = (win==0)?-(w+(w/10)):(w/10);
  
@@ -2137,10 +2215,18 @@ index 3ece085..758a779 100644
 +		/* Keep auxiliary cameras inside the cockpit struts and below corner UI. */
 +		window_x = astra_deck_visible?(win?SWIDTH-w-SWIDTH/5:SWIDTH/5):grd_curscreen->sc_w/2+dx;
 +		window_y = astra_deck_visible?SHEIGHT/7:grd_curscreen->sc_h-h-SHEIGHT/15;
++		if (astra_demo_quiet()) {
++			/* Demo: a mirror at the top centre, a missile camera beside it. */
++			w = w*7/10; h = h*7/10;
++			window_x = win ? SWIDTH/2 + w/2 + SWIDTH/100 : (SWIDTH-w)/2;
++			/* An arena demo has the page's pilot card at the top centre. */
++			if (Game_mode & GM_MULTI) window_x = win ? SWIDTH*61/100 : SWIDTH*39/100 - w;
++			window_y = SHEIGHT/60;
++		}
  
  		gr_init_sub_canvas(&window_canv,&grd_curscreen->sc_canvas,window_x,window_y,w,h);
  	}
-@@ -4878,6 +4904,7 @@ void do_cockpit_window_view(int win,object *viewer,int rear_view_flag,int user,c
+@@ -4878,6 +4924,7 @@ void do_cockpit_window_view(int win,object *viewer,int rear_view_flag,int user,c
  	gr_set_current_canvas(&window_canv);
  
  	render_frame(0, win+1);
@@ -2173,19 +2259,21 @@ index 64c6202..9dde716 100644
  }
  
 diff --git a/d2/main/hud.c b/d2/main/hud.c
-index 7298cc1..7d0747f 100644
+index 7298cc1..ea27994 100644
 --- a/d2/main/hud.c
 +++ b/d2/main/hud.c
-@@ -59,6 +59,8 @@ void HUD_clear_messages()
+@@ -59,6 +59,10 @@ void HUD_clear_messages()
  //	Writes a message on the HUD and checks its timer.
  void HUD_render_message_frame()
  {
 +	extern int astra_arena_remote_view(void);
 +	if(astra_arena_remote_view())return;
++	/* A solo demo shows what the pilot is doing in the page's own status line. */
++	{extern int astra_demo_quiet(void);if(astra_demo_quiet()&&!(Game_mode&GM_MULTI))return;}
  	int i,j,y;
  
  	HUD_toolong = 0;
-@@ -98,7 +100,11 @@ void HUD_render_message_frame()
+@@ -98,7 +102,11 @@ void HUD_render_message_frame()
  		if (is_observer())
  			y = Observer_message_y_start;
  		else
@@ -2197,7 +2285,7 @@ index 7298cc1..7d0747f 100644
  
  		if (Guided_missile[Player_num] && Guided_missile[Player_num]->type==OBJ_WEAPON && Guided_missile[Player_num]->id==GUIDEDMISS_ID &&
  		Guided_missile[Player_num]->signature==Guided_missile_sig[Player_num] && PlayerCfg.GuidedInBigWindow)
-@@ -156,6 +162,10 @@ int HUD_init_message_va(int class_flag, const char * format, va_list args)
+@@ -156,6 +164,10 @@ int HUD_init_message_va(int class_flag, const char * format, va_list args)
  
  static int HUD_init_message_literal_worth_showing(int class_flag, const char *message)
  {

@@ -884,3 +884,15 @@ body::after {
   .net-tour { font-size: 13.5px; }
 }
 @media (prefers-reduced-motion: reduce) { .ai-lab .net-cue { animation: none; } }
+
+/* ---------- v7: follow the signal, fool it, and the gallery's layer tabs ---------- */
+.net-o { cursor: pointer; }
+.net-o:hover { border-color: rgba(230,189,103,0.6); }
+.net-o:focus-visible { outline: 2px solid var(--lab-gold); outline-offset: 1px; }
+.net-o.traced { box-shadow: 0 0 0 2px var(--lab-gold); }
+.net-trace { border-style: dashed; }
+.ai-lab .net-cell[data-path] { position: relative; }
+.ai-lab .net-cell[data-path]::after { content: ""; position: absolute; left: 50%; top: 50%; width: 34%; height: 34%; min-width: 4px; min-height: 4px; transform: translate(-50%, -50%); border-radius: 50%; background: var(--lab-gold); box-shadow: 0 0 0 1.5px #10202b; pointer-events: none; }
+.ai-lab .net-cell.moved { border-color: #fff !important; border-style: dashed !important; }
+.net-panel a { color: var(--lab-gold); }
+.net-tabs { display: flex; flex-wrap: wrap; gap: 6px; }
