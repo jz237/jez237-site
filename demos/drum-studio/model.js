@@ -1,4 +1,5 @@
 import * as T from '../aquaclear-studio/vendor/three.module.js';
+import {liquify} from '../filter-runtime/liquid.js?v=1';
 import {roundedBox} from '../trickle-studio/detail.js?v=3';
 import {polymer} from './surface-finishes.js?v=5';
 import {discharge} from './discharge.js?v=5';
@@ -56,7 +57,7 @@ export function buildModel(){
  const seams=new T.Group();waterGroup.add(seams);const seamMat=new T.LineBasicMaterial({color:'#9fddd5',transparent:true,opacity:.5});for(const z of [-1.58,1.58]){const l=new T.Line(new T.BufferGeometry().setFromPoints([V(-1.8,0,z),V(3.1,0,z)]),seamMat);seams.add(l);}
  const dirtySeams=new T.Group();waterGroup.add(dirtySeams);for(const side of [-1,1]){const line=new T.Line(new T.BufferGeometry().setFromPoints([V(-1.8,0,side),V(1.5,0,side)]),new T.LineBasicMaterial({color:'#c6d3a7',transparent:true,opacity:.56}));dirtySeams.add(line);}
  // Fan sprays and waste droplets only appear during an actual rinse.
- const effects=new T.Group();root.add(effects);const sprayMat=new T.MeshBasicMaterial({color:'#c4e7eb',transparent:true,opacity:.65,depthWrite:false}),drops=new T.InstancedMesh(new T.SphereGeometry(.013,6,4),sprayMat,360);effects.add(drops);
+ const effects=new T.Group();root.add(effects);const sprayMat=liquify(new T.MeshPhysicalMaterial({color:'#d2eef1',roughness:.06,metalness:0,clearcoat:1,transparent:true,opacity:.65,depthWrite:false}),{clear:.3}),drops=new T.InstancedMesh(new T.SphereGeometry(.013,6,4),sprayMat,360);effects.add(drops);
  const wasteDrops=new T.InstancedMesh(new T.SphereGeometry(.024,8,6),new T.MeshStandardMaterial({color:'#8d805b',roughness:.24,transparent:true,opacity:.8}),90);effects.add(wasteDrops);
  const fanMat=new T.ShaderMaterial({transparent:true,side:T.DoubleSide,depthWrite:false,uniforms:{clock:{value:0}},vertexShader:'varying vec2 fanUv;void main(){fanUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',fragmentShader:'varying vec2 fanUv;uniform float clock;void main(){float edges=pow(max(0.,1.-abs(fanUv.x*2.-1.)),.65);float streak=pow(.5+.5*sin(fanUv.x*103.+sin(fanUv.y*11.-clock*17.)*.8),5.);float breakup=.55+.45*sin(fanUv.y*65.-clock*30.+fanUv.x*19.);gl_FragColor=vec4(.65,.85,.89,edges*(.045+.14*streak)*breakup);}' });const fans=[];for(const x of nozzleXs){const g=new T.BufferGeometry();g.setAttribute('position',new T.Float32BufferAttribute([x,3.23,0,x-.19,2.96,-.08,x+.19,2.96,.08],3));g.setAttribute('uv',new T.Float32BufferAttribute([.5,0,0,1,1,1],2));const fan=mesh(effects,g,fanMat);fans.push(fan);}
  const incoming=new T.InstancedMesh(new T.IcosahedronGeometry(.025,0),new T.MeshStandardMaterial({color:'#9b8455',roughness:.68}),120);effects.add(incoming);

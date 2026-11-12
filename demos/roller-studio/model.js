@@ -1,4 +1,5 @@
 import * as T from '../aquaclear-studio/vendor/three.module.js';
+import {liquify} from '../filter-runtime/liquid.js?v=1';
 import {WATER_GLSL} from '../filter-runtime/water-glsl.js?v=1';
 import {bevelBox} from '../sand-studio/finishes.js?v=2';
 import {hardwareFinish} from './hardware.js?v=4';
@@ -56,7 +57,7 @@ export function buildModel(){
  s.fragmentShader=s.fragmentShader.replace('varying vec3 waterPosition;','varying vec3 waterPosition;varying vec3 hrWorld;vec3 hrWn;'+WATER_GLSL).replace('#include <normal_fragment_maps>','#include <normal_fragment_maps>\nvec2 hrG=hrSlope(hrWorld.xz,clock,1.);hrWn=normalize(vec3(-hrG.x,1.,-hrG.y));normal=normalize((viewMatrix*vec4(hrWn,0.)).xyz)*(gl_FrontFacing?1.:-1.);').replace('#include <opaque_fragment>','vec3 hrV=normalize(cameraPosition-hrWorld);float hrF=.02+.98*pow(1.-abs(dot(hrWn,hrV)),5.);outgoingLight+=vec3(.42,.66,.64)*hrCaustic(hrWorld.xz,clock)*.07;outgoingLight=mix(outgoingLight,hrStudio(reflect(-hrV,hrWn*(hrV.y<0.?-1.:1.))),hrF*.72+.07);vec3 hrH=normalize(hrV+normalize(vec3(-.4,1.,.65)));outgoingLight+=pow(max(0.,dot(hrWn,hrH)),420.)*1.4;diffuseColor.a=mix(.36,.94,hrF);\n#include <opaque_fragment>');};mat.customProgramCacheKey=()=> 'roller-water-v3';return mesh(liquids,new T.PlaneGeometry(w,d,65,48),mat,p,[-Math.PI/2,0,0]);}
  const outerSurface=surface(5.55,3.85,[0,1,0],'#3f8794'),innerSurface=surface(2.7,1.72,[0,2.5,0],'#78a9a0');const line=box(liquids,2.7,.012,.012,[0,2.5,.87],new T.MeshBasicMaterial({color:'#adede2'}));
  // Falling filtered droplets and overflow are separate, correctly sided paths.
- const drops=new T.InstancedMesh(new T.SphereGeometry(1,6,5),new T.MeshPhysicalMaterial({color:'#a5dce2',transparent:true,opacity:.65,roughness:.08,metalness:.12}),190);liquids.add(drops);drops.frustumCulled=false;const dropSeeds=Array.from({length:190},()=>({side:r()>.5?1:-1,z:(r()-.5)*1.7,t:r(),speed:.4+r()*.35})),dummy=new T.Object3D();
+ const drops=new T.InstancedMesh(new T.SphereGeometry(1,6,5),liquify(new T.MeshPhysicalMaterial({color:'#a5dce2',transparent:true,opacity:.65,roughness:.08,metalness:.12})),190);liquids.add(drops);drops.frustumCulled=false;const dropSeeds=Array.from({length:190},()=>({side:r()>.5?1:-1,z:(r()-.5)*1.7,t:r(),speed:.4+r()*.35})),dummy=new T.Object3D();
  const bypassWater=box(liquids,.25,1,.28,[-2,2,.65],volumeMat.clone());bypassWater.material.opacity=.5;
  // Small suspended flecks stay on the dirty side until captured by the web.
  const debris=new T.InstancedMesh(new T.IcosahedronGeometry(.023,0),new T.MeshStandardMaterial({color:'#9c733a',roughness:.84}),180);machine.add(debris);debris.frustumCulled=false;const particleTransport=createParticleTransport(180),particlePositions=Array.from({length:180},()=>V(0,0,0));
