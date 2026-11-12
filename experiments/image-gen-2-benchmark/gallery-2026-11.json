@@ -236,6 +236,120 @@
     }
   },
   {
+    "id": "2026-11-11-factual-infographic-factual-infographic-longnose-hawkfish",
+    "title": "Factual infographic: Longnose hawkfish",
+    "tests": "Permanent species reservations and all 238 factual topics checked; no prior hawkfish. Accepted taxonomy and two synonyms plus alternate spelling from CAS. Aquarium guidance labeled biological inference; no tank minimum.; archive_slot=2026-11-11T20:20; concept=longnose-hawkfish-coral-perching-prey-lookout; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: reef-fish-infographic; fish_scientific_name: Oxycirrhites typus",
+    "prompt": "Create a fancy, highly detailed, richly colorful PHOTOREALISTIC aquarium reef-fish educational atlas, the finished artwork itself. Flowing asymmetrical underwater composition, not a rigid grid, poster mockup, book photograph or app. Prominent exact headline “LONGNOSE HAWKFISH”, with italic scientific name “Oxycirrhites typus” directly underneath. Secondary small line “A coral-perching hunter”.\n\nA magnificent dominant single whole hero fish, three-quarter lateral view, occupying the central diagonal from lower left to upper right, perched naturally on a branching gorgonian. Anatomically accurate Oxycirrhites typus: slender moderately compressed whitish body with the characteristic fine horizontal and near-vertical red lines crossing into a delicate grid; very long thin pointed snout (roughly half the head), realistic round eyes; continuous dorsal fin with a slightly notched transition, deeply indented spine membranes and tiny tufts of cirri near each spine tip. Natural translucent fin webs, subtle scale highlights, a blunt nearly straight tail edge, stout elongated lower pectoral rays bracing on the branch rather than walking mammal feet. No exaggerated fangs, invented organs, extra fins or decorative changes to its diagnostic red grid. Show individual scale texture and credible fin attachments with exquisite macro realism. The surrounding scene is a deeper reef with elegant sea-fan branching, muted distant reef silhouettes and restrained microplankton; no other fish species. Jewel teal water, warm coral-red fish markings, lavender and amber gorgonian accents, diagonal shafts of filtered blue light, suspended particles and cinematic underwater depth. Keep the white fish luminous without changing its markings; biologically credible habitat rather than a shallow sunlit garden.\n\nWeave open, exceptionally legible annotations and supporting close studies into the reef's branching pathways, with generous breathing space. Fine curved leader lines connect a large enlarged pectoral-fin study to the hero's actual lower fin rays, and a small dorsal-spine detail to its tiny cirri; subordinate studies are the same species. Exact labels: “Built to perch” and “Stout lower pectoral rays support a coral lookout”; “Tiny dorsal cirri” and “Tufts near the tips of the dorsal spines”. A gracefully placed snout-and-prey macro vignette shows one minute crustacean near the pointed mouth, not a giant shrimp. Its readable labels: “Small-prey hunter” and “Zooplankton and small crustaceans”. Do not draw a fictional suction mechanism or claim the snout probes crevices.\n\nA slender ruler motif beneath the hero reads “Length: to 13 cm / 5.1 in”. A subtle organic world-range ribbon with ocean emphasis, not invented precise locality dots, reads “Indo-Pacific + eastern Pacific” and “Including the Red Sea”. The lower reef contour carries the habitat sentence “Often perched on sea fans or black coral; generally deeper reefs.” A tiny depth annotation can read “Reported range: 5–100 m; shallow exceptions occur.” Do not imply black coral is a plant or that all encounters are deep.\n\nIn open negative space at lower right, elegantly integrated and clearly separated from wild observations, exact heading “Aquarium implications” with smaller text “Inferred from wild biology”. Three concise readable lines: “Provide stable perches and suitable small meaty foods.” “Small crustacean tankmates may become prey.” “Coral association is not a promise of universal reef safety.” A small final line: “Assess companions individually; no tank-size shortcut.” Do not add a numeric tank minimum, unsupported chemistry values, blanket peaceful/aggressive labels, guaranteed coral safety or conservation/trade advice. Do not depict corals as mandatory captive food or recommend harvesting wild sea fans. Maintain a premium museum-atlas hierarchy: commanding fish and title, crisp main labels, concise text that rewards zooming, no decorative gibberish or crowded rectangles. Rich visual education, not a sparse title poster. Source credit in one discreet legible footer: “Sources: Australian Museum · Smithsonian STRI · California Academy of Sciences · Oregon Coast Aquarium”. All featured biological structures and substantive facts must follow the descriptions above.",
+    "image": "images/2026-11-11-factual-infographic-factual-infographic-longnose-hawkfish.jpg",
+    "thumb": "thumbs/2026-11-11-factual-infographic-factual-infographic-longnose-hawkfish.webp",
+    "color": "#394546",
+    "date": "2026-11-11",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1199x1312",
+    "dedup": {
+      "conceptKey": "longnose-hawkfish-coral-perching-prey-lookout",
+      "imageSha256": "6a92ab6760dcf855cafa27eea0278676b399f4998073efa3590ef9dbfb3b2462",
+      "imageDHash": "84d38e2b7379fb5c"
+    },
+    "factualInfographic": {
+      "topic": "Longnose hawkfish (Oxycirrhites typus) coral perching anatomy and small-prey feeding",
+      "description": "A species-specific atlas of diagnostic markings, perching anatomy, range, habitat, small-prey feeding and explicitly inferred aquarium compatibility cautions.",
+      "sourceNote": "Actual authoritative pages read 2026-11-12 UTC. Museum taxonomy, anatomy and habitat independently cross-checked; aquarium diet used as supplemental living-collection source. https://australian.museum/learn/animals/fishes/longnose-hawkfish-oxycirrhites-typus/ https://biogeodb.stri.si.edu/sftep/en/thefishes/species/1594 https://researcharchive.calacademy.org/research/ichthyology/catalog/fishcatget.asp?genus=Oxycirrhites&tbl=species https://aquarium.org/animals/longnose-hawkfish/",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-12T01:22:08.243006+00:00",
+        "sources": [
+          {
+            "id": "AM",
+            "publisher": "Australian Museum",
+            "title": "Longnose Hawkfish, Oxycirrhites typus Bleeker, 1857",
+            "sourceType": "museum",
+            "url": "https://australian.museum/learn/animals/fishes/longnose-hawkfish-oxycirrhites-typus/"
+          },
+          {
+            "id": "STRI",
+            "publisher": "Smithsonian Tropical Research Institute",
+            "title": "Shorefishes of the Eastern Pacific: Oxycirrhites typus",
+            "sourceType": "museum",
+            "url": "https://biogeodb.stri.si.edu/sftep/en/thefishes/species/1594"
+          },
+          {
+            "id": "CAS",
+            "publisher": "California Academy of Sciences",
+            "title": "Eschmeyer’s Catalog of Fishes: Oxycirrhites",
+            "sourceType": "museum",
+            "url": "https://researcharchive.calacademy.org/research/ichthyology/catalog/fishcatget.asp?genus=Oxycirrhites&tbl=species"
+          },
+          {
+            "id": "OCA",
+            "publisher": "Oregon Coast Aquarium",
+            "title": "Longnose Hawkfish",
+            "sourceType": "museum",
+            "url": "https://aquarium.org/animals/longnose-hawkfish/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Accepted species Oxycirrhites typus Bleeker 1857; Oxycirrhites morrisi and Oxycirrhites seftoni are synonyms. Oxycirrhitus typus is a documented alternate genus spelling.",
+            "sourceIds": [
+              "CAS"
+            ]
+          },
+          {
+            "claim": "Whitish body with horizontal and vertical red bands forming a cross-hatch grid; slender compressed body and very long thin snout.",
+            "sourceIds": [
+              "AM",
+              "STRI"
+            ]
+          },
+          {
+            "claim": "Tufts of cirri at dorsal spine tips; lower pectoral rays stout and elongated, used for perching.",
+            "sourceIds": [
+              "AM",
+              "STRI"
+            ]
+          },
+          {
+            "claim": "To 13 cm (about 5.1 inches).",
+            "sourceIds": [
+              "STRI"
+            ]
+          },
+          {
+            "claim": "Indo-Pacific and eastern Pacific marine range, including the Red Sea.",
+            "sourceIds": [
+              "AM",
+              "CAS"
+            ]
+          },
+          {
+            "claim": "Perches on gorgonians or black coral; generally deeper reef habitat, with reported total depth range 5–100 m and shallow exceptions.",
+            "sourceIds": [
+              "AM",
+              "STRI"
+            ]
+          },
+          {
+            "claim": "Feeds on zooplankton and small crustaceans; pointed mouth helps capture small prey.",
+            "sourceIds": [
+              "OCA"
+            ]
+          },
+          {
+            "claim": "Aquarium implications, explicitly labeled inferences rather than tested universal compatibility: provide stable perching structure and suitable small meaty foods; small crustacean tankmates may be prey, so do not promise universal reef safety. Habitat association does not prove all corals or all companions are safe. No numeric tank minimum asserted.",
+            "sourceIds": [
+              "AM",
+              "STRI",
+              "OCA"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
     "id": "2026-11-11-factual-infographic-factual-infographic-firefish",
     "title": "Factual infographic: Firefish",
     "tests": "Species and spelling-alias guards checked against permanent reservations and all factual topics. No tank minimum asserted. Husbandry inferences explicitly labeled; no universal reef-safety claim.; archive_slot=2026-11-11T12:20; concept=firefish-current-feeding-rubble-bolt-hole; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: reef-fish-infographic; fish_scientific_name: Nemateleotris magnifica",
