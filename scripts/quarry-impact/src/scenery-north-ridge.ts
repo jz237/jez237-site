@@ -13,8 +13,14 @@ export function replacesNorthBackdropCard(x: number, z: number) {
   return angle >= 350 || angle <= 45;
 }
 
+let ridgePreparation: Promise<Awaited<ReturnType<typeof createNorthImpostorMaterial>>[]> | undefined;
+export function prepareNorthRidge() {
+  return ridgePreparation ??= Promise.all(atlas.variants.map(variant => createNorthImpostorMaterial({ ...atlas, ...variant })))
+    .catch(error => { ridgePreparation = undefined; throw error; });
+}
+
 export async function loadNorthRidge(parent: T.Group, geometry: ReadonlyMap<string, T.BufferGeometry>, source: Materials) {
-  const images = await Promise.all(atlas.variants.map(variant => createNorthImpostorMaterial({ ...atlas, ...variant })));
+  const images = await prepareNorthRidge();
   const wood = backdropGeometryMaterial(source.wood), needles = backdropGeometryMaterial(source.needles);
   const trunks = source.trunks.map(backdropGeometryMaterial);
   const dummy = new T.Object3D();

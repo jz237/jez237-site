@@ -5,6 +5,9 @@ import {clubEngineLabel} from './club-engine-label';
 import {classEngineLabel} from './class-engine';
 import {programWarmupView} from './program-warmup';
 import './loading-textures';
+import {prepareNorthForest} from './scenery-north-forest';
+import {warmPostprocessing} from './startup-graphics';
+import {prepareForest} from './scenery-vegetation';
 import {ReplayPuddles} from './replay-puddles';
 import {ReplaySlicks} from './replay-slicks';
 import {PropFires,propKind,DRUM_BLAST} from './prop-fires';
@@ -3257,6 +3260,14 @@ canvas.addEventListener('webglcontextrestored', () => {
 });
 async function boot() {
   loading('PREPARING THE QUARRY');
+  // Start independent I/O before synchronous physics/world construction.
+  const assetsReady = Promise.all([
+    loadCars(loading, [kind]), environment(renderer, scene), prepareArenaFloor(),
+    prepareNorthForestFloor(), prepareCircuitSurface(), VehicleFire.loadBaked(),
+    prepareReferenceFloor(), prepareForest(), prepareNorthForest(),
+  ]);
+  // Preserve rejection for the joined await without an early unhandled rejection.
+  void assetsReady.catch(() => {});
   await R.init();
   physics = new R.World({ x: 0, y: -9.81, z: 0 });
   physics.timestep = 1 / 60;
@@ -3285,17 +3296,7 @@ async function boot() {
   online.network.addEventListener('connected',()=>{const url=new URL(location.href);url.searchParams.set('room',online.network.room);history.replaceState(null,'',url);sound.pause(!['playing','countdown'].includes(state));});
   online.network.addEventListener('error',e=>{const message=(e as CustomEvent<string>).detail;onlineUI.message(message);toast(message,8);});
   online.network.addEventListener('disconnected',e=>{keys.clear();online.network.clearInput();sound.pause(true);onlineUI.message((e as CustomEvent<string>).detail);toast(online.network.reconnecting?'Connection lost · reconnecting':online.network.disconnectReason+' · press Escape to leave',8);});
-  const prepared = await Promise.all([
-    loadCars(loading, [kind]),
-    environment(renderer, scene),
-    prepareArenaFloor(),
-    prepareNorthForestFloor(),
-    prepareCircuitSurface(),
-    quarry.trees(),
-    onlineUI.configure(),
-    VehicleFire.loadBaked(),
-    prepareReferenceFloor(),
-  ]);
+  const [prepared] = await Promise.all([assetsReady, quarry.trees(), onlineUI.configure()]);
   environmentTarget = prepared[1];
   vehicleFire.useBaked();
   setQuarryMode();
@@ -3724,6 +3725,7 @@ async function warmPrograms(includeStatic=false) {
   try {
     const inactive=new Set<T.Object3D>([quarryVenue,...Object.values(raceVenues),...Object.values(arenaVenues)].filter(v=>v&&v!==activeVenue).map(v=>v!.root));
     const stages:LoadingStage[]=[{name:'Track and vehicles',start:()=>renderer.compileAsync(programWarmupView(scene,inactive),camera,scene)}];
+    if(includeStatic){ao.setGBuffer(composer.readBuffer.depthTexture!);stages.push({name:'Screen effects',start:()=>warmPostprocessing(renderer,composer)});}
     if(includeStatic&&staticShadows)stages.push({name:'Static shadows',start:()=>renderer.compileAsync(staticShadows!.casterScene,staticShadows!.camera)});
     const waiting=new Set<string>();
     await prepareLoadingStages(stages,event=>{

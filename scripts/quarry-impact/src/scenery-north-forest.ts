@@ -5,7 +5,7 @@ import * as T from 'three';
 import { GLTFLoader } from './model-loader';
 import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
 import { url } from './assets';
-import { loadNorthRidge } from './scenery-north-ridge';
+import { loadNorthRidge, prepareNorthRidge } from './scenery-north-ridge';
 
 export type NorthSaplingPart = { variant: number; level: number; sourceHeight: number; sourceBottom: number;
     geometry: T.BufferGeometry; material: T.MeshStandardMaterial };
@@ -27,11 +27,8 @@ export function northForestDiagnostics(camera: T.Camera) {
     });
 }
 
-/** New materials share all existing branch/needle normal and ARM maps. */
-async function northMaterials(existing: ReadonlyMap<string, T.MeshStandardMaterial>) {
-    const wood = existing.get('medium:fir_sapling_medium_branches');
-    const twigs = existing.get('medium:fir_sapling_medium_twigs');
-    if (!wood || !twigs) throw new Error('Load the shared fir PBR materials before the north forest');
+let northTextures: ReturnType<typeof loadNorthTextures> | undefined;
+function loadNorthTextures() {
     const loader = new T.TextureLoader();
     const load = async (file: string, color = false) => {
         const texture = await loader.loadAsync(url('assets/' + file));
@@ -39,34 +36,56 @@ async function northMaterials(existing: ReadonlyMap<string, T.MeshStandardMateri
         texture.wrapS = texture.wrapT = T.RepeatWrapping; texture.anisotropy = 8;
         return texture;
     };
-    const needles = twigs.clone(); needles.name = 'north-fir-needles';
-    needles.map = await load('north_fir_twig_diff.jpg', true);
-    const trunks: T.MeshStandardMaterial[] = [];
-    for (const variant of ['a', 'b']) {
-        const [map, normalMap, arm] = await Promise.all([
+    return Promise.all([
+        load('north_fir_twig_diff.jpg', true),
+        Promise.all(['a', 'b'].map(variant => Promise.all([
             load(`north_fir_trunk_${variant}_diff.jpg`, true),
             load(`north_fir_trunk_${variant}_nor_gl.jpg`), load(`north_fir_trunk_${variant}_arm.jpg`),
-        ]);
-        const material = new T.MeshStandardMaterial({ name: 'north-fir-trunk-' + variant,
-            map, normalMap, roughnessMap: arm, metalnessMap: arm, roughness: 1,
-            metalness: 0, envMapIntensity: .65, side: T.DoubleSide });
-        trunks.push(material);
-    }
-    // The official C trunk has no UV attribute. Its documented cylindrical
-    // projection is encoded for this existing transformed branch photograph.
+        ]))),
+    ]);
+}
+function prepareNorthTextures() {
+    return northTextures ??= loadNorthTextures().catch(error => { northTextures = undefined; throw error; });
+}
+
+/** New materials share all existing branch/needle normal and ARM maps. */
+async function northMaterials(existing: ReadonlyMap<string, T.MeshStandardMaterial>) {
+    const wood = existing.get('medium:fir_sapling_medium_branches');
+    const twigs = existing.get('medium:fir_sapling_medium_twigs');
+    if (!wood || !twigs) throw new Error('Load the shared fir PBR materials before the north forest');
+    const [needleMap, trunkMaps] = await prepareNorthTextures();
+    const needles = twigs.clone(); needles.name = 'north-fir-needles'; needles.map = needleMap;
+    const trunks = trunkMaps.map(([map, normalMap, arm], index) => new T.MeshStandardMaterial({
+        name: 'north-fir-trunk-' + ['a', 'b'][index], map, normalMap, roughnessMap: arm,
+        metalnessMap: arm, roughness: 1, metalness: 0, envMapIntensity: .65, side: T.DoubleSide,
+    }));
+    // The official C trunk has no UV attribute. Preserve its shared branch photograph.
     trunks.push(wood);
     return { wood, needles, trunks };
+}
+
+let northPreparation: ReturnType<typeof loadNorthSources> | undefined;
+async function loadNorthSources() {
+    const decoder = new DRACOLoader().setDecoderPath(url('models/draco/')).setWorkerLimit(2);
+    decoder.preload();
+    const loader = new GLTFLoader().setDRACOLoader(decoder);
+    const [sources] = await Promise.all([
+        Promise.all([0, 1, 2].map(v => loader.loadAsync(url(`models/quarry-north-fir-${v}.glb`))))
+            .finally(() => decoder.dispose()),
+        prepareNorthRidge(), prepareNorthTextures(),
+    ]);
+    return sources;
+}
+/** Fetch/decode geometry and atlases independently of medium-tree material assembly. */
+export function prepareNorthForest() {
+    return northPreparation ??= loadNorthSources().catch(error => { northPreparation = undefined; throw error; });
 }
 
 /** Six bounded, 360-degree stands participate in normal per-pass culling. */
 export async function loadNorthForest(parent: T.Group,
     existing: ReadonlyMap<string, T.MeshStandardMaterial>, saplings: readonly NorthSaplingPart[],
     medium: readonly NorthSaplingPart[]): Promise<T.LOD[]> {
-    const materials = await northMaterials(existing);
-    const decoder = new DRACOLoader().setDecoderPath(url('models/draco/')).setWorkerLimit(2);
-    const loader = new GLTFLoader().setDRACOLoader(decoder);
-    const sources = await Promise.all([0, 1, 2].map(v => loader.loadAsync(url(`models/quarry-north-fir-${v}.glb`))))
-        .finally(() => decoder.dispose());
+    const [materials, sources] = await Promise.all([northMaterials(existing), prepareNorthForest()]);
     const geometry = new Map<string, T.BufferGeometry>();
     for (const source of sources) {
         source.scene.updateMatrixWorld(true);

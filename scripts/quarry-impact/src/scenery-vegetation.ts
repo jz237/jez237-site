@@ -179,6 +179,17 @@ async function scannedForest(parent: T.Group, file: string, large: boolean,
     // geometry independently for the main view, reflection cube faces and shadows.
     return northSaplings;
 }
+const forestFiles = ['a', 'b', 'c'].map(variant => 'models/fir-medium-' + variant + '.glb');
+forestFiles.push('models/fir-saplings-lod.glb');
+let forestPreparation: ReturnType<typeof loadForestSources> | undefined;
+function loadForestSources() {
+    return Promise.all(forestFiles.map(file => new GLTFLoader().loadAsync(url(file))));
+}
+/** Only asset preparation is concurrent; placement/RNG order remains unchanged. */
+export function prepareForest() {
+    return forestPreparation ??= loadForestSources().catch(error => { forestPreparation = undefined; throw error; });
+}
+
 export async function forestScenery(parent: T.Group, random: () => number) {
     const textures = new T.TextureLoader(), dummy = new T.Object3D();
     const track = Array.from({ length: 120 }, (_, i) => trackPoint(i / 120));
@@ -240,9 +251,7 @@ export async function forestScenery(parent: T.Group, random: () => number) {
         parent.add(trees);
     }
     const northMedium: NorthSaplingPart[] = [];
-    const forestFiles = ['a', 'b', 'c'].map(variant => 'models/fir-medium-' + variant + '.glb');
-    forestFiles.push('models/fir-saplings-lod.glb');
-    const loadedForest = await Promise.all(forestFiles.map(file => new GLTFLoader().loadAsync(url(file))));
+    const loadedForest = await prepareForest();
     for (let i = 0; i < 3; i++)
         northMedium.push(...await scannedForest(parent, forestFiles[i], true, loadedForest[i]));
     const northSaplings = await scannedForest(parent, forestFiles[3], false, loadedForest[3]);

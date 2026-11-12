@@ -1,0 +1,35 @@
+{
+  "baseline": "ebd928195894a87362a3cbd45c02c1bfd73fef85",
+  "files": {
+    "src/main.ts": {
+      "snapshot": "src-main.ts.gz",
+      "before": "6b134732b81bf3a1a5ede8dc51b1e1104839dd8f341757359774b48712c816de",
+      "after": "7f965454dd0a2b5599d505d95ae01dd83601e5ab623c8d7be02f66a8b6fd8601"
+    },
+    "src/rendering.ts": {
+      "snapshot": "src-rendering.ts.gz",
+      "before": "54c7cb0956c9c963cff5114452d5717678758a220de26de18182d5c23b539e88",
+      "after": "d50eab99f94c2aae0be3315461f78569f7e4b8c6e4f2d1915ee850989a2e9788"
+    },
+    "src/scenery-north-forest.ts": {
+      "snapshot": "src-scenery-north-forest.ts.gz",
+      "before": "28d4ac801f3571cc8ca89aae145c125863c6c88d68774a93ec60f0a7a1b2ffcf",
+      "after": "c5b430ea46dc6fdb0bd8270ec3b70b110f7b07fea6f8d695f3cf37eb0db5a7c0"
+    },
+    "src/scenery-north-ridge.ts": {
+      "snapshot": "src-scenery-north-ridge.ts.gz",
+      "before": "0faaf8e6992d2a29a2cbc5f5e77bd73a9600e05841ded6611fb29d3728b4a32e",
+      "after": "0fea8dcdbeabb7f00bd5c68b6d31fa0108800aacaac0cbfc56f392d0da489c12"
+    },
+    "src/scenery-vegetation.ts": {
+      "snapshot": "src-scenery-vegetation.ts.gz",
+      "before": "4338cc1204b18c5c4a03d96c50bbfe16419eb62f4e0a52fd52b617dc2c20dab5",
+      "after": "143e67fc575174636c01bf35e55b6d08221c89f85b64a36a0ffda3065fe10f3d"
+    },
+    "tests/loading-speed-invariants.ts": {
+      "snapshot": "tests-loading-speed-invariants.ts.gz",
+      "before": "1478a7a4980ffa3bcef9c6a7476381384e5b31a336bd3763012abdce7288a596",
+      "after": "cefba463296165f166f972c2f48d0b69721cf7f1c97babbfc960f2333f79c2c6"
+    }
+  }
+}
