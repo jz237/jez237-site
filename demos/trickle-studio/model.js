@@ -1,4 +1,5 @@
 import * as T from '../aquaclear-studio/vendor/three.module.js';
+import {liquify} from '../filter-runtime/liquid.js?v=1';
 import {cellularFoam} from '../aquaclear-studio/realism.js?v=material-5';
 import {surfaceMaps} from '../aquaclear-studio/detail.js?v=material-5';
 import {refineConstruction,roundedBox} from './detail.js?v=3';
@@ -59,7 +60,7 @@ export function buildTrickle(){
  function waterBody(w,d,x,z,bottom){const group=new T.Group();group.position.set(x,bottom,z);waterGroup.add(group);const mat=new T.MeshBasicMaterial({color:'#247b91',transparent:true,opacity:.12,depthWrite:false,side:T.DoubleSide});for(const side of [-1,1]){mesh(group,new T.PlaneGeometry(w,1),mat,0,.5,side*d/2);const wall=mesh(group,new T.PlaneGeometry(d,1),mat,side*w/2,.5,0);wall.rotation.y=Math.PI/2;}const line=new T.LineLoop(new T.BufferGeometry().setFromPoints([V(-w/2,0,-d/2),V(w/2,0,-d/2),V(w/2,0,d/2),V(-w/2,0,d/2)]),new T.LineBasicMaterial({color:'#91dfdf',transparent:true,opacity:.65}));line.position.set(x,bottom,z);waterGroup.add(line);return {group,line,bottom};}
  const bodies=[waterBody(4.83,3,-1.65,0,.10),waterBody(3.25,3,2.44,0,.10),waterBody(5.05,2.35,1.35,-.15,5.38)];
 
- const dropMat=new T.MeshPhysicalMaterial({color:'#a0e6eb',roughness:.16,transparent:true,opacity:.68,depthWrite:false,clearcoat:.7});
+ const dropMat=liquify(new T.MeshPhysicalMaterial({color:'#a0e6eb',roughness:.16,transparent:true,opacity:.68,depthWrite:false,clearcoat:.7}));
  const drops=new T.InstancedMesh(new T.SphereGeometry(.019,8,6),dropMat,630);waterGroup.add(drops);drops.name='trickle-drops';
  const jets=new T.InstancedMesh(new T.CylinderGeometry(.008,.014,1,6),dropMat.clone(),63);waterGroup.add(jets);
  const bubbles=new T.InstancedMesh(new T.SphereGeometry(.026,7,5),new T.MeshPhysicalMaterial({color:'#cbe9e4',roughness:.16,transparent:true,opacity:.4,depthWrite:false}),80);waterGroup.add(bubbles);

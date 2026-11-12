@@ -1,4 +1,5 @@
 import * as T from '../aquaclear-studio/vendor/three.module.js';
+import {liquify} from '../filter-runtime/liquid.js?v=1';
 import {padLoading,outletActive,transport} from './dynamics.js?v=3';
 const TAU=Math.PI*2,clamp=T.MathUtils.clamp,V=(x=0,y=0,z=0)=>new T.Vector3(x,y,z);
 
@@ -19,7 +20,7 @@ export function sampleRoute(path,y,out){const f=clamp((4.13-y)/3.13*128,0,127.99
 
 export function createWaterDetail({root,group,media,bio,balls,focusIndex,dropMaterial}){
  const routes=createRoutes(balls),o=new T.Object3D(),p=V(),q=V(),axis=V(0,1,0),matrix=new T.Matrix4(),rotation=new T.Quaternion(),scale=V(),center=V();
- const beadMat=new T.MeshPhysicalMaterial({color:'#b5f0ec',roughness:.06,metalness:.04,transparent:true,opacity:.68,depthWrite:false,clearcoat:1,clearcoatRoughness:.04});
+ const beadMat=liquify(new T.MeshPhysicalMaterial({color:'#b5f0ec',roughness:.06,metalness:.04,transparent:true,opacity:.68,depthWrite:false,clearcoat:1,clearcoatRoughness:.04}));
  const beads=new T.InstancedMesh(new T.SphereGeometry(.012,8,6),beadMat,bio.count*2);beads.name='water-on-ribs';media.add(beads);
  const film=new T.InstancedMesh(new T.TorusGeometry(.258,.0045,4,12,.62),beadMat.clone(),bio.count*2);film.material.opacity=.35;media.add(film);
  const frames=[];
