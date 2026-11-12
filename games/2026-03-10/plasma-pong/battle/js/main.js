@@ -1,3 +1,4 @@
+import {createOpeningCoach,advanceOpeningCoach,openingMessage} from './opening-coach.js?v=1';
 // Plasma Pong: Battle Edition — game flow, controls, scoring, commentary and the frame loop.
 import * as THREE from '../vendor/three.module.min.js';
 import { F, VERSION, PILOTS, HUMAN, HUMAN2, ARENAS, LADDER, DIFFICULTY, POWERUPS, PERKS, ROSTER, SHADOW, TWISTS, RAMP, rampAI } from './config.js?v=6';
@@ -7,7 +8,7 @@ import { predictToPlane } from './predict.js?v=6';
 import { Renderer, pickQuality } from './render.js?v=6';
 import { Director } from './director.js?v=6';
 import { Audio } from './audio.js?v=6';
-import { Input } from './input.js?v=6';
+import { Input } from './input.js?v=7';
 import { UI, $, hex } from './ui.js?v=6';
 import { Scores } from './scores.js?v=6';
 import { CALM } from './views.js?v=6';
@@ -53,6 +54,23 @@ const G = {
   autopilot: params.has('autoplay'), scopeT: 0, scope: { 1: null, '-1': null }, rallyCalled: false, minHP: { 1: 99, '-1': 99 }, fade: 0, menuCam: true,
 };
 window.__ppb = { G, R, D, A, I, settings, REC, NET };
+
+let openingTipsDone=false;
+try{openingTipsDone=localStorage.getItem('ppb.opening-tips.v1')==='done';}catch{}
+function finishOpeningTips(){
+  openingTipsDone=true;G.coach=null;$('opening-coach').classList.add('hidden');
+  try{localStorage.setItem('ppb.opening-tips.v1','done');}catch{}
+}
+function updateOpeningTips(dt){
+  const show=G.coach&&!openingTipsDone&&G.mode==='campaign'&&G.stage===0&&G.state==='play'&&!G.paused&&!G.replay&&!G.autopilot;
+  $('opening-coach').classList.toggle('hidden',!show);if(!show)return;
+  const c=G.coach,p=G.humans.find(h=>h.p.side===1)?.p;if(!p)return;
+  c.startedInput??=I.lastInputT;
+  const stage=advanceOpeningCoach(c,p,G.W.stats[1],dt,I.lastInputT>c.startedInput||I.keys.size>0||I.touches.size>0);
+  if(stage==='done'){finishOpeningTips();return;}
+  const label=stage+':'+I.lastKind;
+  if(c.label!==label){c.label=label;const [title,text]=openingMessage(stage,I.lastKind);$('opening-step').textContent=title;$('opening-text').textContent=text;}
+}
 
 // ------------------------------------------------------------------ helpers
 const now = () => performance.now() / 1000;
@@ -144,6 +162,7 @@ function startMatch(cfg) {
   G.sides = { 1: sideInfo(cfg.sides[1]), '-1': sideInfo(cfg.sides[-1]) };
   R.setWorld(W, G.sides);
   U.buildHud(G.sides, W);
+  G.coach=!openingTipsDone&&G.mode==='campaign'&&G.stage===0&&!G.autopilot?createOpeningCoach(G.humans[0].p,W.stats[1]):null;
   G.matchT = 0; G.acc = 0; G.hitstop = 0; G.rallyCalled = false; G.minHP = { 1: 99, '-1': 99 };
   G.scope = { 1: null, '-1': null };
   D.slow = 1; D.slowT = 0; D.forceShot = null; D.breach = null;
@@ -239,7 +258,7 @@ function stageIntro() {
   D.setMode(camMode());
   G.simOn = false;
   G.state = 'vs';
-  fillVs(G.sides[1], G.sides[-1], `STAGE ${G.stage + 1} / 5 · <b>${ARENAS[G.stage].name}</b>`, G.stage === 0 ? (I.isTouch ? 'Drag in the arena to move. Tap FIRE to shoot.' : 'A / D or ← / → to move · Space to fire.') + '<br>Break the shield wall, then hit the reactor core.' : you.blurb, pilot.blurb);
+  fillVs(G.sides[1], G.sides[-1], `STAGE ${G.stage + 1} / 5 · <b>${ARENAS[G.stage].name}</b>`, G.stage === 0 ? (I.isTouch ? 'Drag in the arena to move. Tap FIRE to shoot.' : 'WASD or arrow keys to move · Space to fire.') + '<br>Break the shield wall, then hit the reactor core.' : you.blurb, pilot.blurb);
   U.show('vs');
   U.setHud(false);
   A.playMusic(ARENAS[G.stage].music);
@@ -662,6 +681,8 @@ document.getElementById('ui').addEventListener('click', (e) => {
   if (b.dataset.opp) { settings.vsOpp = b.dataset.opp; saveSettings(); A.play('uimove', { gap: 0 }); return renderVsetup(); }
   if (b.dataset.tw) { const tw = settings.twists || (settings.twists = {}); tw[b.dataset.tw] = !tw[b.dataset.tw]; saveSettings(); A.play('uimove', { gap: 0 }); return renderVsetup(); }
   switch (act) {
+    case 'tips-dismiss': finishOpeningTips();break;
+    case 'tips-enable': openingTipsDone=false;try{localStorage.removeItem('ppb.opening-tips.v1');}catch{};if(G.mode==='campaign'&&G.stage===0&&G.humans[0])G.coach=createOpeningCoach(G.humans[0].p,G.W.stats[1]);b.textContent='OPENING TIPS ENABLED';break;
     case 'campaign': G.state = 'difficulty'; U.show('difficulty'); menuSel(1); break;
     case 'versus': openVersus(); break;
     case 'vsgo': vsGo(); break;
@@ -1305,6 +1326,7 @@ function tick(dt) {
     t.t -= dt;
     if (t.t <= 0) { G.timers.splice(G.timers.indexOf(t), 1); t.fn(); }
   }
+  if(G.replay)$('opening-coach').classList.add('hidden');
   if (G.replay && replayFrame(dt)) return;
   const W = G.W;
   let scale = G.simOn && !G.paused ? D.slow : 0;
@@ -1336,6 +1358,7 @@ function tick(dt) {
     if (host) NET.hostFrame(W, dt);
     if (guest) { NET.guestFrame(W, dt); waitingForHost(); }
   }
+  updateOpeningTips(sdt);
   // the scope power-up: show the human every incoming path
   G.scopeT -= dt;
   if (W && G.scopeT <= 0) {

@@ -15,6 +15,7 @@ export class Input {
     this.touches = new Map();
     this.handlers = { any: [], fire: [], od: [], pause: [], key: [] };
     this.isTouch = matchMedia('(pointer:coarse)').matches;
+    this.lastKind = this.isTouch ? 'touch' : 'key';
     this.padPrev = [{}, {}, {}, {}];
     this.lastInputT = performance.now();
     addEventListener('keydown', (e) => this.onKey(e, true));
@@ -40,6 +41,7 @@ export class Input {
     const k = e.code;
     if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Space'].includes(k) && !(e.target && e.target.tagName === 'INPUT')) e.preventDefault();
     if (down) {
+      this.lastKind='key';
       this.lastInputT = performance.now();
       if (!e.repeat) {
         this.emit('any', 'key');
@@ -55,6 +57,7 @@ export class Input {
   }
 
   onDown(e) {
+    this.lastKind=e.pointerType==='mouse'?'mouse':'touch';
     this.lastInputT = performance.now();
     const onUI = e.target && e.target.closest && e.target.closest('button, .card, input, a, .clickable');
     this.emit('any', e.pointerType);
@@ -73,6 +76,7 @@ export class Input {
 
   onMove(e) {
     if (e.pointerType === 'mouse') {
+      this.lastKind='mouse';
       this.mouse.active = true; this.mouse.x = e.clientX; this.mouse.y = e.clientY; this.mouse.t = performance.now();
       this.lastInputT = performance.now();
       return;
@@ -135,7 +139,7 @@ export class Input {
       if (axisMoved && !prev.axis) this.emit('any', 'pad');
       for (const b of [0, 1, 2, 3, 4, 5, 6, 7, 9]) prev[b] = pr(b);
       prev.axis = axisMoved;
-      if (axisMoved || g.buttons.some((b) => b.pressed)) this.lastInputT = performance.now();
+      if (axisMoved || g.buttons.some((b) => b.pressed)) {this.lastInputT = performance.now();this.lastKind='pad';}
     });
   }
 }
