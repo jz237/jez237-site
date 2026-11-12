@@ -119,7 +119,9 @@ static void astra_init_shader(void)
         "if(roomReflection>0.){float fresnel=.06+.35*pow(1.-max(0.,dot(n,eye)),4.);col+=roomReflection*roomRay(reflection,1.-metal)*fresnel*(.22+.65*metal)*(1.-rock*.86);}"
         "float vein=1.-smoothstep(.014,.045,abs(noise(cell*3.5+noise(cell*.8)*2.)-.51));"
         "col+=rock*refinement*vein*vec3(.038,.052,.048)*close*layout;"
-        "float haze=min(.16,1.-exp(-max(0.,-p.z-10.)*.0017));col=mix(col,vec3(.09,.145,.16),haze);"
+        /* An unlit face keeps a few percent of its own texture, and distance haze reaches a little further: a dark pit or far wall then has shape instead of being pure black. */
+        "col=max(col,a.rgb*vec3(.030,.038,.042));"
+        "float haze=min(.24,1.-exp(-max(0.,-p.z-10.)*.0021));col=mix(col,vec3(.09,.145,.16),haze);"
         "if((faithful>2.5&&faithful<3.5)||(faithful>25.5&&faithful<26.5)){float hi=max(a.r,max(a.g,a.b)),lo=min(a.r,min(a.g,a.b));float emission=smoothstep(.53,.70,hi)*(faithful>19.5?1.:(1.-smoothstep(.15,.32,hi-lo)));col=mix(col,a.rgb*1.12,emission*.92);}"
         "gl_FragColor=vec4(col,a.a*light.a);}";
     GLuint v=astra_compile(GL_VERTEX_SHADER,vs), f=astra_compile(GL_FRAGMENT_SHADER,fs);

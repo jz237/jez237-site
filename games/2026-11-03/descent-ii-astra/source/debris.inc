@@ -7,13 +7,20 @@ static ad_group ad_groups[AD_GROUPS];
 void astra_debris_clear(void){memset(ad_groups,0,sizeof ad_groups);}
 static void ad_chunk(float size,int index,float heat){
     float p[6][3]={{-.9f,0,0},{.8f,0,0},{0,-.28f,0},{0,.37f,0},{.16f,0,-1.4f},{-.13f,0,1.1f}};
+    /* Three builds of fragment, from a thin plate to a thick lump, so a
+     * breakup is not a dozen copies of one shard. */
+    {float thick=1+.9f*(index%3);p[2][1]*=thick;p[3][1]*=thick;if(index%3==2){p[4][2]*=.7f;p[5][2]*=.7f;}}
     const int face[8][3]={{0,2,4},{2,1,4},{1,3,4},{3,0,4},{2,0,5},{1,2,5},{3,1,5},{0,3,5}};
     for(int f=0;f<8;f++){
         float *a=p[face[f][0]],*b=p[face[f][1]],*c=p[face[f][2]];
         float u[3],v[3],n[3];for(int k=0;k<3;k++){u[k]=b[k]-a[k];v[k]=c[k]-a[k];}
         for(int k=0;k<3;k++)n[k]=u[(k+1)%3]*v[(k+2)%3]-u[(k+2)%3]*v[(k+1)%3];astra_unit(n);
-        if((f+index)%5==0)ax_paint(.26f+.57f*heat,.17f+.14f*heat,.075f,.05f+heat*.7f);
-        else ax_paint(.22f+(f%2)*.09f,.26f+(f%2)*.08f,.28f+(f%2)*.07f,.015f);
+        /* The faces turned from the one fixed light were drawn at six
+         * percent brightness, so a fragment showed as a flat dark rectangle.
+         * Fragments are now scorched steel that keeps some light on every
+         * face, with more faces glowing while the metal is hot. */
+        if((f+index)%3==0)ax_paint(.36f+.56f*heat,.24f+.18f*heat,.13f,.20f+heat*.85f);
+        else ax_paint(.25f+(f%2)*.07f+.15f*heat,.26f+(f%2)*.06f+.04f*heat,.28f+(f%2)*.06f-.04f*heat,.15f+.22f*heat);
         for(int j=0;j<3;j++){float *q=p[face[f][j]];ax_vertex_add(q[0]*size,q[1]*size,q[2]*size,n[0],n[1],n[2]);}
     }
 }
