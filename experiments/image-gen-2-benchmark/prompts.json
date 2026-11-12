@@ -31768,5 +31768,129 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-11-12-factual-infographic-factual-infographic-tennis-elbow-the-ou",
+    "title": "Factual infographic: Tennis Elbow — The Outer Tendon Attachment",
+    "tests": "factual_subtype: medical-health-infographic; source-backed schematic anatomy; no individualized advice; archive_slot=2026-11-12T17:20; concept=tennis-elbow-extensor-attachment-loading; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: medical-health-infographic",
+    "prompt": "Create a finished, artwork-led medical infographic titled \"TENNIS ELBOW\" with subtitle \"Lateral epicondylitis • the outer elbow tendon attachment\". Direct canvas, not a framed print or page mockup. A sophisticated asymmetric anatomical atlas in luminous gouache, precise technical ink and subtle translucent tissue shading on cool ivory, with deep petrol blue, warm muscle reds, pearly tendon fibers and restrained amber pain accents. Dominant sweeping lateral-view elbow and forearm illustration runs diagonally across the composition, bent gently with a natural hand. Skin is selectively lifted into an anatomically credible window revealing humerus, radius, ulna, lateral epicondyle, forearm extensor muscle and tendon attachment. Bone has fine cortical shading; muscle has delicate aligned fascicles; tendon has silvery longitudinal fibers. Label only those structures with thin accurate leaders. Make the outer epicondyle unmistakable, not the medial elbow. Label the commonly involved structure \"ECRB tendon — wrist extensor attachment\". Include small text \"Schematic anatomy; details enlarged\".\nFollow a curved leader from the attachment into a generous enlarged tendon-fiber study, labeled \"Repeated loading can damage the attachment\" and \"Degeneration; sometimes microscopic tears\". Depict subtle disorganized fibers, not a dramatically severed tendon, not a universal complete rupture, no infectious pus or crystalline deposits. Preserve a clear link from muscle through tendon to bone.\nWeave smaller, unboxed studies into natural negative space: a hand gripping a screwdriver and another holding a racquet, not equal-size cards. Text: \"Not just tennis\" and \"Repeated gripping, twisting or wrist extension can contribute. Sometimes no clear trigger.\" Give these subdued scale so anatomy dominates. A flowing amber annotation at the outer elbow reads \"Pain and tenderness here\"; nearby concise text \"Grip may feel weak • gripping or wrist movement can hurt • often develops gradually\".\nIn the lower sweep integrate an open clinical pathway, with varied-scale illustrations of a forearm strap and a therapist-guided wrist exercise silhouette, without prescribing a particular exercise dose. Text: \"Assessment: symptom history + examination\"; \"Tests may help rule out other causes\"; \"Reduce aggravating activities\"; \"Physiotherapy: stretching + strengthening\"; \"A strap or brace may ease symptoms\". A restrained final annotation: \"Persistent symptoms need review. Surgery is reserved for selected cases after prolonged nonsurgical care.\" Do not imply immediate surgery or guarantee a cure.\nAt the quiet lower edge retain a readable, unboxed urgent-care note: \"Seek urgent care for a hot swollen elbow with fever, severe pain with difficulty moving, or an injury with deformity or a snap.\" Separate concise emergency line: \"Sudden arm pain with chest pressure? Get emergency help.\" Footer: \"General education, not a diagnosis or individual treatment plan.\" No medication doses, unsupported recovery deadlines, statistics, imaging promises or extra physiological claims. No bibliography, URLs, logos or watermarks. Elegant strong headline, readable short labels, airy hierarchy, exquisite tissue detail; let leader lines and the forearm's own curve organize the facts, never a rigid boxed grid. Omit decorative vignettes if space is needed, retaining core anatomy, mechanism, symptoms, management and safety text.",
+    "image": "images/2026-11-12-factual-infographic-factual-infographic-tennis-elbow-the-ou.jpg",
+    "thumb": "thumbs/2026-11-12-factual-infographic-factual-infographic-tennis-elbow-the-ou.webp",
+    "color": "#d9cbbf",
+    "date": "2026-11-12",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1086x1448",
+    "dedup": {
+      "conceptKey": "tennis-elbow-extensor-attachment-loading",
+      "imageSha256": "2b4fa3aa76fa21ed9289f833baea7455f83953bc23b715b7b5b10eb72be3dc3d",
+      "imageDHash": "0c24c398d82898f0"
+    },
+    "factualInfographic": {
+      "topic": "How tennis elbow affects the lateral elbow extensor tendon attachment, causes load-related pain, and is evaluated and managed",
+      "description": "Anatomical atlas of lateral epicondylitis, load-related symptoms, clinical assessment and conservative management with safety context.",
+      "sourceNote": "AAOS https://www.orthoinfo.org/bodypart/elbow/tennis-elbow-lateral-epicondylitis/; NHS https://www.nhs.uk/conditions/tennis-elbow/; NHS https://www.nhs.uk/symptoms/elbow-and-arm-pain/. Read directly: anatomy, tendon damage, symptoms, assessment, management and urgent arm-pain warnings.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-12T22:21:00.787024+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "American Academy of Orthopaedic Surgeons",
+            "title": "Tennis Elbow (Lateral Epicondylitis)",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://www.orthoinfo.org/bodypart/elbow/tennis-elbow-lateral-epicondylitis/"
+          },
+          {
+            "id": "S2",
+            "publisher": "NHS",
+            "title": "Tennis elbow",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/conditions/tennis-elbow/"
+          },
+          {
+            "id": "S3",
+            "publisher": "NHS",
+            "title": "Elbow and arm pain",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/symptoms/elbow-and-arm-pain/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "The elbow contains the humerus, radius and ulna; the lateral epicondyle is the outer bony prominence of the humerus.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Tendons connect muscle to bone; the ECRB wrist extensor tendon attaches at the lateral epicondyle and is commonly involved in tennis elbow.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Repeated vigorous forearm use can damage the tendon attachment, with degeneration and sometimes microscopic tears; this is not necessarily a complete tendon rupture.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Gripping, repetitive wrist extension or twisting in work, hobbies and racquet sports can contribute; tennis is not required and sometimes no repetitive injury is identified.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Symptoms include outside-elbow pain and tenderness, weak grip, and pain worsened by gripping or wrist movement; symptoms often develop gradually.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Assessment uses symptom history and examination; tests or imaging may be used to exclude other causes, not necessarily required for everyone.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Reduce activities that worsen symptoms; physiotherapy with wrist and forearm stretching and strengthening can help; a forearm strap or brace may ease symptoms.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Surgery is considered for persistent symptoms after prolonged nonsurgical treatment, not an automatic first step.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Seek medical review for persistent pain despite self-care.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "A hot swollen elbow with fever or chills, or severe pain with difficulty moving, warrants urgent assessment; injury with deformity or snapping also needs urgent assessment.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "Sudden arm pain with chest pressure, heaviness or squeezing requires emergency help; do not assume tennis elbow.",
+            "sourceIds": [
+              "S3"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
