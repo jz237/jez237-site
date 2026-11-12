@@ -256,6 +256,11 @@ body.paused #gl { filter: brightness(.45) saturate(.6); }
 }
 .rotate-hint { display: none; margin-top: 10px; font-size: 12px; letter-spacing: .08em; color: var(--teal); }
 @media (orientation: portrait) and (pointer: coarse) { .rotate-hint { display: block; } }
+
+.menu-extras{pointer-events:auto}.menu-extras summary{cursor:pointer;list-style:revert}.menu-extras[open]>summary{margin-bottom:9px}.diffrow{flex-wrap:wrap;gap:8px}.diffrow .seg{flex-wrap:wrap}
+@media(max-width:480px){#title .card{padding:16px}.diffrow .seg{width:100%;justify-content:space-between}.diffrow .seg button{padding:7px 6px;letter-spacing:.04em}}
+
+.immersive-hud #score,.immersive-hud .score-label,.immersive-hud #hi-lbl,.immersive-hud #hiscore,.immersive-hud #finds,.immersive-hud #scarecount,.immersive-hud #fear-toast,.immersive-hud #find.collection-only,.immersive-hud #find .p,.immersive-hud #popups .pop:not(.r){display:none!important}
 </style>
 </head>
 <body>
@@ -263,7 +268,7 @@ body.paused #gl { filter: brightness(.45) saturate(.6); }
 <div id="ui">
   <div id="hud" class="hidden">
     <div class="panel hl">
-      <div class="lbl">GOLD</div>
+      <div class="lbl score-label">GOLD</div>
       <div class="big" id="score">0</div>
       <div class="row"><div class="hearts" id="hearts"></div><div id="lives"></div></div>
       <div class="oil" id="oil"><div class="lamp"></div><div class="bar"><i></i></div></div>
@@ -314,13 +319,15 @@ body.paused #gl { filter: brightness(.45) saturate(.6); }
         <button class="mbtn" data-act="depths">DEPTH SELECT<small>Go back down to any depth you have reached</small></button>
         <button class="mbtn" data-act="endless">THE ENDLESS DARK<small>Level after level, deeper forever. There is no bottom</small></button>
         <button class="mbtn" data-act="ledger">THE FEAR LEDGER<small id="fl-sub">0 scares witnessed</small></button>
-        <div class="btns two">
+        <details class="menu-extras"><summary class="mbtn">COLLECTION &amp; MORE</summary><div class="btns two">
           <button class="mbtn" data-act="journal">JOURNAL<small id="j-sub">0 discoveries</small></button>
           <button class="mbtn" data-act="museum">CURSED MUSEUM<small>Your cursed relics on show</small></button>
           <button class="mbtn" data-act="locker">LOCKER<small id="lk-sub">0 unlocked</small></button>
           <button class="mbtn" data-act="playthrough">AI PLAYTHROUGH<small>Watch someone else go down</small></button>
           <button class="mbtn" data-act="scores">HIGH SCORES</button>
           <button class="mbtn" data-act="medals">MEDALS <small id="med-sub">0 / 15</small></button>
+        </div></details>
+        <div class="btns two">
           <button class="mbtn" data-act="options">OPTIONS</button>
           <button class="mbtn" data-act="help">HOW TO PLAY</button>
         </div>
@@ -411,6 +418,7 @@ body.paused #gl { filter: brightness(.45) saturate(.6); }
     <div class="opt">VOICE<input type="range" min="0" max="100" data-set="voice"></div>
     <div class="opt">NARRATION<div class="seg" data-opt="talk"><button data-v="on">ON</button><button data-v="off">OFF</button></div></div>
     <div class="opt">SCARES<div class="seg" data-opt="scares"><button data-v="full">FULL HORROR</button><button data-v="mild">MILD</button></div></div>
+    <div class="opt">HUD STYLE<div class="seg" data-opt="hud"><button data-v="immersive">IMMERSIVE</button><button data-v="full">FULL</button></div></div><p>Immersive hides score and collection popups. Discoveries still save to your journal; health, lamp, story notes and subtitles stay visible.</p>
     <div class="opt">WHISPER SUBTITLES<div class="seg" data-opt="subs"><button data-v="on">ON</button><button data-v="off">OFF</button></div></div>
     <div class="opt">FLASHES<div class="seg" data-opt="flash"><button data-v="full">NORMAL</button><button data-v="reduced">REDUCED</button></div></div>
     <div class="opt">SCREEN SHAKE<div class="seg" data-opt="shake"><button data-v="1">ON</button><button data-v="0.4">LIGHT</button><button data-v="0">OFF</button></div></div>
@@ -482,6 +490,6 @@ addEventListener('error', (e) => window.__gdErrors.push(String(e.message || e)))
 addEventListener('unhandledrejection', (e) => window.__gdErrors.push('rejection: ' + String(e.reason && e.reason.message || e.reason)));
 (() => { const ce = console.error; console.error = (...a) => { window.__gdErrors.push(a.map(String).join(' ')); ce.apply(console, a); }; })();
 </script>
-<script type="module" src="js/main.js?v=1"></script>
+<script type="module" src="js/main.js?v=arcade-polish-1"></script>
 </body>
 </html>

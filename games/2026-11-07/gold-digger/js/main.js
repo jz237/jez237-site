@@ -571,7 +571,7 @@ function tips(W) {
   const P = W.players[0], M = W.M, k = KEYN();
   const near = (kind, r) => { const cx = Math.floor(P.x), cy = Math.floor(P.y); for (let y = cy - r; y <= cy + r; y++) for (let x = cx - r; x <= cx + r; x++) if (x >= 0 && y >= 0 && x < M.w && y < M.h && M.tiles[y * M.w + x] === kind) return true; return false; };
   if (P.inCage) return;
-  tip('move', `Move with <kbd>A</kbd> <kbd>D</kbd>, jump with <kbd>${k.jump}</kbd>. Find the <b>lift down</b> at the bottom of the level.`, I.lastKind !== 'touch' || true)
+  tip('move', `${I.lastKind === 'touch' ? 'Drag with your left thumb to move' : I.lastKind === 'pad' ? 'Move with the left stick or D-pad' : 'Move with <kbd>A</kbd> <kbd>D</kbd>'}, jump with <kbd>${k.jump}</kbd>. Find the <b>lift down</b> at the bottom of the level.`, true)
   || tip('ladder', `Hold <kbd>${k.up}</kbd> on a ladder to climb. Ladders always catch a fall.`, near(T.LADDER, 2))
   || tip('soft', `Loose rubble: swing your <b>PICK</b> <kbd>${k.pick}</kbd> to clear it.`, near(T.SOFT, 2))
   || tip('hard', `A cracked boulder. Throw <b>DYNAMITE</b> <kbd>${k.dyn}</kbd> at it — then <b>run</b>, it hurts you too.`, near(T.HARD, 3))
@@ -720,7 +720,7 @@ function tick(dt) {
     }
   } else if (G.state === 'title') {
     G.idleT += dt;
-    if (G.idleT > 14 && G.screen === 'title' && !Q.has('test')) startDemo();
+    if (G.idleT > 90 && G.screen === 'title' && !Q.has('test')) startDemo();
   }
   // draw the world as it is NOW (the tick may have just started a new level, e.g. the demo into a guardian lair)
   const Wn = G.W;
@@ -802,6 +802,7 @@ document.addEventListener('input', (e) => { const r = e.target.closest('[data-se
 I.on('tap', (k) => { if (k === 'pause') { if (G.state === 'play') pause(); else if (G.state === 'paused') resume(); } if (k === 'map') act('map'); });
 I.on('pause', () => { if (G.state === 'museum') { if (G.screen === 'locker') back(); else toTitle(); return; } if (G.replay) { endReplay(); return; } if (G.state === 'play') pause(); else if (G.state === 'paused' && G.screen === 'pause') resume(); else if (G.screen && G.screen !== 'title' && G.screen !== 'results' && G.screen !== 'shop') back(); });
 I.on('map', () => { if (G.state === 'play' && G.mode !== 'demo') act('map'); else if (G.screen === 'map') back(); });
+for (const event of ['pointermove','focusin','wheel','scroll']) document.addEventListener(event, () => { if (G.state === 'title') G.idleT = 0; }, { passive: true, capture: true });
 I.on('any', () => { G.idleT = 0; if (G.mode === 'demo') endDemo(); });
 I.on('back', () => { if (G.screen && !['title', 'results', 'shop'].includes(G.screen)) back(); });
 // keyboard / pad menu navigation

@@ -1,0 +1,153 @@
+{
+  "assets/asphalt_diff.jpg": {
+    "desktop": "assets/loading/asphalt_diff-379d44307d52.jpg",
+    "mobile": "assets/loading/asphalt_diff-ddc10855550a.jpg"
+  },
+  "assets/asphalt_nor_gl.jpg": {
+    "desktop": "assets/loading/asphalt_nor_gl-d4d1bf756963.jpg",
+    "mobile": "assets/loading/asphalt_nor_gl-f503199f1ccd.jpg"
+  },
+  "assets/asphalt_rough.jpg": {
+    "desktop": "assets/loading/asphalt_rough-3437a8b4448a.jpg",
+    "mobile": "assets/loading/asphalt_rough-3f43649e5243.jpg"
+  },
+  "assets/circuit_asphalt_diff.jpg": {
+    "desktop": "assets/loading/circuit_asphalt_diff-0188e8a0c25b.jpg",
+    "mobile": "assets/loading/circuit_asphalt_diff-646562c8aea0.jpg"
+  },
+  "assets/circuit_asphalt_nor_gl.jpg": {
+    "desktop": "assets/loading/circuit_asphalt_nor_gl-decfa031a443.jpg",
+    "mobile": "assets/loading/circuit_asphalt_nor_gl-a64047d3c1a8.jpg"
+  },
+  "assets/cladding_diff.jpg": {
+    "desktop": "assets/loading/cladding_diff-c6e442a03b58.jpg",
+    "mobile": "assets/loading/cladding_diff-c73d39beec6b.jpg"
+  },
+  "assets/coast_sand_rocks_02_diff.jpg": {
+    "desktop": "assets/loading/coast_sand_rocks_02_diff-4daac8953264.jpg",
+    "mobile": "assets/loading/coast_sand_rocks_02_diff-899ba2343c93.jpg"
+  },
+  "assets/forrest_ground_01_diff.jpg": {
+    "desktop": "assets/loading/forrest_ground_01_diff-3bb7f11e674b.jpg",
+    "mobile": "assets/loading/forrest_ground_01_diff-d5d4bfb0cbbb.jpg"
+  },
+  "assets/geology_rock_diff.jpg": {
+    "desktop": "assets/loading/geology_rock_diff-a35ee183d7ed.jpg",
+    "mobile": "assets/loading/geology_rock_diff-b7c16297c477.jpg"
+  },
+  "assets/geology_rock_nor_gl.jpg": {
+    "desktop": "assets/loading/geology_rock_nor_gl-e39e40655ece.jpg",
+    "mobile": "assets/loading/geology_rock_nor_gl-e1018ef3d4cd.jpg"
+  },
+  "assets/gravel_diff.jpg": {
+    "desktop": "assets/loading/gravel_diff-082b42ab19e3.jpg",
+    "mobile": "assets/loading/gravel_diff-066d54f68ee2.jpg"
+  },
+  "assets/gravel_nor_gl.jpg": {
+    "desktop": "assets/loading/gravel_nor_gl-1c1457105a21.jpg",
+    "mobile": "assets/loading/gravel_nor_gl-72cef9acb5fc.jpg"
+  },
+  "assets/gravel_rough.jpg": {
+    "desktop": "assets/loading/gravel_rough-47e8a9d53616.jpg",
+    "mobile": "assets/loading/gravel_rough-dfc42a57984c.jpg"
+  },
+  "assets/mud_diff.jpg": {
+    "desktop": "assets/loading/mud_diff-7dfeda83f0c6.jpg",
+    "mobile": "assets/loading/mud_diff-c98c6e644cda.jpg"
+  },
+  "assets/mud_nor_gl.jpg": {
+    "desktop": "assets/loading/mud_nor_gl-f3b4a34feff2.jpg",
+    "mobile": "assets/loading/mud_nor_gl-f4653a835372.jpg"
+  },
+  "assets/mud_rough.jpg": {
+    "desktop": "assets/loading/mud_rough-e961dc7cb900.jpg",
+    "mobile": "assets/loading/mud_rough-28827da2c164.jpg"
+  },
+  "assets/north_fir_trunk_a_diff.jpg": {
+    "desktop": "assets/loading/north_fir_trunk_a_diff-de90f0e6dda3.jpg",
+    "mobile": "assets/loading/north_fir_trunk_a_diff-0a8700dbc946.jpg"
+  },
+  "assets/north_fir_trunk_b_diff.jpg": {
+    "desktop": "assets/loading/north_fir_trunk_b_diff-56460cf5d9df.jpg",
+    "mobile": "assets/loading/north_fir_trunk_b_diff-77bec8ad0f82.jpg"
+  },
+  "assets/north_fir_twig_diff.jpg": {
+    "desktop": "assets/loading/north_fir_twig_diff-2c71ba4f1a46.jpg",
+    "mobile": "assets/loading/north_fir_twig_diff-5aaca4972c9d.jpg"
+  },
+  "assets/north_litter_diff.jpg": {
+    "desktop": "assets/loading/north_litter_diff-f6612a6e7ccc.jpg",
+    "mobile": "assets/loading/north_litter_diff-33fb5569da92.jpg"
+  },
+  "assets/rock_diff.jpg": {
+    "desktop": "assets/loading/rock_diff-c1ec81f2d801.jpg",
+    "mobile": "assets/loading/rock_diff-096cfb44dbed.jpg"
+  },
+  "assets/rock_nor_gl.jpg": {
+    "desktop": "assets/loading/rock_nor_gl-2699ae8c7c42.jpg",
+    "mobile": "assets/loading/rock_nor_gl-3a180fc3cef8.jpg"
+  },
+  "assets/rock_rough.jpg": {
+    "desktop": "assets/loading/rock_rough-461221e3ac80.jpg",
+    "mobile": "assets/loading/rock_rough-afab72fe7882.jpg"
+  },
+  "assets/scree_diff.jpg": {
+    "desktop": "assets/loading/scree_diff-d8822d53725a.jpg",
+    "mobile": "assets/loading/scree_diff-ce7761161a9b.jpg"
+  },
+  "assets/scree_nor_gl.jpg": {
+    "desktop": "assets/loading/scree_nor_gl-0cfaef995da1.jpg",
+    "mobile": "assets/loading/scree_nor_gl-1620ce4ad1bb.jpg"
+  },
+  "assets/workyard/concrete_layers_02-arm.jpg": {
+    "desktop": "assets/loading/concrete_layers_02-arm-e58cf85740af.jpg",
+    "mobile": "assets/loading/concrete_layers_02-arm-9db993621205.jpg"
+  },
+  "assets/workyard/concrete_layers_02-diff.jpg": {
+    "desktop": "assets/loading/concrete_layers_02-diff-5048c30cb691.jpg",
+    "mobile": "assets/loading/concrete_layers_02-diff-c309662dd3e0.jpg"
+  },
+  "assets/workyard/concrete_layers_02-normal.jpg": {
+    "desktop": "assets/loading/concrete_layers_02-normal-ce07ca6a5835.jpg",
+    "mobile": "assets/loading/concrete_layers_02-normal-534719f9eb7e.jpg"
+  },
+  "assets/workyard/container_side-arm.jpg": {
+    "desktop": "assets/loading/container_side-arm-e22f83621098.jpg",
+    "mobile": "assets/loading/container_side-arm-3978782eb807.jpg"
+  },
+  "assets/workyard/container_side-diff.jpg": {
+    "desktop": "assets/loading/container_side-diff-54a4b6e1d19c.jpg",
+    "mobile": "assets/loading/container_side-diff-4af2eb0a2973.jpg"
+  },
+  "assets/workyard/container_side-normal.jpg": {
+    "desktop": "assets/loading/container_side-normal-b99dee76d61a.jpg",
+    "mobile": "assets/loading/container_side-normal-5e508c2ee804.jpg"
+  },
+  "assets/workyard/rusty_painted_metal-arm.jpg": {
+    "desktop": "assets/loading/rusty_painted_metal-arm-e7aabded2383.jpg",
+    "mobile": "assets/loading/rusty_painted_metal-arm-eedbbec3d6e6.jpg"
+  },
+  "assets/workyard/rusty_painted_metal-diff.jpg": {
+    "desktop": "assets/loading/rusty_painted_metal-diff-c65c64d38c84.jpg",
+    "mobile": "assets/loading/rusty_painted_metal-diff-65e36758f185.jpg"
+  },
+  "assets/workyard/rusty_painted_metal-normal.jpg": {
+    "desktop": "assets/loading/rusty_painted_metal-normal-0e9045aae2de.jpg",
+    "mobile": "assets/loading/rusty_painted_metal-normal-5dd2cc2cd03d.jpg"
+  },
+  "models/packed/textures/523dd59c74f21dd186e0cefb.png": {
+    "desktop": "assets/loading/523dd59c74f21dd186e0cefb-b64f1a062ab7.jpg",
+    "mobile": "assets/loading/523dd59c74f21dd186e0cefb-371e9784d730.jpg"
+  },
+  "models/packed/textures/987a0c2c9bd43b96db4247f6.jpg": {
+    "mobile": "assets/loading/987a0c2c9bd43b96db4247f6-54aa74f2f021.jpg"
+  },
+  "models/packed/textures/c3dbce0207d9b0e6d1ef3d2e.jpg": {
+    "desktop": "assets/loading/c3dbce0207d9b0e6d1ef3d2e-fc5394179959.jpg",
+    "mobile": "assets/loading/c3dbce0207d9b0e6d1ef3d2e-122c1ae26ef2.jpg"
+  },
+  "models/packed/textures/c7fcfaaba53597834f1fe93b.png": {
+    "desktop": "assets/loading/c7fcfaaba53597834f1fe93b-2454a0020fed.jpg",
+    "mobile": "assets/loading/c7fcfaaba53597834f1fe93b-c4d725c978c3.jpg"
+  }
+}

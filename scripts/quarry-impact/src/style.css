@@ -813,3 +813,6 @@ body.split-screen .hud .waypoint-status{top:84px;left:16px;transform:scale(.8);t
 .split-tag-p1{top:auto;bottom:8px}
 .p2-select .car-name strong{color:#f1d99d}
 @media (max-height:500px){.p2-select{margin-top:4px}}
+
+/* Recovery messages stay readable in compact menus. */
+.menu .intro p[role="alert"]{display:block!important;color:#ffdc9e;line-height:1.5}

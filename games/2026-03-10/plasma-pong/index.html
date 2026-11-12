@@ -54,6 +54,7 @@
     .back{display:inline-block;margin-top:14px;color:#6f86b3;font-size:10px;letter-spacing:.14em;text-decoration:none}
     @media(max-width:680px){.leaders-wrap{grid-template-columns:1fr}body{align-items:start;padding-top:max(26px,env(safe-area-inset-top))}.edition p{min-height:0}.editions{grid-template-columns:1fr}.edition{min-height:250px}.edition h2{margin-top:26px}}
     @media(max-height:500px) and (orientation:landscape){body{align-items:start}.eyebrow,.subtitle,.credit,.back{display:none}h1{font-size:34px;margin:0 0 12px}.edition{min-height:210px;padding:14px}.edition h2{margin-top:14px}}
+  .quick-play{display:inline-block;padding:16px 24px;margin:0 0 16px;border:1px solid #9cfcff;color:#fff;background:#124251;text-decoration:none;font-weight:bold}.quick-play:focus-visible{outline:3px solid #ffd23f;outline-offset:4px}
   </style>
 </head>
 <body>
@@ -61,6 +62,7 @@
     <p class="eyebrow">TWO COMPLETE GAMES · ONE PLASMA</p>
     <h1>PLASMA PONG</h1>
     <p class="subtitle">CHOOSE YOUR EDITION</p>
+    <p><a id="quick-play" class="quick-play" href="battle/?quick=1">QUICK PLAY · BATTLE →</a></p>
     <section class="editions" aria-label="Plasma Pong editions">
       <a class="edition battle" href="battle/">
         <span class="badge">NEW · THREE.JS · v1.1.2</span>
@@ -101,6 +103,15 @@
     <a class="back" href="../../">← ALL GAMES</a>
   </main>
   <script>
+    const quickPlay = document.getElementById('quick-play');
+    let edition = 'battle';
+    try { if (localStorage.getItem('plasma.lastEdition') === 'classic') edition = 'classic'; } catch {}
+    quickPlay.href = edition === 'battle' ? 'battle/?quick=1' : 'classic/';
+    quickPlay.textContent = 'QUICK PLAY · ' + edition.toUpperCase() + ' →';
+    document.querySelectorAll('.edition').forEach(link => link.addEventListener('click', () => {
+      try { localStorage.setItem('plasma.lastEdition', link.classList.contains('classic') ? 'classic' : 'battle'); } catch {}
+    }));
+
     // Each edition's own board, read live from the site's game-scores worker.
     const esc = (v) => String(v ?? '').replace(/[&<>"']/g, (c) => '&#' + c.charCodeAt(0) + ';');
     for (const list of document.querySelectorAll('ol[data-board]')) {

@@ -1256,6 +1256,13 @@
     }
   </style>
   <link rel="stylesheet" href="card-art.css?v=20260912-scenes">
+  <style>
+    .game-preview{width:100%;height:auto;aspect-ratio:16/9;object-fit:cover;border-radius:12px;display:block;margin:0 0 12px}
+    .game-summary{margin:12px 0 8px;color:#c6d4e5;font-size:13px;line-height:1.5;text-align:left}
+    .control-badges{display:flex;gap:5px;flex-wrap:wrap;margin:8px 0}.control-badges span{font-size:10px;border:1px solid #7695ae70;border-radius:6px;padding:4px 6px;color:#d9e8f5}
+    .device-filter{display:flex;justify-content:center;align-items:center;gap:10px;margin:0 0 20px;font-size:13px}.device-filter select{background:#131e35;color:#fff;border:1px solid #7392ba;border-radius:8px;padding:10px;font:inherit}
+    @media(max-width:620px){.hero-editorial{padding:16px!important}.hero-editorial h1{font-size:29px!important;margin:10px 0!important}.hero-editorial .lede{font-size:13px!important;line-height:1.5;margin:10px 0 0}.hero-editorial .eyebrow{font-size:9px!important}.game-filters{gap:6px;margin:14px 0}.game-filters button{padding:7px 10px;font-size:11px}}
+  </style>
 </head>
 <body class="arcade-galaxy-page">
   <iframe id="globe-bg" src="../experiments/blueforest-globe/?bg=1&r=0.125&v=globe-big7" title="" aria-hidden="true" tabindex="-1" scrolling="no" loading="eager"></iframe>
@@ -1269,8 +1276,8 @@
       <div style="position:relative;z-index:1;">
         <div class="eyebrow" style="font-size:11px;text-transform:uppercase;letter-spacing:.12em;margin-bottom:8px;">🎮 Free online games · no download</div>
 	        <h1 style="margin:18px 0 10px;font-size:clamp(2rem,7vw,3rem);font-weight:900;line-height:1.05;">GameMaster <span style="background:linear-gradient(135deg,#ff6b6b,#ffd93d,#6bcb77,#4d96ff,#c66bff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Arcade</span></h1>
-        <div class="mobile-first-callout">📱 Mobile-first games</div>
-        <p class="lede" style="max-width:640px;"><span class="mobile-first-copy">Play free online browser games right here.</span> Mobile-friendly HTML5 arcade games, retro remakes, puzzle prototypes, WebGL experiments, and AI-built no-download games tuned for touch.</p>
+
+        <p class="lede" style="max-width:640px;">Pick a game and play. Filter by controls to find one that fits your device.</p>
       </div>
     </section>
 
@@ -1286,10 +1293,11 @@
     </div>
 
     <div style="max-width:480px;margin:0 auto 18px;position:relative;">
-      <input id="game-search" type="text" placeholder="Search online games, arcade, puzzle, WebGL…" style="width:100%;padding:10px 16px 10px 40px;border-radius:999px;border:1px solid rgba(232,197,122,0.25);background:rgba(15,12,30,.55);color:#f2f4ff;font-size:14px;font-family:inherit;outline:none;transition:border-color .2s,box-shadow .2s;" onfocus="this.style.borderColor='rgba(232,197,122,.6)';this.style.boxShadow='0 0 0 3px rgba(232,197,122,.12)'" onblur="this.style.borderColor='rgba(232,197,122,.25)';this.style.boxShadow='none'">
+      <input aria-label="Search games" id="game-search" type="text" placeholder="Search online games, arcade, puzzle, WebGL…" style="width:100%;padding:10px 16px 10px 40px;border-radius:999px;border:1px solid rgba(232,197,122,0.25);background:rgba(15,12,30,.55);color:#f2f4ff;font-size:14px;font-family:inherit;outline:none;transition:border-color .2s,box-shadow .2s;" onfocus="this.style.borderColor='rgba(232,197,122,.6)';this.style.boxShadow='0 0 0 3px rgba(232,197,122,.12)'" onblur="this.style.borderColor='rgba(232,197,122,.25)';this.style.boxShadow='none'">
       <svg style="position:absolute;left:14px;top:50%;transform:translateY(-50%);width:18px;height:18px;opacity:.5;pointer-events:none;" viewBox="0 0 24 24" fill="none" stroke="#d3dcff" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
     </div>
 
+    <div class="device-filter"><label for="game-input">Play with</label> <select id="game-input"><option value="">Any controls</option><option value="touch">Touch</option><option value="keyboard">Keyboard</option><option value="controller">Controller</option><option value="portrait">Portrait-friendly</option><option value="landscape">Best in landscape</option></select></div>
     <div id="game-sections"></div>
     <p class="game-count" id="game-count"></p>
 
@@ -1555,8 +1563,22 @@
       `;
     }
 
+    // Input/orientation labels are limited to the games checked in the arcade review.
+    const reviewed = {
+      'Quarry Impact': {controls:['touch','keyboard','controller'],orientation:'landscape',summary:'Race, explore and trade dents in a woodland quarry. Vehicles load as you choose them.',preview:'quarry-impact'},
+      'Skyhold 2026': {controls:['touch','keyboard','controller'],orientation:'landscape',summary:'Defend a small planet: stop the lifters, catch falling settlers and take on giant carriers.',preview:'skyhold'},
+      'Gold Digger': {controls:['touch','keyboard','controller'],orientation:'landscape',summary:'Dig toward the next lift, keep your lamp alive and discover the mountain’s secrets.',preview:'gold-digger'},
+      'Shock Horror': {controls:['touch','keyboard','controller'],orientation:'landscape',summary:'Explore a haunted mine with a dying lamp. Jump scares and flashing lights; gentler settings are available.'},
+      'Glimmer Grotto': {controls:['touch','keyboard','controller'],orientation:'portrait',summary:'Carry a little light through quiet cave puzzles. A gentle adventure with no failure.',preview:'glimmer-grotto'},
+      'Plasma Pong': {controls:['touch','keyboard'],orientation:'landscape',summary:'Battle through shield walls and reactor cores, or play the original neon pong.'}
+    };
+    const controlLabels={touch:'Touch',keyboard:'Keyboard',controller:'Controller',portrait:'Portrait-friendly',landscape:'Best in landscape'};
+    const quickSummary=g=>reviewed[g.title]?.summary || (g.desc||'').replace(/^v[\d.]+\s*[—–-]\s*/,'').split(/(?<=[.!?])\s/)[0].slice(0,175);
     function gameCard(g, index) {
-      const isNew = g.date === 'Jul 17' || g.date === 'Jul 11' || g.date === 'Jul 9' || g.date === 'Jun 10' || g.date === 'Jun 24';
+      const published = Date.parse((g.path?.match(/^\d{4}-\d{2}-\d{2}/)?.[0] || g.date + ' 2026') + (g.path?.match(/^\d{4}-\d{2}-\d{2}/) ? 'T12:00:00Z' : ''));
+      const age = Date.now() - published;
+      const isNew = age >= 0 && age < 14 * 86400000 && g.status !== 'unfinished';
+      const info=reviewed[g.title];
       const cardTagClass = g.access === 'private'
         ? 'private'
         : (g.status === 'unfinished' ? 'unfinished' : g.tag);
@@ -1567,14 +1589,16 @@
       return `
         <article class="game-card">
           <a class="card-main" href="${gameHref(g)}"${externalAttrs}>
-            ${gameIcon(g, index)}
+            ${info?.preview ? `<img class="game-preview" src="previews/${info.preview}.webp" alt="${attrValue(g.title)} gameplay" width="640" height="360" loading="lazy" decoding="async">` : gameIcon(g, index)}
             ${isNew ? '<span class="new-badge">NEW</span>' : ''}
             <span class="title">${g.title}</span>
             <span class="date">${g.date}</span>
             <span class="tag ${cardTagClass}">${cardTagLabel}</span>
             <span class="play-overlay">${g.external ? '↗ Open' : '▶ Play'}</span>
           </a>
-          ${g.desc ? `<details class="desc-details"><summary>Details</summary><p class="desc">${g.desc}</p></details>` : ''}
+          ${quickSummary(g) ? `<p class="game-summary">${quickSummary(g)}</p>` : ''}
+          ${info ? `<div class="control-badges" aria-label="Controls and layout">${[...info.controls,info.orientation].map(k=>`<span>${controlLabels[k]}</span>`).join('')}</div>` : ''}
+          ${g.desc ? `<details class="desc-details"><summary>More about this game</summary><p class="desc">${g.desc}</p></details>` : ''}
         </article>
       `;
     }
@@ -1798,15 +1822,18 @@
 
     function render() {
       const q = (document.getElementById('game-search')?.value || '').toLowerCase().trim();
+      const device = document.getElementById('game-input').value;
+      const compatible = device ? games.filter(g => reviewed[g.title]?.controls.includes(device) || reviewed[g.title]?.orientation === device) : games;
       const base = currentFilter === 'all'
-        ? games
-        : games.filter(g => g.tag === currentFilter || g.cat === currentFilter || g.status === currentFilter);
+        ? compatible
+        : compatible.filter(g => g.tag === currentFilter || g.cat === currentFilter || g.status === currentFilter);
       const list = q
         ? base.filter(g => g.title.toLowerCase().includes(q) || (g.desc||'').toLowerCase().includes(q) || g.cat.includes(q) || g.tag.includes(q))
         : base;
       const released = list.filter(g => g.status !== 'unfinished');
       const unfinished = list.filter(g => g.status === 'unfinished');
-      sections.innerHTML = renderSection('Playable Games', released) + (unfinished.length ? renderSection('Unfinished', unfinished) : '');
+      const picks = !q && !device && currentFilter === 'all' ? ['Skyhold 2026','Gold Digger','Glimmer Grotto','Quarry Impact'].map(title=>released.find(g=>g.title===title)).filter(Boolean) : [];
+      sections.innerHTML = renderSection('Start here', picks) + renderSection(picks.length ? 'More playable games' : 'Playable Games', released.filter(g=>!picks.includes(g))) + (unfinished.length ? renderSection('Unfinished', unfinished) : '');
       count.textContent = `${list.length} game${list.length === 1 ? '' : 's'}${currentFilter === 'all' ? '' : ' · ' + currentFilter}${q ? ' matching \"' + q + '\"' : ''}`;
       requestAnimationFrame(() => {
         document.querySelectorAll('.game-card').forEach((el,i) => {
@@ -1833,6 +1860,7 @@
       render();
     });
 
+    document.getElementById('game-input').addEventListener('change',render);
     document.getElementById('game-search')?.addEventListener('input', () => render());
 
     render();

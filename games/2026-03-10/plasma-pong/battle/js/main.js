@@ -218,6 +218,7 @@ function goTitle() {
 }
 
 function startCampaign(diff, pilot = 'p1') {
+  settings.lastDiff = DIFFICULTY[diff] ? diff : 'normal'; saveSettings();
   G.mode = 'campaign';
   G.diff = diff;
   G.p1Pilot = isOpen(pilot) ? pilot : 'p1';
@@ -238,7 +239,7 @@ function stageIntro() {
   D.setMode(camMode());
   G.simOn = false;
   G.state = 'vs';
-  fillVs(G.sides[1], G.sides[-1], `STAGE ${G.stage + 1} / 5 · <b>${ARENAS[G.stage].name}</b>`, me === 'p1' ? 'You. A paddle. A plasma cannon. A very bad idea.' : you.blurb, pilot.blurb);
+  fillVs(G.sides[1], G.sides[-1], `STAGE ${G.stage + 1} / 5 · <b>${ARENAS[G.stage].name}</b>`, G.stage === 0 ? (I.isTouch ? 'Drag in the arena to move. Tap FIRE to shoot.' : 'A / D or ← / → to move · Space to fire.') + '<br>Break the shield wall, then hit the reactor core.' : you.blurb, pilot.blurb);
   U.show('vs');
   U.setHud(false);
   A.playMusic(ARENAS[G.stage].music);
@@ -1289,12 +1290,14 @@ function enterTitle() {
     history.replaceState(null, '', location.pathname);
     G.onPilot = isOpen(settings.pilot) ? settings.pilot : 'p1';
     onlineJoin(code);
+  } else if (params.has('quick')) {
+    startCampaign(DIFFICULTY[settings.lastDiff] ? settings.lastDiff : 'normal', settings.pilot);
   }
 }
 
 // ------------------------------------------------------------------ frame loop
 let last = performance.now();
-const look = { bloom: 1.5, exposure: 1, desat: 0, fade: 0, chroma: 0, tint: new THREE.Vector3(1, 1, 1) };
+const look = { bloom: 0.9, exposure: 1, desat: 0, fade: 0, chroma: 0, tint: new THREE.Vector3(1, 1, 1) };
 function tick(dt) {
   I.pollPads(G.mode === 'versus' && !solo());
   for (const t of G.timers.slice()) {
@@ -1352,6 +1355,7 @@ function tick(dt) {
     const tactical = settings.tactical === 'always' ? !!Object.keys(G.ai).length && G.mode !== 'attract' : settings.tactical === 'demo' ? G.mode === 'demo' : false;
     R.sync(W, sdt || (G.paused ? 0 : dt * 0.2), { tactical, ai: G.ai, scope: G.scope, beat: 0 });
   }
+  look.bloom = G.state === 'play' ? 0.9 : 1.2;
   look.desat = G.paused ? 0.65 : (1 - D.slow) * 0.35;
   look.chroma = (1 - D.slow) * 0.004;
   R.render(dt, look);

@@ -1,0 +1,35 @@
+{
+  "baseline": "58cdbd55b3409db95abb18517262b7c98c6e6dbc",
+  "files": {
+    "src/main.ts": {
+      "snapshot": "src-main.ts.gz",
+      "before": "33a245cedd61fc1feedd4db889e28b17b14eebe448c73d148b4590cddf0aeaf3",
+      "after": "6b134732b81bf3a1a5ede8dc51b1e1104839dd8f341757359774b48712c816de"
+    },
+    "src/assets.ts": {
+      "snapshot": "src-assets.ts.gz",
+      "before": "a531a89972627b160dcbc6851c1bd21c6e2c885a8c165052d18493a57d3f22b5",
+      "after": "2a87d4f5d8660f852e851c9062d1ac502ff5262a8e3b7467e454a98afdf7a089"
+    },
+    "src/model-loader.ts": {
+      "snapshot": "src-model-loader.ts.gz",
+      "before": "e366ee28a4ffe1d0c566199160c45151a0939e7bbeabec464de805a3bdbb50e0",
+      "after": "939ce642c9f25611b1ddd55c34460b3f2087f85ac79a9ca15a461b83543dca9c"
+    },
+    "src/style.css": {
+      "snapshot": "src-style.css.gz",
+      "before": "b85564ce7edc00504a87e248af8f2d66d56ea4c9599173b1572657f0ca10ceb0",
+      "after": "8bc1c0f43171041d3cbe2f3068b9ec60b729a69642e0fad57df88f44f8cf2990"
+    },
+    "tests/derby-wear-invariants.ts": {
+      "snapshot": "tests-derby-wear-invariants.ts.gz",
+      "before": "ca6b6804dd40828dde46ea73d7dbf889e3cc7e4176a40273743757dfd8440137",
+      "after": "58d293bbd0b44dbbb338cfafe3baae0e3c8dfa40cf9d6e53652e768266ae1705"
+    },
+    "tests/trial-ghost.test.ts": {
+      "snapshot": "tests-trial-ghost.test.ts.gz",
+      "before": "54ab6b7c287bc9f1487bb7caa1b942df146ecf77a5bf15e2427ccd2943eeb9f1",
+      "after": "18c6e0be47d5bd6446644fbfde6ceb08e055ea5d86e9bb904a6f6a3d2b6e94dd"
+    }
+  }
+}

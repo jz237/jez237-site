@@ -231,6 +231,9 @@ body.paused #gl { filter: brightness(.45) saturate(.6); }
 }
 .rotate-hint { display: none; margin-top: 10px; font-size: 12px; letter-spacing: .08em; color: var(--teal); }
 @media (orientation: portrait) and (pointer: coarse) { .rotate-hint { display: block; } }
+
+.menu-extras{pointer-events:auto}.menu-extras summary{cursor:pointer;list-style:revert}.menu-extras[open]>summary{margin-bottom:9px}.diffrow{flex-wrap:wrap;gap:8px}.diffrow .seg{flex-wrap:wrap}
+@media(max-width:480px){#title .card{padding:16px}.diffrow .seg{width:100%;justify-content:space-between}.diffrow .seg button{padding:7px 6px;letter-spacing:.04em}}
 </style>
 </head>
 <body>
@@ -285,13 +288,15 @@ body.paused #gl { filter: brightness(.45) saturate(.6); }
         <button class="mbtn primary" data-act="campaign">START EXPEDITION<small>Five depths, three levels and a guardian in each</small></button>
         <button class="mbtn" data-act="depths">DEPTH SELECT<small>Go back down to any depth you have reached</small></button>
         <button class="mbtn" data-act="endless">THE ENDLESS DEEP<small>Level after level, deeper forever, new finds in every stratum</small></button>
-        <div class="btns two">
+        <details class="menu-extras"><summary class="mbtn">COLLECTION &amp; MORE</summary><div class="btns two">
           <button class="mbtn" data-act="journal">JOURNAL<small id="j-sub">0 discoveries</small></button>
           <button class="mbtn" data-act="museum">MUSEUM<small>See your relics on show</small></button>
           <button class="mbtn" data-act="locker">LOCKER<small id="lk-sub">0 unlocked</small></button>
           <button class="mbtn" data-act="playthrough">AI PLAYTHROUGH<small>Watch the autopilot dig</small></button>
           <button class="mbtn" data-act="scores">HIGH SCORES</button>
           <button class="mbtn" data-act="medals">MEDALS <small id="med-sub">0 / 15</small></button>
+        </div></details>
+        <div class="btns two">
           <button class="mbtn" data-act="options">OPTIONS</button>
           <button class="mbtn" data-act="help">HOW TO PLAY</button>
         </div>
@@ -430,6 +435,6 @@ addEventListener('error', (e) => window.__gdErrors.push(String(e.message || e)))
 addEventListener('unhandledrejection', (e) => window.__gdErrors.push('rejection: ' + String(e.reason && e.reason.message || e.reason)));
 (() => { const ce = console.error; console.error = (...a) => { window.__gdErrors.push(a.map(String).join(' ')); ce.apply(console, a); }; })();
 </script>
-<script type="module" src="js/main.js?v=19"></script>
+<script type="module" src="js/main.js?v=arcade-polish-1"></script>
 </body>
 </html>

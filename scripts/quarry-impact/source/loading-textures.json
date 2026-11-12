@@ -1,0 +1,232 @@
+{
+  "method": "2048px desktop / 1024px touch, JPEG 92 4:4:4; lossless WebP for alpha; original files retained",
+  "textures": [
+    {
+      "source": "assets/asphalt_diff.jpg",
+      "originalBytes": 2802005,
+      "desktop": 2382688,
+      "mobile": 511184
+    },
+    {
+      "source": "assets/asphalt_nor_gl.jpg",
+      "originalBytes": 2751902,
+      "desktop": 2343569,
+      "mobile": 355003
+    },
+    {
+      "source": "assets/asphalt_rough.jpg",
+      "originalBytes": 1392536,
+      "desktop": 1209707,
+      "mobile": 275105
+    },
+    {
+      "source": "assets/circuit_asphalt_diff.jpg",
+      "originalBytes": 3075676,
+      "desktop": 2622343,
+      "mobile": 595601
+    },
+    {
+      "source": "assets/circuit_asphalt_nor_gl.jpg",
+      "originalBytes": 4943950,
+      "desktop": 4268988,
+      "mobile": 950886
+    },
+    {
+      "source": "assets/cladding_diff.jpg",
+      "originalBytes": 2325335,
+      "desktop": 974660,
+      "mobile": 237993
+    },
+    {
+      "source": "assets/coast_sand_rocks_02_diff.jpg",
+      "originalBytes": 2905160,
+      "desktop": 1468512,
+      "mobile": 436585
+    },
+    {
+      "source": "assets/forrest_ground_01_diff.jpg",
+      "originalBytes": 3077552,
+      "desktop": 2686164,
+      "mobile": 729004
+    },
+    {
+      "source": "assets/geology_rock_diff.jpg",
+      "originalBytes": 3814362,
+      "desktop": 1949698,
+      "mobile": 480031
+    },
+    {
+      "source": "assets/geology_rock_nor_gl.jpg",
+      "originalBytes": 4473242,
+      "desktop": 2459046,
+      "mobile": 751090
+    },
+    {
+      "source": "assets/gravel_diff.jpg",
+      "originalBytes": 4986779,
+      "desktop": 2792910,
+      "mobile": 789425
+    },
+    {
+      "source": "assets/gravel_nor_gl.jpg",
+      "originalBytes": 6139007,
+      "desktop": 3800822,
+      "mobile": 1215167
+    },
+    {
+      "source": "assets/gravel_rough.jpg",
+      "originalBytes": 2840343,
+      "desktop": 1403283,
+      "mobile": 336405
+    },
+    {
+      "source": "assets/mud_diff.jpg",
+      "originalBytes": 4539452,
+      "desktop": 2511146,
+      "mobile": 716119
+    },
+    {
+      "source": "assets/mud_nor_gl.jpg",
+      "originalBytes": 5688696,
+      "desktop": 3448192,
+      "mobile": 1145869
+    },
+    {
+      "source": "assets/mud_rough.jpg",
+      "originalBytes": 2421908,
+      "desktop": 1117755,
+      "mobile": 305711
+    },
+    {
+      "source": "assets/north_fir_trunk_a_diff.jpg",
+      "originalBytes": 1896228,
+      "desktop": 1705142,
+      "mobile": 415366
+    },
+    {
+      "source": "assets/north_fir_trunk_b_diff.jpg",
+      "originalBytes": 1538961,
+      "desktop": 1381016,
+      "mobile": 346664
+    },
+    {
+      "source": "assets/north_fir_twig_diff.jpg",
+      "originalBytes": 1141996,
+      "desktop": 579547,
+      "mobile": 194856
+    },
+    {
+      "source": "assets/north_litter_diff.jpg",
+      "originalBytes": 3522953,
+      "desktop": 3035994,
+      "mobile": 664595
+    },
+    {
+      "source": "assets/rock_diff.jpg",
+      "originalBytes": 3437626,
+      "desktop": 1785322,
+      "mobile": 442386
+    },
+    {
+      "source": "assets/rock_nor_gl.jpg",
+      "originalBytes": 3307320,
+      "desktop": 1543728,
+      "mobile": 396662
+    },
+    {
+      "source": "assets/rock_rough.jpg",
+      "originalBytes": 2706723,
+      "desktop": 1300638,
+      "mobile": 314045
+    },
+    {
+      "source": "assets/scree_diff.jpg",
+      "originalBytes": 3133031,
+      "desktop": 2727668,
+      "mobile": 730726
+    },
+    {
+      "source": "assets/scree_nor_gl.jpg",
+      "originalBytes": 5493497,
+      "desktop": 4793593,
+      "mobile": 1315249
+    },
+    {
+      "source": "assets/workyard/concrete_layers_02-arm.jpg",
+      "originalBytes": 2201538,
+      "desktop": 782297,
+      "mobile": 189777
+    },
+    {
+      "source": "assets/workyard/concrete_layers_02-diff.jpg",
+      "originalBytes": 2555097,
+      "desktop": 1106774,
+      "mobile": 240803
+    },
+    {
+      "source": "assets/workyard/concrete_layers_02-normal.jpg",
+      "originalBytes": 3389363,
+      "desktop": 1557359,
+      "mobile": 324836
+    },
+    {
+      "source": "assets/workyard/container_side-arm.jpg",
+      "originalBytes": 1856806,
+      "desktop": 555457,
+      "mobile": 126288
+    },
+    {
+      "source": "assets/workyard/container_side-diff.jpg",
+      "originalBytes": 1833036,
+      "desktop": 479292,
+      "mobile": 112394
+    },
+    {
+      "source": "assets/workyard/container_side-normal.jpg",
+      "originalBytes": 2632795,
+      "desktop": 993751,
+      "mobile": 179322
+    },
+    {
+      "source": "assets/workyard/rusty_painted_metal-arm.jpg",
+      "originalBytes": 1552679,
+      "desktop": 538550,
+      "mobile": 144266
+    },
+    {
+      "source": "assets/workyard/rusty_painted_metal-diff.jpg",
+      "originalBytes": 1930544,
+      "desktop": 759065,
+      "mobile": 196648
+    },
+    {
+      "source": "assets/workyard/rusty_painted_metal-normal.jpg",
+      "originalBytes": 2293576,
+      "desktop": 857460,
+      "mobile": 161546
+    },
+    {
+      "source": "models/packed/textures/523dd59c74f21dd186e0cefb.png",
+      "originalBytes": 2020888,
+      "desktop": 530668,
+      "mobile": 178779
+    },
+    {
+      "source": "models/packed/textures/987a0c2c9bd43b96db4247f6.jpg",
+      "originalBytes": 671135,
+      "mobile": 364793
+    },
+    {
+      "source": "models/packed/textures/c3dbce0207d9b0e6d1ef3d2e.jpg",
+      "originalBytes": 2839282,
+      "desktop": 1376120,
+      "mobile": 387677
+    },
+    {
+      "source": "models/packed/textures/c7fcfaaba53597834f1fe93b.png",
+      "originalBytes": 1567628,
+      "desktop": 974362,
+      "mobile": 346424
+    }
+  ]
+}

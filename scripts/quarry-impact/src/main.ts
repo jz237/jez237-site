@@ -4,6 +4,7 @@ import {prepareLoadingStages,type LoadingStage} from './loading-stages';
 import {clubEngineLabel} from './club-engine-label';
 import {classEngineLabel} from './class-engine';
 import {programWarmupView} from './program-warmup';
+import './loading-textures';
 import {ReplayPuddles} from './replay-puddles';
 import {ReplaySlicks} from './replay-slicks';
 import {PropFires,propKind,DRUM_BLAST} from './prop-fires';
@@ -231,7 +232,7 @@ import { SMAAPass } from 'three/addons/postprocessing/SMAAPass.js';
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 import {BLOOM,bloomWanted} from './lamp-bloom';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import { loadCars, environment, cloneCar } from './assets';
+import { loadCars, environment, cloneCar, templates } from './assets';
 import {standbyPosts,createStandby} from './standby-vehicles';
 import { prepareArenaFloor } from './scenery-arena-material';
 import {prepareReferenceFloor} from './scenery-reference-floor';
@@ -693,10 +694,10 @@ function studioButtons(container:Element|null){
 }
 function replayMenu(){
   const footer=ui.querySelector('.footer>div');if(!footer)return;
-  const library=document.createElement('button');library.id='replay-library-open';library.textContent='REPLAY LIBRARY';library.onclick=()=>{if(closeReplayLibrary)return;keys.clear();closeReplayLibrary=showReplayLibrary(ui,(doc,name)=>{if(!openStudio(false,doc,name))throw Error('Finish the current game action before opening a replay.');lastReplay=doc;watch.disabled=false;},()=>{closeReplayLibrary=null;library.focus();});};footer.prepend(library);
+  const library=document.createElement('button');library.id='replay-library-open';library.textContent='REPLAY LIBRARY';library.onclick=()=>{if(closeReplayLibrary)return;keys.clear();closeReplayLibrary=showReplayLibrary(ui,async(doc,name)=>{await loadCars(()=>{},doc.meta.cars.map(car=>car.kind));if(!openStudio(false,doc,name))throw Error('Finish the current game action before opening a replay.');lastReplay=doc;watch.disabled=false;},()=>{closeReplayLibrary=null;library.focus();});};footer.prepend(library);
   const watch=document.createElement('button');watch.id='replay-last';watch.textContent='LAST REPLAY';watch.disabled=!lastReplay;watch.onclick=()=>openStudio();footer.prepend(watch);
   const load=document.createElement('button');load.id='replay-open';load.textContent='OPEN REPLAY';footer.prepend(load);
-  load.onclick=()=>{const input=document.createElement('input');input.type='file';input.accept='.qir';input.hidden=true;input.id='replay-file';ui.append(input);input.oncancel=()=>input.remove();input.onchange=async()=>{const file=input.files?.[0];if(!file)return;load.disabled=true;load.textContent='OPENING…';try{const doc=await readReplayFile(file);if(!openStudio(false,doc))throw Error('Finish the current game action before opening a replay.');lastReplay=doc;watch.disabled=false;}catch(error){let note=ui.querySelector('#replay-message');if(!note){note=document.createElement('p');note.id='replay-message';note.className='last-award';ui.querySelector('.intro')?.append(note);}note.textContent=error instanceof Error?error.message:'Replay could not be opened.';}finally{load.disabled=false;load.textContent='OPEN REPLAY';input.remove();}};input.click();};
+  load.onclick=()=>{const input=document.createElement('input');input.type='file';input.accept='.qir';input.hidden=true;input.id='replay-file';ui.append(input);input.oncancel=()=>input.remove();input.onchange=async()=>{const file=input.files?.[0];if(!file)return;load.disabled=true;load.textContent='OPENING…';try{const doc=await readReplayFile(file);await loadCars(()=>{},doc.meta.cars.map(car=>car.kind));if(!openStudio(false,doc))throw Error('Finish the current game action before opening a replay.');lastReplay=doc;watch.disabled=false;}catch(error){let note=ui.querySelector('#replay-message');if(!note){note=document.createElement('p');note.id='replay-message';note.className='last-award';ui.querySelector('.intro')?.append(note);}note.textContent=error instanceof Error?error.message:'Replay could not be opened.';}finally{load.disabled=false;load.textContent='OPEN REPLAY';input.remove();}};input.click();};
 }
 const cameraImpactOffset = new T.Vector3();
 const sound = new Sound();
@@ -962,13 +963,11 @@ function menu() {
   ui.querySelectorAll<HTMLButtonElement>('[data-car]').forEach(
     (b) =>
       (b.onclick = () => {
-        kind = b.dataset.car as CarKind;
-        createCars(true);
-        menu();
+        void selectCar(b.dataset.car as CarKind);
       }),
   );
   // The car selector steps through the roster; the full list opens on demand so the title screen fits any window.
-  const roster=Object.keys(DEFINITIONS) as CarKind[],step=(by:number)=>{kind=roster[(roster.indexOf(kind)+by+roster.length)%roster.length];createCars(true);menu();};
+  const roster=Object.keys(DEFINITIONS) as CarKind[],step=(by:number)=>{void selectCar(roster[(roster.indexOf(kind)+by+roster.length)%roster.length]);};
   ui.querySelector<HTMLButtonElement>('#car-prev')!.onclick=()=>step(-1);ui.querySelector<HTMLButtonElement>('#car-next')!.onclick=()=>step(1);
   ui.querySelector<HTMLButtonElement>('#car-all')!.onclick=()=>{const list=ui.querySelector<HTMLElement>('#car-list')!,open=list.hidden;list.hidden=!open;ui.querySelector('#car-all')!.setAttribute('aria-expanded',String(open));const intro=ui.querySelector('.intro')!;if(open)intro.classList.add('picking');else intro.classList.remove('picking');};
   const hub=ui.querySelector('.menu-hub')!;
@@ -1020,6 +1019,16 @@ async function connectOnline(endpoint:string,room:string,name:string,loadout?:On
 }
 function receiveOnline() {
   const s=online.network.snapshot;if(!online.active||!s||preparingOnline)return;
+  const missing = s.cars.map(car=>car.kind).filter(car=>!templates.has(car));
+  if (missing.length) {
+    preparingOnline = true; state = 'loading'; loading('PREPARING ROOM VEHICLES');
+    const socket = online.network.socket;
+    void loadCars(message=>{if(online.active && online.network.socket===socket)loading(message);}, missing).catch(error=>{
+      console.warn('Room vehicle loading failed', error);
+      if (online.active && online.network.socket === socket) { leaveOnline(); toast('Could not load room vehicles — please rejoin',8); }
+    }).finally(()=>{ preparingOnline=false; if(online.active && online.network.socket===socket)receiveOnline(); });
+    return;
+  }
   const venue=ensureVenue(s.mode==='race'?s.event?.rules.course??'quarry-v1':'quarry-v1',s.mode==='derby'?s.event?.rules.arena??'quarry-arena-v1':'quarry-arena-v1');
   if(activeVenue!==venue){activateVenue(venue);fx.world=physics;fx.groundHeight=activeVenue.course.height;events.clear();vehicleFire?.reset();puddleSplashes?.reset();}
   online.setWorld(physics,activeVenue.course,activeVenue.puddles);online.receive(s);elapsed=s.elapsed;countdown=s.countdown;mode=s.mode;
@@ -1057,7 +1066,30 @@ function receiveOnline() {
     onlineUI.results(s);
   }
 }
-function createCars(attract = false, previewSetup?:Setup) {
+/** Resolve the roster once so downloading and spawning always use the same cars. */
+function plannedCars(attract = false): CarKind[] {
+  const count = !attract&&splitRun ? Math.max(2,mode === 'playground' ? (traffic ? 5 : 1) : eventOptions.field) : attract ? 1 : activeTimeTrial ? 1 : activeClubRound!==null ? clubCup!.roster.length : mode === 'playground' ? ((activeChallenge?activeChallenge.traffic:traffic) ? 5 : 1) : activeChallenge?8:demo?demoOptions.field:eventOptions.field;
+  const ratedGrid=!attract&&activeClubRound===null&&!activeTimeTrial&&(demo?demoOptions.classLimit:customEvent()&&mode!=='playground'&&eventOptions.classLimit)?(demo?demoPerformanceGrid(kind,demoOptions,garage):eventPerformanceGrid(kind,eventOptions,garage)):null;
+  return Array.from({length:count},(_,i)=>ratedGrid?ratedGrid.at(i):!attract&&activeClubRound!==null?clubCup!.roster[i].kind:demo&&!attract?demoCarKind(i,kind,demoOptions.lineup):i === 0 ? kind : !attract&&splitRun&&i===1&&!ratedGrid ? split.p2 as CarKind : activeChallenge?(['coupe','sedan','hatch']as CarKind[])[i%3]:!attract&&customEvent()&&mode!=='playground'?gridCarKind(i,kind,eventOptions.lineup):CAR_KINDS[i%CAR_KINDS.length]);
+}
+let selectingCar = false;
+async function selectCar(next: CarKind) {
+  if (selectingCar || state !== 'menu') return;
+  selectingCar = true;
+  const previous = kind;
+  state = 'loading'; loading('PREPARING ' + DEFINITIONS[next].name.toUpperCase());
+  try {
+    await loadCars(loading, [next]);
+    kind = next; createCars(true); menu();
+  } catch (error) {
+    kind = previous; menu();
+    const note = document.createElement('p'); note.className='last-award'; note.setAttribute('role','alert');
+    note.textContent = 'This car could not be loaded. Please try again.';
+    ui.querySelector('.car-select')?.after(note);
+    console.warn('Car selection failed', error);
+  } finally { selectingCar = false; }
+}
+function createCars(attract = false, previewSetup?:Setup, roster = plannedCars(attract)) {
   offroadMarker.reset();
   const targetVenue=ensureVenue(attract?'quarry-v1':preferredCourse(),!attract&&mode==='derby'?resolveArenaId((activeChallenge?.mode==='derby'?activeChallenge.arena:undefined)??clubRound()?.arena??(customEvent()?(demo?demoOptions.arena:eventOptions.arena):undefined)):'quarry-arena-v1');
   archiveReplay();bankRun(false);
@@ -1074,7 +1106,7 @@ function createCars(attract = false, previewSetup?:Setup) {
   if(activeVenue===quarryVenue)quarry.resetProps();else activeVenue.resetProps?.(!online?.active);
   impactAdjudicator.clear();collisionScars.clear();
   collisions = 0;
-  const count = !attract&&splitRun ? Math.max(2,mode === 'playground' ? (traffic ? 5 : 1) : eventOptions.field) : attract ? 1 : activeTimeTrial ? 1 : activeClubRound!==null ? clubCup!.roster.length : mode === 'playground' ? ((activeChallenge?activeChallenge.traffic:traffic) ? 5 : 1) : activeChallenge?8:demo?demoOptions.field:eventOptions.field;
+  const count = roster.length;
   if(!attract&&pursuitSelected())pursuit=new PursuitSession(teamPursuitRules(Array.from({length:count},(_,i)=>i),0,demo?'runner':eventOptions.pursuitRole??'runner',demo?1:eventOptions.pursuitRunners??1,Math.max(60,demo?demoOptions.duration:eventOptions.duration)));
   const pursuitGrid=pursuit?pursuitGridOrder(pursuit.snapshot().rules):null;
   const colors = [
@@ -1087,15 +1119,13 @@ function createCars(attract = false, previewSetup?:Setup) {
     0x344266,
     0x664234,
   ];
-  const ratedGrid=!attract&&activeClubRound===null&&!activeTimeTrial&&(demo?demoOptions.classLimit:customEvent()&&mode!=='playground'&&eventOptions.classLimit)?(demo?demoPerformanceGrid(kind,demoOptions,garage):eventPerformanceGrid(kind,eventOptions,garage)):null;
   // Marshals take their posts round an offline derby arena (the event's venue is active by now).
   if(!attract&&mode==='derby'&&!online?.active&&!demo)marshals=marshalPosts(activeVenue.arena??DERBY_ARENA,activeVenue.course.height).map(post=>{const figure=marshalFigure();figure.position.set(post.x,post.y,post.z);figure.rotation.y=post.yaw;scene.add(figure);return {figure,post,flinchFor:0,flinch:0};});
   if(!attract&&mode==='derby'&&!online?.active&&!demo){standby?.dispose();{const arena=activeVenue.arena??DERBY_ARENA;standby=createStandby(scene,standbyPosts(arena,activeVenue.course.height),(kind,color)=>cloneCar(kind,color),new T.Vector3(arena.x,0,arena.z));}}
   // Standing water on the arena floor in an offline rain event (none on the menu's car).
   layEventPuddles(!attract);
   for (let i = 0; i < count; i++) {
-    const type =
-      ratedGrid?ratedGrid.at(i):!attract&&activeClubRound!==null?clubCup!.roster[i].kind:demo&&!attract?demoCarKind(i,kind,demoOptions.lineup):i === 0 ? kind : !attract&&splitRun&&i===1&&!ratedGrid ? split.p2 as CarKind : activeChallenge?(['coupe','sedan','hatch']as CarKind[])[i%3]:!attract&&customEvent()&&mode!=='playground'?gridCarKind(i,kind,eventOptions.lineup):CAR_KINDS[i%CAR_KINDS.length];
+    const type = roster[i];
     const setup=!attract&&activeTimeTrial?timeTrialSetup(activeTimeTrial):!attract&&activeClubRound!==null?clubVehicleSetup(clubCup!,type):demo&&!attract?demoVehicleSetup(type,demoOptions,garage,kind):!attract&&customEvent()&&mode!=='playground'?eventGridSetup(type,kind,garage,eventOptions.performance,i===0,colors[i%colors.length],eventOptions.classLimit):i===0 && (attract || !demo) && !activeChallenge ? previewSetup??garage.cars[type].setup : undefined;
     const team=!attract&&teamRace()?TEAMS[teamOf(i)]:null,teamSetup=team&&setup?{...setup,paint:team.color,trim:team.trim}:setup;
     const car = new Vehicle(i, type, team?.color ?? setup?.paint ?? colors[i%colors.length], scene, physics, fx, teamSetup,activeVenue.course,online?.active?'legacy':'angular-v1');
@@ -1262,8 +1292,13 @@ async function start(watch=demo) {
       console.warn('Audio loading failed', e);
       toast('Sound unavailable — check local assets', 8);
     }
+    const roster = plannedCars();
+    const required = mode === 'derby' && !demo ? [...roster, 'utility', 'van'] as CarKind[] : [...roster];
+    const ghost = activeTimeTrial && trialGhostLibrary.enabled ? raceTrialGhost(trialGhostLibrary,activeTimeTrial,timeTrialBest(timeTrialRecords,activeTimeTrial))?.ghost : null;
+    if(ghost?.config.performanceClass)required.push(ghost.config.kind);
+    await loadCars(loading, required);
     setQuarryMode();
-    createCars();
+    createCars(false, undefined, roster);
     retainedReplay=lastReplay??retainedReplay;
     for(const car of cars)staticShadows?.bindReceivers(car.root);
     await warmPrograms();
@@ -1292,6 +1327,7 @@ async function start(watch=demo) {
     telemetry=null;runSettled=true;activeChallenge=undefined;activeTimeTrial=null;timeTrialOpen=false;timeTrialResult=null;timeTrialInvalidReason='';demo=false;demoRestart=0;
     const detail=error instanceof Error?error.message:'Please try again.';
     try {
+      if(!templates.has(kind))kind=cars.find(car=>templates.has(car.kind))?.kind??'coupe';
       createCars(true);menu();
       const note=document.createElement('p');note.className='last-award';note.setAttribute('role','alert');
       note.textContent='Could not start the event. Returned to the Quarry. '+detail;
@@ -3250,7 +3286,7 @@ async function boot() {
   online.network.addEventListener('error',e=>{const message=(e as CustomEvent<string>).detail;onlineUI.message(message);toast(message,8);});
   online.network.addEventListener('disconnected',e=>{keys.clear();online.network.clearInput();sound.pause(true);onlineUI.message((e as CustomEvent<string>).detail);toast(online.network.reconnecting?'Connection lost · reconnecting':online.network.disconnectReason+' · press Escape to leave',8);});
   const prepared = await Promise.all([
-    loadCars(loading),
+    loadCars(loading, [kind]),
     environment(renderer, scene),
     prepareArenaFloor(),
     prepareNorthForestFloor(),
@@ -3271,7 +3307,7 @@ async function boot() {
   applyQuality();
   applyEventLighting(true);
   loading('WARMING LIGHTING AND REFLECTIONS');
-  void sound.preload().catch(()=>{}); // A failed prefetch is retried on Start.
+  // Event audio is requested by sound.init() after Start, not while choosing a car.
   // Queue programs together instead of waiting for each shader during the first
   // visible frame. Match the composer's offscreen output to avoid extra variants.
   await warmPrograms(true);
@@ -3279,6 +3315,7 @@ async function boot() {
   menu();
   if(new URL(location.href).searchParams.has('room'))onlineUI.show();
   (window as any).__quarry = {
+    get loadedCars(){return [...templates.keys()];},
     get timeTrial(){return structuredClone({active:activeTimeTrial,records:timeTrialRecords,result:timeTrialResult,warning:timeTrialWarning,invalidReason:timeTrialInvalidReason,open:timeTrialOpen});},
     get clubState(){return {cup:clubCup,activeRound:activeClubRound,retired:clubRetired,playerStopped:clubPlayerStopped,firstFinish:clubFirstFinish,recordedStats:clubRunStats,warning:clubWarning};},
     get courseState(){return{arena:resolveArenaId(activeVenue.arenaId),id:activeVenue.course.id,quarryVisible:quarryVenue.root.visible,ironfieldVisible:raceVenues['ironfield-figure-eight-v1']?.root.visible??false,cinderbankVisible:raceVenues['cinderbank-oval-v1']?.root.visible??false,bodies:physics.bodies.len(),colliders:physics.colliders.len(),quarryBodies:quarryVenue.physics.bodies.len(),ironfieldBodies:raceVenues['ironfield-figure-eight-v1']?.physics.bodies.len()??0,cinderbankBodies:raceVenues['cinderbank-oval-v1']?.physics.bodies.len()??0};},
