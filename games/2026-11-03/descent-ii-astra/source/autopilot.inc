@@ -948,6 +948,7 @@ static void aa_move(vms_vector target,float speed){
 /* Aim and level through the original rotational thrust controls. Rates are
  * turns/second in D2; angular errors below are radians. */
 static vms_vector aa_watch_point,aa_last_foe,aa_target_velocity,aa_commit_point;
+static int aa_film_cruise;
 static fix64 aa_commit_time,aa_lock_seen;static int aa_commit_live,aa_commit_object,aa_commit_signature,aa_commit_turns;
 static int aa_last_kills,aa_watch_count,aa_switches,aa_last_target=-1;
 static fix64 aa_watch_until,aa_target_since,aa_weapon_changed,aa_dodge_next;
@@ -2090,6 +2091,7 @@ void astra_auto_frame(void){
     }
     aa_sliding=short_slide;
     int surveying=!searching&&!attacking&&!watching&&!investigating&&!positioning&&door<0&&flare_door<0&&!(aa_wall>=0&&seg==aa_goal);
+    aa_film_cruise=!attacking;
     if(surveying){
         /* Under way, look where the ship is going. Stopped, look about. */
         /* Parked with the nose against a wall is the one time to look about. */
@@ -2240,6 +2242,81 @@ void astra_auto_pickup_result(object *o,int useful){
     if(!astra_auto_enabled())return;
     if(useful){aa_collects++;aa_next=0;}
     else if(o->type==OBJ_POWERUP)aa_skip_pickup(o-Objects,20);
+}
+
+/* Demo camera. The picture of a hands-free demo used to be bolted to the hull:
+ * every correction of the nose moved the whole screen, and the ship flies
+ * banked for seconds at a time, so the mine was often seen tilted fifteen to
+ * thirty degrees. The demo is now filmed through a camera that follows the
+ * nose with a short lag (shorter still in a fight, so the aim stays in the
+ * middle) and holds the mine's horizon level, keeping a little of the bank.
+ * It is a view only: the ship, its guns and the simulation are untouched, and
+ * the pilot's forward sight is taken from this same picture. */
+static vms_vector aa_film_f,aa_film_u;
+static int aa_film_object=-1,aa_film_signature=-1;
+static fix64 aa_film_time,aa_film_report;
+static float aa_film_ease,aa_film_stats[6];
+static int aa_film_probe;
+static float aa_film_roll(vms_vector f,vms_vector u,vms_vector horizon){
+    vm_vec_scale_add2(&horizon,&f,-vm_vec_dot(&horizon,&f));
+    if(vm_vec_normalize(&horizon)<F1_0*2/5)return 0;
+    return acosf(aa_clamp(f2fl(vm_vec_dot(&horizon,&u)),-1,1))*57.29578f;
+}
+static int aa_film_filled(vms_matrix *m,float spread){
+    float deepest=0;
+    for(int k=0;k<5;k++){
+        vms_vector d=m->fvec;
+        if(k)vm_vec_scale_add2(&d,k<3?&m->rvec:&m->uvec,fl2f((k&1?spread:-spread)*(k<3?1.f:.5625f)));
+        float depth=aa_view_depth(d);if(depth>deepest)deepest=depth;
+    }
+    return deepest<32;
+}
+int astra_auto_camera(object *viewer,vms_matrix *view,fix *zoom){
+    if(!astra_auto_enabled()||!viewer||viewer->type!=OBJ_PLAYER||aa_horizon_level!=Current_level_num)return 0;
+    int own=viewer==ConsoleObject,index=viewer-Objects;
+    if(own&&Player_is_dead)return 0;
+    extern fix Render_zoom;
+    float dt=aa_clamp(f2fl(FrameTime),0,.05f);
+    vms_vector want_f=viewer->orient.fvec,want_u=aa_horizon_up;
+    vm_vec_scale_add2(&want_u,&want_f,-vm_vec_dot(&want_u,&want_f));
+    if(vm_vec_normalize(&want_u)<F1_0*2/5)want_u=viewer->orient.uvec;   /* nose near the vertical: no horizon to hold */
+    else {vm_vec_scale(&want_u,fl2f(.85f));vm_vec_scale_add2(&want_u,&viewer->orient.uvec,fl2f(.15f));vm_vec_normalize(&want_u);}
+    if(index!=aa_film_object||viewer->signature!=aa_film_signature||GameTime64-aa_film_time>F1_0/2||GameTime64<aa_film_time||
+       vm_vec_dot(&aa_film_f,&want_f)<F1_0/5){
+        aa_film_f=want_f;aa_film_u=want_u;aa_film_object=index;aa_film_signature=viewer->signature;
+        aa_film_ease=EM_ASM_DOUBLE(return Math.max(0,Math.min(1,Module.comfort?.smooth||0)));
+        aa_film_probe=EM_ASM_INT(return !!Module.cameraProbe);
+    }else{
+        int fighting=own?!aa_film_cruise:1;
+        float nose=1-expf(-dt/((fighting?.06f:.13f)*(1+2.5f*aa_film_ease))),level=1-expf(-dt/.35f);
+        vms_vector change;
+        vm_vec_sub(&change,&want_f,&aa_film_f);vm_vec_scale_add2(&aa_film_f,&change,fl2f(nose));
+        if(vm_vec_normalize(&aa_film_f)<F1_0/10)aa_film_f=want_f;
+        vm_vec_sub(&change,&want_u,&aa_film_u);vm_vec_scale_add2(&aa_film_u,&change,fl2f(level));
+        if(vm_vec_normalize(&aa_film_u)<F1_0/10)aa_film_u=want_u;
+    }
+    aa_film_time=GameTime64;
+    vm_vector_2_matrix(view,&aa_film_f,&aa_film_u,NULL);
+    *zoom=fixmul(Render_zoom,fl2f(1.0));
+    if(own&&aa_film_probe){
+        static fix64 next;
+        if(GameTime64>=next||GameTime64<next-F1_0){
+            next=GameTime64+F1_0/10;
+            aa_film_stats[0]++;
+            aa_film_stats[1]+=aa_film_roll(viewer->orient.fvec,viewer->orient.uvec,aa_horizon_up);
+            aa_film_stats[2]+=aa_film_roll(view->fvec,view->uvec,aa_horizon_up);
+            aa_film_stats[3]+=aa_film_filled(&viewer->orient,.6f);
+            aa_film_stats[4]+=aa_film_filled(view,.6f/1.0);
+            float lag=acosf(aa_clamp(f2fl(vm_vec_dot(&view->fvec,&viewer->orient.fvec)),-1,1))*57.29578f;
+            if(lag>aa_film_stats[5])aa_film_stats[5]=lag;
+        }
+        if(GameTime64>=aa_film_report||GameTime64<aa_film_report-F1_0){
+            aa_film_report=GameTime64+F1_0/2;
+            EM_ASM(Module.demoCamera=({samples:$0,shipRoll:$1,cameraRoll:$2,shipFilled:$3,cameraFilled:$4,maxLag:$5});,
+                aa_film_stats[0],aa_film_stats[1],aa_film_stats[2],aa_film_stats[3],aa_film_stats[4],aa_film_stats[5]);
+        }
+    }
+    return 1;
 }
 
 void astra_auto_arena_reset(void){aa_level=-999;aa_dead_since=0;aa_deaths=aa_kills=aa_collects=0;}
