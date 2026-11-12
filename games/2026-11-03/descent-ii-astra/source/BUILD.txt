@@ -1598,3 +1598,6 @@ Rest of the visual review (2026-11-11, pyre101)
 
 Find more pilots: fourth link (2026-11-11)
 - The squadron dialog's "Find more pilots" block gains the Descent Rangers Discord (discord.gg/ERR8Zh4NdT), a community for casual Descent 1 and 2 games, placed before the tracker link. The invite was valid with about 208 members when added. multiplayer.js?v=89; the engine is unchanged.
+
+Find more pilots: fifth link (2026-11-11)
+- The "Find more pilots" block gains the D2X-XL tracker's Active Servers page (www.descent2.de/active-servers), the only tracker found that is about Descent 2 in particular. It listed no games when added; its games need the D2X-XL desktop port. multiplayer.js?v=90; the engine is unchanged.
