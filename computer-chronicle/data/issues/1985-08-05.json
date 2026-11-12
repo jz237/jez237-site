@@ -1,0 +1,399 @@
+{
+  "currentDate": "2026-11-12",
+  "historicDate": "1985-08-05",
+  "displayDate": "Week of August 5-11, 1985",
+  "edition": "Issue 158 - Weekly 1985 Computer & Culture Chronicle",
+  "masthead": {
+    "title": "Computer Chronicle",
+    "subtitle": "Issue 158 - Weekly 1985 Computer & Culture Chronicle",
+    "dateline": "Week of August 5-11, 1985",
+    "price": "75 cents"
+  },
+  "visualProfile": {
+    "tone": "Gaming-first magical strategy and action; Archon II dominates the illustrated front page",
+    "motifs": [
+      "Commodore 64 and joystick",
+      "elemental fantasy combat on a CRT",
+      "optical disc and encyclopedia volumes"
+    ],
+    "layout": "Warm aged newsprint, dense believable columns, red and blue section headers, halftone photo blocks, fine rules, ink bleed; no dead footer"
+  },
+  "layoutPlan": {
+    "leadPlacement": "ARCHON II: ADEPT dominates with large gaming illustration and headline",
+    "secondaryRail": "Epyx games, Atari optical disc and Commodore peripherals; print feature headlines verbatim",
+    "archiveNavigation": "Weekly archive with previous/next navigation"
+  },
+  "sectionChrome": {
+    "primary": "brick red",
+    "secondary": "royal blue",
+    "texture": "aged newsprint, fine column rules, ink bleed"
+  },
+  "heroImage": {
+    "src": "media/computer-chronicle-gpt-image-2-week-1985-08-05.jpg",
+    "alt": "Computer Chronicle newspaper front page for August 5-11, 1985",
+    "caption": "Newspaper-style front page generated from structured Chronicle issue data.",
+    "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+  },
+  "editorNote": "Magic on the home computer, a disc full of reference books and the expanding business of online clubs.",
+  "morningLine": "Archon returns with a new contest of spells, strategy and joystick skill.",
+  "sources": [
+    {
+      "title": "COMPUTE! issue 63, August 1985: CES report pp.14–18, Amiga preview pp.20–22, Telecomputing Today p.33, reviews pp.38–40",
+      "url": "https://colorcomputerarchive.com/repo/Documents/Magazines/Compute%20(Clean)/Compute_Issue_063_1985_Aug.pdf",
+      "date": "1985-08"
+    },
+    {
+      "title": "Billboard, August 10, 1985: Top Rock Tracks (primary chart scan)",
+      "url": "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1985/BB-1985-08-10.pdf",
+      "date": "1985-08-10"
+    },
+    {
+      "title": "Box Office Mojo: August 9–11, 1985 domestic weekend",
+      "url": "https://www.boxofficemojo.com/weekend/1985W32/",
+      "date": "1985-08-09/1985-08-11"
+    },
+    {
+      "title": "CRASH issue 19: August 1985, Forum piracy letter and editorial response (OCR)",
+      "url": "https://archive.org/stream/crash-magazine-19/Crash_19_Aug_1985_djvu.txt",
+      "date": "1985-08"
+    },
+    {
+      "title": "Ronald Reagan: Statement on the 40th Anniversary of the Bombing of Hiroshima",
+      "url": "https://www.reaganlibrary.gov/archives/speech/statement-40th-anniversary-bombing-hiroshima",
+      "date": "1985-08-06"
+    }
+  ],
+  "lead": {
+    "headline": "Archon II: Adept brings a new war of magic to home computers",
+    "dek": "Electronic Arts’ strategy-and-action sequel earns an enthusiastic August review.",
+    "confidence": "same-month",
+    "sourceRefs": [
+      0
+    ],
+    "body": [
+      "The battlefield is magical, but the accounting is exacting. Archon II: Adept, developed by Free Fall Associates and published by Electronic Arts, earns an enthusiastic review from Arthur Leyenberger in August’s COMPUTE! The sequel keeps the mixture of strategic planning and real-time fighting while changing the armies and the decisions that sustain them.",
+      "Pieces and spells draw on magical energy. Occupying power points replenishes that resource; holding every power point wins the contest. Four elemental piece types can be summoned by each side, and the element in which a fight takes place changes a unit’s effectiveness. Choosing a battle therefore begins before either player moves the joystick.",
+      "Even the spells demand restraint. Imprison requires continuing energy expenditure, making indiscriminate use costly. Apocalypse is an expensive last-resort gamble. Difficulty settings alter starting energy and combat speed, so the same board can test both deliberate planning and quick hands.",
+      "Leyenberger’s verdict is that “Archon II: Adept is even better than Archon.” The reviewed versions cost $33 for Commodore and Atari, and $40 for Apple. Requirements listed are a Commodore 64 or 128, an Atari 400/800 or XL with at least 48K, or an Apple II-series machine with at least 48K; all require a disk drive and joystick. This is August review coverage, not a newly established release date for this week."
+    ]
+  },
+  "stories": [
+    {
+      "headline": "Epyx lines up winter sports, Lucasfilm adventures and a dungeon trilogy",
+      "body": [
+        "Epyx has a crowded program for the home-computer shelf. Tom R. Halfhill’s Summer CES report in August’s COMPUTE! lists Winter Games, a sequel to Summer Games, for Commodore 64, Apple and Macintosh. The report is a look at the company’s announced pipeline, not confirmation that every version is now in shops.",
+        "The Atari line includes the Lucasfilm games The Eidolon and Koronis Rift. The World’s Greatest Football Game is listed for Commodore 64, Apple and Atari, while Temple of Apshai Trilogy spans those machines as well as Macintosh and IBM in the announcement.",
+        "The roundup quotes a collective $19–$35 range without assigning an individual price to each title. Sports, exploration and dungeon adventuring give Epyx several different bids for the family software budget; the platform lists remain announcements rather than a shipping calendar."
+      ],
+      "sourceRefs": [
+        0
+      ],
+      "confidence": "same-month"
+    },
+    {
+      "headline": "Atari demonstrates an encyclopedia on one optical disc",
+      "body": [
+        "A shelf of reference books has become a disc in Atari’s demonstration with Activenture. August’s COMPUTE! reports a working CD-ROM prototype connected to a 520ST at June’s Chicago Summer CES. The demonstration holds a 23-volume, nine-million-word encyclopedia and its index on one disc.",
+        "Even after that load, the account says three quarters of the disc remains empty. Activenture engineering vice president Tom Rolander emphasizes indexing: retrieving a passage may matter as much as storing it. This is read-only storage, not a new way for home users to record their own files.",
+        "Atari hopes for a product late in 1985 or early 1986 at about $500. That is a forecast, not a current retail offer. The encyclopedia publisher remains unnamed because the final contract has not been signed; the demonstration shows technical promise while publishing and pricing remain unfinished business."
+      ],
+      "sourceRefs": [
+        0
+      ],
+      "confidence": "same-month"
+    },
+    {
+      "headline": "Commodore fills out the 128’s peripheral shelf",
+      "body": [
+        "The Commodore 128’s future extends beyond the keyboard in August’s CES reporting. COMPUTE! describes the 1572 as two 1571 drives in a slim case intended to sit atop the 128, supporting Commodore 64, 128 and CP/M formats. Summer availability is promised, but a price is not supplied.",
+        "The MPS 1000 printer is rated at 100 characters per second in draft and 16 in near-letter-quality mode. The report lists 50–240 dots per inch graphics and widths of 80–160 columns, giving home-office buyers several specifications to weigh alongside software compatibility.",
+        "Communications gets the 1670 direct-connect modem, quoted around $200 with 1200-bps transfer, autodial, autoanswer and automatic 300/1200 switching. A two-button mouse is announced at $49.95. These are June show promises carried in August’s magazine, not independently confirmed deliveries during this week."
+      ],
+      "sourceRefs": [
+        0
+      ],
+      "confidence": "same-month"
+    }
+  ],
+  "computerItems": [
+    {
+      "title": "Amstrad CPC6128 planned for US",
+      "summary": "August CES report p.18: Z80A, 128K, built-in 3-inch drive, CP/M compatibility, BASIC and Logo, joystick and stereo output. US configurations announced at $699 with green monitor and WordStar, or $799 with RGB monitor, Amstrad word processor and entertainment software; scheduled later in year, not a confirmed target-week shipment.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "title": "Amiga preview: an explicitly provisional specification",
+      "summary": "August pp.20–22 preview, written early June: Motorola 68000, 256K RAM, multitasking, custom graphics, 4096-color palette and four-voice stereo. Useful background only; do not repeat provisional 192K ROM/Intuition packaging or price rumors as final specifications.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "title": "Atari 260ST and 260STD announced",
+      "summary": "p.15: described with 256K, RF modulator and ROM system software, with 260STD adding built-in 3.5-inch disk; fall targets of $399/$499. Plans, not confirmed shipments or later production configurations.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0
+      ]
+    }
+  ],
+  "softwareList": [
+    {
+      "name": "Super C for Commodore 64 and 128",
+      "detail": "Abacus announces a C compiler with full-screen horizontally and vertically scrolling editor and source files up to 41K (p.18).",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "name": "PaperClip and HomePak expand",
+      "detail": "Batteries Included: Apple PaperClip $89.95; Commodore 128 PaperClip with SpellPak $119.95; new HomePak versions for IBM PC/PCjr, Commodore 128, Apple and Atari ST $49.95. Announcements in p.18 CES roundup.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "name": "Jane 2.0 and Perfect series",
+      "detail": "Commodore’s 128 software plans include mouse-operated Jane 2.0 word processor/spreadsheet/filer and CP/M Perfect Writer, Perfect Calc and Perfect Filer in 80 columns; p.18.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0
+      ]
+    }
+  ],
+  "storeShelves": [
+    {
+      "label": "Top 5 Computer Games — editorial review and preview selections, not sales rankings",
+      "items": [
+        "Archon II: Adept — August strategy/action review; $33 Commodore/Atari, $40 Apple.",
+        "Winter Games — Epyx sequel announced for Commodore 64, Apple and Macintosh.",
+        "The Eidolon — Lucasfilm game listed for Atari in Epyx’s pipeline.",
+        "Koronis Rift — Lucasfilm game listed for Atari; no exact shipping date verified.",
+        "Adventures in Narnia — August review for Commodore 64 or Apple II-series; paperback included."
+      ],
+      "confidence": "same-month",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "label": "Top 5 Movies — domestic weekend August 9-11, 1985",
+      "items": [
+        "1. Back to the Future",
+        "2. Summer Rental",
+        "3. Pee-wee’s Big Adventure",
+        "4. National Lampoon’s European Vacation",
+        "5. Fright Night"
+      ],
+      "confidence": "same-week",
+      "sourceRefs": [
+        2
+      ]
+    }
+  ],
+  "musicChart": [
+    {
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-08-10",
+      "rank": 1,
+      "title": "Money for Nothing",
+      "artist": "Dire Straits",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        1
+      ],
+      "song": "Money for Nothing"
+    },
+    {
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-08-10",
+      "rank": 2,
+      "title": "St. Elmo’s Fire (Man in Motion)",
+      "artist": "John Parr",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        1
+      ],
+      "song": "St. Elmo’s Fire (Man in Motion)"
+    },
+    {
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-08-10",
+      "rank": 3,
+      "title": "The Power of Love",
+      "artist": "Huey Lewis & the News",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        1
+      ],
+      "song": "The Power of Love"
+    },
+    {
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-08-10",
+      "rank": 4,
+      "title": "Invincible",
+      "artist": "Pat Benatar",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        1
+      ],
+      "song": "Invincible"
+    },
+    {
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-08-10",
+      "rank": 5,
+      "title": "Fortress Around Your Heart",
+      "artist": "Sting",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        1
+      ],
+      "song": "Fortress Around Your Heart"
+    }
+  ],
+  "priceWatch": [
+    {
+      "item": "Archon II: Adept list prices",
+      "price": "$33 / $40",
+      "note": "$33 Commodore/Atari; $40 Apple; August review.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "item": "Commodore 1670 modem",
+      "price": "About $200",
+      "note": "Around $200, announced; p.15.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "item": "Commodore mouse",
+      "price": "$49.95",
+      "note": "$49.95 announced; p.15.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "item": "Amstrad CPC6128 US bundles",
+      "price": "$699 / $799",
+      "note": "$699 green monitor/WordStar; $799 RGB/Amstrad software, announced future bundles; p.18.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "item": "Atari CD-ROM forecast",
+      "price": "About $500 forecast",
+      "note": "About $500; late-1985/early-1986 target, not an available retail quote; pp.14–15.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0
+      ]
+    }
+  ],
+  "briefs": [
+    {
+      "headline": "Read the board offline",
+      "summary": "The August Telecomputing Today column recommends downloading messages for offline reading and composing replies offline to reduce connection charges; p.33.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "headline": "A theatrical week for young science enthusiasts",
+      "summary": "Real Genius opens at number seven while Weird Science is sixth; keep the humor as editorial framing, not a computing-industry development.",
+      "confidence": "same-week",
+      "sourceRefs": [
+        2
+      ]
+    }
+  ],
+  "periodAd": {
+    "headline": "PaperClip for the expanding desk",
+    "summary": "August COMPUTE! reports announced PaperClip prices of $89.95 for Apple and $119.95 for Commodore 128 with SpellPak. HomePak versions are announced at $49.95.",
+    "tagline": "Writing, filing and the home-computer budget.",
+    "sourceRefs": [
+      0
+    ]
+  },
+  "market": {
+    "headline": "A large installed base meets a busy new-machine season",
+    "summary": "Publishers and peripheral makers are announcing versions across established 8-bit computers and newer machines. Epyx’s platform lists, Commodore’s accessories and Atari’s optical-disc forecast show competing bids for household spending; announcements are not proof of stock or sales.",
+    "confidence": "same-month",
+    "sourceRefs": [
+      0
+    ]
+  },
+  "worldAnchor": {
+    "headline": "Hiroshima anniversary renews nuclear debate",
+    "summary": "On August 6, Ronald Reagan marked forty years since the atomic bombings, urged arms reductions and reiterated his invitation for Soviet experts to observe and measure a US nuclear test. His statement presented deterrence as part of the administration’s argument, not a settled answer to the nuclear debate.",
+    "confidence": "exact-date",
+    "sourceRefs": [
+      4
+    ]
+  },
+  "bbsNote": {
+    "headline": "The online clubs are becoming a business",
+    "summary": "Arlan R. Levitan’s Telecomputing Today: SIGs: Behind the Scenes (COMPUTE!, August 1985, p.33) describes commercial discussion communities, sysop compensation and competition among services. These are reported contemporary estimates, not audited accounts. These posts summarize printed reporting, not fabricated historical board messages.",
+    "posts": [
+      {
+        "topic": "How a SIG works",
+        "platform": "CompuServe and other commercial information services",
+        "text": "Levitan divides SIGs into topic message areas, file databases for software and saved messages, and real-time conferences. His column says older messages can disappear within a week as new ones overwrite them."
+      },
+      {
+        "topic": "Sysops and revenue",
+        "platform": "Commercial SIG services",
+        "text": "The column says leading SIGs gross more than $1 million annually and a head sysop or sponsor may receive at least 5 percent, while assistants often receive free SIG time. These are the columnist’s claims; no specific operator is identified."
+      },
+      {
+        "topic": "Service competition",
+        "platform": "CompuServe / Delphi / The Source",
+        "text": "Levitan says Delphi and The Source are entering the SIG business. He recounts an unnamed Commodore SIG staff moving to a competitor and another unnamed community splitting after a sysop dispute; do not invent service identities or board names."
+      },
+      {
+        "topic": "Modem buying",
+        "platform": "Commodore home computers",
+        "text": "The CES roundup p.15 quotes Commodore’s 1670 direct-connect 1200-bps modem at around $200, with autoanswer and automatic 300/1200 switching."
+      }
+    ],
+    "sourceRefs": [
+      0
+    ]
+  },
+  "curiosity": {
+    "headline": "An encyclopedia disc with room to spare",
+    "summary": "The optical-disc demonstration in August’s COMPUTE! packs a 23-volume encyclopedia onto a disc that is still three quarters empty.",
+    "detail": "The delightful detail is accompanied by a real business problem: publishers worried consumers would value a small disc less than a shelf of books. Tom Rolander asks whether buyers would pay $500, $150 or $50 for the information. Those are rhetorical pricing questions, not an advertised encyclopedia price. Source: Halfhill, pp.14–15; demonstration took place at June CES.",
+    "sourceRefs": [
+      0
+    ]
+  },
+  "accuracyLedger": {
+    "items": [
+      "Computing stories below are verified August magazine coverage, not claims of launches during August 5–11. Summer CES events occurred in June; August issue publication is the same-month peg.",
+      "COMPUTE! Amiga preview explicitly reports information gathered in early June; do not treat its tentative specifications, ROM arrangements, availability or rumored prices as final launch facts.",
+      "No milestone: no era-defining event has been verified within the target week. No gadget candidate: August VIDEO cover identifies 8mm tests, but substantive text could not be extracted; no unsupported product claim is included.",
+      "Underground check includes contemporary hobbyist letters. Reader claims are opinions, not measured piracy-loss estimates; no unverified crew identities are supplied.",
+      "Game selections are editorial reviews and previews, not a sales chart.",
+      "No verified crew identity or new piracy event warrants an Underground Desk feature this week.",
+      "Movie ranking covers August 9–11; rock chart is Billboard Top Rock Tracks dated August 10."
+    ]
+  }
+}

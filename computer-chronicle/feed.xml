@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Wed, 11 Nov 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Thu, 12 Nov 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of August 5-11, 1985 — Archon II: Adept brings a new war of magic to home computers</title>
+      <link>https://jez237.com/computer-chronicle/?date=1985-08-05</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1985-08-05</guid>
+      <pubDate>Thu, 12 Nov 2026 12:00:00 GMT</pubDate>
+      <description>Electronic Arts’ strategy-and-action sequel earns an enthusiastic August review. The battlefield is magical, but the accounting is exacting. Archon II: Adept, developed by Free Fall Associates and published by Electronic Arts, earns an enthusiastic review from Arthur Leyenberger in August’s COMPUTE! The sequel keeps the mixture of strategic planning and real-time fighting while changing the armies and the decisions that sustain them. Also this week: Epyx lines up winter sports, Lucasfilm adventures and a dungeon trilogy · Atari demonstrates an encyclopedia on one optical disc · Commodore fills out the 128’s peripheral shelf.</description>
+    </item>
     <item>
       <title>Week of July 29-August 4, 1985 — Acorn saved again as Olivetti raises its stake to 78.9%</title>
       <link>https://jez237.com/computer-chronicle/?date=1985-07-29</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1985-03-25</guid>
       <pubDate>Sat, 24 Oct 2026 12:00:00 GMT</pubDate>
       <description>Best sourced gaming feature; a March review, not a newly verified release. A mail route gives the home pilot a reason to take off. MicroProse’s Solo Flight, reviewed in this month’s COMPUTE!, puts navigation, weather and delivery decisions inside a light-airplane simulation. Sid Meier’s program is listed for the Commodore 64 and Atari computers with at least 48K, a disk drive and joystick, at a publisher price of $34.95. Also this week: After IBM’s PCjr retreat, home-computer owners weigh compatibility and support · A $12.95 disk challenges the commercial word processor · Jazz misses its late-March date as Macintosh waits for office software.</description>
-    </item>
-    <item>
-      <title>Week of March 18-24, 1985 — IBM pulls the plug on PCjr production</title>
-      <link>https://jez237.com/computer-chronicle/?date=1985-03-18</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1985-03-18</guid>
-      <pubDate>Fri, 23 Oct 2026 12:00:00 GMT</pubDate>
-      <description>March 19 announcement ends a bid for the mass-market home computer. IBM announced March 19 that production of its PCjr home computer would end in April. UPI’s Boca Raton dispatch attributes the decision to slack sales, bringing a sharp change of course for the company’s consumer-computer effort. Also this week: Solo Flight puts the mail run in the pilot’s hands · A six-kilobyte word processor arrives in the magazine · The Print Shop makes the home printer earn its keep · One screen for the computer and the evening television.</description>
     </item>
   </channel>
 </rss>

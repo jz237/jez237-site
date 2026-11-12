@@ -2,6 +2,22 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-11-12",
+      "historicDate": "1985-08-05",
+      "displayDate": "Week of August 5-11, 1985",
+      "edition": "Issue 158 - Weekly 1985 Computer & Culture Chronicle",
+      "morningLine": "Archon returns with a new contest of spells, strategy and joystick skill.",
+      "leadHeadline": "Archon II: Adept brings a new war of magic to home computers",
+      "storyHeadlines": [
+        "Epyx lines up winter sports, Lucasfilm adventures and a dungeon trilogy",
+        "Atari demonstrates an encyclopedia on one optical disc",
+        "Commodore fills out the 128’s peripheral shelf"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1985-08-05.jpg",
+      "thumb": "media/thumbs/1985-08-05.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-11-11",
       "historicDate": "1985-07-29",
       "displayDate": "Week of July 29-August 4, 1985",
