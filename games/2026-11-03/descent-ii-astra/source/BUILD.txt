@@ -1595,3 +1595,6 @@ Rest of the visual review (2026-11-11, pyre101)
 - Explosion clusters (engine.patch, fireball.c). The small bursts of one breakup were all .79 of the base radius. They now range from .52 to 1.14, from the seed each burst already has, so the cluster no longer looks like copies.
 - Weapon range (weapons_demo.inc). The range was one dark tone from end to end. Its panels are about 40 percent lighter and alternate in tone bay by bay; average picture brightness 27 to 39 of 255.
 - Not changed: corner darkening on large mine faces (the textures tile per face, so it would draw a grid over them); the honeycomb pattern seen in an Elegies arena, which is the shield effect around a ship and not a wall fault.
+
+Find more pilots: fourth link (2026-11-11)
+- The squadron dialog's "Find more pilots" block gains the Descent Rangers Discord (discord.gg/ERR8Zh4NdT), a community for casual Descent 1 and 2 games, placed before the tracker link. The invite was valid with about 208 members when added. multiplayer.js?v=89; the engine is unchanged.
