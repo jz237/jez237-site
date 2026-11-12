@@ -21470,5 +21470,118 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-11-12-factual-infographic-factual-infographic-scoliosis-a-curve-w",
+    "title": "Factual infographic: Scoliosis — A Curve With a Twist",
+    "tests": "factual_subtype: medical-health-infographic; source-backed schematic anatomy; archive_slot=2026-11-12T11:20; concept=adolescent-scoliosis-spinal-rotation-trunk-asymmetry; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: medical-health-infographic",
+    "prompt": "Create a finished artwork-led medical infographic, directly on canvas, titled “SCOLIOSIS” with subtitle “A curve with a twist” and a smaller scope line “Adolescent idiopathic scoliosis”. Refined contemporary anatomical gouache with fine technical ink, slate-blue negative space, luminous ivory bone, muted coral accent and pale turquoise annotations. Dominant large posterior anatomical study of a fictional adolescent torso from shoulders to pelvis, respectfully nonsexual, skeleton exposed through a translucent silhouette: plausible S-shaped thoracic/lumbar curve, individually articulated vertebrae, gently rotated rib cage. No gore. Detailed trabecular hints and subtle bone shading, precise articulated ribs, no fantasy structures. Label thoracic spine, lumbar spine, pelvis with delicate leaders. A small oblique enlarged vertebral/rib study curls out of the thoracic region to explain “Sideways curve + rotation”; no invented angle measurement or numeric severity. Indicate schematic anatomy, not a patient scan. Curve and rotation are the central educational meaning, not a claim all cases share this exact shape.\nWeave open studies organically along the spinal rhythm, unequal scale and generous breathing room, never a boxed grid. At the upper left, discreet shoulder and waist guide marks on the hero explain “Uneven shoulders, ribs or waist can be clues”. Along the right in airy negative space, a dignified clothed teenager with brown skin, short black curls and teal shorts demonstrates the clinician-observed forward bend test; its rib asymmetry is exaggerated only enough for a readable schematic. Caption “Examination + X-rays assess the curve”. Small supporting line “Often painless; curves can change during growth”.\nAt the lower left weave a short branching care pathway with three short labels, not a universal treatment sequence: “Observe — regular follow-up for many mild curves”; “Brace — selected growing children; helps limit progression”; “Surgery — considered for severe or progressing curves”. Below it: “Care depends on curve size, location and growth remaining”. Do not depict braces as straightening a curve or promise a cure. A small factual note in the opposite margin reads “Idiopathic = exact cause unknown. Can run in families.” Under it: “Not caused by poor posture or heavy backpacks”. Warm, reassuring but not trivializing tone. Include a clearly readable coral caution line near the bottom: “Severe back pain, or pain with weakness or numbness: seek prompt medical evaluation.” Footer: “Most teens can stay active with appropriate follow-up. General education, not a diagnosis.” Keep all text concise and legible; no extra medical claims, drug doses, statistics, thresholds, prevention promises or imaging labels. No bibliography or URLs on the image. Asymmetrical flowing medical atlas composition, crisp typographic hierarchy, richly rendered anatomy with uncluttered visual journey. No mockup, frame, desk, UI, logos or watermark.",
+    "image": "images/2026-11-12-factual-infographic-factual-infographic-scoliosis-a-curve-w.jpg",
+    "thumb": "thumbs/2026-11-12-factual-infographic-factual-infographic-scoliosis-a-curve-w.webp",
+    "color": "#555c5f",
+    "date": "2026-11-12",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1086x1448",
+    "dedup": {
+      "conceptKey": "adolescent-scoliosis-spinal-rotation-trunk-asymmetry",
+      "imageSha256": "6cd2f566cce0ac79587823b09e637bc0db644c9c19c766c0a958006b535d1b80",
+      "imageDHash": "c1333333333b8b15"
+    },
+    "factualInfographic": {
+      "topic": "How adolescent idiopathic scoliosis curves and rotates the spine, changes trunk symmetry, and is evaluated and managed",
+      "description": "Source-backed anatomical guide to adolescent idiopathic scoliosis, trunk asymmetry, evaluation, individualized management and warning symptoms.",
+      "sourceNote": "NIAMS and AAOS; verified spinal curvature/rotation, signs, growth-related progression, evaluation, treatment and warning context. https://www.niams.nih.gov/health-topics/scoliosis https://www.orthoinfo.org/bodypart/back/idiopathic-scoliosis-in-children-and-adolescents/ https://www.orthoinfo.org/bodypart/back/introduction-to-scoliosis/",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-12T16:21:07.081834+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "NIAMS / National Institutes of Health",
+            "title": "Scoliosis",
+            "sourceType": "government-agency",
+            "url": "https://www.niams.nih.gov/health-topics/scoliosis"
+          },
+          {
+            "id": "S2",
+            "publisher": "American Academy of Orthopaedic Surgeons",
+            "title": "Idiopathic Scoliosis in Children and Adolescents",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://www.orthoinfo.org/bodypart/back/idiopathic-scoliosis-in-children-and-adolescents/"
+          },
+          {
+            "id": "S3",
+            "publisher": "American Academy of Orthopaedic Surgeons",
+            "title": "Introduction to Scoliosis",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://www.orthoinfo.org/bodypart/back/introduction-to-scoliosis/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Scoliosis can form a sideways C- or S-shaped curve; vertebrae also twist or rotate.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Thoracic and lumbar regions may be involved; shoulder, rib, waist and hip asymmetry can be signs.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Most adolescent scoliosis is idiopathic: its exact cause is unknown; it can run in families.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Poor posture and heavy backpacks do not cause idiopathic scoliosis.",
+            "sourceIds": [
+              "S2",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Small curves are often painless and unnoticed; growth spurts can worsen a curve.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Clinical examination includes the forward bend test to reveal rib asymmetry; X-rays locate and measure the curve.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Treatment depends on curve size, location and remaining growth: observation for many mild curves; bracing for selected growing children helps prevent progression, not straighten an existing curve; surgery may be considered for severe or progressing curves.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Severe back pain or pain with limb weakness or numbness warrants prompt medical evaluation for other causes.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "Most children and teens can lead normal active lives with appropriate follow-up.",
+            "sourceIds": [
+              "S1",
+              "S3"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
