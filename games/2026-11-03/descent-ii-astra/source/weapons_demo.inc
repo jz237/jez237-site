@@ -72,8 +72,11 @@ void astra_weapon_showcase(int index,float clock){
     ax_count=0;
     for(int i=0;i<10;i++){
         float z=5+i*16,Z=z+15.6f;
-        ax_paint(.08f,.12f,.15f,0);aw_quad(-22,-12,z,-22,12,Z,1);aw_quad(22,-12,z,22,12,Z,1);
-        ax_paint(.075f,.09f,.11f,0);aw_quad(-22,-12,z,22,-12,Z,2);aw_quad(-22,12,z,22,12,Z,2);
+        /* The range was one flat dark tone from end to end. Panels are lighter
+         * and alternate in tone, so the bays and the distance can be read. */
+        float tone=1+.24f*(i%2);
+        ax_paint(.115f*tone,.165f*tone,.20f*tone,.06f);aw_quad(-22,-12,z,-22,12,Z,1);aw_quad(22,-12,z,22,12,Z,1);
+        ax_paint(.10f*tone,.125f*tone,.15f*tone,.06f);aw_quad(-22,-12,z,22,-12,Z,2);aw_quad(-22,12,z,22,12,Z,2);
         ax_paint(.15f,.24f,.28f,.15f);
         for(int side=-1;side<=1;side+=2){
             ax_tube(side*21.7f,-12,z,side*21.7f,12,z,.2f,.2f,4);

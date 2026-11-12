@@ -11,14 +11,14 @@ int astra_robot_id=-1;
 static GLint af_light_on,af_lpos,af_lcolor,af_ldir,af_shadow_on,af_shadow_center,af_shadow_lamp,af_shadow_right,af_shadow_up,af_shadow_normal,af_shadow_size,af_shadow_depth;
 static GLint af_basis,af_origin,af_energy,af_flash,af_clock,af_charge,af_wreck_heat,af_wreck_part;
 static void af_program_init(void){
-    const char *vs="varying mediump vec2 uv;varying highp vec3 p,n,t,q;varying mediump float hand;"
+    const char *vs="varying mediump vec2 uv;varying highp vec3 p,n,t,q,up;varying mediump float hand;"
         "uniform mat3 axis;uniform vec3 origin;"
         "void main(){q=gl_Vertex.xyz;p=axis*q+origin;gl_Position=gl_ProjectionMatrix*vec4(p,1.);"
         "mat3 rot=mat3(normalize(axis[0]),normalize(axis[1]),normalize(axis[2]));"
         "n=normalize(rot*(gl_Color.xyz*2.-1.));hand=gl_Color.a*2.-1.;uv=gl_MultiTexCoord0.xy;"
         "vec2 e=gl_MultiTexCoord0.zw*2.-1.;vec3 v=vec3(e,1.-abs(e.x)-abs(e.y));"
-        "if(v.z<0.)v.xy=(1.-abs(v.yx))*sign(v.xy+vec2(.000001));t=normalize(rot*v);}";
-    const char *fs="precision highp float;varying mediump vec2 uv;varying highp vec3 p,n,t,q;varying mediump float hand;"
+        "if(v.z<0.)v.xy=(1.-abs(v.yx))*sign(v.xy+vec2(.000001));t=normalize(rot*v);up=rot[1];}";
+    const char *fs="precision highp float;varying mediump vec2 uv;varying highp vec3 p,n,t,q,up;varying mediump float hand;"
         "uniform sampler2D paint,detail;uniform vec3 energy;uniform vec4 flash;uniform float clock,charge,wreckHeat,wreckPart;"
         "uniform float lightOn,shadowOn,shadowDepth;uniform vec4 lamps[4],lampColor[4],lampDir[4];"
         "uniform sampler2D machineryShadow;uniform vec3 shadowCenter,shadowLamp,shadowRight,shadowUp,shadowNormal;uniform vec2 shadowSize;"
@@ -31,6 +31,7 @@ static void af_program_init(void){
         "vec3 color=base*(.30+key*1.18+max(dot(N,R),0.)*.24)*energy;"
         "color+=coat*mix(vec3(.65,.75,.86),max(base,vec3(.24)),metal)*(.44+.65*metal);"
         "color+=vec3(.09,.38,.46)*rim*(.35+max(dot(N,R),0.));"
+        "if(lightOn>.5)color*=mix(.60,1.12,dot(N,normalize(up))*.5+.5);"
         "vec3 F=flash.xyz-p;float fd=length(F);color+=vec3(1.,.40,.13)*flash.w/(1.+fd*fd*.01)*max(0.,dot(N,F/max(.1,fd)))*base;"
         "vec3 emission=mix(vec3(.20,.79,1.),max(base,vec3(.15)),smoothstep(.08,.42,max(base.r,base.g)-base.b));"
         "color+=emission*pow(a.a,.77)*(1.32+.075*sin(clock*3.));"
@@ -43,6 +44,7 @@ static void af_program_init(void){
         "color+=local*shade;color*=.90+.10*shade;}"
         "color+=vec3(1.,.26,.035)*charge*(pow(a.a,.5)*1.3+rim*.45);"
         "if(wreckHeat>0.){vec3 Q=q*vec3(.85,.86,.91);float edge=abs(Q.x+.43);if(wreckPart>1.5)edge=abs(Q.x-.43);if(wreckPart>2.5)edge=abs(Q.y+.43);if(wreckPart>3.5)edge=abs(Q.y-.48);if(wreckPart>4.5)edge=abs(Q.z+.52);if(wreckPart>5.5)edge=abs(Q.z-.59);if(wreckPart<.5)edge=min(min(abs(abs(Q.x)-.43),abs(Q.y+.43)),abs(Q.z-.59));float jagged=.018*sin(q.x*31.+q.y*27.+q.z*43.);float cut=exp(-abs(edge+jagged)*30.);vec3 hot=mix(vec3(1.,.045,.003),vec3(1.8,.65,.08),wreckHeat);color+=hot*cut*wreckHeat*3.2;}"
+        "if(lightOn>.5){float hz=min(.22,1.-exp(-max(0.,-p.z-14.)*.0017));color=mix(color,vec3(.11,.16,.18),hz);}"
         "gl_FragColor=vec4(color/(1.+.23*color),1.);}";
     GLuint v=astra_compile(GL_VERTEX_SHADER,vs),f=astra_compile(GL_FRAGMENT_SHADER,fs);
     if(!v||!f){fleet_failed=1;return;}

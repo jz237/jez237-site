@@ -1273,7 +1273,7 @@ index 4bb803a..b9fd4ae 100644
                                     &SoundObjects[i].volume, &SoundObjects[i].pan, SoundObjects[i].max_distance );
  				}
 diff --git a/d2/main/fireball.c b/d2/main/fireball.c
-index fe9b0d1..3df53ec 100644
+index fe9b0d1..beec202 100644
 --- a/d2/main/fireball.c
 +++ b/d2/main/fireball.c
 @@ -22,6 +22,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
@@ -1284,7 +1284,7 @@ index fe9b0d1..3df53ec 100644
  #include "fix.h"
  #include "vecmat.h"
  #include "gr.h"
-@@ -65,7 +66,223 @@ fix	Flash_effect=0;
+@@ -65,7 +66,226 @@ fix	Flash_effect=0;
  
  int	PK1=1, PK2=8;
  
@@ -1397,7 +1397,10 @@ index fe9b0d1..3df53ec 100644
 +    }
 +    if(profile)radius=fixmul(radius,fl2f(astra_detonations[profile].scale));
 +    else if(tier==1&&((seed>>8)%5)>=3)radius=fixmul(radius,fl2f(.62f));
-+    if(tier==0)radius=fixmul(radius,fl2f(.79f));
++    /* The small bursts of one breakup were all the same size, which read as
++     * a cluster of copies. They now range from about half to a little over
++     * the old size, the same on average. */
++    if(tier==0)radius=fixmul(radius,fl2f(.52f+.62f*(((seed>>12)&255)/255.f)));
 +    if(closeImpact)radius=fixmul(radius,fl2f(.62f));
 +    if(tier==ASTRA_HULL_SPARK)radius=fl2f(fminf(1.1f,fmaxf(.4f,f2fl(o->size)*.18f)));
 +    pyro_events[slot]=(astra_event){o->pos,radius,GameTime64-elapsed,fl2f(seconds),seed,kind,tier,o->segnum,0,closeImpact,profile};
@@ -1509,7 +1512,7 @@ index fe9b0d1..3df53ec 100644
  {
  	int objnum;
  	object *obj;
-@@ -87,6 +304,9 @@ object *object_create_explosion_sub(object *objp, short segnum, vms_vector * pos
+@@ -87,6 +307,9 @@ object *object_create_explosion_sub(object *objp, short segnum, vms_vector * pos
  	//now set explosion-specific data
  
  	obj->lifeleft = Vclip[vclip_type ].play_time;
@@ -1519,7 +1522,7 @@ index fe9b0d1..3df53ec 100644
  	obj->ctype.expl_info.spawn_time = -1;
  	obj->ctype.expl_info.delete_objnum = -1;
  	obj->ctype.expl_info.delete_time = -1;
-@@ -287,7 +507,8 @@ object *object_create_explosion_sub(object *objp, short segnum, vms_vector * pos
+@@ -287,7 +510,8 @@ object *object_create_explosion_sub(object *objp, short segnum, vms_vector * pos
  									}
  
  									// Explosions CAN be friendly fire.
@@ -1529,7 +1532,7 @@ index fe9b0d1..3df53ec 100644
  								}
  							}
  								break;
-@@ -311,19 +532,27 @@ object *object_create_explosion_sub(object *objp, short segnum, vms_vector * pos
+@@ -311,19 +535,27 @@ object *object_create_explosion_sub(object *objp, short segnum, vms_vector * pos
  
  object *object_create_muzzle_flash(short segnum, vms_vector * position, fix size, int vclip_type )
  {
@@ -1560,7 +1563,7 @@ index fe9b0d1..3df53ec 100644
  
  	if ((objp != NULL) && (objp->type == OBJ_WEAPON))
  		create_smart_children(objp, NUM_SMART_CHILDREN);
-@@ -439,10 +668,13 @@ object *object_create_debris(object *parent, int subobj_num)
+@@ -439,10 +671,13 @@ object *object_create_debris(object *parent, int subobj_num)
  
  }
  
@@ -1576,7 +1579,7 @@ index fe9b0d1..3df53ec 100644
  
  }
  
-@@ -1206,6 +1438,10 @@ int get_explosion_vclip(object *obj,int stage)
+@@ -1206,6 +1441,10 @@ int get_explosion_vclip(object *obj,int stage)
  //blow up a polygon model
  void explode_model(object *obj)
  {
@@ -1587,7 +1590,7 @@ index fe9b0d1..3df53ec 100644
  	Assert(obj->render_type == RT_POLYOBJ);
  
  	if (Dying_modelnums[obj->rtype.pobj_info.model_num] != -1)
-@@ -1216,7 +1452,7 @@ void explode_model(object *obj)
+@@ -1216,7 +1455,7 @@ void explode_model(object *obj)
  
  		for (i=1;i<Polygon_models[obj->rtype.pobj_info.model_num].n_models;i++)
  			if (!(obj->type == OBJ_ROBOT && obj->id == 44 && i == 5)) 	//energy sucker energy part
@@ -1596,7 +1599,7 @@ index fe9b0d1..3df53ec 100644
  
  		//make parent object only draw center part
  		obj->rtype.pobj_info.subobj_flags=1;
-@@ -1620,3 +1856,7 @@ void expl_wall_read_n_swap(expl_wall *ew, int n, int swap, PHYSFS_file *fp)
+@@ -1620,3 +1859,7 @@ void expl_wall_read_n_swap(expl_wall *ew, int n, int swap, PHYSFS_file *fp)
  			expl_wall_swap(&ew[i], swap);
  }
  
