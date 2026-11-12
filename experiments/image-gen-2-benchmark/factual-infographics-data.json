@@ -21583,5 +21583,121 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-11-12-factual-infographic-factual-infographic-hyperthyroidism-whe",
+    "title": "Factual infographic: Hyperthyroidism — When Thyroid Hormone Runs Too High",
+    "tests": "factual_subtype: medical-health-infographic; source-backed schematic anatomical atlas; no individualized advice; archive_slot=2026-11-12T14:20; concept=hyperthyroidism-excess-hormone-systemic-acceleration; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: medical-health-infographic",
+    "prompt": "Create a finished artwork-led medical infographic, a richly shaded anatomical gouache-and-fine-ink atlas on cool ivory with petrol-blue lettering, warm coral thyroid tissue and restrained amber hormone pathways. Title: “HYPERTHYROIDISM” with subtitle “When thyroid hormone runs too high”. Direct canvas artwork, not a poster photographed in a room, not a screen. Dominant asymmetrical hero: beautifully rendered front-of-neck anatomical study, the butterfly-shaped thyroid luminous coral at the front of the neck, its two lobes joined across the midline. Use a softly transparent surrounding neck silhouette to establish location, realistic tissue shading and delicate ink hatching; do not invent extra organs or microscopic pathology. Small label “Thyroid gland”. An open curling amber ribbon labeled “Excess thyroid hormone” sweeps out toward a spacious body-function constellation, labeled “Many body functions speed up”; ribbon is an explanatory schematic, not a literal anatomical duct. Integrate a finely illustrated heart, a natural hand with subtle motion marks, and a heat/sweat motif at different scales, connected through delicate curved leader lines, never a grid of identical cards. Short readable symptom callouts: “Fast or irregular heartbeat”, “Hand tremor”, “Heat intolerance & sweating”, “Weight loss despite increased appetite”. Add “Symptoms vary”.\nAlong the upper-left curve of the neck study, an airy two-branch cause annotation: “Graves’ disease: immune stimulation” and “Overactive thyroid nodules”. Do not illustrate both as if necessarily present in the same patient. Beneath the main illustration, an elegant open diagnostic pathway with a small blood-sample illustration: “Assessment + thyroid blood tests” then “TSH • T4 • T3” and “Symptoms alone do not diagnose it”. No invented test values or thresholds. Let lower text flow around the illustration rather than occupy rigid rectangles. Heading “Care depends on the cause” and concise readable lines: “Antithyroid medicines reduce production”; “Beta blockers ease symptoms, not hormone production”; “Radioiodine or surgery for selected patients”. Adjacent small caution: “No radioiodine during pregnancy or breastfeeding”. A short margin note: “Untreated disease can affect heart rhythm and bone strength”. Preserve visual breathing room with generous negative space, luminous tonal anatomy, precise tapering leaders and typographic hierarchy; no tiny decorative pseudo-text, bibliography, URLs, logos or watermark.\nAn unobtrusive but clearly readable amber emergency line at the foot: “Rare emergency: thyroid storm” then “High fever + pounding heart + confusion: call emergency services”. Footer “General education • Individual care requires clinical assessment”. Restrict factual content and visual causal implications to the stated claims; do not add dosage, numerical prevalence, promises of cure, or a claim that any treatment suits everyone. The thyroid cutaway should remain the magnificent visual focus, with integrated information and organic flow rather than boxed dashboard panels.",
+    "image": "images/2026-11-12-factual-infographic-factual-infographic-hyperthyroidism-whe.jpg",
+    "thumb": "thumbs/2026-11-12-factual-infographic-factual-infographic-hyperthyroidism-whe.webp",
+    "color": "#e0ceba",
+    "date": "2026-11-12",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "hyperthyroidism-excess-hormone-systemic-acceleration",
+      "imageSha256": "a08aebf52440813d03da4403c1274e59fd1eb823594021a8b9de57980e2d82d8",
+      "imageDHash": "c0c4c4c42c0696ec"
+    },
+    "factualInfographic": {
+      "topic": "How hyperthyroidism increases thyroid hormone production, speeds body functions, and is evaluated and managed",
+      "description": "Anatomical educational atlas of thyroid overactivity, symptoms, causes, testing, individualized treatment and thyroid-storm warning signs.",
+      "sourceNote": "NIDDK https://www.niddk.nih.gov/health-information/endocrine-diseases/hyperthyroidism ; American Thyroid Association https://www.thyroid.org/hyperthyroidism/ ; MedlinePlus https://medlineplus.gov/ency/article/000400.htm . Read directly; verified mechanism, clinical context and emergency signs.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-12T19:21:08.133251+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "NIDDK",
+            "title": "Hyperthyroidism (Overactive Thyroid)",
+            "sourceType": "government-agency",
+            "url": "https://www.niddk.nih.gov/health-information/endocrine-diseases/hyperthyroidism"
+          },
+          {
+            "id": "S2",
+            "publisher": "American Thyroid Association",
+            "title": "Hyperthyroidism",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://www.thyroid.org/hyperthyroidism/"
+          },
+          {
+            "id": "S3",
+            "publisher": "MedlinePlus",
+            "title": "Thyroid storm",
+            "sourceType": "government-agency",
+            "url": "https://medlineplus.gov/ency/article/000400.htm"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "The thyroid is a small butterfly-shaped gland in the front of the neck; its hormones regulate energy use and affect nearly every organ.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Hyperthyroidism means the thyroid produces too much thyroid hormone, speeding many body functions.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Graves disease is an autoimmune cause that stimulates excess hormone production; overactive nodules are another cause.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Possible symptoms include heat intolerance, sweating, hand tremor, weight loss despite increased appetite, and rapid or irregular heartbeat; symptoms vary.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Diagnosis requires clinical assessment and thyroid blood tests, not symptoms alone; TSH, T4 and T3 help evaluate thyroid function.",
+            "sourceIds": [
+              "S1",
+              "S2",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Treatment is individualized by cause, severity and circumstances; antithyroid drugs reduce production, beta blockers ease symptoms but do not stop hormone production, radioiodine or surgery are options for selected patients.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Radioiodine is not used during pregnancy or breastfeeding.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Untreated hyperthyroidism can cause heart rhythm problems and bone thinning.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Thyroid storm is a rare life-threatening emergency; high fever, pounding rapid heart and confusion in someone with hyperthyroidism warrant calling emergency services.",
+            "sourceIds": [
+              "S3"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
