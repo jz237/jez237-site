@@ -21363,5 +21363,112 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-11-12-factual-infographic-factual-infographic-benign-prostatic-en",
+    "title": "Factual infographic: Benign Prostatic Enlargement — When Bladder Outflow Narrows",
+    "tests": "factual_subtype: medical-health-infographic; source-backed schematic; archive_slot=2026-11-12T05:20; concept=benign-prostatic-enlargement-bladder-outflow-obstruction; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: medical-health-infographic",
+    "prompt": "Create the finished medical educational infographic directly, not a mockup. Title: \"BENIGN PROSTATIC ENLARGEMENT\" with subtitle \"When bladder outflow narrows\". An artwork-led anatomical atlas with sophisticated teal, warm coral and amber scientific illustration on pale cool ivory. Dominant oblique cutaway of bladder, bladder neck, enlarged prostate and urethra, faithfully showing the prostate BELOW the bladder encircling the proximal urethra. Render delicate bladder-wall muscle fibers, luminous amber urine, softly shaded gland tissue and a clearly compressed urethral lumen; stylized educational schematic, not an individual scan. Label bladder, prostate, urethra, narrowed outlet, residual urine. Flow arrows run from bladder downward through urethra, never backwards. Small organically nested comparison cross-sections of an unobstructed urethra and an enlarged prostate narrowing its lumen connect through fine curved leaders, not boxes. Mark comparison \"schematic — not to scale\". The anatomy dominates and remains detailed, plausible and dignified, no gore.\nIntegrate readable open callouts through the flowing anatomical composition: \"Noncancerous growth • more common with age\" and \"Cause uncertain; aging and hormonal changes may contribute\". Explain beside the narrowing: \"Bladder works harder; emptying may become incomplete\". Along a sweeping margin place short symptom labels: \"Slow start\", \"Weak or interrupted stream\", \"Urgency / frequency\", \"Up at night\". Note \"Size alone does not predict symptoms\". Lower left open annotation: \"Assessment: history, examination and urine tests; additional tests selected by a clinician. Other conditions can cause similar symptoms.\" Lower right management pathway follows the curve of the bladder: \"Mild symptoms: monitoring may be enough\", \"Limit caffeine / alcohol; shift fluids away from bedtime, stay hydrated by day\", \"Alpha blockers relax outlet muscles\", \"5-alpha reductase inhibitors can shrink the gland\", \"Procedures for selected severe or persistent cases\". Add \"Discuss benefits and risks with a clinician\". In a warm rust-colored unboxed warning ribbon across the bottom, clearly legible: \"URGENT: unable to urinate; blood in urine; painful urination with fever/chills; severe lower abdominal pain\". Footer: \"General education — not a diagnosis\". Rich fine anatomical textures, restrained technical ink, watercolor-like tissue shading, asymmetric hierarchy, generous breathing room, concise accurate labels, no rigid grid, detached cards, bibliography, URLs, logos, invented statistics or extra clinical claims. Do not suggest enlargement is cancer or imply every enlarged prostate obstructs flow.",
+    "image": "images/2026-11-12-factual-infographic-factual-infographic-benign-prostatic-en.jpg",
+    "thumb": "thumbs/2026-11-12-factual-infographic-factual-infographic-benign-prostatic-en.webp",
+    "color": "#e1beac",
+    "date": "2026-11-12",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1122x1402",
+    "dedup": {
+      "conceptKey": "benign-prostatic-enlargement-bladder-outflow-obstruction",
+      "imageSha256": "fad32fd479cd842beed7f452560c157e28c4245ff89e26afc537f2af5231a6f6",
+      "imageDHash": "f260e469b2c48c8e"
+    },
+    "factualInfographic": {
+      "topic": "How benign prostatic enlargement narrows bladder outflow, causes urinary symptoms, and is evaluated and managed",
+      "description": "Anatomical explanation of benign prostatic enlargement, urinary symptoms, clinical assessment, management and urgent warning signs.",
+      "sourceNote": "NIDDK https://www.niddk.nih.gov/health-information/urologic-diseases/prostate-problems/enlarged-prostate-benign-prostatic-hyperplasia ; NHS https://www.nhs.uk/conditions/enlarged-prostate/ — verified anatomy, symptom variability, evaluation, management and urgent care guidance.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-12T10:20:55.648809+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "National Institute of Diabetes and Digestive and Kidney Diseases",
+            "title": "Enlarged Prostate (Benign Prostatic Hyperplasia)",
+            "sourceType": "government-agency",
+            "url": "https://www.niddk.nih.gov/health-information/urologic-diseases/prostate-problems/enlarged-prostate-benign-prostatic-hyperplasia"
+          },
+          {
+            "id": "S2",
+            "publisher": "NHS",
+            "title": "Enlarged prostate",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/conditions/enlarged-prostate/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "BPH is noncancerous enlargement of the prostate; it becomes more common with age. Its cause is uncertain; age-related hormonal changes may contribute.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "The prostate lies below the bladder and surrounds the urethra at the bladder neck; enlargement can squeeze the urethra and impede urine flow.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "The bladder works harder against narrowed outflow and may eventually fail to empty fully, leaving residual urine.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Symptoms can include difficulty starting, weak or interrupted stream, incomplete emptying, frequency, urgency and nighttime urination.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Prostate size does not reliably predict symptom severity; other urinary disorders can cause similar symptoms and require evaluation.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Evaluation includes history, examination and urine tests; selected patients may need PSA testing, urine-flow testing or bladder ultrasound.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Mild symptoms may be monitored; reducing caffeine and alcohol and shifting fluids away from bedtime while maintaining daytime hydration may help.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Clinician-selected alpha blockers relax muscles in the prostate and bladder neck; 5-alpha reductase inhibitors can help shrink the prostate. Procedures may relieve obstruction when symptoms are severe or medicines fail. Treatment has benefits and risks and is individualized.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Seek urgent medical care if unable to urinate, for blood in urine, or for painful urgent urination with fever and chills or severe lower abdominal pain.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
