@@ -51,6 +51,7 @@ static void astra_init_shader(void)
     const char *vs="varying highp vec2 uv;varying mediump vec4 light;varying highp vec3 p;"
         "void main(){gl_Position=ftransform();uv=gl_MultiTexCoord0.xy;light=gl_Color;p=gl_Vertex.xyz;}";
     const char *fs="precision highp float;varying highp vec2 uv;varying mediump vec4 light;varying highp vec3 p;"
+        "uniform vec4 crease[4];"
         "uniform sampler2D colorMap,detailMap,nativeMap,nativeTop,doorMap;uniform float doorActive,doorLayer;uniform vec4 doorTiles;uniform vec3 doorScale;uniform vec3 generatedTint,topGeneratedTint;uniform float generatedShape,topGeneratedShape;uniform vec4 generatedRect,topGeneratedRect;uniform mat3 geologyWorld;uniform vec3 geologyEye;uniform float geologyOn;uniform float district;uniform float faithful,topFaithful,nativeCompare;uniform mat3 basis;uniform vec4 lamp,shot,surface;uniform vec4 fixturePos[4],fixtureColor[4],fixtureAxis[4];uniform float doorMotion;uniform vec2 density;uniform float refinement,detailUpgrade;uniform sampler2D topMap,topDetail;uniform float paired,topTurn;"
         AR_ROOM_GLSL AS_STRATA_GLSL
         "float hash(vec2 q){return fract(sin(dot(q,vec2(127.1,311.7)))*43758.5453);}"
@@ -120,6 +121,8 @@ static void astra_init_shader(void)
         "float vein=1.-smoothstep(.014,.045,abs(noise(cell*3.5+noise(cell*.8)*2.)-.51));"
         "col+=rock*refinement*vein*vec3(.038,.052,.048)*close*layout;"
         /* An unlit face keeps a few percent of its own texture, and distance haze reaches a little further: a dark pit or far wall then has shape instead of being pure black. */
+        /* Creases: each entry is 0 along one edge of the face and 1 at the far side; an edge that is not a crease sends 1 everywhere. */
+        "float fold=1.;for(int i=0;i<4;i++)fold*=mix(.64,1.,smoothstep(0.,.34,dot(crease[i].xyz,p)+crease[i].w));col*=fold;"
         "col=max(col,a.rgb*vec3(.030,.038,.042));"
         "float haze=min(.24,1.-exp(-max(0.,-p.z-10.)*.0021));col=mix(col,vec3(.09,.145,.16),haze);"
         "if((faithful>2.5&&faithful<3.5)||(faithful>25.5&&faithful<26.5)){float hi=max(a.r,max(a.g,a.b)),lo=min(a.r,min(a.g,a.b));float emission=smoothstep(.53,.70,hi)*(faithful>19.5?1.:(1.-smoothstep(.15,.32,hi-lo)));col=mix(col,a.rgb*1.12,emission*.92);}"
@@ -190,6 +193,48 @@ static int astra_material_begin(ogl_texture *tex,const float *p,const float *uv)
     for(int i=0;i<3;i++)mat[6+i]=mat[(i+1)%3]*mat[3+(i+2)%3]-mat[(i+2)%3]*mat[3+(i+1)%3];
     astra_unit(mat+6);
     glUniformMatrix3fv(astra_tangents,1,GL_FALSE,mat);
+    {   /* Crease shading. A large flat face was lit evenly from edge to edge,
+         * so a room read as coloured panels rather than a space. Light does
+         * not reach into the angle where two solid faces of a room meet, so
+         * each face is darkened softly toward such an edge. An edge whose
+         * neighbouring side of the room is open leads on to the same wall in
+         * the next room and gets nothing: a long wall is shaded along its
+         * foot and its top, not cut into squares. */
+        float crease[16]={0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,1};
+        if(astra_drawing_mine&&!astra_native_compare&&sz_face_room>=0&&sz_face_room<=Highest_segment_index&&sz_face_side>=0&&sz_face_side<6){
+            static signed char beside[6][4];static int beside_ready;
+            if(!beside_ready){
+                for(int s=0;s<6;s++)for(int k=0;k<4;k++){
+                    int a=Side_to_verts[s][k],b=Side_to_verts[s][(k+1)%4];beside[s][k]=-1;
+                    for(int t=0;t<6;t++){
+                        if(t==s)continue;int has_a=0,has_b=0;
+                        for(int j=0;j<4;j++){has_a|=Side_to_verts[t][j]==a;has_b|=Side_to_verts[t][j]==b;}
+                        if(has_a&&has_b)beside[s][k]=t;
+                    }
+                }
+                beside_ready=1;
+            }
+            segment *room=&Segments[sz_face_room];float c[4][3],normal[3];
+            for(int k=0;k<4;k++){
+                g3s_point point;g3_rotate_point(&point,&Vertices[room->verts[Side_to_verts[sz_face_side][k]]]);
+                c[k][0]=f2glf(point.p3_vec.x);c[k][1]=f2glf(point.p3_vec.y);c[k][2]=-f2glf(point.p3_vec.z);
+            }
+            {float e[3],g[3];for(int i=0;i<3;i++){e[i]=c[1][i]-c[0][i];g[i]=c[3][i]-c[0][i];}
+             for(int i=0;i<3;i++)normal[i]=e[(i+1)%3]*g[(i+2)%3]-e[(i+2)%3]*g[(i+1)%3];}
+            for(int k=0;k<4;k++){
+                int other=beside[sz_face_side][k];
+                if(other<0||IS_CHILD(room->children[other]))continue;
+                float *a=c[k],*b=c[(k+1)%4],*far1=c[(k+2)%4],*far2=c[(k+3)%4],e[3],m[3];
+                for(int i=0;i<3;i++)e[i]=b[i]-a[i];
+                for(int i=0;i<3;i++)m[i]=normal[(i+1)%3]*e[(i+2)%3]-normal[(i+2)%3]*e[(i+1)%3];
+                float across=0;for(int i=0;i<3;i++)across+=m[i]*(.5f*(far1[i]+far2[i])-a[i]);
+                if(fabsf(across)<1e-6f)continue;
+                float offset=0;for(int i=0;i<3;i++){m[i]/=across;offset-=m[i]*a[i];}
+                crease[k*4]=m[0];crease[k*4+1]=m[1];crease[k*4+2]=m[2];crease[k*4+3]=offset;
+            }
+        }
+        glUniform4fv(AS_UNIFORM(astra_program,"crease"),4,crease);
+    }
     static int kinds[256],kinds_ready;
     if(!kinds_ready){EM_ASM({var k=window.astraMaterialTypes||[];for(var i=0;i<256;i++)HEAP32[($0>>2)+i]=k[i]??-1;},kinds);kinds_ready=1;}
     float surface[4];memcpy(surface,astra_surface,sizeof surface);if(kinds[id]==0||kinds[id]==4)surface[0]=kinds[id];else if(kinds[id]>0&&surface[0]==0)surface[0]=1;if(id>=181&&id<=183)surface[0]=1;

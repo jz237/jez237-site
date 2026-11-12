@@ -2255,35 +2255,83 @@ void astra_auto_pickup_result(object *o,int useful){
 static vms_vector aa_film_f,aa_film_u;
 static int aa_film_object=-1,aa_film_signature=-1;
 static fix64 aa_film_time,aa_film_report;
-static float aa_film_ease,aa_film_stats[6];
+static float aa_film_ease,aa_film_stats[12];
+/* Open view. Cruising, the pilot sometimes points the nose at a wall a few
+ * metres away: in a tight turn, waiting at a door, coming out of a shaft.
+ * A camera bolted to the nose then shows one flat surface and nothing else.
+ * When every ray across the picture ends close by, the camera looks for open
+ * space near the nose (the furthest room in sight on the planned route, the
+ * way the ship is moving, then a fan to either side and above and below) and
+ * turns most of the way toward it, easing in and out. It lets go as soon as
+ * the nose itself has a view again. */
+static vms_vector aa_film_open;
+static int aa_film_open_on;
+static float aa_film_open_w,aa_film_open_depth;
+static fix64 aa_film_open_next;
 static int aa_film_probe;
 static float aa_film_roll(vms_vector f,vms_vector u,vms_vector horizon){
     vm_vec_scale_add2(&horizon,&f,-vm_vec_dot(&horizon,&f));
     if(vm_vec_normalize(&horizon)<F1_0*2/5)return 0;
     return acosf(aa_clamp(f2fl(vm_vec_dot(&horizon,&u)),-1,1))*57.29578f;
 }
-static int aa_film_filled(vms_matrix *m,float spread){
+static float aa_film_depth(vms_matrix *m,float spread){
     float deepest=0;
     for(int k=0;k<5;k++){
         vms_vector d=m->fvec;
         if(k)vm_vec_scale_add2(&d,k<3?&m->rvec:&m->uvec,fl2f((k&1?spread:-spread)*(k<3?1.f:.5625f)));
         float depth=aa_view_depth(d);if(depth>deepest)deepest=depth;
     }
-    return deepest<32;
+    return deepest;
 }
+static int aa_film_filled(vms_matrix *m,float spread){return aa_film_depth(m,spread)<32;}
 int astra_auto_camera(object *viewer,vms_matrix *view,fix *zoom){
     if(!astra_auto_enabled()||!viewer||viewer->type!=OBJ_PLAYER||aa_horizon_level!=Current_level_num)return 0;
     int own=viewer==ConsoleObject,index=viewer-Objects;
     if(own&&Player_is_dead)return 0;
     extern fix Render_zoom;
     float dt=aa_clamp(f2fl(FrameTime),0,.05f);
-    vms_vector want_f=viewer->orient.fvec,want_u=aa_horizon_up;
+    vms_vector nose=viewer->orient.fvec,want_f=nose,want_u;
+    if(own&&aa_film_cruise){
+        if(GameTime64>=aa_film_open_next||GameTime64<aa_film_open_next-F1_0){
+            aa_film_open_next=GameTime64+F1_0/6;
+            vms_matrix ahead;vms_vector up=aa_horizon_up;
+            vm_vec_scale_add2(&up,&nose,-vm_vec_dot(&up,&nose));
+            if(vm_vec_normalize(&up)<F1_0*2/5)up=viewer->orient.uvec;
+            vm_vector_2_matrix(&ahead,&nose,&up,NULL);
+            float here=aa_film_depth(&ahead,.6f);
+            if(aa_film_open_on&&(here>=aa_film_open_depth*.9f||aa_view_depth(aa_film_open)<aa_film_open_depth*.7f||vm_vec_dot(&aa_film_open,&nose)<fl2f(.2f)))aa_film_open_on=0;
+            if(!aa_film_open_on&&here<32){
+                /* The route and the direction of travel count for a little more than a bare gap to one side. */
+                float best=fmaxf(34,here*1.5f+6),deep=0;vms_vector pick=nose;int found=0;
+                for(int k=0;k<12;k++){
+                    vms_vector d=nose;
+                    if(k==0){
+                        if(aa_far_room<0||aa_far_room>Highest_segment_index)continue;
+                        vms_vector c;compute_segment_center(&c,&Segments[aa_far_room]);
+                        if(vm_vec_normalized_dir(&d,&c,&viewer->pos)<i2f(30)||vm_vec_dot(&d,&nose)<fl2f(.2f))continue;
+                    }else if(k==1){d=viewer->mtype.phys_info.velocity;if(vm_vec_normalize(&d)<i2f(8)||vm_vec_dot(&d,&nose)<fl2f(.3f))continue;}
+                    else if(k<8){static const float yaw[6]={.53f,-.53f,1.28f,-1.28f,2.75f,-2.75f};vm_vec_scale_add2(&d,&ahead.rvec,fl2f(yaw[k-2]));}
+                    else {static const float pitch[4]={.49f,-.49f,1.19f,-1.19f};vm_vec_scale_add2(&d,&ahead.uvec,fl2f(pitch[k-8]));}
+                    vm_vec_normalize(&d);
+                    float depth=aa_view_depth(d),worth=depth*(k<2?1.3f:1.f);if(depth>=34&&worth>best){best=worth;deep=depth;pick=d;found=1;}
+                }
+                if(found){aa_film_open=pick;aa_film_open_depth=deep;aa_film_open_on=1;}
+            }
+        }
+    }else aa_film_open_on=0;
+    aa_film_open_w+=((aa_film_open_on?1.f:0.f)-aa_film_open_w)*(1-expf(-dt/.45f));
+    if(aa_film_open_w>.01f){
+        vm_vec_scale(&want_f,fl2f(1-.85f*aa_film_open_w));vm_vec_scale_add2(&want_f,&aa_film_open,fl2f(.85f*aa_film_open_w));
+        if(vm_vec_normalize(&want_f)<F1_0/10)want_f=nose;
+    }
+    want_u=aa_horizon_up;
     vm_vec_scale_add2(&want_u,&want_f,-vm_vec_dot(&want_u,&want_f));
     if(vm_vec_normalize(&want_u)<F1_0*2/5)want_u=viewer->orient.uvec;   /* nose near the vertical: no horizon to hold */
     else {vm_vec_scale(&want_u,fl2f(.85f));vm_vec_scale_add2(&want_u,&viewer->orient.uvec,fl2f(.15f));vm_vec_normalize(&want_u);}
     if(index!=aa_film_object||viewer->signature!=aa_film_signature||GameTime64-aa_film_time>F1_0/2||GameTime64<aa_film_time||
        vm_vec_dot(&aa_film_f,&want_f)<F1_0/5){
-        aa_film_f=want_f;aa_film_u=want_u;aa_film_object=index;aa_film_signature=viewer->signature;
+        aa_film_f=want_f=nose;aa_film_u=want_u;aa_film_object=index;aa_film_signature=viewer->signature;
+        aa_film_open_on=0;aa_film_open_w=0;
         aa_film_ease=EM_ASM_DOUBLE(return Math.max(0,Math.min(1,Module.comfort?.smooth||0)));
         aa_film_probe=EM_ASM_INT(return !!Module.cameraProbe);
     }else{
@@ -2309,11 +2357,23 @@ int astra_auto_camera(object *viewer,vms_matrix *view,fix *zoom){
             aa_film_stats[4]+=aa_film_filled(view,.6f/1.0);
             float lag=acosf(aa_clamp(f2fl(vm_vec_dot(&view->fvec,&viewer->orient.fvec)),-1,1))*57.29578f;
             if(lag>aa_film_stats[5])aa_film_stats[5]=lag;
+            static vms_vector was_ship,was_film;static fix64 was_time;
+            if(GameTime64-was_time<F1_0/2&&GameTime64>was_time){
+                aa_film_stats[6]+=acosf(aa_clamp(f2fl(vm_vec_dot(&was_ship,&viewer->orient.fvec)),-1,1))*57.29578f;
+                aa_film_stats[7]+=acosf(aa_clamp(f2fl(vm_vec_dot(&was_film,&view->fvec)),-1,1))*57.29578f;
+            }
+            was_ship=viewer->orient.fvec;was_film=view->fvec;was_time=GameTime64;
+            aa_film_stats[8]+=aa_film_open_on;
+            if(aa_film_cruise){aa_film_stats[9]++;aa_film_stats[10]+=aa_film_filled(&viewer->orient,.6f);aa_film_stats[11]+=aa_film_filled(view,.6f);}
         }
         if(GameTime64>=aa_film_report||GameTime64<aa_film_report-F1_0){
             aa_film_report=GameTime64+F1_0/2;
             EM_ASM(Module.demoCamera=({samples:$0,shipRoll:$1,cameraRoll:$2,shipFilled:$3,cameraFilled:$4,maxLag:$5});,
                 aa_film_stats[0],aa_film_stats[1],aa_film_stats[2],aa_film_stats[3],aa_film_stats[4],aa_film_stats[5]);
+            EM_ASM(Module.demoCamera.shipTurn=$0;Module.demoCamera.cameraTurn=$1;Module.demoCamera.openView=$2;,
+                aa_film_stats[6],aa_film_stats[7],aa_film_stats[8]);
+            EM_ASM(Module.demoCamera.cruise=$0;Module.demoCamera.cruiseShipFilled=$1;Module.demoCamera.cruiseCameraFilled=$2;,
+                aa_film_stats[9],aa_film_stats[10],aa_film_stats[11]);
         }
     }
     return 1;
