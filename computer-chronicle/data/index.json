@@ -2,6 +2,22 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-11-13",
+      "historicDate": "1985-08-12",
+      "displayDate": "Week of August 12-18, 1985",
+      "edition": "Issue 159 - Weekly 1985 Computer & Culture Chronicle",
+      "morningLine": "A movie studio takes the joystick; the neighborhood bulletin board grows up.",
+      "leadHeadline": "Lucasfilm brings the movie studio’s flair to Atari game screens",
+      "storyHeadlines": [
+        "Atari puts an encyclopedia on an optical disc",
+        "The ST’s next test is software, not specifications",
+        "A construction set for the neighborhood bulletin board"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1985-08-12.jpg",
+      "thumb": "media/thumbs/1985-08-12.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-11-12",
       "historicDate": "1985-08-05",
       "displayDate": "Week of August 5-11, 1985",
