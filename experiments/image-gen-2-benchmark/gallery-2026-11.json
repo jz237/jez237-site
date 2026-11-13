@@ -84,6 +84,77 @@
     }
   },
   {
+    "id": "2026-11-13-factual-infographic-factual-infographic-agouti-pigment-band",
+    "title": "Factual infographic: Agouti — Pigment Bands Within a Single Hair",
+    "tests": "; archive_slot=2026-11-13T08:20; concept=feline-agouti-hair-pigment-switching; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: cat-infographic; cat_category: coats-and-genetics",
+    "prompt": "Create a richly detailed, finished artistic feline genetics infographic titled “AGOUTI” with subtitle “Pigment bands within a single hair”. A flowing unboxed scientific atlas in luminous gouache and precise technical ink on cool ivory, with charcoal, amber and muted teal accents. Dominant hero: a beautifully realistic brown mackerel tabby domestic shorthaired cat curled in a broad sweeping crescent, viewed from a slightly elevated three-quarter angle, with credible anatomy, soft whiskers, layered fur and delicate directional light. The fur is the scientific landscape, not a decorative backdrop. An elegant open magnification pathway leaves a lighter inter-stripe flank region and resolves into several exquisitely drawn individual hairs, enlarged schematically. Show amber-yellow and dark eumelanin bands along individual agouti hairs, without making every band identically spaced; contrast one uniformly dark hair sampled from a dark stripe. Label “Between stripes: banded hairs” and “Dark stripe: dark hairs”. Explain “Bands along a hair are not the same as stripes across a coat.” Let hairs sweep diagonally into negative space, with delicate leader lines and no enclosing cards.\nWeave a small, clearly labeled “Simplified pigment switch” schematic beside these hairs, with ASIP, MC1R and a hair-growth arrow; do not imply literal colored tubes inside the cat. Concise text: “ASIP regulates the switch between dark eumelanin and yellow-red phaeomelanin as a hair grows.” Below, use a graceful open typographic inheritance ribbon, not a boxed Punnett grid: “A/A or A/a — agouti banding” and “a/a — non-agouti, solid hairs”. A small dark-coated cat profile serves only as a subordinate visual comparison. Add the essential qualification “Other genes shape the final coat. Orange cats can show tabby markings regardless of agouti genotype.” No breed-history claims, no treatment or behavior claims, no invented numbers or exact scale bars. All study illustrations are schematic enlargements, not microscopy photographs. Maintain generous breathing room, clear hierarchy, crisp readable labels, finely resolved hair texture and substantial educational substance. No rigid grid, dashboard, floating fact cards, frame, photographed poster, book, screen, or human figure. Small source credit: “Sources: UC Davis VGL · Langford Vets / University of Bristol”. Render the composition itself.",
+    "image": "images/2026-11-13-factual-infographic-factual-infographic-agouti-pigment-band.jpg",
+    "thumb": "thumbs/2026-11-13-factual-infographic-factual-infographic-agouti-pigment-band.webp",
+    "color": "#cabeac",
+    "date": "2026-11-13",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1086x1448",
+    "dedup": {
+      "conceptKey": "feline-agouti-hair-pigment-switching",
+      "imageSha256": "69c00802b3d330bcb3ea6f208191441507df0747cfad0c77d3110fa88d2574d0",
+      "imageDHash": "9882c4e40d92e66c"
+    },
+    "factualInfographic": {
+      "topic": "How feline ASIP switches pigment deposition to create agouti bands in individual hairs",
+      "description": "Feline agouti pigment switching, hair-level bands versus coat-level stripes, and recessive non-agouti inheritance.",
+      "sourceNote": "Read authoritative genetics explanations: https://vgl.ucdavis.edu/test/agouti-cat ; https://www.langfordvets.co.uk/diagnostic-laboratories/cat-genetic-testing/genetic-disease-and-trait-tests/agouti-coat-colour/",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-13T13:21:06.862979+00:00",
+        "sources": [
+          {
+            "id": "ucd",
+            "publisher": "University of California Davis Veterinary Genetics Laboratory",
+            "title": "Agouti",
+            "sourceType": "university",
+            "url": "https://vgl.ucdavis.edu/test/agouti-cat"
+          },
+          {
+            "id": "bristol",
+            "publisher": "University of Bristol — Langford Vets",
+            "title": "Agouti Coat Colour",
+            "sourceType": "university",
+            "url": "https://www.langfordvets.co.uk/diagnostic-laboratories/cat-genetic-testing/genetic-disease-and-trait-tests/agouti-coat-colour/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "ASIP interacts with MC1R to switch eumelanin and phaeomelanin deposition during hair growth, creating bands.",
+            "sourceIds": [
+              "ucd"
+            ]
+          },
+          {
+            "claim": "In a brown tabby, hairs between dark stripes are banded; stripe hairs remain dark. Banding within a hair is distinct from the spatial tabby pattern.",
+            "sourceIds": [
+              "ucd"
+            ]
+          },
+          {
+            "claim": "A/A and A/a support agouti banding; two recessive a copies produce non-agouti solid hairs.",
+            "sourceIds": [
+              "ucd",
+              "bristol"
+            ]
+          },
+          {
+            "claim": "Overall coat appearance depends on other genes; orange cats can retain tabby markings regardless of agouti genotype.",
+            "sourceIds": [
+              "ucd"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
     "id": "2026-11-12-factual-infographic-factual-infographic-tennis-elbow-the-ou",
     "title": "Factual infographic: Tennis Elbow — The Outer Tendon Attachment",
     "tests": "factual_subtype: medical-health-infographic; source-backed schematic anatomy; no individualized advice; archive_slot=2026-11-12T17:20; concept=tennis-elbow-extensor-attachment-loading; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: medical-health-infographic",
