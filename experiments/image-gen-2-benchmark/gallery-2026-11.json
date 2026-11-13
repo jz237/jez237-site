@@ -1,5 +1,658 @@
 [
   {
+    "id": "2026-11-12-factual-infographic-factual-infographic-tennis-elbow-the-ou",
+    "title": "Factual infographic: Tennis Elbow — The Outer Tendon Attachment",
+    "tests": "factual_subtype: medical-health-infographic; source-backed schematic anatomy; no individualized advice; archive_slot=2026-11-12T17:20; concept=tennis-elbow-extensor-attachment-loading; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: medical-health-infographic",
+    "prompt": "Create a finished, artwork-led medical infographic titled \"TENNIS ELBOW\" with subtitle \"Lateral epicondylitis • the outer elbow tendon attachment\". Direct canvas, not a framed print or page mockup. A sophisticated asymmetric anatomical atlas in luminous gouache, precise technical ink and subtle translucent tissue shading on cool ivory, with deep petrol blue, warm muscle reds, pearly tendon fibers and restrained amber pain accents. Dominant sweeping lateral-view elbow and forearm illustration runs diagonally across the composition, bent gently with a natural hand. Skin is selectively lifted into an anatomically credible window revealing humerus, radius, ulna, lateral epicondyle, forearm extensor muscle and tendon attachment. Bone has fine cortical shading; muscle has delicate aligned fascicles; tendon has silvery longitudinal fibers. Label only those structures with thin accurate leaders. Make the outer epicondyle unmistakable, not the medial elbow. Label the commonly involved structure \"ECRB tendon — wrist extensor attachment\". Include small text \"Schematic anatomy; details enlarged\".\nFollow a curved leader from the attachment into a generous enlarged tendon-fiber study, labeled \"Repeated loading can damage the attachment\" and \"Degeneration; sometimes microscopic tears\". Depict subtle disorganized fibers, not a dramatically severed tendon, not a universal complete rupture, no infectious pus or crystalline deposits. Preserve a clear link from muscle through tendon to bone.\nWeave smaller, unboxed studies into natural negative space: a hand gripping a screwdriver and another holding a racquet, not equal-size cards. Text: \"Not just tennis\" and \"Repeated gripping, twisting or wrist extension can contribute. Sometimes no clear trigger.\" Give these subdued scale so anatomy dominates. A flowing amber annotation at the outer elbow reads \"Pain and tenderness here\"; nearby concise text \"Grip may feel weak • gripping or wrist movement can hurt • often develops gradually\".\nIn the lower sweep integrate an open clinical pathway, with varied-scale illustrations of a forearm strap and a therapist-guided wrist exercise silhouette, without prescribing a particular exercise dose. Text: \"Assessment: symptom history + examination\"; \"Tests may help rule out other causes\"; \"Reduce aggravating activities\"; \"Physiotherapy: stretching + strengthening\"; \"A strap or brace may ease symptoms\". A restrained final annotation: \"Persistent symptoms need review. Surgery is reserved for selected cases after prolonged nonsurgical care.\" Do not imply immediate surgery or guarantee a cure.\nAt the quiet lower edge retain a readable, unboxed urgent-care note: \"Seek urgent care for a hot swollen elbow with fever, severe pain with difficulty moving, or an injury with deformity or a snap.\" Separate concise emergency line: \"Sudden arm pain with chest pressure? Get emergency help.\" Footer: \"General education, not a diagnosis or individual treatment plan.\" No medication doses, unsupported recovery deadlines, statistics, imaging promises or extra physiological claims. No bibliography, URLs, logos or watermarks. Elegant strong headline, readable short labels, airy hierarchy, exquisite tissue detail; let leader lines and the forearm's own curve organize the facts, never a rigid boxed grid. Omit decorative vignettes if space is needed, retaining core anatomy, mechanism, symptoms, management and safety text.",
+    "image": "images/2026-11-12-factual-infographic-factual-infographic-tennis-elbow-the-ou.jpg",
+    "thumb": "thumbs/2026-11-12-factual-infographic-factual-infographic-tennis-elbow-the-ou.webp",
+    "color": "#d9cbbf",
+    "date": "2026-11-12",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1086x1448",
+    "dedup": {
+      "conceptKey": "tennis-elbow-extensor-attachment-loading",
+      "imageSha256": "2b4fa3aa76fa21ed9289f833baea7455f83953bc23b715b7b5b10eb72be3dc3d",
+      "imageDHash": "0c24c398d82898f0"
+    },
+    "factualInfographic": {
+      "topic": "How tennis elbow affects the lateral elbow extensor tendon attachment, causes load-related pain, and is evaluated and managed",
+      "description": "Anatomical atlas of lateral epicondylitis, load-related symptoms, clinical assessment and conservative management with safety context.",
+      "sourceNote": "AAOS https://www.orthoinfo.org/bodypart/elbow/tennis-elbow-lateral-epicondylitis/; NHS https://www.nhs.uk/conditions/tennis-elbow/; NHS https://www.nhs.uk/symptoms/elbow-and-arm-pain/. Read directly: anatomy, tendon damage, symptoms, assessment, management and urgent arm-pain warnings.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-12T22:21:00.787024+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "American Academy of Orthopaedic Surgeons",
+            "title": "Tennis Elbow (Lateral Epicondylitis)",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://www.orthoinfo.org/bodypart/elbow/tennis-elbow-lateral-epicondylitis/"
+          },
+          {
+            "id": "S2",
+            "publisher": "NHS",
+            "title": "Tennis elbow",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/conditions/tennis-elbow/"
+          },
+          {
+            "id": "S3",
+            "publisher": "NHS",
+            "title": "Elbow and arm pain",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/symptoms/elbow-and-arm-pain/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "The elbow contains the humerus, radius and ulna; the lateral epicondyle is the outer bony prominence of the humerus.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Tendons connect muscle to bone; the ECRB wrist extensor tendon attaches at the lateral epicondyle and is commonly involved in tennis elbow.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Repeated vigorous forearm use can damage the tendon attachment, with degeneration and sometimes microscopic tears; this is not necessarily a complete tendon rupture.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Gripping, repetitive wrist extension or twisting in work, hobbies and racquet sports can contribute; tennis is not required and sometimes no repetitive injury is identified.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Symptoms include outside-elbow pain and tenderness, weak grip, and pain worsened by gripping or wrist movement; symptoms often develop gradually.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Assessment uses symptom history and examination; tests or imaging may be used to exclude other causes, not necessarily required for everyone.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Reduce activities that worsen symptoms; physiotherapy with wrist and forearm stretching and strengthening can help; a forearm strap or brace may ease symptoms.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Surgery is considered for persistent symptoms after prolonged nonsurgical treatment, not an automatic first step.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Seek medical review for persistent pain despite self-care.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "A hot swollen elbow with fever or chills, or severe pain with difficulty moving, warrants urgent assessment; injury with deformity or snapping also needs urgent assessment.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "Sudden arm pain with chest pressure, heaviness or squeezing requires emergency help; do not assume tennis elbow.",
+            "sourceIds": [
+              "S3"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "2026-11-12-factual-infographic-factual-infographic-scoliosis-a-curve-w",
+    "title": "Factual infographic: Scoliosis — A Curve With a Twist",
+    "tests": "factual_subtype: medical-health-infographic; source-backed schematic anatomy; archive_slot=2026-11-12T11:20; concept=adolescent-scoliosis-spinal-rotation-trunk-asymmetry; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: medical-health-infographic",
+    "prompt": "Create a finished artwork-led medical infographic, directly on canvas, titled “SCOLIOSIS” with subtitle “A curve with a twist” and a smaller scope line “Adolescent idiopathic scoliosis”. Refined contemporary anatomical gouache with fine technical ink, slate-blue negative space, luminous ivory bone, muted coral accent and pale turquoise annotations. Dominant large posterior anatomical study of a fictional adolescent torso from shoulders to pelvis, respectfully nonsexual, skeleton exposed through a translucent silhouette: plausible S-shaped thoracic/lumbar curve, individually articulated vertebrae, gently rotated rib cage. No gore. Detailed trabecular hints and subtle bone shading, precise articulated ribs, no fantasy structures. Label thoracic spine, lumbar spine, pelvis with delicate leaders. A small oblique enlarged vertebral/rib study curls out of the thoracic region to explain “Sideways curve + rotation”; no invented angle measurement or numeric severity. Indicate schematic anatomy, not a patient scan. Curve and rotation are the central educational meaning, not a claim all cases share this exact shape.\nWeave open studies organically along the spinal rhythm, unequal scale and generous breathing room, never a boxed grid. At the upper left, discreet shoulder and waist guide marks on the hero explain “Uneven shoulders, ribs or waist can be clues”. Along the right in airy negative space, a dignified clothed teenager with brown skin, short black curls and teal shorts demonstrates the clinician-observed forward bend test; its rib asymmetry is exaggerated only enough for a readable schematic. Caption “Examination + X-rays assess the curve”. Small supporting line “Often painless; curves can change during growth”.\nAt the lower left weave a short branching care pathway with three short labels, not a universal treatment sequence: “Observe — regular follow-up for many mild curves”; “Brace — selected growing children; helps limit progression”; “Surgery — considered for severe or progressing curves”. Below it: “Care depends on curve size, location and growth remaining”. Do not depict braces as straightening a curve or promise a cure. A small factual note in the opposite margin reads “Idiopathic = exact cause unknown. Can run in families.” Under it: “Not caused by poor posture or heavy backpacks”. Warm, reassuring but not trivializing tone. Include a clearly readable coral caution line near the bottom: “Severe back pain, or pain with weakness or numbness: seek prompt medical evaluation.” Footer: “Most teens can stay active with appropriate follow-up. General education, not a diagnosis.” Keep all text concise and legible; no extra medical claims, drug doses, statistics, thresholds, prevention promises or imaging labels. No bibliography or URLs on the image. Asymmetrical flowing medical atlas composition, crisp typographic hierarchy, richly rendered anatomy with uncluttered visual journey. No mockup, frame, desk, UI, logos or watermark.",
+    "image": "images/2026-11-12-factual-infographic-factual-infographic-scoliosis-a-curve-w.jpg",
+    "thumb": "thumbs/2026-11-12-factual-infographic-factual-infographic-scoliosis-a-curve-w.webp",
+    "color": "#555c5f",
+    "date": "2026-11-12",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1086x1448",
+    "dedup": {
+      "conceptKey": "adolescent-scoliosis-spinal-rotation-trunk-asymmetry",
+      "imageSha256": "6cd2f566cce0ac79587823b09e637bc0db644c9c19c766c0a958006b535d1b80",
+      "imageDHash": "c1333333333b8b15"
+    },
+    "factualInfographic": {
+      "topic": "How adolescent idiopathic scoliosis curves and rotates the spine, changes trunk symmetry, and is evaluated and managed",
+      "description": "Source-backed anatomical guide to adolescent idiopathic scoliosis, trunk asymmetry, evaluation, individualized management and warning symptoms.",
+      "sourceNote": "NIAMS and AAOS; verified spinal curvature/rotation, signs, growth-related progression, evaluation, treatment and warning context. https://www.niams.nih.gov/health-topics/scoliosis https://www.orthoinfo.org/bodypart/back/idiopathic-scoliosis-in-children-and-adolescents/ https://www.orthoinfo.org/bodypart/back/introduction-to-scoliosis/",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-12T16:21:07.081834+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "NIAMS / National Institutes of Health",
+            "title": "Scoliosis",
+            "sourceType": "government-agency",
+            "url": "https://www.niams.nih.gov/health-topics/scoliosis"
+          },
+          {
+            "id": "S2",
+            "publisher": "American Academy of Orthopaedic Surgeons",
+            "title": "Idiopathic Scoliosis in Children and Adolescents",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://www.orthoinfo.org/bodypart/back/idiopathic-scoliosis-in-children-and-adolescents/"
+          },
+          {
+            "id": "S3",
+            "publisher": "American Academy of Orthopaedic Surgeons",
+            "title": "Introduction to Scoliosis",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://www.orthoinfo.org/bodypart/back/introduction-to-scoliosis/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Scoliosis can form a sideways C- or S-shaped curve; vertebrae also twist or rotate.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Thoracic and lumbar regions may be involved; shoulder, rib, waist and hip asymmetry can be signs.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Most adolescent scoliosis is idiopathic: its exact cause is unknown; it can run in families.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Poor posture and heavy backpacks do not cause idiopathic scoliosis.",
+            "sourceIds": [
+              "S2",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Small curves are often painless and unnoticed; growth spurts can worsen a curve.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Clinical examination includes the forward bend test to reveal rib asymmetry; X-rays locate and measure the curve.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Treatment depends on curve size, location and remaining growth: observation for many mild curves; bracing for selected growing children helps prevent progression, not straighten an existing curve; surgery may be considered for severe or progressing curves.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Severe back pain or pain with limb weakness or numbness warrants prompt medical evaluation for other causes.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "Most children and teens can lead normal active lives with appropriate follow-up.",
+            "sourceIds": [
+              "S1",
+              "S3"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "2026-11-12-factual-infographic-factual-infographic-hyperthyroidism-whe",
+    "title": "Factual infographic: Hyperthyroidism — When Thyroid Hormone Runs Too High",
+    "tests": "factual_subtype: medical-health-infographic; source-backed schematic anatomical atlas; no individualized advice; archive_slot=2026-11-12T14:20; concept=hyperthyroidism-excess-hormone-systemic-acceleration; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: medical-health-infographic",
+    "prompt": "Create a finished artwork-led medical infographic, a richly shaded anatomical gouache-and-fine-ink atlas on cool ivory with petrol-blue lettering, warm coral thyroid tissue and restrained amber hormone pathways. Title: “HYPERTHYROIDISM” with subtitle “When thyroid hormone runs too high”. Direct canvas artwork, not a poster photographed in a room, not a screen. Dominant asymmetrical hero: beautifully rendered front-of-neck anatomical study, the butterfly-shaped thyroid luminous coral at the front of the neck, its two lobes joined across the midline. Use a softly transparent surrounding neck silhouette to establish location, realistic tissue shading and delicate ink hatching; do not invent extra organs or microscopic pathology. Small label “Thyroid gland”. An open curling amber ribbon labeled “Excess thyroid hormone” sweeps out toward a spacious body-function constellation, labeled “Many body functions speed up”; ribbon is an explanatory schematic, not a literal anatomical duct. Integrate a finely illustrated heart, a natural hand with subtle motion marks, and a heat/sweat motif at different scales, connected through delicate curved leader lines, never a grid of identical cards. Short readable symptom callouts: “Fast or irregular heartbeat”, “Hand tremor”, “Heat intolerance & sweating”, “Weight loss despite increased appetite”. Add “Symptoms vary”.\nAlong the upper-left curve of the neck study, an airy two-branch cause annotation: “Graves’ disease: immune stimulation” and “Overactive thyroid nodules”. Do not illustrate both as if necessarily present in the same patient. Beneath the main illustration, an elegant open diagnostic pathway with a small blood-sample illustration: “Assessment + thyroid blood tests” then “TSH • T4 • T3” and “Symptoms alone do not diagnose it”. No invented test values or thresholds. Let lower text flow around the illustration rather than occupy rigid rectangles. Heading “Care depends on the cause” and concise readable lines: “Antithyroid medicines reduce production”; “Beta blockers ease symptoms, not hormone production”; “Radioiodine or surgery for selected patients”. Adjacent small caution: “No radioiodine during pregnancy or breastfeeding”. A short margin note: “Untreated disease can affect heart rhythm and bone strength”. Preserve visual breathing room with generous negative space, luminous tonal anatomy, precise tapering leaders and typographic hierarchy; no tiny decorative pseudo-text, bibliography, URLs, logos or watermark.\nAn unobtrusive but clearly readable amber emergency line at the foot: “Rare emergency: thyroid storm” then “High fever + pounding heart + confusion: call emergency services”. Footer “General education • Individual care requires clinical assessment”. Restrict factual content and visual causal implications to the stated claims; do not add dosage, numerical prevalence, promises of cure, or a claim that any treatment suits everyone. The thyroid cutaway should remain the magnificent visual focus, with integrated information and organic flow rather than boxed dashboard panels.",
+    "image": "images/2026-11-12-factual-infographic-factual-infographic-hyperthyroidism-whe.jpg",
+    "thumb": "thumbs/2026-11-12-factual-infographic-factual-infographic-hyperthyroidism-whe.webp",
+    "color": "#e0ceba",
+    "date": "2026-11-12",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "hyperthyroidism-excess-hormone-systemic-acceleration",
+      "imageSha256": "a08aebf52440813d03da4403c1274e59fd1eb823594021a8b9de57980e2d82d8",
+      "imageDHash": "c0c4c4c42c0696ec"
+    },
+    "factualInfographic": {
+      "topic": "How hyperthyroidism increases thyroid hormone production, speeds body functions, and is evaluated and managed",
+      "description": "Anatomical educational atlas of thyroid overactivity, symptoms, causes, testing, individualized treatment and thyroid-storm warning signs.",
+      "sourceNote": "NIDDK https://www.niddk.nih.gov/health-information/endocrine-diseases/hyperthyroidism ; American Thyroid Association https://www.thyroid.org/hyperthyroidism/ ; MedlinePlus https://medlineplus.gov/ency/article/000400.htm . Read directly; verified mechanism, clinical context and emergency signs.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-12T19:21:08.133251+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "NIDDK",
+            "title": "Hyperthyroidism (Overactive Thyroid)",
+            "sourceType": "government-agency",
+            "url": "https://www.niddk.nih.gov/health-information/endocrine-diseases/hyperthyroidism"
+          },
+          {
+            "id": "S2",
+            "publisher": "American Thyroid Association",
+            "title": "Hyperthyroidism",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://www.thyroid.org/hyperthyroidism/"
+          },
+          {
+            "id": "S3",
+            "publisher": "MedlinePlus",
+            "title": "Thyroid storm",
+            "sourceType": "government-agency",
+            "url": "https://medlineplus.gov/ency/article/000400.htm"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "The thyroid is a small butterfly-shaped gland in the front of the neck; its hormones regulate energy use and affect nearly every organ.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Hyperthyroidism means the thyroid produces too much thyroid hormone, speeding many body functions.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Graves disease is an autoimmune cause that stimulates excess hormone production; overactive nodules are another cause.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Possible symptoms include heat intolerance, sweating, hand tremor, weight loss despite increased appetite, and rapid or irregular heartbeat; symptoms vary.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Diagnosis requires clinical assessment and thyroid blood tests, not symptoms alone; TSH, T4 and T3 help evaluate thyroid function.",
+            "sourceIds": [
+              "S1",
+              "S2",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Treatment is individualized by cause, severity and circumstances; antithyroid drugs reduce production, beta blockers ease symptoms but do not stop hormone production, radioiodine or surgery are options for selected patients.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Radioiodine is not used during pregnancy or breastfeeding.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Untreated hyperthyroidism can cause heart rhythm problems and bone thinning.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Thyroid storm is a rare life-threatening emergency; high fever, pounding rapid heart and confusion in someone with hyperthyroidism warrant calling emergency services.",
+            "sourceIds": [
+              "S3"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "2026-11-12-factual-infographic-factual-infographic-hypertension-pressu",
+    "title": "Factual infographic: Hypertension — Pressure That Can Go Unnoticed",
+    "tests": "factual_subtype: medical-health-infographic; source-backed anatomical schematic; archive_slot=2026-11-12T02:20; concept=hypertension-arterial-pressure-organ-risk; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: medical-health-infographic",
+    "prompt": "Create a finished artwork-led medical infographic titled \"HYPERTENSION\" with subtitle \"Pressure that can go unnoticed\". Refined contemporary anatomical gouache and precise medical ink on cool ivory, deep navy vascular shadows, coral arterial lumen and restrained teal annotation. Not a photographed poster. A large elegant branching arterial tree rising from a realistically illustrated heart dominates an asymmetric vertical composition. One oversized oblique cutaway of a muscular artery reveals the open lumen and layered wall with subtle outward arrows labeled \"Blood pressure: force against artery walls\". Arrows indicate pressure, not a plaque blockage; do not imply hypertension always comes from narrowed or clogged arteries. Render realistic heart and vessel textures without unsupported microscopic disease details. A flowing open typographic arc beside the heart says \"Systolic: heart pumps\" and \"Diastolic: heart fills between beats\"; schematic timing only, no fabricated patient waveform or data. Nest small anatomically faithful brain and kidney studies along fine open leader lines labeled \"Over time: higher risk of stroke\", \"Heart attack / heart failure\", \"Kidney damage\"; these are risks, not inevitable outcomes. A quiet dominant callout in generous negative space reads \"Usually no symptoms. Measure to know.\" Beneath it integrate a realistic upper-arm cuff and monitor with a blank display, labeled \"Repeated readings + clinician assessment; validated home monitoring may help\". Weave a sparse risk-factor ribbon among the branches: \"Age & family history • excess sodium • inactivity • excess alcohol\" with subordinate note \"Multiple factors contribute\". At the lower curve of the arterial tree, an open-care pathway uses small food and walking motifs and concise labels: \"DASH-style eating • less sodium & alcohol • regular activity • prescribed medicines when needed\" and \"Care is individualized\". All labels should be readable, restrained, clearly connected to their referents, never rigid cards or a boxed grid. At bottom place a clearly legible red-accent open safety note: \"Higher than 180 systolic and/or 120 diastolic + chest pain, breathlessness, weakness, vision change or speech trouble: CALL 911. Without symptoms: contact a healthcare professional.\" Do not make these the only emergency symptoms. Footer \"General education — not a diagnosis or personal treatment plan\". Keep ample breathing room, sophisticated scale changes, detailed vessel material and polished anatomical shading. No invented numerical risk statistics, no doses, no cure promises, no citations or URLs, no decorative invented anatomy, no recurring human protagonist. The artery tree and organ studies are a schematic educational arrangement, not literal connected anatomy. Produce the infographic itself, with rich artwork and integrated unboxed explanation.",
+    "image": "images/2026-11-12-factual-infographic-factual-infographic-hypertension-pressu.jpg",
+    "thumb": "thumbs/2026-11-12-factual-infographic-factual-infographic-hypertension-pressu.webp",
+    "color": "#d5bdae",
+    "date": "2026-11-12",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "hypertension-arterial-pressure-organ-risk",
+      "imageSha256": "8b344bc4b2667b5c4dce54cae18ad2920f7d7a7fcc6e12b20f4ca2633a1e620d",
+      "imageDHash": "2494cce8cad8e0f8"
+    },
+    "factualInfographic": {
+      "topic": "How hypertension raises arterial pressure, threatens organs, and is measured and managed",
+      "description": "Arterial pressure, silent presentation, organ risks, measurement and evidence-based care with emergency context.",
+      "sourceNote": "NHLBI https://www.nhlbi.nih.gov/health/high-blood-pressure and CDC https://www.cdc.gov/high-blood-pressure/about/index.html; verified pressure physiology, symptoms, risks, assessment, management and emergency guidance.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-12T07:21:10.210662+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "National Heart, Lung, and Blood Institute",
+            "title": "High Blood Pressure - What Is High Blood Pressure?",
+            "sourceType": "government-agency",
+            "url": "https://www.nhlbi.nih.gov/health/high-blood-pressure"
+          },
+          {
+            "id": "S2",
+            "publisher": "Centers for Disease Control and Prevention",
+            "title": "About High Blood Pressure",
+            "sourceType": "government-agency",
+            "url": "https://www.cdc.gov/high-blood-pressure/about/index.html"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Hypertension means persistently high pressure of blood against artery walls; arteries carry blood away from the heart.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Systolic pressure is the pressure during heart pumping; diastolic pressure is measured between beats while the heart fills.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "High blood pressure usually has no symptoms; measurements, often repeated over visits and with a validated home monitor, help establish diagnosis.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "High blood pressure can damage heart, brain and kidneys over time and increases risk of heart attack, heart failure, stroke and kidney disease.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Risk factors include family history, increasing age, excess sodium, inactivity and excess alcohol; multiple factors can contribute.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Care can include a heart-healthy DASH eating pattern, limiting sodium and alcohol, physical activity and medicines prescribed to the individual.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Pressure higher than 180 systolic and/or higher than 120 diastolic with chest pain, shortness of breath, weakness, vision change or difficulty speaking is an emergency: call 911; without symptoms, contact a healthcare professional.",
+            "sourceIds": [
+              "S2"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "2026-11-12-factual-infographic-factual-infographic-chronic-sinusitis-i",
+    "title": "Factual infographic: Chronic Sinusitis — Inflamed Drainage Pathways",
+    "tests": "factual_subtype: medical-health-infographic; source-backed anatomical schematic; general education only; archive_slot=2026-11-12T23:20; concept=chronic-sinusitis-inflamed-mucosal-drainage-pathways; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: medical-health-infographic",
+    "prompt": "Create the finished medical educational infographic directly on the canvas, not a photographed chart or screen. Title: “CHRONIC SINUSITIS” and subtitle “Inflamed lining • impaired drainage”. A refined contemporary anatomical atlas in translucent gouache, colored pencil and precise medical ink on a cool ivory background, with deep petrol teal, muted coral inflammation and delicate warm bone shading. Dominant asymmetric oblique facial cutaway of a fictional middle-aged man with brown skin, close-cropped graying hair and a broad nose; dignity and neutral expression. Reveal the air spaces behind forehead and cheekbone in anatomically credible relation to the nasal cavity. Make anatomy the visual centerpiece, finely modeled thin bony walls and soft mucosal folds, not a decorative face. Clearly label “Forehead sinus”, “Cheek sinus”, “Nasal cavity”, “Swollen lining”, “Mucus”. Keep anatomy schematic, no false clinical imaging.\nA curved magnified cutaway grows organically from the cheek sinus into generous negative space: a relatively open passage beside one narrowed by thickened coral lining, mucus collecting upstream; label “Swelling limits drainage into the nose”. Gentle arrows illustrate this pathway, not airflow to lungs or infection spreading. No invented microanatomy. Flowing open leader lines carry the symptom group “Facial pressure • blocked nose • discharge • reduced smell”. Nearby quiet text: “Chronic disease is driven more by inflammation than infection.” A delicate branching annotation reads “Allergies, polyps and asthma may contribute” with no unsupported cause assertion.\nAlong an unboxed lower sweep integrate modest studies of a saline rinse vessel, nasal spray and a thin endoscope near a simple widened passage, subordinate to the large anatomical illustration. Exact management text: “Saline irrigation and nasal steroid sprays help control symptoms”; “For home rinsing, use water that has been boiled and cooled”; “Antibiotics are not always helpful”; “Selected persistent cases: endoscopic surgery widens drainage pathways”. Do not give doses or imply everyone needs surgery. A concise evaluation annotation: “Persistent or recurring symptoms: clinical assessment. CT is not routine for uncomplicated sinusitis.”\nIn clear warm rust lettering in open space at bottom, not a boxed card: “Urgent help: very unwell, worsening symptoms, pain not relieved, or weakened immunity.” A small footer reads “General education—not a diagnosis or individual treatment plan.” Keep all this typography legible with a confident hierarchy and concise integrated labels; no extra facts, numerical thresholds, microorganisms, bibliography, URLs, logos or watermark. Rich visible material detail and elegant negative space; no rigid grid, detached fact cards or repeated equal panels. The artwork leads and explanations follow its curves.",
+    "image": "images/2026-11-12-factual-infographic-factual-infographic-chronic-sinusitis-i.jpg",
+    "thumb": "thumbs/2026-11-12-factual-infographic-factual-infographic-chronic-sinusitis-i.webp",
+    "color": "#d5c1b1",
+    "date": "2026-11-12",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1086x1448",
+    "dedup": {
+      "conceptKey": "chronic-sinusitis-inflamed-mucosal-drainage-pathways",
+      "imageSha256": "4cec882d384a090a64f8f71c27aabbdb3daa3133212ad828d5cdd0902f4b96d6",
+      "imageDHash": "e4f2d2c4c4948cd8"
+    },
+    "factualInfographic": {
+      "topic": "How chronic sinusitis inflames sinus lining, impairs mucus drainage, and is evaluated and managed",
+      "description": "Source-backed schematic of sinus inflammation, drainage, symptoms, evaluation and management.",
+      "sourceNote": "NHS https://www.nhs.uk/conditions/sinusitis-sinus-infection/ and AAO-HNS ENT Health https://www.enthealth.org/conditions/sinusitis/; verified sinus anatomy, inflammation and drainage, symptoms, management and urgent-care context.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-13T04:21:00.625809+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "NHS",
+            "title": "Sinusitis (sinus infection)",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/conditions/sinusitis-sinus-infection/"
+          },
+          {
+            "id": "S2",
+            "publisher": "American Academy of Otolaryngology–Head and Neck Surgery",
+            "title": "Sinusitis — ENT Health",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://www.enthealth.org/conditions/sinusitis/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Sinuses are air spaces behind the cheekbones and forehead that connect to the inside of the nose.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Swollen sinus lining interferes with mucus drainage into the nose and throat.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Symptoms can include facial pressure or tenderness, blocked nose, nasal discharge and reduced smell.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Chronic sinusitis is driven more by inflammation than infection; antibiotics are not always helpful.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Allergies, nasal polyps and asthma can accompany sinusitis and make it worse.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Saline nasal irrigation and nasal steroid sprays are main treatments for chronic sinusitis symptoms. For home irrigation, NHS describes boiling water then cooling it before use.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Prolonged or repeated symptoms warrant clinical evaluation; CT may be needed for prolonged symptoms or suspected complications, not routinely for uncomplicated sinusitis.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Endoscopic surgery may help selected chronic cases not controlled by medicines by widening natural sinus drainage pathways.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Seek urgent medical help if very unwell, symptoms worsen or painkillers do not help, or immunity is weakened.",
+            "sourceIds": [
+              "S1"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "2026-11-12-factual-infographic-factual-infographic-benign-prostatic-en",
+    "title": "Factual infographic: Benign Prostatic Enlargement — When Bladder Outflow Narrows",
+    "tests": "factual_subtype: medical-health-infographic; source-backed schematic; archive_slot=2026-11-12T05:20; concept=benign-prostatic-enlargement-bladder-outflow-obstruction; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: medical-health-infographic",
+    "prompt": "Create the finished medical educational infographic directly, not a mockup. Title: \"BENIGN PROSTATIC ENLARGEMENT\" with subtitle \"When bladder outflow narrows\". An artwork-led anatomical atlas with sophisticated teal, warm coral and amber scientific illustration on pale cool ivory. Dominant oblique cutaway of bladder, bladder neck, enlarged prostate and urethra, faithfully showing the prostate BELOW the bladder encircling the proximal urethra. Render delicate bladder-wall muscle fibers, luminous amber urine, softly shaded gland tissue and a clearly compressed urethral lumen; stylized educational schematic, not an individual scan. Label bladder, prostate, urethra, narrowed outlet, residual urine. Flow arrows run from bladder downward through urethra, never backwards. Small organically nested comparison cross-sections of an unobstructed urethra and an enlarged prostate narrowing its lumen connect through fine curved leaders, not boxes. Mark comparison \"schematic — not to scale\". The anatomy dominates and remains detailed, plausible and dignified, no gore.\nIntegrate readable open callouts through the flowing anatomical composition: \"Noncancerous growth • more common with age\" and \"Cause uncertain; aging and hormonal changes may contribute\". Explain beside the narrowing: \"Bladder works harder; emptying may become incomplete\". Along a sweeping margin place short symptom labels: \"Slow start\", \"Weak or interrupted stream\", \"Urgency / frequency\", \"Up at night\". Note \"Size alone does not predict symptoms\". Lower left open annotation: \"Assessment: history, examination and urine tests; additional tests selected by a clinician. Other conditions can cause similar symptoms.\" Lower right management pathway follows the curve of the bladder: \"Mild symptoms: monitoring may be enough\", \"Limit caffeine / alcohol; shift fluids away from bedtime, stay hydrated by day\", \"Alpha blockers relax outlet muscles\", \"5-alpha reductase inhibitors can shrink the gland\", \"Procedures for selected severe or persistent cases\". Add \"Discuss benefits and risks with a clinician\". In a warm rust-colored unboxed warning ribbon across the bottom, clearly legible: \"URGENT: unable to urinate; blood in urine; painful urination with fever/chills; severe lower abdominal pain\". Footer: \"General education — not a diagnosis\". Rich fine anatomical textures, restrained technical ink, watercolor-like tissue shading, asymmetric hierarchy, generous breathing room, concise accurate labels, no rigid grid, detached cards, bibliography, URLs, logos, invented statistics or extra clinical claims. Do not suggest enlargement is cancer or imply every enlarged prostate obstructs flow.",
+    "image": "images/2026-11-12-factual-infographic-factual-infographic-benign-prostatic-en.jpg",
+    "thumb": "thumbs/2026-11-12-factual-infographic-factual-infographic-benign-prostatic-en.webp",
+    "color": "#e1beac",
+    "date": "2026-11-12",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1122x1402",
+    "dedup": {
+      "conceptKey": "benign-prostatic-enlargement-bladder-outflow-obstruction",
+      "imageSha256": "fad32fd479cd842beed7f452560c157e28c4245ff89e26afc537f2af5231a6f6",
+      "imageDHash": "f260e469b2c48c8e"
+    },
+    "factualInfographic": {
+      "topic": "How benign prostatic enlargement narrows bladder outflow, causes urinary symptoms, and is evaluated and managed",
+      "description": "Anatomical explanation of benign prostatic enlargement, urinary symptoms, clinical assessment, management and urgent warning signs.",
+      "sourceNote": "NIDDK https://www.niddk.nih.gov/health-information/urologic-diseases/prostate-problems/enlarged-prostate-benign-prostatic-hyperplasia ; NHS https://www.nhs.uk/conditions/enlarged-prostate/ — verified anatomy, symptom variability, evaluation, management and urgent care guidance.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-12T10:20:55.648809+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "National Institute of Diabetes and Digestive and Kidney Diseases",
+            "title": "Enlarged Prostate (Benign Prostatic Hyperplasia)",
+            "sourceType": "government-agency",
+            "url": "https://www.niddk.nih.gov/health-information/urologic-diseases/prostate-problems/enlarged-prostate-benign-prostatic-hyperplasia"
+          },
+          {
+            "id": "S2",
+            "publisher": "NHS",
+            "title": "Enlarged prostate",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/conditions/enlarged-prostate/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "BPH is noncancerous enlargement of the prostate; it becomes more common with age. Its cause is uncertain; age-related hormonal changes may contribute.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "The prostate lies below the bladder and surrounds the urethra at the bladder neck; enlargement can squeeze the urethra and impede urine flow.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "The bladder works harder against narrowed outflow and may eventually fail to empty fully, leaving residual urine.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Symptoms can include difficulty starting, weak or interrupted stream, incomplete emptying, frequency, urgency and nighttime urination.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Prostate size does not reliably predict symptom severity; other urinary disorders can cause similar symptoms and require evaluation.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Evaluation includes history, examination and urine tests; selected patients may need PSA testing, urine-flow testing or bladder ultrasound.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Mild symptoms may be monitored; reducing caffeine and alcohol and shifting fluids away from bedtime while maintaining daytime hydration may help.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Clinician-selected alpha blockers relax muscles in the prostate and bladder neck; 5-alpha reductase inhibitors can help shrink the prostate. Procedures may relieve obstruction when symptoms are severe or medicines fail. Treatment has benefits and risks and is individualized.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Seek urgent medical care if unable to urinate, for blood in urine, or for painful urgent urination with fever and chills or severe lower abdominal pain.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
     "id": "2026-11-11-factual-infographic-factual-infographic-royal-gramma",
     "title": "Factual infographic: Royal gramma",
     "tests": "Same-day prepared transaction resumed by explicit authorization; no earlier image requested. USGS reports no synonyms. No numeric tank minimum asserted.; archive_slot=2026-11-11T00:20; concept=royal-gramma-plankton-hunting-reef-overhang; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: reef-fish-infographic; fish_scientific_name: Gramma loreto",
