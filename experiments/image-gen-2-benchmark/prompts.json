@@ -31994,5 +31994,89 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-11-13-factual-infographic-factual-infographic-milk-lactose-why-th",
+    "title": "Factual infographic: Milk Lactose — Why the Saucer Can Upset Digestion",
+    "tests": "; archive_slot=2026-11-13T04:20; concept=feline-milk-lactose-intestinal-digestion; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: cat-infographic; cat_category: food-and-hydration",
+    "prompt": "Create a beautifully detailed finished Cat Atlas educational infographic, artwork-led and unboxed, not a poster mockup. Title: “MILK & THE FELINE GUT”; subtitle: “Why the familiar saucer can upset digestion”. Deep teal, soft ivory, warm copper and muted rose; luminous colored-pencil and watercolor scientific illustration with exquisite realistic fur, fine technical ink, airy asymmetric composition and elegant readable typesetting.\nA large adult solid charcoal-gray shorthaired cat curves diagonally through the central composition, looking toward the viewer, relaxed and anatomically credible. Its body remains intact: a delicate transparent illustrative window over the abdomen reveals a simplified curling intestinal ribbon, explicitly labeled “Digestive schematic — not to scale”. No diseased organs or breed claims. The ribbon flows into an enlarged conceptual intestinal-edge study at left, not a detached box: small abstract milk-sugar beads meet an enzyme symbol labeled “Lactase”. Use simple schematic symbols, not a molecular structural formula. Label “Lactose = milk sugar” and “Lactase helps digest lactose”; explain “Many cats have too little lactase to digest milk comfortably.” Do not imply the drawing is microscopic anatomy.\nBelow the winding ribbon put a gentle open callout: “Possible effects: vomiting • diarrhoea • stomach pain”; “Not every cat reacts the same way.” Keep the central cat comfortable, not vomiting. At upper right a small ivory milk saucer with a subtle caution annotation: “Milk is not needed in an adult cat’s complete, balanced diet.” A larger clear-water bowl catches turquoise reflections at lower right, visually connected by a flowing wash, with “Offer clean, fresh water at all times.”\nUse a small restrained lower-margin note, “Lactose-free cat milk still adds calories and may not be a complete food.” An educational footer reads “General nutrition education, not an individual feeding plan.” Small source credits: “Cornell Feline Health Center • PDSA Vets”.\nMake the scientific journey legible with curved leaders and varied scale, generously spaced around the hero; no rigid grids, cards, decorative medical icons, extra unsupported statistics, kitten feeding advice, molecular equations or dosage. Dense tactile fur, transparent water, subtle watercolor granulation and warm rim light reward close inspection. Render the artwork itself edge to edge on an opaque background.",
+    "image": "images/2026-11-13-factual-infographic-factual-infographic-milk-lactose-why-th.jpg",
+    "thumb": "thumbs/2026-11-13-factual-infographic-factual-infographic-milk-lactose-why-th.webp",
+    "color": "#bcac9d",
+    "date": "2026-11-13",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1122x1402",
+    "dedup": {
+      "conceptKey": "feline-milk-lactose-intestinal-digestion",
+      "imageSha256": "2cc75513a8ded882231568a27476b70ca16095ecbd30cefb21b65d8088c69d84",
+      "imageDHash": "a83918fcc8808e6c"
+    },
+    "factualInfographic": {
+      "topic": "Why many cats cannot digest milk lactose comfortably",
+      "description": "Feline milk lactose digestion and general nutrition context.",
+      "sourceNote": "Read Cornell and PDSA veterinary source pages: https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/feeding-your-cat ; https://www.pdsa.org.uk/what-we-do/blog/vet-qa-can-cats-drink-milk",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-13T09:21:08.472442+00:00",
+        "sources": [
+          {
+            "id": "cornell",
+            "publisher": "Cornell University College of Veterinary Medicine",
+            "title": "Feeding Your Cat",
+            "sourceType": "university",
+            "url": "https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/feeding-your-cat"
+          },
+          {
+            "id": "pdsa",
+            "publisher": "PDSA veterinary team",
+            "title": "Vet Q&A: Can cats drink milk?",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://www.pdsa.org.uk/what-we-do/blog/vet-qa-can-cats-drink-milk"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Many cats are lactose intolerant; dairy can cause gastrointestinal problems.",
+            "sourceIds": [
+              "cornell",
+              "pdsa"
+            ]
+          },
+          {
+            "claim": "Lactose is milk sugar; intestinal lactase is needed to digest it. Many cats lack enough lactase.",
+            "sourceIds": [
+              "pdsa"
+            ]
+          },
+          {
+            "claim": "Drinking lactose-containing milk can cause vomiting, diarrhoea and stomach pain; not every cat becomes ill.",
+            "sourceIds": [
+              "pdsa"
+            ]
+          },
+          {
+            "claim": "Adult cats do not need milk when fed an appropriate complete balanced diet.",
+            "sourceIds": [
+              "pdsa"
+            ]
+          },
+          {
+            "claim": "Cats should always have clean fresh water available.",
+            "sourceIds": [
+              "cornell",
+              "pdsa"
+            ]
+          },
+          {
+            "claim": "Reduced-lactose or lactose-free cat milk still adds calories and is often not a complete meal.",
+            "sourceIds": [
+              "pdsa"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
