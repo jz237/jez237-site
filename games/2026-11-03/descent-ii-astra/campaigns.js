@@ -4,5 +4,6 @@ window.astraCampaigns=Object.freeze({
   d2x:{name:'Vertigo',levels:20,secrets:3,index:1},
   overload:{name:'Overload',levels:16,secrets:6,index:2},
   minerva:{name:'Minerva',levels:1,secrets:0,index:3,arena:true,author:'Spaz',maps:['Minerva']},
-  elegies:{name:'The Elegies',levels:6,secrets:0,index:4,arena:true,author:'NuKE & Karash',maps:['Hydrocide','Mausoleum','Thermacide','Klondike','Sewercide','Krypt']}
+  elegies:{name:'The Elegies',levels:6,secrets:0,index:4,arena:true,author:'NuKE & Karash',maps:['Hydrocide','Mausoleum','Thermacide','Klondike','Sewercide','Krypt']},
+  kegparty:{name:'Keg Party',levels:1,secrets:0,index:5,arena:true,author:'Mesmerist',maps:['Keg Party']}
 });
