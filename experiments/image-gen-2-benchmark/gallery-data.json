@@ -32149,5 +32149,104 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-11-13-factual-infographic-factual-infographic-string-ingestion-th",
+    "title": "Factual infographic: String Ingestion — The Linear Foreign-Body Hazard",
+    "tests": "; archive_slot=2026-11-13T12:20; concept=feline-swallowed-string-intestinal-plication; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: cat-infographic; cat_category: household-hazards",
+    "prompt": "Create a richly illustrated, flowing veterinary Cat Atlas infographic, finished artwork directly, not a mockup. Title: “STRING INGESTION” with subtitle “The linear foreign-body hazard”. Small series heading “CAT ATLAS • HOUSEHOLD HAZARDS”. Use refined gouache and meticulous anatomical pencil, cool ivory ground, smoky blue-gray fur, coral intestinal tissue and a single ochre thread for visual continuity. A dominant large side-view blue-gray domestic shorthair occupies the left and middle, alert but natural, credible face, whiskers, paws and luminous fur texture. A clean educational translucent abdominal window reveals the stomach and small intestine, without gore. No human, no breed assertions, no toy-play scene. Generous negative space, asymmetric composition and open leader lines; no boxed grid or detached dashboard cards.\nIntegrate a large magnified schematic intestinal study sweeping across the lower right, labeled “Schematic • not to scale”. Show several small-bowel loops gathered in accordion-like pleats along a taut ochre strand inside the lumen; indicate intestinal movement with restrained curved arrows. Precise label “Plication — bowel gathers along anchored string”. An elegant upper-right schematic of mouth/tongue base and a separate stomach-outlet detail shows alternative anchor sites, not two simultaneous anchors: label “Possible anchor sites: tongue base OR pylorus (stomach outlet)”. Connect each to the corresponding anatomical location with delicate leaders, anatomically sensible esophagus, stomach and bowel continuity. Only the relevant organs need detail; do not invent decorative vessels or diagnostic images.\nShort open annotations woven into the whitespace: “Swallowed string can obstruct the intestine.”; “Intestinal movement pulls bowel into pleats.”; “Tension can damage the bowel wall.” A small non-graphic enlarged bowel-wall cross-section shows the internal strand contacting the wall, with explanatory text “Perforation can leak intestinal contents and cause life-threatening peritonitis.” This is a possible complication, not inevitable or a home diagnostic sign.\nA lower open text passage in large readable type: “Possible signs: vomiting • appetite loss • abdominal pain”. Beneath it, strongest safety text: “Suspect swallowed string? Seek veterinary care immediately.” Supporting text: “Examination and imaging guide treatment. Linear foreign bodies often need surgery.” Footer: “General education, not a diagnosis.” Small source credit “Sources: ACVS • University of Florida • University of Illinois”. Do not show people pulling string, home removal techniques, doses, instructions to induce vomiting, or a wait-and-see recommendation. Scientific precision, beautifully shaded fur, believable mucosal texture, readable typography and spacious editorial hierarchy. Preserve essential mechanism and urgent-care message over secondary detail.",
+    "image": "images/2026-11-13-factual-infographic-factual-infographic-string-ingestion-th.jpg",
+    "thumb": "thumbs/2026-11-13-factual-infographic-factual-infographic-string-ingestion-th.webp",
+    "color": "#d5c4bb",
+    "date": "2026-11-13",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1089x1444",
+    "dedup": {
+      "conceptKey": "feline-swallowed-string-intestinal-plication",
+      "imageSha256": "6faf104d7d1f11a49f34bda9fb575af3091a3e23a92bc50cbec900f7a608bdbd",
+      "imageDHash": "a68cc4d0b1b488ca"
+    },
+    "factualInfographic": {
+      "topic": "How swallowed string anchors and pleats the feline intestine as a linear foreign body",
+      "description": "Anchoring, intestinal plication, potential perforation, signs and urgent veterinary assessment of swallowed string in cats.",
+      "sourceNote": "Read ACVS and university clinical explanations: https://www.acvs.org/small-animal/gastrointestinal-foreign-bodies/ ; https://imaging.vetmed.ufl.edu/small-animal/abdomen/gastrointestinal-and-pancreas/10-month-old-fs-domestic-medium-haired-cat/ ; https://vetmed.illinois.edu/pet-health-columns/foreign-body-removed-endoscopy/",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-13T17:21:52.333366+00:00",
+        "sources": [
+          {
+            "id": "acvs",
+            "publisher": "American College of Veterinary Surgeons",
+            "title": "Gastrointestinal Foreign Bodies",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://www.acvs.org/small-animal/gastrointestinal-foreign-bodies/"
+          },
+          {
+            "id": "uf",
+            "publisher": "University of Florida College of Veterinary Medicine",
+            "title": "10-Month-Old FS Domestic Medium Haired Cat",
+            "sourceType": "university",
+            "url": "https://imaging.vetmed.ufl.edu/small-animal/abdomen/gastrointestinal-and-pancreas/10-month-old-fs-domestic-medium-haired-cat/"
+          },
+          {
+            "id": "illinois",
+            "publisher": "University of Illinois College of Veterinary Medicine",
+            "title": "Help! My Pet Swallowed a —!",
+            "sourceType": "university",
+            "url": "https://vetmed.illinois.edu/pet-health-columns/foreign-body-removed-endoscopy/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Swallowed string can act as a linear foreign body in cats and cause intestinal obstruction.",
+            "sourceIds": [
+              "uf",
+              "acvs"
+            ]
+          },
+          {
+            "claim": "String can anchor around the base of the tongue or at the pylorus (stomach outlet).",
+            "sourceIds": [
+              "uf"
+            ]
+          },
+          {
+            "claim": "Peristaltic movement gathers the intestine into pleats along the anchored string; this is plication.",
+            "sourceIds": [
+              "uf"
+            ]
+          },
+          {
+            "claim": "The string can erode through the intestinal wall, causing leakage and life-threatening peritonitis.",
+            "sourceIds": [
+              "uf",
+              "acvs"
+            ]
+          },
+          {
+            "claim": "Vomiting, appetite loss and abdominal pain are possible signs; presentation varies.",
+            "sourceIds": [
+              "acvs",
+              "illinois"
+            ]
+          },
+          {
+            "claim": "Suspected foreign-object ingestion needs immediate veterinary care; veterinarians use history, examination and imaging to assess it.",
+            "sourceIds": [
+              "illinois"
+            ]
+          },
+          {
+            "claim": "Some upper digestive foreign bodies can be removed endoscopically; linear foreign bodies often require surgery, and severely damaged bowel may require resection.",
+            "sourceIds": [
+              "acvs",
+              "uf"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
