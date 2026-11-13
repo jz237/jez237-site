@@ -1,7 +1,7 @@
 import { DurableObject } from 'cloudflare:workers';
 
-const LEVELS={d2:24,d2x:20,overload:16,minerva:1,elegies:6};
-const classic=c=>c==='minerva'||c==='elegies';
+const LEVELS={d2:24,d2x:20,overload:16,minerva:1,elegies:6,kegparty:1};
+const classic=c=>c==='minerva'||c==='elegies'||c==='kegparty';
 const DEFAULT={mode:'coop',campaign:'d2',level:1,bots:[2,2,2]};
 const json=(ws,value)=>{try{ws.send(JSON.stringify(value));}catch{}};
 const error=(ws,message)=>json(ws,{type:'error',message});

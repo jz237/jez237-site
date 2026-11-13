@@ -2311,7 +2311,7 @@ index 7298cc1..ea27994 100644
  	// check if message is already in list and bail out if so
  	if (HUD_nmessages > 0)
 diff --git a/d2/main/inferno.c b/d2/main/inferno.c
-index dc6e44a..74e879a 100644
+index dc6e44a..2b82d82 100644
 --- a/d2/main/inferno.c
 +++ b/d2/main/inferno.c
 @@ -44,6 +44,21 @@ char copyright[] = "DESCENT II  COPYRIGHT (C) 1994-1996 PARALLAX SOFTWARE CORPOR
@@ -2322,11 +2322,11 @@ index dc6e44a..74e879a 100644
 +EM_JS(int,astra_ov_selected,(void),{return Module.campaign==="overload";});
 +EM_JS(int,astra_auto_difficulty,(void),{return Number.isInteger(Module.difficulty)&&Module.difficulty>=0&&Module.difficulty<5?Module.difficulty:-1;});
 +EM_JS(int,astra_demo_pilot,(void),{return !!Module.autopilot;});
-+EM_JS(int,astra_start_mission_index,(void),{return "d2|d2x|overload|minerva|elegies".split("|").indexOf(Module.campaign);});
++EM_JS(int,astra_start_mission_index,(void),{return "d2|d2x|overload|minerva|elegies|kegparty".split("|").indexOf(Module.campaign);});
 +static const char *astra_start_mission(void){
-+    static const char *names[]={"d2","d2x","overload","minerva","elegies"};
++    static const char *names[]={"d2","d2x","overload","minerva","elegies","kegparty"};
 +    int index=astra_start_mission_index();
-+    return names[index>=0&&index<5?index:1];
++    return names[index>=0&&index<6?index:1];
 +}
 +EM_JS(int,astra_mine_launch,(void),{return Module.mineInspect>=0;});
 +EM_JS(int,astra_auto_first,(void),{return Module.startLevel||1;});

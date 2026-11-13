@@ -44,5 +44,28 @@
       }
     ],
     "note": "Original HOG, MN2 and author readme preserved byte-for-byte. Original embedded music restored using offline General MIDI rendering; see music/elegies/sources.json."
+  },
+  {
+    "mission": "kegparty",
+    "source": "http://www.pooterman.com/ftp/descent2/levels/kegparty.zip",
+    "archiveSha256": "9344c22d6f7b0a5b0244eb92669e27ac350e09fd9730c7f55b46849a4c3b650d",
+    "files": [
+      {
+        "name": "kegparty.hog",
+        "bytes": 171155,
+        "sha256": "2d42bb87762f8af66e6829775026a085a1522d0ca909562809dddb9326edc653"
+      },
+      {
+        "name": "kegparty.mn2",
+        "bytes": 68,
+        "sha256": "43162b6260eedc783dec6db64b606d5d8790327ccc1de1ed257010946f1ef76a"
+      },
+      {
+        "name": "kegparty.txt",
+        "bytes": 1082,
+        "sha256": "4bad5ac0359bcd4dbf64b26ead78b6c73ef559e76cc3b289c55dac751115863d"
+      }
+    ],
+    "note": "Original HOG (level and its custom textures), MN2 and author readme preserved byte-for-byte, as the readme requires. Astra uses its existing Descent II soundtrack."
   }
 ]

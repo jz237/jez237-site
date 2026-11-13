@@ -239,7 +239,7 @@ function preloadFlightEngine() {
   if(location.protocol!=="http:"&&location.protocol!=="https:")return;
   if(document.getElementById("astraEnginePreload"))return;
   const link=document.createElement("link");link.id="astraEnginePreload";
-  link.rel="preload";link.as="script";link.href="engine.js?v=pyre102";
+  link.rel="preload";link.as="script";link.href="engine.js?v=pyre103";
   document.head.append(link);
 }
 let firstBlastProfile=0;
@@ -306,7 +306,7 @@ async function launch(quick,demo=false,encounter=false,preview=false,autopilot=f
     const scenery = astra && campaign!=="overload" ? script("scenery-art.js?v=74").then(()=>window.astraSceneryReady) : Promise.resolve(null);
     await readPack("game","Reading game data");
     await readPack("vertigo","Reading the mission");
-    if(window.astraCampaigns[campaign]?.arena)await readPack("classics86","Reading classic arenas");
+    if(window.astraCampaigns[campaign]?.arena)await readPack("classics103","Reading classic arenas");
     let assetDepot=null;
     if(astra){
       await script("payload/stream24/index.js?v=69");
@@ -380,7 +380,7 @@ async function launch(quick,demo=false,encounter=false,preview=false,autopilot=f
         setInterval(syncPilot,3000);
       }
     };
-    await script("engine.js?v=pyre102");
+    await script("engine.js?v=pyre103");
   } catch(e) {console.error(e);astraFail(e.message);}
 }
 

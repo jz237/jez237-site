@@ -1,0 +1,31 @@
+
+
+                                       * K E G - P A R T Y *
+
+                                                v1.0
+
+                                       by Mesmerist ($Money$)
+
+
+
+	First of all, yes, these are all Quake2 textures. This was a
+pain in the ass considering I wasn't able to find a way to extract
+the Quake2 textures directly. I was forced to take screenshots in Quake2
+and cut out the textures manually in a paint program. The end result
+doesn't look too bad and the level plays very fast.
+
+Programs used: DMB2, DTX2, Paint Shop Pro 4.14
+
+Time spent: 9 beers
+
+Supported game modes: Anarchy, Flag, Hoard
+
+**  You may not alter the files contained within this .zip file. You MAY
+distribute this file provided it is in it's original, unaltered form. Also,
+you MAY use these textures for your own level if so inclined. I didn't make
+them. The boys at id software did. Therefore the included textures are
+(c)Copyright of id software (http://www.idsoftware.com). Blah blah blah.
+
+- Mesmerist(aka $Money$) ; (E-Mail: weingari@teleplex.net)
+
+
