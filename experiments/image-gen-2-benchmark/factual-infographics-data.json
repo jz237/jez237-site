@@ -22179,5 +22179,83 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-11-13-factual-infographic-factual-infographic-retractile-claws-te",
+    "title": "Factual infographic: Retractile Claws — Tendon Pull and Elastic Return",
+    "tests": "; archive_slot=2026-11-13T16:20; concept=feline-retractile-claw-flexor-ligament-mechanism; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: cat-infographic; cat_category: inside-the-cat",
+    "prompt": "Create a richly detailed flowing anatomical Cat Atlas infographic, a finished artwork not a photographed page. Headline: “RETRACTILE CLAWS”. Subtitle “Inside the Cat • A tendon pulls; elastic ligaments return”. Dominant lifelike silver-gray domestic shorthair reclines diagonally across the lower left, one relaxed forepaw very large in foreground, luminous individual fur, velvet pads, warm studio light; subdued midnight teal ground and ivory type, copper tendon accents and turquoise ligaments. Integrate a large elegant anatomical study of ONE ordinary forepaw toe (digit 3), opened as a clean non-gory scientific cutaway. Show two connected positions of that same toe in an asymmetric sweeping arc: relaxed/retracted above, protruded below. Clear mechanically credible bones: middle phalanx and distal phalanx, with the curved claw attached to the distal phalanx; show distal phalanx rotated back to overlap beside the middle phalanx at rest, not telescoping into bone. Make the resting overlap legible with a small oblique view, distinguish it from the side-on action drawing. Delicate precise leader labels: “Middle phalanx”, “Distal phalanx”, “Distal interphalangeal joint”, “Deep digital flexor tendon”, “Elastic ligaments”. Show the tendon attaching to the flexor process of the distal phalanx, not the tip of the claw. Include a graceful magnified ligament study with “Lateral elastic ligament” and “Paired dorsal elastic ligaments” correctly placed linking middle and distal phalanges. Restrained movement arrows convey rotation at the joint, and one tendon pull arrow. Readable short captions organically integrated into negative space: “REST: Elastic ligaments return the claw to its retracted position.” “PROTRUDE: Deep digital flexor contraction pulls on the distal phalanx and stretches the elastic ligaments.” “Retraction helps protect the claw from wear.” Small scope note: “Simplified anatomy • Domestic cat forepaw digits 2–5”. This is normal anatomy, not surgery or scratching behavior; no surgery diagrams, disease, hunting scene, invented performance numbers or advice. Keep ligaments distinct from tendons, bone ivory and tendon copper. Generous breathing space, exquisite precise technical ink with richly shaded scientific gouache, clear typography, open callouts, no boxes, grids, numbered panels, decorative fake text, or UI. Fine source footer: “University of Minnesota • Washington State University”.",
+    "image": "images/2026-11-13-factual-infographic-factual-infographic-retractile-claws-te.jpg",
+    "thumb": "thumbs/2026-11-13-factual-infographic-factual-infographic-retractile-claws-te.webp",
+    "color": "#444f47",
+    "date": "2026-11-13",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1199x1312",
+    "dedup": {
+      "conceptKey": "feline-retractile-claw-flexor-ligament-mechanism",
+      "imageSha256": "d69d403faa8d2cd68ae5a505e5f5bc6784601641feda692b4d991530c739ba0c",
+      "imageDHash": "2319194b697b1f1b"
+    },
+    "factualInfographic": {
+      "topic": "How domestic cat claws protrude by digital flexor action and retract through elastic ligaments",
+      "description": "Normal forepaw digit anatomy and the tendon–ligament mechanism of claw movement.",
+      "sourceNote": "https://pressbooks.umn.edu/dogcatanatomylabguide/back-matter/appendix/ ; https://askdruniverse.wsu.edu/2025/10/30/how-do-cats-climb/",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-13T21:21:00.152422+00:00",
+        "sources": [
+          {
+            "id": "umn",
+            "publisher": "University of Minnesota",
+            "title": "Supplemental Feline Notes – Dissection Lab Guide for Dog and Cat Anatomy",
+            "sourceType": "university",
+            "url": "https://pressbooks.umn.edu/dogcatanatomylabguide/back-matter/appendix/"
+          },
+          {
+            "id": "wsu",
+            "publisher": "Washington State University",
+            "title": "How do cats climb?",
+            "sourceType": "university",
+            "url": "https://askdruniverse.wsu.edu/2025/10/30/how-do-cats-climb/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "In domestic cat forepaw digits 2–5, the distal phalanx overlaps the middle phalanx when retracted.",
+            "sourceIds": [
+              "umn"
+            ]
+          },
+          {
+            "claim": "Elastic ligaments passively retract the claw; the lateral ligament is especially important, with a pair of dorsal elastic ligaments.",
+            "sourceIds": [
+              "umn"
+            ]
+          },
+          {
+            "claim": "Deep digital flexor muscle contraction transmits pull through its tendon to the flexor process of the distal phalanx, protruding the claw and stretching elastic ligaments.",
+            "sourceIds": [
+              "umn",
+              "wsu"
+            ]
+          },
+          {
+            "claim": "Retraction protects claws from wear when not in use.",
+            "sourceIds": [
+              "umn",
+              "wsu"
+            ]
+          },
+          {
+            "claim": "The distal and middle phalanges articulate at the distal interphalangeal joint.",
+            "sourceIds": [
+              "umn"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
