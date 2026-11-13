@@ -21823,5 +21823,107 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-11-12-factual-infographic-factual-infographic-chronic-sinusitis-i",
+    "title": "Factual infographic: Chronic Sinusitis — Inflamed Drainage Pathways",
+    "tests": "factual_subtype: medical-health-infographic; source-backed anatomical schematic; general education only; archive_slot=2026-11-12T23:20; concept=chronic-sinusitis-inflamed-mucosal-drainage-pathways; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: medical-health-infographic",
+    "prompt": "Create the finished medical educational infographic directly on the canvas, not a photographed chart or screen. Title: “CHRONIC SINUSITIS” and subtitle “Inflamed lining • impaired drainage”. A refined contemporary anatomical atlas in translucent gouache, colored pencil and precise medical ink on a cool ivory background, with deep petrol teal, muted coral inflammation and delicate warm bone shading. Dominant asymmetric oblique facial cutaway of a fictional middle-aged man with brown skin, close-cropped graying hair and a broad nose; dignity and neutral expression. Reveal the air spaces behind forehead and cheekbone in anatomically credible relation to the nasal cavity. Make anatomy the visual centerpiece, finely modeled thin bony walls and soft mucosal folds, not a decorative face. Clearly label “Forehead sinus”, “Cheek sinus”, “Nasal cavity”, “Swollen lining”, “Mucus”. Keep anatomy schematic, no false clinical imaging.\nA curved magnified cutaway grows organically from the cheek sinus into generous negative space: a relatively open passage beside one narrowed by thickened coral lining, mucus collecting upstream; label “Swelling limits drainage into the nose”. Gentle arrows illustrate this pathway, not airflow to lungs or infection spreading. No invented microanatomy. Flowing open leader lines carry the symptom group “Facial pressure • blocked nose • discharge • reduced smell”. Nearby quiet text: “Chronic disease is driven more by inflammation than infection.” A delicate branching annotation reads “Allergies, polyps and asthma may contribute” with no unsupported cause assertion.\nAlong an unboxed lower sweep integrate modest studies of a saline rinse vessel, nasal spray and a thin endoscope near a simple widened passage, subordinate to the large anatomical illustration. Exact management text: “Saline irrigation and nasal steroid sprays help control symptoms”; “For home rinsing, use water that has been boiled and cooled”; “Antibiotics are not always helpful”; “Selected persistent cases: endoscopic surgery widens drainage pathways”. Do not give doses or imply everyone needs surgery. A concise evaluation annotation: “Persistent or recurring symptoms: clinical assessment. CT is not routine for uncomplicated sinusitis.”\nIn clear warm rust lettering in open space at bottom, not a boxed card: “Urgent help: very unwell, worsening symptoms, pain not relieved, or weakened immunity.” A small footer reads “General education—not a diagnosis or individual treatment plan.” Keep all this typography legible with a confident hierarchy and concise integrated labels; no extra facts, numerical thresholds, microorganisms, bibliography, URLs, logos or watermark. Rich visible material detail and elegant negative space; no rigid grid, detached fact cards or repeated equal panels. The artwork leads and explanations follow its curves.",
+    "image": "images/2026-11-12-factual-infographic-factual-infographic-chronic-sinusitis-i.jpg",
+    "thumb": "thumbs/2026-11-12-factual-infographic-factual-infographic-chronic-sinusitis-i.webp",
+    "color": "#d5c1b1",
+    "date": "2026-11-12",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1086x1448",
+    "dedup": {
+      "conceptKey": "chronic-sinusitis-inflamed-mucosal-drainage-pathways",
+      "imageSha256": "4cec882d384a090a64f8f71c27aabbdb3daa3133212ad828d5cdd0902f4b96d6",
+      "imageDHash": "e4f2d2c4c4948cd8"
+    },
+    "factualInfographic": {
+      "topic": "How chronic sinusitis inflames sinus lining, impairs mucus drainage, and is evaluated and managed",
+      "description": "Source-backed schematic of sinus inflammation, drainage, symptoms, evaluation and management.",
+      "sourceNote": "NHS https://www.nhs.uk/conditions/sinusitis-sinus-infection/ and AAO-HNS ENT Health https://www.enthealth.org/conditions/sinusitis/; verified sinus anatomy, inflammation and drainage, symptoms, management and urgent-care context.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-13T04:21:00.625809+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "NHS",
+            "title": "Sinusitis (sinus infection)",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/conditions/sinusitis-sinus-infection/"
+          },
+          {
+            "id": "S2",
+            "publisher": "American Academy of Otolaryngology–Head and Neck Surgery",
+            "title": "Sinusitis — ENT Health",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://www.enthealth.org/conditions/sinusitis/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Sinuses are air spaces behind the cheekbones and forehead that connect to the inside of the nose.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Swollen sinus lining interferes with mucus drainage into the nose and throat.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Symptoms can include facial pressure or tenderness, blocked nose, nasal discharge and reduced smell.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Chronic sinusitis is driven more by inflammation than infection; antibiotics are not always helpful.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Allergies, nasal polyps and asthma can accompany sinusitis and make it worse.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Saline nasal irrigation and nasal steroid sprays are main treatments for chronic sinusitis symptoms. For home irrigation, NHS describes boiling water then cooling it before use.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Prolonged or repeated symptoms warrant clinical evaluation; CT may be needed for prolonged symptoms or suspected complications, not routinely for uncomplicated sinusitis.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Endoscopic surgery may help selected chronic cases not controlled by medicines by widening natural sinus drainage pathways.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Seek urgent medical help if very unwell, symptoms worsen or painkillers do not help, or immunity is weakened.",
+            "sourceIds": [
+              "S1"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
