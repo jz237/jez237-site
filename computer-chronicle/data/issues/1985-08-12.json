@@ -1,0 +1,495 @@
+{
+  "sectionChrome": {
+    "primary": "brick red",
+    "secondary": "royal blue",
+    "texture": "aged newsprint, fine column rules, ink bleed"
+  },
+  "currentDate": "2026-11-13",
+  "historicDate": "1985-08-12",
+  "displayDate": "Week of August 12-18, 1985",
+  "edition": "Issue 159 - Weekly 1985 Computer & Culture Chronicle",
+  "visualProfile": {
+    "tone": "Gaming-first Lucasfilm Atari action and futuristic sport",
+    "motifs": [
+      "Atari joystick and CRT",
+      "split-screen futuristic ball sport",
+      "fractal mountain rescue cockpit"
+    ],
+    "layout": "Warm aged newsprint, dense columns, red/blue headers, boxed modules, halftone illustrations, fine rules, slight ink bleed; full-page composition with no dead footer"
+  },
+  "masthead": {
+    "title": "Computer Chronicle",
+    "subtitle": "Issue 159 - Weekly 1985 Computer & Culture Chronicle",
+    "dateline": "Week of August 12-18, 1985",
+    "price": "75 cents"
+  },
+  "layoutPlan": {
+    "leadPlacement": "Lucasfilm games dominate with Atari gaming illustration and large headline",
+    "secondaryRail": "Optical-disc encyclopedia, ST software pipeline and bulletin boards; print feature headlines verbatim",
+    "archiveNavigation": "Weekly archive with previous/next navigation"
+  },
+  "heroImage": {
+    "src": "media/computer-chronicle-gpt-image-2-week-1985-08-12.jpg",
+    "alt": "Newspaper-style Computer Chronicle front page for August 12–18, 1985",
+    "caption": "Newspaper-style front page generated from structured Chronicle issue data.",
+    "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+  },
+  "editorNote": "August’s home-computer magazines put Lucasfilm games, optical discs and dial-up communities in the spotlight.",
+  "morningLine": "A movie studio takes the joystick; the neighborhood bulletin board grows up.",
+  "lead": {
+    "headline": "Lucasfilm brings the movie studio’s flair to Atari game screens",
+    "dek": "Ballblazer and Rescue on Fractalus bring split-screen sport and mountain rescue to the Atari disk drive.",
+    "body": [
+      "Lucasfilm’s long-awaited Atari games receive an enthusiastic examination in the August Antic. Michael Ciraolo reviews Ballblazer and Rescue on Fractalus, distributed by Epyx, at $40 apiece for 48K Atari disk systems. These are this month’s review-room attractions, not newly dated launches for the week.",
+      "Ballblazer makes a sporting arena out of the computer screen. Two players—or one against the machine—steer Rotofoils in split-screen perspective, driving a Plasmorb toward moving goalbeams. Longer successful shots are worth more, inviting a choice between a safe approach and a spectacular attempt from farther out.",
+      "Rescue on Fractalus turns the monitor into a cockpit above fractal-generated mountains. Stranded pilots await collection amid enemy saucers and gun emplacements; instruments, footsteps and the knock at the airlock help give the rescue mission its character. The mountainous view is part of the action, not merely scenery behind it.",
+      "The route to official disks has not been smooth. Antic recalls a year of anticipation, buggy bootlegs and legal battles without identifying litigants. Its review also reports that initial disks worked only with Atari 810 and 1050 drives; the problem was corrected, and Epyx promised replacements for nonworking copies. Buyers should distinguish that corrected distribution trouble from the games themselves."
+    ],
+    "confidence": "same-month",
+    "sourceRefs": [
+      2,
+      0,
+      1
+    ]
+  },
+  "stories": [
+    {
+      "headline": "Atari puts an encyclopedia on an optical disc",
+      "body": [
+        "Atari’s Summer CES demonstration put an unlikely companion beside the 520ST: a CD-ROM prototype carrying an encyclopedia. August COMPUTE! reports that Activenture of Pacific Grove was developing the software, and that a 23-volume, nine-million-word encyclopedia with its index occupied only a quarter of the disc.",
+        "The demonstration points beyond the usual floppy-disk library. Full-information indexing could make a reference work searchable in ways paper cannot easily match. Activenture engineering vice president Tom Rolander also raised a less technical question: what would households pay for information when it no longer arrived as a shelf of handsome books?",
+        "Atari hoped for availability late in 1985 or early in 1986 at about $500. That is a forecast, not a retail offer. The encyclopedia publisher remained unnamed while its contract was unfinished; the working show prototype is the news, not a promised machine already on store shelves."
+      ],
+      "confidence": "same-month",
+      "sourceRefs": [
+        0,
+        1
+      ]
+    },
+    {
+      "headline": "The ST’s next test is software, not specifications",
+      "body": [
+        "A new Atari ST needs more than specifications to win a place on the desk. Michael Ciraolo’s August Antic software report surveys developers working toward the programs that could give the machine its daily purpose.",
+        "Stoneware announced an agreement with Atari for an unnamed filing program, with user-selectable colors, fonts and file layouts. Microbits Peripheral Products was developing Omega for both ST and 8-bit Ataris, using icons, windows and pull-down menus controlled by mouse or joystick. Expected prices were roughly $50 for the 16-bit version and $10 less for the 8-bit edition.",
+        "Spinnaker said eight ST products were planned for fall. Infocom expected its text-adventure line on the machine but supplied no release date, while Ken Williams said Sierra On-Line would bring King’s Quest and Ultima II. These are development plans to watch, not an inventory of programs available this week."
+      ],
+      "confidence": "same-month",
+      "sourceRefs": [
+        4
+      ]
+    },
+    {
+      "headline": "A construction set for the neighborhood bulletin board",
+      "body": [
+        "Scott Brause, sysop of the Jersey Atari Computer Group, spent two years developing the Bulletin Board Construction Set after frustrations with AMIS and FOREM. Eric Clausen’s August Antic review describes a 48K machine-language system whose four editors handle configuration, menus and polls, user logs and message bases.",
+        "BBCS offers up to 26 menus with 30 entries each, as many as 257 online messages and 1,940-byte individual messages. Support for 1200 baud, XMODEM and ASCII transfers, terminal definitions and remote housekeeping gives a club board room to grow beyond a single local circle.",
+        "Clausen also found memory and DOS compatibility issues, editor bugs in version 1.0 and preliminary documentation in need of rewriting. Antic disclosed that its own marketing director had acquired the program for the magazine’s catalog. The useful new tools and that commercial interest both belong in the account."
+      ],
+      "confidence": "same-month",
+      "sourceRefs": [
+        3
+      ]
+    }
+  ],
+  "computerItems": [
+    {
+      "title": "Atari CD-ROM prototype",
+      "summary": "520ST optical-disc demonstration, projected about $500 late 1985/early 1986, not retail availability.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0,
+        1
+      ]
+    },
+    {
+      "title": "Commodore 1670",
+      "summary": "1200-bps direct-connect modem, automatic dial/answer and speed switching, around $200; report lists C128, C64, SX-64, Plus/4 and VIC-20 compatibility.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0,
+        1
+      ]
+    },
+    {
+      "title": "Commodore 1572",
+      "summary": "Announced dual-1571 unit for C128, supporting C64/C128/CP/M formats; no price announced. Do not claim it reached stores.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0,
+        1
+      ]
+    },
+    {
+      "title": "Amstrad CPC6128 US plans",
+      "summary": "Z80A, 128K, built-in 3-inch disk, CP/M, BASIC and Logo; projected US bundles $699 green screen/WordStar or $799 color monitor/Amstrad word processor and entertainment software.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0,
+        1
+      ]
+    }
+  ],
+  "softwareList": [
+    {
+      "name": "SMART 1030",
+      "detail": "E&B Computer Services, $19.95, 16K disk; Brent Borghese’s software adds Hayes-style command compatibility and an 18-number BBS directory to Atari 1030 use; reviewers criticize technical documentation.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        2
+      ]
+    },
+    {
+      "name": "Omega",
+      "detail": "MPP telecommunications software in development; approximately $50 ST/16-bit, approximately $40 8-bit, announced rather than confirmed shipped.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        4
+      ]
+    },
+    {
+      "name": "Super C",
+      "detail": "Abacus announced a Commodore 64/128 C compiler with full-screen scrolling editor and source files up to 41K in August COMPUTE!’s CES report.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0,
+        1
+      ]
+    },
+    {
+      "name": "PaperClip",
+      "detail": "Batteries Included announced Apple version $89.95 and Commodore 128 version with SpellPak $119.95 in the CES report; preserve announcement timing.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0,
+        1
+      ]
+    }
+  ],
+  "storeShelves": [
+    {
+      "label": "Top 5 Computer Games — editorial reviews and previews, not sales rankings",
+      "items": [
+        "Ballblazer — Epyx/Lucasfilm, Atari 48K disk, $40; split-screen futuristic ball sport. Reviewed this month, not proven newly released this week.",
+        "Rescue on Fractalus — Epyx/Lucasfilm, Atari 48K disk, $40; fractal-terrain rescue flight action.",
+        "Adventure Master — CBS Software, Atari 48K disk, $44.95; menu-driven adventure authoring, two disks, graphics editor and sample/unfinished adventures.",
+        "Maxwell Manor — Avalon Hill, Atari 48K disk, $25; more than 50 screens, ten skill levels and over 100 maze variations in Antic’s review.",
+        "The Eidolon — Lucasfilm Atari game listed in Epyx’s forthcoming slate, not verified on sale this week."
+      ],
+      "confidence": "same-month",
+      "sourceRefs": [
+        2,
+        0,
+        1
+      ]
+    },
+    {
+      "label": "Top 5 Movies — domestic weekend August 16-18, 1985",
+      "items": [
+        "1. Back to the Future",
+        "2. Volunteers",
+        "3. Pee-wee’s Big Adventure",
+        "4. The Return of the Living Dead",
+        "5. Year of the Dragon"
+      ],
+      "confidence": "same-week",
+      "sourceRefs": [
+        10
+      ]
+    }
+  ],
+  "priceWatch": [
+    {
+      "item": "Lucasfilm Atari games",
+      "price": "$40",
+      "note": "$40 each; 48K disk requirements.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        2
+      ]
+    },
+    {
+      "item": "SMART 1030",
+      "price": "$19.95",
+      "note": "$19.95 software; not the hardware modem price.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        2
+      ]
+    },
+    {
+      "item": "Commodore 1670",
+      "price": "$200",
+      "note": "Around $200, manufacturer announcement.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0,
+        1
+      ]
+    },
+    {
+      "item": "Commodore mouse",
+      "price": "$49.95",
+      "note": "Two-button mouse announced at $49.95 for C128/C64/VIC.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0,
+        1
+      ]
+    },
+    {
+      "item": "Delphi access",
+      "price": "$6/hour",
+      "note": "$6/hour at either 300 or 1200 baud in August Antic.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        5
+      ]
+    },
+    {
+      "item": "CompuServe access",
+      "price": "$7.75/hour",
+      "note": "$6/hour at 300 baud; $7.75/hour at 1200 baud in the same report.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        5
+      ]
+    }
+  ],
+  "briefs": [
+    {
+      "headline": "Assembly lessons arrive by modem",
+      "summary": "August Antic describes Chris Crawford’s eight-month 6502 assembly course on ANTIC ONLINE/CompuServe, begun in mid-June with monthly lessons; WUN directory had over 130 users groups.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        6
+      ]
+    },
+    {
+      "headline": "BBS culture grows beyond the hobby shop",
+      "summary": "Martin Lasden’s August 4 New York Times report says CompuServe reported over 200,000 subscribers, up about 70% in a year; Mike Cane estimated at least 2,500 home bulletin boards. Attribute numbers; not a new August 12 census.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        7
+      ]
+    }
+  ],
+  "musicChart": [
+    {
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-08-17",
+      "rank": 1,
+      "title": "Money for Nothing",
+      "song": "Money for Nothing",
+      "artist": "Dire Straits",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        14
+      ]
+    },
+    {
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-08-17",
+      "rank": 2,
+      "title": "St. Elmo’s Fire (Man in Motion)",
+      "song": "St. Elmo’s Fire (Man in Motion)",
+      "artist": "John Parr",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        14
+      ]
+    },
+    {
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-08-17",
+      "rank": 3,
+      "title": "Fortress Around Your Heart",
+      "song": "Fortress Around Your Heart",
+      "artist": "Sting",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        14
+      ]
+    },
+    {
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-08-17",
+      "rank": 4,
+      "title": "Invincible",
+      "song": "Invincible",
+      "artist": "Pat Benatar",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        14
+      ]
+    },
+    {
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-08-17",
+      "rank": 5,
+      "title": "The Power of Love",
+      "song": "The Power of Love",
+      "artist": "Huey Lewis & the News",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        14
+      ]
+    }
+  ],
+  "periodAd": {
+    "headline": "SMART 1030: a directory beside the dial",
+    "summary": "E&B Computer Services’ $19.95 software adds Hayes-style commands and an 18-number BBS directory to Atari 1030 use; Antic’s reviewers criticize its technical documentation.",
+    "tagline": "Software for the modem desk—not a modem at this price.",
+    "sourceRefs": [
+      2
+    ]
+  },
+  "market": {
+    "headline": "Software and services compete for the home-computer dollar",
+    "summary": "Developers are promising ST programs while established Atari owners gain games and board software. Online charges remain part of the budget: August Antic quotes Delphi at $6 an hour at either 300 or 1200 baud, and CompuServe at $6 and $7.75 respectively.",
+    "confidence": "same-month",
+    "sourceRefs": [
+      3,
+      5,
+      6,
+      0,
+      1
+    ]
+  },
+  "worldAnchor": {
+    "headline": "Japan Air Lines jumbo jet crashes on domestic flight",
+    "summary": "Japan Air Lines Flight 123 crashed in mountainous Gunma Prefecture on August 12 during its Tokyo–Osaka flight. Of 524 aboard, four survived; 520 died.",
+    "confidence": "exact-date",
+    "sourceRefs": [
+      11,
+      12,
+      13
+    ]
+  },
+  "bbsNote": {
+    "headline": "Sysops get new tools while services compete on hourly cost",
+    "summary": "August Antic’s Telecomputers 85 issue supplies a substantial dated online beat; these are reported features and prices, not fabricated BBS messages.",
+    "posts": [
+      {
+        "topic": "Sysop software",
+        "platform": "Atari BBCS",
+        "text": "Scott Brause’s 48K machine-language construction set supports configurable boards, remote maintenance and 1200-baud transfers. Review names beta sysop Eric Semel and Michigan Atari Computer Enthusiasts."
+      },
+      {
+        "topic": "Hourly service costs",
+        "platform": "Delphi / CompuServe",
+        "text": "Antic quotes Delphi at $6/hour for 300 or 1200 baud versus CompuServe $6 at 300 and $7.75 at 1200. The article’s free subscription/hour promotion explicitly applied to July only: do not advertise it as live in August."
+      },
+      {
+        "topic": "Email for ordinary users",
+        "platform": "CompuServe EasyPlex",
+        "text": "An August COMPUTE! advertisement promotes menu mode for beginners and prompt/command modes for experienced users, with compose, edit, send and file functions. Treat ease-of-use claims as advertising."
+      },
+      {
+        "topic": "Online learning",
+        "platform": "ANTIC ONLINE / CompuServe",
+        "text": "Chris Crawford’s monthly 6502 course and the WUN club directory turn dial-up time into instruction and user-group coordination."
+      }
+    ],
+    "sourceRefs": [
+      3,
+      5,
+      6,
+      0,
+      1
+    ]
+  },
+  "curiosity": {
+    "headline": "Nine million words—and the disc is still mostly empty",
+    "summary": "Atari’s optical-disc demonstration makes printed encyclopedias look physically extravagant.",
+    "detail": "August COMPUTE! reports Activenture had put a 23-volume, nine-million-word encyclopedia plus index on a disc that remained three-quarters empty. This was a Summer CES prototype report, not a new product shipped this week. Rolander discussed how consumers might value the same information without a shelf of books.",
+    "sourceRefs": [
+      0,
+      1
+    ]
+  },
+  "accuracyLedger": {
+    "items": [
+      "Computing coverage is from August magazines; CES demonstrations happened earlier, not during August 12–18. Announced prices and development plans are not verified shipments.",
+      "Game selections are editorial reviews/previews, not a sales chart. Movies cover August 16–18; rock positions verified from the August 17 Billboard primary scan.",
+      "World-anchor casualty totals incorporate verified survivors; later accident-cause findings are not presented as news established this week.",
+      "No verified breaking gadget item or named underground crew warrants an additional desk feature. The expired July Delphi promotion is not offered."
+    ]
+  },
+  "sources": [
+    {
+      "title": "COMPUTE! Issue 63, Summer CES report pp. 14–18, Amiga preview p. 20, and advertisements",
+      "url": "https://archive.org/details/1985-08-compute-magazine",
+      "date": "1985-08"
+    },
+    {
+      "title": "COMPUTE! Issue 63 OCR text",
+      "url": "https://archive.org/download/1985-08-compute-magazine/Compute_Issue_063_1985_Aug_djvu.txt",
+      "date": "1985-08"
+    },
+    {
+      "title": "Antic product reviews: SMART 1030 and Lucasfilm games",
+      "url": "https://www.atarimagazines.com/v4n4/productreview.php",
+      "date": "1985-08"
+    },
+    {
+      "title": "Antic: Bulletin board Construction Set, Eric Clausen",
+      "url": "https://www.atarimagazines.com/v4n4/bbcs.php",
+      "date": "1985-08"
+    },
+    {
+      "title": "Antic: ST Software News, Michael Ciraolo",
+      "url": "https://www.atarimagazines.com/v4n4/stnews.php",
+      "date": "1985-08"
+    },
+    {
+      "title": "Antic and Delphi online offer (July-only promotion in August issue)",
+      "url": "https://www.atarimagazines.com/v4n4/giveawayonline.php",
+      "date": "1985-08"
+    },
+    {
+      "title": "Antic: Chris Crawford Online for Worldwide Users Network",
+      "url": "https://www.atarimagazines.com/v4n4/wun.php",
+      "date": "1985-08"
+    },
+    {
+      "title": "Of Bytes and Bulletin Boards, Martin Lasden, New York Times",
+      "url": "https://www.nytimes.com/1985/08/04/magazine/of-bytes-and-bulletin-boards.html",
+      "date": "1985-08-04"
+    },
+    {
+      "title": "InfoWorld Vol. 7 No. 32 (metadata only)",
+      "url": "https://books.google.com/books?id=Ai8EAAAAMBAJ",
+      "date": "1985-08-12"
+    },
+    {
+      "title": "Billboard Top Rock Tracks chart page (rows not recovered)",
+      "url": "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1985-08-17/",
+      "date": "1985-08-17"
+    },
+    {
+      "title": "Box Office Mojo Domestic Weekend 33",
+      "url": "https://www.boxofficemojo.com/weekend/1985W33/",
+      "date": "1985-08-16/1985-08-18"
+    },
+    {
+      "title": "FAA Lessons Learned: Japan Airlines Flight 123 (retrospective)",
+      "url": "https://www.faa.gov/lessons_learned/transport_airplane/accidents/JA8119",
+      "date": "1985-08-12 (event; retrospective analysis)"
+    },
+    {
+      "title": "Japan Airlines Safety Promotion Center",
+      "url": "https://www.jal.com/en/safety/center/",
+      "date": "1985-08-12 (event; retrospective)"
+    },
+    {
+      "title": "UPI initial JAL crash dispatch (incorrect initial no-survivor headline)",
+      "url": "https://www.upi.com/Archives/1985/08/12/Japan-Air-Lines-flight-crashes-killing-all-on-board/8685492667200/",
+      "date": "1985-08-12"
+    },
+    {
+      "title": "Billboard August 17, 1985: Top Rock Tracks, primary chart scan",
+      "url": "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1985/BB-1985-08-17.pdf",
+      "date": "1985-08-17"
+    }
+  ]
+}
