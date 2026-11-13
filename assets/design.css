@@ -1616,6 +1616,32 @@ body.ai-sounds-page .desktop-hub [data-space-fx] {
   font-size: 13px;
   font-weight: 750;
 }
+.hub-card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 14px;
+}
+.hub-card-actions a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 8px 12px;
+  border: 1px solid rgba(120,179,255,0.5);
+  border-radius: 8px;
+  background: rgba(24,92,220,0.18);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 750;
+  text-decoration: none;
+}
+.hub-card-actions a:hover,
+.hub-card-actions a:focus-visible {
+  background: rgba(39,170,230,0.28);
+  outline: 2px solid #78b3ff;
+  outline-offset: 2px;
+}
 .icon-card { justify-content: flex-start; }
 .hub-icon {
   height: 108px;
