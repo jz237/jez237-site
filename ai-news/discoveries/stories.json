@@ -1,11 +1,131 @@
 {
   "version": 1,
   "title": "AI Discoveries, Explained",
-  "updated": "2026-11-12",
+  "updated": "2026-11-14",
   "coverageStart": "2026-09-21",
-  "coverageEnd": "2026-11-12",
+  "coverageEnd": "2026-11-14",
   "editorialNote": "Source-linked discoveries, research demonstrations, follow-ups and corrections from AI Discovery Watch. Historical milestones posted before the fresh-news brief are not included. Coverage dates are when a story was shared, not necessarily when its discovery occurred. Evidence labels reflect the linked report at that time; read later updates too.",
   "stories": [
+    {
+      "category": "Computing & engineering",
+      "evidenceKind": "proof",
+      "modelNote": "GPT-6 Astra Ultra supplied the upper bound; Stellar Colosseum supplied the lower bound. Google identifies Gemini 4 involvement, but not its variant for this result.",
+      "sources": [
+        "https://arxiv.org/abs/2611.09809",
+        "https://research.google/blog/advancing-science-engineering-with-antigravitys-teamwork-feature/"
+      ],
+      "status": "Preprint; authors report human checking and a Lean-checked lower-bound proof. No independent verification established.",
+      "takeaway": "Even a quantum computer cannot always answer a yes-or-no question about a hidden string of bits with only half as many information requests as there are bits. A November 6 preprint supplies examples that need more, settling a question listed in 2014, and sharpens the limits for counting the ones. GPT-6 Astra Ultra found a faster counting method; Google's Stellar Colosseum found matching limits. People posed the questions, requested a simpler example, checked the arguments and rewrote them. This is a theoretical result about information requests, not a demonstrated speedup on quantum hardware.",
+      "title": "AI helps show why some quantum questions need extra checks",
+      "id": "d-1571182244972728454-quantum-halfway-query-limit",
+      "coveredOn": "2026-11-14",
+      "context": "🔬 **AI Discovery Watch · November 14, 2026**\n\n**AI helps show why some quantum questions need extra checks**\nEven a quantum computer cannot always answer a yes-or-no question about a hidden string of bits with only half as many information requests as there are bits. A November 6 preprint supplies examples that need more, settling a question listed in 2014, and sharpens the limits for counting the ones. GPT-6 Astra Ultra found a faster counting method; Google's Stellar Colosseum found matching limits. People posed the questions, requested a simpler example, checked the arguments and rewrote them. This is a theoretical result about information requests, not a demonstrated speedup on quantum hardware.\n\n**AI used:** GPT-6 Astra Ultra supplied the upper bound; Stellar Colosseum supplied the lower bound. Google identifies Gemini 4 involvement, but not its variant for this result.\n**Evidence:** Preprint; authors report human checking and a Lean-checked lower-bound proof. No independent verification established.\nOriginal source: <https://arxiv.org/abs/2611.09809>\nSupporting source: <https://research.google/blog/advancing-science-engineering-with-antigravitys-teamwork-feature/>"
+    },
+    {
+      "category": "Mathematics",
+      "evidenceKind": "proof",
+      "modelNote": "Gemini 4, exact variant unspecified, working through the Colosseum multi-agent harness.",
+      "sources": [
+        "https://arxiv.org/abs/2611.12867",
+        "https://github.com/sharaelong/optimal-injectivity-sparsestack"
+      ],
+      "status": "Preprint; authors report a full Lean-checked proof and human audit. No independent verification established.",
+      "takeaway": "A large table of numbers can be shrunk before calculations, but the summary must not erase a whole direction of information. A November 9 preprint shows that a standard random-mixing method can do this with fewer mixing operations than older guarantees required, and gives a nearly matching limit under stated assumptions. Gemini 4 generated most of the proofs; people supplied key supporting results, checked the mathematics and audited its translation into the Lean proof checker. The guarantee allows some distortion—it is not lossless file compression or a measured speedup in software.",
+      "title": "AI helps prove that useful mathematical summaries can take less work",
+      "id": "d-1571182446840381512-sparsestack-ai-compression-proof",
+      "coveredOn": "2026-11-14",
+      "context": "🔬 **AI Discovery Watch · November 14, 2026**\n\n**AI helps prove that useful mathematical summaries can take less work**\nA large table of numbers can be shrunk before calculations, but the summary must not erase a whole direction of information. A November 9 preprint shows that a standard random-mixing method can do this with fewer mixing operations than older guarantees required, and gives a nearly matching limit under stated assumptions. Gemini 4 generated most of the proofs; people supplied key supporting results, checked the mathematics and audited its translation into the Lean proof checker. The guarantee allows some distortion—it is not lossless file compression or a measured speedup in software.\n\n**AI used:** Gemini 4, exact variant unspecified, working through the Colosseum multi-agent harness.\n**Evidence:** Preprint; authors report a full Lean-checked proof and human audit. No independent verification established.\nOriginal source: <https://arxiv.org/abs/2611.12867>\nSupporting source: <https://github.com/sharaelong/optimal-injectivity-sparsestack>"
+    },
+    {
+      "category": "Computing & engineering",
+      "evidenceKind": "proof",
+      "modelNote": "Gemini 4 agents developed constructions, proofs and formalization; exact variant unspecified.",
+      "sources": [
+        "https://arxiv.org/abs/2611.06717",
+        "https://github.com/lockqueue/bmm"
+      ],
+      "status": "Preprint; author-checked proofs and conditional Lean verification. No independent verification or practical benchmark established.",
+      "takeaway": "Imagine checking whether two people share a mutual friend, or whether three people all know one another. A November 4 preprint, revised November 10, gives a faster theoretical method for the huge yes-or-no tables behind these searches, meeting a target left open in 2024. Gemini 4 agents developed the algorithms and proofs after people chose the problem and direction; the authors then checked and edited the work. Its Lean proof checks assume some previously published tools and use an abstract accounting of work. This is not a demonstrated software speedup or the fastest method of every kind.",
+      "title": "AI finds a better way to search huge networks for connections",
+      "id": "d-1571182690764464225-gemini-faster-connection-search",
+      "coveredOn": "2026-11-14",
+      "context": "🔬 **AI Discovery Watch · November 14, 2026**\n\n**AI finds a better way to search huge networks for connections**\nImagine checking whether two people share a mutual friend, or whether three people all know one another. A November 4 preprint, revised November 10, gives a faster theoretical method for the huge yes-or-no tables behind these searches, meeting a target left open in 2024. Gemini 4 agents developed the algorithms and proofs after people chose the problem and direction; the authors then checked and edited the work. Its Lean proof checks assume some previously published tools and use an abstract accounting of work. This is not a demonstrated software speedup or the fastest method of every kind.\n\n**AI used:** Gemini 4 agents developed constructions, proofs and formalization; exact variant unspecified.\n**Evidence:** Preprint; author-checked proofs and conditional Lean verification. No independent verification or practical benchmark established.\nOriginal source: <https://arxiv.org/abs/2611.06717>\nSupporting source: <https://github.com/lockqueue/bmm>"
+    },
+    {
+      "category": "Research in action",
+      "evidenceKind": "lab",
+      "modelNote": "CatAI combines 30 specialized geometric graph-network modules; ACEP handles experiments and measurements. No chat-model identity established.",
+      "sources": [
+        "https://arxiv.org/abs/2611.13536",
+        "https://arxiv.org/pdf/2611.13536"
+      ],
+      "status": "Early laboratory result; closed-loop search within a human-defined space. No independent replication established.",
+      "takeaway": "An AI-guided lab search switched from nickel to a promising copper catalyst after learning from its own experiments. A November 10 preprint reports that CatAI and automated lab equipment raised the target reaction's yield to 90% while testing about 4% of a preset candidate pool. People built the models, chose the reaction and materials library, and supplied the starting experiments; the system selected later tests using predicted results and uncertainty. The advance is a feedback-driven search for a better chemical recipe, not unrestricted AI inventing chemistry. Its laboratory results remain author-reported, without independent replication.",
+      "title": "AI and a robotic lab change course to find a better reaction recipe",
+      "id": "d-1571182959552241836-catai-feedback-copper-catalyst",
+      "coveredOn": "2026-11-14",
+      "context": "🔬 **AI Discovery Watch · November 14, 2026**\n\n**AI and a robotic lab change course to find a better reaction recipe**\nAn AI-guided lab search switched from nickel to a promising copper catalyst after learning from its own experiments. A November 10 preprint reports that CatAI and automated lab equipment raised the target reaction's yield to 90% while testing about 4% of a preset candidate pool. People built the models, chose the reaction and materials library, and supplied the starting experiments; the system selected later tests using predicted results and uncertainty. The advance is a feedback-driven search for a better chemical recipe, not unrestricted AI inventing chemistry. Its laboratory results remain author-reported, without independent replication.\n\n**AI used:** CatAI combines 30 specialized geometric graph-network modules; ACEP handles experiments and measurements. No chat-model identity established.\n**Evidence:** Early laboratory result; closed-loop search within a human-defined space. No independent replication established.\nOriginal source: <https://arxiv.org/abs/2611.13536>\nSupporting source: <https://arxiv.org/pdf/2611.13536>"
+    },
+    {
+      "category": "Research in action",
+      "evidenceKind": "demo",
+      "modelNote": "Claude Opus 5.5 via Claude Code; Matra-Genoa generated structures, Tuga models estimated their properties.",
+      "sources": [
+        "https://arxiv.org/abs/2611.15451",
+        "https://arxiv.org/html/2611.15451v1"
+      ],
+      "status": "Early research-planning demonstration; author-reported calculations, no laboratory confirmation or independent replication.",
+      "takeaway": "An AI assistant identified a possibly overlooked compound in a materials database and worked out an experiment to test whether it can exist. In a November 11 preprint, it also rejected unsuitable candidates and planned how to make promising ones, including choosing containers that should not react with them. People supplied the research questions, databases, prediction tools and laboratory know-how. The advance is connecting those resources into a reasoned research plan—not running a laboratory. None of the proposed materials was made, and some predictions sit within the calculations’ uncertainty.",
+      "title": "AI spots a possible missing material—and plans how to test it",
+      "id": "d-1570819840724439061-claude-alexandria-materials-plans",
+      "coveredOn": "2026-11-13",
+      "context": "🔬 **AI Discovery Watch · November 13, 2026**\n\n**AI spots a possible missing material—and plans how to test it**\nAn AI assistant identified a possibly overlooked compound in a materials database and worked out an experiment to test whether it can exist. In a November 11 preprint, it also rejected unsuitable candidates and planned how to make promising ones, including choosing containers that should not react with them. People supplied the research questions, databases, prediction tools and laboratory know-how. The advance is connecting those resources into a reasoned research plan—not running a laboratory. None of the proposed materials was made, and some predictions sit within the calculations’ uncertainty.\n\n**AI used:** Claude Opus 5.5 via Claude Code; Matra-Genoa generated structures, Tuga models estimated their properties.\n**Evidence:** Early research-planning demonstration; author-reported calculations, no laboratory confirmation or independent replication.\nOriginal source: <https://arxiv.org/abs/2611.15451>\nSupporting source: <https://arxiv.org/html/2611.15451v1>"
+    },
+    {
+      "category": "Mathematics",
+      "evidenceKind": "proof",
+      "modelNote": "GPT-6 Astra generated the paper. Claude Fable 5.2 is also listed, but its role is unspecified.",
+      "sources": [
+        "https://hexagonmath.org/2611.00301",
+        "https://hexagonmath.org/src/2611.00301v1/files"
+      ],
+      "status": "Unrefereed proof claim; contributors understand some parts. No independent or machine-checked confirmation established.",
+      "takeaway": "A new proof claims that a broad family of abstract mathematical structures can be described through a common framework, like translating different construction kits into one shared language. The November 11 release goes beyond an earlier result covering only a restricted case. GPT-6 Astra generated the paper; five mathematicians supplied questions, possible shortcuts and proof ideas, including two who helped pose the original problem. This could connect previously separate mathematical tools, but it remains a proof claim. The contributors report understanding only parts of it; independent confirmation and a fully checked proof are not established.",
+      "title": "AI-generated proof claims a broader map of mathematical structures",
+      "id": "d-1570820138217775165-beo-full-ai-proof-claim",
+      "coveredOn": "2026-11-13",
+      "context": "🔬 **AI Discovery Watch · November 13, 2026**\n\n**AI-generated proof claims a broader map of mathematical structures**\nA new proof claims that a broad family of abstract mathematical structures can be described through a common framework, like translating different construction kits into one shared language. The November 11 release goes beyond an earlier result covering only a restricted case. GPT-6 Astra generated the paper; five mathematicians supplied questions, possible shortcuts and proof ideas, including two who helped pose the original problem. This could connect previously separate mathematical tools, but it remains a proof claim. The contributors report understanding only parts of it; independent confirmation and a fully checked proof are not established.\n\n**AI used:** GPT-6 Astra generated the paper. Claude Fable 5.2 is also listed, but its role is unspecified.\n**Evidence:** Unrefereed proof claim; contributors understand some parts. No independent or machine-checked confirmation established.\nOriginal source: <https://hexagonmath.org/2611.00301>\nSupporting source: <https://hexagonmath.org/src/2611.00301v1/files>"
+    },
+    {
+      "category": "Mathematics",
+      "evidenceKind": "proof",
+      "modelNote": "GPT-6 supplied key arguments; exact variant unspecified. Claude Fable also listed, version and role unspecified.",
+      "sources": [
+        "https://hexagonmath.org/2611.00294",
+        "https://github.com/grottofrancesco/UltimateMatchingTheorem"
+      ],
+      "status": "Unrefereed proof claim; mostly AI-written and AI-checked. No independent or formal verification established.",
+      "takeaway": "Imagine pairing randomly scattered dots with a neat grid while keeping long moves rare both sideways and vertically. A November 11 paper claims an AI-assisted solution to a long-standing question about how tightly both directions can be controlled—and shows that two extreme versions fail. GPT-6 helped find the arguments through weeks of exchanges with three mathematicians, building on their earlier work. This sharpens the mathematics of matching and movement, not a demonstrated improvement to delivery routes. The authors report only an overall understanding so far; independent verification and a fully digested proof are still missing.",
+      "title": "AI helps tackle how to pair scattered points without large moves",
+      "id": "d-1570820404690550855-ultimate-matching-ai-proof-claim",
+      "coveredOn": "2026-11-13",
+      "context": "🔬 **AI Discovery Watch · November 13, 2026**\n\n**AI helps tackle how to pair scattered points without large moves**\nImagine pairing randomly scattered dots with a neat grid while keeping long moves rare both sideways and vertically. A November 11 paper claims an AI-assisted solution to a long-standing question about how tightly both directions can be controlled—and shows that two extreme versions fail. GPT-6 helped find the arguments through weeks of exchanges with three mathematicians, building on their earlier work. This sharpens the mathematics of matching and movement, not a demonstrated improvement to delivery routes. The authors report only an overall understanding so far; independent verification and a fully digested proof are still missing.\n\n**AI used:** GPT-6 supplied key arguments; exact variant unspecified. Claude Fable also listed, version and role unspecified.\n**Evidence:** Unrefereed proof claim; mostly AI-written and AI-checked. No independent or formal verification established.\nOriginal source: <https://hexagonmath.org/2611.00294>\nSupporting source: <https://github.com/grottofrancesco/UltimateMatchingTheorem>"
+    },
+    {
+      "category": "Computing & engineering",
+      "evidenceKind": "early",
+      "modelNote": "AutoAssumption uses language-model agents; exact research-model version unstated. Claude Code appears in its workflow; Codex assisted auditing/editing.",
+      "sources": [
+        "https://arxiv.org/abs/2611.14844",
+        "https://arxiv.org/html/2611.14844v1"
+      ],
+      "status": "Early algorithm-discovery result; proofs reportedly checked in Lean. Performance is author-tested, not independently confirmed.",
+      "takeaway": "AI agents found new ways to decide what an AI model should remember and which internal connections it can discard. Instead of randomly rewriting code, AutoAssumption changes one underlying rule, rebuilds the argument and uses the Lean proof checker before testing it. The November 10 preprint reports better results than the published methods the team tested in those two areas. People selected existing methods, built the tests and must check that the mathematical promises mean what researchers intend. The proofs do not guarantee answer quality; performance gains remain author-run test results, not independently replicated.",
+      "title": "AI improves computing methods by questioning one rule at a time",
+      "id": "d-1570820813521952954-autoassumption-checked-algorithm-search",
+      "coveredOn": "2026-11-13",
+      "context": "🔬 **AI Discovery Watch · November 13, 2026**\n\n**AI improves computing methods by questioning one rule at a time**\nAI agents found new ways to decide what an AI model should remember and which internal connections it can discard. Instead of randomly rewriting code, AutoAssumption changes one underlying rule, rebuilds the argument and uses the Lean proof checker before testing it. The November 10 preprint reports better results than the published methods the team tested in those two areas. People selected existing methods, built the tests and must check that the mathematical promises mean what researchers intend. The proofs do not guarantee answer quality; performance gains remain author-run test results, not independently replicated.\n\n**AI used:** AutoAssumption uses language-model agents; exact research-model version unstated. Claude Code appears in its workflow; Codex assisted auditing/editing.\n**Evidence:** Early algorithm-discovery result; proofs reportedly checked in Lean. Performance is author-tested, not independently confirmed.\nOriginal source: <https://arxiv.org/abs/2611.14844>\nSupporting source: <https://arxiv.org/html/2611.14844v1>"
+    },
     {
       "category": "Physics & materials",
       "evidenceKind": "followup",
