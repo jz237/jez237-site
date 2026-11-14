@@ -32680,5 +32680,98 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-11-14-factual-infographic-factual-infographic-amaxophobia-fear-of",
+    "title": "Factual infographic: Amaxophobia — Fear of Driving or Riding in a Vehicle",
+    "tests": "factual_subtype: phobia-infographic; phobia: Amaxophobia; fear-impact title-line and photographic composition authoring checks; distinct fictional casting; no subjective review; archive_slot=2026-11-14T12:08; concept=amaxophobia-passenger-confinement-passing-truck; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: phobia-infographic",
+    "prompt": "Create a complete flowing unboxed educational photographic phobia infographic, direct canvas, portrait composition, not a photographed print. Exact title lines, read top to bottom: bold prominent \"AMAXOPHOBIA\"; directly beneath, \"Fear of driving or riding in a vehicle\". This is the fear-specific established clinical term; subordinate small text: \"A named fear within specific phobia\".\nThe dominant hero must be an immediate viscerally frightening lifelike photograph from INSIDE a car, passenger-eye height just behind the right shoulder of a fictional woman in her seventies, brown skin, silver bob, petite build, plum scarf. Seatbelt properly fastened. Frame tight between dark roof liner, close side window and dashboard, so the viewer feels enclosed in the moving vehicle rather than observing a distant scenic road. Windshield fills most of the hero. An ordinary full-size truck passes in the opposing lane at lawful separation: its enormous realistic wheel and ribbed metal flank rush along the left edge of the windshield, close in perspective but with the centerline clearly separating lanes. Strong depth toward the vanishing point; slight peripheral motion streaks, sharp dashboard grain, realistic windshield reflections, textured rubber seals, the woman's tense but anatomically natural hand gripping her own bag, shoulders braced. Focus on the enveloping vehicle and overwhelming passenger perspective, NOT a generic frightened-face poster. Overcast daylight, crisp neutral blue-gray cabin with plum accent, highly convincing optics and material detail. No collision, no swerving, no unsafe driving, no fantasy threat, gore, monsters, supernatural figures or distorted anatomy. This is a fictional fear depiction, not documentary evidence of danger. Fear is conveyed through proximity and confined passenger framing, not by inventing an accident or a broken safety device.\nLet the photograph occupy approximately two-thirds of the composition, with open typography flowing over naturally quiet roof-liner and lower upholstery areas. No rectangular cards or boxed grid. Fine curved leader lines connect a small close photographic hand detail to a concise body-alarm annotation. Use these readable factual passages with elegant hierarchy and breathing room:\n\"Anticipatory anxiety — even imagining a journey can trigger fear.\"\n\"Feared outcome: a crash or injury.\"\n\"Body alarm — racing heart, sweating, trembling.\"\n\"Avoidance — missed journeys can narrow daily life; continual avoidance may worsen fear.\"\n\"Feeling unsafe is not proof a crash is imminent. Road travel has real risks; fear may exceed the situation's danger.\"\nAn integrated calm lower typographic pathway, not a separate poster: \"Help: CBT and professionally supported gradual exposure. Seek care when fear limits daily life. Keep normal road-safety precautions; never practise exposure while driving unsafely.\"\nSmall footer: \"General education • Fictional photographic scene\". No statistics, invented brain diagrams, URLs or bibliography. Preserve a rich complete infographic but prioritize dominant fear-trigger photography and readable concise facts. No painted or cartoon treatment. Do not turn the scene into a comfortable distant travel photograph.",
+    "image": "images/2026-11-14-factual-infographic-factual-infographic-amaxophobia-fear-of.jpg",
+    "thumb": "thumbs/2026-11-14-factual-infographic-factual-infographic-amaxophobia-fear-of.webp",
+    "color": "#707379",
+    "date": "2026-11-14",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "amaxophobia-passenger-confinement-passing-truck",
+      "imageSha256": "b3335b763223d219f9f5762b95513043c15948f8a4b665bc5944b929f5fb6787",
+      "imageDHash": "390d0b6b4f34b88e"
+    },
+    "factualInfographic": {
+      "topic": "Amaxophobia: fear of driving or riding in a vehicle, anticipatory anxiety, bodily alarm, avoidance, and evidence-based help",
+      "description": "A source-backed photographic infographic about amaxophobia and evidence-based support.",
+      "sourceNote": "Cleveland Clinic https://my.clevelandclinic.org/health/diseases/22558-amaxophobia-fear-of-driving; NHS https://www.nhs.uk/mental-health/conditions/phobias/; South London and Maudsley NHS https://slam.nhs.uk/phobias. Verified name, definition, anticipatory anxiety, symptoms, avoidance, perceived danger and professional help.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-14T17:09:43.658768+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "Cleveland Clinic",
+            "title": "Amaxophobia (Fear of Driving)",
+            "sourceType": "university",
+            "url": "https://my.clevelandclinic.org/health/diseases/22558-amaxophobia-fear-of-driving"
+          },
+          {
+            "id": "S2",
+            "publisher": "NHS",
+            "title": "Phobias",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/mental-health/conditions/phobias/"
+          },
+          {
+            "id": "S3",
+            "publisher": "South London and Maudsley NHS Foundation Trust",
+            "title": "Phobias",
+            "sourceType": "government-agency",
+            "url": "https://slam.nhs.uk/phobias"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Amaxophobia means fear of driving or riding in a vehicle; it is a specific phobic disorder, not a separate stand-alone diagnostic category.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Thinking about a vehicle journey may trigger anticipatory anxiety; feared outcomes may include a crash or injury.",
+            "sourceIds": [
+              "S1",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Phobia symptoms can include palpitations, sweating and trembling; these are bodily anxiety responses.",
+            "sourceIds": [
+              "S2",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Avoiding feared situations can restrict everyday life and continual avoidance can worsen the problem.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "Phobias involve an exaggerated or unrealistic sense of danger; feeling endangered is not proof that a crash is imminent.",
+            "sourceIds": [
+              "S3",
+              "S1"
+            ]
+          },
+          {
+            "claim": "CBT can help phobias; gradual exposure may be used with professional support. Seek help if symptoms affect daily life.",
+            "sourceIds": [
+              "S2",
+              "S3"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
