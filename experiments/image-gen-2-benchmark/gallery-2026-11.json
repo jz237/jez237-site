@@ -97,6 +97,103 @@
     }
   },
   {
+    "id": "2026-11-14-factual-infographic-factual-infographic-chionophobia-fear-o",
+    "title": "Factual infographic: Chionophobia — Fear of Snow",
+    "tests": "factual_subtype: phobia-infographic; phobia: Chionophobia; fear-impact authoring check; fictional distinct casting; no subjective review; archive_slot=2026-11-14T04:08; concept=chionophobia-snowfall-close-window-avoidance; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: phobia-infographic",
+    "prompt": "Create a complete richly detailed flowing photographic educational infographic directly on the canvas, portrait-oriented when suitable. Dominant lifelike, viscerally frightening photorealistic hero photograph, NOT painting, cartoon, engraving, horror creature, collage of cards, generic frightened-face poster or photographed printed page.\nEXACT TITLE LINES, vertically adjacent at the upper left in natural dark negative space: bold prominent “CHIONOPHOBIA”; directly underneath “Fear of snow”. These must be the main headline and definition, not Specific Phobia.\nFEAR-SPECIFIC SHOT: immersive over-the-shoulder viewpoint almost against a ground-floor window, a few centimetres behind the left shoulder of a fictional man in his twenties with medium tan skin, round face, long dark braid, lean build, ochre parka. He holds a tense hand against the window frame; show only partial profile, not a giant anxious face. The actual trigger dominates two-thirds of the composition: dense real snowflakes right against the glass at eye level, wet granular clumps stuck to the near pane with translucent melting edges, thick uneven snow on the outside sill, and a shallow yard disappearing into curtain-like falling snow. Window jamb and tightly cropped shoulder frame the viewer's field of view; the near flakes feel inescapably close, the obscured depth beyond feels swallowing, but this is an imagined subjective fear view, NOT a person buried alive or a building failing. Real photographic snow at natural scale, no giant supernatural crystals or avalanche. Cool bright diffuse overcast light exposes every slushy bead, wool fibre, skin pore and hair strand. No scenic vista, distant picturesque mountain, cozy fireplace or comforting wide interior. Keep realistic lens depth: near wet glass and shoulder sharp, snow beyond progressively softer. Atmospheric darkness alone is not the trigger. No monsters, gore, injury or unsafe exposure.\nIntegrate concise readable factual text organically along the dark upper frame and open lower-left coat/interior shadow; delicate curved leader lines trace a visual pathway from flakes to a small schematic heartbeat and back toward a subtle doorway silhouette. No rigid panels, boxes, numbered grid, bibliography or tiny filler. Keep the photo dominant while retaining substantial educational meaning. Use these concise exact copy groups with varied typographic scale:\n“Anticipatory anxiety” / “Seeing snow—or even thinking about it—can trigger intense fear.”\n“Body alarm” / “Racing heartbeat • trembling • dizziness” (small abstract waveform is a symptom symbol, not a diagnostic ECG).\n“Avoidance” / “Staying indoors all winter can disrupt work and relationships.” Draw a simple open pathway from snow cue to alarm to avoidance; do not assert an unverified neural circuit or quantify mechanisms.\n“Fear ≠ forecast” / “A light snowfall may trigger alarm far beyond immediate danger. Real winter hazards still deserve normal precautions.” Do not imply all snow is harmless or that this image predicts danger.\n“Help is available” / “CBT and gradual, clinician-guided exposure can help. Seek professional support when fear limits daily life.” No advice to enter severe weather, force exposure, remove safety equipment, or self-test in snow.\nSmall subordinate terminology line: “An established fear name within natural-environment specific phobias—not a separate diagnostic code.” Small provenance line: “Imagined scene • general education, not diagnosis.”\nUse elegant exceptionally readable lettering, generous optical breathing space and organically connected studies, not detached dashboard cards. Retain tactile photographic detail throughout. Do not add unsupported statistics, causes, anatomy, prognoses or patient claims. This is a complete informative infographic, not a sparse title poster.",
+    "image": "images/2026-11-14-factual-infographic-factual-infographic-chionophobia-fear-o.jpg",
+    "thumb": "thumbs/2026-11-14-factual-infographic-factual-infographic-chionophobia-fear-o.webp",
+    "color": "#5e5952",
+    "date": "2026-11-14",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "chionophobia-snowfall-close-window-avoidance",
+      "imageSha256": "341d729f7c888d687cd7f8d11edfdedce4ad588f550604168fdd166dd002788e",
+      "imageDHash": "410501191d23730f"
+    },
+    "factualInfographic": {
+      "topic": "Chionophobia: intense fear of snow, anticipatory anxiety, body alarm, avoidance of winter activities, and evidence-based help",
+      "description": "Snow-related phobic fear with photographic subjective trigger proximity and clinical context.",
+      "sourceNote": "Cleveland Clinic https://my.clevelandclinic.org/health/diseases/22592-chionophobia-fear-of-snow; NHS https://www.nhs.uk/mental-health/conditions/phobias/; NHS inform https://www.nhsinform.scot/illnesses-and-conditions/mental-health/phobias/ — verified terminology, triggers, symptoms, avoidance and treatment; imagined photographic scene, not a clinical case.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-14T09:09:50.644311+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "Cleveland Clinic",
+            "title": "Chionophobia (Fear of Snow)",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://my.clevelandclinic.org/health/diseases/22592-chionophobia-fear-of-snow"
+          },
+          {
+            "id": "S2",
+            "publisher": "NHS",
+            "title": "Phobias",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/mental-health/conditions/phobias/"
+          },
+          {
+            "id": "S3",
+            "publisher": "NHS inform",
+            "title": "Phobias",
+            "sourceType": "government-agency",
+            "url": "https://www.nhsinform.scot/illnesses-and-conditions/mental-health/phobias/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Chionophobia means intense fear of snow; Cleveland Clinic describes it as a natural-environment specific phobia, not a separate named diagnostic code.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Seeing snow or wintry weather, or even thinking about light snowfall, can trigger severe anxiety.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Phobias can produce palpitations, trembling and dizziness.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Avoiding snow can mean staying indoors during winter and disruption of work and relationships.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Phobic alarm can exceed the actual danger; a light snowfall can provoke severe anxiety even without immediate danger. This does not imply all winter conditions are safe.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Phobias can involve anticipatory anxiety and an overwhelming urge to avoid the feared situation, limiting daily activities.",
+            "sourceIds": [
+              "S1",
+              "S3"
+            ]
+          },
+          {
+            "claim": "CBT is a treatment option; gradual exposure or desensitisation is used for simple phobias. A specialist can help; no single programme works for everyone. Seek professional help when fear disrupts daily life.",
+            "sourceIds": [
+              "S2",
+              "S3"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
     "id": "2026-11-13-factual-infographic-factual-infographic-string-ingestion-th",
     "title": "Factual infographic: String Ingestion — The Linear Foreign-Body Hazard",
     "tests": "; archive_slot=2026-11-13T12:20; concept=feline-swallowed-string-intestinal-plication; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: cat-infographic; cat_category: household-hazards",
