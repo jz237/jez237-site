@@ -2,6 +2,22 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-11-14",
+      "historicDate": "1985-08-19",
+      "displayDate": "Week of August 19-25, 1985",
+      "edition": "Issue 160 - Weekly 1985 Computer & Culture Chronicle",
+      "morningLine": "Amiga and ST compete for the desk; Lucasfilm takes the Atari into the mountains.",
+      "leadHeadline": "Amiga and Atari ST bring color and a new price war to the showroom",
+      "storyHeadlines": [
+        "Lucasfilm puts sport and mountain rescue on the Atari",
+        "ST software makers race to fill the new machine’s shelves",
+        "Adventure Master turns players into authors"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1985-08-19.jpg",
+      "thumb": "media/thumbs/1985-08-19.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-11-13",
       "historicDate": "1985-08-12",
       "displayDate": "Week of August 12-18, 1985",

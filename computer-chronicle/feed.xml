@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Fri, 13 Nov 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Sat, 14 Nov 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of August 19-25, 1985 — Amiga and Atari ST bring color and a new price war to the showroom</title>
+      <link>https://jez237.com/computer-chronicle/?date=1985-08-19</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1985-08-19</guid>
+      <pubDate>Sat, 14 Nov 2026 12:00:00 GMT</pubDate>
+      <description>Two mouse-driven 68000 machines promise more picture for the money, but stock and software demand a close look. The new color-computer contest is moving from announcements to dealer showrooms. In his August 19 Los Angeles Times column, Richard O’Reilly compares the Atari 520ST and Commodore Amiga as bargains worth hunting down. That last qualification matters: shoppers may still have trouble finding a machine to examine. This is a market comparison, not a fresh launch announcement. Also this week: Lucasfilm puts sport and mountain rescue on the Atari · ST software makers race to fill the new machine’s shelves · Adventure Master turns players into authors.</description>
+    </item>
     <item>
       <title>Week of August 12-18, 1985 — Lucasfilm brings the movie studio’s flair to Atari game screens</title>
       <link>https://jez237.com/computer-chronicle/?date=1985-08-12</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1985-04-08</guid>
       <pubDate>Mon, 26 Oct 2026 12:00:00 GMT</pubDate>
       <description>SSI turns the B-17 campaign into a test of preparation, persistence and crew survival. Britain is the starting point, but keeping a B-17 and its crew alive is the real destination. Strategic Simulations’ Fifty Mission Crush puts the player in command of an Eighth Air Force bomber for a campaign of fifty missions over Germany, France and the Netherlands. James V. Trunzo’s April COMPUTE! review finds its appeal in sustained command rather than a quick burst of arcade action. Also this week: Atari and Commodore promise a bargain-computer generation · Home-computer optimism meets the PCjr reckoning · Pooh opens the adventure door without a parser battle.</description>
-    </item>
-    <item>
-      <title>Week of April 1-7, 1985 — Atari’s ST gathers support as the 16-bit challenge approaches</title>
-      <link>https://jez237.com/computer-chronicle/?date=1985-04-01</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1985-04-01</guid>
-      <pubDate>Sun, 25 Oct 2026 12:00:00 GMT</pubDate>
-      <description>April 6 cover coverage puts GEM and the new Atari machines in the spotlight; availability remains a forecast. Atari’s new 16-bit computers are gathering an audience before they reach ordinary desks. Personal Computer News makes the machines its April 6 cover story, pointing to GEM and growing support for the platform. It is a week of anticipation, not a verified retail launch. Also this week: Commodore 128 promises three computing worlds without abandoning the 64 · Disney and Sierra make adventure gaming accessible to younger players · A B-17 campaign in fifteen-minute installments · SpeedScript 3.0 brings a machine-language word processor to expanded VIC-20s.</description>
     </item>
   </channel>
 </rss>

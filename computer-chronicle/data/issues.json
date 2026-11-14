@@ -9,6 +9,459 @@
         "secondary": "royal blue",
         "texture": "aged newsprint, fine column rules, ink bleed"
       },
+      "currentDate": "2026-11-14",
+      "historicDate": "1985-08-19",
+      "displayDate": "Week of August 19-25, 1985",
+      "edition": "Issue 160 - Weekly 1985 Computer & Culture Chronicle",
+      "masthead": {
+        "title": "Computer Chronicle",
+        "subtitle": "Issue 160 - Weekly 1985 Computer & Culture Chronicle",
+        "dateline": "Week of August 19-25, 1985",
+        "price": "75 cents"
+      },
+      "visualProfile": {
+        "tone": "Color-computer showroom contest with vivid Atari gaming emphasis",
+        "motifs": [
+          "Amiga and Atari ST with CRT monitors and mice",
+          "fractal mountain rescue cockpit",
+          "split-screen Ballblazer arena"
+        ],
+        "layout": "Warm aged newsprint, dense full-page columns, red and blue section headers, boxed modules, halftones, ink bleed and paper grain; no dead footer space"
+      },
+      "layoutPlan": {
+        "leadPlacement": "Amiga and Atari ST showroom comparison is the stronger exact-week consumer-computing lead; large color gaming-screen illustration",
+        "secondaryRail": "Lucasfilm games get prominent illustration; print feature headlines verbatim and use fixed inside-page jump lines",
+        "archiveNavigation": "Weekly archive with previous/next navigation"
+      },
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1985-08-19.jpg",
+        "alt": "Computer Chronicle newspaper-style front page for August 19-25, 1985",
+        "caption": "Newspaper-style front page generated from structured Chronicle issue data.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "editorNote": "The showroom race meets the software shelf: color, mice and new possibilities for the home computer.",
+      "morningLine": "Amiga and ST compete for the desk; Lucasfilm takes the Atari into the mountains.",
+      "lead": {
+        "headline": "Amiga and Atari ST bring color and a new price war to the showroom",
+        "dek": "Two mouse-driven 68000 machines promise more picture for the money, but stock and software demand a close look.",
+        "body": [
+          "The new color-computer contest is moving from announcements to dealer showrooms. In his August 19 Los Angeles Times column, Richard O’Reilly compares the Atari 520ST and Commodore Amiga as bargains worth hunting down. That last qualification matters: shoppers may still have trouble finding a machine to examine. This is a market comparison, not a fresh launch announcement.",
+          "The quoted Atari package costs $799 with keyboard, mouse, one disk drive and monochrome monitor; choosing color adds $200. Commodore’s $1,295 Amiga includes its keyboard and built-in drive, but the quoted color monitor is another $495. Put those Amiga pieces together and the bill reaches $1,790 before tax or optional memory. A $195 memory upgrade is another choice, not part of the base price.",
+          "Both machines use Motorola’s 68000 and bring mouse-driven icons to the desk. The column contrasts the ST’s 16 simultaneous low-resolution colors from a palette of 512 with the Amiga’s 32 from 4,096. Commodore’s custom graphics and stereo sound hardware give the contest a particularly lively home-entertainment dimension, beyond the familiar spreadsheet demonstration.",
+          "The practical question is what runs today. Atari, Amiga and Macintosh software is not interchangeable simply because the machines share a processor family and small disks. O’Reilly describes the Amiga’s IBM-PC emulation software as a prototype and urges buyers to try their own programs. Dealer coverage and software supply deserve as much scrutiny as a colorful screen: a demonstration is not a guarantee of universal compatibility."
+        ],
+        "sourceRefs": [
+          0
+        ],
+        "confidence": "exact-date"
+      },
+      "stories": [
+        {
+          "headline": "Lucasfilm puts sport and mountain rescue on the Atari",
+          "dek": "Two $40 games turn the familiar 8-bit machine into a cockpit and a futuristic arena.",
+          "body": [
+            "August Antic reviews Epyx’s Lucasfilm pair, Ballblazer and Rescue on Fractalus, for Atari 48K disk systems at $40 each. Michael Ciraolo describes a long wait marked by bootlegs and legal troubles. The magazine establishes current-month coverage, not an August 19 release date.",
+            "Ballblazer divides the screen for a player and an opponent, human or computer. Rotofoils pursue the Plasmorb toward moving goals; a longer shot can earn more points. Rescue on Fractalus instead surrounds the pilot with fractal mountain scenery, stranded airmen and hostile saucers and gun emplacements. Its review describes 16 levels.",
+            "There is a buyer’s caution alongside the spectacle. Early disks worked only on Atari 810 and 1050 drives; Antic says that problem was corrected and Epyx would exchange nonworking copies. The review’s forward references reveal magazine lead time, so the correction should not be mistaken for breaking news this week."
+          ],
+          "sourceRefs": [
+            2
+          ],
+          "confidence": "same-month"
+        },
+        {
+          "headline": "ST software makers race to fill the new machine’s shelves",
+          "dek": "Filing, telecommunications and adventures are promised; promises are not shipping dates.",
+          "body": [
+            "New hardware needs programs, and August Antic finds several publishers making plans for the ST. Stoneware, known for DB Master, has agreed with Atari to develop an approachable filing program. Development manager Stanley Crane describes choices of colors, fonts and layouts intended to make information less forbidding.",
+            "Microbits Peripheral Products is developing Omega for ST and 8-bit Ataris, with windows, icons and menu control. The projected prices are about $50 for the 16-bit version and $10 less for the 8-bit edition. Those figures and summer targets are plans, not proof of a finished package on a dealer’s shelf.",
+            "Spinnaker projects eight ST products for fall. Infocom expects its text adventures to reach the machine without giving a release date, while Sierra’s Ken Williams names King’s Quest and Ultima II among its plans. The lineup is encouraging, but buyers must separate a publisher’s intention from a program they can take home."
+          ],
+          "sourceRefs": [
+            6
+          ],
+          "confidence": "same-month"
+        },
+        {
+          "headline": "Adventure Master turns players into authors",
+          "dek": "CBS offers rooms, vocabulary and painted scenes without a general programming course.",
+          "body": [
+            "CBS Software’s $44.95 Adventure Master puts adventure construction within reach of an Atari owner with a 48K disk system. August Antic describes two disks containing the tools, a finished demonstration called Clever Catacombs and two unfinished adventures for the new author to complete.",
+            "Menu prompts gather rooms, passages, objects, descriptions, vocabulary and scores. A joystick painting editor allows three colors per picture. The package offers a route from playing somebody else’s puzzle to arranging one’s own, without first learning general-purpose programming.",
+            "The limits remain tangible. Many rooms can leave room for only about ten pictures, and defined player commands require exact text matching. Completed games can be saved for autoloading. This is an August review of an available creative tool, not a newly established launch this week."
+          ],
+          "sourceRefs": [
+            2
+          ],
+          "confidence": "same-month"
+        }
+      ],
+      "computerItems": [
+        {
+          "title": "Atari 520ST",
+          "summary": "Motorola 68000, mouse and 3.5-inch disk system; quoted $799 monochrome package or $999 with color monitor. Availability caveat in the August 19 column.",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "title": "Commodore Amiga",
+          "summary": "Quoted $1,295 base; monitor $495 extra; custom graphics and stereo sound hardware; dealer availability still limited in the column.",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "title": "Alphacom Pluswriter",
+          "summary": "Atari plug-compatible 20-character-per-second daisywheel printer; manufacturer claims superscript, subscript and boldface. No price given.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            3
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "Print Shop Graphics Library",
+          "detail": "Broderbund, $24.95; 120 designs; 48K disk and original Print Shop required. Manufacturer-supplied notice.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            3
+          ]
+        },
+        {
+          "name": "kyan Pascal",
+          "detail": "kyan Software, $69.95; 64K, double-density disk; company claims full-screen editor and built-in assembler.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            3
+          ]
+        },
+        {
+          "name": "Page Designer",
+          "detail": "Xlent Software, $29.95; combines text and graphics for printing; co-written by Len Dorfman.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            3
+          ]
+        },
+        {
+          "name": "SMART 1030",
+          "detail": "E&B Computer Services, $19.95, 16K disk; Brent Borghese’s software adds Hayes-like commands to Atari 1030; reviewers criticize technical documentation.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            2
+          ]
+        }
+      ],
+      "storeShelves": [
+        {
+          "label": "Top 5 Computer Games — editorial selections, not sales rankings",
+          "items": [
+            "Ballblazer — Epyx/Lucasfilm futuristic split-screen sport; Atari 48K disk; $40.",
+            "Rescue on Fractalus — Epyx/Lucasfilm fractal-terrain rescue game; Atari 48K disk; $40.",
+            "Adventure Master — CBS Software, $44.95; Atari 48K disk adventure authoring, reviewed in August Antic.",
+            "Six Gun Shootout — SSI strategy game; $39.95, Atari 48K disk; manufacturer notice specifies 10 scenarios and 18 weapon types.",
+            "Maxwell Manor — Avalon Hill, $25, Atari 48K disk; Antic describes over 50 screens, 10 skill levels and over 100 maze variations. Reviewer criticizes limited logical puzzle-solving."
+          ],
+          "confidence": "same-month",
+          "sourceRefs": [
+            2,
+            3
+          ]
+        },
+        {
+          "label": "Top 5 Movies — domestic weekend August 23-25, 1985",
+          "items": [
+            "1. Back to the Future",
+            "2. Teen Wolf",
+            "3. Pee-wee’s Big Adventure",
+            "4. Volunteers",
+            "5. Year of the Dragon"
+          ],
+          "confidence": "same-week",
+          "sourceRefs": [
+            10
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "Amiga color system",
+          "price": "$1790",
+          "note": "Base $1,295 plus $495 monitor = $1,790; arithmetic, before tax, optional memory or other peripherals.",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "item": "ANSCO Easy Modem",
+          "price": "$299",
+          "note": "$299, Hayes-compatible 1200/300 baud; manufacturer notice, not a tested street-price survey.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            3
+          ]
+        },
+        {
+          "item": "Prentice Popcom X150",
+          "price": "$499",
+          "note": "$499, Bell 212 and Hayes-compatible 1200/300 baud; manufacturer notice.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            3
+          ]
+        },
+        {
+          "item": "Atari 850 interface",
+          "price": "$87–$160",
+          "note": "August Antic’s checked mail-order dealer list ranges from Electronic One $87 to B&C Computervisions $160; same hardware, widely varying dealer quotes.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            4
+          ]
+        }
+      ],
+      "briefs": [
+        {
+          "headline": "Mikro-Plus puts part of a game in hardware",
+          "summary": "August Your Computer reports Mikro-Gen’s planned £14.95 Spectrum game/interface with a 16K EPROM component and joystick port. Shadow of the Unicorn is forecast for mid-September, not established as shipping this week.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            8
+          ]
+        }
+      ],
+      "musicChart": [
+        {
+          "rank": 1,
+          "title": "Fortress Around Your Heart",
+          "artist": "Sting",
+          "song": "Fortress Around Your Heart",
+          "chart": "Billboard Top Rock Tracks",
+          "chartDate": "1985-08-24",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            9
+          ]
+        },
+        {
+          "rank": 2,
+          "title": "Money For Nothing",
+          "artist": "Dire Straits",
+          "song": "Money For Nothing",
+          "chart": "Billboard Top Rock Tracks",
+          "chartDate": "1985-08-24",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            9
+          ]
+        },
+        {
+          "rank": 3,
+          "title": "Lonely Ol’ Night",
+          "artist": "John Mellencamp",
+          "song": "Lonely Ol’ Night",
+          "chart": "Billboard Top Rock Tracks",
+          "chartDate": "1985-08-24",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            9
+          ]
+        },
+        {
+          "rank": 4,
+          "title": "No Looking Back",
+          "artist": "Michael McDonald",
+          "song": "No Looking Back",
+          "chart": "Billboard Top Rock Tracks",
+          "chartDate": "1985-08-24",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            9
+          ]
+        },
+        {
+          "rank": 5,
+          "title": "Back In Time",
+          "artist": "Huey Lewis & The News",
+          "song": "Back In Time",
+          "chart": "Billboard Top Rock Tracks",
+          "chartDate": "1985-08-24",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            9
+          ]
+        }
+      ],
+      "periodAd": {
+        "headline": "Print Shop adds 120 designs",
+        "summary": "Broderbund’s Print Shop Graphics Library is listed at $24.95 in August Antic’s manufacturer notices. Requires a 48K disk system and the original Print Shop.",
+        "tagline": "More pictures for the home print shop.",
+        "sourceRefs": [
+          3
+        ]
+      },
+      "market": {
+        "headline": "The system price is only the beginning",
+        "summary": "The August 19 comparison quotes $799 for an ST monochrome package and $999 with color, versus $1,790 for Amiga plus its quoted color monitor. Software, memory and modem charges can add to the budget; these are period reported prices, not a broad street-price survey.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          0
+        ]
+      },
+      "worldAnchor": {
+        "headline": "Washington and Tutu clash over South Africa policy",
+        "summary": "Washington calls for negotiation after Bishop Desmond Tutu declines a meeting with South African President P. W. Botha. An August 20 dispatch reports the administration’s August 19 response as Congress considers sanctions, not an already enacted sanctions outcome.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          11
+        ]
+      },
+      "bbsNote": {
+        "headline": "Atari users compare online prices as Delphi joins the circuit",
+        "summary": "August Antic documents commercial service rates, Atari community migration and a more capable sysop toolkit. These are reported monthly observations, not invented recovered BBS messages.",
+        "posts": [
+          {
+            "topic": "Service-price comparison",
+            "platform": "CompuServe / Delphi",
+            "text": "Reported evening rates: CompuServe $6/hour at 300 baud or $7.75 at 1200; Delphi $6/hour at either speed. Delphi supports ANTIC ONLINE and SIG*ATARI files. Premium surcharges may apply."
+          },
+          {
+            "topic": "Bulletin-board directory",
+            "platform": "Boise Users Group BBS",
+            "text": "Antic says BUG offers a downloadable directory of over 400 Atari BBS numbers, listed by state and checked biweekly. Do not reproduce or dial historic numbers."
+          },
+          {
+            "topic": "Sysop tools",
+            "platform": "Jersey Atari Computer Group / BBCS",
+            "text": "Scott Brause’s 48K machine-language Bulletin Board Construction Set supports 1200 baud, configurable menus and remote maintenance; reviewer Eric Clausen also reports version 1.0 bugs."
+          },
+          {
+            "topic": "Consumer modem prices",
+            "platform": "Atari / general RS-232 modems",
+            "text": "Antic lists Atari 1030 at $79.95 through its catalog and Microbits MPP-1000C at $149.95; separate manufacturer notices list ANSCO Easy Modem $299 and Popcom X150 $499."
+          }
+        ],
+        "sourceRefs": [
+          4,
+          5,
+          3,
+          7
+        ]
+      },
+      "curiosity": {
+        "headline": "Mickey Mouse phones need not apply",
+        "summary": "A cartoon telephone becomes a practical obstacle to going online.",
+        "detail": "Michael Ciraolo’s August Antic introduction explains that acoustic modems use rubber cups for conventional handsets: unusually shaped Mickey Mouse phones will not fit. This is a delightful period observation about physical compatibility, not a new product announcement.",
+        "sourceRefs": [
+          4
+        ]
+      },
+      "undergroundDesk": {
+        "headline": "The Cracker’s story reaches the book pages",
+        "dek": "A current book notice revisits earlier intrusions, not a new arrest.",
+        "body": [
+          "August Your Computer introduces Bill Landreth’s Out of the Inner Circle as a newly released Penguin book written while its author was on probation. The short notice identifies his alias, The Cracker, and discusses the earlier Telemail intrusion.",
+          "The news here is the book and the public account of that scene. The notice does not establish a fresh August arrest or a new attack during this week. The story belongs to the changing public view of computer intrusion, without turning an account of past events into instructions."
+        ],
+        "sourceRefs": [
+          8
+        ],
+        "confidence": "same-month",
+        "groups": [
+          {
+            "name": "The Cracker",
+            "note": "Bill Landreth’s alias, identified in the August book notice."
+          }
+        ]
+      },
+      "accuracyLedger": {
+        "items": [
+          "The lead is an August 19 contemporary comparison, not a launch announcement. Dealer stock is limited; IBM emulation is described as prototype software.",
+          "Magazine reviews and plans are same-month coverage, not exact-week launches; projected prices and release dates remain projections.",
+          "Games are editorial selections, not sales ranks. Movies cover August 23-25; music is Billboard Top Rock Tracks for August 24.",
+          "The Delphi July promotion is expired and is not offered. No verified gadget launch warrants a Gadget Desk.",
+          "The underground book notice recounts earlier events; no fresh arrest is claimed."
+        ]
+      },
+      "sources": [
+        {
+          "title": "2 New Gems Are Worth the Hunt — Richard O’Reilly, Los Angeles Times",
+          "url": "https://www.latimes.com/archives/la-xpm-1985-08-19-fi-973-story.html",
+          "date": "1985-08-19"
+        },
+        {
+          "title": "Antic Vol.4 No.4 issue index",
+          "url": "https://www.atarimagazines.com/index/?issue=v4n4",
+          "date": "1985-08"
+        },
+        {
+          "title": "Antic product reviews: SMART 1030, Lucasfilm games, Adventure Master, Maxwell Manor",
+          "url": "https://www.atarimagazines.com/v4n4/productreview.php",
+          "date": "1985-08"
+        },
+        {
+          "title": "Antic New Products",
+          "url": "https://www.atarimagazines.com/v4n4/newproducts.php",
+          "date": "1985-08"
+        },
+        {
+          "title": "Antic: Communicating Computers — Michael Ciraolo",
+          "url": "https://www.atarimagazines.com/v4n4/startingout.html",
+          "date": "1985-08"
+        },
+        {
+          "title": "Antic: Bulletin Board Construction Set — Eric Clausen",
+          "url": "https://www.atarimagazines.com/v4n4/bbcs.php",
+          "date": "1985-08"
+        },
+        {
+          "title": "Antic: ST Software News — Michael Ciraolo",
+          "url": "https://www.atarimagazines.com/v4n4/stnews.php",
+          "date": "1985-08"
+        },
+        {
+          "title": "Antic / Delphi online promotion (explicit July expiration)",
+          "url": "https://www.atarimagazines.com/v4n4/giveawayonline.php",
+          "date": "1985-08"
+        },
+        {
+          "title": "Your Computer August 1985, news pages 12–13",
+          "url": "https://archive.org/stream/your-computer-magazine-1985-08/YourComputer_1985_08_djvu.txt",
+          "date": "1985-08"
+        },
+        {
+          "title": "Billboard Top Rock Tracks — week of August 24, 1985",
+          "url": "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1985-08-24/",
+          "date": "1985-08-24"
+        },
+        {
+          "title": "Domestic weekend box office August 23–25 — Box Office Mojo",
+          "url": "https://www.boxofficemojo.com/weekend/1985W34/",
+          "date": "1985-08-23/1985-08-25"
+        },
+        {
+          "title": "S. Africa Clerics Ask for Reforms — Rudy Abramson, Los Angeles Times",
+          "url": "https://www.latimes.com/archives/la-xpm-1985-08-20-mn-1916-story.html",
+          "date": "1985-08-20"
+        },
+        {
+          "title": "Radio Underground: 1985 number-one rock tracks (secondary cross-check)",
+          "url": "https://radio-underground.com/albumrock1985_topsongs.php",
+          "date": "1985 (retrospective)"
+        }
+      ]
+    },
+    {
+      "sectionChrome": {
+        "primary": "brick red",
+        "secondary": "royal blue",
+        "texture": "aged newsprint, fine column rules, ink bleed"
+      },
       "currentDate": "2026-11-13",
       "historicDate": "1985-08-12",
       "displayDate": "Week of August 12-18, 1985",
