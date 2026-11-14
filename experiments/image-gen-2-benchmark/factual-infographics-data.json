@@ -22257,5 +22257,89 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-11-13-factual-infographic-factual-infographic-inner-ear-balance-r",
+    "title": "Factual infographic: Inner-Ear Balance — Rotation, Motion and Gravity",
+    "tests": "; archive_slot=2026-11-13T20:20; concept=feline-vestibular-canals-acceleration-gravity; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: cat-infographic; cat_category: extraordinary-senses",
+    "prompt": "Create a richly detailed artwork-led Cat Atlas scientific infographic, finished artwork directly, not a photographed poster. Headline: \"THE INNER EAR: A SENSE OF BALANCE\". Subtitle: \"Rotation, linear motion and gravity\". A magnificent healthy charcoal-and-white domestic shorthair strides along a broad low curved stone ledge, seen in a dynamic three-quarter view with natural paws, anatomically credible body, individually resolved fur, soft copper rim light and cool blue shadows. Not a falling cat, stunt, disease profile, or broad senses overview. Use luminous gouache, translucent anatomical washes and precise scientific ink on muted deep petrol and warm ivory, asymmetrical airy editorial composition. The cat dominates the left and lower artwork. A delicate locator near its head leads to a large floating enlarged schematic inner ear at upper right: three semicircular canals in three different planes, ampullary swellings, utricle and saccule beside a subdued cochlea. Mark \"Enlarged schematic • not to scale\". Differentiate vestibular structures in turquoise and warm gold; cochlea desaturated and labeled \"Cochlea — hearing\". Leader lines must terminate accurately. Open scientific annotations flow around the curved anatomy, never a grid or boxed cards.\nUse these precise concise facts, with generous readable typography: \"Semicircular canals\" / \"Sense rotational acceleration and deceleration\"; \"Utricle + saccule\" / \"Sense linear acceleration and gravity\"; \"Vestibular nerve (CN VIII)\" / \"Carries sensory information to the brainstem\". A graceful curved rotation arrow accompanies a small cat-head silhouette; a straight-motion arrow and downward gravity arrow accompany the sac labels, without suggesting that gravity is sensed by the canals. A small nested magnified ampulla/crista study, explicitly schematic, shows sensory hair cells and is captioned \"Sensory hair cells in the crista\". A fine nonliteral pathway to a tiny brainstem silhouette branches to an eye and posture silhouette, captioned \"Vestibular reflexes help stabilize gaze and posture as the head moves\". No invented precise wiring, quantitative superpowers, righting-reflex demonstration, or implication that balance makes falls safe. Restrict claims to those stated. Let the hero and beautifully modeled translucent anatomy breathe; omit decorative extra studies if cramped, preserve the mechanism distinctions. Elegant title, minimal clear labels, exquisite fur and organic pathways, no dense text blocks, no dashboard, no fake logos. Small source credit: \"Sources: J Feline Med Surg; Cornell Feline Health Center\".",
+    "image": "images/2026-11-13-factual-infographic-factual-infographic-inner-ear-balance-r.jpg",
+    "thumb": "thumbs/2026-11-13-factual-infographic-factual-infographic-inner-ear-balance-r.webp",
+    "color": "#5a6960",
+    "date": "2026-11-13",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1199x1312",
+    "dedup": {
+      "conceptKey": "feline-vestibular-canals-acceleration-gravity",
+      "imageSha256": "d4d1cc3834b733c20e5b5f5195feda4e09992f5320d72ba0f5c32a12c176da54",
+      "imageDHash": "552763b388f8b510"
+    },
+    "factualInfographic": {
+      "topic": "How feline inner-ear vestibular receptors distinguish rotational acceleration from linear motion and gravity",
+      "description": "Normal feline vestibular sensory anatomy and reflex function; focused inner-ear mechanism, not a disease chart.",
+      "sourceNote": "Read source texts: https://pmc.ncbi.nlm.nih.gov/articles/PMC10822464/ ; https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/vestibular-syndrome",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-14T01:21:14.894430+00:00",
+        "sources": [
+          {
+            "id": "journal",
+            "publisher": "Journal of Feline Medicine and Surgery",
+            "title": "Feline Vestibular Disorders. Part I: Anatomy and Clinical Signs",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10822464/"
+          },
+          {
+            "id": "cornell",
+            "publisher": "Cornell University College of Veterinary Medicine",
+            "title": "Vestibular Syndrome",
+            "sourceType": "university",
+            "url": "https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/vestibular-syndrome"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "The vestibular apparatus lies deep in the inner ear beside the cochlea and communicates with brainstem centers.",
+            "sourceIds": [
+              "journal",
+              "cornell"
+            ]
+          },
+          {
+            "claim": "Three semicircular canals occupy different planes; each has an ampulla containing a crista with sensory hair cells.",
+            "sourceIds": [
+              "journal"
+            ]
+          },
+          {
+            "claim": "Semicircular canal receptors respond to rotational acceleration or deceleration.",
+            "sourceIds": [
+              "journal"
+            ]
+          },
+          {
+            "claim": "The utricle and saccule contain sensory maculae that respond to linear acceleration or deceleration and gravity.",
+            "sourceIds": [
+              "journal"
+            ]
+          },
+          {
+            "claim": "Vestibular information helps stabilize posture and the eyes during head movement through vestibulospinal and vestibulo-ocular reflexes.",
+            "sourceIds": [
+              "journal",
+              "cornell"
+            ]
+          },
+          {
+            "claim": "The vestibular portion of cranial nerve VIII carries receptor information toward the brainstem.",
+            "sourceIds": [
+              "journal"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
