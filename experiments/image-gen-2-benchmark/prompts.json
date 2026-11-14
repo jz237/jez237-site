@@ -32604,5 +32604,81 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-11-14-factual-infographic-factual-infographic-selenophobia-fear-o",
+    "title": "Factual infographic: Selenophobia — Fear of the Moon or Moonlight",
+    "tests": "factual_subtype: phobia-infographic; phobia: Selenophobia; fear-impact pre-generation authoring check; fictional distinct casting; no subjective review; archive_slot=2026-11-14T08:08; concept=selenophobia-moonlight-confrontation-narrow-doorway; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: phobia-infographic",
+    "prompt": "Create a complete flowing unboxed educational phobia infographic, realistic very scary photographic imagery, portrait-oriented finished digital canvas, not a photographed poster. Dominant fear-specific hero photograph occupies roughly three quarters of the visual weight. Headline in bold confident display type exactly \"SELENOPHOBIA\"; directly underneath exactly \"Fear of the moon or moonlight\". These are the two requested title lines. Subordinate small line: \"A named fear described within specific phobias\".\n\nFear-impact shot: viewer pressed just behind the shoulder of a fictional woman in her fifties, pale freckled skin, broad build, angular nose, cropped auburn hair, navy wool coat, standing half turned inside a narrow nighttime doorway. The camera is at her eye level, almost touching the near splinter-grained door jamb. One tense hand clutches the rough curtain edge inches from the lens; taut knuckles and a tiny sliver of her cheek give embodied vulnerability, not a frightened-face poster. The narrow opening constricts the view directly onto the bright exposed full moon: an unavoidable, hard-edged, crater-textured disk in a cold black sky, framed precisely in the slit above close dark rooftops. Use a believable compressed telephoto sightline, NOT an enormous fictional planet or a moon at terrestrial distance. Immediate confrontation with moonlight is the trigger; hard silver light grazes the nearby hand and shoulder, a blade of illumination crosses the threshold. Keep the lunar disk naturally proportioned to the distant rooftops, photographically credible, sharply recognizable and not lost as a tiny decorative speck. Near jamb, curtain weave, chipped paint, realistic freckles, coat fibers and the retreating shoulder make confinement tactile. No scenic landscape, beautiful travel vista, starscape decoration, monsters, lunar faces, gore or invented physical hazard. This is a fictional photographic depiction of perceived fear, not a documentary patient or a claim that moonlight is dangerous.\n\nBuild the facts into negative space on the deep navy indoor wall and along the flowing edge of the curtain, no grid, detached cards or boxes. Warm ivory type, restrained silver open leaders, asymmetric scale and excellent readability. Preserve rich photographic detail while leaving generous breathing room. Use just these concise source-backed texts, connected through a loose curved educational pathway rather than a causal brain diagram:\n\"Anticipatory anxiety — even thinking about the moon may provoke distress.\"\n\"Body alarm — palpitations, trembling, dizziness or chest tightness can occur. Symptoms vary.\"\n\"Avoidance — looking away or avoiding nighttime outings.\"\n\"Perceived threat ≠ actual danger — the moon and moonlight are not the threat the fear suggests.\"\n\"Help — CBT can treat phobias. Speak to a health professional when fear affects everyday life.\"\nLet one delicate leader touch the tense hand for body alarm; another trace the curtain edge for avoidance. Integrate a modest fine-line heartbeat motif as schematic only, not a medical measurement or invented brain mechanism. Footer: \"General education • Fictional photographic scene\". No statistics, diagnostic codes, bibliography, URLs, prescriptions, guarantees, or self-directed exposure instructions. Actual trigger and constricted photographic viewpoint dominate over text. Do not make a generic frightened-person poster, illustration, painting or engraving. Request openai/gpt-image-2.6-sunburst, medium quality, auto size, opaque background.",
+    "image": "images/2026-11-14-factual-infographic-factual-infographic-selenophobia-fear-o.jpg",
+    "thumb": "thumbs/2026-11-14-factual-infographic-factual-infographic-selenophobia-fear-o.webp",
+    "color": "#292b2d",
+    "date": "2026-11-14",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1086x1448",
+    "dedup": {
+      "conceptKey": "selenophobia-moonlight-confrontation-narrow-doorway",
+      "imageSha256": "1b353c0617f4d912e29bdef41833a9776ef1e02a2dae3ff76bb71552af36d73d",
+      "imageDHash": "49475797d35dd9be"
+    },
+    "factualInfographic": {
+      "topic": "Selenophobia: intense fear of the moon or moonlight, anticipatory anxiety, body alarm, avoidance, and evidence-based help",
+      "description": "Named fear of the moon or moonlight, symptoms, avoidance and CBT support.",
+      "sourceNote": "Cleveland Clinic https://my.clevelandclinic.org/health/diseases/22646-selenophobia verifies name, meaning, triggers, avoidance and perceived threat; NHS https://www.nhs.uk/mental-health/conditions/phobias/ verifies variable symptoms, CBT and seeking help.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-14T13:09:36.463247+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "Cleveland Clinic",
+            "title": "Selenophobia (Fear of the Moon)",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://my.clevelandclinic.org/health/diseases/22646-selenophobia"
+          },
+          {
+            "id": "S2",
+            "publisher": "NHS",
+            "title": "Phobias",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/mental-health/conditions/phobias/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Selenophobia is an intense fear of the moon or moonlight; it is described as a specific phobia, not a separate named diagnostic category.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Thinking about the moon can provoke anxiety; seeing the moon and nighttime outings can be avoided.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Phobia symptoms can include palpitations, trembling, dizziness and chest tightness; symptoms differ between people.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "People may avoid looking at the moon or going out at night; perceived threat does not mean the moon or moonlight presents a real threat.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "CBT is a treatment for phobias; seek a health professional if symptoms affect everyday life.",
+            "sourceIds": [
+              "S2"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
