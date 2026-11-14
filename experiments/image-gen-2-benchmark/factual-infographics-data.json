@@ -22704,5 +22704,102 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-11-14-factual-infographic-factual-infographic-pediophobia-fear-of",
+    "title": "Factual infographic: Pediophobia — Fear of Dolls",
+    "tests": "factual_subtype: phobia-infographic; phobia: Pediophobia; fear-impact and exact title-line authoring checks; distinct fictional casting; no subjective review; archive_slot=2026-11-14T16:08; concept=pediophobia-porcelain-dolls-close-antique-aisle; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: phobia-infographic",
+    "prompt": "Create a complete richly detailed, flowing unboxed factual phobia infographic, directly on canvas, portrait-oriented if suitable. Photorealistic photographic imagery only, not drawing, painted art, a photographed poster, or an app. The dominant hero photograph occupies about three quarters of the composition. Exact two title lines, with the first in very prominent bold typography and second directly below it:\nPediophobia\nFear of dolls\n\nImmersive fear-impact shot: shoulder-height 28mm camera immediately behind a fictional nonbinary adult in their forties, light brown skin, wide cheekbones, shaved sides, heavy build, blue denim shirt, standing sideways in a narrow antique-shop aisle. Only the edge of their cheek, tense shoulder and hand withdrawing toward their chest appear at the lower left, NOT a frightened-face poster. The viewer is almost nose-to-nose with an ordinary 45cm porcelain doll seated on a shelf: its face is 25cm from the lens at adult eye height, enlarged by believable close perspective, NOT a giant doll. The close glass eyes, hard little painted mouth, individually rooted eyelashes, crazing in the ceramic glaze, dusty lace collar and aged cloth sleeve are tack sharp. Three additional stationary dolls at natural toy size recede on the shelves immediately beside and behind it; shelves press closely into both edges, occluding the comfortable long view. Off-axis shop-window light reveals real ceramic reflections, cloudy glass eyes and threadbare fabric rather than hiding the trigger in darkness. One face is partly obscured by the foreground doll's shoulder. No movement, possession, monsters, weapons, gore, broken human bodies or supernatural suggestion. Fear arises from overwhelmingly close humanlike faces and constrained visual space, not an actual attack. All dolls remain inanimate toys, physically supported on shelves. Do not substitute a distant atmospheric shop interior.\n\nWeave legible ivory typography and fine curved annotations into dark walnut negative spaces along the top and right and an airy lower margin; no rigid grids, boxed panels or detached cards. Preserve photographic trigger dominance while keeping a substantial educational visual journey. Concise exact factual text distributed organically:\n'Humanlike, yet unfamiliar' — 'Doll faces may feel uncanny. Feeling threatened does not mean a doll is alive or dangerous.'\n'Anticipatory anxiety' — 'Even thinking about the trigger can bring anxiety.'\n'Body alarm' — 'Palpitations • trembling • dizziness • chest tightness'. Connect a fine leader to the person's visible tense hand; no invented brain or neural diagrams.\n'Avoidance' — 'Avoiding dolls can begin to limit everyday life.' Use a delicate curved path, not an unsupported causal cycle.\n'Help is available' — 'CBT and gradual, supported exposure can help. A clinician can tailor treatment; never force a confrontation.'\nSmall subordinate terminology note: 'Descriptive fear name; assessment concerns symptoms and impact, not the label alone.'\nFooter: 'Seek professional help if fear affects daily life. General education, not a diagnosis.'\n\nNatural skin texture and anatomy, precise real lens perspective, convincing shelf depth, restrained copper and indigo palette, highly tactile materials and readable elegant text hierarchy. Supporting detail must remain integrated into the same scene, not small photo tiles. Fictional staged scene, not a documentary patient photograph. No URLs, bibliography, invented statistics, diagnostic codes, brand marks, or watermarks.",
+    "image": "images/2026-11-14-factual-infographic-factual-infographic-pediophobia-fear-of.jpg",
+    "thumb": "thumbs/2026-11-14-factual-infographic-factual-infographic-pediophobia-fear-of.webp",
+    "color": "#5a4739",
+    "date": "2026-11-14",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1086x1448",
+    "dedup": {
+      "conceptKey": "pediophobia-porcelain-dolls-close-antique-aisle",
+      "imageSha256": "c99d57eb06c50ce3c8da1557b9aea3008abf6207a8ea041812b622a6aa1e8004",
+      "imageDHash": "d36dcf2f372f3517"
+    },
+    "factualInfographic": {
+      "topic": "Pediophobia: fear of dolls, anticipatory anxiety, bodily alarm, avoidance, and evidence-based help",
+      "description": "Named fear of dolls with photographic trigger proximity, clinical context and evidence-based help.",
+      "sourceNote": "WiderScreen https://widerscreen.fi/numerot/2018-3/disliked-and-demonized-dollies-pediophobia-and-popular-toys-of-the-present/; NHS https://www.nhs.uk/mental-health/conditions/phobias/; NHS inform https://www.nhsinform.scot/illnesses-and-conditions/mental-health/phobias/ — name, uncanny reactions, phobia symptoms, avoidance and treatment verified.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-14T21:09:41.394214+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "WiderScreen",
+            "title": "Disliked and Demonized Dollies: Pediophobia and Popular Toys of the Present",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://widerscreen.fi/numerot/2018-3/disliked-and-demonized-dollies-pediophobia-and-popular-toys-of-the-present/"
+          },
+          {
+            "id": "S2",
+            "publisher": "NHS",
+            "title": "Phobias",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/mental-health/conditions/phobias/"
+          },
+          {
+            "id": "S3",
+            "publisher": "NHS inform",
+            "title": "Phobias",
+            "sourceType": "government-agency",
+            "url": "https://www.nhsinform.scot/illnesses-and-conditions/mental-health/phobias/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Pediophobia is an established descriptive name meaning fear of dolls.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Humanlike doll faces can be experienced as uncanny or unnerving; this is a subjective reaction, not evidence that a doll is alive or dangerous.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "A phobia may cause anxiety or panic on contact or even when thinking about the feared object (anticipatory anxiety).",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "Body alarm can include palpitations, trembling, dizziness and chest tightness.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Avoidance can organise and limit daily life; avoiding contact is characteristic of phobias.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "CBT is a treatment for phobias; gradual exposure/desensitisation can be part of treatment, with specialist support.",
+            "sourceIds": [
+              "S2",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Seek professional help if fear affects daily life.",
+            "sourceIds": [
+              "S2",
+              "S3"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
