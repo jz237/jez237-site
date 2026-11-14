@@ -5,6 +5,8 @@ int astra_net_active=0,astra_net_humans=0,astra_net_count=0,astra_net_owner=0,as
 int astra_net_bot_skill[4]={-1,-1,-1,-1};
 static int an_self,an_seed,an_retarget;
 int astra_net_human(int id){return id>=0&&id<astra_net_count&&astra_net_bot_skill[id]==-1;}
+/* The pilot on this screen, even while an AI pilot is swapped in as Player_num. */
+int astra_kill_viewer(void){return astra_net_active&&(Game_mode&GM_MULTI)&&an_self>=0&&an_self<N_players?an_self:Player_num;}
 static void an_address(struct _sockaddr *a,int slot){
     memset(a,0,sizeof(*a));a->sin_family=AF_INET;a->sin_port=htons(UDP_PORT_DEFAULT);
     a->sin_addr.s_addr=htonl(0x0a330001u+slot);

@@ -2786,10 +2786,30 @@ index 33bd8ca..5a9a4b9 100644
  }
 +
 diff --git a/d2/main/multi.c b/d2/main/multi.c
-index f2e3dc5..a2a151d 100644
+index f2e3dc5..51336d8 100644
 --- a/d2/main/multi.c
 +++ b/d2/main/multi.c
-@@ -2707,6 +2707,7 @@ multi_do_remobj(const ubyte *buf)
+@@ -1098,7 +1098,19 @@ void robo_anarchy_suicide_penalty() {
+ 
+ extern object *obj_find_first_of_type (int);
+ 
++static void multi_compute_kill_sub(int killer, int killed);
++/* Astra: AI pilots are simulated by temporarily making them Player_num. Kill messages, lifetime stats and
++ * scores must still treat the real local pilot as "you", so compute the kill as that pilot. */
+ void multi_compute_kill(int killer, int killed)
++{
++	extern int astra_kill_viewer(void);
++	int saved_pnum = Player_num;
++	Player_num = astra_kill_viewer();
++	multi_compute_kill_sub(killer, killed);
++	Player_num = saved_pnum;
++}
++
++static void multi_compute_kill_sub(int killer, int killed)
+ {
+ 	// Figure out the results of a network kills and add it to the
+ 	// appropriate player's tally.
+@@ -2707,6 +2719,7 @@ multi_do_remobj(const ubyte *buf)
  
  void multi_disconnect_player(int pnum)
  {
@@ -2797,7 +2817,7 @@ index f2e3dc5..a2a151d 100644
  	int i, n = 0;
  
  	if (!(Game_mode & GM_NETWORK))
-@@ -2768,7 +2769,7 @@ void multi_disconnect_player(int pnum)
+@@ -2768,7 +2781,7 @@ void multi_disconnect_player(int pnum)
  			break;
  	}
  
@@ -2806,7 +2826,7 @@ index f2e3dc5..a2a151d 100644
  	{
  		if (Network_status==NETSTAT_PLAYING)
  			multi_leave_game();
-@@ -4905,12 +4906,14 @@ int multi_delete_extra_objects()
+@@ -4905,12 +4918,14 @@ int multi_delete_extra_objects()
  // Returns 1 if player is Master/Host of this game
  int multi_i_am_master(void)
  {
@@ -3549,36 +3569,49 @@ index 602b2d5..56acfe6 100644
 +
 +#include "overload_bridge.inc"
 diff --git a/d2/main/playsave.c b/d2/main/playsave.c
-index 1944a8c..4193e82 100644
+index 1944a8c..e5e4aaa 100644
 --- a/d2/main/playsave.c
 +++ b/d2/main/playsave.c
-@@ -124,6 +124,7 @@ int new_player_config()
+@@ -124,6 +124,8 @@ int new_player_config()
  	PlayerCfg.MultiMessages = 0;
  	PlayerCfg.NoRankings = 0;
  	PlayerCfg.AutomapFreeFlight = 0;
 +	PlayerCfg.WeaponAutoselect = 1;
++	PlayerCfg.AstraCustomWeaponOrder = 0;
  	PlayerCfg.NoFireAutoselect = 0;
  	PlayerCfg.CycleAutoselectOnly = 0;
  	PlayerCfg.AlphaEffects = 0;
-@@ -404,6 +405,8 @@ int read_player_d2x(char *filename)
+@@ -404,6 +406,10 @@ int read_player_d2x(char *filename)
  					PlayerCfg.StickyRearview = atoi(line); /* StickyRearview */ 
  				if(!strcmp(word,"SELECTAFTERFIRE"))
  					PlayerCfg.SelectAfterFire = atoi(line); /* SelectAfterFire */ 					
++				if(!strcmp(word,"ASTRACUSTOMWEAPONORDER"))
++					PlayerCfg.AstraCustomWeaponOrder = atoi(line) != 0;
 +				if(!strcmp(word,"WEAPONAUTOSELECT"))
 +					PlayerCfg.WeaponAutoselect = atoi(line) != 0;
  				if(!strcmp(word,"NOFIREAUTOSELECT"))
  					PlayerCfg.NoFireAutoselect = atoi(line);
  				if(!strcmp(word,"CYCLEAUTOSELECTONLY"))
-@@ -698,6 +701,7 @@ int write_player_d2x(char *filename)
+@@ -698,6 +704,8 @@ int write_player_d2x(char *filename)
  		PHYSFSX_printf(fout,"disablecockpit=%i\n",PlayerCfg.DisableCockpit); /* DisableCockpit */ 
  		PHYSFSX_printf(fout,"stickyrearview=%i\n",PlayerCfg.StickyRearview); /* StickyRearview */ 
  		PHYSFSX_printf(fout,"selectafterfire=%i\n",PlayerCfg.SelectAfterFire); /* SelectAfterFire */ 		
 +		PHYSFSX_printf(fout,"weaponautoselect=%i\n",PlayerCfg.WeaponAutoselect);
++		PHYSFSX_printf(fout,"astracustomweaponorder=%i\n",PlayerCfg.AstraCustomWeaponOrder);
  		PHYSFSX_printf(fout,"nofireautoselect=%i\n",PlayerCfg.NoFireAutoselect);
  		PHYSFSX_printf(fout,"cycleautoselectonly=%i\n",PlayerCfg.CycleAutoselectOnly);
  		PHYSFSX_printf(fout,"autoselectonlyfirstweaponpickup=%i\n",PlayerCfg.AutoselectOnlyOnce);
+@@ -993,6 +1001,8 @@ int read_player_file()
+ 	filename[strlen(filename) - 4] = 0;
+ 	strcat(filename, ".plx");
+ 	read_player_d2x(filename);
++	if (!PlayerCfg.AstraCustomWeaponOrder)
++		InitWeaponOrdering(); // never rearranged: follow the current auto-select defaults
+ 	kc_set_controls();
+ 
+ 	return EZERO;
 diff --git a/d2/main/playsave.h b/d2/main/playsave.h
-index 0303b58..c137fae 100644
+index 0303b58..7f8b911 100644
 --- a/d2/main/playsave.h
 +++ b/d2/main/playsave.h
 @@ -83,6 +83,7 @@ typedef struct player_config
@@ -3589,6 +3622,14 @@ index 0303b58..c137fae 100644
  	ubyte NoFireAutoselect;
  	ubyte CycleAutoselectOnly;
  	ubyte VulcanAmmoWarnings;
+@@ -130,6 +131,7 @@ typedef struct player_config
+ 	ubyte NoChatSound;
+ 	ubyte ClassicAutoselectWeapon;
+ 	ubyte AutoselectOnlyOnce;
++	ubyte AstraCustomWeaponOrder; /* set once the pilot rearranges a weapon priority list */
+ } __pack__ player_config;
+ 
+ extern struct player_config PlayerCfg;
 diff --git a/d2/main/polyobj.c b/d2/main/polyobj.c
 index 823ccc1..eeac247 100644
 --- a/d2/main/polyobj.c
@@ -3921,9 +3962,18 @@ index 6d1b0f7..c7a8543 100644
  
  	Assert( playernum > -1 );
 diff --git a/d2/main/weapon.c b/d2/main/weapon.c
-index f3ad3c7..199d566 100644
+index f3ad3c7..39f3359 100644
 --- a/d2/main/weapon.c
 +++ b/d2/main/weapon.c
+@@ -67,7 +67,7 @@ int	N_weapon_types=0;
+ // autoselect ordering
+ 
+ static const ubyte DefaultPrimaryOrder[]={9,8,7,6,5,4,3,2,1,0,255};
+-static const ubyte DefaultSecondaryOrder[]={9,8,4,3,1,5,0,255,7,6,2};
++static const ubyte DefaultSecondaryOrder[]={9,8,4,3,1,5,0,6,7,2,255};
+ 
+ //allow player to reorder menus?
+ extern ubyte MenuReordering;
 @@ -461,142 +461,45 @@ void do_weapon_select(int weapon_num, int secondary_flag)
  	select_weapon(weapon_num, secondary_flag, 1, 1);
  }
@@ -4114,7 +4164,7 @@ index f3ad3c7..199d566 100644
  
  	max = Secondary_ammo_max[weapon_index];
  
-@@ -746,7 +649,7 @@ void ReorderPrimary ()
+@@ -746,10 +649,14 @@ void ReorderPrimary ()
  			m[i].text=(char *)PRIMARY_WEAPON_NAMES(PlayerCfg.PrimaryOrder[i]);
  		m[i].value=PlayerCfg.PrimaryOrder[i];
  	}
@@ -4122,17 +4172,30 @@ index f3ad3c7..199d566 100644
 +	i = newmenu_doreorder("Reorder Primary","Highest priority first. Weapons below the divider are manual only.", i, m, NULL, NULL);
  
  	for (i=0;i<MAX_PRIMARY_WEAPONS+1;i++)
++	{
++		if (PlayerCfg.PrimaryOrder[i]!=m[i].value)
++			PlayerCfg.AstraCustomWeaponOrder=1;
  		PlayerCfg.PrimaryOrder[i]=m[i].value;
-@@ -766,7 +669,7 @@ void ReorderSecondary ()
++	}
+ }
+ 
+ void ReorderSecondary ()
+@@ -766,9 +673,13 @@ void ReorderSecondary ()
  			m[i].text=(char *)SECONDARY_WEAPON_NAMES(PlayerCfg.SecondaryOrder[i]);
  		m[i].value=PlayerCfg.SecondaryOrder[i];
  	}
 -	i = newmenu_doreorder("Reorder Secondary","Shift+Up/Down arrow to move item", i, m, NULL, NULL);
 +	i = newmenu_doreorder("Reorder Secondary","Highest priority first. Weapons below the divider are manual only.", i, m, NULL, NULL);
  	for (i=0;i<MAX_SECONDARY_WEAPONS+1;i++)
++	{
++		if (PlayerCfg.SecondaryOrder[i]!=m[i].value)
++			PlayerCfg.AstraCustomWeaponOrder=1;
  		PlayerCfg.SecondaryOrder[i]=m[i].value;
++	}
  }
-@@ -804,7 +707,7 @@ int pick_up_primary(int weapon_index)
+ 
+ int POrderList (int num)
+@@ -804,7 +715,7 @@ int pick_up_primary(int weapon_index)
  	//ushort old_flags = Players[Player_num].primary_weapon_flags;
  	ushort flag = 1<<weapon_index;
  	int cutpoint, supposed_weapon=Players[Player_num].primary_weapon;
@@ -4141,7 +4204,7 @@ index f3ad3c7..199d566 100644
  
  	if (weapon_index!=LASER_INDEX && Players[Player_num].primary_weapon_flags & flag) {		//already have
  		HUD_init_message(HM_DEFAULT|HM_REDUNDANT|HM_MAYDUPL, "%s %s!", TXT_ALREADY_HAVE_THE, PRIMARY_WEAPON_NAMES(weapon_index));
-@@ -822,7 +725,7 @@ int pick_up_primary(int weapon_index)
+@@ -822,7 +733,7 @@ int pick_up_primary(int weapon_index)
  		PrimaryWeaponPickedUp = 1;
  
  	// Picked up something better than you have
@@ -4150,7 +4213,7 @@ index f3ad3c7..199d566 100644
  
  		// Are you firing? 
  		if(Controls.fire_primary_state) {
-@@ -861,6 +764,7 @@ int pick_up_primary(int weapon_index)
+@@ -861,6 +772,7 @@ int pick_up_primary(int weapon_index)
  
  /* SelectAfterFire */ 
  void delayed_autoselect() {
@@ -4158,7 +4221,7 @@ index f3ad3c7..199d566 100644
  	if(delayed_primary_autoselect_weapon_index > -1 && ! Controls.fire_primary_state) {
  		select_weapon(delayed_primary_autoselect_weapon_index, 0, 0, 1); 
  		delayed_primary_autoselect_weapon_index = -1; 
-@@ -880,7 +784,7 @@ int check_to_use_primary(int weapon_index)
+@@ -880,7 +792,7 @@ int check_to_use_primary(int weapon_index)
  
  	cutpoint=POrderList (255);
  
@@ -4167,7 +4230,7 @@ index f3ad3c7..199d566 100644
  	{
  		if (weapon_index==SUPER_LASER_INDEX)
  			select_weapon(LASER_INDEX,0,0,1);
-@@ -927,7 +831,7 @@ int pick_up_ammo(int class_flag,int weapon_index,int ammo_count)
+@@ -927,7 +839,7 @@ int pick_up_ammo(int class_flag,int weapon_index,int ammo_count)
  
  	int primary_weapon_index = supposed_weapon;
  
@@ -4176,7 +4239,7 @@ index f3ad3c7..199d566 100644
  		POrderList(weapon_index)<cutpoint && POrderList(weapon_index)<POrderList(primary_weapon_index)) {
  
  		// Are you firing? 
-@@ -1021,8 +925,9 @@ void rock_the_mine_frame(void)
+@@ -1021,8 +933,9 @@ void rock_the_mine_frame(void)
  					rx = fixmul(d_rand() - 16384, 3*F1_0/16 + (F1_0*(16-fc))/32);
  					rz = fixmul(d_rand() - 16384, 3*F1_0/16 + (F1_0*(16-fc))/32);
  
@@ -4188,7 +4251,7 @@ index f3ad3c7..199d566 100644
  
  					//	Shake the buddy!
  					if (Buddy_objnum != -1) {
-@@ -1093,7 +998,11 @@ int start_seismic_disturbance(void)
+@@ -1093,7 +1006,11 @@ int start_seismic_disturbance(void)
  
  void seismic_disturbance_frame(void)
  {
@@ -4201,7 +4264,7 @@ index f3ad3c7..199d566 100644
  		if (((Seismic_disturbance_start_time < GameTime64) && (Seismic_disturbance_end_time > GameTime64)) || start_seismic_disturbance()) {
  			fix	delta_time;
  			int	fc, rx, rz;
-@@ -1115,8 +1024,9 @@ void seismic_disturbance_frame(void)
+@@ -1115,8 +1032,9 @@ void seismic_disturbance_frame(void)
  				rx = fixmul(d_rand() - 16384, 3*F1_0/16 + (F1_0*(16-fc))/32);
  				rz = fixmul(d_rand() - 16384, 3*F1_0/16 + (F1_0*(16-fc))/32);
  
