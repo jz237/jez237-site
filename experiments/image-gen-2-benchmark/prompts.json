@@ -32410,5 +32410,102 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-11-14-factual-infographic-factual-infographic-iatrophobia-fear-of",
+    "title": "Factual infographic: Iatrophobia — Fear of Doctors",
+    "tests": "factual_subtype: phobia-infographic; phobia: Iatrophobia; photographic trigger-proximity authoring check; fictional casting; no subjective review; archive_slot=2026-11-14T00:08; concept=iatrophobia-doctor-approach-examination-table; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: phobia-infographic",
+    "prompt": "Create the finished portrait photographic educational infographic directly, not a framed poster or page mockup. Exact title lines, at upper left in quiet wall space: bold large \"IATROPHOBIA\"; directly beneath it \"Fear of doctors\". This is lifelike, very scary photorealistic photography integrated with flowing, unboxed factual typography, never illustration, painted imagery or cartoon. Hero occupies roughly three quarters of the canvas. Immersive examination-table viewpoint, just behind the patient's shoulder at low seated eye level. A normal-sized clinician leans toward the viewer from only an arm's length, a stethoscope chestpiece held near the foreground at normal examination distance, not distorted into a weapon. White coat fabric, realistic fingers, steel diaphragm, taut examination-paper wrinkles and close overhead examination light have tactile photographic detail. The near clinician's torso and arm fill the right foreground, exam table edge presses diagonally toward the bottom frame, shallow view past the shoulder gives a strong vulnerable personal-space intrusion. Crisp cool fluorescent light and hard natural highlights, clinically credible cream wall, real skin pores, chipped table vinyl. Intensity comes from immediate approaching doctor and invasive-feeling proximity as subjectively experienced, not distant darkness or a generic scared-face poster. No blood, needles, restraint, injury, malicious doctor, fantasy, monsters or gore. The room is an ordinary clinical room, not a literal prison; do not depict blocked exits or actual coercion.\nPatient is a fictional late-60s masculine-presenting man, deep brown skin, broad nose, close silver beard, bald head, stocky build, rust knit cardigan and charcoal trousers; seated rigidly at an examination table edge. Shoulder, partial profile and tense hands make him identifiable while the doctor encounter stays dominant; do not reuse a generic young anxious woman. Doctor is a fictional middle-aged woman with light olive skin, dark hair in a bun, neutral professional expression. Photograph is an imagined depiction of fear, not a documentary patient record. No logos.\nOrganically weave the following concise factual text into natural negative space in the wall and lower left; no equal boxes or rigid grid. Use refined pale type over clean darker tonal areas with restrained amber leader lines. Do not bury photograph behind dense copy. Short open callout near the approaching clinician: \"Trigger: doctors or medical tests\". A fine pathway leads to a small photographic hand close-up and the label \"Body alarm\" with \"Palpitations • trembling • nausea • dizziness\"; no invented ECG trace or brain anatomy. Continue toward a small, subordinate ghosted appointment slip with no identifiable data: \"Avoidance can delay needed care\". Adjacent explanatory line: \"Fear may feel greater than the actual danger.\" Do not claim medical procedures are risk-free. Lower flowing text, clearly readable: \"Help: CBT (cognitive behavioural therapy). Talk with a healthcare professional if fear affects daily life.\" Then \"Tell someone you trust; relaxation breathing may help.\" Finish with a modest subordinate note: \"An established fear name; described within specific phobic disorders. General education, not a diagnosis.\" These are the complete factual labels; no invented statistics or diagnostic thresholds. Preserve the fear trigger's immediate proximity and sharp realistic material details; explanatory text is concise and comfortably spaced. No bibliography, URLs, tiny citations, unnecessary filler, horror decorations or decorative cartoon icons. No unsafe self-exposure advice or instruction to delay care. Artwork-led asymmetric photographic atlas, full canvas opaque image, requested auto size, medium quality.",
+    "image": "images/2026-11-14-factual-infographic-factual-infographic-iatrophobia-fear-of.jpg",
+    "thumb": "thumbs/2026-11-14-factual-infographic-factual-infographic-iatrophobia-fear-of.webp",
+    "color": "#76665c",
+    "date": "2026-11-14",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "iatrophobia-doctor-approach-examination-table",
+      "imageSha256": "873b5dc84246861e15bc5549b01356723366aaf04972fad63dd97bb4ad259923",
+      "imageDHash": "da5a461717026347"
+    },
+    "factualInfographic": {
+      "topic": "Iatrophobia: fear of doctors, medical-visit triggers, bodily anxiety, avoidance of care, and evidence-based help",
+      "description": "An imagined close clinical encounter explains the established fear name, symptoms, avoidance and CBT support without portraying clinicians as dangerous.",
+      "sourceNote": "NCBI, National Library of Medicine: https://www.ncbi.nlm.nih.gov/medgen/1789891; NHS: https://www.nhs.uk/mental-health/conditions/phobias/; Cleveland Clinic: https://my.clevelandclinic.org/health/diseases/22191-iatrophobia-fear-of-doctors — verified name, symptoms, fear versus actual danger, care avoidance and help.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-14T05:10:11.696192+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "NCBI, National Library of Medicine",
+            "title": "Iatrophobia — MedGen C3824834",
+            "sourceType": "government-agency",
+            "url": "https://www.ncbi.nlm.nih.gov/medgen/1789891"
+          },
+          {
+            "id": "S2",
+            "publisher": "NHS",
+            "title": "Phobias",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/mental-health/conditions/phobias/"
+          },
+          {
+            "id": "S3",
+            "publisher": "Cleveland Clinic",
+            "title": "Iatrophobia (Fear of Doctors)",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://my.clevelandclinic.org/health/diseases/22191-iatrophobia-fear-of-doctors"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Iatrophobia means fear of doctors.",
+            "sourceIds": [
+              "S1",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Iatrophobia can involve extreme fear of doctors or medical tests, beyond the actual danger; it is described as a specific phobic disorder.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "Phobia symptoms can include severe worry, palpitations, dizziness, nausea and trembling.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Fear may lead people to avoid necessary medical attention, even when sick.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "Phobias may relate to frightening experiences; causes are not always clear.",
+            "sourceIds": [
+              "S2",
+              "S3"
+            ]
+          },
+          {
+            "claim": "CBT is a talking therapy used to treat phobias; seek professional help when symptoms affect life.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Talking to a trusted person and relaxation breathing can help manage phobia symptoms.",
+            "sourceIds": [
+              "S2"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
