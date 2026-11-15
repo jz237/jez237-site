@@ -76,6 +76,103 @@
     }
   },
   {
+    "id": "2026-11-14-factual-infographic-factual-infographic-scopophobia-fear-of",
+    "title": "Factual infographic: Scopophobia — Fear of Being Watched or Stared At",
+    "tests": "factual_subtype: phobia-infographic; phobia: Scopophobia; exact title-line readback and fear-impact authoring check; distinct fictional casting; no subjective review; archive_slot=2026-11-14T20:08; concept=scopophobia-surrounding-gazes-reception-passage; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: phobia-infographic",
+    "prompt": "Create the finished portrait-format photographic educational infographic directly on canvas, not a poster mockup. Lifelike very scary photographic imagery; refined flowing unboxed editorial design, no grid or cards. The dominant photograph occupies roughly three quarters of the canvas and makes the fear of being watched immediate. Immersive over-the-shoulder view from just behind an androgynous adult in their thirties, olive skin, angular face, short black curls, slender build, green jacket, rigid shoulders and a hand gripping their jacket seam while walking past a group in a narrow indoor reception passage. The shoulder occupies only a small lower corner: the actual trigger is the surrounding gaze. A nearby unfamiliar adult's face at natural conversational distance fills the right foreground, with sharply resolved natural eyes directed toward the protagonist/viewer; several differently aged adults along both sides turn their ordinary, unsmiling but non-hostile faces toward the same point. Realistic scale and perspective, an open exit receding beyond their shoulders, close walls and overlapping sightlines creating subjective social confinement, no physical imprisonment. Shot at eye level with a moderately wide documentary lens: near faces uncomfortably present, deeper faces smaller, realistic pupils, eyelids, pores, lashes, catchlights and asymmetric natural expressions. Clear believable indoor daylight, tactile jacket weave, worn plaster, subtle reflected light. No darkness-as-horror shortcut, monstrous expressions, glowing eyes, threat gestures, weapons, gore, or caricature. This is a staged fictional depiction of perceived scrutiny, not proof the people are dangerous and not documentary patients.\nAcross quiet upper wall negative space place the exact prominent bold headline line: “Scopophobia”. Directly beneath it the exact meaning line: “Fear of being watched or stared at”. These are the two title lines; no umbrella diagnostic headline. Maintain readable typography and generous spacing while keeping faces dominant.\nWeave a rich but concise information path into natural wall and floor negative space with elegant open leaders, varying type scale and a subtle curved diagram, never obscuring the eyes. Use these concise labels and explanations only:\n“THE TRIGGER — Being watched, stared at, or feeling scrutinized.”\n“ANTICIPATORY ANXIETY — Worry may begin before a social situation.”\n“BODY ALARM — Racing heart • sweating • trembling.” A small restrained schematic pulse trace and hand detail can connect this to the protagonist; no invented brain diagram.\nA curved open sequence: “Fear of scrutiny → Avoidance → Short-term relief; anxiety can remain”. Label this as a possible pattern, not universal.\n“FEELING WATCHED ≠ BEING IN DANGER — Anxiety can occur without a current threat; a glance does not reveal hostile intent.”\n“HELP THAT HAS EVIDENCE — CBT can address fearful thoughts and avoidance. A clinician can guide gradual exposure within treatment. Seek help when fear disrupts daily life.” No self-directed challenge or forced exposure advice.\nSmall but legible subordinate terminology line: “An established descriptive fear term, not a diagnosis by itself. Fear of scrutiny can occur in social anxiety.”\nSmall footer: “General education • Fictional photographic scene”. No URLs, tiny citations, fabricated statistics or extra clinical claims. Anatomically convincing people, contemporary real environment, restrained warm gray and deep green palette with clear ivory lettering in negative space. Artwork-led, organically connected facts, not a sparse frightened-face poster. Request one image using openai/gpt-image-2.6-sunburst, medium quality, auto size, opaque background.",
+    "image": "images/2026-11-14-factual-infographic-factual-infographic-scopophobia-fear-of.jpg",
+    "thumb": "thumbs/2026-11-14-factual-infographic-factual-infographic-scopophobia-fear-of.webp",
+    "color": "#584f44",
+    "date": "2026-11-14",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "scopophobia-surrounding-gazes-reception-passage",
+      "imageSha256": "7cc1294490f3461858d1be0788f66f43dab7cc89df85e13a23bfef5ce3c1fa43",
+      "imageDHash": "292725a4058f4f07"
+    },
+    "factualInfographic": {
+      "topic": "Scopophobia: fear of being watched or stared at, anticipatory anxiety, bodily alarm, avoidance, and evidence-based help",
+      "description": "Named fear of being watched, contextualized with social-anxiety mechanisms and care.",
+      "sourceNote": "Verified terminology in BMC Medical Education https://pmc.ncbi.nlm.nih.gov/articles/PMC10079143/; general social-anxiety symptoms, avoidance and CBT in NIMH https://www.nimh.nih.gov/health/publications/social-anxiety-disorder-more-than-just-shyness; phobia support in NHS https://www.nhs.uk/mental-health/conditions/phobias/. No scopophobia-specific treatment trial claimed.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-15T01:09:19.982546+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "BMC Medical Education",
+            "title": "Association of scopophobia with online learning fatigue among medical students in Brazil",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10079143/"
+          },
+          {
+            "id": "S2",
+            "publisher": "National Institute of Mental Health",
+            "title": "Social Anxiety Disorder: What You Need to Know",
+            "sourceType": "government-agency",
+            "url": "https://www.nimh.nih.gov/health/publications/social-anxiety-disorder-more-than-just-shyness"
+          },
+          {
+            "id": "S3",
+            "publisher": "NHS",
+            "title": "Phobias",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/mental-health/conditions/phobias/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Scopophobia is a term for fear of being watched or stared at, particularly by unfamiliar people.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Fear of scrutiny and negative judgment can occur in social anxiety; this descriptive fear name alone is not a diagnosis.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Anxiety can arise before a social situation; possible bodily symptoms include sweating, trembling and rapid heart rate.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Avoidance may feel helpful in the short term while anxiety remains without treatment.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Anxiety can occur even when there is no current threat; feeling scrutinized does not establish actual danger or others’ hostile intentions.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "CBT is research-supported for social anxiety; exposure therapy progressively confronts feared situations as part of treatment.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Seek professional help when anxiety interferes with everyday life; treatment should be tailored with a qualified clinician.",
+            "sourceIds": [
+              "S2",
+              "S3"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
     "id": "2026-11-14-factual-infographic-factual-infographic-pediophobia-fear-of",
     "title": "Factual infographic: Pediophobia — Fear of Dolls",
     "tests": "factual_subtype: phobia-infographic; phobia: Pediophobia; fear-impact and exact title-line authoring checks; distinct fictional casting; no subjective review; archive_slot=2026-11-14T16:08; concept=pediophobia-porcelain-dolls-close-antique-aisle; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: phobia-infographic",
