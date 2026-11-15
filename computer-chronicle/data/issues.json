@@ -1,8 +1,417 @@
 {
-  "generatedAt": "2026-11-12",
+  "generatedAt": "2026-11-15",
   "editorialPriority": "When there is a choice, prefer personal computers, home computing, office PC software, and personal computer or console gaming over broad enterprise technology.",
   "fallbackPolicy": "Use exact-day computer news when verified. If none exists, use same-week or same-month personal-computing items with confidence labels, then fall back to a wider world/business headline.",
   "issues": [
+    {
+      "currentDate": "2026-11-15",
+      "historicDate": "1985-08-26",
+      "displayDate": "Week of August 26-September 1, 1985",
+      "edition": "Issue 161 - Weekly 1985 Computer & Culture Chronicle",
+      "sectionChrome": {
+        "primary": "brick red",
+        "secondary": "royal blue",
+        "texture": "aged newsprint, fine column rules, ink bleed"
+      },
+      "masthead": {
+        "title": "Computer Chronicle",
+        "subtitle": "Issue 161 - Weekly 1985 Computer & Culture Chronicle",
+        "dateline": "Week of August 26-September 1, 1985",
+        "price": "75 cents"
+      },
+      "visualProfile": {
+        "tone": "Elemental fantasy combat on home computers",
+        "motifs": [
+          "Archon II elemental battle board and joystick",
+          "Atari 520ST optical disc demonstration",
+          "acoustic modem and telephone"
+        ],
+        "layout": "Warm aged newsprint, dense columns, red and blue headers, halftone color illustrations, boxed modules and no dead footer space"
+      },
+      "layoutPlan": {
+        "leadPlacement": "Archon II: Adept receives largest headline and gaming illustration",
+        "secondaryRail": "Print feature headlines verbatim; fixed inside-page jump lines",
+        "archiveNavigation": "Weekly archive with previous/next navigation"
+      },
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1985-08-26.jpg",
+        "alt": "Computer Chronicle newspaper front page for August 26-September 1, 1985",
+        "caption": "Newspaper-style front page generated from structured Chronicle issue data.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "editorNote": "Home-computer games, optical-disc ambitions and the cost of going online fill the late-summer desk.",
+      "morningLine": "Four elements, four Adepts—and a reserve of magic that will not last forever.",
+      "lead": {
+        "headline": "Archon II: Adept makes every spell count",
+        "dek": "Free Fall’s fantasy contest trades familiar territory for an elemental struggle over energy.",
+        "body": [
+          "Archon II: Adept brings the meeting of strategy and arcade combat back to the home computer, but not as a simple second helping of the original board. Arthur Leyenberger’s review in the August COMPUTE! describes a contest built around magical energy and the four elements. Electronic Arts publishes the Free Fall Associates game.",
+          "Each side begins with four Adepts, positioned on Earth, Water, Air and Fire. Moving across the strategic board is only half the business: opposing pieces settle their encounters in individual real-time combat. The player must consider both position and the ability to win the next fight.",
+          "Spells and powerful creatures draw down the energy reserve. Power points offer replenishment, making the struggle for territory a struggle for resources as well. Beginner and advanced settings alter starting energy and combat speed, allowing opponents of different experience to meet on more useful terms.",
+          "The Apocalypse spell can force a final one-on-one battle shaped by surviving pieces and resources. The August review lists Commodore 64 or 128, Atari 400/800 or XL with at least 48K, and Apple II-series machines with at least 48K; a disk drive and joystick are required. The Apple edition is listed at $40. This is the month’s review desk, not a claim of a new release this week."
+        ],
+        "sourceRefs": [
+          0
+        ],
+        "confidence": "same-month"
+      },
+      "stories": [
+        {
+          "headline": "Atari puts an encyclopedia on an optical disc",
+          "dek": "A 520ST demonstration points beyond the floppy disk.",
+          "body": [
+            "An encyclopedia can occupy a shelf—or, in Atari’s working demonstration described in the August COMPUTE!, a fraction of an optical disc. Tom R. Halfhill’s Summer CES report describes a prototype connected to a 520ST, with Activenture software providing the indexing.",
+            "The demonstration holds a 23-volume, nine-million-word encyclopedia plus index while leaving three-quarters of the disc empty. Entries can be retrieved within seconds. Activenture’s Tom Rolander sees legal and medical reference works, cookbooks and other large databases as possible applications, not products already on sale.",
+            "Atari hopes for availability late in 1985 or early in 1986 at about $500. Those remain plans reported from the show. The encyclopedia publisher is unnamed because a final contract has not been signed."
+          ],
+          "sourceRefs": [
+            0
+          ],
+          "confidence": "same-month"
+        },
+        {
+          "headline": "WordPerfect makes a blank screen its selling point",
+          "dek": "The writing surface stays clean while the machinery waits behind it.",
+          "body": [
+            "Richard Mansfield’s August COMPUTE! review makes a case for WordPerfect’s unobtrusive writing screen. Persistent control codes and command lines do not crowd the text; a separate control-code screen can be called up when the writer needs it.",
+            "A 100,000-word expandable spelling dictionary includes phonetic lookup, and the review describes detection of repeated words. Macros, two editing screens, automatic backup saving, footnotes, calculations, outline numbering and tables of contents widen the assignment beyond simple typing.",
+            "The listed price is $495 from SSI Software of Orem, Utah. The review calls for an IBM PC or compatible with 192K RAM, two disk drives, DOS 2.0 or later and a printer, and explicitly excludes the PCjr. No version number is assigned here beyond the review’s own identification."
+          ],
+          "sourceRefs": [
+            0
+          ],
+          "confidence": "same-month"
+        },
+        {
+          "headline": "Behind the SIG, an online business",
+          "dek": "File libraries and conferences take more than a modem to keep running.",
+          "body": [
+            "Arlon R. Levitan’s August COMPUTE! column looks behind commercial special-interest groups. Topic-based messages, downloadable files and live conferences form the three principal attractions, with operators competing to keep members returning.",
+            "Levitan reports that leading SIGs generate well over $1 million annually and that some head sysops or sponsoring companies receive at least five percent of gross. Assistant sysops commonly receive free SIG time rather than wages, according to the column. These are the columnist’s estimates, not audited accounts.",
+            "Delphi and The Source are described as challengers to CompuServe. For the household caller, reading downloaded messages and preparing replies offline can keep the hourly meter from running while the thinking is done."
+          ],
+          "sourceRefs": [
+            0
+          ],
+          "confidence": "same-month"
+        }
+      ],
+      "computerItems": [
+        {
+          "title": "Atari CD-ROM prototype",
+          "summary": "520ST demonstration with Activenture indexing software; approximately $500 hoped-for price, late 1985/early 1986 target, not shipping confirmation.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "title": "Commodore 1670 modem",
+          "summary": "August CES report: 300/1200 bps direct-connect, auto-dial, auto-answer, automatic mode and speed selection; around $200; compatible with 128, 64, SX-64, Plus/4 and VIC-20.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "WordPerfect",
+          "detail": "$495 IBM-compatible word processor; 192K, two drives, DOS 2.0+, printer; excludes PCjr.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "name": "Super C",
+          "detail": "Abacus announces C compiler for C64/128 with full-screen editor and source files up to 41K in August CES report; no verified shelf date.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "name": "EasyPlex",
+          "detail": "CompuServe advertisement in August COMPUTE! promotes menu, prompt and command modes for composing, editing, sending and filing electronic mail. Advertisement is evidence of marketing this month, not a dated launch.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0
+          ]
+        }
+      ],
+      "storeShelves": [
+        {
+          "label": "Top 5 Computer Games — Gallup chart printed August 29; underlying sales week circa August 17",
+          "items": [
+            "1. Hyper Sports",
+            "2. Frankie Goes to Hollywood",
+            "3. The Way of the Exploding Fist",
+            "4. Frank Bruno’s Boxing",
+            "5. The Dam Busters"
+          ],
+          "confidence": "same-week",
+          "sourceRefs": [
+            4
+          ]
+        },
+        {
+          "label": "Top 5 Movies — domestic weekend August 30-September 1, 1985",
+          "items": [
+            "1. Back to the Future",
+            "2. Teen Wolf",
+            "3. Pee-wee’s Big Adventure",
+            "4. American Ninja",
+            "5. Volunteers"
+          ],
+          "confidence": "same-week",
+          "sourceRefs": [
+            6
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "Atari 1030",
+          "price": "$79.95",
+          "note": "Antic Arcade catalog price reported in August Antic.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            2
+          ]
+        },
+        {
+          "item": "MMP-1000C",
+          "price": "$149.95",
+          "note": "Microbits direct-connection Atari modem, August Antic.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            2
+          ]
+        },
+        {
+          "item": "Commodore mouse",
+          "price": "$49.95",
+          "note": "Two-button mouse for 128, 64 and VIC, August CES report.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "item": "WordPerfect",
+          "price": "$495",
+          "note": "Listed price in August review.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0
+          ]
+        }
+      ],
+      "briefs": [
+        {
+          "headline": "Epyx looks toward winter",
+          "summary": "August CES reporting previews Winter Games, The Eidolon, Koronis Rift and Temple of Apshai Trilogy. These are reported plans, not confirmation that every platform edition has shipped.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0
+          ]
+        }
+      ],
+      "musicChart": [
+        {
+          "chart": "Billboard Top Rock Tracks (modern archive label: Mainstream Rock Airplay)",
+          "chartDate": "1985-08-31",
+          "rank": 1,
+          "title": "Fortress Around Your Heart",
+          "artist": "Sting",
+          "confidence": "exact-date",
+          "song": "Fortress Around Your Heart",
+          "sourceRefs": [
+            5
+          ]
+        },
+        {
+          "chart": "Billboard Top Rock Tracks (modern archive label: Mainstream Rock Airplay)",
+          "chartDate": "1985-08-31",
+          "rank": 2,
+          "title": "Lonely Ol’ Night",
+          "artist": "John Mellencamp",
+          "confidence": "exact-date",
+          "song": "Lonely Ol’ Night",
+          "sourceRefs": [
+            5
+          ]
+        },
+        {
+          "chart": "Billboard Top Rock Tracks (modern archive label: Mainstream Rock Airplay)",
+          "chartDate": "1985-08-31",
+          "rank": 3,
+          "title": "Back In Time",
+          "artist": "Huey Lewis & The News",
+          "confidence": "exact-date",
+          "song": "Back In Time",
+          "sourceRefs": [
+            5
+          ]
+        },
+        {
+          "chart": "Billboard Top Rock Tracks (modern archive label: Mainstream Rock Airplay)",
+          "chartDate": "1985-08-31",
+          "rank": 4,
+          "title": "No Looking Back",
+          "artist": "Michael McDonald",
+          "confidence": "exact-date",
+          "song": "No Looking Back",
+          "sourceRefs": [
+            5
+          ]
+        },
+        {
+          "chart": "Billboard Top Rock Tracks (modern archive label: Mainstream Rock Airplay)",
+          "chartDate": "1985-08-31",
+          "rank": 5,
+          "title": "Every Step Of The Way",
+          "artist": "John Waite",
+          "confidence": "exact-date",
+          "song": "Every Step Of The Way",
+          "sourceRefs": [
+            5
+          ]
+        }
+      ],
+      "periodAd": {
+        "headline": "EasyPlex puts electronic mail on the menu",
+        "summary": "CompuServe’s August COMPUTE! advertisement promotes menu, prompt and command modes for composing, editing, sending and filing mail.",
+        "tagline": "Compose, edit, send and file.",
+        "sourceRefs": [
+          0
+        ]
+      },
+      "market": {
+        "headline": "The telephone meter joins the hardware bill",
+        "summary": "August Antic lists CompuServe night access at $6 an hour for 300 baud and $7.75 for 1200. Faster hardware and service tariffs both belong in the home-computing budget; these are printed August rates, not a new price announcement.",
+        "confidence": "same-month",
+        "sourceRefs": [
+          2
+        ]
+      },
+      "worldAnchor": {
+        "headline": "Discovery lifts off with communications satellites",
+        "summary": "Discovery launches on STS-51I on August 27 at 6:58 a.m. EDT, carrying ASC-1, AUSSAT-1 and SYNCOM IV-4. Joe Engle commands the five-person crew.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          7
+        ]
+      },
+      "bbsNote": {
+        "headline": "Atari users weigh modem speed against the hourly meter",
+        "summary": "Michael Ciraolo’s Antic August 1985 guide supplies specific modem/interface prices, online rates and community expansion; Levitan’s August COMPUTE! column explains SIG economics. Notes below are editorial summaries of printed reporting, not fabricated BBS messages.",
+        "posts": [
+          {
+            "topic": "Speed versus cost",
+            "platform": "CompuServe",
+            "text": "Antic lists night access at $6/hour for 300 baud and $7.75/hour for 1200; regular entry fee $40, often discounted or waived. ANTIC ONLINE and SIG*Atari are identified as community destinations."
+          },
+          {
+            "topic": "A second home for Atari communities",
+            "platform": "Delphi",
+            "text": "Antic reports planned duplication of SIG*ATARI files and ANTIC ONLINE on Delphi; $50 lifetime registration includes two evening hours; $6/hour evenings at either 300 or 1200 baud, $16 daytime, no monthly minimum."
+          },
+          {
+            "topic": "Different meters for different services",
+            "platform": "The Source / Dow Jones",
+            "text": "The Source: $100 regular registration, $7.75/hour evenings/weekends and $10 monthly minimum. Dow Jones: $72/hour day, $12/hour night. Attribute all rates to Antic August 1985; no claim of this week’s price changes."
+          },
+          {
+            "topic": "The sysop’s business",
+            "platform": "Commercial SIGs",
+            "text": "Levitan reports large SIGs generating over $1 million a year and some lead operators receiving at least five percent of gross, with volunteer assistants compensated by free time."
+          }
+        ],
+        "sourceRefs": [
+          2,
+          0
+        ]
+      },
+      "curiosity": {
+        "headline": "Your Mickey Mouse telephone may not fit your modem",
+        "summary": "Antic’s introductory modem guide finds a surprisingly practical obstacle in novelty-shaped handsets.",
+        "detail": "Michael Ciraolo explains that acoustic-coupler modems use rubber cups to hold the telephone handset and specifically notes that unusual shapes such as Mickey Mouse phones will not work. This is a sourced August 1985 observation, not a newly announced peripheral.",
+        "sourceRefs": [
+          2
+        ]
+      },
+      "undergroundDesk": {
+        "headline": "2600 challenges the seizure of Private Sector",
+        "dek": "August commentary disputes the treatment of a bulletin-board community.",
+        "body": [
+          "The August issue of 2600 reports that New Jersey authorities seized the Private Sector BBS on July 12 and charged its operator on July 18. These are July events being covered in an August publication, not a raid during this issue’s week.",
+          "The magazine disputes guilt by association and sensational satellite-hacking claims, and says the ACLU has taken up the defense. As a publication involved in the scene, its account is an interested source: its allegations and arguments are not judicial findings. The episode puts the status of a board and its users at the center of the argument."
+        ],
+        "sourceRefs": [
+          3
+        ],
+        "confidence": "same-month",
+        "groups": [
+          {
+            "name": "Private Sector BBS",
+            "note": "Board whose seizure is described and contested in the August 2600 account."
+          }
+        ]
+      },
+      "accuracyLedger": {
+        "items": [
+          "Computing features use explicitly identified August magazine reporting; no exact-week launch is inferred.",
+          "Atari optical-disc price and availability remain projections.",
+          "Games chart is printed August 29 but describes an earlier sales week; movies cover August 30-September 1, music August 31.",
+          "Underground reporting is an involved publication’s account of July events, not a finding of guilt.",
+          "No verified gadget event or milestone is asserted."
+        ]
+      },
+      "sources": [
+        {
+          "title": "COMPUTE! No.63, August 1985, especially pp.14–22, 33, 38–40",
+          "url": "https://archive.org/details/1985-08-compute-magazine",
+          "date": "1985-08"
+        },
+        {
+          "title": "COMPUTE! August 1985 OCR; original scan available at issue landing page",
+          "url": "https://archive.org/download/1985-08-compute-magazine/Compute_Issue_063_1985_Aug_djvu.txt",
+          "date": "1985-08"
+        },
+        {
+          "title": "Antic Vol.4 No.4: Communicating Computers, Michael Ciraolo",
+          "url": "https://www.atarimagazines.com/v4n4/startingout.html",
+          "date": "1985-08"
+        },
+        {
+          "title": "2600 Vol.2 No.8: Seized! and editorial commentary",
+          "url": "http://www.gbppr.net/2600/pdf/2600_2-8.pdf",
+          "date": "1985-08"
+        },
+        {
+          "title": "Popular Computing Weekly August 29, p.35: Gallup all-formats chart transcription",
+          "url": "https://computerhits.org/archive/popular%20computing%20weekly_1985-08-29_all%20formats/",
+          "date": "1985-08-29"
+        },
+        {
+          "title": "Billboard Mainstream Rock Airplay archive, full HTML chart rows inspected",
+          "url": "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1985-08-31/",
+          "date": "1985-08-31"
+        },
+        {
+          "title": "The Numbers domestic weekend chart",
+          "url": "https://www.the-numbers.com/box-office-chart/weekend/1985/08/30",
+          "date": "1985-08-30"
+        },
+        {
+          "title": "NASA STS-51I mission record, retrospective official chronology",
+          "url": "https://www.nasa.gov/mission/sts-51i/",
+          "date": "1985-08-27"
+        }
+      ]
+    },
     {
       "sectionChrome": {
         "primary": "brick red",

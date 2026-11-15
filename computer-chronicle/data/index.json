@@ -2,6 +2,22 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-11-15",
+      "historicDate": "1985-08-26",
+      "displayDate": "Week of August 26-September 1, 1985",
+      "edition": "Issue 161 - Weekly 1985 Computer & Culture Chronicle",
+      "morningLine": "Four elements, four Adepts—and a reserve of magic that will not last forever.",
+      "leadHeadline": "Archon II: Adept makes every spell count",
+      "storyHeadlines": [
+        "Atari puts an encyclopedia on an optical disc",
+        "WordPerfect makes a blank screen its selling point",
+        "Behind the SIG, an online business"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1985-08-26.jpg",
+      "thumb": "media/thumbs/1985-08-26.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-11-14",
       "historicDate": "1985-08-19",
       "displayDate": "Week of August 19-25, 1985",

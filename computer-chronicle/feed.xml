@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Sat, 14 Nov 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Sun, 15 Nov 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of August 26-September 1, 1985 — Archon II: Adept makes every spell count</title>
+      <link>https://jez237.com/computer-chronicle/?date=1985-08-26</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1985-08-26</guid>
+      <pubDate>Sun, 15 Nov 2026 12:00:00 GMT</pubDate>
+      <description>Free Fall’s fantasy contest trades familiar territory for an elemental struggle over energy. Archon II: Adept brings the meeting of strategy and arcade combat back to the home computer, but not as a simple second helping of the original board. Arthur Leyenberger’s review in the August COMPUTE! describes a contest built around magical energy and the four elements. Electronic Arts publishes the Free Fall Associates game. Also this week: Atari puts an encyclopedia on an optical disc · WordPerfect makes a blank screen its selling point · Behind the SIG, an online business.</description>
+    </item>
     <item>
       <title>Week of August 19-25, 1985 — Amiga and Atari ST bring color and a new price war to the showroom</title>
       <link>https://jez237.com/computer-chronicle/?date=1985-08-19</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1985-04-15</guid>
       <pubDate>Tue, 27 Oct 2026 12:00:00 GMT</pubDate>
       <description>SSI trades arcade spectacle for the fortunes of a bomber crew in April’s simulation review. A home-computer flight need not be a test of reflexes. Strategic Simulations’ Fifty Mission Crush makes the player responsible for an Eighth Air Force B-17 and the men aboard it. James V. Trunzo’s April COMPUTE! review finds its pull in a campaign of decisions and consequences rather than lavish graphics. Also this week: Commons passes software-copyright bill at third reading · Atari promises a mouse-and-window computer for $599 · Commodore 128 promises three ways to preserve a software library.</description>
-    </item>
-    <item>
-      <title>Week of April 8-14, 1985 — Fifty missions, one crew: the bomber game that makes survival count</title>
-      <link>https://jez237.com/computer-chronicle/?date=1985-04-08</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1985-04-08</guid>
-      <pubDate>Mon, 26 Oct 2026 12:00:00 GMT</pubDate>
-      <description>SSI turns the B-17 campaign into a test of preparation, persistence and crew survival. Britain is the starting point, but keeping a B-17 and its crew alive is the real destination. Strategic Simulations’ Fifty Mission Crush puts the player in command of an Eighth Air Force bomber for a campaign of fifty missions over Germany, France and the Netherlands. James V. Trunzo’s April COMPUTE! review finds its appeal in sustained command rather than a quick burst of arcade action. Also this week: Atari and Commodore promise a bargain-computer generation · Home-computer optimism meets the PCjr reckoning · Pooh opens the adventure door without a parser battle.</description>
     </item>
   </channel>
 </rss>
