@@ -731,3 +731,40 @@ metronidazole, plant diet) from oscars (overeating/blockage, fast first, usual d
 Astra round 4 (12:40 EST), fixed (`A4-*`): salinity in ppm/mg/L or with a typographic minus is rejected; metronidazole only with Malawi bloat signs (off food, stringy white poop), otherwise a fast first; oscars get a fast and outside help, not a drug.
 
 Astra round 5 (12:48 EST), fixed (`A4-2/A5`): the African/oscar swelling plan is one sequence (hospital tank, fast, watch 1–2 days, get help from a fish vet or experienced store if it gets worse; metronidazole mentioned only as the usual Malawi bloat treatment).
+
+## Logic audit fixes — November 16 2026
+
+Owner request: Jez, Discord #hidden-reef-3, `1571980325024956558` ("Fix 1 to 10 now on jez 237 and the lab"), after an
+independent read-only audit of the guide the same afternoon (786,064 answer combinations, every care plan for every
+fish, the medicine check and the coral, invertebrate and pond paths). No clinical validation claim; these make the
+guide agree with itself. `audit-20261116.test.mjs` has one test per item.
+
+Advice that could cause harm:
+1. Salinity typed both ways (`1.026 (35 ppt)`) was read as 1 ppt and raised an urgent "dangerously low" banner. Each
+   number is now read with its own unit; two numbers that cannot both be right are "doesn't look right", not a guess.
+2. Medicine check: praziquantel with corals or invertebrates is "hospital tank", as the fluke and black-spot plans say.
+3. Medicine check: antibiotics with invertebrates or live rock is "hospital tank"; metronidazole with invertebrates is
+   "use with care" (in food).
+4. Popeye for corys and plecos no longer adds Epsom salt (their dropsy plan already left it out).
+
+Wrong or muddled answers:
+5. An exact tie between two conditions goes to the more urgent one, then the one the chosen fish is prone to; the name
+   only settles what is left. A betta breathing fast and scratching now leads with velvet, not flukes.
+6. "One plan treats the whole tank and another moves the fish…" also appears when the whole-tank plan is flukes.
+7. "Do the 1–2 day fast first…" also appears beside the HLLE diet step.
+8. A look-alike opened from a result shows the same fish-aware plan as a finding would, with no heat step while
+   columnaris is a finding. Look-alikes now carry `plan` and `summary`.
+9. Goldfish velvet stops at about 75 °F like goldfish ich; a goldfish hospital tank has an air stone and no heater.
+10. Corys and plecos: dropsy and ulcer summaries and the ulcer look-alike no longer mention scales.
+
+Small ones: a temperature of 0 is a reading; one salinity range in the text (33–35 ppt, about 1.025–1.026); the
+reminder names the reading that is missing (`waterMissing`); the goldfish tile reads "Fancy or common; not koi"; extra
+signs are taken in the guide's order, not click order, so the "could also be" list no longer depends on it; one
+bracket in the treatment line beside columnaris; no aquarium-salt suggestion for corys and plecos in the nitrite
+check; `0,5` and `0.5 ppm` are read as readings.
+
+Left as it was, on purpose: a temperature of 15–35 °F still only asks "did you mean °C?" (a typo is far more likely
+than a tank at freezing). Two ties with equal urgency keep their order (Brooklynella before Uronema for a flat pale
+patch; cloudy eye before popeye for "not sure"). Care judgements the audit marked as opinion (copper for all saltwater
+fish, nitrite urgency in saltwater, pond white spot urgency, fenbendazole wording, 80 °F for corys) are for the store
+owner and were not changed.
