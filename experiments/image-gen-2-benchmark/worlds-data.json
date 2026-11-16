@@ -4616,5 +4616,30 @@
       "continuity": "An endless saline ocean with no exposed land. A long curved white floe called Hook Raft borders a dark teal opening called Needle Lead; three small rafted ice slabs at its southern tip are Stepstones. Low peach sunlight from upper right, steel-blue shadows, sea-green water; no CO2 ice, dust, volcanoes, vegetation, creatures, cities or machinery.",
       "entryDescription": "At the sheltered margin of Needle Lead, frazil crystals aggregate in cold surface water."
     }
+  },
+  {
+    "id": "2026-11-16-weekly-world-pelagic-hinge-the-rafting-edge",
+    "title": "Pelagic Hinge: The Rafting Edge",
+    "tests": "NSIDC Science of Sea Ice and NOAA sea-ice-climate read 2026-11-16. NSIDC explicitly supports light winds/currents pushing nilas sheets over one another (rafting); NOAA supports saline ocean ice. Fictional geography and wind episode are speculative. Beat 2 follows frazil formation, prior to underwater brine exploration.; archive_slot=2026-11-16T07:20; concept=stepstones-young-ice-sheets-rafting-overlap; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; Story beat: 2/7",
+    "prompt": "Create a finished science-informed speculative alien-ocean artist impression, realistic scientific documentary photography aesthetics, richly detailed wide environmental scene. Pelagic Hinge, Where the Salt Goes, beat 2: The Rafting Edge. This is explicitly hypothetical, NOT a measured exoplanet view. Earth-established mechanism: light wind/current pushes thin young sea ice so one sheet slides across another, rafting and locally thickening the cover. Show that mechanism as the actual visual subject rather than another crystal-formation close-up.\nCamera is very low over sea-green water, oblique across the southern tip of a long curved white floating floe called Hook Raft. A dark teal opening, Needle Lead, recedes beside its inside curve. Exactly three modest small ice slabs, Stepstones, sit at its southern tip; these are floating ice landmarks, not rocks or islands. Foreground hero: broad thin translucent gray-green nilas sheets converge with shallow overlapping tongues, one thin sheet visibly riding upon another with coherent contact shadows and wet polished seam; brittle feathered margins, delicate pale stress lines, trapped bubbles, small wind ripples on exposed water. Make sheet overlap unmistakable and physically modest, not towering glacier collisions or a dramatic mountain ridge. Main overlapping sheets remain broad and planar, not shards suspended in air. Strong near-to-far scale hierarchy, a diagonal seam leading toward the three Stepstones and recognizable curved Hook Raft beyond. Open lead still present; do not depict the final fully consolidated state. No subaquatic section in this beat.\nEndless saline liquid H2O ocean, no exposed land; invented Earthlike gravity and pressure with cold polar winter air. Low peach sunlight enters from upper right, steel-blue shadows, white ice and sea-green/dark-teal water, gentle atmospheric depth. Tactile layered translucent ice with subtle subsurface scatter, shallow wet meniscus and credible buoyancy; ice almost entirely supported by water, low freeboard. Detailed naturalistic surface, excellent optical clarity on rafting seam, distance gently softened, restrained contrast, no neon colors. No people, animals, plants, cities, vehicles, machinery, volcanoes, CO2 ice, dust, visible salt falls or glowing brine. No fantasy physics. No grid, inset panels or infographic dashboard. Sparse elegant typography in quiet sky: “PELAGIC HINGE” and small subtitle “The Rafting Edge”; discreet footer “Science-informed speculative world / artist’s impression”. One short open callout near the seam “Rafting: thin ice slides over thin ice”. This label explains established Earth physics; all geography and chronology are speculative. Render the scene itself, no frame, printed poster mockup, logo or watermark. Request openai/gpt-image-2.6-sunburst, medium quality, auto size, opaque background.",
+    "image": "images/2026-11-16-weekly-world-pelagic-hinge-the-rafting-edge.jpg",
+    "thumb": "thumbs/2026-11-16-weekly-world-pelagic-hinge-the-rafting-edge.webp",
+    "color": "#676e6c",
+    "date": "2026-11-16",
+    "batch": "Daily Prompt",
+    "slot": "weekly-world",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1672x941",
+    "dedup": {
+      "conceptKey": "stepstones-young-ice-sheets-rafting-overlap",
+      "imageSha256": "63e172498d3648f775fdbd401d3eee00e63027a0809fcef2f497fde205b3ca15",
+      "imageDHash": "80008308001c3856"
+    },
+    "world": {
+      "name": "Pelagic Hinge",
+      "description": "An explicitly hypothetical ocean exoplanet: freezing seawater separates salt and reorganizes circulation beneath drifting ice.",
+      "continuity": "An endless saline ocean with no exposed land. A long curved white floe called Hook Raft borders a dark teal opening called Needle Lead; three small rafted ice slabs at its southern tip are Stepstones. Low peach sunlight from upper right, steel-blue shadows, sea-green water; no CO2 ice, dust, volcanoes, vegetation, creatures, cities or machinery.",
+      "entryDescription": "Wind converges thin young ice at Stepstones; overlapping sheets thicken the ice edge."
+    }
   }
 ]
