@@ -4691,5 +4691,30 @@
       "continuity": "An endless saline ocean with no exposed land. A long curved white floe called Hook Raft borders a dark teal opening called Needle Lead; three small rafted ice slabs at its southern tip are Stepstones. Low peach sunlight from upper right, steel-blue shadows, sea-green water; no CO2 ice, dust, volcanoes, vegetation, creatures, cities or machinery.",
       "entryDescription": "Wind compresses the lead: a perspective from the open water reveals wave-rounded pancakes and a narrowing opening."
     }
+  },
+  {
+    "id": "2026-11-16-weekly-world-pelagic-hinge-the-hidden-descent",
+    "title": "Pelagic Hinge: The Hidden Descent",
+    "tests": "NSIDC Science of Sea Ice and NOAA sea-ice-climate read 2026-11-16. Both support salt rejection increasing underlying density and sinking; NSIDC supports gravity-aided brine drainage. Exact flow paths are schematic assumptions, not a simulation or observed planet.; archive_slot=2026-11-16T17:20; concept=pelagic-hinge-saline-descent-underwater-density-section; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; Story beat: 5/7",
+    "prompt": "Create a finished scientific-documentary underwater sectional artist impression for PELAGIC HINGE, The Hidden Descent, story order 5, sixth of seven connected images. A dominant deep underwater volume occupies three quarters of the composition: looking obliquely through a naturalistic sea-green ocean beneath the narrowing Needle Lead. Above, a thin strip of peach winter sky and a sharply defined waterline gives geographic orientation. Hook Raft is a long curved white floating floe bordering the lead on the left, its three small overlapping thin ice ledges called Stepstones visible at its near southern tip. Upper-right low peach sunlight, white saline water ice with steel-blue shadows, teal open water; no exposed land. Surface freezing continues as fine granular ice and thin young ice at the edge, not a sealed solid ocean. Realistic ice underside, refracted light, fine crystalline texture, physically credible floating freeboard and submerged thickness. The camera is much farther back than a microscopic brine-pocket study: the narrative is now the water column, not ice microstructure. No enlarged pockets, laboratory inset or repeated surface-only view.\nUse an editorial scientific SECTION convention, a subtle cut-plane showing a thin slice of ice and open water above a broad descending water-column view, not a literal cliff cut through the ocean. Beneath the growing ice edge, slender muted ivory dashed arrows descend, broaden, curve and disperse into a few short fading branches within the surrounding water, demonstrating increased density and local mixing schematically. Water itself remains optically continuous and naturally teal: dissolved salt is invisible, no separate colored river, no luminous plumes, waterfall, visible salt crystals, ropes, tubes or opaque fluid curtain. Arrows are clearly drawn explanatory overlays, not objects. Avoid claiming a precise modeled velocity, depth, planetwide circulation loop or seafloor current. No seabed visible: kilometer-deep ocean extends beyond frame. Negative space and rich water-depth gradation keep this artwork-led, not a boxed lesson chart.\nRestrained elegant typography: top title 'PELAGIC HINGE' and 'The Hidden Descent'. Three concise open annotations follow the causal path: 'Freezing excludes salt', 'Denser saline water sinks', 'Mixing below the ice'. Beside the arrows print 'Schematic flow — not directly visible'. Footer 'Science-informed speculative world / artist’s impression'. A small secondary line 'Earth analogue physics; fictional geography' distinguishes verified mechanisms from invented conditions. Keep annotations readable without crowding the water; no numbers or invented observations. Mechanism is supported by NSIDC Science of Sea Ice and NOAA sea-ice-climate: sea-ice formation rejects salt, increasing underlying water density; brine can drain downward aided by gravity. Transfer to this hypothetical Earth-gravity saline ocean is conditional, the specific paths and chronology are speculative. No inhabitants, organisms, vegetation, machines, ships, cities, volcanoes, dust, CO2 ice or fantasy physics. Realistic scientific environmental rendering, detailed tactile ice and water optics, no cartoon, framed print, book mockup, logos or watermark. Do not jump to the final consolidated ice margin; the narrow lead remains open.",
+    "image": "images/2026-11-16-weekly-world-pelagic-hinge-the-hidden-descent.jpg",
+    "thumb": "thumbs/2026-11-16-weekly-world-pelagic-hinge-the-hidden-descent.webp",
+    "color": "#37595b",
+    "date": "2026-11-16",
+    "batch": "Daily Prompt",
+    "slot": "weekly-world",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1122x1402",
+    "dedup": {
+      "conceptKey": "pelagic-hinge-saline-descent-underwater-density-section",
+      "imageSha256": "4ca8e34124a7f852ad10d6641bbec6a293f5eff843e7e568fa276317ec9a8f7d",
+      "imageDHash": "6070700307090b13"
+    },
+    "world": {
+      "name": "Pelagic Hinge",
+      "description": "An explicitly hypothetical ocean exoplanet: freezing seawater separates salt and reorganizes circulation beneath drifting ice.",
+      "continuity": "An endless saline ocean with no exposed land. A long curved white floe called Hook Raft borders a dark teal opening called Needle Lead; three small rafted ice slabs at its southern tip are Stepstones. Low peach sunlight from upper right, steel-blue shadows, sea-green water; no CO2 ice, dust, volcanoes, vegetation, creatures, cities or machinery.",
+      "entryDescription": "A scientific underwater section traces dense saline water descending and mixing, while surface freezing continues; no luminous visible salt rivers."
+    }
   }
 ]
