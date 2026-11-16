@@ -4566,5 +4566,30 @@
       "continuity": "Chalk-white seasonal CO2 ice over charcoal basaltic fines; restrained lavender shadows and pale gold low spring sunlight from upper left. Crescent Scarp curves along upper right, three dark low basalt knobs called Three Teeth stand at mid-left, branching Basin Loom drains toward a central vent called Pin Eye. No liquid water, vegetation, animals, people, cities, machinery or lava.",
       "entryDescription": "First restrained dust-laden gas eruption through a narrow fracture; gas itself mostly invisible."
     }
+  },
+  {
+    "id": "2026-11-16-weekly-world-pelagic-hinge-the-salt-engine-introductory-fie",
+    "title": "Pelagic Hinge: The Salt Engine — Introductory Field Chart",
+    "tests": "NSIDC and NOAA sources read 2026-11-16. Mechanisms verified for Earth only; assumed planet conditions not claimed as observations. Prior two world compact metadata inspected; distinct fluid and causal mechanism.; archive_slot=2026-11-16T00:20; concept=pelagic-hinge-sea-ice-brine-circulation-field-chart; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; Story beat: 0/7",
+    "prompt": "Create the finished artistic planetary field atlas itself, not a photographed book, framed print, poster mockup or interface. Title: PELAGIC HINGE. Subtitle: The Salt Engine. Clearly print “Science-informed speculative world / artist’s impression”. A dominant exquisitely detailed realistic environmental cutaway fills the composition: oblique view across a dark teal polar ocean on an invented world, with a curved white floating floe (Hook Raft), a slender dark open-water lead (Needle Lead) and three small overlapping ice slabs (Stepstones) at its southern tip. No land. Low peach sunlight upper right, delicate steel-blue shadows, translucent blue-green thin ice, rough white floe top, subtle wavelets and floating crystal slush. Lift the foreground water into a graceful scientific section integrated with the main seascape, showing floating ice above liquid water and the submerged ice edge; no impossible hovering blocks. Photoreal material detail, fine restrained scientific ink leader lines, elegant highly legible typography, asymmetric organic flow, rich artwork and negative space. Not a rigid boxed dashboard or repeated panels.\nWeave three meaningful studies into this one environment: a large open magnification of needle-like frazil crystals collecting at a water surface; a sea-ice microsection showing nearly fresh ice crystals separated by tiny trapped brine pockets; and a subtle schematic descending curved arrow below the ice showing denser salt-enriched water mixing downward. Dissolved salt and currents are not luminous visible colored rivers: explicitly label the arrows “Schematic flow”. Supporting ice-overlap study at Stepstones shows buoyant thin slabs rafting, both contacting water. Restrained white, teal, steel blue and peach palette, never neon. Keep all educational text concise and readable.\nUse exact source-status headings woven into margins, not boxed: “EARTH ANALOGUES — OBSERVED”, with lines “Frazil crystals begin seawater freezing”, “Ice can retain brine pockets”, “Salt rejection can drive dense water downward”. “INFERRED HERE”, with “Earth sea-ice physics applied to an assumed saline ocean”. “SPECULATIVE”, with “Planet, landmarks and chronology invented”, “No life claimed or depicted”. Add a small elegant assumed-conditions line: “Assumed: Earthlike gravity • nitrogen-rich air • saline water ocean”. Label Hook Raft, Needle Lead, Stepstones, Frazil crystals, Brine pockets and Salt-enriched water with precise leader lines. A small circulation arc may connect freezing to drainage to mixing, with no claim of a complete global overturning solution. No infrastructure or inhabited-habitat study: explicitly abiotic world. Water ice, not carbon-dioxide ice; no dust geysers, magma, landscape crystals, organisms, buildings, vehicles, planets dominating the sky or stars visible through daylight. This is beat zero: establish the geography and mechanism, not the later fully closed ice cover. The upper lead remains substantially open. Small footer “Physics references: NSIDC; NOAA • Geography is fictional”.",
+    "image": "images/2026-11-16-weekly-world-pelagic-hinge-the-salt-engine-introductory-fie.jpg",
+    "thumb": "thumbs/2026-11-16-weekly-world-pelagic-hinge-the-salt-engine-introductory-fie.webp",
+    "color": "#546d75",
+    "date": "2026-11-16",
+    "batch": "Daily Prompt",
+    "slot": "weekly-world",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1086x1448",
+    "dedup": {
+      "conceptKey": "pelagic-hinge-sea-ice-brine-circulation-field-chart",
+      "imageSha256": "3739b15a07dd68c99df228226d05169f9d74a1f1f9d5cf482926b90ada856a04",
+      "imageDHash": "841c0f0579617379"
+    },
+    "world": {
+      "name": "Pelagic Hinge",
+      "description": "An explicitly hypothetical ocean exoplanet: freezing seawater separates salt and reorganizes circulation beneath drifting ice.",
+      "continuity": "An endless saline ocean with no exposed land. A long curved white floe called Hook Raft borders a dark teal opening called Needle Lead; three small rafted ice slabs at its southern tip are Stepstones. Low peach sunlight from upper right, steel-blue shadows, sea-green water; no CO2 ice, dust, volcanoes, vegetation, creatures, cities or machinery.",
+      "entryDescription": "Artistic introductory field chart establishes ocean, ice and the hidden density mechanism."
+    }
   }
 ]
