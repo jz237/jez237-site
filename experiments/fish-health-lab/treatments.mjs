@@ -86,6 +86,8 @@ const PLANS = {
       'Treat the whole tank with a velvet medication (copper-based ones only in a hospital tank—copper harms plants, shrimp, snails and sensitive fish) and raise the temperature a little.',
       'Keep treating for about a week after the dust has gone.',
     ],
+    // Goldfish are coldwater fish: the same cap as their ich plan.
+    goldfish: { steps: ['Dim the tank lights or turn them off for a few days—velvet needs light.', `${TEST} Add aeration.`, 'Treat the whole tank with a velvet medication (copper-based ones only in a hospital tank—copper harms plants, shrimp, snails and sensitive fish) and raise the temperature a little, to no more than about 75 °F (24 °C).', 'Keep treating for about a week after the dust has gone.'] },
     // Corys and plecos: copper kills them (matches the medicine check).
     cory: { steps: ['Dim the tank lights or turn them off for a few days—velvet needs light.', `${TEST} Add aeration.`, 'Treat the whole tank with a velvet medication labelled safe for scaleless fish—never copper with corys or plecos.', 'Keep treating for about a week after the dust has gone.'], treatment: 'Darkness + a scaleless-safe velvet medication (no copper)' },
     pleco: { steps: ['Dim the tank lights or turn them off for a few days—velvet needs light.', `${TEST} Add aeration.`, 'Treat the whole tank with a velvet medication labelled safe for scaleless fish—never copper with corys or plecos.', 'Keep treating for about a week after the dust has gone.'], treatment: 'Darkness + a scaleless-safe velvet medication (no copper)' },
@@ -175,6 +177,9 @@ const PLANS = {
   popeye: {
     steps: [TEST, 'If only one eye bulges, it is probably an injury—clean water and time usually fix it.', `If both eyes bulge or it gets worse: ${HOSPITAL.toLowerCase()} Add Epsom salt and treat with an antibacterial medication.`],
     marine: { steps: ['Test the water and do a water change.', 'One eye: probably an injury—clean water and time usually fix it.', 'Both eyes or getting worse: treat in a hospital tank with an antibacterial medication.'], treatment: 'Clean water; antibacterial in a hospital tank if both eyes', reefUnsafe: true },
+    // Corys and plecos: no salt of any kind, as in their dropsy plan (audit, Nov 16 2026).
+    cory: { steps: [TEST, 'If only one eye bulges, it is probably an injury—clean water and time usually fix it.', `If both eyes bulge or it gets worse: ${HOSPITAL.toLowerCase()} Treat with an antibacterial medication labelled safe for scaleless fish.`], treatment: 'Clean water; scaleless-safe antibacterial if both eyes' },
+    pleco: { steps: [TEST, 'If only one eye bulges, it is probably an injury—clean water and time usually fix it.', `If both eyes bulge or it gets worse: ${HOSPITAL.toLowerCase()} Treat with an antibacterial medication labelled safe for scaleless fish.`], treatment: 'Clean water; scaleless-safe antibacterial if both eyes' },
     treatment: 'Clean water; Epsom salt + antibacterial if both eyes',
     recovery: '2–4 weeks; the swelling goes down slowly.', medicated: true,
   },
@@ -255,6 +260,8 @@ export function carePlanFor(id, water, fishType = '') {
   if (['cory', 'pleco'].includes(fishType)) treatment = treatment.replace(/\s*\((or|plus) (aquarium )?salt for salt-tolerant fish\)/i, ' (no salt for corys and plecos)');
   if (reefUnsafe && !/hospital|isolate|separate|no medicine/i.test(treatment)) treatment += ', in a hospital tank';
   let steps = variant.steps || plan.steps;
+  // Goldfish are coldwater fish: their hospital tank needs air, not a heater.
+  if (fishType === 'goldfish') steps = steps.map(step => step.replace(/tank with a heater and air stone—/i, 'tank with an air stone (goldfish need no heater)—'));
   if (['cory', 'pleco'].includes(fishType)) steps = steps.map(step => step.replace(/\s*;?\s*aquarium salt helps salt-tolerant fish\./i, '. Skip salt—corys and plecos don’t tolerate it.').replace(/\.\. /, '. '));
   return {
     steps,

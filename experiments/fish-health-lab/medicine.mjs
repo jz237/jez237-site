@@ -112,8 +112,9 @@ export const MEDICINES = [
     },
     marine: {
       fish: ['ok', 'Gentle on fish.'],
-      corals: ['care', 'Most corals are fine, but dying worms can foul the water—watch closely.'],
-      inverts: ['care', 'Can kill bristle worms, flatworms and some snails.'],
+      // The care plans say to treat flukes and black spot in a hospital tank, never the reef display: the check agrees.
+      corals: ['hospital', 'Most corals tolerate it, but dying worms can foul a reef—treat the fish in a hospital tank.'],
+      inverts: ['hospital', 'Can kill bristle worms, feather dusters and some snails—treat the fish in a hospital tank.'],
       rock: ['care', 'Kills worms living in the rock—do a water change after.'],
       filter: ['ok', 'Doesn’t hurt the filter.'],
     },
@@ -134,8 +135,8 @@ export const MEDICINES = [
     marine: {
       fish: ['ok', 'Fine for the fish.'],
       corals: ['hospital', 'Antibiotics can upset corals and the tank’s bacteria—treat the fish in a hospital tank.'],
-      inverts: ['care', 'Some inverts are sensitive.'],
-      rock: ['care', 'Can upset the bacteria in the rock.'],
+      inverts: ['hospital', 'Shrimp, crabs and snails can be harmed—treat the fish in a hospital tank.'],
+      rock: ['hospital', 'Can upset the bacteria in the rock—treat the fish in a hospital tank.'],
       filter: ['care', 'Can hurt the filter bacteria—watch ammonia.'],
     },
     pond: {
@@ -191,7 +192,7 @@ export const MEDICINES = [
     marine: {
       fish: ['ok', 'Gentle on fish; often given in food.'],
       corals: ['care', 'Usually tolerated, but a hospital tank or medicated food is safer.'],
-      inverts: ['ok', 'Usually fine.'], rock: ['ok', 'Usually fine.'], filter: ['ok', 'Doesn’t hurt the filter.'],
+      inverts: ['care', 'Usually tolerated—give it in food rather than in the water when shrimp, crabs or snails share the tank.'], rock: ['ok', 'Usually fine.'], filter: ['ok', 'Doesn’t hurt the filter.'],
     },
     pond: {
       fish: ['care', 'Works best in food—dosing a whole pond is expensive.'],

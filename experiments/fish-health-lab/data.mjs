@@ -112,7 +112,7 @@ export function closerQuestionFor(sign, water) {
 export const FISH_TYPES = {
   fresh: [
     { id: 'betta', plural: 'bettas', title: 'Betta', text: 'Siamese fighting fish', icon: 'betta', boosts: { 'velvet-fresh': 2, 'fin-rot': 2, dropsy: 1, bloat: 1 } },
-    { id: 'goldfish', plural: 'goldfish', title: 'Goldfish', text: 'Fancy, common or koi', icon: 'goldfish', boosts: { 'swim-bladder': 3, bloat: 2, flukes: 2, ulcer: 2 } },
+    { id: 'goldfish', plural: 'goldfish', title: 'Goldfish', text: 'Fancy or common; not koi', icon: 'goldfish', boosts: { 'swim-bladder': 3, bloat: 2, flukes: 2, ulcer: 2 } },
     { id: 'guppy', plural: 'guppies', title: 'Guppy', text: 'Fancy & endler', icon: 'livebearer', boosts: { columnaris: 3, 'fin-rot': 2 } },
     { id: 'molly', plural: 'mollies and platies', title: 'Molly / platy', text: 'Incl. swordtails', icon: 'livebearer', boosts: { columnaris: 3, bloat: 1 } },
     { id: 'community', plural: 'tetras and rasboras', title: 'Tetra / rasbora', text: 'Small community fish', icon: 'tetra', boosts: { 'ich-fresh': 1, columnaris: 1 } },
