@@ -4591,5 +4591,30 @@
       "continuity": "An endless saline ocean with no exposed land. A long curved white floe called Hook Raft borders a dark teal opening called Needle Lead; three small rafted ice slabs at its southern tip are Stepstones. Low peach sunlight from upper right, steel-blue shadows, sea-green water; no CO2 ice, dust, volcanoes, vegetation, creatures, cities or machinery.",
       "entryDescription": "Artistic introductory field chart establishes ocean, ice and the hidden density mechanism."
     }
+  },
+  {
+    "id": "2026-11-16-weekly-world-pelagic-hinge-first-needles",
+    "title": "Pelagic Hinge: First Needles",
+    "tests": "NSIDC Science of Sea Ice and NOAA How does sea ice affect global climate read 2026-11-16. NSIDC supports frazil crystals accumulating at surface and calm-water grease ice. Earth analogue only; geography and chronology speculative.; archive_slot=2026-11-16T03:20; concept=pelagic-hinge-frazil-aggregation-sheltered-lead-margin; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; Story beat: 1/7",
+    "prompt": "Create one finished realistic scientific-documentary artist’s impression, a scene not an infographic or collage. Pelagic Hinge: First Needles, episode 1 after the establishing field chart. The next natural-history discovery is intimate: frazil crystals beginning to aggregate in the sheltered surface water along the inner curve of Hook Raft. Extremely low near-water camera, macro-wide environmental perspective, foreground in exquisite focus and middle distance gently softened. Tiny millimetric ice needles and flattened crystals float partially submerged, forming delicate loose interlocking clusters and faint silky grease-ice streaks across dark translucent teal water. They are not giant quartz spikes, snowflakes in air, shore frost, botanical shapes or glass shards. Render liquid menisci, minute ripples, subtle subsurface scattering and peach pinlights with believable physical detail. Some crystals remain separated, some gather into thin soft slush; the central lead is still open liquid water. No solid closed lid yet. The dominant visual is the fine first-crystal texture at water level, not a repeated planetary chart, cross section or world map.\nContinuity: a long curved low white sea-ice floe called Hook Raft borders dark teal Needle Lead. Show its curving low edge sweeping from left foreground into middle distance; three small overlapping buoyant slabs at its southern tip, Stepstones, appear as a modest distant landmark, not mountains. Endless saline ocean, no land or cliffs. Low peach sunlight from upper right, steel-blue shadows on rough white ice, sea-green and dark teal water. Plausible water-ice contact, no hovering or unsupported ice. Atmospheric perspective, naturalistic photographic realism, fine variations in wet ice texture and calm ripples, composed negative space. No magical luminescence. No creatures, humans, vegetation, cities, ships, machinery, dust, volcanoes, carbon-dioxide ice, alien buildings or oversized planet in sky. No visible salt crystals or colored salt waterfalls. Do not illustrate later brine-drainage or rafting episodes.\nAdd only restrained elegant small typography in quiet sky/water negative space: heading “PELAGIC HINGE — FIRST NEEDLES”; caption “Science-informed speculative world / artist’s impression”; small source-status note “Earth analogue: frazil aggregation • Planet and landmarks invented”. No arrows, fact cards, boxed grids, exploded study insets, or frame. The world is explicitly hypothetical; no claim of photographed alien observations. Richly detailed camera-like materials, subtle cold atmosphere and warm grazing sunlight, immersive and physically coherent.",
+    "image": "images/2026-11-16-weekly-world-pelagic-hinge-first-needles.jpg",
+    "thumb": "thumbs/2026-11-16-weekly-world-pelagic-hinge-first-needles.webp",
+    "color": "#646f71",
+    "date": "2026-11-16",
+    "batch": "Daily Prompt",
+    "slot": "weekly-world",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1672x941",
+    "dedup": {
+      "conceptKey": "pelagic-hinge-frazil-aggregation-sheltered-lead-margin",
+      "imageSha256": "f82b9599be2d7db6f98e8eba3c1cd10c16cc9318ca7c7ad19c3c7dc594e12dce",
+      "imageDHash": "00007868f6b0ceba"
+    },
+    "world": {
+      "name": "Pelagic Hinge",
+      "description": "An explicitly hypothetical ocean exoplanet: freezing seawater separates salt and reorganizes circulation beneath drifting ice.",
+      "continuity": "An endless saline ocean with no exposed land. A long curved white floe called Hook Raft borders a dark teal opening called Needle Lead; three small rafted ice slabs at its southern tip are Stepstones. Low peach sunlight from upper right, steel-blue shadows, sea-green water; no CO2 ice, dust, volcanoes, vegetation, creatures, cities or machinery.",
+      "entryDescription": "At the sheltered margin of Needle Lead, frazil crystals aggregate in cold surface water."
+    }
   }
 ]
