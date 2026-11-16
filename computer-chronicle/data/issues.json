@@ -4,6 +4,439 @@
   "fallbackPolicy": "Use exact-day computer news when verified. If none exists, use same-week or same-month personal-computing items with confidence labels, then fall back to a wider world/business headline.",
   "issues": [
     {
+      "sectionChrome": {
+        "primary": "brick red",
+        "secondary": "royal blue",
+        "texture": "aged newsprint, fine column rules, ink bleed"
+      },
+      "masthead": {
+        "title": "Computer Chronicle",
+        "subtitle": "Issue 162 - Weekly 1985 Computer & Culture Chronicle",
+        "dateline": "Week of September 2-8, 1985",
+        "price": "75 cents"
+      },
+      "visualProfile": {
+        "tone": "The Amiga opens a multimedia frontier",
+        "motifs": [
+          "Amiga keyboard, mouse and color monitor with animated graphics",
+          "Lucasfilm fractal mountains and Ballblazer split-screen",
+          "home-control modules and telephone modem"
+        ],
+        "layout": "Warm aged newsprint, dense columns, red and blue headers, halftone color illustrations, boxed modules and no dead footer space"
+      },
+      "layoutPlan": {
+        "leadPlacement": "Amiga is the stronger historical computing development; largest headline and color illustration, with prominent Lucasfilm gaming feature.",
+        "secondaryRail": "Print feature headlines verbatim; fixed inside-page jump lines",
+        "archiveNavigation": "Weekly archive with previous/next navigation"
+      },
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1985-09-02.jpg",
+        "alt": "Computer Chronicle newspaper front page for September 2-8, 1985",
+        "caption": "Newspaper-style front page generated from structured Chronicle issue data.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "currentDate": "2026-11-16",
+      "historicDate": "1985-09-02",
+      "displayDate": "Week of September 2-8, 1985",
+      "edition": "Issue 162 - Weekly 1985 Computer & Culture Chronicle",
+      "editorNote": "September magazine reports meet the week’s music, movies and dispatches.",
+      "morningLine": "A new machine gives color and sound room to play; Lucasfilm puts the joystick back in the picture.",
+      "lead": {
+        "headline": "Amiga opens a new frontier in color and sound",
+        "dek": "Commodore’s 68000 machine brings multitasking and custom graphics into the home-computer debate.",
+        "confidence": "same-month",
+        "sourceRefs": [
+          0
+        ],
+        "body": [
+          "A personal computer that can keep several jobs moving while drawing colorful scenes and playing stereo sound is a different proposition from the familiar single-program machine. Tom R. Halfhill’s September COMPUTE! examination of the already unveiled Amiga describes Commodore’s bid to make that proposition practical. It is a report from prerelease sessions, not a new unveiling this week.",
+          "At the center is a Motorola 68000 processor, with 256K of standard memory and a built-in double-sided 3.5-inch drive holding 880K. A detached keyboard and two-button mouse put the user in front of Intuition, the graphical interface above AmigaDOS. Applications and command windows can share the machine, though the amount of memory remains a real limit on what can run together.",
+          "The most immediate attraction is what appears on the screen and comes through the speakers. Custom graphics hardware, a blitter and independently moving playfields offer inviting tools for animation and games. The palette contains 4,096 colors, with special hold-and-modify operation; ordinary display modes use subsets. Four sound channels feed stereo outputs, extending the appeal to electronic musicians as well as players.",
+          "The household budget is less settled than the specification sheet. At the time of the review, the base system was estimated at $1,000–$1,500, or about $2,000 for 512K and an RGB monitor. Commodore’s forecast of availability by the end of August is not confirmation of retail shipments. Expansion promises are plentiful, but the lasting test will be the programs and peripherals owners can actually obtain."
+        ]
+      },
+      "stories": [
+        {
+          "headline": "Lucasfilm games escape limbo through Epyx",
+          "body": [
+            "Lucasfilm’s Rescue on Fractalus! and Ballblazer reach the September COMPUTE! review desk after a long detour. Halfhill attributes roughly a year of delay to turmoil at the original marketing partner, Atari. Epyx has secured the marketing agreement, giving the two imaginative games a commercial home.",
+            "Rescue on Fractalus! sends the pilot into a first-person landscape of fractal mountains to pick up stranded personnel. Instrument flying becomes important at higher levels. Ballblazer instead divides the screen into two first-person views for a futuristic contest, with human or computer opposition and usually three-minute matches; distant goals can earn three points.",
+            "The reviewed Atari editions require 48K, a disk drive and a joystick, with two sticks recommended for Ballblazer. Each is listed at $40. Other-platform plans in the review are dated forecasts, not proof of shipment: the Commodore 64 Ballblazer was still under development at writing."
+          ],
+          "sourceRefs": [
+            1
+          ],
+          "confidence": "same-month"
+        },
+        {
+          "headline": "SIG wars ask who owns an online community",
+          "body": [
+            "An online forum is more than the equipment that carries it. Arlan R. Levitan’s September Telecomputing Today column asks what happens when a service, a sysop and the people who upload messages and programs have different ideas about who owns the community.",
+            "The column revisits May’s short-lived Delphi branch of MAUG, the Micronetworked Apple User Group. After a couple of weeks it vanished, replaced by an Apple SIG with another sysop. CompuServe retained MAUG’s original sysop, and its MAUG divided into Apple II, Macintosh and developer SIGs.",
+            "Price is part of the competition: Levitan reports Delphi’s off-shift 1,200-bps rate at half CompuServe’s, without supplying a dollar tariff. But his larger question concerns the contributors who pay connect time while making a service useful. He invites an electronic poll and explicitly says there is no evidence that anyone’s legal rights were abrogated."
+          ],
+          "sourceRefs": [
+            3
+          ],
+          "confidence": "same-month"
+        },
+        {
+          "headline": "Powerhouse promises home control without leaving the computer on",
+          "body": [
+            "The light switch is becoming a computer peripheral. September COMPUTE! describes X-10 Powerhouse, a controller initially supported by Apple II software that can direct as many as 72 lights and appliances through separately purchased modules plugged into household outlets.",
+            "A joystick moves through room icons to map the appliances. Once the schedule is programmed, the controller operates independently; the computer need not remain on simply to keep the house on time. That distinction makes home control more plausible for a machine that must also serve schoolwork and games.",
+            "The interface is approximately $125, with another $25 for software and cable, before module costs. A Commodore 64/128 version is scheduled for September and IBM PC/PCjr support for October. These are the reported schedules, not verified deliveries."
+          ],
+          "sourceRefs": [
+            4
+          ],
+          "confidence": "same-month"
+        }
+      ],
+      "computerItems": [
+        {
+          "title": "Amiga",
+          "summary": "68000, 256K standard, 880K floppy, mouse, custom graphics and sound; estimates and forecasts remain provisional.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "title": "ESTeem wireless modem",
+          "summary": "Creative Computing reports $995 base or $1,195 battery-powered CMOS version and networks of up to 255 computers/peripherals; $2,295 package with portable computer. Private radio network, not a consumer BBS subscription.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            5
+          ]
+        },
+        {
+          "title": "X-10 Powerhouse",
+          "summary": "Standalone programmable controller with Apple II software initially and announced C64/128 support in September.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            4
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "Intuition and AmigaDOS",
+          "detail": "Graphical desktop and command interface support concurrent programs; prerelease review warns memory limits; BASIC plans still being finalized.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "name": "Cornerstone",
+          "detail": "Creative Computing September Software Digest reviews Infocom relational database: multivalued fields and report generator praised; speed and confusing menus criticized; hard disk recommended. Extended support quoted $150 annually for upgrades and up to five incidents; user pays calls.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            5
+          ]
+        }
+      ],
+      "storeShelves": [
+        {
+          "label": "Top 5 Computer Games — Gallup chart printed September 5; sales week circa August 24",
+          "items": [
+            "1. The Way of the Exploding Fist",
+            "2. Summer Games 2",
+            "3. Nightshade",
+            "4. Frank Bruno’s Boxing",
+            "5. Beach-Head II"
+          ],
+          "confidence": "same-week",
+          "sourceRefs": [
+            10
+          ]
+        },
+        {
+          "label": "Top 5 Movies — domestic weekend September 6-8, 1985",
+          "items": [
+            "1. Back to the Future",
+            "2. Teen Wolf",
+            "3. Pee-wee’s Big Adventure",
+            "4. Compromising Positions",
+            "5. Volunteers"
+          ],
+          "confidence": "same-week",
+          "sourceRefs": [
+            8
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "Amiga base estimate",
+          "price": "$1,000–$1,500",
+          "note": "$1,000–$1,500; unsettled prerelease estimate, not verified retail price.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "item": "Amiga 512K/color estimate",
+          "price": "About $2,000 with RGB monitor, provisional.",
+          "note": "About $2,000 with RGB monitor, provisional.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "item": "Lucasfilm games",
+          "price": "$40 each for reviewed Atari editions of Rescue on Fractalus! and Ballblazer.",
+          "note": "$40 each for reviewed Atari editions of Rescue on Fractalus! and Ballblazer.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            1
+          ]
+        },
+        {
+          "item": "Below the Root",
+          "price": "$26.95 listed in review.",
+          "note": "$26.95 listed in review.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            2
+          ]
+        },
+        {
+          "item": "Powerhouse",
+          "price": "$125 interface plus $25 software/cable",
+          "note": "$125 interface plus $25 software/cable; modules extra.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            4
+          ]
+        },
+        {
+          "item": "Prometheus ProModem 1200",
+          "price": "$495 advertised for expandable 1200/300-baud modem with clock/calendar",
+          "note": "$495 advertised for expandable 1200/300-baud modem with clock/calendar; advertiser claim.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            5
+          ]
+        }
+      ],
+      "briefs": [
+        {
+          "headline": "A modem horsepower race",
+          "summary": "Erik Sandberg-Diment’s September 8 New York Times column describes 300-, 1,200- and 2,400-speed modems and emerging 9,600 units, Hayes compatibility and software support; attribute period language rather than equating baud and bits/sec at every speed.",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            6
+          ]
+        },
+        {
+          "headline": "Electronic mail sells ease of use",
+          "summary": "CompuServe September Creative Computing advertisement promotes EasyPlex menu mode for beginners and prompt/command modes for experienced users; composing, editing, sending and filing messages. Advertisement is evidence of period marketing, not an exact-week launch.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            5
+          ]
+        }
+      ],
+      "musicChart": [
+        {
+          "chart": "Billboard Top Rock Tracks",
+          "chartDate": "1985-09-07",
+          "rank": 1,
+          "title": "Lonely Ol' Night",
+          "song": "Lonely Ol' Night",
+          "artist": "John Mellencamp",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            7
+          ]
+        },
+        {
+          "chart": "Billboard Top Rock Tracks",
+          "chartDate": "1985-09-07",
+          "rank": 2,
+          "title": "Fortress Around Your Heart",
+          "song": "Fortress Around Your Heart",
+          "artist": "Sting",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            7
+          ]
+        },
+        {
+          "chart": "Billboard Top Rock Tracks",
+          "chartDate": "1985-09-07",
+          "rank": 3,
+          "title": "Back In Time",
+          "song": "Back In Time",
+          "artist": "Huey Lewis & The News",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            7
+          ]
+        },
+        {
+          "chart": "Billboard Top Rock Tracks",
+          "chartDate": "1985-09-07",
+          "rank": 4,
+          "title": "Every Step Of The Way",
+          "song": "Every Step Of The Way",
+          "artist": "John Waite",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            7
+          ]
+        },
+        {
+          "chart": "Billboard Top Rock Tracks",
+          "chartDate": "1985-09-07",
+          "rank": 5,
+          "title": "Dancing In The Street",
+          "song": "Dancing In The Street",
+          "artist": "David Bowie & Mick Jagger",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            7
+          ]
+        }
+      ],
+      "periodAd": {
+        "headline": "EasyPlex puts mail on the menu",
+        "summary": "CompuServe’s September Creative Computing advertisement offers beginner menus and expert prompt or command modes for composing, editing, sending and filing electronic mail.",
+        "tagline": "Compose, edit, send and file.",
+        "sourceRefs": [
+          5
+        ]
+      },
+      "market": {
+        "headline": "The expansion bill follows the computer home",
+        "summary": "The Amiga’s estimated base price is only the beginning: memory, an RGB monitor and peripherals enlarge the budget. Powerhouse likewise requires appliance modules beyond its interface and software. These are September magazine estimates and listed costs, not a new weekly price survey.",
+        "confidence": "same-month",
+        "sourceRefs": [
+          0,
+          4
+        ]
+      },
+      "worldAnchor": {
+        "headline": "Titanic discovery announced Monday",
+        "summary": "The joint U.S.–French expedition announced the Titanic’s discovery on September 2. The wreck itself was found early September 1, before this issue’s week began, more than 13,000 feet below the Atlantic.",
+        "confidence": "same-week",
+        "sourceRefs": [
+          9
+        ]
+      },
+      "bbsNote": {
+        "headline": "SIG loyalties, EasyPlex mail and faster modems",
+        "summary": "Period reporting and advertising show online communities becoming commercial assets as connection speeds increase. All posts below are editorial research notes, not invented BBS messages.",
+        "posts": [
+          {
+            "topic": "SIG Wars",
+            "platform": "CompuServe / Delphi",
+            "text": "September Levitan column revisits May MAUG move and ensuing split into three CompuServe forums; raises ownership and contributor-reward questions. Delphi off-shift 1200-bps rate reported half CompuServe’s."
+          },
+          {
+            "topic": "EasyPlex",
+            "platform": "CompuServe",
+            "text": "September ad offers beginner menus plus expert prompt/command operation for electronic mail; avoid claiming this week’s launch."
+          },
+          {
+            "topic": "Modem standards",
+            "platform": "Hayes-compatible dial-up",
+            "text": "September 8 Times column calls Hayes the de facto standard and describes emerging faster modems; commentary, not a product shipment announcement."
+          }
+        ],
+        "sourceRefs": [
+          3,
+          5,
+          6
+        ]
+      },
+      "curiosity": {
+        "headline": "A fantasy quest where nobody has to die",
+        "summary": "Below the Root offers renewal instead of killing its player characters.",
+        "detail": "Nick Piazza Jr.’s September COMPUTE! review says questers are never killed or destroyed; the renew option returns the character home at the cost of one in-game day. The reviewer highlights suitability for younger children and parents concerned about violence. Five questers include three males and two females; his daughter thought that balance unfair.",
+        "sourceRefs": [
+          2
+        ]
+      },
+      "gadgetWatch": {
+        "headline": "GE HomeMinder puts the house on TV",
+        "summary": "David H. Ahl’s September Creative Computing review tests a freestanding General Electric home-automation controller with seven modules; TV graphics program appliances through existing wiring, touch-tone access permits remote control and short messages. Also offered integrated into a 25-inch television. About $500 with seven or eight modules; review, not verified September launch.",
+        "confidence": "same-month",
+        "sourceRefs": [
+          5
+        ]
+      },
+      "accuracyLedger": {
+        "items": [
+          "Computing articles are September magazine coverage, not invented exact-week launches.",
+          "Amiga prices and availability remain prerelease estimates and forecasts.",
+          "Games chart printed September 5 describes sales circa August 24; movies September 6-8 and rock chart September 7.",
+          "Titanic announcement September 2 is distinct from discovery September 1."
+        ]
+      },
+      "sources": [
+        {
+          "title": "COMPUTE! 64: The Amiga, Tom R. Halfhill",
+          "url": "https://www.atarimagazines.com/compute/issue64/amiga.php",
+          "date": "1985-09"
+        },
+        {
+          "title": "COMPUTE! 64: Rescue on Fractalus! and Ballblazer, Tom R. Halfhill",
+          "url": "https://www.atarimagazines.com/compute/issue64/review_rescue.php",
+          "date": "1985-09"
+        },
+        {
+          "title": "COMPUTE! 64: Below the Root, Nick Piazza Jr.",
+          "url": "https://www.atarimagazines.com/compute/issue64/review_below.php",
+          "date": "1985-09"
+        },
+        {
+          "title": "COMPUTE! 64: SIG Wars, Arlan R. Levitan",
+          "url": "https://www.atarimagazines.com/compute/issue64/telecomputing.php",
+          "date": "1985-09"
+        },
+        {
+          "title": "COMPUTE! 64 p100: Home Control Package",
+          "url": "https://www.atarimagazines.com/compute/issue64/news_home_control.php",
+          "date": "1985-09"
+        },
+        {
+          "title": "Creative Computing 11(9): wireless modems, GE HomeMinder, Cornerstone and advertisements",
+          "url": "https://archive.org/stream/creativecomputing-1985-09/Creative_Computing_v11_n09_1985_Sep_djvu.txt",
+          "date": "1985-09"
+        },
+        {
+          "title": "The New York Times: When Computers Need to Chat, Erik Sandberg-Diment",
+          "url": "https://www.nytimes.com/1985/09/08/business/the-executive-computer-when-computers-need-to-chat.html",
+          "date": "1985-09-08"
+        },
+        {
+          "title": "Billboard Top Rock Tracks archive",
+          "url": "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1985-09-07/",
+          "date": "1985-09-07"
+        },
+        {
+          "title": "Box Office Mojo domestic weekend 36",
+          "url": "https://www.boxofficemojo.com/weekend/1985W36/",
+          "date": "1985-09-06/1985-09-08"
+        },
+        {
+          "title": "Los Angeles Times / Times Wire Services: Wreck of Liner Titanic Found",
+          "url": "https://www.latimes.com/archives/la-xpm-1985-09-03-mn-24236-story.html",
+          "date": "1985-09-03"
+        },
+        {
+          "title": "Popular Computing Weekly September 5 p33: Gallup chart transcription, sales week circa August 24",
+          "url": "https://computerhits.org/archive/popular%20computing%20weekly_1985-09-05_all%20formats/",
+          "date": "1985-09-05"
+        }
+      ]
+    },
+    {
       "currentDate": "2026-11-15",
       "historicDate": "1985-08-26",
       "displayDate": "Week of August 26-September 1, 1985",

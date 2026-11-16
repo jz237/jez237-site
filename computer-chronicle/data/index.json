@@ -2,6 +2,22 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-11-16",
+      "historicDate": "1985-09-02",
+      "displayDate": "Week of September 2-8, 1985",
+      "edition": "Issue 162 - Weekly 1985 Computer & Culture Chronicle",
+      "morningLine": "A new machine gives color and sound room to play; Lucasfilm puts the joystick back in the picture.",
+      "leadHeadline": "Amiga opens a new frontier in color and sound",
+      "storyHeadlines": [
+        "Lucasfilm games escape limbo through Epyx",
+        "SIG wars ask who owns an online community",
+        "Powerhouse promises home control without leaving the computer on"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1985-09-02.jpg",
+      "thumb": "media/thumbs/1985-09-02.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-11-15",
       "historicDate": "1985-08-26",
       "displayDate": "Week of August 26-September 1, 1985",

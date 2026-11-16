@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Sun, 15 Nov 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Mon, 16 Nov 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of September 2-8, 1985 — Amiga opens a new frontier in color and sound</title>
+      <link>https://jez237.com/computer-chronicle/?date=1985-09-02</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1985-09-02</guid>
+      <pubDate>Mon, 16 Nov 2026 12:00:00 GMT</pubDate>
+      <description>Commodore’s 68000 machine brings multitasking and custom graphics into the home-computer debate. A personal computer that can keep several jobs moving while drawing colorful scenes and playing stereo sound is a different proposition from the familiar single-program machine. Tom R. Halfhill’s September COMPUTE! examination of the already unveiled Amiga describes Commodore’s bid to make that proposition practical. It is a report from prerelease sessions, not a new unveiling this week. Also this week: Lucasfilm games escape limbo through Epyx · SIG wars ask who owns an online community · Powerhouse promises home control without leaving the computer on.</description>
+    </item>
     <item>
       <title>Week of August 26-September 1, 1985 — Archon II: Adept makes every spell count</title>
       <link>https://jez237.com/computer-chronicle/?date=1985-08-26</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1985-04-22</guid>
       <pubDate>Wed, 28 Oct 2026 12:00:00 GMT</pubDate>
       <description>Hewson’s unusual rescue game earns a lively reception in this week’s home-computer press. A rescue mission takes a strange and expressive turn on the Commodore screen. Gribbly’s Day Out, from Hewson, sends its hero after young gribblets, mixing movement on land with Psi-powered flight. The review in this week’s Home Computing Weekly treats the result as an inventive departure from routine arcade action. Also this week: Amstrad puts disc storage at the center of its new home micro · Chuckie Egg packaging turns to holograms against copying · Atari’s announced ST machines promise a graphical desktop at home-computer prices.</description>
-    </item>
-    <item>
-      <title>Week of April 15-21, 1985 — Fifty Mission Crush puts the B-17 campaign on home computers</title>
-      <link>https://jez237.com/computer-chronicle/?date=1985-04-15</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1985-04-15</guid>
-      <pubDate>Tue, 27 Oct 2026 12:00:00 GMT</pubDate>
-      <description>SSI trades arcade spectacle for the fortunes of a bomber crew in April’s simulation review. A home-computer flight need not be a test of reflexes. Strategic Simulations’ Fifty Mission Crush makes the player responsible for an Eighth Air Force B-17 and the men aboard it. James V. Trunzo’s April COMPUTE! review finds its pull in a campaign of decisions and consequences rather than lavish graphics. Also this week: Commons passes software-copyright bill at third reading · Atari promises a mouse-and-window computer for $599 · Commodore 128 promises three ways to preserve a software library.</description>
     </item>
   </channel>
 </rss>
