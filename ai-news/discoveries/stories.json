@@ -1,11 +1,26 @@
 {
   "version": 1,
   "title": "AI Discoveries, Explained",
-  "updated": "2026-11-15",
+  "updated": "2026-11-16",
   "coverageStart": "2026-09-21",
-  "coverageEnd": "2026-11-15",
+  "coverageEnd": "2026-11-16",
   "editorialNote": "Source-linked discoveries, research demonstrations, follow-ups and corrections from AI Discovery Watch. Historical milestones posted before the fresh-news brief are not included. Coverage dates are when a story was shared, not necessarily when its discovery occurred. Evidence labels reflect the linked report at that time; read later updates too.",
   "stories": [
+    {
+      "category": "Research in action",
+      "evidenceKind": "demo",
+      "modelNote": "GPT-5.6 Sol in Codex performed the simulated training investigations and real-data analyses; model weights stayed fixed.",
+      "sources": [
+        "https://arxiv.org/abs/2611.17539",
+        "https://arxiv.org/html/2611.17539v1"
+      ],
+      "status": "Early preprint; author-reported analysis of existing measurements, not independently replicated.",
+      "takeaway": "In a November 12 preprint, an AI learned from simulated X-ray puzzles and wrote tools for interpreting real crystal mixtures. It reconstructed a known crystal component missing from its reference library by adapting a related structure, showing how simulated practice can improve scientific investigation. People supplied earlier measurements, scientific software and training rules; the AI did not run physical experiments. This is a research-capability demonstration, not a newly discovered material. Tests covered only 15 measurements, better-fitting patterns do not prove the structures correct, and simply providing more scientific context produced better average fits than the learned strategy.",
+      "title": "AI learns a new search strategy for identifying crystal mixtures",
+      "id": "d-1571907181794824233-ai-learns-to-identify-missing-crystal-component",
+      "coveredOn": "2026-11-16",
+      "context": "🔬 **AI Discovery Watch · November 16, 2026**\n\n**AI learns a new search strategy for identifying crystal mixtures**\nIn a November 12 preprint, an AI learned from simulated X-ray puzzles and wrote tools for interpreting real crystal mixtures. It reconstructed a known crystal component missing from its reference library by adapting a related structure, showing how simulated practice can improve scientific investigation. People supplied earlier measurements, scientific software and training rules; the AI did not run physical experiments. This is a research-capability demonstration, not a newly discovered material. Tests covered only 15 measurements, better-fitting patterns do not prove the structures correct, and simply providing more scientific context produced better average fits than the learned strategy.\n\n**AI used:** GPT-5.6 Sol in Codex performed the simulated training investigations and real-data analyses; model weights stayed fixed.\n**Evidence:** Early preprint; author-reported analysis of existing measurements, not independently replicated.\nOriginal source: <https://arxiv.org/abs/2611.17539>\nSupporting source: <https://arxiv.org/html/2611.17539v1>"
+    },
     {
       "category": "Mathematics",
       "evidenceKind": "early",
