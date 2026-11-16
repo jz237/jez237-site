@@ -4666,5 +4666,30 @@
       "continuity": "An endless saline ocean with no exposed land. A long curved white floe called Hook Raft borders a dark teal opening called Needle Lead; three small rafted ice slabs at its southern tip are Stepstones. Low peach sunlight from upper right, steel-blue shadows, sea-green water; no CO2 ice, dust, volcanoes, vegetation, creatures, cities or machinery.",
       "entryDescription": "Underwater close view of brine pockets and gravity drainage beneath Hook Raft; arrows schematic, dissolved salt not colored naturally."
     }
+  },
+  {
+    "id": "2026-11-16-weekly-world-pelagic-hinge-the-closing-lead",
+    "title": "Pelagic Hinge: The Closing Lead",
+    "tests": "Read NSIDC Science of Sea Ice and NOAA sea-ice-climate 2026-11-16. NSIDC explicitly supports wave-bumped raised pancake rims and wind/current closure of winter leads. Fictional location, chronology and planetary conditions are assumptions, not observations.; archive_slot=2026-11-16T14:20; concept=pelagic-hinge-pancake-ice-narrowing-lead-waterlevel; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; Story beat: 4/7",
+    "prompt": "Create one finished realistic scientific-documentary artist impression, the fifth image (story order 4) in Pelagic Hinge's seven-beat Where the Salt Goes sequence. This is a science-informed speculative ocean planet, NOT an observed exoplanet photograph. Visually advance the story from microscopic brine pockets to an immersive open-water view of a narrowing lead. A low camera about 60 cm above the water, 28 mm environmental lens, looks along a winding dark-teal channel. Foreground dominated by several irregular circular pancake ice disks, thin slushy white centers with raised granular rims from repeated wave-driven collisions; small ripples and wet edges, convincing floating thickness and mostly submerged volume. Disks jostle and crowd into the channel's middle distance, leaving a sinuous liquid passage visibly narrowing into the distance. Show a small wind ruffle on the exposed water; not a frozen solid river, giant storm or dramatic explosion. This is a surface scene, no underwater section, arrows, inset diagrams or brine visualization.\nMaintain exact weekly geography: the long curved white floe Hook Raft borders Needle Lead to the left, curving gently inward toward the distant opening. Three small overlapping rafted slabs, the Stepstones, remain at its southern/near tip on the left midground, identifiable as three discrete thin ledges, not mountains or buildings. Endless saline ocean and floating ice beyond, no exposed land or skyline cliffs. White water ice, steel-blue shadows, sea-green and dark teal liquid water, warm low oblique peach sunlight from upper right, fine surface frost, delicate granular slush, realistic specular reflections and atmospheric depth. Layer near pancake rims, midground curved floe and narrowing water gap, far level icy horizon. Physical natural materials, subtle irregularity, rich detail, no cartoon or stylized painting. Assume Earthlike gravity and saline water near freezing under a nitrogen atmosphere; do not print invented planetary measurements or imply simulation certainty.\nSmall restrained editorial text in sky negative space, world name 'PELAGIC HINGE', subordinate title 'The Closing Lead', and discreet legible footer 'Science-informed speculative world / artist’s impression'. No other text, no logos or watermark. Earth analogue physics: rough-water frazil forms pancakes whose rims are raised by collisions; winds and currents can close winter leads. The depicted geography and timing are invented. No life, people, animals, vegetation, craft, cities, machinery, land, volcanoes, dry CO2 ice, dust jets, glowing brine, visible salt waterfalls, or fantasy physics. Leave the lead still open; complete consolidation belongs to a later story beat. Render the scene itself, not a framed print or book.",
+    "image": "images/2026-11-16-weekly-world-pelagic-hinge-the-closing-lead.jpg",
+    "thumb": "thumbs/2026-11-16-weekly-world-pelagic-hinge-the-closing-lead.webp",
+    "color": "#7f7e7c",
+    "date": "2026-11-16",
+    "batch": "Daily Prompt",
+    "slot": "weekly-world",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1672x941",
+    "dedup": {
+      "conceptKey": "pelagic-hinge-pancake-ice-narrowing-lead-waterlevel",
+      "imageSha256": "1377a24e1932c3f9eaf32d4e048c934bb175d0d1901aca958544708d1d096992",
+      "imageDHash": "001078e182092c9c"
+    },
+    "world": {
+      "name": "Pelagic Hinge",
+      "description": "An explicitly hypothetical ocean exoplanet: freezing seawater separates salt and reorganizes circulation beneath drifting ice.",
+      "continuity": "An endless saline ocean with no exposed land. A long curved white floe called Hook Raft borders a dark teal opening called Needle Lead; three small rafted ice slabs at its southern tip are Stepstones. Low peach sunlight from upper right, steel-blue shadows, sea-green water; no CO2 ice, dust, volcanoes, vegetation, creatures, cities or machinery.",
+      "entryDescription": "Wind compresses the lead: a perspective from the open water reveals wave-rounded pancakes and a narrowing opening."
+    }
   }
 ]
