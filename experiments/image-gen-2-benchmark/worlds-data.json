@@ -4641,5 +4641,30 @@
       "continuity": "An endless saline ocean with no exposed land. A long curved white floe called Hook Raft borders a dark teal opening called Needle Lead; three small rafted ice slabs at its southern tip are Stepstones. Low peach sunlight from upper right, steel-blue shadows, sea-green water; no CO2 ice, dust, volcanoes, vegetation, creatures, cities or machinery.",
       "entryDescription": "Wind converges thin young ice at Stepstones; overlapping sheets thicken the ice edge."
     }
+  },
+  {
+    "id": "2026-11-16-weekly-world-pelagic-hinge-salt-between-crystals",
+    "title": "Pelagic Hinge: Salt Between Crystals",
+    "tests": "NSIDC Science of Sea Ice and NOAA sea-ice-climate read 2026-11-16. Brine pockets, liquid salt-rich droplets and gravity-aided drainage explicitly supported by NSIDC; NOAA independently supports trapped pockets and salt rejection. Microstructure is illustrative, not measured on an exoplanet. Beat 3 examines internal pockets, not the later large-scale ocean descent.; archive_slot=2026-11-16T10:20; concept=hook-raft-brine-pockets-draining-crystal-channels; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; Story beat: 3/7",
+    "prompt": "Create a finished realistic scientific-documentary artist impression of an explicitly hypothetical saline ocean world, PELAGIC HINGE — Salt Between Crystals. Beat 3 of Where the Salt Goes: reveal what lies inside the ice beneath Hook Raft after surface rafting. Main composition is a very close underwater view looking obliquely upward at the translucent underside of the floe; an elegantly integrated scientific cutaway opens one small region of the foreground ice into a magnified crystal-scale study. This is a conceptual change of scale, labeled “Magnified schematic — not to scale”, not a giant cavern in nature. Dominant exquisite ice textures: pale translucent vertical crystal boundaries, small irregular elongated clear liquid pockets in the spaces between crystals, a few connected fine drainage channels leading to the bottom interface. Brine is transparent liquid, not blue dye, orange liquid, luminous veins or waterfalls. Render crystal interfaces with subtle optical refraction and tiny entrained air bubbles, irregular rather than machined geometries. Show a few fine restrained white annotation arrows INSIDE the magnified schematic channels pointing downward toward the ocean; label “Gravity-aided brine drainage”. These graphic arrows are conceptual, not physical objects. An open delicate leader points to a liquid pocket with exact label “Trapped brine: concentrated liquid seawater”. Another reads “Ice crystals exclude most salt”. Small explanatory line “Dissolved salt is not naturally visible”. No large descending ocean plume here: the next beat will explore broader circulation. Show just a subtle clear liquid interface below the channel mouth, no waterfall or jet.\nAbove and behind this near-focus underwater study, a narrow strip of real-scale surface context: recognizable curved white Hook Raft bordering dark teal Needle Lead, and three modest overlapping floating ice slabs called Stepstones at the distant southern tip, never land or rocks. A slim above-water horizon may be shown through a scientifically illustrated split-level view; scale transitions are unmistakably schematic. Ocean is sea-green, steel-blue shaded ice, low peach sunlight from upper right filtering through thin ice. Keep visual richness, translucent layered ice grain, wet surfaces, natural buoyancy and convincing refraction. No deep glacier caves, open void tunnels, unsupported hanging floes, exaggerated icicle forest, giant channels or invented solid salt crystals. Endless saline ocean, no land, no organisms, no vegetation, no cities, no machinery, no CO2 ice, no dust, no volcanoes. Documentary realism with restrained technical overlay, not fantasy or cartoon. No boxed grid, detached cards, printed-chart mockup or frame. Clear visual hierarchy with immense tactile ice detail, breathing room for sparse open annotations. Title “PELAGIC HINGE” and subtitle “Salt Between Crystals”. Footer “Science-informed speculative world / artist’s impression”. Small evidence line “Earth mechanism: sea-ice brine pockets and drainage. Planet and geography: invented.” Do not imply alien observations or measured microstructure. Request openai/gpt-image-2.6-sunburst, medium quality, auto size, opaque background.",
+    "image": "images/2026-11-16-weekly-world-pelagic-hinge-salt-between-crystals.jpg",
+    "thumb": "thumbs/2026-11-16-weekly-world-pelagic-hinge-salt-between-crystals.webp",
+    "color": "#5d7675",
+    "date": "2026-11-16",
+    "batch": "Daily Prompt",
+    "slot": "weekly-world",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1536x1024",
+    "dedup": {
+      "conceptKey": "hook-raft-brine-pockets-draining-crystal-channels",
+      "imageSha256": "db11dfa6a6cab5cb41a71ea092aa9539d205587e3ba737e44b4d697fe8d360de",
+      "imageDHash": "0018664e0a110b0b"
+    },
+    "world": {
+      "name": "Pelagic Hinge",
+      "description": "An explicitly hypothetical ocean exoplanet: freezing seawater separates salt and reorganizes circulation beneath drifting ice.",
+      "continuity": "An endless saline ocean with no exposed land. A long curved white floe called Hook Raft borders a dark teal opening called Needle Lead; three small rafted ice slabs at its southern tip are Stepstones. Low peach sunlight from upper right, steel-blue shadows, sea-green water; no CO2 ice, dust, volcanoes, vegetation, creatures, cities or machinery.",
+      "entryDescription": "Underwater close view of brine pockets and gravity drainage beneath Hook Raft; arrows schematic, dissolved salt not colored naturally."
+    }
   }
 ]
