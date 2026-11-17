@@ -33318,5 +33318,93 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-11-17-factual-infographic-factual-infographic-how-the-hercules-be",
+    "title": "Factual infographic: How the Hercules Beetle Uses Its Horns",
+    "tests": "; archive_slot=2026-11-17T12:20; concept=hercules-beetle-horn-contest-forest; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: bizarre-insect-life",
+    "prompt": "Create a richly detailed flowing unboxed natural history atlas of the Hercules beetle Dynastes hercules. Dominant naturalistic whole male macro hero, olive spotted elytra and black head and thoracic horns, six legs, in rainforest setting. Prominent separate labeled generalized insect internal schematic, not a species dissection, showing gut, heart, nerve cord, spiracle and trachea. Integrate at least three large close-up biological studies: paired male horns, dark hornless female, and larva in decaying wood. Show a concise flowing sequence of males squeezing and lifting rivals with horns in contests for access to females; show separate egg, larva, pupa, adult stages, and adult on fallen rotting fruit. Include a modest rainforest habitat and scale context, source-backed identification and precise legible labels. Connect studies with curved leaders and organic visual pathways; no boxed panels, frame, prop, bibliography, invented anatomy or unsupported measurements. Naturalistic macro textures and richly shaded scientific illustration, with breathable asymmetrical composition.",
+    "image": "images/2026-11-17-factual-infographic-factual-infographic-how-the-hercules-be.jpg",
+    "thumb": "thumbs/2026-11-17-factual-infographic-factual-infographic-how-the-hercules-be.webp",
+    "color": "#b2a386",
+    "date": "2026-11-17",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "hercules-beetle-horn-contest-forest",
+      "imageSha256": "62e2ed28f998ce06ea40be22ca7b1634fd653ed40d89041d97bf2835e7e373f9",
+      "imageDHash": "f9f18c0c4ea6cedf"
+    },
+    "factualInfographic": {
+      "topic": "How the Hercules beetle Dynastes hercules uses horns in male contests and develops in decaying wood",
+      "description": "How the Hercules beetle Dynastes hercules uses horns in male contests and develops in decaying wood",
+      "sourceNote": "University of Florida IFAS https://ask.ifas.ufl.edu/publication/IN1142/pdf; University of South Florida https://etc.usf.edu/clipart/47900/47972/47972_insect_secti.htm. Species biology and generalized internal anatomy.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-17T17:21:24.409443+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "University of Florida IFAS",
+            "title": "Hercules Beetle Dynastes hercules",
+            "sourceType": "university",
+            "url": "https://ask.ifas.ufl.edu/publication/IN1142/pdf"
+          },
+          {
+            "id": "S2",
+            "publisher": "University of South Florida",
+            "title": "Insect Section",
+            "sourceType": "university",
+            "url": "https://etc.usf.edu/clipart/47900/47972/47972_insect_secti.htm"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Dynastes hercules is a scarab beetle; males bear head and thoracic horns, females lack horns.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Male horns squeeze and lift rivals in contests for access to females.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Male elytra can be olive with dark spots; females are usually black.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Larvae feed on dead wood in decaying logs; adults generally feed on fallen rotting fruit.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "The species undergoes complete metamorphosis: egg, larva, pupa, adult.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Its range includes southern Mexico to Bolivia and the Lesser Antilles, including rainforest.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Generalized insect section includes heart, gut, nerve cord, spiracle and trachea.",
+            "sourceIds": [
+              "S2"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
