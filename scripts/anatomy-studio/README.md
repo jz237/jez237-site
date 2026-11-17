@@ -14,6 +14,7 @@ node stamp.mjs                       # content-hash every ?v= (imports, CSS, JSO
 node stamp.mjs --check               # exit 1 if any stamp is stale (also run by .github/workflows/anatomy-studio-stamps.yml)
 node preview.mjs                     # 1100x579 preview JPEG for the demos catalog (needs the site served on :8791)
 node verify.mjs                      # Playwright checks against STUDIO_URL (default http://127.0.0.1:8791/demos/anatomy-studio/)
+node verify-life.mjs                 # the living body and loading, as a separate run: either file can fail on its own
 ```
 
 `blender-inspect.py` dumps one CSV per FBX (name, suffix kind, parent chain, triangles, bounds). Read it before changing
@@ -46,6 +47,10 @@ have the same triangle count (skeleton, heart) gets no `assets/hi` file and no `
 `stamp.mjs` hashes text with LF line endings, so Windows and Linux checkouts produce the same stamps. Each module's hash
 covers its text after its own imports were stamped, so a change in a leaf module ripples up to `studio.js` and `index.html`,
 and every importer uses the same URL for a module (two different `?v=` values would load it twice).
+
+`verify-life.mjs` steps the motion by hand, so its checks do not depend on the frame rate: breathing, the heartbeat held at each
+phase with the valves in the right position, pace, sway, head and neck, eyes and blinking, swallowing, the monitor, blood flow,
+exact restoration on exploding, and lean loading. Under software WebGL the two files together take about twenty minutes.
 
 `verify.mjs` runs headless Chromium with SwiftShader (`--use-angle=swiftshader --enable-unsafe-swiftshader`) and
 `?quality=verify` (no shadows/AA) and checks piece counts per stage, rendered triangle count, explosion with intermediate

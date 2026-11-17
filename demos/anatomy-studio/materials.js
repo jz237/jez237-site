@@ -80,12 +80,21 @@ export function skinTint(geometry, world) {
   geometry.setAttribute('color', new THREE.BufferAttribute(col, 3));
 }
 /**
- * Shared values for motion done in vertex shaders, driven by life.js: the clock and strength of the gut's ripple, and
- * the breathing of the skin. `breath` is 0..1 (already eased out when the body separates); `trunk` and `spine` are the
- * landmarks of the chest-wall field (ribsBottom, ribsTop, pelvis, dome | spineZ, sternumZ) and `chest` its amplitudes
- * (side, lift, front, belly). The field itself is written twice, here in GLSL and in life.js in JavaScript: keep them alike.
+ * Shared values for motion done in vertex shaders, all driven by life.js.
+ *   time, gain          clock and strength of the gut's ripple
+ *   breath              0..1 (and beyond in deep breathing), already eased out when the body separates
+ *   trunk, spine, chest landmarks (ribsBottom, ribsTop, pelvis, dome | spineZ, sternumZ) and amplitudes
+ *                       (side, lift, front, belly) of the chest-wall field
+ *   lung                (lungTop, diaphragm drop) for the pieces that go down with the diaphragm
+ *   bodyInverse         takes world space back to the body's own frame (the whole body sways as a group)
+ *   headTurn, neckPivot, neckRange   the small turn of the head: a rotation vector, about a point in the neck,
+ *                       fading in between the base of the neck and the base of the skull
+ *   blink, eyes         0..1 and the two eyeball centres: the upper lids come down over them
+ * The fields are written twice, here in GLSL and in life.js in JavaScript: keep them alike.
  */
-export const lifeUniforms = {time: {value: 0}, gain: {value: 0}, breath: {value: 0}, trunk: {value: new THREE.Vector4(1.1, 1.41, .95, 1.18)}, spine: {value: new THREE.Vector2(-.083, .074)}, chest: {value: new THREE.Vector4(.012, .004, .036, .007)}};
+export const lifeUniforms = {time: {value: 0}, gain: {value: 0}, breath: {value: 0}, trunk: {value: new THREE.Vector4(1.1, 1.41, .95, 1.18)}, spine: {value: new THREE.Vector2(-.083, .074)}, chest: {value: new THREE.Vector4(.012, .004, .036, .007)},
+  lung: {value: new THREE.Vector2(1.43, .016)}, bodyInverse: {value: new THREE.Matrix4()}, headTurn: {value: new THREE.Vector3()}, neckPivot: {value: new THREE.Vector3(0, 1.484, -.043)}, neckRange: {value: new THREE.Vector2(1.438, 1.53)},
+  blink: {value: 0}, eyes: {value: [new THREE.Vector3(.03, 1.581, .047), new THREE.Vector3(-.03, 1.581, .047)]}};
 /** Run another shader edit after whatever the material already does, and keep the program cache key distinct. */
 function alsoCompile(mat, tag, edit) {
   const before = mat.onBeforeCompile, key = Object.hasOwn(mat, 'customProgramCacheKey') ? mat.customProgramCacheKey() : 'plain';
@@ -93,33 +102,52 @@ function alsoCompile(mat, tag, edit) {
   mat.customProgramCacheKey = () => `${key}|${tag}`;
 }
 /**
- * The soft layers of the body wall: skin, muscle and fascia, the vessels, nerves, ligaments and lymph nodes
- * threaded through them. They lie on each other with no gap, so they must all move by exactly the same rule or one
- * shows through the next. (The diaphragm, spleen and thymus are organs: they go down with the diaphragm instead.)
+ * Which pieces are deformed per vertex, and how. They carry a vertex attribute, lifeLayer, that the shader reads:
+ *   WALL  the soft layers of the body wall: skin, muscle and fascia, and the vessels, nerves, ligaments and lymph
+ *         nodes threaded through them. They lie on each other with no gap, so they must all move by exactly the
+ *         same rule or one shows through the next;
+ *   SOFT  lungs, pleura and bronchi: carried by the wall and drawn down by the diaphragm, each vertex by its own
+ *         amount, so a lung lengthens from a fixed apex instead of stretching as a block.
+ * Everything else (bone, heart, solid organs, the diaphragm itself) is moved as a whole piece by life.js.
+ * Because it is an attribute of the geometry, any material drawing that geometry can follow the motion: the piece's
+ * own material, the shadow pass, the ambient-occlusion pass, the selection outline and the cross-section's caps.
  */
+export const WALL = 128, SOFT = 255;
 const WALL_FILES = new Set(['regions', 'muscular', 'vessels', 'nerves', 'joints', 'lymphoid']);
-export const ridesWall = piece => WALL_FILES.has(piece.file) && !/^Diaphragm$|spleen|thymus/i.test(piece.name);
-/**
- * The body wall breathes per vertex. Its layers are panels and sheets that meet edge to edge and face to face;
- * moving each as a block opens cracks between panels and pushes muscle through fascia. So every vertex follows the
- * chest-wall field at its own position in the body instead.
- */
-export function breathe(mat) {
-  alsoCompile(mat, 'breathe', shader => {
-    Object.assign(shader.uniforms, {uBreath: lifeUniforms.breath, uTrunk: lifeUniforms.trunk, uSpine: lifeUniforms.spine, uChest: lifeUniforms.chest});
+export const layerOf = piece => WALL_FILES.has(piece.file) ? (/^Diaphragm$|spleen|thymus/i.test(piece.name) ? 0 : WALL) : piece.file === 'visceral' && /lung|pleura|bronch/i.test(piece.name) ? SOFT : 0;
+export function tagLayer(geometry, layer) { if (layer && !geometry.attributes.lifeLayer) geometry.setAttribute('lifeLayer', new THREE.BufferAttribute(new Uint8Array(geometry.attributes.position.count).fill(layer), 1, true)); }
+/** Make a material follow the living body. Geometry without the lifeLayer attribute reads 0 and is left alone. */
+export function enliven(mat) {
+  alsoCompile(mat, 'alive', shader => {
+    Object.assign(shader.uniforms, {uBreath: lifeUniforms.breath, uTrunk: lifeUniforms.trunk, uSpine: lifeUniforms.spine, uChest: lifeUniforms.chest, uLung: lifeUniforms.lung, uBodyInverse: lifeUniforms.bodyInverse,
+      uHeadTurn: lifeUniforms.headTurn, uNeckPivot: lifeUniforms.neckPivot, uNeckRange: lifeUniforms.neckRange, uBlink: lifeUniforms.blink, uEyes: lifeUniforms.eyes});
     shader.vertexShader = shader.vertexShader.replace('#include <common>', `#include <common>
-uniform float uBreath; uniform vec4 uTrunk; uniform vec2 uSpine; uniform vec4 uChest;
+attribute float lifeLayer;
+uniform float uBreath; uniform vec4 uTrunk; uniform vec2 uSpine; uniform vec4 uChest; uniform vec2 uLung; uniform mat4 uBodyInverse;
+uniform vec3 uHeadTurn; uniform vec3 uNeckPivot; uniform vec2 uNeckRange; uniform float uBlink; uniform vec3 uEyes[ 2 ];
 float lifeStep( float a, float b, float x ) { float t = clamp( ( x - a ) / ( b - a ), 0.0, 1.0 ); return t * t * ( 3.0 - 2.0 * t ); }
-vec3 chestWall( vec3 p ) {
+vec3 lifeField( vec3 p, float soft ) {
 	float side = 1.0 - lifeStep( 0.19, 0.27, abs( p.x ) );
 	float chest = lifeStep( uTrunk.x - 0.06, uTrunk.x + 0.07, p.y ) * ( 1.0 - lifeStep( uTrunk.y - 0.01, uTrunk.y + 0.07, p.y ) ) * side;
 	float belly = lifeStep( uTrunk.z - 0.02, uTrunk.z + 0.09, p.y ) * ( 1.0 - lifeStep( uTrunk.w - 0.05, uTrunk.w + 0.03, p.y ) ) * side;
 	float f = lifeStep( uSpine.x, uSpine.y, p.z );
-	return vec3( p.x * uChest.x * chest, uChest.y * f * chest, max( 0.0, p.z - uSpine.x ) * uChest.z * chest + uChest.w * f * f * belly );
+	vec3 d = vec3( p.x * uChest.x * chest, uChest.y * f * chest, max( 0.0, p.z - uSpine.x ) * uChest.z * chest + uChest.w * f * f * belly );
+	if ( soft > 0.5 ) d.y = - uLung.y * side * ( p.y >= uTrunk.w ? lifeStep( uLung.x, uTrunk.w, p.y ) : 1.0 - lifeStep( uTrunk.w, uTrunk.z, p.y ) );
+	d *= uBreath;
+	d += cross( uHeadTurn, p - uNeckPivot ) * lifeStep( uNeckRange.x, uNeckRange.y, p.y );
+	if ( uBlink > 0.0 ) for ( int i = 0; i < 2; i ++ ) {
+		vec3 q = p - uEyes[ i ];
+		float lid = ( 1.0 - lifeStep( 0.010, 0.017, abs( q.x ) ) ) * lifeStep( 0.003, 0.008, q.z ) * lifeStep( - 0.002, 0.002, q.y ) * ( 1.0 - lifeStep( 0.003, 0.013, q.y ) );
+		d.y -= uBlink * 0.009 * lid; d.z += uBlink * 0.0012 * lid;
+	}
+	return d;
 }`).replace('#include <begin_vertex>', `#include <begin_vertex>
-	if ( uBreath > 0.0 ) { mat3 lifeModel = mat3( modelMatrix ); transformed += transpose( lifeModel ) * chestWall( ( modelMatrix * vec4( transformed, 1.0 ) ).xyz ) * ( uBreath / dot( lifeModel[ 0 ], lifeModel[ 0 ] ) ); }`);
+	if ( lifeLayer > 0.25 ) { mat4 lifeBody = uBodyInverse * modelMatrix; mat3 lifeTurn = mat3( lifeBody ); transformed += transpose( lifeTurn ) * lifeField( ( lifeBody * vec4( transformed, 1.0 ) ).xyz, step( 0.75, lifeLayer ) ) / dot( lifeTurn[ 0 ], lifeTurn[ 0 ] ); }`);
   });
 }
+/** Shadows are drawn with this instead of the stock depth material for pieces that deform, so the shadow moves with them. */
+export const lifeDepthMaterial = new THREE.MeshDepthMaterial({depthPacking: THREE.RGBADepthPacking});
+enliven(lifeDepthMaterial);
 export const fileColors = {skeletal: '#f0e6c8', joints: '#d8d1c0', visceral: '#f2a8b8', heart: '#ff6b7a', brain: '#f5c0c8', muscular: '#e07a7a', vessels: '#7f8fe6', nerves: '#f5e08a', lymphoid: '#9fd98a', regions: '#e6c9a8'};
 export const fileLabels = {skeletal: 'Skeleton', joints: 'Ligaments & discs', visceral: 'Viscera', heart: 'Heart', brain: 'Brain & senses', muscular: 'Muscles', vessels: 'Arteries & veins', nerves: 'Nerves & cord', lymphoid: 'Lymphatics', regions: 'Surface regions'};
 
@@ -199,6 +227,9 @@ function realistic(p) {
   return {color: '#cfc6bb', roughness: .6};
 }
 
+// How strongly each system glows as X-ray glass. The wrappings (muscle, skin, ligaments) are kept faint so the organs,
+// vessels and nerves inside them read; all stay under .5 so a click passes through to what it is aimed at.
+const GLASS = {muscular: .13, regions: .17, joints: .2, lymphoid: .34, nerves: .38, vessels: .44, visceral: .47, brain: .47, heart: .49};
 export const modes = ['skin', 'realistic', 'organs', 'coded', 'xray', 'clay'];   // organs: realistic with the bones, viscera, heart, brain, lymphoid organs, vessels, nerves and the face's skin shown
 export const ORGAN_FILES = new Set(['skeletal', 'visceral', 'heart', 'brain', 'lymphoid', 'vessels', 'nerves']);
 // Bones, organs, vessels, nerves and cord, plus the skin of the face; the greater omentum is lifted away so the bowel behind it shows, and the penis counts as skin.
@@ -211,7 +242,7 @@ export function finishMaterial(mesh, part, mode = 'realistic') {
   if (mode === 'realistic') spec = r;
   else if (mode === 'skin' || mode === 'organs') spec = part.file === 'regions' ? skinSpec(part) : r;
   else if (mode === 'coded') spec = {color: base, roughness: .5, clearcoat: .3, opacity: r.transparent ? Math.max(r.opacity, .4) : 1, transparent: !!r.transparent, depthWrite: r.depthWrite};
-  else if (mode === 'xray') spec = part.file === 'skeletal' ? {color: '#eef3f7', roughness: .25, clearcoat: .5, opacity: .92, transparent: false, depthWrite: true} : {color: base, roughness: .25, opacity: .45, transparent: true, depthWrite: false, glass: true};
+  else if (mode === 'xray') spec = part.file === 'skeletal' ? {color: '#eef3f7', roughness: .25, clearcoat: .5, opacity: .92, transparent: false, depthWrite: true} : {color: base, roughness: .25, opacity: GLASS[part.file] ?? .4, transparent: true, depthWrite: false, glass: true};
   else spec = {color: '#cfc6bb', roughness: .85, clearcoat: 0, opacity: r.transparent ? .5 : 1, transparent: !!r.transparent, depthWrite: r.depthWrite};
   if (spec.planarUV && !mesh.geometry.attributes.uv) { planarCenteredUV(mesh); if (mesh.userData) mesh.userData.uvCell = 0; }
   if ((spec.bump || spec.roughMap) && !mesh.geometry.attributes.uv) { const cell = spec.striated ? .045 : .06; const world = part.file === 'regions' && !/hair/i.test(part.name) ? { scale: mesh.scale?.x || 1, offset: mesh.position ? mesh.position.toArray() : [0, 0, 0] } : null; projectedUV(mesh, cell, world); if (mesh.userData) { mesh.userData.uvCell = cell; mesh.userData.uvWorld = world; } }
@@ -245,12 +276,16 @@ export function finishMaterial(mesh, part, mode = 'realistic') {
     const size = g.boundingBox.getSize(new THREE.Vector3()), axis = size.x >= size.y && size.x >= size.z ? 0 : size.y >= size.z ? 1 : 2, scale = mesh.scale?.x || 1;
     const wave = new THREE.Vector4(0, 0, 0, r.gut / scale); wave.setComponent(axis, Math.PI * 2 / (.07 / scale));   // 7 cm between crests, amplitude in the mesh's own units
     alsoCompile(mat, 'gut', shader => {
-      shader.uniforms.uLifeTime = lifeUniforms.time; shader.uniforms.uLifeGain = lifeUniforms.gain; shader.uniforms.uGutWave = {value: wave};
-      shader.vertexShader = shader.vertexShader.replace('#include <common>', '#include <common>\nuniform float uLifeTime; uniform float uLifeGain; uniform vec4 uGutWave;')
-        .replace('#include <begin_vertex>', '#include <begin_vertex>\n\tfloat gutPhase = dot( position, uGutWave.xyz ) - uLifeTime * 1.7;\n\ttransformed += normalize( objectNormal ) * uGutWave.w * uLifeGain * ( sin( gutPhase ) * 0.65 + sin( gutPhase * 2.3 + 1.7 ) * 0.35 );');
+      // gutPath (effects.js, tubePath) is each vertex's distance along the tube in metres; until it has been worked out, or on a
+      // mesh without it, the wave falls back to crossing the piece along its longest side
+      const path = mesh.userData.gutPath || (mesh.userData.gutPath = {value: mesh.geometry.attributes.gutPath ? 1 : 0});
+      shader.uniforms.uLifeTime = lifeUniforms.time; shader.uniforms.uLifeGain = lifeUniforms.gain; shader.uniforms.uGutWave = {value: wave}; shader.uniforms.uGutPath = path;
+      shader.vertexShader = shader.vertexShader.replace('#include <common>', '#include <common>\nattribute float gutPath; uniform float uGutPath; uniform float uLifeTime; uniform float uLifeGain; uniform vec4 uGutWave;')
+        .replace('#include <begin_vertex>', '#include <begin_vertex>\n\tfloat gutPhase = mix( dot( position, uGutWave.xyz ), gutPath * 89.76, uGutPath ) - uLifeTime * 1.7;\n\ttransformed += normalize( objectNormal ) * uGutWave.w * uLifeGain * ( sin( gutPhase ) * 0.65 + sin( gutPhase * 2.3 + 1.7 ) * 0.35 );');
     });
   }
-  if (ridesWall(part)) breathe(mat);
+  const layer = layerOf(part); if (mesh.userData) mesh.userData.lifeLayer = layer;
+  if (layer) { tagLayer(mesh.geometry, layer); enliven(mat); mesh.customDepthMaterial = lifeDepthMaterial; }
   if (spec.emissive) { mat.emissive.set(spec.emissive); mat.emissiveIntensity = spec.emissiveIntensity ?? .3; }
   mesh.material = mat; return mat;
 }

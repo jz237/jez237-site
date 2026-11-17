@@ -15,6 +15,7 @@
  * Opaque pieces are also drawn double-sided while a section is active, so anything left uncapped shows its inner wall.
  */
 import * as THREE from 'three';
+import { enliven } from './materials.js?v=fd0627ad9b';
 
 // Frame: metres, y up, +z anterior, +x subject's left.
 const NORMALS = { sagittal: [1, 0, 0], coronal: [0, 0, 1], transverse: [0, 1, 0] };
@@ -80,6 +81,7 @@ export function createSection({ materials, bounds, onChange, scene }) {
   });
   const backMaterial = stencilMaterial(THREE.BackSide, THREE.IncrementWrapStencilOp);
   const frontMaterial = stencilMaterial(THREE.FrontSide, THREE.DecrementWrapStencilOp);
+  enliven(backMaterial); enliven(frontMaterial);   // count the faces where the living piece actually is
   function capMaterial(hex, file) {
     const kind = patterns[file] ? file : 'other', key = `${hex}-${kind}`;
     let m = capMaterials.get(key);

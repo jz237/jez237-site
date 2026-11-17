@@ -16,6 +16,7 @@ assert.ok(manifest.stats.triangles <= 5.2e6, `triangles ${manifest.stats.triangl
 for (const f of manifest.files) { const s = await stat(path.join(DEMO, f.path)); assert.equal(s.size, f.bytes, `${f.id} bytes drifted from manifest`); assert.ok(s.size < MAX, `${f.id} exceeds the 25 MiB Cloudflare Pages limit`); }
 for (const f of manifest.files.filter(f => f.hi)) { const s = await stat(path.join(DEMO, f.hi.path)); assert.equal(s.size, f.hi.bytes, `${f.id} hi bytes drifted`); assert.ok(s.size < MAX, `hi/${f.id} exceeds 25 MiB`); }
 assert.ok(manifest.stats.hiTriangles > manifest.stats.triangles * 1.5, 'full tier carries more detail');
+for (const name of ['Liver', 'Stomach', 'Spleen', 'Kidney']) assert.equal(manifest.pieces.find(p => p.name === name).region, 'abdomen', `${name} is filed under the abdomen`);
 const ids = new Set(manifest.pieces.map(p => p.id)); assert.equal(ids.size, manifest.pieces.length, 'piece ids must be unique');
 const direct = Object.entries(manifest.stats.descriptionRules).filter(([r]) => !['parent', 'path', 'none'].includes(r)).reduce((a, [, n]) => a + n, 0);
 assert.ok(direct / manifest.pieces.length >= .85, `direct description coverage ${(direct / manifest.pieces.length * 100).toFixed(1)}%`);
@@ -90,6 +91,8 @@ try {
  await page.locator('#search').fill('sartorius'); await page.locator('#results button').first().click(); await page.waitForFunction(() => (window.anatomyStudio.getState().selected || '').startsWith('Sartorius'), null, {timeout: 60000});
  await page.waitForFunction(() => document.querySelectorAll('#part-facts dt').length >= 1, null, {timeout: 30000}); await page.waitForFunction(() => /piece=muscular\/sartorius/.test(location.search), null, {timeout: 10000});
  await page.locator('#hide').click(); s = await read(); assert.equal(s.hidden, 1); assert.equal(s.selected, null); await page.locator('#show-hidden').click(); assert.equal((await read()).hidden, 0); await page.locator('#search').fill('');
+ await page.locator('[data-layer="vessels"]').uncheck(); s = await read(); assert.deepEqual(s.off, ['vessels']); assert.equal(s.visible, (await page.evaluate(() => window.anatomyStudio.getParts().filter(p => p.file !== 'vessels' && p.visible).length))); assert.ok(s.visible < BODY, 'an unchecked system is hidden');
+ await page.waitForFunction(() => /hide=vessels/.test(location.search), null, {timeout: 10000}); await page.locator('[data-layer="vessels"]').check(); await page.waitForFunction(() => window.anatomyStudio.getState().off.length === 0);
  await page.locator('#section-axis').selectOption('sagittal'); assert.equal((await read()).section.axis, 'sagittal'); await page.locator('#section-flip').click(); assert.equal((await read()).section.flip, true); await page.locator('#section-axis').selectOption('off'); assert.equal((await read()).section.axis, 'off');
  await page.locator('#quiz-start').click(); s = await read(); assert.ok(s.quiz.active && s.quiz.target, 'quiz asks for a piece'); await page.locator('#quiz-skip').click(); assert.ok((await read()).quiz.locked, 'Show me reveals the answer'); await page.locator('#quiz-start').click(); assert.equal((await read()).quiz.active, false);
  await page.locator('#tour-body').click(); await page.waitForFunction(() => window.anatomyStudio.getState().tour.active); await page.locator('#tour-next').click(); await page.waitForFunction(() => window.anatomyStudio.getState().system === 'skeletal', null, {timeout: 30000});
@@ -122,29 +125,6 @@ try {
  // reduced motion still animates a deliberate explosion
  const reduced = await browser.newPage({viewport: {width: 1024, height: 800}, reducedMotion: 'reduce'}); reduced.on('pageerror', e => errors.push(e.message)); await reduced.goto(`${url}?quality=verify&stage=core`); await ready(reduced);
  await reduced.locator('#explode-button').click(); await reduced.waitForFunction(() => window.anatomyStudio.getState().amount > 0, null, {timeout: 30000}); await settled(1, reduced); assert.ok(await reduced.evaluate(() => window.anatomyStudio.getParts().every(p => Math.hypot(...p.position.map((v, i) => v - p.base[i])) > .01)), 'reduced motion explosion still separates every piece');
- // the assembled body is alive: the heart beats, the chest breathes, bone keeps its size, the limbs stay still, and exploding stops it all exactly
- const alive = await browser.newPage({viewport: {width: 1024, height: 800}}); alive.on('pageerror', e => errors.push(e.message)); await alive.goto(`${url}?quality=verify&stage=core&life=1`); await ready(alive);
- const motion = await alive.evaluate(() => { const A = window.anatomyStudio, ids = {lv: 'heart/left-ventricle', lung: 'visceral/inferior-lobe-of-left-lung', rib: 'skeletal/seventh-rib-l', sternum: 'skeletal/body-of-sternum', spine: 'skeletal/vertebra-t6', femur: 'skeletal/femur-l'};
-  const at = Object.fromEntries(Object.entries(ids).map(([k, id]) => [k, A.getParts().findIndex(p => p.id === id)])), r = Object.fromEntries(Object.keys(ids).map(k => [k, {scale: [9, -9], move: 0}]));
-  for (let i = 0; i < 100; i++) { A._advance(.1); const ps = A.getParts(); for (const k in ids) { const p = ps[at[k]], s = (p.scale[0] + p.scale[1] + p.scale[2]) / 3; r[k].scale = [Math.min(r[k].scale[0], s), Math.max(r[k].scale[1], s)]; r[k].move = Math.max(r[k].move, Math.hypot(...p.position.map((v, j) => v - p.base[j]))); } }
-  return {r, life: A.getState().life}; });
- assert.ok(motion.life.on && motion.life.weight === 1 && motion.life.animated > 150, 'the assembled body is animated');   // about 240 pieces of the core systems; over 1,000 with everything loaded
- assert.ok(motion.r.lv.scale[0] < .95 && motion.r.lv.scale[1] > .999, `the ventricle contracts and relaxes (${motion.r.lv.scale})`);
- assert.ok(motion.r.lung.scale[1] > 1.01 && motion.r.lung.move > .005, 'the lung fills and descends'); assert.ok(motion.r.sternum.move > .003, 'the sternum swings forward');
- for (const k of ['rib', 'sternum', 'spine', 'femur']) assert.ok(motion.r[k].scale[0] > .9999 && motion.r[k].scale[1] < 1.0001, `bone keeps its size (${k})`);
- assert.ok(motion.r.rib.move > .0008 && motion.r.femur.move === 0 && motion.r.spine.move < .0005, 'ribs swing, the spine and limbs stay still');
- // the rest of the body: it sways about the ankles, the eyes move, and a swallow lifts the hyoid
- const stance = await alive.evaluate(() => { const A = window.anatomyStudio, i = A.getParts().findIndex(p => p.id === 'skeletal/hyoid-bone'), j = A.getParts().findIndex(p => p.id === 'brain/iris-l'); let sway = 0, lo = 9, hi = -9, rise = 0, eye = 0; A.swallow();
-  for (let k = 0; k < 300; k++) { A._advance(.05); const s = A.getState().life, ps = A.getParts(); sway = Math.max(sway, Math.abs(s.sway[0])); lo = Math.min(lo, s.gaze[0]); hi = Math.max(hi, s.gaze[0]); rise = Math.max(rise, ps[i].position[1] - ps[i].base[1]); eye = Math.max(eye, ps[j].turned); }
-  return {sway, gaze: hi - lo, rise, eye}; });
- assert.ok(stance.sway > .03 && stance.sway < .4, `the body sways a fraction of a degree (${stance.sway})`); assert.ok(stance.gaze > .01 && stance.eye > .005, 'the eyes move'); assert.ok(stance.rise > .012 && stance.rise < .03, `a swallow lifts the hyoid (${stance.rise})`);
- await alive.evaluate(() => { window.anatomyStudio.setAmount(1); window.anatomyStudio._advance(5); });
- assert.deepEqual(await alive.evaluate(() => { const A = window.anatomyStudio; return [A.getState().life.weight, A.getParts().filter(p => p.scale.some(v => v !== 1)).length, A.getParts().filter(p => p.turned > 1e-6).length, ...A.getState().life.sway.map(Math.abs)]; }), [0, 0, 0, 0, 0], 'exploding stops the motion and restores every size and angle');
- await alive.close();
- // a desktop link that opens in Organs & vessels loads what that finish shows and keeps the muscles back until a view needs them
- const lean = await browser.newPage({viewport: {width: 1280, height: 860}}); lean.on('pageerror', e => errors.push(e.message)); await lean.goto(`${url}?quality=verify&mode=organs`); await ready(lean);
- await lean.waitForFunction(() => { const x = window.anatomyStudio.getState(); return !x.loading && x.files.length === 9; }, null, {timeout: 240000}); assert.ok(!(await lean.evaluate(() => window.anatomyStudio.getState().files)).includes('muscular'), 'muscles wait');
- await lean.locator('[data-mode="realistic"]').click(); await full(lean); assert.equal((await lean.evaluate(() => window.anatomyStudio.getState().pieces)), manifest.pieces.length, 'a finish that shows muscles fetches them'); await lean.close();
  assert.deepEqual(errors, []);
- console.log(`PASS: ${url} — ${manifest.pieces.length} pieces across ${manifest.files.length} files, explosion, exact reassembly, ${Object.keys(manifest.assemblies).length} nested studies (${Object.entries(manifest.assemblies).map(([k, v]) => `${k} ${v.length}`).join(', ')}), filters, search, isolate, finishes, labels, sequence, keyboard, non-overlapping board at three viewports, mobile, deep links, manual, reduced motion. Screenshots: ${shots}`);
+ console.log(`PASS: ${url} — ${manifest.pieces.length} pieces across ${manifest.files.length} files, explosion, exact reassembly, ${Object.keys(manifest.assemblies).length} nested studies (${Object.entries(manifest.assemblies).map(([k, v]) => `${k} ${v.length}`).join(', ')}), filters, system checkboxes, search, isolate, finishes, labels, sequence, keyboard, non-overlapping board at three viewports, mobile, deep links, manual, reduced motion. Screenshots: ${shots}`);
 } finally { await browser.close(); }

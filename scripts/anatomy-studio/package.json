@@ -6,7 +6,9 @@
     "fetch": "bash fetch-models.sh",
     "prepare-assets": "node prepare.mjs",
     "check": "node check-assemblies.mjs",
-    "verify": "node verify.mjs",
+    "verify": "node verify.mjs && node verify-life.mjs",
+    "verify:core": "node verify.mjs",
+    "verify:life": "node verify-life.mjs",
     "stamp": "node stamp.mjs",
     "stamp:check": "node stamp.mjs --check"
   },

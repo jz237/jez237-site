@@ -102,3 +102,13 @@ h1 em{color:#c9a99c}.hero .eyebrow{color:var(--mint)}
 .gesture-hint{max-width:calc(100% - 44px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 /* five toggles: let them wrap */
 .toggle-row{flex-wrap:wrap}.toggle-row button{flex:1 1 30%}
+
+/* ---- systems checkboxes, vitals panel and the monitor on the stage */
+.field-label,.section-row label{display:block;margin-bottom:6px}
+.layers{display:grid;grid-template-columns:1fr 1fr;gap:5px 10px}.layers label{display:flex;align-items:center;gap:6px;margin:0;font-size:11px;color:var(--text);cursor:pointer}.layers input{accent-color:var(--mint);width:14px;height:14px;margin:0}
+.vitals output,.vitals label b{float:right;font:500 11px 'DM Sans',sans-serif;letter-spacing:0;line-height:inherit;color:var(--mint)}.vitals input[type=range]{width:100%}.vitals .mode-row{margin-top:10px}.vitals .toggle-row{margin-top:14px}
+.beat .stage-note{min-height:3.2em;margin:8px 0 0}
+.vitals-hud{position:absolute;right:22px;bottom:214px;z-index:2;padding:6px 6px 2px;border:1px solid #6b4a40;border-radius:7px;background:#120d0bd9;backdrop-filter:blur(8px);pointer-events:none}
+.vitals-hud canvas{display:block;width:264px;height:96px}
+.board-mode .vitals-hud{display:none}
+@media(max-width:760px){.vitals-hud{right:10px;bottom:auto;top:176px;transform:scale(.72);transform-origin:top right}.vitals{grid-column:1/-1}}

@@ -13,7 +13,7 @@ exploded views (heart, lungs, spine, brain, skull, eye, hand, knee, rib cage, di
 - **Focus** (`F`, or double-click a piece) frames it in context; **Isolate** shows it alone; **Hide** (`X`) removes it so you can dissect layer by layer, and **Show hidden** brings everything back.
 - Key facts and related pieces: where a description states an origin, insertion, action, nerve supply or blood supply, that sentence is lifted out under its heading, and other pieces of the model named in the description become links. Nothing is authored; it all comes from the description text.
 - **Cross-section** — slice along the sagittal, coronal or transverse plane, move the cut with the slider, flip to keep the other half. *Fill cuts* caps the cut faces of watertight, opaque pieces (about half the model: bones and muscles; organs with openings, vessels with open ends and sheets stay hollow). Ambient occlusion pauses while a section is active.
-- **Pull apart** — explode every system, or only one, leaving the rest assembled.
+- **Systems shown** — a checkbox per system, to build views such as skeleton + nerves (`?hide=muscular,regions` in a link). **Pull apart** — explode every system, or only one, leaving the rest assembled.
 - **Guided tours** — *Tour the ten systems* steps through the body one system at a time; inside a nested study, *Guided tour* visits its landmark pieces. `←` `→` move between stops, `Esc` ends.
 - **Quiz** — two games, played from a card on the stage: *Find it* (the studio names a piece and you click it; three tries) and *Name it* (the studio shows a piece alone and you pick its name from four, which works from the keyboard). A region can be chosen; it asks about whatever is on screen. Tooltips and labels are off while a round runs.
 - The camera can go underneath (skull base, soles of the feet); the floor and platform hide when it does. With the 3D view focused, arrow keys orbit and `+` / `-` zoom.
@@ -25,29 +25,33 @@ exploded views (heart, lungs, spine, brain, skull, eye, hand, knee, rib cage, di
 
 ## Files
 
-`index.html` + `studio.js` (engine), `life.js` (breathing, heartbeat, pulse), `labels.js` (label layout), `effects.js` (selection outline, skin depth pre-pass, bone cavity shading, platform reflection), `section.js` (cross-section plane), `quiz.js`, `tour.js`, `tour-notes.js` (text written for the tours), `facts.js` (key facts and related pieces from descriptions), `url-state.js` (shareable links), `assemblies.js` (nested explodes, dependency-free), `explode-rules.js` (whole-body vectors),
+`index.html` + `studio.js` (engine), `life.js` (the living body), `vitals.js` (pace controls, monitor, sound), `flow.js` (blood-flow particles), `labels.js` (label layout), `effects.js` (selection outline, skin depth pre-pass, bone cavity shading, platform reflection), `section.js` (cross-section plane), `quiz.js`, `tour.js`, `tour-notes.js` (text written for the tours), `facts.js` (key facts and related pieces from descriptions), `url-state.js` (shareable links), `assemblies.js` (nested explodes, dependency-free), `explode-rules.js` (whole-body vectors),
 `materials.js` (per-system finishes), `parts-board.js`, `manifest.json` (every piece: id, system, hierarchy, side, region, centre, size),
 `descriptions.json`, `assets/*.glb` (one meshopt-compressed file per system, each under 25 MiB), `manual.html`, `vendor/` (three.js 0.180).
 
 ## Life
 
-With the body assembled (and in a study put back together) it moves; **Alive** in the explorer turns this off, as do `?life=0` and the reduced-motion setting. It eases out as the body starts to separate and every piece returns exactly to its place and size.
+With the body assembled (and in a study put back together) it moves; **Alive** in the explorer turns this off, as do `?life=0` and the reduced-motion setting. It starts off on phones, where drawing continuously costs battery (`?life=1` or the button turns it on). It eases out as the body starts to separate and every piece returns exactly to its place and size.
 
 - **Breathing**, about 14 a minute: each rib swings rigidly about its joint with the spine, carrying the sternum forward and up; the diaphragm descends, the lungs lengthen and widen, the abdominal organs are pushed down and the belly wall moves out. Inhalation is quicker than exhalation, with a short rest.
 - **Heartbeat**, about 70 a minute and slightly faster on the in-breath: the atria contract first, then the ventricles contract towards the apex, pulling the atria and the vessel roots down while the atria refill; the aorta and pulmonary trunk swell with the ejected blood.
 - **Pulse**: each artery swells a little as the pressure wave reaches it, later with distance from the heart.
-- **Gut**: a slow ripple travels along the stomach, intestines and ureters (a vertex-shader wave).
+- **Gut**: a slow ripple travels along the stomach, intestines and ureters. After loading, each tube's vertices are given their distance along the tube (`tubePath` in `effects.js`, a walk over the surface from one end), so the wave runs down the tube coil after coil instead of straight across the piece.
 - **Sway**: the whole body leans a few millimetres about the ankles, slowly and irregularly, more front-to-back than side-to-side, as anyone standing does; the calf and shin muscles thicken in turn to hold it. It is one rigid turn of the whole body, so every joint stays closed. It is dropped during a cross-section and inside a study.
-- **Eyes**: both eyes jump together to a new point of gaze every second or two, with small corrections between. (There are no eyelids in the model, so no blinking.)
+- **Eyes**: both eyes jump together to a new point of gaze every second or two, with small corrections between, and blink every few seconds (the skin of the upper lids is drawn down over the eye in the shader).
+- **Head and neck**: the head turns and nods a degree or two; each neck vertebra takes its share of the turn and the skin and muscles of the neck follow per vertex. Limb joints do not move.
+- **Valves**: the leaflets hinge on their rings. The mitral and tricuspid valves are open while the ventricles fill and shut when they contract; the aortic and pulmonary valves the reverse.
 - **Swallowing**: every twenty to forty seconds the larynx and hyoid rise about two centimetres and drop back, stretching the trachea.
 - **Brain, veins, arms**: the brain swells very slightly with each pulse; the large veins narrow on the in-breath in the chest and neck and fill in the abdomen.
 
-`life.js` holds the timing, the amplitudes and the method: each motion is a smooth displacement field over body space, sampled at every piece, so neighbours move together. Bone and solid organs are moved but never resized. The layers of the body wall (skin, muscle, fascia and what runs through them) follow the same field per vertex in their shaders, because they lie on each other with no gap and would otherwise show through one another. Amplitudes are those of quiet breathing and a resting heart, slightly enlarged to be visible; it is an illustration, not a measurement. While the body is alive the page draws continuously, so the idle saving described below applies only when it is exploded, on the board, or switched off.
+**Vitals** (explorer, section 05): At rest / Exercise presets, heart-rate and breathing-rate sliders, playback speed down to a tenth, and a scrubber that holds the heart anywhere in one beat with the phase named (atrial systole, isovolumetric contraction, ejection, isovolumetric relaxation, filling). A monitor on the stage draws an ECG and the breathing curve from the same clock as the motion (a textbook trace, not a recording); **Sound** plays the two heart sounds as the valves shut, and the breath; **Blood flow** shows points of light travelling through the heart and great vessels with the right direction and timing, in the X-ray finish (`flow.js`, `vitals.js`).
+
+`life.js` holds the timing, the amplitudes and the method: each motion is a smooth displacement field over body space, sampled at every piece, so neighbours move together. Bone and solid organs are moved but never resized. The layers of the body wall (skin, muscle, fascia and what runs through them) and the lungs follow the same fields per vertex in their shaders, because they lie on each other with no gap and would otherwise show through one another. Those pieces carry a vertex attribute (`lifeLayer`), so every pass that draws them deforms them the same way: their own material, the shadow pass, ambient occlusion, the selection outline and the cross-section's caps. Amplitudes are those of quiet breathing and a resting heart, slightly enlarged to be visible; it is an illustration, not a measurement. While the body is alive the page keeps drawing, at half the display's rate when nothing else is moving, so the idle saving described below applies in full only when it is exploded, on the board, or switched off.
 
 ## Graphics
 
 - **Selection** is marked by an outline (`effects.js`): a stencil mask of the piece's silhouette, then its back faces pushed out along the normals, so hollow pieces are outlined and not flooded. The colour tint is only a hint.
-- **X-ray** soft tissue is drawn additively with a rim term (clear faces, glowing edges), which looks the same whatever the draw order.
+- **X-ray** soft tissue is drawn additively with a rim term (clear faces, glowing edges), which looks the same whatever the draw order. Each system has its own strength: muscle, skin and ligaments are faint so the organs, vessels and nerves inside them read. A click in X-ray skips the wrappings (skin, fascia) and takes an organ if one lies in front of the first bone, otherwise that bone, otherwise the smallest structure under the pointer.
 - **See-through skin** gets a depth pre-pass, so only the nearest layer of skin is blended and limbs cannot show through each other in the wrong order.
 - **Skin** light wraps further in red than in green and blue; **organs** differ in gloss (matte lung, glossy liver, slick gut) and share a broad mottle map; **bone** gets cavity shading computed from each mesh's curvature after loading.
 - **Cut faces** carry a pattern per tissue (stipple for bone, lines for muscle, hatch otherwise), and ambient occlusion stays on while a section is active.
@@ -63,6 +67,8 @@ The studio draws a frame only while something is moving and for a moment after a
 Every local URL carries a content hash: module imports, stylesheets, the JSON files, and the `.glb` models (via `v` in `manifest.json`). After editing anything in this folder run `node scripts/anatomy-studio/stamp.mjs`; `--check` fails if a stamp is stale. Do not edit `?v=` values by hand. `assets/*` is served `immutable` (see `_headers`), which is safe only because of these stamps.
 
 ## Rebuilding the assets
+
+Body regions are assigned by height, then corrected for the organs under the diaphragm (liver, stomach, spleen, kidneys and the vessels and nodes named for them are abdominal even though they sit level with the lower ribs).
 
 See `../../scripts/anatomy-studio/README.md`: `fetch-models.sh` → `run-exports.sh` (Blender 4.5, headless) → `node prepare.mjs` → `node check-assemblies.mjs` → `node verify.mjs`.
 Pieces keep Z-Anatomy's Terminologia Anatomica names. Every bone, tooth, cartilage, muscle, organ, lobe, bronchus, heart and

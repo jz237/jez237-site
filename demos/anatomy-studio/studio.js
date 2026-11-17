@@ -6,21 +6,23 @@ import { EffectComposer } from './vendor/postprocessing/EffectComposer.js';
 import { RenderPass } from './vendor/postprocessing/RenderPass.js';
 import { GTAOPass } from './vendor/postprocessing/GTAOPass.js';
 import { OutputPass } from './vendor/postprocessing/OutputPass.js';
-import { PartsBoard } from './parts-board.js?v=eb3be7f2fd';
-import { finishMaterial, studioEnvironment, fileLabels, fileColors, modes, organPiece, projectedUV, skinTint } from './materials.js?v=984d071ad9';
+import { PartsBoard } from './parts-board.js?v=365033683b';
+import { finishMaterial, studioEnvironment, fileLabels, fileColors, modes, organPiece, projectedUV, skinTint, tagLayer, enliven } from './materials.js?v=fd0627ad9b';
 import { assemblies, bodyLandmarks, assemblyContext, assemblyOffset } from './assemblies.js?v=98fdd3ac69';
 import { bodyOffset, bodySpread, explodeSchedule } from './explode-rules.js?v=742c72af7e';
 import { layoutLabels } from './labels.js?v=5a33037751';
-import { createSection } from './section.js?v=475f66ee5d';
+import { createSection } from './section.js?v=686dcf1601';
 import { createQuiz } from './quiz.js?v=bcf9b3a438';
 import { createTour } from './tour.js?v=7c4b903d8e';
 import { keyFacts, relatedPieces, summary } from './facts.js?v=12aa155dc7';
-import { readURL, writeURL } from './url-state.js?v=df6e81efce';
+import { readURL, writeURL } from './url-state.js?v=d7621eb958';
 import { systemNotes, pieceNotes } from './tour-notes.js?v=bb3933d4cf';
 import { UnrealBloomPass } from './vendor/postprocessing/UnrealBloomPass.js';
 import { BokehPass } from './vendor/postprocessing/BokehPass.js';
-import { createOutline, syncSkinDepth, skinDepthMaterial, cavityTint, createFloorReflection } from './effects.js?v=d0c5506e15';
-import { createLife } from './life.js?v=2f173080ce';
+import { createOutline, syncSkinDepth, skinDepthMaterial, cavityTint, createFloorReflection, tubePath } from './effects.js?v=039643d2d5';
+import { createLife } from './life.js?v=342c152a42';
+import { createVitals } from './vitals.js?v=284c6d38fa';
+import { createFlow } from './flow.js?v=45b1f16515';
 
 const $ = id => document.getElementById(id);
 const params = new URLSearchParams(location.search);
@@ -28,7 +30,7 @@ const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const mobile = matchMedia('(max-width: 760px)').matches || (matchMedia('(pointer: coarse)').matches && innerWidth < 900);
 const verifyQuality = params.get('quality') === 'verify';
 const DEFAULT_MODE = 'xray';   // the finish the studio opens in; it is also the one a link leaves unsaid
-const state = { ready:false, amount:0, target:0, sequence:false, sequenceTime:0, selected:null, isolated:false, system:'all', mode:DEFAULT_MODE, view:'hero', board:false, assembly:null, assemblySide:'L', labels:false, labelAll:false, ao:false, detail:false, stage:'none', loading:false, rotate:false, hidden:new Set(), quiz:false, only:'all', fx:false, dof:false };
+const state = { ready:false, amount:0, target:0, sequence:false, sequenceTime:0, selected:null, isolated:false, system:'all', mode:DEFAULT_MODE, view:'hero', board:false, assembly:null, assemblySide:'L', labels:false, labelAll:false, ao:false, detail:false, stage:'none', loading:false, rotate:false, hidden:new Set(), off:new Set(), quiz:false, only:'all', fx:false, dof:false };
 const parts = [], partsById = new Map(), landmarks = [], raycaster = new THREE.Raycaster(), pointer = new THREE.Vector2();
 let manifest, descriptions = null, renderer, controls, camera, scene, model, last = performance.now(), pointerStart = null, viewTween = null, lastApplied = -1, explodeTween = null;
 const hi = { geometries:new Map(), loaded:new Set(), loading:new Set(), frame:0 };
@@ -45,7 +47,9 @@ const quality = { auto:!verifyQuality && params.get('quality') !== 'fixed', leve
 let resizeStage = () => {};
 let outline = null, mirror = null, bloomPass = null, bokehPass = null, tinting = false;
 // The assembled body breathes and its heart beats (life.js). Off for reduced motion, in the verification runs (they compare exact positions) and with ?life=0.
-const life = createLife(); life.on = params.has('life') ? params.get('life') !== '0' : !reducedMotion && !verifyQuality;
+const life = createLife(); life.on = params.has('life') ? params.get('life') !== '0' : !reducedMotion && !verifyQuality && !mobile;
+let vitals = null, flow = null, flowOn = true, lifeSkip = false;
+const pathQueue = [];
 const tintQueue = [];
 // Explode order: outer layers leave first and come back last. A piece starts moving at its lag and every piece arrives at 100%.
 const LAG = { regions:0, muscular:.05, lymphoid:.1, vessels:.12, nerves:.14, joints:.2, visceral:.2, heart:.24, brain:.24, skeletal:.3 }, LAG_SPAN = .7;
@@ -85,7 +89,7 @@ function init(){
  const rt = new THREE.WebGLRenderTarget(1, 1, { type:THREE.HalfFloatType, stencilBuffer:true, samples:(verifyQuality || params.get('msaa') === '0') ? 0 : 4 });   // multisampled so occlusion does not cost anti-aliasing
  composer = new EffectComposer(renderer, rt); renderPass = new RenderPass(scene, camera); composer.addPass(renderPass);
  gtaoPass = new GTAOPass(scene, camera, 1, 1, undefined, { radius:.14, distanceExponent:1.1, thickness:1, scale:1.6, samples:14, distanceFallOff:1, screenSpaceRadius:false }, { lumaPhi:8, depthPhi:2.5, normalPhi:3.5, radius:4, radiusExponent:1, rings:2, samples:14 });
- gtaoPass.output = GTAOPass.OUTPUT.Default; gtaoPass.blendIntensity = 1; composer.addPass(gtaoPass);
+ gtaoPass.output = GTAOPass.OUTPUT.Default; gtaoPass.blendIntensity = 1; composer.addPass(gtaoPass); enliven(gtaoPass.normalMaterial);   // occlusion is worked out from the body as it is posed, not as it was built
  // The occlusion pass draws the whole scene with one material, so the cap quads (which rely on a stencil test) are hidden for it.
  const drawOcclusion = gtaoPass.render.bind(gtaoPass); gtaoPass.render = (...args) => { section.showCaps(false); drawOcclusion(...args); section.showCaps(true); };
  bokehPass = new BokehPass(scene, camera, { focus:1, aperture:.03, maxblur:.006 }); bokehPass.enabled = false; composer.addPass(bokehPass);   // depth of field, only while a piece of a study is in focus
@@ -131,10 +135,15 @@ function init(){
 }
 
 async function loadStudio(){
- manifest = await (await fetch('./manifest.json?v=de101016e7')).json();
+ manifest = await (await fetch('./manifest.json?v=7194a4b870')).json();
  $('piece-total').textContent = manifest.stats.pieces.toLocaleString(); life.setup(manifest); pieceById = new Map(manifest.pieces.map(p => [p.id, p])); pieceOrder = new Map(manifest.pieces.map((p, i) => [p.id, i]));
  model = new THREE.Group(); model.name = 'Human body'; scene.add(model);
  const select = $('system'); select.replaceChildren(new Option('Complete body', 'all'), ...manifest.files.map(f => new Option(fileLabels[f.id] || f.id, f.id)));
+ // one checkbox per system, to build views such as skeleton + nerves
+ $('layers').replaceChildren(...manifest.files.map(f => { const label = document.createElement('label'), box = document.createElement('input'); box.type = 'checkbox'; box.checked = true; box.dataset.layer = f.id;
+  box.onchange = async () => { if (box.checked) { state.off.delete(f.id); await loadFiles([f.id]); } else state.off.add(f.id); if (state.selected && state.off.has(state.selected.file)) selectPart(null); updateVisibility(); section.refit(); syncURL(); };
+  label.append(box, ` ${fileLabels[f.id] || f.id}`); return label; }));
+ flow = createFlow({ manifest, parent:model });
  const requested = params.get('stage'); const target = requested && stageOrder.includes(requested) ? requested : requested === 'full' ? 'detail' : mobile ? 'core' : params.get('mode') === 'organs' ? 'lean' : 'detail';   // lean: everything the opening view shows; the muscles (a third of the download) wait until they are needed
  await loadStage('core');
  state.ready = true; document.body.dataset.ready = 'true'; $('loading').hidden = true;
@@ -143,11 +152,11 @@ async function loadStudio(){
  updateList(); updateUI(); setView('hero', true); $('fx-toggle').setAttribute('aria-pressed', state.fx); $('life-toggle').setAttribute('aria-pressed', life.on);
  if (!reducedMotion && !verifyQuality) { camera.position.sub(controls.target).multiplyScalar(1.24).add(controls.target); setView('hero'); if (viewTween) viewTween.duration = 2400; }   // a slow push-in on arrival
  window.anatomyStudio = {
-  getState:() => ({ ready:state.ready, pieces:parts.length, visible:parts.filter(p => p.mesh.visible).length, amount:state.amount, target:state.target, selected:state.selected?.label ?? null, isolated:state.isolated, system:state.system, board:state.board, mode:state.mode, ao:state.ao, detail:state.detail, hiFiles:[...hi.loaded], hiLoading:[...hi.loading], assembly:state.assembly, assemblySide:state.assemblySide, stage:state.stage, loading:state.loading, hidden:state.hidden.size, rendered, life:life.getState(), fx:state.fx, dof:bokehPass.enabled, only:state.only, quality:quality.level, section:section.state, quiz:quiz.getState(), tour:tour.getState(), triangles:parts.reduce((n, p) => n + (p.mesh.visible ? p.triangles : 0), 0), drawCalls:parts.reduce((n, p) => n + (p.mesh.visible ? 1 : 0), 0), files:manifest.files.filter(f => f.loaded).map(f => f.id) }),
+  getState:() => ({ ready:state.ready, pieces:parts.length, visible:parts.filter(p => p.mesh.visible).length, amount:state.amount, target:state.target, selected:state.selected?.label ?? null, isolated:state.isolated, system:state.system, board:state.board, mode:state.mode, ao:state.ao, detail:state.detail, hiFiles:[...hi.loaded], hiLoading:[...hi.loading], assembly:state.assembly, assemblySide:state.assemblySide, stage:state.stage, loading:state.loading, hidden:state.hidden.size, off:[...state.off], flow:{ on:flowOn, shown:!!flow?.points.visible, particles:flow?.particles ?? 0 }, vitals:vitals?.getState(), rendered, life:life.getState(), fx:state.fx, dof:bokehPass.enabled, only:state.only, quality:quality.level, section:section.state, quiz:quiz.getState(), tour:tour.getState(), triangles:parts.reduce((n, p) => n + (p.mesh.visible ? p.triangles : 0), 0), drawCalls:parts.reduce((n, p) => n + (p.mesh.visible ? 1 : 0), 0), files:manifest.files.filter(f => f.loaded).map(f => f.id) }),
   getParts:() => parts.map(p => ({ id:p.id, name:p.name, turned:p.baseQuaternion ? p.mesh.quaternion.angleTo(p.baseQuaternion) : 0, scale:p.mesh.scale.toArray().map((v, i) => v / p.baseScale.getComponent(i)), side:p.side, file:p.file, region:p.region, visible:p.mesh.visible, lod:p.lod, triangles:Math.round((p.mesh.geometry.index?.count ?? p.mesh.geometry.attributes.position.count) / 3), radius:(p.mesh.geometry.boundingSphere || p.mesh.geometry.computeBoundingSphere() || p.mesh.geometry.boundingSphere).radius * Math.max(p.mesh.scale.x, p.mesh.scale.y, p.mesh.scale.z), extent:p.size.length() / 2, position:p.mesh.position.toArray(), base:p.base.toArray(), inAssembly:!!(state.assembly && isMember(p)) })),
   getAssembly:id => { const a = assemblies[id]; if (!a) return null; const members = assemblyMembers(id); return { side:state.assemblySide, paired:!!a.paired, members:members.map(p => p.id), primary:members.filter(p => a.primary?.(p.piece)).map(p => p.id), framed:members.filter(p => !a.frame || a.frame(p.piece)).map(p => p.id), rectangles:projectedRectangles(members.filter(p => p.mesh.visible)) }; },
   getBoardRectangles:() => board ? board.rectangles() : [],
-  loadStage, enterAssembly, leaveAssembly, setMode, setAmount, reset, loadHi, setDetail, lodPass, choosePiece, hideSelected, swallow:() => life.swallow(), getManifest:() => manifest,
+  loadStage, enterAssembly, leaveAssembly, setMode, setAmount, reset, loadHi, setDetail, lodPass, choosePiece, hideSelected, swallow:() => life.swallow(), life, pickAt:(x, y) => pick({ clientX:x, clientY:y })?.userData.part.id ?? null, getManifest:() => manifest,
   // inspection hooks for the verification scripts and for debugging: ?quality=verify or ?debug
   ...(verifyQuality || params.has('debug') ? { _advance:(seconds = 1) => { let t = Math.max(last, performance.now()); for (let i = 0, n = Math.ceil(seconds * 60); i < n; i++) tick(t += 1000 / 60); },   /* step the loop by hand: a background tab gets no animation frames */ _radius:id => { const p = partsById.get(id); return p ? projectedRadiusPx(p) : null; }, _edges:(id, limit = .03) => { const p = partsById.get(id); if (!p) return null; const g = p.mesh.geometry, pos = g.attributes.position, idx = g.index, s = p.mesh.scale.x; let long = 0, max = 0; const n = idx ? idx.count : pos.count; const v = i => [pos.getX(i), pos.getY(i), pos.getZ(i)]; for (let t = 0; t < n; t += 3) { const a = v(idx ? idx.getX(t) : t), b = v(idx ? idx.getX(t + 1) : t + 1), c = v(idx ? idx.getX(t + 2) : t + 2); const L = Math.max(Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]), Math.hypot(b[0] - c[0], b[1] - c[1], b[2] - c[2]), Math.hypot(a[0] - c[0], a[1] - c[1], a[2] - c[2])) * s; if (L > max) max = L; if (L > limit) long++; } return { tris:n / 3, long, max:+max.toFixed(4), lod:p.lod }; }, _focus:(id, distance = .6, dir = [1, .35, 1.4]) => { const p = partsById.get(id); if (!p) return false; const c = p.center.clone().add(p.mesh.position).sub(p.base); viewTween = null; controls.target.copy(c); camera.position.copy(c).addScaledVector(new THREE.Vector3().fromArray(dir).normalize(), distance); return true; }, _side:v => { for (const p of parts) p.mesh.material.side = v; }, _normals:on => { for (const p of parts) { if (on) { p.mesh.userData.savedMat = p.mesh.material; p.mesh.material = new THREE.MeshNormalMaterial(); } else if (p.mesh.userData.savedMat) { p.mesh.material = p.mesh.userData.savedMat; delete p.mesh.userData.savedMat; } } }, _flat:on => { for (const p of parts) { if (on) { p.mesh.userData.savedMat = p.mesh.material; p.mesh.material = new THREE.MeshStandardMaterial({ color:'#d9ad8e', roughness:.6, flatShading:false }); } else if (p.mesh.userData.savedMat) { p.mesh.material = p.mesh.userData.savedMat; delete p.mesh.userData.savedMat; } } }, _gtao:gtaoPass, _GTAOPass:GTAOPass, _camera:() => ({ position:camera.position.toArray(), target:controls.target.toArray(), tween:!!viewTween }) } : {})
  };
@@ -189,9 +198,17 @@ async function loadFiles(ids){
  await Promise.all(wanted.map(f => f.loadingPromise));
  buildBodyLandmarks(); updateList(); updateVisibility();
  for (const p of parts) if (p.file === 'skeletal' && !p.tintQueued) { p.tintQueued = true; tintQueue.push(p); }
+ for (const p of parts) if (p.mesh.userData.gutPath && !p.pathQueued) { p.pathQueued = true; pathQueue.push(p); }
+ if (pathQueue.length) setTimeout(pumpPaths, 600);
  if (tintQueue.length && !tinting) { tinting = true; setTimeout(pumpTints, 30); }
 }
 /** Bone cavity shading is worked out from each mesh's curvature in short slices, so loading is never held up. */
+/** Distance along each gut tube, one piece at a time between frames: after it, peristalsis runs down the tube, not across it. */
+function pumpPaths(){
+ const p = pathQueue.pop(); if (!p) return;
+ if (tubePath(p.loGeometry, p.mesh.scale.x) && p.mesh.geometry === p.loGeometry) p.mesh.userData.gutPath.value = 1;
+ invalidate(); if (pathQueue.length) setTimeout(pumpPaths, 120);
+}
 function pumpTints(){
  const started = performance.now();
  while (tintQueue.length && performance.now() - started < 8) { const p = tintQueue.pop(); if (cavityTint(p.loGeometry, p.mesh.scale.x) && p.mesh.userData.cavity) { p.mesh.material.vertexColors = true; p.mesh.material.needsUpdate = true; } }
@@ -223,8 +240,14 @@ function projectedRectangles(list){ model.updateMatrixWorld(true); camera.update
 function pick(e){ const rect = renderer.domElement.getBoundingClientRect(); pointer.set((e.clientX - rect.left) / rect.width * 2 - 1, -(e.clientY - rect.top) / rect.height * 2 + 1); raycaster.setFromCamera(pointer, camera); if (state.board) return raycaster.intersectObjects(board.visible.flatMap(x => [x.mesh, x.plane]), false)[0]?.object;
  const hits = raycaster.intersectObjects(parts.filter(p => p.mesh.visible).map(p => p.mesh), false).filter(h => !section.clips(h.point));
  // What you see is what you select: ghosted or see-through pieces (X-ray tissue, translucent skin, pleura, dura) do not block the solid piece behind them.
- const solid = h => !h.object.material.transparent || h.object.material.opacity >= .5;
- return (hits.find(solid) || hits.find(h => h.object.userData.part.file !== 'regions') || hits[0])?.object; }
+ const solid = h => !h.object.material.transparent || h.object.material.opacity >= .5, first = hits.findIndex(solid);
+ if (state.mode !== 'xray' || state.isolated) return (hits[first] || hits.find(h => h.object.userData.part.file !== 'regions') || hits[0])?.object;
+ // X-ray: everything but bone is glass, so the nearest surface is usually a sheet of fascia or skin nobody was aiming at.
+ // Take what lies in front of the first bone, drop the wrappings, and prefer an organ, then the smallest thing there.
+ const glass = (first < 0 ? hits : hits.slice(0, first)).filter(h => { const p = h.object.userData.part; return p.file !== 'regions' && !/fasci|bursa|sheath|retinacul|aponeuros|septum/i.test(p.name); });
+ const reach = h => h.object.userData.part.size.length(), smallest = list => list.reduce((best, h) => !best || reach(h) < reach(best) ? h : best, null);
+ const organ = smallest(glass.filter(h => /visceral|heart|brain/.test(h.object.userData.part.file) || /spleen|thymus/i.test(h.object.userData.part.name)));
+ return (organ || hits[first] || smallest(glass) || hits[0])?.object; }
 function ensureBoard(){ if (board && !boardDirty) return; if (board) { scene.remove(board.group); } $('scene-status').textContent = 'LAYING OUT THE BOARD'; board = new PartsBoard(parts); scene.add(board.group); boardDirty = false; boardKey = ''; }
 function reflowBoard(force = false){ if (!board) return; const key = parts.filter(p => p.mesh.visible).map(p => p.id).join(','); if (force || key !== boardKey) { boardKey = key; board.layout($('viewport').clientWidth, $('viewport').clientHeight, p => p.mesh.visible); boardControls?.target.set(0, 0, 0); if (state.board) window.scrollTo(0, 0); } $('board-count').textContent = `${board.visible.length} / ${parts.length} PIECES`; }
 function toggleBoard(on){
@@ -301,7 +324,7 @@ function renderFacts(part, text){
 function updateVisibility(){
  const skinOnlyNow = skinOnly();
  for (const p of parts) { const selected = p === state.selected, mat = p.mesh.material, member = isMember(p);
-  p.mesh.visible = member && !state.hidden.has(p.id) && (state.system === 'all' || p.file === state.system) && (!state.isolated || selected) && (!skinOnlyNow || SURFACE(p)) && !(state.mode === 'organs' && state.system === 'all' && !state.isolated && !organPiece(p));   // Organs & vessels leaves out skin, muscles, fasciae and ligaments, unless one system or one piece was asked for
+  p.mesh.visible = member && !state.hidden.has(p.id) && !state.off.has(p.file) && (state.system === 'all' || p.file === state.system) && (!state.isolated || selected) && (!skinOnlyNow || SURFACE(p)) && !(state.mode === 'organs' && state.system === 'all' && !state.isolated && !organPiece(p));   // Organs & vessels leaves out skin, muscles, fasciae and ligaments, unless one system or one piece was asked for
   const o = state.assembly && p.assemblyLayer?.opacity != null && state.amount > .05 ? p.assemblyLayer.opacity : null;
   mat.opacity = o ?? p.opacity; mat.transparent = o != null || p.transparent; mat.depthWrite = o != null ? false : p.depthWrite;
   mat.emissive.copy(selected ? new THREE.Color('#49c8a3') : p.emissive); mat.emissiveIntensity = selected ? (state.isolated ? .05 : .13) : p.emissiveIntensity;   // a light tint only: the outline marks the selection and the surface detail stays readable
@@ -393,7 +416,7 @@ function buildAllLabels(){
 }
 
 // ---------------------------------------------------------------- zoom-level detail: full-resolution geometry streamed per system
-function swapGeometry(p, g){ invalidate(); for (const child of p.mesh.children) if (child.userData.follow) child.geometry = g; if (p.mesh.material.vertexColors && !g.attributes.color && p.mesh.userData.uvWorld) skinTint(g, p.mesh.userData.uvWorld); p.mesh.geometry = g; }
+function swapGeometry(p, g){ invalidate(); if (p.mesh.userData.lifeLayer) tagLayer(g, p.mesh.userData.lifeLayer); if (p.mesh.userData.gutPath) p.mesh.userData.gutPath.value = g.attributes.gutPath ? 1 : 0; for (const child of p.mesh.children) if (child.userData.follow) child.geometry = g; if (p.mesh.material.vertexColors && !g.attributes.color && p.mesh.userData.uvWorld) skinTint(g, p.mesh.userData.uvWorld); p.mesh.geometry = g; }
 function setDetail(on){ state.detail = !!on; $('lod-toggle').setAttribute('aria-pressed', state.detail); if (!state.detail) for (const p of parts) if (p.lod === 'hi') { swapGeometry(p, p.loGeometry); p.lod = 'lo'; } else lodPass(); }
 const _v = new THREE.Vector3();
 function projectedRadiusPx(p){ const dist = _v.copy(p.mesh.position).sub(camera.position).length(); const fovScale = renderer.domElement.clientHeight / 2 / Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)); return (p.size.length() / 2) / Math.max(dist, .001) * fovScale; }
@@ -427,12 +450,14 @@ async function loadHi(fileId){
  hi.loading.delete(fileId); if (!state.loading) $('stage-status').hidden = true; lodPass();
 }
 function stopSequence(){ explodeTween = null; state.sequence = false; $('animate').textContent = '▷ Play sequence'; }
-function reset(){ tour.end(); if (quiz.active) quiz.stop(); state.only = 'all'; $('explode-only').value = 'all'; if (state.board) toggleBoard(false); stopSequence(); if (state.assembly) leaveAssembly(); state.hidden.clear(); $('section-axis').value = 'off'; section.setAxis('off'); controls.minDistance = .25; state.target = 0; state.system = 'all'; state.isolated = false; state.labels = false; state.view = 'hero'; controls.autoRotate = false; state.rotate = false; $('system').value = 'all'; $('search').value = ''; for (const id of ['rotate', 'label-toggle']) $(id).setAttribute('aria-pressed', 'false'); selectPart(null); updateList(); updateUI(); setView('hero'); }
+function reset(){ tour.end(); if (quiz.active) quiz.stop(); state.only = 'all'; $('explode-only').value = 'all'; state.off.clear(); for (const box of document.querySelectorAll('[data-layer]')) box.checked = true; if (state.board) toggleBoard(false); stopSequence(); if (state.assembly) leaveAssembly(); state.hidden.clear(); $('section-axis').value = 'off'; section.setAxis('off'); controls.minDistance = .25; state.target = 0; state.system = 'all'; state.isolated = false; state.labels = false; state.view = 'hero'; controls.autoRotate = false; state.rotate = false; $('system').value = 'all'; $('search').value = ''; for (const id of ['rotate', 'label-toggle']) $(id).setAttribute('aria-pressed', 'false'); selectPart(null); updateList(); updateUI(); setView('hero'); }
 function bindControls(){
  section = createSection({ scene, materials:() => parts.map(p => p.mesh.material), bounds:visibleBounds, onChange:() => { const s = section.state; $('section-controls').hidden = s.axis === 'off'; $('section-pos').value = Math.round(s.position * 100); $('section-flip').setAttribute('aria-pressed', s.flip); $('section-caps').setAttribute('aria-pressed', s.caps); updateUI(); invalidate(); } });
  $('section-axis').onchange = e => section.setAxis(e.target.value);
  $('section-pos').oninput = e => section.setPosition(Number(e.target.value) / 100);
  $('section-flip').onclick = () => section.flip(); $('section-caps').onclick = () => section.setCaps(!section.state.caps);
+ vitals = createVitals({ life, onChange:() => invalidate(4) });
+ $('flow-toggle').onclick = () => { flowOn = !flowOn; $('flow-toggle').setAttribute('aria-pressed', flowOn); invalidate(4); }; $('flow-toggle').setAttribute('aria-pressed', flowOn);
  quiz = createQuiz({
   candidates:() => { const region = $('quiz-region').value; return parts.filter(p => p.mesh.visible && p.piece.descriptionKey && p.size.length() > .04 && (region === 'all' || p.region === region) && (state.system !== 'all' || state.assembly || QUIZ_FILES.has(p.file))); },   // described and big enough to click; with the whole body up, stick to bones, organs, muscles, heart and brain
   reveal:part => { state.isolated = false; selectPart(part); updateVisibility(); focusSelected(2); }, clear:() => selectPart(null),
@@ -500,7 +525,7 @@ function stepDown(){
 function syncURL(){
  if (applyingURL || !state.ready) return; clearTimeout(urlTimer);
  urlTimer = setTimeout(() => { if (applyingURL || state.sequence) return; const a = state.assembly && assemblies[state.assembly], mode = state.restoreMode || state.mode, x = Math.round(state.target * 100);
-  writeURL({ assembly:state.assembly, side:a?.paired ? state.assemblySide : null, piece:state.quiz ? null : state.selected?.id, mode:mode !== DEFAULT_MODE ? mode : null, system:state.system !== 'all' ? state.system : null, amount:(a ? x < 100 : x > 0) ? state.target : null, board:state.board }, { push:state.assembly !== lastURLAssembly });   // opening or leaving a study is a step Back can undo
+  writeURL({ assembly:state.assembly, side:a?.paired ? state.assemblySide : null, piece:state.quiz ? null : state.selected?.id, mode:mode !== DEFAULT_MODE ? mode : null, system:state.system !== 'all' ? state.system : null, hide:[...state.off], amount:(a ? x < 100 : x > 0) ? state.target : null, board:state.board }, { push:state.assembly !== lastURLAssembly });   // opening or leaving a study is a step Back can undo
   lastURLAssembly = state.assembly; }, 200);
 }
 async function applyURL(u, { initial = false } = {}){
@@ -513,6 +538,8 @@ async function applyURL(u, { initial = false } = {}){
   if (u.board !== state.board && !state.assembly) toggleBoard(u.board);
   const system = manifest.files.some(f => f.id === u.system) ? u.system : 'all';
   if (!state.assembly && system !== state.system) { if (system !== 'all') await loadFiles([system]); state.system = system; $('system').value = system; selectPart(null); updateList(); section.refit(); }
+  const off = new Set((u.hide || []).filter(id => manifest.files.some(f => f.id === id)));
+  if (off.size !== state.off.size || [...off].some(id => !state.off.has(id))) { state.off = off; for (const box of document.querySelectorAll('[data-layer]')) box.checked = !off.has(box.dataset.layer); updateVisibility(); }
   if (u.amount != null) setAmount(u.amount); else if (!initial && !state.board) setAmount(state.assembly ? 1 : 0);
   if (pieceById.has(u.piece)) await choosePiece(u.piece, { focus:initial && !state.board }); else if (!initial && state.selected) selectPart(null);
  } finally { applyingURL = false; lastURLAssembly = state.assembly; }
@@ -556,8 +583,11 @@ function tick(now){
   camera.position.copy(arc.a).applyQuaternion(arc.q.identity().slerp(arc.turn, s)).multiplyScalar(THREE.MathUtils.lerp(arc.ra, arc.rb, s)).add(controls.target);   // direction turns, distance eases
   if (t === 1) viewTween = null; }
  const moved = controls.update(dt);
- if (moved || alwaysRender || state.sequence || explodeTween || viewTween || controls.autoRotate || state.amount !== state.target || state.loading || hi.loading.size) invalidate(3);
+ const busy = moved || alwaysRender || state.sequence || explodeTween || viewTween || controls.autoRotate || state.amount !== state.target || state.loading || hi.loading.size;
+ if (busy) invalidate(3);
  if (renderFrames <= 0) { quality.last = 0; return; }   // nothing changed: leave the last frame on screen
+ // Breathing and a heartbeat are slow: when they are the only thing moving, every other frame is enough and halves the work.
+ if (alive > 0 && !busy && renderFrames <= 2 && (lifeSkip = !lifeSkip)) { quality.last = 0; return; }
  renderFrames--; rendered++;
  if (state.ready && state.detail && !state.board && (++hi.frame % 10 === 0 || renderFrames === 0)) lodPass();
  if (!state.board) { const under = camera.position.y < -.1; for (const o of studioObjects) o.visible = !under; }   // from underneath, the floor and platform would hide the body
@@ -571,6 +601,7 @@ function tick(now){
  const planes = section.planes, fx = state.fx && !state.board;
  for (const m of [skinDepthMaterial, gtaoPass.normalMaterial]) if ((m.clippingPlanes || null) !== planes) { m.clippingPlanes = planes; m.needsUpdate = true; }   // helpers and the occlusion pass honour the cut
  outline.update(camera, H, planes);
+ vitals.frame(dt, alive); flow?.update(dt * life.getState().speed * (life.getState().scrub === null ? 1 : 0), life.signals, flowOn && alive > 0 && state.mode === 'xray' && !state.board);
  mirror.visible = fx && !section.active && camera.position.y > -.1; mirror.userData.fresh = false;   // a section's cap quads need a stencil buffer the mirror does not have
  gtaoPass.enabled = state.ao; bloomPass.enabled = fx; bokehPass.enabled = fx && state.dof && !!state.selected && !section.active;
  if (bokehPass.enabled) { const p = state.selected; bokehPass.camera = camera; bokehPass.uniforms.focus.value = _v.copy(p.center).add(p.mesh.position).sub(p.base).distanceTo(camera.position); }

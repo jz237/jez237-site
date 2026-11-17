@@ -66,6 +66,16 @@ function describe(p) {
 }
 
 // ---------------------------------------------------------------- regions (glTF frame: y up, +z anterior, +x subject left; skeleton height ~1.70 m)
+// Height alone files the liver, stomach, spleen and kidneys under the thorax: they sit below the diaphragm but level
+// with the lower ribs. Soft organs, and vessels and nerves named for them, are abdominal up to the dome of the diaphragm.
+const ABDOMINAL = /renal|hepatic|gastr|splen|coeliac|celiac|mesenter|suprarenal|pancrea|lumbar|portal|cystic|colic|ileal|jejunal|duoden|pylor|omental|testicular|ovarian/i;
+const CHEST = /lung|pleura|bronch|oesophag|trachea|thymus|mediastin|diaphragm|thoracic|intercostal|azygos|pulmon|cardiac|pericard/i;
+export function refineRegion(found, name, file, c) {
+  if (found !== 'thorax' || c[1] >= 1.19) return found;
+  if ((file === 'visceral' || file === 'lymphoid') && !CHEST.test(name)) return 'abdomen';
+  if ((file === 'vessels' || file === 'nerves') && ABDOMINAL.test(name) && !CHEST.test(name)) return 'abdomen';
+  return found;
+}
 export function region(c) {
   const y = c[1], x = Math.abs(c[0]);
   if (x > 0.18 && y > 0.55 && y < 1.42) return 'upper limb';
@@ -91,7 +101,7 @@ for (const fid of fileIds) {
     let min = [Infinity, Infinity, Infinity], max = [-Infinity, -Infinity, -Infinity], t = 0;
     for (const prim of mesh.listPrimitives()) { const pos = prim.getAttribute('POSITION'); const mn = pos.getMin([]), mx = pos.getMax([]); for (let i = 0; i < 3; i++) { min[i] = Math.min(min[i], mn[i]); max[i] = Math.max(max[i], mx[i]); } t += (prim.getIndices()?.getCount() ?? pos.getCount()) / 3; }
     const tr = node.getTranslation(); const center = tr.map(v => +v.toFixed(4)); const size = max.map((v, i) => +(v - min[i]).toFixed(4));
-    const piece = {id: x.id, name: x.name, system: x.system, file: fid, node: index++, parent: x.parent || null, path: x.path || '', side: x.side, region: region(center), center, size, triangles: t, merged: JSON.parse(x.merged || '[]')};
+    const piece = {id: x.id, name: x.name, system: x.system, file: fid, node: index++, parent: x.parent || null, path: x.path || '', side: x.side, region: refineRegion(region(center), x.name, fid, center), center, size, triangles: t, merged: JSON.parse(x.merged || '[]')};
     if (x.schematic) { piece.schematic = true; piece.text = x.description; }
     const d = describe(piece); piece.descriptionKey = d.key; piece.descriptionRule = d.rule;
     pieces.push(piece); tris += t;

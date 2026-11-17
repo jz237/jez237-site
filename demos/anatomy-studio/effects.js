@@ -10,7 +10,7 @@
  */
 import * as THREE from 'three';
 import { Reflector } from './vendor/objects/Reflector.js';
-import { breathe } from './materials.js?v=984d071ad9';
+import { enliven } from './materials.js?v=fd0627ad9b';
 
 const noRaycast = () => {};
 
@@ -44,6 +44,7 @@ export function createOutline(color = '#5fe0bb') {
       .replace('#include <begin_vertex>', '#include <begin_vertex>\n\ttransformed += normalize( normal ) * uOutline;');
   };
   material.customProgramCacheKey = () => 'selection-outline';
+  enliven(material); enliven(mask);   // the outline stays on a piece that breathes
   let helpers = [], host = null;
   return {
     material,
@@ -76,7 +77,7 @@ export function createOutline(color = '#5fe0bb') {
 // chest in the wrong order, because blended surfaces are sorted per piece, not per pixel.
 const SKIN_DEPTH_ORDER = 10, SKIN_COLOUR_ORDER = 11;
 export const skinDepthMaterial = new THREE.MeshBasicMaterial({ colorWrite: false, depthWrite: true, transparent: true });
-breathe(skinDepthMaterial);   // the depth it writes has to match the breathing skin drawn after it
+enliven(skinDepthMaterial);   // the depth it writes has to match the breathing skin drawn after it
 
 export function syncSkinDepth(part) {
   const mat = part.mesh.material;
@@ -170,4 +171,54 @@ export function createFloorReflection(radius = 1.3) {
     for (const h of mirrorHidden) h.visible = true;
   };
   return mirror;
+}
+
+// ---------------------------------------------------------------- distance along a tube
+/**
+ * For a tube-shaped mesh (intestine, ureter), each vertex's distance along the tube from one end, in metres, as a
+ * vertex attribute `gutPath`. Peristalsis uses it to send a wave down the tube itself, coil after coil, instead of
+ * straight across the piece. Found by walking the surface: the vertex furthest (over the surface) from any starting
+ * vertex is an end of the tube, and distances from that end measure position along it. `scale` is the mesh's
+ * local-to-world scale. Returns false for a mesh too large to be worth it.
+ */
+export function tubePath(geometry, scale = 1) {
+  const pos = geometry.attributes.position, index = geometry.index;
+  if (!pos || !index || pos.count > 220000) return false;
+  const n = pos.count, canon = new Uint32Array(n), seen = new Map();
+  for (let i = 0; i < n; i++) {   // one node per position: a mesh stores a point twice wherever its normals differ
+    const x = pos.getX(i), y = pos.getY(i), z = pos.getZ(i), key = Number.isInteger(x) && Number.isInteger(y) && Number.isInteger(z) && Math.max(Math.abs(x), Math.abs(y), Math.abs(z)) < 32769 ? ((x + 32768) * 65537 + (y + 32768)) * 65537 + (z + 32768) : `${x},${y},${z}`;
+    let c = seen.get(key); if (c === undefined) { c = seen.size; seen.set(key, c); } canon[i] = c;
+  }
+  const m = seen.size, px = new Float32Array(m), py = new Float32Array(m), pz = new Float32Array(m);
+  for (let i = 0; i < n; i++) { const c = canon[i]; px[c] = pos.getX(i); py[c] = pos.getY(i); pz[c] = pos.getZ(i); }
+  // adjacency in compressed rows: count, then fill (every triangle edge both ways; duplicates do no harm)
+  const ix = index.array, degree = new Uint32Array(m + 1);
+  for (let t = 0; t < ix.length; t += 3) for (let e = 0; e < 3; e++) { degree[canon[ix[t + e]] + 1]++; degree[canon[ix[t + (e + 1) % 3]] + 1]++; }
+  for (let i = 0; i < m; i++) degree[i + 1] += degree[i];
+  const fill = degree.slice(0, m), next = new Uint32Array(degree[m]);
+  for (let t = 0; t < ix.length; t += 3) for (let e = 0; e < 3; e++) { const a = canon[ix[t + e]], b = canon[ix[t + (e + 1) % 3]]; next[fill[a]++] = b; next[fill[b]++] = a; }
+  const dist = new Float32Array(m), heap = new Uint32Array(m * 4 + 16), prio = new Float32Array(m * 4 + 16);
+  /** Shortest surface distance from `seed` to everything it can reach; returns the furthest vertex found. */
+  function walk(seed, into) {
+    let size = 0, far = seed;
+    const push = (v, d) => { let i = size++; while (i > 0) { const p = (i - 1) >> 1; if (prio[p] <= d) break; heap[i] = heap[p]; prio[i] = prio[p]; i = p; } heap[i] = v; prio[i] = d; };
+    const pop = () => { const top = heap[0], lv = heap[--size], ld = prio[size]; let i = 0; for (;;) { let c = 2 * i + 1; if (c >= size) break; if (c + 1 < size && prio[c + 1] < prio[c]) c++; if (prio[c] >= ld) break; heap[i] = heap[c]; prio[i] = prio[c]; i = c; } heap[i] = lv; prio[i] = ld; return top; };
+    into[seed] = 0; push(seed, 0);
+    while (size) {
+      const d = prio[0], v = pop(); if (d > into[v]) continue;
+      if (d > into[far]) far = v;
+      for (let k = degree[v]; k < degree[v + 1]; k++) { const u = next[k], nd = d + Math.hypot(px[u] - px[v], py[u] - py[v], pz[u] - pz[v]); if (nd < into[u] && size < heap.length - 1) { into[u] = nd; push(u, nd); } }
+    }
+    return far;
+  }
+  const scratch = new Float32Array(m).fill(Infinity); dist.fill(Infinity);
+  for (let seed = 0; seed < m; seed++) {   // a piece may be several separate surfaces: do each
+    if (dist[seed] !== Infinity) continue;
+    const end = walk(seed, scratch);
+    walk(end, dist);
+  }
+  const out = new Float32Array(n);
+  for (let i = 0; i < n; i++) { const d = dist[canon[i]]; out[i] = Number.isFinite(d) ? d * scale : 0; }
+  geometry.setAttribute('gutPath', new THREE.BufferAttribute(out, 1));
+  return true;
 }
