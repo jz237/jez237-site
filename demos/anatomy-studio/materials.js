@@ -79,6 +79,39 @@ export function skinTint(geometry, world) {
   }
   geometry.setAttribute('color', new THREE.BufferAttribute(col, 3));
 }
+/**
+ * Shared values for motion done in vertex shaders, driven by life.js: the clock and strength of the gut's ripple, and
+ * the breathing of the skin. `breath` is 0..1 (already eased out when the body separates); `trunk` and `spine` are the
+ * landmarks of the chest-wall field (ribsBottom, ribsTop, pelvis, dome | spineZ, sternumZ) and `chest` its amplitudes
+ * (side, lift, front, belly). The field itself is written twice, here in GLSL and in life.js in JavaScript: keep them alike.
+ */
+export const lifeUniforms = {time: {value: 0}, gain: {value: 0}, breath: {value: 0}, trunk: {value: new THREE.Vector4(1.1, 1.41, .95, 1.18)}, spine: {value: new THREE.Vector2(-.083, .074)}, chest: {value: new THREE.Vector4(.012, .004, .036, .007)}};
+/** Run another shader edit after whatever the material already does, and keep the program cache key distinct. */
+function alsoCompile(mat, tag, edit) {
+  const before = mat.onBeforeCompile, key = Object.hasOwn(mat, 'customProgramCacheKey') ? mat.customProgramCacheKey() : 'plain';
+  mat.onBeforeCompile = (shader, renderer) => { before.call(mat, shader, renderer); edit(shader); };
+  mat.customProgramCacheKey = () => `${key}|${tag}`;
+}
+/**
+ * Skin breathes per vertex. The skin is many panels that meet edge to edge; moving each one as a block opens
+ * cracks between them, so every vertex follows the chest-wall field at its own position in the body instead.
+ */
+export function breathe(mat) {
+  alsoCompile(mat, 'breathe', shader => {
+    Object.assign(shader.uniforms, {uBreath: lifeUniforms.breath, uTrunk: lifeUniforms.trunk, uSpine: lifeUniforms.spine, uChest: lifeUniforms.chest});
+    shader.vertexShader = shader.vertexShader.replace('#include <common>', `#include <common>
+uniform float uBreath; uniform vec4 uTrunk; uniform vec2 uSpine; uniform vec4 uChest;
+float lifeStep( float a, float b, float x ) { float t = clamp( ( x - a ) / ( b - a ), 0.0, 1.0 ); return t * t * ( 3.0 - 2.0 * t ); }
+vec3 chestWall( vec3 p ) {
+	float side = 1.0 - lifeStep( 0.19, 0.27, abs( p.x ) );
+	float chest = lifeStep( uTrunk.x - 0.06, uTrunk.x + 0.07, p.y ) * ( 1.0 - lifeStep( uTrunk.y - 0.01, uTrunk.y + 0.07, p.y ) ) * side;
+	float belly = lifeStep( uTrunk.z - 0.02, uTrunk.z + 0.09, p.y ) * ( 1.0 - lifeStep( uTrunk.w - 0.05, uTrunk.w + 0.03, p.y ) ) * side;
+	float f = lifeStep( uSpine.x, uSpine.y, p.z );
+	return vec3( p.x * uChest.x * chest, uChest.y * f * chest, max( 0.0, p.z - uSpine.x ) * uChest.z * chest + uChest.w * f * f * belly );
+}`).replace('#include <begin_vertex>', `#include <begin_vertex>
+	if ( uBreath > 0.0 ) { mat3 lifeModel = mat3( modelMatrix ); transformed += transpose( lifeModel ) * chestWall( ( modelMatrix * vec4( transformed, 1.0 ) ).xyz ) * ( uBreath / dot( lifeModel[ 0 ], lifeModel[ 0 ] ) ); }`);
+  });
+}
 export const fileColors = {skeletal: '#f0e6c8', joints: '#d8d1c0', visceral: '#f2a8b8', heart: '#ff6b7a', brain: '#f5c0c8', muscular: '#e07a7a', vessels: '#7f8fe6', nerves: '#f5e08a', lymphoid: '#9fd98a', regions: '#e6c9a8'};
 export const fileLabels = {skeletal: 'Skeleton', joints: 'Ligaments & discs', visceral: 'Viscera', heart: 'Heart', brain: 'Brain & senses', muscular: 'Muscles', vessels: 'Arteries & veins', nerves: 'Nerves & cord', lymphoid: 'Lymphatics', regions: 'Surface regions'};
 
@@ -101,8 +134,8 @@ function realistic(p) {
       if (/omentum|mesocolon|meso-appendix|taenia/.test(L)) return {color: '#e5cf9c', roughness: .35, clearcoat: .6, opacity: .82, transparent: true};
       if (/liver/.test(L)) return {color: '#7b2f2b', ...wet, roughness: .2, clearcoat: 1, clearcoatRoughness: .08, bumpScale: .0013};   // smooth, glossy capsule
       if (/gallbladder|bile duct/.test(L)) return {color: '#5e8a58', ...wet};
-      if (/stomach|duodenum|jejunum|ileum|oesophagus|pharynx/.test(L)) return {color: '#cc8f7f', ...wet, roughness: .25, clearcoat: .95, clearcoatRoughness: .12};   // slick serosa
-      if (/colon|appendix|anal|rectum/.test(L)) return {color: '#b98079', ...wet, roughness: .27, clearcoat: .92, clearcoatRoughness: .14};
+      if (/stomach|duodenum|jejunum|ileum|oesophagus|pharynx/.test(L)) return {color: '#cc8f7f', ...wet, roughness: .25, clearcoat: .95, clearcoatRoughness: .12, gut: /stomach/.test(L) ? .0018 : /oesophagus|pharynx/.test(L) ? 0 : .0013};   // slick serosa
+      if (/colon|appendix|anal|rectum/.test(L)) return {color: '#b98079', ...wet, roughness: .27, clearcoat: .92, clearcoatRoughness: .14, gut: /colon/.test(L) ? .0011 : 0};
       if (/kidney|renal|suprarenal/.test(L)) return {color: '#7d3038', ...wet, roughness: .23, clearcoat: .95, clearcoatRoughness: .1};
       if (/ureter|urethra|bladder/.test(L)) return {color: '#d9b0a0', ...wet};
       if (/pancrea/.test(L)) return {color: '#e4c59b', roughness: .42, clearcoat: .5, bump: boneTex, bumpScale: .0018, roughMap: boneTex};
@@ -196,9 +229,20 @@ export function finishMaterial(mesh, part, mode = 'realistic') {
   }
   if (spec.glass) {
     mat.blending = THREE.AdditiveBlending;
-    mat.onBeforeCompile = shader => { shader.fragmentShader = shader.fragmentShader.replace('#include <opaque_fragment>', 'float xrayRim = pow( 1.0 - saturate( abs( dot( normalize( vViewPosition ), normal ) ) ), 2.4 );\n\toutgoingLight = diffuse * ( 0.022 + 0.85 * xrayRim ) + totalEmissiveRadiance * ( 0.3 + xrayRim );\n\t#include <opaque_fragment>'); };
+    mat.onBeforeCompile = shader => { shader.fragmentShader = shader.fragmentShader.replace('#include <opaque_fragment>', 'float xrayRim = pow( 1.0 - saturate( abs( dot( normalize( vViewPosition ), normal ) ) ), 2.4 );\n\toutgoingLight = diffuse * ( 0.016 + 0.66 * xrayRim ) + totalEmissiveRadiance * ( 0.3 + xrayRim );\n\t#include <opaque_fragment>'); };
     mat.customProgramCacheKey = () => 'xray-glass';
   }
+  if (r.gut) {   // peristalsis: a slow ripple travelling along the piece's long axis, whatever the finish
+    const g = mesh.geometry; if (!g.boundingBox) g.computeBoundingBox();
+    const size = g.boundingBox.getSize(new THREE.Vector3()), axis = size.x >= size.y && size.x >= size.z ? 0 : size.y >= size.z ? 1 : 2, scale = mesh.scale?.x || 1;
+    const wave = new THREE.Vector4(0, 0, 0, r.gut / scale); wave.setComponent(axis, Math.PI * 2 / (.07 / scale));   // 7 cm between crests, amplitude in the mesh's own units
+    alsoCompile(mat, 'gut', shader => {
+      shader.uniforms.uLifeTime = lifeUniforms.time; shader.uniforms.uLifeGain = lifeUniforms.gain; shader.uniforms.uGutWave = {value: wave};
+      shader.vertexShader = shader.vertexShader.replace('#include <common>', '#include <common>\nuniform float uLifeTime; uniform float uLifeGain; uniform vec4 uGutWave;')
+        .replace('#include <begin_vertex>', '#include <begin_vertex>\n\tfloat gutPhase = dot( position, uGutWave.xyz ) - uLifeTime * 1.7;\n\ttransformed += normalize( objectNormal ) * uGutWave.w * uLifeGain * ( sin( gutPhase ) * 0.65 + sin( gutPhase * 2.3 + 1.7 ) * 0.35 );');
+    });
+  }
+  if (part.file === 'regions') breathe(mat);
   if (spec.emissive) { mat.emissive.set(spec.emissive); mat.emissiveIntensity = spec.emissiveIntensity ?? .3; }
   mesh.material = mat; return mat;
 }

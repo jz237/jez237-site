@@ -122,6 +122,20 @@ try {
  // reduced motion still animates a deliberate explosion
  const reduced = await browser.newPage({viewport: {width: 1024, height: 800}, reducedMotion: 'reduce'}); reduced.on('pageerror', e => errors.push(e.message)); await reduced.goto(`${url}?quality=verify&stage=core`); await ready(reduced);
  await reduced.locator('#explode-button').click(); await reduced.waitForFunction(() => window.anatomyStudio.getState().amount > 0, null, {timeout: 30000}); await settled(1, reduced); assert.ok(await reduced.evaluate(() => window.anatomyStudio.getParts().every(p => Math.hypot(...p.position.map((v, i) => v - p.base[i])) > .01)), 'reduced motion explosion still separates every piece');
+ // the assembled body is alive: the heart beats, the chest breathes, bone keeps its size, the limbs stay still, and exploding stops it all exactly
+ const alive = await browser.newPage({viewport: {width: 1024, height: 800}}); alive.on('pageerror', e => errors.push(e.message)); await alive.goto(`${url}?quality=verify&stage=core&life=1`); await ready(alive);
+ const motion = await alive.evaluate(() => { const A = window.anatomyStudio, ids = {lv: 'heart/left-ventricle', lung: 'visceral/inferior-lobe-of-left-lung', rib: 'skeletal/seventh-rib-l', sternum: 'skeletal/body-of-sternum', spine: 'skeletal/vertebra-t6', femur: 'skeletal/femur-l'};
+  const at = Object.fromEntries(Object.entries(ids).map(([k, id]) => [k, A.getParts().findIndex(p => p.id === id)])), r = Object.fromEntries(Object.keys(ids).map(k => [k, {scale: [9, -9], move: 0}]));
+  for (let i = 0; i < 100; i++) { A._advance(.1); const ps = A.getParts(); for (const k in ids) { const p = ps[at[k]], s = (p.scale[0] + p.scale[1] + p.scale[2]) / 3; r[k].scale = [Math.min(r[k].scale[0], s), Math.max(r[k].scale[1], s)]; r[k].move = Math.max(r[k].move, Math.hypot(...p.position.map((v, j) => v - p.base[j]))); } }
+  return {r, life: A.getState().life}; });
+ assert.ok(motion.life.on && motion.life.weight === 1 && motion.life.animated > 150, 'the assembled body is animated');   // about 240 pieces of the core systems; over 1,000 with everything loaded
+ assert.ok(motion.r.lv.scale[0] < .95 && motion.r.lv.scale[1] > .999, `the ventricle contracts and relaxes (${motion.r.lv.scale})`);
+ assert.ok(motion.r.lung.scale[1] > 1.01 && motion.r.lung.move > .005, 'the lung fills and descends'); assert.ok(motion.r.sternum.move > .003, 'the sternum swings forward');
+ for (const k of ['rib', 'sternum', 'spine', 'femur']) assert.ok(motion.r[k].scale[0] > .9999 && motion.r[k].scale[1] < 1.0001, `bone keeps its size (${k})`);
+ assert.ok(motion.r.rib.move > .0008 && motion.r.femur.move === 0 && motion.r.spine.move < .0005, 'ribs swing, the spine and limbs stay still');
+ await alive.evaluate(() => { window.anatomyStudio.setAmount(1); window.anatomyStudio._advance(5); });
+ assert.deepEqual(await alive.evaluate(() => { const A = window.anatomyStudio; return [A.getState().life.weight, A.getParts().filter(p => p.scale.some(v => v !== 1)).length]; }), [0, 0], 'exploding stops the motion and restores every size');
+ await alive.close();
  // a desktop link that opens in Organs & vessels loads what that finish shows and keeps the muscles back until a view needs them
  const lean = await browser.newPage({viewport: {width: 1280, height: 860}}); lean.on('pageerror', e => errors.push(e.message)); await lean.goto(`${url}?quality=verify&mode=organs`); await ready(lean);
  await lean.waitForFunction(() => { const x = window.anatomyStudio.getState(); return !x.loading && x.files.length === 9; }, null, {timeout: 240000}); assert.ok(!(await lean.evaluate(() => window.anatomyStudio.getState().files)).includes('muscular'), 'muscles wait');

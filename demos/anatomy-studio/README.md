@@ -25,9 +25,20 @@ exploded views (heart, lungs, spine, brain, skull, eye, hand, knee, rib cage, di
 
 ## Files
 
-`index.html` + `studio.js` (engine), `labels.js` (label layout), `effects.js` (selection outline, skin depth pre-pass, bone cavity shading, platform reflection), `section.js` (cross-section plane), `quiz.js`, `tour.js`, `tour-notes.js` (text written for the tours), `facts.js` (key facts and related pieces from descriptions), `url-state.js` (shareable links), `assemblies.js` (nested explodes, dependency-free), `explode-rules.js` (whole-body vectors),
+`index.html` + `studio.js` (engine), `life.js` (breathing, heartbeat, pulse), `labels.js` (label layout), `effects.js` (selection outline, skin depth pre-pass, bone cavity shading, platform reflection), `section.js` (cross-section plane), `quiz.js`, `tour.js`, `tour-notes.js` (text written for the tours), `facts.js` (key facts and related pieces from descriptions), `url-state.js` (shareable links), `assemblies.js` (nested explodes, dependency-free), `explode-rules.js` (whole-body vectors),
 `materials.js` (per-system finishes), `parts-board.js`, `manifest.json` (every piece: id, system, hierarchy, side, region, centre, size),
 `descriptions.json`, `assets/*.glb` (one meshopt-compressed file per system, each under 25 MiB), `manual.html`, `vendor/` (three.js 0.180).
+
+## Life
+
+With the body assembled (and in a study put back together) it moves; **Alive** in the explorer turns this off, as do `?life=0` and the reduced-motion setting. It eases out as the body starts to separate and every piece returns exactly to its place and size.
+
+- **Breathing**, about 14 a minute: each rib swings rigidly about its joint with the spine, carrying the sternum forward and up; the diaphragm descends, the lungs lengthen and widen, the abdominal organs are pushed down and the belly wall moves out. Inhalation is quicker than exhalation, with a short rest.
+- **Heartbeat**, about 70 a minute and slightly faster on the in-breath: the atria contract first, then the ventricles contract towards the apex, pulling the atria and the vessel roots down while the atria refill; the aorta and pulmonary trunk swell with the ejected blood.
+- **Pulse**: each artery swells a little as the pressure wave reaches it, later with distance from the heart.
+- **Gut**: a slow ripple travels along the stomach and intestines (a vertex-shader wave; the only motion that deforms a mesh).
+
+`life.js` holds the timing, the amplitudes and the method: each motion is a smooth displacement field over body space, sampled at every piece, so neighbours move together. Bone and solid organs are moved but never resized. Amplitudes are those of quiet breathing and a resting heart, slightly enlarged to be visible; it is an illustration, not a measurement. While the body is alive the page draws continuously, so the idle saving described below applies only when it is exploded, on the board, or switched off.
 
 ## Graphics
 

@@ -10,6 +10,7 @@
  */
 import * as THREE from 'three';
 import { Reflector } from './vendor/objects/Reflector.js';
+import { breathe } from './materials.js?v=82cc3f3258';
 
 const noRaycast = () => {};
 
@@ -75,6 +76,7 @@ export function createOutline(color = '#5fe0bb') {
 // chest in the wrong order, because blended surfaces are sorted per piece, not per pixel.
 const SKIN_DEPTH_ORDER = 10, SKIN_COLOUR_ORDER = 11;
 export const skinDepthMaterial = new THREE.MeshBasicMaterial({ colorWrite: false, depthWrite: true, transparent: true });
+breathe(skinDepthMaterial);   // the depth it writes has to match the breathing skin drawn after it
 
 export function syncSkinDepth(part) {
   const mat = part.mesh.material;
