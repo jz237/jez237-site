@@ -539,7 +539,7 @@ async function boot() {
       {label:'Center City moving traffic'});
   };
   const ui = wireInterface({ store, motion, data, projection, rig, structures,
-    readLocationView, initialName: initial.name });
+    readLocationView, initialName: initial.name, closeTemporaryViews });
   const disposeNotes=wireFieldNotes($('toggleNotes'));
   const disposeLooks = wireLooks($('lookChoices'), store, () => motion.stop());
   const orientation = createOrientation({ host: $('orientation'), projection,
@@ -627,15 +627,27 @@ async function boot() {
     }
   });
 
-  let explore, explorePromise;
+  let explore, explorePromise, toolRequest = 0;
+  function closeTemporaryViews() {
+    ++toolRequest;
+    explore?.close();
+    if (cityFeatures?.active) cityFeatures.close(false);
+    if (bathymetry.active) bathymetry.disable();
+    mapLayers.clearReliefOverlays();
+    aircraftLayer.stopFollow();
+    $('cityFeatureLoadStatus').textContent = '';
+    $('exploreStatus').textContent = '';
+  }
+
   async function openExplore(kind) {
     cityFeatures?.close();
-    const status = $('exploreStatus');
+    $('cityFeatureLoadStatus').textContent = '';
+    const request = ++toolRequest, status = $('exploreStatus');
     status.textContent = 'Opening map tools…';
     try {
       explorePromise ??= import('./explore-modes.js?v=philly-2026092205');
       const module = await explorePromise;
-      if (sceneDisposed) return;
+      if (sceneDisposed || request !== toolRequest) return;
       explore ??= module.createExploreModes(THREE, {
         stage: dom.stage, scene, sky: sky.mesh, projection, sampleElevation, photographic, store, motion,
         rig, structures, landmarks: data.landmarks, models: data.landmarkModels,
@@ -645,20 +657,23 @@ async function boot() {
       explore.open(kind);
       status.textContent = 'Choose an exhibit. Return to map restores your view.';
     } catch {
-      explorePromise = undefined; status.textContent = 'Map tools could not load. Please try again.';
+      explorePromise = undefined;
+      if (!sceneDisposed && request === toolRequest) {
+        status.textContent = 'Map tools could not load. Please try again.';
+      }
     }
   }
   $('openExhibit').onclick = () => openExplore('exhibit');
   $('openModel').onclick = () => openExplore('model');
 
-  let cityRequest = 0;
   async function openCityFeature(kind) {
-    const request = ++cityRequest, status = $('cityFeatureLoadStatus');
+    const request = ++toolRequest, status = $('cityFeatureLoadStatus');
+    $('exploreStatus').textContent = '';
     status.textContent = 'Loading discovery…';
     try {
       cityFeaturesPromise ??= import('./city-features.js?v=philly-2026092205');
       const module = await cityFeaturesPromise;
-      if (sceneDisposed || request !== cityRequest) return;
+      if (sceneDisposed || request !== toolRequest) return;
       cityFeatures ??= module.createCityFeatures(THREE, { scene, sky: sky.mesh, projection,
         sampleElevation, store, motion, invalidate: () => wake(),
         stopOtherModes: () => { explore?.close(); aircraftLayer.stopFollow(true);
@@ -666,6 +681,7 @@ async function boot() {
       cityFeatures.open(kind); status.textContent = '';
     } catch {
       cityFeaturesPromise = undefined;
+      if (sceneDisposed || request !== toolRequest) return;
       cityFeatures?.close(); status.textContent = 'Discovery could not load. Please try again.';
     }
   }
@@ -1742,7 +1758,8 @@ function createMotion(store, projection) {
 // ---------------------------------------------------------------------------
 
 function wireInterface(deps) {
-  const { store, motion, data, projection, rig, structures, readLocationView, initialName } = deps;
+  const { store, motion, data, projection, rig, structures,
+    readLocationView, initialName, closeTemporaryViews } = deps;
 
   const controls = buildControls(store, dom.studioGroups);
   const layerToggles = buildLayerToggles(store, dom.layerToggles);
@@ -1927,6 +1944,10 @@ function wireInterface(deps) {
       inspectionSnapshot = null;
       store.set({ ...saved, camLon: pose.lon, camLat: pose.lat }, { source: 'inspection' });
     }
+    syncInspectionButton();
+  }
+  function syncInspectionButton() {
+    const enabled = !!inspectionSnapshot;
     document.body.classList.toggle('street-inspection', enabled);
     $('btnInspect').setAttribute('aria-pressed', String(enabled));
     $('btnInspect').textContent = enabled ? 'Exit inspection' : 'Street inspection';
@@ -1935,9 +1956,7 @@ function wireInterface(deps) {
   store.subscribe((state, changed) => {
     if (inspectionSnapshot && (changed.has('preset') || state.era !== 'present')) {
       inspectionSnapshot = null;
-      document.body.classList.remove('street-inspection');
-      $('btnInspect').setAttribute('aria-pressed', 'false');
-      $('btnInspect').textContent = 'Street inspection';
+      syncInspectionButton();
     }
   });
   $('storyArchitecture').addEventListener('click', () => visitPreset('architecture'));
@@ -2231,9 +2250,18 @@ function wireInterface(deps) {
     clearTimeout(hashTimer);
     const view = readLocationView(window.location.hash);
     if (!view) return;
+    restoreView(view.state, view.name, 'hash');
+    clearTimeout(hashTimer);
+  }
+  function restoreView(state, name, source) {
+    if (inspectionSnapshot) {
+      inspectionSnapshot = null;
+      syncInspectionButton();
+    }
+    closeTemporaryViews();
     motion.stop();
-    store.set(view.state, { source: 'hash' });
-    api.setViewName(view.name);
+    store.set(state, { source });
+    api.setViewName(name);
   }
   window.addEventListener('hashchange', restoreLocation);
 
@@ -2316,9 +2344,8 @@ function wireInterface(deps) {
       writeReadout(dom.scaleLabel, bar.label);
     },
   };
-  const disposeSaved = wireSavedViews($('savedViews'),store,(state,name) => {
-    motion.stop(); store.set(state,{source:'saved-view'}); api.setViewName(name);
-  },() => viewName || dom.outPreset.textContent);
+  const disposeSaved = wireSavedViews($('savedViews'), store,
+    (state, name) => restoreView(state, name, 'saved-view'), () => viewName || dom.outPreset.textContent);
   api.dispose = () => {
     disposeSaved();
     stopUrlSync();

@@ -815,19 +815,25 @@ async function structuresPass(page, viewport, shot, problems, report) {
     await page.locator('#mbStudio').click();     // put the studio sheet away again
     await page.waitForTimeout(400);
   }
-  // A named link pasted into an open page is a hash change, not a reload;
-  // the name must still take effect.
+  // An incoming view must also replace an active inspection of the previous scene.
+  await page.locator('#btnInspect').evaluate(button => button.click());
+  if (await page.locator('#btnInspect').getAttribute('aria-pressed') !== 'true') {
+    problems.push(`[${viewport.id}] street inspection did not start`);
+  }
   await goto('#d=9000&n=Named%20QA%20view', 2500);
   const named = await page.evaluate(() => ({
     readout: document.getElementById('outPreset').textContent,
     viewName: window.philadelphiaRelief.stats().viewName,
     hash: window.location.hash,
+    inspecting: document.body.classList.contains('street-inspection'),
+    inspectionButton: document.getElementById('btnInspect').getAttribute('aria-pressed'),
     thumbs: [...document.querySelectorAll('#presetList .p-thumb')]
       .map((img) => ({ complete: img.complete, w: img.naturalWidth })),
     ogImage: document.querySelector('meta[property="og:image"]')?.content,
     twitter: document.querySelector('meta[name="twitter:card"]')?.content,
   }));
-  if (named.readout !== 'Named QA view' || named.viewName !== 'Named QA view') {
+  if (named.readout !== 'Named QA view' || named.viewName !== 'Named QA view'
+      || named.inspecting || named.inspectionButton !== 'false') {
     problems.push(`[${viewport.id}] named link not honoured: ${JSON.stringify(named)}`);
   }
   if (named.thumbs.length !== 8) problems.push(`[${viewport.id}] ${named.thumbs.length} preset previews`);
@@ -865,7 +871,7 @@ async function structuresPass(page, viewport, shot, problems, report) {
     problems.push(`[${viewport.id}] clock mode night wrong: ${JSON.stringify(night)}`);
   }
   await shot('20b-clock-night');
-  await goto('#we=fog&tm=manual', 2500);   // hash edits patch the live state, so say manual
+  await goto('#we=fog&tm=manual', 2500);
   const fog = (await stats())?.light;
   if (!(fog?.weather === 'fog' && fog.fogDensity >= 0.9 && fog.clock === false)) {
     problems.push(`[${viewport.id}] fog weather wrong: ${JSON.stringify(fog)}`);
