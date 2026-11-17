@@ -10,7 +10,7 @@
  */
 import * as THREE from 'three';
 import { Reflector } from './vendor/objects/Reflector.js';
-import { breathe } from './materials.js?v=82cc3f3258';
+import { breathe } from './materials.js?v=984d071ad9';
 
 const noRaycast = () => {};
 

@@ -36,9 +36,13 @@ With the body assembled (and in a study put back together) it moves; **Alive** i
 - **Breathing**, about 14 a minute: each rib swings rigidly about its joint with the spine, carrying the sternum forward and up; the diaphragm descends, the lungs lengthen and widen, the abdominal organs are pushed down and the belly wall moves out. Inhalation is quicker than exhalation, with a short rest.
 - **Heartbeat**, about 70 a minute and slightly faster on the in-breath: the atria contract first, then the ventricles contract towards the apex, pulling the atria and the vessel roots down while the atria refill; the aorta and pulmonary trunk swell with the ejected blood.
 - **Pulse**: each artery swells a little as the pressure wave reaches it, later with distance from the heart.
-- **Gut**: a slow ripple travels along the stomach and intestines (a vertex-shader wave; the only motion that deforms a mesh).
+- **Gut**: a slow ripple travels along the stomach, intestines and ureters (a vertex-shader wave).
+- **Sway**: the whole body leans a few millimetres about the ankles, slowly and irregularly, more front-to-back than side-to-side, as anyone standing does; the calf and shin muscles thicken in turn to hold it. It is one rigid turn of the whole body, so every joint stays closed. It is dropped during a cross-section and inside a study.
+- **Eyes**: both eyes jump together to a new point of gaze every second or two, with small corrections between. (There are no eyelids in the model, so no blinking.)
+- **Swallowing**: every twenty to forty seconds the larynx and hyoid rise about two centimetres and drop back, stretching the trachea.
+- **Brain, veins, arms**: the brain swells very slightly with each pulse; the large veins narrow on the in-breath in the chest and neck and fill in the abdomen.
 
-`life.js` holds the timing, the amplitudes and the method: each motion is a smooth displacement field over body space, sampled at every piece, so neighbours move together. Bone and solid organs are moved but never resized. Amplitudes are those of quiet breathing and a resting heart, slightly enlarged to be visible; it is an illustration, not a measurement. While the body is alive the page draws continuously, so the idle saving described below applies only when it is exploded, on the board, or switched off.
+`life.js` holds the timing, the amplitudes and the method: each motion is a smooth displacement field over body space, sampled at every piece, so neighbours move together. Bone and solid organs are moved but never resized. The layers of the body wall (skin, muscle, fascia and what runs through them) follow the same field per vertex in their shaders, because they lie on each other with no gap and would otherwise show through one another. Amplitudes are those of quiet breathing and a resting heart, slightly enlarged to be visible; it is an illustration, not a measurement. While the body is alive the page draws continuously, so the idle saving described below applies only when it is exploded, on the board, or switched off.
 
 ## Graphics
 

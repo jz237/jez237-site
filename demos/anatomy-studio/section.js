@@ -121,12 +121,13 @@ export function createSection({ materials, bounds, onChange, scene }) {
 
   /** Once per drawn frame while a section is active: keep the caps in step with what is on screen. */
   /** Test queued meshes in slices, smallest first so most caps appear at once; each slice asks for a redraw. */
-  let pumping = false, notified = 0;
+  let pumping = false, notified = 0, pumped = 0;
   function pump() {
     pumping = false;
     if (!active() || !s.caps || !untested.length) return;
-    const started = performance.now();
-    while (untested.length && performance.now() - started < BUDGET_MS) { const p = untested.pop(); closed.set(p, closedSurface(p.loGeometry || p.mesh.geometry)); }
+    const started = performance.now(), budget = started - pumped > 150 ? 60 : BUDGET_MS;   // when frames are slow this runs rarely, so each turn does more
+    while (untested.length && performance.now() - started < budget) { const p = untested.pop(); closed.set(p, closedSurface(p.loGeometry || p.mesh.geometry)); }
+    pumped = performance.now();
     if (!untested.length || started - notified > 250) { notified = started; onChange(); }   // a redraw now and then, not after every slice
     if (untested.length) { pumping = true; setTimeout(pump, 4); }
   }

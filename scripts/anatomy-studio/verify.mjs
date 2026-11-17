@@ -133,8 +133,13 @@ try {
  assert.ok(motion.r.lung.scale[1] > 1.01 && motion.r.lung.move > .005, 'the lung fills and descends'); assert.ok(motion.r.sternum.move > .003, 'the sternum swings forward');
  for (const k of ['rib', 'sternum', 'spine', 'femur']) assert.ok(motion.r[k].scale[0] > .9999 && motion.r[k].scale[1] < 1.0001, `bone keeps its size (${k})`);
  assert.ok(motion.r.rib.move > .0008 && motion.r.femur.move === 0 && motion.r.spine.move < .0005, 'ribs swing, the spine and limbs stay still');
+ // the rest of the body: it sways about the ankles, the eyes move, and a swallow lifts the hyoid
+ const stance = await alive.evaluate(() => { const A = window.anatomyStudio, i = A.getParts().findIndex(p => p.id === 'skeletal/hyoid-bone'), j = A.getParts().findIndex(p => p.id === 'brain/iris-l'); let sway = 0, lo = 9, hi = -9, rise = 0, eye = 0; A.swallow();
+  for (let k = 0; k < 300; k++) { A._advance(.05); const s = A.getState().life, ps = A.getParts(); sway = Math.max(sway, Math.abs(s.sway[0])); lo = Math.min(lo, s.gaze[0]); hi = Math.max(hi, s.gaze[0]); rise = Math.max(rise, ps[i].position[1] - ps[i].base[1]); eye = Math.max(eye, ps[j].turned); }
+  return {sway, gaze: hi - lo, rise, eye}; });
+ assert.ok(stance.sway > .03 && stance.sway < .4, `the body sways a fraction of a degree (${stance.sway})`); assert.ok(stance.gaze > .01 && stance.eye > .005, 'the eyes move'); assert.ok(stance.rise > .012 && stance.rise < .03, `a swallow lifts the hyoid (${stance.rise})`);
  await alive.evaluate(() => { window.anatomyStudio.setAmount(1); window.anatomyStudio._advance(5); });
- assert.deepEqual(await alive.evaluate(() => { const A = window.anatomyStudio; return [A.getState().life.weight, A.getParts().filter(p => p.scale.some(v => v !== 1)).length]; }), [0, 0], 'exploding stops the motion and restores every size');
+ assert.deepEqual(await alive.evaluate(() => { const A = window.anatomyStudio; return [A.getState().life.weight, A.getParts().filter(p => p.scale.some(v => v !== 1)).length, A.getParts().filter(p => p.turned > 1e-6).length, ...A.getState().life.sway.map(Math.abs)]; }), [0, 0, 0, 0, 0], 'exploding stops the motion and restores every size and angle');
  await alive.close();
  // a desktop link that opens in Organs & vessels loads what that finish shows and keeps the muscles back until a view needs them
  const lean = await browser.newPage({viewport: {width: 1280, height: 860}}); lean.on('pageerror', e => errors.push(e.message)); await lean.goto(`${url}?quality=verify&mode=organs`); await ready(lean);

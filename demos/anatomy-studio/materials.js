@@ -93,8 +93,16 @@ function alsoCompile(mat, tag, edit) {
   mat.customProgramCacheKey = () => `${key}|${tag}`;
 }
 /**
- * Skin breathes per vertex. The skin is many panels that meet edge to edge; moving each one as a block opens
- * cracks between them, so every vertex follows the chest-wall field at its own position in the body instead.
+ * The soft layers of the body wall: skin, muscle and fascia, the vessels, nerves, ligaments and lymph nodes
+ * threaded through them. They lie on each other with no gap, so they must all move by exactly the same rule or one
+ * shows through the next. (The diaphragm, spleen and thymus are organs: they go down with the diaphragm instead.)
+ */
+const WALL_FILES = new Set(['regions', 'muscular', 'vessels', 'nerves', 'joints', 'lymphoid']);
+export const ridesWall = piece => WALL_FILES.has(piece.file) && !/^Diaphragm$|spleen|thymus/i.test(piece.name);
+/**
+ * The body wall breathes per vertex. Its layers are panels and sheets that meet edge to edge and face to face;
+ * moving each as a block opens cracks between panels and pushes muscle through fascia. So every vertex follows the
+ * chest-wall field at its own position in the body instead.
  */
 export function breathe(mat) {
   alsoCompile(mat, 'breathe', shader => {
@@ -137,7 +145,7 @@ function realistic(p) {
       if (/stomach|duodenum|jejunum|ileum|oesophagus|pharynx/.test(L)) return {color: '#cc8f7f', ...wet, roughness: .25, clearcoat: .95, clearcoatRoughness: .12, gut: /stomach/.test(L) ? .0018 : /oesophagus|pharynx/.test(L) ? 0 : .0013};   // slick serosa
       if (/colon|appendix|anal|rectum/.test(L)) return {color: '#b98079', ...wet, roughness: .27, clearcoat: .92, clearcoatRoughness: .14, gut: /colon/.test(L) ? .0011 : 0};
       if (/kidney|renal|suprarenal/.test(L)) return {color: '#7d3038', ...wet, roughness: .23, clearcoat: .95, clearcoatRoughness: .1};
-      if (/ureter|urethra|bladder/.test(L)) return {color: '#d9b0a0', ...wet};
+      if (/ureter|urethra|bladder/.test(L)) return {color: '#d9b0a0', ...wet, gut: /ureter/.test(L) ? .0005 : 0};   // the ureters squeeze urine down in waves too
       if (/pancrea/.test(L)) return {color: '#e4c59b', roughness: .42, clearcoat: .5, bump: boneTex, bumpScale: .0018, roughMap: boneTex};
       if (/thyroid|parathyroid|hypophysis|pineal/.test(L)) return {color: '#b9585d', ...wet};
       if (/gland|duct/.test(L)) return {color: '#d4a382', roughness: .45, clearcoat: .4};
@@ -242,7 +250,7 @@ export function finishMaterial(mesh, part, mode = 'realistic') {
         .replace('#include <begin_vertex>', '#include <begin_vertex>\n\tfloat gutPhase = dot( position, uGutWave.xyz ) - uLifeTime * 1.7;\n\ttransformed += normalize( objectNormal ) * uGutWave.w * uLifeGain * ( sin( gutPhase ) * 0.65 + sin( gutPhase * 2.3 + 1.7 ) * 0.35 );');
     });
   }
-  if (part.file === 'regions') breathe(mat);
+  if (ridesWall(part)) breathe(mat);
   if (spec.emissive) { mat.emissive.set(spec.emissive); mat.emissiveIntensity = spec.emissiveIntensity ?? .3; }
   mesh.material = mat; return mat;
 }

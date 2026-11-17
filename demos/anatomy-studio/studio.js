@@ -6,12 +6,12 @@ import { EffectComposer } from './vendor/postprocessing/EffectComposer.js';
 import { RenderPass } from './vendor/postprocessing/RenderPass.js';
 import { GTAOPass } from './vendor/postprocessing/GTAOPass.js';
 import { OutputPass } from './vendor/postprocessing/OutputPass.js';
-import { PartsBoard } from './parts-board.js?v=76a88f20d1';
-import { finishMaterial, studioEnvironment, fileLabels, fileColors, modes, organPiece, projectedUV, skinTint } from './materials.js?v=82cc3f3258';
+import { PartsBoard } from './parts-board.js?v=eb3be7f2fd';
+import { finishMaterial, studioEnvironment, fileLabels, fileColors, modes, organPiece, projectedUV, skinTint } from './materials.js?v=984d071ad9';
 import { assemblies, bodyLandmarks, assemblyContext, assemblyOffset } from './assemblies.js?v=98fdd3ac69';
 import { bodyOffset, bodySpread, explodeSchedule } from './explode-rules.js?v=742c72af7e';
 import { layoutLabels } from './labels.js?v=5a33037751';
-import { createSection } from './section.js?v=b5188e87e5';
+import { createSection } from './section.js?v=475f66ee5d';
 import { createQuiz } from './quiz.js?v=bcf9b3a438';
 import { createTour } from './tour.js?v=7c4b903d8e';
 import { keyFacts, relatedPieces, summary } from './facts.js?v=12aa155dc7';
@@ -19,8 +19,8 @@ import { readURL, writeURL } from './url-state.js?v=df6e81efce';
 import { systemNotes, pieceNotes } from './tour-notes.js?v=bb3933d4cf';
 import { UnrealBloomPass } from './vendor/postprocessing/UnrealBloomPass.js';
 import { BokehPass } from './vendor/postprocessing/BokehPass.js';
-import { createOutline, syncSkinDepth, skinDepthMaterial, cavityTint, createFloorReflection } from './effects.js?v=72befa3056';
-import { createLife } from './life.js?v=c398ae1e9f';
+import { createOutline, syncSkinDepth, skinDepthMaterial, cavityTint, createFloorReflection } from './effects.js?v=d0c5506e15';
+import { createLife } from './life.js?v=2f173080ce';
 
 const $ = id => document.getElementById(id);
 const params = new URLSearchParams(location.search);
@@ -144,10 +144,10 @@ async function loadStudio(){
  if (!reducedMotion && !verifyQuality) { camera.position.sub(controls.target).multiplyScalar(1.24).add(controls.target); setView('hero'); if (viewTween) viewTween.duration = 2400; }   // a slow push-in on arrival
  window.anatomyStudio = {
   getState:() => ({ ready:state.ready, pieces:parts.length, visible:parts.filter(p => p.mesh.visible).length, amount:state.amount, target:state.target, selected:state.selected?.label ?? null, isolated:state.isolated, system:state.system, board:state.board, mode:state.mode, ao:state.ao, detail:state.detail, hiFiles:[...hi.loaded], hiLoading:[...hi.loading], assembly:state.assembly, assemblySide:state.assemblySide, stage:state.stage, loading:state.loading, hidden:state.hidden.size, rendered, life:life.getState(), fx:state.fx, dof:bokehPass.enabled, only:state.only, quality:quality.level, section:section.state, quiz:quiz.getState(), tour:tour.getState(), triangles:parts.reduce((n, p) => n + (p.mesh.visible ? p.triangles : 0), 0), drawCalls:parts.reduce((n, p) => n + (p.mesh.visible ? 1 : 0), 0), files:manifest.files.filter(f => f.loaded).map(f => f.id) }),
-  getParts:() => parts.map(p => ({ id:p.id, name:p.name, scale:p.mesh.scale.toArray().map((v, i) => v / p.baseScale.getComponent(i)), side:p.side, file:p.file, region:p.region, visible:p.mesh.visible, lod:p.lod, triangles:Math.round((p.mesh.geometry.index?.count ?? p.mesh.geometry.attributes.position.count) / 3), radius:(p.mesh.geometry.boundingSphere || p.mesh.geometry.computeBoundingSphere() || p.mesh.geometry.boundingSphere).radius * Math.max(p.mesh.scale.x, p.mesh.scale.y, p.mesh.scale.z), extent:p.size.length() / 2, position:p.mesh.position.toArray(), base:p.base.toArray(), inAssembly:!!(state.assembly && isMember(p)) })),
+  getParts:() => parts.map(p => ({ id:p.id, name:p.name, turned:p.baseQuaternion ? p.mesh.quaternion.angleTo(p.baseQuaternion) : 0, scale:p.mesh.scale.toArray().map((v, i) => v / p.baseScale.getComponent(i)), side:p.side, file:p.file, region:p.region, visible:p.mesh.visible, lod:p.lod, triangles:Math.round((p.mesh.geometry.index?.count ?? p.mesh.geometry.attributes.position.count) / 3), radius:(p.mesh.geometry.boundingSphere || p.mesh.geometry.computeBoundingSphere() || p.mesh.geometry.boundingSphere).radius * Math.max(p.mesh.scale.x, p.mesh.scale.y, p.mesh.scale.z), extent:p.size.length() / 2, position:p.mesh.position.toArray(), base:p.base.toArray(), inAssembly:!!(state.assembly && isMember(p)) })),
   getAssembly:id => { const a = assemblies[id]; if (!a) return null; const members = assemblyMembers(id); return { side:state.assemblySide, paired:!!a.paired, members:members.map(p => p.id), primary:members.filter(p => a.primary?.(p.piece)).map(p => p.id), framed:members.filter(p => !a.frame || a.frame(p.piece)).map(p => p.id), rectangles:projectedRectangles(members.filter(p => p.mesh.visible)) }; },
   getBoardRectangles:() => board ? board.rectangles() : [],
-  loadStage, enterAssembly, leaveAssembly, setMode, setAmount, reset, loadHi, setDetail, lodPass, choosePiece, hideSelected, getManifest:() => manifest,
+  loadStage, enterAssembly, leaveAssembly, setMode, setAmount, reset, loadHi, setDetail, lodPass, choosePiece, hideSelected, swallow:() => life.swallow(), getManifest:() => manifest,
   // inspection hooks for the verification scripts and for debugging: ?quality=verify or ?debug
   ...(verifyQuality || params.has('debug') ? { _advance:(seconds = 1) => { let t = Math.max(last, performance.now()); for (let i = 0, n = Math.ceil(seconds * 60); i < n; i++) tick(t += 1000 / 60); },   /* step the loop by hand: a background tab gets no animation frames */ _radius:id => { const p = partsById.get(id); return p ? projectedRadiusPx(p) : null; }, _edges:(id, limit = .03) => { const p = partsById.get(id); if (!p) return null; const g = p.mesh.geometry, pos = g.attributes.position, idx = g.index, s = p.mesh.scale.x; let long = 0, max = 0; const n = idx ? idx.count : pos.count; const v = i => [pos.getX(i), pos.getY(i), pos.getZ(i)]; for (let t = 0; t < n; t += 3) { const a = v(idx ? idx.getX(t) : t), b = v(idx ? idx.getX(t + 1) : t + 1), c = v(idx ? idx.getX(t + 2) : t + 2); const L = Math.max(Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]), Math.hypot(b[0] - c[0], b[1] - c[1], b[2] - c[2]), Math.hypot(a[0] - c[0], a[1] - c[1], a[2] - c[2])) * s; if (L > max) max = L; if (L > limit) long++; } return { tris:n / 3, long, max:+max.toFixed(4), lod:p.lod }; }, _focus:(id, distance = .6, dir = [1, .35, 1.4]) => { const p = partsById.get(id); if (!p) return false; const c = p.center.clone().add(p.mesh.position).sub(p.base); viewTween = null; controls.target.copy(c); camera.position.copy(c).addScaledVector(new THREE.Vector3().fromArray(dir).normalize(), distance); return true; }, _side:v => { for (const p of parts) p.mesh.material.side = v; }, _normals:on => { for (const p of parts) { if (on) { p.mesh.userData.savedMat = p.mesh.material; p.mesh.material = new THREE.MeshNormalMaterial(); } else if (p.mesh.userData.savedMat) { p.mesh.material = p.mesh.userData.savedMat; delete p.mesh.userData.savedMat; } } }, _flat:on => { for (const p of parts) { if (on) { p.mesh.userData.savedMat = p.mesh.material; p.mesh.material = new THREE.MeshStandardMaterial({ color:'#d9ad8e', roughness:.6, flatShading:false }); } else if (p.mesh.userData.savedMat) { p.mesh.material = p.mesh.userData.savedMat; delete p.mesh.userData.savedMat; } } }, _gtao:gtaoPass, _GTAOPass:GTAOPass, _camera:() => ({ position:camera.position.toArray(), target:controls.target.toArray(), tween:!!viewTween }) } : {})
  };
@@ -549,7 +549,7 @@ function tick(now){
   for (const p of parts) { if (state.assembly) { if (p.assemblyOffset) p.mesh.position.copy(p.base).addScaledVector(p.assemblyOffset, t); else p.mesh.position.copy(p.base); } else { const k = state.only === 'all' || p.file === state.only ? 1 : 0, ti = Math.min(1, Math.max(0, (t - p.lag) / LAG_SPAN)), si = ti === t ? spread : THREE.MathUtils.smoothstep(ti, explodeSchedule.spreadStart, explodeSchedule.spreadEnd); p.mesh.position.copy(p.base).addScaledVector(p.offset, ti * k).addScaledVector(p.spread, si * k); } }
   if ((state.assembly && ((lastApplied < .05) !== (t < .05))) || (state.mode === 'skin' && ((lastApplied < .02) !== (t < .02)))) updateVisibility();
   lastApplied = state.amount;
-  if (repose) life.apply(parts, alive); }
+  if (repose) life.apply(parts, alive, model, section.active || !!state.assembly); }
  if (viewTween) { const t = Math.min(1, (now - viewTween.start) / (viewTween.duration || 900)), s = t * t * (3 - 2 * t);
   if (!viewTween.arc) { const a = viewTween.from.clone().sub(viewTween.fromTarget), b = viewTween.to.clone().sub(viewTween.toTarget), ra = a.length(), rb = b.length(); a.normalize(); b.normalize(); viewTween.arc = { a, ra, rb, turn:new THREE.Quaternion().setFromUnitVectors(a, b), q:new THREE.Quaternion() }; }
   const arc = viewTween.arc; controls.target.lerpVectors(viewTween.fromTarget, viewTween.toTarget, s);

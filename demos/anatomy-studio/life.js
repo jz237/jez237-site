@@ -10,13 +10,21 @@
  *               the atria and the roots of the great vessels down with them while the atria refill; the aorta and
  *               pulmonary trunk swell as the blood is ejected.
  *   pulse       each artery swells slightly as the pressure wave reaches it, later the further it is from the heart.
- *   gut         a slow travelling ripple along the stomach and intestines (a vertex-shader wave, see materials.js).
+ *   gut         a slow travelling ripple along the stomach, intestines and ureters (a vertex-shader wave, see materials.js).
+ *   sway        nobody stands perfectly still: the whole body leans a few millimetres about the ankles, slowly and
+ *               irregularly, more front-to-back than side-to-side, and the calf and shin muscles take turns to hold it.
+ *   eyes        both eyes jump together to a new point of gaze every second or two, with small corrections between.
+ *   swallowing  now and then the larynx and hyoid rise about two centimetres and drop back, stretching the trachea.
+ *   brain       swells very slightly with each arterial pulse, as it does inside the skull.
+ *   veins       the large veins narrow a little on the in-breath in the chest and neck and fill in the abdomen.
  *
  * How it is done: every motion is a smooth displacement field over body space, F(point, time). A piece is moved
  * by the field at its centre, so neighbours always move together and nothing tears or collides. What else happens
  * to the piece depends on what it is made of:
- *   elastic   lungs, pleura, bronchi, diaphragm, muscle, skin, vessels, nerves, cartilage: also stretched by the
- *             field's change across the piece;
+ *   elastic   lungs, pleura, bronchi, diaphragm, cartilage: also stretched by the field's change across the piece;
+ *   wall      skin, muscle, fascia and the vessels, nerves and ligaments in them: not moved here at all. They
+ *             lie on each other with no gap, so each vertex follows the chest-wall field in the shader
+ *             (materials.js, breathe) and no layer can slip through the next;
  *   solid     heart, liver and the other organs, sternum, vertebrae: moved, never resized by breathing;
  *   ribs      rigid: rotated about the joint with the spine by exactly the angle that keeps the front end on the
  *             chest-wall field, which is what joins it to its cartilage and the sternum.
@@ -27,7 +35,7 @@
  * This is an illustration of the motion, not a measurement of it.
  */
 import * as THREE from 'three';
-import { lifeUniforms } from './materials.js?v=82cc3f3258';
+import { lifeUniforms, ridesWall } from './materials.js?v=984d071ad9';
 
 const smooth = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a))); return t * t * (3 - 2 * t); };
 const smoother = t => { t = Math.min(1, Math.max(0, t)); return t * t * t * (t * (t * 6 - 15) + 10); };
@@ -63,11 +71,19 @@ const VENTRICLE = 0.075, ATRIUM = 0.06, ATRIUM_FILL = 0.035, GREAT_VESSEL = 0.03
 const PULSE_SPEED = 6;         // metres per second along the arterial tree
 const RIB = /^(First|Second|Third|Fourth|Fifth|Sixth|Seventh|Eighth|Ninth|Tenth|Eleventh|Twelfth) rib$/;
 const INFLATES = /lung|pleura|bronch|^Diaphragm$/i;
+const TAU = Math.PI * 2;
+const SWAY_FRONT = 0.0045, SWAY_SIDE = 0.0022;   // radians about the ankles: about 7 mm and 3.5 mm at the head
+const CALF_TONE = 0.012;                          // the muscle holding the lean thickens by this fraction
+const GAZE_SIDE = 0.13, GAZE_UP = 0.055;          // radians: how far the eyes wander from straight ahead
+const SWALLOW_RISE = [0, 0.018, 0.004], SWALLOW_SECONDS = 1.1;
+const BRAIN_PULSE = 0.003, VEIN_BREATH = 0.012;
 
 export function createLife() {
-  const life = { on: true, breath: 0.15, beat: 0, time: 0, weight: 0, anchors: null, animated: [], planned: 0 };
-  const signals = { breath: 0, ventricle: 0, atrium: 0 };
+  const life = { on: true, breath: 0.15, beat: 0, time: Math.random() * 60, weight: 0, anchors: null, animated: [], planned: 0, swayGain: 0, swayX: 0, swayZ: 0,
+    gaze: { x: 0, y: 0, fromX: 0, fromY: 0, toX: 0, toY: 0, t: 1, seconds: 0.05, wait: 1.2 }, swallow: { t: -1, wait: 14 + Math.random() * 14 } };
+  const signals = { breath: 0, ventricle: 0, atrium: 0, sway: 0, swallow: 0 };
   const turn = new THREE.Quaternion(), arm = new THREE.Vector3(), axis = new THREE.Vector3();
+  const eyeTurn = new THREE.Quaternion(), eyeNow = new THREE.Quaternion(), lean = new THREE.Quaternion(), tilt = new THREE.Quaternion(), UP = new THREE.Vector3(0, 1, 0), ACROSS = new THREE.Vector3(1, 0, 0), FORWARD = new THREE.Vector3(0, 0, 1);
 
   /** Landmarks of the trunk, read from the model so the fields fit this body. */
   function setup(manifest) {
@@ -86,7 +102,11 @@ export function createLife() {
       // ventricles (where the valves sit) is what gets pulled down
       heartPivot: apex.map((v, i) => v + (base[i] - v) * 0.25),
       valvePlane: la && lv ? la.center.map((v, i) => (v + lv.center[i]) / 2) : heart,
-      archY: arch ? arch.center[1] + arch.size[1] / 2 : 1.39, heart
+      archY: arch ? arch.center[1] + arch.size[1] / 2 : 1.39, heart,
+      ankle: (() => { const t = piece('Talus'); return t ? [0, t.center[1], t.center[2]] : [0, 0.059, -0.053]; })(),
+      eyes: manifest.pieces.filter(p => p.name === 'Sclera').map(p => p.center),
+      brain: (() => { const list = manifest.pieces.filter(p => p.file === 'brain' && p.region === 'head' && p.size[0] > 0.03), n = Math.max(1, list.length); return list.reduce((s, p) => s.map((v, i) => v + p.center[i] / n), [0, 0, 0]); })(),
+      larynx: new Set(manifest.assemblies?.larynx || [])
     };
     const a = life.anchors;   // the skin's shader evaluates the same chest-wall field: give it the same numbers
     lifeUniforms.trunk.value.set(a.ribsBottom, a.ribsTop, a.pelvis, a.dome); lifeUniforms.spine.value.set(a.spineZ, a.sternumZ); lifeUniforms.chest.value.set(CHEST_SIDE, CHEST_LIFT, CHEST_FRONT, BELLY_OUT);
@@ -163,13 +183,13 @@ export function createLife() {
     const add = (signal, offset, stretch, delay = 0) => { if (offset.some(v => Math.abs(v) > 2e-5) || stretch.some(v => Math.abs(v) > 2e-4)) channels.push({ signal, offset, stretch, delay }); };
     let rib = null;
     // breathing
-    // (the skin is not moved here: it follows the same chest-wall field per vertex, in its shader, so its panels stay joined)
-    if (piece.file !== 'regions' && piece.region !== 'upper limb' && piece.region !== 'lower limb' && piece.region !== 'head') {
+    // (the wall layers are not moved here: they follow the same chest-wall field per vertex, in their shaders)
+    if (!ridesWall(piece) && piece.region !== 'upper limb' && piece.region !== 'lower limb' && piece.region !== 'head') {
       if (piece.file === 'skeletal' && RIB.test(piece.name)) rib = ribSwing(piece);
       else {
-        const organ = piece.file === 'visceral' || piece.file === 'heart' || piece.name === 'Diaphragm';
+        const organ = piece.file !== 'skeletal';   // viscera, heart, diaphragm, spleen, thymus
         const s = sample(organ ? organField : wallField, piece);
-        const elastic = organ ? INFLATES.test(piece.name) : piece.file !== 'skeletal' || /cartilage/i.test(piece.name);
+        const elastic = organ ? INFLATES.test(piece.name) : /cartilage/i.test(piece.name);
         if (piece.file === 'heart') s.offset[1] *= HEART_RIDE;
         add('breath', s.offset, elastic ? s.stretch : NONE);
       }
@@ -194,9 +214,29 @@ export function createLife() {
       const delay = Math.hypot(c[0] - a.heart[0], c[1] - a.heart[1], c[2] - a.heart[2]) / PULSE_SPEED / BEAT_SECONDS;
       add('pulse', NONE, [0, 1, 2].map(i => i === longest ? 0 : ARTERY), delay);
     }
-    if (!channels.length && !rib) return null;
-    if (rib) part.baseQuaternion = part.mesh.quaternion.clone();
-    return { channels, rib };
+    // veins: the big ones empty towards the chest on the in-breath and fill below the diaphragm
+    if (piece.file === 'vessels' && !isArtery(piece) && /thorax|neck|abdomen/.test(piece.region)) {
+      const longest = piece.size.indexOf(Math.max(...piece.size)), k = piece.region === 'abdomen' ? VEIN_BREATH * 0.7 : -VEIN_BREATH;
+      add('breath', NONE, [0, 1, 2].map(i => i === longest ? 0 : k));
+    }
+    // the muscles that hold the lean: calf when leaning forward, shin when leaning back
+    if (piece.file === 'muscular' && /soleus|gastrocnemius|tibialis anterior/i.test(piece.name)) {
+      const longest = piece.size.indexOf(Math.max(...piece.size)), k = /tibialis/i.test(piece.name) ? -CALF_TONE : CALF_TONE;
+      add('sway', NONE, [0, 1, 2].map(i => i === longest ? -k * 0.5 : k));
+    }
+    // swallowing: the larynx and hyoid rise together; the trachea is pulled up at its top end only
+    if (a.larynx.has(piece.id)) add('swallow', SWALLOW_RISE, NONE);
+    else if (piece.name === 'Trachea') add('swallow', SWALLOW_RISE.map(v => v * 0.5), [0, SWALLOW_RISE[1] / Math.max(piece.size[1], 0.05), 0]);
+    // the brain swells a little with each pulse, about its centre
+    let eye = null;
+    if (piece.file === 'brain' && piece.region === 'head') {
+      const centre = a.eyes.find(e => Math.hypot(c[0] - e[0], c[1] - e[1], c[2] - e[2]) < 0.014);
+      if (centre && !/lacrimal/i.test(piece.name)) eye = { pivot: centre };   // an eyeball: it turns, it does not pulse
+      else if (!centre && !/ear|cochlea|vestibul|lacrimal|ossicle|tympan/i.test(piece.name)) add('pulse', c.map((v, i) => (v - a.brain[i]) * BRAIN_PULSE), [BRAIN_PULSE, BRAIN_PULSE, BRAIN_PULSE], 0.12);
+    }
+    if (!channels.length && !rib && !eye) return null;
+    if (rib || eye) part.baseQuaternion = part.mesh.quaternion.clone();
+    return { channels, rib, eye };
   }
 
   /** Advance the clocks. The heart runs a little faster during inhalation. */
@@ -208,14 +248,44 @@ export function createLife() {
     signals.atrium = atrialCurve(life.beat);
     signals.ventricle = ventricularCurve(life.beat);
     lifeUniforms.time.value = life.time;
+    // postural sway: a few slow, unrelated rhythms add up to a wander that never quite repeats
+    const t = life.time, front = 0.5 * Math.sin(TAU * t / 7.3) + 0.3 * Math.sin(TAU * t / 11.9 + 1.3) + 0.2 * Math.sin(TAU * t / 4.1 + 2.1);
+    const sideways = 0.5 * Math.sin(TAU * t / 9.7 + 0.6) + 0.3 * Math.sin(TAU * t / 5.3 + 2.9) + 0.2 * Math.sin(TAU * t / 13.7);
+    signals.sway = front; life.swayX = front * SWAY_FRONT; life.swayZ = -sideways * SWAY_SIDE;
+    // eyes: hold, then jump. Larger jumps take longer (about 30 ms plus 2.5 ms a degree), as real saccades do
+    const g = life.gaze;
+    if (g.t >= 1 && (g.wait -= dt) <= 0) {
+      const far = Math.random() < 0.35, rnd = () => Math.random() * 2 - 1;
+      g.fromX = g.x; g.fromY = g.y;
+      g.toX = Math.max(-GAZE_SIDE, Math.min(GAZE_SIDE, far ? rnd() * GAZE_SIDE : g.x * 0.6 + rnd() * 0.025));
+      g.toY = Math.max(-GAZE_UP, Math.min(GAZE_UP, far ? rnd() * GAZE_UP : g.y * 0.6 + rnd() * 0.012));
+      g.seconds = 0.03 + Math.hypot(g.toX - g.fromX, g.toY - g.fromY) * 0.145; g.t = 0; g.wait = far ? 1.2 + Math.random() * 2.6 : 0.35 + Math.random() * 1.3;
+    }
+    if (g.t < 1) { g.t = Math.min(1, g.t + dt / g.seconds); const e = smoother(g.t); g.x = g.fromX + (g.toX - g.fromX) * e; g.y = g.fromY + (g.toY - g.fromY) * e; }
+    eyeTurn.setFromAxisAngle(UP, g.x).multiply(turn.setFromAxisAngle(ACROSS, -g.y));
+    // swallowing: every twenty to forty seconds
+    const s = life.swallow;
+    if (s.t < 0) { if ((s.wait -= dt) <= 0) s.t = 0; signals.swallow = 0; }
+    else { s.t += dt / SWALLOW_SECONDS; signals.swallow = contraction(s.t, 0, 0.3, 1); if (s.t >= 1) { s.t = -1; s.wait = 20 + Math.random() * 20; } }
   }
 
   /**
    * Apply to the pieces. `weight` is 1 with the body assembled and falls to 0 as it starts to separate, so the
    * motion eases out instead of stopping dead. Positions must already hold this frame's assembled/exploded pose.
    */
-  function apply(parts, weight) {
+  function apply(parts, weight, body = null, still = false) {
     if (!life.anchors) return;
+    // The lean: the whole body turns about the ankles as one rigid thing, so every joint stays closed. It is
+    // dropped (smoothly) for a cross-section, whose plane is fixed in space, and inside a nested study.
+    life.swayGain = weight <= 0 ? 0 : life.swayGain + ((still ? 0 : weight) - life.swayGain) * 0.06;
+    if (body) {
+      if (life.swayGain > 1e-4) {
+        lean.setFromAxisAngle(ACROSS, life.swayX * life.swayGain).multiply(tilt.setFromAxisAngle(FORWARD, life.swayZ * life.swayGain));
+        const p = life.anchors.ankle;
+        body.quaternion.copy(lean); body.position.set(p[0], p[1], p[2]).applyQuaternion(lean).multiplyScalar(-1); body.position.x += p[0]; body.position.y += p[1]; body.position.z += p[2];
+      } else { body.quaternion.identity(); body.position.set(0, 0, 0); }
+    }
+    eyeNow.identity().slerp(eyeTurn, weight);
     if (parts.length !== life.planned) { for (const p of parts) if (p.life === undefined) { p.life = plan(p); if (p.life) life.animated.push(p); } life.planned = parts.length; }
     const was = life.weight;
     life.weight = weight;
@@ -234,6 +304,12 @@ export function createLife() {
       const c = p.piece.center, b = p.base;
       mesh.position.x += ox + (1 - kx) * (c[0] - b.x); mesh.position.y += oy + (1 - ky) * (c[1] - b.y); mesh.position.z += oz + (1 - kz) * (c[2] - b.z);
       mesh.scale.set(s0.x * kx, s0.y * ky, s0.z * kz);
+      const eye = p.life.eye;
+      if (eye) {
+        mesh.quaternion.copy(eyeNow).multiply(p.baseQuaternion);
+        arm.set(mesh.position.x - eye.pivot[0], mesh.position.y - eye.pivot[1], mesh.position.z - eye.pivot[2]).applyQuaternion(eyeNow);
+        mesh.position.set(eye.pivot[0] + arm.x, eye.pivot[1] + arm.y, eye.pivot[2] + arm.z);
+      }
       const rib = p.life.rib;
       if (rib) {
         const v = signals.breath * weight;
@@ -252,6 +328,9 @@ export function createLife() {
   return {
     setup, advance, apply,
     get on() { return life.on; }, set on(v) { life.on = !!v; },
-    getState: () => ({ on: life.on, weight: +life.weight.toFixed(3), animated: life.animated.length, breath: +signals.breath.toFixed(3), ventricle: +signals.ventricle.toFixed(3) })
+    /** Start a swallow now (the studio's tests use it; it otherwise happens on its own). */
+    swallow() { if (life.swallow.t < 0) life.swallow.t = 0; },
+    getState: () => ({ on: life.on, weight: +life.weight.toFixed(3), animated: life.animated.length, breath: +signals.breath.toFixed(3), ventricle: +signals.ventricle.toFixed(3),
+      sway: [life.swayX * life.swayGain, life.swayZ * life.swayGain].map(v => +(v * 180 / Math.PI).toFixed(4)), gaze: [+life.gaze.x.toFixed(4), +life.gaze.y.toFixed(4)], swallow: +signals.swallow.toFixed(3) })
   };
 }
