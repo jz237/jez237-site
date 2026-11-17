@@ -94,11 +94,38 @@ test('head clearance and looking around cannot lift the shoulder away from plant
   assert.ok(audit.maxSlide<.0001);assert.ok(audit.maxLimbError<.0001);
 });
 
+test('leaving the level basking shelf includes supported steps through the turn',()=>{
+  const originalRandom=Math.random;
+  let seed=12345;
+  Math.random=()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296;};
+  try{
+    const {rig,brain,surface}=habitat(), b=brain as any;
+    const {x,z}=rig.inputs, audit=new Audit();
+    assert.ok(b.goTo(.25,.25,'idle'));
+    b.hurry=true;b.boredom=1e6;
+    let forward=0,turnFrames=0;
+    for(let tick=0;tick<360;tick++){
+      const beforeX=rig.inputs.x,beforeZ=rig.inputs.z,inSwing=rig.motion.transferring;
+      b.update(1/60);audit.sample(rig,surface);
+      if(rig.maneuver==='turn')turnFrames++;
+      if(inSwing)forward+=Math.hypot(rig.inputs.x-beforeX,rig.inputs.z-beforeZ);
+    }
+    assert.ok(turnFrames>20,'use the walking turn on the broad shelf');
+    assert.ok(Math.hypot(rig.inputs.x-x,rig.inputs.z-z)>.01 && forward>.005,
+      'the body advances across real supports during the first six seconds');
+    assert.ok(audit.maxSlide<.0001 && audit.maxLimbError<.00015);
+  }finally{Math.random=originalRandom;}
+});
+
 test('the complete habitat supports a continuous tour with real planted feet', {timeout:600000},t=>{
   let seed=12345;const random=Math.random;Math.random=()=>{seed=(seed*1664525+1013904223)>>>0;return seed/4294967296;};
   try{
     const a=habitat(),r=a.rig,b=a.brain as any,audit=new Audit(),skin=new SkinAudit(a.lizard,true);
     const presentation=new PoseInterpolation(a.lizard.bones);
+    let weightedTicks=0, maxWeightShift=0, maxRenderedJump=0;
+    let previousChest: THREE.Vector3 | undefined;
+    let worstDisplayStep={name:"",frame:0,shift:0};
+    const chest=a.lizard.bones[a.lizard.bone("chest")];
     const drink=b.drinkSpot(); assert.ok(drink,'a dry drinking approach is available');
     b.dish={centre:new THREE.Vector3(-.58,groundHeight(-.58,.362),.362)};
     const food=b.grazeSpot();assert.ok(food,'a feeding approach is available');
@@ -113,9 +140,19 @@ test('the complete habitat supports a continuous tour with real planted feet', {
       const goal=[...b.goal];let arrived=false,seconds=0;
       for(let i=0;i<limit*60;i++){
         b.update(1/60);audit.sample(r,a.surface);
-        presentation.capture();
+        const display=r.gaitPresentation();
+        const renderedChest=new THREE.Vector3().setFromMatrixPosition(display?.get(chest) ?? chest.matrix);
+        const shift=renderedChest.distanceTo(new THREE.Vector3().setFromMatrixPosition(chest.matrix));
+        maxWeightShift=Math.max(maxWeightShift,shift);
+        if(shift>.001 && (r as any).placingFoot)weightedTicks++;
+        if(previousChest && renderedChest.distanceTo(previousChest)>maxRenderedJump){
+          maxRenderedJump=renderedChest.distanceTo(previousChest);
+          worstDisplayStep={name,frame,shift};
+        }
+        previousChest=renderedChest;
+        presentation.capture(display);
         if(frame%6===0){
-          skin.sample(r,a.surface,frame);
+          presentation.render(1,()=>skin.sample(r,a.surface,frame),()=>a.lizard.syncAttachments());
           presentation.render(.5,()=>skin.sample(r,a.surface,frame),()=>a.lizard.syncAttachments());
         }
         frame++;
@@ -134,6 +171,9 @@ test('the complete habitat supports a continuous tour with real planted feet', {
       if(!arrived)break;
     }
     t.diagnostic(JSON.stringify({audit:audit.report(),skin:{penetration:skin.maxPenetration,worst:skin.worst,samples:skin.samples}}));
+    t.diagnostic(JSON.stringify({weightedTicks,maxWeightShift,maxRenderedJump,worstDisplayStep}));
+    assert.ok(weightedTicks>30,'the chest visibly shifts weight during supported climbing steps');
+    assert.ok(maxRenderedJump<.006,'weight transfer cannot introduce a large one-frame torso jump');
     assert.equal(results.length,tour.length,'the whole tour completed');
     assert.ok(results.every(r=>r.arrived),'no route leaves the animal permanently stuck');
     assert.ok(audit.maxSlide<.0001,'stance does not slide');

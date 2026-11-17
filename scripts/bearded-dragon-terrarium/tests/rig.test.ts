@@ -233,3 +233,46 @@ test('walking under an overhead branch keeps the body on the floor', () => {
   assert.ok(highestBody < 0.07, `stays below the branch (${highestBody.toFixed(3)} m)`);
   assert.ok(largestStep < 0.005, `no upward pop (${largestStep.toFixed(3)} m/frame)`);
 });
+
+test('a free stride flexes the unloaded wrist and preserves both segment lengths in the displayed pose', () => {
+  const lizard=model(), rig=new LizardRig(lizard,flat);
+  Object.assign(rig.inputs,{x:-.4,speed:.12,clearance:1.15,chestLift:.15});
+  let maxPitch=0, displayedSteps=0, largestSwingArc=0;
+  for(let tick=0;tick<240;tick++){
+    rig.inputs.x+=rig.inputs.speed/60;
+    rig.update(1/60);
+    const pose=rig.gaitPresentation();
+    for(const limb of lizard.data.limbs){
+      const {upper,lower,hand}=limb.bones;
+      const physicalHand=lizard.bones[hand].matrix;
+      const handMatrix=pose?.get(lizard.bones[hand]) ?? physicalHand;
+      const leg=(rig as any).legs.find((leg:any)=>leg.data===limb);
+      const offset=pos(handMatrix).distanceTo(pos(physicalHand));
+      if(leg.swing)largestSwingArc=Math.max(largestSwingArc,offset);
+      else assert.equal(offset,0,'a weight shift cannot move a planted foot');
+      const up=new THREE.Vector3().setFromMatrixColumn(handMatrix,1).normalize();
+      assert.ok(up.y>.9,'palms stay oriented toward the support');
+      maxPitch=Math.max(maxPitch,Math.acos(Math.min(1,up.y)));
+      if(!pose)continue;
+      const shoulder=pos(pose.get(lizard.bones[upper])!),elbow=pos(pose.get(lizard.bones[lower])!);
+      const wrist=new THREE.Vector3(0,limb.wrist[1]-.13,0).applyMatrix4(handMatrix);
+      assert.ok(Math.abs(shoulder.distanceTo(elbow)-limb.upperLength*LIZARD_SCALE)<1e-6);
+      assert.ok(Math.abs(wrist.distanceTo(elbow)-limb.lowerLength*LIZARD_SCALE)<1e-6);
+      displayedSteps++;
+    }
+  }
+  assert.ok(maxPitch>.06 && displayedSteps>100,'visible wrist flexion and supported girdle movement');
+  assert.ok(largestSwingArc>.004,'the lifted foot clears the body on an outward arc');
+});
+
+test('an attending eye turns toward a target within view of its socket', () => {
+  const lizard=model(),rig=new LizardRig(lizard,flat);
+  rig.update(1/60);
+  const eye=lizard.eyes[0];
+  rig.inputs.tracking=true;
+  for(let frame=0;frame<30;frame++){
+    rig.inputs.look=new THREE.Vector3(2,6,1.5).applyMatrix4(eye.group.matrix);
+    rig.update(1/60);
+  }
+  assert.ok(eye.look.z<-.2 && eye.look.x>.15,'the pupil turns forward and upward with the target');
+});
