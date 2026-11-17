@@ -9,6 +9,7 @@ extern int astra_ov_enabled(void);
 enum { SZ_TYPES=8 };
 static short sz_regions[MAX_SEGMENTS],sz_queue[MAX_SEGMENTS],sz_sizes[MAX_SEGMENTS];
 static unsigned char sz_types[MAX_SEGMENTS];
+static float sz_boundary[MAX_SEGMENTS][4];
 static int sz_level=-999,sz_rooms=-1,sz_vertices=-1,sz_count,sz_builds,sz_face_room=-1,sz_face_side=-1;
 static vms_vector sz_first;
 static unsigned sz_draws,sz_seen;
@@ -50,9 +51,29 @@ static void sz_build(void){
     /* Neighboring surviving districts advance through a deliberate palette.
      * No native object, texture index, light value or gameplay random state is written. */
     int ordinal=0;for(int id=0;id<sz_count;id++)if(sz_sizes[id])sz_types[id]=(ordinal+++(abs(Current_level_num)-1)*3)%SZ_TYPES;
+    /* Keep the extraction seam continuous across the nearest open threshold.
+     * Precompute one inward-facing plane for each bordering room. */
+    memset(sz_boundary,0,sizeof sz_boundary);
+    for(int room=0;room<=sz_rooms;room++){
+        int family=sz_types[sz_regions[room]];vms_vector center;compute_segment_center(&center,&Segments[room]);
+        fix closest=INT32_MAX;
+        for(int s=0;s<6;s++){
+            int child=Segments[room].children[s];
+            if(child<0||Segments[room].sides[s].wall_num>=0||sz_types[sz_regions[child]]==family)continue;
+            vms_vector portal,delta,n=Segments[room].sides[s].normals[0];
+            compute_center_point_on_side(&portal,&Segments[room],s);vm_vec_sub(&delta,&center,&portal);
+            fix d=vm_vec_dot(&delta,&n);if(d<0){vm_vec_negate(&n);d=-d;}
+            if(d>=closest)continue;closest=d;
+            float *plane=sz_boundary[room];
+            plane[0]=f2fl(n.x);plane[1]=f2fl(n.y);plane[2]=f2fl(n.z);
+            plane[3]=-(plane[0]*f2fl(portal.x)+plane[1]*f2fl(portal.y)+plane[2]*f2fl(portal.z));
+        }
+    }
     EM_ASM(Module.mineDistricts=({version:75,regions:$0,rooms:$1,builds:$2,counts:Array(8).fill(0),seen:0,draws:0});for(let i=0;i<$1;i++)Module.mineDistricts.counts[HEAPU8[$3+HEAP16[($4>>1)+i]]]++;,ordinal,sz_rooms+1,sz_builds,sz_types,sz_regions);
 }
-int astra_district(int room){if(room<0||room>Highest_segment_index||astra_ov_enabled())return -1;sz_build();return sz_types[sz_regions[room]];}
+int astra_district(int room){if(room<0||room>Highest_segment_index||astra_ov_enabled())return -1;sz_build();
+    if(astra_gallery_scene==57){if(room==astra_lab_entry)return 4;if(room==astra_gallery_room)return 3;}
+    return sz_types[sz_regions[room]];}
 static int sz_natural(int family){return family==3||family>=16;}
 static int sz_eligible(int room,int s){
     if(room<0||room>Highest_segment_index||s<0||s>5||!sz_solid(room,s))return 0;

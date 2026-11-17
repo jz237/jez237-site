@@ -1,6 +1,6 @@
 // A paused tour of the loaded campaign's real architecture and machinery.
 window.astraMinePreview={
-  names:['Architecture & materials','Rotating fans','Hydraulic machinery','Live terminals','Cables & electrical faults','Doors & locking systems','Reactor assembly','Recharge lattice','Moving ship shadows','Brushed metal & surface wear','Fractured rock & minerals','Storage bay','Cooling chamber','Steam, dust & light','Clean edges in motion','Deep ventilation grilles','Light housings & spill','Service conduits','Raised frames & panel variants','Water, wet banks & cascades','Molten lava','Red service lighting','Blue service lighting','Cyan service lighting','Amber service lighting','Warm ventilation & moving fans','Strip-light reflections','Industrial wall construction','Sculpted rock & rounded joins','Fixture light shafts','Room-aware metal reflections','Natural tunnel contours','Continuous mineral surfaces','Lighting by room purpose','Working mine installations','Distinctive chambers','Environmental reactions','Contact shadows & crevices','Steel, stone & wet surfaces','Wear around working equipment','Fracture shelves & contours','Welds, seals & fasteners','Consistent construction scale','Turbine & furnace bay','Illuminated service cabinets','Sealed generator window','Connected coolant manifold','Ore extraction machinery','Sector landmark & maintenance',"Raw excavation district","Ochre clay workings","Pale limestone galleries","Dark fractured basalt","Partly lined construction","Reinforced steel galleries","Weathered service district","Finished ceramic sector"],
+  names:['Architecture & materials','Rotating fans','Hydraulic machinery','Live terminals','Cables & electrical faults','Doors & locking systems','Reactor assembly','Recharge lattice','Moving ship shadows','Brushed metal & surface wear','Fractured rock & minerals','Storage bay','Cooling chamber','Steam, dust & light','Clean edges in motion','Deep ventilation grilles','Light housings & spill','Service conduits','Raised frames & panel variants','Water, wet banks & cascades','Molten lava','Red service lighting','Blue service lighting','Cyan service lighting','Amber service lighting','Warm ventilation & moving fans','Strip-light reflections','Industrial wall construction','Sculpted rock & rounded joins','Fixture light shafts','Room-aware metal reflections','Natural tunnel contours','Continuous mineral surfaces','Lighting by room purpose','Working mine installations','Distinctive chambers','Environmental reactions','Contact shadows & crevices','Steel, stone & wet surfaces','Wear around working equipment','Fracture shelves & contours','Welds, seals & fasteners','Consistent construction scale','Turbine & furnace bay','Illuminated service cabinets','Sealed generator window','Connected coolant manifold','Ore extraction machinery','Sector landmark & maintenance',"Raw excavation district","Ochre clay workings","Pale limestone galleries","Dark fractured basalt","Partly lined construction","Reinforced steel galleries","Weathered service district","Finished ceramic sector","Pump gallery fly-through"],
   descriptions:[
     'New high-resolution metal, rock, grilles, machinery and lamps throughout both campaigns. Pause and compare the same view with the original artwork.',
     'Spinning fan blades behind a fixed protective grille.',
@@ -57,25 +57,33 @@ window.astraMinePreview={
     "Ribbed alloy lining and reinforced structural frames cover the walls, ceiling and floor of a connected industrial section.",
     "Weathered metal plates and older service finishes identify this connected part of the mine.",
     "Pale ceramic armor and clean reinforced panels mark a more completely built section, while the original lamps, doors and functional signs stay recognizable."
+    , 'Strafe past the foreground grate and fly toward the blue doorway. A robot crosses above the lava. Switch views to freeze the same instant, or replay the sideways pass.'
   ],
   active:false,paused:false,touring:true,clock:0,last:0,mask:2147483647,high:33554431,fresh:false,
   has(index){return index<32?!!(this.mask&(1<<index)):!!(this.high&(1<<(index-32)));},
   tick(){const now=performance.now();if(this.last&&!this.paused)this.clock+=Math.min(.1,(now-this.last)/1000);this.last=now;return this.clock;},
-  select(index){if(!this.has(index))return;Module.mineInspect=index;this.clock=0;Module.mineReactionCommand=(Module.mineReactionCommand||0)+1;this.last=performance.now();$('mineScene').value=String(index);this.sync();},
+  select(index){if(!this.has(index))return;Module.mineInspect=index;this.clock=0;
+    if(index===57){this.touring=false;Module.mineTravel=0;delete Module.mineStrafe;$('galleryTravel').value=$('galleryStrafe').value='0';}
+    Module.mineReactionCommand=(Module.mineReactionCommand||0)+1;this.last=performance.now();$('mineScene').value=String(index);this.sync();},
   next(direction){let i=Module.mineInspect;for(let n=0;n<this.names.length;n++){i=(i+direction+this.names.length)%this.names.length;if(this.has(i)){this.select(i);break;}}},
   pause(){this.paused=!this.paused;this.last=performance.now();this.sync();},
   sync(){
     $('minePause').textContent=this.paused?'Play':'Pause';$('minePause').setAttribute('aria-pressed',String(this.paused));
     $('mineTour').checked=this.touring;
+    const gallery=window.Module?.mineInspect===57, updated=window.Module?.mineRefinement!==false;
+    $('galleryControls').hidden=$('galleryCompare').hidden=!gallery;
+    $('galleryCompare').textContent=updated?'Updated':'Previous';
+    $('galleryCompare').setAttribute('aria-pressed',String(updated));
     $('mineReactionControls').hidden=window.Module?.mineInspect!==36;
     $('mineChamberControls').hidden=window.Module?.mineInspect!==35;
     $('mineMaterialControls').hidden=window.Module?.mineInspect!==38;
     $('mineCompare').textContent=(window.Module?.mineInspect>=27?(Module.mineRefinement===false?'Base surfaces':'New details'):(window.Module?.mineRefinement===false?'Original surfaces':'Remastered surfaces'));
+    if(gallery)$('mineCompare').textContent=updated?'Showing updated materials':'Showing previous materials';
     $('mineCompare').setAttribute('aria-pressed',String(window.Module?.mineRefinement!==false));
   },
   details(open){$('mineDetails').hidden=!open;$('mineControls').setAttribute('aria-expanded',String(open));},
-  open(){
-    this.paused=false;this.touring=true;this.clock=0;this.last=0;this.mask=2147483647;this.high=33554431;this.fresh=true;$('mineZoom').value='1';this.sync();
+  open(scene=0){
+    this.requestedScene=scene;this.paused=false;this.touring=true;this.clock=0;this.last=0;this.mask=2147483647;this.high=33554431;this.fresh=true;$('mineZoom').value='1';this.sync();
     if(window.Module&&flightActive&&Module.astra){
       Module.mineRefinement=true;Module.mineInspect=0;Module.mineInspectZoom=1;Module.pickupInspect=Module.weaponInspect=-1;
       releaseFlightMouse();Module._astra_reset_flight_input?.();Module.pyroPreviewCommand=1;
@@ -102,7 +110,7 @@ window.astraMinePreview={
       this.sync();this.uiKey=uiKey;
     }
     this.state={index,mask,high,level,room,clock,paused:this.paused};
-    if(this.fresh){this.fresh=false;Module.mineRefinement=true;this.select(0);this.sync();return;}
+    if(this.fresh){this.fresh=false;Module.mineRefinement=true;this.select(this.has(this.requestedScene)?this.requestedScene:0);this.sync();return;}
     if(this.touring&&!this.paused&&clock>11)this.next(1);
   },
   unavailable(){$('mineCaption').textContent='No inspection view available in this mine';}
@@ -117,12 +125,28 @@ function mineLevels(){
 }
 $('campaign').addEventListener('change',mineLevels);mineLevels();
 $('mineStart').onclick=$('mineFlight').onclick=$('autoMine').onclick=()=>mine.open();
+$('galleryStart').onclick=()=>mine.open(57);
+$('galleryCompare').onclick=()=>$('mineCompare').click();
+function setCamera(strafe,travel){
+  const x=Math.max(-4,Math.min(4,strafe)),z=Math.max(0,Math.min(1,travel));
+  Module.mineStrafe=x;Module.mineTravel=z;$('galleryStrafe').value=x;$('galleryTravel').value=z;
+}
+function currentStrafe(){return Module.mineStrafe??Math.sin(mine.clock*.52)*4;}
+$('galleryStrafe').oninput=e=>setCamera(Number(e.target.value),Module.mineTravel||0);
+$('galleryTravel').oninput=e=>setCamera(currentStrafe(),Number(e.target.value));
+$('galleryReplay').onclick=()=>{mine.select(57);mine.paused=false;mine.sync();};
+window.addEventListener('keydown',e=>{
+  if(!mine.active||Module.mineInspect!==57||e.ctrlKey||e.altKey||e.metaKey||/^(INPUT|SELECT|TEXTAREA)$/.test(e.target.tagName))return;
+  const key=e.key.toLowerCase();if(!['w','a','s','d'].includes(key))return;
+  e.preventDefault();e.stopImmediatePropagation();
+  setCamera(currentStrafe()+(key==='d'?.32:key==='a'?-.32:0),(Module.mineTravel||0)+(key==='w'?.035:key==='s'?-.035:0));
+},true);
 $('minePrevious').onclick=()=>mine.next(-1);$('mineNext').onclick=()=>mine.next(1);
 $('minePause').onclick=()=>mine.pause();$('mineExit').onclick=()=>astraPreview.close();
 $('mineScene').onchange=()=>mine.select(Number($('mineScene').value));
 $('mineTour').onchange=()=>{mine.touring=$('mineTour').checked;mine.clock=0;};
 $('mineZoom').oninput=()=>{Module.mineInspectZoom=Number($('mineZoom').value);};
-$('mineCompare').onclick=()=>{Module.mineRefinement=Module.mineRefinement===false;mine.sync();};
+$('mineCompare').onclick=()=>{if(Module.mineInspect===57){mine.paused=true;mine.last=performance.now();}Module.mineRefinement=Module.mineRefinement===false;mine.sync();};
 $('mineControls').onclick=()=>mine.details($('mineDetails').hidden);
 $('mineMaterial').onchange=()=>{Module.mineMaterial=Number($('mineMaterial').value);mine.clock=0;};
 $('mineChamber').onchange=()=>{Module.mineChamber=Number($('mineChamber').value);mine.clock=0;};
@@ -135,4 +159,4 @@ astraPreview.open=()=>{Module.mineInspect=-1;mine.show(false);previousExplosion(
 const previousWeapon=astraWeaponDemo.open.bind(astraWeaponDemo);
 astraWeaponDemo.open=()=>{if(window.Module)Module.mineInspect=-1;mine.show(false);previousWeapon();};
 
-if(location.hash==='#mines')requestAnimationFrame(()=>document.querySelector('[data-tab=showroom]')?.click());
+if(['#mines','#pump-gallery'].includes(location.hash))requestAnimationFrame(()=>document.querySelector('[data-tab=showroom]')?.click());

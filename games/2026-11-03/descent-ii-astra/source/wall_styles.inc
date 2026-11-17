@@ -3,6 +3,7 @@
  * functional overlays, hidden panels, hazards or simulation state are changed. */
 #include "gameseq.h"
 extern int astra_gallery_scene,astra_gallery_room,astra_gallery_side;
+extern int astra_lab_entry,astra_lab_portal,astra_lab_grate,astra_material_pass;
 typedef struct {vms_vector p,r,u,n;float width;int color;} aw_mount;
 static const float aw_palette[4][3]={{1,.075f,.035f},{.07f,.27f,1},{.035f,.86f,1},{1,.44f,.055f}};
 static int aw_room=-1;
