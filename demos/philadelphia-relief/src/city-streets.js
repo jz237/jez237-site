@@ -1,4 +1,4 @@
-import { prepareStreetGraph, prepareTraffic, trafficPose } from './city-traffic.js?v=philly-2026100901';
+import { prepareStreetGraph, prepareTraffic, nearbyTrafficPose } from './city-traffic.js?v=philly-2026100901';
 import { CITY_LIGHT_GLSL } from './city-lighting.js?v=philly-2026100901';
 import { prepareCurbLayout } from './city-curbs.js?v=philly-2026101001';
 import { streetMotionEnabled } from './street-policy.js?v=philly-2026101501';
@@ -60,7 +60,8 @@ export function createCityStreets(THREE,{scene,projection,sampleElevation,lighti
   }
   let graph=null,traffic=null,curbLayout=null,loading=false,disposed=false,age=10;
   let retryDelay=0,request=null,vehicleView=null,motionEnabled=false;
-  let visibleCars=0,movingCars=0,trafficRadius=0,photoCars=[];
+  let visibleCars=0,movingCars=0,trafficRadius=0;
+  const photoCars=[];
   let lastX=Infinity,lastZ=Infinity,lastExag=0,lastRadius=0;
   const palette=[0xb3b7bb,0x293746,0xd6cdb6,0x813b30,0x3e586c,0xdcb646,0xdddeda];
   const lamps={indicator:[2.6,1.8,.025],head:[2.2,2.1,1.65],
@@ -175,7 +176,7 @@ export function createCityStreets(THREE,{scene,projection,sampleElevation,lighti
       cars:group.visible?visibleCars:0,moving:group.visible&&motionEnabled?movingCars:0,
       radius:trafficRadius}),
     get animating(){return !disposed&&group.visible&&motionEnabled
-      &&(visibleCars>0||signals.count>0||people.visible&&people.count>0);},
+      &&(visibleCars>0||!vehicleView?.photo&&(signals.count>0||people.visible&&people.count>0));},
     update({camera,pose,state,exaggeration,sunDir,dt,reducedMotion,archive,quality,photo=false}){
       if(disposed)return;
       motionEnabled=streetMotionEnabled(state,reducedMotion);
@@ -206,13 +207,19 @@ export function createCityStreets(THREE,{scene,projection,sampleElevation,lighti
       // The same simulation drives both renderers. Photo mode only needs car
       // poses; do not rebuild or upload hidden Three.js scenery every frame.
       if(photo){
-        photoCars=[];visibleCars=0;movingCars=0;vehicleView=null;
+        if(!advancing&&vehicleView?.photo&&vehicleView.x===x&&vehicleView.z===z
+          &&vehicleView.radius===radius)return;
+        vehicleView={photo:true,x,z,radius};
+        visibleCars=0;movingCars=0;
         for(const car of traffic.cars){
-          const p=trafficPose(car);if(Math.hypot(p.x-x,p.z-z)>radius)continue;
+          const p=nearbyTrafficPose(car,x,z,radius);if(!p)continue;
+          const item=photoCars[visibleCars]??(photoCars[visibleCars]={});
+          item.id=car;item.lon=projection.xToLon(p.x);item.lat=projection.zToLat(p.z);item.ground=p.ground;
+          item.angle=p.angle;item.variant=Math.floor(car.seed*palette.length)%palette.length;
+          item.van=car.seed>.88;
           visibleCars++;if(car.speed>.05)movingCars++;
-          photoCars.push({id:car,lon:projection.xToLon(p.x),lat:projection.zToLat(p.z),
-            angle:p.angle,variant:Math.floor(car.seed*palette.length)%palette.length,van:car.seed>.88});
         }
+        photoCars.length=visibleCars;
         return;
       }
       people.visible=heads.visible=pose.dist<1800;
@@ -258,8 +265,8 @@ export function createCityStreets(THREE,{scene,projection,sampleElevation,lighti
       uploadInstances(people);uploadInstances(heads);
       vehicles.count=0;
       visibleCars=0;movingCars=0;
-      for(const car of traffic.cars){const p=trafficPose(car);
-        if(Math.hypot(p.x-x,p.z-z)>radius)continue;
+      for(const car of traffic.cars){const p=nearbyTrafficPose(car,x,z,radius);
+        if(!p)continue;
         visibleCars++;if(car.speed>.05)movingCars++;
         const indicator=traffic.indicator(car);
         const van=car.seed>.88,length=van?6.4:4.4,sin=Math.sin(p.angle),cos=Math.cos(p.angle);

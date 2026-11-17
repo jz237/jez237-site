@@ -134,6 +134,18 @@ export function trafficPose(car){
   return lanePoint(e,car.distance);
 }
 
+/** Reject distant cars before evaluating their lane offsets and turn curves. */
+export function nearbyTrafficPose(car,x,z,radius){
+  const {edge,distance}=car;
+  // Turns span at most 12 m on either approach. This box also covers lane
+  // offsets and the loop at a dead end; the final radius uses the actual pose.
+  const limit=radius+64;
+  if(Math.abs(edge.from.x+edge.dx*distance-x)>limit
+    ||Math.abs(edge.from.z+edge.dz*distance-z)>limit)return null;
+  const pose=trafficPose(car),dx=pose.x-x,dz=pose.z-z;
+  return dx*dx+dz*dz<=radius*radius?pose:null;
+}
+
 // Mesh-local +X is the driver's left (world Z points south). Keep an indicator
 // through both halves of the same turn curve, then cancel once the car is straight.
 export function trafficIndicator(car,time){

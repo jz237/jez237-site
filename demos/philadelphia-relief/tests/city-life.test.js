@@ -1,7 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
-import { createStreetGraph,createTraffic,trafficPose,trafficSignal,trafficIndicator } from '../src/city-traffic.js';
+import { createStreetGraph,createTraffic,trafficPose,nearbyTrafficPose,trafficSignal,trafficIndicator }
+  from '../src/city-traffic.js';
 import { roofDetails,insideRoof } from '../src/roof-details.js';
 import { buildLandmarkModels } from '../src/landmark-models.js';
 import * as THREE from '../vendor/three.module.min.js';
@@ -10,6 +11,24 @@ import { createCityUniforms } from '../src/city-lighting.js';
 import { extrudeBuildings } from '../src/structures-data.js';
 
 const projection={lonToX:x=>x,latToZ:z=>z};
+
+test('nearby selection preserves exact poses at the edge of the view through turns and reversals',()=>{
+  for(const end of [[100,100],[100,-100],[200,0],[0,0]]){
+    const graph=createStreetGraph({roads:[{id:1,oneway:1,width:20,
+      points:[[1,0,0],[2,100,0],[3,...end]]}]},projection,()=>5);
+    const [from,to]=graph.edges;
+    for(const car of [{edge:from,nextEdge:to},{previousEdge:from,edge:to}]){
+      for(let distance=0;distance<=100;distance+=2){
+        car.distance=distance;
+        const p=trafficPose(car);
+        assert.deepEqual(nearbyTrafficPose(car,p.x,p.z,0),p);
+        assert.deepEqual(nearbyTrafficPose(car,p.x+49,p.z,50),p);
+        assert.equal(nearbyTrafficPose(car,p.x+51,p.z,50),null);
+        assert.equal(nearbyTrafficPose(car,p.x,p.z-2000,650),null);
+      }
+    }
+  }
+});
 
 test('turn indicators use the correct side through the corner and cancel afterwards',()=>{
   for(const [end,side] of [[[100,100],-1],[[100,-100],1],[[0,0],1]]){
