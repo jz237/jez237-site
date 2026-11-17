@@ -314,7 +314,7 @@ export function assessDiagnosis(input) {
   }
   // A look-alike's own page shows a plan too: the same fish-aware plan, with the same heat rule as the findings.
   alternatives = alternatives.map(c => ({ ...c, summary: summaryFor(c, input), plan: carePlanFor(c.id, input.water, input.fishType) }));
-  reconcilePlans(findings, alternatives);
+  reconcilePlans(findings, alternatives, input);
   const assessment = assessUrgency(input);
   // Care-form alarms count too, including after a look-alike swap. Never put
   // "it may be normal" beside toxic readings or several affected fish.
@@ -524,20 +524,28 @@ export function lookalikesFor(id, water) {
 // show, the heat steps are replaced everywhere the plan appears (results, care page, notes).
 const HEAT_STEP = /raise the temperature/i;
 export const HEAT_CONFLICT = 'Don’t raise the temperature while columnaris is active—warm water speeds it up. Treat the columnaris first, keep the temperature steady, and use a medicine for the spots without the heat step.';
-function reconcilePlans(findings, alternatives = []) {
-  if (!findings.some(c => c.id === 'columnaris')) return;
+function reconcilePlans(findings, alternatives = [], input = {}) {
+  const columnaris = findings.some(c => c.id === 'columnaris');
+  const temperature = numeric(input.temperature);
+  const fahrenheit = temperature === null ? null : input.tempUnit === 'C' ? temperature * 9 / 5 + 32 : temperature;
   // The spot plans among the findings, and any shown as a look-alike beside columnaris.
   for (const c of [...findings, ...alternatives]) {
     if (!['ich-fresh', 'velvet-fresh'].includes(c.id) || !c.plan) continue;
+    // Respect the existing ich/goldfish heat targets and tropical upper range.
+    // A plan must not tell someone with an already-hot tank to heat it further.
+    const ceiling = input.fishType === 'goldfish' ? 75 : c.id === 'ich-fresh' ? 80 : 86;
+    if (!columnaris && !(fahrenheit !== null && fahrenheit >= ceiling)) continue;
     if (/heat|warm/i.test(c.tip || '')) c.tip = '';
     if (!c.plan.steps.some(step => HEAT_STEP.test(step))) continue; // this variant has no heat step to change
     // One bracket, not two: "(copper only in a hospital tank; no heat while columnaris is active)".
     const line = c.plan.treatment.replace(/^Gradual heat \+ /i, '').replace(/^an /, 'An ');
-    const note = 'no heat while columnaris is active';
+    const note = columnaris ? 'no heat while columnaris is active' : 'no additional heat at this reading';
+    const heatAdvice = columnaris ? 'Keep the temperature steady while columnaris is active.'
+      : 'Add extra aeration. Don’t raise the temperature further; if it is above your fish’s usual range, bring it back slowly.';
     c.plan = {
       ...c.plan,
       steps: c.plan.steps.map(step => HEAT_STEP.test(step)
-        ? (c.id === 'ich-fresh' ? 'Keep the temperature steady—don’t raise it while columnaris is active. Add extra aeration.' : step.replace(/,? and raise the temperature[^.]*\.?/i, '. Keep the temperature steady while columnaris is active.'))
+        ? (c.id === 'ich-fresh' ? (columnaris ? 'Keep the temperature steady—don’t raise it while columnaris is active. Add extra aeration.' : heatAdvice) : step.replace(/,? and raise the temperature.*$/i, `. ${heatAdvice}`))
         : step),
       treatment: /\)$/.test(line) ? line.replace(/\)$/, `; ${note})`) : `${line} (${note})`,
     };

@@ -777,3 +777,15 @@ readings are now cross-checked before choosing a value; disagreement asks the ke
 to recheck the instrument instead of suggesting a correction based on a guessed value.
 Existing SG approximation tolerance and dangerous-single-reading warnings are preserved.
 Regression: `salinity-conflicts.test.mjs`. Lab-only delivery; personal-site release not requested by this loop.
+
+## Temperature/plan agreement — November 16, 2026
+
+Recurring Lab review: a 100 °F reading raised an urgent banner but ich/velvet
+plans still told the keeper to raise the temperature. Plans now suppress heat
+at the existing ich target (80 °F), goldfish target (75 °F), or tropical upper
+range (86 °F for velvet). Celsius is converted first. The rewrite applies to
+findings, look-alikes, swaps, care pages and notes; columnaris restrictions and
+scaleless-fish medication variants remain. Cooler/blank readings retain the
+existing plans. Aeration leads the replacement step so the Lab does not show a
+heater shopping link beside a warning against more heat. Regression tests:
+`heat-readings.test.mjs`. Lab delivery only; no personal-site release by this loop.
