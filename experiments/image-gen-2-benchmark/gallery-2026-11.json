@@ -1,5 +1,159 @@
 [
   {
+    "id": "2026-11-17-factual-infographic-factual-infographic-southern-mole-crick",
+    "title": "Factual infographic: Southern Mole Cricket — The Underground Calling Horn",
+    "tests": "; archive_slot=2026-11-17T04:20; concept=southern-mole-cricket-underground-calling-horn; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: bizarre-insect-life",
+    "prompt": "Create a richly detailed, flowing, unboxed natural-history infographic titled \"SOUTHERN MOLE CRICKET\", with italic scientific subtitle \"Neoscapteriscus borellii\" and secondary phrase \"The underground calling horn\". Render the finished canvas directly, not a photographed poster, framed chart, book, specimen tray or museum display. A sophisticated asymmetrical scientific atlas with luminous naturalistic macro detail, earthy umber and copper insect cuticle, soft cream negative space, damp charcoal soil, subtle moss greens and restrained gold annotation. The enormously detailed whole adult mole cricket occupies the center-left on a diagonal, all six legs anatomically correct, front pair broadened for digging, fine pubescence, cylindrical segmented body, antennae shorter than body, folded forewings and hindwings extending beyond the abdomen. Use brown coloration and a mottled pronotal pattern. Exact species, not a mammalian mole or a generic grasshopper. No fantasy organs.\nIntegrate seven substantive supporting studies organically with the hero, using curved leaders and generous breathing room, NOT boxes, a panel grid or identical circles. (1) A large close-up of one broad foreleg and its TWO tibial dactyls, with a visible basal gap; label \"Two digging blades\" and \"Separated bases\". (2) A close-up of the head, antennae and pubescent cuticle, emphasizing natural surface detail without unsupported sensory claims. (3) A dorsal wing-detail study showing folded forewings and longer hindwings; label \"Hindwings extend beyond abdomen\". (4) A prominent translucent side-view INTERNAL NERVOUS-SYSTEM study, about one quarter of the composition, labeled clearly \"Generalized insect nervous system — schematic\". Show a small dorsal brain inside the head, connectives leading to a ventral chain of ganglia along the lower thorax and abdomen, and nerves to legs. Precise labels \"Brain\", \"Ventral nerve cord\", \"Segmental ganglia\", and a concise note \"Thoracic ganglia coordinate leg and wing activity\". No mammal brain, lungs, spinal column or invented species-specific organ geometry; no numerical ganglion count. (5) A sweeping soil cross-section at lower right showing a generalized Neoscapteriscus calling burrow, with its horn-shaped surface opening, narrowed neck, bulb and an adjoining tunnel; label \"Calling horn\", \"Constriction\", \"Bulb\", \"Tunnel\" and \"Generalized burrow — not to scale\". Small schematic sound arcs rise into evening air from the opening, with a male inside, not a loudspeaker or musical instrument. (6) A developmental arc of bean-shaped gray-brown eggs in an underground chamber, a smaller wingless nymph and adult; labels \"Eggs underground → Wingless nymph → Adult\", no pupa. (7) A modest habitat vignette merging with the soil cutaway: damp open sandy ground near a pond margin with sparse grass, and a tiny natural-scale cricket silhouette alongside a readable \"Adult body: 25–32 mm\" scale reference; do not imply the giant hero is life size.\nExplain the unusual mechanism along an open curved sequence: \"DIG\" — \"Powerful forelegs push loose soil aside.\" Then \"CALL FROM BELOW\" — \"A male's low ringing trill issues from a horn-shaped opening.\" Then \"PROJECT UPWARD\" — \"The specialized burrow augments sound; flying crickets can locate the caller.\" Keep the central hero and biological close-ups dominant, varied in scale and direction. Add concise natural-history notes in spacious margins: \"Moist, open soils\", \"Mostly eats other insects\", and \"Native to South America; introduced in the southeastern United States\". Do not add calendar dates, specific song frequencies, unsupported hunting scenes, extra anatomical labels, giant prey, preservation pins, claim of measured dissection, maps of precise range boundaries, URLs, citations, logos or watermarks. Fine ink leaders, exquisitely shaded cuticle and soil grains, short readable typography and subtle warm highlights should connect all studies as one high-end flowing educational artwork.",
+    "image": "images/2026-11-17-factual-infographic-factual-infographic-southern-mole-crick.jpg",
+    "thumb": "thumbs/2026-11-17-factual-infographic-factual-infographic-southern-mole-crick.webp",
+    "color": "#bda588",
+    "date": "2026-11-17",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1199x1312",
+    "dedup": {
+      "conceptKey": "southern-mole-cricket-underground-calling-horn",
+      "imageSha256": "6eb7e43acd11cf2092aa4ed95a716f6da19cc8e6b6b682b0015c3abfd4ff01ad",
+      "imageDHash": "78ccc3f3464d3cd3"
+    },
+    "factualInfographic": {
+      "topic": "How the southern mole cricket Neoscapteriscus borellii excavates soil and calls from a horn-shaped underground burrow",
+      "description": "Flowing species atlas of digging forelegs, calling burrow, life stages and a clearly generalized insect nervous-system schematic.",
+      "sourceNote": "Verified species biology, nomenclature, digging, calling, development and generalized anatomy: https://orthsoc.org/sina/341a.htm ; https://orthsoc.org/sina/g341a.htm ; https://orthsoc.org/sina/s341a.htm ; https://orthsoc.org/sina/341db1.htm ; https://entnemdept.ufl.edu/projex/gallery/dl/Beneficial_Arthropods_Parasitoids/TEXT/ORT_Southern_mole_cricket_Scapteriscus_borellii.html ; https://genent.cals.ncsu.edu/bug-bytes/nervous-system/",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-17T10:41:32.192597+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "Orthopterists Society — Singing Insects of North America",
+            "title": "Southern mole cricket (Neoscapteriscus borellii)",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://orthsoc.org/sina/341a.htm"
+          },
+          {
+            "id": "S2",
+            "publisher": "Orthopterists Society — Singing Insects of North America",
+            "title": "Genus Neoscapteriscus",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://orthsoc.org/sina/g341a.htm"
+          },
+          {
+            "id": "S3",
+            "publisher": "Orthopterists Society — Singing Insects of North America",
+            "title": "Mole crickets — Burrowing and Acoustic behavior",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://orthsoc.org/sina/s341a.htm"
+          },
+          {
+            "id": "S4",
+            "publisher": "Orthopterists Society — Singing Insects of North America",
+            "title": "Generalized Neoscapteriscus calling burrow",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://orthsoc.org/sina/341db1.htm"
+          },
+          {
+            "id": "S5",
+            "publisher": "University of Florida",
+            "title": "Southern mole cricket — Scapteriscus borellii",
+            "sourceType": "university",
+            "url": "https://entnemdept.ufl.edu/projex/gallery/dl/Beneficial_Arthropods_Parasitoids/TEXT/ORT_Southern_mole_cricket_Scapteriscus_borellii.html"
+          },
+          {
+            "id": "S6",
+            "publisher": "North Carolina State University",
+            "title": "Nervous System — ENT 425",
+            "sourceType": "university",
+            "url": "https://genent.cals.ncsu.edu/bug-bytes/nervous-system/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Southern mole cricket is Neoscapteriscus borellii, formerly Scapteriscus borellii.",
+            "sourceIds": [
+              "S1",
+              "S2",
+              "S5"
+            ]
+          },
+          {
+            "claim": "Adults are brown, with enlarged digging forelegs, forewings longer than the pronotum and hindwings extending beyond the abdomen; body length is 25–32 mm.",
+            "sourceIds": [
+              "S1",
+              "S5"
+            ]
+          },
+          {
+            "claim": "Neoscapteriscus has two blade-like dactyls on each foretibia; in N. borellii they are separated at the base by at least half a dactyl basal width.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Mole crickets force loose soil aside with strokes of the enlarged forelegs and spend nearly all their lives underground.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "Southern mole cricket habitat includes moist sandy or mucky open areas such as lawns, fields and pond or stream margins.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "The species is native to South America and introduced to the southeastern United States.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Males call with a low ringing trill from a horn-shaped burrow opening; specialized calling burrows augment and project sound skyward, attracting flying conspecifics including females.",
+            "sourceIds": [
+              "S1",
+              "S2",
+              "S3"
+            ]
+          },
+          {
+            "claim": "A generalized Neoscapteriscus calling burrow contains an opening horn, constrictions, a bulb, a turn-around and surface/deep tunnels.",
+            "sourceIds": [
+              "S4"
+            ]
+          },
+          {
+            "claim": "Eggs are gray-brown, bean-shaped, laid in underground chambers; nymphs resemble smaller wingless adults.",
+            "sourceIds": [
+              "S5"
+            ]
+          },
+          {
+            "claim": "Southern mole crickets are largely carnivorous, though omnivorous; they mostly eat other insects.",
+            "sourceIds": [
+              "S1",
+              "S5"
+            ]
+          },
+          {
+            "claim": "A generalized insect nervous system has a dorsal brain connected to a ventral nerve cord with segmental ganglia; thoracic ganglia innervate legs and wings. This is a generalized schematic, not a measured species dissection.",
+            "sourceIds": [
+              "S6"
+            ]
+          },
+          {
+            "claim": "One generation per year is typical except in south Florida, where there can be two; eggs are laid in spring and large nymphs or adults overwinter.",
+            "sourceIds": [
+              "S1"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
     "id": "2026-11-17-factual-infographic-factual-infographic-geysers-the-boiling",
     "title": "Factual infographic: Geysers — The Boiling Feedback Engine",
     "tests": "; archive_slot=2026-11-17T00:20; concept=geyser-plumbing-boiling-pressure-eruption; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: factual-infographic",
