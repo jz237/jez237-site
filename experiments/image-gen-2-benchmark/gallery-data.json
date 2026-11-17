@@ -32967,5 +32967,116 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-11-17-factual-infographic-factual-infographic-geysers-the-boiling",
+    "title": "Factual infographic: Geysers — The Boiling Feedback Engine",
+    "tests": "; archive_slot=2026-11-17T00:20; concept=geyser-plumbing-boiling-pressure-eruption; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: factual-infographic",
+    "prompt": "Create a finished, richly illustrated scientific museum infographic titled \"GEYSERS\" with the subtitle \"The boiling feedback engine\". An artwork-led, flowing, unboxed geological atlas, not a poster mockup. Use luminous mineral watercolor, exquisitely shaded geological gouache and precise fine ink, in volcanic charcoal, warm ochre rock, pale silica cream and deep turquoise water, with a softly glowing white eruption plume. Strong elegant readable typography. A dramatic geyser jet crowns the upper third; the ground opens below into an asymmetric rock cutaway occupying most of the canvas, showing a narrow irregular water-filled conduit and a modest side chamber with a trapped vapor pocket. Fractured rock, wet reflective mineral edges, small transparent bubbles, veils of condensed droplets and delicate groundwater pathways provide tactile richness. Keep the underground geometry explicitly schematic, not a surveyed real geyser. No huge open magma lake touching the water; heat arrives from deeper rock, indicated by subtle warm upward arrows at the lower edge. A small cream silica cone frames the surface vent.\nWeave concise source-backed text around the illustration using fine curved leader lines and ample negative space, not rectangular boxes or an equal-panel grid. Follow a winding visual journey: \"1 • RECHARGE\" — \"Surface water seeps underground.\" Blue paths enter fractures. \"2 • HEAT UNDER PRESSURE\" — \"Greater pressure at depth lets water stay liquid above its surface boiling temperature.\" The deeper water is warm but predominantly liquid. \"3 • BUBBLES PRIME THE COLUMN\" — \"In many geysers, trapped steam escapes from bends or side chambers and heats the water above.\" Use a naturally enlarged close-up connected organically to the side cavity, showing gas above liquid and a few escaping bubbles, not invented valves. \"4 • PRESSURE FALLS, BOILING SPREADS\" — \"Initial boiling and overflow lower pressure. More hot water boils; expanding steam drives the eruption.\" Show separate slender downward pressure-release annotation and upward water/steam arrows with distinct labels, never suggesting liquid flows downward during eruption. \"5 • COOL AND REFILL\" — \"Depletion or cooling ends the eruption. Replenishment and heating restart the cycle.\" A faint curved loop returns to recharge.\nAdd three precise open labels: \"Restricted plumbing\", \"Heat from deeper rock\", and \"Silica deposits\" at their correct features. Beside the brilliant white plume put \"The white cloud is mostly condensed water droplets.\" Tiny but readable footer: \"Conceptual cutaway • Plumbing varies between geysers • Not to scale\". The secondary detail should be subordinate to the magnificent central eruption and subterranean anatomy. Maintain scientific clarity and generous breathing room: no exact heights, depths, timing or temperature values, no ranking claims, no fabricated location or species, no machinery, valves, fire, people, citations, URLs, logos or watermark. Render the infographic itself directly, with premium naturalistic mineral textures and crisp purposeful lettering, not a photographed page or display.",
+    "image": "images/2026-11-17-factual-infographic-factual-infographic-geysers-the-boiling.jpg",
+    "thumb": "thumbs/2026-11-17-factual-infographic-factual-infographic-geysers-the-boiling.webp",
+    "color": "#c3b9a7",
+    "date": "2026-11-17",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1064x1478",
+    "dedup": {
+      "conceptKey": "geyser-plumbing-boiling-pressure-eruption",
+      "imageSha256": "85a635637714ac15e69b29eba9fccca2aa7099486ce757f18cbbc9e08de6a82c",
+      "imageDHash": "c4a2f4f0e0e8c8c0"
+    },
+    "factualInfographic": {
+      "topic": "How geyser plumbing turns geothermal heat into episodic water and steam eruptions",
+      "description": "An artwork-led schematic of recharge, heating under pressure, steam bubbles, pressure-release boiling and eruption shutdown.",
+      "sourceNote": "National Park Service https://www.nps.gov/yell/learn/nature/hydrothermal-features.htm ; UC Berkeley https://news.berkeley.edu/2015/02/24/geysers-have-loops-in-their-plumbing/ — verified plumbing, pressure/boiling feedback, bubble traps, silica and condensed plume.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-17T06:13:36.946776+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "National Park Service",
+            "title": "Hydrothermal Features — Yellowstone National Park",
+            "sourceType": "government-agency",
+            "url": "https://www.nps.gov/yell/learn/nature/hydrothermal-features.htm"
+          },
+          {
+            "id": "S2",
+            "publisher": "University of California, Berkeley",
+            "title": "Why do geysers erupt? Loops in their plumbing",
+            "sourceType": "university",
+            "url": "https://news.berkeley.edu/2015/02/24/geysers-have-loops-in-their-plumbing/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Geysers are hot springs whose restricted underground plumbing limits free circulation.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Surface water seeps underground and is heated by the volcanic geothermal system.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Pressure increases with depth; pressurized water can remain liquid above its surface boiling temperature.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "In many studied geysers, bends or side chambers trap steam; released bubbles heat the overlying water column.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Initial boiling and overflow reduce pressure, allowing more hot water to boil and steam to expand.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Expanding steam drives liquid water and vapor out of the vent.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "The visible white plume is largely condensed water droplets, rather than visible pure water vapor.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Eruptions end as the reservoir depletes or water cools; replenishment and heating permit another cycle.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Subsurface geometries vary; a schematic side-chamber cutaway is not a surveyed map of a particular geyser.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Silica deposited from thermal water can build a cone around a geyser vent.",
+            "sourceIds": [
+              "S1"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
