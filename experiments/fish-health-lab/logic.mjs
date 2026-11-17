@@ -99,7 +99,8 @@ export function assessUrgency(input) {
   // Readings: outside the usual range → a water check; far outside → urgent as well.
   const marine = input.water === 'marine';
   const ph = numeric(input.ph);
-  if (ph !== null && ph > 0) {
+  // Zero is within the form’s accepted range and is not an unknown reading.
+  if (ph !== null && ph >= 0) {
     const [low, high] = marine ? [7.8, 8.6] : [6, 8.5], [danger, dangerHigh] = marine ? [7.4, 9] : [5.5, 9.5];
     if (ph < danger || ph > dangerHigh) {
       urgent.push(`pH ${ph} is dangerously ${ph < danger ? 'low' : 'high'}`);
