@@ -102,7 +102,7 @@ export function createExploreModes(THREE, options) {
         && [...changed].some(k => k.startsWith('cam')))) leave(false);
   });
   document.addEventListener('keydown', key, true);
-  return { open, close: () => leave(true), get bounds() { return bounds; },
+  return { open, close() { if (mode) leave(true); }, get bounds() { return bounds; },
     update(camera, exaggeration) {
       if (!bounds) return;
       if (!photographic.exhibitSupported && store.value('photoMode') !== 'relief') {

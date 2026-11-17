@@ -436,6 +436,13 @@ export function createMapLayers(THREE, { scene, stage, projection, sampleElevati
     get archiveActive() { return $('archiveYear').value !== 'off'; },
     get reliefOnly() { return $('archiveYear').value !== 'off' || $('radarToggle').checked; },
     clearArchive() { $('archiveYear').value = 'off'; archiveChanged(); },
+    clearReliefOverlays() {
+      if (this.archiveActive) this.clearArchive();
+      if ($('radarToggle').checked) {
+        $('radarToggle').checked = false;
+        radarChanged();
+      }
+    },
     inspect,
     update(activeCamera, ctx) {
       lastExag = ctx.exaggeration; points.update(activeCamera, ctx);
