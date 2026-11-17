@@ -11,7 +11,7 @@ bash run-exports.sh                  # eight headless Blender exports in paralle
 node prepare.mjs                     # compress to ../../demos/anatomy-studio/assets/*.glb, write manifest.json + descriptions.json
 node check-assemblies.mjs            # prove the four nested assemblies resolve against real piece names
 node stamp.mjs                       # content-hash every ?v= (imports, CSS, JSON, models); run after prepare.mjs and after any edit to the demo
-node stamp.mjs --check               # exit 1 if any stamp is stale
+node stamp.mjs --check               # exit 1 if any stamp is stale (also run by .github/workflows/anatomy-studio-stamps.yml)
 node preview.mjs                     # 1100x579 preview JPEG for the demos catalog (needs the site served on :8791)
 node verify.mjs                      # Playwright checks against STUDIO_URL (default http://127.0.0.1:8791/demos/anatomy-studio/)
 ```

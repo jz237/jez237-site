@@ -36,7 +36,8 @@ export function writeURL(state, { push = false } = {}) {
   };
   for (const k of KEYS) { if (values[k]) url.searchParams.set(k, values[k]); else url.searchParams.delete(k); }
   // keep piece ids readable: "visceral/liver", not "visceral%2Fliver"
-  const href = url.href.replace(/%2F/gi, '/');
+  // and keep bare flags bare: "?debug", not "?debug="
+  const href = url.href.replace(/%2F/gi, '/').replace(/=(?=&|$)/g, '');
   if (href === location.href) return false;
   history[push ? 'pushState' : 'replaceState'](null, '', href);
   return true;

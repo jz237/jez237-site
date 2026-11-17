@@ -10,7 +10,7 @@
  * Returns { leaders, shown, total } where `leaders` is SVG markup for the leader lines.
  */
 
-const ROW = 17;            // vertical pitch of a side-column label
+const ROW = 20;            // vertical pitch of a side-column label
 const MARGIN = 14;         // gap between a column and the edge of the stage
 const TOP = 16;
 const BOTTOM_RIGHT = 46;    // the explode panel overlaps the bottom edge of the label layer
