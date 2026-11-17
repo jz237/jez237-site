@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { assessUrgency, rankConditions, buildCase, rankVisualConditions, lookalikesFor, weightOf, featureKeys } from '../../experiments/fish-health-lab/logic.mjs';
+import { assessDiagnosis, assessUrgency, rankConditions, buildCase, rankVisualConditions, lookalikesFor, weightOf, featureKeys } from '../../experiments/fish-health-lab/logic.mjs';
 import { CONDITIONS } from '../../experiments/fish-health-lab/data.mjs';
 import { VISUAL_LIBRARY } from '../../experiments/fish-health-lab/visuals.mjs';
 
@@ -99,5 +99,22 @@ test('every condition has the content the result card needs', () => {
   for (const c of CONDITIONS) {
     for (const field of ['title', 'summary', 'hint', 'check', 'avoid', 'urgency', 'art']) assert.ok(c[field], `${c.id}.${field}`);
     assert.ok(c.clues.length >= 2, c.id);
+  }
+});
+
+test('natural reassurance stays away from urgent readings and several affected fish', () => {
+  for (const water of ['fresh', 'marine']) for (const primarySign of ['dots', 'swollen']) {
+    const calm = { water, primarySign, signs: [primarySign], closer: primarySign === 'swollen' ? 'flat' : '', ammonia: '0', nitrite: '0', affected: 'one' };
+    const baseline = assessDiagnosis(calm);
+    assert.ok(baseline.naturalNote, `${water} ${primarySign}: calm explanation retained`);
+    for (const alarm of [{ affected: 'several' }, { ammonia: '2' }, { nitrite: '2' }, { ph: '4' }, { temperature: '100', tempUnit: 'F' }, ...(water === 'marine' ? [{ salinity: '20' }] : [])]) {
+      const result = assessDiagnosis({ ...calm, ...alarm });
+      assert.equal(result.naturalNote, '', JSON.stringify({ water, primarySign, alarm }));
+      assert.equal(result.primary.id, baseline.primary.id, 'readings must not overwrite the visual match');
+      for (const alternative of baseline.alternatives) {
+        const chosen = assessDiagnosis({ ...calm, ...alarm, chosen: [alternative.id] });
+        assert.equal(chosen.naturalNote, '', `choice ${alternative.id} must not restore reassurance`);
+      }
+    }
   }
 });

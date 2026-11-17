@@ -316,6 +316,9 @@ export function assessDiagnosis(input) {
   alternatives = alternatives.map(c => ({ ...c, summary: summaryFor(c, input), plan: carePlanFor(c.id, input.water, input.fishType) }));
   reconcilePlans(findings, alternatives);
   const assessment = assessUrgency(input);
+  // Care-form alarms count too, including after a look-alike swap. Never put
+  // "it may be normal" beside toxic readings or several affected fish.
+  if (assessment.urgent.length || input.affected === 'several') natural = '';
   const contextConcerns = [];
   if (assessment.checks.length && !findings.some(c => c.id === 'water')) {
     contextConcerns.push({ ...CONDITIONS.find(c => c.id === 'water'), reason: assessment.checks.join(' ') });
