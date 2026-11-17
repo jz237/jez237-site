@@ -7,9 +7,9 @@
   const $=id=>document.getElementById(id);
   let socket=null,lobby=null,identity=null,timer=null,queue=[],out=[],bytes=0,barrier=null,roomChoices=false,lastHostState='',ignoreStart=false;
   let ui,notice,roomField,roster,connectButtons,start,setup,playBar;
-  let sentTimes=[];
+  let sentTimes=[],congestedAt=null;
   let credential=null,roomCode='',intentional=false,retryTimer=null,retryUntil=0,heartbeat=null,lastPong=0,lastInventory=0;
-  const session={session:null,failed:false,departed:0,stats:{sent:0,received:0},
+  const session={session:null,failed:false,departed:0,stats:{sent:0,received:0,superseded:0},
     abort:message=>fail(message),
     quickCoop(){if(this.session||socket)return;$('squadMode').value='coop';$('squadCampaign').value=$('campaign').value;$('squadLevel').value='1';setup.onchange();ui.showModal();connect(false,true);},
     quickArena(online){if(this.session||socket)return;$('squadCampaign').value=$('campaign').value;$('squadLevel').value=$('classicLevel').value||'1';$('squadMode').value='deathmatch';setup.onchange();ui.showModal();if(online)connect(false,true);else practice();},
@@ -30,12 +30,21 @@
     help(){if(socket)send({type:'help'});else window.astraSquadUI?.help(this.session.self);},
     waitForMine:()=>status('Joined the room. Waiting for the next mine…'),
     get menuOpen(){return !!ui?.open&&!!this.session;},
+    get online(){return !!socket||!!this.reconnecting;},
     menu(){if(!this.session)return;document.exitPointerLock?.();window.astraFlightFocus?.(false);ui.classList.add('squad-in-flight');ui.showModal();status('The match continues while this menu is open.');},
     peek:()=>queue[0],take:()=>queue.shift(),
-    send(dest,data){
+    send(dest,data,pilot=-1){
       if(!socket||socket.readyState!==1||this.failed)return;
-      if(data.length>1500||out.length>=256||bytes+data.length>48000){fail('Connection is too slow. Please rejoin the room.');return;}
-      out.push({dest,data:data.slice()});bytes+=data.length+3;
+      if(data.length>1500){fail('Invalid outgoing multiplayer packet.');return;}
+      if(pilot>=0&&(out.length>=24||socket.bufferedAmount>65536||congestedAt!==null)){
+        // Positions can supersede each other only between reliable game events.
+        for(let i=out.length-1;i>=0&&out[i].pilot>=0;i--){
+          const old=out[i];if(old.dest!==dest||old.pilot!==pilot)continue;
+          bytes-=old.data.length+3;out.splice(i,1);this.stats.superseded++;break;
+        }
+      }
+      if(out.length>=256||bytes+data.length+3>48000){recoverCongestion();return;}
+      out.push({dest,data:data.slice(),pilot});bytes+=data.length+3;
     },
     ready(level,checksum){
       queue=[];out=[];bytes=0;barrier=null;this.targetLevel=level;if(this.campaignSnapshot?.level!==level)this.campaignSnapshot=null;
@@ -65,13 +74,23 @@
     }
   }
   function send(data){if(socket?.readyState===1)socket.send(JSON.stringify(data));}
+  function recoverCongestion(){
+    if(credential&&session.session&&socket?.readyState===1)socket.close(4001,'Resynchronize flight');
+    else fail('Connection is too slow. Please rejoin the room.');
+  }
   function flush(){
     if(!out.length||socket?.readyState!==1)return;
-    if(socket.bufferedAmount>128*1024){fail('Network connection cannot keep up. Please rejoin.');return;}
+    const now=performance.now();
+    if(socket.bufferedAmount>131072||(congestedAt!==null&&socket.bufferedAmount>65536)){
+      if(congestedAt===null)congestedAt=now;
+      if(now-congestedAt>=3000)recoverCongestion();
+      return;
+    }
+    congestedAt=null;
     // Keep 30 of the relay's 80 messages/second available for control traffic.
     // A busy object transfer stays ordered and bounded instead of flooding it.
-    const now=performance.now();while(sentTimes.length&&now-sentTimes[0]>=1000)sentTimes.shift();
-    while(out.length&&sentTimes.length<50){
+    while(sentTimes.length&&now-sentTimes[0]>=1000)sentTimes.shift();
+    while(out.length&&sentTimes.length<50&&socket.bufferedAmount<=131072){
       const parts=[];let n=0;
       while(out.length&&n+out[0].data.length+3<=16384){const p=out.shift();parts.push(p);n+=p.data.length+3;}
       const data=new Uint8Array(n);let k=0;
@@ -157,12 +176,17 @@
     };
   }
   function startHeartbeat(){
+    congestedAt=null;
     clearInterval(heartbeat);lastPong=performance.now();
     heartbeat=setInterval(()=>{
       if(!socket||socket.readyState!==1)return;
       if(!document.hidden&&performance.now()-lastPong>15000){socket.close(4001,'Connection timeout');return;}
       send({type:'ping',at:performance.now()});
-      const m=window.Module;if(m?.netBotExport&&session.session?.self===session.session?.host&&performance.now()-lastInventory>1000){lastInventory=performance.now();send({type:'inventory',level:m.netState.level,bots:m.netBotExport});}
+      const m=window.Module;if(m?.netBotExport&&session.session?.self===session.session?.host&&performance.now()-lastInventory>1000){
+        lastInventory=performance.now();
+        const bots=m.netBotExport.map((p,i)=>p&&({...p,assisting:m.netBots?.[i]?.assisting??-1}));
+        send({type:'inventory',level:m.netState.level,bots});
+      }
     },2500);
   }
   function reconnect(){

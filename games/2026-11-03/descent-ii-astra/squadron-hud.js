@@ -12,7 +12,13 @@
     open(){releaseFlightMouse();window.Module?._astra_reset_flight_input?.();q('wingmanOrders').hidden=window.astraNet?.session?.mode!=='coop';q('wingmanStatus').textContent=lastMessage;dialog.showModal();},
     command(m){if(!window.Module||Module.netSession?.self!==Module.netSession?.host)return;const d=m.direction||[0,0,1],ok=!!Module._astra_squad_order(m.from,orders.indexOf(m.order),...d);window.astraNet.orderResult(m.from,m.order,ok);},
     result(m){const name=window.astraNet?.session?.roster[m.from]?.name||'Pilot';message(m.ok?`${name}: ${labels[orders.indexOf(m.order)]}`:'No visible enemy is under that aim. Point at an enemy and try again.');},
-    help(slot){help.set(slot,performance.now()+10000);message((window.astraNet?.session?.roster[slot]?.name||'Pilot')+' requests assistance');}
+    help(slot){
+      const s=window.astraNet?.session;if(s?.mode!=='coop'||s.roster[slot]?.skill!==-1)return;
+      help.set(slot,performance.now()+15000);
+      const responder=s.self===s.host&&window.Module?.netState?.status===1?Module._astra_squad_assist?.(slot):-1;
+      const who=s.roster[slot].name;
+      message(responder>=0?s.roster[responder].name+' is covering '+who:who+' requests assistance');
+    }
   };
   q('wingmanOpen').onclick=()=>api.open();q('squadHUDHelp').onclick=q('wingmanHelp').onclick=()=>window.astraNet?.help();
   dialog.querySelectorAll('[data-order]').forEach(b=>b.onclick=()=>issue(b.dataset.order));
@@ -21,17 +27,20 @@
   setInterval(()=>{
     const m=window.Module,n=window.astraNet,s=n?.session,shown=!!s&&!m?.arenaDemo&&!!m?.netPilots&&document.body.classList.contains('flying')&&!window.astraMenus?.active&&!window.astraPreview?.active;
     panel.hidden=!shown;markers.hidden=!shown||s?.mode!=='coop';if(!shown)return;
-    q('squadHUDTitle').textContent=n.reconnecting?'Reconnecting…':`${s.mode==='coop'?'Squadron':'Pilots'} · ${Number.isFinite(n.latency)?n.latency+' ms':'AI flight'}${s.self===s.host?' · Host':''}`;
+    q('squadHUDTitle').textContent=n.reconnecting?'Reconnecting…':`${s.mode==='coop'?'Squadron':'Pilots'} · ${Number.isFinite(n.latency)?n.latency+' ms':n.online?'Online':'AI flight'}${s.self===s.host?' · Host':''}`;
     q('wingmanOpen').hidden=s.mode!=='coop';q('squadHUDHelp').hidden=s.mode!=='coop';
     const canvas=q('view'),rect=canvas.getBoundingClientRect(),now=performance.now(),alive=new Set();
     for(const p of m.netPilots){
       const info=s.roster[p.id];if(!info||info.skill===-2||p.id===s.self)continue;alive.add(p.id);
       let row=rows.get(p.id);if(!row){row=document.createElement('div');row.className='squadHUDRow';row.innerHTML='<span class="squad-name"></span><span class="squad-range"></span><span class="squad-shield" aria-hidden="true"><i></i></span><span class="squad-state"></span>';rows.set(p.id,row);q('squadHUDRows').append(row);}
       const asking=help.get(p.id)>now;
+      const botState=s.self===s.host?m.netBots?.[p.id]:m.netBotInventory?.[p.id];
+      const covering=info.skill>=0&&Number.isInteger(botState?.assisting)&&botState.assisting>=0?s.roster[botState.assisting]:null;
+      const activity=covering?' · Covering '+(botState.assisting===s.self?'you':covering.name):asking?' · Assistance requested':'';
       row.classList.toggle('needs-help',asking||p.shields<30);
       row.querySelector('.squad-name').textContent=`${asking?'! ':''}${info.name}${info.skill>=0?' · AI':''}`;
       row.querySelector('.squad-range').textContent=p.connected===1?`${Math.round(p.distance)} u`:'';
-      row.querySelector('.squad-state').textContent=p.connected===1?`${Math.max(0,Math.round(p.shields))}% shields${asking?' · Assistance requested':''}`:'Reconnecting';
+      row.querySelector('.squad-state').textContent=p.connected===1?`${Math.max(0,Math.round(p.shields))}% shields${activity}`:'Reconnecting';
       row.style.setProperty('--shield',Math.max(0,Math.min(100,p.shields))+'%');
       let tag=tags.get(p.id);if(!tag){tag=document.createElement('span');tags.set(p.id,tag);markers.append(tag);}
       const x=rect.left+p.screen[0]*rect.width/canvas.width,y=rect.top+p.screen[1]*rect.height/canvas.height;

@@ -11,6 +11,9 @@ typedef struct {
     vms_vector route[8],gaze,cruise,right,turn_goal;
     int route_count,gaze_ready,turn_side,polar,rear_seen,dodges;
     fix64 evade_until;vms_vector evade;
+    int assist_leader, sight_room;
+    fix64 assist_until, search_until;
+    vms_vector last_sighting;
     fix64 gaze_until,turn_until,avoid_next;
     float rates[3],accels[3],command_velocity[3],command_accel[3],remaining,view_depth;
     vms_vector track;int track_target,track_signature;
@@ -37,7 +40,7 @@ EMSCRIPTEN_KEEPALIVE int astra_squad_order(int leader,int order,float x,float y,
         if(distance<i2f(200)&&aim>closest&&object_to_object_visibility(ship,o,0)){closest=aim;target=i;}
     }
     if(order==2&&target<0)return 0;
-    for(int i=1;i<astra_net_count;i++)if(astra_net_bot_skill[i]>=0){sq_command[i]=order;sq_leader[i]=leader;sq_focus[i]=target;sq_focus_sig[i]=target>=0?Objects[target].signature:0;sq_command_until[i]=GameTime64+i2f(order==3?12:120);sq[i].think=0;}
+    for(int i=1;i<astra_net_count;i++)if(astra_net_bot_skill[i]>=0){sq_command[i]=order;sq_leader[i]=leader;sq_focus[i]=target;sq_focus_sig[i]=target>=0?Objects[target].signature:0;sq_command_until[i]=GameTime64+i2f(order==3?12:120);sq[i].assist_until=0;sq[i].think=0;}
     return 1;
 }
 void astra_squad_takeover(void){sq_handoff=1;memset(sq,0,sizeof sq);}
@@ -123,6 +126,45 @@ static int sq_pass(int id,int room,int side){
     return !d->keys||d->keys==KEY_NONE||(Players[id].flags&d->keys)==d->keys;
 }
 static int sq_parent[MAX_SEGMENTS],sq_dist[MAX_SEGMENTS],sq_queue[MAX_SEGMENTS];
+/* Shared route scratch. Distances count traversable portals for this pilot,
+ * including doors that its current keys can open. */
+static int sq_routes_from(int id,int start){
+    for(int i=0;i<=Highest_segment_index;i++){sq_parent[i]=-1;sq_dist[i]=-1;}
+    int first=0,last=0;sq_queue[last++]=start;sq_dist[start]=0;
+    while(first<last){
+        int room=sq_queue[first++];
+        for(int side=0;side<6;side++){
+            int child=Segments[room].children[side];
+            if(child<0||sq_dist[child]>=0||!sq_pass(id,room,side))continue;
+            sq_parent[child]=room;sq_dist[child]=sq_dist[room]+1;sq_queue[last++]=child;
+        }
+    }
+    return last;
+}
+static int sq_helping(squad_pilot *b){
+    return b->assist_until&&GameTime64<b->assist_until&&astra_net_human(b->assist_leader)
+        &&Players[b->assist_leader].connected==CONNECT_PLAYING;
+}
+EMSCRIPTEN_KEEPALIVE int astra_squad_assist(int leader){
+    if(!astra_net_active||astra_net_owner!=astra_net_host||!(Game_mode&GM_MULTI_COOP)
+        ||!astra_net_human(leader)||Players[leader].connected!=CONNECT_PLAYING)return -1;
+    object *requester=&Objects[Players[leader].objnum];
+    if(requester->type!=OBJ_PLAYER||requester->segnum<0)return -1;
+    int best=-1;float best_cost=1e10f;
+    for(int id=1;id<astra_net_count;id++){
+        if(!sq_bot(id)||Players[id].connected!=CONNECT_PLAYING)continue;
+        squad_pilot *b=&sq[id];object *ship=&Objects[Players[id].objnum];
+        if(ship->type!=OBJ_PLAYER||ship->segnum<0||b->spawn||ship->shields<0)continue;
+        int assigned=sq_helping(b);
+        if(assigned&&b->assist_leader!=leader)continue;
+        sq_routes_from(id,ship->segnum);
+        int hops=sq_dist[requester->segnum];if(hops<0)continue;
+        float cost=assigned?-1.f:hops*100.f+fminf(99.f,sq_distance(&requester->pos,&ship->pos)*.1f);
+        if(cost<best_cost){best=id;best_cost=cost;}
+    }
+    if(best>=0){sq[best].assist_leader=leader;sq[best].assist_until=GameTime64+i2f(15);sq[best].think=0;}
+    return best;
+}
 int astra_squad_pickup(object*,object*);
 /* Route anchors are portals, not stop signs. Look through several rooms and
  * pursue a point ahead on the hull-checked line, braking only for its end. */
@@ -211,29 +253,33 @@ static void sq_plan(int id,object *ship){
     int enemy=-1;float best=1e10f;b->rear_seen=0;sq_sense_fire(id,ship);
     if(GameTime64>sq_command_until[id])sq_command[id]=0;
     if(sq_leader[id]>=0&&Players[sq_leader[id]].connected!=CONNECT_PLAYING)sq_leader[id]=-1;
+    int helping=sq_helping(b),command=helping?1:sq_command[id],leader=helping?b->assist_leader:sq_leader[id];
     for(int i=0;i<=Highest_object_index;i++)if(sq_enemy(id,i)){
         vms_vector direction;float distance=f2fl(vm_vec_normalized_dir(&direction,&Objects[i].pos,&ship->pos));
-        int marked=sq_command[id]==2&&i==sq_focus[id]&&Objects[i].signature==sq_focus_sig[id];
-        if(sq_command[id]==3&&b->contact_until<GameTime64)continue;
+        int marked=command==2&&i==sq_focus[id]&&Objects[i].signature==sq_focus_sig[id];
+        if(command==3&&b->contact_until<GameTime64)continue;
         if(distance>170||!sq_seen(ship,i,skill))continue;
         int rear=aa_in_rear_view(ship,&Objects[i].pos,Objects[i].size);if(rear)b->rear_seen++;
         float cost=distance*(i==b->target?.6f:1)*(marked?.08f:1)*(rear&&(distance<45||vm_vec_dot(&direction,&Objects[i].orient.fvec)<-fl2f(.86f))?.45f:1);
-        if(sq_command[id]==1&&sq_leader[id]>=0)cost+=sq_distance(&Objects[i].pos,&Objects[Players[sq_leader[id]].objnum].pos)*.7f;if(cost<best){best=cost;enemy=i;}
+        if(command==1&&leader>=0)cost+=sq_distance(&Objects[i].pos,&Objects[Players[leader].objnum].pos)*.7f;if(cost<best){best=cost;enemy=i;}
     }
     if(enemy>=0){
         if(enemy!=b->target||b->target_sig!=Objects[enemy].signature)b->react=GameTime64+fl2f(.85f-.16f*skill);
         b->target=enemy;b->target_sig=Objects[enemy].signature;b->seen=GameTime64;b->aim=Objects[enemy].pos;
+        if(!(Game_mode&GM_MULTI_COOP)){
+            b->last_sighting=b->aim;b->sight_room=Objects[enemy].segnum;
+            b->search_until=GameTime64+fl2f(1.6f+.45f*skill);
+        }
     }else if(GameTime64-b->seen>F1_0){b->target=-1;}
-    for(int i=0;i<=Highest_segment_index;i++){sq_parent[i]=-1;sq_dist[i]=-1;}
-    int first=0,last=0;sq_queue[last++]=ship->segnum;sq_dist[ship->segnum]=0;
-    while(first<last){int r=sq_queue[first++];for(int side=0;side<6;side++){
-        int child=Segments[r].children[side];if(child>=0&&sq_dist[child]<0&&sq_pass(id,r,side)){sq_parent[child]=r;sq_dist[child]=sq_dist[r]+1;sq_queue[last++]=child;}
-    }}
+    int last=sq_routes_from(id,ship->segnum);
+    if(b->search_until&&(GameTime64>=b->search_until||b->sight_room<0||sq_dist[b->sight_room]<0||
+       (enemy<0&&ship->segnum==b->sight_room&&sq_distance(&ship->pos,&b->last_sighting)<10)))b->search_until=0;
+    int searching=enemy<0&&b->search_until&&Players[id].shields>i2f(35)&&Players[id].energy>i2f(12);
     int previous_pick=b->pick;
     b->door=b->route_side=b->pick=-1;int goal=ship->segnum,follow_look=0;vms_vector end=ship->pos,follow_aim=ship->pos;float cost=1e9f;
     /* Only useful, nearby supplies: a wingman leaves the human's supplies alone
      * while healthy. Full ammunition can never trap a pilot in a pickup loop. */
-    for(int i=0;i<=Highest_object_index;i++){
+    for(int i=0;!helping&&!searching&&i<=Highest_object_index;i++){
         object *o=&Objects[i];if(o->type!=OBJ_POWERUP||o->flags&OF_SHOULD_BE_DEAD||o->segnum<0||sq_dist[o->segnum]<0)continue;
         float need=sq_need(id,o);if(need<=0)continue;
         if((Game_mode&GM_MULTI_COOP)&&(sq_command[id]==3||(Players[id].shields>i2f(65)&&Players[id].energy>i2f(40))))continue;
@@ -249,15 +295,17 @@ static void sq_plan(int id,object *ship){
     }
     if(cost==1e9f&&(Game_mode&GM_MULTI_COOP)){
         float near=1e9f;
-        for(int p=0;p<astra_net_count;p++)if(astra_net_human(p)&&Players[p].connected==CONNECT_PLAYING&&(sq_leader[id]<0||sq_leader[id]==p)){
+        for(int p=0;p<astra_net_count;p++)if(astra_net_human(p)&&Players[p].connected==CONNECT_PLAYING&&(leader<0||leader==p)){
             object *lead=&Objects[Players[p].objnum];if(lead->type!=OBJ_PLAYER||lead->segnum<0||sq_dist[lead->segnum]<0)continue;
             float d=sq_distance(&lead->pos,&ship->pos);if(d<near){near=d;goal=lead->segnum;end=lead->pos;
-                vm_vec_scale_add2(&end,&lead->orient.fvec,-i2f((sq_command[id]==1?27:13)+id*3));vm_vec_scale_add2(&end,&lead->orient.rvec,i2f((id&1?1:-1)*10));
+                vm_vec_scale_add2(&end,&lead->orient.fvec,-i2f((command==1?27:13)+id*3));vm_vec_scale_add2(&end,&lead->orient.rvec,i2f((id&1?1:-1)*10));
                 if(find_point_seg(&end,lead->segnum)<0)end=lead->pos;
                 follow_look=near<50;vm_vec_scale_add(&follow_aim,&lead->pos,&lead->orient.fvec,i2f(90));
                 if(near<18)end=ship->pos;
             }
         }
+    }else if(searching){
+        goal=b->sight_room;end=b->last_sighting;b->roam_until=0;
     }else if(cost==1e9f){
         if(b->goal>=0&&b->goal<=Highest_segment_index&&sq_dist[b->goal]>0&&GameTime64<b->roam_until)goal=b->goal;
         else {float score=1e9f;for(int i=0;i<last;i++){int r=sq_queue[i];if(r==ship->segnum)continue;float n=b->visits[r]*5+sq_dist[r]+((r*13+id*7)%11)*.18f;if(n<score){score=n;goal=r;}}b->roam_until=GameTime64+i2f(12);}
@@ -419,7 +467,11 @@ static void sq_drive(int id,object *o){
          * several hull widths at fighting range. A novice still accepts a
          * near miss; an expert waits for about two thirds of a radius. */
         float miss=aim_distance*sqrtf(fmaxf(0,1-z*z)),allow=f2fl(Objects[b->target].size)*(1.25f-.15f*skill);
-        if(miss>allow||!sq_clear(o,&aim,0,b->target))return;
+        if(miss>allow)return;
+        vms_vector end;vm_vec_scale_add(&end,&o->pos,&o->orient.fvec,fl2f(aim_distance));
+        fvi_query shot={&o->pos,&end,o->segnum,0,o-Objects,NULL,FQ_CHECK_OBJS|FQ_IGNORE_POWERUPS};fvi_info hit;
+        int obstacle=find_vector_intersection(&shot,&hit);
+        if(obstacle!=HIT_NONE&&(obstacle!=HIT_OBJECT||hit.hit_object!=b->target))return;
     }
     if(GameTime64>=b->weapon_until){
         static const int choice[]={PLASMA_INDEX,SPREADFIRE_INDEX,GAUSS_INDEX,LASER_INDEX};int best=LASER_INDEX;
@@ -468,7 +520,7 @@ void astra_squad_frame(void){
             multi_make_ghost_player(id);int pos=(id+Players[id].net_killed_total)%max(1,NumNetPlayerPositions);
             o->pos=Player_init[pos].pos;o->orient=Player_init[pos].orient;obj_relink(o-Objects,Player_init[pos].segnum);
             Players[id].flags|=PLAYER_FLAGS_INVULNERABLE;Players[id].invulnerable_time=GameTime64-INVULNERABLE_TIME_MAX+i2f(2);o->shields=Players[id].shields;
-            Player_num=id;ConsoleObject=o;multi_send_reappear();create_player_appearance_effect(o);b->target=-1;b->think=0;
+            Player_num=id;ConsoleObject=o;multi_send_reappear();create_player_appearance_effect(o);b->target=-1;b->think=0;b->search_until=b->assist_until=0;
             memset(b->rates,0,sizeof b->rates);memset(b->accels,0,sizeof b->accels);memset(b->command_velocity,0,sizeof b->command_velocity);memset(b->command_accel,0,sizeof b->command_accel);
             b->gaze_ready=b->turn_side=b->polar=b->route_count=0;b->right=o->orient.rvec;b->cruise=o->orient.fvec;b->last=o->pos;b->progress=GameTime64;b->escape_until=0;
         }
@@ -484,7 +536,7 @@ void astra_squad_frame(void){
         {aq_log *q=&sq_quality[id];EM_ASM({Module.netBotQuality=Module.netBotQuality||[];Module.netBotQuality[$13]=({seconds:[$0,$1],turnAccel:[$2,$3],turnJerk:[$4,$5],moveAccel:[$6,$7],moveJerk:[$8,$9],reversals:$10,shots:$11,hits:$12});},
             q->seconds[0],q->seconds[1],q->turn_accel[0],q->turn_accel[1],q->turn_jerk[0],q->turn_jerk[1],q->move_accel[0],q->move_accel[1],q->move_jerk[0],q->move_jerk[1],q->reversals,q->shots,q->hits,id);
         EM_ASM({Module.netBotQualityMean=Module.netBotQualityMean||[];Module.netBotQualityMean[$6]=({turn:[$0,$1],move:[$2,$3],jolts:[$4,$5]});},q->turn_mean[0],q->turn_mean[1],q->move_mean[0],q->move_mean[1],q->jolts[0],q->jolts[1],id);}
-        EM_ASM({Module.netBots=Module.netBots||[];Module.netBots[$0]=({skill:$1,goal:$2,target:$3,shots:$4,missiles:$5,pickups:$6,stuck:$7,energy:$8,order:$9,leader:$10,rearVisible:$11,dodges:$12});},id,astra_net_bot_skill[id],b->goal,b->target,b->shots,b->missiles,b->pickups,b->stuck,f2fl(Players[id].energy),sq_command[id],sq_leader[id],b->rear_seen,b->dodges);}
+        EM_ASM({Module.netBots=Module.netBots||[];Module.netBots[$0]=({skill:$1,goal:$2,target:$3,shots:$4,missiles:$5,pickups:$6,stuck:$7,energy:$8,order:$9,leader:$10,rearVisible:$11,dodges:$12,assisting:$13});},id,astra_net_bot_skill[id],b->goal,b->target,b->shots,b->missiles,b->pickups,b->stuck,f2fl(Players[id].energy),sq_command[id],sq_leader[id],b->rear_seen,b->dodges,sq_helping(b)?b->assist_leader:-1);}
     }
     sq_handoff=0;
     Player_num=saved;ConsoleObject=console;Player_is_dead=dead;Controls=controls;

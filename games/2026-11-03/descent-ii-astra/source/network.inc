@@ -31,7 +31,9 @@ int astra_net_send(const void *data,int length,const struct sockaddr *to){
     if(length<1||length>1500)return -1;
     int dest=(ntohl(((const struct sockaddr_in*)to)->sin_addr.s_addr)&255)-1;
     if(!astra_net_human(dest)||dest==an_self)return length;
-    EM_ASM({window.astraNet?.send($0,HEAPU8.subarray($1,$1+$2));},dest,data,length);
+    const ubyte *packet=data;
+    int pilot=length==UPID_PDATA_Q_SIZE&&packet[0]==UPID_PDATA&&packet[5]<4&&packet[6]==CONNECT_PLAYING?packet[5]:-1;
+    EM_ASM({window.astraNet?.send($0,HEAPU8.subarray($1,$1+$2),$3);},dest,data,length,pilot);
     return length;
 }
 int astra_net_receive(void *data,int length,struct _sockaddr *from){
