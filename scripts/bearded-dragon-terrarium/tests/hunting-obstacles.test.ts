@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import {writeFileSync} from 'node:fs';
 import * as THREE from 'three';
 import {Cricket} from '../lib/Insects';
+import {PoseInterpolation} from '../lib/PoseInterpolation';
 import {habitat,Audit,SkinAudit} from './locomotion-fixture';
 
 function cricket(x:number,y:number,z:number){
@@ -222,9 +223,16 @@ test('hunts around the hide, log and ledges retain contact and upright forelegs'
     // The full rock route includes the supported ascent; ground encounters
     // retain their shorter limit. Neither permits a navigation stall.
     const encounterSeconds=scenario.walkIn?95:60;
+    const presentation=new PoseInterpolation(a.lizard.bones);
     for(let frame=0;frame<encounterSeconds*60&&!c.caught&&b.mode==='hunt';frame++){
       b.update(1/60);audit.sample(r,a.surface);seconds=(frame+1)/60;
-      if(frame%12===0)skin.sample(r,a.surface,frame);
+      const display=a.rig.gaitPresentation();
+      const matrixFor=(id:number)=>display?.get(a.lizard.bones[id]) ?? a.lizard.bones[id].matrix;
+      presentation.capture(display);
+      if(frame%12===0){
+        presentation.render(1,()=>skin.sample(r,a.surface,frame),()=>a.lizard.syncAttachments());
+        presentation.render(.5,()=>skin.sample(r,a.surface,frame),()=>a.lizard.syncAttachments());
+      }
       if(Math.hypot(I.x-tx,I.z-tz)>.002){translationPause=0;tx=I.x;tz=I.z;}else translationPause+=1/60;
       maxTranslationPause=Math.max(maxTranslationPause,translationPause);
       // A planted-foot pivot is real progress, as in the navigation/soak
@@ -251,10 +259,10 @@ test('hunts around the hide, log and ledges retain contact and upright forelegs'
         }
         maxFootStall=Math.max(maxFootStall,l.swingStall);
         if(!l.front)continue;
-        const hand=a.lizard.bones[l.data.bones.hand].matrix;
+        const hand=matrixFor(l.data.bones.hand);
         minPalmUp=Math.min(minPalmUp,new THREE.Vector3().setFromMatrixColumn(hand,1).normalize().y);
-        const S=new THREE.Vector3().setFromMatrixPosition(a.lizard.bones[l.data.bones.upper].matrix);
-        const E=new THREE.Vector3().setFromMatrixPosition(a.lizard.bones[l.data.bones.lower].matrix);
+        const S=new THREE.Vector3().setFromMatrixPosition(matrixFor(l.data.bones.upper));
+        const E=new THREE.Vector3().setFromMatrixPosition(matrixFor(l.data.bones.lower));
         const W=new THREE.Vector3(0,.35,0).applyMatrix4(hand),direction=W.sub(S).normalize();
         const upper=E.clone().sub(S);
         minElbowOut=Math.min(minElbowOut,upper.dot(r.bodyRight)*l.side);
@@ -267,7 +275,7 @@ test('hunts around the hide, log and ledges retain contact and upright forelegs'
         // use its angular comparison only while the projection is reliable.
         if(reference.lengthSq()>.16)minElbow=Math.min(minElbow,elbow.dot(reference.normalize()));
         for(const id of [l.data.bones.upper,l.data.bones.lower,l.data.bones.hand]){
-          const q=new THREE.Quaternion().setFromRotationMatrix(new THREE.Matrix4().extractRotation(a.lizard.bones[id].matrix)),old=rotations.get(id);
+          const q=new THREE.Quaternion().setFromRotationMatrix(new THREE.Matrix4().extractRotation(matrixFor(id))),old=rotations.get(id);
           if(old)maxRotation=Math.max(maxRotation,q.angleTo(old));rotations.set(id,q);
         }
       }

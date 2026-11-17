@@ -86,7 +86,7 @@ export class DesertTerrarium {
     await this.renderer.compileAsync(this.scene,this.camera);
     this.draw();document.body.classList.add('ready');Object.assign(window,{desertReady:true});
     const count=Number(params.get('frames')??0);
-    if(count){for(let i=0;i<count;i++){this.simulate(1/30);this.draw();}return;}
+    if(count){for(let i=0;i<count;i++){this.simulate(1/30);this.drawPose(1);}return;}
     this.startAnimation();
   }
   private stopAnimation(){this.animation?.stop();this.lastTime=0;}
@@ -95,9 +95,7 @@ export class DesertTerrarium {
     const dt=this.lastTime?(ms-this.lastTime)/1000:1/60;
     this.lastTime=ms;const cpuStart=performance.now();this.simulate(dt,8);
     const simulationEnd=performance.now();
-    this.poseInterpolation!.render(this.simulationClock.alpha,()=>this.draw(),()=>{
-      this.lizard.syncAttachments();this.lizard.root.updateMatrixWorld(true);this.camera.updateMatrixWorld();
-    });
+    this.drawPose(this.simulationClock.alpha);
     const renderEnd=performance.now();
     this.playbackStats?.record(ms,this.time,renderEnd-cpuStart,simulationEnd-cpuStart,renderEnd-simulationEnd,params.has('lite')?'Light':qualityLevels[this.quality.level].name);
     if(!params.has('lite')&&params.get('quality')!=='high'&&this.quality.record(dt,simulationEnd-cpuStart))this.applyQuality();
@@ -127,7 +125,7 @@ export class DesertTerrarium {
     this.controls.update();this.camera.updateMatrixWorld();foliageUniforms.uKeyDirView.value.copy(this.habitat.warm.position).sub(this.habitat.warm.target.position).normalize().transformDirection(this.camera.matrixWorldInverse);
     foliageUniforms.uKeyColor.value.copy(this.habitat.warm.color);this.lizard.root.updateMatrixWorld(true);
     if(this.time>this.nextReadout){this.nextReadout=this.time+.5;this.updateUI();}
-    this.poseInterpolation?.capture();
+    this.poseInterpolation?.capture(this.rig.gaitPresentation());
   }
   updatePlants(dt: number) {
     let index = 0;
@@ -161,6 +159,11 @@ export class DesertTerrarium {
     this.brain.lampOnIt=lamp;this.brain.envTemp=THREE.MathUtils.clamp(.19+.2*daylight+.43*lamp-(shade?.04:0),0,1);
     this.lizard.skin.uWet.value=0;
     if(night&&!this.wasNight){this.brain.restInHide();}this.wasNight=night;void dt;
+  }
+  private drawPose(alpha:number) {
+    this.poseInterpolation!.render(alpha,()=>this.draw(),()=>{
+      this.lizard.syncAttachments();this.lizard.root.updateMatrixWorld(true);this.camera.updateMatrixWorld();
+    });
   }
   private draw(){this.post.render(this.time);this.frames++;}
   private resize(reset:boolean) {

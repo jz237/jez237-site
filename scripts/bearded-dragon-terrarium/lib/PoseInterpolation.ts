@@ -14,11 +14,12 @@ export class PoseInterpolation {
     this.frames=nodes.map(node=>({node,matrix:new THREE.Matrix4(),previous:pose(),current:pose()}));
   }
 
-  capture() {
+  capture(display?: ReadonlyMap<THREE.Object3D, THREE.Matrix4>) {
     for(const f of this.frames){
       if(f.node.matrixAutoUpdate)f.node.updateMatrix();
       f.previous.position.copy(f.current.position);f.previous.rotation.copy(f.current.rotation);f.previous.scale.copy(f.current.scale);
-      f.matrix.copy(f.node.matrix).decompose(f.current.position,f.current.rotation,f.current.scale);
+      f.matrix.copy(f.node.matrix);
+      (display?.get(f.node) ?? f.matrix).decompose(f.current.position,f.current.rotation,f.current.scale);
       if(!this.ready){f.previous.position.copy(f.current.position);f.previous.rotation.copy(f.current.rotation);f.previous.scale.copy(f.current.scale);}
     }
     this.ready=true;
@@ -40,7 +41,7 @@ export class PoseInterpolation {
     }finally{
       for(const f of this.frames){
         f.node.matrix.copy(f.matrix);
-        if(f.node.matrixAutoUpdate){f.node.position.copy(f.current.position);f.node.quaternion.copy(f.current.rotation);f.node.scale.copy(f.current.scale);}
+        if(f.node.matrixAutoUpdate)f.matrix.decompose(f.node.position,f.node.quaternion,f.node.scale);
         f.node.matrixWorldNeedsUpdate=true;
       }
       sync();

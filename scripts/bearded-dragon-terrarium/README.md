@@ -50,6 +50,12 @@ The independent head solver checks an envelope of the actual head, neck and jaw 
 
 The habitat tour and obstacle hunts sample rendered head, jaw, neck, trunk, feet and limbs in addition to controller targets. Separate tests cover lift-off continuity, different fore/hind duty factors, physical capture, gaze singularities, needs, tail stability and varied display cadence. `node --import tsx tools/measure-gait.ts` reports actual distance, cadence and support ratios on level ground; those values are simulation measurements, not additional biological evidence.
 
+### Walking and climbing, 17 November 2026
+
+As one forefoot lifts, the shoulders shift toward the planted forefoot. The hips do the same when a hind foot lifts. The renderer fits the elbows and knees between those joints and their existing wrist and ankle positions, checks the pose against the habitat, and interpolates it between physics ticks. The chest settles gradually as the dragon leaves its basking stance. On open sand, wrists and ankles flex during the swing and extend for touchdown. The eyes can follow a target within the range of each socket.
+
+In two runs of the same 38.45-second rock descent, the dragon took 1,459 simulation ticks to transfer its feet across ledges. Previously, its shoulders and hips both moved less than 0.05 mm on 1,458 of those ticks. In the updated animation that happened on 106 ticks, with a peak chest shift of 3.75 mm. Both runs took the same route and recorded zero planted-foot drift.
+
 ### Hide exit and rock pursuit, 31 October 2026
 
 Foothold searches discard negligible repositioning before ranking candidates, allowing a useful withdrawal beneath the hide instead of repeatedly selecting the same blocked support. During elevated transfers, the complete transported limb arc is checked and an already valid supported torso stays steady until touchdown. Descending feet retract as they lift, avoiding an initial vertical pull on an already extended leg.

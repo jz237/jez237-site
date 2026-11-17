@@ -99,6 +99,10 @@ test('the complete habitat supports a continuous tour with real planted feet', {
   try{
     const a=habitat(),r=a.rig,b=a.brain as any,audit=new Audit(),skin=new SkinAudit(a.lizard,true);
     const presentation=new PoseInterpolation(a.lizard.bones);
+    let weightedTicks=0, maxWeightShift=0, maxRenderedJump=0;
+    let previousChest: THREE.Vector3 | undefined;
+    let worstDisplayStep={name:"",frame:0,shift:0};
+    const chest=a.lizard.bones[a.lizard.bone("chest")];
     const drink=b.drinkSpot(); assert.ok(drink,'a dry drinking approach is available');
     b.dish={centre:new THREE.Vector3(-.58,groundHeight(-.58,.362),.362)};
     const food=b.grazeSpot();assert.ok(food,'a feeding approach is available');
@@ -113,9 +117,19 @@ test('the complete habitat supports a continuous tour with real planted feet', {
       const goal=[...b.goal];let arrived=false,seconds=0;
       for(let i=0;i<limit*60;i++){
         b.update(1/60);audit.sample(r,a.surface);
-        presentation.capture();
+        const display=r.gaitPresentation();
+        const renderedChest=new THREE.Vector3().setFromMatrixPosition(display?.get(chest) ?? chest.matrix);
+        const shift=renderedChest.distanceTo(new THREE.Vector3().setFromMatrixPosition(chest.matrix));
+        maxWeightShift=Math.max(maxWeightShift,shift);
+        if(shift>.001 && (r as any).placingFoot)weightedTicks++;
+        if(previousChest && renderedChest.distanceTo(previousChest)>maxRenderedJump){
+          maxRenderedJump=renderedChest.distanceTo(previousChest);
+          worstDisplayStep={name,frame,shift};
+        }
+        previousChest=renderedChest;
+        presentation.capture(display);
         if(frame%6===0){
-          skin.sample(r,a.surface,frame);
+          presentation.render(1,()=>skin.sample(r,a.surface,frame),()=>a.lizard.syncAttachments());
           presentation.render(.5,()=>skin.sample(r,a.surface,frame),()=>a.lizard.syncAttachments());
         }
         frame++;
@@ -134,6 +148,9 @@ test('the complete habitat supports a continuous tour with real planted feet', {
       if(!arrived)break;
     }
     t.diagnostic(JSON.stringify({audit:audit.report(),skin:{penetration:skin.maxPenetration,worst:skin.worst,samples:skin.samples}}));
+    t.diagnostic(JSON.stringify({weightedTicks,maxWeightShift,maxRenderedJump,worstDisplayStep}));
+    assert.ok(weightedTicks>30,'the chest visibly shifts weight during supported climbing steps');
+    assert.ok(maxRenderedJump<.006,'weight transfer cannot introduce a large one-frame torso jump');
     assert.equal(results.length,tour.length,'the whole tour completed');
     assert.ok(results.every(r=>r.arrived),'no route leaves the animal permanently stuck');
     assert.ok(audit.maxSlide<.0001,'stance does not slide');
