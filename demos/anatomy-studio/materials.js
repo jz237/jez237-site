@@ -32,6 +32,8 @@ const irisTex = texture((c, s) => { const g = c.createRadialGradient(s / 2, s / 
 const hairTex = texture((c, s) => { paint(c, s, noiseField(s, 2, 3), 90, 150); for (let x = 0; x < s; x += 1.5) { const v = 70 + Math.round(random() * 110); c.fillStyle = `rgba(${v},${v},${v},.7)`; c.fillRect(x, 0, 1, s); } });
 // Nerve: fine longitudinal fascicles.
 const nerveTex = texture((c, s) => { paint(c, s, noiseField(s, 3, 4), 118, 140); for (let x = 0; x < s; x += 3) { const v = 100 + Math.round(random() * 60); c.fillStyle = `rgba(${v},${v},${v},.5)`; c.fillRect(x, 0, 1, s); } });
+// Mottle: broad, low-contrast patches multiplied into the base colour of organs and muscle so no surface is one flat tone.
+const mottleTex = (() => { const t = texture((c, s) => paint(c, s, noiseField(s, 3, 3), 198, 255), 256); t.colorSpace = THREE.SRGBColorSpace; t.repeat.set(.19, .19); return t; })();
 const grain = boneTex, pores = boneTex, striation = muscleTex, vesselRidge = vesselTex;
 
 /** Planar UVs along the piece's longest axis so muscle striations run with the fibres. */
@@ -83,25 +85,25 @@ export const fileLabels = {skeletal: 'Skeleton', joints: 'Ligaments & discs', vi
 /** Realistic finish for one piece. Returns {color, roughness, clearcoat, opacity, bump, bumpScale, emissive, sheen...}. */
 function realistic(p) {
   const n = p.name, path = p.path || '', L = n.toLowerCase();
-  const wet = {roughness: .3, clearcoat: .85, clearcoatRoughness: .18, bump: organTex, bumpScale: .0012, roughMap: organTex, ior: 1.42};
+  const wet = {roughness: .3, clearcoat: .85, clearcoatRoughness: .18, bump: organTex, bumpScale: .0012, roughMap: organTex, ior: 1.42, mottle: true};
   switch (p.file) {
     case 'skeletal':
       if (/tooth|incisor|canine|molar|premolar/.test(L)) return {color: '#f4f1e8', roughness: .28, clearcoat: .7, clearcoatRoughness: .15};
       if (/cartilage|cartilages/.test(L + path.toLowerCase())) return {color: '#dfe7e3', roughness: .38, clearcoat: .5, opacity: .92, transparent: true};
-      return {color: '#e8e0cf', roughness: .55, clearcoat: .22, clearcoatRoughness: .5, bump: boneTex, bumpScale: .0009, roughMap: boneTex};
+      return {color: '#e8e0cf', roughness: .55, clearcoat: .22, clearcoatRoughness: .5, bump: boneTex, bumpScale: .0009, roughMap: boneTex, cavity: true};   // cavity: grooves darker, ridges paler (effects.js)
     case 'joints':
       if (/disc/.test(L)) return {color: '#d4d7da', roughness: .45, clearcoat: .3};
       return {color: '#e7dfd0', roughness: .7, bump: striation, bumpScale: .0003};
     case 'visceral':
-      if (/lobe of (right|left) lung/.test(L)) return {color: '#e5a3ab', ...wet, bump: organTex, bumpScale: .0016};
+      if (/lobe of (right|left) lung/.test(L)) return {color: '#e5a3ab', ...wet, roughness: .62, clearcoat: .18, clearcoatRoughness: .55, bump: organTex, bumpScale: .0026};   // matte and spongy
       if (/bronch|trachea/.test(L)) return {color: '#e2d5c1', roughness: .4, clearcoat: .4, bump: vesselRidge, bumpScale: .0006};
       if (L === 'pleura') return {color: '#e9d7d3', roughness: .2, clearcoat: .8, opacity: .32, transparent: true, depthWrite: false};
       if (/omentum|mesocolon|meso-appendix|taenia/.test(L)) return {color: '#e5cf9c', roughness: .35, clearcoat: .6, opacity: .82, transparent: true};
-      if (/liver/.test(L)) return {color: '#7b2f2b', ...wet, bumpScale: .0022};
+      if (/liver/.test(L)) return {color: '#7b2f2b', ...wet, roughness: .2, clearcoat: 1, clearcoatRoughness: .08, bumpScale: .0013};   // smooth, glossy capsule
       if (/gallbladder|bile duct/.test(L)) return {color: '#5e8a58', ...wet};
-      if (/stomach|duodenum|jejunum|ileum|oesophagus|pharynx/.test(L)) return {color: '#cc8f7f', ...wet};
-      if (/colon|appendix|anal|rectum/.test(L)) return {color: '#b98079', ...wet};
-      if (/kidney|renal|suprarenal/.test(L)) return {color: '#7d3038', ...wet};
+      if (/stomach|duodenum|jejunum|ileum|oesophagus|pharynx/.test(L)) return {color: '#cc8f7f', ...wet, roughness: .25, clearcoat: .95, clearcoatRoughness: .12};   // slick serosa
+      if (/colon|appendix|anal|rectum/.test(L)) return {color: '#b98079', ...wet, roughness: .27, clearcoat: .92, clearcoatRoughness: .14};
+      if (/kidney|renal|suprarenal/.test(L)) return {color: '#7d3038', ...wet, roughness: .23, clearcoat: .95, clearcoatRoughness: .1};
       if (/ureter|urethra|bladder/.test(L)) return {color: '#d9b0a0', ...wet};
       if (/pancrea/.test(L)) return {color: '#e4c59b', roughness: .42, clearcoat: .5, bump: boneTex, bumpScale: .0018, roughMap: boneTex};
       if (/thyroid|parathyroid|hypophysis|pineal/.test(L)) return {color: '#b9585d', ...wet};
@@ -139,12 +141,12 @@ function realistic(p) {
       if (/Brainstem/.test(path)) return {color: '#dcc1b3', roughness: .38, clearcoat: .55};
       if (/Diencephalon|striatum|Basal forebrain|Limbic/.test(path) || /thalamus|caudate|putamen|pallidus|amygdal|hippocamp|fornix/.test(L)) return {color: '#c99aa0', roughness: .38, clearcoat: .55};
       if (/corpus callosum|commissure|septum/.test(L)) return {color: '#ece2d8', roughness: .35, clearcoat: .5};
-      return {color: '#e3b4b7', roughness: .34, clearcoat: .7, clearcoatRoughness: .25, bump: brainTex, bumpScale: .0011, roughMap: brainTex};
+      return {color: '#e3b4b7', roughness: .34, clearcoat: .7, clearcoatRoughness: .25, bump: brainTex, bumpScale: .0011, roughMap: brainTex, mottle: true};
     case 'nerves': return {color: '#f0dc9a', roughness: .48, clearcoat: .3, bump: nerveTex, bumpScale: .0006, striated: true};
     case 'muscular':
       if (/fascia|bursa|sheath|retinacul|aponeurosis|iliotibial|septum|thoracolumbar/.test(L)) return {color: '#e6dccb', roughness: .5, clearcoat: .3, opacity: .78, transparent: true};
       if (/tendon/.test(L)) return {color: '#efe7d8', roughness: .4, clearcoat: .4};
-      return {color: '#9b2f33', roughness: .4, clearcoat: .55, clearcoatRoughness: .3, bump: muscleTex, bumpScale: .0022, roughMap: muscleTex, striated: true};
+      return {color: '#9b2f33', roughness: .4, clearcoat: .55, clearcoatRoughness: .3, bump: muscleTex, bumpScale: .0022, roughMap: muscleTex, striated: true, mottle: true};
     case 'lymphoid':
       if (/spleen/.test(L)) return {color: '#6e2a3a', ...wet};
       if (/thymus/.test(L)) return {color: '#d9a0a8', roughness: .4, clearcoat: .4};
@@ -168,12 +170,15 @@ export function finishMaterial(mesh, part, mode = 'realistic') {
   if (mode === 'realistic') spec = r;
   else if (mode === 'skin' || mode === 'organs') spec = part.file === 'regions' ? skinSpec(part) : r;
   else if (mode === 'coded') spec = {color: base, roughness: .5, clearcoat: .3, opacity: r.transparent ? Math.max(r.opacity, .4) : 1, transparent: !!r.transparent, depthWrite: r.depthWrite};
-  else if (mode === 'xray') spec = {color: part.file === 'skeletal' ? '#eef3f7' : base, roughness: .25, clearcoat: .5, opacity: part.file === 'skeletal' ? .92 : .16, transparent: part.file !== 'skeletal', depthWrite: part.file === 'skeletal', emissive: base, emissiveIntensity: part.file === 'skeletal' ? 0 : .35};
+  else if (mode === 'xray') spec = part.file === 'skeletal' ? {color: '#eef3f7', roughness: .25, clearcoat: .5, opacity: .92, transparent: false, depthWrite: true} : {color: base, roughness: .25, opacity: .45, transparent: true, depthWrite: false, glass: true};
   else spec = {color: '#cfc6bb', roughness: .85, clearcoat: 0, opacity: r.transparent ? .5 : 1, transparent: !!r.transparent, depthWrite: r.depthWrite};
   if (spec.planarUV && !mesh.geometry.attributes.uv) { planarCenteredUV(mesh); if (mesh.userData) mesh.userData.uvCell = 0; }
   if ((spec.bump || spec.roughMap) && !mesh.geometry.attributes.uv) { const cell = spec.striated ? .045 : .06; const world = part.file === 'regions' && !/hair/i.test(part.name) ? { scale: mesh.scale?.x || 1, offset: mesh.position ? mesh.position.toArray() : [0, 0, 0] } : null; projectedUV(mesh, cell, world); if (mesh.userData) { mesh.userData.uvCell = cell; mesh.userData.uvWorld = world; } }
   const mat = new THREE.MeshPhysicalMaterial({color: spec.color, roughness: spec.roughness ?? .5, metalness: 0, clearcoat: spec.clearcoat ?? 0, clearcoatRoughness: spec.clearcoatRoughness ?? .3, envMapIntensity: .8, transparent: !!spec.transparent, opacity: spec.opacity ?? 1, depthWrite: spec.depthWrite ?? true, side: THREE.FrontSide, ior: spec.ior ?? 1.45});
   if (spec.map && mesh.geometry.attributes.uv) { mat.map = spec.map; mat.map.colorSpace = THREE.SRGBColorSpace; }
+  else if (spec.mottle && mesh.geometry.attributes.uv) mat.map = mottleTex;
+  if (mesh.userData) mesh.userData.cavity = !!spec.cavity;
+  if (spec.cavity && mesh.geometry.attributes.color) mat.vertexColors = true;
   if (spec.bump && mesh.geometry.attributes.uv) { mat.bumpMap = spec.bump; mat.bumpScale = spec.bumpScale; }
   if (spec.roughMap && mesh.geometry.attributes.uv) { mat.roughnessMap = spec.roughMap; mat.roughness = Math.min(1, (spec.roughness ?? .5) * 1.6); }
   if (spec.anisotropy && mesh.geometry.attributes.uv) { mat.anisotropy = spec.anisotropy; mat.anisotropyRotation = Math.PI / 2; }   // hair: stretched highlight along the strands
@@ -185,9 +190,14 @@ export function finishMaterial(mesh, part, mode = 'realistic') {
       shader.uniforms.uSkinWrap = {value: sss.wrap}; shader.uniforms.uSkinBleed = {value: new THREE.Vector3(...sss.bleed)};
       shader.fragmentShader = shader.fragmentShader.replace('#include <common>', '#include <common>\nuniform float uSkinWrap; uniform vec3 uSkinBleed;')
         .replace('float dotNL = saturate( dot( geometryNormal, directLight.direction ) );\n\tvec3 irradiance = dotNL * directLight.color;\n\t#ifdef USE_CLEARCOAT',
-          'float dotNLraw = dot( geometryNormal, directLight.direction );\n\tfloat dotNL = saturate( ( dotNLraw + uSkinWrap ) / ( 1.0 + uSkinWrap ) );\n\tvec3 irradiance = dotNL * directLight.color;\n\tirradiance += uSkinBleed * pow( 1.0 - saturate( abs( dotNLraw ) ), 3.0 ) * directLight.color;\n\t#ifdef USE_CLEARCOAT');
+          'float dotNLraw = dot( geometryNormal, directLight.direction );\n\tfloat dotNL = saturate( ( dotNLraw + uSkinWrap ) / ( 1.0 + uSkinWrap ) );\n\tvec3 skinWrap = uSkinWrap * vec3( 1.9, 1.0, 0.6 );   // red scatters furthest under the surface\n\tvec3 irradiance = saturate( ( vec3( dotNLraw ) + skinWrap ) / ( 1.0 + skinWrap ) ) * directLight.color;\n\tirradiance += uSkinBleed * pow( 1.0 - saturate( abs( dotNLraw ) ), 3.0 ) * directLight.color;\n\tirradiance += uSkinBleed * 0.5 * pow( saturate( - dotNLraw ), 1.5 ) * directLight.color;   // a little light through thin parts lit from behind\n\t#ifdef USE_CLEARCOAT');
     };
-    mat.customProgramCacheKey = () => `skin-sss-${sss.wrap}`;
+    mat.customProgramCacheKey = () => `skin-sss2-${sss.wrap}`;
+  }
+  if (spec.glass) {
+    mat.blending = THREE.AdditiveBlending;
+    mat.onBeforeCompile = shader => { shader.fragmentShader = shader.fragmentShader.replace('#include <opaque_fragment>', 'float xrayRim = pow( 1.0 - saturate( abs( dot( normalize( vViewPosition ), normal ) ) ), 2.4 );\n\toutgoingLight = diffuse * ( 0.022 + 0.85 * xrayRim ) + totalEmissiveRadiance * ( 0.3 + xrayRim );\n\t#include <opaque_fragment>'); };
+    mat.customProgramCacheKey = () => 'xray-glass';
   }
   if (spec.emissive) { mat.emissive.set(spec.emissive); mat.emissiveIntensity = spec.emissiveIntensity ?? .3; }
   mesh.material = mat; return mat;

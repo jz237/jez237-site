@@ -32,7 +32,9 @@ export function closedSurface(geometry) {
   if (!pos || !index) return false;
   const n = pos.count, canon = new Uint32Array(n), seen = new Map();
   for (let i = 0; i < n; i++) {
-    const key = `${pos.getX(i)},${pos.getY(i)},${pos.getZ(i)}`;
+    // positions are quantised to 16-bit integers, which pack exactly into one number; anything else falls back to text
+    const x = pos.getX(i), y = pos.getY(i), z = pos.getZ(i);
+    const key = Number.isInteger(x) && Number.isInteger(y) && Number.isInteger(z) && Math.max(Math.abs(x), Math.abs(y), Math.abs(z)) < 32769 ? ((x + 32768) * 65537 + (y + 32768)) * 65537 + (z + 32768) : `${x},${y},${z}`;
     let c = seen.get(key);
     if (c === undefined) { c = seen.size; seen.set(key, c); }
     canon[i] = c;
@@ -54,6 +56,7 @@ export function closedSurface(geometry) {
 export function createSection({ materials, bounds, onChange, scene }) {
   const plane = new THREE.Plane(new THREE.Vector3(1, 0, 0), 0);
   const s = { axis: 'off', t: 0.5, flip: false, lo: -1, hi: 1, caps: true };
+  const planes = [plane];
   const active = () => s.axis !== 'off';
 
   // ---- caps
@@ -64,22 +67,30 @@ export function createSection({ materials, bounds, onChange, scene }) {
   const capMatrix = new THREE.Matrix4();
   const capped = new Map();   // part -> { back, front, cap, color }
   const capMaterials = new Map();
+  // Cut-face patterns, about 5 mm across: stipple for bone (marrow), fine parallel lines for muscle, diagonal hatch for the rest.
+  const pattern = draw => { const c = document.createElement('canvas'); c.width = c.height = 64; const g = c.getContext('2d'); g.fillStyle = '#fff'; g.fillRect(0, 0, 64, 64); g.strokeStyle = g.fillStyle = 'rgba(0,0,0,.42)'; draw(g); const t = new THREE.CanvasTexture(c); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(1600, 1600); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 4; return t; };
+  const patterns = {
+    skeletal: pattern(g => { for (const [x, y, r] of [[10, 12, 4], [40, 8, 3], [26, 34, 5], [54, 40, 3.5], [8, 50, 3], [44, 56, 4]]) { g.beginPath(); g.arc(x, y, r, 0, 7); g.fill(); } }),
+    muscular: pattern(g => { g.lineWidth = 2; for (let y = 4; y < 64; y += 8) { g.beginPath(); g.moveTo(0, y); g.lineTo(64, y); g.stroke(); } }),
+    other: pattern(g => { g.lineWidth = 2.5; for (let i = -64; i < 128; i += 16) { g.beginPath(); g.moveTo(i, 0); g.lineTo(i + 64, 64); g.stroke(); } })
+  };
   const stencilMaterial = (side, op) => new THREE.MeshBasicMaterial({
     side, clippingPlanes: [plane], colorWrite: false, depthWrite: false, depthTest: false,
     stencilWrite: true, stencilFunc: THREE.AlwaysStencilFunc, stencilFail: op, stencilZFail: op, stencilZPass: op
   });
   const backMaterial = stencilMaterial(THREE.BackSide, THREE.IncrementWrapStencilOp);
   const frontMaterial = stencilMaterial(THREE.FrontSide, THREE.DecrementWrapStencilOp);
-  function capMaterial(hex) {
-    let m = capMaterials.get(hex);
+  function capMaterial(hex, file) {
+    const kind = patterns[file] ? file : 'other', key = `${hex}-${kind}`;
+    let m = capMaterials.get(key);
     if (!m) {
       // a little darker than the surface, so a cut face reads as a cut and not as more skin
       m = new THREE.MeshBasicMaterial({
-        color: new THREE.Color(hex).multiplyScalar(0.72), side: THREE.DoubleSide,
+        color: new THREE.Color(hex).multiplyScalar(0.8), map: patterns[kind], side: THREE.DoubleSide,
         stencilWrite: true, stencilRef: 0, stencilFunc: THREE.NotEqualStencilFunc,
         stencilFail: THREE.ReplaceStencilOp, stencilZFail: THREE.ReplaceStencilOp, stencilZPass: THREE.ReplaceStencilOp
       });
-      capMaterials.set(hex, m);
+      capMaterials.set(key, m);
     }
     return m;
   }
@@ -96,7 +107,7 @@ export function createSection({ materials, bounds, onChange, scene }) {
       return m;
     };
     const color = part.mesh.material.color.getHex();
-    const cap = new THREE.Mesh(capGeometry, capMaterial(color));
+    const cap = new THREE.Mesh(capGeometry, capMaterial(color, part.file));
     cap.renderOrder = order + 0.5; cap.frustumCulled = false; cap.matrixAutoUpdate = false; cap.matrixWorldAutoUpdate = false;
     cap.onAfterRender = clearStencil;
     capGroup.add(cap);
@@ -110,13 +121,13 @@ export function createSection({ materials, bounds, onChange, scene }) {
 
   /** Once per drawn frame while a section is active: keep the caps in step with what is on screen. */
   /** Test queued meshes in slices, smallest first so most caps appear at once; each slice asks for a redraw. */
-  let pumping = false;
+  let pumping = false, notified = 0;
   function pump() {
     pumping = false;
     if (!active() || !s.caps || !untested.length) return;
     const started = performance.now();
     while (untested.length && performance.now() - started < BUDGET_MS) { const p = untested.pop(); closed.set(p, closedSurface(p.loGeometry || p.mesh.geometry)); }
-    onChange();
+    if (!untested.length || started - notified > 250) { notified = started; onChange(); }   // a redraw now and then, not after every slice
     if (untested.length) { pumping = true; setTimeout(pump, 4); }
   }
 
@@ -139,7 +150,7 @@ export function createSection({ materials, bounds, onChange, scene }) {
       c.cap.matrixWorld.copy(capMatrix);
       if (c.back.geometry !== part.mesh.geometry) c.back.geometry = c.front.geometry = part.mesh.geometry;   // the detail tier swapped in
       const color = part.mesh.material.color.getHex();
-      if (color !== c.color) { c.color = color; c.cap.material = capMaterial(color); }   // the finish changed
+      if (color !== c.color) { c.color = color; c.cap.material = capMaterial(color, part.file); }   // the finish changed
     }
   }
 
@@ -194,6 +205,10 @@ export function createSection({ materials, bounds, onChange, scene }) {
     setCaps(on) { s.caps = !!on; if (!s.caps) removeCaps(); onChange(); },
     flip() { s.flip = !s.flip; place(); onChange(); return s.flip; },
     /** True when a world-space point lies on the removed side, so picking ignores what the cut has hidden. */
-    clips: point => active() && plane.distanceToPoint(point) < 0
+    clips: point => active() && plane.distanceToPoint(point) < 0,
+    /** The clipping planes other materials should use right now (an array to share, or null). */
+    get planes() { return active() ? planes : null; },
+    /** Hide the cap quads while a pass draws the scene with one material for everything (the stencil test would be lost). */
+    showCaps(on) { capGroup.visible = on; }
   };
 }

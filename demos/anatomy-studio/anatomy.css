@@ -100,3 +100,5 @@ h1 em{color:#c9a99c}.hero .eyebrow{color:var(--mint)}
 .hero .eyebrow,.gesture-hint,.range-labels,.scene-badge,.small-pill,.stat-grid span,.label-note,.board-header strong,.landmark-all{font-size:9px}
 .landmark,.assembly-grid button span,.assembly-actions span,.stage-note,.part-path,.part-detail #part-meta,.results span,.credits kbd,.control-section h3{font-size:10px}
 .gesture-hint{max-width:calc(100% - 44px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* five toggles: let them wrap */
+.toggle-row{flex-wrap:wrap}.toggle-row button{flex:1 1 30%}

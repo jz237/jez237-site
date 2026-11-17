@@ -25,13 +25,23 @@ exploded views (heart, lungs, spine, brain, skull, eye, hand, knee, rib cage, di
 
 ## Files
 
-`index.html` + `studio.js` (engine), `labels.js` (label layout), `section.js` (cross-section plane), `quiz.js`, `tour.js`, `tour-notes.js` (text written for the tours), `facts.js` (key facts and related pieces from descriptions), `url-state.js` (shareable links), `assemblies.js` (nested explodes, dependency-free), `explode-rules.js` (whole-body vectors),
+`index.html` + `studio.js` (engine), `labels.js` (label layout), `effects.js` (selection outline, skin depth pre-pass, bone cavity shading, platform reflection), `section.js` (cross-section plane), `quiz.js`, `tour.js`, `tour-notes.js` (text written for the tours), `facts.js` (key facts and related pieces from descriptions), `url-state.js` (shareable links), `assemblies.js` (nested explodes, dependency-free), `explode-rules.js` (whole-body vectors),
 `materials.js` (per-system finishes), `parts-board.js`, `manifest.json` (every piece: id, system, hierarchy, side, region, centre, size),
 `descriptions.json`, `assets/*.glb` (one meshopt-compressed file per system, each under 25 MiB), `manual.html`, `vendor/` (three.js 0.180).
 
+## Graphics
+
+- **Selection** is marked by an outline (`effects.js`): a stencil mask of the piece's silhouette, then its back faces pushed out along the normals, so hollow pieces are outlined and not flooded. The colour tint is only a hint.
+- **X-ray** soft tissue is drawn additively with a rim term (clear faces, glowing edges), which looks the same whatever the draw order.
+- **See-through skin** gets a depth pre-pass, so only the nearest layer of skin is blended and limbs cannot show through each other in the wrong order.
+- **Skin** light wraps further in red than in green and blue; **organs** differ in gloss (matte lung, glossy liver, slick gut) and share a broad mottle map; **bone** gets cavity shading computed from each mesh's curvature after loading.
+- **Cut faces** carry a pattern per tissue (stipple for bone, lines for muscle, hatch otherwise), and ambient occlusion stays on while a section is active.
+- **Effects** (one toggle, desktop only, `?fx=0` to start without): a soft reflection of the body in the platform, a light bloom on true highlights, and depth of field when a piece of a study is in focus. They are the first thing the automatic quality step-down switches off.
+- **Motion**: the body explodes in layers (skin first, skeleton last; every piece still arrives at 100% and reassembly is exact), camera moves swing around the target, and the opening view pushes in.
+
 ## Rendering and loading
 
-The studio draws a frame only while something is moving and for a moment after any input, so an idle page costs no GPU time. The files of a stage download in parallel and attach in order; the body appears as soon as the skeleton is in. A desktop visit loads everything the opening finish shows and leaves the muscles (10.7 MB, a third of the download) until a finish, system, search result, tour or the all-parts board needs them. Piece numbers and explode directions come from the manifest's order, not from load order. If frames stay under about 20 fps while something is moving, ambient occlusion, then shadows, then resolution are switched off (a note says so; `?quality=fixed` disables this, and using the Shadowing button does too). three.js is vendored minified (`vendor/three.*.min.js`, r180). A lost WebGL context is waited out and restored rather than treated as fatal.
+The studio draws a frame only while something is moving and for a moment after any input, so an idle page costs no GPU time. The files of a stage download in parallel and attach in order; the body appears as soon as the skeleton is in. A desktop visit loads everything the opening finish shows and leaves the muscles (10.7 MB, a third of the download) until a finish, system, search result, tour or the all-parts board needs them. Piece numbers and explode directions come from the manifest's order, not from load order. If frames stay under about 20 fps while something is moving, the effects, then ambient occlusion, then shadows, then resolution are switched off (a note says so; `?quality=fixed` disables this, and using the Shadowing button does too). three.js is vendored minified (`vendor/three.*.min.js`, r180). A lost WebGL context is waited out and restored rather than treated as fatal.
 
 ## Version stamps
 
