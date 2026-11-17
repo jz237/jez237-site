@@ -11,7 +11,7 @@ static const char *astra_liquid_fragment=
 "varying highp vec2 uv;\n"
 "varying mediump vec4 light;\n"
 "uniform sampler2D baseMap,overlayMap,env0,env1,env2,env3,env4,env5;\n"
-"uniform float clock,kind,overlay,turn,cascade,barrier;uniform vec2 downhill;\n"
+"uniform float clock,kind,overlay,turn,cascade,barrier,materialPass;uniform vec2 downhill;\n"
 "uniform vec3 eye,normal,tangent,bitangent;\n"
 "uniform vec4 shore[4],planes[6],origins[6],pu[6],pv[6],texuv[6],texduv[6],rect[6],tints[6];\n"
 "uniform vec4 lamps[3],lampColors[3];\n"
@@ -98,7 +98,7 @@ static const char *astra_liquid_fragment=
 "  float foam=exp(-max(0.,edge)*1.55)*smoothstep(.35,.75,noise(flow*18.+w.xy))*wash;\n"
 "  col=mix(col,vec3(.50,.66,.64)*(room*.45+.55),min(.78,foam*.83+crest*.10+cascade*.24*smoothstep(.56,.82,noise(vec2(dot(q,vec2(-downhill.y,downhill.x))*2.5,dot(q,downhill)*.28-clock*1.6)))));\n"
 " }else{\n"
-"  vec2 flow=q*.39+vec2(clock*.022,-clock*.037);\n"
+"  vec2 flow=mix(q*.39+vec2(clock*.022,-clock*.037),q*.185-vec2(.079,.033)*clock,materialPass);\n"
 "  vec2 warp=vec2(fbm(flow*.85+clock*.013),fbm(flow*.92+19.-clock*.01))-.5;\n"
 "  vec3 plate=crust(flow+warp*1.05);\n"
 "  float grain=fbm(flow*9.+warp*2.);\n"
@@ -127,6 +127,7 @@ static const char *astra_liquid_fragment=
 "  float pressure=sin(clock*.65+plate.z*25.);\n"
 "  float blister=(1.-smoothstep(.025,.15,plate.y))*smoothstep(.92,1.,pressure);\n"
 "  col+=vec3(.88,.19,.013)*blister*.75;\n"
+"  float bank=materialPass*(1.-smoothstep(.12,1.45,edge));col=mix(col,basalt*.58+vec3(.035,.022,.018),bank*.93);\n"
 "  vec2 rockSlope=vec2(noise(flow*22.+.08)-noise(flow*22.-.08),noise(flow.yx*27.+.08)-noise(flow.yx*27.-.08));\n"
 "  N=normalize(N+tangent*rockSlope.x*.65+bitangent*rockSlope.y*.65);\n"
 "  vec3 key=normalize(normal*sign(dot(normal,V))*.7+tangent*.6+bitangent*.4);\n"
@@ -228,14 +229,14 @@ static int warm_astra_liquid_face(void){
 int astra_liquid_face(int count,const g3s_point **view,const int *ids,const g3s_uvl *uv,g3s_lrgb *light,int room,int sidenum){
 
     if(astra_native_compare||warm_astra_liquid_face_failed||count<3||count>8)return 0;
-    side *face=&Segments[room].sides[sidenum];int kind=astra_liquid_kind(face->tmap_num);if(!kind)return 0;if(kind==2)ah_lava(count,view);
+    side *face=&Segments[room].sides[sidenum];int galleryPool=astra_gallery_scene==57&&room==astra_gallery_room&&sidenum==astra_gallery_side;int kind=galleryPool?2:astra_liquid_kind(face->tmap_num);if(!kind)return 0;if(kind==2)ah_lava(count,view);
     if(face->wall_num>=0&&Walls[face->wall_num].type==WALL_DOOR)return 0;
     if(!warm_astra_liquid_face_program&&!warm_astra_liquid_face()){return 0;}
     al_catalog();al_reflection_room(room);
     int barrier=kind==1&&Segments[room].children[sidenum]>=0&&(WALL_IS_DOORWAY(&Segments[room],sidenum)&WID_FLY_FLAG)&&
         (face->wall_num<0||Walls[face->wall_num].type==WALL_ILLUSION);
     PIGGY_PAGE_IN(Textures[face->tmap_num]);grs_bitmap *base=&GameBitmaps[Textures[face->tmap_num].index];ogl_bindbmtex(base);ogl_texture *tex=base->gltexture;
-    GLuint native=tex->native_color?tex->native_color:tex->handle,toptex=native;int top=face->tmap_num2&0x3fff,mode=0;
+    GLuint native=tex->native_color?tex->native_color:tex->handle,toptex=native;int top=galleryPool?0:face->tmap_num2&0x3fff,mode=0;
     if(top>0&&top<NumTextures){PIGGY_PAGE_IN(Textures[top]);grs_bitmap *bm=&GameBitmaps[Textures[top].index];ogl_bindbmtex(bm);toptex=bm->gltexture->handle;mode=(bm->bm_flags&BM_FLAG_SUPER_TRANSPARENT)?2:1;}
     glUseProgram(warm_astra_liquid_face_program);glUniform1f(AS_UNIFORM(warm_astra_liquid_face_program,"barrier"),barrier);glUniform1i(AS_UNIFORM(warm_astra_liquid_face_program,"baseMap"),0);glUniform1i(AS_UNIFORM(warm_astra_liquid_face_program,"overlayMap"),1);
     static GLint environmentUnits[6];static int unitsReady;if(!unitsReady){for(int i=0;i<6;i++){char name[12];snprintf(name,sizeof name,"env%d",i);environmentUnits[i]=glGetUniformLocation(warm_astra_liquid_face_program,name);}unitsReady=1;}for(int i=0;i<6;i++){glUniform1i(environmentUnits[i],2+i);glActiveTexture(GL_TEXTURE2+i);glBindTexture(GL_TEXTURE_2D,al_probe.textures[i]?al_probe.textures[i]:native);}
@@ -249,7 +250,7 @@ int astra_liquid_face(int count,const g3s_point **view,const int *ids,const g3s_
     int major=fabsf(n[0])>fabsf(n[1])?(fabsf(n[0])>fabsf(n[2])?0:2):(fabsf(n[1])>fabsf(n[2])?1:2);t[(major+1)%3]=1;b[(major+2)%3]=1;
     vms_matrix orient;extract_orient_from_segment(&orient,&Segments[room]);float up[3];al_vec(up,&orient.uvec);float cascade=kind==1?(1-fminf(1,fabsf(al_dot(n,up)))):0;cascade=cascade*cascade;glUniform1f(AS_UNIFORM(warm_astra_liquid_face_program,"cascade"),cascade);float dx=-al_dot(up,t),dy=-al_dot(up,b),length=sqrtf(dx*dx+dy*dy);glUniform2f(AS_UNIFORM(warm_astra_liquid_face_program,"downhill"),length>.01f?dx/length:0,length>.01f?dy/length:1);
     glUniform3fv(AS_UNIFORM(warm_astra_liquid_face_program,"normal"),1,n);glUniform3fv(AS_UNIFORM(warm_astra_liquid_face_program,"tangent"),1,t);glUniform3fv(AS_UNIFORM(warm_astra_liquid_face_program,"bitangent"),1,b);glUniform3fv(AS_UNIFORM(warm_astra_liquid_face_program,"eye"),1,eye);
-    glUniform1f(AS_UNIFORM(warm_astra_liquid_face_program,"kind"),kind);glUniform1f(AS_UNIFORM(warm_astra_liquid_face_program,"clock"),al_clock());glUniform1f(AS_UNIFORM(warm_astra_liquid_face_program,"overlay"),mode);glUniform1f(AS_UNIFORM(warm_astra_liquid_face_program,"turn"),(face->tmap_num2>>14)&3);
+    glUniform1f(AS_UNIFORM(warm_astra_liquid_face_program,"materialPass"),kind==2&&astra_material_pass);glUniform1f(AS_UNIFORM(warm_astra_liquid_face_program,"kind"),kind);glUniform1f(AS_UNIFORM(warm_astra_liquid_face_program,"clock"),al_clock());glUniform1f(AS_UNIFORM(warm_astra_liquid_face_program,"overlay"),mode);glUniform1f(AS_UNIFORM(warm_astra_liquid_face_program,"turn"),(face->tmap_num2>>14)&3);
     float edges[4][4];int corners[4];get_side_verts(corners,room,sidenum);vms_vector center;compute_center_point_on_side(&center,&Segments[room],sidenum);float ctr[3];al_vec(ctr,&center);
     int catalog=al_index[room][sidenum];unsigned shore=catalog>=0?al_faces[catalog].shore:15;
     for(int i=0;i<4;i++){

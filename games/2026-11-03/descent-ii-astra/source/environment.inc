@@ -241,6 +241,7 @@ static void ae_hatch(int room,int side,int theme,float w,float h){
 #include "astra_mine_life.inc"
 void astra_environment_face(int nv,const g3s_point **points,const int *vp,g3s_lrgb *light,int room,int side,int flags){
     if(!ax_on()||astra_native_compare)return;ae_faces++;ae_reset();segment *s=&Segments[room];int wallnum=s->sides[side].wall_num;
+    if(astra_gallery_scene==57&&room==astra_gallery_room&&side==astra_gallery_side)return;
     int hidden=wallnum>=0&&Walls[wallnum].type==WALL_DOOR&&Walls[wallnum].clip_num>=0&&(WallAnims[Walls[wallnum].clip_num].flags&WCF_HIDDEN);
     int solid=s->children[side]<0&&wallnum<0;
     if(!solid&&!hidden){
@@ -408,6 +409,58 @@ void astra_environment_rooms(const short *rooms,int count,int window_num){
         for(int j=0;j<3;j++){float x=afx_lamps[j][0],z=afx_lamps[j][2],dist=sqrtf(x*x+afx_lamps[j][1]*afx_lamps[j][1]+z*z);float reach=fmaxf(0,1-dist/fmaxf(1,afx_lamps[j][3]));for(int k=0;k<3;k++)for(int side=0;side<2;side++)colors[side][k]+=afx_colors[j][k]*reach*(side==(x>0)?1:.23f);}
         for(int k=0;k<3;k++)for(int side=0;side<2;side++)colors[side][k]+=astra_flash[3]*(k==0?.28f:k==1?.075f:.02f);
         EM_ASM(window.astraDeck?.reflect([$0,$1,$2],[$3,$4,$5]);,colors[0][0],colors[0][1],colors[0][2],colors[1][0],colors[1][1],colors[1][2]);
+    }
+    if(astra_gallery_scene==57){
+        vms_vector a,b,forward,deck;vms_matrix upright,frame;
+        compute_center_point_on_side(&a,&Segments[astra_lab_entry],astra_lab_grate);
+        compute_center_point_on_side(&b,&Segments[astra_gallery_room],astra_gallery_side);
+        vm_vec_normalized_dir(&forward,&b,&a);vm_vec_avg(&deck,&a,&b);
+        extract_orient_from_segment(&upright,&Segments[astra_lab_entry]);
+        vm_vector_2_matrix(&frame,&forward,&upright.uvec,NULL);
+        vm_vec_scale_add2(&deck,&frame.uvec,F1_0/2);
+        astra_fixture_lights(astra_gallery_room);
+        g3_start_instance_matrix(&deck,&frame);ax_count=0;ax_energy=0;
+        float lip=astra_material_pass?.56f:.18f;
+        for(int sign=-1;sign<=1;sign+=2){
+            float x=sign*4.4f;
+            ax_paint(.12f,.16f,.18f,2);ag_box(x,3.6f,0,.38f,3.6f,lip);
+            ax_paint(.35f,.39f,.43f,0);ax_tube(x-sign*.35f,.1f,-lip,x-sign*.35f,7.f,-lip,.11f,.11f,6);
+            for(int i=0;i<7;i++){
+                float y=.70f+i*.92f;
+                ax_paint(.04f,.052f,.07f,0);ag_box(x,y,-lip-.04f,.27f,.37f,.045f);
+                ax_paint(.05f,.24f,.99f,3);ag_box(x,y,-lip-.08f,.205f,.31f,.035f);
+                if(astra_material_pass){ax_paint(.29f,.32f,.37f,0);ag_box(x,y,-lip-.17f,.25f,.023f,.021f);}
+            }
+            ax_paint(.25f,.28f,.32f,0);ag_box(x,.45f,-2.5f,.16f,.26f,3.4f);
+            for(int j=0;j<3;j++){float z=-5.55f+2.65f*j;
+                ax_paint(.13f,.16f,.17f,0);ag_box(x,-.18f,z,.16f,.79f,.16f);
+                ax_paint(.32f,.33f,.32f,0);ag_box(x,-.73f,z,.34f,.12f,.34f);
+                ax_tube(x,-.51f,z,x,.40f,z+.70f,.09f,.09f,6);
+            }
+        }
+        ax_paint(.23f,.27f,.31f,2);ag_box(0,7.23f,0,4.75f,.22f,lip);
+        for(int sign=-1;sign<=1;sign+=2){
+            ax_paint(.30f,.31f,.30f,0);
+            ax_tube(sign*4.31f,5.46f,0,sign*2.76f,7.19f,0,.27f,.27f,6);
+            ax_paint(.52f,.34f,.10f,0);
+            ax_tube(sign*3.77f,6.05f,-.13f,sign*3.36f,6.50f,-.13f,.23f,.23f,6);
+        }
+        for(int j=-2;j<=2;j++){
+            float x=j*1.6f;ax_paint(.29f,.21f,.14f,0);
+            ax_tube(x,.13f,-6.f,x,.13f,.8f,.13f,.13f,8);
+            if(astra_material_pass){
+                for(int j=0;j<3;j++){float z=-5.3f+2.55f*j;ax_paint(.26f,.29f,.30f,0);ax_tube(x,.13f,z-.1f,x,.13f,z+.1f,.18f,.18f,8);}
+            }
+        }
+        ax_paint(.38f,.41f,.43f,0);
+        for(int j=0;j<14;j++)ag_box(0,lip+.28f,-5.9f+j*.48f,4.3f,.075f,.055f);
+        for(int j=-4;j<=4;j++)ag_box(j*.95f,lip+.23f,-2.75f,.035f,.05f,3.22f);
+        for(int i=0;i<ax_count;i++){
+            ax_vertex *v=ax_vertices+i;
+            if(v->color[3]>=3){afx_uv[i*2]=v->p[0]*.54f;afx_uv[i*2+1]=.5f+v->p[2]*.045f;}
+            else {afx_uv[i*2]=.24f*(v->p[0]+v->p[2]*.75f);afx_uv[i*2+1]=.24f*(v->p[1]+v->p[2]*.6f);}
+        }
+        afx_finish(7,1);g3_done_instance();
     }
     ag_render_exhibit();
     if(!window_num&&sz_level==Current_level_num)EM_ASM(if(Module.mineDistricts){Module.mineDistricts.seen=$0;Module.mineDistricts.draws=$1;},sz_seen,sz_draws);

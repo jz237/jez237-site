@@ -98,6 +98,10 @@ static void aw_lamp(const aw_mount *m,int room,int s,float fade){
         ax_paint(.14f,.16f,.18f,0);ag_box(x,0,.14f,pitch*.48f,.225f,.035f);
         ax_paint(color[0]*(lit?1:.06f),color[1]*(lit?1:.06f),color[2]*(lit?1:.06f),lit?3:0);ag_box(x,0,.18f,pitch*.43f,.18f,.012f);
     }
+    if(astra_material_pass){
+        ax_paint(.20f,.24f,.27f,0);
+        for(int i=1;i<cells;i+=2){float x=-W+.10f+i*pitch;ax_tube(x,-.28f,.31f,x,.28f,.31f,.04f,.04f,5);}
+    }
     ax_paint(.39f,.42f,.44f,0);for(int sign=-1;sign<=1;sign+=2)ag_box(0,sign*.29f,.19f,W,.018f,.025f);
     ax_paint(.055f,.065f,.075f,0);ag_box(0,-.51f,.07f,.84f,.15f,.035f);
     /* Seven-segment stamped bay number, independent of objectives/key colors. */
@@ -126,6 +130,8 @@ static void afx_fixture(int room,int s){
     int kind=astra_fixture_kind(room,s);
     if(room==astra_gallery_room&&s==astra_gallery_side){if(astra_gallery_scene==15||astra_gallery_scene==25)kind=1;else if(astra_gallery_scene==17)kind=2;}
     aw_mount mount;int accent=aw_mount_for(room,s,&mount);
+    int galleryGrate=astra_gallery_scene==57&&room==astra_lab_entry&&s==astra_lab_grate;
+    if(galleryGrate){kind=1;accent=0;}
     if(!kind&&!accent)return;
     vms_vector center;compute_center_point_on_side(&center,&Segments[room],s);g3s_point p;g3_rotate_point(&p,&center);float distance=f2fl(p.p3_z);
     if(distance<.6f||distance>82)return;float fade=fminf(1,(82-distance)/12.f);
@@ -133,12 +139,12 @@ static void afx_fixture(int room,int s){
         aw_lamp(&mount,room,s,fade);if(afx_budget<22&&aw_mount_at(room,s,1,&mount))aw_lamp(&mount,room,s,fade);return;
     }
     side *face=&Segments[room].sides[s];int turn=kind==3?(face->tmap_num2>>14)&3:0;afx_plane m;if(!afx_plane_for(room,s,turn,&m))return;
-    if(room==astra_gallery_room&&s==astra_gallery_side&&(astra_gallery_scene==15||astra_gallery_scene==17||astra_gallery_scene==25)){
+    if(galleryGrate||room==astra_gallery_room&&s==astra_gallery_side&&(astra_gallery_scene==15||astra_gallery_scene==17||astra_gallery_scene==25)){
         m.cx=m.cy=0;for(int j=0;j<4;j++){m.cx+=m.uv[j*2]*.25f;m.cy+=m.uv[j*2+1]*.25f;}
     }
     float w=m.w,h=m.h;ax_count=0;ax_energy=0;
     if(kind==1){
-        float W=fminf(w*.255f,5.8f),H=fminf(h*.255f,5.8f);afx_frame_box(0,0,W,H,.33f);
+        float W=fminf(w*.255f,5.8f),H=fminf(h*.255f,5.8f);float grilleDepth=astra_material_pass?.69f:.33f;afx_frame_box(0,0,W,H,grilleDepth);
         if(aw_vent(room,s)){
             float rad=fminf(W,H)*.78f,time=ae_clock(),warm=aw_warmth(room,s,time);int lit=!(Light_subtracted[room]&(1<<s));
             ax_paint(warm*(lit?1:.04f),warm*(lit?.25f:.02f),.025f,lit?4:0);
@@ -151,7 +157,7 @@ static void afx_fixture(int room,int s){
             ax_paint(.29f,.23f,.18f,0);ax_tube(0,0,.15f,0,0,.23f,rad*.17f,rad*.15f,12);
         }
         for(int k=-2;k<=2;k++){float x=k*W*.32f;ax_paint(.22f,.23f,.24f,0);ax_tube(x,-H,.16f,x,H,.16f,.13f,.13f,8);for(int j=-1;j<=1;j+=2)ax_tube(x,j*H*.66f-.09f,.16f,x,j*H*.66f+.09f,.16f,.20f,.20f,8);}
-        int bars=9;for(int k=0;k<bars;k++){float y=-H+(k+1)*2*H/(bars+1);ax_paint(.35f,.34f,.32f,0);ag_box(0,y,.32f,W,.065f,.10f);ax_paint(.43f,.42f,.40f,0);ag_box(0,y+.055f,.40f,W,.014f,.018f);}
+        int bars=9;for(int k=0;k<bars;k++){float y=-H+(k+1)*2*H/(bars+1);ax_paint(.35f,.34f,.32f,0);ag_box(0,y,grilleDepth-.01f,W,.065f,.10f);ax_paint(.43f,.42f,.40f,0);ag_box(0,y+.055f,grilleDepth+.07f,W,.014f,.018f);}
     }else if(kind==2){
         float H=fminf(h*.32f,6),W=fminf(w*.13f,2.3f);afx_frame_box(0,0,W+.38f,H+.18f,.13f);
         for(int k=-1;k<=1;k++){float x=k*W*.72f;ax_paint(.39f,.38f,.36f,0);ax_tube(x,-H,.29f,x,H,.29f,.22f,.22f,12);

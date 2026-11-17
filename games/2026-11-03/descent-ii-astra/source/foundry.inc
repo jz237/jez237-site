@@ -16,10 +16,17 @@ int astra_environment_bay(int room){
     }return selected;
 }
 static int ag_exhibit(object *ship){
-    if(astra_gallery_scene!=8||astra_gallery_room<0)return 0;
+    if((astra_gallery_scene!=8&&astra_gallery_scene!=57)||astra_gallery_room<0)return 0;
     vms_vector c;vms_matrix b;float w,h;
     if(!ae_basis(astra_gallery_room,astra_gallery_side,&c,&b,&w,&h))return 0;
     int id=-1;for(int i=0;i<N_robot_types;i++)if(!Robot_info[i].boss_flag&&!Robot_info[i].companion&&Polygon_models[Robot_info[i].model_num].rad<i2f(4)){id=i;break;}
+    if(astra_gallery_scene==57){
+        for(int i=0;i<N_robot_types;i++){
+            int model=Robot_info[i].model_num;
+            if(model<0||model>=(int)sizeof(astra_fleet_type)||astra_fleet_type[model]!=4)continue;
+            if(!Robot_info[i].boss_flag&&!Robot_info[i].companion&&Polygon_models[model].rad<i2f(6)){id=i;break;}
+        }
+    }
     if(id<0)return 0;
     memset(ship,0,sizeof *ship);ship->type=OBJ_ROBOT;ship->render_type=RT_POLYOBJ;ship->id=id;ship->segnum=astra_gallery_room;ship->rtype.pobj_info.model_num=Robot_info[id].model_num;
     ship->size=Polygon_models[Robot_info[id].model_num].rad;ship->shields=Robot_info[id].strength;ship->pos=c;
@@ -27,6 +34,15 @@ static int ag_exhibit(object *ship){
     vm_vec_scale_add2(&ship->pos,&b.rvec,fl2f(sinf(t*.48f)*fminf(w*.15f,3)));
     vm_vec_scale_add2(&ship->pos,&b.uvec,fl2f(cosf(t*.35f)*.65f));
     vm_vec_scale_add2(&ship->pos,&b.fvec,fl2f(r+1.2f+.4f*sinf(t*.7f)));
+    if(astra_gallery_scene==57){
+        vms_vector center,eye,forward;compute_segment_center(&center,&Segments[astra_gallery_room]);compute_segment_center(&eye,&Segments[astra_lab_entry]);
+        vm_vec_normalized_dir(&forward,&eye,&center);vms_matrix up;extract_orient_from_segment(&up,&Segments[astra_lab_entry]);
+        vm_vector_2_matrix(&ship->orient,&forward,&up.uvec,NULL);
+        compute_center_point_on_side(&ship->pos,&Segments[astra_gallery_room],astra_gallery_side);
+        vm_vec_scale_add2(&ship->pos,&up.uvec,fl2f(3.4f));
+        vm_vec_scale_add2(&ship->pos,&ship->orient.rvec,fl2f(sinf(t*.52f)*fminf(4,w*.18f)));
+        vm_vec_scale_add2(&ship->pos,&up.uvec,fl2f(.65f*sinf(t*.8f)));return 1;
+    }
     vms_angvec a={fl2f(sinf(t*.25f)*.03f),fl2f(sinf(t*.4f)*.04f),fl2f(.5f+sinf(t*.2f)*.08f)};vms_matrix rot;
     vm_angles_2_matrix(&rot,&a);vm_matrix_x_matrix(&ship->orient,&b,&rot);return 1;
 }

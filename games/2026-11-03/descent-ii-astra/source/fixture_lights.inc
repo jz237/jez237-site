@@ -185,6 +185,18 @@ void astra_fixture_lights(int room){
         afx_colors[slot][3]=accent||filtered||vent?1:0;
     }
     }
+    if(astra_gallery_scene==57&&(room==astra_lab_entry||room==astra_gallery_room)){
+        for(int j=0;j<2;j++){
+            vms_vector point;if(j==0){
+                int ids[4];get_side_verts(ids,astra_lab_entry,astra_lab_portal);
+                vm_vec_avg(&point,&Vertices[ids[0]],&Vertices[ids[3]]);
+            }else compute_center_point_on_side(&point,&Segments[astra_gallery_room],astra_gallery_side);
+            g3s_point view;afx_point(&view,&point);afx_lamps[j][0]=f2fl(view.p3_x);afx_lamps[j][1]=f2fl(view.p3_y);afx_lamps[j][2]=-f2fl(view.p3_z);
+            afx_light_world[j][0]=f2fl(point.x);afx_light_world[j][1]=f2fl(point.y);afx_light_world[j][2]=f2fl(point.z);
+            afx_lamps[j][3]=afx_light_world[j][3]=38;memset(afx_axes[j],0,sizeof afx_axes[j]);
+            afx_colors[j][0]=j?1.45f:.12f;afx_colors[j][1]=j?.36f:.42f;afx_colors[j][2]=j?.045f:1.65f;afx_colors[j][3]=1;
+        }
+    }
     astra_scenery_light(room);
     astra_reaction_light(room);
     if(!afx_instance){

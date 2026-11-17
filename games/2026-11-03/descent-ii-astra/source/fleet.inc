@@ -35,9 +35,9 @@ static void af_program_init(void){
         "vec3 F=flash.xyz-p;float fd=length(F);color+=vec3(1.,.40,.13)*flash.w/(1.+fd*fd*.01)*max(0.,dot(N,F/max(.1,fd)))*base;"
         "vec3 emission=mix(vec3(.20,.79,1.),max(base,vec3(.15)),smoothstep(.08,.42,max(base.r,base.g)-base.b));"
         "color+=emission*pow(a.a,.77)*(1.32+.075*sin(clock*3.));"
-        "if(lightOn>.5){vec3 local=vec3(0.);for(int i=0;i<4;i++){vec3 d=lamps[i].xyz-p;float dist=length(d),radius=max(1.,lamps[i].w);vec3 L=d/max(.01,dist);"
+        "if(lightOn>.5){vec3 local=vec3(0.);for(int i=0;i<4;i++){vec3 d=lamps[i].xyz-p;if(lampColor[i].w<0.&&lampDir[i].w>0.)d+=lampDir[i].xyz*clamp(dot(-d,lampDir[i].xyz),-lampDir[i].w,lampDir[i].w);float dist=length(d),radius=max(1.,lamps[i].w);vec3 L=d/max(.01,dist);"
         "float fall=pow(max(0.,1.-dist/radius),2.);float cone=lampColor[i].w<0.?1.:smoothstep(lampColor[i].w,min(.999,lampColor[i].w+.09),dot(-L,lampDir[i].xyz));"
-        "float diffuse=max(0.,dot(N,L));float spec=pow(max(0.,dot(N,normalize(L+V))),mix(80.,8.,rough));local+=lampColor[i].rgb*fall*cone*(base*(.14+diffuse*1.8)+spec*mix(vec3(.18),base,metal)*.7);}"
+        "float diffuse=max(0.,dot(N,L));float spec=pow(max(0.,dot(N,normalize(L+V))),mix(80.,8.,rough));local+=lampColor[i].rgb*fall*cone*(base*(.14+diffuse*1.8)+step(1.5,lightOn)*(.22*base+.08*metal)*rim*diffuse+spec*mix(vec3(.18),base,metal)*.7);}"
         "float shade=1.;if(shadowOn>.5){vec3 D=p-shadowLamp;float denom=dot(D,shadowNormal);float z=dot(p-shadowCenter,shadowNormal);"
         "if(denom<-.001&&z<shadowDepth){vec3 H=shadowLamp+D*(dot(shadowCenter-shadowLamp,shadowNormal)/denom)-shadowCenter;vec2 st=vec2(dot(H,shadowRight),dot(H,shadowUp))/shadowSize+.5;"
         "if(st.x>0.&&st.x<1.&&st.y>0.&&st.y<1.){float mask=texture2D(machineryShadow,st).r;shade=1.-.75*mask;}}}"
@@ -132,8 +132,8 @@ static void af_d2_lighting(object *o){
     extern int astra_ov_enabled(void);if(astra_ov_enabled())return;
     float lamps[4][4]={{0}},colors[4][4]={{0}},directions[4][4]={{0}};
     int previous_room=aw_room;afx_instance=o;astra_fixture_lights(o->segnum);afx_instance=NULL;aw_room=previous_room;
-    for(int i=0;i<3;i++){memcpy(lamps[i],afx_lamps[i],sizeof lamps[i]);memcpy(colors[i],afx_colors[i],sizeof colors[i]);colors[i][3]=-1;}
-    glUniform4fv(af_lpos,4,&lamps[0][0]);glUniform4fv(af_lcolor,4,&colors[0][0]);glUniform4fv(af_ldir,4,&directions[0][0]);glUniform1f(af_light_on,1);
+    for(int i=0;i<3;i++){memcpy(lamps[i],afx_lamps[i],sizeof lamps[i]);memcpy(colors[i],afx_colors[i],sizeof colors[i]);colors[i][3]=-1;if(astra_material_pass)memcpy(directions[i],afx_axes[i],sizeof directions[i]);}
+    glUniform4fv(af_lpos,4,&lamps[0][0]);glUniform4fv(af_lcolor,4,&colors[0][0]);glUniform4fv(af_ldir,4,&directions[0][0]);glUniform1f(af_light_on,astra_material_pass?2:1);
     extern float astra_d2_telegraph(object*);glUniform1f(af_charge,astra_d2_telegraph(o));
 }
 int astra_draw_robot(int model,polymodel *pm,vms_angvec *angles,g3s_lrgb light){
