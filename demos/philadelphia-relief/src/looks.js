@@ -48,7 +48,10 @@ export function wireLooks(host, store, onChoose) {
     }
   };
   host.addEventListener('click',click); update(store.get());
-  const off=store.subscribe(update);
+  const lookKeys=new Set(LOOKS.flatMap(look=>Object.keys(look.patch)));
+  const off=store.subscribe((state,changed)=>{
+    for(const key of changed)if(lookKeys.has(key)){update(state);break;}
+  });
   return () => { off(); host.removeEventListener('click',click);
     undo.removeEventListener('click',restore); };
 }

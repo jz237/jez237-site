@@ -12,27 +12,29 @@ export function createPhotoTraffic(C,viewer,{now=()=>performance.now()}={}){
   const bounds=new C.BoundingSphere(undefined,80);
   const orientation=new C.Quaternion(),heading=new C.HeadingPitchRoll();
   let disposed=false,cursor=0,lastSamples=0,frame=0,nearby=0,nearView=0,groundedCars=0;
+  let nextMovingSample=0;
   return {
     stats:()=>({cars:nearby,nearView,grounded:groundedCars,
       heightSamples:lastSamples,cachedHeights:heights.size}),
     show(on){if(!disposed&&source.show!==on){source.show=on;viewer.scene.requestRender();}},
-    update(cars){
+    update(cars,cameraMoving=false){
       if(disposed)return;
       nearby=cars.length;nearView=0;groundedCars=0;lastSamples=0;frame++;
       if(!nearby&&!records.size)return;
       const camera=viewer.camera,time=now();
       const volume=nearby&&camera.frustum.computeCullingVolume(
         camera.positionWC,camera.directionWC,camera.upWC);
-      let budget=4,changed=false;
+      let sampleTime=0,nextCursor=cursor,changed=false;
       source.entities.suspendEvents();
       try {
         for(let i=0;i<cars.length;i++){
           // Rotate priority so the query budget cannot starve later cars.
-          const car=cars[(i+cursor)%cars.length];
+          const index=(i+cursor)%cars.length,car=cars[index];
           let record=records.get(car.id);
           if(record)record.frame=frame;
-          let grounded=Number.isFinite(record?.height)
-            &&Math.hypot((car.lon-record.groundLon)*85000,(car.lat-record.groundLat)*111000)<16;
+          const groundDistance=Number.isFinite(record?.height)
+            ? Math.hypot((car.lon-record.groundLon)*85000,(car.lat-record.groundLat)*111000) : Infinity;
+          let grounded=groundDistance<16;
           const estimate=grounded?record.height:(car.ground??0);
           C.Cartesian3.fromDegrees(car.lon,car.lat,estimate+.12,C.Ellipsoid.WGS84,bounds.center);
           if(volume.computeVisibility(bounds)===C.Intersect.OUTSIDE){
@@ -60,10 +62,19 @@ export function createPhotoTraffic(C,viewer,{now=()=>performance.now()}={}){
           // new tiles arrive; successful samples also refresh after refinement.
           const key=`${Math.floor(car.lon*25000)},${Math.floor(car.lat*25000)}`;
           let ground=heights.get(key);
-          if((!ground||ground.expires<=time)&&budget>0){
-            budget--;
+          // Mesh intersections can take several milliseconds on a detailed block.
+          // During a gesture keep rolling on recent measured pavement, leaving
+          // the next query for a newly visible car or one that has driven on.
+          const needsHeight=(!ground||ground.expires<=time)
+            &&(!cameraMoving||groundDistance>=8);
+          if(needsHeight&&lastSamples<(cameraMoving?1:4)&&sampleTime<2
+            &&(!cameraMoving||time>=nextMovingSample)){
             C.Cartographic.fromDegrees(car.lon,car.lat,0,cartographic);
+            const started=now();
             const height=viewer.scene.getHeight(cartographic,C.HeightReference.CLAMP_TO_3D_TILE);
+            const finished=now(),cost=finished-started;
+            sampleTime+=cost;lastSamples++;nextCursor=index+1;
+            nextMovingSample=finished+Math.min(64,cost*3);
             ground={height:Number.isFinite(height)?height:ground?.height,
               expires:time+(Number.isFinite(height)?15000:1000)};
             heights.delete(key);heights.set(key,ground);
@@ -89,8 +100,7 @@ export function createPhotoTraffic(C,viewer,{now=()=>performance.now()}={}){
           record.entity.orientation.setValue(orientation);
           changed=true;
         }
-        cursor=cars.length?(cursor+4)%cars.length:0;
-        lastSamples=4-budget;
+        cursor=cars.length?nextCursor%cars.length:0;
         for(const [id,record] of records)if(record.frame!==frame){
           source.entities.remove(record.entity);records.delete(id);changed=true;
         }

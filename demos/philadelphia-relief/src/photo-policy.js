@@ -1,3 +1,5 @@
+import { metersPerPixel, shortestAngleDelta } from './geo.js?v=philly-2026092121';
+
 // Separate thresholds prevent rapid renderer changes near the zoom boundary.
 export const PHOTO_ENTER = 6500;
 export const PHOTO_EXIT = 9500;
@@ -75,6 +77,21 @@ export function photoCamera(pose, aspect) {
     range: pose.dist,
     fov: aspect > 1 ? 2 * Math.atan(Math.tan(vertical / 2) * aspect) : vertical,
   };
+}
+
+// The orbit rig keeps easing long after the remaining shift is less than a
+// screen pixel. Keep applying its exact camera, but let fine tiles load then.
+// Compare to the last significant pose so small steps can still accumulate.
+export function photoViewMoved(anchor, pose, height) {
+  if (!anchor || anchor.flightView || pose.flightView
+    || anchor.targetAltitude !== pose.targetAltitude) return true;
+  const metres = metersPerPixel(Math.min(anchor.dist, pose.dist), pose.fov, height);
+  const degrees = pose.fov / height;
+  const east = (pose.lon - anchor.lon) * 111320 * Math.cos(pose.lat * Math.PI / 180);
+  const north = (pose.lat - anchor.lat) * 111320;
+  return Math.hypot(east, north) >= metres || Math.abs(pose.dist - anchor.dist) >= metres
+    || Math.abs(shortestAngleDelta(anchor.bearing, pose.bearing)) >= degrees
+    || Math.abs(pose.pitch - anchor.pitch) >= degrees || Math.abs(pose.fov - anchor.fov) >= degrees;
 }
 
 export function photoLandmarkVisible(place, pose, bounds) {

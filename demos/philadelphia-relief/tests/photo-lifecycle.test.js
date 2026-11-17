@@ -86,6 +86,28 @@ test('tile counts describe the last actual draw and unchanged frames do not rewr
   assert.equal(message.dataset.bestError,undefined);
 });
 
+test('subpixel orbit easing allows fine tiles to return while accumulated pans and wheel zoom still select motion detail',async t=>{
+  let time=1000;t.mock.method(performance,'now',()=>time);
+  const f=fixture(t),tiles=await f.ready();f.update();assert.equal(tiles.maximumScreenSpaceError,12);
+  time+=200;f.update();assert.equal(tiles.maximumScreenSpaceError,4);
+  const shifted={...pose,lon:pose.lon+.001};f.update(shifted);assert.equal(tiles.maximumScreenSpaceError,12);
+  for(let i=1;i<=4;i++){time+=50;f.update({...shifted,lon:shifted.lon+i*.0000005});}
+  assert.equal(tiles.maximumScreenSpaceError,4);
+  time+=20;f.update({...shifted,lon:shifted.lon+.000008});assert.equal(tiles.maximumScreenSpaceError,12);
+  time+=230;f.update({...shifted,lon:shifted.lon+.000008});assert.equal(tiles.maximumScreenSpaceError,4);
+  f.update({...shifted,dist:pose.dist*1.3});assert.equal(tiles.maximumScreenSpaceError,12);
+});
+
+test('changing tile backlog counts is rate limited while completion is announced immediately',async t=>{
+  let time=1000;t.mock.method(performance,'now',()=>time);
+  const f=fixture(t),tiles=await f.ready(),message=f.nodes.get('photoStatus');
+  tiles.loadProgress.fire(20,1);f.update();assert.match(message.textContent,/21 tiles/);
+  time+=100;tiles.loadProgress.fire(9,1);f.update();assert.match(message.textContent,/21 tiles/);
+  time+=160;f.update();assert.match(message.textContent,/10 tiles/);
+  tiles.loadProgress.fire(0,0);f.update();assert.match(message.textContent,/full detail/);
+  tiles.loadProgress.fire(4,2);f.update();assert.match(message.textContent,/6 tiles/);
+});
+
 test('photo render errors fall back immediately and release the viewer after rendering returns',async t=>{
   const f=fixture(t),tiles=await f.ready(),viewer=f.viewers[0];
   viewer.failRender=true;

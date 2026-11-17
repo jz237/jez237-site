@@ -1,5 +1,5 @@
 import { selectPhotoMode, photoAllowed, photoWanted, photoCamera, photoReady, photoTileReady,
-  photoLandmarkVisible, photoBudget, photoFailure, PHOTO_PRELOAD }
+  photoLandmarkVisible, photoBudget, photoFailure, photoViewMoved, PHOTO_PRELOAD }
   from './photo-policy.js?v=philly-2026092121';
 import { createVisibleTimeout } from './visible-timeout.js?v=philly-2026101001';
 import { createPhotoTraffic } from './photo-traffic.js?v=philly-2026101502';
@@ -40,7 +40,8 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
   const retry = document.getElementById('photoRetry');
   let viewer, tileset, photoTraffic, loading = false, failed = false, disposed = false;
   let active = false, wanted = false, firstViewReady = false, visibleTiles = 0;
-  let pending = 0, lastPoseKey = '', lastMotion = 0, lastStatus = '';
+  let pending = 0, lastPoseKey = '', lastMotion = -Infinity, motionAnchor, lastStatus = '';
+  let progressPhase, progressAt = -Infinity, flightBackground;
   let lastPose, width = 1, height = 1, detailTiles = 0, bestError = Infinity, generation = 0;
   let press, exhibitBounds, conservative=false,budget;
   const resourceDeadline=createVisibleTimeout(document,()=>unavailable(null,'timeout'),45000);
@@ -48,11 +49,32 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
   // Keep a warm renderer through brief zoom/layer changes, then free its GPU
   // resources if the user stays outside photographic coverage.
   const idleRelease=createVisibleTimeout(document,()=>release(),30000);
-  let resizedWidth = 0, resizedHeight = 0;
+  let resizedWidth = 0, resizedHeight = 0, budgetQuality, budgetDpr;
 
-  function report(text) {
+  function report(text, phase) {
+    if (phase && progressPhase === phase && performance.now() - progressAt < 250) return;
+    if (phase) progressAt = performance.now();
+    progressPhase = phase;
     if (text === lastStatus) return;
     lastStatus = text; message.textContent = text;
+  }
+  function applyBudget(w, h, quality) {
+    const dpr = window.devicePixelRatio;
+    const resized = w !== resizedWidth || h !== resizedHeight;
+    if (!budget || resized || quality !== budgetQuality || dpr !== budgetDpr) {
+      budget = photoBudget(w, h, dpr, quality, conservative);
+      budgetQuality = quality; budgetDpr = dpr;
+      const scaleChanged = viewer.resolutionScale !== budget.scale;
+      if (scaleChanged) viewer.resolutionScale = budget.scale;
+      if (resized || scaleChanged) viewer.resize();
+      resizedWidth = w; resizedHeight = h;
+    }
+    if (tileset) {
+      if (tileset.cacheBytes !== budget.cacheBytes) tileset.cacheBytes = budget.cacheBytes;
+      if (tileset.maximumCacheOverflowBytes !== budget.overflowBytes) {
+        tileset.maximumCacheOverflowBytes = budget.overflowBytes;
+      }
+    }
   }
   function present(on) {
     if (active === on) return;
@@ -81,7 +103,11 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
     const camera = viewer.camera, mapped = photoCamera(pose, w / h);
     updateLandmarks(pose);
     camera.frustum.fov = mapped.fov;
-    viewer.scene.backgroundColor = C.Color.fromCssColorString(pose.flightView ? '#bacfdc' : '#203b43');
+    const flight = !!pose.flightView;
+    if (flightBackground !== flight) {
+      viewer.scene.backgroundColor = C.Color.fromCssColorString(flight ? '#bacfdc' : '#203b43');
+      flightBackground = flight;
+    }
     if (pose.flightView) {
       const ride = pose.flightView;
       camera.lookAtTransform(C.Matrix4.IDENTITY);
@@ -102,7 +128,8 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
   function updateLandmarks(pose=lastPose) {
     if(!viewer)return;
     for (const entity of viewer.entities.values) {
-      entity.show=photoLandmarkVisible(entity.reliefPlace,pose,exhibitBounds);
+      const visible=photoLandmarkVisible(entity.reliefPlace,pose,exhibitBounds);
+      if(entity.show!==visible)entity.show=visible;
     }
   }
   function applyExhibit() {
@@ -128,7 +155,6 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
       if (disposed || failed || ticket !== generation) return;
       C.Ion.defaultAccessToken = config.ionToken;
       phase='graphics';
-      budget=photoBudget(width,height,window.devicePixelRatio,store.value('quality'),conservative);
       viewer = new C.Viewer(host, {
         globe: false, baseLayer: false, geocoder: false, baseLayerPicker: false,
         animation: false, timeline: false, homeButton: false, sceneModePicker: false,
@@ -143,11 +169,9 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
       // The relief rig owns the camera. Tile collision data is used only to
       // anchor labels to their actual roofs, not to move that shared camera.
       viewer.scene.screenSpaceCameraController.enableCollisionDetection = false;
-      viewer.resolutionScale = budget.scale;
-      viewer.scene.backgroundColor = C.Color.fromCssColorString('#203b43');
+      applyBudget(width, height, store.value('quality'));
       viewer.scene.postProcessStages.fxaa.enabled = true;
-      viewer.resize(); setCamera(lastPose, width, height);
-      resizedWidth = width; resizedHeight = height;
+      setCamera(lastPose, width, height);
       // Local curated place lookup uses no external geocoding service.
       const googleOptions = { onlyUsingWithGoogleGeocoder: true };
       phase='tiles';
@@ -209,7 +233,9 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
       if (!disposed && ticket === generation) unavailable(error,phase);
     }
   }
-  const unsubscribe = store.subscribe(state => { select.value = state.photoMode; });
+  const unsubscribe = store.subscribe((state, changed) => {
+    if (changed.has('photoMode')) select.value = state.photoMode;
+  });
   select.value = store.value('photoMode');
   select.onchange = () => store.set(selectPhotoMode(select.value), { source: 'photo-mode' });
   function destroyRenderer(){
@@ -217,6 +243,8 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
     if (viewer && !viewer.isDestroyed()) viewer.destroy();
     viewer=undefined;tileset=undefined;
     firstViewReady = false; lastPoseKey = ''; pending = 0;
+    motionAnchor=undefined;lastMotion=-Infinity;flightBackground=undefined;
+    budget=undefined;resizedWidth=0;resizedHeight=0;
     visibleTiles=0;detailTiles=0;bestError=Infinity;
     host.replaceChildren();credits.replaceChildren();
     delete message.dataset.visibleTiles;delete message.dataset.detailTiles;delete message.dataset.bestError;
@@ -304,10 +332,8 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
         return false;
       }
       if (!viewer || !tileset || loading) return false;
-      const nextBudget=photoBudget(w,h,window.devicePixelRatio,state.quality,conservative);
-      if(viewer.resolutionScale!==nextBudget.scale){viewer.resolutionScale=nextBudget.scale;viewer.resize();}
-      budget=nextBudget;tileset.cacheBytes=budget.cacheBytes;
-      tileset.maximumCacheOverflowBytes=budget.overflowBytes;
+      const resized = w !== resizedWidth || h !== resizedHeight;
+      applyBudget(w, h, state.quality);
       // Warm the engine near the boundary without requesting a second,
       // regional photographic scene while the miniature is still in use.
       if (!wanted) {
@@ -316,25 +342,28 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
         return false;
       }
       if (!firstViewReady) firstViewDeadline.start();
+      const time = performance.now();
       const key = [pose.lon, pose.lat, pose.dist, pose.pitch, pose.bearing,
         pose.fov, pose.targetAltitude, pose.flightView?.lon, pose.flightView?.lat,
-        pose.flightView?.height, pose.flightView?.heading, pose.flightView?.pitch, w, h].join(':');
+        pose.flightView?.height, pose.flightView?.heading, pose.flightView?.pitch,
+        pose.flightView?.clearance, w, h].join(':');
       if (key !== lastPoseKey) {
-        lastPoseKey = key; lastMotion = performance.now();
-        if (w !== resizedWidth || h !== resizedHeight) {
-          viewer.resize(); resizedWidth = w; resizedHeight = h;
+        lastPoseKey = key;
+        if (resized || photoViewMoved(motionAnchor, pose, h)) {
+          motionAnchor = { ...pose }; lastMotion = time;
         }
         setCamera(pose, w, h);
       }
       // Establish complete neighborhood coverage before requesting the finest
       // level. Stationary detail follows the current device/retry budget.
-      const detail = !firstViewReady ? 16 : performance.now() - lastMotion < 180 ? 12 : budget.detail;
+      const moving = time - lastMotion < 180;
+      const detail = !firstViewReady ? 16 : moving ? 12 : budget.detail;
       if (tileset.maximumScreenSpaceError !== detail) {
         tileset.maximumScreenSpaceError = detail; viewer.scene.requestRender();
       }
-      viewer.entities.show = state.layers.landmarks;
+      if (viewer.entities.show !== state.layers.landmarks) viewer.entities.show = state.layers.landmarks;
       try {
-        if (cars) photoTraffic.update(cars);
+        if (cars) photoTraffic.update(cars, moving);
         viewer.render();
       } catch(error) { unavailable(error,'render'); return false; }
       if(failed||disposed)return false;
@@ -347,7 +376,8 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
       present(wanted && firstViewReady);
       report(active ? pending ? `Photographic 3D · refining ${pending} tiles`
         : 'Photographic 3D · full detail' : pending
-        ? `Preparing photographic detail · ${pending} tiles` : 'Preparing photographic detail…');
+        ? `Preparing photographic detail · ${pending} tiles` : 'Preparing photographic detail…',
+      pending ? (active ? 'refining' : 'preparing') : undefined);
       return active;
     },
     capture() {

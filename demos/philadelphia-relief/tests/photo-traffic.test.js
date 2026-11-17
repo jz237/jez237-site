@@ -45,7 +45,7 @@ test('photo car headings include the authored glTF forward-axis correction',()=>
 });
 
 function fixture(){
-  let source,renders=0,removed,queries=0,height=30,time=0,visible=()=>true;
+  let source,renders=0,removed,queries=0,height=30,time=0,queryCost=0,visible=()=>true;
   class Property{
     setValue(value){this.value={...value};}
     getValue(){return this.value;}
@@ -63,11 +63,12 @@ function fixture(){
   const viewer={dataSources:{add(s){source=s;},remove(s,destroy){removed={s,destroy};}},
     camera:{frustum:{computeCullingVolume:()=>({computeVisibility:s=>visible(s)?0:-1})}},
     scene:{requestRender(){renders++;},getHeight(_position,reference){
-      assert.equal(reference,3);queries++;return height;}}};
+      assert.equal(reference,3);queries++;time+=queryCost;return height;}}};
   const layer=createPhotoTraffic(C,viewer,{now:()=>time});
   return {layer,entities,get source(){return source;},get renders(){return renders;},
     get removed(){return removed;},get queries(){return queries;},
-    set height(value){height=value;},set time(value){time=value;},set visible(value){visible=value;}};
+    set height(value){height=value;},set time(value){time=value;},set queryCost(value){queryCost=value;},
+    set visible(value){visible=value;}};
 }
 const car={id:1,lon:1,lat:2,angle:0,variant:5,van:false};
 
@@ -117,6 +118,29 @@ test('road sampling stays bounded and eventually grounds every car without per-f
   f.layer.update(cars);assert.equal(f.queries,queries);assert.equal(f.renders,renders);
   f.layer.update(cars.map(c=>({...c,lon:c.lon+.000001})));
   assert.ok(f.queries-queries<=4);assert.equal(f.renders,renders+1);
+});
+
+test('a slow intersection yields the frame; panning spreads queries without starving arriving cars',()=>{
+  const f=fixture(),cars=Array.from({length:8},(_,i)=>({...car,id:i,lon:1+i*.001}));
+  f.queryCost=8;
+  f.layer.update(cars,true);assert.equal(f.queries,1);
+  f.time=16;f.layer.update(cars,true);assert.equal(f.queries,1);
+  for(let i=1;i<cars.length;i++){f.time=i*35;f.layer.update(cars,true);}
+  assert.equal(f.layer.stats().grounded,8);
+  const advanced=cars.map(c=>({...c,lon:c.lon+.00006}));
+  f.time=300;f.layer.update(advanced,true);assert.equal(f.queries,8);
+  assert.equal(f.entities.values[0].position.getValue().lon,advanced[0].lon);
+  f.layer.update(advanced,false);assert.equal(f.queries,9,'an expensive first cast consumes the resting frame budget');
+  f.queryCost=0;f.layer.update(advanced,false);assert.equal(f.queries,13);
+});
+
+test('a moving car must acquire new pavement after leaving its measured road height',()=>{
+  const f=fixture();f.layer.update([car],true);
+  f.height=undefined;
+  f.layer.update([{...car,lon:car.lon+.00011}],true);
+  assert.equal(f.queries,2);assert.equal(f.layer.stats().grounded,1);
+  f.layer.update([{...car,lon:car.lon+.00025}],true);
+  assert.equal(f.layer.stats().grounded,0,'a missed query cannot carry a car indefinitely over unknown ground');
 });
 
 test('cars wait for loaded road geometry and refresh refined heights without a zero-height flash',()=>{
