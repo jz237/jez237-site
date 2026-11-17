@@ -1,0 +1,31 @@
+name: Anatomy Studio Version Stamps
+
+# Every local URL in /demos/anatomy-studio/ carries a hash of the file it points at (module imports, stylesheets,
+# JSON, and the .glb models through manifest.json), and the models are served "immutable" on that basis. This
+# check fails when a file changed without scripts/anatomy-studio/stamp.mjs being run. Plain Node: no install
+# step and no browser.
+on:
+  push:
+    branches:
+      - main
+    paths: ['demos/anatomy-studio/**', 'scripts/anatomy-studio/stamp.mjs', '.github/workflows/anatomy-studio-stamps.yml']
+  pull_request:
+    paths: ['demos/anatomy-studio/**', 'scripts/anatomy-studio/stamp.mjs', '.github/workflows/anatomy-studio-stamps.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  stamps:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            demos/anatomy-studio
+            scripts/anatomy-studio
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node scripts/anatomy-studio/stamp.mjs --check
