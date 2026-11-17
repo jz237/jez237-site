@@ -33232,5 +33232,91 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-11-17-factual-infographic-factual-infographic-pillow-lava-underwa",
+    "title": "Factual infographic: Pillow Lava — Underwater Budding Basalt",
+    "tests": "; archive_slot=2026-11-17T08:20; concept=underwater-basalt-pillow-lava-budding; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: factual-infographic",
+    "prompt": "Create a finished factual science infographic titled “PILLOW LAVA” with subtitle “How basalt grows underwater”. A dramatic, richly detailed underwater scientific painting dominates: bulbous dark basalt lobes piled on the seafloor, one active lobe with incandescent molten basalt emerging through a broken thin glassy rind. Integrate open, readable callouts and curved arrows, not boxed panels. Show an organic sequence of basalt entering water, rapid glassy rind formation, inflation from continued supply, rind cracking and budding a new lobe. Include a cutaway showing a chilled glassy outer rind and cooling joints radiating inward, and older lobes settling into gaps below. A small contextual note explains ancient pillow basalt can indicate a formerly underwater environment. Deep indigo water, charcoal glass, amber molten rock, technically accurate textures and elegant legible typography; ample breathing room. No invented numerical claims, no bibliography, no frame, no watermark.",
+    "image": "images/2026-11-17-factual-infographic-factual-infographic-pillow-lava-underwa.jpg",
+    "thumb": "thumbs/2026-11-17-factual-infographic-factual-infographic-pillow-lava-underwa.webp",
+    "color": "#27343c",
+    "date": "2026-11-17",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "underwater-basalt-pillow-lava-budding",
+      "imageSha256": "891cdb8094cc80161db01baae4c7e5f45c11f254567ffae328db4cf32cd05b12",
+      "imageDHash": "2bdbc7970d0d1915"
+    },
+    "factualInfographic": {
+      "topic": "How pillow lava grows as underwater basalt cools and buds into lobes",
+      "description": "How basaltic pillow lobes form and accumulate underwater.",
+      "sourceNote": "USGS https://volcanoes.usgs.gov/volcanic_ash/glossary/pillow_lava.html and San Diego State University https://volcanoes.sdsu.edu/lava_water.html: pillow formation, glassy rind, budding and cooling.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-17T13:21:11.023961+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "US Geological Survey",
+            "title": "Pillow lava",
+            "sourceType": "government-agency",
+            "url": "https://volcanoes.usgs.gov/volcanic_ash/glossary/pillow_lava.html"
+          },
+          {
+            "id": "S2",
+            "publisher": "San Diego State University",
+            "title": "How Volcanoes Work: Lava and Water",
+            "sourceType": "university",
+            "url": "https://volcanoes.sdsu.edu/lava_water.html"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Basalt entering water can form bulbous pillow lobes.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Water rapidly chills the outside into a glassy rind.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Continued lava supply expands a lobe until its rind cracks and a new lobe buds out.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Pillows accumulate in mounds and settle into gaps between earlier pillows.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "As a pillow interior cools, joints can radiate inward from its surface.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Ancient pillow basalts can indicate a formerly underwater setting.",
+            "sourceIds": [
+              "S1"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
