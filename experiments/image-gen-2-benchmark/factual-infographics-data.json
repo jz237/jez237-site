@@ -23337,5 +23337,99 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-11-17-factual-infographic-factual-infographic-cherenkov-radiation",
+    "title": "Factual infographic: Cherenkov Radiation — Outrunning Light in Water",
+    "tests": "; archive_slot=2026-11-17T16:20; concept=cherenkov-electron-light-water-shockwave; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: factual-infographic",
+    "prompt": "Create a finished, visually sumptuous factual scientific infographic, an organically flowing artwork-led physics atlas, not a poster mockup. Main title: \"CHERENKOV RADIATION\". Subtitle: \"Outrunning light in water — not in a vacuum\". Rich midnight indigo, electric cobalt, cyan caustics and restrained warm silver accents. Dominant hero: a spectacular oblique cutaway illustration of deep transparent water around an illustrative submerged reactor core, sapphire-blue glow immersed in the water, subtle ripples reflecting against brushed steel, exquisite refracted light and believable underwater depth. Label the scene \"Illustrative reactor pool\" and the glow \"Blue light from fast charged particles\". Not an engineering blueprint of a named facility; omit dimensions, core construction instructions, fuel specifications and operational data.\n\nFlow from the large water scene into an oversized open scientific schematic of one fast electron crossing water, with a thin white path arrow, successive stylized pale wavefront arcs, and their luminous overlapping shock front. Clearly label \"Schematic — not to scale\", \"Fast electron\", \"Light waves reinforce\", and \"Cherenkov light\". Diagram the process as a clean conceptual wave illustration, not literal glowing atoms or a mechanism of nuclear fission. No fabricated cone angle or formula. Add the concise explanation \"A charged particle outruns light in the medium, producing an electromagnetic shock wave.\" Make the diagram spacious and nested into the pool's blue light, not a separate rectangular box.\n\nAround an organic arc of blue light, place a beautifully typeset speed comparison with two conceptual paths, labels \"Light in vacuum\" and \"Light in water\", a shorter water-light path marked \"Light slows in water\", and the crucial text \"The vacuum speed limit is not broken.\" Do not give an exact numerical speed or misleading measurement scale. Use a fine leader back to the electron illustration to connect this distinction to the threshold mechanism.\n\nAt the lower margin let a small elegant top-down boat-and-bow-wave illustration flow into a delicate air-wave/supersonic-aircraft sketch; prominently caption \"Wave analogies: a bow wave or sonic boom\". These analogies clarify how a disturbance outruns waves in its medium, not that water molecules become sound or that a plane produces Cherenkov light. Keep them secondary to the dominant blue-water hero. One final integrated vignette of an abstract optical readout with no invented numerical values carries \"Light reveals particles\" and \"Used in particle measurements and nuclear-material accounting.\" A small blue-violet luminous brushstroke carries \"The familiar blue-violet glow\".\n\nRender rich layered materials, restrained fine technical linework, watercolor-like luminous glazing, translucent scientific geometry, subtle paper grain only in dark negative space, varied study sizes and generous visual breathing room. No grid, no bordered cards, no uniform boxed panels. Use elegant readable typography, concise precise callouts, no wall of prose. Finished art fills the canvas directly, with no frame, tabletop, museum wall or UI. No logos, bibliography, URLs, footnotes or watermark. Include only the factual labels and relationships specified; no additional statistics, safety claims, history or invented physics. Nothing exceeds light speed in vacuum.",
+    "image": "images/2026-11-17-factual-infographic-factual-infographic-cherenkov-radiation.jpg",
+    "thumb": "thumbs/2026-11-17-factual-infographic-factual-infographic-cherenkov-radiation.webp",
+    "color": "#1c568b",
+    "date": "2026-11-17",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1086x1448",
+    "dedup": {
+      "conceptKey": "cherenkov-electron-light-water-shockwave",
+      "imageSha256": "48e6a5d176536047029e0a2455b40f00459b8d04479ff22eeedfc4a858585f82",
+      "imageDHash": "33ac0e0e39e93321"
+    },
+    "factualInfographic": {
+      "topic": "How Cherenkov radiation produces a blue glow when charged particles outrun light in water",
+      "description": "An artwork-led physics atlas connecting a glowing reactor pool to the particle-and-medium mechanism, wave analogies and measurement uses.",
+      "sourceNote": "Verified mechanism, medium versus vacuum speed, reactor-pool glow and applications: U.S. Department of Energy https://www.energy.gov/ne/articles/cherenkov-radiation-explained ; Hong Kong Observatory https://www.hko.gov.hk/en/education/earth-science/optical-phenomena/00352-what-is-cerenkov-radiation.html. Diagrams are conceptual and not to scale.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-17T23:19:03.855184+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "U.S. Department of Energy",
+            "title": "Cherenkov Radiation, Explained",
+            "sourceType": "government-agency",
+            "url": "https://www.energy.gov/ne/articles/cherenkov-radiation-explained"
+          },
+          {
+            "id": "S2",
+            "publisher": "Hong Kong Observatory",
+            "title": "What is Cerenkov Radiation?",
+            "sourceType": "government-agency",
+            "url": "https://www.hko.gov.hk/en/education/earth-science/optical-phenomena/00352-what-is-cerenkov-radiation.html"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Cherenkov radiation occurs when an electrically charged particle travels faster than light travels in the surrounding transparent medium.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Light travels more slowly in water than in vacuum; this does not allow a particle to exceed the speed of light in vacuum.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "High-energy electrons are an example of charged particles that can produce Cherenkov radiation.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "The moving charged particle interacts with the medium, and the emitted electromagnetic waves reinforce into a light shock wave.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Cherenkov emission can produce the blue or violet glow seen in water around a nuclear reactor core.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "The process can be compared with a sonic boom or a boat bow wave; these are analogies, not identical phenomena.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Cherenkov light is used in nuclear-material accounting and in particle-physics measurements of particle energy and trajectory.",
+            "sourceIds": [
+              "S1"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
