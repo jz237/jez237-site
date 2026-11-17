@@ -237,15 +237,19 @@ test('walking under an overhead branch keeps the body on the floor', () => {
 test('a free stride flexes the unloaded wrist and preserves both segment lengths in the displayed pose', () => {
   const lizard=model(), rig=new LizardRig(lizard,flat);
   Object.assign(rig.inputs,{x:-.4,speed:.12,clearance:1.15,chestLift:.15});
-  let maxPitch=0, displayedSteps=0;
+  let maxPitch=0, displayedSteps=0, largestSwingArc=0;
   for(let tick=0;tick<240;tick++){
     rig.inputs.x+=rig.inputs.speed/60;
     rig.update(1/60);
     const pose=rig.gaitPresentation();
     for(const limb of lizard.data.limbs){
       const {upper,lower,hand}=limb.bones;
-      const handMatrix=lizard.bones[hand].matrix;
-      assert.ok(!pose?.has(lizard.bones[hand]),'a weight shift cannot move a hand or foot');
+      const physicalHand=lizard.bones[hand].matrix;
+      const handMatrix=pose?.get(lizard.bones[hand]) ?? physicalHand;
+      const leg=(rig as any).legs.find((leg:any)=>leg.data===limb);
+      const offset=pos(handMatrix).distanceTo(pos(physicalHand));
+      if(leg.swing)largestSwingArc=Math.max(largestSwingArc,offset);
+      else assert.equal(offset,0,'a weight shift cannot move a planted foot');
       const up=new THREE.Vector3().setFromMatrixColumn(handMatrix,1).normalize();
       assert.ok(up.y>.9,'palms stay oriented toward the support');
       maxPitch=Math.max(maxPitch,Math.acos(Math.min(1,up.y)));
@@ -258,6 +262,7 @@ test('a free stride flexes the unloaded wrist and preserves both segment lengths
     }
   }
   assert.ok(maxPitch>.06 && displayedSteps>100,'visible wrist flexion and supported girdle movement');
+  assert.ok(largestSwingArc>.004,'the lifted foot clears the body on an outward arc');
 });
 
 test('an attending eye turns toward a target within view of its socket', () => {

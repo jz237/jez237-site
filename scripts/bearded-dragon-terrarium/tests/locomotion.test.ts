@@ -94,6 +94,29 @@ test('head clearance and looking around cannot lift the shoulder away from plant
   assert.ok(audit.maxSlide<.0001);assert.ok(audit.maxLimbError<.0001);
 });
 
+test('leaving the level basking shelf includes supported steps through the turn',()=>{
+  const originalRandom=Math.random;
+  let seed=12345;
+  Math.random=()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296;};
+  try{
+    const {rig,brain,surface}=habitat(), b=brain as any;
+    const {x,z}=rig.inputs, audit=new Audit();
+    assert.ok(b.goTo(.25,.25,'idle'));
+    b.hurry=true;b.boredom=1e6;
+    let forward=0,turnFrames=0;
+    for(let tick=0;tick<360;tick++){
+      const beforeX=rig.inputs.x,beforeZ=rig.inputs.z,inSwing=rig.motion.transferring;
+      b.update(1/60);audit.sample(rig,surface);
+      if(rig.maneuver==='turn')turnFrames++;
+      if(inSwing)forward+=Math.hypot(rig.inputs.x-beforeX,rig.inputs.z-beforeZ);
+    }
+    assert.ok(turnFrames>20,'use the walking turn on the broad shelf');
+    assert.ok(Math.hypot(rig.inputs.x-x,rig.inputs.z-z)>.01 && forward>.005,
+      'the body advances across real supports during the first six seconds');
+    assert.ok(audit.maxSlide<.0001 && audit.maxLimbError<.00015);
+  }finally{Math.random=originalRandom;}
+});
+
 test('the complete habitat supports a continuous tour with real planted feet', {timeout:600000},t=>{
   let seed=12345;const random=Math.random;Math.random=()=>{seed=(seed*1664525+1013904223)>>>0;return seed/4294967296;};
   try{

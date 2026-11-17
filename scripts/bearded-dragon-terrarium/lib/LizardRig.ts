@@ -80,6 +80,7 @@ interface Leg {
   swingElapsed?: number;
   supportArc?:THREE.Vector3[]|null;
   swingPitch?: number;
+  swingArc?: number;
   avoiding: boolean;
   returning: boolean;
   settling: boolean;
@@ -200,6 +201,7 @@ export class LizardRig {
   private sprint = 0;
   private walkExtension = 0;
   private strideHz = 0.85;
+  private walkingOnRock = false;
   private initialised = false;
   private hasPose = false;
   private poseDt = 1 / 60;
@@ -822,6 +824,7 @@ export class LizardRig {
     this.rebalancePoint=null;
     const I = this.inputs;
     this.initialised = false;
+    this.walkingOnRock = this.ground.kindAt?.(I.x,I.z) === 1 && this.hasLevelFooting(I.x,I.z,I.heading);
     this.hasPose = false; this.accepted = null;
     this.motionSpeed=0;
     this.headPitchFloor=-1.15;
@@ -905,6 +908,19 @@ export class LizardRig {
     return prof[i][4];
   }
 
+  /** A broad, level rock can carry a walking stride. Probe the space swept
+   * by the next pair of feet so the slow edge gait starts before a drop. */
+  private hasLevelFooting(x: number, z: number, heading: number) {
+    const floor = this.ground.heightAt(x,z), c = Math.cos(heading), s = Math.sin(heading);
+    for (const along of [-.065, 0, .085]) {
+      for (const across of [-.055, 0, .055]) {
+        const px = x + c * along + s * across, pz = z - s * along + c * across;
+        if (Math.abs(this.ground.heightAt(px,pz) - floor) > .007) return false;
+      }
+    }
+    return true;
+  }
+
   // ---------------------------------------------------------------------------
   update(dt: number) {
     if (!this.initialised) this.reset();
@@ -918,7 +934,14 @@ export class LizardRig {
     const speedCm = Math.hypot(I.speed,I.lateralSpeed??0) / K;
     const heights = this.legs.map(l => l.planted.y);
     const kindHere = this.ground.kindAt?.(I.x, I.z);
-    this.climbing = kindHere === 1 || kindHere === 2 || (!!this.ground.kindAt&&Math.abs(I.x-.475)<.11&&I.z<.18&&this.ground.heightAt(I.x,I.z)<.12) || Math.max(...heights) - Math.min(...heights) > .009
+    // On arrival from below, finish the supported ascent. A flat patch under
+    // the root alone cannot release the last hind foot from its climbing arc.
+    const levelRock = kindHere === 1 && this.hasLevelFooting(I.x,I.z,I.heading);
+    if (!levelRock) this.walkingOnRock = false;
+    else if (!this.moving && !this.legs.some(leg => leg.swing) && Math.abs(this.bodyPitch) < .12
+      && Math.max(...heights) - Math.min(...heights) < .007) this.walkingOnRock = true;
+    const rockEdge = kindHere === 1 && !this.walkingOnRock;
+    this.climbing = rockEdge || kindHere === 2 || (!!this.ground.kindAt&&Math.abs(I.x-.475)<.11&&I.z<.18&&this.ground.heightAt(I.x,I.z)<.12) || Math.max(...heights) - Math.min(...heights) > .009
       || Math.abs(this.ground.heightAt(I.x + Math.cos(I.heading) * .06, I.z - Math.sin(I.heading) * .06) - this.ground.heightAt(I.x, I.z)) > .008;
     const wasMoving=this.moving;
     this.moving = speedCm > 0.45 || Math.abs(I.turnRate) > 0.12;
@@ -1442,6 +1465,8 @@ export class LizardRig {
               const elevated=this.ground.heightAt(I.x,I.z)>.12||this.legs.some(l=>l.planted.y>.12)||hold.point.y>.12;
               if(this.climbing?elevated:transferTiming(leg.from.y,leg.to.y,leg.stepTop).raised)this.cacheTransferReach(leg);else leg.supportArc=null;
               leg.swingPitch = this.freeSwingPitch(leg);
+              leg.swingArc = leg.swingPitch
+                ? Math.min(leg.front ? .007 : .009, leg.from.distanceTo(leg.to) * .14) : 0;
               leg.heel = 0;
             }
           }
@@ -1606,7 +1631,7 @@ export class LizardRig {
     const forwardTravel = travel.dot(this.bodyFwd);
     const centre = leg.from.clone().lerp(leg.to, .5);
     const toeReach = Math.max(...leg.footprint.map(point => point.length()));
-    const radius = travel.length() * .5 + toeReach + leg.liftScale * K + .004;
+    const radius = travel.length() * .5 + toeReach + leg.liftScale * K + .014;
     if (Math.abs(centre.x) + radius > TANK.w / 2 || Math.abs(centre.z) + radius > TANK.d / 2
       || this.collision?.overlapsSolid?.(centre, radius)) return 0;
     // Limit the downward excursion of the longest toe to part of the lift.
@@ -1622,7 +1647,7 @@ export class LizardRig {
 
   /** Shift the loaded girdle over its remaining support during an actual step.
    * Display matrices are separate from the anchors and the accepted route pose.
-   * Head, hands, toes and tail retain their world-space targets. */
+   * Planted hands and toes retain their world-space targets. */
   gaitPresentation(): ReadonlyMap<THREE.Object3D, THREE.Matrix4> | undefined {
     const front = new THREE.Vector3(), rear = new THREE.Vector3();
     for (const leg of this.legs) {
@@ -1669,7 +1694,7 @@ export class LizardRig {
           const bone = this.model.bones[this.spineIdx[k]];
           matrices.set(bone, bone.matrix.clone().setPosition(this.spinePos[k]));
         }
-        if (this.legs.every(leg => this.fitDisplayLimb(leg, matrices))) {
+        if (this.legs.every(leg => this.fitDisplayLimb(leg, matrices, gain))) {
           this.previousPresentedChest.copy(this.spinePos[2]);
           return matrices;
         }
@@ -1680,9 +1705,30 @@ export class LizardRig {
     }
   }
 
-  private fitDisplayLimb(leg: Leg, matrices: Map<THREE.Object3D, THREE.Matrix4>) {
+  private fitDisplayLimb(leg: Leg, matrices: Map<THREE.Object3D, THREE.Matrix4>, gain: number) {
     const bones = leg.data.bones, shoulder = this.shoulder(leg);
-    const wrist = new THREE.Vector3(0, leg.wristAbove, 0).applyMatrix4(this.model.bones[bones.hand].matrix);
+    const hand = this.model.bones[bones.hand];
+    const wrist = new THREE.Vector3(0, leg.wristAbove, 0).applyMatrix4(hand.matrix);
+    // A free foot swings around the trunk. Carry the whole toe fan on the
+    // same arc and keep its clearance as it crosses the gently sloping sand.
+    if (leg.swing && !leg.returning && !leg.settling && leg.swingArc) {
+      const arc = leg.swingArc * gain * leg.side * Math.sin(Math.PI * leg.swingT) ** 2;
+      const offset = new THREE.Vector3(Math.sin(leg.fromYaw) * arc, 0, Math.cos(leg.fromYaw) * arc);
+      const foot = new THREE.Vector3().setFromMatrixPosition(hand.matrix);
+      const floor = this.ground.heightAt;
+      const c = Math.cos(leg.fromYaw), s = Math.sin(leg.fromYaw);
+      for (const toe of leg.footprint) {
+        const x = foot.x + c*toe.x + s*toe.z, z = foot.z - s*toe.x + c*toe.z;
+        offset.y = Math.max(offset.y, floor(x+offset.x,z+offset.z) - floor(x,z));
+      }
+      if (offset.y > .002) return false;
+      const shift = new THREE.Matrix4().makeTranslation(offset.x, offset.y, offset.z);
+      for (const index of [bones.hand, ...bones.digits]) {
+        const bone = this.model.bones[index];
+        matrices.set(bone, bone.matrix.clone().premultiply(shift));
+      }
+      wrist.add(offset);
+    }
     const direction = wrist.clone().sub(shoulder), distance = direction.length();
     const a = leg.data.upperLength * K, b = leg.data.lowerLength * K;
     if (distance >= a+b || distance <= Math.abs(a-b)+.0001) return false;

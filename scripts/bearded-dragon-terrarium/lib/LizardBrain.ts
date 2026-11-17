@@ -1166,6 +1166,12 @@ export class LizardBrain {
   /** Follows a route in short bouts, steering ahead to round its corners. */
   private travel(dt: number) {
     const I = this.rig.inputs;
+    // The doorway needs single-foot placement, but its floor is level.
+    // Keep sight and recovery aligned with the passage while crossing it.
+    const inDoorway = (this.caveExit !== 0 || this.caveBacking) && I.z < .23
+      && Math.abs(I.x-.485) < .08 && this.surface.heightAt(I.x,I.z) < .12;
+    const onRiser = this.rig.maneuver === 'climb' && !inDoorway;
+    if (inDoorway) { I.look = null; this.poseGoal.headPitch = .1; }
     if(this.pivotRecovery){
       const p=this.pivotRecovery;p.time-=dt;
       p.remaining-=Math.max(0,this.rig.motion.turnRate*p.direction)*dt;
@@ -1201,7 +1207,7 @@ export class LizardBrain {
       // side, repeatedly abandoning a usable path during contact recovery.
       if(this.mode==='hunt'&&this.rig.maneuver!=='climb'&&!this.caveExit&&!this.bowlExit){this.nav.avoidApproach(I.x,I.z,I.heading);this.replan();}
       this.retreatSign=-Math.sign(this.speed||1);this.retreatLeft=.025;this.retreatT=2;this.retreatReversed=false;this.retreatSide=0;
-      if(this.rig.maneuver==='climb'&&!this.rig.motion.transferring){
+      if(onRiser&&!this.rig.motion.transferring){
         // A diagonal stance across two stair heights may block both forward
         // and backward motion. With all feet down, permit a bounded supported
         // pivot so the next transfer can realign with the slope. The rig owns
@@ -1235,7 +1241,7 @@ export class LizardBrain {
       // Choose a clear local destination and a direction that does not worsen
       // the current support constraints. A stretched foot alone is not enough
       // information: the other limbs and the ramp edge also constrain a shift.
-      if(this.rig.maneuver!=='climb'){
+      if(!onRiser){
         const axial=[-1,1].map(forward=>{
           const x=I.x+Math.cos(I.heading)*.03*forward,z=I.z-Math.sin(I.heading)*.03*forward;
           const clear=this.recoveryDestinationClear(x,z);
@@ -1244,7 +1250,7 @@ export class LizardBrain {
         const back=axial.find(p=>p.forward===this.retreatSign)!;
         const destination=this.goal??this.path.at(-1);
         const toward=destination?Math.sign(wrap(Math.atan2(-(destination[1]-I.z),destination[0]-I.x)-I.heading))||1:1;
-        const pivots=[toward,-toward].map(turn=>({forward:0,side:0,turn,cost:this.rig.recoveryCost(0,0,turn)}));
+        const pivots=(inDoorway ? [] : [toward,-toward]).map(turn=>({forward:0,side:0,turn,cost:this.rig.recoveryCost(0,0,turn)}));
         // All shifts within the solver's contact tolerance are equally
         // supported. For a pivot tie, face the route instead of repeatedly
         // turning away because of a tiny floating-point cost difference.
@@ -1277,7 +1283,7 @@ export class LizardBrain {
         // When neither an axial step nor a pivot fits, shift sideways into
         // open sand. The rig transfers one foot at a time and still rejects
         // every body/limb pose that would cross stone, glass or a fixed sole.
-        if(this.rig.maneuver!=='climb'&&!this.retreatSide){
+        if(!onRiser&&!this.retreatSide){
           const choices=this.recoverySides();
           if(choices.length){
             this.retreatSide=choices[0].side;this.retreatLeft=.025;this.retreatT=2;this.retreatReversed=true;
@@ -1327,7 +1333,13 @@ export class LizardBrain {
       return {speed:Math.abs(err)<.10 ? -.035 : 0,turn:clamp(err*3,-.8,.8)};
     }
     if(this.caveExit){
-      if(I.z<.28){
+      // Once the trailing girdle is past the mouth, the legs can resume the
+      // ordinary sand gait. Marching the root to a fixed staging point can
+      // carry a foreleg into the bowl before the dragon starts its turn.
+      const trailing = this.rig.spinePoints()[this.caveExit > 0 ? 5 : 2];
+      const clearOfMouth = I.z > .19 && trailing.z > CAVE.mouth.z + CAVE.mouth.rz
+        && this.nav.walkable(I.x,I.z) && !this.rig.motion.transferring;
+      if(I.z<.28 && !clearOfMouth){
         const want=Math.atan2(-(.32-I.z),.485-I.x)+(this.caveExit<0?Math.PI:0),err=wrap(want-I.heading);
         return {speed:Math.abs(err)<.35 ? .035*this.caveExit : 0,turn:clamp(err*3,-.6,.6)};
       }

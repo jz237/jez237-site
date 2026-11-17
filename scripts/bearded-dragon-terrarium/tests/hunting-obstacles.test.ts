@@ -82,7 +82,10 @@ test('a blocked final approach withdraws before choosing a new side of the prey'
 
 test('finishing a climb after spotting prey still detects a blocked advance',()=>{
   const a=habitat(),b=a.brain as any,r=a.rig as any,I=r.inputs;
+  Object.assign(I,{x:-.195,z:.127,heading:-.38});
+  r.reset();
   r.update(1/60);
+  assert.equal(r.maneuver,'climb','start on the sloping rock ramp');
   assert.ok(b.goTo(.25,.25,'idle'));
   const goal=[...b.goal],c=restingCricket(-.25,.25,.1);
   Object.defineProperty(r,'canRedirect',{get:()=>false});
