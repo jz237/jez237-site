@@ -2,6 +2,22 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-11-17",
+      "historicDate": "1985-09-09",
+      "displayDate": "Week of September 9-15, 1985",
+      "edition": "Issue 163 - Weekly 1985 Computer & Culture Chronicle",
+      "morningLine": "Mario takes a running jump; Apple faces another turn in its founder’s career.",
+      "leadHeadline": "Super Mario Bros. arrives on Japan’s Famicom",
+      "storyHeadlines": [
+        "Jobs tells Apple board he intends to start another computer company",
+        "COMPUTE! puts the Amiga under the microscope",
+        "Atari ST expansion promises fill the autumn calendar"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1985-09-09.jpg",
+      "thumb": "media/thumbs/1985-09-09.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-11-16",
       "historicDate": "1985-09-02",
       "displayDate": "Week of September 2-8, 1985",

@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Mon, 16 Nov 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Tue, 17 Nov 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of September 9-15, 1985 — Super Mario Bros. arrives on Japan’s Famicom</title>
+      <link>https://jez237.com/computer-chronicle/?date=1985-09-09</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1985-09-09</guid>
+      <pubDate>Tue, 17 Nov 2026 12:00:00 GMT</pubDate>
+      <description>Nintendo sends Mario across a scrolling Mushroom Kingdom on September 13. Japan’s Famicom has a new adventure this Friday, September 13: Nintendo’s Super Mario Bros. The cartridge puts running and jumping at the center of a journey through the Mushroom Kingdom, giving Mario a landscape of obstacles rather than a single fixed screen. This is the Japanese release; it is not a simultaneous worldwide launch. Also this week: Jobs tells Apple board he intends to start another computer company · COMPUTE! puts the Amiga under the microscope · Atari ST expansion promises fill the autumn calendar.</description>
+    </item>
     <item>
       <title>Week of September 2-8, 1985 — Amiga opens a new frontier in color and sound</title>
       <link>https://jez237.com/computer-chronicle/?date=1985-09-02</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1985-04-29</guid>
       <pubDate>Thu, 29 Oct 2026 12:00:00 GMT</pubDate>
       <description>Robot Odyssey I and Chipwits make circuits and visual instructions the machinery of adventure. Adventure games are putting a new question to the home computer: can the player build the intelligence that wins the game? In the April–May Computer Gaming World, Gregg Williams compares Robot Odyssey I and Chipwits, two simulations that make programming itself the entertainment. These are current review selections, not announcements of releases during this week. Also this week: AT competition widens: three rivals promise more choice · Buyers and vendors still divided over software protection · Share a screen over the telephone.</description>
-    </item>
-    <item>
-      <title>Week of April 22-28, 1985 — Gribbly’s Day Out brings airborne rescue to the Commodore screen</title>
-      <link>https://jez237.com/computer-chronicle/?date=1985-04-22</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1985-04-22</guid>
-      <pubDate>Wed, 28 Oct 2026 12:00:00 GMT</pubDate>
-      <description>Hewson’s unusual rescue game earns a lively reception in this week’s home-computer press. A rescue mission takes a strange and expressive turn on the Commodore screen. Gribbly’s Day Out, from Hewson, sends its hero after young gribblets, mixing movement on land with Psi-powered flight. The review in this week’s Home Computing Weekly treats the result as an inventive departure from routine arcade action. Also this week: Amstrad puts disc storage at the center of its new home micro · Chuckie Egg packaging turns to holograms against copying · Atari’s announced ST machines promise a graphical desktop at home-computer prices.</description>
     </item>
   </channel>
 </rss>
