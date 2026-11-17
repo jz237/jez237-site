@@ -5,13 +5,25 @@ const closerLabels = Object.entries(CLOSER_QUESTIONS).flatMap(([sign, q]) => q.c
   .map(c => [`${sign}:${c.id}`, `${SYMPTOMS.find(s => s.id === sign).title}: ${c.title.toLowerCase()}`]));
 const growthLabels = GROWTH_CHOICES.filter(c => c.id !== 'unclear').map(c => [`lumps:${c.id}`, `Raised lumps: ${c.title.toLowerCase()}`]);
 export const LABELS = Object.fromEntries([...SYMPTOMS.map(s => [s.id, s.title]), ...BEHAVIORS.map(s => [s.id, s.label]), ...closerLabels, ...growthLabels, ['lumps:unclear', 'Raised lumps']]);
-const numeric = value => value !== '' && value !== null && value !== undefined && Number.isFinite(Number(value)) ? Number(value) : null;
+// A reading as typed: "0,5", "0.5 ppm" and "78 °F" are still readings (audit, Nov 16 2026); anything else is "not measured".
+const numeric = value => {
+  if (value === '' || value === null || value === undefined) return null;
+  const text = typeof value === 'string' ? value.trim().replace(/^(\d+),(\d+)/, '$1.$2').replace(/\s*(ppm|mg\s*\/\s*l|°\s*[cf]?|[cf])$/i, '') : value;
+  return text !== '' && Number.isFinite(Number(text)) ? Number(text) : null;
+};
 const DISTRESS = ['gasping', 'collapse', 'deaths'];
 // Corys and plecos have armour plates, not scales; their swelling answers read differently.
 const CATFISH = ['cory', 'pleco'];
 const CATFISH_LABELS = { 'swollen:pinecone': 'Swollen tight all over', 'swollen:flat': 'Just a full, soft belly', pinecone: 'Swollen tight and stiff all over' };
 // Look-alike checks that talk about scales, for corys and plecos.
 const CATFISH_REASONS = { dropsy: 'Look from above: swollen tight and stiff all over = dropsy.', bloat: 'Look from above: just a full, soft belly = bloat.' };
+// The same for the short "what it is" sentence on result cards and look-alikes.
+const CATFISH_SUMMARIES = {
+  dropsy: 'Fluid builds up inside the fish, so it swells tight and stiff all over. A sign of a serious internal problem.',
+  ulcer: 'Open red sores or craters in the skin, usually from bacteria taking hold after stress or bad water.',
+};
+CATFISH_REASONS.ulcer = 'Look for an open red crater in the skin = ulcer.';
+const summaryFor = (condition, input) => (CATFISH.includes(input.fishType) && CATFISH_SUMMARIES[condition.id]) || condition.summary;
 const labelFor = (id, input) => (CATFISH.includes(input.fishType) && CATFISH_LABELS[id]) || LABELS[id] || id;
 
 // Salinity as typed: "35 ppt", "35", "1.025" or "SG 1.025".
@@ -23,12 +35,42 @@ export function readSalinity(text) {
   if (/\d\s*[mµu]S(\/cm)?\b|siemens|conductiv/i.test(raw)) return { unreadable: true }; // conductivity, not salinity
   if (/[-−–]\s*\d/.test(raw)) return { unreadable: true }; // a negative reading (any minus sign)
   if (/\bppm\b|mg\s*\/\s*l|\bmg\b|ppb/i.test(raw)) return { unreadable: true }; // not salinity units
-  const n = parseFloat(raw.replace(',', '.').replace(/^[^0-9.]+/, ''));
-  if (!Number.isFinite(n) || n < 0) return { unreadable: true };
-  // Units win when they're given: "%", "ppt"/"psu"/"‰", or "SG".
-  if (/%/.test(raw)) return n <= 7 ? { ppt: n * 10 } : { unreadable: true };
+  const typed = raw.replace(/(\d),(\d)/g, '$1.$2');
+  // A labelled SG outside the parser's supported range must not disappear
+  // when another value (e.g. 35 ppt) looks normal. Check both label positions
+  // before the generic reader, which only recognises plausible SG numbers.
+  const explicitGravity = [
+    ...typed.matchAll(/\b(?:sg|specific gravity)\s*[:=]?\s*(\d+(?:\.\d+)?|\.\d+)/gi),
+    ...typed.matchAll(/(\d+(?:\.\d+)?|\.\d+)\s*(?:sg|specific gravity)\b/gi),
+  ].map(m => Number(m[1]));
+  if (explicitGravity.some(g => g < 0.98 || g > 1.1)) return { unreadable: true };
+  // Check ALL stated readings before choosing one. Percent and repeated ppt/SG
+  // readings used to bypass the two-number check below (35 ppt / 0% became 0).
+  const readings = [...typed.matchAll(/\d+(?:\.\d+)?|\.\d+/g)].flatMap(m => {
+    const n = Number(m[0]), suffix = typed.slice(m.index + m[0].length);
+    if (/^\s*(?:ppt\b|psu\b|‰|g\/l\b)/i.test(suffix)) return [{ppt: n, gravity: false}];
+    if (/^\s*%/.test(suffix)) return [{ppt: n * 10, gravity: false}];
+    if (n >= 0.98 && n <= 1.1) return [{ppt: Math.max(0, (n - 1) * 1310), gravity: true}];
+    return [];
+  });
+  if (readings.some(r => !r.gravity && r.ppt > 70) || readings.some((a, i) => readings.slice(i + 1).some(b =>
+    Math.abs(a.ppt - b.ppt) > (a.gravity || b.gravity ? 6 : 0.5)))) return { unreadable: true };
+  const first = parseFloat(typed.replace(/^[^0-9.]+/, ''));
+  if (!Number.isFinite(first) || first < 0) return { unreadable: true };
+  // Both ways of writing it in one box ("1.026 (35 ppt)", "35 ppt / 1.026"): each number is read with its own unit.
+  // Before Nov 16 2026 the first number was taken as ppt, so a normal 1.026 read as "1 ppt, dangerously low".
+  const numbers = [...typed.matchAll(/\d+(?:\.\d+)?|\.\d+/g)].map(m => parseFloat(m[0]));
+  const beside = unit => { const m = typed.match(new RegExp(`(\\d+(?:\\.\\d+)?|\\.\\d+)\\s*(?:${unit})`, 'i')); return m ? parseFloat(m[1]) : null; };
+  const asGravity = numbers.find(v => v >= 0.98 && v <= 1.1), fromGravity = asGravity === undefined ? null : Math.max(0, (asGravity - 1) * 1310);
+  const typedPpt = beside('ppt|psu|‰|g\\/l');
+  const pair = numbers.length === 2 && fromGravity !== null ? numbers.find(v => v !== asGravity && v >= 20 && v <= 45) : undefined;
+  if (typedPpt !== null && fromGravity !== null && typedPpt !== asGravity) return typedPpt <= 70 && Math.abs(typedPpt - fromGravity) <= 6 ? { ppt: typedPpt } : { unreadable: true };
+  if (typedPpt === null && !/%/.test(raw) && pair !== undefined) return Math.abs(pair - fromGravity) <= 6 ? { ppt: pair } : { unreadable: true };
+  // Units win when they're given: "%", "ppt"/"psu"/"‰", or "SG". The number used is the one beside the unit.
+  const n = typedPpt ?? first;
+  if (/%/.test(raw)) { const percent = beside('%') ?? first; return percent <= 7 ? { ppt: percent * 10 } : { unreadable: true }; }
   if (/ppt|psu|‰|g\/l/i.test(raw)) return n <= 70 ? { ppt: n } : { unreadable: true };
-  if (/\bsg\b|specific gravity/i.test(raw)) return n >= 0.98 && n <= 1.1 ? { ppt: Math.max(0, (n - 1) * 1310) } : { unreadable: true };
+  if (/\bsg\b|specific gravity/i.test(raw)) { const g = asGravity ?? first; return g >= 0.98 && g <= 1.1 ? { ppt: Math.max(0, (g - 1) * 1310) } : { unreadable: true }; }
   if (n >= 0.98 && n <= 1.1) return { ppt: Math.max(0, (n - 1) * 1310) };
   if (n > 1.1 && n < 3) return { unreadable: true };
   if (n <= 70) return { ppt: n };
@@ -52,11 +94,13 @@ export function assessUrgency(input) {
   if (numeric(input.nitrite) !== null && numeric(input.nitrite) >= 1) urgent.push(`Nitrite ${numeric(input.nitrite)} ppm is toxic`);
   if (nitrite !== null && nitrite > 0) checks.push(input.water === 'marine'
     ? 'Nitrite is detectable—your biological filter may be struggling. Do a water change.'
+    : CATFISH.includes(input.fishType) ? 'Nitrite is detectable—do a water change. Skip aquarium salt: corys and plecos don’t tolerate it.'
     : 'Nitrite is detectable—do a water change and consider aquarium salt for salt-tolerant fish to protect the gills.');
   // Readings: outside the usual range → a water check; far outside → urgent as well.
   const marine = input.water === 'marine';
   const ph = numeric(input.ph);
-  if (ph !== null && ph > 0) {
+  // Zero is within the form’s accepted range and is not an unknown reading.
+  if (ph !== null && ph >= 0) {
     const [low, high] = marine ? [7.8, 8.6] : [6, 8.5], [danger, dangerHigh] = marine ? [7.4, 9] : [5.5, 9.5];
     if (ph < danger || ph > dangerHigh) {
       urgent.push(`pH ${ph} is dangerously ${ph < danger ? 'low' : 'high'}`);
@@ -64,7 +108,7 @@ export function assessUrgency(input) {
     } else if (ph < low || ph > high) checks.push(`pH ${ph} is outside the usual ${low}–${high} for ${marine ? 'saltwater' : 'most freshwater fish'}—correct it slowly over a few days, not all at once.`);
   }
   const temp = numeric(input.temperature);
-  if (temp !== null && temp > 0) {
+  if (temp !== null && temp >= 0) {
     const unit = input.tempUnit === 'C' ? 'C' : 'F', f = unit === 'C' ? temp * 9 / 5 + 32 : temp;
     // [usual low, usual high, danger low, danger high] in °F, and what "back to normal" means.
     const coldwater = !marine && input.fishType === 'goldfish';
@@ -87,7 +131,7 @@ export function assessUrgency(input) {
   else if (marine && salinity) {
     const ppt = salinity.ppt;
     if (ppt < 25 || ppt > 42) urgent.push(`Salinity about ${Math.round(ppt)} ppt is dangerously ${ppt < 25 ? 'low' : 'high'}`);
-    if (ppt < 30 || ppt > 37) checks.push(`Salinity looks ${ppt < 30 ? 'low' : 'high'} (about ${Math.round(ppt)} ppt; reef tanks usually run 33–35 ppt / 1.024–1.026). Correct it slowly—no more than about 1 ppt a day.`);
+    if (ppt < 30 || ppt > 37) checks.push(`Salinity looks ${ppt < 30 ? 'low' : 'high'} (about ${Math.round(ppt)} ppt; reef tanks usually run 33–35 ppt, about 1.025–1.026). Correct it slowly—no more than about 1 ppt a day.`);
   }
   if (input.tankAge === 'new') checks.push('A new tank may not be cycled yet—test ammonia and nitrite every day.');
   if (input.affected === 'several' || signs.has('several')) checks.push('Several fish are affected—check the water as well as treating the illness.');
@@ -97,7 +141,8 @@ export function assessUrgency(input) {
   const action = onlySalinity ? 'Add aeration and correct the salinity slowly—about 1 ppt a day, not with one big water change.'
     : salinityAlarm ? 'Add aeration and do a water change now with water at the tank’s current salinity; then correct the salinity itself slowly (about 1 ppt a day).'
     : 'Add aeration, test the water and do a water change now.';
-  return { urgent, checks, action, level: urgent.length ? 'urgent' : checks.length ? 'check-water' : 'observe', waterUnknown: ammonia === null || nitrite === null };
+  return { urgent, checks, action, level: urgent.length ? 'urgent' : checks.length ? 'check-water' : 'observe', waterUnknown: ammonia === null || nitrite === null,
+    waterMissing: [ammonia === null ? 'ammonia' : '', nitrite === null ? 'nitrite' : ''].filter(Boolean) };
 }
 
 function weightsFor(condition, water) {
@@ -139,7 +184,10 @@ export function rankForFeature(feature, input) {
       return { ...c, base, score: base + behaviorScore + fishScore };
     })
     .filter(Boolean)
-    .sort((a, b) => b.score - a.score || b.base - a.base || a.id.localeCompare(b.id));
+    // An exact tie goes to the more urgent condition, then the one this kind of fish is prone to; the name only settles
+    // what is left (audit, Nov 16 2026: a betta breathing fast and scratching got flukes over velvet by alphabet).
+    .sort((a, b) => b.score - a.score || b.base - a.base || URGENCY[b.urgency || 'week'].rank - URGENCY[a.urgency || 'week'].rank
+      || (fish?.boosts[b.id] || 0) - (fish?.boosts[a.id] || 0) || a.id.localeCompare(b.id));
 }
 
 // Kept for the library and older callers: ranks by the primary feature.
@@ -150,7 +198,11 @@ export function rankVisualConditions(input) {
 
 export function featureKeys(input) {
   const selected = input.primarySign || SYMPTOMS.find(s => (input.signs || []).includes(s.id))?.id;
-  const patterns = [...new Set([selected, ...(input.visualSigns || [])])].filter(id => id && SYMPTOMS.some(s => s.id === id));
+  // The sign that led here stays first; the extra signs go in the guide's own order, not click order, so the same
+  // answers always give the same "could also be" list.
+  const place = id => SYMPTOMS.findIndex(s => s.id === id);
+  const extras = [...new Set(input.visualSigns || [])].filter(id => id !== selected).sort((a, b) => place(a) - place(b));
+  const patterns = [...new Set([selected, ...extras])].filter(id => id && SYMPTOMS.some(s => s.id === id));
   const question = closerQuestionFor(selected, input.water);
   const closer = question?.choices.some(c => c.id === input.closer && c.id !== 'unclear') ? input.closer : '';
   const growth = GROWTH_CHOICES.some(c => c.id === input.growthAppearance) ? input.growthAppearance : '';
@@ -224,7 +276,7 @@ function decorate(condition, input, fits) {
   const quiet = quietWater(condition, input, fits);
   return {
     ...condition,
-    ...(quiet ? { summary: quiet.summary } : {}),
+    summary: quiet ? quiet.summary : summaryFor(condition, input),
     fits,
     matched: fits.map(id => labelFor(id, input)),
     urgencyLevel: urgencyFor(condition, input),
@@ -269,8 +321,13 @@ export function assessDiagnosis(input) {
     findings.splice(0, findings.length, ...swap.findings);
     ({ alternatives, natural } = couldAlsoBe(findings, ranked, input, swap.previous));
   }
-  reconcilePlans(findings);
+  // A look-alike's own page shows a plan too: the same fish-aware plan, with the same heat rule as the findings.
+  alternatives = alternatives.map(c => ({ ...c, summary: summaryFor(c, input), plan: carePlanFor(c.id, input.water, input.fishType) }));
+  reconcilePlans(findings, alternatives, input);
   const assessment = assessUrgency(input);
+  // Care-form alarms count too, including after a look-alike swap. Never put
+  // "it may be normal" beside toxic readings or several affected fish.
+  if (assessment.urgent.length || input.affected === 'several') natural = '';
   const contextConcerns = [];
   if (assessment.checks.length && !findings.some(c => c.id === 'water')) {
     contextConcerns.push({ ...CONDITIONS.find(c => c.id === 'water'), reason: assessment.checks.join(' ') });
@@ -284,9 +341,9 @@ export function assessDiagnosis(input) {
   if (findings.some(c => c.id === 'columnaris') && findings.some(c => ['ich-fresh', 'velvet-fresh'].includes(c.id))) messages.push(HEAT_CONFLICT);
   // Two plans that need to be done in order, or in two places.
   const planText = c => c.plan ? [...c.plan.steps, c.plan.treatment].join(' ') : '';
-  if (findings.some(c => /treat the whole tank/i.test(planText(c))) && findings.some(c => /\bmove (the|a badly affected|all|every) fish to a (bare )?hospital/i.test(planText(c))))
+  if (findings.some(c => /treat the (whole )?tank\b/i.test(planText(c))) && findings.some(c => /\bmove (the|a badly affected|all|every) fish to a (bare )?hospital/i.test(planText(c))))
     messages.push('One plan treats the whole tank and another moves the fish to a hospital tank. If you move it, treat it there for both problems—the fish left in the main tank still need the whole-tank treatment.');
-  if (findings.some(c => /skip feeding|stop feeding/i.test(planText(c))) && findings.some(c => /feed (a good|a varied|plenty)/i.test(planText(c)) && !/skip feeding|stop feeding/i.test(planText(c))))
+  if (findings.some(c => /skip feeding|stop feeding/i.test(planText(c))) && findings.some(c => /feed (a good|a varied|plenty)|improve the diet/i.test(planText(c)) && !/skip feeding|stop feeding/i.test(planText(c))))
     messages.push('Do the 1–2 day fast first, then start the better diet.');
   if (input.onset === 'new-fish') messages.push('This started after a new fish or shared equipment—new arrivals often bring ich, velvet and flukes with them. Quarantine new fish from now on.');
   if (contextConcerns.length) messages.push('Your tank history or readings also point to a water problem. Fix that alongside the treatment.');
@@ -405,7 +462,7 @@ function alsoReason(condition, finding, input) {
   const fits = signs.length ? `“${signs.join(' + ')}” fits this too${behaviors.length ? `, and so does ${behaviors.join(', ')}` : ''}.`
     : like ? `It can look a lot like ${like}${behaviors.length ? `, and ${behaviors.join(', ')} fits it too` : ''}.`
     : behaviors.length ? `${behaviors.join(', ').replace(/^./, c => c.toUpperCase())} fits this too.` : '';
-  const what = (condition.summary || '').match(/^[^.!?]*[.!?]/)?.[0] || '';
+  const what = (summaryFor(condition, input) || '').match(/^[^.!?]*[.!?]/)?.[0] || '';
   return [fits, what, fish?.boosts[condition.id] ? `It’s also common in ${fish.plural}.` : ''].filter(Boolean).join(' ');
 }
 
@@ -476,18 +533,30 @@ export function lookalikesFor(id, water) {
 // show, the heat steps are replaced everywhere the plan appears (results, care page, notes).
 const HEAT_STEP = /raise the temperature/i;
 export const HEAT_CONFLICT = 'Don’t raise the temperature while columnaris is active—warm water speeds it up. Treat the columnaris first, keep the temperature steady, and use a medicine for the spots without the heat step.';
-function reconcilePlans(findings) {
-  if (!(findings.some(c => c.id === 'columnaris') && findings.some(c => ['ich-fresh', 'velvet-fresh'].includes(c.id)))) return;
-  for (const c of findings) {
+function reconcilePlans(findings, alternatives = [], input = {}) {
+  const columnaris = findings.some(c => c.id === 'columnaris');
+  const temperature = numeric(input.temperature);
+  const fahrenheit = temperature === null ? null : input.tempUnit === 'C' ? temperature * 9 / 5 + 32 : temperature;
+  // The spot plans among the findings, and any shown as a look-alike beside columnaris.
+  for (const c of [...findings, ...alternatives]) {
     if (!['ich-fresh', 'velvet-fresh'].includes(c.id) || !c.plan) continue;
+    // Respect the existing ich/goldfish heat targets and tropical upper range.
+    // A plan must not tell someone with an already-hot tank to heat it further.
+    const ceiling = input.fishType === 'goldfish' ? 75 : c.id === 'ich-fresh' ? 80 : 86;
+    if (!columnaris && !(fahrenheit !== null && fahrenheit >= ceiling)) continue;
     if (/heat|warm/i.test(c.tip || '')) c.tip = '';
     if (!c.plan.steps.some(step => HEAT_STEP.test(step))) continue; // this variant has no heat step to change
+    // One bracket, not two: "(copper only in a hospital tank; no heat while columnaris is active)".
+    const line = c.plan.treatment.replace(/^Gradual heat \+ /i, '').replace(/^an /, 'An ');
+    const note = columnaris ? 'no heat while columnaris is active' : 'no additional heat at this reading';
+    const heatAdvice = columnaris ? 'Keep the temperature steady while columnaris is active.'
+      : 'Add extra aeration. Don’t raise the temperature further; if it is above your fish’s usual range, bring it back slowly.';
     c.plan = {
       ...c.plan,
       steps: c.plan.steps.map(step => HEAT_STEP.test(step)
-        ? (c.id === 'ich-fresh' ? 'Keep the temperature steady—don’t raise it while columnaris is active. Add extra aeration.' : step.replace(/ and raise the temperature a little\.?/i, '. Keep the temperature steady while columnaris is active.'))
+        ? (c.id === 'ich-fresh' ? (columnaris ? 'Keep the temperature steady—don’t raise it while columnaris is active. Add extra aeration.' : heatAdvice) : step.replace(/,? and raise the temperature.*$/i, `. ${heatAdvice}`))
         : step),
-      treatment: `${c.plan.treatment.replace(/^Gradual heat \+ /i, '').replace(/^an /, 'An ')} (no heat while columnaris is active)`,
+      treatment: /\)$/.test(line) ? line.replace(/\)$/, `; ${note})`) : `${line} (${note})`,
     };
   }
 }
