@@ -6,8 +6,11 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 
-import { buildShareUrl, readViewName, cleanViewName, decodeState, VIEW_NAME_MAX } from '../src/urlstate.js';
+import { buildShareUrl, readViewName, cleanViewName, decodeState, resolveViewHash, VIEW_NAME_MAX } from '../src/urlstate.js';
 import { defaults } from '../src/schema.js';
+import { createStore } from '../src/state.js';
+import { presetPatch } from '../src/presets.js';
+import { selectPhotoMode } from '../src/photo-policy.js';
 import { buildSearchIndex } from '../src/ui.js';
 
 const dataDir = new URL('../data/', import.meta.url);
@@ -38,6 +41,51 @@ test('named sharing', async (t) => {
     assert.equal(readViewName('#d=1'), '');
     assert.equal(readViewName(''), '');
   });
+
+  await t.test('a name at the length limit can still be shared when it ends with an emoji', () => {
+    const fits = 'A'.repeat(VIEW_NAME_MAX - 2) + '🌆';
+    const clipped = 'A'.repeat(VIEW_NAME_MAX - 1);
+    for (const [input, expected] of [[fits, fits], [clipped + '🌆', clipped], ['B\uD83CCD', 'BCD']]) {
+      const hash = new URL(buildShareUrl('https://example.test/map/?from=share', defaults(), input)).hash;
+      assert.equal(readViewName(hash), expected);
+    }
+    assert.equal(readViewName('#n=' + encodeURIComponent(clipped + '🌆')), clipped);
+  });
+});
+
+test('a shared view restores the same camera, layers and settings in an existing tab as on startup', () => {
+  const hash = '#d=12000&n=River%20overview';
+  const { state, name } = resolveViewHash(hash);
+  const open = createStore({ ...presetPatch('architecture'), camLon: -75.1636,
+    photoMode: 'photo', streetMotion: 'on', layers: { flood: true, imagery: false } });
+  open.set(state, { source: 'hash' });
+  const { lastChangeSource, ...restored } = open.get();
+  assert.equal(lastChangeSource, 'hash');
+  assert.deepEqual(restored, { ...defaults(), camDist: 12000 });
+  assert.deepEqual(restored, createStore(state).get());
+  assert.equal(name, 'River overview');
+  assert.equal(resolveViewHash('#P=architecture').state.preset, 'architecture');
+});
+
+test('empty and name-only links restore defaults while ordinary document anchors stay local', () => {
+  assert.deepEqual(resolveViewHash('#n=Home'), { name: 'Home', state: defaults() });
+  assert.deepEqual(resolveViewHash(''), { name: '', state: defaults() });
+  assert.deepEqual(resolveViewHash('#'), resolveViewHash(''));
+  assert.equal(resolveViewHash('#studio'), null);
+  assert.equal(buildShareUrl('https://example.test/map/?from=share#d=650', defaults()),
+    'https://example.test/map/?from=share');
+});
+
+test('explicit photo requests use full graphics unless a link also requests lighter graphics', () => {
+  const device = { lightweight: 1, disabledLayers: ['imagery'] };
+  assert.equal(resolveViewHash('#d=650', device).state.lightweight, 1);
+  const photo = resolveViewHash('#pm=photo&d=650', device).state;
+  assert.equal(photo.lightweight, 0);
+  assert.equal(photo.layers.imagery, false);
+  assert.equal(resolveViewHash('#pm=photo&lg=1').state.lightweight, 1);
+  assert.equal(resolveViewHash('#pm=auto&lg=0', device).state.lightweight, 0);
+  assert.deepEqual(selectPhotoMode('photo'), { photoMode: 'photo', lightweight: 0 });
+  assert.deepEqual(selectPhotoMode('auto'), { photoMode: 'auto' });
 });
 
 test('search index', async (t) => {

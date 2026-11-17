@@ -1,4 +1,4 @@
-import { photoAllowed, photoWanted, photoCamera, photoReady, photoTileReady,
+import { selectPhotoMode, photoAllowed, photoWanted, photoCamera, photoReady, photoTileReady,
   photoLandmarkVisible, photoBudget, photoFailure, PHOTO_PRELOAD }
   from './photo-policy.js?v=philly-2026092121';
 import { createVisibleTimeout } from './visible-timeout.js?v=philly-2026101001';
@@ -195,8 +195,7 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
   }
   const unsubscribe = store.subscribe(state => { select.value = state.photoMode; });
   select.value = store.value('photoMode');
-  select.onchange = () => store.set({ photoMode: select.value,
-    ...(select.value === 'photo' ? { lightweight: 0 } : {}) }, { source: 'photo-mode' });
+  select.onchange = () => store.set(selectPhotoMode(select.value), { source: 'photo-mode' });
   function destroyRenderer(){
     photoTraffic?.dispose();photoTraffic=undefined;
     if (viewer && !viewer.isDestroyed()) viewer.destroy();

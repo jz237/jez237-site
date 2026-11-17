@@ -3,6 +3,10 @@ export const PHOTO_ENTER = 6500;
 export const PHOTO_EXIT = 9500;
 export const PHOTO_PRELOAD = 16000;
 
+export function selectPhotoMode(mode) {
+  return mode === 'photo' ? { photoMode: mode, lightweight: 0 } : { photoMode: mode };
+}
+
 // The diorama and photographic renderer coexist. Bound the second renderer's
 // framebuffer as well as its tile cache, especially on high-DPI laptops.
 export function photoBudget(width,height,dpr=1,quality='auto',retry=false){

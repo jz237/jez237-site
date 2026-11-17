@@ -14,6 +14,7 @@ import { PRESETS, QUICK_JUMPS } from './presets.js?v=philly-2026092121';
 import { TOURS } from './tours.js?v=philly-2026092121';
 import { ERAS } from './eras.js?v=philly-2026092121';
 import { getTheme, THEME_IDS } from './themes.js?v=philly-2026092121';
+import { selectPhotoMode } from './photo-policy.js?v=philly-2026092121';
 
 const ENUM_LABELS = {
   lightweight: v => v ? 'On · older computers' : 'Off · full graphics',
@@ -98,7 +99,8 @@ export function buildControls(store, host) {
           const b = el('button', null, (ENUM_LABELS[id] || String)(option));
           b.type = 'button';
           b.setAttribute('aria-pressed', String(store.value(id) === option));
-          b.addEventListener('click', () => store.set({ [id]: option }, { source: 'ui' }));
+          b.addEventListener('click', () => store.set(
+            id === 'photoMode' ? selectPhotoMode(option) : { [id]: option }, { source: 'ui' }));
           buttons.set(option, b);
           seg.appendChild(b);
         }

@@ -126,7 +126,10 @@ export function decodeState(hash) {
 export function cleanViewName(name) {
   if (typeof name !== 'string') return '';
   // eslint-disable-next-line no-control-regex
-  return name.replace(/[\u0000-\u001f\u007f]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, VIEW_NAME_MAX);
+  const text = name.replace(/[\u0000-\u001f\u007f]/g, ' ').replace(/\s+/g, ' ').trim();
+  // The input's maxlength counts UTF-16 units. Drop a lone surrogate if the
+  // cut splits an emoji so the remaining name can still be URI-encoded.
+  return text.slice(0, VIEW_NAME_MAX).replace(/[\uD800-\uDFFF]/gu, '').trimEnd();
 }
 
 /** The name a shared link carries (`n=`), or '' when it has none. */
@@ -135,6 +138,19 @@ export function readViewName(hash) {
   const body = hash.replace(/^#+/, '');
   if (!body) return '';
   return cleanViewName(new URLSearchParams(body).get(NAME_KEY) || '');
+}
+
+/** Restore the entire linked view, whether it opens in a new tab or an existing map. */
+export function resolveViewHash(hash, { lightweight = 0, disabledLayers = [] } = {}) {
+  const patch = decodeState(hash);
+  const name = readViewName(hash);
+  if (hash && hash !== '#' && !patch && !name) return null;
+  const base = defaults();
+  const layers = { ...base.layers, ...patch?.layers };
+  for (const id of disabledLayers) layers[id] = false;
+  return { name, state: { ...base, ...patch, layers,
+    lightweight: patch?.lightweight ?? (patch?.photoMode === 'photo' ? 0 : lightweight),
+  } };
 }
 
 /** Build a shareable absolute URL for the current state, optionally named. */

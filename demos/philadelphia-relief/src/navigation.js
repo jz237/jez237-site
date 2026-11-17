@@ -28,10 +28,15 @@ export function wireNavigation(host, rig, motion) {
   host.addEventListener('click',click);
   return {
     update(pose) {
-      if (caption) caption.textContent=cameraCaption(pose);
-      north.style.transform=`rotate(${-pose.bearing}deg)`;
-      overhead.setAttribute('aria-pressed',String(pose.pitch<5));
-      zoomIn.disabled=pose.dist<=201; zoomOut.disabled=pose.dist>=189999;
+      const label = cameraCaption(pose);
+      if (caption && caption.textContent !== label) caption.textContent = label;
+      const rotation = `rotate(${-pose.bearing}deg)`;
+      if (north.style.transform !== rotation) north.style.transform = rotation;
+      const pressed = String(pose.pitch < 5);
+      if (overhead.getAttribute('aria-pressed') !== pressed) overhead.setAttribute('aria-pressed', pressed);
+      const atMin = pose.dist <= 201, atMax = pose.dist >= 189999;
+      if (zoomIn.disabled !== atMin) zoomIn.disabled = atMin;
+      if (zoomOut.disabled !== atMax) zoomOut.disabled = atMax;
     },
     dispose() { host.removeEventListener('click',click); },
   };
