@@ -10,6 +10,8 @@ python3 make-normalize.py            # work/normalize.json from skeletal landmar
 bash run-exports.sh                  # eight headless Blender exports in parallel -> work/raw/*.glb (+ anchors, reports)
 node prepare.mjs                     # compress to ../../demos/anatomy-studio/assets/*.glb, write manifest.json + descriptions.json
 node check-assemblies.mjs            # prove the four nested assemblies resolve against real piece names
+node stamp.mjs                       # content-hash every ?v= (imports, CSS, JSON, models); run after prepare.mjs and after any edit to the demo
+node stamp.mjs --check               # exit 1 if any stamp is stale
 node preview.mjs                     # 1100x579 preview JPEG for the demos catalog (needs the site served on :8791)
 node verify.mjs                      # Playwright checks against STUDIO_URL (default http://127.0.0.1:8791/demos/anatomy-studio/)
 ```
@@ -37,6 +39,13 @@ the shared custom normals. `SKIN_DIAG=1` logs component escape fractions, bridge
 Cloudflare Pages limit, derives each piece's body region from its centre, matches descriptions with fallback rules
 (exact → parenthetical → side → qualifier → “of …” → aliases → parent → path), computes the radial envelope used by
 `explode-rules.js`, and resolves the assembly member lists by importing `demos/anatomy-studio/assemblies.js`.
+
+`prepare.mjs` writes a full-resolution file only for systems that were decimated for the base tier; a system whose two tiers
+have the same triangle count (skeleton, heart) gets no `assets/hi` file and no `hi` entry in the manifest.
+
+`stamp.mjs` hashes text with LF line endings, so Windows and Linux checkouts produce the same stamps. Each module's hash
+covers its text after its own imports were stamped, so a change in a leaf module ripples up to `studio.js` and `index.html`,
+and every importer uses the same URL for a module (two different `?v=` values would load it twice).
 
 `verify.mjs` runs headless Chromium with SwiftShader (`--use-angle=swiftshader --enable-unsafe-swiftshader`) and
 `?quality=verify` (no shadows/AA) and checks piece counts per stage, rendered triangle count, explosion with intermediate

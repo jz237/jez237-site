@@ -6,7 +6,7 @@ const url = process.env.STUDIO_URL || 'http://127.0.0.1:8791/demos/anatomy-studi
 const out = process.env.OUT || '/tmp/anatomy-studio-shots'; await mkdir(out, {recursive: true});
 const browser = await chromium.launch({headless: true, args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist', '--enable-webgl', '--disable-gpu-sandbox']});
 const page = await browser.newPage({viewport: {width: 1400, height: 900}, deviceScaleFactor: 1});
-await page.goto(`${url}?stage=full&msaa=0`); await page.waitForFunction(() => document.body.dataset.ready === 'true', null, {timeout: 300000});
+await page.goto(`${url}?stage=full&msaa=0&debug`); await page.waitForFunction(() => document.body.dataset.ready === 'true', null, {timeout: 300000});
 await page.waitForFunction(() => window.anatomyStudio.getState().stage === 'detail' && !window.anatomyStudio.getState().loading, null, {timeout: 300000});
 await page.addStyleTag({content: '.hero{display:none!important}'});
 const shot = async name => { await page.evaluate(() => window.scrollTo(0, 0)); await page.screenshot({path: path.join(out, `${name}.png`), timeout: 240000}); console.log('shot', name); };

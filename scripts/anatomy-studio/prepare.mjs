@@ -6,7 +6,7 @@ import {NodeIO} from '@gltf-transform/core';
 import {ALL_EXTENSIONS} from '@gltf-transform/extensions';
 import {dedup, prune, weld, quantize, reorder, meshopt} from '@gltf-transform/functions';
 import {MeshoptEncoder, MeshoptDecoder} from 'meshoptimizer';
-import {readFileSync, writeFileSync, readdirSync, existsSync, statSync, mkdirSync} from 'node:fs';
+import {readFileSync, writeFileSync, readdirSync, existsSync, statSync, mkdirSync, rmSync} from 'node:fs';
 import {homedir} from 'node:os';
 import path from 'node:path';
 import {pathToFileURL} from 'node:url';
@@ -119,6 +119,8 @@ for (const f of files) {
     piece.hiTriangles = t; tris += t; n++; node.setExtras({id: x.id}); }
   await doc.transform(dedup(), prune(), weld({tolerance: 0}), quantize({quantizePosition: f.id === 'regions' ? 16 : 14, quantizeNormal: 10, quantizationVolume: f.id === 'regions' ? 'scene' : 'mesh'}), reorder({encoder: MeshoptEncoder}), meshopt({encoder: MeshoptEncoder, level: 'medium'}));
   const out = path.join(DEMO, 'assets', 'hi', `${f.id}.glb`); await io.write(out, doc); const bytes = statSync(out).size;
+  // A system that was not decimated for the base tier (skeleton, heart) has nothing extra to stream: no detail file, no manifest entry.
+  if (tris === f.triangles) { rmSync(out); console.log(`hi/${f.id.padEnd(9)} same as the base tier; skipped`); continue; }
   if (bytes >= MAX_BYTES) throw new Error(`hi/${f.id}.glb is ${bytes} bytes; over the 25 MiB Cloudflare Pages limit`);
   f.hi = {path: `assets/hi/${f.id}.glb`, bytes, pieces: n, triangles: tris}; totalBytes += bytes;
   console.log(`hi/${f.id.padEnd(9)} ${String(n).padStart(4)} pieces ${String(tris).padStart(8)} tris ${(bytes / 1048576).toFixed(2).padStart(6)} MB`);
