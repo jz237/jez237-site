@@ -31,7 +31,8 @@ function fixture(t,options={}){
     entities={values:[]};
     dataSources={add(){},remove(){}};
     scene={screenSpaceCameraController:{},postProcessStages:{fxaa:{}},
-      requestRender(){},primitives:{add:tiles=>{this.tiles=tiles;}},renderError:new Signal()};
+      requestRender(){},primitives:{add:tiles=>{this.tiles=tiles;}},renderError:new Signal(),
+      preRender:new Signal(),postRender:new Signal()};
     constructor(host,settings){if(options.graphicsError)throw options.graphicsError;
       this.settings=settings;viewers.push(this);
       host.append(new Element());settings.creditContainer.append(new Element());}
@@ -42,13 +43,17 @@ function fixture(t,options={}){
       this.destroyed=true;this.destroyCount++;this.tiles?.destroy();
     }
     render(){
+      if(this.skipRender)return;
       this.rendering=true;
+      this.scene.preRender.fire();
       if(this.failRender)this.scene.renderError.fire(this.scene,new Error('render failure'));
-      else this.tiles.tileVisible.fire({geometricError:32});
+      else if(!this.empty)this.tiles.tileVisible.fire({geometricError:32});
+      this.scene.postRender.fire();
       this.rendering=false;
     }
   }
   const C={Viewer,Ion:{},CustomDataSource:class{},Cartographic:class{},
+    BoundingSphere:class{center={};},Quaternion:class{},HeadingPitchRoll:class{},
     Color:{fromCssColorString:s=>s},Cartesian3:{fromDegrees:()=>({})},
     Matrix4:{IDENTITY:{}},HeadingPitchRange:class{},Math:{toRadians:n=>n*Math.PI/180},
     createGooglePhotorealistic3DTileset:()=>new Promise((resolve,reject)=>tileRequests.push({resolve,reject}))};
@@ -67,6 +72,20 @@ function fixture(t,options={}){
   t.after(()=>{photo.dispose();globalThis.document=oldDocument;globalThis.window=oldWindow;});
   return {photo,viewers,tileRequests,nodes,update,ready,makeTiles,stage,doc,store};
 }
+test('tile counts describe the last actual draw and unchanged frames do not rewrite its status attributes',async t=>{
+  const f=fixture(t);await f.ready();
+  const viewer=f.viewers[0],message=f.nodes.get('photoStatus');
+  let writes=0;
+  message.dataset=new Proxy(message.dataset,{set(data,key,value){writes++;data[key]=value;return true;}});
+  f.update();assert.equal(writes,0);
+  viewer.skipRender=true;f.update();
+  assert.equal(f.photo.stats().visibleTiles,1);assert.equal(f.photo.stats().detailTiles,1);
+  assert.equal(message.dataset.bestError,'32');assert.equal(writes,0);
+  viewer.skipRender=false;viewer.empty=true;f.update();
+  assert.equal(f.photo.stats().visibleTiles,0);assert.equal(message.dataset.visibleTiles,'0');
+  assert.equal(message.dataset.bestError,undefined);
+});
+
 test('photo render errors fall back immediately and release the viewer after rendering returns',async t=>{
   const f=fixture(t),tiles=await f.ready(),viewer=f.viewers[0];
   viewer.failRender=true;

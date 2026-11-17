@@ -1,13 +1,13 @@
 {
   "version": 1,
   "esbuild": "0.28.2",
-  "sourceHash": "638d93b709bd961cab44e2903e73eafef2a8d2173424acf9254f2d7e3bb9cc4e",
-  "entry": "load/app-5WCADAOR.js",
+  "sourceHash": "caba65b801d47a229ebfcc629b430264883973a23ec788602c6460fc34a6510b",
+  "entry": "load/app-U6DUGKXR.js",
   "css": "load/style-d53329a43e41.css",
   "startupRequests": 3,
-  "startupBytes": 1125606,
+  "startupBytes": 1126531,
   "files": {
-    "load/app-5WCADAOR.js": "7748e224ff87e8b21af0a4a5059cbff35e16c2b768144a50d14d9e2e3cff6924",
+    "load/app-U6DUGKXR.js": "89b59f06d0b84a6ab4ba27bbf736cc936140d9aa6ec48fc08a4041c42ef9072f",
     "load/chunk-J5ZVIAFN.js": "4472d19fa7963a748fbb0d757e5ad459fc34f622e67c8e1c88f0b5702e8a25a9",
     "load/chunk-AEXPLQJR.js": "0c4d5332763adcaa9b518d170efbd60d2d15529a694f6fa086f34c5c48a06d45",
     "load/chunk-JYXLTZYM.js": "7859b18ebc8e9993d33f8d298b6a8bb4d94bd39f1fa3b229df180351bb8197b8",

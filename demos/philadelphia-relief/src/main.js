@@ -1036,12 +1036,13 @@ async function boot() {
     supplement(now, state);
     orientation.update(now, viewW / viewH, dt); navigation.update(now);
     bathymetry.update();
+    let photoCars;
     if(photographic.active){
       streetLife.update({camera,pose:now,state,exaggeration:1,sunDir,dt:streetDt,
         reducedMotion:REDUCED_MOTION,archive:mapLayers.archiveActive,quality:effectiveQuality,photo:true});
-      photographic.updateTraffic(streetLife.photoCars);
+      photoCars=streetLife.photoCars;
     }
-    if (photographic.update(now, state, viewW, viewH)) {
+    if (photographic.update(now, state, viewW, viewH, photoCars)) {
       const text=streetStatus(state,now,streetLife.stats(),{photo:true,reducedMotion:REDUCED_MOTION});
       if(streetMessage.textContent!==text)streetMessage.textContent=text;
       explore?.update(camera, 1);

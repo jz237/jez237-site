@@ -55,6 +55,7 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
     lastStatus = text; message.textContent = text;
   }
   function present(on) {
+    if (active === on) return;
     active = on;
     photoTraffic?.show(on);
     host.classList.toggle('visible', on);
@@ -160,6 +161,11 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
       tileset = loadedTiles;
       viewer.scene.primitives.add(tileset);
       applyExhibit();
+      // In request-render mode an update may leave the previous frame on screen.
+      // Count tiles during actual draws so paused traffic keeps the visible view's statistics.
+      viewer.scene.preRender.addEventListener(() => {
+        visibleTiles = 0; detailTiles = 0; bestError = Infinity;
+      });
       tileset.tileVisible.addEventListener(tile => {
         visibleTiles++;
         bestError = Math.min(bestError, tile.geometricError);
@@ -167,6 +173,16 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
       });
       tileset.loadProgress.addEventListener((requests, processing) => {
         pending = requests + processing;
+      });
+      viewer.scene.postRender.addEventListener(() => {
+        const data = message.dataset;
+        const visible = String(visibleTiles), detail = String(detailTiles);
+        if (data.visibleTiles !== visible) data.visibleTiles = visible;
+        if (data.detailTiles !== detail) data.detailTiles = detail;
+        if (Number.isFinite(bestError)) {
+          const error = String(Math.round(bestError));
+          if (data.bestError !== error) data.bestError = error;
+        } else if (data.bestError !== undefined) delete data.bestError;
       });
       viewer.scene.renderError.addEventListener((_scene,error)=>unavailable(error,'render'));
       for (const place of landmarks?.landmarks || []) {
@@ -232,7 +248,6 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
   stage.addEventListener('pointerup', up);
 
   return {
-    updateTraffic(cars){photoTraffic?.update(cars);},
     setExhibit(bounds) { exhibitBounds = bounds; return applyExhibit(); },
     get exhibitSupported() {
       return !viewer || window.Cesium.ClippingPolygonCollection.isSupported(viewer.scene);
@@ -259,7 +274,7 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
     },
     stats: () => ({ active, wanted, loading, failed, pending, firstViewReady, visibleTiles, detailTiles,
       traffic:photoTraffic?.stats() }),
-    update(pose, state, w, h) {
+    update(pose, state, w, h, cars) {
       if(disposed)return false;
       lastPose = pose; width = w; height = h;
       if (state.lightweight) {
@@ -318,14 +333,11 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
         tileset.maximumScreenSpaceError = detail; viewer.scene.requestRender();
       }
       viewer.entities.show = state.layers.landmarks;
-      visibleTiles = 0; detailTiles = 0; bestError = Infinity;
-      try { viewer.render(); } catch(error) { unavailable(error,'render'); return false; }
+      try {
+        if (cars) photoTraffic.update(cars);
+        viewer.render();
+      } catch(error) { unavailable(error,'render'); return false; }
       if(failed||disposed)return false;
-      if (visibleTiles) {
-        message.dataset.visibleTiles = String(visibleTiles);
-        message.dataset.detailTiles = String(detailTiles);
-        message.dataset.bestError = String(Math.round(bestError));
-      }
       // Keep the miniature visible through the initial coarse/empty frames.
       // Require neighborhood geometry AND a completed initial view; a handful
       // of fine tiles must not reveal a mostly coarse, partially loaded scene.
