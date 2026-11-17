@@ -768,3 +768,12 @@ than a tank at freezing). Two ties with equal urgency keep their order (Brooklyn
 patch; cloudy eye before popeye for "not sure"). Care judgements the audit marked as opinion (copper for all saltwater
 fish, nitrite urgency in saltwater, pond white spot urgency, fenbendazole wording, 80 °F for corys) are for the store
 owner and were not changed.
+
+## Salinity conflict follow-up — November 16, 2026
+
+The recurring Lab review reproduced conflicting explicit readings being silently accepted
+(e.g. `35 ppt / 20 ppt`, or `1.010 (3.5%)`). All stated ppt/PSU/percent and SG
+readings are now cross-checked before choosing a value; disagreement asks the keeper
+to recheck the instrument instead of suggesting a correction based on a guessed value.
+Existing SG approximation tolerance and dangerous-single-reading warnings are preserved.
+Regression: `salinity-conflicts.test.mjs`. Lab-only delivery; personal-site release not requested by this loop.

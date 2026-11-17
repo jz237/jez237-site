@@ -36,6 +36,17 @@ export function readSalinity(text) {
   if (/[-−–]\s*\d/.test(raw)) return { unreadable: true }; // a negative reading (any minus sign)
   if (/\bppm\b|mg\s*\/\s*l|\bmg\b|ppb/i.test(raw)) return { unreadable: true }; // not salinity units
   const typed = raw.replace(/(\d),(\d)/g, '$1.$2');
+  // Check ALL stated readings before choosing one. Percent and repeated ppt/SG
+  // readings used to bypass the two-number check below (35 ppt / 0% became 0).
+  const readings = [...typed.matchAll(/\d+(?:\.\d+)?|\.\d+/g)].flatMap(m => {
+    const n = Number(m[0]), suffix = typed.slice(m.index + m[0].length);
+    if (/^\s*(?:ppt\b|psu\b|‰|g\/l\b)/i.test(suffix)) return [{ppt: n, gravity: false}];
+    if (/^\s*%/.test(suffix)) return [{ppt: n * 10, gravity: false}];
+    if (n >= 0.98 && n <= 1.1) return [{ppt: Math.max(0, (n - 1) * 1310), gravity: true}];
+    return [];
+  });
+  if (readings.some(r => !r.gravity && r.ppt > 70) || readings.some((a, i) => readings.slice(i + 1).some(b =>
+    Math.abs(a.ppt - b.ppt) > (a.gravity || b.gravity ? 6 : 0.5)))) return { unreadable: true };
   const first = parseFloat(typed.replace(/^[^0-9.]+/, ''));
   if (!Number.isFinite(first) || first < 0) return { unreadable: true };
   // Both ways of writing it in one box ("1.026 (35 ppt)", "35 ppt / 1.026"): each number is read with its own unit.
