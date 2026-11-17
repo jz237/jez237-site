@@ -37,8 +37,8 @@ const restored = () => page.evaluate(() => window.anatomyStudio.getParts().every
 try {
  await page.goto(`${url}?quality=verify&stage=full`); await ready(page); await full();
  const BODY = manifest.pieces.length; const ORGANS = manifest.pieces.filter(p => (['skeletal', 'visceral', 'heart', 'brain', 'lymphoid', 'vessels', 'nerves'].includes(p.file) || (p.file === 'regions' && p.name === 'Regions of face')) && !/external genitalia/i.test(p.path || '') && p.name !== 'Greater omentum').length;
- const whole = async () => (await read()).mode === 'organs' ? ORGANS : BODY;   // the default finish shows the bones, organs and vessels only
- let s = await read(); assert.equal(s.pieces, manifest.pieces.length); assert.equal(s.mode, 'organs', 'studio opens in Organs & vessels'); assert.equal(s.visible, ORGANS); assert.deepEqual([...s.files].sort(), manifest.files.map(f => f.id).sort());
+ const whole = async () => (await read()).mode === 'organs' ? ORGANS : BODY;   // Organs & vessels shows the bones, organs and vessels only; every other finish shows the whole body
+ let s = await read(); assert.equal(s.pieces, manifest.pieces.length); assert.equal(s.mode, 'xray', 'studio opens in X-ray'); assert.equal(s.visible, BODY); assert.deepEqual([...s.files].sort(), manifest.files.map(f => f.id).sort());
  await page.waitForTimeout(400); s = await read(); assert.ok(s.triangles > manifest.stats.triangles * .5 && s.triangles <= manifest.stats.triangles * 1.05, `rendered triangles ${s.triangles}`);
  await page.screenshot({path: path.join(shots, 'assembled.png')});
  // explode: visible intermediate motion, every piece moves, skeleton barely moves, exact reassembly
@@ -108,7 +108,7 @@ try {
  const drawn = (await read()).rendered; await page.waitForFunction(v => window.anatomyStudio.getState().rendered > v + 3, drawn, {timeout: 180000});   // let the software renderer settle after the material changes
  await page.evaluate(m => window.anatomyStudio.setMode(m), modeBefore); await page.locator('#reset').click(); await settled(0);
  // all-parts board: every tile in frame, no overlaps, at several viewports
- await page.locator('#all-parts').click(); await page.waitForFunction(() => window.anatomyStudio.getState().board, null, {timeout: 60000});
+ await page.locator('#all-parts').click({timeout: 180000}); await page.waitForFunction(() => window.anatomyStudio.getState().board, null, {timeout: 180000});   // generous: the software renderer is slow with the X-ray finish's many see-through layers
  const checkBoard = async count => { await page.waitForTimeout(250); const rects = await page.evaluate(() => window.anatomyStudio.getBoardRectangles()); assert.equal(rects.length, count); for (const r of rects) assert.ok(r.min.every(v => v >= -1) && r.max.every(v => v <= 1), `tile ${r.id} outside frame`); for (let i = 0; i < rects.length; i++) for (let j = i + 1; j < rects.length; j++) { const a = rects[i], b = rects[j]; assert.ok(a.max[0] <= b.min[0] || b.max[0] <= a.min[0] || a.max[1] <= b.min[1] || b.max[1] <= a.min[1], `tiles ${a.id}, ${b.id} overlap`); } assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth), false); };
  await checkBoard(BODY); await page.screenshot({path: path.join(shots, 'all-parts.png')});
  await page.locator('#system').selectOption('brain'); await checkBoard(manifest.files.find(f => f.id === 'brain').pieces); await page.locator('#system').selectOption('all');
@@ -122,8 +122,8 @@ try {
  // reduced motion still animates a deliberate explosion
  const reduced = await browser.newPage({viewport: {width: 1024, height: 800}, reducedMotion: 'reduce'}); reduced.on('pageerror', e => errors.push(e.message)); await reduced.goto(`${url}?quality=verify&stage=core`); await ready(reduced);
  await reduced.locator('#explode-button').click(); await reduced.waitForFunction(() => window.anatomyStudio.getState().amount > 0, null, {timeout: 30000}); await settled(1, reduced); assert.ok(await reduced.evaluate(() => window.anatomyStudio.getParts().every(p => Math.hypot(...p.position.map((v, i) => v - p.base[i])) > .01)), 'reduced motion explosion still separates every piece');
- // a desktop visit without ?stage loads everything the opening view shows and keeps the muscles back until a view needs them
- const lean = await browser.newPage({viewport: {width: 1280, height: 860}}); lean.on('pageerror', e => errors.push(e.message)); await lean.goto(`${url}?quality=verify`); await ready(lean);
+ // a desktop link that opens in Organs & vessels loads what that finish shows and keeps the muscles back until a view needs them
+ const lean = await browser.newPage({viewport: {width: 1280, height: 860}}); lean.on('pageerror', e => errors.push(e.message)); await lean.goto(`${url}?quality=verify&mode=organs`); await ready(lean);
  await lean.waitForFunction(() => { const x = window.anatomyStudio.getState(); return !x.loading && x.files.length === 9; }, null, {timeout: 240000}); assert.ok(!(await lean.evaluate(() => window.anatomyStudio.getState().files)).includes('muscular'), 'muscles wait');
  await lean.locator('[data-mode="realistic"]').click(); await full(lean); assert.equal((await lean.evaluate(() => window.anatomyStudio.getState().pieces)), manifest.pieces.length, 'a finish that shows muscles fetches them'); await lean.close();
  assert.deepEqual(errors, []);

@@ -26,7 +26,8 @@ const params = new URLSearchParams(location.search);
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const mobile = matchMedia('(max-width: 760px)').matches || (matchMedia('(pointer: coarse)').matches && innerWidth < 900);
 const verifyQuality = params.get('quality') === 'verify';
-const state = { ready:false, amount:0, target:0, sequence:false, sequenceTime:0, selected:null, isolated:false, system:'all', mode:'organs', view:'hero', board:false, assembly:null, assemblySide:'L', labels:false, labelAll:false, ao:false, detail:false, stage:'none', loading:false, rotate:false, hidden:new Set(), quiz:false, only:'all', fx:false, dof:false };
+const DEFAULT_MODE = 'xray';   // the finish the studio opens in; it is also the one a link leaves unsaid
+const state = { ready:false, amount:0, target:0, sequence:false, sequenceTime:0, selected:null, isolated:false, system:'all', mode:DEFAULT_MODE, view:'hero', board:false, assembly:null, assemblySide:'L', labels:false, labelAll:false, ao:false, detail:false, stage:'none', loading:false, rotate:false, hidden:new Set(), quiz:false, only:'all', fx:false, dof:false };
 const parts = [], partsById = new Map(), landmarks = [], raycaster = new THREE.Raycaster(), pointer = new THREE.Vector2();
 let manifest, descriptions = null, renderer, controls, camera, scene, model, last = performance.now(), pointerStart = null, viewTween = null, lastApplied = -1, explodeTween = null;
 const hi = { geometries:new Map(), loaded:new Set(), loading:new Set(), frame:0 };
@@ -131,7 +132,7 @@ async function loadStudio(){
  $('piece-total').textContent = manifest.stats.pieces.toLocaleString(); pieceById = new Map(manifest.pieces.map(p => [p.id, p])); pieceOrder = new Map(manifest.pieces.map((p, i) => [p.id, i]));
  model = new THREE.Group(); model.name = 'Human body'; scene.add(model);
  const select = $('system'); select.replaceChildren(new Option('Complete body', 'all'), ...manifest.files.map(f => new Option(fileLabels[f.id] || f.id, f.id)));
- const requested = params.get('stage'); const target = requested && stageOrder.includes(requested) ? requested : requested === 'full' ? 'detail' : mobile ? 'core' : 'lean';   // lean: everything the opening view shows; the muscles (a third of the download) wait until they are needed
+ const requested = params.get('stage'); const target = requested && stageOrder.includes(requested) ? requested : requested === 'full' ? 'detail' : mobile ? 'core' : params.get('mode') === 'organs' ? 'lean' : 'detail';   // lean: everything the opening view shows; the muscles (a third of the download) wait until they are needed
  await loadStage('core');
  state.ready = true; document.body.dataset.ready = 'true'; $('loading').hidden = true;
  for (const id of ['explode-button', 'animate', 'reset', 'all-parts', 'quiz-start', 'tour-body']) $(id).disabled = false; $('ao-toggle').setAttribute('aria-pressed', state.ao); state.detail = !verifyQuality && !mobile; $('lod-toggle').setAttribute('aria-pressed', state.detail);
@@ -495,13 +496,13 @@ function stepDown(){
 function syncURL(){
  if (applyingURL || !state.ready) return; clearTimeout(urlTimer);
  urlTimer = setTimeout(() => { if (applyingURL || state.sequence) return; const a = state.assembly && assemblies[state.assembly], mode = state.restoreMode || state.mode, x = Math.round(state.target * 100);
-  writeURL({ assembly:state.assembly, side:a?.paired ? state.assemblySide : null, piece:state.quiz ? null : state.selected?.id, mode:mode !== 'organs' ? mode : null, system:state.system !== 'all' ? state.system : null, amount:(a ? x < 100 : x > 0) ? state.target : null, board:state.board }, { push:state.assembly !== lastURLAssembly });   // opening or leaving a study is a step Back can undo
+  writeURL({ assembly:state.assembly, side:a?.paired ? state.assemblySide : null, piece:state.quiz ? null : state.selected?.id, mode:mode !== DEFAULT_MODE ? mode : null, system:state.system !== 'all' ? state.system : null, amount:(a ? x < 100 : x > 0) ? state.target : null, board:state.board }, { push:state.assembly !== lastURLAssembly });   // opening or leaving a study is a step Back can undo
   lastURLAssembly = state.assembly; }, 200);
 }
 async function applyURL(u, { initial = false } = {}){
  applyingURL = true; clearTimeout(urlTimer);
  try {
-  const wanted = assemblies[u.assembly] ? u.assembly : null, mode = modes.includes(u.mode) ? u.mode : initial ? null : 'organs';
+  const wanted = assemblies[u.assembly] ? u.assembly : null, mode = modes.includes(u.mode) ? u.mode : initial ? null : DEFAULT_MODE;
   if (state.assembly && state.assembly !== wanted) leaveAssembly();
   if (mode && mode !== (state.restoreMode || state.mode)) { setMode(mode, { user:true }); if (mode !== 'organs') loadRest(); }
   if (wanted && (state.assembly !== wanted || (assemblies[wanted].paired && u.side && u.side !== state.assemblySide))) await enterAssembly(wanted, u.side);
