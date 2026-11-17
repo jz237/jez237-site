@@ -1,11 +1,41 @@
 {
   "version": 1,
   "title": "AI Discoveries, Explained",
-  "updated": "2026-11-16",
+  "updated": "2026-11-17",
   "coverageStart": "2026-09-21",
-  "coverageEnd": "2026-11-16",
+  "coverageEnd": "2026-11-17",
   "editorialNote": "Source-linked discoveries, research demonstrations, follow-ups and corrections from AI Discovery Watch. Historical milestones posted before the fresh-news brief are not included. Coverage dates are when a story was shared, not necessarily when its discovery occurred. Evidence labels reflect the linked report at that time; read later updates too.",
   "stories": [
+    {
+      "category": "Research in action",
+      "evidenceKind": "demo",
+      "modelNote": "VibeSyn: primarily OpenAI o3-2025-04-16 for task agents; GPT-5-2025-08-07 for image analysis.",
+      "sources": [
+        "https://arxiv.org/abs/2611.18772",
+        "https://arxiv.org/pdf/2611.18772"
+      ],
+      "status": "Author-reported laboratory demonstration; unreviewed preprint, not independently replicated.",
+      "takeaway": "An AI-led lab adjusted a ten-step chemical recipe as results arrived. In a November 12 preprint, VibeSyn’s team reports making 160 milligrams of catharanthine, a known molecule. The system changed reaction conditions after poor yields and adapted handling when mixtures caused problems. People chose the target and starting route, approved key choices and manually performed one step. This demonstrates adaptive laboratory research—not a new drug—and remains unreviewed and not independently replicated.",
+      "title": "An AI-led lab adapts a ten-step chemical recipe",
+      "id": "d-1572269502790508569-vibesyn-adaptive-ten-step-synthesis",
+      "coveredOn": "2026-11-17",
+      "context": "🔬 **AI Discovery Watch · November 17, 2026**\n\n**An AI-led lab adapts a ten-step chemical recipe**\nAn AI-led lab adjusted a ten-step chemical recipe as results arrived. In a November 12 preprint, VibeSyn’s team reports making 160 milligrams of catharanthine, a known molecule. The system changed reaction conditions after poor yields and adapted handling when mixtures caused problems. People chose the target and starting route, approved key choices and manually performed one step. This demonstrates adaptive laboratory research—not a new drug—and remains unreviewed and not independently replicated.\n\n**AI used:** VibeSyn: primarily OpenAI o3-2025-04-16 for task agents; GPT-5-2025-08-07 for image analysis.\n**Evidence:** Author-reported laboratory demonstration; unreviewed preprint, not independently replicated.\nOriginal source: <https://arxiv.org/abs/2611.18772>\nSupporting source: <https://arxiv.org/pdf/2611.18772>"
+    },
+    {
+      "category": "Mathematics",
+      "evidenceKind": "proof",
+      "modelNote": "GPT-Astra, as named by the authors; exact model version not specified.",
+      "sources": [
+        "https://arxiv.org/abs/2611.17567",
+        "https://arxiv.org/pdf/2611.17567"
+      ],
+      "status": "Unreviewed mathematical proof claim; no independent verification established.",
+      "takeaway": "Mathematicians report a general way to describe hidden patterns that ordinary wave-based analysis can miss. Their November 12 paper claims to settle the Jamneshan–Tao conjecture by connecting these patterns to a family of geometric models. This would give researchers a more unified toolkit for studying mathematical patterns. People supplied earlier results; collaboration with GPT-Astra produced an initial general proof, which they then refined together over many iterations. The paper is an unreviewed proof claim, not an independently checked theorem.",
+      "title": "AI collaboration tackles a general rule for hidden patterns",
+      "id": "d-1572269763713957911-jamneshan-tao-pattern-proof-claim",
+      "coveredOn": "2026-11-17",
+      "context": "🔬 **AI Discovery Watch · November 17, 2026**\n\n**AI collaboration tackles a general rule for hidden patterns**\nMathematicians report a general way to describe hidden patterns that ordinary wave-based analysis can miss. Their November 12 paper claims to settle the Jamneshan–Tao conjecture by connecting these patterns to a family of geometric models. This would give researchers a more unified toolkit for studying mathematical patterns. People supplied earlier results; collaboration with GPT-Astra produced an initial general proof, which they then refined together over many iterations. The paper is an unreviewed proof claim, not an independently checked theorem.\n\n**AI used:** GPT-Astra, as named by the authors; exact model version not specified.\n**Evidence:** Unreviewed mathematical proof claim; no independent verification established.\nOriginal source: <https://arxiv.org/abs/2611.17567>\nSupporting source: <https://arxiv.org/pdf/2611.17567>"
+    },
     {
       "category": "Research in action",
       "evidenceKind": "demo",
