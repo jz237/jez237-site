@@ -1,0 +1,401 @@
+{
+  "sectionChrome": {
+    "primary": "brick red",
+    "secondary": "royal blue",
+    "texture": "aged newsprint, fine column rules, ink bleed"
+  },
+  "masthead": {
+    "title": "Computer Chronicle",
+    "subtitle": "Issue 163 - Weekly 1985 Computer & Culture Chronicle",
+    "dateline": "Week of September 9-15, 1985",
+    "price": "75 cents"
+  },
+  "visualProfile": {
+    "tone": "Mario leaps into a new Famicom adventure in Japan",
+    "motifs": [
+      "Famicom console and cartridge",
+      "side-scrolling brick platforms, pipes and mushroom power-ups",
+      "Amiga color graphics and Atari ST peripherals"
+    ],
+    "layout": "Warm aged newsprint, dense believable columns, red and blue headers, halftone color illustrations, boxed modules and no dead footer space"
+  },
+  "layoutPlan": {
+    "leadPlacement": "Super Mario Bros. Japanese debut gets the biggest headline and gaming illustration; Jobs and Amiga are secondary features. Charts must retain their explicitly dated periods: rock September 7 snapshot, movies September 13-15, computer games chart printed September 5.",
+    "secondaryRail": "Print feature headlines verbatim; fixed inside-page jump lines",
+    "archiveNavigation": "Weekly archive with previous/next navigation"
+  },
+  "heroImage": {
+    "src": "media/computer-chronicle-gpt-image-2-week-1985-09-09.jpg",
+    "alt": "Computer Chronicle newspaper front page for September 9-15, 1985",
+    "caption": "Newspaper-style front page generated from structured Chronicle issue data.",
+    "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+  },
+  "currentDate": "2026-11-17",
+  "historicDate": "1985-09-09",
+  "displayDate": "Week of September 9-15, 1985",
+  "edition": "Issue 163 - Weekly 1985 Computer & Culture Chronicle",
+  "editorNote": "A new Japanese cartridge adventure joins a September of ambitious computers and expansion promises.",
+  "morningLine": "Mario takes a running jump; Apple faces another turn in its founder’s career.",
+  "lead": {
+    "headline": "Super Mario Bros. arrives on Japan’s Famicom",
+    "dek": "Nintendo sends Mario across a scrolling Mushroom Kingdom on September 13.",
+    "confidence": "exact-date",
+    "sourceRefs": [
+      1,
+      2,
+      3
+    ],
+    "body": [
+      "Japan’s Famicom has a new adventure this Friday, September 13: Nintendo’s Super Mario Bros. The cartridge puts running and jumping at the center of a journey through the Mushroom Kingdom, giving Mario a landscape of obstacles rather than a single fixed screen. This is the Japanese release; it is not a simultaneous worldwide launch.",
+      "The game’s instruction manual describes a rescue quest through an enemy-filled kingdom. Pipes, brickwork and gaps turn forward progress into a matter of timing. Mario and Luigi give the familiar brothers a new setting in which the route itself is part of the challenge.",
+      "Power-ups change the terms of that challenge. A Super Mushroom enlarges Mario, a Fire Flower supplies fireballs, and a Starman grants temporary invincibility. Each gives the player another reason to investigate the scenery while keeping an eye on the next jump.",
+      "The Japanese cartridge is documented at ¥4,900. For Famicom owners, the immediate story is a new Nintendo game with an unusually expansive sense of movement. Its reception abroad remains another story: this week’s arrival belongs to Japan."
+    ]
+  },
+  "stories": [
+    {
+      "headline": "Jobs tells Apple board he intends to start another computer company",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        4
+      ],
+      "body": [
+        "Steve Jobs told Apple directors on September 12 that he intended to leave and form another computer company. The announcement places a fresh question before a company already associated closely with its cofounder’s public identity.",
+        "The directors initially showed support and discussed a possible investment, according to the museum chronology of the episode. They asked Jobs to defer his resignation for a week. As this issue closes, an intention and a board discussion should not be mistaken for a completed formal departure.",
+        "The distinction matters to Apple watchers. A proposed new computer enterprise is significant news on its own; its eventual products, staffing and relationship with Apple are not settled by this week’s announcement."
+      ]
+    },
+    {
+      "headline": "COMPUTE! puts the Amiga under the microscope",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0
+      ],
+      "body": [
+        "Tom R. Halfhill’s in-depth Amiga review in September’s COMPUTE! examines a machine that puts graphics and sound near the center of the personal-computing proposition. His sessions took place before the introduction, making this a hands-on evaluation rather than an announcement of a new September unveiling.",
+        "The Motorola 68000 works alongside specialized graphics and sound support. A palette of 4,096 colors offers an arresting specification, but that figure must not be read as a promise that every display mode shows every color at once.",
+        "Speech adds another dimension. The review discusses synthesized speech and text-to-speech conversion, suggesting a computer that can address its user as well as draw on a monitor. The software and peripherals surrounding such abilities will help determine what they mean at the desk."
+      ]
+    },
+    {
+      "headline": "Atari ST expansion promises fill the autumn calendar",
+      "confidence": "same-month",
+      "sourceRefs": [
+        5
+      ],
+      "body": [
+        "September’s Antic surveys expansion plans around the Atari ST, carrying forward announcements from June’s Consumer Electronics Show. The report describes a system acquiring an ecosystem, but much of the merchandise is still a promise rather than a delivered accessory.",
+        "Haba’s announced list includes a 10-megabyte hard disk at $499 and a Hayes-compatible modem at $299. Haba, Batteries Included and Rising Star are also preparing productivity programs, giving prospective owners reasons to look beyond the hardware specification.",
+        "Atari projects a 256K 260ST at $399 and a drive-equipped 260STD at $499, with October or November shipment contemplated. Those are future plans, not products this newspaper can certify as sitting on September shop counters."
+      ]
+    }
+  ],
+  "computerItems": [
+    {
+      "title": "Amstrad PCW 8256",
+      "summary": "Museum dates launch to September 1985: 256 KB RAM and one floppy drive, marketed as a word processor but also a CP/M computer. Exact day not established.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        6
+      ]
+    },
+    {
+      "title": "Commodore Amiga",
+      "summary": "September hands-on review provides graphics and speech feature context; not a launch this week.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0
+      ]
+    }
+  ],
+  "softwareList": [
+    {
+      "name": "Intuition and AmigaDOS",
+      "detail": "Graphical and command environments accompany the Amiga’s multimedia ambitions; September review coverage, not a separate release this week.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "name": "CP/M",
+      "detail": "The Amstrad PCW 8256 is marketed for word processing but is also a CP/M computer.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        6
+      ]
+    }
+  ],
+  "storeShelves": [
+    {
+      "label": "Top 5 Computer Games — last available Gallup snapshot, printed September 5 (sales circa August 24)",
+      "items": [
+        "1. The Way of the Exploding Fist",
+        "2. Summer Games 2",
+        "3. Nightshade",
+        "4. Frank Bruno’s Boxing",
+        "5. Beach-Head II"
+      ],
+      "confidence": "same-week",
+      "sourceRefs": [
+        11
+      ]
+    },
+    {
+      "label": "Top 5 Movies — domestic weekend September 13-15, 1985",
+      "items": [
+        "1. Back to the Future",
+        "2. Teen Wolf",
+        "3. Pee-wee’s Big Adventure",
+        "4. Compromising Positions",
+        "5. Volunteers"
+      ],
+      "confidence": "same-week",
+      "sourceRefs": [
+        8
+      ]
+    }
+  ],
+  "priceWatch": [
+    {
+      "item": "Commodore 1670 300/1200-baud modem",
+      "price": "$185.95",
+      "note": "September COMPUTE! dealer advertisement, Computer Mail Order, Williamsport; advertised mail-order price, not MSRP or guaranteed availability",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "item": "Hayes 1200 modem",
+      "price": "$385.95",
+      "note": "Same September COMPUTE! dealer advertisement; hardware listing, not connect-time charge",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "item": "Commodore 64",
+      "price": "$149.95",
+      "note": "Same dealer advertisement; monitor and peripherals separately listed",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "item": "Haba 10 MB ST hard disk",
+      "price": "$499",
+      "note": "Antic reports announced price; not proven on sale",
+      "confidence": "same-month",
+      "sourceRefs": [
+        5
+      ]
+    }
+  ],
+  "briefs": [
+    {
+      "headline": "PCW brings word-processing to the home-computer aisle",
+      "summary": "Use the month-dated museum evidence for 256 KB and a single floppy drive; omit unverified exact-day or package-price claims.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        6
+      ]
+    },
+    {
+      "headline": "Mellencamp heads the rock list",
+      "summary": "Lonely Ol’ Night leads Billboard Top Rock Tracks for September 14. The five-song shelf below retains the separately dated September 7 chart snapshot.",
+      "confidence": "same-week",
+      "sourceRefs": [
+        7
+      ]
+    }
+  ],
+  "musicChart": [
+    {
+      "chart": "Billboard Top Rock Tracks — September 7 snapshot",
+      "chartDate": "1985-09-07",
+      "rank": 1,
+      "title": "Lonely Ol' Night",
+      "song": "Lonely Ol' Night",
+      "artist": "John Mellencamp",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        10
+      ]
+    },
+    {
+      "chart": "Billboard Top Rock Tracks — September 7 snapshot",
+      "chartDate": "1985-09-07",
+      "rank": 2,
+      "title": "Fortress Around Your Heart",
+      "song": "Fortress Around Your Heart",
+      "artist": "Sting",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        10
+      ]
+    },
+    {
+      "chart": "Billboard Top Rock Tracks — September 7 snapshot",
+      "chartDate": "1985-09-07",
+      "rank": 3,
+      "title": "Back In Time",
+      "song": "Back In Time",
+      "artist": "Huey Lewis & The News",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        10
+      ]
+    },
+    {
+      "chart": "Billboard Top Rock Tracks — September 7 snapshot",
+      "chartDate": "1985-09-07",
+      "rank": 4,
+      "title": "Every Step Of The Way",
+      "song": "Every Step Of The Way",
+      "artist": "John Waite",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        10
+      ]
+    },
+    {
+      "chart": "Billboard Top Rock Tracks — September 7 snapshot",
+      "chartDate": "1985-09-07",
+      "rank": 5,
+      "title": "Dancing In The Street",
+      "song": "Dancing In The Street",
+      "artist": "David Bowie & Mick Jagger",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        10
+      ]
+    }
+  ],
+  "periodAd": {
+    "headline": "A C64 and a connection",
+    "summary": "Computer Mail Order’s September COMPUTE! advertisement lists a Commodore 64 at $149.95 and a Commodore 1670 modem at $185.95. Monitor and peripherals are separate; listed mail-order prices do not establish availability.",
+    "tagline": "The computer is only the beginning.",
+    "sourceRefs": [
+      0
+    ]
+  },
+  "market": {
+    "headline": "Expansion promises compete with the entry price",
+    "summary": "Haba’s announced $499 ST hard disk puts mass storage on the shopping list, while the September C64 advertisement starts at $149.95 before monitor and peripherals. Announced accessory prices and dealer advertisements measure different things; neither is a new weekly market average.",
+    "confidence": "same-month",
+    "sourceRefs": [
+      0,
+      5
+    ]
+  },
+  "worldAnchor": {
+    "headline": "Air-launched antisatellite weapon destroys Solwind",
+    "summary": "On September 13, an F-15-launched antisatellite weapon struck Solwind in space. NASA’s chronology also records scientists’ concern that the satellite was still returning useful solar observations.",
+    "confidence": "exact-date",
+    "sourceRefs": [
+      9
+    ]
+  },
+  "bbsNote": {
+    "headline": "SIG Wars: who owns an online community?",
+    "summary": "Arlan R. Levitan’s “Telecomputing Today: SIG Wars,” COMPUTE! September 1985, printed page 105, examines competition between CompuServe and Delphi. The column recounts earlier events, not a fresh September disappearance.",
+    "posts": [
+      {
+        "topic": "MAUG changes services",
+        "platform": "CompuServe / Delphi",
+        "text": "Research note, not an authentic BBS post: Levitan reports that the Delphi MAUG branch vanished in May after a short run, replaced by an Apple SIG with a new sysop. CompuServe retained the original MAUG sysop and divided its Apple community into Apple II, Macintosh and developer SIGs."
+      },
+      {
+        "topic": "Connection rates and community ownership",
+        "platform": "Commercial online services and BBSs",
+        "text": "Research note, not a fabricated period message: the column says Delphi’s off-shift 1200-bps rate was half CompuServe’s and even Delphi 2400-bps cost less than CompuServe 1200-bps. It questions service ownership of user-contributed messages and public-domain programs, and contrasts contributor benefits on noncommercial bulletin boards."
+      }
+    ],
+    "sourceRefs": [
+      0
+    ]
+  },
+  "curiosity": {
+    "headline": "A promised ST accessory holds 500 megabytes on compact disc",
+    "summary": "September Antic looks beyond floppy disks toward a proposed Atari CD-ROM system.",
+    "detail": "The article’s subheading touts a 500-megabyte CD-ROM. This is an autumn product promise reported from June CES, not proof of delivery. Its striking capacity is the curiosity; do not call it an audio CD player or DVD.",
+    "sourceRefs": [
+      5
+    ]
+  },
+  "accuracyLedger": {
+    "items": [
+      "Famicom launch is Japan only, September 13; no future sales claims.",
+      "Jobs board discussion September 12 is not the September 17 resignation.",
+      "Amiga and ST coverage is month-dated; proposed products remain future plans.",
+      "Rock five-song snapshot is September 7; September 14 number one separately verified.",
+      "Games retain explicitly labelled earlier Gallup snapshot, not an invented current ranking.",
+      "Movie ranking verified for September 13-15."
+    ]
+  },
+  "sources": [
+    {
+      "title": "COMPUTE! issue 64; Amiga review, SIG Wars, dealer advertisements",
+      "url": "https://colorcomputerarchive.com/repo/Documents/Magazines/Compute%20%28Clean%29/Compute_Issue_064_1985_Sep.pdf",
+      "date": "1985-09"
+    },
+    {
+      "title": "Nintendo: official Mario history",
+      "url": "https://www.nintendo.com/us/explore/characters/mario/history/",
+      "date": "retrospective; event 1985-09-13"
+    },
+    {
+      "title": "Nintendo: original Super Mario Bros. manual, hosted reissue",
+      "url": "https://www.nintendo.co.jp/clv/manuals/en/pdf/CLV-P-NAAAE.pdf",
+      "date": "1985 original; later hosted reproduction"
+    },
+    {
+      "title": "Arcade History: Japanese Famicom cartridge record",
+      "url": "https://www.arcade-history.com/game/55613/",
+      "date": "retrospective; event 1985-09-13"
+    },
+    {
+      "title": "Centre for Computing History: Jobs leaves Apple",
+      "url": "https://www.computinghistory.org.uk/det/930/Steve-Jobs-leaves-Apple-to-start-NeXT/",
+      "date": "retrospective; distinguishes September 12 and 17"
+    },
+    {
+      "title": "Antic vol. 4 no. 5: More ST Products Coming",
+      "url": "https://www.atarimagazines.com/v4n5/morestproducts.php",
+      "date": "1985-09"
+    },
+    {
+      "title": "Centre for Computing History: Amstrad PCW 8256",
+      "url": "https://www.computinghistory.org.uk/det/528/Amstrad-PCW-8256/",
+      "date": "retrospective; event 1985-09"
+    },
+    {
+      "title": "Billboard, week ending September 14, 1985",
+      "url": "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1985/BB-1985-09-14.pdf",
+      "date": "1985-09-14"
+    },
+    {
+      "title": "Box Office Mojo: Domestic Weekend 37",
+      "url": "https://www.boxofficemojo.com/weekend/1985W37/",
+      "date": "1985-09-13/1985-09-15"
+    },
+    {
+      "title": "NASA: Astronautics and Aeronautics, 1985",
+      "url": "https://www.nasa.gov/wp-content/uploads/2023/04/1985.pdf?emrc=f61c57",
+      "date": "chronology entry 1985-09-13"
+    },
+    {
+      "title": "Billboard Top Rock Tracks archive",
+      "url": "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1985-09-07/",
+      "date": "1985-09-07"
+    },
+    {
+      "title": "Popular Computing Weekly September 5 p33: Gallup chart transcription, sales week circa August 24",
+      "url": "https://computerhits.org/archive/popular%20computing%20weekly_1985-09-05_all%20formats/",
+      "date": "1985-09-05"
+    }
+  ]
+}
