@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Rush — Limelight · Escape Velocity | Jez237 Multimedia</title>
+  <meta name="description" content="Watch Escape Velocity, an animated music video for Rush’s Limelight. A robot trio plays beneath a mechanical iris, and a soloist takes flight.">
+  <meta name="theme-color" content="#080e13">
+  <link rel="canonical" href="https://jez237.com/multimedia/limelight-escape-velocity/">
+  <meta property="og:type" content="video.other">
+  <meta property="og:site_name" content="Jez237">
+  <meta property="og:title" content="Rush — Limelight · Escape Velocity">
+  <meta property="og:description" content="A 3D animated music video, set to the Moving Pictures recording.">
+  <meta property="og:url" content="https://jez237.com/multimedia/limelight-escape-velocity/">
+  <meta property="og:image" content="https://jez237.com/multimedia/limelight-escape-velocity/og.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="A red-armored robot plays guitar in front of the drum kit.">
+  <meta property="og:video" content="https://media.jez237.com/multimedia/limelight-escape-velocity/limelight-escape-velocity-1080p.mp4">
+  <meta property="og:video:type" content="video/mp4">
+  <meta property="og:video:width" content="1920">
+  <meta property="og:video:height" content="1080">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" type="image/svg+xml" href="../../assets/brand.svg">
+  <style>
+    :root { color-scheme: dark; font-family: "Segoe UI", system-ui, sans-serif; background: #080e13; color: #f3ecdf; }
+    * { box-sizing: border-box; }
+    body { margin: 0; }
+    main { width: min(100% - 2rem, 72rem); margin: 0 auto; padding-bottom: 3rem; }
+    nav, .credit { color: #a5b6bd; }
+    a { color: inherit; text-underline-offset: .2em; }
+    a:hover, a:focus-visible { color: #ffda9a; }
+    .crumb { display: flex; align-items: center; gap: .65rem; padding: 1.15rem 0; border-bottom: 1px solid #2b373d; font-size: .9rem; }
+    .crumb a { text-decoration: none; }
+    .crumb a:first-child { color: #f3ecdf; font-weight: 700; }
+    header { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: .4rem 2rem; padding: 1.4rem 0 1rem; }
+    h1 { font-size: clamp(2rem, 5vw, 3.8rem); letter-spacing: -.045em; line-height: 1; margin: .3rem 0; font-weight: 650; }
+    header p, .credit { margin: 0; line-height: 1.5; }
+    .artist { color: #edba6a; }
+    video { display: block; width: 100%; aspect-ratio: 16 / 9; max-height: 78svh; background: #000; object-fit: contain; border: 1px solid #304049; border-radius: .35rem; }
+    .details { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .5rem 2rem; padding: .8rem 0 1.4rem; color: #b0bdc2; font-size: .94rem; }
+    .details p { margin: 0; }
+    h2 { font-size: 1rem; margin: .8rem 0; }
+    ol { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit,minmax(min(14rem,100%),1fr)); gap: .55rem; }
+    li a { display: flex; gap: .75rem; align-items: center; padding: .7rem .8rem; border: 1px solid #2b3a42; border-radius: .3rem; text-decoration: none; }
+    li a:hover, li a:focus-visible { background: #14212a; border-color: #a98857; }
+    time { color: #edba6a; font-variant-numeric: tabular-nums; font-size: .85rem; }
+  </style>
+</head>
+<body>
+  <main>
+    <nav class="crumb" aria-label="Breadcrumb"><a href="../../">Jez237</a><span aria-hidden="true">/</span><a href="../">Multimedia</a></nav>
+    <header>
+      <div><p class="artist">Rush · Limelight</p><h1>Escape Velocity</h1></div>
+      <p class="credit">Animated music video · 4:21 · 1080p48</p>
+    </header>
+    <video id="film" controls playsinline preload="metadata" poster="poster.jpg" aria-label="Escape Velocity, a music video for Limelight by Rush">
+      <source src="https://media.jez237.com/multimedia/limelight-escape-velocity/limelight-escape-velocity-1080p.mp4" type="video/mp4">
+      <track kind="chapters" srclang="en" label="Chapters" src="chapters.vtt">
+      <a href="https://media.jez237.com/multimedia/limelight-escape-velocity/limelight-escape-velocity-1080p.mp4">Open the video</a>
+    </video>
+    <div class="details">
+      <p>Music by Rush · <cite>Moving Pictures</cite></p>
+      <a href="https://media.jez237.com/multimedia/limelight-escape-velocity/limelight-escape-velocity-1080p.mp4">Open MP4</a>
+    </div>
+    <section aria-labelledby="chapters"><h2 id="chapters">Chapters</h2>
+      <ol id="chapter-list">
+        <li><a href="#t=0"><time>0:00</time>The opening riff</a></li>
+        <li><a href="#t=19.33"><time>0:19</time>The camera chase</a></li>
+        <li><a href="#t=57.60"><time>0:57</time>The mirror stage</a></li>
+        <li><a href="#t=94.25"><time>1:34</time>Through the iris</a></li>
+        <li><a href="#t=153.73"><time>2:33</time>The guitar solo</a></li>
+        <li><a href="#t=182.16"><time>3:02</time>The flock</a></li>
+        <li><a href="#t=252.36"><time>4:12</time>Departure</a></li>
+      </ol>
+    </section>
+  </main>
+  <script>
+    const film = document.getElementById("film");
+    function seekToFragment(play) {
+      const match = /^#t=(\d+(?:\.\d+)?)$/.exec(location.hash);
+      if (!match) return;
+      film.currentTime = Math.min(Number(match[1]), Number.isFinite(film.duration) ? film.duration : 261);
+      if (play) film.play().catch(() => {});
+    }
+    document.getElementById("chapter-list").addEventListener("click", event => {
+      const link = event.target.closest("a");
+      if (!link || event.ctrlKey || event.altKey || event.metaKey || event.shiftKey || event.button !== 0) return;
+      event.preventDefault();
+      history.replaceState(null, "", link.hash);
+      seekToFragment(true);
+    });
+    window.addEventListener("hashchange", () => seekToFragment(false));
+    if (film.readyState >= 1) seekToFragment(false);
+    else film.addEventListener("loadedmetadata", () => seekToFragment(false), { once: true });
+  </script>
+</body>
+</html>
