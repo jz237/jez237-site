@@ -4,6 +4,7 @@ import {TANK} from './Case';
 
 export interface TailCollision {
   beginStep?(): void;
+  overlapsSolid?(point: THREE.Vector3, radius: number): boolean;
   touchesSolid?: boolean;
   projectPoint(previous: THREE.Vector3, point: THREE.Vector3, radius: number, normal: THREE.Vector3): boolean;
   projectSegment?(a: THREE.Vector3, b: THREE.Vector3, ra: number, rb: number, pinnedA: boolean, na: THREE.Vector3, nb: THREE.Vector3): boolean;
