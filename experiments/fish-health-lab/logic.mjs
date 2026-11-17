@@ -36,6 +36,14 @@ export function readSalinity(text) {
   if (/[-−–]\s*\d/.test(raw)) return { unreadable: true }; // a negative reading (any minus sign)
   if (/\bppm\b|mg\s*\/\s*l|\bmg\b|ppb/i.test(raw)) return { unreadable: true }; // not salinity units
   const typed = raw.replace(/(\d),(\d)/g, '$1.$2');
+  // A labelled SG outside the parser's supported range must not disappear
+  // when another value (e.g. 35 ppt) looks normal. Check both label positions
+  // before the generic reader, which only recognises plausible SG numbers.
+  const explicitGravity = [
+    ...typed.matchAll(/\b(?:sg|specific gravity)\s*[:=]?\s*(\d+(?:\.\d+)?|\.\d+)/gi),
+    ...typed.matchAll(/(\d+(?:\.\d+)?|\.\d+)\s*(?:sg|specific gravity)\b/gi),
+  ].map(m => Number(m[1]));
+  if (explicitGravity.some(g => g < 0.98 || g > 1.1)) return { unreadable: true };
   // Check ALL stated readings before choosing one. Percent and repeated ppt/SG
   // readings used to bypass the two-number check below (35 ppt / 0% became 0).
   const readings = [...typed.matchAll(/\d+(?:\.\d+)?|\.\d+/g)].flatMap(m => {

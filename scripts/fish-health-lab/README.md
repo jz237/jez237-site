@@ -789,3 +789,12 @@ scaleless-fish medication variants remain. Cooler/blank readings retain the
 existing plans. Aeration leads the replacement step so the Lab does not show a
 heater shopping link beside a warning against more heat. Regression tests:
 `heat-readings.test.mjs`. Lab delivery only; no personal-site release by this loop.
+
+## Explicit invalid SG follow-up — November 16, 2026
+
+A normal ppt/percent reading no longer hides an explicitly labelled SG outside
+the parser's supported range (`35 ppt / SG 1.40`, `3.5% (SG 35)`). Prefix and
+suffix labels, decimal commas and `specific gravity` wording are checked before
+choosing a reading. Invalid pairs request an instrument recheck, not a guessed
+salinity correction. Valid pairs and extreme single-reading warnings remain.
+Lab-only delivery; no personal-site or production deployment by this loop.
