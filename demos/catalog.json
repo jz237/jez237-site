@@ -1,5 +1,29 @@
 [
   {
+    "id": "034",
+    "title": "Ocean Water Lab",
+    "category": "3D · Ocean simulation",
+    "description": "Shape a living ocean: rolling FFT waves, breaking surf, tides, storms and rogue waves. Cruise in a speedboat or take the helm of a cannon-firing pirate ship.",
+    "url": "ocean-water-lab/",
+    "image": "assets/ocean-water-lab.jpg",
+    "imageAlt": "Golden coastal ocean and the Ocean Water Lab controls",
+    "source": "https://github.com/jz237/jez237-site/tree/main/scripts/ocean-water-lab",
+    "features": [
+      "Nine ocean looks and a cinematic tour",
+      "Speedboat and pirate-ship sailing",
+      "Weather, buoyancy and procedural sound",
+      "Advanced controls and engine-setting exports"
+    ],
+    "facts": [
+      "Self-hosted",
+      "WebGL2",
+      "v1.4.0"
+    ],
+    "note": "Original by Rahul Bhola · MIT license · Touch helm added · Demanding scenes work best on desktop.",
+    "imageWidth": 1280,
+    "imageHeight": 760
+  },
+  {
     "id": "033",
     "title": "Voxel Engine",
     "category": "3D · Destruction sandbox",

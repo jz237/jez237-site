@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22%3E%3Ctext y=%2250%22 font-size=%2250%22%3E🌊%3C/text%3E%3C/svg%3E">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ocean Water Lab — Jez237</title><meta name="description" content="Explore waves, storms and sailing in Rahul Bhola’s Ocean Water Lab.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&amp;family=Saira+Condensed:wght@500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+:root {
+  /* layout: the sea fills the frame; a shipping-forecast readout sits top left,
+     the bridge instrument panel docks right and becomes a bottom sheet on phones */
+  --hull: #06121d;
+  --panel: rgba(6, 18, 29, 0.76);
+  --line: rgba(198, 228, 240, 0.17);
+  --text: #e8f1f4;
+  --muted: #94acb8;
+  --signal: #ffb84d;
+  --foam: #d8f4f6;
+  --display: "Saira Condensed", "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; margin: 0; }
+body {
+  background: var(--hull); color: var(--text); font-family: var(--display); font-size: 16px;
+  overflow: hidden; overflow: clip; -webkit-font-smoothing: antialiased;
+  -webkit-user-select: none; user-select: none;
+}
+#sea { position: absolute; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; cursor: grab; outline: none; }
+#sea:active { cursor: grabbing; }
+
+.plate {
+  background: var(--panel); border: 1px solid var(--line); border-radius: 4px;
+  -webkit-backdrop-filter: blur(14px) saturate(1.2); backdrop-filter: blur(14px) saturate(1.2);
+}
+.forecast {
+  position: absolute; top: 16px; left: 16px; max-width: min(400px, calc(100% - 32px));
+  padding: 12px 18px 14px; pointer-events: none;
+}
+.forecast h1 {
+  margin: 0; font-size: 15px; font-weight: 600; letter-spacing: 0.26em; text-transform: uppercase; color: var(--foam);
+}
+.state { margin: 5px 0 11px; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; line-height: 1; }
+.state #ro-state { font-size: 40px; font-weight: 700; letter-spacing: 0.01em; text-transform: uppercase; }
+.state #ro-name { font-size: 22px; font-weight: 500; color: var(--signal); text-transform: uppercase; letter-spacing: 0.08em; }
+.figures { margin: 0; display: flex; flex-wrap: wrap; gap: 8px 22px; }
+.figures div { display: flex; flex-direction: column; gap: 1px; }
+.figures dt { font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); }
+.figures dd { margin: 0; font-family: var(--mono); font-size: 14px; font-variant-numeric: tabular-nums; color: var(--muted); }
+.figures b { font-weight: 500; font-size: 19px; color: var(--text); }
+
+.panel {
+  position: absolute; top: 16px; right: 16px; max-height: calc(100% - 32px); width: 318px;
+  display: flex; flex-direction: column; gap: 14px; padding: 14px 16px 16px;
+  overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; scrollbar-color: var(--line) transparent;
+}
+.panel section { display: flex; flex-direction: column; gap: 9px; }
+.panel section + section, .panel .tab > section:first-child { border-top: 1px solid var(--line); padding-top: 12px; }
+.tab { display: flex; flex-direction: column; gap: 14px; }
+.tab[hidden] { display: none; }
+.tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; border: 1px solid var(--line); border-radius: 2px; }
+.tabs button { border: 0; border-radius: 0; padding: 8px 6px 7px; }
+.tabs button + button { border-left: 1px solid var(--line); }
+details { border-top: 1px solid var(--line); padding-top: 9px; }
+details:first-child { border-top: 0; padding-top: 0; }
+details > summary { cursor: pointer; list-style: none; font-size: 13px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); padding: 2px 0 8px; }
+details > summary::-webkit-details-marker { display: none; }
+details > summary::before { content: "+"; display: inline-block; width: 1.1em; color: var(--signal); font-family: var(--mono); letter-spacing: 0; }
+details[open] > summary::before { content: "\2212"; }
+details .row { margin-bottom: 7px; }
+details .chips { margin: 4px 0 8px; }
+.row label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#tab-adv .row { grid-template-columns: 116px 1fr 66px; gap: 8px; }
+#tab-adv .row label { font-size: 14px; }
+input[type="color"] { -webkit-appearance: none; appearance: none; width: 100%; height: 20px; padding: 0; border: 1px solid var(--line); border-radius: 2px; background: none; cursor: pointer; }
+input[type="color"]::-webkit-color-swatch-wrapper { padding: 2px; }
+input[type="color"]::-webkit-color-swatch { border: 0; border-radius: 1px; }
+textarea { width: 100%; min-height: 150px; resize: vertical; background: rgba(0, 0, 0, 0.3); color: var(--text); border: 1px solid var(--line); border-radius: 2px; padding: 8px; font: 11.5px/1.45 var(--mono); -webkit-user-select: text; user-select: text; }
+textarea#import-text { min-height: 70px; }
+.note { margin: 0; font-size: 14px; line-height: 1.35; color: var(--muted); letter-spacing: 0.02em; }
+.panel h2 { margin: 0; font-size: 13px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+button {
+  font: 500 15px/1 var(--display); letter-spacing: 0.06em; text-transform: uppercase; color: var(--text);
+  background: rgba(198, 228, 240, 0.07); border: 1px solid var(--line); border-radius: 2px;
+  padding: 7px 10px 6px; cursor: pointer; transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+button:hover { background: rgba(198, 228, 240, 0.16); }
+button[aria-pressed="true"] { background: var(--signal); border-color: var(--signal); color: #1a1205; font-weight: 600; }
+button:focus-visible, input:focus-visible { outline: 2px solid var(--foam); outline-offset: 2px; }
+.row { display: grid; grid-template-columns: 94px 1fr 68px; align-items: center; gap: 10px; }
+.row label { font-size: 15px; letter-spacing: 0.04em; color: var(--text); }
+.row output { font-family: var(--mono); font-size: 12.5px; font-variant-numeric: tabular-nums; color: var(--signal); text-align: right; }
+input[type="range"] { -webkit-appearance: none; appearance: none; width: 100%; height: 18px; margin: 0; background: transparent; cursor: pointer; }
+input[type="range"]::-webkit-slider-runnable-track { height: 2px; background: var(--line); }
+input[type="range"]::-moz-range-track { height: 2px; background: var(--line); }
+input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 9px; height: 16px; margin-top: -7px; background: var(--signal); border: 0; border-radius: 1px; }
+input[type="range"]::-moz-range-thumb { width: 9px; height: 16px; background: var(--signal); border: 0; border-radius: 1px; }
+
+.hint {
+  position: absolute; left: 16px; bottom: 16px; max-width: calc(100% - 356px); margin: 0; padding: 8px 14px 7px;
+  display: flex; flex-wrap: wrap; gap: 3px 18px; align-items: baseline;
+  font-size: 14px; letter-spacing: 0.05em; color: var(--muted); pointer-events: none;
+}
+.hint .meter { color: var(--text); }
+body.touring .forecast, body.touring .hint, body.touring #drive-hud { display: none; }
+#tour-caption { position: absolute; left: 24px; bottom: 76px; padding: 14px 22px 13px 20px; border-left: 4px solid var(--signal); display: flex; flex-direction: column; gap: 4px; pointer-events: none; }
+#tour-caption[hidden] { display: none; }
+#tour-a { font-size: 30px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; }
+#tour-b { font-size: 19px; color: var(--muted); letter-spacing: 0.04em; }
+#tour-caption.big { left: 50%; top: 42%; bottom: auto; transform: translate(-50%, -50%); background: none; border: 0; -webkit-backdrop-filter: none; backdrop-filter: none; text-align: center; }
+#tour-caption.big #tour-a { font-size: 64px; letter-spacing: 0.3em; }
+#tour-caption.big #tour-b { font-size: 24px; color: var(--signal); }
+#rec-status { position: absolute; top: 18px; left: 50%; transform: translateX(-50%); padding: 5px 12px 4px; border-radius: 2px; background: #c62828; color: #fff; font: 600 14px var(--mono); letter-spacing: 0.1em; pointer-events: none; }
+#rec-status[hidden] { display: none; }
+#drive-hud { position: absolute; left: 50%; bottom: 64px; transform: translateX(-50%); display: flex; gap: 6px 18px; flex-wrap: wrap; justify-content: center; align-items: baseline;
+  padding: 9px 16px 8px; max-width: min(720px, calc(100% - 360px)); font-size: 14px; letter-spacing: 0.06em; color: var(--muted); pointer-events: none; }
+#drive-hud[hidden] { display: none; }
+#drive-hud #hud-vessel { color: var(--signal); text-transform: uppercase; letter-spacing: 0.16em; font-weight: 600; }
+#drive-hud b { font-family: var(--mono); font-weight: 500; font-size: 20px; color: var(--text); }
+#drive-hud #hud-keys { flex-basis: 100%; text-align: center; font-size: 13px; }
+.hint .meter { font-family: var(--mono); font-size: 12px; font-variant-numeric: tabular-nums; }
+#note:empty { display: none; }
+#loading {
+  position: absolute; left: 0; right: 0; top: 50%; margin: 0; text-align: center; pointer-events: none;
+  font-size: 15px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--muted);
+}
+body.ready #loading, body.nogl #loading, body.failed #loading { display: none; }
+#panel-toggle { display: none; position: absolute; top: 16px; right: 16px; background: var(--panel); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); padding: 10px 12px 9px; }
+
+.message {
+  display: none; position: absolute; inset: 0; align-items: center; justify-content: center; padding: 24px; text-align: center;
+  background: var(--hull); font-size: 20px; line-height: 1.4; letter-spacing: 0.03em;
+}
+.message p { max-width: 34em; margin: 0; }
+.message pre { font: 12px/1.5 var(--mono); color: var(--muted); white-space: pre-wrap; text-align: left; max-width: 90vw; overflow-x: auto; }
+body.nogl #msg-nogl, body.failed #msg-failed { display: flex; flex-direction: column; gap: 14px; }
+body.nogl .panel, body.nogl .forecast, body.nogl .hint, body.failed .panel, body.failed .forecast, body.failed .hint { display: none; }
+
+@media (max-width: 760px) {
+  .forecast { top: 12px; left: 12px; max-width: calc(100% - 136px); padding: 9px 12px 10px; }
+  .state #ro-state { font-size: 28px; }
+  .state #ro-name { font-size: 17px; }
+  .figures { gap: 6px 16px; }
+  .figures div:nth-child(n+3) { display: none; }
+  #panel-toggle { display: block; top: 12px; }
+  .panel { top: auto; left: 0; right: 0; bottom: 0; width: auto; max-height: 54%; border-radius: 6px 6px 0 0; border-width: 1px 0 0; transform: translateY(105%); visibility: hidden; transition: transform 0.25s ease, visibility 0s linear 0.25s; }
+  body.panel-open .panel { transform: none; visibility: visible; transition: transform 0.25s ease, visibility 0s; }
+  .hint { left: 12px; bottom: 12px; max-width: calc(100% - 24px); font-size: 13px; }
+  .hint span:nth-child(3), .hint span:nth-child(4) { display: none; }
+  #panel-toggle { top: 12px; right: 12px; }
+  body.panel-open .hint { display: none; }
+}
+@media (prefers-reduced-motion: reduce) { .panel, button { transition: none; } }
+
+.site-credit {margin:8px 0 0;font-size:12px;line-height:1.5} .site-credit a {color:#b8e8f0}
+#touch-helm {display:none;position:absolute;bottom:60px;left:12px;right:12px;justify-content:center;gap:6px;z-index:4}
+#touch-helm button {min-width:46px;min-height:46px;touch-action:none;user-select:none;background:#092330;color:#ddf7ff;border:1px solid #7495a3;border-radius:8px}
+@media(pointer:coarse) {body:has(#drive-hud:not([hidden])) #touch-helm {display:flex} body.panel-open #touch-helm,body.touring #touch-helm {display:none} #drive-hud {bottom:115px;width:90%} #hud-keys {display:none}}
+</style>
+</head>
+<body>
+<canvas id="sea" tabindex="0" aria-label="Real-time ocean. Drag to look around, scroll to zoom, click the water to drop an object."></canvas>
+
+<header class="forecast plate">
+  <h1>Ocean Water Lab</h1>
+  <p class="state"><span id="ro-state">Sea state 4</span><span id="ro-name">Moderate</span></p>
+  <dl class="figures">
+    <div><dt>Wave height</dt><dd><b id="ro-hs">1.96</b> m</dd></div>
+    <div><dt>Peak period</dt><dd><b id="ro-tp">7.1</b> s</dd></div>
+    <div><dt>Wavelength</dt><dd><b id="ro-lp">79</b> m</dd></div>
+    <div><dt>Beaufort</dt><dd><b id="ro-bf">5</b></dd></div>
+  </dl>
+<p class="site-credit"><a href="/demos/">← Demos</a> · By <a href="https://github.com/rahulbhola877/ocean-water-lab">Rahul Bhola</a> · v1.4.0 · site 1</p></header>
+
+<button id="panel-toggle" type="button" aria-expanded="false" aria-controls="panel">Controls</button>
+
+<aside id="panel" class="panel plate" aria-label="Sea, sky and water controls">
+  <section>
+    <h2>Game look</h2>
+    <div class="chips" id="scene-chips"></div>
+    <div class="chips">
+      <button type="button" id="tour-play">Play tour</button>
+      <button type="button" id="tour-rec">Record tour</button>
+      <button type="button" id="film-render" title="Renders the tour frame by frame into a smooth 1080p MP4, however slow the GPU">Render film</button>
+      <button type="button" id="rec-free">Record</button>
+      <button type="button" data-toggle="sound">Sound</button>
+      <button type="button" id="rec-save" hidden>Save last video</button>
+    </div>
+    <div class="tabs">
+      <button type="button" data-tab="quick" aria-pressed="true">Quick</button>
+      <button type="button" data-tab="adv" aria-pressed="false">Advanced</button>
+      <button type="button" data-tab="export" aria-pressed="false">Export</button>
+    </div>
+  </section>
+  <div class="tab" id="tab-quick">
+  <section>
+    <h2>Sea</h2>
+    <div class="chips">
+      <button type="button" data-set="sea:calm">Calm</button>
+      <button type="button" data-set="sea:breeze">Breeze</button>
+      <button type="button" data-set="sea:rough">Rough</button>
+      <button type="button" data-set="sea:storm">Storm</button>
+    </div>
+    <div class="row"><label for="s-wind">Wind</label><input id="s-wind" type="range" min="1" max="24" step="0.1"><output id="v-wind" for="s-wind"></output></div>
+    <div class="row"><label for="s-windDir">Heading</label><input id="s-windDir" type="range" min="0" max="360" step="1"><output id="v-windDir" for="s-windDir"></output></div>
+    <div class="row"><label for="s-chop">Chop</label><input id="s-chop" type="range" min="0" max="1.2" step="0.01"><output id="v-chop" for="s-chop"></output></div>
+    <div class="row"><label for="s-swell">Swell</label><input id="s-swell" type="range" min="0" max="4" step="0.1"><output id="v-swell" for="s-swell"></output></div>
+    <div class="row"><label for="s-foam">Whitecaps</label><input id="s-foam" type="range" min="0" max="4" step="0.1"><output id="v-foam" for="s-foam"></output></div>
+  </section>
+  <section>
+    <h2>Sky</h2>
+    <div class="chips">
+      <button type="button" data-set="sky:day">Day</button>
+      <button type="button" data-set="sky:noon">Noon</button>
+      <button type="button" data-set="sky:golden">Golden hour</button>
+      <button type="button" data-set="sky:overcast">Overcast</button>
+      <button type="button" data-set="sky:night">Night</button>
+    </div>
+    <div class="row"><label for="s-sunElev">Sun height</label><input id="s-sunElev" type="range" min="-3" max="80" step="0.5"><output id="v-sunElev" for="s-sunElev"></output></div>
+    <div class="row"><label for="s-sunAz">Sun bearing</label><input id="s-sunAz" type="range" min="0" max="360" step="1"><output id="v-sunAz" for="s-sunAz"></output></div>
+    <div class="row"><label for="s-clouds">Cloud</label><input id="s-clouds" type="range" min="0" max="1" step="0.01"><output id="v-clouds" for="s-clouds"></output></div>
+  </section>
+  <section>
+    <h2>Water</h2>
+    <div class="chips">
+      <button type="button" data-set="water:ocean">Open ocean</button>
+      <button type="button" data-set="water:lagoon">Lagoon</button>
+      <button type="button" data-set="water:coast">Green coast</button>
+      <button type="button" data-set="water:tropical">Tropical</button>
+      <button type="button" data-set="water:emerald">Emerald</button>
+      <button type="button" data-set="water:navy">Navy</button>
+    </div>
+    <div class="chips">
+      <button type="button" data-toggle="rain">Rain</button>
+      <button type="button" data-toggle="dive">Dive under</button>
+      <button type="button" data-toggle="follow">Chase cam</button>
+      <button type="button" data-toggle="autopilot">Autopilot</button>
+    </div>
+  </section>
+  <section>
+    <h2>Vessel</h2>
+    <div class="chips">
+      <button type="button" data-set="vessel:speedboat">Speedboat</button>
+      <button type="button" data-set="vessel:ship">Pirate ship</button>
+      <button type="button" data-toggle="boat">Show</button>
+      <button type="button" id="helm">Take the helm</button>
+    </div>
+  </section>
+  <section>
+    <h2>Click water to drop</h2>
+    <div class="chips">
+      <button type="button" data-set="drop:crate">Crate</button>
+      <button type="button" data-set="drop:barrel">Barrel</button>
+      <button type="button" data-set="drop:buoy">Buoy</button>
+      <button type="button" data-set="drop:raft">Raft</button>
+    </div>
+    <div class="chips">
+      <button type="button" data-toggle="stir">Stir with drag</button>
+      <button type="button" id="reset">Reset objects</button>
+    </div>
+  </section>
+  <section>
+    <h2>Detail</h2>
+    <div class="chips">
+      <button type="button" data-set="quality:auto">Auto</button>
+      <button type="button" data-set="quality:low">Low</button>
+      <button type="button" data-set="quality:high">High</button>
+    </div>
+  </section>
+  </div>
+  <div class="tab" id="tab-adv" hidden></div>
+  <div class="tab" id="tab-export" hidden>
+  <section>
+    <h2>Export settings</h2>
+    <div class="chips" id="export-fmt">
+      <button type="button" data-fmt="json" aria-pressed="true">JSON</button>
+      <button type="button" data-fmt="kit" aria-pressed="false">Kit uniforms</button>
+      <button type="button" data-fmt="unity" aria-pressed="false">Unity</button>
+      <button type="button" data-fmt="unreal" aria-pressed="false">Unreal</button>
+      <button type="button" data-fmt="godot" aria-pressed="false">Godot</button>
+    </div>
+    <textarea id="export-text" readonly spellcheck="false" aria-label="Exported settings"></textarea>
+    <div class="chips"><button type="button" id="export-copy">Copy</button><button type="button" id="export-save">Download</button></div>
+    <p class="note" id="export-note">Kit uniforms are exact for the shaders in water-kit. Unity HDRP and Unreal Water fields are the closest equivalents and need a look-over in the engine.</p>
+  </section>
+  <section>
+    <h2>Import</h2>
+    <textarea id="import-text" spellcheck="false" placeholder="Paste exported JSON here" aria-label="Settings to import"></textarea>
+    <div class="chips"><button type="button" id="import-load">Load</button><button type="button" id="reset-all">Reset all</button></div>
+  </section>
+  </div>
+</aside>
+
+<p class="hint plate">
+  <span>Drag to look</span><span>Scroll or pinch to zoom</span><span>Right-drag to move</span><span>Shift-drag to stir</span><span id="drive-hint" hidden>WASD to drive</span>
+  <span class="meter"><span id="ro-fps">60</span> fps at <span id="ro-res">0×0</span></span>
+  <span id="note"></span>
+</p>
+
+<div id="tour-caption" class="plate" hidden><span id="tour-a"></span><span id="tour-b"></span></div>
+<div id="rec-status" hidden>REC 0:00</div>
+<div id="drive-hud" class="plate" hidden>
+  <span id="hud-vessel">Speedboat</span>
+  <span><b id="hud-speed">0</b> kn</span>
+  <span>HDG <b id="hud-hdg">000</b></span>
+  <span id="hud-power"></span>
+  <span id="hud-keys"></span>
+</div>
+<div id="touch-helm" aria-label="Touch sailing controls">
+<button data-key="a" aria-label="Steer left">◀</button><button data-key="w" aria-label="Throttle or sail up">▲</button><button data-key="s" aria-label="Throttle or sail down">▼</button><button data-key="d" aria-label="Steer right">▶</button><button data-key="Shift">Boost</button><button data-key=" ">Fire</button></div>
+<p id="loading">Raising the sea</p>
+<div class="message" id="msg-nogl"><p>This browser has no WebGL 2, which the ocean needs. Open the page in a current Chrome, Edge, Firefox or Safari.</p></div>
+<div class="message" id="msg-failed"><p>The ocean could not start on this graphics driver.</p><pre id="error"></pre></div>
+
+<script>
+/*@KIT_JS@*/
+</script>
+<script>
+window.WATER_SHADERS = /*@SHADERS@*/;
+</script>
+<script>
+/*@MAIN_JS@*/
+</script>
+<script>
+const held=new Map();
+const release=(id)=>{const key=held.get(id);if(key!==undefined){window.dispatchEvent(new KeyboardEvent('keyup',{key}));held.delete(id)}};
+document.querySelectorAll('#touch-helm button').forEach(b=>{
+ b.addEventListener('pointerdown',e=>{e.preventDefault();b.setPointerCapture(e.pointerId);held.set(e.pointerId,b.dataset.key);window.dispatchEvent(new KeyboardEvent('keydown',{key:b.dataset.key,cancelable:true}));});
+ ['pointerup','pointercancel','lostpointercapture'].forEach(type=>b.addEventListener(type,e=>release(e.pointerId)));
+});
+window.addEventListener('blur',()=>[...held.keys()].forEach(release));
+document.addEventListener('visibilitychange',()=>{if(document.hidden)[...held.keys()].forEach(release)});
+</script></body>
+</html>
