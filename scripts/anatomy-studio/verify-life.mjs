@@ -8,19 +8,20 @@ import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
+const SLOW = Number(process.env.STUDIO_SLOW) || 1;   // multiplies every wait: CI's small runners render several times slower
 
 const url = process.env.STUDIO_URL || 'http://127.0.0.1:8791/demos/anatomy-studio/';
 const HERE = path.dirname(fileURLToPath(import.meta.url)), DEMO = path.resolve(HERE, '../../demos/anatomy-studio');
 const manifest = JSON.parse(await readFile(path.join(DEMO, 'manifest.json'), 'utf8'));
 const budget = JSON.parse(await readFile(path.join(HERE, 'budget.json'), 'utf8'));
 const args = ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist', '--enable-webgl', '--disable-gpu-sandbox'];
-const browser = await chromium.launch({executablePath: process.env.CHROME_PATH || undefined, headless: true, args});
+const browser = await chromium.launch({executablePath: process.env.CHROME_PATH || undefined, headless: true, args}); { const open = browser.newPage.bind(browser); browser.newPage = async options => { const p = await open(options); p.setDefaultTimeout(30000 * SLOW); return p; }; }
 const errors = [];
-const ready = p => p.waitForFunction(() => document.body.dataset.ready === 'true', null, {timeout: 240000});
-const full = p => p.waitForFunction(() => window.anatomyStudio.getState().stage === 'detail' && !window.anatomyStudio.getState().loading, null, {timeout: 240000});
+const ready = p => p.waitForFunction(() => document.body.dataset.ready === 'true', null, {timeout: 240000 * SLOW});
+const full = p => p.waitForFunction(() => window.anatomyStudio.getState().stage === 'detail' && !window.anatomyStudio.getState().loading, null, {timeout: 240000 * SLOW});
 try {
  // the assembled body is alive: the heart beats, the chest breathes, bone keeps its size, the limbs stay still, and exploding stops it all exactly
- const alive = await browser.newPage({viewport: {width: 1024, height: 800}}); alive.on('pageerror', e => errors.push(e.message)); alive.setDefaultTimeout(300000); /* software rendering can fall a minute behind, and a click waits for a steady frame */ await alive.goto(`${url}?quality=verify&stage=core&life=1`); await ready(alive);
+ const alive = await browser.newPage({viewport: {width: 1024, height: 800}}); alive.on('pageerror', e => errors.push(e.message)); alive.setDefaultTimeout(300000 * SLOW); /* software rendering can fall a minute behind, and a click waits for a steady frame */ await alive.goto(`${url}?quality=verify&stage=core&life=1`); await ready(alive);
  const motion = await alive.evaluate(() => { const A = window.anatomyStudio, ids = {lv: 'heart/left-ventricle', lung: 'visceral/inferior-lobe-of-left-lung', liver: 'visceral/liver', rib: 'skeletal/seventh-rib-l', sternum: 'skeletal/body-of-sternum', spine: 'skeletal/vertebra-t6', femur: 'skeletal/femur-l'};
   const at = Object.fromEntries(Object.entries(ids).map(([k, id]) => [k, A.getParts().findIndex(p => p.id === id)])), r = Object.fromEntries(Object.keys(ids).map(k => [k, {scale: [9, -9], move: 0}]));
   for (let i = 0; i < 100; i++) { A._advance(.1); const ps = A.getParts(); for (const k in ids) { const p = ps[at[k]], s = (p.scale[0] + p.scale[1] + p.scale[2]) / 3; r[k].scale = [Math.min(r[k].scale[0], s), Math.max(r[k].scale[1], s)]; r[k].move = Math.max(r[k].move, Math.hypot(...p.position.map((v, j) => v - p.base[j]))); } }
@@ -74,8 +75,8 @@ try {
  await alive.close();
  // a lesson, on a page of its own (it fetches the rest of the body first): one stage of the beat loops with the monitor and the blood flow on, and ending it puts everything back
  // (clicks on these two pages are dispatched, not aimed: software rendering falls up to a minute behind at random, and an aimed click waits for a steady frame; verify.mjs covers real clicks)
- const lesson = await browser.newPage({viewport: {width: 1024, height: 800}}); lesson.on('pageerror', e => errors.push(e.message)); lesson.setDefaultTimeout(300000); await lesson.goto(`${url}?quality=verify&stage=core&life=1`, {timeout: 180000}); await ready(lesson);
- await lesson.locator('#lesson-beat').dispatchEvent('click'); await lesson.waitForFunction(() => window.anatomyStudio.getState().tour.active && !window.anatomyStudio.getState().loading, null, {timeout: 600000}); await lesson.locator('#tour-next').dispatchEvent('click'); await lesson.locator('#tour-next').dispatchEvent('click'); await lesson.waitForFunction(() => /Ejection/.test(document.getElementById('tour-title').textContent));
+ const lesson = await browser.newPage({viewport: {width: 1024, height: 800}}); lesson.on('pageerror', e => errors.push(e.message)); lesson.setDefaultTimeout(300000 * SLOW); await lesson.goto(`${url}?quality=verify&stage=core&life=1`, {timeout: 180000 * SLOW}); await ready(lesson);
+ await lesson.locator('#lesson-beat').dispatchEvent('click'); await lesson.waitForFunction(() => window.anatomyStudio.getState().tour.active && !window.anatomyStudio.getState().loading, null, {timeout: 600000 * SLOW}); await lesson.locator('#tour-next').dispatchEvent('click'); await lesson.locator('#tour-next').dispatchEvent('click'); await lesson.waitForFunction(() => /Ejection/.test(document.getElementById('tour-title').textContent));
  const taught = await lesson.evaluate(() => { const A = window.anatomyStudio, seen = new Set(); for (let i = 0; i < 200; i++) { A._advance(1 / 30); seen.add(A.getState().life.phase); } const s = A.getState(); return {phases: [...seen], looping: s.life.looping, flow: s.flow.on, monitor: s.vitals.monitor, stops: s.tour.stops}; });
  assert.deepEqual(taught, {phases: ['Ejection'], looping: true, flow: true, monitor: true, stops: 6}, 'the ejection stage loops on its own');
  await lesson.locator('#tour-end').dispatchEvent('click'); await lesson.evaluate(() => window.anatomyStudio._advance(1));
@@ -83,10 +84,10 @@ try {
  await lesson.close();
  // a desktop link that opens in Organs & vessels loads what that finish shows and keeps the muscles back until a view needs them
  const lean = await browser.newPage({viewport: {width: 1280, height: 860}}); lean.on('pageerror', e => errors.push(e.message)); await lean.goto(`${url}?quality=verify&mode=organs`); await ready(lean);
- await lean.waitForFunction(() => { const x = window.anatomyStudio.getState(); return !x.loading && x.files.length === 9; }, null, {timeout: 240000}); assert.ok(!(await lean.evaluate(() => window.anatomyStudio.getState().files)).includes('muscular'), 'muscles wait');
+ await lean.waitForFunction(() => { const x = window.anatomyStudio.getState(); return !x.loading && x.files.length === 9; }, null, {timeout: 240000 * SLOW}); assert.ok(!(await lean.evaluate(() => window.anatomyStudio.getState().files)).includes('muscular'), 'muscles wait');
  await lean.locator('[data-mode="realistic"]').click(); await full(lean); assert.equal((await lean.evaluate(() => window.anatomyStudio.getState().pieces)), manifest.pieces.length, 'a finish that shows muscles fetches them'); await lean.close();
  // embed: the stage and the explode slider, nothing else
- const embed = await browser.newPage({viewport: {width: 640, height: 420}}); embed.on('pageerror', e => errors.push(e.message)); await embed.goto(`${url}?quality=verify&stage=core&embed`, {timeout: 180000}); await ready(embed);
+ const embed = await browser.newPage({viewport: {width: 640, height: 420}}); embed.on('pageerror', e => errors.push(e.message)); await embed.goto(`${url}?quality=verify&stage=core&embed`, {timeout: 180000 * SLOW}); await ready(embed);
  assert.deepEqual(await embed.evaluate(() => [getComputedStyle(document.querySelector('.inspector')).display, getComputedStyle(document.querySelector('.topbar')).display, getComputedStyle(document.querySelector('.embed-link')).display, document.documentElement.scrollHeight <= innerHeight + 1, !!document.getElementById('explode').offsetParent]), ['none', 'none', 'block', true, true], 'the embed view is the stage, the slider and a link out');
  await embed.close();
  assert.deepEqual(errors, []);
