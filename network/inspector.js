@@ -26,7 +26,8 @@
     function esc(s) {
       return String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
     }
-    function classVar(cls) { return 'var(--nm-class-' + cls + ', #fff)'; }
+    // Only known traffic classes are ever written into markup.
+    function classVar(cls) { return 'var(--nm-class-' + (NetMap.CLASS_LABELS[cls] ? cls : 'browsing') + ', #fff)'; }
 
     function metaRows(node) {
       const rows = [];

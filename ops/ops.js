@@ -20,9 +20,13 @@
   var TICK_MS = 30000;
   var LS_KEY = "opsSnapshot.v1";
 
+  // ?src= is a local development aid only. On the deployed dashboard the link
+  // author must not be able to choose where the snapshot comes from.
   var srcOverride = null;
   try {
-    srcOverride = new URLSearchParams(location.search).get("src");
+    if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
+      srcOverride = new URLSearchParams(location.search).get("src");
+    }
   } catch (e) { /* ignore */ }
   var SNAPSHOT_URL = srcOverride || URL_DEFAULT;
 
