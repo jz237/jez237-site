@@ -90,11 +90,14 @@ export function skinTint(geometry, world) {
  *   headTurn, neckPivot, neckRange   the small turn of the head: a rotation vector, about a point in the neck,
  *                       fading in between the base of the neck and the base of the skull
  *   blink, eyes         0..1 and the two eyeball centres: the upper lids come down over them
+ *   elbows, elbowTurn   the two elbow joints (left, right) and the rotation of each forearm about its own
+ *   xray                overall strength of the X-ray glass (eased down as the camera comes close)
  * The fields are written twice, here in GLSL and in life.js in JavaScript: keep them alike.
  */
 export const lifeUniforms = {time: {value: 0}, gain: {value: 0}, breath: {value: 0}, trunk: {value: new THREE.Vector4(1.1, 1.41, .95, 1.18)}, spine: {value: new THREE.Vector2(-.083, .074)}, chest: {value: new THREE.Vector4(.012, .004, .036, .007)},
   lung: {value: new THREE.Vector2(1.43, .016)}, bodyInverse: {value: new THREE.Matrix4()}, headTurn: {value: new THREE.Vector3()}, neckPivot: {value: new THREE.Vector3(0, 1.484, -.043)}, neckRange: {value: new THREE.Vector2(1.438, 1.53)},
-  blink: {value: 0}, eyes: {value: [new THREE.Vector3(.03, 1.581, .047), new THREE.Vector3(-.03, 1.581, .047)]}};
+  blink: {value: 0}, eyes: {value: [new THREE.Vector3(.03, 1.581, .047), new THREE.Vector3(-.03, 1.581, .047)]},
+  elbows: {value: [new THREE.Vector3(.2, 1.08, -.04), new THREE.Vector3(-.2, 1.08, -.04)]}, elbowTurn: {value: [new THREE.Vector3(), new THREE.Vector3()]}, xray: {value: 1}};
 /** Run another shader edit after whatever the material already does, and keep the program cache key distinct. */
 function alsoCompile(mat, tag, edit) {
   const before = mat.onBeforeCompile, key = Object.hasOwn(mat, 'customProgramCacheKey') ? mat.customProgramCacheKey() : 'plain';
@@ -106,27 +109,29 @@ function alsoCompile(mat, tag, edit) {
  *   WALL  the soft layers of the body wall: skin, muscle and fascia, and the vessels, nerves, ligaments and lymph
  *         nodes threaded through them. They lie on each other with no gap, so they must all move by exactly the
  *         same rule or one shows through the next;
+ *   ARM_L, ARM_R  wall layers of an arm: as WALL, and below the elbow they also turn with the forearm. The arm hangs
+ *         beside the hip, so which limb a vertex belongs to cannot be told from where it is; the piece says so;
  *   SOFT  lungs, pleura and bronchi: carried by the wall and drawn down by the diaphragm, each vertex by its own
  *         amount, so a lung lengthens from a fixed apex instead of stretching as a block.
  * Everything else (bone, heart, solid organs, the diaphragm itself) is moved as a whole piece by life.js.
  * Because it is an attribute of the geometry, any material drawing that geometry can follow the motion: the piece's
  * own material, the shadow pass, the ambient-occlusion pass, the selection outline and the cross-section's caps.
  */
-export const WALL = 128, SOFT = 255;
+export const WALL = 128, ARM_L = 153, ARM_R = 179, SOFT = 255;
 const WALL_FILES = new Set(['regions', 'muscular', 'vessels', 'nerves', 'joints', 'lymphoid']);
-export const layerOf = piece => WALL_FILES.has(piece.file) ? (/^Diaphragm$|spleen|thymus/i.test(piece.name) ? 0 : WALL) : piece.file === 'visceral' && /lung|pleura|bronch/i.test(piece.name) ? SOFT : 0;
+export const layerOf = piece => WALL_FILES.has(piece.file) ? (/^Diaphragm$|spleen|thymus/i.test(piece.name) ? 0 : piece.region === 'upper limb' ? (piece.center[0] > 0 ? ARM_L : ARM_R) : WALL) : piece.file === 'visceral' && /lung|pleura|bronch/i.test(piece.name) ? SOFT : 0;
 export function tagLayer(geometry, layer) { if (layer && !geometry.attributes.lifeLayer) geometry.setAttribute('lifeLayer', new THREE.BufferAttribute(new Uint8Array(geometry.attributes.position.count).fill(layer), 1, true)); }
 /** Make a material follow the living body. Geometry without the lifeLayer attribute reads 0 and is left alone. */
 export function enliven(mat) {
   alsoCompile(mat, 'alive', shader => {
     Object.assign(shader.uniforms, {uBreath: lifeUniforms.breath, uTrunk: lifeUniforms.trunk, uSpine: lifeUniforms.spine, uChest: lifeUniforms.chest, uLung: lifeUniforms.lung, uBodyInverse: lifeUniforms.bodyInverse,
-      uHeadTurn: lifeUniforms.headTurn, uNeckPivot: lifeUniforms.neckPivot, uNeckRange: lifeUniforms.neckRange, uBlink: lifeUniforms.blink, uEyes: lifeUniforms.eyes});
+      uHeadTurn: lifeUniforms.headTurn, uNeckPivot: lifeUniforms.neckPivot, uNeckRange: lifeUniforms.neckRange, uBlink: lifeUniforms.blink, uEyes: lifeUniforms.eyes, uElbows: lifeUniforms.elbows, uElbowTurn: lifeUniforms.elbowTurn});
     shader.vertexShader = shader.vertexShader.replace('#include <common>', `#include <common>
 attribute float lifeLayer;
 uniform float uBreath; uniform vec4 uTrunk; uniform vec2 uSpine; uniform vec4 uChest; uniform vec2 uLung; uniform mat4 uBodyInverse;
-uniform vec3 uHeadTurn; uniform vec3 uNeckPivot; uniform vec2 uNeckRange; uniform float uBlink; uniform vec3 uEyes[ 2 ];
+uniform vec3 uHeadTurn; uniform vec3 uNeckPivot; uniform vec2 uNeckRange; uniform float uBlink; uniform vec3 uEyes[ 2 ]; uniform vec3 uElbows[ 2 ]; uniform vec3 uElbowTurn[ 2 ];
 float lifeStep( float a, float b, float x ) { float t = clamp( ( x - a ) / ( b - a ), 0.0, 1.0 ); return t * t * ( 3.0 - 2.0 * t ); }
-vec3 lifeField( vec3 p, float soft ) {
+vec3 lifeField( vec3 p, float soft, float layer ) {
 	float side = 1.0 - lifeStep( 0.19, 0.27, abs( p.x ) );
 	float chest = lifeStep( uTrunk.x - 0.06, uTrunk.x + 0.07, p.y ) * ( 1.0 - lifeStep( uTrunk.y - 0.01, uTrunk.y + 0.07, p.y ) ) * side;
 	float belly = lifeStep( uTrunk.z - 0.02, uTrunk.z + 0.09, p.y ) * ( 1.0 - lifeStep( uTrunk.w - 0.05, uTrunk.w + 0.03, p.y ) ) * side;
@@ -140,9 +145,11 @@ vec3 lifeField( vec3 p, float soft ) {
 		float lid = ( 1.0 - lifeStep( 0.010, 0.017, abs( q.x ) ) ) * lifeStep( 0.003, 0.008, q.z ) * lifeStep( - 0.002, 0.002, q.y ) * ( 1.0 - lifeStep( 0.003, 0.013, q.y ) );
 		d.y -= uBlink * 0.009 * lid; d.z += uBlink * 0.0012 * lid;
 	}
+	// below the elbow the arm's layers turn with the forearm; the turn fades in across the joint so the skin folds, not tears
+	if ( layer > 0.55 && layer < 0.75 ) { int arm = layer < 0.65 ? 0 : 1; d += cross( uElbowTurn[ arm ], p - uElbows[ arm ] ) * lifeStep( - 0.035, 0.035, uElbows[ arm ].y - p.y ); }
 	return d;
 }`).replace('#include <begin_vertex>', `#include <begin_vertex>
-	if ( lifeLayer > 0.25 ) { mat4 lifeBody = uBodyInverse * modelMatrix; mat3 lifeTurn = mat3( lifeBody ); transformed += transpose( lifeTurn ) * lifeField( ( lifeBody * vec4( transformed, 1.0 ) ).xyz, step( 0.75, lifeLayer ) ) / dot( lifeTurn[ 0 ], lifeTurn[ 0 ] ); }`);
+	if ( lifeLayer > 0.25 ) { mat4 lifeBody = uBodyInverse * modelMatrix; mat3 lifeTurn = mat3( lifeBody ); transformed += transpose( lifeTurn ) * lifeField( ( lifeBody * vec4( transformed, 1.0 ) ).xyz, step( 0.75, lifeLayer ), lifeLayer ) / dot( lifeTurn[ 0 ], lifeTurn[ 0 ] ); }`);
   });
 }
 /** Shadows are drawn with this instead of the stock depth material for pieces that deform, so the shadow moves with them. */
@@ -268,8 +275,8 @@ export function finishMaterial(mesh, part, mode = 'realistic') {
   }
   if (spec.glass) {
     mat.blending = THREE.AdditiveBlending;
-    mat.onBeforeCompile = shader => { shader.fragmentShader = shader.fragmentShader.replace('#include <opaque_fragment>', 'float xrayRim = pow( 1.0 - saturate( abs( dot( normalize( vViewPosition ), normal ) ) ), 2.4 );\n\toutgoingLight = diffuse * ( 0.016 + 0.66 * xrayRim ) + totalEmissiveRadiance * ( 0.3 + xrayRim );\n\t#include <opaque_fragment>'); };
-    mat.customProgramCacheKey = () => 'xray-glass';
+    mat.onBeforeCompile = shader => { shader.uniforms.uXray = lifeUniforms.xray; shader.fragmentShader = shader.fragmentShader.replace('#include <common>', '#include <common>\nuniform float uXray;').replace('#include <opaque_fragment>', 'float xrayRim = pow( 1.0 - saturate( abs( dot( normalize( vViewPosition ), normal ) ) ), 2.4 );\n\toutgoingLight = diffuse * ( 0.016 + 0.66 * xrayRim ) * uXray + totalEmissiveRadiance * ( 0.3 + xrayRim );\n\t#include <opaque_fragment>'); };
+    mat.customProgramCacheKey = () => 'xray-glass2';
   }
   if (r.gut) {   // peristalsis: a slow ripple travelling along the piece's long axis, whatever the finish
     const g = mesh.geometry; if (!g.boundingBox) g.computeBoundingBox();

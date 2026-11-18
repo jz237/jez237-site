@@ -21,6 +21,10 @@ const OPTIONS = 4;
 export function createQuiz({ candidates, reveal, present, clear, onToggle }) {
   const el = id => document.getElementById(id);
   const q = { active: false, mode: 'find', target: null, options: [], asked: 0, found: 0, streak: 0, misses: 0, locked: false, timer: 0, recent: [] };
+  // Kept in this browser between visits: totals, the best streak, and the pieces answered wrongly, which are asked again sooner.
+  const KEY = 'anatomy-studio-quiz';
+  const memory = (() => { try { return { asked: 0, found: 0, best: 0, missed: {}, ...JSON.parse(localStorage.getItem(KEY) || '{}') }; } catch { return { asked: 0, found: 0, best: 0, missed: {} }; } })();
+  const remember = () => { try { localStorage.setItem(KEY, JSON.stringify(memory)); } catch { /* private browsing: the quiz still works, it just forgets */ } };
   const answered = () => Math.max(0, q.asked - (q.locked ? 0 : 1));
 
   function render(feedback = '', tone = '') {
@@ -32,7 +36,7 @@ export function createQuiz({ candidates, reveal, present, clear, onToggle }) {
     const naming = q.mode === 'name';
     el('quiz-eyebrow').textContent = naming ? 'NAME THIS PIECE' : 'FIND THIS PIECE';
     el('quiz-target').textContent = naming ? (q.locked && q.target ? q.target.name : 'Which piece is this?') : q.target ? q.target.name : '';
-    el('quiz-score').textContent = `${q.found} of ${answered()} · streak ${q.streak}`;
+    el('quiz-score').textContent = `${q.found} of ${answered()} · streak ${q.streak} · best ${memory.best}`;
     el('quiz-feedback').textContent = feedback;
     el('quiz-feedback').dataset.tone = tone;
     const box = el('quiz-options');
@@ -64,7 +68,9 @@ export function createQuiz({ candidates, reveal, present, clear, onToggle }) {
       if (q.recent.length) { q.recent.length = 0; next(); return; }   // asked everything on screen: start over
       stop(); el('quiz-note').textContent = 'Nothing on screen to ask about. Show more of the body and try again.'; return;
     }
-    q.target = pool[Math.floor(Math.random() * pool.length)];
+    const again = pool.filter(p => memory.missed[p.name]);   // four times in ten, go back to something missed before
+    const from = again.length && Math.random() < 0.4 ? again : pool;
+    q.target = from[Math.floor(Math.random() * from.length)];
     q.recent.push(q.target.name);
     if (q.recent.length > 60) q.recent.shift();
     q.misses = 0;
@@ -95,12 +101,14 @@ export function createQuiz({ candidates, reveal, present, clear, onToggle }) {
     clear();
     onToggle(false);
     render();
-    el('quiz-note').textContent = summary;
+    el('quiz-note').textContent = summary; el('quiz-memory').textContent = lifetime();
   }
 
   function settle(correct, message) {
     q.locked = true;
     if (correct) { q.found++; q.streak++; } else q.streak = 0;
+    memory.asked++; if (correct) { memory.found++; memory.best = Math.max(memory.best, q.streak); delete memory.missed[q.target.name]; } else memory.missed[q.target.name] = (memory.missed[q.target.name] || 0) + 1;
+    remember();
     reveal(q.target);
     render(message, correct ? 'good' : 'bad');
     q.timer = setTimeout(next, correct ? 1900 : 3200);
@@ -127,12 +135,14 @@ export function createQuiz({ candidates, reveal, present, clear, onToggle }) {
   el('quiz-start').onclick = () => (q.active ? stop() : start());
   el('quiz-skip').onclick = () => { if (q.active && !q.locked) settle(false, q.mode === 'name' ? `This is the ${q.target.name}.` : `Here is the ${q.target.name}.`); };
   el('quiz-end').onclick = () => stop();
+  const lifetime = () => memory.asked ? `All time: ${memory.found} of ${memory.asked} found, best streak ${memory.best}${Object.keys(memory.missed).length ? `, ${Object.keys(memory.missed).length} to revisit` : ''}.` : '';
+  el('quiz-memory').textContent = lifetime();
   render();
 
   return {
     get active() { return q.active; },
     get masking() { return q.active && q.mode === 'name' && !q.locked; },
-    start, stop, answer, choose,
+    start, stop, answer, choose, memory,
     getState: () => ({ active: q.active, mode: q.mode, target: q.target?.id ?? null, options: [...q.options], asked: q.asked, found: q.found, streak: q.streak, misses: q.misses, locked: q.locked })
   };
 }

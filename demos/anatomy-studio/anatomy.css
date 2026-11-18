@@ -112,3 +112,29 @@ h1 em{color:#c9a99c}.hero .eyebrow{color:var(--mint)}
 .vitals-hud canvas{display:block;width:264px;height:96px}
 .board-mode .vitals-hud{display:none}
 @media(max-width:760px){.vitals-hud{right:10px;bottom:auto;top:176px;transform:scale(.72);transform-origin:top right}.vitals{grid-column:1/-1}}
+
+/* ---- loading poster: the preview picture stands in until the first models arrive */
+.loading{background:linear-gradient(#090e14cc,#090e14e6),url(../assets/anatomy-studio.jpg) center/cover no-repeat}
+/* ---- compare: a divider across the stage */
+.compare-handle{position:absolute;top:0;bottom:185px;z-index:3;width:2px;margin-left:-1px;background:var(--mint);cursor:ew-resize;touch-action:none}
+.compare-handle::before{content:'';position:absolute;inset:0 -14px}
+.compare-handle i{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);padding:6px 5px;border-radius:5px;background:var(--mint);color:#2a1410;font-style:normal;font-size:12px;line-height:1}
+.compare-handle span{position:absolute;top:14px;white-space:nowrap;padding:4px 8px;border:1px solid #6b4a40;border-radius:4px;background:#1a1411e6;font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--mint)}
+.compare-handle #compare-left{right:10px}.compare-handle #compare-right{left:10px}
+.compare-handle:focus-visible{outline:2px solid var(--mint);outline-offset:6px}
+.comparing .hero,.board-mode .compare-handle{display:none}
+@media(max-width:760px){.compare-handle{bottom:247px}}
+/* ---- vitals extras */
+.disclaimer{font-style:italic;opacity:.8}
+.panel-footer{flex-wrap:wrap;gap:8px}
+/* ---- embed: ?embed leaves the model, the explode slider and a way out */
+.embed .topbar,.embed .skip-link,.embed .inspector,.embed .hero,.embed .scene-badge,.embed .gesture-hint,.embed .range-labels,.embed .transport-head h2,.embed .transport .eyebrow,.embed #all-parts,.embed #animate{display:none}
+.embed .workspace{display:block;height:100dvh;min-height:0}.embed .stage{height:100dvh;min-height:0}
+.embed .transport{padding:10px 16px 12px}.embed .playback{margin-top:8px}.embed #viewport,.embed .labels,.embed .leaders,.embed .loading{bottom:96px}.embed .leaders{height:calc(100% - 96px)}
+.embed .view-toolbar{display:none}.embed .vitals-hud{bottom:108px}.embed .compare-handle{bottom:96px}
+.embed-link{display:none}.embed .embed-link{display:block;position:absolute;top:12px;right:14px;z-index:4;padding:6px 10px;border:1px solid #6b4a40;border-radius:5px;background:#1a1411e6;color:var(--mint);font-size:10px;letter-spacing:.5px}
+/* four buttons on the tour card: keep each on one line */
+.tour-actions{flex-wrap:nowrap}.tour-actions button{white-space:nowrap;padding:8px 9px}.tour-actions #tour-next{flex:1}.tour-actions #tour-end{margin-left:0}
+/* lessons and tours: the card holds its four buttons, and on a phone the monitor moves below the model while the camera buttons step aside */
+@media(min-width:761px){.tour-card{width:min(372px,calc(100% - 64px))}}
+@media(max-width:760px){.tour-card:not([hidden])~.view-toolbar{display:none}.stage:has(.tour-card:not([hidden])) .vitals-hud{top:auto;bottom:262px;transform-origin:bottom right}}

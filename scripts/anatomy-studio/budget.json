@@ -1,0 +1,17 @@
+{
+  "comment": "Ceilings checked by verify.mjs and verify-life.mjs. Each sits roughly 15% above the value measured on 2026-11-17 (in brackets below), so ordinary work passes and a real regression fails. Raise one only with a reason in the commit message.",
+  "codeBytes": 470000,
+  "codeBytesNote": "HTML, CSS and JavaScript in demos/anatomy-studio, excluding vendor/, with LF line endings [about 390,000]",
+  "vendorBytes": 1200000,
+  "vendorBytesNote": "three.js and its add-ons in vendor/ [1,074,790]",
+  "coreStageBytes": 17500000,
+  "coreStageBytesNote": "the five model files a phone loads before the studio is usable [16,050,540]",
+  "baseModelBytes": 37000000,
+  "baseModelBytesNote": "all ten base model files, which a desktop visit loads [34,464,408]",
+  "drawCalls": 2700,
+  "drawCallsNote": "per frame in the opening view with every system loaded, plain rendering [2,276]",
+  "triangles": 5200000,
+  "trianglesNote": "per frame, same view [4,676,188]",
+  "motionMs": 3,
+  "motionMsNote": "CPU time for one step of the living body with the core systems loaded, averaged; machine-dependent, so the ceiling is generous [0.27 with every system on the development machine]"
+}

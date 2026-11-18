@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 
-import {fileColors as colors} from './materials.js?v=fd0627ad9b';
+import {fileColors as colors} from './materials.js?v=5290592a00';
 const order=Object.keys(colors);
 
 /** A camera-facing, non-overlapping board of independently scaled 3D parts. */

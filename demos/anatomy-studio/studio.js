@@ -6,23 +6,24 @@ import { EffectComposer } from './vendor/postprocessing/EffectComposer.js';
 import { RenderPass } from './vendor/postprocessing/RenderPass.js';
 import { GTAOPass } from './vendor/postprocessing/GTAOPass.js';
 import { OutputPass } from './vendor/postprocessing/OutputPass.js';
-import { PartsBoard } from './parts-board.js?v=365033683b';
-import { finishMaterial, studioEnvironment, fileLabels, fileColors, modes, organPiece, projectedUV, skinTint, tagLayer, enliven } from './materials.js?v=fd0627ad9b';
+import { PartsBoard } from './parts-board.js?v=e3b7b13125';
+import { finishMaterial, studioEnvironment, fileLabels, fileColors, modes, organPiece, projectedUV, skinTint, tagLayer, enliven, lifeUniforms } from './materials.js?v=5290592a00';
 import { assemblies, bodyLandmarks, assemblyContext, assemblyOffset } from './assemblies.js?v=98fdd3ac69';
 import { bodyOffset, bodySpread, explodeSchedule } from './explode-rules.js?v=742c72af7e';
 import { layoutLabels } from './labels.js?v=5a33037751';
-import { createSection } from './section.js?v=686dcf1601';
-import { createQuiz } from './quiz.js?v=bcf9b3a438';
-import { createTour } from './tour.js?v=7c4b903d8e';
+import { createSection } from './section.js?v=4b27f180ad';
+import { createQuiz } from './quiz.js?v=c8d5755f3b';
+import { createTour } from './tour.js?v=37c81856aa';
 import { keyFacts, relatedPieces, summary } from './facts.js?v=12aa155dc7';
 import { readURL, writeURL } from './url-state.js?v=d7621eb958';
 import { systemNotes, pieceNotes } from './tour-notes.js?v=bb3933d4cf';
 import { UnrealBloomPass } from './vendor/postprocessing/UnrealBloomPass.js';
 import { BokehPass } from './vendor/postprocessing/BokehPass.js';
-import { createOutline, syncSkinDepth, skinDepthMaterial, cavityTint, createFloorReflection, tubePath } from './effects.js?v=039643d2d5';
-import { createLife } from './life.js?v=342c152a42';
-import { createVitals } from './vitals.js?v=284c6d38fa';
-import { createFlow } from './flow.js?v=45b1f16515';
+import { createOutline, syncSkinDepth, skinDepthMaterial, cavityTint, createFloorReflection, tubePath } from './effects.js?v=e6f679f535';
+import { createLife, BEAT_PHASES } from './life.js?v=19dcaad8b1';
+import { createVitals } from './vitals.js?v=e2cd010288';
+import { createFlow } from './flow.js?v=d5412ec2d6';
+import { searchTerms } from './synonyms.js?v=47fefaf02f';
 
 const $ = id => document.getElementById(id);
 const params = new URLSearchParams(location.search);
@@ -30,7 +31,7 @@ const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const mobile = matchMedia('(max-width: 760px)').matches || (matchMedia('(pointer: coarse)').matches && innerWidth < 900);
 const verifyQuality = params.get('quality') === 'verify';
 const DEFAULT_MODE = 'xray';   // the finish the studio opens in; it is also the one a link leaves unsaid
-const state = { ready:false, amount:0, target:0, sequence:false, sequenceTime:0, selected:null, isolated:false, system:'all', mode:DEFAULT_MODE, view:'hero', board:false, assembly:null, assemblySide:'L', labels:false, labelAll:false, ao:false, detail:false, stage:'none', loading:false, rotate:false, hidden:new Set(), off:new Set(), quiz:false, only:'all', fx:false, dof:false };
+const state = { ready:false, amount:0, target:0, sequence:false, sequenceTime:0, selected:null, isolated:false, system:'all', mode:DEFAULT_MODE, view:'hero', board:false, assembly:null, assemblySide:'L', labels:false, labelAll:false, ao:false, detail:false, stage:'none', loading:false, rotate:false, hidden:new Set(), off:new Set(), quiz:false, only:'all', fx:false, dof:false, compare:null, compareX:.5 };
 const parts = [], partsById = new Map(), landmarks = [], raycaster = new THREE.Raycaster(), pointer = new THREE.Vector2();
 let manifest, descriptions = null, renderer, controls, camera, scene, model, last = performance.now(), pointerStart = null, viewTween = null, lastApplied = -1, explodeTween = null;
 const hi = { geometries:new Map(), loaded:new Set(), loading:new Set(), frame:0 };
@@ -48,7 +49,8 @@ let resizeStage = () => {};
 let outline = null, mirror = null, bloomPass = null, bokehPass = null, tinting = false;
 // The assembled body breathes and its heart beats (life.js). Off for reduced motion, in the verification runs (they compare exact positions) and with ?life=0.
 const life = createLife(); life.on = params.has('life') ? params.get('life') !== '0' : !reducedMotion && !verifyQuality && !mobile;
-let vitals = null, flow = null, flowOn = true, lifeSkip = false;
+let vitals = null, flow = null, flowOn = false, lifeSkip = false, saveShot = false, hovering = false, lesson = null;   // flow and the monitor wait to be asked for: the opening view is the model
+if (params.has('embed')) document.body.classList.add('embed');   // a bare stage for dropping into another page
 const pathQueue = [];
 const tintQueue = [];
 // Explode order: outer layers leave first and come back last. A piece starts moving at its lag and every piece arrives at 100%.
@@ -127,7 +129,9 @@ function init(){
  renderer.domElement.addEventListener('dblclick', e => { if (!state.ready || state.board || state.quiz) return; const hit = pick(e); if (hit) { selectPart(hit.userData.part); focusSelected(); } });   // double-click frames a piece without isolating it
  let lastMove = 0;
  renderer.domElement.addEventListener('pointermove', e => { if (e.buttons || !state.ready || state.quiz) { $('tooltip').hidden = true; return; } if (performance.now() - lastMove < 40) return; lastMove = performance.now(); const hit = pick(e); renderer.domElement.style.cursor = hit ? 'pointer' : 'grab'; $('tooltip').hidden = !hit; if (hit) { const r = host.getBoundingClientRect(); $('tooltip').textContent = hit.userData.part.label; $('tooltip').style.left = `${Math.min(e.clientX - r.left + 15, r.width - 230)}px`; $('tooltip').style.top = `${e.clientY - r.top + 18}px`; } });
- renderer.domElement.addEventListener('pointerleave', () => { $('tooltip').hidden = true; pointerStart = null; });
+ renderer.domElement.addEventListener('pointerleave', () => { $('tooltip').hidden = true; pointerStart = null; hovering = false; });
+ renderer.domElement.addEventListener('pointerenter', e => { hovering = e.pointerType === 'mouse'; });   // the sway and the head hold still under the pointer, so a piece can be aimed at
+ renderer.info.autoReset = false;   // counted per frame, across every pass (see the budget in the tests)
  bindControls();
  for (const type of ['pointerdown', 'pointermove', 'pointerup', 'wheel', 'keydown', 'click', 'input', 'change', 'touchmove']) addEventListener(type, () => invalidate(90), { passive:true, capture:true });   // any input keeps the picture live for a moment
  document.addEventListener('visibilitychange', () => { quality.last = 0; invalidate(4); });
@@ -152,13 +156,13 @@ async function loadStudio(){
  updateList(); updateUI(); setView('hero', true); $('fx-toggle').setAttribute('aria-pressed', state.fx); $('life-toggle').setAttribute('aria-pressed', life.on);
  if (!reducedMotion && !verifyQuality) { camera.position.sub(controls.target).multiplyScalar(1.24).add(controls.target); setView('hero'); if (viewTween) viewTween.duration = 2400; }   // a slow push-in on arrival
  window.anatomyStudio = {
-  getState:() => ({ ready:state.ready, pieces:parts.length, visible:parts.filter(p => p.mesh.visible).length, amount:state.amount, target:state.target, selected:state.selected?.label ?? null, isolated:state.isolated, system:state.system, board:state.board, mode:state.mode, ao:state.ao, detail:state.detail, hiFiles:[...hi.loaded], hiLoading:[...hi.loading], assembly:state.assembly, assemblySide:state.assemblySide, stage:state.stage, loading:state.loading, hidden:state.hidden.size, off:[...state.off], flow:{ on:flowOn, shown:!!flow?.points.visible, particles:flow?.particles ?? 0 }, vitals:vitals?.getState(), rendered, life:life.getState(), fx:state.fx, dof:bokehPass.enabled, only:state.only, quality:quality.level, section:section.state, quiz:quiz.getState(), tour:tour.getState(), triangles:parts.reduce((n, p) => n + (p.mesh.visible ? p.triangles : 0), 0), drawCalls:parts.reduce((n, p) => n + (p.mesh.visible ? 1 : 0), 0), files:manifest.files.filter(f => f.loaded).map(f => f.id) }),
+  getState:() => ({ ready:state.ready, pieces:parts.length, visible:parts.filter(p => p.mesh.visible).length, amount:state.amount, target:state.target, selected:state.selected?.label ?? null, isolated:state.isolated, system:state.system, board:state.board, mode:state.mode, ao:state.ao, detail:state.detail, hiFiles:[...hi.loaded], hiLoading:[...hi.loading], assembly:state.assembly, assemblySide:state.assemblySide, stage:state.stage, loading:state.loading, hidden:state.hidden.size, off:[...state.off], flow:{ on:flowOn, shown:!!flow?.points.visible, particles:flow?.particles ?? 0 }, compare:state.compare, lesson, draw:{ calls:renderer.info.render.calls, triangles:renderer.info.render.triangles }, hovering, vitals:vitals?.getState(), rendered, life:life.getState(), fx:state.fx, dof:bokehPass.enabled, only:state.only, quality:quality.level, section:section.state, quiz:quiz.getState(), tour:tour.getState(), triangles:parts.reduce((n, p) => n + (p.mesh.visible ? p.triangles : 0), 0), drawCalls:parts.reduce((n, p) => n + (p.mesh.visible ? 1 : 0), 0), files:manifest.files.filter(f => f.loaded).map(f => f.id) }),
   getParts:() => parts.map(p => ({ id:p.id, name:p.name, turned:p.baseQuaternion ? p.mesh.quaternion.angleTo(p.baseQuaternion) : 0, scale:p.mesh.scale.toArray().map((v, i) => v / p.baseScale.getComponent(i)), side:p.side, file:p.file, region:p.region, visible:p.mesh.visible, lod:p.lod, triangles:Math.round((p.mesh.geometry.index?.count ?? p.mesh.geometry.attributes.position.count) / 3), radius:(p.mesh.geometry.boundingSphere || p.mesh.geometry.computeBoundingSphere() || p.mesh.geometry.boundingSphere).radius * Math.max(p.mesh.scale.x, p.mesh.scale.y, p.mesh.scale.z), extent:p.size.length() / 2, position:p.mesh.position.toArray(), base:p.base.toArray(), inAssembly:!!(state.assembly && isMember(p)) })),
   getAssembly:id => { const a = assemblies[id]; if (!a) return null; const members = assemblyMembers(id); return { side:state.assemblySide, paired:!!a.paired, members:members.map(p => p.id), primary:members.filter(p => a.primary?.(p.piece)).map(p => p.id), framed:members.filter(p => !a.frame || a.frame(p.piece)).map(p => p.id), rectangles:projectedRectangles(members.filter(p => p.mesh.visible)) }; },
   getBoardRectangles:() => board ? board.rectangles() : [],
   loadStage, enterAssembly, leaveAssembly, setMode, setAmount, reset, loadHi, setDetail, lodPass, choosePiece, hideSelected, swallow:() => life.swallow(), life, pickAt:(x, y) => pick({ clientX:x, clientY:y })?.userData.part.id ?? null, getManifest:() => manifest,
   // inspection hooks for the verification scripts and for debugging: ?quality=verify or ?debug
-  ...(verifyQuality || params.has('debug') ? { _advance:(seconds = 1) => { let t = Math.max(last, performance.now()); for (let i = 0, n = Math.ceil(seconds * 60); i < n; i++) tick(t += 1000 / 60); },   /* step the loop by hand: a background tab gets no animation frames */ _radius:id => { const p = partsById.get(id); return p ? projectedRadiusPx(p) : null; }, _edges:(id, limit = .03) => { const p = partsById.get(id); if (!p) return null; const g = p.mesh.geometry, pos = g.attributes.position, idx = g.index, s = p.mesh.scale.x; let long = 0, max = 0; const n = idx ? idx.count : pos.count; const v = i => [pos.getX(i), pos.getY(i), pos.getZ(i)]; for (let t = 0; t < n; t += 3) { const a = v(idx ? idx.getX(t) : t), b = v(idx ? idx.getX(t + 1) : t + 1), c = v(idx ? idx.getX(t + 2) : t + 2); const L = Math.max(Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]), Math.hypot(b[0] - c[0], b[1] - c[1], b[2] - c[2]), Math.hypot(a[0] - c[0], a[1] - c[1], a[2] - c[2])) * s; if (L > max) max = L; if (L > limit) long++; } return { tris:n / 3, long, max:+max.toFixed(4), lod:p.lod }; }, _focus:(id, distance = .6, dir = [1, .35, 1.4]) => { const p = partsById.get(id); if (!p) return false; const c = p.center.clone().add(p.mesh.position).sub(p.base); viewTween = null; controls.target.copy(c); camera.position.copy(c).addScaledVector(new THREE.Vector3().fromArray(dir).normalize(), distance); return true; }, _side:v => { for (const p of parts) p.mesh.material.side = v; }, _normals:on => { for (const p of parts) { if (on) { p.mesh.userData.savedMat = p.mesh.material; p.mesh.material = new THREE.MeshNormalMaterial(); } else if (p.mesh.userData.savedMat) { p.mesh.material = p.mesh.userData.savedMat; delete p.mesh.userData.savedMat; } } }, _flat:on => { for (const p of parts) { if (on) { p.mesh.userData.savedMat = p.mesh.material; p.mesh.material = new THREE.MeshStandardMaterial({ color:'#d9ad8e', roughness:.6, flatShading:false }); } else if (p.mesh.userData.savedMat) { p.mesh.material = p.mesh.userData.savedMat; delete p.mesh.userData.savedMat; } } }, _gtao:gtaoPass, _GTAOPass:GTAOPass, _camera:() => ({ position:camera.position.toArray(), target:controls.target.toArray(), tween:!!viewTween }) } : {})
+  ...(verifyQuality || params.has('debug') ? { _bench:(n = 200) => { const t0 = performance.now(); for (let i = 0; i < n; i++) { for (const p of parts) p.mesh.position.copy(p.base); life.advance(1 / 60); life.apply(parts, 1, model, false); } lastApplied = -1; return (performance.now() - t0) / n; }, _advance:(seconds = 1) => { let t = Math.max(last, performance.now()); for (let i = 0, n = Math.ceil(seconds * 60); i < n; i++) tick(t += 1000 / 60); },   /* step the loop by hand: a background tab gets no animation frames */ _radius:id => { const p = partsById.get(id); return p ? projectedRadiusPx(p) : null; }, _edges:(id, limit = .03) => { const p = partsById.get(id); if (!p) return null; const g = p.mesh.geometry, pos = g.attributes.position, idx = g.index, s = p.mesh.scale.x; let long = 0, max = 0; const n = idx ? idx.count : pos.count; const v = i => [pos.getX(i), pos.getY(i), pos.getZ(i)]; for (let t = 0; t < n; t += 3) { const a = v(idx ? idx.getX(t) : t), b = v(idx ? idx.getX(t + 1) : t + 1), c = v(idx ? idx.getX(t + 2) : t + 2); const L = Math.max(Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]), Math.hypot(b[0] - c[0], b[1] - c[1], b[2] - c[2]), Math.hypot(a[0] - c[0], a[1] - c[1], a[2] - c[2])) * s; if (L > max) max = L; if (L > limit) long++; } return { tris:n / 3, long, max:+max.toFixed(4), lod:p.lod }; }, _focus:(id, distance = .6, dir = [1, .35, 1.4]) => { const p = partsById.get(id); if (!p) return false; const c = p.center.clone().add(p.mesh.position).sub(p.base); viewTween = null; controls.target.copy(c); camera.position.copy(c).addScaledVector(new THREE.Vector3().fromArray(dir).normalize(), distance); return true; }, _side:v => { for (const p of parts) p.mesh.material.side = v; }, _normals:on => { for (const p of parts) { if (on) { p.mesh.userData.savedMat = p.mesh.material; p.mesh.material = new THREE.MeshNormalMaterial(); } else if (p.mesh.userData.savedMat) { p.mesh.material = p.mesh.userData.savedMat; delete p.mesh.userData.savedMat; } } }, _flat:on => { for (const p of parts) { if (on) { p.mesh.userData.savedMat = p.mesh.material; p.mesh.material = new THREE.MeshStandardMaterial({ color:'#d9ad8e', roughness:.6, flatShading:false }); } else if (p.mesh.userData.savedMat) { p.mesh.material = p.mesh.userData.savedMat; delete p.mesh.userData.savedMat; } } }, _gtao:gtaoPass, _GTAOPass:GTAOPass, _camera:() => ({ position:camera.position.toArray(), target:controls.target.toArray(), tween:!!viewTween }) } : {})
  };
  await applyURL(readURL(), { initial:true });
  addEventListener('popstate', () => applyURL(readURL()));
@@ -196,7 +200,7 @@ async function loadFiles(ids){
   attachQueue = f.loadingPromise.catch(() => {});
  }
  await Promise.all(wanted.map(f => f.loadingPromise));
- buildBodyLandmarks(); updateList(); updateVisibility();
+ buildBodyLandmarks(); updateList(); updateVisibility(); if (state.compare) buildCompare();
  for (const p of parts) if (p.file === 'skeletal' && !p.tintQueued) { p.tintQueued = true; tintQueue.push(p); }
  for (const p of parts) if (p.mesh.userData.gutPath && !p.pathQueued) { p.pathQueued = true; pathQueue.push(p); }
  if (pathQueue.length) setTimeout(pumpPaths, 600);
@@ -228,7 +232,7 @@ function updateStageUI(){
 }
 function captureMaterial(part){ const m = part.mesh.material; section.applyTo(m); syncSkinDepth(part); part.opacity = m.opacity; part.transparent = m.transparent; part.depthWrite = m.depthWrite; part.emissive = m.emissive.clone(); part.emissiveIntensity = m.emissiveIntensity; }
 function setMode(mode, { user = false } = {}){ if (!modes.includes(mode)) return; if (user) state.restoreMode = null; state.mode = mode;
- if ((mode === 'skin' || mode === 'organs') && manifest && !manifest.files.find(f => f.id === 'regions')?.loaded) loadFiles(['regions']).then(() => { if (state.mode === 'skin' || state.mode === 'organs') updateVisibility(); }); /* the skin lives in the detail stage */ for (const p of parts) { p.mesh.material.dispose(); finishMaterial(p.mesh, p.piece, mode); captureMaterial(p); p.mesh.castShadow = !p.mesh.material.transparent; } document.querySelectorAll('[data-mode]').forEach(b => { b.classList.toggle('active', b.dataset.mode === mode); b.setAttribute('aria-pressed', b.dataset.mode === mode); }); boardDirty = true; updateVisibility(); syncURL(); }
+ if ((mode === 'skin' || mode === 'organs') && manifest && !manifest.files.find(f => f.id === 'regions')?.loaded) loadFiles(['regions']).then(() => { if (state.mode === 'skin' || state.mode === 'organs') updateVisibility(); }); /* the skin lives in the detail stage */ for (const p of parts) { p.mesh.material.dispose(); finishMaterial(p.mesh, p.piece, mode); captureMaterial(p); p.mesh.castShadow = !p.mesh.material.transparent; } document.querySelectorAll('[data-mode]').forEach(b => { b.classList.toggle('active', b.dataset.mode === mode); b.setAttribute('aria-pressed', b.dataset.mode === mode); }); boardDirty = true; updateVisibility(); syncURL(); placeCompare(); }
 
 function buildBodyLandmarks(){
  for (const l of landmarks.filter(l => l.kind === 'body')) l.el.remove(); for (let i = landmarks.length - 1; i >= 0; i--) if (landmarks[i].kind === 'body') landmarks.splice(i, 1);
@@ -295,7 +299,8 @@ function updateList(){
  // Typed search: a ranked list over the whole model, including systems that have not been downloaded yet.
  const box = $('results'), term = search.trim(); box.hidden = !term; box.replaceChildren(); if (!term) return;
  const rank = p => { const n = p.name.toLowerCase(); return n === term ? 0 : n.startsWith(term) ? 1 : n.includes(term) ? 2 : 3; };
- const found = manifest.pieces.filter(p => (state.system === 'all' || p.file === state.system) && `${p.name} ${p.region} ${p.path}`.toLowerCase().includes(term)).sort((a, b) => rank(a) - rank(b) || a.name.length - b.name.length).slice(0, 30);
+ const terms = searchTerms(term);   // "thigh bone" also looks for "femur"
+ const found = manifest.pieces.filter(p => { if (state.system !== 'all' && p.file !== state.system) return false; const hay = `${p.name} ${p.region} ${p.path}`.toLowerCase(), name = p.name.toLowerCase(); return terms.some((t, i) => i === 0 ? hay.includes(t) : name.includes(t)); }).sort((a, b) => rank(a) - rank(b) || a.name.length - b.name.length).slice(0, 30);
  if (!found.length) { const none = document.createElement('p'); none.textContent = 'No matching pieces.'; box.append(none); }
  for (const p of found) { const b = document.createElement('button'); b.type = 'button'; b.setAttribute('role', 'option'); const name = document.createElement('b'); name.textContent = sided(p); const where = document.createElement('span'); where.textContent = `${fileLabels[p.file]} · ${p.region}`; b.append(name, where); b.onclick = () => choosePiece(p.id); box.append(b); }
 }
@@ -309,6 +314,24 @@ async function choosePiece(id, { focus = true } = {}){
  if (!part.mesh.visible) { setMode('realistic', { user:true }); loadRest(); }   // the default finish leaves out muscles, ligaments and most skin
  updateList(); if (focus && !state.board) focusSelected(); return part;
 }
+/** Would this piece be on screen in the given finish? (The rule updateVisibility applies, for any finish.) */
+function shows(p, mode){
+ const surfaceOnly = mode === 'skin' && !state.assembly && !state.isolated && state.system === 'all' && state.amount < .02;
+ return isMember(p) && !state.hidden.has(p.id) && !state.off.has(p.file) && (state.system === 'all' || p.file === state.system) && (!state.isolated || p === state.selected) && (!surfaceOnly || SURFACE(p)) && !(mode === 'organs' && state.system === 'all' && !state.isolated && !organPiece(p));
+}
+/** Compare two finishes of the same view: the chosen one fills the right of a divider that can be dragged. */
+function setCompare(mode){
+ state.compare = modes.includes(mode) ? mode : null; $('compare').value = state.compare || 'off';
+ document.body.classList.toggle('comparing', !!state.compare); $('compare-handle').hidden = !state.compare; placeCompare();
+ if (state.compare) { buildCompare(); if (state.compare !== 'organs' || state.mode !== 'organs') loadRest(); }
+ invalidate(4);
+}
+function buildCompare(){
+ for (const p of parts) { if (p.altMode === state.compare) continue; const own = p.mesh.material, cavity = p.mesh.userData.cavity;
+  p.alt?.dispose(); finishMaterial(p.mesh, p.piece, state.compare); p.alt = p.mesh.material; section.applyTo(p.alt); p.altMode = state.compare;
+  p.mesh.material = own; p.mesh.userData.cavity = cavity; }
+}
+function placeCompare(){ $('compare-handle').style.left = `${state.compareX * 100}%`; $('compare-left').textContent = $(`mode-${state.mode}`)?.textContent || state.mode; $('compare-right').textContent = state.compare ? document.querySelector(`[data-mode="${state.compare}"]`).textContent : ''; }
 function hideSelected(){ if (!state.selected) return; state.hidden.add(state.selected.id); state.isolated = false; selectPart(null); }
 function visibleBounds(){ const box = new THREE.Box3(), half = new THREE.Vector3(), c = new THREE.Vector3(); for (const p of parts) { if (!p.mesh.visible) continue; c.copy(p.center).add(p.mesh.position).sub(p.base); half.copy(p.size).multiplyScalar(.5); box.expandByPoint(c.clone().sub(half)); box.expandByPoint(c.add(half)); } return box; }
 function renderFacts(part, text){
@@ -316,6 +339,9 @@ function renderFacts(part, text){
  const key = part?.piece.descriptionKey, borrowed = !!part && !!key && key.toLowerCase() !== part.name.toLowerCase() && text !== fallbackCopy[part.file];
  $('part-about').hidden = !borrowed; if (borrowed) $('part-about').textContent = `This piece has no description of its own. The text below is about: ${key}.`;
  const url = part ? sourceOf(part) : null; $('part-source').hidden = !url; if (url) $('part-source').href = url;
+ // descriptions were cut to about 900 characters when the model was built: offer the rest
+ const cut = !!part && !!key && text !== fallbackCopy[part.file] && (text.length > 760 || !/[.!?)"]$/.test(text.trim()));
+ $('part-more').hidden = !cut; if (cut) { $('part-more').href = url || `https://en.wikipedia.org/wiki/Special:Search?search=${encodeURIComponent(key)}`; $('part-more').textContent = `Read more about ${/^[A-Z][a-z]/.test(key) ? key[0].toLowerCase() + key.slice(1) : key} ↗`; }
  const authored = part && (part.piece.text || part.piece.descriptionKey), facts = authored ? keyFacts(text, part.file) : [], related = authored ? relatedPieces(text, part, parts) : [];
  const list = $('part-facts'); list.hidden = !facts.length; list.replaceChildren(...facts.flatMap(f => { const dt = document.createElement('dt'); dt.textContent = f.label; const dd = document.createElement('dd'); dd.textContent = f.text; return [dt, dd]; }));
  const box = $('part-related'); box.hidden = !related.length; box.replaceChildren(); if (!related.length) return;
@@ -450,14 +476,22 @@ async function loadHi(fileId){
  hi.loading.delete(fileId); if (!state.loading) $('stage-status').hidden = true; lodPass();
 }
 function stopSequence(){ explodeTween = null; state.sequence = false; $('animate').textContent = '▷ Play sequence'; }
-function reset(){ tour.end(); if (quiz.active) quiz.stop(); state.only = 'all'; $('explode-only').value = 'all'; state.off.clear(); for (const box of document.querySelectorAll('[data-layer]')) box.checked = true; if (state.board) toggleBoard(false); stopSequence(); if (state.assembly) leaveAssembly(); state.hidden.clear(); $('section-axis').value = 'off'; section.setAxis('off'); controls.minDistance = .25; state.target = 0; state.system = 'all'; state.isolated = false; state.labels = false; state.view = 'hero'; controls.autoRotate = false; state.rotate = false; $('system').value = 'all'; $('search').value = ''; for (const id of ['rotate', 'label-toggle']) $(id).setAttribute('aria-pressed', 'false'); selectPart(null); updateList(); updateUI(); setView('hero'); }
+function reset(){ tour.end(); if (quiz.active) quiz.stop(); if (state.compare) setCompare(null); state.only = 'all'; $('explode-only').value = 'all'; state.off.clear(); for (const box of document.querySelectorAll('[data-layer]')) box.checked = true; if (state.board) toggleBoard(false); stopSequence(); if (state.assembly) leaveAssembly(); state.hidden.clear(); $('section-axis').value = 'off'; section.setAxis('off'); controls.minDistance = .25; state.target = 0; state.system = 'all'; state.isolated = false; state.labels = false; state.view = 'hero'; controls.autoRotate = false; state.rotate = false; $('system').value = 'all'; $('search').value = ''; for (const id of ['rotate', 'label-toggle']) $(id).setAttribute('aria-pressed', 'false'); selectPart(null); updateList(); updateUI(); setView('hero'); }
 function bindControls(){
- section = createSection({ scene, materials:() => parts.map(p => p.mesh.material), bounds:visibleBounds, onChange:() => { const s = section.state; $('section-controls').hidden = s.axis === 'off'; $('section-pos').value = Math.round(s.position * 100); $('section-flip').setAttribute('aria-pressed', s.flip); $('section-caps').setAttribute('aria-pressed', s.caps); updateUI(); invalidate(); } });
+ section = createSection({ scene, materials:() => parts.flatMap(p => p.alt ? [p.mesh.material, p.alt] : [p.mesh.material]), bounds:visibleBounds, onChange:() => { const s = section.state; $('section-controls').hidden = s.axis === 'off'; $('section-pos').value = Math.round(s.position * 100); $('section-flip').setAttribute('aria-pressed', s.flip); $('section-caps').setAttribute('aria-pressed', s.caps); updateUI(); invalidate(); } });
  $('section-axis').onchange = e => section.setAxis(e.target.value);
  $('section-pos').oninput = e => section.setPosition(Number(e.target.value) / 100);
  $('section-flip').onclick = () => section.flip(); $('section-caps').onclick = () => section.setCaps(!section.state.caps);
  vitals = createVitals({ life, onChange:() => invalidate(4) });
- $('flow-toggle').onclick = () => { flowOn = !flowOn; $('flow-toggle').setAttribute('aria-pressed', flowOn); invalidate(4); }; $('flow-toggle').setAttribute('aria-pressed', flowOn);
+ const setFlow = on => { flowOn = !!on; $('flow-toggle').setAttribute('aria-pressed', flowOn); invalidate(4); };
+ $('flow-toggle').onclick = () => setFlow(!flowOn); setFlow(false);
+ $('compare').onchange = e => setCompare(e.target.value);
+ { const handle = $('compare-handle'); let dragging = false;   // drag the divider; arrow keys move it too
+  const move = e => { if (!dragging) return; const r = $('viewport').getBoundingClientRect(); state.compareX = THREE.MathUtils.clamp((e.clientX - r.left) / r.width, .05, .95); placeCompare(); invalidate(4); };
+  handle.addEventListener('pointerdown', e => { dragging = true; handle.setPointerCapture(e.pointerId); }); handle.addEventListener('pointermove', move); handle.addEventListener('pointerup', () => { dragging = false; });
+  handle.addEventListener('keydown', e => { const step = e.key === 'ArrowLeft' ? -.03 : e.key === 'ArrowRight' ? .03 : 0; if (!step) return; e.preventDefault(); e.stopPropagation(); state.compareX = THREE.MathUtils.clamp(state.compareX + step, .05, .95); placeCompare(); invalidate(4); }); }
+ $('save-image').onclick = () => { saveShot = true; invalidate(4); };
+ $('lesson-beat').onclick = () => startLesson('beat'); $('lesson-breath').onclick = () => startLesson('breath');
  quiz = createQuiz({
   candidates:() => { const region = $('quiz-region').value; return parts.filter(p => p.mesh.visible && p.piece.descriptionKey && p.size.length() > .04 && (region === 'all' || p.region === region) && (state.system !== 'all' || state.assembly || QUIZ_FILES.has(p.file))); },   // described and big enough to click; with the whole body up, stick to bones, organs, muscles, heart and brain
   reveal:part => { state.isolated = false; selectPart(part); updateVisibility(); focusSelected(2); }, clear:() => selectPart(null),
@@ -466,7 +500,7 @@ function bindControls(){
  });
  tour = createTour({
   onStart:() => { if (quiz.active) quiz.stop(); updateUI(); },
-  onEnd:() => { if (tourKind === 'body') { state.system = 'all'; $('system').value = 'all'; updateList(); if (tourRestore && tourRestore !== state.mode) setMode(tourRestore); else updateVisibility(); section.refit(); } tourKind = null; tourRestore = null; updateUI(); }
+  onEnd:() => { if (tourKind === 'lesson') { endLesson(); tourRestore = null; } if (tourKind === 'body') { state.system = 'all'; $('system').value = 'all'; updateList(); if (tourRestore && tourRestore !== state.mode) setMode(tourRestore); else updateVisibility(); section.refit(); } tourKind = null; tourRestore = null; updateUI(); }
  });
  $('tour-study').onclick = startStudyTour; $('tour-body').onclick = startBodyTour;
  $('focus').onclick = () => focusSelected(); $('hide').onclick = hideSelected; $('show-hidden').onclick = () => { state.hidden.clear(); updateVisibility(); };
@@ -554,6 +588,48 @@ function startStudyTour(){
  stops.push({ title:'Back together', text:`${assemblyMembers(id).length} pieces, reassembled. Drag the slider to take the study apart at your own pace, or label every piece to see all the names.`, run:() => { selectPart(null); setAmount(0, { animate:true }); } });
  tourKind = 'study'; tour.start(a.title.toUpperCase(), stops);
 }
+/**
+ * Lessons: one heartbeat, or one breath, taken a stage at a time. Each stop runs its stretch of the cycle over
+ * and over, slowed down, with the monitor and (for the heart) the blood flow switched on; ending puts everything back.
+ */
+function startLesson(kind){
+ tour.end(); if (quiz.active) quiz.stop(); if (state.board) toggleBoard(false); if (state.assembly) leaveAssembly(); if (state.compare) setCompare(null);
+ if (!life.on) { life.on = true; $('life-toggle').setAttribute('aria-pressed', 'true'); }
+ const before = { mode:state.mode, flow:flowOn, monitor:vitals.monitor, amount:state.target };
+ if (state.target > 0) setAmount(0, { animate:true });
+ if (state.mode !== 'xray') setMode('xray'); loadRest();
+ vitals.setMonitor(true); $('flow-toggle').click(); if (!flowOn) $('flow-toggle').click();   // on, whichever way it was
+ const look = (id, distance, dir) => choosePiece(id, { focus:false }).then(part => { if (!part) return; selectPart(null); const d = new THREE.Vector3().fromArray(dir).normalize(), wide = $('viewport').clientWidth > 760,
+   // keep the subject clear of the lesson card: to its right on a wide stage, below it on a narrow one
+   c = part.center.clone().addScaledVector(wide ? new THREE.Vector3(0, 1, 0).cross(d).normalize() : new THREE.Vector3(0, 1, 0), (wide ? -.2 : .24) * distance);
+  viewTween = { start:performance.now(), from:camera.position.clone(), to:c.clone().addScaledVector(d, distance), fromTarget:controls.target.clone(), toTarget:c, duration:1400 }; });
+ let stops;
+ if (kind === 'beat') {
+  let from = 0;
+  stops = BEAT_PHASES.map((ph, i) => { const range = [from + .004, ph.until - .004]; from = ph.until; return { title:`${i + 1}. ${ph.name}`, text:`${ph.note} ${BEAT_NOTES[i]}`, run:async () => { life.loopBreath(null); life.loopBeat(range); if (i === 0) await look('heart/left-ventricle', .62, [.35, .12, 1]); } }; });
+  stops.push({ title:'The whole beat', text:'All five stages run together in under a second, about seventy times a minute at rest. Watch the monitor: each QRS spike is one ejection, and the dots in the heart stop and go with the valves.', run:() => { life.loopBeat(null); life.setSpeed(.5); $('life-speed').value = '0.5'; } });
+ } else {
+  stops = [
+   { title:'1. Breathing in', text:'The diaphragm contracts and flattens, moving down about a centimetre and a half; the muscles between the ribs lift them up and out, and the sternum swings forward. The chest gets bigger, pressure inside it falls, and air is drawn in. The lungs lengthen to follow the diaphragm.', run:async () => { life.loopBeat(null); life.loopBreath([.01, .38]); await look('skeletal/body-of-sternum', 1.55, [.75, .1, 1]); } },
+   { title:'2. Breathing out', text:'At rest nothing has to push: the diaphragm relaxes and domes back up, the ribs settle under their own weight and the stretched lungs recoil like elastic. It is quick at first and then eases. Forced breathing out (a cough, blowing) adds the abdominal muscles.', run:() => life.loopBreath([.38, .92]) },
+   { title:'3. The pause', text:'A short rest before the next breath. The lungs are not empty: about two and a half litres stay in them. The heart beats a little slower in this half of the cycle and quicker while breathing in.', run:() => life.loopBreath([.9, .999]) },
+   { title:'The whole breath', text:'About fourteen of these a minute at rest. Follow the blue curve on the monitor: a quick rise, a slower fall, a flat pause.', run:() => life.loopBreath(null) }
+  ];
+ }
+ lesson = kind; tourKind = 'lesson'; tourRestore = before; tour.start(kind === 'beat' ? 'ONE HEARTBEAT' : 'ONE BREATH', stops);
+}
+const BEAT_NOTES = [
+ 'On the monitor this follows the small P wave. Most filling has already happened; this adds the last fifth.',
+ 'This starts at the tall QRS spike. It lasts about a twentieth of a second and makes the first heart sound, "lub", as the inflow valves shut.',
+ 'About 70 millilitres leave each ventricle. The aorta and pulmonary trunk swell with it, which is the pulse you can feel at the wrist a moment later.',
+ 'The second heart sound, "dub", is the outflow valves closing. On the monitor the T wave has just finished.',
+ 'The longest stage at rest, and the one that shortens most when the heart speeds up. Blood falls in passively until the next atrial contraction.'
+];
+function endLesson(){
+ const before = tourRestore; lesson = null; life.loopBeat(null); life.loopBreath(null); life.setSpeed(1); $('life-speed').value = '1'; vitals.show();
+ if (before) { vitals.setMonitor(before.monitor); if (flowOn !== before.flow) $('flow-toggle').click(); if (before.mode !== state.mode) setMode(before.mode); }
+ setView('hero');
+}
 function startBodyTour(){
  tour.end(); if (state.assembly) leaveAssembly(); if (state.board) toggleBoard(false); const before = state.mode;
  const show = async id => { if (id !== 'all') await loadFiles([id]); state.system = id; $('system').value = id; state.isolated = false; selectPart(null); updateList(); section.refit(); setAmount(0, { animate:state.amount > .01 }); };
@@ -576,7 +652,7 @@ function tick(now){
   for (const p of parts) { if (state.assembly) { if (p.assemblyOffset) p.mesh.position.copy(p.base).addScaledVector(p.assemblyOffset, t); else p.mesh.position.copy(p.base); } else { const k = state.only === 'all' || p.file === state.only ? 1 : 0, ti = Math.min(1, Math.max(0, (t - p.lag) / LAG_SPAN)), si = ti === t ? spread : THREE.MathUtils.smoothstep(ti, explodeSchedule.spreadStart, explodeSchedule.spreadEnd); p.mesh.position.copy(p.base).addScaledVector(p.offset, ti * k).addScaledVector(p.spread, si * k); } }
   if ((state.assembly && ((lastApplied < .05) !== (t < .05))) || (state.mode === 'skin' && ((lastApplied < .02) !== (t < .02)))) updateVisibility();
   lastApplied = state.amount;
-  if (repose) life.apply(parts, alive, model, section.active || !!state.assembly); }
+  if (repose) life.apply(parts, alive, model, section.active || !!state.assembly || hovering); }
  if (viewTween) { const t = Math.min(1, (now - viewTween.start) / (viewTween.duration || 900)), s = t * t * (3 - 2 * t);
   if (!viewTween.arc) { const a = viewTween.from.clone().sub(viewTween.fromTarget), b = viewTween.to.clone().sub(viewTween.toTarget), ra = a.length(), rb = b.length(); a.normalize(); b.normalize(); viewTween.arc = { a, ra, rb, turn:new THREE.Quaternion().setFromUnitVectors(a, b), q:new THREE.Quaternion() }; }
   const arc = viewTween.arc; controls.target.lerpVectors(viewTween.fromTarget, viewTween.toTarget, s);
@@ -598,6 +674,8 @@ function tick(now){
  if (layout.leaders !== lastLeaders) { $('leaders').innerHTML = layout.leaders; lastLeaders = layout.leaders; }
  const note = layout.total > layout.shown ? `${layout.shown} OF ${layout.total} LABELS SHOWN · ZOOM IN FOR THE REST` : ''; if (note !== labelNote) { labelNote = note; $('label-note').textContent = note; $('label-note').hidden = !note; }
  section.frame(parts, !state.board);
+ renderer.info.reset();
+ lifeUniforms.xray.value = .55 + .45 * THREE.MathUtils.smoothstep(camera.position.distanceTo(controls.target), .45, 2.4);   // many glass layers fill the screen in close-up: ease them down
  const planes = section.planes, fx = state.fx && !state.board;
  for (const m of [skinDepthMaterial, gtaoPass.normalMaterial]) if ((m.clippingPlanes || null) !== planes) { m.clippingPlanes = planes; m.needsUpdate = true; }   // helpers and the occlusion pass honour the cut
  outline.update(camera, H, planes);
@@ -605,7 +683,17 @@ function tick(now){
  mirror.visible = fx && !section.active && camera.position.y > -.1; mirror.userData.fresh = false;   // a section's cap quads need a stencil buffer the mirror does not have
  gtaoPass.enabled = state.ao; bloomPass.enabled = fx; bokehPass.enabled = fx && state.dof && !!state.selected && !section.active;
  if (bokehPass.enabled) { const p = state.selected; bokehPass.camera = camera; bokehPass.uniforms.focus.value = _v.copy(p.center).add(p.mesh.position).sub(p.base).distanceTo(camera.position); }
- if ((state.ao || fx) && !state.board) { renderPass.camera = camera; gtaoPass.camera = camera; composer.render(); } else renderer.render(scene, camera);
+ if (state.compare && !state.board) {
+  // the same view twice, each clipped to its side of the divider; the second pass swaps in the other finish
+  const x = Math.round(W * state.compareX);
+  renderer.setScissorTest(true); renderer.setScissor(0, 0, x, H); renderer.render(scene, camera);
+  for (const p of parts) { p.ownMaterial = p.mesh.material; p.ownVisible = p.mesh.visible; if (p.alt) p.mesh.material = p.alt; p.mesh.visible = shows(p, state.compare); }
+  renderer.setScissor(x, 0, W - x, H); renderer.render(scene, camera);
+  for (const p of parts) { p.mesh.material = p.ownMaterial; p.mesh.visible = p.ownVisible; }
+  renderer.setScissorTest(false);
+ } else if ((state.ao || fx) && !state.board) { renderPass.camera = camera; gtaoPass.camera = camera; composer.render(); } else renderer.render(scene, camera);
+ if (saveShot) { saveShot = false; const name = `anatomy-studio-${(state.selected ? plain(state.selected) : state.assembly || state.mode).toLowerCase().replace(/[^a-z0-9]+/g, '-')}.png`;   // straight after drawing, while the picture is still in the buffer
+  renderer.domElement.toBlob(blob => { if (!blob) return; const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 4000); $('save-image').dataset.saved = name; }, 'image/png'); }
  if (quality.auto && state.ready && !state.loading && !hi.loading.size) { const t = performance.now(), gap = t - quality.last; quality.last = t;
   if (gap < 5000 && t !== gap) { quality.slow = gap > 50 ? quality.slow + 1 : Math.max(0, quality.slow - 2); if (quality.slow > 45) { quality.slow = 0; stepDown(); } } }   // only back-to-back frames count (last is zeroed whenever a frame is skipped): about 45 of them under 20 fps
 }

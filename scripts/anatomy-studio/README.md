@@ -12,6 +12,7 @@ node prepare.mjs                     # compress to ../../demos/anatomy-studio/as
 node check-assemblies.mjs            # prove the four nested assemblies resolve against real piece names
 node stamp.mjs                       # content-hash every ?v= (imports, CSS, JSON, models); run after prepare.mjs and after any edit to the demo
 node stamp.mjs --check               # exit 1 if any stamp is stale (also run by .github/workflows/anatomy-studio-stamps.yml)
+# both verify files also run in CI: .github/workflows/anatomy-studio-verify.yml (reports; it does not gate publishing)
 node preview.mjs                     # 1100x579 preview JPEG for the demos catalog (needs the site served on :8791)
 node verify.mjs                      # Playwright checks against STUDIO_URL (default http://127.0.0.1:8791/demos/anatomy-studio/)
 node verify-life.mjs                 # the living body and loading, as a separate run: either file can fail on its own

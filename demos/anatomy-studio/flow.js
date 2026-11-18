@@ -26,7 +26,7 @@ export function createFlow({ manifest, parent }) {
     // where each stop falls along the curve, so a particle knows which stretch it is in
     const marks = [0]; let run = 0;
     for (let i = 1; i < points.length; i++) { run += points[i].distanceTo(points[i - 1]); marks.push(run); }
-    routes.push({ color, width, curve, total, marks: marks.map(m => m / run * total), kinds: stops.map(s => s[1]) });
+    routes.push({ color, width, curve, total, marks: marks.map(m => m / run * total), kinds: stops.map(s => s[1]), systemic: color === RED });
   }
   const ra = at('Right atrium'), rv = at('Right ventricle'), la = at('Left atrium'), lv = at('Left ventricle');
   const trunk = at('Pulmonary trunk'), fork = at('Bifurcation of pulmonary trunk');
@@ -62,7 +62,10 @@ export function createFlow({ manifest, parent }) {
     for (let i = 0; i < particles.length; i++) {
       const q = particles[i], r = q.r;
       let k = 1; while (k < r.marks.length - 1 && q.s > r.marks[k]) k++;
-      q.s += speed[r.kinds[k]] * dt;
+      let v = speed[r.kinds[k]];
+      if (r.kinds[k] === 'outflow' && r.systemic && signals.leak > 0) v -= SPEED.inflow * 0.5 * signals.leak;   // a leaking aortic valve: blood falls back towards the ventricle
+      q.s += v * dt;
+      if (q.s < r.marks[k - 1]) q.s = r.marks[k - 1];
       if (q.s >= r.total) q.s -= r.total;
       r.curve.getPointAt(q.s / r.total, p).add(q.jitter);
       positions[i * 3] = p.x; positions[i * 3 + 1] = p.y; positions[i * 3 + 2] = p.z;

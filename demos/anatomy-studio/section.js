@@ -15,7 +15,7 @@
  * Opaque pieces are also drawn double-sided while a section is active, so anything left uncapped shows its inner wall.
  */
 import * as THREE from 'three';
-import { enliven } from './materials.js?v=fd0627ad9b';
+import { enliven } from './materials.js?v=5290592a00';
 
 // Frame: metres, y up, +z anterior, +x subject's left.
 const NORMALS = { sagittal: [1, 0, 0], coronal: [0, 0, 1], transverse: [0, 1, 0] };

@@ -1,12 +1,13 @@
 import {chromium} from 'playwright';
 import assert from 'node:assert/strict';
-import {mkdir, readFile, stat} from 'node:fs/promises';
+import {mkdir, readFile, readdir, stat} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import path from 'node:path';
+import {fileURLToPath} from 'node:url';
 
 const url = process.env.STUDIO_URL || 'http://127.0.0.1:8791/demos/anatomy-studio/';
 const shots = process.env.STUDIO_SHOTS || path.join(tmpdir(), 'anatomy-studio-validation'); await mkdir(shots, {recursive: true});
-const HERE = path.dirname(new URL(import.meta.url).pathname), DEMO = path.resolve(HERE, '../../demos/anatomy-studio');
+const HERE = path.dirname(fileURLToPath(import.meta.url)), DEMO = path.resolve(HERE, '../../demos/anatomy-studio');
 const manifest = JSON.parse(await readFile(path.join(DEMO, 'manifest.json'), 'utf8'));
 const MAX = 25 * 1024 * 1024;
 
@@ -17,6 +18,12 @@ for (const f of manifest.files) { const s = await stat(path.join(DEMO, f.path));
 for (const f of manifest.files.filter(f => f.hi)) { const s = await stat(path.join(DEMO, f.hi.path)); assert.equal(s.size, f.hi.bytes, `${f.id} hi bytes drifted`); assert.ok(s.size < MAX, `hi/${f.id} exceeds 25 MiB`); }
 assert.ok(manifest.stats.hiTriangles > manifest.stats.triangles * 1.5, 'full tier carries more detail');
 for (const name of ['Liver', 'Stomach', 'Spleen', 'Kidney']) assert.equal(manifest.pieces.find(p => p.name === name).region, 'abdomen', `${name} is filed under the abdomen`);
+// budgets: download size must not creep (budget.json says what each number is)
+const budget = JSON.parse(await readFile(path.join(HERE, 'budget.json'), 'utf8'));
+const textBytes = async dir => { let n = 0; for (const f of await readdir(dir)) if (/\.(js|css|html)$/.test(f)) n += (await readFile(path.join(dir, f), 'utf8')).replace(/\r\n/g, '\n').length; return n; };
+const treeBytes = async dir => { let n = 0; for (const e of await readdir(dir, {withFileTypes: true})) n += e.isDirectory() ? await treeBytes(path.join(dir, e.name)) : (await stat(path.join(dir, e.name))).size; return n; };
+const sizes = {codeBytes: await textBytes(DEMO), vendorBytes: await treeBytes(path.join(DEMO, 'vendor')), coreStageBytes: manifest.stages.core.reduce((n, id) => n + manifest.files.find(f => f.id === id).bytes, 0), baseModelBytes: manifest.files.reduce((n, f) => n + f.bytes, 0)};
+for (const [k, v] of Object.entries(sizes)) assert.ok(v <= budget[k], `${k} is ${v.toLocaleString()}, over its budget of ${budget[k].toLocaleString()} (${budget[k + 'Note']})`);
 const ids = new Set(manifest.pieces.map(p => p.id)); assert.equal(ids.size, manifest.pieces.length, 'piece ids must be unique');
 const direct = Object.entries(manifest.stats.descriptionRules).filter(([r]) => !['parent', 'path', 'none'].includes(r)).reduce((a, [, n]) => a + n, 0);
 assert.ok(direct / manifest.pieces.length >= .85, `direct description coverage ${(direct / manifest.pieces.length * 100).toFixed(1)}%`);
@@ -39,7 +46,10 @@ try {
  await page.goto(`${url}?quality=verify&stage=full`); await ready(page); await full();
  const BODY = manifest.pieces.length; const ORGANS = manifest.pieces.filter(p => (['skeletal', 'visceral', 'heart', 'brain', 'lymphoid', 'vessels', 'nerves'].includes(p.file) || (p.file === 'regions' && p.name === 'Regions of face')) && !/external genitalia/i.test(p.path || '') && p.name !== 'Greater omentum').length;
  const whole = async () => (await read()).mode === 'organs' ? ORGANS : BODY;   // Organs & vessels shows the bones, organs and vessels only; every other finish shows the whole body
- let s = await read(); assert.equal(s.pieces, manifest.pieces.length); assert.equal(s.mode, 'xray', 'studio opens in X-ray'); assert.equal(s.visible, BODY); assert.deepEqual([...s.files].sort(), manifest.files.map(f => f.id).sort());
+ let s = await read(); assert.equal(s.pieces, manifest.pieces.length);
+ assert.ok(s.draw.calls > 0 && s.draw.calls <= budget.drawCalls, `draw calls ${s.draw.calls} within ${budget.drawCalls}`); assert.ok(s.draw.triangles <= budget.triangles, `triangles drawn ${s.draw.triangles} within ${budget.triangles}`);
+ assert.equal(s.flow.on, false, 'blood flow waits to be asked for'); assert.equal(s.vitals.monitor, false, 'so does the monitor');
+ assert.equal(s.mode, 'xray', 'studio opens in X-ray'); assert.equal(s.visible, BODY); assert.deepEqual([...s.files].sort(), manifest.files.map(f => f.id).sort());
  await page.waitForTimeout(400); s = await read(); assert.ok(s.triangles > manifest.stats.triangles * .5 && s.triangles <= manifest.stats.triangles * 1.05, `rendered triangles ${s.triangles}`);
  await page.screenshot({path: path.join(shots, 'assembled.png')});
  // explode: visible intermediate motion, every piece moves, skeleton barely moves, exact reassembly
@@ -91,6 +101,12 @@ try {
  await page.locator('#search').fill('sartorius'); await page.locator('#results button').first().click(); await page.waitForFunction(() => (window.anatomyStudio.getState().selected || '').startsWith('Sartorius'), null, {timeout: 60000});
  await page.waitForFunction(() => document.querySelectorAll('#part-facts dt').length >= 1, null, {timeout: 30000}); await page.waitForFunction(() => /piece=muscular\/sartorius/.test(location.search), null, {timeout: 10000});
  await page.locator('#hide').click(); s = await read(); assert.equal(s.hidden, 1); assert.equal(s.selected, null); await page.locator('#show-hidden').click(); assert.equal((await read()).hidden, 0); await page.locator('#search').fill('');
+ // everyday names in search; a second finish beside the first; saving the picture
+ for (const [typed, found] of [['thigh bone', 'Femur'], ['kneecap', 'Patella'], ['windpipe', 'Trachea'], ['esophagus', 'Oesophagus']]) { await page.locator('#search').fill(typed); assert.ok((await page.locator('#results button b').first().textContent()).startsWith(found), `"${typed}" finds the ${found}`); }
+ await page.locator('#search').fill('');
+ await page.locator('#compare').selectOption('clay'); await page.waitForFunction(() => window.anatomyStudio.getState().compare === 'clay'); assert.equal(await page.locator('#compare-handle').isVisible(), true); await page.locator('#compare-handle').focus(); await page.keyboard.press('ArrowRight');
+ await page.locator('#compare').selectOption('off'); assert.equal((await read()).compare, null); assert.equal(await page.locator('#compare-handle').isVisible(), false);
+ { const [download] = await Promise.all([page.waitForEvent('download', {timeout: 120000}), page.locator('#save-image').click()]); assert.ok(/^anatomy-studio-.*\.png$/.test(download.suggestedFilename()), 'Save image downloads a PNG'); }
  await page.locator('[data-layer="vessels"]').uncheck(); s = await read(); assert.deepEqual(s.off, ['vessels']); assert.equal(s.visible, (await page.evaluate(() => window.anatomyStudio.getParts().filter(p => p.file !== 'vessels' && p.visible).length))); assert.ok(s.visible < BODY, 'an unchecked system is hidden');
  await page.waitForFunction(() => /hide=vessels/.test(location.search), null, {timeout: 10000}); await page.locator('[data-layer="vessels"]').check(); await page.waitForFunction(() => window.anatomyStudio.getState().off.length === 0);
  await page.locator('#section-axis').selectOption('sagittal'); assert.equal((await read()).section.axis, 'sagittal'); await page.locator('#section-flip').click(); assert.equal((await read()).section.flip, true); await page.locator('#section-axis').selectOption('off'); assert.equal((await read()).section.axis, 'off');
@@ -126,5 +142,5 @@ try {
  const reduced = await browser.newPage({viewport: {width: 1024, height: 800}, reducedMotion: 'reduce'}); reduced.on('pageerror', e => errors.push(e.message)); await reduced.goto(`${url}?quality=verify&stage=core`); await ready(reduced);
  await reduced.locator('#explode-button').click(); await reduced.waitForFunction(() => window.anatomyStudio.getState().amount > 0, null, {timeout: 30000}); await settled(1, reduced); assert.ok(await reduced.evaluate(() => window.anatomyStudio.getParts().every(p => Math.hypot(...p.position.map((v, i) => v - p.base[i])) > .01)), 'reduced motion explosion still separates every piece');
  assert.deepEqual(errors, []);
- console.log(`PASS: ${url} — ${manifest.pieces.length} pieces across ${manifest.files.length} files, explosion, exact reassembly, ${Object.keys(manifest.assemblies).length} nested studies (${Object.entries(manifest.assemblies).map(([k, v]) => `${k} ${v.length}`).join(', ')}), filters, system checkboxes, search, isolate, finishes, labels, sequence, keyboard, non-overlapping board at three viewports, mobile, deep links, manual, reduced motion. Screenshots: ${shots}`);
+ console.log(`PASS: ${url} — ${manifest.pieces.length} pieces across ${manifest.files.length} files, explosion, exact reassembly, ${Object.keys(manifest.assemblies).length} nested studies (${Object.entries(manifest.assemblies).map(([k, v]) => `${k} ${v.length}`).join(', ')}), budgets, filters, system checkboxes, search by everyday name, compare, save image, isolate, finishes, labels, sequence, keyboard, non-overlapping board at three viewports, mobile, deep links, manual, reduced motion. Screenshots: ${shots}`);
 } finally { await browser.close(); }

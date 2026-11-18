@@ -15,6 +15,7 @@
  *   sway        nobody stands perfectly still: the whole body leans a few millimetres about the ankles, slowly and
  *               irregularly, more front-to-back than side-to-side, and the calf and shin muscles take turns to hold it.
  *   head        turns and nods a degree or two, the neck bending with it vertebra by vertebra.
+ *   elbows      each forearm bends a few degrees at the elbow and straightens again, slowly and independently.
  *   eyes        both eyes jump together to a new point of gaze every second or two, with small corrections between,
  *               and blink every few seconds.
  *   swallowing  now and then the larynx and hyoid rise about two centimetres and drop back, stretching the trachea.
@@ -38,7 +39,7 @@
  * This is an illustration of the motion, not a measurement of it.
  */
 import * as THREE from 'three';
-import { lifeUniforms, layerOf } from './materials.js?v=fd0627ad9b';
+import { lifeUniforms, layerOf } from './materials.js?v=5290592a00';
 
 const smooth = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a))); return t * t * (3 - 2 * t); };
 const smoother = t => { t = Math.min(1, Math.max(0, t)); return t * t * t * (t * (t * 6 - 15) + 10); };
@@ -94,12 +95,26 @@ const SWALLOW_RISE = [0, 0.018, 0.004], SWALLOW_SECONDS = 1.1;
 const BLINK_SECONDS = 0.32;
 const BRAIN_PULSE = 0.003, VEIN_BREATH = 0.012;
 const OUTFLOW_SWING = 1.0, INFLOW_SWING = 0.9;   // radians a leaflet turns on its ring between shut and open
+const ELBOW_BEND = 0.075;                        // radians: the forearm wanders between straight and about 4 degrees bent
+
+/**
+ * Conditions for teaching. Each is a deliberately simplified picture of one thing going wrong, built from the same
+ * controls as the healthy body: it shows what the word means, not how a real case behaves, and is not a diagnosis.
+ */
+export const CONDITIONS = {
+  normal: { name: 'Healthy', note: 'A resting heart of about 70 beats a minute and quiet breathing.', rates: REST },
+  fast: { name: 'Fast heartbeat', note: 'Tachycardia: over 100 beats a minute at rest. The ventricles have less time to fill between beats.', rates: { bpm: 150, breaths: 18, depth: 1 } },
+  slow: { name: 'Slow heartbeat', note: 'Bradycardia: under 60 beats a minute. Normal in sleep and in trained athletes; otherwise each beat has to do more.', rates: { bpm: 44, breaths: 12, depth: 1 } },
+  irregular: { name: 'Irregular heartbeat', note: 'As in atrial fibrillation: the atria quiver instead of contracting, so there is no P wave and no atrial kick, and the ventricles beat at uneven intervals.', rates: { bpm: 96, breaths: 15, depth: 1 }, irregular: true },
+  shallow: { name: 'Shallow breathing', note: 'Fast, shallow breaths: the diaphragm and ribs travel less than half as far, so each breath moves much less air.', rates: { bpm: 88, breaths: 26, depth: 0.42 } },
+  leak: { name: 'Leaking aortic valve', note: 'Aortic regurgitation: the valve does not shut fully, so some blood falls back into the left ventricle while it should be filling from the atrium.', rates: { bpm: 76, breaths: 14, depth: 1 }, leak: 0.3 }
+};
 
 export function createLife() {
   const life = { on: true, breath: 0.15, beat: 0, time: Math.random() * 60, weight: 0, anchors: null, animated: [], planned: 0, swayGain: 0, swayX: 0, swayZ: 0,
-    rate: { ...REST }, speed: 1, scrub: null, head: [0, 0, 0],
+    rate: { ...REST }, speed: 1, scrub: null, head: [0, 0, 0], elbow: [0, 0], condition: 'normal', interval: 1, loopBeat: null, loopBreath: null,
     gaze: { x: 0, y: 0, fromX: 0, fromY: 0, toX: 0, toY: 0, t: 1, seconds: 0.05, wait: 1.2 }, swallow: { t: -1, wait: 14 + Math.random() * 14 }, blink: { t: -1, wait: 2 + Math.random() * 3 } };
-  const signals = { breath: 0, ventricle: 0, atrium: 0, sway: 0, swallow: 0, outflow: 0, inflow: 1, blink: 0 };
+  const signals = { breath: 0, ventricle: 0, atrium: 0, sway: 0, swallow: 0, outflow: 0, inflow: 1, blink: 0, leak: 0 };
   const turn = new THREE.Quaternion(), arm = new THREE.Vector3(), axis = new THREE.Vector3();
   const eyeTurn = new THREE.Quaternion(), eyeNow = new THREE.Quaternion(), lean = new THREE.Quaternion(), tilt = new THREE.Quaternion(), UP = new THREE.Vector3(0, 1, 0), ACROSS = new THREE.Vector3(1, 0, 0), FORWARD = new THREE.Vector3(0, 0, 1);
 
@@ -110,6 +125,8 @@ export function createLife() {
     const t6 = piece('Vertebra T6'), sternum = piece('Body of sternum'), rib1 = piece('First rib'), rib12 = piece('Twelfth rib');
     const lung = piece('Inferior lobe of left lung'), hip = piece('Hip bone'), lv = piece('Left ventricle'), la = piece('Left atrium'), rv = piece('Right ventricle'), ra = piece('Right atrium'), arch = piece('Aortic arch');
     const c1 = piece('Atlas (C1)'), c4 = piece('Vertebra C4'), c7 = piece('Vertebra C7');
+    // the elbow: the lower end of each humerus (left first, to match the shader's arrays)
+    const elbows = [1, -1].map(sign => { const h = manifest.pieces.find(p => p.name === 'Humerus' && Math.sign(p.center[0]) === sign); return h ? [h.center[0] + sign * 0.02, h.center[1] - h.size[1] / 2 + 0.012, h.center[2] + 0.005] : [sign * 0.217, 1.09, -0.039]; });
     const apex = mark('Apex of heart') || [0.099, 1.231, 0.072], base = mark('Base of heart') || [-0.066, 1.311, -0.018];
     const heart = lv ? lv.center : [0.04, 1.27, 0.01];
     const a = life.anchors = {
@@ -128,7 +145,7 @@ export function createLife() {
       larynx: new Set(manifest.assemblies?.larynx || []),
       // the head turns about the middle of the neck; the turn fades in from the base of the neck to the base of the skull
       neckPivot: c4 ? [0, c4.center[1], c4.center[2]] : [0, 1.484, -0.043], neckBase: c7 ? c7.center[1] - 0.005 : 1.438, skullBase: c1 ? c1.center[1] - 0.004 : 1.53,
-      valves: new Map()
+      valves: new Map(), elbows
     };
     // Valve leaflets. Each hinges on the valve ring, at its edge furthest from the middle of the valve, about an
     // axis lying in the ring; turning it swings its free edge the way the blood goes.
@@ -150,6 +167,7 @@ export function createLife() {
     lifeUniforms.trunk.value.set(a.ribsBottom, a.ribsTop, a.pelvis, a.dome); lifeUniforms.spine.value.set(a.spineZ, a.sternumZ); lifeUniforms.chest.value.set(CHEST_SIDE, CHEST_LIFT, CHEST_FRONT, BELLY_OUT);
     lifeUniforms.lung.value.set(a.lungTop, DIAPHRAGM_DROP); lifeUniforms.neckPivot.value.fromArray(a.neckPivot); lifeUniforms.neckRange.value.set(a.neckBase, a.skullBase);
     a.eyes.slice(0, 2).forEach((e, i) => lifeUniforms.eyes.value[i].fromArray(e));
+    a.elbows.forEach((e, i) => lifeUniforms.elbows.value[i].fromArray(e));
   }
 
   // ---- breathing fields. Each returns the displacement of a body-space point at full inhalation.
@@ -221,7 +239,7 @@ export function createLife() {
   function plan(part) {
     const a = life.anchors, piece = part.piece, c = piece.center, channels = [], NONE = [0, 0, 0], layered = layerOf(piece) > 0;
     const add = (signal, offset, stretch, delay = 0) => { if (offset.some(v => Math.abs(v) > 2e-5) || stretch.some(v => Math.abs(v) > 2e-4)) channels.push({ signal, offset, stretch, delay }); };
-    let rib = null, eye = null, head = 0;
+    let rib = null, eye = null, head = 0, elbow = null;
     // breathing (layered pieces follow the same fields per vertex, in their shaders)
     if (!layered && piece.region !== 'upper limb' && piece.region !== 'lower limb' && piece.region !== 'head') {
       if (piece.file === 'skeletal' && RIB.test(piece.name)) rib = ribSwing(piece);
@@ -275,22 +293,34 @@ export function createLife() {
     }
     // the head and neck: whole pieces turn about the neck by their share of the head's turn
     if (!layered && (piece.region === 'head' || piece.region === 'neck')) head = smooth(a.neckBase, a.skullBase, c[1]);
-    if (!channels.length && !rib && !eye && !valve && head <= 0.001) return null;
-    if (rib || eye || valve || head > 0.001) part.baseQuaternion = part.mesh.quaternion.clone();
-    return { channels, rib, eye, valve, head: head > 0.001 ? head : 0 };
+    // the forearm and hand: whole pieces below the elbow turn about it (their soft layers do the same per vertex)
+    if (!layered && piece.region === 'upper limb') { const arm = c[0] > 0 ? 0 : 1, share = smooth(-0.035, 0.035, a.elbows[arm][1] - c[1]); if (share > 0.001) elbow = { arm, share }; }
+    if (!channels.length && !rib && !eye && !valve && !elbow && head <= 0.001) return null;
+    if (rib || eye || valve || elbow || head > 0.001) part.baseQuaternion = part.mesh.quaternion.clone();
+    return { channels, rib, eye, valve, elbow, head: head > 0.001 ? head : 0 };
   }
 
   /** Advance the clocks. The heart runs a little faster during inhalation. */
   function advance(dt) {
     dt *= life.scrub === null ? life.speed : 0;   // scrubbing through a beat holds everything else still
     life.time += dt;
-    life.breath = (life.breath + dt * life.rate.breaths / 60) % 1;
+    const cond = CONDITIONS[life.condition];
+    // a lesson can run one part of a breath or of a beat over and over, slowed down
+    if (life.loopBreath) { const [from, to] = life.loopBreath; life.breath = from + ((Math.max(from, life.breath) - from + dt * life.rate.breaths / 60 * 0.6) % (to - from)); }
+    else life.breath = (life.breath + dt * life.rate.breaths / 60) % 1;
     signals.breath = breathCurve(life.breath) * life.rate.depth;
-    life.beat = life.scrub === null ? (life.beat + dt * life.rate.bpm / 60 / (1.05 - 0.1 * Math.min(1, signals.breath))) % 1 : life.scrub;
-    signals.atrium = atrialCurve(life.beat);
+    if (life.scrub !== null) life.beat = life.scrub;
+    else if (life.loopBeat) { const [from, to] = life.loopBeat; life.beat = from + ((Math.max(from, Math.min(to, life.beat)) - from + dt * 0.16) % (to - from)); }
+    else {
+      const next = life.beat + dt * life.rate.bpm / 60 / life.interval / (1.05 - 0.1 * Math.min(1, signals.breath));
+      if (next >= 1) life.interval = cond.irregular ? 0.62 + Math.random() * 0.85 : 1;   // an irregular rhythm: every beat waits a different time
+      life.beat = next % 1;
+    }
+    signals.atrium = cond.irregular ? 0.1 + 0.05 * Math.sin(life.time * 38) : atrialCurve(life.beat);   // fibrillating atria only quiver
     signals.ventricle = ventricularCurve(life.beat);
-    signals.outflow = outflowOpen(life.beat);
+    signals.outflow = Math.max(outflowOpen(life.beat), cond.leak || 0);   // a leaking valve never quite shuts
     signals.inflow = inflowOpen(life.beat);
+    signals.leak = cond.leak ? 1 - outflowOpen(life.beat) : 0;            // and lets blood back while it should be shut
     lifeUniforms.time.value = life.time;
     // postural sway: a few slow, unrelated rhythms add up to a wander that never quite repeats
     const t = life.time, front = 0.5 * Math.sin(TAU * t / 7.3) + 0.3 * Math.sin(TAU * t / 11.9 + 1.3) + 0.2 * Math.sin(TAU * t / 4.1 + 2.1);
@@ -300,6 +330,9 @@ export function createLife() {
     life.head[1] = HEAD_YAW * (0.6 * Math.sin(TAU * t / 13.1 + 0.4) + 0.4 * Math.sin(TAU * t / 5.9 + 1.0));
     life.head[0] = HEAD_PITCH * (0.6 * Math.sin(TAU * t / 8.9 + 2.0) + 0.4 * Math.sin(TAU * t / 17.3));
     life.head[2] = HEAD_ROLL * Math.sin(TAU * t / 10.7 + 0.9);
+    // the elbows: each arm on its own slow rhythm, between straight and slightly bent (an elbow does not bend backwards)
+    life.elbow[0] = ELBOW_BEND * (0.5 + 0.3 * Math.sin(TAU * t / 9.1 + 1.7) + 0.2 * Math.sin(TAU * t / 4.7));
+    life.elbow[1] = ELBOW_BEND * (0.5 + 0.3 * Math.sin(TAU * t / 11.3 + 4.0) + 0.2 * Math.sin(TAU * t / 6.1 + 2.2));
     // eyes: hold, then jump. Larger jumps take longer (about 30 ms plus 2.5 ms a degree), as real saccades do
     const g = life.gaze;
     if (g.t >= 1 && (g.wait -= dt) <= 0) {
@@ -347,6 +380,8 @@ export function createLife() {
     }
     const hx = life.head[0] * life.swayGain, hy = life.head[1] * life.swayGain, hz = life.head[2] * life.swayGain, headAngle = Math.hypot(hx, hy, hz);
     lifeUniforms.headTurn.value.set(hx, hy, hz); lifeUniforms.blink.value = signals.blink * weight;
+    const bend = [life.elbow[0] * life.swayGain, life.elbow[1] * life.swayGain];   // bending brings the forearm forward: a turn about the body's left-right axis
+    lifeUniforms.elbowTurn.value[0].set(-bend[0], 0, 0); lifeUniforms.elbowTurn.value[1].set(-bend[1], 0, 0);
     eyeNow.identity().slerp(eyeTurn, weight);
     if (parts.length !== life.planned) { for (const p of parts) if (p.life === undefined) { p.life = plan(p); if (p.life) life.animated.push(p); } life.planned = parts.length; }
     const was = life.weight;
@@ -380,6 +415,7 @@ export function createLife() {
         const angle = axis.length() * signals.breath * weight;
         if (angle > 0) { turn.setFromAxisAngle(axis.normalize(), angle); swing(mesh, plan.rib.pivot, turn); }
       }
+      if (plan.elbow && bend[plan.elbow.arm] > 1e-6) { turn.setFromAxisAngle(ACROSS, -bend[plan.elbow.arm] * plan.elbow.share); swing(mesh, life.anchors.elbows[plan.elbow.arm], turn); }
       if (plan.head && headAngle > 1e-6) { axis.set(hx, hy, hz).normalize(); turn.setFromAxisAngle(axis, headAngle * plan.head); swing(mesh, neck, turn); }
     }
   }
@@ -397,12 +433,17 @@ export function createLife() {
     setSpeed(k) { life.speed = Math.min(2, Math.max(0, k)); },
     /** Hold the heart at a point in its beat (0..1), with everything else still; null lets it run again. */
     scrub(phase) { life.scrub = phase === null || phase === undefined ? null : Math.min(0.9999, Math.max(0, phase)); },
+    /** One of CONDITIONS: sets the pace and whatever else that condition changes. */
+    setCondition(id) { if (!CONDITIONS[id]) return; life.condition = id; life.interval = 1; Object.assign(life.rate, CONDITIONS[id].rates); },
+    /** Run one stretch of the heartbeat, or of the breath, over and over ([from, to] as fractions; null to stop). */
+    loopBeat(range) { life.loopBeat = range && range[1] > range[0] ? range : null; },
+    loopBreath(range) { life.loopBreath = range && range[1] > range[0] ? range : null; },
     /** Start a swallow or a blink now (they otherwise happen on their own). */
     swallow() { if (life.swallow.t < 0) life.swallow.t = 0; },
     blink() { if (life.blink.t < 0) life.blink.t = 0; },
     signals,
     getState: () => ({ on: life.on, weight: +life.weight.toFixed(3), animated: life.animated.length, breath: +signals.breath.toFixed(3), ventricle: +signals.ventricle.toFixed(3),
-      beat: +life.beat.toFixed(4), phase: beatPhase(life.beat).name, breathPhase: +life.breath.toFixed(4), bpm: life.rate.bpm, breaths: life.rate.breaths, depth: life.rate.depth, speed: life.speed, scrub: life.scrub,
+      beat: +life.beat.toFixed(4), phase: beatPhase(life.beat).name, breathPhase: +life.breath.toFixed(4), bpm: life.rate.bpm, breaths: life.rate.breaths, depth: life.rate.depth, speed: life.speed, scrub: life.scrub, condition: life.condition, looping: !!(life.loopBeat || life.loopBreath), elbow: life.elbow.map(v => +(v * life.swayGain * 180 / Math.PI).toFixed(2)),
       outflow: +signals.outflow.toFixed(3), inflow: +signals.inflow.toFixed(3), blink: +signals.blink.toFixed(3), head: life.head.map(v => +(v * life.swayGain * 180 / Math.PI).toFixed(3)),
       sway: [life.swayX * life.swayGain, life.swayZ * life.swayGain].map(v => +(v * 180 / Math.PI).toFixed(4)), gaze: [+life.gaze.x.toFixed(4), +life.gaze.y.toFixed(4)], swallow: +signals.swallow.toFixed(3) })
   };

@@ -1,0 +1,53 @@
+name: Anatomy Studio Browser Tests
+
+# Runs the two Playwright suites for /demos/anatomy-studio/ in headless Chromium with software WebGL: behaviour
+# (verify.mjs) and the living body plus loading (verify-life.mjs), including the size and work budgets in
+# scripts/anatomy-studio/budget.json. Software rendering is slow, so allow about half an hour.
+# It does not gate publishing: Cloudflare builds main regardless. It reports.
+on:
+  push:
+    branches:
+      - main
+    paths: ['demos/anatomy-studio/**', 'scripts/anatomy-studio/**', '.github/workflows/anatomy-studio-verify.yml']
+  pull_request:
+    paths: ['demos/anatomy-studio/**', 'scripts/anatomy-studio/**', '.github/workflows/anatomy-studio-verify.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: anatomy-studio-verify-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            demos/anatomy-studio
+            demos/assets/anatomy-studio.jpg
+            scripts/anatomy-studio
+            assets/brand.svg
+          sparse-checkout-cone-mode: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install test tooling
+        working-directory: scripts/anatomy-studio
+        run: |
+          npm ci
+          npx playwright install --with-deps chromium
+      - name: Serve the site
+        run: |
+          python3 -m http.server 8791 --bind 127.0.0.1 >/dev/null 2>&1 &
+          for i in $(seq 1 30); do curl -sf http://127.0.0.1:8791/demos/anatomy-studio/ >/dev/null && break; sleep 1; done
+      - name: Behaviour
+        working-directory: scripts/anatomy-studio
+        run: node verify.mjs
+      - name: Living body and loading
+        working-directory: scripts/anatomy-studio
+        run: node verify-life.mjs

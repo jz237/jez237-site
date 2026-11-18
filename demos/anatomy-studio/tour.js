@@ -7,7 +7,10 @@
 
 export function createTour({ onStart, onEnd }) {
   const el = id => document.getElementById(id);
-  const t = { stops: [], at: -1, name: '', token: 0 };
+  const t = { stops: [], at: -1, name: '', token: 0, narrate: false };
+  const voice = 'speechSynthesis' in window ? window.speechSynthesis : null;
+  /** Read a stop aloud with the browser's own voice, if narration is on. */
+  function say(text) { if (!voice) return; voice.cancel(); if (!t.narrate || !text) return; const u = new SpeechSynthesisUtterance(text); u.rate = 0.96; voice.speak(u); }
   const active = () => t.at >= 0;
 
   async function show(i) {
@@ -22,10 +25,10 @@ export function createTour({ onStart, onEnd }) {
     el('tour-prev').disabled = i === 0;
     el('tour-next').textContent = i === t.stops.length - 1 ? 'Finish' : 'Next →';
     try { await stop.run?.(); } catch (error) { console.warn('tour stop failed', error); }
-    if (typeof stop.text === 'function') {
-      const text = await stop.text();
-      if (token === t.token) el('tour-text').textContent = text;   // ignore a description that arrives after the visitor moved on
-    }
+    const text = typeof stop.text === 'function' ? await stop.text() : stop.text;
+    if (token !== t.token) return;   // ignore a description that arrives after the visitor moved on
+    el('tour-text').textContent = text;
+    say(`${stop.title}. ${text}`);
   }
 
   function start(name, stops) {
@@ -43,18 +46,21 @@ export function createTour({ onStart, onEnd }) {
     t.at = -1;
     t.token++;
     el('tour-card').hidden = true;
+    voice?.cancel();
     onEnd?.();
   }
 
   el('tour-prev').onclick = () => show(t.at - 1);
   el('tour-next').onclick = () => (t.at === t.stops.length - 1 ? end() : show(t.at + 1));
   el('tour-end').onclick = end;
+  el('tour-narrate').hidden = !voice;
+  el('tour-narrate').onclick = () => { t.narrate = !t.narrate; el('tour-narrate').setAttribute('aria-pressed', t.narrate); if (t.narrate && active()) say(`${t.stops[t.at].title}. ${el('tour-text').textContent}`); else voice?.cancel(); };
 
   return {
     get active() { return active(); },
     start, end,
     next: () => (active() && t.at < t.stops.length - 1 ? show(t.at + 1) : undefined),
     prev: () => (active() ? show(t.at - 1) : undefined),
-    getState: () => ({ active: active(), name: t.name, at: t.at, stops: t.stops.length })
+    getState: () => ({ active: active(), name: t.name, at: t.at, stops: t.stops.length, narrate: t.narrate })
   };
 }
