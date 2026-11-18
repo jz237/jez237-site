@@ -268,6 +268,13 @@ export class SquadronRoom extends DurableObject {
 export class SquadronLobby extends DurableObject {
   constructor(ctx,env){super(ctx,env);this.rooms=[];this.serial=Promise.resolve();ctx.blockConcurrencyWhile(async()=>{this.rooms=await ctx.storage.get('rooms')||[];});}
   fetch(request){const job=this.serial.then(()=>this.match(request));this.serial=job.catch(()=>{});return job;}
+  async listPublicRooms(){
+    // A spectator reading the directory never joins, creates or prunes rooms.
+    const fresh=this.rooms.filter(r=>Date.now()-r.created<2*60*60*1000);
+    const results=await Promise.allSettled(fresh.map(r=>this.env.ROOMS.getByName(r.code).publicInfo()));
+    return {source:'astra',available:results.length===0||results.some(r=>r.status==='fulfilled'),
+      partial:results.some(r=>r.status==='rejected'),games:results.filter(r=>r.status==='fulfilled'&&r.value).map(r=>r.value)};
+  }
   async match(request){
     const url=new URL(request.url),rooms=[];
     let requested=DEFAULT;try{requested=JSON.parse(url.searchParams.get('config')||JSON.stringify(DEFAULT));}catch{return new Response('Invalid configuration',{status:400});}
@@ -298,7 +305,7 @@ export class SquadronLobby extends DurableObject {
     return this.env.ROOMS.getByName(entry.code).fetch(new Request(target,{method:'GET',headers}));
   }
 }
-// Only contact the three public directories. Never fetch a user-supplied host
+// Only contact fixed public directories. Never fetch a user-supplied host
 // or any address listed by a game server. Bound the body even without a length.
 async function directoryText(url){
   const r=await fetch(url,{redirect:'manual',signal:AbortSignal.timeout(5500),cf:{cacheEverything:true,cacheTtl:45}});
@@ -318,18 +325,43 @@ async function desktopDirectory(source){
     if(source==='retro'){
       const html=await directoryText('https://retro-tracker.game-server.cc/');
       if(!html.includes('DXX Retro Tracker'))throw Error('Unavailable');
-      for(const table of html.split(/class=["']?scoreboard_details\b/i).slice(1,33)){
+      if(/Tracker backend is DOWN/i.test(html))throw Error('Tracker offline');
+      for(const table of html.split(/class=["']?scoreboard_details\b/i).slice(1,257)){
         const field=label=>plain(new RegExp('<b>'+label+':\\s*</b>\\s*([^<]*)','i').exec(table)?.[1]);
-        if(field('Game Name'))games.push({name:field('Game Name'),map:field('Mission'),players:field('Players'),kind:field('Version'),status:field('Joinable')});
+        if(field('Game Name'))games.push({name:field('Game Name'),map:field('Mission'),players:field('Players'),kind:field('Version'),mode:field('Game Mode'),status:field('Joinable')});
+      }
+    }else if(source==='rebirth'){
+      const feed=JSON.parse(await directoryText('https://dxxtracker.reenigne.net/tracker.php'));
+      if(!feed||typeof feed!=='object'||feed.error)throw Error('Unavailable');
+      for(const g of Object.values(feed).slice(0,256)){
+        if(!g?.name||!/^d[12]$/i.test(g.game))continue;
+        games.push({name:short(g.name),kind:short(g.game.toUpperCase()+' '+(g.version||'')),map:short(g.missiontitle),players:short(g.players),
+          mode:['Anarchy','Team anarchy','Robot anarchy','Co-op','Capture the flag','Hoard','Team hoard','Bounty'][g.mode],
+          status:['Menu','Playing','Browsing','Waiting','Forming','End level'][g.status],address:short(g.ip+':'+g.port)});
+      }
+    }else if(source==='tsetse'){
+      const feed=JSON.parse(await directoryText('https://api.tsetsefly.de/?template=ttfcWeb&get=gameServerList&ver=0&format=json'));
+      if(!Array.isArray(feed.data?.gameServerList))throw Error('Unavailable');
+      for(const g of feed.data.gameServerList.slice(0,256)){
+        const family=String(g.gameSn||'').toLowerCase();
+        if(!/^d[123]$/.test(family)||!g.serverName)continue;
+        const seen=Date.parse(g.lastSeen);if(Number.isFinite(seen)&&Date.now()-seen>15*60000)continue;
+        let address='';
+        for(const host of g.hostList||[])for(const ips of host.ipV4List||[])for(const ip of ips.addressList||[]){
+          const port=ip.portList?.find(p=>p.type==='hostport'&&!p.timeout);
+          if(!address&&port)address=short(ip.address+':'+port.number);
+        }
+        games.push({name:short(g.serverName),family,kind:short(g.version?.gameVersionName),address,map:short(g.mapName),
+          mode:short(g.modName),status:short(g.network),players:short(g.curPlayer+'/'+g.maxPlayer),bots:Number(g.botPlayer)||0});
       }
     }else if(source==='xl'){
       const feed=JSON.parse(await directoryText('https://descent2.de/tracker-api.php'));
       if(!Array.isArray(feed.servers)&&!/^No games are currently registered/i.test(feed.error||''))throw Error('Unavailable');
-      for(const s of (feed.servers||[]).slice(0,32))if(s.info)games.push({name:short(s.info.game),map:short(s.info.mission),players:short(s.info.players),kind:short(s.info.version),status:short(s.info.status),address:short(s.address)});
+      for(const s of (feed.servers||[]).slice(0,256))if(s.info)games.push({name:short(s.info.game),map:short(s.info.mission),players:short(s.info.players),kind:short(s.info.version),mode:short(s.info.mode),status:short(s.info.status),address:short(s.address)});
     }else{
       const html=await directoryText('https://tracker.h0m3.net/index.html');
       if(!html.includes('Descent 3')&&!html.includes('server-name'))throw Error('Unavailable');
-      for(const block of html.split(/<section class="server">/i).slice(1,33)){
+      for(const block of html.split(/<section class="server">/i).slice(1,257)){
         const value=key=>plain(new RegExp('class="cell '+key+'"[^>]*>([^<]*)','i').exec(block)?.[1]);
         const address=plain(/class="ip-address"[^>]*>([\d.:]+)</i.exec(block)?.[1]);
         const version=plain(/class="cell server-name"[^>]*>[^<]*<\/div>\s*<div class="cell">([^<]*)/i.exec(block)?.[1]);
@@ -340,16 +372,27 @@ async function desktopDirectory(source){
   }catch{return {source,available:false,games:[]};}
 }
 export default {
-  async fetch(request,env){
+  async fetch(request,env,ctx){
     const url=new URL(request.url);
-    if(url.pathname==='/health')return Response.json({service:'astra-squadron',version:109,maxPilots:4,campaigns:Object.keys(LEVELS),matchBy:['mode','campaign','any'],desktopTrackers:['retro','xl','d3']});
-    if(url.pathname!=='/online'&&url.pathname!=='/trackers'&&!/^\/room\/[0-9A-V]{9}$/.test(url.pathname))return new Response('Not found',{status:404});
+    if(url.pathname==='/health')return Response.json({service:'astra-squadron',version:111,maxPilots:4,campaigns:Object.keys(LEVELS),matchBy:['mode','campaign','any'],desktopTrackers:['retro','rebirth','xl','d3','tsetse']});
+    if(!['/online','/games','/trackers'].includes(url.pathname)&&!/^\/room\/[0-9A-V]{9}$/.test(url.pathname))return new Response('Not found',{status:404});
     const origin=request.headers.get('Origin')||'';
     // The standalone Astra installation also runs from a loopback web server.
     const localInstall=/^http:\/\/(127\.0\.0\.1|localhost):\d+$/.test(origin);
     if(!/^https:\/\/(www\.)?jez237\.com$/.test(origin)&&!/^https:\/\/[a-z0-9-]+\.jez237-site\.pages\.dev$/.test(origin)&&!localInstall)return new Response('Origin not allowed',{status:403});
     if(request.method!=='GET')return new Response('Method not allowed',{status:405});
     if(request.headers.get('Upgrade')?.toLowerCase()!=='websocket')return new Response('WebSocket required',{status:426});
+    if(url.pathname==='/games'){
+      const [client,ws]=Object.values(new WebSocketPair());ws.accept();
+      const sources=['astra','retro','rebirth','xl','d3','tsetse'];
+      ctx.waitUntil(Promise.all(sources.map(async source=>{
+        try{
+          const result=source==='astra'?await env.LOBBY.getByName('public-v54').listPublicRooms():await desktopDirectory(source);
+          json(ws,{type:'directory-source',...result});
+        }catch{json(ws,{type:'directory-source',source,available:false,games:[]});}
+      })).finally(()=>{try{ws.close(1000,'Directory complete');}catch{}}));
+      return new Response(null,{status:101,webSocket:client});
+    }
     if(url.pathname==='/trackers'){
       const sources=await Promise.all(['retro','xl','d3'].map(desktopDirectory));
       const [client,ws]=Object.values(new WebSocketPair());ws.accept();json(ws,{type:'desktop-games',sources});ws.close(1000,'Directories read');

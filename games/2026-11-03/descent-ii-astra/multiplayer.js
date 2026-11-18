@@ -129,7 +129,7 @@
       if(m.type==='finder-idle'&&finding){
         foundNoRooms=m.publicRooms===0;
         status(m.publicRooms?'Public rooms are full or changing levels. Searching again shortly…':$('squadHostEmpty').checked?'No open match. Searching again in 12 seconds, then hosting if still empty.':'Waiting for a public Astra match across all campaigns and modes…');
-        $('squadTrackers').open=true;loadTrackers();return;
+        loadTrackers();return;
       }
       if(m.type==='retarget'){session.targetLevel=m.level;session.session.level=m.level;session.session.late=!!m.late;barrier=null;status('The host is moving to the next mine…');return;}
       if(m.type==='roster'){
@@ -168,47 +168,130 @@
   function stopSearch(){
     finding=foundNoRooms=false;clearTimeout(searchTimer);searchTimer=null;
     if($('squadStopSearch'))$('squadStopSearch').hidden=true;
-    if(listingSocket){listingSocket.onmessage=listingSocket.onclose=null;listingSocket.close();listingSocket=null;listedAt=0;}
   }
   function cancelSearch(){
     stopSearch();ignoreStart=true;
     if(socket&&!session.session){send({type:'leave'});socket.close(1000,'Search canceled');}
     status('Search stopped.');render();
   }
-  function loadTrackers(){
-    if(listingSocket||!ui.open||!$('squadTrackers').open||performance.now()-listedAt<45000&&listedAt)return;
-    const box=$('squadListings');listedAt=performance.now();box.textContent='Checking public trackers…';
-    const ws=listingSocket=new WebSocket(relayBase()+'/trackers');let received=false;
-    ws.onmessage=e=>{
-      let result;try{result=JSON.parse(e.data);}catch{return;}
-      if(result.type!=='desktop-games'||!Array.isArray(result.sources))return;
-      received=true;box.replaceChildren();
-      const directories={retro:['DXX Retro / Redux','https://retro-tracker.game-server.cc/'],xl:['D2X-XL','https://descent2.de/active-servers'],d3:['Descent 3','https://tracker.h0m3.net/index.html']};
-      for(const s of result.sources){
-        if(!Object.hasOwn(directories,s.source))continue;
-        const [name,url]=directories[s.source],details=document.createElement('details'),head=document.createElement('summary');
-        head.textContent=name+' · '+(!s.available?'Tracker unavailable':s.games.length+' listed');details.append(head);
-        for(const g of s.games){
-          const row=document.createElement('p');row.textContent=[g.name,g.kind,g.map,g.players&&g.players+' players',g.status,g.address].filter(Boolean).join(' · ');details.append(row);
-          if(s.source==='d3'&&/^Retail\b/i.test(g.kind||'')&&/^\d{1,3}(\.\d{1,3}){3}:[1-9]\d{0,4}$/.test(g.address)){
-            const [ip,port]=g.address.split(':');
-            if(Number(port)<=65535&&ip.split('.').every(v=>Number(v)<=255)){
-              const join=document.createElement('a');join.textContent='Join in Steam Descent 3';join.href='steam://run/273590//-directip%20'+g.address+'/';row.append(' ',join);
-            }
-          }
-        }
-        const link=document.createElement('a');link.textContent='Open '+name+' tracker';link.href=url;link.target='_blank';link.rel='noopener noreferrer';details.append(link);box.append(details);
-      }
-    };
-    ws.onclose=()=>{if(listingSocket===ws)listingSocket=null;if(!received){listedAt=0;box.textContent='Tracker service unavailable. Reopen to retry.';}};
+  const directoryNames={astra:'Astra',retro:'DXX Retro / Redux',rebirth:'DXX-Rebirth',xl:'D2X-XL',d3:'Descent 3',tsetse:'Tsetsefly'};
+  const directoryUrls={retro:'https://retro-tracker.game-server.cc/',rebirth:'https://dxxtracker.reenigne.net/',xl:'https://descent2.de/active-servers',d3:'https://tracker.h0m3.net/index.html',tsetse:'https://tsetsefly.de/'};
+  const sources=new Map();
+  let directoryTimeout,refreshTimer;
+  function publicAddress(value){
+    if(typeof value!=='string'||!/^\d{1,3}(\.\d{1,3}){3}:[1-9]\d{0,4}$/.test(value))return '';
+    const [ip,port]=value.split(':'),octets=ip.split('.').map(Number),[a,b]=octets;
+    if(+port>65535||octets.some(n=>n>255)||a===0||a===10||a===127||a>=224||
+      a===169&&b===254||a===172&&b>=16&&b<=31||a===192&&b===168||a===100&&b>=64&&b<=127)return '';
+    return octets.join('.')+':'+Number(port);
   }
-  function connect(create,online=false,force=false,anywhere=false){
+  function joinDetails(g){
+    const panel=$('squadJoinDetails');panel.replaceChildren();panel.hidden=false;
+    const heading=document.createElement('strong');heading.textContent=g.name;panel.append(heading);
+    const note=document.createElement('p');
+    note.textContent=g.pxo?'Open Descent 3’s PXO multiplayer lobby and select “'+g.name+'”.':g.address?'Open '+g.client+' and join by address using '+g.address+'.':'Open '+g.client+' and choose “'+g.name+'” in its multiplayer tracker.';
+    panel.append(note);
+    const copy=document.createElement('button');copy.type='button';copy.textContent=g.address?'Copy server address':'Copy match name';
+    copy.onclick=async()=>{try{await navigator.clipboard.writeText(g.address||g.name);copy.textContent='Copied';}catch{note.textContent='Select and copy '+(g.address||g.name);}};panel.append(copy);
+    const link=document.createElement('a');link.href=directoryUrls[g.source];link.target='_blank';link.rel='noopener noreferrer';link.textContent='View tracker';panel.append(link);
+    const close=document.createElement('button');close.type='button';close.textContent='Close details';close.onclick=()=>{panel.hidden=true;const row=[...$('squadListings').children].find(r=>r.dataset.key===g.key);(row?.querySelector('button,a')||$('squadRefresh')).focus();};panel.append(close);
+    panel.tabIndex=-1;panel.focus();
+  }
+  function directoryGames(){
+    const unique=new Map();
+    // Prefer the monitor's separate human and bot counts for overlapping D3 listings.
+    for(const source of ['astra','retro','rebirth','xl','tsetse','d3']){
+      for(const item of sources.get(source)?.games||[]){
+        const g={...item,source};
+        if(source==='astra'){
+          if(!/^[0-9A-V]{9}$/.test(g.code)||!campaigns[g.campaign])continue;
+          g.name=(campaigns[g.campaign].name||g.campaign)+' · Mine '+g.level;
+          g.info=[g.mode==='coop'?'Co-op':'Deathmatch',g.host&&'Host '+g.host,g.players+'/4 pilots'];
+          g.action=g.players>=4?'Full':!g.accepting?'Changing mines':'Join in Astra';
+          g.disabled=g.players>=4||!g.accepting;g.key='astra/'+g.code;g.people=g.active;
+        }else{
+          const isD3=source==='d3'||source==='tsetse'&&g.family==='d3';
+          g.client=isD3?'Descent 3':source==='tsetse'?[g.family?.toUpperCase(),g.kind].filter(Boolean).join(' '):directoryNames[source];
+          const address=publicAddress(g.address);
+          const nativeAddress=typeof g.address==='string'&&/^(?:[a-z\d-]+(?:\.[a-z\d-]+)*\.[a-z]{2,}|\[[a-f\d:]+\]):[1-9]\d{0,4}$/i.test(g.address)&&Number(g.address.split(':').pop())<=65535;
+          g.address=address||(nativeAddress?g.address:'');
+          g.key=g.address?(isD3?'d3':source)+'/'+g.address:JSON.stringify([source,g.name,g.kind,g.map]);
+          const counts=/^\s*(\d+)\s*\/\s*(\d+)/.exec(g.players||'');
+          g.people=Number.parseInt(g.players,10)||0;
+          g.disabled=(counts&&+counts[1]>=+counts[2]&&+counts[2]>0)||/^(?:closed|no|full|end level)$/i.test(g.status||'');
+          g.pxo=isD3&&/^PXO$/i.test(g.status||'');
+          g.steam=isD3&&/^Retail\b/i.test(g.kind||'')&&!!address&&(source!=='tsetse'||g.pxo||/^DirectIP$/i.test(g.status||''));
+          g.info=[g.client,g.kind,g.map,g.mode,g.status,g.players&&g.players+(source==='tsetse'?' pilots':' players'),g.bots>0&&g.bots+' AI'];
+          g.action=g.disabled?(counts&&+counts[1]>=+counts[2]?'Full':'Closed'):g.steam?'Join in Steam':'Join details';
+        }
+        if(!unique.has(g.key))unique.set(g.key,g);
+      }
+    }
+    return [...unique.values()].sort((a,b)=>Number(!!a.disabled)-Number(!!b.disabled)||Number(b.source==='astra')-Number(a.source==='astra')||b.people-a.people||a.name.localeCompare(b.name));
+  }
+  function matchRow(g){
+    const row=document.createElement('div');row.className='squad-match';row.dataset.key=g.key;
+    const steam=g.steam&&!g.disabled,action=document.createElement(steam?'a':'button');
+    if(steam){action.href='steam://run/273590//'+(g.pxo?'-pxo':'-directip')+'%20'+g.address+'/';}
+    else{
+      action.type='button';action.disabled=!!g.disabled;
+      if(g.source==='astra'){
+        action.className='squad-room-join';action.dataset.unavailable=g.disabled?'1':'0';action.disabled=!!g.disabled||!!socket||finding;
+        action.onclick=()=>connect(false,false,false,false,g.code);
+      }else action.onclick=()=>joinDetails(g);
+    }
+    const name=document.createElement('strong'),info=document.createElement('span'),verb=document.createElement('b');
+    name.textContent=g.name;info.textContent=g.info.filter(Boolean).join(' · ');verb.textContent=g.action;
+    action.append(name,info,verb);row.append(action);
+    if(steam){const other=document.createElement('button');other.className='squad-other-client';other.type='button';other.textContent='Other client';other.setAttribute('aria-label','Other client for '+g.name);other.onclick=()=>joinDetails(g);row.append(other);}
+    return row;
+  }
+  function renderDirectory(loading){
+    const list=$('squadListings'),games=directoryGames(),old=new Map([...list.children].map(row=>[row.dataset.key,row]));
+    games.forEach((g,i)=>{
+      let row=old.get(g.key);old.delete(g.key);
+      const signature=JSON.stringify(g);
+      if(!row||row.dataset.signature!==signature){const next=matchRow(g);next.dataset.signature=signature;if(row)row.replaceWith(next);row=next;}
+      if(list.children[i]!==row)list.insertBefore(row,list.children[i]||null);
+    });
+    for(const row of old.values())row.remove();
+    const missing=Object.keys(directoryNames).filter(k=>!sources.get(k)?.available||sources.get(k)?.partial);
+    $('squadDirectoryStatus').textContent=(games.length?games.length+' public '+(games.length===1?'match':'matches'):loading?'Searching for public matches…':missing.length===6?'Could not reach the game directories.':'No public matches found.')+
+      (games.length&&loading?' · Checking trackers…':'')+(!loading&&missing.length&&missing.length<6?' · Unavailable or incomplete: '+missing.map(k=>directoryNames[k]).join(', '):'');
+  }
+  function stopDirectory(){
+    clearTimeout(directoryTimeout);clearTimeout(refreshTimer);
+    if(listingSocket){listingSocket.onmessage=listingSocket.onclose=null;listingSocket.close();listingSocket=null;}
+  }
+  function loadTrackers(force=false){
+    if(listingSocket||!ui.open||session.session||document.hidden)return;
+    if(!force&&listedAt&&Date.now()-listedAt<45000){scheduleRefresh();return;}
+    clearTimeout(refreshTimer);const seen=new Set();
+    const ws=listingSocket=new WebSocket(relayBase()+'/games');$('squadRefresh').disabled=true;renderDirectory(true);
+    ws.onmessage=e=>{
+      let r;try{r=JSON.parse(e.data);}catch{return;}
+      if(r.type!=='directory-source'||!Object.hasOwn(directoryNames,r.source)||!Array.isArray(r.games))return;
+      sources.set(r.source,r);seen.add(r.source);renderDirectory(true);
+    };
+    ws.onclose=()=>{
+      clearTimeout(directoryTimeout);listingSocket=null;listedAt=Date.now();
+      for(const k of Object.keys(directoryNames))if(!seen.has(k))sources.delete(k);
+      renderDirectory(false);$('squadRefresh').disabled=false;scheduleRefresh();
+    };
+    directoryTimeout=setTimeout(()=>ws.close(),10000);
+  }
+  function scheduleRefresh(){
+    clearTimeout(refreshTimer);
+    if(ui.open&&!session.session&&!document.hidden)refreshTimer=setTimeout(()=>loadTrackers(true),Math.max(1000,45000-(Date.now()-listedAt)));
+  }
+  function connect(create,online=false,force=false,anywhere=false,selectedCode=''){
     if(socket||session.session)return;intentional=false;
-    let code=create?randomCode():roomField.value.trim().toUpperCase();
+    let code=create?randomCode():selectedCode||roomField.value.trim().toUpperCase();
     if(!online&&!/^[0-9A-V]{9}$/.test(code)){status('Enter the nine-character invite code.');return;}
     ignoreStart=false;roomChoices=false;$('squadRooms').hidden=true;
     if(anywhere){finding=true;$('squadStopSearch').hidden=false;}
     status(anywhere?'Finding an open Astra match worldwide…':'Connecting…');connectButtons.querySelectorAll('button').forEach(b=>b.disabled=true);
+    $('squadListings').querySelectorAll('.squad-room-join').forEach(b=>b.disabled=true);
     const base=relayBase();
     const route=online?`/online?v=54&build=109&new=${force?1:0}${anywhere?'&scope=all':''}&name=${encodeURIComponent(pilotName())}&config=${encodeURIComponent(JSON.stringify(configuration()))}`:`/room/${code}?v=54&build=86&create=${create?1:0}&name=${encodeURIComponent(pilotName())}`;
     socket=new WebSocket(base+route);
@@ -223,7 +306,7 @@
       }
       if(anywhere&&!session.session&&!finding){render();return;}
       if(session.session&&!session.failed&&!intentional){if(credential)reconnect();else fail('Disconnected from the room. Return to the title to reconnect.');}
-      else if(!session.session){lobby=null;identity=null;render();if(!roomChoices)status('Room connection closed.');}
+      else if(!session.session){lobby=null;identity=null;render();if(!roomChoices)status(selectedCode?'Could not join that room. Checking availability again…':'Room connection closed.');if(selectedCode)loadTrackers(true);}
     };
   }
   function startHeartbeat(){
@@ -265,6 +348,7 @@
   }
   function render(){
     connectButtons.querySelectorAll('button').forEach(b=>b.disabled=!!socket||finding);
+    $('squadListings').querySelectorAll('.squad-room-join').forEach(b=>b.disabled=b.dataset.unavailable==='1'||!!socket||finding);
     const host=lobby?.players[0]?.id===identity;start.hidden=!host;
     setup.querySelectorAll('select,input').forEach(e=>e.disabled=!!lobby&&!host);
     roster.replaceChildren();
@@ -299,29 +383,30 @@
     playBar.querySelector('button').textContent='Flight menu';
     playBar.querySelector('button').onclick=()=>{document.exitPointerLock?.();window.Module?._astra_reset_flight_input?.();if(window.Module)Module.menuCommand=1;};
     const leaveWaitingRoom=()=>{if(finding)cancelSearch();else if(socket&&!session.session){ignoreStart=true;socket.close(1000,'Leaving waiting room');}};
-    button.onclick=()=>{if(!session.session&&!socket){$('squadCampaign').value=$('campaign').value;setup.onchange();}ui.showModal();};$('squadClose').onclick=()=>{if(!session.failed){leaveWaitingRoom();ui.close();}};
+    button.onclick=()=>{if(!session.session&&!socket){$('squadCampaign').value=$('campaign').value;setup.onchange();}ui.showModal();loadTrackers(true);};$('squadClose').onclick=()=>{if(!session.failed){leaveWaitingRoom();ui.close();}};
     $('squadCreate').onclick=()=>connect(true);$('squadJoin').onclick=()=>connect(false);$('squadPractice').onclick=practice;
     $('squadOnline').onclick=()=>connect(false,true);
-    const anywhere=document.createElement('button');anywhere.id='squadAnywhere';anywhere.textContent='Find any online game';$('squadPractice').after(anywhere);
+    const anywhere=document.createElement('button');anywhere.id='squadAnywhere';anywhere.textContent='Auto-join any Astra match';$('squadPractice').after(anywhere);
     anywhere.onclick=()=>connect(false,true,false,true);
     const stop=document.createElement('button');stop.id='squadStopSearch';stop.hidden=true;stop.textContent='Stop searching';stop.onclick=cancelSearch;connectButtons.after(stop);
     const fallback=document.createElement('label');fallback.className='squad-finder-host';fallback.innerHTML='<input id="squadHostEmpty" type="checkbox" checked> Host a public room if the search stays empty';anywhere.after(fallback);
-    const trackers=document.createElement('details');trackers.id='squadTrackers';trackers.innerHTML='<summary>Live desktop Descent games</summary><p>These games use their desktop clients. Open a tracker to join with the matching game.</p><div id="squadListings"></div>';
-    $('squadFind').before(trackers);trackers.ontoggle=()=>{if(trackers.open)loadTrackers();};
+    const trackers=document.createElement('section');trackers.id='squadTrackers';trackers.setAttribute('aria-labelledby','squadDirectoryTitle');
+    trackers.innerHTML='<div class="squad-directory-head"><h3 id="squadDirectoryTitle">Online games</h3><button type="button" id="squadRefresh">Refresh</button></div><p id="squadDirectoryStatus" role="status"></p><div id="squadListings"></div><div id="squadJoinDetails" hidden></div>';
+    ui.querySelector('header').after(trackers);$('squadRefresh').onclick=()=>loadTrackers(true);
     $('squadLeave').onclick=()=>{if(session.session)window.astraNavigation.home();else socket?.close(1000,'Leaving');};
     $('squadCopy').onclick=async()=>{if(!socket||!roomField.value)return;const u=new URL('./',location.href);u.hash='room='+roomField.value;try{await navigator.clipboard.writeText(u.href);status('Invite link copied.');}catch{status(u.href);}};
     start.onclick=()=>send({type:'start'});
     setup.onchange=()=>{const arena=!!campaigns[$('squadCampaign').value]?.arena;$('squadMode').options[0].disabled=arena;if(arena)$('squadMode').value='deathmatch';$('squadLevel').max=String(campaigns[$('squadCampaign').value]?.levels||24);$('squadLevel').value=Math.max(1,Math.min(Number($('squadLevel').max),Number($('squadLevel').value)||1));if(lobby)send({type:'configure',...configuration()});};
     ui.addEventListener('cancel',e=>{if(session.failed)e.preventDefault();else leaveWaitingRoom();});
-    ui.addEventListener('close',()=>{if(finding)cancelSearch();else stopSearch();window.Module?._astra_reset_flight_input?.();});
+    ui.addEventListener('close',()=>{stopDirectory();$('squadJoinDetails').hidden=true;if(finding)cancelSearch();else stopSearch();window.Module?._astra_reset_flight_input?.();});
     setInterval(()=>{
       if(!session.session||!ui.open||session.failed||!window.Module?.netPilots)return;
       roster.replaceChildren();for(const p of Module.netPilots){const info=session.session.roster[p.id];if(!info||info.skill===-2)continue;const row=document.createElement('li');row.textContent=info.name+' · '+(info.skill>=0?skills[info.skill]+' AI':p.id===session.session.self?'You':'Human')+(p.connected===0?' · Connecting':session.session.mode==='deathmatch'?` · ${p.kills} kills / ${p.deaths} deaths`:'');roster.append(row);}
     },1000);
     for(const type of ['keydown','keyup'])ui.addEventListener(type,e=>e.stopPropagation());
-    const invite=/^#room=([0-9A-V]{9})$/.exec(location.hash);if(invite){roomField.value=invite[1];ui.showModal();}
-    window.addEventListener('pagehide',()=>{clearInterval(timer);clearInterval(heartbeat);clearTimeout(retryTimer);socket?.close(1000,'Page closed');});
-    document.addEventListener('visibilitychange',()=>{if(!document.hidden)lastPong=performance.now();});
+    const invite=/^#room=([0-9A-V]{9})$/.exec(location.hash);if(invite){roomField.value=invite[1];ui.showModal();loadTrackers();}else if(location.hash==='#online-games')button.click();
+    window.addEventListener('pagehide',()=>{stopDirectory();clearInterval(timer);clearInterval(heartbeat);clearTimeout(retryTimer);socket?.close(1000,'Page closed');});
+    document.addEventListener('visibilitychange',()=>{if(!document.hidden){lastPong=performance.now();loadTrackers();}else clearTimeout(refreshTimer);});
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mount,{once:true});else mount();
 })();

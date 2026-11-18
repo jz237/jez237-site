@@ -6,9 +6,19 @@
 #squadAnywhere,#squadTrackers,.squad-finder-host{grid-column:1/-1}
 #squadronDialog .squad-finder-host{display:flex;flex-direction:row;align-items:center;font-size:13px;color:#adc7cf}
 #squadHostEmpty{min-height:0!important;width:16px;height:16px;margin:0 5px 0 0;accent-color:#54c8ca}
-#squadTrackers{border-top:1px solid #426975;padding-top:10px}
-#squadTrackers summary{cursor:pointer;padding:5px 0}
-#squadTrackers p{margin:6px 0;color:#adc7cf;font-size:13px}
-#squadListings details{padding:5px 10px;border-left:2px solid #426975;margin:7px 0}
-#squadListings a{color:#8fe3f0}
+#squadTrackers{margin:16px 0;padding:12px;border:1px solid #375665;border-radius:8px;background:#0b1c26}
+.squad-in-flight #squadTrackers{display:none}
+.squad-directory-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.squad-directory-head h3{margin:0;font-size:18px}
+#squadTrackers p{margin:6px 0;color:#b2cad3;font-size:13px}
+#squadListings{max-height:clamp(130px,32vh,320px);overflow:auto;overscroll-behavior:contain}
+.squad-match{display:flex;gap:5px;margin:5px 2px}
+#squadListings .squad-match>a,#squadListings .squad-match>button:first-child{flex:1;min-width:0;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:2px 12px;text-align:left;color:#e3f5f8;background:#122b38;border:1px solid #406273;border-radius:6px;text-decoration:none;padding:9px 12px;overflow-wrap:anywhere}
+#squadListings .squad-match>a:hover,#squadListings .squad-match>button:enabled:hover{background:#1c3d4d;border-color:#8eeaff}
+.squad-match span{grid-column:1;font-size:12px;color:#b4cbd5}
+.squad-match b{grid-column:2;grid-row:1 / span 2;font-size:13px;color:#91edf2}
+#squadListings .squad-other-client{font-size:12px;padding:6px}
+#squadJoinDetails{border-top:1px solid #406273;padding:10px 0 0;margin-top:8px}
+#squadJoinDetails a,#squadJoinDetails button{margin-right:8px;color:#9ae4e8}
+@media(max-width:520px){.squad-match{flex-wrap:wrap}.squad-match b{grid-column:1;grid-row:auto}.squad-match .squad-other-client{align-self:center;max-width:72px}}
 #squadStopSearch{margin-top:10px}
