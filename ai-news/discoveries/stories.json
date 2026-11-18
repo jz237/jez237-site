@@ -1,11 +1,71 @@
 {
   "version": 1,
   "title": "AI Discoveries, Explained",
-  "updated": "2026-11-17",
+  "updated": "2026-11-18",
   "coverageStart": "2026-09-21",
-  "coverageEnd": "2026-11-17",
+  "coverageEnd": "2026-11-18",
   "editorialNote": "Source-linked discoveries, research demonstrations, follow-ups and corrections from AI Discovery Watch. Historical milestones posted before the fresh-news brief are not included. Coverage dates are when a story was shared, not necessarily when its discovery occurred. Evidence labels reflect the linked report at that time; read later updates too.",
   "stories": [
+    {
+      "category": "Physics & materials",
+      "evidenceKind": "lab",
+      "modelNote": "QORA uses GPT-6-Astra and Sorol for its theory-and-experiment agent system; finer model-role assignments are not specified.",
+      "sources": [
+        "https://arxiv.org/abs/2611.21765",
+        "https://arxiv.org/html/2611.21765v1"
+      ],
+      "status": "Early laboratory result reported by the authors; not independently replicated or established by peer review.",
+      "takeaway": "AI agents designed and tested microwave pulse patterns that kept quantum states in diamond stable for almost twice as long as a leading human-designed pattern. The November 16 preprint reports roughly 19 microseconds instead of 10—a small timespan, but an important laboratory measure of protection from noise. People set the goals, supervised the apparatus and worked out why the new patterns helped; the agents proposed patterns, calibrated equipment and used measurements to guide further searches. This is an early result in one diamond system, not a demonstrated improvement to a complete quantum computer.",
+      "title": "AI finds microwave patterns that protect fragile quantum states",
+      "id": "d-1572631645046046827-qora-protects-diamond-quantum-states",
+      "coveredOn": "2026-11-18",
+      "context": "🔬 **AI Discovery Watch · November 18, 2026**\n\n**AI finds microwave patterns that protect fragile quantum states**\nAI agents designed and tested microwave pulse patterns that kept quantum states in diamond stable for almost twice as long as a leading human-designed pattern. The November 16 preprint reports roughly 19 microseconds instead of 10—a small timespan, but an important laboratory measure of protection from noise. People set the goals, supervised the apparatus and worked out why the new patterns helped; the agents proposed patterns, calibrated equipment and used measurements to guide further searches. This is an early result in one diamond system, not a demonstrated improvement to a complete quantum computer.\n\n**AI used:** QORA uses GPT-6-Astra and Sorol for its theory-and-experiment agent system; finer model-role assignments are not specified.\n**Evidence:** Early laboratory result reported by the authors; not independently replicated or established by peer review.\nOriginal source: <https://arxiv.org/abs/2611.21765>\nSupporting source: <https://arxiv.org/html/2611.21765v1>"
+    },
+    {
+      "category": "Medicine & biology",
+      "evidenceKind": "lab",
+      "modelNote": "Abelio generated the proposals using commercial OpenAI, Anthropic, Google and xAI models; exact hypothesis-generating versions are not identified in the inspected methods.",
+      "sources": [
+        "https://arxiv.org/abs/2611.22988",
+        "https://arxiv.org/html/2611.22988v1"
+      ],
+      "status": "Early laboratory proof of concept, not a treatment; two experiments per assay, with researchers aware of treatment groups.",
+      "takeaway": "AI proposed using matching DNA strands attached to neighboring cells as tiny, reversible bridges across a damaged intestinal barrier. In a November 17 preprint, researchers report that treated cell layers leaked less, and adding a strand that disrupted the DNA pairing reversed the effect. People chose the research goal, selected proposals, refined the experimental details and performed the laboratory work. This offers a testable new repair strategy, but the bridges themselves were not directly seen. Results come from cultured cells, not animals or patients, and need independent confirmation.",
+      "title": "AI proposes DNA bridges to reduce leaks between intestinal cells",
+      "id": "d-1572631882888257659-abelio-dna-bridges-cell-barrier",
+      "coveredOn": "2026-11-18",
+      "context": "🔬 **AI Discovery Watch · November 18, 2026**\n\n**AI proposes DNA bridges to reduce leaks between intestinal cells**\nAI proposed using matching DNA strands attached to neighboring cells as tiny, reversible bridges across a damaged intestinal barrier. In a November 17 preprint, researchers report that treated cell layers leaked less, and adding a strand that disrupted the DNA pairing reversed the effect. People chose the research goal, selected proposals, refined the experimental details and performed the laboratory work. This offers a testable new repair strategy, but the bridges themselves were not directly seen. Results come from cultured cells, not animals or patients, and need independent confirmation.\n\n**AI used:** Abelio generated the proposals using commercial OpenAI, Anthropic, Google and xAI models; exact hypothesis-generating versions are not identified in the inspected methods.\n**Evidence:** Early laboratory proof of concept, not a treatment; two experiments per assay, with researchers aware of treatment groups.\nOriginal source: <https://arxiv.org/abs/2611.22988>\nSupporting source: <https://arxiv.org/html/2611.22988v1>"
+    },
+    {
+      "category": "Medicine & biology",
+      "evidenceKind": "followup",
+      "modelNote": "Claude Mythos 5 supplied the original discovery; Claude Opus 5 planned the new tests, with substantial human oversight.",
+      "sources": [
+        "https://cloud.ginkgo.bio/blog/art-reverse-transcriptase-activity",
+        "https://maccus.fr/en/ai-enzyme-lab-validation/"
+      ],
+      "status": "Company-reported follow-up with published assay data, not peer-reviewed. Specificity and DNA-product sequencing remain untested.",
+      "takeaway": "Two enzymes from a family first flagged by Claude in September have now passed their first activity tests. Ginkgo’s November 17 report says they copied their associated RNA into DNA; two other candidates remained inconclusive. Claude planned the experiments using a robotic laboratory’s available procedures, while people reviewed designs, added controls and rescued an insensitive measurement. This closes an important gap between spotting an unusual genetic pattern and showing biochemical activity. The tests do not establish the enzymes’ job in living organisms or whether they defend against viruses.",
+      "title": "New lab tests show that two AI-discovered enzymes actually work",
+      "id": "d-1572632092863504506-art-enzymes-first-activity-tests",
+      "coveredOn": "2026-11-18",
+      "context": "🔬 **AI Discovery Watch · November 18, 2026**\n\n**New lab tests show that two AI-discovered enzymes actually work**\nTwo enzymes from a family first flagged by Claude in September have now passed their first activity tests. Ginkgo’s November 17 report says they copied their associated RNA into DNA; two other candidates remained inconclusive. Claude planned the experiments using a robotic laboratory’s available procedures, while people reviewed designs, added controls and rescued an insensitive measurement. This closes an important gap between spotting an unusual genetic pattern and showing biochemical activity. The tests do not establish the enzymes’ job in living organisms or whether they defend against viruses.\n\n**AI used:** Claude Mythos 5 supplied the original discovery; Claude Opus 5 planned the new tests, with substantial human oversight.\n**Evidence:** Company-reported follow-up with published assay data, not peer-reviewed. Specificity and DNA-product sequencing remain untested.\nOriginal source: <https://cloud.ginkgo.bio/blog/art-reverse-transcriptase-activity>\nSupporting source: <https://maccus.fr/en/ai-enzyme-lab-validation/>"
+    },
+    {
+      "category": "Medicine & biology",
+      "evidenceKind": "early",
+      "modelNote": "Claude Opus 4.6 directed the research; Sonnet 4.5 ran early analyses, then Opus 4.6. Humans steered hypotheses across 13 rounds.",
+      "sources": [
+        "https://arxiv.org/abs/2611.21950",
+        "https://arxiv.org/html/2611.21950v1"
+      ],
+      "status": "Early computational finding from existing experimental data, not independently confirmed; association is not proof of disease causation.",
+      "takeaway": "AI spotted a pattern in existing immune-cell data: genes that receive many regulatory signals and influence many other genes were unusually associated with autoimmune disease. The November 16 preprint calls them “relay genes,” like busy junctions in a communications network. DiscoveryAgent proposed this idea and tested alternatives while a biologist chose research directions and interpreted the evidence. The association could guide follow-up experiments, but it does not identify which genes cause an individual disease. The disease link did not carry over to a different cell type, and no new treatment was tested.",
+      "title": "AI spots gene-network relays linked to autoimmune disease",
+      "id": "d-1572632558213013585-discoveryagent-immune-gene-relays",
+      "coveredOn": "2026-11-18",
+      "context": "🔬 **AI Discovery Watch · November 18, 2026**\n\n**AI spots gene-network relays linked to autoimmune disease**\nAI spotted a pattern in existing immune-cell data: genes that receive many regulatory signals and influence many other genes were unusually associated with autoimmune disease. The November 16 preprint calls them “relay genes,” like busy junctions in a communications network. DiscoveryAgent proposed this idea and tested alternatives while a biologist chose research directions and interpreted the evidence. The association could guide follow-up experiments, but it does not identify which genes cause an individual disease. The disease link did not carry over to a different cell type, and no new treatment was tested.\n\n**AI used:** Claude Opus 4.6 directed the research; Sonnet 4.5 ran early analyses, then Opus 4.6. Humans steered hypotheses across 13 rounds.\n**Evidence:** Early computational finding from existing experimental data, not independently confirmed; association is not proof of disease causation.\nOriginal source: <https://arxiv.org/abs/2611.21950>\nSupporting source: <https://arxiv.org/html/2611.21950v1>"
+    },
     {
       "category": "Research in action",
       "evidenceKind": "demo",
