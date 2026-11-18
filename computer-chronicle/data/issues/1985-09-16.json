@@ -1,0 +1,466 @@
+{
+  "sectionChrome": {
+    "primary": "brick red",
+    "secondary": "royal blue",
+    "texture": "aged newsprint, fine column rules, ink bleed"
+  },
+  "currentDate": "2026-11-18",
+  "historicDate": "1985-09-16",
+  "displayDate": "Week of September 16-22, 1985",
+  "edition": "Issue 164 - Weekly 1985 Computer & Culture Chronicle",
+  "masthead": {
+    "title": "Computer Chronicle",
+    "subtitle": "Issue 164 - Weekly 1985 Computer & Culture Chronicle",
+    "dateline": "Week of September 16-22, 1985",
+    "price": "75 cents"
+  },
+  "milestone": {
+    "title": "Steve Jobs formally leaves Apple",
+    "note": "The cofounder's departure divides Apple's leadership and starts a separate computing venture, an era-defining industry rupture rather than an ordinary product update."
+  },
+  "visualProfile": {
+    "tone": "Extra Edition: Apple cofounder resigns; a new computing venture beckons",
+    "motifs": [
+      "Steve Jobs and an Apple desktop in editorial halftone",
+      "Apple II fantasy adventure map and floppy disks",
+      "Amiga desktop and modem terminal"
+    ],
+    "layout": "Warm aged newsprint, dense believable columns, red and blue section headers, real color accents, boxed modules, paper grain and no dead footer space"
+  },
+  "layoutPlan": {
+    "leadPlacement": "Jobs resignation is the historically stronger lead and gets the largest headline and halftone. Ultima IV is the prominent gaming feature. Do not invent a new-company product or logo.",
+    "secondaryRail": "Print feature headlines verbatim with fixed inside-page jump lines. Games are editorial shelf picks, not sales ranks; movies September 20-22 and rock September 21.",
+    "archiveNavigation": "Weekly archive with previous/next navigation"
+  },
+  "heroImage": {
+    "src": "media/computer-chronicle-gpt-image-2-week-1985-09-16.jpg",
+    "alt": "Computer Chronicle newspaper front page for September 16-22, 1985",
+    "caption": "Newspaper-style front page generated from structured Chronicle issue data.",
+    "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+  },
+  "editorNote": "An Apple founder steps away as personal computing opens new paths into adventure, graphics and the classroom.",
+  "morningLine": "Jobs leaves Apple; Britannia asks what kind of hero you will become.",
+  "lead": {
+    "headline": "Jobs resigns from Apple",
+    "dek": "Cofounder leaves the chairmanship and turns toward a higher-education computer venture.",
+    "confidence": "exact-date",
+    "sourceRefs": [
+      0,
+      1
+    ],
+    "body": [
+      "Steve Jobs has resigned as chairman of Apple Computer. His September 17 letter to A. C. Markkula Jr., reproduced in the September 18 Mercury News, brings a formal break between the 30-year-old cofounder and the company he helped build. A proposed new venture aimed at higher education now occupies his attention.",
+      "The departure follows the May management struggle with John Sculley. Jobs says the subsequent reorganization left him without work or regular management reports. “I am but 30 and want still to contribute and achieve,” he writes, presenting a separate enterprise as the way forward.",
+      "His account says he outlined the venture at the preceding Thursday board meeting. Directors initially asked him to defer resignation and indicated possible investment. But recruitment of five key Apple employees angered the board, and Markkula disputed Jobs’ description of the discussions. The newspaper reports Apple was evaluating the conflict; a lawsuit was not yet decided in that account.",
+      "For prospective customers, the new enterprise remains a direction rather than a machine to order. No product name, specification or price has been established. Jobs still held 9.4 percent of Apple common stock as of August 31, according to the report: leaving the chairman’s office does not by itself erase that financial connection."
+    ]
+  },
+  "stories": [
+    {
+      "headline": "Ultima IV makes virtue the object of the adventure",
+      "body": [
+        "Origin Systems’ Ultima IV: Quest of the Avatar turns the role-playing adventure toward conduct as well as conquest. Richard Garriott’s Britannia asks players to pursue Avatarhood, not merely eliminate one final villain. The Apple II edition is the first arrival; the September 16 date comes from retrospective release records rather than a located contemporary shipping notice.",
+        "Honesty, compassion, valor, justice, sacrifice, honor, spirituality and humility supply eight measures of the would-be hero. Ethical choices begin during character creation, and behavior continues to matter during the journey. Conversation also expands: inhabitants can be asked about subjects rather than supplying only one fixed reply.",
+        "That gives the home-computer adventurer a different sort of challenge. Progress means learning about people and principles as well as exploring the map. This is Apple II coverage, not an announcement that later computer and console editions are already on the shelf."
+      ],
+      "confidence": "same-week",
+      "sourceRefs": [
+        2,
+        3
+      ]
+    },
+    {
+      "headline": "Amiga promises a multimedia desktop, but buyers must separate promise from delivery",
+      "body": [
+        "September’s COMPUTE! gives the Amiga a lengthy examination by Tom R. Halfhill. His sessions took place before release, so the review is a view of the machine’s capabilities and promises rather than proof of a new arrival at dealers this week.",
+        "A Motorola 68000, 256K of standard memory and an internal 880K 3.5-inch disk drive form the base described. Four stereo sound channels, a 4,096-color palette and a mouse-driven interface make the attractions unusually vivid. Custom chips assist graphics and animation, while multitasking broadens the desktop proposition.",
+        "The practical qualifications matter. Early machines load much of the operating system from disk, leaving roughly 130K free on a 256K system in the reviewer’s account. Prices were not final at writing: $1,000–$1,500 for a basic configuration and about $2,000 with 512K and an RGB monitor were estimates, not firm dealer offers."
+      ],
+      "confidence": "same-month",
+      "sourceRefs": [
+        4
+      ]
+    },
+    {
+      "headline": "A modem becomes a route to college credit",
+      "body": [
+        "A modem can carry more than messages between hobbyists. Sharon Darling’s September COMPUTE! feature describes The Electronic University, including West Des Moines student Leeann Pearce studying from home on an SX-64 while living with multiple sclerosis. Her husband and daughter also use the service.",
+        "TeleLearning Systems, founded by Ron Gordon in 1983, developed the network. The magazine puts participation near 15,000 students. Lessons arrive on disks; electronic mail carries questions and assignments, and scheduled conferences bring students together with instructors.",
+        "The enrollment package is not a degree price. It costs $79.95 for Commodore 64 or $149.95 for Apple and IBM, with tuition and connection charges extra. Participating institutions award degrees and accept credits; students must check their college’s requirements, and examinations can require a local proctor."
+      ],
+      "confidence": "same-month",
+      "sourceRefs": [
+        5
+      ]
+    },
+    {
+      "headline": "Britain gives computer programs explicit copyright protection",
+      "body": [
+        "Britain’s Copyright (Computer Software) Amendment Act comes into force September 16, following royal assent on July 16. Computer programs receive explicit treatment as literary works under the Copyright Act 1956, including programs made before commencement.",
+        "The change brings a legal issue directly into the home-computer software market. September’s Your Computer calls the date P-Day and discusses hopes that the measure will curb unauthorized copying. Industry loss claims remain estimates, not a count of proven theft.",
+        "A statute is not a report of a raid. No particular cracking crew or arrest is established by these sources; the news is the legal protection now attached to the program itself."
+      ],
+      "confidence": "exact-date",
+      "sourceRefs": [
+        15,
+        16,
+        17
+      ]
+    }
+  ],
+  "computerItems": [
+    {
+      "title": "Amiga review configuration",
+      "summary": "Motorola 68000; 256K RAM; internal 880K 3.5-inch disk; mouse; stereo sound. Review-time projections must not be treated as confirmed retail availability.",
+      "sourceRefs": [
+        4
+      ],
+      "confidence": "same-month"
+    },
+    {
+      "title": "Tymac MDD-640",
+      "summary": "September product notice lists a 3.5-inch drive for Apple II, II+ and IIe, DOS 3.3/ProDOS compatible, $399 suggested retail. Capacity/speed comparisons in the notice are vendor claims.",
+      "sourceRefs": [
+        8
+      ],
+      "confidence": "same-month"
+    },
+    {
+      "title": "X-10 Powerhouse",
+      "summary": "Computer-programmed standalone controller for up to 72 lights/appliances via separate X-10 modules. Notice says Apple II initially, Commodore 64/128 scheduled September, IBM PC/PCjr October; schedules are not delivery confirmation.",
+      "sourceRefs": [
+        9
+      ],
+      "confidence": "same-month"
+    }
+  ],
+  "softwareList": [
+    {
+      "name": "HomePak and The Newsroom",
+      "detail": "In September HOTWARE, HomePak combines word processing, telecommunications and data management; The Newsroom is a do-it-yourself newspaper package. Underlying chart data July 6, not September.",
+      "confidence": "period",
+      "sourceRefs": [
+        10
+      ]
+    },
+    {
+      "name": "Electronic University enrollment packages",
+      "detail": "Disk-based lessons and telecommunications software for Commodore 64, Apple II and IBM PC/PCjr; enrollment cost is separate from tuition and connection fees.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        5
+      ]
+    }
+  ],
+  "storeShelves": [
+    {
+      "label": "Top 5 Computer Games — editorial shelf picks, not a sales ranking (September coverage; HOTWARE data July 6)",
+      "items": [
+        "Ultima IV: Quest of the Avatar — Apple II",
+        "Rescue on Fractalus! — Atari",
+        "Ballblazer — Atari",
+        "Flight Simulator II — HOTWARE period shelf",
+        "Karateka — HOTWARE period shelf"
+      ],
+      "confidence": "period",
+      "sourceRefs": [
+        2,
+        3,
+        7,
+        10
+      ]
+    },
+    {
+      "label": "Top 5 Movies — domestic weekend September 20-22, 1985",
+      "items": [
+        "1. Back to the Future",
+        "2. Creator",
+        "3. Teen Wolf",
+        "4. Pee-wee’s Big Adventure",
+        "5. Compromising Positions"
+      ],
+      "confidence": "same-week",
+      "sourceRefs": [
+        12
+      ]
+    }
+  ],
+  "priceWatch": [
+    {
+      "item": "Rescue on Fractalus! / Ballblazer",
+      "price": "$40 each",
+      "note": "Published Atari review prices; not a bundle.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        7
+      ]
+    },
+    {
+      "item": "Tymac MDD-640",
+      "price": "$399",
+      "note": "Suggested retail, drive only.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        8
+      ]
+    },
+    {
+      "item": "X-10 Powerhouse",
+      "price": "$125 + $25",
+      "note": "Interface plus software/cable; device modules extra.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        9
+      ]
+    },
+    {
+      "item": "Electronic University enrollment",
+      "price": "$79.95 / $149.95",
+      "note": "C64 / Apple and IBM; tuition and connection costs extra.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        5
+      ]
+    }
+  ],
+  "briefs": [
+    {
+      "headline": "Five governments meet at the Plaza",
+      "summary": "On September 22, finance ministers and central-bank governors of France, West Germany, Japan, Britain and the United States meet in New York and issue a joint announcement on exchange rates and coordinated economic policy.",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        14
+      ]
+    },
+    {
+      "headline": "A smaller disk for Apple owners",
+      "summary": "September’s product notice lists the Tymac MDD-640, a 3.5-inch Apple II-family drive compatible with DOS 3.3 and ProDOS, at $399 suggested retail.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        8
+      ]
+    }
+  ],
+  "musicChart": [
+    {
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-09-21",
+      "confidence": "exact-date",
+      "rank": 1,
+      "title": "Lonely Ol' Night",
+      "artist": "John Cougar Mellencamp",
+      "song": "Lonely Ol' Night",
+      "sourceRefs": [
+        11
+      ]
+    },
+    {
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-09-21",
+      "confidence": "exact-date",
+      "rank": 2,
+      "title": "Fortress Around Your Heart",
+      "artist": "Sting",
+      "song": "Fortress Around Your Heart",
+      "sourceRefs": [
+        11
+      ]
+    },
+    {
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-09-21",
+      "confidence": "exact-date",
+      "rank": 3,
+      "title": "Dancing in the Street",
+      "artist": "Mick Jagger & David Bowie",
+      "song": "Dancing in the Street",
+      "sourceRefs": [
+        11
+      ]
+    },
+    {
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-09-21",
+      "confidence": "exact-date",
+      "rank": 4,
+      "title": "Lovin’ Every Minute of It",
+      "artist": "Loverboy",
+      "song": "Lovin’ Every Minute of It",
+      "sourceRefs": [
+        11
+      ]
+    },
+    {
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-09-21",
+      "confidence": "exact-date",
+      "rank": 5,
+      "title": "And We Danced",
+      "artist": "The Hooters",
+      "song": "And We Danced",
+      "sourceRefs": [
+        11
+      ]
+    }
+  ],
+  "periodAd": {
+    "headline": "Put the lights on a program",
+    "summary": "X-10 Powerhouse: $125 for the interface, another $25 for software and cable. Separate modules control the appliances. Apple II first; Commodore and IBM versions are scheduled, not confirmed shipped.",
+    "tagline": "Program the house, then unplug the computer.",
+    "sourceRefs": [
+      9
+    ]
+  },
+  "market": {
+    "headline": "The entry price is only the beginning",
+    "summary": "Online college enrollment, modem hardware and connection time are separate bills. Amiga planning figures remain pre-release estimates. Compare complete working configurations, not unlike headline prices.",
+    "confidence": "same-month",
+    "sourceRefs": [
+      4,
+      5
+    ]
+  },
+  "worldAnchor": {
+    "headline": "Earthquake devastates Mexico City",
+    "summary": "A powerful earthquake strikes Mexico on September 19 at 7:18 a.m., causing severe destruction in Mexico City. The scale of the disaster is still emerging as rescue work continues.",
+    "confidence": "exact-date",
+    "sourceRefs": [
+      13
+    ]
+  },
+  "bbsNote": {
+    "headline": "SIG loyalty becomes a battleground between online services",
+    "summary": "Arlan R. Levitan's September Telecomputing Today column reports competition over Apple-user communities. The underlying MAUG/Delphi episode occurred in May, so frame as September commentary, not this week's outage.",
+    "posts": [
+      {
+        "topic": "Where did MAUG go?",
+        "platform": "Delphi / CompuServe",
+        "text": "Editorial paraphrase, not an actual BBS post: the Delphi MAUG branch disappeared after a few weeks in May and was replaced with a generic Apple SIG and another sysop. CompuServe MAUG became three forums serving Apple II users, Macintosh users and developers."
+      },
+      {
+        "topic": "Connection bills shape communities",
+        "platform": "Delphi / CompuServe",
+        "text": "Editorial paraphrase, not an actual BBS post: Levitan says Delphi's off-shift 1200-bps rate was half CompuServe's, and even Delphi's 2400-bps rate was below CompuServe's 1200-bps charge. No exact dollar tariff verified."
+      },
+      {
+        "topic": "New-machine modem prospect",
+        "platform": "Amiga RS-232 / Tecmar",
+        "text": "September's pre-release Amiga review says Tecmar is introducing a 2400-bps modem for the serial port; it supplies no verified modem price or shipping day."
+      }
+    ],
+    "sourceRefs": [
+      6,
+      4
+    ]
+  },
+  "curiosity": {
+    "headline": "Unplug the computer; the house controller keeps working",
+    "summary": "September's X-10 Powerhouse notice offers a surprisingly recognizable smart-home idea.",
+    "detail": "Owners graphically place lights and appliances room by room using a joystick, program the standalone interface, and then let it operate independently of the computer. The published interface price is $125, with software/cable another $25; up to 72 controlled devices require separate X-10 modules. Commodore and IBM versions are scheduled, not proven shipped.",
+    "sourceRefs": [
+      9
+    ]
+  },
+  "accuracyLedger": {
+    "items": [
+      "Jobs letter dated September 17; no later lawsuit reported as already filed.",
+      "Ultima IV Apple II date is retrospective; no simultaneous multiplatform launch.",
+      "Amiga review pre-release; prices estimates, not retail offers.",
+      "Games are editorial picks, not a current sales chart.",
+      "Music September 21; movies September 20-22.",
+      "No invented underground crews or final earthquake death toll."
+    ]
+  },
+  "sources": [
+    {
+      "title": "Mercury News: Jobs submits his resignation, with full September 17 letter",
+      "url": "https://maryacfallon.com/wp-content/uploads/2020/07/Jobs-Submits-His-Resignation-as-Apple-Chairman.pdf",
+      "date": "1985-09-18"
+    },
+    {
+      "title": "Computer History Museum Apple timeline",
+      "url": "https://computerhistory.org/apple-timeline/",
+      "date": "undated retrospective; accessed 2026-11-17"
+    },
+    {
+      "title": "GameSpot Ultima IV release record",
+      "url": "https://www.gamespot.com/games/ultima-iv-quest-of-the-avatar/",
+      "date": "undated retrospective; accessed 2026-11-17"
+    },
+    {
+      "title": "Ultima IV platform chronology and gameplay reference",
+      "url": "https://en.wikipedia.org/wiki/Ultima_IV:_Quest_of_the_Avatar",
+      "date": "undated retrospective; accessed 2026-11-17"
+    },
+    {
+      "title": "COMPUTE!: The Amiga: An In-Depth Review, p.16",
+      "url": "https://www.atarimagazines.com/compute/issue64/amiga.php",
+      "date": "1985-09"
+    },
+    {
+      "title": "COMPUTE!: The Electronic University, p.30",
+      "url": "https://www.atarimagazines.com/compute/issue64/electronic_university.php",
+      "date": "1985-09"
+    },
+    {
+      "title": "COMPUTE!: Telecomputing Today: SIG Wars",
+      "url": "https://www.atarimagazines.com/compute/issue64/telecomputing.php",
+      "date": "1985-09"
+    },
+    {
+      "title": "COMPUTE!: Rescue on Fractalus and Ballblazer review",
+      "url": "https://www.atarimagazines.com/compute/issue64/review_rescue.php",
+      "date": "1985-09"
+    },
+    {
+      "title": "COMPUTE!: Fast Apple Disk Drive",
+      "url": "https://www.atarimagazines.com/compute/issue64/news_apple_drive.php",
+      "date": "1985-09"
+    },
+    {
+      "title": "COMPUTE!: Home Control Package",
+      "url": "https://www.atarimagazines.com/compute/issue64/news_home_control.php",
+      "date": "1985-09"
+    },
+    {
+      "title": "COMPUTE!: HOTWARE, p.65 (data July 6)",
+      "url": "https://www.atarimagazines.com/compute/issue64/hotwire.php",
+      "date": "1985-09"
+    },
+    {
+      "title": "Billboard: September 21 issue, Top Rock Tracks",
+      "url": "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1985/BB-1985-09-21.pdf",
+      "date": "1985-09-21"
+    },
+    {
+      "title": "The Numbers: September 20 weekend domestic chart",
+      "url": "https://www.the-numbers.com/box-office-chart/weekend/1985/09/20",
+      "date": "1985-09-20/1985-09-22"
+    },
+    {
+      "title": "NIST: Earthquake Mexico 1985 retrospective",
+      "url": "https://www.nist.gov/el/earthquake-mexico-1985",
+      "date": "undated retrospective; accessed 2026-11-17"
+    },
+    {
+      "title": "G5 Plaza Accord joint announcement",
+      "url": "https://www.g7.utoronto.ca/finance/fm850922.htm",
+      "date": "1985-09-22"
+    },
+    {
+      "title": "UK Copyright (Computer Software) Amendment Act 1985, enacted text",
+      "url": "https://www.legislation.gov.uk/ukpga/1985/41/enacted",
+      "date": "1985-07-16"
+    },
+    {
+      "title": "WIPO Copyright, November 1985, UK software copyright commencement report",
+      "url": "https://tind.wipo.int/record/38623/files/HJC_cr_1985_11_en.pdf",
+      "date": "1985-11"
+    },
+    {
+      "title": "Your Computer September 1985 software copyright article (indexed scan)",
+      "url": "https://device.report/m/cf3124ed47d7129ab98b2013611a66c6b76ff1e749200c22f0647cd34973deab.pdf",
+      "date": "1985-09"
+    }
+  ]
+}
