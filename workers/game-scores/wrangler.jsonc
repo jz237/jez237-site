@@ -1,0 +1,15 @@
+{
+  "name": "game-scores",
+  "main": "index.mjs",
+  "account_id": "ac73a259dff5a3cbeccbb78824ac0db6",
+  "compatibility_date": "2024-12-01",
+  "workers_dev": true,
+  "preview_urls": false,
+  "kv_namespaces": [{ "binding": "SCORES", "id": "88ac169998084178943b7b7f60031eb4" }],
+  // Per-visitor-address limits, counted per Cloudflare location (approximate).
+  "ratelimits": [
+    { "name": "WRITE_LIMIT", "namespace_id": "23701", "simple": { "limit": 8, "period": 60 } },
+    { "name": "NEW_BOARD_LIMIT", "namespace_id": "23702", "simple": { "limit": 3, "period": 60 } },
+    { "name": "READ_LIMIT", "namespace_id": "23703", "simple": { "limit": 240, "period": 60 } }
+  ]
+}
