@@ -4,6 +4,7 @@ extern int astra_net_active,astra_net_humans,astra_net_count,astra_net_owner,ast
 extern int astra_net_human(int);
 extern void init_player_stats_new_ship(ubyte);
 extern void drop_player_eggs(object*);
+extern void multi_send_drop_blobs(char);
 typedef struct {
     int level,signature,target,target_sig,goal,last_room,door,route_side,pick,shots,missiles,pickups,stuck;
     fix64 think,seen,react,fire,missile,flare,spawn,progress,roam_until,weapon_until,contact_until,report,escape_until;
@@ -11,6 +12,12 @@ typedef struct {
     vms_vector route[8],gaze,cruise,right,turn_goal;
     int route_count,gaze_ready,turn_side,polar,rear_seen,dodges;
     fix64 evade_until;vms_vector evade;
+    int assist_leader, sight_room;
+    fix64 assist_until, search_until;
+    vms_vector last_sighting;
+    vms_vector pass_direction,watch_point;
+    fix64 pass_until,withdraw_until,boost_until,boost_next,reversal_at,settle_until;
+    int pass_target,pass_signature,pass_count,watching,strafe_sign,reversals,boosts;
     fix64 gaze_until,turn_until,avoid_next;
     float rates[3],accels[3],command_velocity[3],command_accel[3],remaining,view_depth;
     vms_vector track;int track_target,track_signature;
@@ -37,7 +44,7 @@ EMSCRIPTEN_KEEPALIVE int astra_squad_order(int leader,int order,float x,float y,
         if(distance<i2f(200)&&aim>closest&&object_to_object_visibility(ship,o,0)){closest=aim;target=i;}
     }
     if(order==2&&target<0)return 0;
-    for(int i=1;i<astra_net_count;i++)if(astra_net_bot_skill[i]>=0){sq_command[i]=order;sq_leader[i]=leader;sq_focus[i]=target;sq_focus_sig[i]=target>=0?Objects[target].signature:0;sq_command_until[i]=GameTime64+i2f(order==3?12:120);sq[i].think=0;}
+    for(int i=1;i<astra_net_count;i++)if(astra_net_bot_skill[i]>=0){sq_command[i]=order;sq_leader[i]=leader;sq_focus[i]=target;sq_focus_sig[i]=target>=0?Objects[target].signature:0;sq_command_until[i]=GameTime64+i2f(order==3?12:120);sq[i].assist_until=0;sq[i].think=0;}
     return 1;
 }
 void astra_squad_takeover(void){sq_handoff=1;memset(sq,0,sizeof sq);}
@@ -101,9 +108,9 @@ static void sq_sense_fire(int id,object *ship){
         if((Game_mode&GM_MULTI_COOP)?o->ctype.laser_info.parent_type!=OBJ_ROBOT:(o->ctype.laser_info.parent_type!=OBJ_PLAYER||parent==ship-Objects))continue;
         if(sq_distance(&o->pos,&ship->pos)>150||!sq_seen(ship,i,skill))continue;
         vms_vector offset,velocity,miss;float time;vm_vec_sub(&offset,&o->pos,&ship->pos);vm_vec_sub(&velocity,&o->mtype.phys_info.velocity,&ship->mtype.phys_info.velocity);
-        if(!aa_collision_course(offset,velocity,f2fl(ship->size+o->size)+3,&time,&miss)||time>=earliest)continue;
+        if(!aa_collision_course(offset,velocity,f2fl(ship->size+o->size)+3,&time,&miss)||time>=earliest||time>.48f+.18f*skill)continue;
         vms_vector side;vm_vec_cross(&side,&velocity,&b->up);if(vm_vec_normalize(&side)<F1_0/10)side=ship->orient.rvec;
-        if(id&1)vm_vec_scale(&side,-F1_0);
+        if(vm_vec_dot(&side,&miss)>0||(vm_vec_mag_quick(&miss)<F1_0&&(id&1)))vm_vec_scale(&side,-F1_0);
         vms_vector end;vm_vec_scale_add(&end,&ship->pos,&side,i2f(13));
         if(!sq_clear(ship,&end,ship->size,-1)){vm_vec_scale(&side,-F1_0);vm_vec_scale_add(&end,&ship->pos,&side,i2f(13));if(!sq_clear(ship,&end,ship->size,-1))continue;}
         earliest=time;b->evade=side;b->evade_until=GameTime64+fl2f(.4f+.1f*skill);b->dodges++;
@@ -123,6 +130,45 @@ static int sq_pass(int id,int room,int side){
     return !d->keys||d->keys==KEY_NONE||(Players[id].flags&d->keys)==d->keys;
 }
 static int sq_parent[MAX_SEGMENTS],sq_dist[MAX_SEGMENTS],sq_queue[MAX_SEGMENTS];
+/* Shared route scratch. Distances count traversable portals for this pilot,
+ * including doors that its current keys can open. */
+static int sq_routes_from(int id,int start){
+    for(int i=0;i<=Highest_segment_index;i++){sq_parent[i]=-1;sq_dist[i]=-1;}
+    int first=0,last=0;sq_queue[last++]=start;sq_dist[start]=0;
+    while(first<last){
+        int room=sq_queue[first++];
+        for(int side=0;side<6;side++){
+            int child=Segments[room].children[side];
+            if(child<0||sq_dist[child]>=0||!sq_pass(id,room,side))continue;
+            sq_parent[child]=room;sq_dist[child]=sq_dist[room]+1;sq_queue[last++]=child;
+        }
+    }
+    return last;
+}
+static int sq_helping(squad_pilot *b){
+    return b->assist_until&&GameTime64<b->assist_until&&astra_net_human(b->assist_leader)
+        &&Players[b->assist_leader].connected==CONNECT_PLAYING;
+}
+EMSCRIPTEN_KEEPALIVE int astra_squad_assist(int leader){
+    if(!astra_net_active||astra_net_owner!=astra_net_host||!(Game_mode&GM_MULTI_COOP)
+        ||!astra_net_human(leader)||Players[leader].connected!=CONNECT_PLAYING)return -1;
+    object *requester=&Objects[Players[leader].objnum];
+    if(requester->type!=OBJ_PLAYER||requester->segnum<0)return -1;
+    int best=-1;float best_cost=1e10f;
+    for(int id=1;id<astra_net_count;id++){
+        if(!sq_bot(id)||Players[id].connected!=CONNECT_PLAYING)continue;
+        squad_pilot *b=&sq[id];object *ship=&Objects[Players[id].objnum];
+        if(ship->type!=OBJ_PLAYER||ship->segnum<0||b->spawn||ship->shields<0)continue;
+        int assigned=sq_helping(b);
+        if(assigned&&b->assist_leader!=leader)continue;
+        sq_routes_from(id,ship->segnum);
+        int hops=sq_dist[requester->segnum];if(hops<0)continue;
+        float cost=assigned?-1.f:hops*100.f+fminf(99.f,sq_distance(&requester->pos,&ship->pos)*.1f);
+        if(cost<best_cost){best=id;best_cost=cost;}
+    }
+    if(best>=0){sq[best].assist_leader=leader;sq[best].assist_until=GameTime64+i2f(15);sq[best].think=0;}
+    return best;
+}
 int astra_squad_pickup(object*,object*);
 /* Route anchors are portals, not stop signs. Look through several rooms and
  * pursue a point ahead on the hull-checked line, braking only for its end. */
@@ -211,30 +257,39 @@ static void sq_plan(int id,object *ship){
     int enemy=-1;float best=1e10f;b->rear_seen=0;sq_sense_fire(id,ship);
     if(GameTime64>sq_command_until[id])sq_command[id]=0;
     if(sq_leader[id]>=0&&Players[sq_leader[id]].connected!=CONNECT_PLAYING)sq_leader[id]=-1;
+    int helping=sq_helping(b),command=helping?1:sq_command[id],leader=helping?b->assist_leader:sq_leader[id];
     for(int i=0;i<=Highest_object_index;i++)if(sq_enemy(id,i)){
         vms_vector direction;float distance=f2fl(vm_vec_normalized_dir(&direction,&Objects[i].pos,&ship->pos));
-        int marked=sq_command[id]==2&&i==sq_focus[id]&&Objects[i].signature==sq_focus_sig[id];
-        if(sq_command[id]==3&&b->contact_until<GameTime64)continue;
+        int marked=command==2&&i==sq_focus[id]&&Objects[i].signature==sq_focus_sig[id];
+        if(command==3&&b->contact_until<GameTime64)continue;
         if(distance>170||!sq_seen(ship,i,skill))continue;
         int rear=aa_in_rear_view(ship,&Objects[i].pos,Objects[i].size);if(rear)b->rear_seen++;
         float cost=distance*(i==b->target?.6f:1)*(marked?.08f:1)*(rear&&(distance<45||vm_vec_dot(&direction,&Objects[i].orient.fvec)<-fl2f(.86f))?.45f:1);
-        if(sq_command[id]==1&&sq_leader[id]>=0)cost+=sq_distance(&Objects[i].pos,&Objects[Players[sq_leader[id]].objnum].pos)*.7f;if(cost<best){best=cost;enemy=i;}
+        if(command==1&&leader>=0)cost+=sq_distance(&Objects[i].pos,&Objects[Players[leader].objnum].pos)*.7f;if(cost<best){best=cost;enemy=i;}
     }
+    b->watching=0;
     if(enemy>=0){
         if(enemy!=b->target||b->target_sig!=Objects[enemy].signature)b->react=GameTime64+fl2f(.85f-.16f*skill);
         b->target=enemy;b->target_sig=Objects[enemy].signature;b->seen=GameTime64;b->aim=Objects[enemy].pos;
+        if(!(Game_mode&GM_MULTI_COOP)){
+            b->last_sighting=b->aim;b->sight_room=Objects[enemy].segnum;
+            b->search_until=GameTime64+fl2f(1.6f+.45f*skill);
+            if(Players[id].shields<i2f(22+skill*5))
+                b->withdraw_until=GameTime64+fl2f(2.6f+.5f*skill);
+        }
     }else if(GameTime64-b->seen>F1_0){b->target=-1;}
-    for(int i=0;i<=Highest_segment_index;i++){sq_parent[i]=-1;sq_dist[i]=-1;}
-    int first=0,last=0;sq_queue[last++]=ship->segnum;sq_dist[ship->segnum]=0;
-    while(first<last){int r=sq_queue[first++];for(int side=0;side<6;side++){
-        int child=Segments[r].children[side];if(child>=0&&sq_dist[child]<0&&sq_pass(id,r,side)){sq_parent[child]=r;sq_dist[child]=sq_dist[r]+1;sq_queue[last++]=child;}
-    }}
+    int last=sq_routes_from(id,ship->segnum);
+    if(b->search_until&&(GameTime64>=b->search_until||b->sight_room<0||sq_dist[b->sight_room]<0||
+       (enemy<0&&ship->segnum==b->sight_room&&sq_distance(&ship->pos,&b->last_sighting)<10)))b->search_until=0;
+    int withdrawing=b->withdraw_until>GameTime64;
+    int searching=enemy<0&&!withdrawing&&b->search_until&&Players[id].shields>i2f(35)&&Players[id].energy>i2f(12);
     int previous_pick=b->pick;
     b->door=b->route_side=b->pick=-1;int goal=ship->segnum,follow_look=0;vms_vector end=ship->pos,follow_aim=ship->pos;float cost=1e9f;
     /* Only useful, nearby supplies: a wingman leaves the human's supplies alone
      * while healthy. Full ammunition can never trap a pilot in a pickup loop. */
-    for(int i=0;i<=Highest_object_index;i++){
+    for(int i=0;!helping&&!searching&&i<=Highest_object_index;i++){
         object *o=&Objects[i];if(o->type!=OBJ_POWERUP||o->flags&OF_SHOULD_BE_DEAD||o->segnum<0||sq_dist[o->segnum]<0)continue;
+        if(withdrawing&&o->id!=POW_SHIELD_BOOST)continue;
         float need=sq_need(id,o);if(need<=0)continue;
         if((Game_mode&GM_MULTI_COOP)&&(sq_command[id]==3||(Players[id].shields>i2f(65)&&Players[id].energy>i2f(40))))continue;
         if(sq_dist[o->segnum]>6)continue;
@@ -249,15 +304,35 @@ static void sq_plan(int id,object *ship){
     }
     if(cost==1e9f&&(Game_mode&GM_MULTI_COOP)){
         float near=1e9f;
-        for(int p=0;p<astra_net_count;p++)if(astra_net_human(p)&&Players[p].connected==CONNECT_PLAYING&&(sq_leader[id]<0||sq_leader[id]==p)){
+        for(int p=0;p<astra_net_count;p++)if(astra_net_human(p)&&Players[p].connected==CONNECT_PLAYING&&(leader<0||leader==p)){
             object *lead=&Objects[Players[p].objnum];if(lead->type!=OBJ_PLAYER||lead->segnum<0||sq_dist[lead->segnum]<0)continue;
             float d=sq_distance(&lead->pos,&ship->pos);if(d<near){near=d;goal=lead->segnum;end=lead->pos;
-                vm_vec_scale_add2(&end,&lead->orient.fvec,-i2f((sq_command[id]==1?27:13)+id*3));vm_vec_scale_add2(&end,&lead->orient.rvec,i2f((id&1?1:-1)*10));
-                if(find_point_seg(&end,lead->segnum)<0)end=lead->pos;
-                follow_look=near<50;vm_vec_scale_add(&follow_aim,&lead->pos,&lead->orient.fvec,i2f(90));
-                if(near<18)end=ship->pos;
+                int rank=0;for(int w=1;w<id;w++)if(sq_bot(w)&&(!sq_helping(&sq[w])||sq[w].assist_leader==p))rank++;
+                int lane=(rank&1)?-1:1,back=command==1?20+rank*10:11+rank*7;
+                int reversing=vm_vec_dot(&lead->mtype.phys_info.velocity,&lead->orient.fvec)<-i2f(4);
+                vm_vec_scale_add2(&end,&lead->orient.fvec,-i2f(reversing?4:back));
+                vm_vec_scale_add2(&end,&lead->orient.rvec,i2f(lane*(reversing?21:command==1?13:8)));
+                if(!sq_clear(lead,&end,ship->size,-1)){
+                    vm_vec_scale_add(&end,&lead->pos,&lead->orient.fvec,-i2f(back+rank*7));
+                    if(!sq_clear(lead,&end,ship->size,-1))end=lead->pos;
+                }
+                follow_look=near<55;
+                int rear=command==1&&rank==1&&vm_vec_mag_quick(&lead->mtype.phys_info.velocity)<i2f(10);
+                vm_vec_scale_add(&follow_aim,&lead->pos,&lead->orient.fvec,i2f(rear?-75:85));
+                if(follow_look&&command==1){b->watch_point=follow_aim;b->watching=1;}
             }
         }
+    }else if(withdrawing&&cost==1e9f){
+        /* Pick a nearby exit that opens distance from the last sighting. */
+        float best_exit=-1e9f;
+        for(int i=1;i<last;i++){
+            int room=sq_queue[i];if(sq_dist[room]>3)break;
+            vms_vector center;compute_segment_center(&center,&Segments[room]);
+            float score=sq_distance(&center,&b->last_sighting)-5*sq_dist[room]+(room==b->goal?14:0);
+            if(score>best_exit){best_exit=score;goal=room;end=center;}
+        }
+    }else if(searching){
+        goal=b->sight_room;end=b->last_sighting;b->roam_until=0;
     }else if(cost==1e9f){
         if(b->goal>=0&&b->goal<=Highest_segment_index&&sq_dist[b->goal]>0&&GameTime64<b->roam_until)goal=b->goal;
         else {float score=1e9f;for(int i=0;i<last;i++){int r=sq_queue[i];if(r==ship->segnum)continue;float n=b->visits[r]*5+sq_dist[r]+((r*13+id*7)%11)*.18f;if(n<score){score=n;goal=r;}}b->roam_until=GameTime64+i2f(12);}
@@ -277,6 +352,19 @@ static void sq_plan(int id,object *ship){
         }
     }
     if(b->door<0&&b->route_count)b->move=sq_pursuit(b,ship);
+    if(searching&&b->route_side>=0&&b->door<0){
+        vms_vector lip,out,across;
+        compute_center_point_on_side(&lip,&Segments[ship->segnum],b->route_side);
+        if(vm_vec_normalized_dir(&out,&lip,&ship->pos)<i2f(36)){
+            vm_vec_cross(&across,&out,&b->up);vm_vec_normalize(&across);
+            vms_vector peek=lip;vm_vec_scale_add2(&peek,&across,i2f((id&1?1:-1)*4));
+            vm_vec_scale_add2(&peek,&out,i2f(4));
+            if(sq_clear(ship,&peek,ship->size,-1)){b->move=peek;b->route_count=0;}
+            b->watch_point=b->last_sighting;
+            if(!sq_clear(ship,&b->watch_point,0,-1))vm_vec_scale_add(&b->watch_point,&lip,&out,i2f(12));
+            b->watching=2;
+        }
+    }
     if(b->target<0)b->aim=follow_look&&b->door<0?follow_aim:b->move;
     /* An impact bearing can draw attention only while that point is visible. */
     if(b->contact_until>GameTime64&&enemy<0&&sq_clear(ship,&b->contact,0,-1))b->aim=b->contact;
@@ -344,6 +432,57 @@ static void sq_look(object *o,squad_pilot *b,vms_vector direction,int visible,in
     Controls.heading_time=fl2f(sq_turn(o,b,1,yaw,limit,fy,visible,skill)*dt);Controls.pitch_time=fl2f(sq_turn(o,b,0,pitch,limit,fp,visible,skill)*dt);
     Controls.bank_time=fl2f(sq_turn(o,b,2,copysignf(fmaxf(0,fabsf(roll)-.025f),roll),b->polar?.025f:.07f,bank_feed,visible,skill)*dt);
 }
+/* Choose one pass for long enough to finish it. Probe the ship's hull along
+ * each candidate only at the start of a pass, never for every rendered frame. */
+static void sq_choose_pass(int id,object *ship,object *foe,vms_vector line,float range){
+    squad_pilot *b=&sq[id];int skill=astra_net_bot_skill[id];
+    vms_vector lateral;vm_vec_cross(&lateral,&line,&b->up);
+    if(vm_vec_normalize(&lateral)<F1_0/8)lateral=ship->orient.rvec;
+    static const int offsets[][2]={{1,0},{-1,0},{1,1},{-1,1},{1,-1},{-1,-1},{0,1},{0,-1},{0,0}};
+    int start=(id*3+b->pass_count*5)%8;
+    float best=-1e9f;
+    for(int i=0;i<9;i++){
+        int k=i==8?8:(start+i)%8;
+        float preferred=40+(id%3)*7+((b->pass_count%3)-1)*(6+skill*2);
+        vms_vector d;vm_vec_copy_scale(&d,&line,fl2f(sq_clamp((range-preferred)/25,-1.1f,1.3f)));
+        vm_vec_scale_add2(&d,&lateral,fl2f(offsets[k][0]*.88f));vm_vec_scale_add2(&d,&b->up,fl2f(offsets[k][1]*.72f));
+        if(vm_vec_normalize(&d)<F1_0/16)continue;
+        float depth=sq_depth(ship,d,48,ship->size,NULL);
+        float score=depth+7*f2fl(vm_vec_dot(&d,&b->cruise))-i*1.15f;
+        if(i==8&&range<75)score-=8;
+        if(score>best){b->pass_direction=d;best=score;}
+    }
+    b->pass_count++;b->pass_target=foe-Objects;b->pass_signature=foe->signature;
+    b->pass_until=GameTime64+fl2f(.95f+(4-skill)*.18f+(b->pass_count%3)*.15f);
+}
+static void sq_weapon_for_pass(int id,float range){
+    player *p=&Players[id];squad_pilot *b=&sq[id];
+    int selected=p->primary_weapon;
+    if(GameTime64<b->weapon_until&&(selected!=GAUSS_INDEX||p->primary_ammo[VULCAN_INDEX]>=20)&&
+       (selected==GAUSS_INDEX||p->energy>i2f(4)))return;
+    const int choices[]={LASER_INDEX,SPREADFIRE_INDEX,PLASMA_INDEX,GAUSS_INDEX};
+    float best=-1e9f;
+    for(int i=0;i<4;i++){
+        int w=choices[i];if(!(p->primary_weapon_flags&(1<<w)))continue;
+        if(w==GAUSS_INDEX&&p->primary_ammo[VULCAN_INDEX]<20)continue;
+        float score=w==GAUSS_INDEX?range*.85f+(p->energy<i2f(20)?65:0):
+                    w==PLASMA_INDEX?77-fabsf(range-38)*.48f:
+                    w==SPREADFIRE_INDEX?70-range*.65f:43+(p->laser_level*3);
+        if(w==selected)score+=5;
+        if(w!=GAUSS_INDEX&&p->energy<Weapon_info[Primary_weapon_to_weapon_info[w]].energy_usage)continue;
+        if(score>best){best=score;selected=w;}
+    }
+    p->primary_weapon=selected;b->weapon_until=GameTime64+fl2f(2.5f+min(3,b->pass_count%4));
+}
+static int sq_safe_blast(int id,vms_vector point,fix radius){
+    if(!(Game_mode&GM_MULTI_COOP))return 1;
+    for(int p=0;p<N_players;p++){
+        if(p==id||Players[p].connected!=CONNECT_PLAYING)continue;
+        object *ally=&Objects[Players[p].objnum];if(ally->type!=OBJ_PLAYER)continue;
+        if(vm_vec_dist_quick(&point,&ally->pos)<radius+ally->size+i2f(4))return 0;
+    }
+    return 1;
+}
 static void sq_drive(int id,object *o){
     squad_pilot *b=&sq[id];int skill=astra_net_bot_skill[id];float dt=f2fl(FrameTime),speed=30+skill*5;
     if(b->door<0&&b->route_count&&GameTime64>=b->escape_until)b->move=sq_pursuit(b,o);
@@ -351,24 +490,36 @@ static void sq_drive(int id,object *o){
     int visible=b->target>=0&&sq_enemy(id,b->target)&&Objects[b->target].signature==b->target_sig&&sq_seen(o,b->target,skill);
     if(visible){
         object *foe=&Objects[b->target];aim=foe->pos;target_velocity=foe->mtype.phys_info.velocity;float d=sq_distance(&foe->pos,&o->pos);
+        sq_weapon_for_pass(id,d);
         int weapon=Players[id].primary_weapon,wi=Primary_weapon_to_weapon_info[weapon];
         /* Lead by the opponent's observed course, averaged over a quarter
          * second, and solve the intercept. A novice applies a little over half
          * of the lead and an expert nearly all of it. */
-        if(b->track_target!=b->target||b->track_signature!=foe->signature){b->track_target=b->target;b->track_signature=foe->signature;b->track=foe->mtype.phys_info.velocity;}
+        if(b->track_target!=b->target||b->track_signature!=foe->signature){b->track_target=b->target;b->track_signature=foe->signature;b->track=foe->mtype.phys_info.velocity;b->strafe_sign=b->reversals=0;b->settle_until=0;}
         else {vms_vector change;vm_vec_sub(&change,&foe->mtype.phys_info.velocity,&b->track);vm_vec_scale_add2(&b->track,&change,fl2f(1-expf(-f2fl(FrameTime)/.22f)));}
         {vms_vector offset,led;vm_vec_sub(&offset,&foe->pos,&o->pos);
          float flight=fminf(.8f,aa_intercept(offset,b->track,fmaxf(60,f2fl(Weapon_info[wi].speed[Difficulty_level]))));
          vm_vec_scale_add(&led,&aim,&b->track,fl2f(flight*(.55f+.11f*skill)));
          if(sq_clear(o,&led,0,-1))aim=led;}
-        /* Continuous range keeping avoids the old approach/back-off/orbit
-         * switches. Orbit direction stays stable for the engagement. */
-        vms_vector line,lateral;vm_vec_normalized_dir(&line,&foe->pos,&o->pos);vm_vec_cross(&lateral,&b->up,&line);if(vm_vec_normalize(&lateral)<F1_0/10)lateral=o->orient.rvec;
-        vm_vec_copy_scale(&travel,&line,fl2f(sq_clamp((d-43)*.7f,-21,25+skill*3)));
-        vm_vec_scale_add2(&travel,&lateral,fl2f((id&1?1:-1)*(skill>=2?12+skill*1.5f:5)));
-        speed=f2fl(vm_vec_normalize(&travel));distance=70;
+        vms_vector line;vm_vec_normalized_dir(&line,&foe->pos,&o->pos);
+        if(b->withdraw_until<=GameTime64){
+            if(GameTime64>=b->pass_until||b->pass_target!=b->target||b->pass_signature!=foe->signature)
+                sq_choose_pass(id,o,foe,line,d);
+            travel=b->pass_direction;speed=18+3*skill+(d>80?10:0);distance=70;
+        }
+        float crossing=f2fl(vm_vec_dot(&target_velocity,&o->orient.rvec));
+        if(fabsf(crossing)>7&&vm_vec_dot(&line,&o->orient.fvec)>fl2f(.85f)){
+            int sign=crossing>0?1:-1;
+            if(b->strafe_sign&&sign!=b->strafe_sign&&GameTime64-b->reversal_at>F1_0/4){
+                b->reversals=GameTime64-b->reversal_at<i2f(3)?b->reversals+1:1;b->reversal_at=GameTime64;
+                if(skill>=3&&b->reversals>=2)b->settle_until=GameTime64+fl2f(.12f);
+            }
+            b->strafe_sign=sign;
+        }
     }else{
+        if(GameTime64-b->seen>F1_0/2)b->strafe_sign=b->reversals=0;
         if(b->door<0){if(b->target>=0&&GameTime64-b->seen<F1_0&&sq_clear(o,&b->aim,0,-1))aim=b->aim;else aim=sq_gaze(id,o,b->target<0?b->aim:b->move);}
+        if(b->watching&&b->door<0){aim=b->watch_point;if(b->watching==2)speed=fminf(speed,18+skill*2);}
         else aim=b->move;
     }
     vms_vector direction;float aim_distance=f2fl(vm_vec_normalized_dir(&direction,&aim,&o->pos));if(aim_distance<.1f)direction=o->orient.fvec;
@@ -379,7 +530,11 @@ static void sq_drive(int id,object *o){
         vms_vector desire;vm_vec_copy_scale(&desire,&travel,fl2f(speed));
         if(GameTime64<b->evade_until)vm_vec_scale_add2(&desire,&b->evade,i2f(18+skill*2));
         for(int p=0;p<N_players;p++)if(p!=id&&Players[p].connected==CONNECT_PLAYING){object *friend=&Objects[Players[p].objnum];if(friend->type!=OBJ_PLAYER)continue;vms_vector away;float d=f2fl(vm_vec_normalized_dir(&away,&o->pos,&friend->pos)),space=(Game_mode&GM_MULTI_COOP)?15:f2fl(o->size+friend->size)+2;
-            if(d<space&&sq_clear(o,&friend->pos,0,friend-Objects)){if(d<.1f){away=Player_init[0].orient.rvec;vm_vec_scale(&away,id>p?F1_0:-F1_0);}vm_vec_scale_add2(&desire,&away,fl2f((space-d)*3));}}
+            if(d<space&&sq_clear(o,&friend->pos,0,friend-Objects)){if(d<.1f){away=Player_init[0].orient.rvec;vm_vec_scale(&away,id>p?F1_0:-F1_0);}vm_vec_scale_add2(&desire,&away,fl2f((space-d)*3));}
+            if((Game_mode&GM_MULTI_COOP)&&astra_net_human(p)&&d>1&&d<32&&vm_vec_dot(&away,&friend->orient.fvec)>fl2f(.88f)&&sq_clear(o,&friend->pos,0,friend-Objects)){
+                fix side=vm_vec_dot(&away,&friend->orient.rvec);
+                vm_vec_scale_add2(&desire,&friend->orient.rvec,i2f(side<0?-20:20));
+            }}
         speed=fminf(speed+15,f2fl(vm_vec_normalize(&desire)));travel=desire;
     }
     if(b->door>=0&&!visible){speed=fminf(speed,sqrtf(60*fmaxf(0,distance-12)));if(z>.97f&&GameTime64>b->flare){Flare_create(o);b->flare=GameTime64+F1_0;}}
@@ -411,20 +566,31 @@ static void sq_drive(int id,object *o){
      * portal changes and strafes. Native D2 physics still moves the ship. */
     vms_vector desired;vm_vec_copy_scale(&desired,&travel,fl2f(speed));
     aa_velocity_control(o,b->command_velocity,b->command_accel,desired);
+    if((Players[id].flags&PLAYER_FLAGS_AFTERBURNER)&&Players[id].afterburner_charge>F1_0/6&&
+       speed>26&&clearance>24&&b->door<0&&vm_vec_dot(&travel,&o->orient.fvec)>fl2f(.92f)){
+        if(GameTime64>=b->boost_next&&Players[id].afterburner_charge>F1_0/2&&
+           (b->withdraw_until>GameTime64||(visible&&aim_distance>75))){
+            b->boost_until=GameTime64+fl2f(.32f+.04f*skill);b->boost_next=GameTime64+i2f(4);b->boosts++;
+        }
+        if(GameTime64<b->boost_until)Controls.afterburner_state=1;
+    }
+    extern int Drop_afterburner_blob_flag;
+    int pilot_exhaust=Drop_afterburner_blob_flag;Drop_afterburner_blob_flag=0;
     read_flying_controls(o);
-    if(!visible||GameTime64<b->react||z<.94f)return;
+    if(Drop_afterburner_blob_flag){drop_afterburner_blobs(o,2,i2f(5)/2,-1);multi_send_drop_blobs(id);}
+    Drop_afterburner_blob_flag=pilot_exhaust;
+    if(!visible||GameTime64<b->react||GameTime64<b->settle_until||z<.94f)return;
     {
         /* Hold fire until the shot would pass inside the opponent's hull, and
          * the way to it is open. The old gate was a 10 to 13 degree cone,
          * several hull widths at fighting range. A novice still accepts a
          * near miss; an expert waits for about two thirds of a radius. */
         float miss=aim_distance*sqrtf(fmaxf(0,1-z*z)),allow=f2fl(Objects[b->target].size)*(1.25f-.15f*skill);
-        if(miss>allow||!sq_clear(o,&aim,0,b->target))return;
-    }
-    if(GameTime64>=b->weapon_until){
-        static const int choice[]={PLASMA_INDEX,SPREADFIRE_INDEX,GAUSS_INDEX,LASER_INDEX};int best=LASER_INDEX;
-        for(int i=0;i<4;i++)if(Players[id].primary_weapon_flags&(1<<choice[i])){if(choice[i]==GAUSS_INDEX&&Players[id].primary_ammo[VULCAN_INDEX]<20)continue;best=choice[i];break;}
-        Players[id].primary_weapon=best;b->weapon_until=GameTime64+i2f(8);
+        if(miss>allow)return;
+        vms_vector end;vm_vec_scale_add(&end,&o->pos,&o->orient.fvec,fl2f(aim_distance));
+        fvi_query shot={&o->pos,&end,o->segnum,0,o-Objects,NULL,FQ_CHECK_OBJS|FQ_IGNORE_POWERUPS};fvi_info hit;
+        int obstacle=find_vector_intersection(&shot,&hit);
+        if(obstacle!=HIT_NONE&&(obstacle!=HIT_OBJECT||hit.hit_object!=b->target))return;
     }
     if(GameTime64>=b->fire){
         int weapon=Players[id].primary_weapon,wi=Primary_weapon_to_weapon_info[weapon];
@@ -439,7 +605,11 @@ static void sq_drive(int id,object *o){
     }
     if(skill>=1&&GameTime64>=b->missile&&sq_distance(&aim,&o->pos)>32){
         int type=Players[id].secondary_ammo[HOMING_INDEX]>0?HOMING_INDEX:CONCUSSION_INDEX;
-        if(Players[id].secondary_ammo[type]>0){int wi=Secondary_weapon_to_weapon_info[type];Laser_player_fire(o,wi,4,1,0,o->orient.fvec);multi_send_fire(type+MISSILE_ADJUST,0,0,1,b->target);Players[id].secondary_ammo[type]--;b->missiles++;}
+        if(Players[id].secondary_ammo[type]>0){int wi=Secondary_weapon_to_weapon_info[type];
+            if(aim_distance>f2fl(Weapon_info[wi].damage_radius)+5&&sq_safe_blast(id,aim,Weapon_info[wi].damage_radius)&&
+               sq_safe_blast(id,Objects[b->target].pos,Weapon_info[wi].damage_radius)){
+                Laser_player_fire(o,wi,4,1,0,o->orient.fvec);multi_send_fire(type+MISSILE_ADJUST,0,0,1,b->target);Players[id].secondary_ammo[type]--;b->missiles++;
+            }}
         b->missile=GameTime64+i2f(6-skill);
     }
 }
@@ -468,9 +638,10 @@ void astra_squad_frame(void){
             multi_make_ghost_player(id);int pos=(id+Players[id].net_killed_total)%max(1,NumNetPlayerPositions);
             o->pos=Player_init[pos].pos;o->orient=Player_init[pos].orient;obj_relink(o-Objects,Player_init[pos].segnum);
             Players[id].flags|=PLAYER_FLAGS_INVULNERABLE;Players[id].invulnerable_time=GameTime64-INVULNERABLE_TIME_MAX+i2f(2);o->shields=Players[id].shields;
-            Player_num=id;ConsoleObject=o;multi_send_reappear();create_player_appearance_effect(o);b->target=-1;b->think=0;
+            Player_num=id;ConsoleObject=o;multi_send_reappear();create_player_appearance_effect(o);b->target=-1;b->think=0;b->search_until=b->assist_until=0;
             memset(b->rates,0,sizeof b->rates);memset(b->accels,0,sizeof b->accels);memset(b->command_velocity,0,sizeof b->command_velocity);memset(b->command_accel,0,sizeof b->command_accel);
-            b->gaze_ready=b->turn_side=b->polar=b->route_count=0;b->right=o->orient.rvec;b->cruise=o->orient.fvec;b->last=o->pos;b->progress=GameTime64;b->escape_until=0;
+            b->gaze_ready=b->turn_side=b->polar=b->route_count=b->watching=0;b->withdraw_until=b->pass_until=b->boost_until=b->settle_until=0;
+            b->right=o->orient.rvec;b->cruise=o->orient.fvec;b->last=o->pos;b->progress=GameTime64;b->escape_until=0;
         }
         if(o->type!=OBJ_PLAYER)continue;
         if((Players[id].flags&PLAYER_FLAGS_INVULNERABLE)&&GameTime64-Players[id].invulnerable_time>INVULNERABLE_TIME_MAX)Players[id].flags&=~PLAYER_FLAGS_INVULNERABLE;
@@ -484,7 +655,8 @@ void astra_squad_frame(void){
         {aq_log *q=&sq_quality[id];EM_ASM({Module.netBotQuality=Module.netBotQuality||[];Module.netBotQuality[$13]=({seconds:[$0,$1],turnAccel:[$2,$3],turnJerk:[$4,$5],moveAccel:[$6,$7],moveJerk:[$8,$9],reversals:$10,shots:$11,hits:$12});},
             q->seconds[0],q->seconds[1],q->turn_accel[0],q->turn_accel[1],q->turn_jerk[0],q->turn_jerk[1],q->move_accel[0],q->move_accel[1],q->move_jerk[0],q->move_jerk[1],q->reversals,q->shots,q->hits,id);
         EM_ASM({Module.netBotQualityMean=Module.netBotQualityMean||[];Module.netBotQualityMean[$6]=({turn:[$0,$1],move:[$2,$3],jolts:[$4,$5]});},q->turn_mean[0],q->turn_mean[1],q->move_mean[0],q->move_mean[1],q->jolts[0],q->jolts[1],id);}
-        EM_ASM({Module.netBots=Module.netBots||[];Module.netBots[$0]=({skill:$1,goal:$2,target:$3,shots:$4,missiles:$5,pickups:$6,stuck:$7,energy:$8,order:$9,leader:$10,rearVisible:$11,dodges:$12});},id,astra_net_bot_skill[id],b->goal,b->target,b->shots,b->missiles,b->pickups,b->stuck,f2fl(Players[id].energy),sq_command[id],sq_leader[id],b->rear_seen,b->dodges);}
+        EM_ASM({Module.netBots=Module.netBots||[];Module.netBots[$0]=({skill:$1,goal:$2,target:$3,shots:$4,missiles:$5,pickups:$6,stuck:$7,energy:$8,order:$9,leader:$10,rearVisible:$11,dodges:$12,assisting:$13});},id,astra_net_bot_skill[id],b->goal,b->target,b->shots,b->missiles,b->pickups,b->stuck,f2fl(Players[id].energy),sq_command[id],sq_leader[id],b->rear_seen,b->dodges,sq_helping(b)?b->assist_leader:-1);
+        EM_ASM({Object.assign(Module.netBots[$0],{passes:$1,boosts:$2,withdraw:!!$3,watch:$4,primary:$5});},id,b->pass_count,b->boosts,b->withdraw_until>GameTime64,b->watching,Players[id].primary_weapon);}
     }
     sq_handoff=0;
     Player_num=saved;ConsoleObject=console;Player_is_dead=dead;Controls=controls;
