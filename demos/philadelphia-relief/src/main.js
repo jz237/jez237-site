@@ -1279,7 +1279,7 @@ async function boot() {
     scheduledDelay = frameDelay({ saving: powerToggle.checked,
       moving: rig.dragging || motion.playing || cityFeatures?.animating, live: aircraftLayer.animating,
       streets: streetLife.animating,
-      loading: photo.wanted && !photo.failed && (photo.loading || !photo.firstViewReady || photo.pending > 0)
+      loading: photo.wanted && !photo.failed && (photo.loading || !photo.firstViewReady || !photo.settled)
         || imageryDetail.stats().pending > 0,
       now: performance.now(), lastInteraction });
     const text = scheduledDelay === 500 ? 'Saving power · idle refresh · full detail retained'

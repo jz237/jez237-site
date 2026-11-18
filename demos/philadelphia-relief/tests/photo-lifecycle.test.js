@@ -123,6 +123,57 @@ test('automatic photo detail eases sustained slow navigation and immediately res
   time+=200;f.update({...pose,lon});assert.equal(tiles.maximumScreenSpaceError,2);
 });
 
+// The real tileset forgets its learned memory limit on every assignment.
+function measureDetailWrites(tiles, target, adjusted) {
+  const writes=[];
+  Object.defineProperties(tiles, {
+    maximumScreenSpaceError:{get:()=>target,set:value=>{target=adjusted=value;writes.push(value);}},
+    memoryAdjustedScreenSpaceError:{get:()=>adjusted},
+  });
+  return {writes, adjust:value=>{adjusted=value;}};
+}
+
+test('navigation preserves the learned tile memory limit and can still request a substantially coarser view',async t=>{
+  let time=1000;t.mock.method(performance,'now',()=>time);
+  const f=fixture(t),tiles=await f.ready(),memory=measureDetailWrites(tiles,4,27);
+  tiles.totalMemoryUsageInBytes=tiles.cacheBytes+100;
+  let lon=pose.lon;
+  const pan=()=>{time+=45;lon+=.00002;f.update({...pose,lon});};
+  for(let i=0;i<6;i++)pan();
+  memory.adjust(22);pan();assert.deepEqual(memory.writes,[]);
+  assert.match(f.nodes.get('photoStatus').textContent,/navigating/);
+  memory.adjust(16);pan();
+  assert.deepEqual(memory.writes,[24]);assert.equal(tiles.memoryAdjustedScreenSpaceError,24);
+});
+
+test('a full cache loads one finer tier at a time and resumes the selected quality as memory returns',async t=>{
+  let time=1000;t.mock.method(performance,'now',()=>time);
+  const f=fixture(t),tiles=await f.ready(),memory=measureDetailWrites(tiles,24,24);
+  tiles.totalMemoryUsageInBytes=tiles.cacheBytes;
+  tiles.tilesLoaded=false;time+=210;f.update();
+  assert.deepEqual(memory.writes,[]);assert.equal(f.photo.stats().settled,false);
+  assert.match(f.nodes.get('photoStatus').textContent,/refining/);
+  tiles.tilesLoaded=true;f.update();assert.deepEqual(memory.writes,[12]);
+  time+=80;f.update();assert.deepEqual(memory.writes,[12]);assert.equal(f.photo.stats().settled,false);
+  time+=100;f.update();assert.deepEqual(memory.writes,[12,6]);
+  memory.adjust(18);time+=200;f.update();assert.equal(f.photo.stats().settled,true);
+  assert.equal(tiles.memoryAdjustedScreenSpaceError,18);
+  tiles.totalMemoryUsageInBytes=tiles.cacheBytes/2;f.update();
+  assert.equal(f.photo.stats().settled,false,'the native limit can now relax on rendered frames');
+  memory.adjust(6);f.update();assert.deepEqual(memory.writes,[12,6,4]);
+  assert.equal(f.photo.stats().settled,true);assert.match(f.nodes.get('photoStatus').textContent,/full detail/);
+});
+
+test('a quiet view keeps drawing until a recovering memory limit reaches an already configured target',async t=>{
+  let time=1000;t.mock.method(performance,'now',()=>time);
+  const f=fixture(t),tiles=await f.ready(),memory=measureDetailWrites(tiles,4,10);
+  let draws=0;f.viewers[0].scene.requestRender=()=>draws++;
+  tiles.totalMemoryUsageInBytes=tiles.cacheBytes/2;time+=250;f.update();
+  assert.equal(f.photo.stats().settled,false);assert.ok(draws>0);
+  const previous=draws;memory.adjust(4);f.update();
+  assert.equal(f.photo.stats().settled,true);assert.equal(draws,previous);assert.deepEqual(memory.writes,[]);
+});
+
 test('changing tile backlog counts is rate limited while completion is announced immediately',async t=>{
   let time=1000;t.mock.method(performance,'now',()=>time);
   const f=fixture(t),tiles=await f.ready(),message=f.nodes.get('photoStatus');
