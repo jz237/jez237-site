@@ -1,5 +1,122 @@
 [
   {
+    "id": "2026-11-18-factual-infographic-factual-infographic-yellow-watchman-gob",
+    "title": "Factual infographic: Yellow Watchman Goby — The Burrow’s Lookout",
+    "tests": "Complete factual topics and permanent scientific species reservations read; entire catalog checked for accepted name, synonym and common aliases: unused. Two independent museums plus taxonomy and manufacturer sources actually fetched and read. No subjective image critic or reroll.; archive_slot=2026-11-18T16:20; concept=yellow-watchman-goby-shrimp-burrow-vigilance-sandy-reef; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: reef-fish-infographic; fish_scientific_name: Cryptocentrus cinctus",
+    "prompt": "Create the finished fancy, richly colorful, highly detailed PHOTOREALISTIC educational reef-fish atlas itself, not a photo of a poster or an app mockup. A striking asymmetrical sand-level reef composition, a large anatomically accurate YELLOW WATCHMAN GOBY perched diagonally above its burrow entrance, backed by jewel-toned reef structure. Rich golden yellow fish, cool turquoise water, pearlescent sand grains, rose and violet coral edges, grazing shafts of beautiful natural underwater light. Lifelike scale texture, wet eye reflections, translucent fin membranes and exquisite soft shadows. Elegant readable typography and organically integrated open explanations, curved hairline leaders and different-scale biological studies. No rigid grid, detached text cards, identical round panels, cartoon, painting or flat vector design. Artwork leads the educational content without becoming a sparse title poster.\n\nHeadline exactly “YELLOW WATCHMAN GOBY”; directly beneath in elegant italic scientific type “Cryptocentrus cinctus”. Secondary line “The burrow’s lookout”. The hero fills nearly half the composition, alert at a natural hole in the sand beneath a secure rock ledge, with the body tapering toward a rounded tail. Keep the correct goby silhouette, broad head, high-set eyes, downturned-looking wide mouth, two separate dorsal fins and credible paired fins; yellow body with delicate pale-blue to white spots over head and upper body, faint natural brown side bars, not clownfish stripes. Do not decorate with invented scales, neon rays or extra fins. Subtle leaders highlight “Pale blue-white spotting” and “About 10 cm / 4 in”. A softly nested external head-and-fin close-up shows the spotting and lifelike fin texture, not invented internal anatomy. Only this one fish species appears; an invertebrate partner is explanatory habitat context, not another featured species.\n\nThe sand-and-rock habitat curls across the bottom of the artwork. At the burrow entrance, a modestly sized anatomically credible alpheid shrimp clears a little sand, one antenna reaching the goby's flank; the goby remains at the entrance looking outward. Do not show a gigantic snapping claw, gunfire, sound waves or cavitation: the story is shelter and vigilance, not a repeat of a pistol-shrimp physics chart. Connect two concise open labels by a sweeping curve: “SHRIMP — excavates & maintains the burrow” and “GOBY — guards & warns of approaching predators”. Smaller readable explanatory line: “Shared shelter; touch and movement keep partners in contact.” The shallow visible burrow mouth and soft cross-section suggestion in the sand must be labeled “Habitat schematic — not to scale”, not an assertion about an exact tunnel shape or chamber depth. No eggs, larvae or unsupported reproductive claims.\n\nUpper left quiet water holds an airy geographic notation “Eastern Indian Ocean & western Pacific”, a simple graceful locator silhouette without detailed political boundaries, and “Sandy lagoons • Seagrass beds • Sheltered reefs”. Include small realistic seagrass blades well behind the fish and a natural sandy reef environment, not a fish hovering in open ocean. Nearby label “Wild habitat: sandy bottoms, 2–15 m” attributed in tiny type to Oregon Coast Aquarium. A delicate ruler below the hero reinforces its small real size without confusing a shrimp scale.\n\nLet a flowing ribbon of pale negative space arc upward at the right for “IN THE AQUARIUM — husbandry guidance”. Typeset these exact concise lines with clear hierarchy and breathing room: “Varied meat-based foods; deliver food to the bottom.” “Generally peaceful and reef-compatible; avoid same-species rivals unless a mated pair.” “Sand or fine gravel for burrowing; support rocks on the tank bottom.” “Secure lid — this fish can jump.” “Manufacturer minimum: 114 L / 30 US gal.” Then a short subordinate caveat: “A minimum is not a stocking guarantee; assess the whole community.” Do not imply the shrimp is mandatory or every shrimp/fish combination will pair. Do not label the fish an algae-cleaning machine, universal reef-safe guarantee or carefree nano-tank pet. No unsupported temperature, salinity, lifespan, toxicity, breeding or conservation numbers. Natural diet is not reduced to an unverified prey montage; the food statement here is explicitly aquarium guidance from the manufacturer.\n\nMaintain a coherent dramatic photorealistic lighting environment throughout hero and supporting close-up, abundant meaningful fine detail, generous space around readable text, softly layered depth and organically flowing labels. Tiny source credit: “Oregon Coast Aquarium • California Academy of Sciences • Coralife • WoRMS”. Deliver the direct finished scientific artwork, no frames, gallery walls, decorative books, props or people.",
+    "image": "images/2026-11-18-factual-infographic-factual-infographic-yellow-watchman-gob.jpg",
+    "thumb": "thumbs/2026-11-18-factual-infographic-factual-infographic-yellow-watchman-gob.webp",
+    "color": "#90896d",
+    "date": "2026-11-18",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "yellow-watchman-goby-shrimp-burrow-vigilance-sandy-reef",
+      "imageSha256": "eebd782d0c45ed352faa201ba6e160469d19c522da1c92d31496dfd706376973",
+      "imageDHash": "dcc8791cc0a04f1e"
+    },
+    "factualInfographic": {
+      "topic": "Yellow watchman goby (Cryptocentrus cinctus) shrimp-shared burrow vigilance and aquarium habitat",
+      "description": "Photorealistic reef atlas of the yellow watchman goby, its alpheid-shrimp shared shelter, sandy habitat and cautious aquarium guidance.",
+      "sourceNote": "Read full Oregon Coast Aquarium and California Academy of Sciences accounts, WoRMS accepted/synonym records and Coralife manufacturer care guide. Sources: https://aquarium.org/animals/yellow-watchman-goby/ ; https://researcharchive.calacademy.org/research/ichthyology/catalog/fishcatget.asp?spid=43819 ; https://www.marinespecies.org/rest/AphiaSynonymsByAphiaID/278326 ; https://www.coralifeproducts.com/care-guides/yellow-watchman-goby",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-18T21:22:03.414015+00:00",
+        "sources": [
+          {
+            "id": "oca",
+            "publisher": "Oregon Coast Aquarium",
+            "title": "Yellow Watchman Goby",
+            "sourceType": "museum",
+            "url": "https://aquarium.org/animals/yellow-watchman-goby/"
+          },
+          {
+            "id": "cas",
+            "publisher": "California Academy of Sciences",
+            "title": "Eschmeyer’s Catalog of Fishes: Smilogobius cinctus",
+            "sourceType": "museum",
+            "url": "https://researcharchive.calacademy.org/research/ichthyology/catalog/fishcatget.asp?spid=43819"
+          },
+          {
+            "id": "worms",
+            "publisher": "World Register of Marine Species",
+            "title": "Cryptocentrus cinctus: synonym records",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://www.marinespecies.org/rest/AphiaSynonymsByAphiaID/278326"
+          },
+          {
+            "id": "coralife",
+            "publisher": "Coralife",
+            "title": "Yellow Watchman Goby Care Guide",
+            "sourceType": "manufacturer-technical-documentation",
+            "url": "https://www.coralifeproducts.com/care-guides/yellow-watchman-goby"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Accepted binomial Cryptocentrus cinctus (Herre, 1936), original synonym Smilogobius cinctus; marine goby of the eastern Indian Ocean and western Pacific.",
+            "sourceIds": [
+              "cas",
+              "worms"
+            ]
+          },
+          {
+            "claim": "Yellow watchman goby is also called yellow shrimp goby and banded prawn goby. Yellow coloration with fine pale blue or white spots on head and upper body; faint brown bars can occur.",
+            "sourceIds": [
+              "oca"
+            ]
+          },
+          {
+            "claim": "Can reach about 10 cm, approximately 4 inches; yellow and whitish barred phases are the same species.",
+            "sourceIds": [
+              "oca",
+              "coralife"
+            ]
+          },
+          {
+            "claim": "Lives on sandy bottoms of seagrass beds, lagoons and sheltered coral reefs, at 2–15 m depth in Oregon Coast Aquarium account.",
+            "sourceIds": [
+              "oca"
+            ]
+          },
+          {
+            "claim": "Alpheid shrimp build and maintain the shared burrow; goby guards and warns of approaching predators, with touch and movement communication.",
+            "sourceIds": [
+              "oca"
+            ]
+          },
+          {
+            "claim": "Aquarium diet recommendation: varied meat-based foods; bottom-feeding fish can learn to feed in mid-water. Oregon account lists algae and bivalves, so do not portray it as an obligate herbivore or make universal diet claims.",
+            "sourceIds": [
+              "coralife",
+              "oca"
+            ]
+          },
+          {
+            "claim": "Aquarium manufacturer guidance: generally peaceful and reef-safe; avoid conspecifics except mated pairs. Reef compatibility is guidance, not a guarantee for every individual or community.",
+            "sourceIds": [
+              "coralife"
+            ]
+          },
+          {
+            "claim": "Provide sand or fine gravel deep enough for burrowing, secure rocks on the tank bottom to prevent settling onto the fish, and use a secure lid because it can jump.",
+            "sourceIds": [
+              "coralife"
+            ]
+          },
+          {
+            "claim": "Manufacturer minimum 30 US gallons, approximately 114 liters; a minimum recommendation rather than a guarantee for any stocking plan.",
+            "sourceIds": [
+              "coralife"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
     "id": "2026-11-18-factual-infographic-factual-infographic-yellow-tang-the-ree",
     "title": "Factual infographic: Yellow Tang — The Reef’s Golden Grazer",
     "tests": "Artwork-led photorealistic reef atlas; all substantive labels mapped to read sources; accepted species and synonym checked against permanent reservations and complete factual catalog.; archive_slot=2026-11-18T00:20; concept=yellow-tang-algae-grazing-reef-ledges; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: reef-fish-infographic; fish_scientific_name: Zebrasoma flavescens",
