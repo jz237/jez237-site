@@ -67,7 +67,7 @@
   },
   "jez237": {
     "status": "Blocked before preview upload; previous production retained",
-    "blocker": "Cloudflare API authentication error 10000 / invalid access token 9109; refresh returned 400. Desktop Chrome is signed in to the Hidden Reef account, not the jez237 account. User asked to switch to jrbaud@gmail.com.",
+    "blocker": "Cloudflare API authentication error 10000 / invalid access token 9109; refresh returned 400. Desktop Chrome is signed in to the Hidden Reef account, not the jez237 account. User asked to switch to the owner's other Google account.",
     "previousPublication": {
       "deploymentSourceCommit": "92d692fc303ac927ca66e258d4f1a91e6739e180",
       "preview": "https://5645ed58.jez237-site.pages.dev",
