@@ -23561,5 +23561,124 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-11-18-factual-infographic-factual-infographic-copperband-butterfl",
+    "title": "Factual infographic: Copperband Butterflyfish — The Crevice Forager",
+    "tests": "Permanent reservation list and entire factual topics checked; full catalog searched for scientific synonyms and common-name aliases. No prior species profile found. All substantive visual claims mapped to fetched authoritative sources; reef compatibility framed as a caution from documented feeding biology, not a universal claim.; archive_slot=2026-11-18T04:20; concept=copperband-butterflyfish-crevice-foraging-inner-reef; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: reef-fish-infographic; fish_scientific_name: Chelmon rostratus",
+    "prompt": "Create a lavish, highly detailed, colorful PHOTOREALISTIC marine reef-fish educational atlas, the finished artwork itself, not a framed print or photographed poster. Portrait-oriented flowing asymmetric composition with premium typography and expansive breathing room. Exactly one featured SPECIES: adult copperband butterflyfish, Chelmon rostratus. Main title COPPERBAND BUTTERFLYFISH, with italic Chelmon rostratus directly below; small subtitle THE CREVICE FORAGER. This is a photographically convincing fish and reef scene, not a watercolor, cartoon or rigid tiled infographic.\n\nThe enormous hero fish fills the middle and upper right, swimming diagonally leftward toward a dark reef fissure. Show full anatomically correct profile with just enough three-dimensional rotation to reveal compressed body and transparent fin membranes: luminous silvery-white scales, three broad copper-orange body bars with precise dark edging, narrower eye-crossing copper bar, long narrow tubular adult snout and tiny terminal mouth, tall dorsal and anal fins, correctly placed dorsal black ocellus and dark blue-edged caudal-peduncle bar. Preserve diagnostic markings, no added stripes or invented fin appendages. Sculpted underwater caustic light glows across metallic scale microtexture, translucent fin rays and the real eye. Deep petrol-blue water behind the white fish, turquoise shadows, copper highlights, natural magenta and amber reef color in supporting coral context. Rich layered reef depth, floating particles subtle, fish crisp and dominant.\n\nWeave open studies into a single continuous visual journey following the snout toward the lower-left reef fissure; no grids, detached cards or heavy boxes. A large organically nested external macro view of the snout tip beside a hole with tiny generic benthic invertebrate prey, labeled 'Precision feeding' and 'A long snout reaches tiny invertebrates in holes and crevices.' Keep the mouth anatomically small, not a toothed predator jaw or a suction hose. Delicate leader lines label the main fish 'Long adult snout', 'Tall dorsal fin', and 'Dorsal eyespot'. A small elegant length rule below the hero reads 'Up to 20 cm • 8 in'. Do not imply the ruler is tank capacity. A separate minimal ghosted snout silhouette, explicitly labeled 'Development sketch', may connect a short caption 'The long snout develops after larval settlement'; no extra adult fish crowding the hero.\n\nOpen readable text set into quiet water along the left margin: 'Tropical Indo-West Pacific'; 'Rocky shores • coral reefs • estuaries • silty inner reefs'; 'Preferred depth: 1–25 m'. A sweeping reef ledge below carries the brief behavior annotation 'Seen singly or in pairs; pairs form during breeding.' Do not show a school or imply every pair persists for life.\n\nAlong the lower reef edge integrate an elegant restrained husbandry annotation, clearly separated from wild biology by the heading 'Aquarium considerations'. Exact concise educational copy: 'Difficult to keep in a home aquarium.' 'Benthic-invertebrate diet: evaluate feeding and livestock compatibility.' 'Sometimes used for Aiptasia control — not a guarantee of pest control or universal reef safety.' This is a caution, not a claim of compatibility with all corals or invertebrates. Do not invent tank-size, water-chemistry, feeding-frequency, lifespan or aggression figures; no tank-capacity recommendation. Keep a beautiful natural reef habitat without depicting this fish actively eating ornamental corals. No unsupported toxin or conservation warnings. Small source credit footer 'Sources: Australian Museum • Georgia Aquarium • WoRMS'. Every label legible, natural optical depth and exquisite biological close-up detail; let the scene carry the explanation, not walls of type. Omit optional development sketch before sacrificing hero scale or readable essential caveats.",
+    "image": "images/2026-11-18-factual-infographic-factual-infographic-copperband-butterfl.jpg",
+    "thumb": "thumbs/2026-11-18-factual-infographic-factual-infographic-copperband-butterfl.webp",
+    "color": "#4a463f",
+    "date": "2026-11-18",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "copperband-butterflyfish-crevice-foraging-inner-reef",
+      "imageSha256": "77afb79cb3c10d751f18908ac63b06f29801f57ca5edb38c708f356537d89c7b",
+      "imageDHash": "3a478f07f47a3c03"
+    },
+    "factualInfographic": {
+      "topic": "Copperband butterflyfish (Chelmon rostratus) crevice feeding, reef habitat and aquarium caveats",
+      "description": "Photorealistic species atlas of adult anatomy, crevice feeding, habitat, pairing and cautious aquarium suitability.",
+      "sourceNote": "Read full Australian Museum and Georgia Aquarium pages; accepted taxonomy and all synonyms read through WoRMS REST after taxdetails returned 403. Sources: https://australian.museum/learn/animals/fishes/beaked-coralfish-chelmon-rostratus/ https://www.georgiaaquarium.org/animal/copperband-butterflyfish/ https://www.marinespecies.org/rest/AphiaRecordByAphiaID/218758 https://www.marinespecies.org/rest/AphiaSynonymsByAphiaID/218758",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-18T09:21:38.339258+00:00",
+        "sources": [
+          {
+            "id": "AM",
+            "publisher": "Australian Museum",
+            "title": "Beaked Coralfish, Chelmon rostratus (Linnaeus, 1758)",
+            "sourceType": "museum",
+            "url": "https://australian.museum/learn/animals/fishes/beaked-coralfish-chelmon-rostratus/"
+          },
+          {
+            "id": "GA",
+            "publisher": "Georgia Aquarium",
+            "title": "Copperband Butterflyfish",
+            "sourceType": "museum",
+            "url": "https://www.georgiaaquarium.org/animal/copperband-butterflyfish/"
+          },
+          {
+            "id": "W",
+            "publisher": "World Register of Marine Species",
+            "title": "Accepted taxon record 218758",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://www.marinespecies.org/rest/AphiaRecordByAphiaID/218758"
+          },
+          {
+            "id": "WS",
+            "publisher": "World Register of Marine Species",
+            "title": "Synonyms of AphiaID 218758",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://www.marinespecies.org/rest/AphiaSynonymsByAphiaID/218758"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Chelmon rostratus is the accepted species; copperband butterflyfish and beaked coralfish are common names.",
+            "sourceIds": [
+              "AM",
+              "GA",
+              "W"
+            ]
+          },
+          {
+            "claim": "Verified synonyms and spelling aliases are Chaelmo rostratus, Chaetodon enceladus, Chaetodon rostratus, Chelmo rostratus and Chelmon lol.",
+            "sourceIds": [
+              "WS"
+            ]
+          },
+          {
+            "claim": "Silvery-white body, three broad orange-copper body bars, narrower dark-margined orange eye bar, tall dorsal and anal fins, dorsal ocellus, dark caudal-peduncle bar with blue edging.",
+            "sourceIds": [
+              "AM",
+              "GA"
+            ]
+          },
+          {
+            "claim": "The adult long snout extracts benthic invertebrates from holes and crevices; it develops after larval settlement.",
+            "sourceIds": [
+              "AM",
+              "GA"
+            ]
+          },
+          {
+            "claim": "Maximum length is 20 cm (8 inches).",
+            "sourceIds": [
+              "GA"
+            ]
+          },
+          {
+            "claim": "Tropical Indo-West Pacific range; rocky shores, coral reefs, estuaries and silty inner reefs; preferred depth 1–25 m.",
+            "sourceIds": [
+              "AM",
+              "GA"
+            ]
+          },
+          {
+            "claim": "Encountered singly or in pairs; forms pairs during breeding.",
+            "sourceIds": [
+              "GA"
+            ]
+          },
+          {
+            "claim": "Difficult to keep in home aquaria; sometimes used for Aiptasia control.",
+            "sourceIds": [
+              "GA"
+            ]
+          },
+          {
+            "claim": "Aquarium caveat: its benthic-invertebrate diet and occasional Aiptasia use do not establish blanket reef safety; assess compatibility and feeding rather than promise pest control. This is a cautious husbandry implication of the documented diet, not a claim all individuals eat the same ornamental animals.",
+            "sourceIds": [
+              "GA"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
