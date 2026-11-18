@@ -23680,5 +23680,130 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-11-18-factual-infographic-factual-infographic-flame-angelfish-fir",
+    "title": "Factual infographic: Flame Angelfish — Fire in the Reef’s Shelter",
+    "tests": "Full permanent species reservations, complete factual topics and entire factual catalog checked for accepted name, synonyms and common aliases: unused. Taxonomic spelling corrected from provisional candidate to current WoRMS accepted name. All substantive claims mapped to fetched sources. Producer recommendations explicitly distinguished from wild biology.; archive_slot=2026-11-18T08:20; concept=flame-angelfish-shelter-grazing-coral-arch; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: reef-fish-infographic; fish_scientific_name: Centropyge loriculus",
+    "prompt": "Create an exceptionally detailed, fancy, richly colorful PHOTOREALISTIC aquarium reef-fish educational atlas infographic, rendered as the finished artwork itself. Not a poster photographed on a wall, not a book or app mockup. One real species only: FLAME ANGELFISH. Prominent elegant title \"FLAME ANGELFISH\" with italic scientific line \"Centropyge loriculus\" directly beneath. Small secondary subtitle \"Fire in the reef's shelter\". Accepted spelling is loriculus, not loricula. Do not put taxonomic synonyms into the artwork.\n\nCOMPOSITION: A large lifelike flame angelfish sweeps diagonally upward from a deeply shadowed coral-rock arch at lower left into a luminous cyan lagoon opening at upper right. The hero spans most of the central width, shown in near-lateral three-quarter profile with all diagnostic markings clear. Amber-red caustic reflections, blue-hour cobalt shadows, clean pale turquoise negative space for typography, pearly fine annotation lines. Natural photographic underwater depth, crisp micro-scales, soft suspended particles, convincing translucent membranes, sophisticated specular highlights on the eye. Hero anatomy must be credible: compact laterally compressed angelfish body, small picking mouth, continuous dorsal, true anal/pectoral/pelvic fins, natural tail, no extra limbs or fantastical scales. Typical orange-red form shading orange-yellow across the middle; dark blotch behind the near pectoral fin, about five variable vertical black body bars; posterior dorsal and anal fins black with precise electric blue/purple streaks; translucent yellow-orange tail and orange-red pelvic fins. Do not replace markings with decorative swirls. Habitat coral and sponges are contextual only, no other fish species.\n\nINTEGRATED VISUAL JOURNEY: Flow from the hero's mouth down a delicate curved leader to a highly detailed enlarged grazing study seamlessly nested in the rock arch: short algae and detritus on reef substrate, a smaller same-species fish picking at the surface; caption \"A grazer near cover\" and \"Wild diet: mainly benthic algae and detritus.\" A nearby airy close-up of the blue-edged posterior dorsal and anal fin textures connects back to the hero without a boxed frame; label \"Blue-streaked fin edges\". Let the shaded rock arch form the natural backdrop for \"Shelter matters\" and \"Secretive; stays close to reef shelter.\" Coral-rock crevices remain natural, not a cutaway of fish organs. At the upper left, a small graceful Pacific locator motif with only three labeled island clusters, Palau, Marshall Islands, Society Islands; title \"Western & central Pacific\" and \"Coral-rich lagoon and seaward reefs · 5–60 m\". Do not draw a falsely precise complete range boundary.\n\nToward the lower right let a softly curving current carry a subtle sex-change arrow, explicitly labeled \"Wild social biology\" / \"Females can become males\" / \"Males maintain harems; spawning usually at dusk.\" This is a conceptual symbol, not a different-colored morph or anatomical transformation sequence. Aquarium advice flows in open space around the rockwork rather than detached cards. Clear readable heading \"Aquarium planning — not a universal recipe\"; concise type: \"Typical captive adult: ~10 cm (4 in)\"; \"Biota adult guideline: 246 L / 65 US gal or more\"; \"Provide shelter-rich rockwork, varied foods and frequent feeding.\" Then a prominent warm amber but tasteful caveat integrated into a coral silhouette: \"REEF SAFE — WITH CAUTION\" / \"May nip soft corals, clams and fleshy LPS corals (large-polyp stony corals).\" / \"Territorial toward other dwarf angels. Feeding does not guarantee coral safety.\" Do not show a guaranteed pair or recommend keeping a harem at home. Small final stewardship line \"Never release aquarium fish.\" Small source footer \"Sources: USGS · Bishop Museum · WoRMS · Biota husbandry\".\n\nMaintain a premium natural-history photographic atlas aesthetic: scientific clarity, extremely rich biological detail and colorful reef light, with elegant readable text woven into one organic composition. Asymmetric variable-scale studies, plenty of breathing room around the dominant hero, no rigid grid, no equal-size text panels, no decorative fact boxes, no gratuitous statistics, no unsourced temperature/salinity/lifespan claims. Habitat, feeding, behavior and reef caveats should be legible at a glance, with detailed textures rewarding closer inspection.",
+    "image": "images/2026-11-18-factual-infographic-factual-infographic-flame-angelfish-fir.jpg",
+    "thumb": "thumbs/2026-11-18-factual-infographic-factual-infographic-flame-angelfish-fir.webp",
+    "color": "#4a413b",
+    "date": "2026-11-18",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1086x1448",
+    "dedup": {
+      "conceptKey": "flame-angelfish-shelter-grazing-coral-arch",
+      "imageSha256": "7bef4ac77a8634d9db0dac7212b54617e7910af3278678540586bc4704135b53",
+      "imageDHash": "00042c064e701006"
+    },
+    "factualInfographic": {
+      "topic": "Flame angelfish (Centropyge loriculus) shelter-linked reef grazing and aquarium compatibility",
+      "description": "Photorealistic reef atlas of the flame angelfish: verified markings, Pacific reef shelter, grazing and social biology with producer-labeled aquarium guidance and qualified reef compatibility.",
+      "sourceNote": "Actual sources read November 18, 2026. USGS biology and identification; Bishop Museum taxonomy/collections (read full HTML because readability omitted body); WoRMS current accepted name and synonyms; Biota aquaculture producer husbandry recommendations. Biota size is captive typical, not species maximum; capacity conversion 65 US gal × 3.785411784 = 246.05 L. https://nas.er.usgs.gov/queries/factsheet.aspx?SpeciesID=2591 https://explore.bishopmuseum.org/taxa/Centropyge_loriculus https://www.marinespecies.org/rest/AphiaRecordByAphiaID/402161 https://www.marinespecies.org/rest/AphiaSynonymsByAphiaID/402161 https://shop.thebiotagroup.com/blogs/news/biota-captive-bred-flame-angelfish",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-18T13:22:21.836806+00:00",
+        "sources": [
+          {
+            "id": "usgs",
+            "publisher": "U.S. Geological Survey",
+            "title": "Flaming angelfish species profile",
+            "sourceType": "government-agency",
+            "url": "https://nas.er.usgs.gov/queries/factsheet.aspx?SpeciesID=2591"
+          },
+          {
+            "id": "bishop",
+            "publisher": "Bernice Pauahi Bishop Museum",
+            "title": "Centropyge loriculus collections and accepted name",
+            "sourceType": "museum",
+            "url": "https://explore.bishopmuseum.org/taxa/Centropyge_loriculus"
+          },
+          {
+            "id": "worms",
+            "publisher": "World Register of Marine Species",
+            "title": "Accepted Centropyge loriculus record",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://www.marinespecies.org/rest/AphiaRecordByAphiaID/402161"
+          },
+          {
+            "id": "synonyms",
+            "publisher": "World Register of Marine Species",
+            "title": "Synonyms of Centropyge loriculus",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://www.marinespecies.org/rest/AphiaSynonymsByAphiaID/402161"
+          },
+          {
+            "id": "biota",
+            "publisher": "The Biota Group (aquaculture producer)",
+            "title": "Biota Captive Bred Flame Angelfish — producer husbandry documentation",
+            "sourceType": "manufacturer-technical-documentation",
+            "url": "https://shop.thebiotagroup.com/blogs/news/biota-captive-bred-flame-angelfish"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "The accepted WoRMS name is Centropyge loriculus; Centropyge loricula, Centropyge flammeus and Holacanthus loriculus refer to the same species.",
+            "sourceIds": [
+              "worms",
+              "synonyms",
+              "bishop"
+            ]
+          },
+          {
+            "claim": "Typical fish have orange-red bodies, orange-yellow midbody, black vertical bars and a dark blotch behind the pectoral fin; blue/purple streaks highlight posterior dorsal and anal fins. Caudal rays are light orange-yellow with translucent membranes; pelvic fins are orange-red.",
+            "sourceIds": [
+              "usgs",
+              "biota"
+            ]
+          },
+          {
+            "claim": "Occurs across scattered western and central Pacific reef localities, including Palau, Marshall and Society Islands; rich lagoon and seaward coral reefs at 5–60 m are habitat.",
+            "sourceIds": [
+              "usgs"
+            ]
+          },
+          {
+            "claim": "Secretive fish stay close to shelter; benthic algae and detritus are primary wild foods.",
+            "sourceIds": [
+              "usgs"
+            ]
+          },
+          {
+            "claim": "Flame angelfish are protogynous; females can change into males, and wild males maintain harems; spawning typically occurs at dusk.",
+            "sourceIds": [
+              "usgs"
+            ]
+          },
+          {
+            "claim": "Biota describes typical captive size about 4 inches (approximately 10 cm) and recommends adult aquaria of at least 65 US gallons (approximately 246 liters); this is a producer guideline, not a universal threshold.",
+            "sourceIds": [
+              "biota"
+            ]
+          },
+          {
+            "claim": "Biota recommends varied nutritious food and frequent feeding; fish also pick rockwork for algae and sponges. They are territorial with their own species and other dwarf angels.",
+            "sourceIds": [
+              "biota"
+            ]
+          },
+          {
+            "claim": "Reef safe with caution: individuals may pick soft corals, clams and fleshy large-polyp stony corals. Feeding does not establish guaranteed coral safety.",
+            "sourceIds": [
+              "biota"
+            ]
+          },
+          {
+            "claim": "Shelter-rich rockwork and algae-based food reflect the species wild shelter association and grazing biology; aquarium space and compatibility need individual planning. Never release aquarium fish: USGS identifies probable aquarium release among introduction pathways.",
+            "sourceIds": [
+              "usgs",
+              "biota"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
