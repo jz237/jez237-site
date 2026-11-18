@@ -40,7 +40,7 @@ import {
   TOURS, DEFAULT_TOUR, getTour, tourDuration, tourShotStart, tourFrame,
 } from './tours.js?v=philly-2026092121';
 import {
-  decodeState, encodeState, buildShareUrl, readViewName, cleanViewName,
+  resolveViewHash, buildShareUrl, cleanViewName,
 } from './urlstate.js?v=philly-2026092121';
 import {
   ASSETS, MODE, assess, webglFailure, syntheticGrid,
@@ -312,19 +312,15 @@ async function boot() {
   const projection = createProjection(meta);
   const sampleElevation = createElevationSampler(grid, meta.width, meta.height, projection);
 
-  const initial = decodeState(window.location.hash) || {};
-  let savedGraphics;
-  try { savedGraphics = localStorage.getItem('philly3d.lightweight'); } catch { /* private browsing */ }
-  if (initial.lightweight === undefined) initial.lightweight = Number(preferLightweight({
-    memory: navigator.deviceMemory, cores: navigator.hardwareConcurrency, saved: savedGraphics,
-  }));
-  const store = createStore(initial);
-  let sceneDisposed = false, firstFrameAt = 0;
-  if (status.disableLayers.length) {
-    const off = {};
-    for (const id of status.disableLayers) off[id] = false;
-    store.set({ layers: off }, { source: 'degraded' });
+  function readLocationView(hash) {
+    let saved;
+    try { saved = localStorage.getItem('philly3d.lightweight'); } catch { /* private browsing */ }
+    return resolveViewHash(hash, { disabledLayers: status.disableLayers, lightweight: Number(
+      preferLightweight({ memory: navigator.deviceMemory, cores: navigator.hardwareConcurrency, saved })) });
   }
+  const initial = readLocationView(window.location.hash) ?? readLocationView('');
+  const store = createStore(initial.state);
+  let sceneDisposed = false, firstFrameAt = 0;
 
   const renderer = createRenderer();
   if (!renderer) {
@@ -530,7 +526,9 @@ async function boot() {
   streetMotion.onchange=()=>store.set({streetMotion:streetMotion.value,
     ...(streetMotion.value==='on'&&store.value('animationSpeed')===0?{animationSpeed:1}:{})},
   {source:'traffic-motion'});
-  store.subscribe(state=>{streetMotion.value=state.streetMotion;});
+  store.subscribe((state, changed) => {
+    if (changed.has('streetMotion')) streetMotion.value = state.streetMotion;
+  });
   $('showTraffic').onclick=()=>{
     explore?.close();cityFeatures?.close();bathymetry?.disable();
     store.set({era:'present',compareMode:'off',lightweight:0,
@@ -540,7 +538,8 @@ async function boot() {
     motion.flyTo({lon:-75.164,lat:39.9502,camDist:350,camPitch:35,camBearing:0},
       {label:'Center City moving traffic'});
   };
-  const ui = wireInterface({ store, motion, data, projection, rig, structures });
+  const ui = wireInterface({ store, motion, data, projection, rig, structures,
+    readLocationView, initialName: initial.name, closeTemporaryViews });
   const disposeNotes=wireFieldNotes($('toggleNotes'));
   const disposeLooks = wireLooks($('lookChoices'), store, () => motion.stop());
   const orientation = createOrientation({ host: $('orientation'), projection,
@@ -556,6 +555,7 @@ async function boot() {
     if (!changed.has('lightweight')) return;
     lightweightToggle.checked = !!state.lightweight;
     if (state.lightweight) $('powerSaving').checked = true;
+    if (state.lastChangeSource === 'hash') return;
     try { localStorage.setItem('philly3d.lightweight', state.lightweight ? 'on' : 'off'); }
     catch { /* private browsing */ }
   });
@@ -627,15 +627,27 @@ async function boot() {
     }
   });
 
-  let explore, explorePromise;
+  let explore, explorePromise, toolRequest = 0;
+  function closeTemporaryViews() {
+    ++toolRequest;
+    explore?.close();
+    if (cityFeatures?.active) cityFeatures.close(false);
+    if (bathymetry.active) bathymetry.disable();
+    mapLayers.clearReliefOverlays();
+    aircraftLayer.stopFollow();
+    $('cityFeatureLoadStatus').textContent = '';
+    $('exploreStatus').textContent = '';
+  }
+
   async function openExplore(kind) {
     cityFeatures?.close();
-    const status = $('exploreStatus');
+    $('cityFeatureLoadStatus').textContent = '';
+    const request = ++toolRequest, status = $('exploreStatus');
     status.textContent = 'Opening map tools…';
     try {
       explorePromise ??= import('./explore-modes.js?v=philly-2026092205');
       const module = await explorePromise;
-      if (sceneDisposed) return;
+      if (sceneDisposed || request !== toolRequest) return;
       explore ??= module.createExploreModes(THREE, {
         stage: dom.stage, scene, sky: sky.mesh, projection, sampleElevation, photographic, store, motion,
         rig, structures, landmarks: data.landmarks, models: data.landmarkModels,
@@ -645,20 +657,23 @@ async function boot() {
       explore.open(kind);
       status.textContent = 'Choose an exhibit. Return to map restores your view.';
     } catch {
-      explorePromise = undefined; status.textContent = 'Map tools could not load. Please try again.';
+      explorePromise = undefined;
+      if (!sceneDisposed && request === toolRequest) {
+        status.textContent = 'Map tools could not load. Please try again.';
+      }
     }
   }
   $('openExhibit').onclick = () => openExplore('exhibit');
   $('openModel').onclick = () => openExplore('model');
 
-  let cityRequest = 0;
   async function openCityFeature(kind) {
-    const request = ++cityRequest, status = $('cityFeatureLoadStatus');
+    const request = ++toolRequest, status = $('cityFeatureLoadStatus');
+    $('exploreStatus').textContent = '';
     status.textContent = 'Loading discovery…';
     try {
       cityFeaturesPromise ??= import('./city-features.js?v=philly-2026092205');
       const module = await cityFeaturesPromise;
-      if (sceneDisposed || request !== cityRequest) return;
+      if (sceneDisposed || request !== toolRequest) return;
       cityFeatures ??= module.createCityFeatures(THREE, { scene, sky: sky.mesh, projection,
         sampleElevation, store, motion, invalidate: () => wake(),
         stopOtherModes: () => { explore?.close(); aircraftLayer.stopFollow(true);
@@ -666,6 +681,7 @@ async function boot() {
       cityFeatures.open(kind); status.textContent = '';
     } catch {
       cityFeaturesPromise = undefined;
+      if (sceneDisposed || request !== toolRequest) return;
       cityFeatures?.close(); status.textContent = 'Discovery could not load. Please try again.';
     }
   }
@@ -744,7 +760,13 @@ async function boot() {
   });
 
   applyState(store.get(), { terrain, sky, overlays, structures, postfx, ui, flood, force: true });
-  store.subscribe((state) => applyState(state, { terrain, sky, overlays, structures, postfx, ui, flood }));
+  store.subscribe((state, changed) => {
+    if ([...changed].every(key => Object.hasOwn(CAMERA, key))) {
+      ui.syncViewDescription(state);
+    } else {
+      applyState(state, { terrain, sky, overlays, structures, postfx, ui, flood });
+    }
+  });
 
   // Structure tiers follow the effective quality and the set of active zones.
   // Raising the quality later means the rowhouse tier was never fetched;
@@ -1014,12 +1036,13 @@ async function boot() {
     supplement(now, state);
     orientation.update(now, viewW / viewH, dt); navigation.update(now);
     bathymetry.update();
+    let photoCars;
     if(photographic.active){
       streetLife.update({camera,pose:now,state,exaggeration:1,sunDir,dt:streetDt,
         reducedMotion:REDUCED_MOTION,archive:mapLayers.archiveActive,quality:effectiveQuality,photo:true});
-      photographic.updateTraffic(streetLife.photoCars);
+      photoCars=streetLife.photoCars;
     }
-    if (photographic.update(now, state, viewW, viewH)) {
+    if (photographic.update(now, state, viewW, viewH, photoCars)) {
       const text=streetStatus(state,now,streetLife.stats(),{photo:true,reducedMotion:REDUCED_MOTION});
       if(streetMessage.textContent!==text)streetMessage.textContent=text;
       explore?.update(camera, 1);
@@ -1256,7 +1279,7 @@ async function boot() {
     scheduledDelay = frameDelay({ saving: powerToggle.checked,
       moving: rig.dragging || motion.playing || cityFeatures?.animating, live: aircraftLayer.animating,
       streets: streetLife.animating,
-      loading: photo.wanted && !photo.failed && (photo.loading || !photo.firstViewReady || photo.pending > 0)
+      loading: photo.wanted && !photo.failed && (photo.loading || !photo.firstViewReady || !photo.settled)
         || imageryDetail.stats().pending > 0,
       now: performance.now(), lastInteraction });
     const text = scheduledDelay === 500 ? 'Saving power · idle refresh · full detail retained'
@@ -1335,7 +1358,7 @@ async function boot() {
     cameraLayer.dispose();
     disposeRegionalViews();
     imageryDetail.dispose(); neighborhood.dispose(); diorama.dispose();
-    orientation.dispose(); navigation.dispose(); disposeLooks(); disposeNotes(); ui.disposeSaved?.();
+    orientation.dispose(); navigation.dispose(); disposeLooks(); disposeNotes(); ui.dispose();
     disposeMapChrome(); disposeWindows();
     },
   });
@@ -1736,7 +1759,8 @@ function createMotion(store, projection) {
 // ---------------------------------------------------------------------------
 
 function wireInterface(deps) {
-  const { store, motion, data, projection, rig, structures } = deps;
+  const { store, motion, data, projection, rig, structures,
+    readLocationView, initialName, closeTemporaryViews } = deps;
 
   const controls = buildControls(store, dom.studioGroups);
   const layerToggles = buildLayerToggles(store, dom.layerToggles);
@@ -1746,14 +1770,11 @@ function wireInterface(deps) {
     'structures');
 
   const dialogs = createDialogs(['about', 'shortcuts', 'share']);
-  let viewName = readViewName(window.location.hash);
+  let viewName = initialName;
   if (viewName) toast(`Shared view: ${viewName}`);
   // Choosing another scene restages the view, so the shared name comes off.
-  store.subscribe((state, changed) => {
-    if (changed.has('preset') && viewName) {
-      viewName = '';
-      api.syncControls(state);
-    }
+  store.subscribe((_state, changed) => {
+    if (changed.has('preset')) viewName = '';
   });
 
   // Share dialog: name the view (optional) and copy a link that carries the
@@ -1779,7 +1800,7 @@ function wireInterface(deps) {
       toast('Link is in the address bar');
     }
     dialogs.close();
-    api.syncControls(store.get());
+    api.syncViewDescription(store.get());
   });
   function openShareDialog() {
     if (shareName) shareName.value = viewName || '';
@@ -1896,8 +1917,10 @@ function wireInterface(deps) {
   const shotsPanel = setupPanel(dom.shots, dom.shotsToggle);
   $('openExplore').addEventListener('click', () => shotsPanel.set(!shotsPanel.isCollapsed()));
   $('openCustomize').addEventListener('click', () => studioPanel.set(!studioPanel.isCollapsed()));
-  document.querySelector('.skip-link').addEventListener('click', () => {
-    studioPanel.set(false); dom.studioToggle.focus();
+  document.querySelector('.skip-link').addEventListener('click', event => {
+    event.preventDefault();
+    studioPanel.set(false);
+    dom.studioToggle.focus({ preventScroll: true });
   });
   let inspectionSnapshot = null;
   function visitPreset(id) {
@@ -1922,6 +1945,10 @@ function wireInterface(deps) {
       inspectionSnapshot = null;
       store.set({ ...saved, camLon: pose.lon, camLat: pose.lat }, { source: 'inspection' });
     }
+    syncInspectionButton();
+  }
+  function syncInspectionButton() {
+    const enabled = !!inspectionSnapshot;
     document.body.classList.toggle('street-inspection', enabled);
     $('btnInspect').setAttribute('aria-pressed', String(enabled));
     $('btnInspect').textContent = enabled ? 'Exit inspection' : 'Street inspection';
@@ -1930,9 +1957,7 @@ function wireInterface(deps) {
   store.subscribe((state, changed) => {
     if (inspectionSnapshot && (changed.has('preset') || state.era !== 'present')) {
       inspectionSnapshot = null;
-      document.body.classList.remove('street-inspection');
-      $('btnInspect').setAttribute('aria-pressed', 'false');
-      $('btnInspect').textContent = 'Street inspection';
+      syncInspectionButton();
     }
   });
   $('storyArchitecture').addEventListener('click', () => visitPreset('architecture'));
@@ -2212,37 +2237,43 @@ function wireInterface(deps) {
 
   // ---- URL sync -----------------------------------------------------------
   let hashTimer = 0;
-  let ownHash = '';
-  store.subscribe((state) => {
+  const stopUrlSync = store.subscribe(state => {
     clearTimeout(hashTimer);
+    if (state.lastChangeSource === 'hash') return;
+    const href = window.location.href;
     hashTimer = setTimeout(() => {
-      const encoded = [encodeState(state), viewName ? `n=${encodeURIComponent(viewName)}` : '']
-        .filter(Boolean).join('&');
-      ownHash = `#${encoded}`;
-      history.replaceState(null, '', encoded ? ownHash : window.location.pathname);
+      if (window.location.href !== href) return;
+      const url = buildShareUrl(href, store.get(), viewName);
+      if (url !== href) history.replaceState(history.state, '', url);
     }, 350);
   });
-  window.addEventListener('hashchange', () => {
-    if (window.location.hash === ownHash) return;
-    // A pasted named link names the view even without a reload; the name is
-    // applied after the state so a scene change in the same link cannot
-    // clear it.
-    const name = readViewName(window.location.hash);
-    const patch = decodeState(window.location.hash);
-    if (patch) {
-      motion.stop();
-      store.set(patch, { source: 'hash' });
+  function restoreLocation() {
+    clearTimeout(hashTimer);
+    const view = readLocationView(window.location.hash);
+    if (!view) return;
+    restoreView(view.state, view.name, 'hash');
+    clearTimeout(hashTimer);
+  }
+  function restoreView(state, name, source) {
+    if (inspectionSnapshot) {
+      inspectionSnapshot = null;
+      syncInspectionButton();
     }
-    if (name !== viewName) {
-      viewName = name;
-      api.syncControls(store.get());
-    }
-  });
+    closeTemporaryViews();
+    motion.stop();
+    store.set(state, { source });
+    api.setViewName(name);
+  }
+  window.addEventListener('hashchange', restoreLocation);
 
   // ---- readout ------------------------------------------------------------
   let fps = 0;
   let readoutClock = 0;
   let photographicReadout = false;
+
+  function writeReadout(node, value) {
+    if (node.textContent !== value) node.textContent = value;
+  }
 
   const api = {
     layerToggles,
@@ -2257,20 +2288,23 @@ function wireInterface(deps) {
       layerToggles.sync(state);
       presets.sync(state);
       syncComparison(state);
+      this.syncViewDescription(state);
+    },
+    syncViewDescription(state) {
       const preset = getPreset(state.preset);
       // A shared link can carry a name; it heads the readout until a preset
       // restages the view.
       const away=awayFromPreset(preset,state,projection);
-      dom.outPreset.textContent = viewName || (away ? 'Exploring the Delaware Valley' : preset.name);
-      dom.outBlurb.textContent = photographicReadout
+      writeReadout(dom.outPreset, viewName || (away ? 'Exploring the Delaware Valley' : preset.name));
+      writeReadout(dom.outBlurb, photographicReadout
         ? 'Photographic buildings, trees and streets from captured aerial imagery. '
           + 'Zoom out to return to the relief diorama.' : viewName
         ? (preset ? `${preset.name}, shared by link.` : 'A named view shared by link.')
         : (away ? 'Follow the mapped streets and terrain. '
-          + 'Use the locator to find your way back.' : preset.blurb);
+          + 'Use the locator to find your way back.' : preset.blurb));
     },
     get viewName() { return viewName; },
-    setViewName(name) { viewName = cleanViewName(name); this.syncControls(store.get()); },
+    setViewName(name) { viewName = cleanViewName(name); this.syncViewDescription(store.get()); },
     openShare() { openShareDialog(); },
     setFps(value) { fps = value; },
     setCapture(fn) { captureFn = fn; },
@@ -2278,7 +2312,7 @@ function wireInterface(deps) {
     updateReadout({ pose, groundY, viewH, dt, exaggeration, photographic = false }) {
       if (photographic !== photographicReadout) {
         photographicReadout = photographic;
-        this.syncControls(store.get());
+        this.syncViewDescription(store.get());
       }
       readoutClock += dt;
       if (readoutClock < 0.1) return;
@@ -2290,29 +2324,35 @@ function wireInterface(deps) {
       const modelNote = $('dioramaStatus');
       if (modelNote) {
         const archiveYear = $('archiveYear')?.value || 'off';
-        modelNote.hidden = !state.diorama || state.era !== 'present' || state.compareMode !== 'off';
-        modelNote.textContent = archiveYear !== 'off' ? `${archiveYear} AERIAL SURVEY · TODAY’S TERRAIN`
+        const hidden = !state.diorama || state.era !== 'present' || state.compareMode !== 'off';
+        if (modelNote.hidden !== hidden) modelNote.hidden = hidden;
+        writeReadout(modelNote, archiveYear !== 'off' ? `${archiveYear} AERIAL SURVEY · TODAY’S TERRAIN`
           : pose.dist > 9000
           ? `MINIATURE LANDSCAPE · ${exag.toFixed(1)}× relief`
-          : state.layers.structures ? 'NEIGHBORHOOD MODEL · MAPPED FOOTPRINTS' : 'AERIAL INSPECTION';
+          : state.layers.structures ? 'NEIGHBORHOOD MODEL · MAPPED FOOTPRINTS' : 'AERIAL INSPECTION');
       }
       const mpp = metersPerPixel(pose.dist, pose.fov, viewH);
 
-      dom.outCoords.textContent = formatLatLon(pose.lat, pose.lon);
-      dom.outElev.textContent = `${Math.round(elevation)} m`;
-      dom.outBearing.textContent = `${Math.round(pose.bearing)}° ${compassPoint(pose.bearing)}`;
-      dom.outPitch.textContent = `${Math.round(pose.pitch)}°`;
-      dom.outZoom.textContent = `z${equivalentZoom(mpp, pose.lat).toFixed(1)}`;
-      dom.outFps.textContent = fps ? String(Math.round(fps)) : '—';
+      writeReadout(dom.outCoords, formatLatLon(pose.lat, pose.lon));
+      writeReadout(dom.outElev, `${Math.round(elevation)} m`);
+      writeReadout(dom.outBearing, `${Math.round(pose.bearing)}° ${compassPoint(pose.bearing)}`);
+      writeReadout(dom.outPitch, `${Math.round(pose.pitch)}°`);
+      writeReadout(dom.outZoom, `z${equivalentZoom(mpp, pose.lat).toFixed(1)}`);
+      writeReadout(dom.outFps, fps ? String(Math.round(fps)) : '—');
 
       const bar = scaleBar(mpp, 120);
       dom.scaleLine.style.width = `${Math.round(bar.pixels)}px`;
-      dom.scaleLabel.textContent = bar.label;
+      writeReadout(dom.scaleLabel, bar.label);
     },
   };
-  api.disposeSaved=wireSavedViews($('savedViews'),store,(state,name) => {
-    motion.stop(); store.set(state,{source:'saved-view'}); api.setViewName(name);
-  },() => viewName || dom.outPreset.textContent);
+  const disposeSaved = wireSavedViews($('savedViews'), store,
+    (state, name) => restoreView(state, name, 'saved-view'), () => viewName || dom.outPreset.textContent);
+  api.dispose = () => {
+    disposeSaved();
+    stopUrlSync();
+    clearTimeout(hashTimer);
+    window.removeEventListener('hashchange', restoreLocation);
+  };
   return api;
 }
 
