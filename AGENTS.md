@@ -31,3 +31,13 @@ running the scheduled task, not just launching the helper from Codex.
 
 # Hidden Reef ownership
 Read HIDDEN_REEF.md. Do not restore full Hidden Reef storefronts in this repository. Both prototypes paths are redirects only. Its authoritative editable source is on Evo X2, and its live site is https://hidden-reef.pages.dev/.
+
+# How publishing happens in practice (observed 2026-11-17)
+
+Cloudflare Pages also builds this repository from Git: a push to `main` is published within about five to ten minutes
+without the wrapper above (`.github/workflows/pages-file-size.yml` says the Git builds publish the repository root, and
+commits were confirmed live that way). The Anatomy Studio releases of 2026-11-17 went out by pushing to `main`.
+
+The wrapper cannot be run from a fresh checkout as it stands: it needs `wrangler` resolvable from `scripts/` (it is not
+a dependency of this repository) and an upload directory prepared by hand. This note records what was observed; it does
+not change the rule above. If the wrapper is still required for some releases, say here which ones.
