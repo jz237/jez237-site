@@ -41,7 +41,7 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
   let viewer, tileset, photoTraffic, loading = false, failed = false, disposed = false;
   let active = false, wanted = false, firstViewReady = false, visibleTiles = 0;
   let pending = 0, lastPoseKey = '', lastMotion = -Infinity, motionAnchor, lastStatus = '';
-  let drawnPose, deferredPose = false, previousMovingFrame, slowFrames = 0;
+  let drawnPose, deferredPose = false, previousMovingFrame, slowFrames = 0, movingDetail = 12;
   let detailPending = false, nextDetailStep = 0;
   let progressPhase, progressAt = -Infinity, flightBackground;
   let lastPose, width = 1, height = 1, detailTiles = 0, bestError = Infinity, generation = 0;
@@ -63,10 +63,9 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
   function viewSettled() {
     return !!tileset?.tilesLoaded && pending === 0 && !detailPending;
   }
-  function updateDetail(target, time) {
+  function updateDetail(target, time, freeCacheBytes) {
     const current = tileset.maximumScreenSpaceError;
     const adjusted = tileset.memoryAdjustedScreenSpaceError;
-    const used = tileset.totalMemoryUsageInBytes;
     detailPending = false;
 
     // The Cesium setter also resets its memory-adjusted error. Preserve that
@@ -74,7 +73,7 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
     const constrained = adjusted > current;
     if (current === target || (constrained && target <= (target > current ? adjusted * 1.25 : adjusted))) {
       if (current === target) nextDetailStep = 0;
-      if (constrained && target < adjusted && used < tileset.cacheBytes) {
+      if (constrained && target < adjusted && freeCacheBytes > 0) {
         // Paused traffic and power saving still need real draws while Cesium
         // relaxes its limit, even when our configured target already matches.
         detailPending = true; viewer.scene.requestRender();
@@ -82,11 +81,10 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
       return;
     }
 
-    // The overflow allowance keeps the previous block visible while loading
-    // the next one. At the normal cache limit, refine one level at a time and
-    // let its requests enter the queue before asking for another level.
+    // Leave room for incoming tiles while the previous block is still visible.
+    // A coarse frame can briefly free space before its requests enter the queue.
     let next = target;
-    if (target < current && used >= tileset.cacheBytes) {
+    if (target < current && (freeCacheBytes <= tileset.maximumCacheOverflowBytes || time < nextDetailStep)) {
       detailPending = true;
       if (!tileset.tilesLoaded || time < nextDetailStep) return;
       next = Math.max(target, current / 2);
@@ -283,7 +281,7 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
     viewer=undefined;tileset=undefined;
     firstViewReady = false; lastPoseKey = ''; pending = 0;
     motionAnchor=undefined;lastMotion=-Infinity;flightBackground=undefined;
-    drawnPose=undefined;deferredPose=false;previousMovingFrame=undefined;slowFrames=0;
+    drawnPose=undefined;deferredPose=false;previousMovingFrame=undefined;slowFrames=0;movingDetail=12;
     detailPending=false;nextDetailStep=0;
     budget=undefined;resizedWidth=0;resizedHeight=0;
     visibleTiles=0;detailTiles=0;bestError=Infinity;
@@ -359,7 +357,7 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
       wanted = !isOverlayActive() && photoWanted(state, pose.dist, wanted);
       if (!wanted) {
         present(false);
-        previousMovingFrame=undefined;slowFrames=0;
+        previousMovingFrame=undefined;slowFrames=0;movingDetail=12;
         detailPending=false;nextDetailStep=0;
         firstViewDeadline.cancel();
       }
@@ -407,19 +405,27 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
       // Establish complete neighborhood coverage before requesting the finest
       // level. Stationary detail follows the current device/retry budget.
       const moving = time - lastMotion < 180;
+      const freeCacheBytes = tileset.cacheBytes - tileset.totalMemoryUsageInBytes;
       // A sustained slow gesture can traverse hundreds of meshes per frame.
       // Hold the lighter moving target through that gesture to avoid tile churn.
       const adaptMotion = firstViewReady && moving
         && (state.quality === 'auto' || state.quality === 'performance');
       if (adaptMotion) {
         const interval = time - previousMovingFrame;
-        if (interval >= 1000) slowFrames = 0;
-        else if (slowFrames < 3) slowFrames = interval > 32 ? slowFrames + 1 : 0;
+        if (interval >= 1000) {
+          slowFrames = 0; movingDetail = 12;
+        } else if (slowFrames < 3) {
+          slowFrames = interval > 32 ? slowFrames + 1 : 0;
+        }
+        if (slowFrames === 3) {
+          const slowDetail = freeCacheBytes <= tileset.maximumCacheOverflowBytes ? 32 : 24;
+          movingDetail = Math.max(movingDetail, slowDetail);
+        }
         previousMovingFrame = time;
       } else {
-        previousMovingFrame = undefined; slowFrames = 0;
+        previousMovingFrame = undefined; slowFrames = 0; movingDetail = 12;
       }
-      updateDetail(!firstViewReady ? 16 : moving ? (slowFrames === 3 ? 24 : 12) : budget.detail, time);
+      updateDetail(!firstViewReady ? 16 : moving ? movingDetail : budget.detail, time, freeCacheBytes);
       if (viewer.entities.show !== state.layers.landmarks) viewer.entities.show = state.layers.landmarks;
       try {
         if (cars) photoTraffic.update(cars, moving);
