@@ -1146,6 +1146,9 @@ def main():
         item["url"] = canonicalize_url(item.get("url", ""))
         if not item["url"]:
             continue
+        # Published links are rendered as clickable anchors: web pages only.
+        if urllib.parse.urlparse(item["url"]).scheme.lower() not in ("http", "https"):
+            continue
         dt = item.get("published") or now
         if dt < cutoff:
             continue
