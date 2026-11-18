@@ -24,12 +24,27 @@
     const modeEl = document.getElementById('netmap-mode');
 
     /* ---------- adapter: sim by default; live is owner-only ---------- */
-    // Live mode only works where the CSP allows the exporter origin —
-    // i.e. locally on the LAN, never on the deployed site. See
+    // Live mode is refused outright on the deployed site: ?src= is chosen by
+    // whoever wrote the link, and the CSP alone does not stop it (it allows
+    // some hosts anyone can publish to). It only runs when this page is
+    // itself served from the owner's machine or LAN. See
     // network/exporter/README.md.
+    function isLocalHost(hostname) {
+      return hostname === 'localhost' || hostname === '[::1]' || hostname.endsWith('.local') ||
+        /^(127\.|10\.|192\.168\.|172\.(1[6-9]|2\d|3[01])\.)\d{1,3}(\.\d{1,3}){1,2}$/.test(hostname);
+    }
+    function liveSource(raw) {
+      if (!raw || !isLocalHost(location.hostname)) return null;
+      try {
+        const url = new URL(raw, location.href);
+        return /^https?:$/.test(url.protocol) && isLocalHost(url.hostname) ? url.href : null;
+      } catch (e) {
+        return null;
+      }
+    }
     let adapter;
-    const liveSrc = params.get('src');
-    if (params.get('adapter') === 'live' && liveSrc && NetMap.LiveAdapter) {
+    const liveSrc = params.get('adapter') === 'live' ? liveSource(params.get('src')) : null;
+    if (liveSrc && NetMap.LiveAdapter) {
       adapter = NetMap.LiveAdapter(liveSrc);
     } else {
       adapter = NetMap.SimAdapter(data);
@@ -201,6 +216,7 @@
         if (!n || d.rx + d.tx < 1) return;
         let cls = 'browsing', best = -1;
         Object.keys(d.classes || {}).forEach(k => { if (d.classes[k] > best) { best = d.classes[k]; cls = k; } });
+        if (!NetMap.CLASS_LABELS[cls]) cls = 'browsing';   // only known classes reach the markup
         const li = document.createElement('li');
         const btn = document.createElement('button');
         btn.type = 'button';
