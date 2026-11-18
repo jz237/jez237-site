@@ -2,6 +2,23 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-11-18",
+      "historicDate": "1985-09-16",
+      "displayDate": "Week of September 16-22, 1985",
+      "edition": "Issue 164 - Weekly 1985 Computer & Culture Chronicle",
+      "morningLine": "Jobs leaves Apple; Britannia asks what kind of hero you will become.",
+      "leadHeadline": "Jobs resigns from Apple",
+      "storyHeadlines": [
+        "Ultima IV makes virtue the object of the adventure",
+        "Amiga promises a multimedia desktop, but buyers must separate promise from delivery",
+        "A modem becomes a route to college credit",
+        "Britain gives computer programs explicit copyright protection"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1985-09-16.jpg",
+      "thumb": "media/thumbs/1985-09-16.webp",
+      "milestone": true
+    },
+    {
       "currentDate": "2026-11-17",
       "historicDate": "1985-09-09",
       "displayDate": "Week of September 9-15, 1985",

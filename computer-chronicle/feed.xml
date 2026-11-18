@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Tue, 17 Nov 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Wed, 18 Nov 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of September 16-22, 1985 — Jobs resigns from Apple</title>
+      <link>https://jez237.com/computer-chronicle/?date=1985-09-16</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1985-09-16</guid>
+      <pubDate>Wed, 18 Nov 2026 12:00:00 GMT</pubDate>
+      <description>Cofounder leaves the chairmanship and turns toward a higher-education computer venture. Steve Jobs has resigned as chairman of Apple Computer. His September 17 letter to A. C. Markkula Jr., reproduced in the September 18 Mercury News, brings a formal break between the 30-year-old cofounder and the company he helped build. A proposed new venture aimed at higher education now occupies his attention. Also this week: Ultima IV makes virtue the object of the adventure · Amiga promises a multimedia desktop, but buyers must separate promise from delivery · A modem becomes a route to college credit · Britain gives computer programs explicit copyright protection.</description>
+    </item>
     <item>
       <title>Week of September 9-15, 1985 — Super Mario Bros. arrives on Japan’s Famicom</title>
       <link>https://jez237.com/computer-chronicle/?date=1985-09-09</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1985-05-06</guid>
       <pubDate>Fri, 30 Oct 2026 12:00:00 GMT</pubDate>
       <description>Brøderbund’s fifty-screen challenge gives veteran runners a certificate to chase. Championship Lode Runner asks a pointed question of anyone who has mastered the original: can you survive fifty screens built for experts? Brøderbund’s sequel, reviewed in the May COMPUTE!, trades the original’s 150 screens for a smaller, deliberately demanding collection. This is a test of seasoned runners, not a gentle first lesson in collecting gold and evading guards. Also this week: Atari’s attack: 520ST reaches the hands-on test bench · Sidekick puts the desk inside the PC — at two prices · MacVision imports the video world into Macintosh documents.</description>
-    </item>
-    <item>
-      <title>Week of April 29-May 5, 1985 — Build a robot, solve an adventure: programming becomes play</title>
-      <link>https://jez237.com/computer-chronicle/?date=1985-04-29</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1985-04-29</guid>
-      <pubDate>Thu, 29 Oct 2026 12:00:00 GMT</pubDate>
-      <description>Robot Odyssey I and Chipwits make circuits and visual instructions the machinery of adventure. Adventure games are putting a new question to the home computer: can the player build the intelligence that wins the game? In the April–May Computer Gaming World, Gregg Williams compares Robot Odyssey I and Chipwits, two simulations that make programming itself the entertainment. These are current review selections, not announcements of releases during this week. Also this week: AT competition widens: three rivals promise more choice · Buyers and vendors still divided over software protection · Share a screen over the telephone.</description>
     </item>
   </channel>
 </rss>
