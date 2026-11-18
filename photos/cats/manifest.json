@@ -2,6 +2,18 @@
   "album": "Cat Corner",
   "photos": [
     {
+      "src": "images/black-cat-hammock-dangle-2026-11-17.jpg",
+      "alt": "Black cat resting in a red and black cat tree hammock with both front legs dangling and eyes looking upward",
+      "caption": "Hammock occupied. Landing gear fully extended.",
+      "date": "2026-11-17"
+    },
+    {
+      "src": "images/white-cat-chair-portrait-2026-11-16.jpg",
+      "alt": "White cat with green eyes and a dark crown marking standing on a cushioned chair, tail held upright",
+      "caption": "Tail up. Full attention. Probably a request.",
+      "date": "2026-11-16"
+    },
+    {
       "src": "images/two-black-cats-rug-stare-2026-11-06.jpg",
       "alt": "Two black cats lying side by side on a gray rug, both looking up at the camera with golden eyes, a white toy mouse beside them",
       "caption": "Matching set, matching stare: the toy mouse has been spared for now",
