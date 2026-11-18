@@ -31,7 +31,8 @@ function fixture(t,options={}){
     entities={values:[]};
     dataSources={add(){},remove(){}};
     scene={screenSpaceCameraController:{},postProcessStages:{fxaa:{}},
-      requestRender(){},primitives:{add:tiles=>{this.tiles=tiles;}},renderError:new Signal()};
+      requestRender(){},primitives:{add:tiles=>{this.tiles=tiles;}},renderError:new Signal(),
+      preRender:new Signal(),postRender:new Signal()};
     constructor(host,settings){if(options.graphicsError)throw options.graphicsError;
       this.settings=settings;viewers.push(this);
       host.append(new Element());settings.creditContainer.append(new Element());}
@@ -42,13 +43,17 @@ function fixture(t,options={}){
       this.destroyed=true;this.destroyCount++;this.tiles?.destroy();
     }
     render(){
+      if(this.skipRender)return;
       this.rendering=true;
+      this.scene.preRender.fire();
       if(this.failRender)this.scene.renderError.fire(this.scene,new Error('render failure'));
-      else this.tiles.tileVisible.fire({geometricError:32});
+      else if(!this.empty)this.tiles.tileVisible.fire({geometricError:32});
+      this.scene.postRender.fire();
       this.rendering=false;
     }
   }
   const C={Viewer,Ion:{},CustomDataSource:class{},Cartographic:class{},
+    BoundingSphere:class{center={};},Quaternion:class{},HeadingPitchRoll:class{},
     Color:{fromCssColorString:s=>s},Cartesian3:{fromDegrees:()=>({})},
     Matrix4:{IDENTITY:{}},HeadingPitchRange:class{},Math:{toRadians:n=>n*Math.PI/180},
     createGooglePhotorealistic3DTileset:()=>new Promise((resolve,reject)=>tileRequests.push({resolve,reject}))};
@@ -67,6 +72,135 @@ function fixture(t,options={}){
   t.after(()=>{photo.dispose();globalThis.document=oldDocument;globalThis.window=oldWindow;});
   return {photo,viewers,tileRequests,nodes,update,ready,makeTiles,stage,doc,store};
 }
+test('tile counts describe the last actual draw and unchanged frames do not rewrite its status attributes',async t=>{
+  const f=fixture(t);await f.ready();
+  const viewer=f.viewers[0],message=f.nodes.get('photoStatus');
+  let writes=0;
+  message.dataset=new Proxy(message.dataset,{set(data,key,value){writes++;data[key]=value;return true;}});
+  f.update();assert.equal(writes,0);
+  viewer.skipRender=true;f.update();
+  assert.equal(f.photo.stats().visibleTiles,1);assert.equal(f.photo.stats().detailTiles,1);
+  assert.equal(message.dataset.bestError,'32');assert.equal(writes,0);
+  viewer.skipRender=false;viewer.empty=true;f.update();
+  assert.equal(f.photo.stats().visibleTiles,0);assert.equal(message.dataset.visibleTiles,'0');
+  assert.equal(message.dataset.bestError,undefined);
+});
+
+test('subpixel orbit easing allows fine tiles to return while accumulated pans and wheel zoom still select motion detail',async t=>{
+  let time=1000;t.mock.method(performance,'now',()=>time);
+  const f=fixture(t),tiles=await f.ready();f.update();assert.equal(tiles.maximumScreenSpaceError,12);
+  time+=200;f.update();assert.equal(tiles.maximumScreenSpaceError,4);
+  const shifted={...pose,lon:pose.lon+.001};f.update(shifted);assert.equal(tiles.maximumScreenSpaceError,12);
+  for(let i=1;i<=4;i++){time+=50;f.update({...shifted,lon:shifted.lon+i*.0000005});}
+  assert.equal(tiles.maximumScreenSpaceError,4);
+  time+=20;f.update({...shifted,lon:shifted.lon+.000008});assert.equal(tiles.maximumScreenSpaceError,12);
+  time+=230;f.update({...shifted,lon:shifted.lon+.000008});assert.equal(tiles.maximumScreenSpaceError,4);
+  f.update({...shifted,dist:pose.dist*1.3});assert.equal(tiles.maximumScreenSpaceError,12);
+});
+
+test('fractional camera motion accumulates and applies the exact final orbit position once',async t=>{
+  const f=fixture(t);await f.ready();
+  const applied=[];
+  window.Cesium.Cartesian3.fromDegrees=(lon,lat,height)=>({lon,lat,height});
+  f.viewers[0].camera.lookAt=target=>applied.push(target.lon);
+  f.update({...pose,lon:pose.lon+.0000004});
+  const end={...pose,lon:pose.lon+.0000008};f.update(end);
+  assert.deepEqual(applied,[],'two subpixel steps leave the current camera untouched');
+  f.update(end);f.update(end);assert.deepEqual(applied,[end.lon]);
+  const far={...pose,lon:end.lon+.00003};f.update(far);assert.deepEqual(applied,[end.lon,far.lon]);
+});
+
+test('automatic photo detail eases sustained slow navigation and immediately restores the selected resting quality',async t=>{
+  let time=1000;t.mock.method(performance,'now',()=>time);
+  const f=fixture(t),tiles=await f.ready();let lon=pose.lon;
+  const pan=ms=>{time+=ms;lon+=.00002;f.update({...pose,lon});return tiles.maximumScreenSpaceError;};
+  assert.equal(pan(16),12);assert.equal(pan(45),12);assert.equal(pan(45),12);
+  assert.equal(pan(45),24);assert.equal(pan(16),24,'hold the target through the same gesture');
+  time+=200;f.update({...pose,lon});assert.equal(tiles.maximumScreenSpaceError,4);
+  assert.equal(pan(16),12,'start the next gesture at normal moving detail');
+  f.store.set({quality:'cinematic'});
+  for(let i=0;i<5;i++)assert.equal(pan(50),12);
+  time+=200;f.update({...pose,lon});assert.equal(tiles.maximumScreenSpaceError,2);
+});
+
+// The real tileset forgets its learned memory limit on every assignment.
+function measureDetailWrites(tiles, target, adjusted) {
+  const writes=[];
+  Object.defineProperties(tiles, {
+    maximumScreenSpaceError:{get:()=>target,set:value=>{target=adjusted=value;writes.push(value);}},
+    memoryAdjustedScreenSpaceError:{get:()=>adjusted},
+  });
+  return {writes, adjust:value=>{adjusted=value;}};
+}
+
+test('navigation preserves the learned tile memory limit and can still request a substantially coarser view',async t=>{
+  let time=1000;t.mock.method(performance,'now',()=>time);
+  const f=fixture(t),tiles=await f.ready(),memory=measureDetailWrites(tiles,4,27);
+  tiles.totalMemoryUsageInBytes=tiles.cacheBytes+100;
+  let lon=pose.lon;
+  const pan=()=>{time+=45;lon+=.00002;f.update({...pose,lon});};
+  for(let i=0;i<6;i++)pan();
+  memory.adjust(26);pan();assert.deepEqual(memory.writes,[]);
+  assert.match(f.nodes.get('photoStatus').textContent,/navigating/);
+  memory.adjust(22);pan();
+  assert.deepEqual(memory.writes,[32]);assert.equal(tiles.memoryAdjustedScreenSpaceError,32);
+});
+
+test('slow navigation holds its coarser tile detail until the end of a memory-heavy gesture',async t=>{
+  let time=1000;t.mock.method(performance,'now',()=>time);
+  const f=fixture(t),tiles=await f.ready();let lon=pose.lon;
+  const pan=ms=>{time+=ms;lon+=.00002;f.update({...pose,lon});return tiles.maximumScreenSpaceError;};
+  tiles.totalMemoryUsageInBytes=tiles.cacheBytes/2;
+  for(let i=0;i<5;i++)pan(45);
+  assert.equal(tiles.maximumScreenSpaceError,24);
+  tiles.totalMemoryUsageInBytes=tiles.cacheBytes-tiles.maximumCacheOverflowBytes/2;
+  assert.equal(pan(45),32);
+  tiles.totalMemoryUsageInBytes=tiles.cacheBytes/2;
+  assert.equal(pan(16),32,'a momentary drop in memory use must not reload tiles during the gesture');
+  time+=200;f.update({...pose,lon});assert.equal(tiles.maximumScreenSpaceError,4);
+  assert.equal(pan(16),12,'the next gesture starts at normal navigation detail');
+});
+
+test('refinement keeps room for incoming tiles and resumes the selected quality as memory returns',async t=>{
+  let time=1000;t.mock.method(performance,'now',()=>time);
+  const f=fixture(t),tiles=await f.ready(),memory=measureDetailWrites(tiles,24,24);
+  tiles.totalMemoryUsageInBytes=tiles.cacheBytes-tiles.maximumCacheOverflowBytes/2;
+  tiles.tilesLoaded=false;time+=210;f.update();
+  assert.deepEqual(memory.writes,[]);assert.equal(f.photo.stats().settled,false);
+  assert.match(f.nodes.get('photoStatus').textContent,/refining/);
+  tiles.tilesLoaded=true;f.update();assert.deepEqual(memory.writes,[12]);
+  tiles.totalMemoryUsageInBytes=tiles.cacheBytes/2;
+  time+=80;f.update();assert.deepEqual(memory.writes,[12]);assert.equal(f.photo.stats().settled,false);
+  tiles.totalMemoryUsageInBytes=tiles.cacheBytes;
+  time+=100;f.update();assert.deepEqual(memory.writes,[12,6]);
+  memory.adjust(18);time+=200;f.update();assert.equal(f.photo.stats().settled,true);
+  assert.equal(tiles.memoryAdjustedScreenSpaceError,18);
+  tiles.totalMemoryUsageInBytes=tiles.cacheBytes/2;f.update();
+  assert.equal(f.photo.stats().settled,false,'the native limit can now relax on rendered frames');
+  memory.adjust(6);f.update();assert.deepEqual(memory.writes,[12,6,4]);
+  assert.equal(f.photo.stats().settled,true);assert.match(f.nodes.get('photoStatus').textContent,/full detail/);
+});
+
+test('a quiet view keeps drawing until a recovering memory limit reaches an already configured target',async t=>{
+  let time=1000;t.mock.method(performance,'now',()=>time);
+  const f=fixture(t),tiles=await f.ready(),memory=measureDetailWrites(tiles,4,10);
+  let draws=0;f.viewers[0].scene.requestRender=()=>draws++;
+  tiles.totalMemoryUsageInBytes=tiles.cacheBytes/2;time+=250;f.update();
+  assert.equal(f.photo.stats().settled,false);assert.ok(draws>0);
+  const previous=draws;memory.adjust(4);f.update();
+  assert.equal(f.photo.stats().settled,true);assert.equal(draws,previous);assert.deepEqual(memory.writes,[]);
+});
+
+test('changing tile backlog counts is rate limited while completion is announced immediately',async t=>{
+  let time=1000;t.mock.method(performance,'now',()=>time);
+  const f=fixture(t),tiles=await f.ready(),message=f.nodes.get('photoStatus');
+  tiles.loadProgress.fire(20,1);f.update();assert.match(message.textContent,/21 tiles/);
+  time+=100;tiles.loadProgress.fire(9,1);f.update();assert.match(message.textContent,/21 tiles/);
+  time+=160;f.update();assert.match(message.textContent,/10 tiles/);
+  tiles.loadProgress.fire(0,0);f.update();assert.match(message.textContent,/full detail/);
+  tiles.loadProgress.fire(4,2);f.update();assert.match(message.textContent,/6 tiles/);
+});
+
 test('photo render errors fall back immediately and release the viewer after rendering returns',async t=>{
   const f=fixture(t),tiles=await f.ready(),viewer=f.viewers[0];
   viewer.failRender=true;
