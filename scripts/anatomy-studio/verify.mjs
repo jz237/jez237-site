@@ -105,6 +105,9 @@ try {
  // everyday names in search; a second finish beside the first; saving the picture
  for (const [typed, found] of [['thigh bone', 'Femur'], ['kneecap', 'Patella'], ['windpipe', 'Trachea'], ['esophagus', 'Oesophagus']]) { await page.locator('#search').fill(typed); assert.ok((await page.locator('#results button b').first().textContent()).startsWith(found), `"${typed}" finds the ${found}`); }
  await page.locator('#search').fill('');
+ // a description that was cut when the model was built offers the rest; a short one does not
+ await page.locator('#part-list').selectOption('skeletal/femur-l'); await page.waitForFunction(() => !document.getElementById('part-more').hidden, null, {timeout: 30000 * SLOW}); assert.ok(/^Read more about femur/.test(await page.locator('#part-more').textContent()) && (await page.locator('#part-more').getAttribute('href')).startsWith('https://'));
+ await page.locator('#part-list').selectOption('joints/intervertebral-disc-t6-t7'); await page.waitForFunction(() => /intervertebral disc/i.test(document.getElementById('part-title').textContent) && document.getElementById('part-more').hidden, null, {timeout: 30000 * SLOW}); await page.locator('#clear').click();
  await page.locator('#compare').selectOption('clay'); await page.waitForFunction(() => window.anatomyStudio.getState().compare === 'clay'); assert.equal(await page.locator('#compare-handle').isVisible(), true); await page.locator('#compare-handle').focus(); await page.keyboard.press('ArrowRight');
  await page.locator('#compare').selectOption('off'); assert.equal((await read()).compare, null); assert.equal(await page.locator('#compare-handle').isVisible(), false);
  { const [download] = await Promise.all([page.waitForEvent('download', {timeout: 120000 * SLOW}), page.locator('#save-image').click()]); assert.ok(/^anatomy-studio-.*\.png$/.test(download.suggestedFilename()), 'Save image downloads a PNG'); }

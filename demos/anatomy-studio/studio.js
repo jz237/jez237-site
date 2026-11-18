@@ -340,7 +340,7 @@ function renderFacts(part, text){
  $('part-about').hidden = !borrowed; if (borrowed) $('part-about').textContent = `This piece has no description of its own. The text below is about: ${key}.`;
  const url = part ? sourceOf(part) : null; $('part-source').hidden = !url; if (url) $('part-source').href = url;
  // descriptions were cut to about 900 characters when the model was built: offer the rest
- const cut = !!part && !!key && text !== fallbackCopy[part.file] && (text.length > 760 || !/[.!?)"]$/.test(text.trim()));
+ const cut = !!part && !!key && text !== fallbackCopy[part.file] && (text.length > 700 || !/[.!?)"]$/.test(text.trim()));
  $('part-more').hidden = !cut; if (cut) { $('part-more').href = url || `https://en.wikipedia.org/wiki/Special:Search?search=${encodeURIComponent(key)}`; $('part-more').textContent = `Read more about ${/^[A-Z][a-z]/.test(key) ? key[0].toLowerCase() + key.slice(1) : key} ↗`; }
  const authored = part && (part.piece.text || part.piece.descriptionKey), facts = authored ? keyFacts(text, part.file) : [], related = authored ? relatedPieces(text, part, parts) : [];
  const list = $('part-facts'); list.hidden = !facts.length; list.replaceChildren(...facts.flatMap(f => { const dt = document.createElement('dt'); dt.textContent = f.label; const dd = document.createElement('dd'); dd.textContent = f.text; return [dt, dd]; }));
