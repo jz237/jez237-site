@@ -98,6 +98,31 @@ test('subpixel orbit easing allows fine tiles to return while accumulated pans a
   f.update({...shifted,dist:pose.dist*1.3});assert.equal(tiles.maximumScreenSpaceError,12);
 });
 
+test('fractional camera motion accumulates and applies the exact final orbit position once',async t=>{
+  const f=fixture(t);await f.ready();
+  const applied=[];
+  window.Cesium.Cartesian3.fromDegrees=(lon,lat,height)=>({lon,lat,height});
+  f.viewers[0].camera.lookAt=target=>applied.push(target.lon);
+  f.update({...pose,lon:pose.lon+.0000004});
+  const end={...pose,lon:pose.lon+.0000008};f.update(end);
+  assert.deepEqual(applied,[],'two subpixel steps leave the current camera untouched');
+  f.update(end);f.update(end);assert.deepEqual(applied,[end.lon]);
+  const far={...pose,lon:end.lon+.00003};f.update(far);assert.deepEqual(applied,[end.lon,far.lon]);
+});
+
+test('automatic photo detail eases sustained slow navigation and immediately restores the selected resting quality',async t=>{
+  let time=1000;t.mock.method(performance,'now',()=>time);
+  const f=fixture(t),tiles=await f.ready();let lon=pose.lon;
+  const pan=ms=>{time+=ms;lon+=.00002;f.update({...pose,lon});return tiles.maximumScreenSpaceError;};
+  assert.equal(pan(16),12);assert.equal(pan(45),12);assert.equal(pan(45),12);
+  assert.equal(pan(45),24);assert.equal(pan(16),24,'hold the target through the same gesture');
+  time+=200;f.update({...pose,lon});assert.equal(tiles.maximumScreenSpaceError,4);
+  assert.equal(pan(16),12,'start the next gesture at normal moving detail');
+  f.store.set({quality:'cinematic'});
+  for(let i=0;i<5;i++)assert.equal(pan(50),12);
+  time+=200;f.update({...pose,lon});assert.equal(tiles.maximumScreenSpaceError,2);
+});
+
 test('changing tile backlog counts is rate limited while completion is announced immediately',async t=>{
   let time=1000;t.mock.method(performance,'now',()=>time);
   const f=fixture(t),tiles=await f.ready(),message=f.nodes.get('photoStatus');

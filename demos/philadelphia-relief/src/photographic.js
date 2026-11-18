@@ -41,6 +41,7 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
   let viewer, tileset, photoTraffic, loading = false, failed = false, disposed = false;
   let active = false, wanted = false, firstViewReady = false, visibleTiles = 0;
   let pending = 0, lastPoseKey = '', lastMotion = -Infinity, motionAnchor, lastStatus = '';
+  let drawnPose, deferredPose = false, previousMovingFrame, slowFrames = 0;
   let progressPhase, progressAt = -Infinity, flightBackground;
   let lastPose, width = 1, height = 1, detailTiles = 0, bestError = Infinity, generation = 0;
   let press, exhibitBounds, conservative=false,budget;
@@ -101,6 +102,7 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
   function setCamera(pose, w, h) {
     const C = window.Cesium;
     const camera = viewer.camera, mapped = photoCamera(pose, w / h);
+    drawnPose = { ...pose, aspect: w / h }; deferredPose = false;
     updateLandmarks(pose);
     camera.frustum.fov = mapped.fov;
     const flight = !!pose.flightView;
@@ -244,6 +246,7 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
     viewer=undefined;tileset=undefined;
     firstViewReady = false; lastPoseKey = ''; pending = 0;
     motionAnchor=undefined;lastMotion=-Infinity;flightBackground=undefined;
+    drawnPose=undefined;deferredPose=false;previousMovingFrame=undefined;slowFrames=0;
     budget=undefined;resizedWidth=0;resizedHeight=0;
     visibleTiles=0;detailTiles=0;bestError=Infinity;
     host.replaceChildren();credits.replaceChildren();
@@ -318,6 +321,7 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
       wanted = !isOverlayActive() && photoWanted(state, pose.dist, wanted);
       if (!wanted) {
         present(false);
+        previousMovingFrame=undefined;slowFrames=0;
         firstViewDeadline.cancel();
       }
       if (failed) return false;
@@ -352,12 +356,31 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
         if (resized || photoViewMoved(motionAnchor, pose, h)) {
           motionAnchor = { ...pose }; lastMotion = time;
         }
+        // Each Cesium camera change rechecks the surface beneath the eye.
+        // Accumulate fractional pixels and apply the exact final pose once.
+        if (resized || drawnPose?.aspect !== w / h || photoViewMoved(drawnPose, pose, h, .5)) {
+          setCamera(pose, w, h);
+        }
+        else deferredPose = true;
+      } else if (deferredPose) {
         setCamera(pose, w, h);
       }
       // Establish complete neighborhood coverage before requesting the finest
       // level. Stationary detail follows the current device/retry budget.
       const moving = time - lastMotion < 180;
-      const detail = !firstViewReady ? 16 : moving ? 12 : budget.detail;
+      // A sustained slow gesture can traverse hundreds of meshes per frame.
+      // Hold the lighter moving target through that gesture to avoid tile churn.
+      const adaptMotion = firstViewReady && moving
+        && (state.quality === 'auto' || state.quality === 'performance');
+      if (adaptMotion) {
+        const interval = time - previousMovingFrame;
+        if (interval >= 1000) slowFrames = 0;
+        else if (slowFrames < 3) slowFrames = interval > 32 ? slowFrames + 1 : 0;
+        previousMovingFrame = time;
+      } else {
+        previousMovingFrame = undefined; slowFrames = 0;
+      }
+      const detail = !firstViewReady ? 16 : moving ? (slowFrames === 3 ? 24 : 12) : budget.detail;
       if (tileset.maximumScreenSpaceError !== detail) {
         tileset.maximumScreenSpaceError = detail; viewer.scene.requestRender();
       }

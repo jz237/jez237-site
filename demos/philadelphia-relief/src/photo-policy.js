@@ -80,13 +80,12 @@ export function photoCamera(pose, aspect) {
 }
 
 // The orbit rig keeps easing long after the remaining shift is less than a
-// screen pixel. Keep applying its exact camera, but let fine tiles load then.
-// Compare to the last significant pose so small steps can still accumulate.
-export function photoViewMoved(anchor, pose, height) {
+// screen pixel. Compare to an anchor so small steps can still accumulate.
+export function photoViewMoved(anchor, pose, height, pixels = 1) {
   if (!anchor || anchor.flightView || pose.flightView
     || anchor.targetAltitude !== pose.targetAltitude) return true;
-  const metres = metersPerPixel(Math.min(anchor.dist, pose.dist), pose.fov, height);
-  const degrees = pose.fov / height;
+  const metres = metersPerPixel(Math.min(anchor.dist, pose.dist), pose.fov, height) * pixels;
+  const degrees = pose.fov / height * pixels;
   const east = (pose.lon - anchor.lon) * 111320 * Math.cos(pose.lat * Math.PI / 180);
   const north = (pose.lat - anchor.lat) * 111320;
   return Math.hypot(east, north) >= metres || Math.abs(pose.dist - anchor.dist) >= metres
