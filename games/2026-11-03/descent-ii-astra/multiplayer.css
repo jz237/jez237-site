@@ -2,3 +2,13 @@
 .squad-in-flight #squadSetup,.squad-in-flight #squadConnect,.squad-in-flight #squadLaunch,.squad-in-flight>label,.squad-in-flight .squad-hint{display:none!important}.squadron #previewFlight,.squadron #mineFlight{display:none!important}
 #squadOnline{background:#176474!important}#squadPrivate{grid-column:1/-1;border-top:1px solid #426975;padding-top:12px}#squadPrivate summary{cursor:pointer;padding:8px 0;color:#adc7cf}#squadPrivate[open]{display:grid;gap:12px}#squadRooms{border:1px solid #426975;border-radius:8px;margin-top:16px;padding:14px}#squadRooms[hidden]{display:none}#squadRooms button{margin:4px}.squad-in-flight #squadRooms{display:none!important}
 #squadFind{margin-top:12px;grid-column:1/-1;flex:1 0 100%;width:100%}#squadFind p{font-size:13px;color:#adc7cf;margin:8px 0}#squadFind a{display:block;margin:8px 0;color:#8fe3f0;text-decoration:none;font-weight:600}#squadFind a:hover,#squadFind a:focus-visible{text-decoration:underline}#squadFind small{display:block;font-weight:400;font-size:12px;color:#adc7cf}
+
+#squadAnywhere,#squadTrackers,.squad-finder-host{grid-column:1/-1}
+#squadronDialog .squad-finder-host{display:flex;flex-direction:row;align-items:center;font-size:13px;color:#adc7cf}
+#squadHostEmpty{min-height:0!important;width:16px;height:16px;margin:0 5px 0 0;accent-color:#54c8ca}
+#squadTrackers{border-top:1px solid #426975;padding-top:10px}
+#squadTrackers summary{cursor:pointer;padding:5px 0}
+#squadTrackers p{margin:6px 0;color:#adc7cf;font-size:13px}
+#squadListings details{padding:5px 10px;border-left:2px solid #426975;margin:7px 0}
+#squadListings a{color:#8fe3f0}
+#squadStopSearch{margin-top:10px}

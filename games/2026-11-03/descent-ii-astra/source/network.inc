@@ -4,6 +4,9 @@
 int astra_net_active=0,astra_net_humans=0,astra_net_count=0,astra_net_owner=0,astra_net_host=0;
 int astra_net_bot_skill[4]={-1,-1,-1,-1};
 static int an_self,an_seed,an_retarget;
+extern void init_player_stats_new_ship(ubyte);
+extern void StartLevel(int);
+extern void multi_reset_player_object(object *);
 int astra_net_human(int id){return id>=0&&id<astra_net_count&&astra_net_bot_skill[id]==-1;}
 /* The pilot on this screen, even while an AI pilot is swapped in as Player_num. */
 int astra_kill_viewer(void){return astra_net_active&&(Game_mode&GM_MULTI)&&an_self>=0&&an_self<N_players?an_self:Player_num;}
@@ -180,6 +183,9 @@ void astra_net_tick(void){
 int astra_net_reconnect(void){
     if(!astra_net_active||!EM_ASM_INT({const n=Module.netRejoinCommand||0;Module.netRejoinCommand=0;return n;}))return 0;
     player kept=Players[an_self];object pose=*ConsoleObject;int level=Current_level_num,alive=!Player_is_dead;
+    /* Snapshot transfer replaces object slots. Finish the old death camera
+     * while its original slot and Viewer_save still belong to this mine. */
+    if(!alive){dead_player_end();Dead_player_camera=NULL;}
     astra_net_host=EM_ASM_INT(return Module.netSession.host||0);
     if(EM_ASM_INT(return window.astraNet.targetLevel||0)!=level){
         StartNewLevel(EM_ASM_INT(return window.astraNet.targetLevel||1));
@@ -197,7 +203,12 @@ int astra_net_reconnect(void){
         ConsoleObject->pos=pose.pos;ConsoleObject->orient=pose.orient;ConsoleObject->shields=kept.shields;
         ConsoleObject->mtype.phys_info=pose.mtype.phys_info;obj_relink(obj,pose.segnum);
         EM_ASM(Module.netReconnecting=false;Module.netDisconnected=false;window.astraNet.rejoined());
-    }else if(result==0)EM_ASM(Module.netReconnecting=false;Module.netDisconnected=false;window.astraNet.rejoined());
+    }else if(result==0){
+        int obj=Players[an_self].objnum;ConsoleObject=Viewer=&Objects[obj];ConsoleObject->id=an_self;ConsoleObject->type=OBJ_PLAYER;
+        multi_reset_player_object(ConsoleObject);multi_do_death(obj);
+        init_player_stats_new_ship(an_self);ConsoleObject->shields=Players[an_self].shields;StartLevel(1);
+        EM_ASM(Module.netReconnecting=false;Module.netDisconnected=false;window.astraNet.rejoined());
+    }
     else EM_ASM(window.astraNet.abort('Could not restore this ship. Return to the title to join again.'));
     return 1;
 }

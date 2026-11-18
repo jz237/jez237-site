@@ -8,6 +8,8 @@
   let socket=null,lobby=null,identity=null,timer=null,queue=[],out=[],bytes=0,barrier=null,roomChoices=false,lastHostState='',ignoreStart=false;
   let ui,notice,roomField,roster,connectButtons,start,setup,playBar;
   let sentTimes=[],congestedAt=null;
+  let finding=false,searchTimer=null,listingSocket=null,listedAt=0,foundNoRooms=false;
+  const relayBase=()=>window.astraRelayOverride&&/^(localhost|127\.0\.0\.1)$/.test(location.hostname)?window.astraRelayOverride:ENDPOINT;
   let credential=null,roomCode='',intentional=false,retryTimer=null,retryUntil=0,heartbeat=null,lastPong=0,lastInventory=0;
   const session={session:null,failed:false,departed:0,stats:{sent:0,received:0,superseded:0},
     abort:message=>fail(message),
@@ -22,7 +24,7 @@
     campaignState(payload){if(socket&&this.session?.campaign==='overload'&&this.session.self===this.session.host)send({type:'campaign-state',level:this.targetLevel,payload});},
     campaignHit(go,damage){if(socket&&this.session?.campaign==='overload')send({type:'campaign-hit',level:this.targetLevel,go,damage});},
     campaignRequest(){send({type:'campaign-request',level:this.targetLevel});},
-    shutdown(){intentional=true;ignoreStart=true;this.failed=true;send({type:'leave'});clearInterval(heartbeat);clearTimeout(retryTimer);clearInterval(timer);timer=null;if(socket){socket.onclose=null;socket.onmessage=null;socket.close(1000,'Leaving');socket=null;}queue=[];out=[];bytes=0;},
+    shutdown(){stopSearch();intentional=true;ignoreStart=true;this.failed=true;send({type:'leave'});clearInterval(heartbeat);clearTimeout(retryTimer);clearInterval(timer);timer=null;if(socket){socket.onclose=null;socket.onmessage=null;socket.close(1000,'Leaving');socket=null;}queue=[];out=[];bytes=0;},
     reconnect(){if(socket)socket.close(4001,'Reconnecting');else reconnect();},
     rejoined(){retryUntil=0;this.reconnecting=false;this.failed=false;window.astraOverload?.resyncNetwork?.();if(ui.open)ui.close();window.Module?._astra_reset_flight_input?.();status('Connection restored · Same ship');},
     order(order,direction){const data={type:'order',order,direction};if(socket)send(data);else if(this.session?.mode==='coop'){data.from=this.session.self;window.astraSquadUI?.command(data);}},
@@ -55,6 +57,7 @@
     playing(self,level){this.session.late=false;send({type:'joined'});status(`${this.session.public?'Public room · ':''}${this.session.mode==='coop'?'Co-op':'Deathmatch'} · Mine ${level}`);},
     hostState(level,checksum,accepting){if(!this.session||this.session.self!==(this.session.host??0))return;const value=JSON.stringify({type:'state',level,checksum,accepting:!!accepting});if(value!==lastHostState){lastHostState=value;if(socket?.readyState===1)socket.send(value);}},
     launch(config,self){
+      stopSearch();
       this.session={...config,host:config.host??0,self};this.targetLevel=config.level;this.failed=false;queue=[];out=[];bytes=0;
       $('campaign').value=config.campaign;$('look').value='astra';$('intro').checked=false;
       ui.close();ui.classList.add('squad-in-flight');document.body.classList.add('squadron');playBar.hidden=!!config.spectator;
@@ -123,6 +126,11 @@
       if(m.type==='campaign-request'){window.astraOverload?.publishNetwork?.(true);return;}
       if(m.type==='campaign-hit'){if(session.session?.self===session.session?.host)window.astraOverload?.networkHit?.(m);return;}
       if(m.type==='rooms'){showRooms(m.rooms);return;}
+      if(m.type==='finder-idle'&&finding){
+        foundNoRooms=m.publicRooms===0;
+        status(m.publicRooms?'Public rooms are full or changing levels. Searching again shortly…':$('squadHostEmpty').checked?'No open match. Searching again in 12 seconds, then hosting if still empty.':'Waiting for a public Astra match across all campaigns and modes…');
+        $('squadTrackers').open=true;loadTrackers();return;
+      }
       if(m.type==='retarget'){session.targetLevel=m.level;session.session.level=m.level;session.session.late=!!m.late;barrier=null;status('The host is moving to the next mine…');return;}
       if(m.type==='roster'){
         if(!session.session)return;let changed=0;
@@ -157,20 +165,63 @@
   }
   function randomCode(){return Array.from(crypto.getRandomValues(new Uint8Array(9)),v=>(v%32).toString(32)).join('').toUpperCase();}
   function pilotName(){return ($('squadName').value.replace(/[^a-z0-9_-]/gi,'').slice(0,8)||'Pilot');}
-  function connect(create,online=false,force=false){
+  function stopSearch(){
+    finding=foundNoRooms=false;clearTimeout(searchTimer);searchTimer=null;
+    if($('squadStopSearch'))$('squadStopSearch').hidden=true;
+    if(listingSocket){listingSocket.onmessage=listingSocket.onclose=null;listingSocket.close();listingSocket=null;listedAt=0;}
+  }
+  function cancelSearch(){
+    stopSearch();ignoreStart=true;
+    if(socket&&!session.session){send({type:'leave'});socket.close(1000,'Search canceled');}
+    status('Search stopped.');render();
+  }
+  function loadTrackers(){
+    if(listingSocket||!ui.open||!$('squadTrackers').open||performance.now()-listedAt<45000&&listedAt)return;
+    const box=$('squadListings');listedAt=performance.now();box.textContent='Checking public trackers…';
+    const ws=listingSocket=new WebSocket(relayBase()+'/trackers');let received=false;
+    ws.onmessage=e=>{
+      let result;try{result=JSON.parse(e.data);}catch{return;}
+      if(result.type!=='desktop-games'||!Array.isArray(result.sources))return;
+      received=true;box.replaceChildren();
+      const directories={retro:['DXX Retro / Redux','https://retro-tracker.game-server.cc/'],xl:['D2X-XL','https://descent2.de/active-servers'],d3:['Descent 3','https://tracker.h0m3.net/index.html']};
+      for(const s of result.sources){
+        if(!Object.hasOwn(directories,s.source))continue;
+        const [name,url]=directories[s.source],details=document.createElement('details'),head=document.createElement('summary');
+        head.textContent=name+' · '+(!s.available?'Tracker unavailable':s.games.length+' listed');details.append(head);
+        for(const g of s.games){
+          const row=document.createElement('p');row.textContent=[g.name,g.kind,g.map,g.players&&g.players+' players',g.status,g.address].filter(Boolean).join(' · ');details.append(row);
+          if(s.source==='d3'&&/^Retail\b/i.test(g.kind||'')&&/^\d{1,3}(\.\d{1,3}){3}:[1-9]\d{0,4}$/.test(g.address)){
+            const [ip,port]=g.address.split(':');
+            if(Number(port)<=65535&&ip.split('.').every(v=>Number(v)<=255)){
+              const join=document.createElement('a');join.textContent='Join in Steam Descent 3';join.href='steam://run/273590//-directip%20'+g.address+'/';row.append(' ',join);
+            }
+          }
+        }
+        const link=document.createElement('a');link.textContent='Open '+name+' tracker';link.href=url;link.target='_blank';link.rel='noopener noreferrer';details.append(link);box.append(details);
+      }
+    };
+    ws.onclose=()=>{if(listingSocket===ws)listingSocket=null;if(!received){listedAt=0;box.textContent='Tracker service unavailable. Reopen to retry.';}};
+  }
+  function connect(create,online=false,force=false,anywhere=false){
     if(socket||session.session)return;intentional=false;
     let code=create?randomCode():roomField.value.trim().toUpperCase();
     if(!online&&!/^[0-9A-V]{9}$/.test(code)){status('Enter the nine-character invite code.');return;}
     ignoreStart=false;roomChoices=false;$('squadRooms').hidden=true;
-    status('Connecting…');connectButtons.querySelectorAll('button').forEach(b=>b.disabled=true);
-    const base=window.astraRelayOverride&&/^(localhost|127\.0\.0\.1)$/.test(location.hostname)?window.astraRelayOverride:ENDPOINT;
-    const route=online?`/online?v=54&build=86&new=${force?1:0}&name=${encodeURIComponent(pilotName())}&config=${encodeURIComponent(JSON.stringify(configuration()))}`:`/room/${code}?v=54&build=86&create=${create?1:0}&name=${encodeURIComponent(pilotName())}`;
+    if(anywhere){finding=true;$('squadStopSearch').hidden=false;}
+    status(anywhere?'Finding an open Astra match worldwide…':'Connecting…');connectButtons.querySelectorAll('button').forEach(b=>b.disabled=true);
+    const base=relayBase();
+    const route=online?`/online?v=54&build=109&new=${force?1:0}${anywhere?'&scope=all':''}&name=${encodeURIComponent(pilotName())}&config=${encodeURIComponent(JSON.stringify(configuration()))}`:`/room/${code}?v=54&build=86&create=${create?1:0}&name=${encodeURIComponent(pilotName())}`;
     socket=new WebSocket(base+route);
     socket.binaryType='arraybuffer';socket.onmessage=e=>receive(e.data);
     socket.onopen=()=>{startHeartbeat();sentTimes=[];timer=setInterval(flush,20);if(create&&!online)send({type:'configure',...configuration()});};
     socket.onerror=()=>status('Could not reach the room service. You can still play with AI pilots.');
     socket.onclose=()=>{
-      clearInterval(timer);timer=null;socket=null;
+      clearInterval(timer);clearInterval(heartbeat);timer=null;socket=null;
+      if(anywhere&&finding&&!session.session){
+        clearTimeout(searchTimer);searchTimer=setTimeout(()=>{if(finding&&ui.open)connect(false,true,foundNoRooms&&$('squadHostEmpty').checked,true);},12000);
+        return;
+      }
+      if(anywhere&&!session.session&&!finding){render();return;}
       if(session.session&&!session.failed&&!intentional){if(credential)reconnect();else fail('Disconnected from the room. Return to the title to reconnect.');}
       else if(!session.session){lobby=null;identity=null;render();if(!roomChoices)status('Room connection closed.');}
     };
@@ -213,7 +264,7 @@
     heading.tabIndex=-1;heading.focus();box.scrollIntoView({block:'nearest'});
   }
   function render(){
-    connectButtons.querySelectorAll('button').forEach(b=>b.disabled=!!socket);
+    connectButtons.querySelectorAll('button').forEach(b=>b.disabled=!!socket||finding);
     const host=lobby?.players[0]?.id===identity;start.hidden=!host;
     setup.querySelectorAll('select,input').forEach(e=>e.disabled=!!lobby&&!host);
     roster.replaceChildren();
@@ -247,16 +298,22 @@
     playBar=document.createElement('div');playBar.id='squadBar';playBar.hidden=true;playBar.innerHTML='<span>Connecting squadron…</span><button>Leave match</button>';document.body.append(playBar);
     playBar.querySelector('button').textContent='Flight menu';
     playBar.querySelector('button').onclick=()=>{document.exitPointerLock?.();window.Module?._astra_reset_flight_input?.();if(window.Module)Module.menuCommand=1;};
-    const leaveWaitingRoom=()=>{if(socket&&!session.session){ignoreStart=true;socket.close(1000,'Leaving waiting room');}};
+    const leaveWaitingRoom=()=>{if(finding)cancelSearch();else if(socket&&!session.session){ignoreStart=true;socket.close(1000,'Leaving waiting room');}};
     button.onclick=()=>{if(!session.session&&!socket){$('squadCampaign').value=$('campaign').value;setup.onchange();}ui.showModal();};$('squadClose').onclick=()=>{if(!session.failed){leaveWaitingRoom();ui.close();}};
     $('squadCreate').onclick=()=>connect(true);$('squadJoin').onclick=()=>connect(false);$('squadPractice').onclick=practice;
     $('squadOnline').onclick=()=>connect(false,true);
+    const anywhere=document.createElement('button');anywhere.id='squadAnywhere';anywhere.textContent='Find any online game';$('squadPractice').after(anywhere);
+    anywhere.onclick=()=>connect(false,true,false,true);
+    const stop=document.createElement('button');stop.id='squadStopSearch';stop.hidden=true;stop.textContent='Stop searching';stop.onclick=cancelSearch;connectButtons.after(stop);
+    const fallback=document.createElement('label');fallback.className='squad-finder-host';fallback.innerHTML='<input id="squadHostEmpty" type="checkbox" checked> Host a public room if the search stays empty';anywhere.after(fallback);
+    const trackers=document.createElement('details');trackers.id='squadTrackers';trackers.innerHTML='<summary>Live desktop Descent games</summary><p>These games use their desktop clients. Open a tracker to join with the matching game.</p><div id="squadListings"></div>';
+    $('squadFind').before(trackers);trackers.ontoggle=()=>{if(trackers.open)loadTrackers();};
     $('squadLeave').onclick=()=>{if(session.session)window.astraNavigation.home();else socket?.close(1000,'Leaving');};
     $('squadCopy').onclick=async()=>{if(!socket||!roomField.value)return;const u=new URL('./',location.href);u.hash='room='+roomField.value;try{await navigator.clipboard.writeText(u.href);status('Invite link copied.');}catch{status(u.href);}};
     start.onclick=()=>send({type:'start'});
     setup.onchange=()=>{const arena=!!campaigns[$('squadCampaign').value]?.arena;$('squadMode').options[0].disabled=arena;if(arena)$('squadMode').value='deathmatch';$('squadLevel').max=String(campaigns[$('squadCampaign').value]?.levels||24);$('squadLevel').value=Math.max(1,Math.min(Number($('squadLevel').max),Number($('squadLevel').value)||1));if(lobby)send({type:'configure',...configuration()});};
     ui.addEventListener('cancel',e=>{if(session.failed)e.preventDefault();else leaveWaitingRoom();});
-    ui.addEventListener('close',()=>{window.Module?._astra_reset_flight_input?.();});
+    ui.addEventListener('close',()=>{if(finding)cancelSearch();else stopSearch();window.Module?._astra_reset_flight_input?.();});
     setInterval(()=>{
       if(!session.session||!ui.open||session.failed||!window.Module?.netPilots)return;
       roster.replaceChildren();for(const p of Module.netPilots){const info=session.session.roster[p.id];if(!info||info.skill===-2)continue;const row=document.createElement('li');row.textContent=info.name+' · '+(info.skill>=0?skills[info.skill]+' AI':p.id===session.session.self?'You':'Human')+(p.connected===0?' · Connecting':session.session.mode==='deathmatch'?` · ${p.kills} kills / ${p.deaths} deaths`:'');roster.append(row);}
