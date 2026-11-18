@@ -33500,5 +33500,135 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-11-18-factual-infographic-factual-infographic-yellow-tang-the-ree",
+    "title": "Factual infographic: Yellow Tang — The Reef’s Golden Grazer",
+    "tests": "Artwork-led photorealistic reef atlas; all substantive labels mapped to read sources; accepted species and synonym checked against permanent reservations and complete factual catalog.; archive_slot=2026-11-18T00:20; concept=yellow-tang-algae-grazing-reef-ledges; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: reef-fish-infographic; fish_scientific_name: Zebrasoma flavescens",
+    "prompt": "Create the finished premium educational infographic itself, a richly colorful, exquisitely detailed PHOTOREALISTIC Aquarium Reef Fish Atlas plate. Headline exactly “YELLOW TANG”; directly beneath, elegant italic “Zebrasoma flavescens”. Secondary title “The reef’s golden grazer”. One species only. A broad asymmetrical underwater composition, no frames, no mockup, no rigid grid, no detached dashboard cards. Dominant huge lifelike yellow tang in left-facing near-lateral three-quarter profile swimming diagonally out of a turquoise reef channel; this fish occupies most of the composition, with sculptural yet natural sunlight caustics on its laterally compressed lemon-yellow oval body, delicate true fin rays, translucent golden fin edges, large swept dorsal and anal fins, high dark eye, slightly downturned narrow snout and small mouth. Preserve exact diagnostic anatomy: all yellow except the small white blade at the caudal peduncle, not a white tail or decorative stripes. Real small scale texture, subtle water haze, believable depth. Colorful natural reef framework in the lower scene: lavender and mauve corals, warm coral-pink encrusting areas, teal shadows, fine green algal turf on exposed rock. Clear navy negative space for warm-white highly legible text; elegant title hierarchy and fine gold open leader lines. Beauty and biological detail first, but a genuinely informative atlas, not a sparse poster.\n\nLet a flowing S-shaped reef ledge connect the hero to three organic studies at varied scales, integrated into the same water, not boxes. Beside the snout, a large crisp macro side-view of the small mouth grazing filamentous turf with a restrained labeled magnified detail of flexible comb-like teeth; label the magnification “Grazing mouth — enlarged detail” and explain “Small downturned mouth and comb-like teeth crop algae from reef surfaces.” A delicate curved arrow links bitten turf to reef context and the text “Algae grazing helps keep fast-growing seaweeds in check.” Do not show coral tissue being eaten.\n\nNear the tail, a scientifically clear labeled anatomical close-up, explicitly “Tail-base spine — anatomical detail”: show the white modified-scale blade at the side of the caudal peduncle with a subtle line diagram of its slot, not a sword on the tail-fin edge. Show only the near-side spine in the hero; the annotation says “One blade on each side; exposed by tail flexion.” Small readable caution “Defense and competition — sharp spines can cut. Observe, do not touch.” Do not invent venom glands or show gore.\n\nA lower-right reef crevice vignette shows the SAME species resting at night as a smaller observational study: grayish-yellow color and a clear pale lateral band, dim blue natural night light. An organically curving day-to-night ribbon reads “Day: graze the reef” then “Night: rest in crevices”. Keep this secondary fish anatomically consistent, not a different species or morph candidate.\n\nAlong upper-right open water, place a small elegant Pacific locator sketch with Hawaii and the western Pacific island region toward Japan highlighted approximately, no invented fine boundaries. Text: “Subtropical Pacific reefs • Hawaii and western Pacific islands”; “Habitat: coral reefs, 2–46 m deep”; “Adult length: about 15–20 cm / 6–8 in”. Beside the mid-body silhouette place the compact note “Alone or in loose groups; juveniles can be territorial.” Do not confuse depth with body length or imply every animal schools.\n\nIntegrate a modest open lower-margin aquarium note headed “Aquarium implications — from wild biology” with three concise lines: “Plan algae-based feeding and night refuges.” “Wild groups do not guarantee peaceful tankmates.” “Algae grazing is not a blanket reef-safety guarantee.” This is explicitly a qualitative planning implication, not a sourced tank-volume prescription; do not invent tank capacities, temperatures, stocking numbers or categorical coral-safety promises. Keep fish compatibility caveat visible without dominating. Do not add lifespan, conservation status, trade legality or reproductive statistics. Tiny tasteful source line “Sources: Animal Diversity Web • Waikiki Aquarium • Aquarium of the Pacific • WoRMS”. Perfectly readable concise explanatory text woven into artwork using open callouts, varying study sizes, generous breathing room, lovely reef lighting, realistic fins and color. Deliver direct finished artwork, opaque background, natural photographic realism, not watercolor or cartoon.",
+    "image": "images/2026-11-18-factual-infographic-factual-infographic-yellow-tang-the-ree.jpg",
+    "thumb": "thumbs/2026-11-18-factual-infographic-factual-infographic-yellow-tang-the-ree.webp",
+    "color": "#505538",
+    "date": "2026-11-18",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1536x1024",
+    "dedup": {
+      "conceptKey": "yellow-tang-algae-grazing-reef-ledges",
+      "imageSha256": "540e1ef5b8142f7463a7ef1f0912df6d82dc547a79cf389835d893a19a583613",
+      "imageDHash": "4c9d9b174c654407"
+    },
+    "factualInfographic": {
+      "topic": "Yellow tang (Zebrasoma flavescens) reef algae grazing, tail defense and aquarium implications",
+      "description": "Yellow tang morphology, Pacific reef habitat, algal grazing, defensive caudal spine, day–night behavior and carefully labeled aquarium implications.",
+      "sourceNote": "Read authoritative species accounts and WoRMS accepted-name/synonym API on 2026-11-18. Aquarium notes are explicit qualitative inferences, not numeric husbandry prescriptions. Sources: https://animaldiversity.org/accounts/Zebrasoma_flavescens/ ; https://www.waikikiaquarium.org/experience/animal-guide/fishes/surgeonfishes/yellow-tang/ ; https://www.aquariumofpacific.org/onlinelearningcenter/species/yellow_tang ; https://www.marinespecies.org/rest/AphiaRecordByAphiaID/219683 ; https://www.marinespecies.org/rest/AphiaSynonymsByAphiaID/219683",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-18T05:22:05.810361+00:00",
+        "sources": [
+          {
+            "id": "adw",
+            "publisher": "University of Michigan — Animal Diversity Web",
+            "title": "Zebrasoma flavescens",
+            "sourceType": "university",
+            "url": "https://animaldiversity.org/accounts/Zebrasoma_flavescens/"
+          },
+          {
+            "id": "waikiki",
+            "publisher": "University of Hawaii — Waikiki Aquarium",
+            "title": "Yellow Tang",
+            "sourceType": "university",
+            "url": "https://www.waikikiaquarium.org/experience/animal-guide/fishes/surgeonfishes/yellow-tang/"
+          },
+          {
+            "id": "pacific",
+            "publisher": "Aquarium of the Pacific",
+            "title": "Yellow Tang",
+            "sourceType": "museum",
+            "url": "https://www.aquariumofpacific.org/onlinelearningcenter/species/yellow_tang"
+          },
+          {
+            "id": "worms",
+            "publisher": "WoRMS / Flanders Marine Institute",
+            "title": "Accepted Zebrasoma flavescens record",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://www.marinespecies.org/rest/AphiaRecordByAphiaID/219683"
+          },
+          {
+            "id": "synonyms",
+            "publisher": "WoRMS / Flanders Marine Institute",
+            "title": "Zebrasoma flavescens synonyms",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://www.marinespecies.org/rest/AphiaSynonymsByAphiaID/219683"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Zebrasoma flavescens is the accepted marine species; Acanthurus flavescens is its synonym.",
+            "sourceIds": [
+              "worms",
+              "synonyms"
+            ]
+          },
+          {
+            "claim": "The yellow tang has a laterally compressed oval lemon-yellow body, large dorsal and anal fins, small downturned mouth and white defensive spine on each side of the tail base.",
+            "sourceIds": [
+              "waikiki",
+              "adw",
+              "pacific"
+            ]
+          },
+          {
+            "claim": "Native subtropical Pacific range includes Hawaii and western Pacific islands toward Japan; reef habitat includes depths of 2–46 m.",
+            "sourceIds": [
+              "adw",
+              "pacific"
+            ]
+          },
+          {
+            "claim": "Adults grow to about 15–20 cm (6–8 inches).",
+            "sourceIds": [
+              "pacific"
+            ]
+          },
+          {
+            "claim": "Flexible comb-like teeth and a small downturned mouth graze algae from rocks and reef framework; algae grazing helps limit algal competition with coral.",
+            "sourceIds": [
+              "waikiki",
+              "adw"
+            ]
+          },
+          {
+            "claim": "Individuals may occur alone or in loose groups; juveniles can be territorial.",
+            "sourceIds": [
+              "adw",
+              "pacific"
+            ]
+          },
+          {
+            "claim": "Daytime grazing gives way to solitary resting in reef crevices at night; night color is grayish-yellow with a white lateral band.",
+            "sourceIds": [
+              "waikiki",
+              "adw"
+            ]
+          },
+          {
+            "claim": "Tail-base blades are modified scales in slots, exposed through tail flexion, used in defense and competition, and can inflict deep wounds; avoid touching.",
+            "sourceIds": [
+              "waikiki"
+            ]
+          },
+          {
+            "claim": "Aquarium implications explicitly inferred from sourced biology, not a numeric husbandry prescription: plan algae-based feeding and reef-like night refuges; territorial behavior means wild grouping is not a guarantee of peaceful tankmates. Coral-associated grazing alone is not a universal reef-compatibility guarantee.",
+            "sourceIds": [
+              "waikiki",
+              "adw",
+              "pacific"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
