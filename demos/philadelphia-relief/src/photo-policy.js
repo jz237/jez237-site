@@ -1,7 +1,13 @@
+import { metersPerPixel, shortestAngleDelta } from './geo.js?v=philly-2026092121';
+
 // Separate thresholds prevent rapid renderer changes near the zoom boundary.
 export const PHOTO_ENTER = 6500;
 export const PHOTO_EXIT = 9500;
 export const PHOTO_PRELOAD = 16000;
+
+export function selectPhotoMode(mode) {
+  return mode === 'photo' ? { photoMode: mode, lightweight: 0 } : { photoMode: mode };
+}
 
 // The diorama and photographic renderer coexist. Bound the second renderer's
 // framebuffer as well as its tile cache, especially on high-DPI laptops.
@@ -71,6 +77,20 @@ export function photoCamera(pose, aspect) {
     range: pose.dist,
     fov: aspect > 1 ? 2 * Math.atan(Math.tan(vertical / 2) * aspect) : vertical,
   };
+}
+
+// The orbit rig keeps easing long after the remaining shift is less than a
+// screen pixel. Compare to an anchor so small steps can still accumulate.
+export function photoViewMoved(anchor, pose, height, pixels = 1) {
+  if (!anchor || anchor.flightView || pose.flightView
+    || anchor.targetAltitude !== pose.targetAltitude) return true;
+  const metres = metersPerPixel(Math.min(anchor.dist, pose.dist), pose.fov, height) * pixels;
+  const degrees = pose.fov / height * pixels;
+  const east = (pose.lon - anchor.lon) * 111320 * Math.cos(pose.lat * Math.PI / 180);
+  const north = (pose.lat - anchor.lat) * 111320;
+  return Math.hypot(east, north) >= metres || Math.abs(pose.dist - anchor.dist) >= metres
+    || Math.abs(shortestAngleDelta(anchor.bearing, pose.bearing)) >= degrees
+    || Math.abs(pose.pitch - anchor.pitch) >= degrees || Math.abs(pose.fov - anchor.fov) >= degrees;
 }
 
 export function photoLandmarkVisible(place, pose, bounds) {
