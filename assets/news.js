@@ -4,6 +4,17 @@ async function loadJson(path) {
   return r.json();
 }
 
+// Feed entries come from third-party sources, so links may only ever point at
+// web pages. Anything else (javascript:, data:, ...) becomes an inert "#".
+function safeLink(url) {
+  try {
+    const parsed = new URL(String(url || ''), document.baseURI);
+    return parsed.protocol === 'https:' || parsed.protocol === 'http:' ? parsed.href : '#';
+  } catch {
+    return '#';
+  }
+}
+
 function el(tag, cls, text) {
   const e = document.createElement(tag);
   if (cls) e.className = cls;
@@ -284,7 +295,7 @@ function renderSourceGroup(block, featuredSet, wrap) {
 
   const title = document.createElement('a');
   title.className = 'news-source-group-title';
-  title.href = root?.url || representative.sourceUrl || representative.url;
+  title.href = safeLink(root?.url || representative.sourceUrl || representative.url);
   title.target = '_blank';
   title.rel = 'noopener';
   title.textContent = sourceGroupTitle(block);
@@ -304,7 +315,7 @@ function renderSourceGroup(block, featuredSet, wrap) {
 
     const briefTitle = document.createElement('a');
     briefTitle.className = 'news-source-brief-title';
-    briefTitle.href = item.url;
+    briefTitle.href = safeLink(item.url);
     briefTitle.target = '_blank';
     briefTitle.rel = 'noopener';
     briefTitle.textContent = item.brief?.whatHappened || item.title || 'Untitled';
@@ -349,7 +360,7 @@ function renderNews(items, featuredUrlSet = new Set(), container = null) {
 
     const title = document.createElement('a');
     title.className = 'news-card-title';
-    title.href = n.url;
+    title.href = safeLink(n.url);
     title.target = '_blank';
     title.rel = 'noopener';
     title.textContent = n.title || 'Untitled';
@@ -391,7 +402,7 @@ function renderLeadStory(wrap, story) {
   const body = el('div', 'news-lead-body');
   body.appendChild(el('div', 'eyebrow', story.signalGroup || 'Top story'));
   const title = document.createElement('a');
-  title.href = story.url;
+  title.href = safeLink(story.url);
   title.target = '_blank';
   title.rel = 'noopener';
   title.className = 'news-lead-title';
@@ -489,7 +500,7 @@ function renderTools(news) {
   dailyTools.forEach((item, index) => {
     const a = document.createElement('a');
     a.className = 'news-tool-pill';
-    a.href = item.url;
+    a.href = safeLink(item.url);
     a.target = '_blank';
     a.rel = 'noopener';
     const toolName = item.toolLabel || item.title || 'Untitled';

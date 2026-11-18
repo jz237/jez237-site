@@ -582,13 +582,23 @@
             .slice(0, 3);
         }
 
+        // Feed entries come from third-party sources: link only to web pages.
+        function safeLink(url) {
+          try {
+            const parsed = new URL(String(url || ''), document.baseURI);
+            return parsed.protocol === 'https:' || parsed.protocol === 'http:' ? parsed.href : '#';
+          } catch {
+            return '#';
+          }
+        }
+
         function renderItem(item) {
           const article = document.createElement('article');
           article.className = 'home-ai-briefing-item';
 
           const thumb = document.createElement('a');
           thumb.className = 'home-ai-briefing-thumb';
-          thumb.href = item.url;
+          thumb.href = safeLink(item.url);
           thumb.target = '_blank';
           thumb.rel = 'noopener';
 
@@ -615,7 +625,7 @@
           label.textContent = signalLabel(item);
 
           const title = document.createElement('a');
-          title.href = item.url;
+          title.href = safeLink(item.url);
           title.target = '_blank';
           title.rel = 'noopener';
           title.textContent = item.title || 'Untitled update';
