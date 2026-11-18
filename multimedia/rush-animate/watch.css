@@ -1,0 +1,275 @@
+:root {
+  color-scheme:dark;
+  font-family:Inter,"Segoe UI",system-ui,sans-serif;
+  background:#101614;
+  color:#f5efdf;
+  --line:#37433d;
+  --muted:#b5c1b8;
+  --gold:#e9bb75;
+}
+
+* {
+  box-sizing:border-box;
+}
+
+body {
+  margin:0;
+  background:radial-gradient(ellipse at 10% 0,#26362d 0,transparent 38rem);
+}
+
+main {
+  width:min(73rem,calc(100% - 3.25rem));
+  margin:auto;
+  padding-bottom:2.8rem;
+}
+
+a {
+  color:inherit;
+  text-underline-offset:.22em;
+}
+
+a:hover,a:focus-visible {
+  color:var(--gold);
+}
+
+:focus-visible {
+  outline:2px solid var(--gold);
+  outline-offset:3px;
+}
+
+button {
+  font:inherit;
+}
+
+nav,.caption,.section-head,header {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+nav {
+  justify-content:flex-start;
+  gap:.75rem;
+  padding:1.16rem 0;
+  border-bottom:1px solid var(--line);
+  font-size:.86rem;
+  color:var(--muted);
+}
+
+nav a {
+  text-decoration:none;
+}
+
+.brand {
+  font-weight:700;
+  color:#fcf3dc;
+}
+
+nav span,.record span,footer span {
+  color:#829387;
+}
+
+header {
+  align-items:flex-end;
+  gap:.8rem;
+  padding:1.65rem 0 1.25rem;
+}
+
+.record {
+  margin:0;
+  color:var(--gold);
+  font-size:.88rem;
+}
+
+.record span {
+  margin:0 .35rem;
+}
+
+.record cite {
+  font-style:normal;
+}
+
+h1 {
+  font-family:Georgia,"Times New Roman",serif;
+  font-weight:400;
+  font-style:italic;
+  letter-spacing:-.065em;
+  font-size:clamp(3.1rem,6.4vw,5.5rem);
+  line-height:.94;
+  margin:.22rem 0 .15rem;
+}
+
+.edition {
+  text-align:right;
+}
+
+.edition p {
+  font-family:Georgia,serif;
+  font-style:italic;
+  font-size:clamp(1.25rem,2vw,1.7rem);
+  margin:0 0 .29rem;
+}
+
+.edition span,.caption,.actions {
+  color:var(--muted);
+  font-size:.83rem;
+}
+
+.edition b {
+  font-weight:400;
+  color:#839486;
+  margin:0 .2rem;
+}
+
+video {
+  display:block;
+  width:100%;
+  max-height:78svh;
+  aspect-ratio:16/9;
+  object-fit:contain;
+  background:#050706;
+  border:1px solid #52604f;
+  border-radius:4px;
+}
+
+.caption {
+  gap:.75rem;
+  margin:.72rem 0 1.8rem;
+}
+
+.caption p,footer p {
+  margin:0;
+}
+
+.caption span {
+  color:#96aa96;
+}
+
+.caption a {
+  white-space:nowrap;
+}
+
+h2 {
+  margin:0;
+  font-family:Georgia,serif;
+  font-size:1.55rem;
+  font-weight:400;
+}
+
+.section-head {
+  gap:.6rem;
+  flex-wrap:wrap;
+  margin:.6rem 0;
+}
+
+.actions {
+  display:flex;
+  gap:.4rem;
+}
+
+.actions button {
+  border:1px solid #536155;
+  color:#eee8d7;
+  background:#18241d;
+  cursor:pointer;
+  border-radius:4px;
+  padding:.42rem .65rem;
+}
+
+.actions button[aria-pressed=true] {
+  background:var(--gold);
+  border-color:var(--gold);
+  color:#1c201b;
+}
+
+.moments {
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  border-top:1px solid var(--line);
+}
+
+.moments a {
+  display:flex;
+  gap:.62rem;
+  align-items:baseline;
+  text-decoration:none;
+  padding:.87rem .45rem .87rem 0;
+  border-bottom:1px solid var(--line);
+  font-size:.89rem;
+}
+
+.moments time {
+  font-family:ui-monospace,Consolas,monospace;
+  font-size:.80rem;
+  color:var(--gold);
+  flex:none;
+}
+
+.moments a[aria-current=true] span {
+  text-decoration:underline;
+  text-decoration-color:var(--gold);
+  text-underline-offset:.23rem;
+}
+
+footer {
+  color:var(--muted);
+  font-size:.87rem;
+  line-height:1.55;
+  margin:1.35rem 0 0;
+}
+
+footer p {
+  max-width:76ch;
+}
+
+footer p+p {
+  margin-top:.43rem;
+}
+
+footer span {
+  margin:0 .28rem;
+}
+
+@media(max-width:850px) {
+  .moments {
+    grid-template-columns:repeat(2,1fr);
+  }
+}
+
+@media(max-width:560px) {
+  main {
+    width:calc(100% - 1.4rem);
+  }
+  nav {
+    padding:.8rem 0;
+  }
+  header {
+    padding:1.2rem 0 .85rem;
+  }
+  .edition span {
+    font-size:.70rem;
+  }
+  .record {
+    font-size:.73rem;
+  }
+  .caption {
+    font-size:.72rem;
+    margin-bottom:1.25rem;
+  }
+  .moments a {
+    font-size:.79rem;
+    gap:.38rem;
+  }
+  .moments time {
+    font-size:.73rem;
+  }
+  .actions {
+    font-size:.75rem;
+  }
+  .section-head h2 {
+    font-size:1.3rem;
+  }
+  .caption span {
+    position:static;
+  }
+}
