@@ -1,7 +1,7 @@
 import { DurableObject } from 'cloudflare:workers';
 
-const LEVELS={d2:24,d2x:20,overload:16,minerva:1,elegies:6};
-const classic=c=>c==='minerva'||c==='elegies';
+const LEVELS={d2:24,d2x:20,overload:16,minerva:1,elegies:6,kegparty:1};
+const classic=c=>c==='minerva'||c==='elegies'||c==='kegparty';
 const DEFAULT={mode:'coop',campaign:'d2',level:1,bots:[2,2,2]};
 const json=(ws,value)=>{try{ws.send(JSON.stringify(value));}catch{}};
 const error=(ws,message)=>json(ws,{type:'error',message});
@@ -20,7 +20,7 @@ export class SquadronRoom extends DurableObject {
   async save(){await this.ctx.storage.put('room',this.room);}
   publicInfo(){
     if(!this.room?.public||this.room.closed||!this.peers().some(s=>s.deserializeAttachment()?.slot===(this.room.host??0)))return null;
-    return {code:this.room.code,players:this.room.continuity?this.room.players.filter(Boolean).length:this.peers().length,mode:this.room.config.mode,campaign:this.room.config.campaign,level:this.room.level||this.room.config.level,host:this.room.players[this.room.host??0]?.name,started:this.room.started};
+    return {code:this.room.code,players:this.room.continuity?this.room.players.filter(Boolean).length:this.peers().length,active:this.peers().length,accepting:!!this.room.accepting||!this.room.synchronized,mode:this.room.config.mode,campaign:this.room.config.campaign,level:this.room.level||this.room.config.level,host:this.room.players[this.room.host??0]?.name,started:this.room.started};
   }
   roster(){
     const roster=this.room.launch.roster,humans=this.room.players.filter(Boolean).length;
@@ -268,17 +268,31 @@ export class SquadronRoom extends DurableObject {
 export class SquadronLobby extends DurableObject {
   constructor(ctx,env){super(ctx,env);this.rooms=[];this.serial=Promise.resolve();ctx.blockConcurrencyWhile(async()=>{this.rooms=await ctx.storage.get('rooms')||[];});}
   fetch(request){const job=this.serial.then(()=>this.match(request));this.serial=job.catch(()=>{});return job;}
+  async listPublicRooms(){
+    // A spectator reading the directory never joins, creates or prunes rooms.
+    const fresh=this.rooms.filter(r=>Date.now()-r.created<2*60*60*1000);
+    const results=await Promise.allSettled(fresh.map(r=>this.env.ROOMS.getByName(r.code).publicInfo()));
+    return {source:'astra',available:results.length===0||results.some(r=>r.status==='fulfilled'),
+      partial:results.some(r=>r.status==='rejected'),games:results.filter(r=>r.status==='fulfilled'&&r.value).map(r=>r.value)};
+  }
   async match(request){
     const url=new URL(request.url),rooms=[];
     let requested=DEFAULT;try{requested=JSON.parse(url.searchParams.get('config')||JSON.stringify(DEFAULT));}catch{return new Response('Invalid configuration',{status:400});}
     if(!validConfig(requested))return new Response('Invalid configuration',{status:400});
     for(const entry of this.rooms){if(Date.now()-entry.created>2*60*60*1000)continue;const info=await this.env.ROOMS.getByName(entry.code).publicInfo();if(info)rooms.push({entry,info});}
-    const retained=rooms.map(r=>r.entry);await this.ctx.storage.put('rooms',retained);this.rooms=retained;
-    const matching=rooms.filter(r=>r.info.mode===requested.mode&&r.info.campaign===requested.campaign);
+    const retained=rooms.map(r=>r.entry);if(retained.length!==this.rooms.length){await this.ctx.storage.put('rooms',retained);this.rooms=retained;}
+    const anywhere=url.searchParams.get('scope')==='all';
+    const matching=rooms.filter(r=>anywhere||(r.info.mode===requested.mode&&r.info.campaign===requested.campaign));
+    if(anywhere)matching.sort((a,b)=>Number(b.info.accepting)-Number(a.info.accepting)||b.info.active-a.info.active||a.entry.created-b.entry.created);
     for(const {entry,info} of matching){
-      if(info.players>=4)continue;
+      if(info.players>=4||(anywhere&&!info.accepting))continue;
       const target=new URL(request.url);target.pathname='/room/'+entry.code;target.searchParams.delete('create');
       const response=await this.env.ROOMS.getByName(entry.code).fetch(new Request(target,request));if(response.status===101)return response;
+    }
+    if(anywhere&&(matching.length||url.searchParams.get('new')!=='1')){
+      const [client,ws]=Object.values(new WebSocketPair());ws.accept();
+      json(ws,{type:'finder-idle',publicRooms:matching.length});ws.close(1000,'Search complete');
+      return new Response(null,{status:101,webSocket:client});
     }
     if(matching.length&&url.searchParams.get('new')!=='1'){
       const [client,ws]=Object.values(new WebSocketPair());ws.accept();json(ws,{type:'rooms',rooms:matching.map(r=>r.info)});ws.close(1000,'All rooms full');
@@ -291,17 +305,99 @@ export class SquadronLobby extends DurableObject {
     return this.env.ROOMS.getByName(entry.code).fetch(new Request(target,{method:'GET',headers}));
   }
 }
+// Only contact fixed public directories. Never fetch a user-supplied host
+// or any address listed by a game server. Bound the body even without a length.
+async function directoryText(url){
+  const r=await fetch(url,{redirect:'manual',signal:AbortSignal.timeout(5500),cf:{cacheEverything:true,cacheTtl:45}});
+  if(!r.ok||!r.body)throw Error('Directory unavailable');
+  const reader=r.body.getReader(),decoder=new TextDecoder();let size=0,text='';
+  try{
+    for(;;){const {done,value}=await reader.read();if(done)break;size+=value.length;
+      if(size>512*1024){await reader.cancel();throw Error('Directory too large');}text+=decoder.decode(value,{stream:true});}
+    return text+decoder.decode();
+  }finally{reader.releaseLock();}
+}
+const short=s=>String(s??'').replace(/[\x00-\x1f\x7f]/g,' ').slice(0,90).trim();
+const plain=s=>short(s).replace(/&amp;/g,'&').replace(/&quot;/g,'"').replace(/&#39;/g,"'").replace(/&nbsp;/g,' ');
+async function desktopDirectory(source){
+  const games=[];
+  try{
+    if(source==='retro'){
+      const html=await directoryText('https://retro-tracker.game-server.cc/');
+      if(!html.includes('DXX Retro Tracker'))throw Error('Unavailable');
+      if(/Tracker backend is DOWN/i.test(html))throw Error('Tracker offline');
+      for(const table of html.split(/class=["']?scoreboard_details\b/i).slice(1,257)){
+        const field=label=>plain(new RegExp('<b>'+label+':\\s*</b>\\s*([^<]*)','i').exec(table)?.[1]);
+        if(field('Game Name'))games.push({name:field('Game Name'),map:field('Mission'),players:field('Players'),kind:field('Version'),mode:field('Game Mode'),status:field('Joinable')});
+      }
+    }else if(source==='rebirth'){
+      const feed=JSON.parse(await directoryText('https://dxxtracker.reenigne.net/tracker.php'));
+      if(!feed||typeof feed!=='object'||feed.error)throw Error('Unavailable');
+      for(const g of Object.values(feed).slice(0,256)){
+        if(!g?.name||!/^d[12]$/i.test(g.game))continue;
+        games.push({name:short(g.name),kind:short(g.game.toUpperCase()+' '+(g.version||'')),map:short(g.missiontitle),players:short(g.players),
+          mode:['Anarchy','Team anarchy','Robot anarchy','Co-op','Capture the flag','Hoard','Team hoard','Bounty'][g.mode],
+          status:['Menu','Playing','Browsing','Waiting','Forming','End level'][g.status],address:short(g.ip+':'+g.port)});
+      }
+    }else if(source==='tsetse'){
+      const feed=JSON.parse(await directoryText('https://api.tsetsefly.de/?template=ttfcWeb&get=gameServerList&ver=0&format=json'));
+      if(!Array.isArray(feed.data?.gameServerList))throw Error('Unavailable');
+      for(const g of feed.data.gameServerList.slice(0,256)){
+        const family=String(g.gameSn||'').toLowerCase();
+        if(!/^d[123]$/.test(family)||!g.serverName)continue;
+        const seen=Date.parse(g.lastSeen);if(Number.isFinite(seen)&&Date.now()-seen>15*60000)continue;
+        let address='';
+        for(const host of g.hostList||[])for(const ips of host.ipV4List||[])for(const ip of ips.addressList||[]){
+          const port=ip.portList?.find(p=>p.type==='hostport'&&!p.timeout);
+          if(!address&&port)address=short(ip.address+':'+port.number);
+        }
+        games.push({name:short(g.serverName),family,kind:short(g.version?.gameVersionName),address,map:short(g.mapName),
+          mode:short(g.modName),status:short(g.network),players:short(g.curPlayer+'/'+g.maxPlayer),bots:Number(g.botPlayer)||0});
+      }
+    }else if(source==='xl'){
+      const feed=JSON.parse(await directoryText('https://descent2.de/tracker-api.php'));
+      if(!Array.isArray(feed.servers)&&!/^No games are currently registered/i.test(feed.error||''))throw Error('Unavailable');
+      for(const s of (feed.servers||[]).slice(0,256))if(s.info)games.push({name:short(s.info.game),map:short(s.info.mission),players:short(s.info.players),kind:short(s.info.version),mode:short(s.info.mode),status:short(s.info.status),address:short(s.address)});
+    }else{
+      const html=await directoryText('https://tracker.h0m3.net/index.html');
+      if(!html.includes('Descent 3')&&!html.includes('server-name'))throw Error('Unavailable');
+      for(const block of html.split(/<section class="server">/i).slice(1,257)){
+        const value=key=>plain(new RegExp('class="cell '+key+'"[^>]*>([^<]*)','i').exec(block)?.[1]);
+        const address=plain(/class="ip-address"[^>]*>([\d.:]+)</i.exec(block)?.[1]);
+        const version=plain(/class="cell server-name"[^>]*>[^<]*<\/div>\s*<div class="cell">([^<]*)/i.exec(block)?.[1]);
+        if(value('server-name'))games.push({name:value('server-name'),map:value('mission-name'),players:value('player-count'),kind:version,status:value('gametype'),address});
+      }
+    }
+    return {source,available:true,games};
+  }catch{return {source,available:false,games:[]};}
+}
 export default {
-  async fetch(request,env){
+  async fetch(request,env,ctx){
     const url=new URL(request.url);
-    if(url.pathname==='/health')return Response.json({service:'astra-squadron',version:86,maxPilots:4,campaigns:Object.keys(LEVELS),matchBy:['mode','campaign']});
-    if(url.pathname!=='/online'&&!/^\/room\/[0-9A-V]{9}$/.test(url.pathname))return new Response('Not found',{status:404});
+    if(url.pathname==='/health')return Response.json({service:'astra-squadron',version:111,maxPilots:4,campaigns:Object.keys(LEVELS),matchBy:['mode','campaign','any'],desktopTrackers:['retro','rebirth','xl','d3','tsetse']});
+    if(!['/online','/games','/trackers'].includes(url.pathname)&&!/^\/room\/[0-9A-V]{9}$/.test(url.pathname))return new Response('Not found',{status:404});
     const origin=request.headers.get('Origin')||'';
     // The standalone Astra installation also runs from a loopback web server.
     const localInstall=/^http:\/\/(127\.0\.0\.1|localhost):\d+$/.test(origin);
     if(!/^https:\/\/(www\.)?jez237\.com$/.test(origin)&&!/^https:\/\/[a-z0-9-]+\.jez237-site\.pages\.dev$/.test(origin)&&!localInstall)return new Response('Origin not allowed',{status:403});
     if(request.method!=='GET')return new Response('Method not allowed',{status:405});
     if(request.headers.get('Upgrade')?.toLowerCase()!=='websocket')return new Response('WebSocket required',{status:426});
+    if(url.pathname==='/games'){
+      const [client,ws]=Object.values(new WebSocketPair());ws.accept();
+      const sources=['astra','retro','rebirth','xl','d3','tsetse'];
+      ctx.waitUntil(Promise.all(sources.map(async source=>{
+        try{
+          const result=source==='astra'?await env.LOBBY.getByName('public-v54').listPublicRooms():await desktopDirectory(source);
+          json(ws,{type:'directory-source',...result});
+        }catch{json(ws,{type:'directory-source',source,available:false,games:[]});}
+      })).finally(()=>{try{ws.close(1000,'Directory complete');}catch{}}));
+      return new Response(null,{status:101,webSocket:client});
+    }
+    if(url.pathname==='/trackers'){
+      const sources=await Promise.all(['retro','xl','d3'].map(desktopDirectory));
+      const [client,ws]=Object.values(new WebSocketPair());ws.accept();json(ws,{type:'desktop-games',sources});ws.close(1000,'Directories read');
+      return new Response(null,{status:101,webSocket:client});
+    }
     const headers=new Headers(request.headers);headers.delete('X-Astra-Public');headers.delete('X-Astra-Config');request=new Request(request,{headers});
     if(url.pathname==='/online')return env.LOBBY.getByName(url.searchParams.get('v')==='54'?'public-v54':'public-v52').fetch(request);
     return env.ROOMS.getByName(url.pathname.split('/').pop()).fetch(request);

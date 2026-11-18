@@ -7,7 +7,7 @@
     frame=document.createElement('iframe');frame.id='astraSession';
     frame.title='Descent II Astra';frame.allow='autoplay; fullscreen; gamepad';
     frame.allowFullscreen=true;
-    const url=new URL('play.html?v=pyre102',location.href);url.hash=invite;
+    const url=new URL('play.html?v=pyre111',location.href);url.hash=invite;
     frame.src=url.href;document.body.append(frame);generation++;
   }
   window.addEventListener('message',event=>{
@@ -18,5 +18,5 @@
     }
   });
   window.astraShell={get generation(){return generation;}};
-  openTitle(/^#room=[0-9A-V]{9}$/.test(location.hash)?location.hash:'');
+  openTitle(['#pump-gallery','#online-games'].includes(location.hash)?location.hash:/^#room=[0-9A-V]{9}$/.test(location.hash)?location.hash:'');
 })();
