@@ -33874,5 +33874,140 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-11-18-factual-infographic-factual-infographic-pajama-cardinalfish",
+    "title": "Factual infographic: Pajama Cardinalfish — The Twilight Coral Refuge",
+    "tests": "Complete factual topics and permanent species reservations checked, plus full catalog accepted-name/synonym/common-name search: unused species. Incidental pajamas in a human phobia prompt is not a fish profile. Full fetched sources support all substantive labels. No subjective post-render critic.; archive_slot=2026-11-18T12:20; concept=pajama-cardinalfish-nocturnal-crustacean-hunting-branching-coral; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: reef-fish-infographic; fish_scientific_name: Sphaeramia nematoptera",
+    "prompt": "Create a fancy, richly colorful, extremely detailed PHOTOREALISTIC aquarium reef-fish educational atlas, the finished infographic itself, not a photographed page or framed display. A flowing asymmetric underwater composition with a dominant beautiful pajama cardinalfish emerging from branching coral into twilight to hunt small crustaceans. Precision external anatomy, photographic scales, translucent fin membranes and realistic underwater caustics, exceptional readable typography. The art leads the information. No rigid panel grid, cards, text boxes or uniform circles. Deep petrol-blue water, warm lemon-gold head, ruby-red eye and copper-brown spots, luminous cream body, peach and turquoise coral lighting; rich but biologically accurate colors. Finely traced curved leader lines and open annotations find quiet negative space without covering the fish.\n\nSet the prominent headline exactly “PAJAMA CARDINALFISH”, directly beneath it “Sphaeramia nematoptera”, then the small subtitle “Twilight hunter • Branching-coral refuge”. The large hero takes up about half the composition, drifting rightward above an intricate coral refuge, in a slightly turned lateral pose so diagnostic pattern remains clear. Accurate cardinalfish proportions, TWO separate dorsal fins, yellow head with large red eye, broad vertical black body bar below the first dorsal fin, and large brown polka dots on the pale posterior half. Naturally translucent remaining fins, credible paired fins and tail, no invented fin rays or ornament. Finely illuminated scales and gill-cover edges. Label the two dorsal fins, black bar and spotted rear body with subtle open leaders. Do not show a Banggai cardinalfish or its multiple narrow black bands; this species has a very different pattern.\n\nFlow the reef upward from the lower left: branching coral fingers cradle a small distant group of this same species, each with accurate markings. A gentle dim-to-bright arc visually links “DAY — shelter among branching corals” with “NIGHT — leave cover to hunt”. The hero is at the night end of this arc; a tiny believable shrimp and crab are natural prey, not oversized monsters. Open explanatory text: “Small shrimps, crabs & other crustaceans”. Do not invent light emission, special senses or a feeding apparatus. The twilight lighting is artistic staging, not a claim that fish glow.\n\nOn a clean sliver of open water beside the reef integrate a delicate western-Pacific locator silhouette without inaccurate detailed boundaries; label “Western Pacific” and “Lagoons, bays & sheltered coral reefs”. Beneath a graceful fish-length indicator label “Up to 8.5 cm / 3.3 in”. Near the branching coral label “Social groups use branching-coral shelter”. Lower along the current path add a small natural external close-up of a male's head, gently enlarged buccal region, with label “Paternal mouthbrooding — male carries eggs in his mouth; does not feed while brooding”. Use an open leader, not a cutaway or visible transparent skin; avoid invented internal anatomy or egg counts.\n\nAt the lower right, create an elegant unboxed aquarium guidance ribbon integrated into the flowing current, with clear heading “IN THE AQUARIUM — husbandry guidance”. Typeset short readable lines: “Generally peaceful; reef-compatible, but tiny crustaceans may be prey.” “Groups can form dominance hierarchies: allow more room and plenty of cover.” “Varied meaty foods; try frozen food and nighttime feeding if reluctant.” “Manufacturer minimum: 76 L / 20 US gal; groups need more room.” Clearly distinguish these recommendations from observed wild ecology. No blanket guarantee of compatibility, no claim that this minimum fits any group, no invented temperature or salinity numbers. Do not depict people or tank equipment; the setting remains an immersive natural coral reef atlas.\n\nUse generous visual breathing room, varied supporting-study sizes, strong hierarchy and crisp readable letters, no filler facts. Small footer source credit: “Oregon Coast Aquarium • Mote Marine Laboratory & Aquarium • Coralife • WoRMS”. Deliver a cohesive premium photorealistic scientific artwork, not a watercolor, cartoon, flat vector graphic, dashboard, gallery mockup or sparse title poster. Every fish shown is this ONE species, with the same diagnostic anatomy and markings.",
+    "image": "images/2026-11-18-factual-infographic-factual-infographic-pajama-cardinalfish.jpg",
+    "thumb": "thumbs/2026-11-18-factual-infographic-factual-infographic-pajama-cardinalfish.webp",
+    "color": "#39403f",
+    "date": "2026-11-18",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "pajama-cardinalfish-nocturnal-crustacean-hunting-branching-coral",
+      "imageSha256": "6e0f63553d4c4a26f1783f1142fc612bee2a00a7a893eb03867a9d7ffc33763d",
+      "imageDHash": "af9e94ca6b317363"
+    },
+    "factualInfographic": {
+      "topic": "Pajama cardinalfish (Sphaeramia nematoptera) nocturnal crustacean feeding and branching-coral refuge biology",
+      "description": "A photorealistic species atlas linking diagnostic markings with branching-coral shelter, nocturnal crustacean feeding and careful aquarium guidance.",
+      "sourceNote": "Read full species accounts and manufacturer care guide; taxonomy and synonym verified through actual WoRMS REST records after HTML endpoint failed. Sources: https://aquarium.org/animals/pajama-cardinalfish/ ; https://mote.org/animal-encyclopedia/pajama-cardinalfish/ ; https://www.coralifeproducts.com/care-guides/pajama-cardinal-fish ; https://www.marinespecies.org/rest/AphiaRecordByAphiaID/278349 ; https://www.marinespecies.org/rest/AphiaSynonymsByAphiaID/278349",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-18T17:21:50.740056+00:00",
+        "sources": [
+          {
+            "id": "oregon",
+            "publisher": "Oregon Coast Aquarium",
+            "title": "Pajama Cardinalfish",
+            "sourceType": "museum",
+            "url": "https://aquarium.org/animals/pajama-cardinalfish/"
+          },
+          {
+            "id": "mote",
+            "publisher": "Mote Marine Laboratory & Aquarium",
+            "title": "Pajama Cardinalfish",
+            "sourceType": "museum",
+            "url": "https://mote.org/animal-encyclopedia/pajama-cardinalfish/"
+          },
+          {
+            "id": "coralife",
+            "publisher": "Coralife",
+            "title": "Pajama Cardinal Fish Care Guide",
+            "sourceType": "manufacturer-technical-documentation",
+            "url": "https://www.coralifeproducts.com/care-guides/pajama-cardinal-fish"
+          },
+          {
+            "id": "worms",
+            "publisher": "World Register of Marine Species (VLIZ)",
+            "title": "Aphia record 278349: Sphaeramia nematoptera",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://www.marinespecies.org/rest/AphiaRecordByAphiaID/278349"
+          },
+          {
+            "id": "synonyms",
+            "publisher": "World Register of Marine Species (VLIZ)",
+            "title": "Synonyms of AphiaID 278349",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://www.marinespecies.org/rest/AphiaSynonymsByAphiaID/278349"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Accepted marine species Sphaeramia nematoptera (Bleeker, 1856), family Apogonidae; Apogon nematopterus is an unaccepted synonym of this same species.",
+            "sourceIds": [
+              "worms",
+              "synonyms"
+            ]
+          },
+          {
+            "claim": "Common names Pajama cardinalfish and Coral cardinalfish; yellow head, two dorsal fins, vertical black bar beneath the first dorsal fin, large brown spots on the posterior body; large red eyes.",
+            "sourceIds": [
+              "oregon",
+              "mote"
+            ]
+          },
+          {
+            "claim": "Maximum reported length 8.5 cm, about 3.3 inches.",
+            "sourceIds": [
+              "oregon",
+              "mote"
+            ]
+          },
+          {
+            "claim": "Western Pacific: lagoons, bays and sheltered coastal coral reefs; Oregon records depths to 14 m.",
+            "sourceIds": [
+              "oregon",
+              "mote"
+            ]
+          },
+          {
+            "claim": "Lives among branching corals including Porites cylindrica, Acropora and Anacropora; forms social groups, hides by day and leaves coral protection to feed at night.",
+            "sourceIds": [
+              "oregon",
+              "mote"
+            ]
+          },
+          {
+            "claim": "Carnivore feeding on small shrimps, crabs and other small crustaceans.",
+            "sourceIds": [
+              "oregon",
+              "mote"
+            ]
+          },
+          {
+            "claim": "Male incubates fertilized eggs in his mouth and does not feed during incubation; no precise incubation duration asserted.",
+            "sourceIds": [
+              "oregon",
+              "mote"
+            ]
+          },
+          {
+            "claim": "Aquarium guidance: generally peaceful towards other tankmates and described as reef safe; this does not imply safety for every small crustacean, since crustaceans are natural prey. Groups can develop dominance hierarchies and need a larger aquarium with ample cover.",
+            "sourceIds": [
+              "coralife",
+              "oregon"
+            ]
+          },
+          {
+            "claim": "Aquarium feeding: varied meaty diet; some initially refuse dry foods, can be coaxed with frozen food and later weaned to dry; try nighttime feeding for reluctant feeders.",
+            "sourceIds": [
+              "coralife"
+            ]
+          },
+          {
+            "claim": "Coralife lists a 20 US gallon minimum (approximately 76 liters using 3.78541 liters per US gallon); not presented as a universal group-housing recommendation; groups need more room and cover.",
+            "sourceIds": [
+              "coralife"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
