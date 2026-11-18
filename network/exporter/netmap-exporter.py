@@ -6,10 +6,10 @@ Serves /sample.json in the shape the map's LiveAdapter expects
 machine that can see per-device traffic (the OpenClaw host is ideal),
 then open the map locally in live mode:
 
-    python3 netmap-exporter.py --bind 192.168.1.68 --port 8321
+    python3 netmap-exporter.py --bind <lan-ip> --port 8321
     # from the repo root, in another terminal:
     python3 -m http.server 8000
-    # browse: http://localhost:8000/network/?adapter=live&src=http://192.168.1.68:8321/sample.json
+    # browse: http://localhost:8000/network/?adapter=live&src=http://<lan-ip>:8321/sample.json
 
 SECURITY: never port-forward this, never put it behind a public DNS
 name, and never add its origin to the public site's CSP. Real-time

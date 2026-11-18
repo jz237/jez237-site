@@ -22,7 +22,7 @@ the EV is charging. So:
    (the OpenClaw host is ideal):
 
    ```bash
-   python3 network/exporter/netmap-exporter.py --bind 192.168.1.68 --port 8321
+   python3 network/exporter/netmap-exporter.py --bind <lan-ip> --port 8321
    ```
 
 2. Serve the site locally from the repo root:
@@ -34,7 +34,7 @@ the EV is charging. So:
 3. Open live mode in a browser on the LAN:
 
    ```
-   http://localhost:8000/network/?adapter=live&src=http://192.168.1.68:8321/sample.json
+   http://localhost:8000/network/?adapter=live&src=http://<lan-ip>:8321/sample.json
    ```
 
    The HUD badge switches from SIMULATED to LIVE (or "LIVE · offline"
