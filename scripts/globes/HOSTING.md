@@ -586,9 +586,11 @@ Tests: `betta-variety.test.mjs` (7).
 Living Silk also offers **Low power** in the Graphics selector, or directly at
 `/demos/betta-bowl/?power=low`. This WebGL 2 renderer uses the compact Atelier
 specimen, the bowl's swimming controller and the same furnishing meshes. It draws
-glass and the water surface with simple materials and a gentle current. Feeding,
-flaring, varieties, Follow and Night work here. Choose **Full simulation** for
-interactive sloshing, refracted glass, Learn and Water care.
+glass with simple materials. Dragging tilts the bowl and excites a damped surface
+wave. Its height and currents are sampled by the fish and floating pellets.
+Learn and Water care share the full simulation’s lessons, chemistry, chart and
+saved progress. Feeding, flaring, varieties, Follow and Night work in both modes.
+Full simulation adds ray-traced refraction and a three-dimensional fluid solver.
 
 Auto can select Low power before starting the WebGPU workers on lower-spec
 desktops, software adapters and browsers without WebGPU. A manual choice in the
@@ -646,7 +648,8 @@ checkout. Sparse task checkouts are editing-only.
 ## Controls and requirements
 
 Drag to tilt, Ctrl+drag to spin, scroll/pinch to zoom, arrows to change scenes,
-right-click on Koi or Anemone Reef to drop food. WebGPU and a fast GPU are required.
+right-click on Koi or Anemone Reef to drop food. The full simulation requires WebGPU.
+The Betta Bowl also runs in Low power on WebGL 2.
 The original automatically selects a 48-cubed grid for small coarse-pointer
 screens, compared with 128-cubed on desktop. `?res=48&aa=1` explicitly selects a
 lighter desktop run without changing defaults.

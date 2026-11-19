@@ -10,7 +10,7 @@
 //
 // Sim frame throughout (world axes, the globe's centre at the origin).
 
-import * as THREE from 'three/webgpu';
+import * as THREE from 'three';
 import { LEAF, NEST } from '../render/bowlScape';
 import type { KoiSense } from '../fish/Koi';
 

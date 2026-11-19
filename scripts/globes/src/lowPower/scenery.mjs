@@ -2,10 +2,10 @@ import * as T from 'three';
 import { BOWL } from '../render/bowl';
 import { BED_LEVEL, BED_RADIUS, GLASS_INNER, MAT, stream } from '../render/scape/mesh.mjs';
 import { buildScapePieces } from '../render/scape/scene.mjs';
+import { WATER_LEVEL, SURFACE_RADIUS } from './slosh.mjs';
 
 // The same bowl and furnishings, rasterized once per view. Their material and cavity detail is
 // baked into vertex colours at load time. No scene BVH, refraction pass or fluid grid is needed.
-export const WATER_LEVEL = 0.25;
 const colours = {
   [MAT.BARK]: 0x795334, [MAT.WOOD_END]: 0xb98a56, [MAT.ROCK]: 0x797b72,
   [MAT.LEAF_BIG]: 0x50802f, [MAT.LEAF_SMALL]: 0x77a440, [MAT.STEM]: 0x526e31,
@@ -36,6 +36,15 @@ function furnishings(scene) {
     geometry.setAttribute('color', new T.BufferAttribute(colour, 3));
     geometry.setIndex(new T.BufferAttribute(indices, 1));
     const part = new T.Mesh(geometry, material);
+    part.name = mesh.name;
+    part.userData.topic = ({ driftwood: 'driftwood', rocks: 'rock', plantTall: 'anubias', plantSmall: 'rosette' })[mesh.name] ?? (materials.includes(MAT.HEATER) ? 'heater' : 'filter');
+    if (materials.includes(MAT.HEATER_LAMP)) {
+      const lampVertices = new Set();
+      for (let i = 0; i < indices.length; i++) {
+        if (materials[Math.floor(i / 3)] === MAT.HEATER_LAMP) lampVertices.add(indices[i]);
+      }
+      part.userData.lampVertices = [...lampVertices];
+    }
     part.castShadow = part.receiveShadow = true;
     scene.add(part);
   }
@@ -100,28 +109,42 @@ function glassMaterial() {
   });
 }
 
-export function makeBowl(scene) {
-  const pieces = furnishings(scene);
+export function makeBowl(basin, shell, liquid, slosh) {
+  const pieces = furnishings(shell);
   const glass = glassMaterial();
   const wall = new T.Mesh(sphereBand(1, BOWL.mouth, -0.99), glass);
   wall.renderOrder = 5;
-  scene.add(wall);
+  wall.userData.topic = 'glass';
+  shell.add(wall);
   const rim = new T.MeshPhongMaterial({ color: 0x9bc8cf, transparent: true, opacity: 0.63, depthWrite: false, shininess: 70 });
-  scene.add(ring(Math.sqrt(1 - BOWL.mouth ** 2), BOWL.beadRadius, BOWL.mouth, rim));
+  shell.add(ring(Math.sqrt(1 - BOWL.mouth ** 2), BOWL.beadRadius, BOWL.mouth, rim));
   const sand = sandMaterial();
   const bed = disc(BED_RADIUS, BED_LEVEL, sand);
   bed.receiveShadow = true;
-  scene.add(new T.Mesh(sphereBand(GLASS_INNER, BED_LEVEL, -0.98), sand), bed);
-  const topRadius = Math.sqrt(GLASS_INNER ** 2 - WATER_LEVEL ** 2);
+  const sandWall = new T.Mesh(sphereBand(GLASS_INNER, BED_LEVEL, -0.98), sand);
+  bed.userData.topic = sandWall.userData.topic = 'sand';
+  shell.add(sandWall, bed);
   const water = new T.MeshPhongMaterial({ color: 0x76c8db, specular: 0xbbeffa, shininess: 70,
-    transparent: true, opacity: 0.16, depthWrite: false, side: T.DoubleSide });
-  const film = disc(topRadius, WATER_LEVEL, water);
+    transparent: true, opacity: 0.23, depthWrite: false, side: T.DoubleSide });
+  const surface = new T.RingGeometry(0, SURFACE_RADIUS, 64, 10).rotateX(-Math.PI / 2);
+  water.onBeforeCompile = shader => {
+    shader.uniforms.bend = slosh.bend;
+    shader.vertexShader = 'uniform float bend;\n' + shader.vertexShader
+      .replace('#include <beginnormal_vertex>', `#include <beginnormal_vertex>
+        float r2 = dot(position.xz, position.xz) / ${SURFACE_RADIUS ** 2};
+        vec2 slope = bend * (-4. + 6. * r2) * 2. * position.xz / ${SURFACE_RADIUS ** 2};
+        objectNormal = normalize(vec3(-slope.x,1.,-slope.y));`)
+      .replace('#include <begin_vertex>', '#include <begin_vertex>\ntransformed.y += bend * (1.-r2) * (1.-3.*r2);');
+  };
+  const film = new T.Mesh(surface, water);
+  film.position.y = WATER_LEVEL;
+  film.userData.topic = 'water';
   film.renderOrder = 3;
-  scene.add(film, ring(topRadius, 0.004, WATER_LEVEL, rim));
-  const tint = new T.Mesh(sphereBand(GLASS_INNER, WATER_LEVEL, BED_LEVEL),
+  liquid.add(film, ring(SURFACE_RADIUS, 0.004, WATER_LEVEL, rim));
+  const tint = new T.Mesh(sphereBand(GLASS_INNER, WATER_LEVEL, -0.98),
     new T.MeshBasicMaterial({ color: 0x77c5d9, transparent: true, depthWrite: false, opacity: 0.06 }));
   tint.renderOrder = 4;
-  scene.add(tint);
+  liquid.add(tint);
   const lid = new T.Group(), dark = new T.MeshPhongMaterial({ color: 0x142229, shininess: 70 });
   lid.position.y = BOWL.mouth + BOWL.lidThickness;
   const lip = new T.Mesh(new T.RingGeometry(BOWL.lidRadius - BOWL.rimWidth, BOWL.lidRadius, 80),
@@ -131,7 +154,8 @@ export function makeBowl(scene) {
   knob.position.y = BOWL.knobHeight / 2;
   const lamp = disc(BOWL.puckRadius, -0.022, new T.MeshBasicMaterial({ color: 0xffe6ba, side: T.DoubleSide }));
   lid.add(lip, ring(BOWL.lidRadius - 0.01, 0.013, 0, dark), disc(BOWL.lidRadius - BOWL.rimWidth, 0, rim), knob, lamp);
-  scene.add(lid);
+  lid.userData.topic = 'lid';
+  basin.add(lid);
   // A contact shadow on the table stays under the bowl as the camera orbits and zooms.
   const shadow = new T.ShaderMaterial({
     transparent: true, depthWrite: false,
@@ -141,6 +165,6 @@ export function makeBowl(scene) {
   const footprint = new T.Mesh(new T.PlaneGeometry(2.6, 2.6), shadow);
   footprint.rotation.x = -Math.PI / 2;
   footprint.position.y = -0.985;
-  scene.add(footprint);
-  return { lid, obstacles: pieces.flatMap(p => p.obstacles).map(o => ({ ...o, leaf: !!o.follow })), bubbles: pieces.find(p => p.bubbles)?.bubbles };
+  basin.add(footprint);
+  return { lid, tint, obstacles: pieces.flatMap(p => p.obstacles).map(o => ({ ...o, leaf: !!o.follow })), bubbles: pieces.find(p => p.bubbles)?.bubbles };
 }

@@ -3,7 +3,7 @@
 // (GlobeView.setBowlLid). It comes off only to feed the fish, from a bowl standing still, which
 // stays put until the lid is back on (Feeding.ts): its water would pour out of the open mouth.
 
-import * as THREE from 'three/webgpu';
+import * as THREE from 'three';
 import { BOWL, lidReach, type BowlShape } from '../render/bowl';
 
 /** How long the lid takes to come off, or to go back on (s). */

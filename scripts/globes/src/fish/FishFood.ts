@@ -543,7 +543,7 @@ export class FishFood {
   }
 
   /** The flakes into texels FOOD_TEXEL.. of the pose texture's first row. */
-  write(device: GPUDevice, texture: GPUTexture): void {
+  renderData(): Float32Array<ArrayBuffer> {
     const d = this.data;
     d.fill(0);
     d[0] = this.flakes.length;
@@ -562,7 +562,11 @@ export class FishFood {
       const s = 1 + Math.min(t, 0.999);
       d.set([f.normal[0] * s, f.normal[1] * s, f.normal[2] * s, f.seed], o + 4);
     });
-    device.queue.writeTexture({ texture, origin: [FOOD_TEXEL, 0] }, d, { bytesPerRow: FOOD_TEXELS * 16 }, [FOOD_TEXELS, 1]);
+    return d;
+  }
+
+  write(device: GPUDevice, texture: GPUTexture): void {
+    device.queue.writeTexture({ texture, origin: [FOOD_TEXEL, 0] }, this.renderData(), { bytesPerRow: FOOD_TEXELS * 16 }, [FOOD_TEXELS, 1]);
   }
 }
 

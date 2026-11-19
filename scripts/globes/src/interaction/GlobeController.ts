@@ -17,7 +17,7 @@
 // share the way with the camera (which pans the other way): the globe crosses the screen just
 // the same, but only its own share of the motion pushes the water.
 
-import * as THREE from 'three/webgpu';
+import * as THREE from 'three';
 import type { GlobeConfig } from '../config';
 import type { Vec3 } from '../sim/FluidSim';
 
