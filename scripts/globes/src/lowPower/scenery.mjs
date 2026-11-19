@@ -3,7 +3,7 @@ import { BOWL } from '../render/bowl';
 import { BED_LEVEL, BED_RADIUS, GLASS_INNER, MAT, stream } from '../render/scape/mesh.mjs';
 import { buildScapePieces } from '../render/scape/scene.mjs';
 import { WATER_LEVEL } from './slosh.mjs';
-import { makeWaterFilm } from './waterFilm.mjs';
+import { makeWaterFilm, WATERLINE_SEGMENTS } from './waterFilm.mjs';
 import { movingPlant } from './plants.mjs';
 
 // The same bowl and furnishings, rasterized once per view. Their material and cavity detail is
@@ -71,9 +71,9 @@ function disc(radius, y, material) {
   return mesh;
 }
 
-function sphereBand(radius, top, bottom) {
+function sphereBand(radius, top, bottom, segments = 80) {
   const theta = Math.acos(top / radius);
-  return new T.SphereGeometry(radius, 80, 36, 0, Math.PI * 2, theta, Math.acos(bottom / radius) - theta);
+  return new T.SphereGeometry(radius, segments, 36, 0, Math.PI * 2, theta, Math.acos(bottom / radius) - theta);
 }
 
 function sandMaterial() {
@@ -134,18 +134,9 @@ export function makeBowl(basin, shell, liquid, slosh, keyLight) {
   const sandWall = new T.Mesh(sphereBand(GLASS_INNER, BED_LEVEL, -0.98), sand);
   bed.userData.topic = sandWall.userData.topic = 'sand';
   shell.add(sandWall, bed);
-  const tint = new T.Mesh(sphereBand(GLASS_INNER, WATER_LEVEL, -0.98),
+  const tint = new T.Mesh(sphereBand(GLASS_INNER, WATER_LEVEL, -0.98, WATERLINE_SEGMENTS),
     new T.MeshBasicMaterial({ color: 0x77c5d9, transparent: true, depthWrite: false, opacity: 0.06 }));
-  // Seen edge-on, the film still has a narrow dark contact line on the wet glass.
-  tint.material.onBeforeCompile = shader => {
-    shader.vertexShader = 'varying float belowFilm;\n' + shader.vertexShader.replace('#include <begin_vertex>',
-      `#include <begin_vertex>\nbelowFilm = ${WATER_LEVEL} - position.y;`);
-    shader.fragmentShader = 'varying float belowFilm;\n' + shader.fragmentShader.replace('#include <opaque_fragment>', `
-      float line = 1.-smoothstep(.002,.017,belowFilm);
-      outgoingLight = mix(outgoingLight,vec3(.009,.030,.043),line);
-      diffuseColor.a += (1.-diffuseColor.a)*.56*line;
-      #include <opaque_fragment>`);
-  };
+  waterFilm.fitWetGlass(tint.material);
   tint.renderOrder = 4;
   liquid.add(tint);
   const lid = new T.Group(), dark = new T.MeshPhongMaterial({ color: 0x142229, shininess: 70 });

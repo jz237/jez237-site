@@ -35,12 +35,15 @@ export function addSurfaceLife(liquid) {
   const nest = new T.InstancedMesh(new T.SphereGeometry(1, 8, 5),
     new T.MeshPhongMaterial({ color: 0xb0d2d5, specular: 0xffffff, shininess: 90, transparent: true, opacity: 0.79 }), NEST.length);
   const bubble = new T.Object3D();
-  NEST.forEach(([along, inward, height, radius], i) => {
-    bubble.position.set(Math.sqrt(SURFACE_RADIUS ** 2 - along ** 2) - SURFACE_RADIUS - inward, height + 0.002, along);
+  const anchors = NEST.map(([along, inward, height, radius], i) => {
+    bubble.position.set(Math.sqrt(SURFACE_RADIUS ** 2 - along ** 2) - .003 - inward, height + .005, along);
     bubble.scale.set(radius, radius * 0.70, radius);
     bubble.updateMatrix();
     nest.setMatrixAt(i, bubble.matrix);
+    return bubble.position.clone();
   });
+  nest.position.y = WATER_LEVEL;
+  nest.instanceMatrix.setUsage(T.DynamicDrawUsage);
   nest.userData.topic = 'nest';
   nest.renderOrder = 4;
   liquid.add(leaf, nest);
@@ -64,8 +67,16 @@ export function addSurfaceLife(liquid) {
     leaf.rotation.y = -e[3];
     nest.count = life.bubbles;
     nest.visible = nest.count > 0;
-    nest.position.set(e[8], WATER_LEVEL + 0.003, e[10]);
     nest.rotation.y = -e[11];
+    const cs = Math.cos(e[11]), sn = Math.sin(e[11]), instances = nest.instanceMatrix.array;
+    for (let i = 0; i < nest.count; i++) {
+      const a = anchors[i], h = surface.riseAtRestPosition(cs*a.x-sn*a.z, sn*a.x+cs*a.z);
+      const scale = Math.sqrt(GLASS_INNER**2 - (WATER_LEVEL+h)**2) / SURFACE_RADIUS;
+      instances[16*i+12] = a.x*scale;
+      instances[16*i+13] = a.y+h;
+      instances[16*i+14] = a.z*scale;
+    }
+    if (nest.count) nest.instanceMatrix.needsUpdate = true;
   }
   return { life, update };
 }

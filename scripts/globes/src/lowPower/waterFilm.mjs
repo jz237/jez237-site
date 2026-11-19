@@ -1,9 +1,12 @@
 import * as T from 'three';
 import { Reflector } from 'three/addons/objects/Reflector.js';
 import { STUDIO_DAY, STUDIO_NIGHT } from '../render/studio';
+import { GLASS_INNER } from '../render/scape/mesh.mjs';
 import { SURFACE_RADIUS, WATER_LEVEL } from './slosh.mjs';
 import { RIPPLE_HEIGHT, RIPPLE_SLOPE } from './ripples.mjs';
 import { makeRippleLight } from './caustics.mjs';
+
+export const WATERLINE_SEGMENTS = 96;
 
 export function makeWaterFilm(liquid, slosh, lamp) {
   const field = slosh.ripples;
@@ -12,7 +15,14 @@ export function makeWaterFilm(liquid, slosh, lamp) {
   waves.needsUpdate = true;
   // Sample texel centres so the normals, displaced mesh, and CPU floaters agree.
   const uvScale = ((field.size - 1) / field.size / (2 * SURFACE_RADIUS)).toFixed(8);
-  const geometry = new T.RingGeometry(0, SURFACE_RADIUS, 96, 28);
+  const geometry = new T.RingGeometry(0, SURFACE_RADIUS, WATERLINE_SEGMENTS, 28);
+  const waterShape = `
+    uniform sampler2D waves;
+    float rippleHeight(vec2 pos) {
+      return (texture2D(waves,.5 + pos*${uvScale}).b*255.-128.) * ${RIPPLE_HEIGHT / 127};
+    }
+    float glassRadius(float y) { return sqrt(${GLASS_INNER**2} - y*y); }
+  `;
   const mirror = new Reflector(geometry, { textureWidth: 320, textureHeight: 200, multisample: 0, clipBias: 0.001 });
   const target = mirror.getRenderTarget();
   target.texture.type = T.UnsignedByteType;
@@ -24,7 +34,7 @@ export function makeWaterFilm(liquid, slosh, lamp) {
   const material = new T.ShaderMaterial({
     name: 'Rippling water', uniforms, transparent: true, depthWrite: false, side: T.DoubleSide, forceSinglePass: true,
     vertexShader: `
-      uniform sampler2D waves;
+      ${waterShape}
       uniform float bend;
       uniform mat4 mirrorProjection;
       varying vec2 pos;
@@ -33,9 +43,9 @@ export function makeWaterFilm(liquid, slosh, lamp) {
       void main() {
         pos = vec2(position.x, -position.y);
         float r2 = dot(pos,pos) / ${SURFACE_RADIUS ** 2};
-        float ripple = (texture2D(waves, .5 + pos * ${uvScale}).b * 255. - 128.) * ${RIPPLE_HEIGHT}/127.;
-        float height = bend * (1.-r2) * (1.-3.*r2) + ripple * clamp(24.*(1.-r2),0.,1.);
-        vec4 world = modelMatrix * vec4(position.xy, height, 1.);
+        float height = bend * (1.-r2) * (1.-3.*r2) + rippleHeight(pos);
+        float scale = glassRadius(${WATER_LEVEL}+height) / ${SURFACE_RADIUS};
+        vec4 world = modelMatrix * vec4(position.xy*scale, height, 1.);
         worldPos = world.xyz;
         mirrorCoord = mirrorProjection * world;
         gl_Position = projectionMatrix * viewMatrix * world;
@@ -98,6 +108,31 @@ export function makeWaterFilm(liquid, slosh, lamp) {
   film.renderOrder = 3;
   liquid.add(film);
 
+  // The tint ends at precisely the same spherical ring as the free surface.
+  // Move the upper rows only, keeping the narrow meniscus on that moving edge.
+  function fitWetGlass(material) {
+    material.onBeforeCompile = shader => {
+      shader.uniforms.waves = uniforms.waves;
+      shader.vertexShader = waterShape + 'varying float belowFilm;\n' +
+        shader.vertexShader.replace('#include <begin_vertex>', `
+          #include <begin_vertex>
+          belowFilm = ${WATER_LEVEL} - position.y;
+          if (belowFilm < .19) {
+            vec2 dir = normalize(position.xz);
+            float rise = rippleHeight(dir*${SURFACE_RADIUS});
+            float weight = 1.-smoothstep(0.,.19,belowFilm);
+            transformed.y += weight*rise;
+            transformed.xz = dir*glassRadius(transformed.y);
+            belowFilm += (1.-weight)*rise;
+          }`);
+      shader.fragmentShader = 'varying float belowFilm;\n' + shader.fragmentShader.replace('#include <opaque_fragment>', `
+        float line = 1.-smoothstep(.002,.017,belowFilm);
+        outgoingLight = mix(outgoingLight,vec3(.009,.030,.043),line);
+        diffuseColor.a += (1.-diffuseColor.a)*.56*line;
+        #include <opaque_fragment>`);
+    };
+  }
+
   const flip = new T.Matrix4().makeRotationX(Math.PI), inverse = new T.Matrix4();
   const eye = new T.Vector3(), centre = new T.Vector3();
   let captureAt = -1, lastSide = 0;
@@ -126,5 +161,5 @@ export function makeWaterFilm(liquid, slosh, lamp) {
     lastSide = side;
     captureAt = t + .105;
   }
-  return { update, illuminate: rippleLight.illuminate };
+  return { update, fitWetGlass, waves, illuminate: rippleLight.illuminate };
 }

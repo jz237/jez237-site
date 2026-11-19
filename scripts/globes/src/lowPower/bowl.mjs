@@ -21,7 +21,7 @@ import { keptNight, NIGHT_LETHARGY } from '../app/night.mjs';
 import { BED_LEVEL, GLASS_INNER } from '../render/scape/mesh.mjs';
 import { makeBowl } from './scenery.mjs';
 import { addSurfaceLife } from './surfaceLife.mjs';
-import { createBowlOptics } from './glassOptics.mjs';
+import { createBowlOptics, WET_LAYER } from './glassOptics.mjs';
 import { Slosh, WATER_LEVEL } from './slosh.mjs';
 import '../app/styles.css';
 import './bowl.css';
@@ -176,13 +176,17 @@ export async function startLowPowerBowl() {
   // The small mirror captures objects on the viewer's side of the water.
   // Submerged-only geometry is needed just for views from below the film.
   const submergedTopics = new Set(['fish', 'sand', 'rock', 'driftwood']);
-  const lens = createBowlOptics();
-  const backdrops = [];
+  const lens = createBowlOptics(waterFilm.waves);
+  const walls = [];
+  lens.install(tint);
+  tint.layers.enable(WET_LAYER);
   for (const part of pickable) {
     const topic = part.userData.topic;
     if (topic === 'glass' || topic === 'water') {
-      backdrops.push(part);
-      if (topic === 'water') lens.install(part, { film: true });
+      if (topic === 'water') {
+        lens.install(part, { film: true });
+        part.layers.enable(WET_LAYER);
+      } else walls.push(part);
     } else {
       part.layers.enable(submergedTopics.has(topic) ? 2 : 1);
       lens.install(part, { topic, distort: topic !== 'lid' });
@@ -196,19 +200,10 @@ export async function startLowPowerBowl() {
   function pickTopic(x, y) {
     const rect = canvas.getBoundingClientRect();
     const u = (x - rect.left) / rect.width, v = (y - rect.top) / rect.height;
-    const solid = lens.pick(renderer, scene, camera, u, v);
-    if (solid) return solid;
+    const topic = lens.pick(renderer, scene, camera, u, v);
+    if (topic) return topic;
     picker.setFromCamera(new T.Vector2(2*u - 1, 1 - 2*v), camera);
-    const hits = picker.intersectObjects(backdrops, false);
-    let backdrop = null;
-    for (const hit of hits) {
-      const topic = hit.object.userData.topic;
-      if (topic === 'glass') {
-        const p = basin.worldToLocal(hit.point.clone());
-        backdrop = p.y < surface.heightAt(p.x, p.z) ? 'water' : 'glass';
-      } else if (topic === 'water') backdrop = 'water';
-    }
-    return backdrop;
+    return picker.intersectObjects(walls, false).length ? 'glass' : null;
   }
   const learn = new Learn(controls, stage, {
     pickTopic, variety: () => variety.variety, betta: { swim, get flared() { return flared; } }, food, feeding, life: floating.life,

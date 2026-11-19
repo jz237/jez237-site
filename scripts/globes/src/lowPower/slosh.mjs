@@ -1,6 +1,6 @@
 import { Quaternion, Vector3 } from 'three';
 import { GLASS_INNER } from '../render/scape/mesh.mjs';
-import { SurfaceRipples } from './ripples.mjs';
+import { RIPPLE_HEIGHT, SurfaceRipples } from './ripples.mjs';
 
 export const WATER_LEVEL = 0.25;
 export const SURFACE_RADIUS = Math.sqrt(GLASS_INNER ** 2 - WATER_LEVEL ** 2);
@@ -62,14 +62,47 @@ export class Slosh {
     return top;
   }
 
-  localDisplacement(x, z) {
-    const r2 = (x * x + z * z) / SURFACE_RADIUS ** 2;
-    return this.bend.value * Math.max(0, 1 - r2) * (1 - 3 * r2) + this.ripples.heightAt(x, z);
+  riseAtRestPosition(x,z) {
+    const r2 = Math.min(1, (x*x + z*z) / SURFACE_RADIUS**2);
+    return this.bend.value*(1-r2)*(1-3*r2) + this.ripples.heightAt(x,z);
+  }
+
+  sampleAtRise(x, z, dx, dz, rise) {
+    // A ring of the surface widens as it falls and narrows as it rises along
+    // the sphere. Recover its resting coordinates at this physical position.
+    const y = WATER_LEVEL + rise;
+    const scale = SURFACE_RADIUS / Math.sqrt(GLASS_INNER**2 - y*y);
+    return this.riseAtRestPosition((x + dx*rise)*scale, (z + dz*rise)*scale);
+  }
+
+  localDisplacement(x, z, dx = 0, dz = 0, floor = -Infinity, ceiling = Infinity) {
+    const bound = Math.abs(this.bend.value) + RIPPLE_HEIGHT;
+    let lo = Math.max(-bound, floor), hi = Math.min(bound, ceiling);
+    // A steep shoreline can cross a vertical sightline more than once if
+    // extended outside the bowl. Keep the search inside the physical column.
+    if (ceiling <= -bound || (hi === ceiling && this.sampleAtRise(x,z,dx,dz,hi) >= hi-.00001)) return ceiling;
+    if (floor >= bound || (lo === floor && this.sampleAtRise(x,z,dx,dz,lo) <= lo+.00001)) return floor;
+    let rise = Math.max(lo, Math.min(hi, 0));
+    for (let i = 0; i < 16; i++) {
+      const next = this.sampleAtRise(x,z,dx,dz,rise);
+      if (Math.abs(next-rise) < .00002) return next;
+      if (next > rise) lo = rise; else hi = rise;
+      // Bisect only if the fixed-point iteration stalls at a steep crest.
+      rise = i < 4 && next >= lo && next <= hi ? next : (lo+hi)*.5;
+    }
+    return rise;
   }
 
   heightAt(x, z) {
     const plane = WATER_LEVEL / this.normal.y + this.sx * x + this.sz * z;
     const p = this.point.set(x, plane, z).applyQuaternion(this.inverse);
-    return plane + this.localDisplacement(p.x, p.z) / this.normal.y;
+    const cap2 = GLASS_INNER**2 - x*x - z*z;
+    const limit = Math.abs(plane) + (Math.abs(this.bend.value) + RIPPLE_HEIGHT) / this.normal.y;
+    if (cap2 >= 0 && cap2 < limit*limit) {
+      const cap = Math.sqrt(cap2);
+      const rise = this.localDisplacement(p.x,p.z,this.sx,this.sz,(-cap-plane)*this.normal.y,(cap-plane)*this.normal.y);
+      return plane + rise / this.normal.y;
+    }
+    return plane + this.localDisplacement(p.x, p.z, this.sx, this.sz) / this.normal.y;
   }
 }

@@ -26,14 +26,22 @@ test('a shove raises one wall, the wave overshoots, then the film settles level'
 
 test('surface sampling meets the drawn waterline on the sphere during repeated hard tilts', () => {
   const water = new Slosh();
+  let maxWave = 0;
   for (let i = 0; i < 200; i++) {
     water.step(1 / 30, [24 * Math.sin(i / 8), -24, 24 * Math.cos(i / 8)], [1, 0, -1]);
     const a = i * 0.21;
-    const rim = new Vector3(SURFACE_RADIUS * Math.cos(a), WATER_LEVEL, SURFACE_RADIUS * Math.sin(a)).applyQuaternion(water.rotation);
-    assert.ok(Math.abs(rim.length() - GLASS_INNER) < 1e-10);
-    assert.ok(Math.abs(rim.y - water.heightAt(rim.x, rim.z)) < 1e-8);
+    for (const angle of [a, a + Math.PI/2, a + Math.PI]) {
+      const c = Math.cos(angle), s = Math.sin(angle);
+      const y = WATER_LEVEL + water.ripples.heightAt(SURFACE_RADIUS*c, SURFACE_RADIUS*s);
+      const r = Math.sqrt(GLASS_INNER**2 - y*y);
+      const rim = new Vector3(r*c,y,r*s).applyQuaternion(water.rotation);
+      assert.ok(Math.abs(rim.length() - GLASS_INNER) < 1e-10);
+      assert.ok(Math.abs(rim.y - water.heightAt(rim.x,rim.z)) < .00012);
+      maxWave = Math.max(maxWave,Math.abs(y-WATER_LEVEL));
+    }
     assert.ok(Math.hypot(water.sx, water.sz) <= 0.371);
   }
+  assert.ok(maxWave > .025);
 });
 
 test('a local impact travels across the surface, stays inside the glass and damps at different frame rates', () => {
@@ -46,12 +54,45 @@ test('a local impact travels across the surface, stays inside the glass and damp
     for (let i = 1; i < hz; i++) w.step(1 / hz, 0, 0);
     samples.push(w.heightAt(0.40, 0));
     assert.notEqual(samples.at(-1), 0);
-    assert.equal(w.heightAt(1, 0), 0);
     assert.ok(w.data.some((v, i) => i % 4 === 0 && Math.abs(v - 128) >= 1));
     for (let i = 0; i < 7 * hz; i++) w.step(1 / hz, 0, 0);
     assert.ok(Math.max(...w.shown) < 0.0001);
+    assert.ok(Math.abs(w.heightAt(1,0)) < 0.0001);
   }
   assert.ok(Math.max(...samples) - Math.min(...samples) < 1e-6);
+});
+
+test('rocking the bowl raises visible crests in addition to the mean tilt', () => {
+  const water = new Slosh();
+  let peak = 0;
+  for (let i = 0; i < 75; i++) {
+    water.step(1/30, [4*Math.sin(i/8), -24, 0], [0, 0, .2*Math.cos(i/8)]);
+    let thirdMode = 0;
+    for (let j = 0; j < 32; j++) {
+      const a = j*Math.PI/16;
+      const height = water.ripples.heightAt(SURFACE_RADIUS*Math.cos(a), SURFACE_RADIUS*Math.sin(a));
+      thirdMode += height*Math.cos(3*a)/16;
+    }
+    // A tilted planar ring has no third angular harmonic.
+    peak = Math.max(peak, Math.abs(thirdMode));
+  }
+  assert.ok(peak > .012);
+});
+
+test('a crest reaches the side, spreads along the wall and settles without changing the fill level', () => {
+  const w = new SurfaceRipples(1);
+  w.disturb(.93,0,.15,1);
+  let near = 0, around = 0;
+  for (let i = 0; i < 120; i++) {
+    w.step(1/60,0,0);
+    near = Math.max(near, Math.abs(w.heightAt(1,0)));
+    around = Math.max(around, Math.abs(w.heightAt(Math.cos(.35),Math.sin(.35))));
+    const mean = w.inside.reduce((sum,k) => sum+w.heights[k],0) / w.inside.length;
+    assert.ok(Math.abs(mean)<1e-6);
+  }
+  assert.ok(near>.005 && around>.001);
+  for (let i = 0; i < 420; i++) w.step(1/60,0,0);
+  assert.ok(Math.abs(w.heightAt(1,0))<.0001);
 });
 
 test('opposite tilts send opposite ripples inward from the glass', () => {

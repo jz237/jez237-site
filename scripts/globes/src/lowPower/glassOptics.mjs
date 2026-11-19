@@ -1,10 +1,13 @@
 import * as T from 'three';
 import { BOWL } from '../render/bowl';
 import { WATER_LEVEL } from './slosh.mjs';
+import { RIPPLE_HEIGHT } from './ripples.mjs';
 import { buildLensProfile, LENS_SIZE, MAX_INVERSE_DISTANCE } from './lensProfile.mjs';
 
 const optics = `
   uniform highp sampler3D bowlProfile;
+  uniform sampler2D lensWaves;
+  uniform mat3 viewToWater;
   uniform vec3 bowlCentre, bowlAxis, bowlUp, waterUp;
   uniform float inverseEye, lensStrength;
   vec4 throughBowl(vec4 p) {
@@ -22,6 +25,13 @@ const optics = `
     vec3 entry = impact - sight*sqrt(max(0.,1.-dot(impact,impact)));
     float shell = 1.-smoothstep(${BOWL.mouth - 0.025},${BOWL.mouth + 0.025},dot(entry,bowlUp));
     float h = dot(entry,waterUp)-${WATER_LEVEL};
+    if (abs(h) < .10) {
+      // The entry lies on the outer glass. Match its bearing to the moving
+      // wet edge on the inner wall so refraction follows the crest.
+      vec2 bearing = normalize((viewToWater*entry).xz);
+      float halfSpan = .5 - .5/float(textureSize(lensWaves,0).x);
+      h -= (texture2D(lensWaves,.5+bearing*halfSpan).b*255.-128.)*${RIPPLE_HEIGHT / 127};
+    }
     float endH = dot(local,waterUp)-${WATER_LEVEL};
     float wetEntry = 1.-smoothstep(-.035,.035,h);
     float wetPath = 1.-smoothstep(-.05,.05,(h+endH)*.5);
@@ -32,8 +42,9 @@ const optics = `
 `;
 
 const PICK_LAYER = 3;
+export const WET_LAYER = 4;
 
-export function createBowlOptics() {
+export function createBowlOptics(waves) {
   const half = Uint16Array.from(buildLensProfile(), T.DataUtils.toHalfFloat);
   const profile = new T.Data3DTexture(half, ...LENS_SIZE);
   profile.format = T.RGFormat;
@@ -44,7 +55,9 @@ export function createBowlOptics() {
     bowlProfile: { value: profile }, bowlCentre: { value: new T.Vector3() }, bowlAxis: { value: new T.Vector3() },
     bowlUp: { value: new T.Vector3() }, waterUp: { value: new T.Vector3() },
     inverseEye: { value: 0 }, lensStrength: { value: 0 }, readLesson: { value: false },
+    lensWaves: { value: waves }, viewToWater: { value: new T.Matrix3() },
   };
+  const waterRotation = new T.Matrix4();
   const topics = [null], installed = new Set();
   const target = new T.WebGLRenderTarget(1, 1);
   const pixel = new Uint8Array(4);
@@ -95,6 +108,8 @@ export function createBowlOptics() {
     uniforms.lensStrength.value = T.MathUtils.smoothstep(distance, 1.05, 1.24);
     uniforms.bowlUp.value.set(0, 1, 0).applyQuaternion(shell.quaternion).transformDirection(view);
     uniforms.waterUp.value.copy(surface.normal).transformDirection(view);
+    waterRotation.makeRotationFromQuaternion(surface.inverse).multiply(camera.matrixWorld);
+    uniforms.viewToWater.value.setFromMatrix4(waterRotation);
   }
 
   // Shade only the tapped pixel using the same animated geometry and depth
@@ -112,7 +127,13 @@ export function createBowlOptics() {
       renderer.setRenderTarget(target);
       renderer.render(scene, camera);
       renderer.readRenderTargetPixels(target, 0, 0, 1, 1, pixel);
-      return topics[pixel[0]] ?? null;
+      if (topics[pixel[0]]) return topics[pixel[0]];
+      // A displaced crest and a trough can lie on opposite sides of the old
+      // disk. Test the actual transparent meshes on background taps only.
+      camera.layers.set(WET_LAYER);
+      renderer.render(scene, camera);
+      renderer.readRenderTargetPixels(target, 0, 0, 1, 1, pixel);
+      return pixel[3] ? 'water' : null;
     } finally {
       renderer.setRenderTarget(previous);
       renderer.shadowMap.needsUpdate = pending;

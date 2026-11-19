@@ -1,6 +1,7 @@
 import * as T from 'three';
 import { RIPPLE_HEIGHT, RIPPLE_SLOPE, RIPPLE_CURVATURE } from './ripples.mjs';
 import { SURFACE_RADIUS, WATER_LEVEL } from './slosh.mjs';
+import { GLASS_INNER } from '../render/scape/mesh.mjs';
 
 // Project the existing height field along the refracted lamp rays. All receivers
 // sample the same patch of water, with parallax from their depth below the film.
@@ -36,11 +37,13 @@ export function makeRippleLight(waves, bend, uvScale, lamp) {
           vec4 wave = texture2D(waterWaves, .5 + entry*${uvScale});
           vec2 slope = (wave.rg*255.-128.) * ${RIPPLE_SLOPE / 127};
           slope += surfaceBend*(-8.+12.*r2)*entry*invR2;
-          float depth = max(0., vLightEntry.z + surfaceBend*(1.-r2)*(1.-3.*r2) +
-            (wave.b*255.-128.)*${RIPPLE_HEIGHT / 127});
+          float rise = surfaceBend*(1.-r2)*(1.-3.*r2) + (wave.b*255.-128.)*${RIPPLE_HEIGHT / 127};
+          float depth = max(0., vLightEntry.z + rise);
           // In water, a sloped patch deflects light by about (1 - 1/1.333)
           // times its slope. Backtrack once from the flat-film intersection.
           entry -= depth*.25*slope;
+          float y = ${WATER_LEVEL} + rise;
+          entry *= ${SURFACE_RADIUS} * inversesqrt(${GLASS_INNER**2} - y*y);
           r2 = dot(entry,entry)*invR2;
           float curvature = (texture2D(waterWaves,.5+entry*${uvScale}).a*255.-128.) * ${1 / (127 * RIPPLE_CURVATURE)};
           curvature += surfaceBend*(-16.+48.*min(r2,1.))*invR2;
