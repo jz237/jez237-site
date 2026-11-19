@@ -21,6 +21,7 @@ import { keptNight, NIGHT_LETHARGY } from '../app/night.mjs';
 import { BED_LEVEL, GLASS_INNER } from '../render/scape/mesh.mjs';
 import { makeBowl } from './scenery.mjs';
 import { addSurfaceLife } from './surfaceLife.mjs';
+import { createBowlOptics } from './glassOptics.mjs';
 import { Slosh, WATER_LEVEL } from './slosh.mjs';
 import '../app/styles.css';
 import './bowl.css';
@@ -174,25 +175,37 @@ export async function startLowPowerBowl() {
   // The small mirror captures objects on the viewer's side of the water.
   // Submerged-only geometry is needed just for views from below the film.
   const submergedTopics = new Set(['fish', 'sand', 'rock', 'driftwood']);
+  const lens = createBowlOptics();
+  const backdrops = [];
   for (const part of pickable) {
     const topic = part.userData.topic;
-    if (topic !== 'water' && topic !== 'glass') part.layers.enable(submergedTopics.has(topic) ? 2 : 1);
+    if (topic === 'glass' || topic === 'water') {
+      backdrops.push(part);
+      if (topic === 'water') lens.install(part, { film: true });
+    } else {
+      part.layers.enable(submergedTopics.has(topic) ? 2 : 1);
+      lens.install(part, { topic, distort: topic !== 'lid' });
+    }
   }
+  lens.install(pellets);
   sky.layers.enable(1);
   key.layers.enable(1);
+  sky.layers.enable(3);
+  key.layers.enable(3);
   function pickTopic(x, y) {
     const rect = canvas.getBoundingClientRect();
-    picker.setFromCamera(new T.Vector2(2 * (x - rect.left) / rect.width - 1, 1 - 2 * (y - rect.top) / rect.height), camera);
-    const hits = picker.intersectObjects(pickable, false);
+    const u = (x - rect.left) / rect.width, v = (y - rect.top) / rect.height;
+    const solid = lens.pick(renderer, scene, camera, u, v);
+    if (solid) return solid;
+    picker.setFromCamera(new T.Vector2(2*u - 1, 1 - 2*v), camera);
+    const hits = picker.intersectObjects(backdrops, false);
     let backdrop = null;
     for (const hit of hits) {
       const topic = hit.object.userData.topic;
-      if (topic === 'lid' && !lid.visible) continue;
       if (topic === 'glass') {
         const p = basin.worldToLocal(hit.point.clone());
         backdrop = p.y < surface.heightAt(p.x, p.z) ? 'water' : 'glass';
       } else if (topic === 'water') backdrop = 'water';
-      else return topic;
     }
     return backdrop;
   }
@@ -221,7 +234,7 @@ export async function startLowPowerBowl() {
     new T.MeshPhongMaterial({ color: 0xa5dbe2, transparent: true, opacity: 0.48, depthWrite: false }), 16);
   air.frustumCulled = false;
   air.renderOrder = 2;
-  if (bubbles) basin.add(air);
+  if (bubbles) { basin.add(air); lens.install(air); }
   const bubble = new T.Object3D();
   const aim = new T.Vector3(), view = new T.Vector3(...CAMERA_VIEW);
   const matrix = new T.Matrix4(), point = new T.Vector3(), oldRotation = new T.Quaternion();
@@ -236,7 +249,7 @@ export async function startLowPowerBowl() {
   const pace = new FramePace();
   pace.frameMs = 1000 / 30;
   let last = null, t = 0, nightMix = Number(night.on);
-  const diagnostics = { frames: 0, swim, fish, renderer, painter, controller, surface, learn, waterCare, food, feeding, camera, basin, pickable, get water() { return water; } };
+  const diagnostics = { frames: 0, swim, fish, renderer, painter, controller, surface, learn, waterCare, food, feeding, camera, basin, pickable, lens, get water() { return water; } };
   if (new URLSearchParams(location.search).has('qa')) window.__bettaLow = diagnostics;
   await fish.userData.ready;
   stage.querySelector('.splash')?.remove();
@@ -421,7 +434,9 @@ export async function startLowPowerBowl() {
       aim.fromArray(swim.position).add(basin.position).addScaledVector(view, -1.65 * controller.followZoom);
       controller.followEye.lerp(aim, 1 - Math.exp(-5 * dt));
     }
+    lens.uniforms.lensStrength.value = 0;
     waterFilm.update(renderer, scene, camera, t, nightMix);
+    lens.update(camera, basin, shell, surface);
     renderer.render(scene, camera);
     diagnostics.frames++;
   }

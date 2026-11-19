@@ -124,7 +124,9 @@ export function makeBowl(basin, shell, liquid, slosh) {
   const rim = new T.MeshPhongMaterial({ color: 0x9bc8cf, transparent: true, opacity: 0.63, depthWrite: false, shininess: 70 });
   shell.add(ring(Math.sqrt(1 - BOWL.mouth ** 2), BOWL.beadRadius, BOWL.mouth, rim));
   const sand = sandMaterial();
-  const bed = disc(BED_RADIUS, BED_LEVEL, sand);
+  const bed = new T.Mesh(new T.RingGeometry(0, BED_RADIUS, 80, 10), sand);
+  bed.rotation.x = -Math.PI / 2;
+  bed.position.y = BED_LEVEL;
   bed.receiveShadow = true;
   const sandWall = new T.Mesh(sphereBand(GLASS_INNER, BED_LEVEL, -0.98), sand);
   bed.userData.topic = sandWall.userData.topic = 'sand';
@@ -152,7 +154,7 @@ export function makeBowl(basin, shell, liquid, slosh) {
   const knob = new T.Mesh(new T.CylinderGeometry(BOWL.knobRadius, BOWL.knobRadius, BOWL.knobHeight, 20), dark);
   knob.position.y = BOWL.knobHeight / 2;
   const lamp = disc(BOWL.puckRadius, -0.022, new T.MeshBasicMaterial({ color: 0xffe6ba, side: T.DoubleSide }));
-  lid.add(lip, ring(BOWL.lidRadius - 0.01, 0.013, 0, dark), disc(BOWL.lidRadius - BOWL.rimWidth, 0, rim), knob, lamp);
+  lid.add(lip, ring(BOWL.lidRadius - 0.01, 0.013, 0, dark), disc(BOWL.lidRadius - BOWL.rimWidth, 0, rim.clone()), knob, lamp);
   lid.userData.topic = 'lid';
   basin.add(lid);
   // A contact shadow on the table stays under the bowl as the camera orbits and zooms.

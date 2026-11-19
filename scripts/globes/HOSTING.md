@@ -585,8 +585,11 @@ Tests: `betta-variety.test.mjs` (7).
 
 Living Silk also offers **Low power** in the Graphics selector, or directly at
 `/demos/betta-bowl/?power=low`. This WebGL 2 renderer uses the compact Atelier
-specimen, the bowl's swimming controller and the same furnishing meshes. It draws
-glass with simple materials. Dragging tilts the bowl and excites a damped surface
+specimen, the bowl's swimming controller and the same furnishing meshes. The
+curved glass magnifies the fish and plants according to their depth. A small
+table of refracted rays shifts the animated vertices during the ordinary draw.
+Learn taps use that same projection to identify the visible subject.
+Dragging tilts the bowl and excites a damped surface
 wave. Both planted species bend with the local current, with their roots fixed
 and the betta’s collision boundaries following the leaves. The fish senses flow
 across its body, drifts, and corrects its course. The same current carries food.
