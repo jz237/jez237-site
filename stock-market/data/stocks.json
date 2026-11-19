@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-19T22:25:17.411Z",
+  "updatedAt": "2026-11-19T23:00:42.092Z",
   "source": "yahoo-finance-chart",
   "stocks": [
     {
@@ -1972,7 +1972,7 @@
         20690.25,
         27722.75
       ],
-      "volume": 8326571000,
+      "volume": 8331556000,
       "currency": "USD",
       "exchange": "Nasdaq GIDS",
       "chart": [
@@ -2364,9 +2364,9 @@
         "Global growth data"
       ],
       "kind": "instrument",
-      "price": 103.927,
-      "change": 0.3641,
-      "changeAmount": 0.377,
+      "price": 103.937,
+      "change": 0.3737,
+      "changeAmount": 0.387,
       "prevClose": 103.55,
       "dayLow": 103.588,
       "dayHigh": 103.974,
@@ -2437,10 +2437,10 @@
         103.55,
         103.49,
         103.86,
-        103.927
+        103.937
       ],
       "quoteSource": "yahoo-finance-chart",
-      "quoteUpdatedAt": "2026-11-19T22:15:36.000Z",
+      "quoteUpdatedAt": "2026-11-19T22:50:52.000Z",
       "yahooSymbol": "DX-Y.NYB"
     },
     {
@@ -2464,9 +2464,9 @@
         "Dollar/yield moves"
       ],
       "kind": "instrument",
-      "price": 61958.98,
-      "change": -5.1238,
-      "changeAmount": -3346.082,
+      "price": 62155.26,
+      "change": -4.8232,
+      "changeAmount": -3149.802,
       "prevClose": 65305.062,
       "dayLow": 61456.16,
       "dayHigh": 63985.29,
@@ -2474,7 +2474,7 @@
         57747.766,
         97860.6
       ],
-      "volume": 33412339712,
+      "volume": 33620076544,
       "currency": "USD",
       "exchange": "CCC",
       "chart": [
@@ -2537,10 +2537,10 @@
         64855.8438,
         64893.9453,
         62987.2656,
-        61959.3008
+        62155.2617
       ],
       "quoteSource": "yahoo-finance-chart",
-      "quoteUpdatedAt": "2026-11-19T22:25:29.000Z",
+      "quoteUpdatedAt": "2026-11-19T23:00:52.000Z",
       "yahooSymbol": "BTC-USD"
     },
     {
