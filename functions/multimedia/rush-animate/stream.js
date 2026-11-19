@@ -1,4 +1,4 @@
-const film = 'https://github.com/jz237/multimedia/releases/download/animate-countercurrent-1/animate-countercurrent-1080p.mp4';
+const film = 'https://github.com/jz237/multimedia/releases/download/animate-countercurrent-2/animate-countercurrent-instruments-1080p.mp4';
 
 export async function onRequest({ request }) {
   if (!['GET', 'HEAD'].includes(request.method)) {
@@ -15,9 +15,9 @@ export async function onRequest({ request }) {
   }
   const media = new Headers({
     'Content-Type': 'video/mp4',
-    'Content-Disposition': 'inline; filename="animate-countercurrent-1080p.mp4"',
+    'Content-Disposition': 'inline; filename="animate-countercurrent-instruments-1080p.mp4"',
     'Accept-Ranges': 'bytes',
-    'Cache-Control': 'public, max-age=86400',
+    'Cache-Control': new URL(request.url).searchParams.get('v') === 'instruments-2' ? 'public, max-age=86400' : 'public, max-age=0, must-revalidate',
     'X-Content-Type-Options': 'nosniff',
   });
   for (const field of ['Content-Length', 'Content-Range', 'ETag', 'Last-Modified']) {
