@@ -34126,5 +34126,159 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-11-18-factual-infographic-factual-infographic-orchid-dottyback-th",
+    "title": "Factual infographic: Orchid Dottyback — The Red Sea’s Violet Crevice Hunter",
+    "tests": "Permanent species reservations and complete factual topics read; full catalog searched for accepted species and orchid dottyback aliases: no prior profile. Independent scientific and aquaculture publishers fetched/read. WoRMS accepted identity and empty synonym response verified. No critic, reroll or substitution.; archive_slot=2026-11-18T20:20; concept=orchid-dottyback-plankton-darting-red-sea-ledge-nest; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: reef-fish-infographic; fish_scientific_name: Pseudochromis fridmani",
+    "prompt": "Create the finished premium, fancy, highly detailed, vividly colorful PHOTOREALISTIC reef-fish educational infographic artwork itself. Not a photograph of a print, book, display or app. One flowing asymmetrical aquarium reef atlas, with a magnificent large ORCHID DOTTYBACK emerging from a coral-encrusted rock overhang into a ribbon of turquoise water. Dominant electric orchid purple and magenta fish against sunlit teal water, amber reef ledge highlights and deep indigo crevices. Extremely convincing underwater photographic realism: delicate scale microtexture, translucent fin membranes, tiny fin rays, moist reflective eye, soft particulate bokeh, realistic caustics and layered reef depth. Elegant confident typography, open callouts, gracefully curved leaders and organically nested biological close-ups; no rigid grid, detached dashboard cards, numbered fact boxes, cartoons or flat vector poster. Rich information woven through sumptuous artwork with genuine breathing room.\n\nExact prominent headline “ORCHID DOTTYBACK”; directly underneath in italic scientific lettering “Pseudochromis fridmani”. Secondary phrase “The Red Sea’s violet crevice hunter”. The hero curves diagonally from lower-left refuge toward upper-right open water, occupying almost half of the image. Depict only this real fish species, not a hybrid, strawberry dottyback, royal gramma or another purple fish. Correct slender elongated dottyback silhouette, long continuous dorsal fin, credible anal, pectoral and pelvic fins, natural rounded tail and no added streamers or imaginary structures. Its rich magenta-violet body is unbroken by decorative stripes; the diagnostic black oblique line crosses the eye from the snout. No two-tone yellow body or tail. A small open leader reads “Black eye stripe”; another fine dimension marker reads “Recorded max: 6.3 cm / 2.5 in”. No invented internal dissection. Use coherent aquarium-spectrum illumination to reveal the purple coloration; do not pretend a deep-water natural scene would always have the same color.\n\nMake the ledge and negative space form a sweeping visual narrative rather than separate panels. In the top-left quiet water integrate a subtle accurate Red Sea locator silhouette, restrained and recognizable between northeast Africa and Arabia, with simple labels “RED SEA” and “Wild habitat: reef walls, ledges & overhangs”. Do not draw a global range spanning other tropical oceans. Tiny open side note “Small holes provide quick refuge”. The reef rock should show real crevices, encrusting organisms and restrained warm coral accents, not fanciful glowing crystal caves. Coral scenery is context, never a second featured organism or an unsupported species-specific partnership.\n\nAt the hero's mouth, a gentle curved current line brings a few tiny realistic zooplankton silhouettes through the blue water; label this nonliteral enlarged study “Feeding study — prey enlarged”. A light two-direction arc visually links the fish to its nearby refuge with concise text “Dart out for zooplankton → return to cover”. Show a beautiful nested photographic face-and-fin detail close to the tail's negative space, focusing on the black eye stripe, translucent violet fin edge and iridescent scale texture. Connect the head detail to the hero with one delicate line; keep the same species and correct markings. An airy optical annotation below it reads “Light changes the look: deeper seawater filters red light; the fish can appear blue.” This is an explanation, not a color-morph comparison or a second fish species. Avoid invented wavelengths or measured color patches.\n\nBelow the rock overhang let a softly feathered close view of a small cave open into the main artwork, explicitly labeled “Nesting detail — schematic, enlarged”. Within the cave depict a modest cohesive rounded egg mass with tiny connecting filament threads and a smaller same-species male nearby, without unsupported egg counts or precise egg-size scale. Two accurate labels: “Eggs held together by fine threads” and “Male tends the cave nest”. Small research note in open space: “Captive study: incubation about 96 h at 27 ± 1 °C.” Beneath in subordinate type: “Study conditions, not a universal schedule.” Do not add a generic fry-life-cycle timeline or assert that spawning guarantees survival. No mouths holding eggs or anemone association.\n\nOn the right a broad arc of clean softly lit water carries the heading “IN THE AQUARIUM — husbandry guidance”. Use these exact short readable lines, not dense paragraphs:\n“Feed varied small meaty foods; cultured fish also accept prepared foods.”\n“Provide plenty of rockwork and hiding places.”\n“Moderately territorial: similar-looking fish and other dottybacks may be challenged.”\n“Generally coral-compatible; very small shrimp may be chased.”\n“Biota suggested volume: 114 L / 30 US gal.”\nThe last small caveat reads “Not a stocking guarantee: individual behavior and the whole community matter.” Distinguish these captive-care recommendations visually from wild habitat facts. Never imply all peaceful fish, shrimp or tankmates are safe; no blanket ‘perfect nano fish’ or ‘pest eradication’ promise. Do not depict a fish attacking a coral or a huge shrimp. No unsupported lifespan, water parameter tables, conservation status, venom, toxicity or physiological cutaways. A modest “Captive-bred specimens are available” note can connect to the nesting detail, without claiming all trade specimens are captive-bred.\n\nKeep readability at every hierarchy, the common/scientific name pair clear, the hero beautifully lit and visually dominant, and the supporting studies varied in scale. Organic connecting curves can follow the reef ledge and fish movement. Keep margins and calm water around text, not a densely packed catalog. Photorealistic fish, reef textures and biological studies; delicate technical annotation only where useful. Tiny credit line: “FishBase • ORA • Biota • JCU / Chen et al. 2023 • WoRMS”. Direct finished educational artwork with no people, picture frame, photographed page, museum case, decorative props or UI.",
+    "image": "images/2026-11-18-factual-infographic-factual-infographic-orchid-dottyback-th.jpg",
+    "thumb": "thumbs/2026-11-18-factual-infographic-factual-infographic-orchid-dottyback-th.webp",
+    "color": "#4d5262",
+    "date": "2026-11-18",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1122x1402",
+    "dedup": {
+      "conceptKey": "orchid-dottyback-plankton-darting-red-sea-ledge-nest",
+      "imageSha256": "6049ef7e3f6732fe2d3e1be7b416cfb194117cf292b0e7e42d575b03c3b10532",
+      "imageDHash": "c0c424a43c8b6140"
+    },
+    "factualInfographic": {
+      "topic": "Orchid dottyback (Pseudochromis fridmani) Red Sea ledge foraging, cave nesting and aquarium compatibility",
+      "description": "Photorealistic reef atlas connecting Red Sea refuge and plankton feeding, male cave-nest care and carefully qualified aquarium guidance.",
+      "sourceNote": "Actually read FishBase species summary, ORA culture guidance, Biota product care specifications and Proaquatix husbandry, JCU published abstract and WoRMS accepted/synonym endpoints. Sources: https://www.fishbase.se/summary/Pseudochromis-fridmani.html ; https://www.orafarm.com/product/orchid-dottyback/ ; https://shop.thebiotagroup.com/products/fridmani-dottyback ; https://shop.thebiotagroup.com/products/orchid-dottyback-proaquatix-friday-delivery ; https://researchonline.jcu.edu.au/80859/ ; https://www.marinespecies.org/rest/AphiaRecordsByName/Pseudochromis%20fridmani?like=false&marine_only=true ; https://www.marinespecies.org/rest/AphiaSynonymsByAphiaID/218336",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-19T01:23:46.105522+00:00",
+        "sources": [
+          {
+            "id": "fishbase",
+            "publisher": "FishBase Consortium",
+            "title": "Pseudochromis fridmani species summary",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://www.fishbase.se/summary/Pseudochromis-fridmani.html"
+          },
+          {
+            "id": "ora",
+            "publisher": "Oceans, Reefs & Aquariums",
+            "title": "Orchid Dottyback species and culture guidance",
+            "sourceType": "manufacturer-technical-documentation",
+            "url": "https://www.orafarm.com/product/orchid-dottyback/"
+          },
+          {
+            "id": "biota",
+            "publisher": "The Biota Group",
+            "title": "Fridmani Dottyback culture specifications",
+            "sourceType": "manufacturer-technical-documentation",
+            "url": "https://shop.thebiotagroup.com/products/fridmani-dottyback"
+          },
+          {
+            "id": "proaquatix",
+            "publisher": "The Biota Group",
+            "title": "Orchid Dottyback Proaquatix care guidance",
+            "sourceType": "manufacturer-technical-documentation",
+            "url": "https://shop.thebiotagroup.com/products/orchid-dottyback-proaquatix-friday-delivery"
+          },
+          {
+            "id": "chen",
+            "publisher": "James Cook University",
+            "title": "Chen, Zeng and Cobcroft (2023), Year-Round Spawning, Filial Cannibalism, and Embryonic and Larval Development of Pseudochromis fridmani; Fishes 8:451, abstract",
+            "sourceType": "university",
+            "url": "https://researchonline.jcu.edu.au/80859/"
+          },
+          {
+            "id": "worms",
+            "publisher": "World Register of Marine Species",
+            "title": "Accepted Pseudochromis fridmani taxon 218336",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://www.marinespecies.org/rest/AphiaRecordsByName/Pseudochromis%20fridmani?like=false&marine_only=true"
+          },
+          {
+            "id": "synonyms",
+            "publisher": "World Register of Marine Species",
+            "title": "Synonym lookup 218336: 204 no synonyms returned",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://www.marinespecies.org/rest/AphiaSynonymsByAphiaID/218336"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Accepted species is Pseudochromis fridmani Klausewitz, 1968; marine Pseudochromidae; WoRMS synonym endpoint returns no synonyms.",
+            "sourceIds": [
+              "worms",
+              "synonyms"
+            ]
+          },
+          {
+            "claim": "Known only from the Red Sea; marine reef-associated fish on vertical rock faces or beneath overhangs, taking refuge in small holes.",
+            "sourceIds": [
+              "fishbase",
+              "ora"
+            ]
+          },
+          {
+            "claim": "Recorded maximum total length is 6.3 cm, about 2.5 inches.",
+            "sourceIds": [
+              "fishbase"
+            ]
+          },
+          {
+            "claim": "Purple/magenta fish with a diagnostic black line through the eye; aquarium illumination shows purple, while red-light filtering can make wild deeper fish appear blue.",
+            "sourceIds": [
+              "biota",
+              "proaquatix",
+              "ora"
+            ]
+          },
+          {
+            "claim": "Darts from reef ledges to feed on passing zooplankton and returns to shelter.",
+            "sourceIds": [
+              "ora"
+            ]
+          },
+          {
+            "claim": "Aquarium foods include mysid and brine shrimp, krill, pellets and flakes for cultured fish.",
+            "sourceIds": [
+              "ora",
+              "proaquatix"
+            ]
+          },
+          {
+            "claim": "Moderately territorial; provide many hiding places; may fight conspecifics and similar-looking fish. More peaceful than many other dottybacks does not mean aggression-free.",
+            "sourceIds": [
+              "ora",
+              "proaquatix"
+            ]
+          },
+          {
+            "claim": "Generally compatible with corals, but may chase very small shrimp; reef-safe is not a guarantee for every small mobile invertebrate.",
+            "sourceIds": [
+              "proaquatix",
+              "biota"
+            ]
+          },
+          {
+            "claim": "Biota suggested tank size 30 US gallons, approximately 114 liters; this is husbandry guidance rather than a wild biological threshold.",
+            "sourceIds": [
+              "biota"
+            ]
+          },
+          {
+            "claim": "Egg mass held by filamentous threads is deposited in nooks or caves and tended by the male.",
+            "sourceIds": [
+              "ora"
+            ]
+          },
+          {
+            "claim": "Captive breeding is established; one published captive study found approximately 96 hour incubation at 27 ± 1 degrees Celsius, not a universal timer.",
+            "sourceIds": [
+              "chen"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
