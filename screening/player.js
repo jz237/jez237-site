@@ -30,7 +30,7 @@ async function bufferedCopy() {
   try {
     // Some native media stacks use a separate network session. A first-party fetch
     // carries the screening cookie and hands this short movie to the same controls.
-    const response = await fetch('/screening/01/film.mp4', {credentials:'same-origin', cache:'no-store'});
+    const response = await fetch(film.querySelector('source').src, {credentials:'same-origin', cache:'no-store'});
     if (!response.ok || response.headers.get('Content-Type') !== 'video/mp4') throw new Error('Unavailable');
     const file = await response.blob();
     bufferedURL = URL.createObjectURL(file);

@@ -28,6 +28,39 @@ async function verified(ticket) {
   const actual = await crypto.subtle.digest('SHA-256', raw);
   return crypto.subtle.timingSafeEqual(digest, actual) ? raw : null;
 }
+// Native phone players can open media in a separate network session. Wrap the
+// film key in a short-lived, video-only ticket on this site's HTTPS media URL.
+const purpose = new TextEncoder().encode('screening/01/film.mp4');
+const ticketLifetime = 2 * 60 * 60;
+function transport(bytes) {
+  return btoa(String.fromCharCode(...bytes)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+}
+function wrapperKey(env, usage) {
+  return crypto.subtle.importKey('raw', bytes(env.SCREEN01_MEDIA_TICKETS_V1), 'AES-GCM', false, [usage]);
+}
+async function makeVideoURL(env, raw) {
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const payload = new Uint8Array(36);
+  new DataView(payload.buffer).setUint32(0, Math.floor(Date.now() / 1000) + ticketLifetime);
+  payload.set(raw, 4);
+  const sealed = await crypto.subtle.encrypt({name: 'AES-GCM', iv, additionalData: purpose}, await wrapperKey(env, 'encrypt'), payload);
+  const ticket = new Uint8Array(12 + sealed.byteLength);
+  ticket.set(iv); ticket.set(new Uint8Array(sealed), 12);
+  return base + 'film.mp4?p=' + transport(ticket);
+}
+async function readVideoTicket(env, value) {
+  if (!value || !/^[\w-]{86}$/.test(value)) return null;
+  try {
+    const sealed = bytes(value);
+    const data = await crypto.subtle.decrypt({name: 'AES-GCM', iv: sealed.subarray(0,12), additionalData: purpose},
+      await wrapperKey(env, 'decrypt'), sealed.subarray(12));
+    const now = Math.floor(Date.now() / 1000);
+    const expires = new DataView(data).getUint32(0);
+    return data.byteLength === 36 && expires > now && expires <= now + ticketLifetime ? new Uint8Array(data, 4) : null;
+  } catch {
+    return null;
+  }
+}
 function sessionTicket(request) {
   const fields = (request.headers.get('Cookie') || '').split(';').map(s => s.trim());
   const field = fields.find(s => s.startsWith(cookieName + '='));
@@ -113,14 +146,22 @@ export async function onRequest({request, env}) {
   }
   if (!['GET', 'HEAD'].includes(request.method)) return blank(405, {Allow: 'GET, HEAD'});
   if (!['', 'film.mp4', 'poster.jpg'].includes(route)) return blank(404);
-  const raw = await verified(sessionTicket(request));
+  let raw = await verified(sessionTicket(request));
+  if (!raw && route === 'film.mp4') raw = await readVideoTicket(env, url.searchParams.get('p'));
   if (!raw) {
     if (route) return blank(404);
     return new Response(request.method === 'HEAD' ? null : locked, {headers: {...headers, 'Content-Type':'text/html; charset=utf-8'}});
   }
-  const [asset,type] = route === 'film.mp4' ? [screening.assets.film, 'video/mp4']
-    : route === 'poster.jpg' ? [screening.assets.still, 'image/jpeg'] : [screening.assets.card, 'text/html; charset=utf-8'];
   try {
+    if (!route) {
+      const meta = {...headers, 'Content-Type': 'text/html; charset=utf-8'};
+      if (request.method === 'HEAD') return new Response(null, {headers:meta});
+      const card = screening.assets.card;
+      const content = await openBytes(request, env, card, raw, 0, card.size-1);
+      const url = await makeVideoURL(env, raw);
+      return new Response(new TextDecoder().decode(content).replaceAll(base+'film.mp4', url), {headers:meta});
+    }
+    const [asset,type] = route === 'film.mp4' ? [screening.assets.film, 'video/mp4'] : [screening.assets.still, 'image/jpeg'];
     return await assetResponse(request, env, raw, asset, type);
   } catch {
     return blank(503, {'Retry-After': '5'});

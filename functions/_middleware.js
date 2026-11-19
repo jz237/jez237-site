@@ -136,7 +136,7 @@ export async function onRequest(context) {
 
   const contentType = response.headers.get("content-type") || "";
 
-  if (!contentType.includes("text/html")) {
+  if (url.pathname.startsWith("/screening/") || !contentType.includes("text/html")) {
     return response;
   }
 
