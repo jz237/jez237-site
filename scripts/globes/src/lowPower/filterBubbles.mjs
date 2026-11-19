@@ -1,4 +1,4 @@
-import { DynamicDrawUsage, InstancedMesh, MeshPhongMaterial, Object3D, SphereGeometry, Vector3 } from 'three';
+import { DynamicDrawUsage, InstancedBufferAttribute, InstancedMesh, MathUtils, MeshPhongMaterial, Object3D, SphereGeometry, Vector3 } from 'three';
 import { GLASS_INNER } from '../render/scape/mesh.mjs';
 
 const CAPACITY = 16;
@@ -12,6 +12,7 @@ export class FilterBubbles {
   outlet = new Vector3();
   flow = [0, 0, 0];
   instance = new Object3D();
+  lensWeight = new InstancedBufferAttribute(new Float32Array(CAPACITY), 1).setUsage(DynamicDrawUsage);
   emission = 1;
   serial = 0;
 
@@ -20,6 +21,7 @@ export class FilterBubbles {
     this.mesh.name = 'Filter bubbles';
     this.mesh.count = 0;
     this.mesh.instanceMatrix.setUsage(DynamicDrawUsage);
+    this.mesh.geometry.setAttribute('lensWeight', this.lensWeight);
     this.mesh.frustumCulled = false;
     this.mesh.renderOrder = 2;
   }
@@ -66,9 +68,17 @@ export class FilterBubbles {
       this.instance.position.copy(p);
       this.instance.scale.setScalar(drop.radius);
       this.instance.updateMatrix();
+      // Emerge at the rigid outlet, then take on the same refraction as the
+      // water where the bubble pops. Use its actual travel in the current.
+      const travel = p.distanceTo(this.outlet);
+      const progress = travel / (travel + top - p.y);
+      this.lensWeight.setX(count, MathUtils.smoothstep(progress, .15, .8));
       this.mesh.setMatrixAt(count++, this.instance.matrix);
     }
     this.mesh.count = count;
-    if (count) this.mesh.instanceMatrix.needsUpdate = true;
+    if (count) {
+      this.mesh.instanceMatrix.needsUpdate = true;
+      this.lensWeight.needsUpdate = true;
+    }
   }
 }

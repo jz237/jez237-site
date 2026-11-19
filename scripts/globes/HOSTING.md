@@ -593,7 +593,9 @@ Dragging tilts the bowl and excites a damped surface
 wave. Both planted species bend with the local current, with their roots fixed
 and the betta’s collision boundaries following the leaves. The fish senses flow
 across its body, drifts, and corrects its course. The same current carries food.
-Filter bubbles leave the moving outlet, rise with buoyancy and drift in the
+The sponge filter, lift tube and airline tilt together as rigid hardware.
+Filter bubbles gradually take on the glass magnification as they leave the
+outlet, rise with buoyancy and drift in the
 local current. They pop where they reach the moving surface. When the betta
 opens its mouth to gulp at the surface, its lips start a single spreading ring.
 These ripples share the 65 × 65 surface field with slosh and pellet impacts.

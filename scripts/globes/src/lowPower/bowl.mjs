@@ -192,7 +192,8 @@ export async function startLowPowerBowl() {
       } else walls.push(part);
     } else {
       part.layers.enable(submergedTopics.has(topic) ? 2 : 1);
-      lens.install(part, { topic, distort: topic !== 'lid' });
+      // Keep the sponge, lift tube and airline rigid as the wet edge crosses them.
+      lens.install(part, { topic, distort: topic !== 'lid' && topic !== 'filter' });
     }
   }
   lens.install(pellets);

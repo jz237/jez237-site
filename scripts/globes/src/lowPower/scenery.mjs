@@ -18,7 +18,10 @@ const palette = Object.fromEntries(Object.entries(colours).map(([k, hex]) => [k,
 
 function furnishings(scene, waterFilm) {
   const material = new T.MeshLambertMaterial({ vertexColors: true, side: T.DoubleSide });
+  // The rigid filter and the refracted furnishings need distinct vertex programs.
+  const filterMaterial = material.clone();
   waterFilm.illuminate(material);
+  waterFilm.illuminate(filterMaterial);
   const pieces = buildScapePieces({ detail: 0.28 });
   const obstacles = pieces.flatMap(p => p.obstacles);
   const plants = new Map();
@@ -41,7 +44,7 @@ function furnishings(scene, waterFilm) {
     geometry.setAttribute('color', new T.BufferAttribute(colour, 3));
     geometry.setIndex(new T.BufferAttribute(indices, 1));
     if (mesh.motion) plants.set(mesh.name, movingPlant(mesh, geometry, obstacles));
-    const part = new T.Mesh(geometry, material);
+    const part = new T.Mesh(geometry, mesh.name === 'filter' ? filterMaterial : material);
     part.name = mesh.name;
     part.userData.topic = ({ driftwood: 'driftwood', rocks: 'rock', plantTall: 'anubias', plantSmall: 'rosette' })[mesh.name] ?? (materials.includes(MAT.HEATER) ? 'heater' : 'filter');
     if (materials.includes(MAT.HEATER_LAMP)) {

@@ -33,6 +33,20 @@ test('released bubbles carry momentum across a reversal and pop at the advected 
   assert.equal(stream.mesh.count,0);
 });
 
+test('a bubble starts at the rigid tube and reaches full glass refraction before popping', () => {
+  const stream = new FilterBubbles({at: [-.2,-.1,0], radius: .006, rate: .01});
+  const water = new Slosh(), rotation = new Matrix3(), weights = [];
+  for (let i = 0; i < 120; i++) {
+    stream.update(1/60, rotation, water, () => -.6);
+    if (stream.mesh.count) weights.push(stream.mesh.geometry.getAttribute('lensWeight').getX(0));
+  }
+  assert.equal(weights[0], 0);
+  assert.ok(weights.some(w => w > .25 && w < .75));
+  assert.ok(weights.every((w,i) => i === 0 || w >= weights[i-1]));
+  assert.equal(weights.at(-1), 1);
+  assert.equal(stream.mesh.count, 0);
+});
+
 test('a dimple on a tilted surface travels out from its contact point', () => {
   const water = new Slosh();
   for (let i=0; i<90; i++) water.step(1/30,[3,-24,0],[0,0,0]);

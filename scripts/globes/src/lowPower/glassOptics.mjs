@@ -77,17 +77,19 @@ export function createBowlOptics(waves) {
     installed.add(material);
     const original = material.onBeforeCompile.bind(material);
     const key = material.customProgramCacheKey();
-    material.customProgramCacheKey = () => key + '-bowl-' + Number(distort) + Number(!!topic);
+    const weighted = mesh.geometry.hasAttribute('lensWeight');
+    material.customProgramCacheKey = () => key + '-bowl-' + Number(distort) + Number(!!topic) + Number(weighted);
     material.onBeforeCompile = (shader, renderer) => {
       original(shader, renderer);
       Object.assign(shader.uniforms, uniforms);
       if (distort) {
         // mvPosition already contains instance transforms and animated fins.
         // Keep physical positions for shadow, lighting and mirror coordinates.
-        shader.vertexShader = optics + (film
+        const viewPosition = weighted ? 'mix(mvPosition,throughBowl(mvPosition),lensWeight)' : 'throughBowl(mvPosition)';
+        shader.vertexShader = (weighted ? 'attribute float lensWeight;\n' : '') + optics + (film
           ? shader.vertexShader.replace('projectionMatrix * viewMatrix * world', 'projectionMatrix * throughBowl(viewMatrix * world)')
           : shader.vertexShader.replace('#include <logdepthbuf_vertex>',
-            'gl_Position = projectionMatrix * throughBowl(mvPosition);\n#include <logdepthbuf_vertex>'));
+            'gl_Position = projectionMatrix * ' + viewPosition + ';\n#include <logdepthbuf_vertex>'));
       }
       if (topic) {
         shader.vertexShader = 'attribute float lessonId; varying float vLesson;\n' +
