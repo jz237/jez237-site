@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-18T22:55:52.628Z",
+  "updatedAt": "2026-11-19T02:09:27.806Z",
   "source": "yahoo-finance-chart",
   "stocks": [
     {
@@ -2364,21 +2364,20 @@
         "Global growth data"
       ],
       "kind": "instrument",
-      "price": 103.782,
-      "change": 0.3597,
-      "changeAmount": 0.372,
+      "price": 103.841,
+      "change": 0.4168,
+      "changeAmount": 0.431,
       "prevClose": 103.41,
-      "dayLow": 103.586,
-      "dayHigh": 103.911,
+      "dayLow": 103.77,
+      "dayHigh": 103.858,
       "range52w": [
         95.55,
-        103.911
+        103.858
       ],
       "volume": 0,
       "currency": "USD",
       "exchange": "ICE Futures",
       "chart": [
-        99.17,
         99.16,
         99.7,
         99.43,
@@ -2437,10 +2436,11 @@
         103.41,
         103.55,
         103.49,
-        103.782
+        103.782,
+        103.841
       ],
       "quoteSource": "yahoo-finance-chart",
-      "quoteUpdatedAt": "2026-11-18T22:46:02.000Z",
+      "quoteUpdatedAt": "2026-11-19T01:59:41.000Z",
       "yahooSymbol": "DX-Y.NYB"
     },
     {
@@ -2464,21 +2464,20 @@
         "Dollar/yield moves"
       ],
       "kind": "instrument",
-      "price": 62159.44,
-      "change": -3.0698,
-      "changeAmount": -1968.61,
-      "prevClose": 64128.05,
-      "dayLow": 62227.746,
-      "dayHigh": 64884.81,
+      "price": 62645.69,
+      "change": -4.0722,
+      "changeAmount": -2659.372,
+      "prevClose": 65305.062,
+      "dayLow": 62382.484,
+      "dayHigh": 63210.613,
       "range52w": [
         57747.766,
         97860.6
       ],
-      "volume": 29589133312,
+      "volume": 30772508672,
       "currency": "USD",
       "exchange": "CCC",
       "chart": [
-        81142.6094,
         86602.9141,
         86172.2813,
         84383.0078,
@@ -2537,10 +2536,11 @@
         65305.0625,
         64855.8438,
         64893.9453,
-        62159.4414
+        62159.4414,
+        62645.6914
       ],
       "quoteSource": "yahoo-finance-chart",
-      "quoteUpdatedAt": "2026-11-18T22:56:02.000Z",
+      "quoteUpdatedAt": "2026-11-19T02:09:39.000Z",
       "yahooSymbol": "BTC-USD"
     },
     {
@@ -2565,21 +2565,20 @@
         "Geopolitics"
       ],
       "kind": "instrument",
-      "price": 81.89,
-      "change": -7.5316,
-      "changeAmount": -6.67,
+      "price": 82.92,
+      "change": -6.3686,
+      "changeAmount": -5.64,
       "prevClose": 88.56,
-      "dayLow": 81.2,
-      "dayHigh": 84.77,
+      "dayLow": 81.69,
+      "dayHigh": 83.11,
       "range52w": [
         54.98,
         119.48
       ],
-      "volume": 243419,
+      "volume": 11667,
       "currency": "USD",
       "exchange": "NY Mercantile",
       "chart": [
-        82.23,
         83.53,
         83.4,
         85.76,
@@ -2638,10 +2637,11 @@
         88.56,
         85.72,
         86.01,
-        81.89
+        83.26,
+        82.92
       ],
       "quoteSource": "yahoo-finance-chart",
-      "quoteUpdatedAt": "2026-11-18T22:00:00.000Z",
+      "quoteUpdatedAt": "2026-11-19T01:59:36.000Z",
       "yahooSymbol": "CL=F"
     },
     {
@@ -2666,21 +2666,20 @@
         "Geopolitical risk"
       ],
       "kind": "instrument",
-      "price": 3727.8,
-      "change": -4.0784,
-      "changeAmount": -158.5,
+      "price": 3756,
+      "change": -3.3528,
+      "changeAmount": -130.3,
       "prevClose": 3886.3,
-      "dayLow": 3722.1,
-      "dayHigh": 3859.3,
+      "dayLow": 3727.4,
+      "dayHigh": 3759.4,
       "range52w": [
-        3722.1,
+        3727.4,
         5586.2
       ],
-      "volume": 240473,
+      "volume": 18225,
       "currency": "USD",
       "exchange": "COMEX",
       "chart": [
-        4653.2998,
         4664,
         4529.8999,
         4481.5,
@@ -2739,10 +2738,11 @@
         3886.3,
         3853,
         3864.2,
-        3727.8
+        3741.8999,
+        3756
       ],
       "quoteSource": "yahoo-finance-chart",
-      "quoteUpdatedAt": "2026-11-18T21:59:59.000Z",
+      "quoteUpdatedAt": "2026-11-19T01:59:42.000Z",
       "yahooSymbol": "GC=F"
     }
   ],
