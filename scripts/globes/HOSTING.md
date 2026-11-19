@@ -583,6 +583,41 @@ Tests: `betta-variety.test.mjs` (7).
 
 ## Browser compatibility
 
+Living Silk also offers **Low power** in the Graphics selector, or directly at
+`/demos/betta-bowl/?power=low`. This WebGL 2 renderer uses the compact Atelier
+specimen, the bowl's swimming controller and the same furnishing meshes. The
+curved glass magnifies the fish and plants according to their depth. A small
+table of refracted rays shifts the animated vertices during the ordinary draw.
+Learn taps use that same projection to identify the visible subject.
+Dragging tilts the bowl and excites a damped surface
+wave. Both planted species bend with the local current, with their roots fixed
+and the betta’s collision boundaries following the leaves. The fish senses flow
+across its body, drifts, and corrects its course. The same current carries food.
+The sponge filter, lift tube and airline tilt together as rigid hardware.
+Filter bubbles gradually take on the glass magnification as they leave the
+outlet, rise with buoyancy and drift in the
+local current. They pop where they reach the moving surface. When the betta
+opens its mouth to gulp at the surface, its lips start a single spreading ring.
+These ripples share the 65 × 65 surface field with slosh and pellet impacts.
+Turning the bowl continuously drives the
+arc of glass facing the incoming current. The resulting waves spread across
+the surface and reflect at the wall, where the wet
+glass and the water surface share a moving edge on the inside of the sphere.
+Their slopes distort a cached reflection
+of the bowl. The same ripples focus the lamp into moving bands on the fish,
+plants and sand. Each surface samples the light at its own depth. The bands
+soften at night and in cloudy or tannin-stained water.
+Learn and Water care share the full simulation’s lessons, chemistry, chart and
+saved progress. Feeding, flaring, varieties, Follow and Night work in both modes.
+Full simulation adds ray-traced refraction and a three-dimensional fluid solver.
+
+Auto can select Low power before starting the WebGPU workers on lower-spec
+desktops, software adapters and browsers without WebGPU. A manual choice in the
+selector is remembered. Low power targets 30 frames per second, starts at up to
+720,000 pixels, and scales down when frames take too long. After six seconds
+of steady frames it tries a small resolution increase. A failed increase
+restores the previous size and lengthens the wait before the next try.
+
 Firefox compiles WGSL with naga, which is stricter than Chrome's Tint. Builds up to
 1.6.0 failed there with `Abstract types may only appear in constant expressions` in
 the Koi `koi_map` function, because upstream called `mix()` with only literal
@@ -634,7 +669,8 @@ checkout. Sparse task checkouts are editing-only.
 ## Controls and requirements
 
 Drag to tilt, Ctrl+drag to spin, scroll/pinch to zoom, arrows to change scenes,
-right-click on Koi or Anemone Reef to drop food. WebGPU and a fast GPU are required.
+right-click on Koi or Anemone Reef to drop food. The full simulation requires WebGPU.
+The Betta Bowl also runs in Low power on WebGL 2.
 The original automatically selects a 48-cubed grid for small coarse-pointer
 screens, compared with 128-cubed on desktop. `?res=48&aa=1` explicitly selects a
 lighter desktop run without changing defaults.
