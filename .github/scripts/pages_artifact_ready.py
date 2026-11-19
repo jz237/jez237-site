@@ -15,8 +15,8 @@ def artifact_visible(payload, run_id, attempt, artifact_id, sha):
         raise ValueError('Invalid artifact-list response; publication stopped')
     rows = payload['artifacts']
     total = payload.get('total_count')
-    if type(total) is not int or total != len(rows) or total > 100:
-        raise ValueError('Incomplete artifact list; publication stopped')
+    if type(total) is not int or not 0 <= total <= 100 or len(rows) > 100:
+        raise ValueError('Invalid or paginated artifact list; publication stopped')
     if any(not isinstance(row, dict) for row in rows):
         raise ValueError('Invalid artifact entry; publication stopped')
     name = f'github-pages-{run_id}-{attempt}'
@@ -33,7 +33,11 @@ def artifact_visible(payload, run_id, attempt, artifact_id, sha):
         raise ValueError('Uploaded artifact identity does not match this run; publication stopped')
     if row.get('expired') is not False or type(row.get('size_in_bytes')) is not int or row['size_in_bytes'] <= 0:
         raise ValueError('Uploaded artifact is expired, empty, or incomplete; publication stopped')
-    return True
+    # GitHub's count and rows can become visible at different times just after
+    # upload. An inconsistent snapshot is NOT readiness, but may settle within
+    # the existing deadline. Validate any matching identity above first so a
+    # count mismatch cannot hide a wrong, ambiguous, expired or empty artifact.
+    return total == len(rows)
 
 
 def read_artifacts(endpoint, timeout):
@@ -62,7 +66,7 @@ def wait_for_artifact(repository, run_id, attempt, artifact_id, sha, *, reader=r
         if artifact_visible(payload, run_id, attempt, artifact_id, sha):
             log(f'Exact Pages artifact {artifact_id} is visible for run {run_id}, attempt {attempt}.')
             return checks
-        log(f'Uploaded artifact is not visible yet (check {checks}); waiting before deployment.')
+        log(f'Uploaded artifact is absent or its listing has not settled (check {checks}); waiting before deployment.')
         pause(min(5, max(0, deadline - now())))
     raise ValueError('Uploaded artifact did not become visible within the readiness deadline; no deployment submitted')
 

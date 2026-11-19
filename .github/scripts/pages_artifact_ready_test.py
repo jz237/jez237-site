@@ -101,10 +101,42 @@ class ArtifactReadinessTests(unittest.TestCase):
             artifact_visible(payload, RUN, ATTEMPT, ARTIFACT, SHA)
 
     def test_incomplete_or_malformed_api_data_is_not_readiness(self):
-        for payload in [None, [], {}, {'total_count': 1, 'artifacts': []},
+        self.assertFalse(artifact_visible({'total_count': 1, 'artifacts': []}, RUN, ATTEMPT, ARTIFACT, SHA))
+        for payload in [None, [], {}, {'total_count': -1, 'artifacts': []},
+                        {'total_count': True, 'artifacts': []},
                         {'total_count': 101, 'artifacts': []}, {'total_count': 1, 'artifacts': [None]}]:
             with self.subTest(payload=payload), self.assertRaises(ValueError):
                 artifact_visible(payload, RUN, ATTEMPT, ARTIFACT, SHA)
+
+    def test_inconsistent_count_settles_before_readiness(self):
+        clock = Clock()
+        rows_before_count = visible()
+        rows_before_count['total_count'] = 0
+        replies = iter([{'total_count': 1, 'artifacts': []}, rows_before_count, visible()])
+        self.assertEqual(wait_for_artifact(REPO, RUN, ATTEMPT, ARTIFACT, SHA,
+            reader=lambda *_: next(replies), now=clock.now, pause=clock.pause,
+            log=lambda _: None), 3)
+        self.assertEqual(clock.elapsed, 10)
+
+    def test_persistently_inconsistent_count_never_permits_deployment(self):
+        clock = Clock()
+        payload = visible()
+        payload['total_count'] = 2
+        with self.assertRaisesRegex(ValueError, 'no deployment submitted'):
+            wait_for_artifact(REPO, RUN, ATTEMPT, ARTIFACT, SHA,
+                reader=lambda *_: payload, now=clock.now, pause=clock.pause,
+                timeout=12, log=lambda _: None)
+        self.assertEqual(clock.elapsed, 12)
+
+    def test_inconsistent_count_does_not_hide_unsafe_identity(self):
+        for mutation in [{'id': 999}, {'expired': True}, {'size_in_bytes': 0},
+                         {'workflow_run': {'id': RUN, 'head_sha': 'b' * 40}}]:
+            payload = visible()
+            payload['total_count'] = 2
+            payload['artifacts'][0].update(mutation)
+            with self.subTest(mutation=mutation), self.assertRaises(ValueError):
+                wait_for_artifact(REPO, RUN, ATTEMPT, ARTIFACT, SHA,
+                    reader=lambda *_: payload, pause=lambda _: self.fail('unsafe response retried'))
 
     def test_auth_or_transport_failure_never_permits_deployment(self):
         for error in [ValueError('permission denied'), subprocess.TimeoutExpired('gh', 20)]:
