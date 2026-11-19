@@ -594,7 +594,9 @@ wave. Both planted species bend with the local current, with their roots fixed
 and the betta’s collision boundaries following the leaves. The fish senses flow
 across its body, drifts, and corrects its course. The same current carries food.
 Short ripples travel across a 65 × 65 surface field when the bowl rocks,
-filter bubbles pop, or pellets land. They reflect at the wall, where the wet
+filter bubbles pop, or pellets land. Turning the bowl continuously drives the
+arc of glass facing the incoming current. The resulting waves spread across
+the surface and reflect at the wall, where the wet
 glass and the water surface share a moving edge on the inside of the sphere.
 Their slopes distort a cached reflection
 of the bowl. The same ripples focus the lamp into moving bands on the fish,

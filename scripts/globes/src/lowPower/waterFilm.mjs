@@ -94,8 +94,8 @@ export function makeWaterFilm(liquid, slosh, lamp) {
         vec3 reflection = mix(room,scene.rgb,scene.a*valid);
         float back = smoothstep(-.1,.65,-dot(pos,vec2(dot(eye,tx),dot(eye,tz))));
         float lip = smoothstep(mix(.966,.88,back),.994,r2);
-        reflection = mix(reflection,wall*.065,lip*(.65+.31*back));
-        float opacity = clamp(.065 + .78*fresnel + .48*lip,.08,.98);
+        reflection = mix(reflection,wall*.10,lip*(.40+.27*back));
+        float opacity = clamp(.065 + .78*fresnel + .34*lip,.08,.98);
         gl_FragColor = vec4(reflection,opacity);
         #include <tonemapping_fragment>
         #include <colorspace_fragment>
@@ -126,9 +126,9 @@ export function makeWaterFilm(liquid, slosh, lamp) {
             belowFilm += (1.-weight)*rise;
           }`);
       shader.fragmentShader = 'varying float belowFilm;\n' + shader.fragmentShader.replace('#include <opaque_fragment>', `
-        float line = 1.-smoothstep(.002,.017,belowFilm);
-        outgoingLight = mix(outgoingLight,vec3(.009,.030,.043),line);
-        diffuseColor.a += (1.-diffuseColor.a)*.56*line;
+        float line = 1.-smoothstep(0.,.019,belowFilm);
+        outgoingLight = mix(outgoingLight,vec3(.009,.030,.043),.76*line);
+        diffuseColor.a += (1.-diffuseColor.a)*.37*line;
         #include <opaque_fragment>`);
     };
   }

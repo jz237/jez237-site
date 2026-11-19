@@ -29,8 +29,10 @@ export function makeRippleLight(waves, bend, uvScale, lamp) {
       shader.fragmentShader = `
         uniform sampler2D waterWaves;
         uniform float surfaceBend, rippleLight;
+        uniform vec2 lampSlope;
+        uniform mat4 toLiquid;
         varying vec3 vLightEntry;
-        float focusedLight() {
+        float focusedLight(vec3 viewNormal) {
           const float invR2 = ${1 / SURFACE_RADIUS ** 2};
           vec2 entry = vLightEntry.xy;
           float r2 = min(dot(entry,entry)*invR2,1.);
@@ -50,11 +52,19 @@ export function makeRippleLight(waves, bend, uvScale, lamp) {
           // Converging rays illuminate less area. Bound the peak for a lamp
           // with finite width, and feather the edge of the illuminated disk.
           float area = clamp(1. + .25*depth*curvature, .32, 2.6);
-          return (1./area - 1.) * (1.-smoothstep(.93,1.,r2)) * rippleLight;
+          // Even a broad, gently curved wave turns the lamp across a scale or
+          // leaf. Compare the incident light on that facet before and after
+          // refraction using the same ray deflection as the projected pattern.
+          vec3 facet = mat3(toLiquid)*(viewNormal*mat3(viewMatrix));
+          vec3 above = vec3(lampSlope.x,1.,lampSlope.y);
+          float flatLight = dot(facet,normalize(above));
+          float waveLight = dot(facet,normalize(above-.25*vec3(slope.x,0.,slope.y)));
+          float tiltLight = (max(0.,waveLight)-max(0.,flatLight))/max(.25,flatLight);
+          return ((1.+tiltLight)/area - 1.) * (1.-smoothstep(.93,1.,r2)) * rippleLight;
         }
       ` + shader.fragmentShader.replace('#include <lights_fragment_end>', `
         #include <lights_fragment_end>
-        float caustic = focusedLight();
+        float caustic = focusedLight(normal);
         reflectedLight.directDiffuse *= 1. + caustic;
         reflectedLight.directSpecular *= 1. + caustic;
         // A little scattered light reaches the shade under leaves and fins.

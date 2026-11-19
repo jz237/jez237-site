@@ -1,0 +1,237 @@
+import{a as e,i as t,n,t as r,u as i}from"./mesh-BUPESk9o.js";import{A as a,At as o,B as s,Bn as c,Bt as l,C as u,Ci as d,D as f,Di as p,E as m,Ei as h,Et as g,F as _,Fi as v,Fn as y,G as b,Gn as x,H as S,Hn as C,Ht as w,I as T,Ii as E,It as D,Jr as ee,Jt as te,K as ne,Kn as re,L as ie,Li as O,Lt as ae,M as oe,N as se,Nn as k,O as A,Ot as ce,P as le,Pt as ue,Qt as j,R as de,S as fe,Sn as pe,St as M,U as me,Un as N,V as he,Wn as P,X as ge,Xr as _e,Yn as ve,Yt as ye,Zt as be,_ as xe,_i as Se,_t as Ce,a as F,ai as we,an as Te,ar as Ee,b as De,bt as Oe,d as ke,fi as Ae,gn as je,gr as Me,h as Ne,hn as I,in as Pe,j as Fe,k as Ie,kt as Le,l as Re,ln as ze,m as Be,mn as Ve,n as He,ni as L,or as Ue,pi as R,rr as We,sr as Ge,t as Ke,u as qe,ui as Je,ur as Ye,v as Xe,w as Ze,x as Qe,xt as $e,z,zi as et,zt as B}from"./styles-DDK5oVWV.js";import{n as V}from"./scene-BIPDmWFQ.js";import{l as tt,n as nt,p as rt,s as H,u as it}from"./plantMotion-3Ei3f7Cd.js";var at=`classic`,U=4,ot=e=>le.find(t=>t.id===e)??T(`classic`),st=class{constructor(e,t=()=>{}){this.fish=e,this.onShown=t,this.field=null,this.wanted=at,this.shown=at,this.job=null,this.look=new Float32Array(16),this.canvases={},e.userData.ready.then(()=>this.measure()).catch(()=>{})}async measure(){try{let e=this.fish.children.find(e=>e.name.startsWith(`Arc-length`)),t=this.fish.children.find(e=>e.userData.kind===0),n=this.fish.userData.macroTextures,r=async(e,t,n)=>{let r=await createImageBitmap(e,{resizeWidth:t,resizeHeight:n,resizeQuality:`high`}),i=document.createElement(`canvas`);i.width=t,i.height=n;let a=i.getContext(`2d`,{willReadFrequently:!0});return a.drawImage(r,0,0),r.close?.(),Ie(a.getImageData(0,0,t,n).data)},[i,o,s,c]=await Promise.all([r(e.material.map.image,f.w,f.h),r(t.material.map.image,m.w,m.h),r(n.head.image,64,64),r(n.scales.image,64,64)]),l=se();this.field={...a({profile:i,caudal:o,head:s,scales:c},l),cells:l,caudalOut:A()},oe(le),this.show(this.wanted)}catch(e){console.warn(`[atelier] colour varieties unavailable:`,e)}}get ready(){return!!this.field}show(e){this.wanted=e;let t=this.field;if(!t)return;let n=ot(e),r=this.job={};if(!n.body){this.apply(n,null);return}let i=Fe(n,t),a=()=>{if(this.job!==r)return;let e=performance.now()+U;for(let t=i.next();;t=i.next()){if(t.done)return this.apply(n,t.value);if(performance.now()>e)break}requestAnimationFrame(a)};a()}showNow(e){if(this.wanted=e,!this.field)return!1;let t=ot(e);if(this.job=null,!t.body)return this.apply(t,null),!0;let n=Fe(t,this.field),r=n.next();for(;!r.done;)r=n.next();return this.apply(t,r.value),!0}apply(e,t){t&&(z.uLookProfile.value=this.texture(`profile`,t.profile,f),z.uLookCaudal.value=this.texture(`caudal`,t.caudal,m)),_(e,this.field,this.look),z.uLook.value.fromArray(this.look),this.shown=e.id,this.onShown(e.id)}texture(e,t,{w:n,h:r}){let i=this.canvases[e];if(!i){let t=document.createElement(`canvas`);t.width=n,t.height=r;let a=new B(t);a.colorSpace=Je,a.minFilter=k,a.generateMipmaps=!1,i=this.canvases[e]={canvas:t,texture:a}}return i.canvas.getContext(`2d`).putImageData(new ImageData(new Uint8ClampedArray(t),n,r),0,0),i.texture.needsUpdate=!0,i.texture}},W=65,G=1/60,K=1-Math.exp(-.016666666666666666/.07),q=.085,ct=.85,lt=.16,J=e=>128+Math.round(127*Math.max(-1,Math.min(1,e))),ut=class{size=W;data=new Uint8Array(16900).fill(128);heights=new Float32Array(4225);previous=new Float32Array(4225);shown=new Float32Array(4225);debt=0;flowX=0;flowZ=0;constructor(e){this.radius=e,this.cell=2*e/64,this.propagation=(.77*G/this.cell)**2;let t=[],n=[],r=[],i=[],a=[],o=[],s=[],c=[],l=(e,t)=>(e-32)**2+(t-32)**2<1024;for(let e=1;e<64;e++)for(let r=1;r<64;r++){let i=2*r/64-1,u=2*e/64-1,d=Math.hypot(i,u),f=e*W+r;if(!(d>=1)&&(t.push(f),n.push(l(r-1,e)?f-1:f,l(r+1,e)?f+1:f,l(r,e-1)?f-W:f,l(r,e+1)?f+W:f),d>.64)){a.push(f),o.push(i/d),s.push(u/d);let e=Math.max(0,Math.min(1,(d-.76)/.18)),t=(d-.78)/.052,n=.65*Math.exp(-t*t);c.push(e*e*(3-2*e)-n)}}this.inside=Uint16Array.from(t),this.neighbours=Uint16Array.from(n),this.wall=Uint16Array.from(a),this.normalX=Float32Array.from(o),this.normalZ=Float32Array.from(s),this.coupling=Float32Array.from(c);for(let e=0;e<W;e++)for(let t=0;t<W;t++){let n=Math.hypot(t-32,e-32);if(n<32||n>32+Math.SQRT2)continue;let a=31.25/n;i.push(Math.round(32+(e-32)*a)*W+Math.round(32+(t-32)*a)),r.push(e*W+t)}this.border=Uint16Array.from(r),this.sources=Uint16Array.from(i),this.texels=new Uint32Array(this.data.buffer)}disturb(e,t,n,r){let i=(e+this.radius)/this.cell,a=(t+this.radius)/this.cell,o=n/this.cell,s=Math.max(1,Math.ceil(i-o)),c=Math.min(63,i+o),l=Math.max(1,Math.ceil(a-o)),u=Math.min(63,a+o),d=0,f=0;for(let e=l;e<=u;e++)for(let t=s;t<=c;t++){let n=((t-i)**2+(e-a)**2)/(o*o);n>=1||(t-32)**2+(e-32)**2>=1024||(d+=1-n,f+=(1-n)*n)}if(!d)return;let p=f/d;for(let e=l;e<=u;e++)for(let t=s;t<=c;t++){let n=((t-i)**2+(e-a)**2)/(o*o);n<1&&(t-32)**2+(e-32)**2<1024&&(this.previous[e*W+t]-=3*G*r*(1-n)*(p-n))}}step(e,t,n){this.debt+=e;let r=Math.floor((this.debt+1e-9)/G);if(!r)return;this.debt=Math.max(0,this.debt-r*G);let i=this.neighbours;for(let e=0;e<r;e++){let e=this.heights,r=this.previous,a=0;for(let t of this.inside){let n=e[i[a]]+e[i[a+1]]+e[i[a+2]]+e[i[a+3]]-4*e[t];a+=4,r[t]=e[t]+.972*(e[t]-r[t])+this.propagation*n}let o=K*(t-this.flowX),s=K*(n-this.flowZ);this.flowX+=o,this.flowZ+=s;let c=.5*o/G+1.2*this.flowX,l=.5*s/G+1.2*this.flowZ,u=c*c+l*l,d=1.75*G**2/Math.sqrt(1+u/16),f=1/(.035+u),p=this.flowX*this.flowX+this.flowZ*this.flowZ,m=5.5*G**2/(.34+p);for(let e=0;e<this.wall.length;e++){let t=c*this.normalX[e]+l*this.normalZ[e],n=t*t*f,i=d*t*(.12+.88*n*n*n),a=this.flowX*this.normalX[e]+this.flowZ*this.normalZ[e];r[this.wall[e]]+=this.coupling[e]*(i+m*(a*a-.5*p))}this.previous=e,this.heights=r}let a=this.shown,o=.5/this.cell,s=lt/this.cell**2;for(let e of this.inside){let t=this.heights[e],n=t/q;a[e]=t/Math.sqrt(1+n*n)}let c=0;for(let e of this.inside){let t=a[i[c]],n=a[i[c+1]],r=a[i[c+2]],l=a[i[c+3]];c+=4,this.data[4*e]=J((n-t)*o/ct),this.data[4*e+1]=J((l-r)*o/ct),this.data[4*e+2]=J(a[e]/q),this.data[4*e+3]=J((t+n+r+l-4*a[e])*s)}for(let e=0;e<this.border.length;e++){let t=this.border[e],n=this.sources[e];a[t]=a[n],this.texels[t]=this.texels[n]}}heightAt(e,t){let n=(e*e+t*t)/this.radius**2;if(n>1){let r=1/Math.sqrt(n);e*=r,t*=r}let r=(e+this.radius)/this.cell,i=(t+this.radius)/this.cell,a=Math.max(0,Math.min(63,Math.floor(r))),o=Math.max(0,Math.min(63,Math.floor(i))),s=o*W+a,c=r-a,l=i-o,u=this.shown,d=u[s]+c*(u[s+1]-u[s]);return d+l*(u[s+W]+c*(u[s+W+1]-u[s+W])-d)}},Y=.25,X=Math.sqrt(t**2-Y**2),dt=new E(0,1,0),ft=(e,t)=>Math.max(-t,Math.min(t,e)),pt=class{sx=0;sz=0;vx=0;vz=0;time=0;currentX=0;currentZ=0;normal=dt.clone();rotation=new Ye;inverse=new Ye;bend={value:0};ripples=new ut(X);point=new E;step(e,t,n){this.time+=e;let r=Math.max(1,Math.ceil(e*120)),i=e/r,a=ft(t[0]/24+n[2]*.075,.38),o=ft(t[2]/24-n[0]*.075,.38);for(let e=0;e<r;e++)this.vx+=(48*(a-this.sx)-2.5*this.vx)*i,this.vz+=(48*(o-this.sz)-2.5*this.vz)*i,this.sx+=this.vx*i,this.sz+=this.vz*i;let s=Math.min(1,.37/(Math.hypot(this.sx,this.sz)||1));this.sx*=s,this.sz*=s,this.normal.set(-this.sx,1,-this.sz).normalize(),this.rotation.setFromUnitVectors(dt,this.normal),this.inverse.copy(this.rotation).invert(),this.bend.value=ft((this.vx+this.vz)*.042,.075);let c=Math.min(1,1.85/(Math.hypot(this.vx,this.vz)||1));this.currentX=this.vx*c,this.currentZ=this.vz*c;let l=this.currentX+.32*(n[2]-this.currentX),u=this.currentZ+.32*(-n[0]-this.currentZ);this.ripples.step(e,l,u)}currentAt(e,n,r,i,a,o=0){let s=this.heightAt(e,r),c=Math.max(0,Math.min(1,(n-i)/Math.max(.04,s-i))),l=this.currentX*e+this.currentZ*r,u=Math.max(.1,t**2-n*n),d=.26+.72*c;return a[o]=d*(this.currentX-e*l/u)+.009*Math.sin(.68*this.time+r),a[o+1]=c*l,a[o+2]=d*(this.currentZ-r*l/u)+.006*Math.cos(.47*this.time+e),s}riseAtRestPosition(e,t){let n=Math.min(1,(e*e+t*t)/X**2);return this.bend.value*(1-n)*(1-3*n)+this.ripples.heightAt(e,t)}sampleAtRise(e,n,r,i,a){let o=Y+a,s=X/Math.sqrt(t**2-o*o);return this.riseAtRestPosition((e+r*a)*s,(n+i*a)*s)}localDisplacement(e,t,n=0,r=0,i=-1/0,a=1/0){let o=Math.abs(this.bend.value)+q,s=Math.max(-o,i),c=Math.min(o,a);if(a<=-o||c===a&&this.sampleAtRise(e,t,n,r,c)>=c-1e-5)return a;if(i>=o||s===i&&this.sampleAtRise(e,t,n,r,s)<=s+1e-5)return i;let l=Math.max(s,Math.min(c,0));for(let i=0;i<16;i++){let a=this.sampleAtRise(e,t,n,r,l);if(Math.abs(a-l)<2e-5)return a;a>l?s=l:c=l,l=i<4&&a>=s&&a<=c?a:(s+c)*.5}return l}heightAt(e,n){let r=Y/this.normal.y+this.sx*e+this.sz*n,i=this.point.set(e,r,n).applyQuaternion(this.inverse),a=t**2-e*e-n*n,o=Math.abs(r)+(Math.abs(this.bend.value)+q)/this.normal.y;if(a>=0&&a<o*o){let e=Math.sqrt(a);return r+this.localDisplacement(i.x,i.z,this.sx,this.sz,(-e-r)*this.normal.y,(e-r)*this.normal.y)/this.normal.y}return r+this.localDisplacement(i.x,i.z,this.sx,this.sz)/this.normal.y}},mt=class e extends P{constructor(t,n={}){super(t),this.isReflector=!0,this.type=`Reflector`,this.forceUpdate=!1,this._reflectionCameras=new WeakMap;let r=this,i=n.color===void 0?new w(8355711):new w(n.color),a=n.textureWidth||512,o=n.textureHeight||512,s=n.clipBias||0,c=n.shader||e.ReflectorShader,l=n.multisample===void 0?4:n.multisample,u=new Ue,d=new E,f=new E,p=new E,m=new N,g=new E(0,0,-1),_=new O,v=new E,y=new E,b=new O,x=new N,S=new et(a,o,{samples:l,type:I}),C=new R({name:c.name===void 0?`unspecified`:c.name,uniforms:h.clone(c.uniforms),fragmentShader:c.fragmentShader,vertexShader:c.vertexShader});C.uniforms.tDiffuse.value=S.texture,C.uniforms.color.value=i,C.uniforms.textureMatrix.value=x,this.material=C,this.onBeforeRender=function(e,t,n){let i=this.getReflectionCamera(n);if(f.setFromMatrixPosition(r.matrixWorld),p.setFromMatrixPosition(n.matrixWorld),m.extractRotation(r.matrixWorld),d.set(0,0,1),d.applyMatrix4(m),v.subVectors(f,p),v.dot(d)>0&&this.forceUpdate===!1)return;v.reflect(d).negate(),v.add(f),m.extractRotation(n.matrixWorld),g.set(0,0,-1),g.applyMatrix4(m),g.add(p),y.subVectors(f,g),y.reflect(d).negate(),y.add(f),i.position.copy(v),i.up.set(0,1,0),i.up.applyMatrix4(m),i.up.reflect(d),i.lookAt(y),i.far=n.far,i.updateMatrixWorld(),i.projectionMatrix.copy(n.projectionMatrix),x.set(.5,0,0,.5,0,.5,0,.5,0,0,.5,.5,0,0,0,1),x.multiply(i.projectionMatrix),x.multiply(i.matrixWorldInverse),x.multiply(r.matrixWorld),u.setFromNormalAndCoplanarPoint(d,f),u.applyMatrix4(i.matrixWorldInverse),_.set(u.normal.x,u.normal.y,u.normal.z,u.constant);let a=i.projectionMatrix;i.isOrthographicCamera?(b.x=(Math.sign(_.x)+a.elements[8])/a.elements[0],b.y=(Math.sign(_.y)+a.elements[9])/a.elements[5],b.z=-n.far,b.w=1):(b.x=(Math.sign(_.x)+a.elements[8])/a.elements[0],b.y=(Math.sign(_.y)+a.elements[9])/a.elements[5],b.z=-1,b.w=(1+a.elements[10])/a.elements[14]),_.multiplyScalar(2/_.dot(b)),a.elements[2]=_.x,a.elements[6]=_.y,i.isOrthographicCamera?(a.elements[10]=_.z-s,a.elements[14]=_.w-1):(a.elements[10]=_.z+1-s,a.elements[14]=_.w),r.visible=!1;let o=e.getRenderTarget(),c=e.xr.enabled,l=e.shadowMap.autoUpdate;e.xr.enabled=!1,e.shadowMap.autoUpdate=!1,e.setRenderTarget(S),e.state.buffers.depth.setMask(!0),e.autoClear===!1&&e.clear(),e.render(t,i),e.xr.enabled=c,e.shadowMap.autoUpdate=l,e.setRenderTarget(o);let h=n.viewport;h!==void 0&&e.state.viewport(h),r.visible=!0,this.forceUpdate=!1},this.getRenderTarget=function(){return S},this.dispose=function(){S.dispose(),r.material.dispose()},this.getReflectionCamera=function(e){let t=this._reflectionCameras.get(e);return t===void 0&&(t=e.clone(),this._reflectionCameras.set(e,t)),t}}};mt.ReflectorShader={name:`ReflectorShader`,uniforms:{color:{value:null},tDiffuse:{value:null},textureMatrix:{value:null}},vertexShader:`
+		uniform mat4 textureMatrix;
+		varying vec4 vUv;
+
+		#include <common>
+		#include <logdepthbuf_pars_vertex>
+
+		void main() {
+
+			vUv = textureMatrix * vec4( position, 1.0 );
+
+			gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+
+			#include <logdepthbuf_vertex>
+
+		}`,fragmentShader:`
+		uniform vec3 color;
+		uniform sampler2D tDiffuse;
+		varying vec4 vUv;
+
+		#include <logdepthbuf_pars_fragment>
+
+		float blendOverlay( float base, float blend ) {
+
+			return( base < 0.5 ? ( 2.0 * base * blend ) : ( 1.0 - 2.0 * ( 1.0 - base ) * ( 1.0 - blend ) ) );
+
+		}
+
+		vec3 blendOverlay( vec3 base, vec3 blend ) {
+
+			return vec3( blendOverlay( base.r, blend.r ), blendOverlay( base.g, blend.g ), blendOverlay( base.b, blend.b ) );
+
+		}
+
+		void main() {
+
+			#include <logdepthbuf_fragment>
+
+			vec4 base = texture2DProj( tDiffuse, vUv );
+			gl_FragColor = vec4( blendOverlay( base.rgb, color ), 1.0 );
+
+			#include <tonemapping_fragment>
+			#include <colorspace_fragment>
+
+		}`};function ht(e,n,r,i){let a={value:new N},o={value:new v},s={value:1},c=new E,l=new E,u={waterWaves:e,surfaceBend:n,toLiquid:a,lampSlope:o,rippleLight:s};function d(e){let n=e.onBeforeCompile.bind(e),i=e.customProgramCacheKey();e.customProgramCacheKey=()=>i+`-ripple-light`,e.onBeforeCompile=(e,i)=>{n(e,i),Object.assign(e.uniforms,u),e.vertexShader=`uniform mat4 toLiquid; uniform vec2 lampSlope; varying vec3 vLightEntry;
+`+e.vertexShader.replace(`#include <logdepthbuf_vertex>`,`
+          // mvPosition includes the body wave and fin displacement. It stays in
+          // physical view space even when the glass bends the displayed vertex.
+          vec3 receiver = cameraPosition + mvPosition.xyz * mat3(viewMatrix);
+          vec3 p = (toLiquid * vec4(receiver,1.)).xyz;
+          float depth = ${Y} - p.y;
+          vLightEntry = vec3(p.xz + depth*lampSlope, depth);
+          #include <logdepthbuf_vertex>`),e.fragmentShader=`
+        uniform sampler2D waterWaves;
+        uniform float surfaceBend, rippleLight;
+        uniform vec2 lampSlope;
+        uniform mat4 toLiquid;
+        varying vec3 vLightEntry;
+        float focusedLight(vec3 viewNormal) {
+          const float invR2 = ${1/X**2};
+          vec2 entry = vLightEntry.xy;
+          float r2 = min(dot(entry,entry)*invR2,1.);
+          vec4 wave = texture2D(waterWaves, .5 + entry*${r});
+          vec2 slope = (wave.rg*255.-128.) * ${ct/127};
+          slope += surfaceBend*(-8.+12.*r2)*entry*invR2;
+          float rise = surfaceBend*(1.-r2)*(1.-3.*r2) + (wave.b*255.-128.)*${q/127};
+          float depth = max(0., vLightEntry.z + rise);
+          // In water, a sloped patch deflects light by about (1 - 1/1.333)
+          // times its slope. Backtrack once from the flat-film intersection.
+          entry -= depth*.25*slope;
+          float y = ${Y} + rise;
+          entry *= ${X} * inversesqrt(${t**2} - y*y);
+          r2 = dot(entry,entry)*invR2;
+          float curvature = (texture2D(waterWaves,.5+entry*${r}).a*255.-128.) * ${1/(127*lt)};
+          curvature += surfaceBend*(-16.+48.*min(r2,1.))*invR2;
+          // Converging rays illuminate less area. Bound the peak for a lamp
+          // with finite width, and feather the edge of the illuminated disk.
+          float area = clamp(1. + .25*depth*curvature, .32, 2.6);
+          // Even a broad, gently curved wave turns the lamp across a scale or
+          // leaf. Compare the incident light on that facet before and after
+          // refraction using the same ray deflection as the projected pattern.
+          vec3 facet = mat3(toLiquid)*(viewNormal*mat3(viewMatrix));
+          vec3 above = vec3(lampSlope.x,1.,lampSlope.y);
+          float flatLight = dot(facet,normalize(above));
+          float waveLight = dot(facet,normalize(above-.25*vec3(slope.x,0.,slope.y)));
+          float tiltLight = (max(0.,waveLight)-max(0.,flatLight))/max(.25,flatLight);
+          return ((1.+tiltLight)/area - 1.) * (1.-smoothstep(.93,1.,r2)) * rippleLight;
+        }
+      `+e.fragmentShader.replace(`#include <lights_fragment_end>`,`
+        #include <lights_fragment_end>
+        float caustic = focusedLight(normal);
+        reflectedLight.directDiffuse *= 1. + caustic;
+        reflectedLight.directSpecular *= 1. + caustic;
+        // A little scattered light reaches the shade under leaves and fins.
+        reflectedLight.indirectDiffuse *= 1. + .30*caustic;`)}}function f(e,t){a.value.copy(e.matrixWorld).invert(),i.getWorldPosition(c).sub(i.target.getWorldPosition(l)).transformDirection(a.value);let n=1/1.333,r=Math.sqrt(1-n*n*(1-c.y*c.y));o.value.set(c.x,c.z).multiplyScalar(n/r),s.value=t}return{illuminate:d,update:f}}function gt(e,n,r){let i=n.ripples,a=new be(i.data,i.size,i.size,Me);a.minFilter=a.magFilter=k,a.needsUpdate=!0;let o=((i.size-1)/i.size/(2*X)).toFixed(8),s=new we(0,X,96,28),c=`
+    uniform sampler2D waves;
+    float rippleHeight(vec2 pos) {
+      return (texture2D(waves,.5 + pos*${o}).b*255.-128.) * ${q/127};
+    }
+    float glassRadius(float y) { return sqrt(${t**2} - y*y); }
+  `,l=new mt(s,{textureWidth:320,textureHeight:200,multisample:0,clipBias:.001}),u=l.getRenderTarget();u.texture.type=p;let d={waves:{value:a},bend:n.bend,mirrorMap:{value:u.texture},mirrorProjection:{value:new N},night:{value:0},filmNormal:{value:n.normal}},f=ht(d.waves,d.bend,o,r),m=new R({name:`Rippling water`,uniforms:d,transparent:!0,depthWrite:!1,side:2,forceSinglePass:!0,vertexShader:`
+      ${c}
+      uniform float bend;
+      uniform mat4 mirrorProjection;
+      varying vec2 pos;
+      varying vec3 worldPos;
+      varying vec4 mirrorCoord;
+      void main() {
+        pos = vec2(position.x, -position.y);
+        float r2 = dot(pos,pos) / ${X**2};
+        float height = bend * (1.-r2) * (1.-3.*r2) + rippleHeight(pos);
+        float scale = glassRadius(${Y}+height) / ${X};
+        vec4 world = modelMatrix * vec4(position.xy*scale, height, 1.);
+        worldPos = world.xyz;
+        mirrorCoord = mirrorProjection * world;
+        gl_Position = projectionMatrix * viewMatrix * world;
+      }`,fragmentShader:`
+      uniform sampler2D waves, mirrorMap;
+      uniform float bend, night;
+      uniform vec3 filmNormal;
+      varying vec2 pos;
+      varying vec3 worldPos;
+      varying vec4 mirrorCoord;
+      const vec3 dayWall = vec3(${He.wallCore});
+      const vec3 darkWall = vec3(${F.wallCore});
+      void main() {
+        float r2 = dot(pos,pos) / ${X**2};
+        vec2 slope = (texture2D(waves, .5 + pos * ${o}).rg * 255. - 128.) * ${ct}/127.;
+        slope += bend * (-8. + 12.*r2) * pos / ${X**2};
+        // The curved meniscus catches the room at a different angle to the open film.
+        slope += .50 * smoothstep(.945,1.,r2) * pos;
+        // Tangents of the tilted film, from the same shortest-arc rotation as Slosh.
+        vec3 n = filmNormal;
+        vec2 spin = n.xz / (1.+n.y);
+        vec3 tx = vec3(1.-n.x*spin.x, -n.x, -n.z*spin.x);
+        vec3 tz = vec3(-n.x*spin.y, -n.z, 1.-n.z*spin.y);
+        vec3 N = normalize(n - tx*slope.x - tz*slope.y);
+        vec3 eye = normalize(cameraPosition-worldPos), ray = reflect(-eye,N);
+        float angle = abs(dot(N,eye));
+        float fresnel = .021 + .979 * pow(1.-min(angle,1.),5.);
+        bool above = dot(n,eye) >= 0.;
+        if (!above) fresnel = max(fresnel, 1.-smoothstep(.60,.72,angle));
+
+        vec3 wall = mix(dayWall,darkWall,night);
+        float horizon = 1.-smoothstep(.01,.13,abs(ray.y-.105));
+        vec3 room = wall * (.18 + .52*smoothstep(-.1,.35,ray.y));
+        room += mix(vec3(.042,.085,.115),vec3(.006,.015,.038),night) * horizon;
+        // Two soft reflections where the lights meet the glass and the blue backdrop.
+        float strip = (1.-smoothstep(.005,.032,abs(ray.y-.08-.11*ray.x))) *
+                      (1.-smoothstep(.05,.28,abs(ray.x+.20)));
+        float side = (1.-smoothstep(.012,.050,abs(ray.x-.23))) *
+                     (1.-smoothstep(.07,.30,abs(ray.y-.17)));
+        room += mix(vec3(.73,.79,.69),vec3(.08,.14,.32),night) * (.55*strip+.23*side);
+        vec2 uv = mirrorCoord.xy / max(mirrorCoord.w,.001);
+        uv += (mat3(viewMatrix) * (N-n)).xy * .058;
+        vec4 scene = texture2D(mirrorMap,clamp(uv,0.,1.));
+        float valid = step(0.,min(uv.x,uv.y))*step(max(uv.x,uv.y),1.)*step(.001,mirrorCoord.w);
+        vec3 reflection = mix(room,scene.rgb,scene.a*valid);
+        float back = smoothstep(-.1,.65,-dot(pos,vec2(dot(eye,tx),dot(eye,tz))));
+        float lip = smoothstep(mix(.966,.88,back),.994,r2);
+        reflection = mix(reflection,wall*.10,lip*(.40+.27*back));
+        float opacity = clamp(.065 + .78*fresnel + .34*lip,.08,.98);
+        gl_FragColor = vec4(reflection,opacity);
+        #include <tonemapping_fragment>
+        #include <colorspace_fragment>
+      }`}),h=new P(s,m);h.rotation.x=-Math.PI/2,h.position.y=Y,h.userData.topic=`water`,h.renderOrder=3,e.add(h);function g(e){e.onBeforeCompile=e=>{e.uniforms.waves=d.waves,e.vertexShader=c+`varying float belowFilm;
+`+e.vertexShader.replace(`#include <begin_vertex>`,`
+          #include <begin_vertex>
+          belowFilm = ${Y} - position.y;
+          if (belowFilm < .19) {
+            vec2 dir = normalize(position.xz);
+            float rise = rippleHeight(dir*${X});
+            float weight = 1.-smoothstep(0.,.19,belowFilm);
+            transformed.y += weight*rise;
+            transformed.xz = dir*glassRadius(transformed.y);
+            belowFilm += (1.-weight)*rise;
+          }`),e.fragmentShader=`varying float belowFilm;
+`+e.fragmentShader.replace(`#include <opaque_fragment>`,`
+        float line = 1.-smoothstep(0.,.019,belowFilm);
+        outgoingLight = mix(outgoingLight,vec3(.009,.030,.043),.76*line);
+        diffuseColor.a += (1.-diffuseColor.a)*.37*line;
+        #include <opaque_fragment>`)}}let _=new N().makeRotationX(Math.PI),v=new N,y=new E,b=new E,x=-1,S=0;function C(t,r,i,o,s,c){a.needsUpdate=!0,d.night.value=s,h.updateWorldMatrix(!0,!1),f.update(e,(1-.76*s)*c),i.updateMatrixWorld(),b.setFromMatrixPosition(h.matrixWorld);let p=y.setFromMatrixPosition(i.matrixWorld).sub(b).dot(n.normal)>=0?1:-1;if(o<x&&p===S)return;let{width:m,height:g}=t.domElement,C=Math.min(.45,384/Math.max(m,g));u.setSize(Math.max(1,Math.round(m*C)),Math.max(1,Math.round(g*C))),l.matrixWorld.copy(h.matrixWorld),p<0&&l.matrixWorld.multiply(_);let w=l.getReflectionCamera(i);w.layers.set(1),p<0&&w.layers.enable(2);let T=t.shadowMap.needsUpdate;t.shadowMap.needsUpdate=!1,l.onBeforeRender(t,r,i),t.shadowMap.needsUpdate=T,d.mirrorProjection.value.copy(l.material.uniforms.textureMatrix.value).multiply(v.copy(l.matrixWorld).invert()),S=p,x=o+.105}return{update:C,fitWetGlass:g,waves:a,illuminate:f.illuminate}}function _t(e,t,n){let r=e.positions,{vertex:i,leaves:a}=e.motion,o=a.length/40,s=new Int32Array(o),c=new Float32Array(o).fill(-1),l=new Float32Array(o*4),u=new E,d=[0,0,0],f=t.getAttribute(`position`).clone().setUsage(Te);t.setAttribute(`position`,f),t.getAttribute(`normal`).setUsage(Te);let p=f.array,m=Array.from({length:o},(e,t)=>{let n=t*40;return H(a,t)+nt*(2*a[n+7]+1.5*a[n+11])}),h=rt(n,r),g=h.map(e=>new ue().setFromPoints([new E(...e.a),new E(...e.b)]).expandByScalar(e.r)),_=[];for(let e=0;e<r.length/3;e++){let t=e*20,n=i[t];if(n<0)continue;i[t+1]>c[n]&&(s[n]=e,c[n]=i[t+1]),u.fromArray(r,3*e);let a=h.filter((e,t)=>g[t].distanceToPoint(u)<=m[n]);(a.length||u.length()+m[n]>=.946)&&_.push({offset:3*e,nearby:a})}t.computeBoundingSphere(),t.boundingSphere.radius+=Math.max(...m);function v(e,n,c,m,h,g){let v=m.elements,y=-Math.expm1(-n/.3);for(let e=0;e<o;e++){let{x:t,y:n,z:r}=u.fromArray(p,3*s[e]).applyMatrix3(m),i=c.currentAt(t,n,r,g(t,r),d),a=Math.max(0,Math.min(1,1+(i-n)/.12)),o=d[0]-(h[1]*r-h[2]*n),f=d[1]-(h[2]*t-h[0]*r),_=d[2]-(h[0]*n-h[1]*t);for(let t=0;t<3;t++){let n=v[3*t]*o+v[3*t+1]*f+v[3*t+2]*_;l[4*e+t]+=(.35*a*n-l[4*e+t])*y}}tt(r,i,a,e,l,p);for(let e of _)it(p,e.offset,e.nearby);f.needsUpdate=!0,t.computeVertexNormals()}function y(e,t,n){e.fromArray(t);for(let[t,i]of n){let n=3*t;e.x+=i*(p[n]-r[n]),e.y+=i*(p[n+1]-r[n+1]),e.z+=i*(p[n+2]-r[n+2])}return e}return{update:v,moveEnd:y}}var vt={[e.BARK]:7951156,[e.WOOD_END]:12159574,[e.ROCK]:7961458,[e.LEAF_BIG]:5275695,[e.LEAF_SMALL]:7840832,[e.STEM]:5402161,[e.ROOT]:7101499,[e.HEATER]:3226429,[e.HEATER_LAMP]:15302713,[e.SPONGE]:3687491,[e.TUBE]:5594720,[e.SUCTION]:7440264},Z=Object.fromEntries(Object.entries(vt).map(([e,t])=>[e,new w(t)]));function Q(t,n){let r=new re({vertexColors:!0,side:2});n.illuminate(r);let i=V({detail:.28}),a=i.flatMap(e=>e.obstacles),o=new Map;for(let n of i)for(let i of n.meshes){let{positions:n,indices:s,normals:c,materials:l,attrs:u}=i,d=new Float32Array(n.length);for(let t=0;t<s.length;t++){let n=s[t],r=l[Math.floor(t/3)],i=n*4,a=Z[r],o=.55+.45*u[i+3];r===e.BARK&&(o*=.68+.32*(1-u[i+2])+.12*Math.sin(u[i+1]*17)),r===e.ROCK&&(o*=1-.43*u[i+1]),(r===e.LEAF_BIG||r===e.LEAF_SMALL)&&(o*=.72+.32*u[i]+.13*Math.cos(9*u[i+1])),d[3*n]=a.r*o,d[3*n+1]=a.g*o,d[3*n+2]=a.b*o}let f=new ae;f.setAttribute(`position`,new D(n,3)),f.setAttribute(`normal`,new D(c,3)),f.setAttribute(`color`,new D(d,3)),f.setIndex(new D(s,1)),i.motion&&o.set(i.name,_t(i,f,a));let p=new P(f,r);if(p.name=i.name,p.userData.topic={driftwood:`driftwood`,rocks:`rock`,plantTall:`anubias`,plantSmall:`rosette`}[i.name]??(l.includes(e.HEATER)?`heater`:`filter`),l.includes(e.HEATER_LAMP)){let t=new Set;for(let n=0;n<s.length;n++)l[Math.floor(n/3)]===e.HEATER_LAMP&&t.add(s[n]);p.userData.lampVertices=[...t]}p.castShadow=p.receiveShadow=!0,t.add(p)}return{plants:o,obstacles:a.map(e=>({...e,leaf:!!e.follow})),bubbles:i.find(e=>e.bubbles)?.bubbles}}function yt(e,t,n,r){let i=new P(new d(e,t,8,80),r);return i.rotation.x=Math.PI/2,i.position.y=n,i}function bt(e,t,n){let r=new P(new l(e,80),n);return r.rotation.x=-Math.PI/2,r.position.y=t,r}function xt(e,t,n,r=80){let i=Math.acos(t/e);return new Se(e,r,36,0,Math.PI*2,i,Math.acos(n/e)-i)}function St(){let e=new Uint8Array(65536),t=i(912);for(let n=0;n<e.length;n+=4){let r=.74+t()*.32-(t()<.045?.35:0);e.set([202*r,164*r,111*r,255],n)}let n=new be(e,128,128);return n.wrapS=n.wrapT=L,n.repeat.set(4,4),n.colorSpace=Je,n.magFilter=k,n.minFilter=y,n.generateMipmaps=!0,n.needsUpdate=!0,new re({map:n})}function Ct(){return new R({transparent:!0,depthWrite:!1,vertexShader:`varying vec3 n; varying vec3 eye;
+      void main() {
+        vec4 p = modelViewMatrix * vec4(position,1.);
+        n = normalMatrix * normal; eye = -p.xyz; gl_Position = projectionMatrix * p;
+      }`,fragmentShader:`varying vec3 n; varying vec3 eye;
+      void main() {
+        vec3 N = normalize(n);
+        float rim = pow(1.-clamp(dot(N,normalize(eye)),0.,1.), 3.);
+        vec2 panel = abs(N.xy - vec2(-.67,.40));
+        float glow = (1.-smoothstep(.055,.12,panel.x))*(1.-smoothstep(.16,.28,panel.y));
+        float stripe = smoothstep(.76,.82,N.x)*(1.-smoothstep(.84,.89,N.x))*(1.-smoothstep(.25,.7,abs(N.y)));
+        gl_FragColor = vec4(mix(vec3(.58,.83,.97),vec3(.08,.26,.37),rim), .018 + .60*rim + .24*glow + .13*stripe);
+        #include <colorspace_fragment>
+      }`})}function wt(e,i,a,o,s){let c=gt(a,o,s),l=Q(i,c),u=Ct(),d=new P(xt(1,M.mouth,-.99),u);d.renderOrder=5,d.userData.topic=`glass`,i.add(d);let f=new ve({color:10209487,transparent:!0,opacity:.63,depthWrite:!1,shininess:70});i.add(yt(Math.sqrt(1-M.mouth**2),M.beadRadius,M.mouth,f));let p=St();c.illuminate(p);let m=new P(new we(0,n,80,10),p);m.rotation.x=-Math.PI/2,m.position.y=r,m.receiveShadow=!0;let h=new P(xt(t,r,-.98),p);m.userData.topic=h.userData.topic=`sand`,i.add(h,m);let g=new P(xt(t,Y,-.98,96),new x({color:7849433,transparent:!0,depthWrite:!1,opacity:.06}));c.fitWetGlass(g.material),g.renderOrder=4,a.add(g);let _=new Ve,v=new ve({color:1319465,shininess:70});_.position.y=M.mouth+M.lidThickness;let y=new P(new we(M.lidRadius-M.rimWidth,M.lidRadius,80),new ve({color:1647915,side:2}));y.rotation.x=-Math.PI/2;let b=new P(new te(M.knobRadius,M.knobRadius,M.knobHeight,20),v);b.position.y=M.knobHeight/2;let S=bt(M.puckRadius,-.022,new x({color:16770746,side:2}));_.add(y,yt(M.lidRadius-.01,.013,0,v),bt(M.lidRadius-M.rimWidth,0,f.clone()),b,S),_.userData.topic=`lid`,e.add(_);let C=new R({transparent:!0,depthWrite:!1,vertexShader:`varying vec2 p; void main(){ p=uv*2.-1.; gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.); }`,fragmentShader:`varying vec2 p; void main(){ float r=dot(p,p); gl_FragColor=vec4(.003,.009,.014,.62*exp(-4.*r)*(1.-smoothstep(.65,1.,r))); }`}),w=new P(new Ge(2.6,2.6),C);return w.rotation.x=-Math.PI/2,w.position.y=-.985,e.add(w),{lid:_,tint:g,waterFilm:c,...l}}function Tt(){let e=[],t=[],n=[];for(let r=0;r<=18;r++){let i=r/18,a=b.width*Math.sin(i*Math.PI)**.76*(.75+.35*i);for(let o=0;o<5;o++){let s=(o-2)/2;e.push((i-.5)*b.length,.007+b.cup*s*s+b.arch*Math.sin(i*Math.PI),s*a);let c=(o===2?1.25:.85)*(.8+.2*Math.cos(r*2.8+o));if(t.push(.34*c,.14*c,.045*c),r&&o){let e=r*5+o;n.push(e-6,e-1,e,e-6,e,e-5)}}}let r=new ae;r.setAttribute(`position`,new ze(e,3)),r.setAttribute(`color`,new ze(t,3)),r.setIndex(n),r.computeVertexNormals();let i=new P(r,new re({vertexColors:!0,side:2}));return i.userData.topic=`leaf`,i}function Et(e){let n=new Ke(t),r=Tt(),i=new pe(new Se(1,8,5),new ve({color:11588309,specular:16777215,shininess:90,transparent:!0,opacity:.79}),ne.length),a=new We,o=ne.map(([e,t,n,r],o)=>(a.position.set(Math.sqrt(X**2-e**2)-.003-t,n+.005,e),a.scale.set(r,r*.7,r),a.updateMatrix(),i.setMatrixAt(o,a.matrix),a.position.clone()));i.position.y=Y,i.instanceMatrix.setUsage(Te),i.userData.topic=`nest`,i.renderOrder=4,e.add(r,i);let s={probes:new Float32Array(224)},l=new E,u=new E,d=[0,0,0];function f(e,a,f,p,m,h){let g=n.probePoints();l.set(g[0],Y,g[2]).applyQuaternion(m.rotation),m.currentAt(l.x,l.y,l.z,h(l.x,l.z),d),u.fromArray(d).applyQuaternion(m.inverse);for(let e=0;e<g.length;e+=4){let t=96+e;s.probes[t]=u.x,s.probes[t+2]=u.z,s.probes[t+3]=c.clamp(.5+(Y-g[e+1])*24,0,1)}n.update(e,s,Y,.5,a,f,p.mode);let _=n.matrix.elements;r.position.set(_[0],Y+m.localDisplacement(_[0],_[2]),_[2]),r.rotation.y=-_[3],i.count=n.bubbles,i.visible=i.count>0,i.rotation.y=-_[11];let v=Math.cos(_[11]),y=Math.sin(_[11]),b=i.instanceMatrix.array;for(let e=0;e<i.count;e++){let n=o[e],r=m.riseAtRestPosition(v*n.x-y*n.z,y*n.x+v*n.z),i=Math.sqrt(t**2-(Y+r)**2)/X;b[16*e+12]=n.x*i,b[16*e+13]=n.y+r,b[16*e+14]=n.z*i}i.count&&(i.instanceMatrix.needsUpdate=!0)}return{life:n,update:f}}var Dt=[65,49,13],Ot=.95,kt=192;function At(){let[e,n,r]=Dt,i=new Float32Array(e*n*r*2).fill(1);for(let a=0;a<r;a++){let o=Ot*a/(r-1);for(let[r,s]of[1.333,1].entries()){let c=[];for(let e=1;e<=kt;e++){let n=Math.sin(Math.PI/2*e/kt),r=n*o,i=Math.sqrt(1-r**2),a=Math.sqrt(1-n*n),l=n*i-a*r,u=n*r+a*i,d=n/1.5,f=Math.sqrt(1-d**2),p=f-Math.sqrt(t**2-d**2),m=l+p*(d*u-f*l),h=u-p*(d*l+f*u),g=Math.min(1,n/(t*s)),_=Math.sqrt(1-g**2),v=(g*h-_*m)/(_*h+g*m),y=Math.max(0,Math.min(1,(n-.82)/.175)),b=1-y*y*(3-2*y);c.push({apparent:n/i,ix:m,iz:h,slope:v,retain:b})}for(let t=0;t<n;t++){let s=2*t/(n-1)-1,l=2*e*(t+n*a)+r,u=0,d=0,f=0;for(let t of c){let n=t.apparent*(1-s*o),r=s>=t.iz?n:n+t.retain*(t.ix+(t.iz-s)*t.slope-n);if(!(r<=u)){for(;f<e&&f/(e-1)<=r;){let t=f/(e-1),a=(n-d)/(r-u);i[l+2*f]=t?(d+(t-u)*a)/t:a,f++}if(f===e)break;u=r,d=n}}}}}return i}var jt=`
+  uniform highp sampler3D bowlProfile;
+  uniform sampler2D lensWaves;
+  uniform mat3 viewToWater;
+  uniform vec3 bowlCentre, bowlAxis, bowlUp, waterUp;
+  uniform float inverseEye, lensStrength;
+  vec4 throughBowl(vec4 p) {
+    if (lensStrength <= 0.) return p;
+    vec3 local = p.xyz - bowlCentre;
+    float z = dot(local,bowlAxis);
+    vec3 radial = local - z*bowlAxis;
+    const vec3 size = vec3(${Dt.map(e=>e.toFixed(1)).join(`,`)});
+    vec3 coord = clamp(vec3(length(radial),.5+.5*z,inverseEye/${Ot}),0.,1.);
+    vec2 gain = texture(bowlProfile,(coord*(size-1.)+.5)/size).rg;
+    // Which part of the shell does this sightline enter? Above the free
+    // surface there is only thin glass. Through the mouth there is no wall.
+    vec3 sight = normalize(p.xyz);
+    vec3 impact = sight*dot(sight,bowlCentre) - bowlCentre;
+    vec3 entry = impact - sight*sqrt(max(0.,1.-dot(impact,impact)));
+    float shell = 1.-smoothstep(${M.mouth-.025},${M.mouth+.025},dot(entry,bowlUp));
+    float h = dot(entry,waterUp)-${Y};
+    if (abs(h) < .10) {
+      // The entry lies on the outer glass. Match its bearing to the moving
+      // wet edge on the inner wall so refraction follows the crest.
+      vec2 bearing = normalize((viewToWater*entry).xz);
+      float halfSpan = .5 - .5/float(textureSize(lensWaves,0).x);
+      h -= (texture2D(lensWaves,.5+bearing*halfSpan).b*255.-128.)*${q/127};
+    }
+    float endH = dot(local,waterUp)-${Y};
+    float wetEntry = 1.-smoothstep(-.035,.035,h);
+    float wetPath = 1.-smoothstep(-.05,.05,(h+endH)*.5);
+    float wet = wetEntry*(.55+.45*wetPath);
+    p.xyz += radial * ((mix(gain.y,gain.x,wet)-1.)*shell*lensStrength);
+    return p;
+  }
+`,$=3;function Mt(e){let t=Uint16Array.from(At(),j.toHalfFloat),n=new ye(t,...Dt);n.format=ee,n.type=I,n.minFilter=n.magFilter=k,n.needsUpdate=!0;let r={bowlProfile:{value:n},bowlCentre:{value:new E},bowlAxis:{value:new E},bowlUp:{value:new E},waterUp:{value:new E},inverseEye:{value:0},lensStrength:{value:0},readLesson:{value:!1},lensWaves:{value:e},viewToWater:{value:new C}},i=new N,a=[null],o=new Set,s=new et(1,1),l=new Uint8Array(4);function u(e,{distort:t=!0,topic:n=null,film:i=!1}={}){let s=e.material;if(n){a.includes(n)||a.push(n);let t=a.indexOf(n),r=new Uint8Array(e.geometry.attributes.position.count).fill(t);e.geometry.setAttribute(`lessonId`,new D(r,1)),e.layers.enable($)}if(t&&(e.frustumCulled=!1),o.has(s))return;o.add(s);let c=s.onBeforeCompile.bind(s),l=s.customProgramCacheKey();s.customProgramCacheKey=()=>l+`-bowl-`+Number(t)+Number(!!n),s.onBeforeCompile=(e,a)=>{c(e,a),Object.assign(e.uniforms,r),t&&(e.vertexShader=jt+(i?e.vertexShader.replace(`projectionMatrix * viewMatrix * world`,`projectionMatrix * throughBowl(viewMatrix * world)`):e.vertexShader.replace(`#include <logdepthbuf_vertex>`,`gl_Position = projectionMatrix * throughBowl(mvPosition);
+#include <logdepthbuf_vertex>`))),n&&(e.vertexShader=`attribute float lessonId; varying float vLesson;
+`+e.vertexShader.replace(`#include <begin_vertex>`,`#include <begin_vertex>
+vLesson = lessonId;`),e.fragmentShader=`uniform bool readLesson; varying float vLesson;
+`+e.fragmentShader.replace(/}\s*$/,`if (readLesson) gl_FragColor = vec4(vLesson/255.,0.,0.,1.);
+}`))}}function d(e,t,n,a){e.updateMatrixWorld();let o=e.matrixWorldInverse,s=r.bowlCentre.value.copy(t.position).applyMatrix4(o),l=s.length();r.bowlAxis.value.copy(s).normalize().negate(),r.inverseEye.value=1/Math.max(1,l),r.lensStrength.value=c.smoothstep(l,1.05,1.24),r.bowlUp.value.set(0,1,0).applyQuaternion(n.quaternion).transformDirection(o),r.waterUp.value.copy(a.normal).transformDirection(o),i.makeRotationFromQuaternion(a.inverse).multiply(e.matrixWorld),r.viewToWater.value.setFromMatrix4(i)}function f(e,t,n,i,o){if(i<0||o<0||i>=1||o>=1)return null;let{width:c,height:u}=e.domElement;s.viewport.set(-Math.floor(i*c),Math.floor(o*u)+1-u,c,u);let d=e.getRenderTarget(),f=n.layers.mask,p=e.shadowMap.needsUpdate;try{return r.readLesson.value=!0,n.layers.set($),e.shadowMap.needsUpdate=!1,e.setRenderTarget(s),e.render(t,n),e.readRenderTargetPixels(s,0,0,1,1,l),a[l[0]]?a[l[0]]:(n.layers.set(4),e.render(t,n),e.readRenderTargetPixels(s,0,0,1,1,l),l[3]?`water`:null)}finally{e.setRenderTarget(d),e.shadowMap.needsUpdate=p,n.layers.mask=f,r.readLesson.value=!1}}return{install:u,update:d,pick:f,uniforms:r,topics:a}}async function Nt(){let e=document.createElement(`canvas`),n=e.getContext(`webgl2`,{alpha:!0,antialias:!1,powerPreference:`low-power`});if(!n)throw Error(`WebGL2 unavailable`);let i=new o({canvas:e,context:n,alpha:!0,antialias:!1});i.setClearColor(0,0),i.toneMapping=4,i.shadowMap.enabled=!0,i.shadowMap.autoUpdate=!1,i.shadowMap.needsUpdate=!0;let a=document.getElementById(`stage`);a.classList.add(`raster-bowl`),a.prepend(e);let l=new Ae,d=new Ve,f=new Ve,p=new Ve;l.add(d),d.add(f,p);let m=new je(14939135,12428923,1.65),h=new Pe(16771793,2.3);h.position.set(-.8,3,.9),h.castShadow=!0,Object.assign(h.shadow.camera,{left:-1.1,right:1.1,top:1.1,bottom:-1.1,near:1,far:5}),h.shadow.camera.updateProjectionMatrix(),h.shadow.bias=-.001,h.shadow.normalBias=.006,l.add(m),f.add(h,h.target);let _=new Ee(34,1,.03,24),y={...Ce,maxTilt:Math.PI/6},b=new Le(e,_,y);b.rolling=!0,b.placeAt(0),b.zoomTo(4.3,!0),e.setAttribute(`aria-label`,`Betta bowl. Drag to tilt, Ctrl-drag to turn, and scroll or pinch to zoom.`),e.title=`Drag to tilt · Ctrl-drag to turn · Scroll or pinch to zoom`;let x=72e4,C=()=>{let{width:e,height:t}=a.getBoundingClientRect();e&&t&&(i.setPixelRatio(Math.min(devicePixelRatio,1,Math.sqrt(x/(e*t)))),i.setSize(e,t,!1),_.aspect=e/t,_.fov=c.radToDeg(2*Math.atan(Math.tan(17*Math.PI/180)/Math.min(1,_.aspect))),_.updateProjectionMatrix())};new ResizeObserver(C).observe(a),C();let T=new pt,{lid:D,obstacles:ee,bubbles:te,plants:ne,tint:O,waterFilm:ae}=wt(d,f,p,T,h),oe=Et(p),se=new $e(g(y,!0)),k=new Oe(se,b);D.matrixAutoUpdate=!1,Object.assign(de,{step:1/60,passScale:.5,maxFrame:1/30});let A=ie({compact:!0}),le={value:0},ue=new Set;A.traverse(e=>{e.isMesh&&(e.receiveShadow=!0,ue.add(e.material))});for(let e of ue){ae.illuminate(e);let t=e.onBeforeCompile.bind(e),n=e.customProgramCacheKey();e.customProgramCacheKey=()=>n+`-water-pale`,e.onBeforeCompile=(e,n)=>{t(e,n),e.uniforms.paleness=le,e.fragmentShader=`uniform float paleness;
+`+e.fragmentShader.replace(`#include <opaque_fragment>`,`outgoingLight = mix(outgoingLight, vec3(dot(outgoingLight, vec3(.2126,.7152,.0722))*.75+.14), .75*paleness);
+#include <opaque_fragment>`)}}let j=new Ve;j.scale.setScalar(Qe),j.updateMatrix(),j.add(A),d.add(j),j.userData.topic=`fish`;let M=new fe;M.compensateDrift=!0,M.obstacles=ee.map(e=>({...e,a:[...e.a],b:[...e.b]}));let P={radius:t,sandLevel:r,level:Y,gravity:[0,-24,0],iso:.5},ye=new Float32Array(4*Xe.length),be={probes:new Float32Array(ye.length),sand:new Float32Array(Xe.length),centroid:[0,-.15,0]},F;A.userData.locomotion=Ze(M),A.userData.update(0);let we=[0,0,0];A.userData.externalFlow=we;let Te=S(new URLSearchParams(location.search).get(`water`)),Me={fx:Te??he},I=new ge;I.enabled=I.pellets=!0;let Fe={mouthAt:()=>u(M.position,M.heading,M.pitch),ahead:()=>[-Math.cos(M.heading)*Math.cos(M.pitch),Math.sin(M.pitch),Math.sin(M.heading)*Math.cos(M.pitch)],busy:()=>M.mode===`startle`,reach:.055,get appetite(){return Me.fx.appetite},food:null,gapeWant:0},Ie=[Fe],ze=new Float32Array(28),He=new Float32Array(7),L=document.createElement(`div`);L.className=`betta-controls`,L.innerHTML=`<button type="button" aria-label="Feed fish">Feed</button><button type="button" aria-pressed="false">Flare fins</button>`;let[Ue,R]=L.querySelectorAll(`button`);a.append(L);let Ge=new Ne(L),Ke=new st(A);Ke.show(Ge.variety);let Je=document.querySelector(`.site-links`);Je.append(document.querySelector(`.graphics-choice`));let z=new qe(Je,Be(()=>localStorage)),et=new Re(Je);et.onChange=e=>{e&&b.followEye.copy(_.position)};let B=!1;R.addEventListener(`click`,()=>{B=!B,R.setAttribute(`aria-pressed`,String(B)),R.textContent=B?`Relax fins`:`Flare fins`});let V=new pe(new Se(1,10,7),new re({color:14785363}),7);V.count=0,V.frustumCulled=!1,d.add(V),k.onChange=()=>{Ue.textContent=k.state===`idle`?`Feed`:k.state===`closing`?`Closing lid`:`Close lid`,Ue.setAttribute(`aria-label`,k.state===`idle`?`Feed fish`:Ue.textContent),Ue.disabled=k.state===`closing`},Ue.addEventListener(`click`,()=>k.request());let tt=new _e,nt=[];d.traverse(e=>{if(e.isMesh){for(let t=e;t;t=t.parent)if(t.userData.topic){e.userData.topic=t.userData.topic,nt.push(e);break}}});let rt=new Set([`fish`,`sand`,`rock`,`driftwood`]),H=Mt(ae.waves),it=[];H.install(O),O.layers.enable(4);for(let e of nt){let t=e.userData.topic;t===`glass`||t===`water`?t===`water`?(H.install(e,{film:!0}),e.layers.enable(4)):it.push(e):(e.layers.enable(rt.has(t)?2:1),H.install(e,{topic:t,distort:t!==`lid`}))}H.install(V),m.layers.enable(1),h.layers.enable(1),m.layers.enable(3),h.layers.enable(3);function at(t,n){let r=e.getBoundingClientRect(),a=(t-r.left)/r.width,o=(n-r.top)/r.height;return H.pick(i,l,_,a,o)||(tt.setFromCamera(new v(2*a-1,1-2*o),_),tt.intersectObjects(it,!1).length?`glass`:null)}let U=new me(L,a,{pickTopic:at,variety:()=>Ge.variety,betta:{swim:M,get flared(){return B}},food:I,feeding:k,life:oe.life},!1),ot=new s(L,a,{water:Me,forced:Te,feeding:k,food:I,learn:U,rotation:()=>b.rotation.elements});Ge.onChange=e=>{Ke.show(e),U.aboutFish()},z.onChange=e=>{e&&U.atNight()};let W=null;e.addEventListener(`pointerdown`,e=>{W=e.isPrimary&&e.button===0?{x:e.clientX,y:e.clientY,id:e.pointerId}:null}),e.addEventListener(`pointermove`,e=>{W&&Math.hypot(e.clientX-W.x,e.clientY-W.y)>5&&(W=null)}),e.addEventListener(`pointercancel`,()=>{W=null}),e.addEventListener(`pointerup`,e=>{W?.id===e.pointerId&&(W=null,!U.tap(e.clientX,e.clientY)&&at(e.clientX,e.clientY)===`lid`&&k.request())});let G=new pe(new Se(1,7,5),new ve({color:10869730,transparent:!0,opacity:.48,depthWrite:!1}),16);G.frustumCulled=!1,G.renderOrder=2,te&&(d.add(G),H.install(G));let K=new We,q=new E,ct=new E(...ce),lt=new N,J=new E,ut=new Ye,X=[0,0,0],dt=b.twist,ft=0,mt=f.children.find(e=>e.userData.lampVertices),ht=-1,gt=(e,t)=>{let n=b.rotation.elements;return(r-n[3]*e-n[5]*t)/n[4]},_t=new xe;_t.frameMs=1e3/30;let vt=null,Z=0,Q=Number(z.on),yt={frames:0,swim:M,fish:A,renderer:i,painter:Ke,controller:b,surface:T,learn:U,waterCare:ot,food:I,feeding:k,camera:_,basin:d,pickable:nt,lens:H,get water(){return F}};new URLSearchParams(location.search).has(`qa`)&&(window.__bettaLow=yt),await A.userData.ready,a.querySelector(`.splash`)?.remove();function bt(e){b.update(e,24),d.position.copy(b.center),f.quaternion.setFromRotationMatrix(lt.setFromMatrix3(b.rotation));let t=b.bodyAccel(24);T.step(e,t,b.omega),p.quaternion.copy(T.rotation);let n=!f.quaternion.equals(ut);for(let t of ne.values())t.update(Z,e,T,b.rotation,b.omega,gt);for(let e=0;e<ee.length;e++){let t=ee[e],r=M.obstacles[e];if(t.follow){let e=ne.get(t.follow.mesh);e.moveEnd(J,t.a,t.follow.a).applyMatrix3(b.rotation).toArray(r.a),e.moveEnd(J,t.b,t.follow.b).applyMatrix3(b.rotation).toArray(r.b)}else n&&(J.fromArray(t.a).applyMatrix3(b.rotation).toArray(r.a),J.fromArray(t.b).applyMatrix3(b.rotation).toArray(r.b))}Z>=ft&&(i.shadowMap.needsUpdate=!0,ft=Z+.25),n&&(h.updateWorldMatrix(!0,!1),h.target.updateWorldMatrix(!0,!1),h.shadow.updateMatrices(h),ut.copy(f.quaternion));let r=b.twist-dt,a=r-2*Math.PI*Math.round(r/(2*Math.PI));if(dt=b.twist,a&&Math.abs(a)<=1){for(let e=0;e<3;e++)X[e]=a*b.rotation.elements[3+e];M.turnWith(X)}P.gravity=t,k.update(e,e=>I.spawn(e,1),I.count),se.update(e,b.rotation),D.matrix.copy(se.toLid).invert(),D.matrixWorldNeedsUpdate=!0,D.visible=se.shown}let xt=[0,0,0];function St(){A.updateMatrix(),lt.multiplyMatrices(j.matrix,A.matrix);for(let e=0;e<Xe.length;e++){A.userData.bodyMotion.transform(...Xe[e],xt);let{x:t,y:n,z:r}=J.fromArray(xt).applyMatrix4(lt);J.toArray(ye,4*e);let i=be.sand[e]=gt(t,r),a=T.currentAt(t,n,r,i,be.probes,4*e);be.probes[4*e+3]=c.clamp(.5+(a-n)*25,0,1)}let e=Fe.mouthAt();P.level=T.heightAt(e[0],e[2]),P.sandLevel=gt(M.position[0],M.position[2]),F=De(be,ye,P,P.level)}function Ct(e){let n=I.probePoints();for(let e=0;e<7;e++){let t=4*e,r=n[t],i=n[t+1],a=n[t+2];He[e]=gt(r,a);let o=T.currentAt(r,i,a,He[e],ze,t);ze[t+3]=c.clamp(.5+(o-i)*25,0,1)}I.update(e,ze,He,0,{rotation:b.rotation.elements,gravity:P.gravity,iso:.5,radius:t},Ie);let r=I.renderData();V.count=r[0];for(let e=0;e<V.count;e++){let t=4+8*e;K.position.fromArray(r,t),K.scale.setScalar(r[t+3]),K.updateMatrix(),V.setMatrixAt(e,K.matrix)}V.count&&(V.instanceMatrix.needsUpdate=!0);for(let e of I.splashes)J.fromArray(e).applyQuaternion(T.inverse),T.ripples.disturb(J.x,J.z,.115,1.15);I.splashes.length=0}let Tt=O.material.color.clone(),Dt=new w(11497785),Ot=new w(13227466),kt=0,At=0;function jt(e,t){if(kt=c.damp(kt,t.cloud,.7,e),At=c.damp(At,t.tint,.7,e),O.material.color.copy(Tt).lerp(Dt,At).lerp(Ot,kt),O.material.opacity=.06+.28*At+.36*kt,le.value=c.damp(le.value,t.pale,.7,e),mt&&t.heaterLamp!==ht){ht=t.heaterLamp;let e=mt.geometry.getAttribute(`color`);for(let t of mt.userData.lampVertices)e.setXYZ(t,.06+.85*ht,.03+.26*ht,.012+.04*ht);e.needsUpdate=!0}}let $=null,Nt=0,Pt=0;function Ft(t){if(!_t.draw(t))return;$===null?($=t,Nt=0,Pt=0):(Nt++,Pt=Math.max(Pt,t-vt)),(Nt>=30||t-$>=2500)&&(Nt>1&&(t-$-Pt)/(Nt-1)>46&&x>18e4&&(x=Math.max(18e4,Math.min(x,e.width*e.height)*.7),C()),$=t,Nt=0,Pt=0);let n=vt===null?1/30:Math.min(.067,Math.max(0,(t-vt)/1e3));vt=t,Z+=n,Q=c.damp(Q,Number(z.on),2,n),a.classList.toggle(`raster-night`,z.on),m.intensity=1.65-1.35*Q,h.intensity=2.3-1.52*Q,h.color.setRGB(1-.68*Q,.84-.33*Q,.67+.33*Q),bt(n),St(),I.aim(Ie),M.food=Fe.food?.pos??null,M.gape=Fe.gapeWant;let r=Me.fx;M.lethargy=Math.max(r.lethargy,Q*ke),M.gasp=r.gasp,A.userData.display.clamp=c.damp(A.userData.display.clamp,r.clamp,.6,n),A.userData.gait.breathPhase+=5*r.gasp*n,oe.life.tending=r.nest,M.gulpUrge=oe.life.nestNeed,M.fold=A.userData.bodyMotion.turnAngles.at(-1)??0,M.advance(n,F.flow,P,F.submerged>.5,F,A.userData.stroke),A.userData.locomotion=Ze(M);for(let e=0;e<3;e++)we[e]=F.flow[e]/Qe;if(A.userData.display.requested=B||M.flaring,A.userData.update(Z),Ct(n),oe.update(n,b.rotation.elements,Math.hypot(...b.omega),M,T,gt),ot.on&&ot.frame(n),U.on&&U.frame(),jt(n,r),te){for(let e=0;e<G.count;e++){let t=(Z*.52+e/G.count)%1;K.position.fromArray(te.at).applyMatrix3(b.rotation),K.position.y+=(T.heightAt(K.position.x,K.position.z)-K.position.y)*t,K.position.x+=t*.02*Math.sin(e*5+Z*3),e%4==0&&t<n*.52&&(J.fromArray(te.at).applyMatrix3(b.rotation),J.x+=.02*Math.sin(e*5+Z*3),J.y=T.heightAt(J.x,J.z),J.applyQuaternion(T.inverse),T.ripples.disturb(J.x,J.z,.095,.32)),K.scale.setScalar(te.radius*(.72+.4*t)),K.updateMatrix(),G.setMatrixAt(e,K.matrix)}G.instanceMatrix.needsUpdate=!0}b.followShare=c.damp(b.followShare,Number(et.on),4,n),b.followShare<.001&&!et.on&&(b.followShare=0),et.on&&(q.fromArray(M.position).add(d.position).addScaledVector(ct,-1.65*b.followZoom),b.followEye.lerp(q,1-Math.exp(-5*n))),H.uniforms.lensStrength.value=0,ae.update(i,l,_,Z,Q,1-.6*kt-.2*At),H.update(_,d,f,T),i.render(l,_),yt.frames++}let It=()=>{vt=null,$=null,i.setAnimationLoop(document.hidden?null:Ft)};document.addEventListener(`visibilitychange`,It),It()}export{Nt as startLowPowerBowl};

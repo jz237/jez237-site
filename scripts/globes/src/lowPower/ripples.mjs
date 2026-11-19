@@ -1,7 +1,8 @@
 // A small circular height field for the short waves riding on the main slosh.
 // Fixed time steps keep the wave speed independent of the renderer's frame rate.
 const SIZE = 65, STEP = 1 / 60;
-export const RIPPLE_HEIGHT = 0.055, RIPPLE_SLOPE = 0.85;
+const FLOW_RESPONSE = 1 - Math.exp(-STEP / .07);
+export const RIPPLE_HEIGHT = 0.085, RIPPLE_SLOPE = 0.85;
 // Alpha stores this fraction of the signed surface Laplacian.
 export const RIPPLE_CURVATURE = 0.16;
 const byte = n => 128 + Math.round(127 * Math.max(-1, Math.min(1, n)));
@@ -12,17 +13,15 @@ export class SurfaceRipples {
   heights = new Float32Array(SIZE * SIZE);
   previous = new Float32Array(SIZE * SIZE);
   shown = new Float32Array(SIZE * SIZE);
-  wallX = new Float32Array(SIZE * SIZE);
-  wallZ = new Float32Array(SIZE * SIZE);
   debt = 0;
-  lastX = 0; lastZ = 0;
-  wallTravel = 0;
+  flowX = 0; flowZ = 0;
 
   constructor(radius) {
     this.radius = radius;
     this.cell = 2 * radius / (SIZE - 1);
     this.propagation = (0.77 * STEP / this.cell) ** 2;
     const inside = [], neighbours = [], border = [], sources = [];
+    const wall = [], normalX = [], normalZ = [], coupling = [];
     const mid = (SIZE - 1) / 2;
     const wet = (i, j) => (i - mid)**2 + (j - mid)**2 < mid*mid;
     for (let j = 1; j < SIZE - 1; j++) for (let i = 1; i < SIZE - 1; i++) {
@@ -34,15 +33,26 @@ export class SurfaceRipples {
       // A missing neighbour contributes zero flux across that cell face.
       neighbours.push(wet(i-1,j) ? k-1 : k, wet(i+1,j) ? k+1 : k,
         wet(i,j-1) ? k-SIZE : k, wet(i,j+1) ? k+SIZE : k);
-      // A rocking bowl excites the broad slosh and shorter crests along the
-      // contact line. Odd angular modes lift one side as the other recedes.
-      const rim = Math.exp(-((r - 0.88) ** 2) / 0.0035);
-      const edge = Math.exp(-((r - .955) ** 2) / .006), angle = Math.atan2(z,x);
-      this.wallX[k] = x*rim + edge*(1.8*Math.cos(3*angle) + 3.2*Math.cos(5*angle) + 2.4*Math.cos(7*angle));
-      this.wallZ[k] = z*rim + edge*(-1.8*Math.sin(3*angle) + 3.2*Math.sin(5*angle) - 2.4*Math.sin(7*angle));
+      // Transfer momentum from the horizontal current over the curved bank.
+      // Taper the coupling into the unforced inner surface.
+      if (r > .64) {
+        wall.push(k);
+        normalX.push(x/r); normalZ.push(z/r);
+        // Flatten the last few cells so a crest passes smoothly between the
+        // axial and diagonal portions of the circular grid boundary.
+        const bank = Math.max(0,Math.min(1,(r-.76)/.18));
+        // Water drawn up the bank leaves a shallow trough just inside it.
+        const acrossTrough = (r-.78)/.052;
+        const drawdown = .65*Math.exp(-acrossTrough*acrossTrough);
+        coupling.push(bank*bank*(3-2*bank) - drawdown);
+      }
     }
     this.inside = Uint16Array.from(inside);
     this.neighbours = Uint16Array.from(neighbours);
+    this.wall = Uint16Array.from(wall);
+    this.normalX = Float32Array.from(normalX);
+    this.normalZ = Float32Array.from(normalZ);
+    this.coupling = Float32Array.from(coupling);
     // Bilinear samples on a circular rim reach outside the wet cells. Extend
     // their values by one texel so the rendered perimeter is continuous.
     for (let j = 0; j < SIZE; j++) for (let i = 0; i < SIZE; i++) {
@@ -85,30 +95,33 @@ export class SurfaceRipples {
     const steps = Math.floor((this.debt + 1e-9) / STEP);
     if (!steps) return;
     this.debt = Math.max(0, this.debt - steps * STEP);
-    const drive = (v, last) => Math.max(-7, Math.min(7, 0.38 * (v - last) / (steps * STEP) + 2.2 * v)) * STEP ** 2;
-    const dx = drive(vx, this.lastX), dz = drive(vz, this.lastZ);
-    this.lastX = vx; this.lastZ = vz;
-    const speed = Math.hypot(vx, vz), nb = this.neighbours;
+    const nb = this.neighbours;
     for (let n = 0; n < steps; n++) {
-      // As the slosh runs up the curved wall, short crests spread back from
-      // either side of the high point. Their crossings concentrate the light.
-      this.wallTravel += speed * STEP;
-      if (this.wallTravel >= .095) {
-        this.wallTravel %= .095;
-        const x = this.radius * vx / speed, z = this.radius * vz / speed;
-        const kick = Math.min(.95, 1.35 * speed);
-        for (const side of [-.32, .32]) {
-          const px = .81*x - side*z, pz = .81*z + side*x;
-          this.disturb(px, pz, .13*this.radius, kick);
-          this.disturb(-px, -pz, .13*this.radius, -kick);
-        }
-      }
       const h = this.heights, next = this.previous;
       let i = 0;
       for (const k of this.inside) {
         const lap = h[nb[i]] + h[nb[i+1]] + h[nb[i+2]] + h[nb[i+3]] - 4 * h[k];
         i += 4;
-        next[k] = h[k] + 0.972 * (h[k] - next[k]) + this.propagation * lap + dx * this.wallX[k] + dz * this.wallZ[k];
+        next[k] = h[k] + 0.972 * (h[k] - next[k]) + this.propagation * lap;
+      }
+      // Incoming flow takes a short time to turn upward at the glass. Follow
+      // its acceleration through a reversal, then let the field carry the wave.
+      const dx = FLOW_RESPONSE*(vx-this.flowX), dz = FLOW_RESPONSE*(vz-this.flowZ);
+      this.flowX += dx; this.flowZ += dz;
+      const ax = .50*dx/STEP + 1.2*this.flowX, az = .50*dz/STEP + 1.2*this.flowZ;
+      const strength2 = ax*ax + az*az;
+      const gain = 1.75*STEP**2 / Math.sqrt(1 + strength2/16);
+      const invStrength2 = 1/(.035+strength2);
+      const flow2 = this.flowX*this.flowX + this.flowZ*this.flowZ;
+      const runUp = 5.5*STEP**2 / (.34+flow2);
+      for (let j = 0; j < this.wall.length; j++) {
+        const normalDrive = ax*this.normalX[j] + az*this.normalZ[j];
+        const incidence2 = normalDrive*normalDrive*invStrength2;
+        const push = gain*normalDrive*(.12+.88*incidence2*incidence2*incidence2);
+        // Normal momentum flux piles up the leading crest and draws down its
+        // shoulders. Subtract its circular mean so fill volume stays constant.
+        const normalFlow = this.flowX*this.normalX[j] + this.flowZ*this.normalZ[j];
+        next[this.wall[j]] += this.coupling[j]*(push + runUp*(normalFlow*normalFlow-.5*flow2));
       }
       this.previous = h;
       this.heights = next;

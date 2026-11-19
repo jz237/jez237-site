@@ -45,7 +45,11 @@ export class Slosh {
     const gain = Math.min(1, 1.85 / (Math.hypot(this.vx, this.vz) || 1));
     this.currentX = this.vx * gain;
     this.currentZ = this.vz * gain;
-    this.ripples.step(dt, this.currentX, this.currentZ);
+    // The rotating glass also draws water up where it moves through the film.
+    // Blend its vertical rim speed with that of the rocking free surface.
+    const wallX = this.currentX + .32*(omega[2]-this.currentX);
+    const wallZ = this.currentZ + .32*(-omega[0]-this.currentZ);
+    this.ripples.step(dt, wallX, wallZ);
   }
 
   // The rocking water moves fastest near the film. Its rising side lifts what is

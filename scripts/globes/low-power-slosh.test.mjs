@@ -79,6 +79,41 @@ test('rocking the bowl raises visible crests in addition to the mean tilt', () =
   assert.ok(peak > .012);
 });
 
+test('a shove lifts one broad arc facing the current at any bearing', () => {
+  const profiles = [];
+  for (const bearing of [0, .68, 1.94]) {
+    const water = new SurfaceRipples(1);
+    for (let i=0; i<12; i++) water.step(1/60, .7*Math.cos(bearing), .7*Math.sin(bearing));
+    const profile = [];
+    for (let i=0; i<48; i++) {
+      const angle = bearing + Math.PI*i/24;
+      profile.push(water.heightAt(Math.cos(angle), Math.sin(angle)));
+    }
+    assert.ok(profile[0] > .012 && profile[24] < -.008);
+    assert.ok(profile[0] > profile[4] && profile[4] > profile[8] && profile[8] > profile[12]);
+    profiles.push(profile);
+  }
+  for (const profile of profiles.slice(1)) {
+    const error = Math.max(...profile.map((v,i)=>Math.abs(v-profiles[0][i])));
+    assert.ok(error < .08*profiles[0][0], 'the crest follows the gesture around the bowl');
+  }
+});
+
+test('a steady stream into the wall settles without launching periodic splashes', () => {
+  const water = new SurfaceRipples(1);
+  let low = Infinity, high = -Infinity;
+  for (let i=0; i<540; i++) {
+    water.step(1/60, .6, 0);
+    if (i>=480) {
+      const height = water.heightAt(.88, .32);
+      low = Math.min(low,height); high = Math.max(high,height);
+    }
+  }
+  assert.ok(low > .003 && high-low < .0002);
+  const mean = water.inside.reduce((sum,k) => sum + water.heights[k], 0) / water.inside.length;
+  assert.ok(Math.abs(mean) < .000001, 'wall run-up conserves the water level');
+});
+
 test('a crest reaches the side, spreads along the wall and settles without changing the fill level', () => {
   const w = new SurfaceRipples(1);
   w.disturb(.93,0,.15,1);
@@ -103,8 +138,9 @@ test('opposite tilts send opposite ripples inward from the glass', () => {
     right.step(1 / 30, push, 0);
   }
   assert.ok(Math.abs(right.heightAt(.65,0)) > .003);
-  assert.ok(Math.abs(right.heightAt(.65,0) + left.heightAt(.65,0)) < 1e-6);
-  assert.ok(Math.abs(right.heightAt(0,.65)) < 1e-6);
+  assert.ok(right.heightAt(.65,0)*left.heightAt(.65,0) < 0);
+  assert.ok(Math.abs(right.heightAt(.65,0) - left.heightAt(-.65,0)) < 1e-6);
+  assert.ok(Math.abs(right.heightAt(0,.65) - left.heightAt(0,.65)) < 1e-6);
 });
 
 test('the light texture resolves a focusing crest and a spreading trough', () => {
