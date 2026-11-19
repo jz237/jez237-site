@@ -590,6 +590,9 @@ glass with simple materials. Dragging tilts the bowl and excites a damped surfac
 wave. Both planted species bend with the local current, with their roots fixed
 and the betta’s collision boundaries following the leaves. The fish senses flow
 across its body, drifts, and corrects its course. The same current carries food.
+Short ripples travel across a 65 × 65 surface field when the bowl rocks,
+filter bubbles pop, or pellets land. Their slopes distort a cached reflection
+of the bowl and their curvature shifts the light on the sand.
 Learn and Water care share the full simulation’s lessons, chemistry, chart and
 saved progress. Feeding, flaring, varieties, Follow and Night work in both modes.
 Full simulation adds ray-traced refraction and a three-dimensional fluid solver.

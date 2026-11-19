@@ -77,7 +77,7 @@ export async function startLowPowerBowl() {
   new ResizeObserver(resize).observe(stage);
   resize();
   const surface = new Slosh();
-  const { lid, obstacles, bubbles, plants, tint } = makeBowl(basin, shell, liquid, surface);
+  const { lid, obstacles, bubbles, plants, tint, waterFilm } = makeBowl(basin, shell, liquid, surface);
   const floating = addSurfaceLife(liquid);
   const cover = new BowlLid(bowlShape(glass, true));
   const feeding = new Feeding(cover, controller);
@@ -154,13 +154,6 @@ export async function startLowPowerBowl() {
   pellets.count = 0;
   pellets.frustumCulled = false;
   basin.add(pellets);
-  const ripple = new T.Mesh(new T.RingGeometry(0.94, 1, 48),
-    new T.MeshBasicMaterial({ color: 0xc6e8ee, transparent: true, depthWrite: false, side: T.DoubleSide }));
-  ripple.rotation.x = -Math.PI / 2;
-  ripple.renderOrder = 4;
-  ripple.visible = false;
-  basin.add(ripple);
-  let rippleAge = 1;
   feeding.onChange = () => {
     feed.textContent = feeding.state === 'idle' ? 'Feed' : feeding.state === 'closing' ? 'Closing lid' : 'Close lid';
     feed.setAttribute('aria-label', feeding.state === 'idle' ? 'Feed fish' : feed.textContent);
@@ -178,6 +171,15 @@ export async function startLowPowerBowl() {
       break;
     }
   });
+  // The small mirror captures objects on the viewer's side of the water.
+  // Submerged-only geometry is needed just for views from below the film.
+  const submergedTopics = new Set(['fish', 'sand', 'rock', 'driftwood']);
+  for (const part of pickable) {
+    const topic = part.userData.topic;
+    if (topic !== 'water' && topic !== 'glass') part.layers.enable(submergedTopics.has(topic) ? 2 : 1);
+  }
+  sky.layers.enable(1);
+  key.layers.enable(1);
   function pickTopic(x, y) {
     const rect = canvas.getBoundingClientRect();
     picker.setFromCamera(new T.Vector2(2 * (x - rect.left) / rect.width - 1, 1 - 2 * (y - rect.top) / rect.height), camera);
@@ -221,7 +223,7 @@ export async function startLowPowerBowl() {
   air.renderOrder = 2;
   if (bubbles) basin.add(air);
   const bubble = new T.Object3D();
-  const aim = new T.Vector3(), view = new T.Vector3(...CAMERA_VIEW), ringNormal = new T.Vector3(0, 0, 1);
+  const aim = new T.Vector3(), view = new T.Vector3(...CAMERA_VIEW);
   const matrix = new T.Matrix4(), point = new T.Vector3(), oldRotation = new T.Quaternion();
   const turn = [0, 0, 0];
   let lastTwist = controller.twist, shadowAt = 0;
@@ -323,19 +325,11 @@ export async function startLowPowerBowl() {
       pellets.setMatrixAt(i, bubble.matrix);
     }
     if (pellets.count) pellets.instanceMatrix.needsUpdate = true;
-    if (food.splashes.length) {
-      ripple.position.fromArray(food.splashes[0]);
-      rippleAge = 0;
-      food.splashes.length = 0;
+    for (const splash of food.splashes) {
+      point.fromArray(splash).applyQuaternion(surface.inverse);
+      surface.ripples.disturb(point.x, point.z, 0.115, 1.15);
     }
-    rippleAge += dt;
-    ripple.visible = rippleAge < 1;
-    if (ripple.visible) {
-      ripple.position.y = surface.heightAt(ripple.position.x, ripple.position.z) + 0.003;
-      ripple.quaternion.setFromUnitVectors(ringNormal, surface.normal);
-      ripple.scale.setScalar(0.015 + 0.24 * rippleAge);
-      ripple.material.opacity = 0.48 * (1 - rippleAge) ** 2;
-    }
+    food.splashes.length = 0;
   }
 
   const clearTint = tint.material.color.clone(), tea = new T.Color(0xaf7139), cloudy = new T.Color(0xc9d5ca);
@@ -408,6 +402,13 @@ export async function startLowPowerBowl() {
         bubble.position.fromArray(bubbles.at).applyMatrix3(controller.rotation);
         bubble.position.y += (surface.heightAt(bubble.position.x, bubble.position.z) - bubble.position.y) * h;
         bubble.position.x += h * 0.02 * Math.sin(i * 5 + t * 3);
+        if (i % 4 === 0 && h < dt * 0.52) {
+          point.fromArray(bubbles.at).applyMatrix3(controller.rotation);
+          point.x += 0.02 * Math.sin(i * 5 + t * 3);
+          point.y = surface.heightAt(point.x, point.z);
+          point.applyQuaternion(surface.inverse);
+          surface.ripples.disturb(point.x, point.z, 0.095, 0.32);
+        }
         bubble.scale.setScalar(bubbles.radius * (0.72 + 0.4 * h));
         bubble.updateMatrix();
         air.setMatrixAt(i, bubble.matrix);
@@ -420,6 +421,7 @@ export async function startLowPowerBowl() {
       aim.fromArray(swim.position).add(basin.position).addScaledVector(view, -1.65 * controller.followZoom);
       controller.followEye.lerp(aim, 1 - Math.exp(-5 * dt));
     }
+    waterFilm.update(renderer, scene, camera, t, nightMix);
     renderer.render(scene, camera);
     diagnostics.frames++;
   }

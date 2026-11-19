@@ -2,7 +2,8 @@ import * as T from 'three';
 import { BOWL } from '../render/bowl';
 import { BED_LEVEL, BED_RADIUS, GLASS_INNER, MAT, stream } from '../render/scape/mesh.mjs';
 import { buildScapePieces } from '../render/scape/scene.mjs';
-import { WATER_LEVEL, SURFACE_RADIUS } from './slosh.mjs';
+import { WATER_LEVEL } from './slosh.mjs';
+import { makeWaterFilm } from './waterFilm.mjs';
 import { movingPlant } from './plants.mjs';
 
 // The same bowl and furnishings, rasterized once per view. Their material and cavity detail is
@@ -128,25 +129,19 @@ export function makeBowl(basin, shell, liquid, slosh) {
   const sandWall = new T.Mesh(sphereBand(GLASS_INNER, BED_LEVEL, -0.98), sand);
   bed.userData.topic = sandWall.userData.topic = 'sand';
   shell.add(sandWall, bed);
-  const water = new T.MeshPhongMaterial({ color: 0x76c8db, specular: 0xbbeffa, shininess: 70,
-    transparent: true, opacity: 0.23, depthWrite: false, side: T.DoubleSide });
-  const surface = new T.RingGeometry(0, SURFACE_RADIUS, 64, 10).rotateX(-Math.PI / 2);
-  water.onBeforeCompile = shader => {
-    shader.uniforms.bend = slosh.bend;
-    shader.vertexShader = 'uniform float bend;\n' + shader.vertexShader
-      .replace('#include <beginnormal_vertex>', `#include <beginnormal_vertex>
-        float r2 = dot(position.xz, position.xz) / ${SURFACE_RADIUS ** 2};
-        vec2 slope = bend * (-4. + 6. * r2) * 2. * position.xz / ${SURFACE_RADIUS ** 2};
-        objectNormal = normalize(vec3(-slope.x,1.,-slope.y));`)
-      .replace('#include <begin_vertex>', '#include <begin_vertex>\ntransformed.y += bend * (1.-r2) * (1.-3.*r2);');
-  };
-  const film = new T.Mesh(surface, water);
-  film.position.y = WATER_LEVEL;
-  film.userData.topic = 'water';
-  film.renderOrder = 3;
-  liquid.add(film, ring(SURFACE_RADIUS, 0.004, WATER_LEVEL, rim));
+  const waterFilm = makeWaterFilm(liquid, slosh, sand);
   const tint = new T.Mesh(sphereBand(GLASS_INNER, WATER_LEVEL, -0.98),
     new T.MeshBasicMaterial({ color: 0x77c5d9, transparent: true, depthWrite: false, opacity: 0.06 }));
+  // Seen edge-on, the film still has a narrow dark contact line on the wet glass.
+  tint.material.onBeforeCompile = shader => {
+    shader.vertexShader = 'varying float belowFilm;\n' + shader.vertexShader.replace('#include <begin_vertex>',
+      `#include <begin_vertex>\nbelowFilm = ${WATER_LEVEL} - position.y;`);
+    shader.fragmentShader = 'varying float belowFilm;\n' + shader.fragmentShader.replace('#include <opaque_fragment>', `
+      float line = 1.-smoothstep(.002,.017,belowFilm);
+      outgoingLight = mix(outgoingLight,vec3(.009,.030,.043),line);
+      diffuseColor.a += (1.-diffuseColor.a)*.56*line;
+      #include <opaque_fragment>`);
+  };
   tint.renderOrder = 4;
   liquid.add(tint);
   const lid = new T.Group(), dark = new T.MeshPhongMaterial({ color: 0x142229, shininess: 70 });
@@ -170,5 +165,5 @@ export function makeBowl(basin, shell, liquid, slosh) {
   footprint.rotation.x = -Math.PI / 2;
   footprint.position.y = -0.985;
   basin.add(footprint);
-  return { lid, tint, ...scape };
+  return { lid, tint, waterFilm, ...scape };
 }

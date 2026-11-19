@@ -1,5 +1,6 @@
 import { Quaternion, Vector3 } from 'three';
 import { GLASS_INNER } from '../render/scape/mesh.mjs';
+import { SurfaceRipples } from './ripples.mjs';
 
 export const WATER_LEVEL = 0.25;
 export const SURFACE_RADIUS = Math.sqrt(GLASS_INNER ** 2 - WATER_LEVEL ** 2);
@@ -19,6 +20,7 @@ export class Slosh {
   rotation = new Quaternion();
   inverse = new Quaternion();
   bend = { value: 0 };
+  ripples = new SurfaceRipples(SURFACE_RADIUS);
   point = new Vector3();
 
   step(dt, gravity, omega) {
@@ -43,6 +45,7 @@ export class Slosh {
     const gain = Math.min(1, 1.85 / (Math.hypot(this.vx, this.vz) || 1));
     this.currentX = this.vx * gain;
     this.currentZ = this.vz * gain;
+    this.ripples.step(dt, this.currentX, this.currentZ);
   }
 
   // The rocking water moves fastest near the film. Its rising side lifts what is
@@ -59,10 +62,14 @@ export class Slosh {
     return top;
   }
 
+  localDisplacement(x, z) {
+    const r2 = (x * x + z * z) / SURFACE_RADIUS ** 2;
+    return this.bend.value * Math.max(0, 1 - r2) * (1 - 3 * r2) + this.ripples.heightAt(x, z);
+  }
+
   heightAt(x, z) {
     const plane = WATER_LEVEL / this.normal.y + this.sx * x + this.sz * z;
     const p = this.point.set(x, plane, z).applyQuaternion(this.inverse);
-    const r2 = (p.x * p.x + p.z * p.z) / SURFACE_RADIUS ** 2;
-    return plane + this.bend.value * Math.max(0, 1 - r2) * (1 - 3 * r2) / this.normal.y;
+    return plane + this.localDisplacement(p.x, p.z) / this.normal.y;
   }
 }

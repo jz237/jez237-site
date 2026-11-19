@@ -60,8 +60,7 @@ export function addSurfaceLife(liquid) {
     }
     life.update(dt, sense, WATER_LEVEL, 0.5, rotation, spin, swim.mode);
     const e = life.matrix.elements;
-    const r2 = (e[0] ** 2 + e[2] ** 2) / SURFACE_RADIUS ** 2;
-    leaf.position.set(e[0], WATER_LEVEL + surface.bend.value * (1 - r2) * (1 - 3 * r2), e[2]);
+    leaf.position.set(e[0], WATER_LEVEL + surface.localDisplacement(e[0], e[2]), e[2]);
     leaf.rotation.y = -e[3];
     nest.count = life.bubbles;
     nest.visible = nest.count > 0;

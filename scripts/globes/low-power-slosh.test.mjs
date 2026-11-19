@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { BufferAttribute, BufferGeometry, Matrix3, Vector3 } from 'three';
 import { Slosh, SURFACE_RADIUS, WATER_LEVEL } from './src/lowPower/slosh.mjs';
+import { SurfaceRipples } from './src/lowPower/ripples.mjs';
 import { movingPlant } from './src/lowPower/plants.mjs';
 import { BettaSwim } from './src/fish/bettaSwim.mjs';
 import { buildScapePieces } from './src/render/scape/scene.mjs';
@@ -33,6 +34,36 @@ test('surface sampling meets the drawn waterline on the sphere during repeated h
     assert.ok(Math.abs(rim.y - water.heightAt(rim.x, rim.z)) < 1e-8);
     assert.ok(Math.hypot(water.sx, water.sz) <= 0.371);
   }
+});
+
+test('a local impact travels across the surface, stays inside the glass and damps at different frame rates', () => {
+  const samples = [];
+  for (const hz of [15, 30, 60, 120]) {
+    const w = new SurfaceRipples(1);
+    w.disturb(0, 0, 0.115, 1.15);
+    w.step(1 / hz, 0, 0);
+    assert.equal(w.heightAt(0.40, 0), 0);
+    for (let i = 1; i < hz; i++) w.step(1 / hz, 0, 0);
+    samples.push(w.heightAt(0.40, 0));
+    assert.notEqual(samples.at(-1), 0);
+    assert.equal(w.heightAt(1, 0), 0);
+    assert.ok(w.data.some((v, i) => i % 4 === 0 && Math.abs(v - 128) >= 1));
+    for (let i = 0; i < 7 * hz; i++) w.step(1 / hz, 0, 0);
+    assert.ok(Math.max(...w.shown) < 0.0001);
+  }
+  assert.ok(Math.max(...samples) - Math.min(...samples) < 1e-6);
+});
+
+test('opposite tilts send opposite ripples inward from the glass', () => {
+  const left = new SurfaceRipples(1), right = new SurfaceRipples(1);
+  for (let i = 0; i < 15; i++) {
+    const push = i < 6 ? 0.8 : 0;
+    left.step(1 / 30, -push, 0);
+    right.step(1 / 30, push, 0);
+  }
+  assert.ok(Math.abs(right.heightAt(.65,0)) > .003);
+  assert.ok(Math.abs(right.heightAt(.65,0) + left.heightAt(.65,0)) < 1e-6);
+  assert.ok(Math.abs(right.heightAt(0,.65)) < 1e-6);
 });
 
 test('a tilt produces reversing currents that are stronger near the surface and fade after release', () => {
