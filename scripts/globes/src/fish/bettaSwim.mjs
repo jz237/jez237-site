@@ -24,6 +24,19 @@ const nearestOn = (p, a, b) => {
   return [a[0] + ab[0] * t, a[1] + ab[1] * t, a[2] + ab[2] * t];
 };
 export const BETTA_SCALE = 0.084;
+
+/** Both renderers place the Atelier model relative to the swimming head. Carry the offset's
+ * velocity through each turn so the fin solver feels the same moving water in either renderer. */
+export function swimPose(s) {
+  const h = s.heading, p = s.pitch, length = 1.22 * BETTA_SCALE;
+  const offset = [length * Math.cos(h) * Math.cos(p), -length * Math.sin(p), -length * Math.sin(h) * Math.cos(p)];
+  const offsetVelocity = [
+    -length * (Math.sin(h) * Math.cos(p) * s.angularVelocity + Math.cos(h) * Math.sin(p) * s.pitchRate),
+    -length * Math.cos(p) * s.pitchRate,
+    length * (-Math.cos(h) * Math.cos(p) * s.angularVelocity + Math.sin(h) * Math.sin(p) * s.pitchRate),
+  ];
+  return { ...s, speed: s.speed / BETTA_SCALE, position: s.position.map((v, k) => (v + offset[k]) / BETTA_SCALE), velocity: s.velocity.map((v, k) => (v + offsetVelocity[k]) / BETTA_SCALE) };
+}
 // (Lengths set by the fish's own build were first measured on one BETTA_SCALE 0.105 long: SIZE scales
 // them to this one.)
 const SIZE = BETTA_SCALE / 0.105;
@@ -131,6 +144,7 @@ export class BettaSwim {
     this.timer = 7;
     this.cruiseSpeed = 0.09;
     this.drift = [0, 0, 0];
+    this.compensateDrift = false;
     this.initialized = false;
     // Own random stream so the trips never perturb the swimming route.
     this.gulpSeed = (seed ^ 0x9e3779b9) >>> 0;
@@ -799,6 +813,16 @@ export class BettaSwim {
     // The bearing to a goal is meaningless once it is nearly overhead or underfoot, and chasing it is
     // what makes a fish circle: the nearer the goal is in plan, the less the heading follows it.
     let yawError = wrap(Math.atan2(delta[2], -delta[0]) - this.heading) * smooth(0.03, 0.12, Math.hypot(delta[0], delta[2]));
+    // Aim a little upstream to stay on course. Use the drift the body has felt,
+    // so a reversing wave cannot whip the head round. Maneuvers keep their own aim.
+    if (this.compensateDrift && !nearWall && !veer && !detouring && !escaping &&
+        (this.mode === 'cruise' || this.mode === 'glide' || this.mode === 'burst') && !feed && !swallowing) {
+      const reach = Math.hypot(delta[0], delta[2]);
+      if (reach > 0.12) {
+        const cross = (delta[0] * this.drift[2] - delta[2] * this.drift[0]) / reach;
+        yawError = wrap(yawError + clamp(Math.atan2(cross, Math.max(0.08, this.speed)), -0.85, 0.85));
+      }
+    }
     // Parked at the glass it works at its reflection: head turned a little off square, swaying to and fro.
     // Going for food, the head turns as the plan says (to the pellet itself from the lips, close in).
     if (feed && !detouring) yawError = wrap(feed.yaw - this.heading) * smooth(0.004, 0.02, feed.plan);
