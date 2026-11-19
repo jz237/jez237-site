@@ -24,6 +24,19 @@ const nearestOn = (p, a, b) => {
   return [a[0] + ab[0] * t, a[1] + ab[1] * t, a[2] + ab[2] * t];
 };
 export const BETTA_SCALE = 0.084;
+
+/** Both renderers place the Atelier model relative to the swimming head. Carry the offset's
+ * velocity through each turn so the fin solver feels the same moving water in either renderer. */
+export function swimPose(s) {
+  const h = s.heading, p = s.pitch, length = 1.22 * BETTA_SCALE;
+  const offset = [length * Math.cos(h) * Math.cos(p), -length * Math.sin(p), -length * Math.sin(h) * Math.cos(p)];
+  const offsetVelocity = [
+    -length * (Math.sin(h) * Math.cos(p) * s.angularVelocity + Math.cos(h) * Math.sin(p) * s.pitchRate),
+    -length * Math.cos(p) * s.pitchRate,
+    length * (-Math.cos(h) * Math.cos(p) * s.angularVelocity + Math.sin(h) * Math.sin(p) * s.pitchRate),
+  ];
+  return { ...s, speed: s.speed / BETTA_SCALE, position: s.position.map((v, k) => (v + offset[k]) / BETTA_SCALE), velocity: s.velocity.map((v, k) => (v + offsetVelocity[k]) / BETTA_SCALE) };
+}
 // (Lengths set by the fish's own build were first measured on one BETTA_SCALE 0.105 long: SIZE scales
 // them to this one.)
 const SIZE = BETTA_SCALE / 0.105;

@@ -583,6 +583,18 @@ Tests: `betta-variety.test.mjs` (7).
 
 ## Browser compatibility
 
+Living Silk also offers **Low power** in the Graphics selector, or directly at
+`/demos/betta-bowl/?power=low`. This WebGL 2 renderer uses the compact Atelier
+specimen, the bowl's swimming controller and the same furnishing meshes. It draws
+glass and the water surface with simple materials and a gentle current. Feeding,
+flaring, varieties, Follow and Night work here. Choose **Full simulation** for
+interactive sloshing, refracted glass, Learn and Water care.
+
+Auto can select Low power before starting the WebGPU workers on lower-spec
+desktops, software adapters and browsers without WebGPU. A manual choice in the
+selector is remembered. Low power targets 30 frames per second, starts at up to
+720,000 pixels, and scales down when frames take too long.
+
 Firefox compiles WGSL with naga, which is stricter than Chrome's Tint. Builds up to
 1.6.0 failed there with `Abstract types may only appear in constant expressions` in
 the Koi `koi_map` function, because upstream called `mix()` with only literal

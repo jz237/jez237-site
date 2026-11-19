@@ -8,7 +8,7 @@
 // for bit. It uses no DOM and no GPU (built without its textures, it runs in a worker).
 import * as THREE from 'three';
 import { createBetta } from '../../../betta-atelier/src/fish.js';
-import { BettaSwim, BETTA_SCALE as SCALE } from './bettaSwim.mjs';
+import { BettaSwim, BETTA_SCALE as SCALE, swimPose } from './bettaSwim.mjs';
 import { BETTA_PROBES, readBettaWater } from './bettaWater.mjs';
 
 /** The dimple the lips make at the film: for how long (s into the gulp), at what rate it adds speed
@@ -78,7 +78,7 @@ export class BettaSpecimen {
     this.clamp = 0;
     this.rig.add(this.fish);
     this.rig.scale.setScalar(SCALE);
-    this.fish.userData.locomotion = this.locomotion();
+    this.fish.userData.locomotion = swimPose(this.swim);
     this.fish.userData.update(0);
     this.rig.updateMatrixWorld(true);
     let count = 0;
@@ -150,7 +150,7 @@ export class BettaSpecimen {
     this.swim.fold = this.fish.userData.bodyMotion?.turnAngles?.at(-1) ?? 0;
     // The tail's own working (read back from last frame's gait) is what lets the body gain speed.
     this.swim.advance(dt, this.flow.toArray(this.flowNow), env, this.waterState.submerged > 0.99, this.waterState, this.fish.userData.stroke ?? null);
-    this.fish.userData.locomotion = this.locomotion();
+    this.fish.userData.locomotion = swimPose(this.swim);
     const toLocal = 1 / SCALE;
     this.flowLocal[0] = this.flow.x * toLocal; this.flowLocal[1] = this.flow.y * toLocal; this.flowLocal[2] = this.flow.z * toLocal;
     this.fish.userData.externalFlow = this.flowLocal;
@@ -326,19 +326,6 @@ export class BettaSpecimen {
     // The lips, where it would meet the surface.
     this.fish.userData.bodyMotion.transform(-1.68, 0.0832, 0, scratch);
     this.mouth.set(scratch[0], scratch[1], scratch[2]).applyMatrix4(this.fish.matrixWorld);
-  }
-
-  locomotion() {
-    // The route belongs to the neck/head, not a pivot in the middle of the fish.
-    // Offsetting the model origin lets the head lead while the rear curls behind.
-    const s = this.swim, h = s.heading, p = s.pitch, length = 1.22 * SCALE;
-    const offset = [length * Math.cos(h) * Math.cos(p), -length * Math.sin(p), -length * Math.sin(h) * Math.cos(p)];
-    const offsetVelocity = [
-      -length * (Math.sin(h) * Math.cos(p) * s.angularVelocity + Math.cos(h) * Math.sin(p) * s.pitchRate),
-      -length * Math.cos(p) * s.pitchRate,
-      length * (-Math.cos(h) * Math.cos(p) * s.angularVelocity + Math.sin(h) * Math.sin(p) * s.pitchRate),
-    ];
-    return { ...s, speed: s.speed / SCALE, position: s.position.map((v, k) => (v + offset[k]) / SCALE), velocity: s.velocity.map((v, k) => (v + offsetVelocity[k]) / SCALE) };
   }
 
   updateVertices() {
