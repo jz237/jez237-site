@@ -1,0 +1,21 @@
+{
+  "keyDigest": "a1e807263688fde9410242a8432daa88bcc57c38e3911ea975cb5713bb57e0cd",
+  "chunkSize": 262144,
+  "assets": {
+    "card": {
+      "path": "/assets/screenings/01/5ad9e988471920e7469ddc00.bin",
+      "size": 1218,
+      "nonce": "iHyQVEyipVI"
+    },
+    "film": {
+      "path": "/assets/screenings/01/59f1cd275b8ad246b94535f6.bin",
+      "size": 7507974,
+      "nonce": "GdblU7ylGzs"
+    },
+    "still": {
+      "path": "/assets/screenings/01/6f0a505228202da494f9acd0.bin",
+      "size": 64507,
+      "nonce": "v0RSMS-71Z8"
+    }
+  }
+}
