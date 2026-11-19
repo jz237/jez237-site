@@ -11,7 +11,7 @@ import { finishMaterial, studioEnvironment, fileLabels, fileColors, modes, organ
 import { assemblies, bodyLandmarks, assemblyContext, assemblyOffset } from './assemblies.js?v=98fdd3ac69';
 import { bodyOffset, bodySpread, explodeSchedule } from './explode-rules.js?v=742c72af7e';
 import { layoutLabels } from './labels.js?v=5a33037751';
-import { createSection } from './section.js?v=4b27f180ad';
+import { createSection } from './section.js?v=beb859e964';
 import { createQuiz } from './quiz.js?v=c8d5755f3b';
 import { createTour } from './tour.js?v=37c81856aa';
 import { keyFacts, relatedPieces, summary } from './facts.js?v=12aa155dc7';

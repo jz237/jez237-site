@@ -48,6 +48,9 @@ jobs:
         run: |
           python3 -m http.server 8791 --bind 127.0.0.1 >/dev/null 2>&1 &
           for i in $(seq 1 30); do curl -sf http://127.0.0.1:8791/demos/anatomy-studio/ >/dev/null && break; sleep 1; done
+      - name: Section topology and culling regression
+        working-directory: scripts/anatomy-studio
+        run: node verify-section.mjs
       - name: Behaviour
         working-directory: scripts/anatomy-studio
         run: node verify.mjs

@@ -16,6 +16,7 @@ node stamp.mjs --check               # exit 1 if any stamp is stale (also run by
 node preview.mjs                     # 1100x579 preview JPEG for the demos catalog (needs the site served on :8791)
 node verify.mjs                      # Playwright checks against STUDIO_URL (default http://127.0.0.1:8791/demos/anatomy-studio/)
 node verify-life.mjs                 # the living body and loading, as a separate run: either file can fail on its own
+node verify-section.mjs              # transformed/LOD cap bounds, then all 2,270 meshes under software WebGL
 ```
 
 `blender-inspect.py` dumps one CSV per FBX (name, suffix kind, parent chain, triangles, bounds). Read it before changing
@@ -58,3 +59,11 @@ exact restoration on exploding, and lean loading. Under software WebGL the two f
 motion, exact reassembly, each nested study (only members visible, members framed, primary members separated), filters,
 search, isolate and descriptions, finish modes, labels, sequence, keyboard, the non-overlapping all-parts board at three
 viewports, mobile layout, deep links, the manual and reduced motion. Screenshots land in `STUDIO_SHOTS` or the temp dir.
+
+The November 19 section regression checks cap passes only for meshes intersecting
+the cut plane while the body is still. Previously every closed opaque mesh drew
+two stencil passes and a full-screen cap, even when wholly on one side of the
+plane; software rendering starved topology timers. Current world transforms and
+LOD bounds are tested, and the conservative path is retained during shader-driven
+life motion. The test checks all meshes without relaxing the existing topology
+assertions or the behaviour suite's timeout.

@@ -15,7 +15,7 @@
  * Opaque pieces are also drawn double-sided while a section is active, so anything left uncapped shows its inner wall.
  */
 import * as THREE from 'three';
-import { enliven } from './materials.js?v=5290592a00';
+import { enliven, lifeUniforms } from './materials.js?v=5290592a00';
 
 // Frame: metres, y up, +z anterior, +x subject's left.
 const NORMALS = { sagittal: [1, 0, 0], coronal: [0, 0, 1], transverse: [0, 1, 0] };
@@ -99,7 +99,21 @@ export function createSection({ materials, bounds, onChange, scene }) {
   const clearStencil = renderer => renderer.clearStencil();
   const closed = new Map();   // part -> true | false, tested on the base-tier mesh
   const untested = [];
-  const wantsCap = part => part.file !== 'regions' && !part.mesh.material.transparent && closed.get(part) === true;
+  const cutBounds = new THREE.Box3();
+  const wantsCap = part => {
+    if (part.file === 'regions' || part.mesh.material.transparent || closed.get(part) !== true) return false;
+    // Shader deformation is not represented by CPU geometry bounds. Keep the
+    // conservative stencil path while the living body is moving.
+    if (lifeUniforms.gain.value > 0) return true;
+    // A fully retained/removed piece cannot have a cut face. Avoid three stencil
+    // draws and a full-screen cap quad for every such piece (thousands of draws
+    // otherwise starve topology timers on software WebGL). Use the CURRENT LOD
+    // and world transform so moving/exploded pieces and changed planes stay exact.
+    const mesh = part.mesh;
+    if (!mesh.geometry.boundingBox) mesh.geometry.computeBoundingBox();
+    mesh.updateWorldMatrix(true, false);
+    return cutBounds.copy(mesh.geometry.boundingBox).applyMatrix4(mesh.matrixWorld).intersectsPlane(plane);
+  };
 
   function addCap(part, order) {
     const helper = material => {
