@@ -11,9 +11,9 @@ const header = {
   'X-Frame-Options': 'DENY',
   'X-Robots-Tag': 'noindex, nofollow, noarchive, nosnippet',
   Vary: 'Cookie, Authorization',
-  'Content-Security-Policy': "default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; media-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'none'",
+  'Content-Security-Policy': "default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; media-src 'self' blob:; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'none'",
 };
-const locked = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow,noarchive"><meta name="referrer" content="no-referrer"><title>Private screening · Jez237</title><link rel="stylesheet" href="/screening/watch.css"><script src="/screening/unlock.js" defer></script></head><body><main class="entry"><h1>Private screening</h1><p id="status" role="status">Open the complete private link you received to watch this film.</p><button type="button" id="retry" hidden>Try again</button><noscript><p>Enable JavaScript to open your private link.</p></noscript></main></body></html>`;
+const locked = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow,noarchive"><meta name="referrer" content="no-referrer"><title>Private screening · Jez237</title><link rel="stylesheet" href="/screening/watch.css?v=2"><script src="/screening/unlock.js?v=2" defer></script></head><body><main class="entry"><h1>Private screening</h1><p id="status" role="status">Open the complete private link you received to watch this film.</p><button type="button" id="retry" hidden>Try again</button><noscript><p>Enable JavaScript to open your private link.</p></noscript></main></body></html>`;
 
 const keyDigest = Uint8Array.from(selection.keyDigest.match(/../g), hex => parseInt(hex,16));
 const encoder = new TextEncoder();
@@ -76,88 +76,44 @@ function byteRange(value,size) {
   return lo<size&&hi>=lo?{lo,hi,partial:true}:null;
 }
 
-async function packetInput(ctx, asset, lo, hi) {
-  const size=selection.blockSize;
-  const first=Math.floor(lo/size),last=Math.floor(hi/size);
-  const total=asset.bytes+16*Math.ceil(asset.bytes/size);
-  const from=first*(size+16);
-  const through=Math.min(asset.bytes,(last+1)*size)+(last+1)*16-1;
-  const location=new URL(asset.path,ctx.request.url);
-  const request=new Request(location,{headers:{Range:'bytes='+from+'-'+through,'User-Agent':'jez237-screening-player'}});
-  const origin=asset.remote?await fetch(request):await ctx.env.ASSETS.fetch(request);
-  if (origin.status===206) {
-    if(origin.headers.get('Content-Range')!==('bytes '+from+'-'+through+'/'+total))throw new Error('Unexpected encrypted range');
-  } else if (origin.status!==200 || from!==0 || origin.headers.get('Content-Length')!==String(total)) {
-    throw new Error('Encrypted video is unavailable');
-  }
-  if(!origin.body)throw new Error('Missing encrypted content');
-  return {reader:origin.body.getReader(),first,last};
-}
-
-async function* plaintext(ctx,asset,key,lo,hi) {
-  const {reader,first,last}=await packetInput(ctx,asset,lo,hi);
-  const blockSize=selection.blockSize;
+async function openSmall(ctx,asset,key) {
   const iv=new Uint8Array(12);
-  const ivIndex=new DataView(iv.buffer);
   iv.set(decode(asset.nonce));
-  let bytes=new Uint8Array(0),at=0;
-  try {
-    for(let row=first;row<=last;row++){
-      const offset=row*blockSize;
-      const length=Math.min(blockSize,asset.bytes-offset);
-      const sealed=new Uint8Array(length+16);
-      let filled=0;
-      while(filled<sealed.length){
-        if(at===bytes.length){
-          const chunk=await reader.read();
-          if(chunk.done)throw new Error('Truncated video');
-          bytes=chunk.value;at=0;
-        }
-        const n=Math.min(sealed.length-filled,bytes.length-at);
-        sealed.set(bytes.subarray(at,at+n),filled);
-        at+=n;filled+=n;
-      }
-      ivIndex.setUint32(8,row);
-      const plain=new Uint8Array(await crypto.subtle.decrypt({name:'AES-GCM',iv},key,sealed));
-      yield plain.subarray(Math.max(0,lo-offset),Math.min(length,hi-offset+1));
-    }
-  } finally {await reader.cancel().catch(()=>{})}
+  const source=await ctx.env.ASSETS.fetch(new URL(asset.path,ctx.request.url));
+  if(!source.ok || asset.bytes>selection.blockSize)throw new Error('Protected page is unavailable');
+  const encrypted=await source.arrayBuffer();
+  if(encrypted.byteLength!==asset.bytes+16)throw new Error('Unexpected asset length');
+  return crypto.subtle.decrypt({name:'AES-GCM',iv},key,encrypted);
 }
 
-async function mediaResponse(ctx,asset,key,video) {
-  const request=ctx.request;
-  const tag='"'+asset.digest+'"';
+async function segment(request,stream) {
+  const tag='"'+stream.sha256+'"';
   const conditional=request.headers.get('If-Range');
-  const span=byteRange(conditional && conditional!==tag?null:request.headers.get('Range')?.trim(),asset.bytes);
-  if(!span)return blank(416,{'Content-Range':'bytes */'+asset.bytes});
+  const span=byteRange(conditional && conditional!==tag?null:request.headers.get('Range')?.trim(),stream.bytes);
+  if(!span)return blank(416,{'Content-Range':'bytes */'+stream.bytes});
   const {lo,hi,partial}=span;
   const count=hi-lo+1;
-  const headers={...header,'Content-Type':video?'video/mp4':'image/jpeg','Accept-Ranges':'bytes',ETag:tag,'Content-Length':String(count)};
-  if(partial)headers['Content-Range']='bytes '+lo+'-'+hi+'/'+asset.bytes;
-  if(video)headers['Content-Disposition']='inline; filename="film.mp4"';
+  const headers={...header,'Content-Type':'video/mp2t','Accept-Ranges':'bytes',ETag:tag,'Content-Length':String(count)};
+  if(partial)headers['Content-Range']='bytes '+lo+'-'+hi+'/'+stream.bytes;
   const status=partial?206:200;
   if(request.method==='HEAD')return new Response(null,{status,headers});
-  const samples=plaintext(ctx,asset,key,lo,hi);
-  const first=await samples.next();
-  if(first.done)throw new Error('Empty video');
-  if(first.value.length===count){
-    await samples.return();
-    return new Response(first.value,{status,headers});
-  }
-  const stream=new FixedLengthStream(count);
-  const writer=stream.writable.getWriter();
-  const pumping=(async()=>{
-    try{
-      await writer.write(first.value);
-      for await (const part of samples)await writer.write(part);
-      await writer.close();
-    }catch(error){
-      await samples.return().catch(()=>{});
-      await writer.abort(error).catch(()=>{});
-    }
-  })();
-  ctx.waitUntil(pumping);
-  return new Response(stream.readable,{status,headers});
+  const outgoing=new Headers({'User-Agent':'jez237-screening-player'});
+  if(partial)outgoing.set('Range','bytes='+lo+'-'+hi);
+  const origin=await fetch(stream.origin,{headers:outgoing,redirect:'follow'});
+  if(origin.status!==status || (partial && origin.headers.get('Content-Range')!==headers['Content-Range']))return blank(503,{'Retry-After':'5'});
+  return new Response(origin.body,{status,headers});
+}
+async function playlist(env,version,raw) {
+  const key=await grant(env,'key',raw);
+  const uri=await grant(env,version+'.ts',raw);
+  return selection.streams[version].playlist.replaceAll('"screening-key"','"'+key+'"')
+    .replaceAll('\n'+version+'.ts\n','\n'+uri+'\n');
+}
+async function streamKey(raw) {
+  const suffix=encoder.encode('/hls-screening/02/v1');
+  const input=new Uint8Array(raw.length+suffix.length);
+  input.set(raw);input.set(suffix,raw.length);
+  return (await crypto.subtle.digest('SHA-256',input)).slice(0,16);
 }
 
 export async function onRequest(ctx) {
@@ -173,28 +129,34 @@ export async function onRequest(ctx) {
     return blank(204,{'Set-Cookie':cookie+'='+token+'; Path='+base+'; Secure; HttpOnly; SameSite=Lax'});
   }
   if(!['GET','HEAD'].includes(request.method))return blank(405,{Allow:'GET, HEAD'});
-  const video=route==='film.mp4'||route==='film-4k.mp4';
-  if(route && !video && route!=='poster.jpg')return blank(404);
+  const hls=/^(hd|uhd)\.(m3u8|ts)$/.exec(route);
+  if(route && !hls && !['key','poster.jpg'].includes(route))return blank(404);
   let raw=await keyFrom(cookieValue(request));
-  if(!raw && video)raw=await acceptGrant(env,route,url.searchParams.get('p'));
+  if(!raw && (hls || route==='key'))raw=await acceptGrant(env,route,url.searchParams.get('p'));
   if(!raw){
     if(route)return blank(404);
     return new Response(request.method==='HEAD'?null:locked,{headers:{...header,'Content-Type':'text/html; charset=utf-8'}});
   }
   try {
+    if(route==='key'){
+      return new Response(request.method==='HEAD'?null:await streamKey(raw),{headers:{...header,'Content-Type':'application/octet-stream'}});
+    }
+    if(hls){
+      if(hls[2]==='ts')return await segment(request,selection.streams[hls[1]]);
+      const body=request.method==='HEAD'?null:await playlist(env,hls[1],raw);
+      return new Response(body,{headers:{...header,'Content-Type':'application/vnd.apple.mpegurl'}});
+    }
     const assetKey=await crypto.subtle.importKey('raw',raw,'AES-GCM',false,['decrypt']);
-    if(route){
-      const selected=video?(route==='film.mp4'?selection.assets.hd:selection.assets.uhd):selection.assets.poster;
-      return await mediaResponse(ctx,selected,assetKey,video);
+    if(route==='poster.jpg'){
+      const body=request.method==='HEAD'?null:await openSmall(ctx,selection.assets.poster,assetKey);
+      return new Response(body,{headers:{...header,'Content-Type':'image/jpeg'}});
     }
     const headers={...header,'Content-Type':'text/html; charset=utf-8'};
     if(request.method==='HEAD')return new Response(null,{headers});
-    const card=selection.assets.card;
-    let html='';
-    for await(const packet of plaintext(ctx,card,assetKey,0,card.bytes-1))html+=new TextDecoder().decode(packet);
+    const card=await openSmall(ctx,selection.assets.card,assetKey);
     const fourK=url.searchParams.get('quality')==='4k';
-    const source=await grant(env,fourK?'film-4k.mp4':'film.mp4',raw);
-    html=html.replaceAll('[[VIDEO]]',source).replaceAll('[[SIZE]]',fourK?'4K UHD':'1080p')
+    const source=await grant(env,fourK?'uhd.m3u8':'hd.m3u8',raw);
+    const html=new TextDecoder().decode(card).replaceAll('[[VIDEO]]',source).replaceAll('[[SIZE]]',fourK?'4K UHD':'1080p')
       .replaceAll('[[SWITCH_URL]]',base+(fourK?'':'?quality=4k')).replaceAll('[[SWITCH_LABEL]]',fourK?'Switch to 1080p':'Watch in 4K');
     return new Response(html,{headers});
   }catch{return blank(503,{'Retry-After':'5'})}

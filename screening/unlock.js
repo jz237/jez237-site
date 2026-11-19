@@ -20,7 +20,7 @@ async function unlock() {
       return;
     }
     if (!access.ok) throw new Error('Checking access');
-    const session = await fetch(base + 'film.mp4', {method: 'HEAD', credentials: 'same-origin', cache: 'no-store'});
+    const session = await fetch(base + 'poster.jpg', {method: 'HEAD', credentials: 'same-origin', cache: 'no-store'});
     if (session.status === 404) {
       statusLine.textContent = 'Allow cookies for jez237.com, then tap Try again.';
       retry.hidden = false;
