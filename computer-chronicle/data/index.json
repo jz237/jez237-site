@@ -2,6 +2,22 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-11-19",
+      "historicDate": "1985-09-23",
+      "displayDate": "Week of September 23-29, 1985",
+      "edition": "Issue 165 - Weekly 1985 Computer & Culture Chronicle",
+      "morningLine": "Apple takes its dispute with Steve Jobs to court while Lucasfilm games give Atari owners new worlds to explore.",
+      "leadHeadline": "Apple takes Steve Jobs to court over his new computer venture",
+      "storyHeadlines": [
+        "Lucasfilm’s delayed games reach Atari owners through Epyx",
+        "Amiga review makes the case for a multimedia personal computer",
+        "Atari’s ST roadmap promises cheaper machines and compact-disc storage"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1985-09-23.jpg",
+      "thumb": "media/thumbs/1985-09-23.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-11-18",
       "historicDate": "1985-09-16",
       "displayDate": "Week of September 16-22, 1985",

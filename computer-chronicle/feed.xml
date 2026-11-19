@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Wed, 18 Nov 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Thu, 19 Nov 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of September 23-29, 1985 — Apple takes Steve Jobs to court over his new computer venture</title>
+      <link>https://jez237.com/computer-chronicle/?date=1985-09-23</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1985-09-23</guid>
+      <pubDate>Thu, 19 Nov 2026 12:00:00 GMT</pubDate>
+      <description>A $5-million suit turns the cofounder’s new venture into a legal battleground. Apple sued Steve Jobs on September 23, escalating the dispute surrounding its departed cofounder and his new computer venture. The Los Angeles Times reports the action in its September 24 edition under a headline describing a $5-million lawsuit. Also this week: Lucasfilm’s delayed games reach Atari owners through Epyx · Amiga review makes the case for a multimedia personal computer · Atari’s ST roadmap promises cheaper machines and compact-disc storage.</description>
+    </item>
     <item>
       <title>Week of September 16-22, 1985 — Jobs resigns from Apple</title>
       <link>https://jez237.com/computer-chronicle/?date=1985-09-16</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1985-05-13</guid>
       <pubDate>Sat, 31 Oct 2026 12:00:00 GMT</pubDate>
       <description>A $9.99 price tag brings a fresh budget pitch to the Commodore 64 shelf. Mastertronic is making price the attraction on the Commodore 64 games rack. The May issue of COMPUTE! reports games at $9.99 apiece, a modest entry ticket for owners looking beyond the familiar full-price boxes. This is the month’s product-news coverage, not a claim that the games all arrived during this particular week. Also this week: Atari rejoins Summer CES; ST clears FCC hurdle · GEM brings the desktop metaphor to PCs and Atari · Star offers near-letter-quality printing from $299.</description>
-    </item>
-    <item>
-      <title>Week of May 6-12, 1985 — Championship Lode Runner turns veterans into certified champions</title>
-      <link>https://jez237.com/computer-chronicle/?date=1985-05-06</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1985-05-06</guid>
-      <pubDate>Fri, 30 Oct 2026 12:00:00 GMT</pubDate>
-      <description>Brøderbund’s fifty-screen challenge gives veteran runners a certificate to chase. Championship Lode Runner asks a pointed question of anyone who has mastered the original: can you survive fifty screens built for experts? Brøderbund’s sequel, reviewed in the May COMPUTE!, trades the original’s 150 screens for a smaller, deliberately demanding collection. This is a test of seasoned runners, not a gentle first lesson in collecting gold and evading guards. Also this week: Atari’s attack: 520ST reaches the hands-on test bench · Sidekick puts the desk inside the PC — at two prices · MacVision imports the video world into Macintosh documents.</description>
     </item>
   </channel>
 </rss>
