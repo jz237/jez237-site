@@ -1,14 +1,14 @@
-import {createPractice, advancePractice} from './practice.js?v=1';
+import {createPractice, advancePractice} from './practice.js?v=belt-rescue-2';
 // Skyhold 2026 — game flow, menus, HUD (with the scanner strip), commentary, demo director and the frame loop.
 import { VERSION, SECTORS, STEP, F, C, H, BOSSES, UPGRADES, UP_KEYS, UP_COST, MEDALS, parTime, TYPICAL_UP, START_LIVES, DIFFICULTY, POWERUPS, LIVERIES, CP_NAMES, WAVES, ENEMY, SHIPS, SHIP_KEYS, RIVALS, MASTERY, mastLevel, SPECIALS } from './config.js?v=26';
-import { makeWorld, step, stepGuest, drainEvents, wd, wp, settlersLeft, nodePos, CHAIN_T, chainMult, beamRange } from './sim.js?v=26';
-import { Autopilot } from './ai.js?v=26';
-import { Renderer, pickQuality, CALM, LOOKS, PW, PH } from './render.js?v=26';
+import { makeWorld, step, stepGuest, drainEvents, wd, wp, settlersLeft, nodePos, CHAIN_T, chainMult, beamRange } from './sim.js?v=belt-rescue-2';
+import { Autopilot } from './ai.js?v=belt-rescue-2';
+import { Renderer, pickQuality, CALM, LOOKS, PW, PH } from './render.js?v=belt-rescue-2';
 import { Audio } from './audio.js?v=26';
 import { Input } from './input.js?v=26';
 import { Scores, NO_POST } from './scores.js?v=26';
-import { Recorder, Replay } from './replay.js?v=26';
-import { Online, ROOM, QUICK, QUICK_R, randomCode, cleanCode } from './online.js?v=26';
+import { Recorder, Replay } from './replay.js?v=belt-rescue-2';
+import { Online, ROOM, QUICK, QUICK_R, randomCode, cleanCode } from './online.js?v=belt-rescue-2';
 
 const $ = (id) => document.getElementById(id);
 const params = new URLSearchParams(location.search);
@@ -519,7 +519,7 @@ function handleEvents(list, W, live) {
         R.shatter(R.cx); A.play('boomL', { vol: 1, rate: 0.55, gap: 0 }); A.play('boomL', { vol: 0.8, rate: 0.7, delay: 0.5, gap: 0 }); slowmo(0.4, 1.6);
         A.play('colonyfall', { vol: 1, gap: 0 }); A.cab('planet'); A.play('alarm', { vol: 0.7, delay: 0.4, gap: 0 });
         R.flashScreen(0.3, 0xff3a2a); R.addTrauma(0.5 * S);
-        if (live) { banner('THE PLANET IS LOST', 'FIGHT ON IN SPACE · EVERY LIFTER IS NOW A HUSK', 3.6); say('colonyfall', { key: true, delay: 0.8 }); rumble(0.7, 0.7, 600); }
+        if (live) { banner('THE PLANET IS LOST', 'MUTANTS CLOSING FROM BOTH SIDES', 3.6); say('colonyfall', { key: true, delay: 0.8 }); rumble(0.7, 0.7, 600); }
         break;
       case 'colony': if (live) { banner('THE PLANET RETURNS', 'A NEW COLONY · THE SETTLERS ARE BACK', 2.8); R.flashScreen(0.6, 0xffffff); } break;
       case 'tell': snd('tell', e, { vol: 0.4, gap: 0.12 }); A.retro('tell', { vol: 0.15, pan: pan(e.x) }); break;
@@ -556,10 +556,11 @@ function handleEvents(list, W, live) {
         if (mine(e) || !live) R.kick(0.8);
         A.play('nova', { vol: 1, gap: 0 }); A.retro('nova', { vol: 0.5 }); cab('bomb', e);
         const p = P(e.x, e.y);
-        for (const r of [10, 22, 34]) fx.ring(p.x, p.y, p.z, r, 0xffd0a0);
-        R.novaWave(e.x, e.y);
-        fx.flash(p.x, p.y, p.z + 4, 120, 0xffc890, 0.6);
-        R.flashScreen(0.5, 0xffe8c8); R.addTrauma(0.6 * S); R.shock(e.x, e.y, 2.2);
+        fx.ring(p.x, p.y, p.z, 12, 0xffaf62);
+        fx.ring(p.x, p.y, p.z, 26, 0x80ccff);
+        R.novaWave(e.x, e.y, e.r);
+        fx.flash(p.x, p.y, p.z + 1, 24, 0xffc890, 0.44);
+        R.flashScreen(0.2, 0xffe8c8); R.addTrauma(0.45 * S); R.shock(e.x, e.y, 1.5);
         if (live && mine(e)) rumble(0.8, 0.8, 400);
         break;
       }
@@ -1336,7 +1337,7 @@ function tickFrame(dt, draw = true) {
   if (interp) lerpIn(cur, Math.min(1, (G.state === 'replay' ? G.replay.acc : G.acc) / STEP));
   const me = myPlayer(cur);
   const menu = G.state === 'title' || (['aiwatch', 'sectors', 'online', 'scores', 'medals', 'options', 'help'].includes(G.screen) && G.mode === 'title');
-  R.updateCamera(dt, { me: me && me.alive && !menu ? me : null, cine: menu, shake: +settings.shake, chase: !menu && chaseOn() });
+  R.updateCamera(dt, { me: me && me.alive && !menu ? me : null, cine: menu, shake: +settings.shake, chase: !menu && chaseOn(), watching: G.mode === 'demo' || G.mode === 'playthrough' });
   R.W = cur;
 
   R.danger = G.state === 'play' && me && me.alive && me.shield === 0 && cur.lives <= 1 && G.mode !== 'demo' && G.mode !== 'playthrough' && !cur.rivals;
@@ -1438,7 +1439,7 @@ function objective(W, me) {
   const B = W.boss;
   if (B) { if (B.st === 'warp') return 'THE CARRIER IS ARRIVING · GET CLEAR'; const n = B.nodes.filter((q) => q.hp > 0).length; return `LINE UP WITH THE CARRIER'S GLOWING WEAK POINTS AND FIRE · ${n} LEFT`; }
   if (W.special && W.phase === 'fight') { const S = SPECIALS.find((q) => q.key === W.special.key); return `${S ? S.name : 'SPECIAL WAVE'} · ${W.special.left} OF ${W.special.total} FIGHTERS LEFT`; }
-  if (W.fallen) return 'THE COLONY HAS FALLEN · DESTROY EVERY MACHINE';
+  if (W.fallen) return 'BREAK THE ENCIRCLEMENT · DESTROY EVERY MACHINE';
   const l = W.enemies.filter((e) => e.hp > 0 && (e.type === 'lifter' || e.type === 'husk')).length + (W.plan ? W.plan.left : 0);
   return `SHOOT THE LIFTERS BEFORE THEY REACH THE SETTLERS · ${l} TO GO`;
 }
@@ -1528,7 +1529,7 @@ async function boot() {
   toTitle();
   boardOf('campaign', settings.diff).fresh(); boardOf('endless', settings.diff).fresh();
   if (!G.fixed && !params.has('test')) R.prepareAll(true);
-  if (params.has('test')) { const m = await import('./tests.js?v=26'); m.runTests(window.__sh); }
+  if (params.has('test')) { const m = await import('./tests.js?v=belt-rescue-2'); m.runTests(window.__sh); }
   else if (params.has('playthrough')) { A.unlock(); startPlaythrough(); }
   else if (params.has('room')) { act('online'); $('join-code').value = cleanCode(params.get('room')); }
   else if (G.autopilot) { A.unlock(); if (params.has('endless')) startEndless(); else startCampaign(+params.get('sector') || 0); }

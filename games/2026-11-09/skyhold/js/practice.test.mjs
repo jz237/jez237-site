@@ -1,6 +1,6 @@
 import test from 'node:test';import assert from 'node:assert/strict';
 import {createPractice,advancePractice} from './practice.js';
-import {step,drainEvents,wd} from './sim.js?v=26';
+import {step,drainEvents,wd} from './sim.js?v=belt-rescue-2';
 const tick=(s,n=1)=>{for(let i=0;i<n;i++){step(s.world,1/60);drainEvents(s.world);advancePractice(s);}};
 test('practice waits for real movement and shots, then completes a real catch and landing',()=>{
  const s=createPractice(),W=s.world,p=W.players[0];tick(s,600);assert.equal(s.stage,'move');assert.equal(W.enemies.length,0);
