@@ -13,7 +13,7 @@ from urllib.parse import quote
 
 ORIGIN = 'https://jez237.com'
 PREFIX = '/jez237-site/'
-SECTIONS = ('games/', 'demos/')
+SECTIONS = ('games/', 'demos/', 'multimedia/port-richmond-halloween-intro/')
 # Leave room below GitHub's 1 GB limit for tar/zip headers and future additions.
 MAX_PAYLOAD_BYTES = 900_000_000
 
@@ -44,11 +44,11 @@ def fallback_script():
   const prefix = '/jez237-site/';
   if (!location.pathname.startsWith(prefix)) return;
   const path = location.pathname.slice(prefix.length);
-  if (/^(games|demos)(\/|$)/.test(path)) {
+  if (__SECTIONS__.some(section => path === section.slice(0, -1) || path.startsWith(section))) {
     location.replace('https://jez237.com/' + path + location.search + location.hash);
   }
 })();
-</script>'''
+</script>'''.replace('__SECTIONS__', json.dumps(SECTIONS))
 
 
 def retirement_worker():
@@ -77,8 +77,8 @@ def prepare_routes(destination, paths):
     destination = Path(destination)
     if not destination.is_dir() or (destination / '.git').exists():
         raise ValueError('Destination must be an existing disposable payload, not a repository')
-    if any((destination / name).exists() for name in ('games', 'demos')):
-        raise ValueError('Exclude games/demos from staging first; refusing to overwrite content')
+    if any((destination / name).exists() for name in SECTIONS):
+        raise ValueError('Exclude routed sections from staging first; refusing to overwrite content')
     redirects = workers = 0
     for path in paths:
         relative = PurePosixPath(path)
@@ -141,7 +141,7 @@ def main():
     try:
         if args.action == 'routes':
             paths = subprocess.check_output(['git', 'ls-tree', '-rz', '--name-only', 'HEAD',
-                                             '--', 'games', 'demos']).decode().split('\0')
+                                             '--', *SECTIONS]).decode().split('\0')
             result = prepare_routes(args.destination, filter(None, paths))
         else:
             result = check_size(args.destination)

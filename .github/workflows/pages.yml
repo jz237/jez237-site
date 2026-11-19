@@ -45,6 +45,10 @@ jobs:
             !/.wrangler/
             !/games/
             !/demos/
+            !/multimedia/port-richmond-halloween-intro/
+            /multimedia/port-richmond-halloween-intro/og.jpg
+            /multimedia/port-richmond-halloween-intro/poster.jpg
+            /multimedia/port-richmond-halloween-intro/thumb.webp
             /games/index.html
             /games/2026-08-20/final-blow/game.js
             /games/2026-08-20/final-blow/index.html
@@ -157,6 +161,7 @@ jobs:
             --exclude='./.wrangler' \
             --exclude='./games' \
             --exclude='./demos' \
+            --exclude='./multimedia/port-richmond-halloween-intro' \
             --exclude='./functions' \
             --exclude='./scripts' \
             --exclude='./stock-market-src' \
@@ -183,6 +188,8 @@ jobs:
           python3 scripts/prepare_pages_mirror.py routes _site
           # The main landing page also uses these lightweight gallery thumbnails.
           cp -a demos/assets _site/demos/assets
+          # Keep gallery previews; the interactive film opens on the canonical site.
+          cp multimedia/port-richmond-halloween-intro/{og.jpg,poster.jpg,thumb.webp} _site/multimedia/port-richmond-halloween-intro/
 
       - name: Preserve legacy direct video URLs from R2
         run: python3 scripts/restore_legacy_media.py _site
