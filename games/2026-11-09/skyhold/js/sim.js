@@ -73,7 +73,7 @@ function nearestPlayer(W, x, max = 1e9) {
   return best;
 }
 function tut(W, key) { if (!W.tutorial || W.tut[key] || W.demo) return; W.tut[key] = 1; W.ev.push({ k: 'tut', key }); }
-const safeNow = (W) => W.tutorial && W.waveT < TUTOR.safe;
+const safeNow = (W) => W.tutorial && !W.fallen && W.waveT < TUTOR.safe;
 
 // the colony: settlers live round a few sites spread round the planet
 function makeColony(W) {
@@ -170,6 +170,7 @@ function startWave(W, w) {
   const R = W.R;
   W.phase = 'fight'; W.waveT = 0;
   W.special = null;
+  if (W.fallen) launchSpacePack(W);
   if (!W.rivals && (W.mode === 'endless' ? W.waveN % SPECIAL.every === 0 : w === SPECIAL.every - 1)) { specialWave(W, w); return; }
   const extra = [];
   for (let i = 0; i < R.sowers; i++) extra.push({ t: rr(W, 3, 14), type: 'sower' });
@@ -365,7 +366,16 @@ function maw(W, e, dt) {
   }
   if (e.life <= 0 && Math.abs(wd(p.x - e.x)) < MAW.stalk + 8 && !safeNow(W)) { e.tell = MAW.warn; W.ev.push({ k: 'tell', id: e.id, x: e.x, y: e.y, T: e.tell }); }
 }
-// the SKYGATE: fly through it and it throws you to wherever the colony needs you most
+export function rescueAtGate(W) {
+  let to = null, why = '';
+  const ls = W.enemies.filter((e) => e.type === 'lifter' && e.hp > 0 && e.born <= 0);
+  const lift = ls.filter((e) => e.st === 'lift').sort((a, b) => b.y - a.y)[0];
+  if (lift) { to = lift; why = 'lift'; }
+  if (!to) { const s = W.settlers.find((q) => q.st === 'fall' && q.dropY > W.R.safeH); if (s) { to = s; why = 'fall'; } }
+  if (!to) { const gr = ls.find((e) => e.st === 'grab' || e.st === 'down'); if (gr) { to = gr; why = 'grab'; } }
+  return { to, why };
+}
+// The pilot and the gate use the same distress signal.
 function gateCheck(W, p) {
   const g = W.gate;
   if (!g || !p.alive) { p.px = p.x; return; }
@@ -373,12 +383,7 @@ function gateCheck(W, p) {
   const was = wd((p.px ?? p.x) - g.x), now = wd(p.x - g.x);
   p.px = p.x;
   if (p.gateT > 0 || Math.sign(was) === Math.sign(now) || Math.abs(now) > 6 || Math.abs(p.y - g.y) > GATE.r) return;
-  let to = null, why = '';
-  const ls = W.enemies.filter((e) => e.type === 'lifter' && e.hp > 0 && e.born <= 0);
-  const lift = ls.filter((e) => e.st === 'lift').sort((a, b) => b.y - a.y)[0];
-  if (lift) { to = lift; why = 'lift'; }
-  if (!to) { const s = W.settlers.find((q) => q.st === 'fall' && q.dropY > W.R.safeH); if (s) { to = s; why = 'fall'; } }
-  if (!to) { const gr = ls.find((e) => e.st === 'grab' || e.st === 'down'); if (gr) { to = gr; why = 'grab'; } }
+  const { to, why } = rescueAtGate(W);
   p.gateT = GATE.cd;
   W.ev.push({ k: 'gate', pid: p.id, x: g.x, y: g.y, warp: !!to, why });
   if (!to) return;
@@ -439,11 +444,13 @@ function spawnSpot(W, type) {
   }
   return rr(W, 0, C);
 }
-function spawnEnemy(W, type, x, y) {
+function spawnEnemy(W, type, x, y, entryDelay = 0) {
+  if (W.fallen && type === 'lifter') type = 'husk';
   if (x === undefined) x = spawnSpot(W, type);
   if (y === undefined) y = type === 'lifter' ? rr(W, 20, 30) : type === 'sower' ? rr(W, 24, 31) : type === 'prowler' ? clamp((nearestPlayer(W, x) || { y: 18 }).y, 6, 30) : rr(W, 12, 28);
   const e = addEnemy(W, type, x, y);
-  e.born = type === 'prowler' ? 0.8 : W.R.warn * 1.2 * (W.tutorial && W.waveT < TUTOR.safe ? 1.3 : 1);
+  e.born = (type === 'prowler' ? 0.8 : W.R.warn * 1.2 * (safeNow(W) ? 1.3 : 1)) + entryDelay;
+  if (W.fallen && type === 'husk') e.fireT = rr(W, 0.55, 1.65);
   W.ev.push({ k: 'warpin', type, x, y, id: e.id, T: e.born });
   if (type === 'prowler') W.ev.push({ k: 'prowler', x, y });
   return e;
@@ -747,10 +754,12 @@ function lose(W, s, why) {
     W.ev.push({ k: 'colonyfall' });
     // every lifter left turns on the pilots
     for (const e of W.enemies) if (e.type === 'lifter' && e.hp > 0) toHusk(W, e);
+    if (W.phase === 'fight' || W.phase === 'boss') launchSpacePack(W);
   }
 }
 function toHusk(W, e) {
   e.type = 'husk'; e.st = 'hunt'; e.carry = 0; e.tgt = 0; e.hp = ENEMY.husk.hp; e.tell = 0;
+  if (W.fallen) e.fireT = rr(W, 0.65, 1.8);
   W.ev.push({ k: 'fuse', x: e.x, y: e.y, id: e.id });
 }
 
@@ -844,7 +853,35 @@ function lifter(W, e, dt) {
     }
   }
 }
+// A finite pincer at collapse and each subsequent wave. Each arrival gets its
+// usual visible entry warning and counts toward the normal wave-clear condition.
+function launchSpacePack(W) {
+  const pilots = W.players.filter(p => p.alive);
+  if (!pilots.length) return;
+  const difficulty = D_OF(W);
+  const count = Math.min(Math.round(4 * difficulty.count), 8 - W.enemies.filter(e => e.hp > 0 && e.type === 'husk').length);
+  for (let i = 0; i < count; i++) {
+    const p = pilots[Math.floor(i / 2) % pilots.length], side = i % 2 ? 1 : -1;
+    const x = wp(p.x + side * rr(W, 46, 64) + (p.vx || 0) * 0.35);
+    const y = clamp(p.y + (i % 4 < 2 ? 1 : -1) * rr(W, 7, 14), 3, H - 3);
+    spawnEnemy(W, 'husk', x, y, Math.floor(i / 2) * 0.22);
+  }
+}
 function husk(W, e, dt) {
+  if (W.fallen) {
+    const p = nearestPlayer(W, e.x);
+    if (!p) { e.vx *= 1 - dt; e.vy *= 1 - dt; return; }
+    const distance = Math.abs(wd(p.x - e.x)), lane = e.id % 3 - 1;
+    const approach = clamp((distance - 5) / 29, 0, 1);
+    const lead = approach * (0.20 + (lane + 1) * 0.17);
+    const tx = p.x + p.vx * lead + lane * 4 * approach;
+    const ty = clamp(p.y + p.vy * lead + lane * 8 * approach + 2.2 * Math.sin(e.t * 3.1 + e.ph), 1.5, H - 1.5);
+    const gunship = SHIPS[p.ship] || SHIPS.warden;
+    const topSpeed = F.vmax * gunship.vmax * (1 + 0.08 * (W.up.thrust || 0));
+    const speed = (topSpeed * 1.07 + W.R.hV * 0.55) * D_OF(W).speed;
+    moveTo(e, tx, ty, speed, 56 + W.R.hV, dt);
+    return;
+  }
   const p = nearestPlayer(W, e.x, 140);
   if (!p) { e.vx += clamp(e.face * W.R.hV * 0.5 - e.vx, -10 * dt, 10 * dt); e.vy = (e.yT - e.y); return; }
   const jx = Math.sin(e.t * 3.1 + e.ph) * 5, jy = Math.sin(e.t * 4.3 + e.ph * 2) * 3;
@@ -984,7 +1021,8 @@ function prowler(W, e, dt) {
 const NOGUN = new Set(['whirler', 'coil', 'spark', 'scorcher', 'maw']);
 function shoot(W, e, dt) {
   if (e.type === 'mine' || e.type === 'skimmer' || e.type === 'meteor' || NOGUN.has(e.type) || safeNow(W)) return;
-  const p = nearestPlayer(W, e.x, 46);
+  const mutant = W.fallen && e.type === 'husk';
+  const p = nearestPlayer(W, e.x, mutant ? 74 : 46);
   if (e.tell > 0) {
     e.tell -= dt;
     if (e.tell <= 0) { if (p) bolt(W, e, p); }
@@ -992,22 +1030,24 @@ function shoot(W, e, dt) {
   }
   e.fireT -= dt;
   if (e.fireT > 0) return;
-  const rate = W.R.fire * (e.type === 'husk' ? 1.4 : e.type === 'prowler' ? 2.4 : e.type === 'stinger' ? 0.5 : e.type === 'hive' ? 0.6 : 1);
+  const rate = mutant ? 0.74 * D_OF(W).fire + W.R.fire : W.R.fire * (e.type === 'husk' ? 1.4 : e.type === 'prowler' ? 2.4 : e.type === 'stinger' ? 0.5 : e.type === 'hive' ? 0.6 : 1);
   e.fireT = rr(W, 0.7, 1.3) / Math.max(0.02, rate);
   if (!p || e.type === 'lifter' && e.st === 'lift') return;
   if (e.type === 'stinger' && Math.sign(wd(p.x - e.x)) !== e.face) return;   // a stinger only fires ahead of it
   const telling = W.enemies.filter((q) => q.tell > 0).length;
-  if (telling >= W.R.shooters) return;
-  e.tell = W.R.warn * 0.6;
+  if (telling >= (mutant ? Math.max(3, W.R.shooters) : W.R.shooters)) return;
+  e.tell = mutant ? clamp(W.R.warn * 0.43, 0.48, 0.85) : W.R.warn * 0.6;
   W.ev.push({ k: 'tell', id: e.id, x: e.x, y: e.y, T: e.tell });
 }
 function bolt(W, e, p, ang) {
-  const R = W.R, v = R.boltV;
+  const R = W.R, mutant = W.fallen && e.type === 'husk';
+  const v = mutant ? 22 * D_OF(W).boltV + R.boltV * 0.65 : R.boltV;
   let a = ang;
   if (a === undefined) {
     const dx0 = wd(p.x - e.x), dy0 = p.y - e.y, t = Math.hypot(dx0, dy0) / v;
-    const tx = dx0 + p.vx * t * R.lead, ty = dy0 + p.vy * t * R.lead * 0.5;
-    a = Math.atan2(ty, tx) + rr(W, -R.aim, R.aim);
+    const lead = mutant ? Math.max(0.55, R.lead) : R.lead;
+    const tx = dx0 + p.vx * t * lead, ty = dy0 + p.vy * t * lead * 0.5;
+    a = Math.atan2(ty, tx) + rr(W, -R.aim, R.aim) * (mutant ? 0.55 : 1);
   }
   W.bolts.push({ id: W.nextId++, x: e.x, y: e.y, vx: Math.cos(a) * v, vy: Math.sin(a) * v, t: 0, from: e.type || 'carrier' });
   W.ev.push({ k: 'bolt', x: e.x, y: e.y, from: e.type || 'carrier' });

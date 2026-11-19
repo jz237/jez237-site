@@ -1,10 +1,10 @@
 // ?test=1 self-test page: determinism, exact replays, the gentle start, the difficulty ramp shape, lifters taking
 // and fusing settlers, the carrier fight, the live loop with no console errors and no score posts, and the title
 // screen naming every gunship, machine and carrier with its picture drawn.
-import { makeWorld, step, drainEvents, STEP, settlersLeft, wp, wd } from './sim.js?v=26';
-import { Autopilot } from './ai.js?v=orbital-patrol-1';
+import { makeWorld, addEnemy, step, drainEvents, STEP, settlersLeft, wp, wd } from './sim.js?v=belt-rescue-1';
+import { Autopilot } from './ai.js?v=belt-rescue-1';
 import { RAMP, SECTORS, TYPICAL_UP, rampAt, endlessLevel, DIFF_KEYS, applyDiff, MIN_WARN, TUTOR, WAVES, SHIPS, SHIP_KEYS, C } from './config.js?v=26';
-import { Recorder, Replay } from './replay.js?v=26';
+import { Recorder, Replay } from './replay.js?v=belt-rescue-1';
 
 export const hashW = (W) => JSON.stringify([W.n, W.score, W.lives, W.cp, W.phase, W.rs, W.players.map((p) => [p.x.toFixed(6), p.y.toFixed(6), p.alive, p.shield, p.nova]),
   W.enemies.map((e) => [e.id, e.type, e.x.toFixed(4), e.y.toFixed(4), e.hp]), W.settlers.map((s) => [s.id, s.st, s.x.toFixed(4), s.y.toFixed(4)]), W.bolts.length, W.boss ? [W.boss.st, W.boss.x.toFixed(4), W.boss.nodes.map((n) => n.hp).join()] : 0]);
@@ -87,6 +87,61 @@ export async function runTests(sh) {
     let fused = 0, lifted = 0;
     for (let i = 0; i < 120 / STEP && !fused; i++) { step(W, STEP); for (const e of drainEvents(W)) { if (e.k === 'fuse') fused++; if (e.k === 'lifted') lifted++; } }
     return { ok: fused > 0 && lifted > 0, info: `lifted ${lifted}, fused ${fused}, settlers left ${settlersLeft(W)}` };
+  });
+  await T('the pilot shoots the abductor, catches the settler and lands with them', () => {
+    const notes = [];
+    for (const viaGate of [false, true]) {
+      const W = makeWorld({ sector: 3, seed: 17, noTut: true }), p = W.players[0], s = W.settlers[0];
+      W.phaseT = 45; p.x = p.px = 6; p.y = 18; p.face = 1; p.nova = 0;
+      if (viaGate) W.gate = { x: 23, y: 17 }; else W.gate = null;
+      const lift = addEnemy(W, 'lifter', viaGate ? C / 2 : C - 59, 17);
+      Object.assign(lift, { st: 'lift', carry: s.id, tgt: s.id });
+      Object.assign(s, { st: 'held', by: lift.id, x: lift.x, y: 15 });
+      addEnemy(W, 'sower', 37, 27);
+      const events = [];
+      drive(W, new Autopilot(17, 'demo'), 14 / STEP, null, (w, batch) => {
+        for (const e of batch) if (['gatein','fall','catch','land'].includes(e.k)) events.push(e.k);
+        return !w.stats.landed;
+      });
+      notes.push(events.join('>'));
+      if (!W.stats.landed || !events.includes('catch') || s.st !== 'walk' || (viaGate && !events.includes('gatein'))) return { ok:false, info:notes.join(' / ') };
+    }
+    return { ok:true, info:notes.join(' / ') };
+  });
+  await T('a patrol reverses on a rear attacker on either side of the orbital seam', () => {
+    const times = [];
+    for (const face of [-1,1]) {
+      const W = makeWorld({ seed: 31, noTut: true }), p = W.players[0];
+      W.phaseT = 30; W.gate = null; p.x = face > 0 ? 3 : C - 3; p.face = face; p.vx = face * 25; p.nova = 0;
+      const enemy = addEnemy(W, 'husk', wp(p.x - face * 44), p.y + 2);
+      let turned = false;
+      drive(W, new Autopilot(31, 'demo'), 6 / STEP, null, () => { turned ||= p.face === -face; return enemy.hp > 0; });
+      if (!turned || enemy.hp > 0 || !W.stats.hits) return { ok:false, info:'Pursuer escaped' };
+      times.push(W.t.toFixed(2) + 's');
+    }
+    return { ok:true, info:times.join(' / ') };
+  });
+  await T('losing the last settler brings a finite, warned pincer that can overtake the Warden', () => {
+    const W = makeWorld({ sector:0, seed:7, noTut:true }), p = W.players[0];
+    while (W.phase === 'intro') step(W, STEP);
+    W.plan = { left:0, packs:0, extra:[], groupT:90, prowlT:300 };
+    W.enemies.length = 0; W.gate = null;
+    const s = W.settlers[0], last = addEnemy(W,'lifter',wp(p.x-75),35.3);
+    for (const q of W.settlers) q.st = 'dead';
+    Object.assign(last,{ st:'lift', carry:s.id, tgt:s.id }); Object.assign(s,{ st:'held', by:last.id });
+    p.vx = 44; p.inv = 30; p.input = { mx:1 };
+    step(W,STEP);
+    const warps = drainEvents(W).filter(e => e.k === 'warpin' && e.type === 'husk');
+    const sides = new Set(warps.map(e => Math.sign(wd(e.x - p.x))));
+    let closest = 100, fired = false;
+    for (let i=0; i<18/STEP; i++) {
+      step(W,STEP); closest = Math.min(closest,Math.abs(wd(p.x - last.x)));
+      fired ||= W.bolts.some(b => b.from === 'husk'); drainEvents(W);
+    }
+    // Finish the finite wave with the same beam and NOVA controls as a player.
+    drive(W,new Autopilot(7,'demo'),75/STEP,null,() => W.phase === 'fight');
+    return { ok:W.fallen && last.type==='husk' && warps.every(w=>w.T>0) && sides.size===2 && fired && closest<8 && W.phase==='break',
+      info:warps.length+' warnings, rear pursuit closed to '+closest.toFixed(1)+' m, '+W.phase };
   });
   await T('the patrol crosses the seam and visits every longitude when the colony is quiet', () => {
     const W = makeWorld({ seed: 11 }), p = W.players[0], visited = new Set();

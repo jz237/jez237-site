@@ -12,8 +12,8 @@
 //   'human' — plays like a person: ~0.35 s reaction (scattered, sometimes late), wobbly altitude, misses things
 //             behind it, saves novas too long. The difficulty ramp is measured with this one.
 //   'demo'  — the attract mode: sharp and decisive. It never reads the world's random generator (replays stay exact).
-import { F, ENEMY, BOSSES, H, C, SHIPS, WAVES, SPECIAL } from './config.js?v=26';
-import { wd, wp, nodePos, beamRange } from './sim.js?v=26';
+import { F, ENEMY, BOSSES, H, C, GATE, SHIPS, WAVES, SPECIAL } from './config.js?v=26';
+import { wd, wp, nodePos, beamRange, rescueAtGate } from './sim.js?v=belt-rescue-1';
 
 const clamp = (v, a, b) => (v < a ? a : v > b ? b : v);
 function mkr(seed) { let s = seed | 0; return () => { s = (s + 0x6D2B79F5) | 0; let t = Math.imul(s ^ (s >>> 15), s | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
@@ -22,10 +22,6 @@ const PROFILES = {
   human: { react: 0.36, jit: 0.12, late: 0.16, lateT: 0.32, blind: 0.4, aimErr: 0.42, wob: 0.55, dodge: 1.6, nova: 5, novaDanger: 0.35, stand: 17, greed: 0.6, slow: 0.82, catchK: 0.85 },
   demo: { react: 0.12, jit: 0.04, late: 0, lateT: 0, blind: 0.05, aimErr: 0.12, wob: 0.15, dodge: 2.4, nova: 4, novaDanger: 1, stand: 15, greed: 1, slow: 1, catchK: 1 },
 };
-// the demo lets a hive pod's fresh stingers be seen before it opens fire on them (seconds after the burst)
-const SWARM_HOLD = 1.7;
-// ...but not once a stinger is within SWARM_CLOSE m, and at most one watched swarm every SWARM_GAP s
-const SWARM_CLOSE = 24, SWARM_GAP = 8;
 const DANGER = new Set(['husk', 'prowler', 'stinger', 'whirler', 'spark', 'maw', 'scorcher']);
 // NOVA PLAN (demo): what each machine a nova would destroy is worth (a lifter carrying a settler most of all; a hive pod
 // counts with the swarm inside it; a coil with the sparks it would let out)
@@ -43,7 +39,7 @@ export class Autopilot {
     this.debug = { intent: '', target: null, dodge: '' };
     this.novaWas = false; this.blinkWas = false; this.dodgeY = 0; this.dodgeT = 0;
     this.nPeak = 0; this.nPeakT = 0; this.nHold = 0; this.nGap = 0; this.nWhy = ''; this.nWhyT = 0;
-    this.course = 0; this.exitUntil = 0; this.exitY = 0; this.nextPass = 0; this.fightUntil = 0;
+    this.course = 0; this.exitUntil = 0; this.exitY = 0;
   }
   // has the pilot noticed thing `id` yet? things behind it are noticed later, sometimes much later
   notice(W, id, x, me) {
@@ -58,13 +54,52 @@ export class Autopilot {
     }
     return W.t >= t;
   }
+  distress(W, me) {
+    if (W.fallen) return null;
+    const ship = SHIPS[me.ship] || SHIPS.warden, thrust = 1 + 0.08 * (W.up.thrust || 0);
+    const speed = F.vmax * thrust * ship.vmax;
+    const travel = (x, y, reach = 0) => {
+      const dx = wd(x - me.x), v = me.vx * Math.sign(dx), d = Math.max(0, Math.abs(dx) - reach);
+      const horizontal = d > 0 ? d / speed + (speed - v) / (2 * F.accel * thrust * ship.accel) : 0;
+      return Math.max(horizontal, Math.abs(y - me.y) / (F.vy * thrust * ship.accel));
+    };
+    let best = null, high = -Infinity, gateSignal;
+    for (const s of W.settlers) {
+      if (s.st !== 'held' && s.st !== 'fall') continue;
+      const falling = s.st === 'fall';
+      const o = falling ? s : W.enemies.find(e => e.id === s.by && e.hp > 0 && e.st === 'lift' && e.carry === s.id);
+      if (!o || !this.notice(W, falling ? 's' + s.id : o.id, o.x, me)) continue;
+      const deadline = falling ? s.y / W.R.fallV : (H - 0.8 - o.y) / W.R.liftV;
+      const reach = falling ? 0 : beamRange(W) * ship.range * 0.85;
+      let eta = travel(o.x, o.y, reach), gate = false;
+      if (falling) eta = travel(o.x, Math.max(F.minY, s.y - W.R.fallV * eta));
+      if (W.gate && eta > 1.2) {
+        const through = travel(W.gate.x, W.gate.y), jump = through + (falling ? GATE.back / speed + 0.25 : 0.2);
+        if ((me.gateT || 0) <= through && jump + 0.55 < eta) {
+          gateSignal ??= rescueAtGate(W);
+          if (gateSignal.to === o) { eta = jump; gate = true; }
+        }
+      }
+      if (eta > deadline + 0.25) continue;
+      const urgentFall = falling && (s.dropY > W.R.safeH || this.goal?.settler === s);
+      const score = (urgentFall ? 45 : falling ? 9 : 24) - Math.min(eta, 14) * 1.7 + 12 / (1 + Math.max(0, deadline - eta));
+      if (score <= high) continue;
+      high = score;
+      const kind = gate ? 'gate' : falling ? 'settler' : 'rescue';
+      best = { kind, o, settler: s, why: gate ? 'Taking the sky gate to the distress signal' : falling ? 'Intercepting the falling settler' : 'Intercepting the lifter carrying a settler' };
+    }
+    return best;
+  }
   pick(W, me) {
     const P = this.P;
     let best = null, why = '', score = -1e9;
     const consider = (o, s, w) => { if (s > score) { score = s; best = o; why = w; } };
     // settlers in trouble
     if (me.carry) return { kind: 'land', tgt: null, why: 'Setting the settler down safely' };
-    for (const s of W.settlers) {
+    if (this.profile === 'demo') {
+      const distress = this.distress(W, me);
+      if (distress) return distress;
+    } else for (const s of W.settlers) {
       if (s.st !== 'fall' || !this.notice(W, 's' + s.id, s.x, me)) continue;
       const d = Math.abs(wd(s.x - me.x)), safe = s.dropY <= W.R.safeH;
       const tLand = s.y / Math.max(0.5, W.R.fallV), tGo = d / F.vmax + 0.6;
@@ -82,18 +117,20 @@ export class Autopilot {
     }
     for (const e of W.enemies) {
       if (e.hp <= 0 || e.type === 'mine') continue;
-      if (this.profile === 'demo' && e.type === 'stinger' && e.t < SWARM_HOLD && this.holding) continue;   // let the watcher see a fresh swarm
       if (!this.notice(W, e.id, e.x, me)) continue;
       const dx = wd(e.x - me.x), d = Math.abs(dx);
       if (e.born > 0 && d > 30) continue;
       const last = endgame && NOVA_HOST.has(e.type) && !(e.cross && !e.link);
-      const rescue = e.type === 'lifter' && (e.st === 'lift' || e.st === 'grab');
-      const tail = e.type === 'prowler' && d < 32 && Math.abs(e.y - me.y) < 9;
-      if (sweeping && !last && !rescue && !tail && !B && W.t >= this.fightUntil && (dx * this.course < 0 || d > 150)) continue;
+      const locked = this.goal?.kind === 'enemy' && this.goal.o === e;
+      const local = d < (locked ? 102 : 76);
       let s = -d;
       let w = 'Hunting the nearest machine';
       if (e.type === 'lifter') {
-        if (e.st === 'lift') { s = 700 + (e.y / H) * 300 - d * 1.2; w = 'A lifter has a settler: shooting it down'; }
+        if (e.st === 'lift') {
+          // Reachable abductors have already received a distress response.
+          s = sweeping ? 150 - d * 0.3 : 700 + (e.y / H) * 300 - d * 1.2;
+          w = 'A lifter has a settler: shooting it down';
+        }
         else if (e.st === 'grab' || e.st === 'down') { s = 520 - d * 1.1; w = 'Stopping a lifter going down for a settler'; }
         else if (e.st === 'seek') s = 120 - d;
         else s = 40 - d;
@@ -106,11 +143,16 @@ export class Autopilot {
       if (e.tell > 0 && d < 40) { s += 150; w = 'Taking out a machine that is about to fire'; }
       if (last && s < 260 - d * 0.5) { s = 260 - d * 0.5; w = 'Hunting down the last machines of the wave'; }
       if (sweeping && !B) {
-        if (dx * this.course >= 0 && d < 95) s = Math.max(s, 100 - d);
-        if (last) s = Math.max(s, 440 - d * 0.35);
+        if (NOVA_HOST.has(e.type)) {
+          s = Math.max(s, 180 - d * 0.24);
+          if (local) s += 125;
+          if (locked && local) s += 85;
+          if (local && dx * me.face < 0 && DANGER.has(e.type)) w = 'Reversing to engage the pursuer';
+        }
+        if (last) s = Math.max(s, 385 - d * 0.35);
       }
       if (B) s -= 120;
-      consider({ kind: 'enemy', o: e, engage: last || rescue || tail || !!B }, s * P.greed + (1 - P.greed) * -d, w);
+      consider({ kind: 'enemy', o: e }, s * P.greed + (1 - P.greed) * -d, w);
     }
     if (B && B.st === 'fight') {
       let ni = -1, nd = 1e9;
@@ -121,35 +163,15 @@ export class Autopilot {
       const s = W.settlers.find((q) => q.st === 'walk');
       return { kind: 'patrol', tgt: s ? s.x : me.x + me.face * 50, why: 'Patrolling over the colony' };
     }
-    if (sweeping && best.kind === 'enemy' && W.t >= this.nextPass && W.t >= this.exitUntil && Math.abs(wd(best.o.x - me.x)) < 49) {
-      this.fightUntil = W.t + 2.4; this.nextPass = this.fightUntil + 3.2;
-    }
     return { ...best, why };
   }
-  // a fresh swarm (a pod burst less than SWARM_HOLD s ago) near enough to be watched
-  swarmFresh(W, me) { return W.enemies.some((e) => e.type === 'stinger' && e.hp > 0 && e.t < SWARM_HOLD - 0.3 && Math.abs(wd(e.x - me.x)) < 60); }
-  // ...and one of its stingers already close: no more waiting, fight
-  swarmClose(W, me) { return W.enemies.some((e) => e.type === 'stinger' && e.hp > 0 && Math.abs(wd(e.x - me.x)) < SWARM_CLOSE && Math.abs(e.y - me.y) < 9); }
-  // at most one watched swarm every SWARM_GAP s (with a hive or more a wave, waiting on every one gets the demo killed)
-  swarmHold(W, me) {
-    this.hcd = (this.hcd || 0) - 1 / 120;
-    const want = this.swarmFresh(W, me) && !this.swarmClose(W, me);
-    if (want && (this.holding || this.hcd <= 0)) { this.holding = true; return true; }
-    if (this.holding) { this.holding = false; this.hcd = SWARM_GAP; }
-    return false;
-  }
   control(W, me) {
-    const out = this.control0(W, me);
-    if (this.profile === 'demo' && this.swarmHold(W, me)) out.fire = false;
-    return out;
-  }
-  control0(W, me) {
     const out = { mx: 0, my: 0, fire: false, nova: false, blink: false };
     const D = this.debug, P = this.P;
     if (!me.alive) { D.intent = 'Waiting to come back in'; D.target = null; return out; }
     // re-think a few times a second
     this.goalT -= 1 / 120;
-    if (!this.goal || this.goalT <= 0 || this.stale(W, this.goal)) { this.goal = this.pick(W, me); this.goalT = 0.3 + (this.profile === 'human' ? this.r() * 0.2 : 0); }
+    if (!this.goal || this.goalT <= 0 || this.stale(W, this.goal) || (!!me.carry !== (this.goal.kind === 'land'))) { this.goal = this.pick(W, me); this.goalT = this.profile === 'demo' ? 0.18 : 0.3 + this.r() * 0.2; }
     const g = this.goal;
     D.intent = g.why; D.dodge = '';
     // the human pilot's altitude wobbles and its aim is a bit off
@@ -158,9 +180,14 @@ export class Autopilot {
     let tx = me.x, ty = me.y, want = 0, fire = false;
     const SH = SHIPS[me.ship] || SHIPS.warden, range = beamRange(W) * 0.9 * SH.range;
     if (g.kind === 'land') { tx = me.x + me.face * 10; ty = 1; want = 0.4; D.target = { x: me.x, y: 0 }; }
-    else if (g.kind === 'settler') {
+    else if (g.kind === 'gate') {
+      const gate = W.gate, dx = wd(gate.x - me.x);
+      tx = wp(gate.x + (Math.sign(dx) || me.face) * 4); ty = gate.y; want = 1;
+      D.target = { x: gate.x, y: gate.y };
+    } else if (g.kind === 'settler') {
       const s = g.o, tl = s.y / Math.max(0.5, W.R.fallV);
-      tx = s.x; ty = Math.max(F.minY, s.y - W.R.fallV * Math.min(0.6, tl)); want = 1;
+      const arrival = this.profile === 'demo' ? Math.abs(wd(s.x - me.x)) / (F.vmax * SH.vmax) + 0.12 : 0.6;
+      tx = s.x; ty = Math.max(F.minY, s.y - W.R.fallV * Math.min(arrival, tl)); want = 1;
       D.target = { x: s.x, y: s.y };
     } else if (g.kind === 'patrol') {
       tx = g.tgt; ty = this.profile === 'demo' ? 16 + 5 * Math.sin(me.x * 8 * Math.PI / C) : 16;
@@ -175,6 +202,7 @@ export class Autopilot {
       const stand = g.kind === 'node' ? 16 : P.stand;
       // come at it along its altitude from the side we are on, at a stand-off
       ty = ey + evy * 0.25 + this.yErr;
+      if (g.kind === 'rescue') ty = ey + evy * Math.min(1.2, d / F.beamV);
       tx = ex - Math.sign(dx || me.face) * stand;
       want = d > stand + 4 ? 1 : 0.16;
       // a STINGER only turns round once we are well behind it and only fires ahead: get in close behind it and stay
@@ -206,10 +234,12 @@ export class Autopilot {
       else mx = me.face === sB ? 0 : sB * 0.17;
       const closing = (me.vx - B.vx) * sB;
       if (closing > 10 && dB < near + closing * 0.5) mx = -sB;
-    } else if (g.kind === 'enemy' && this.profile === 'demo' && !g.engage && W.t >= this.fightUntil) {
-      // Open the distance between firing passes while continuing along the orbital route.
-      mx = this.course;
-    } else if (g.kind === 'enemy' && !escape) {
+    } else if (g.kind === 'settler' && this.profile === 'demo') {
+      const accel = F.brake * SH.accel * (1 + 0.08 * (W.up.thrust || 0));
+      const closing = me.vx * Math.sign(hx);
+      if (closing > 2 && closing * closing / (2 * accel) >= Math.abs(hx) - 0.7) mx = -Math.sign(me.vx);
+      else if (Math.abs(hx) < 0.7) mx = 0;
+    } else if ((g.kind === 'enemy' || g.kind === 'rescue') && !escape) {
       const adx = wd(g.o.x - me.x);
       // keep facing what we shoot at: inside the stand-off, push gently toward it rather than turning away
       if (Math.abs(adx) < P.stand + 4) mx = Math.sign(adx) * 0.17;
@@ -373,8 +403,6 @@ export class Autopilot {
     if (me.nova <= 0 || me.novaT > 0) return '';
     const go = (why) => { this.nGap = 2; this.nPeak = 0; this.nHold = 0; return why; };
     if (escapeReason) return go(escapeReason);
-    // a pod has just burst near us: let the swarm be seen first
-    if (W.enemies.some((e) => e.type === 'stinger' && e.hp > 0 && e.t < SWARM_HOLD - 0.3 && Math.abs(wd(e.x - me.x)) < 60)) return '';
     const here = this.novaWorth(W, me.x, me);
     if (here.w < 1) { this.nPeak = 0; this.nHold = 0; return ''; }
     const walking = W.settlers.filter((q) => q.st === 'walk' || q.st === 'held').length;
@@ -398,6 +426,8 @@ export class Autopilot {
   }
   stale(W, g) {
     if (!g) return true;
+    if (g.kind === 'gate') return !W.gate || !['held', 'fall'].includes(g.settler.st);
+    if (g.kind === 'rescue') return g.settler.st !== 'held' || g.o.hp <= 0 || g.o.st !== 'lift';
     if (g.kind === 'enemy') return !(g.o && g.o.hp > 0) || !W.enemies.includes(g.o);
     if (g.kind === 'settler') return g.o.st !== 'fall';
     if (g.kind === 'node') return !W.boss || !W.boss.nodes[g.i] || W.boss.nodes[g.i].hp <= 0 || (g.ph || 1) !== (W.boss.phase || 1);
