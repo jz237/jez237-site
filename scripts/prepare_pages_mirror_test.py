@@ -43,12 +43,30 @@ class MirrorTests(unittest.TestCase):
         self.assertIn('<noscript>', page)
         self.assertIn('href="https://jez237.com/games/a%20space/play.html"', page)
 
+    def test_interactive_film_routes_without_removing_legacy_videos(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / '404.html').write_text('<html><head></head></html>')
+            film = 'multimedia/port-richmond-halloween-intro/'
+            result = prepare_routes(root, [film + 'index.html', film + 'assets/world.glb',
+                'multimedia/other/index.html'])
+            self.assertEqual(result['redirect_pages'], 1)
+            self.assertIn('https://jez237.com/' + film, (root / film / 'index.html').read_text())
+            self.assertFalse((root / film / 'assets').exists())
+            # The next workflow step restores pinned legacy binary URLs to the same folder.
+            (root / film / 'hide-review-1080p.mp4').write_bytes(b'legacy-video')
+            self.assertEqual((root / film / 'hide-review-1080p.mp4').read_bytes(), b'legacy-video')
+
     def test_404_only_routes_mirror_interactive_paths(self):
         source = re.search(r'<script[^>]*>(.*?)</script>', fallback_script(), re.S).group(1)
-        for path in ['/jez237-site/games/a/room', '/jez237-site/demos/b/custom']:
+        for path in ['/jez237-site/games/a/room', '/jez237-site/demos/b/custom',
+                     '/jez237-site/multimedia/port-richmond-halloween-intro/',
+                     '/jez237-site/multimedia/port-richmond-halloween-intro/scene']:
             self.assertEqual(run_script(source, {'pathname': path, 'search': '?x=1', 'hash': '#y'}),
                 'https://jez237.com/' + path.removeprefix('/jez237-site/') + '?x=1#y')
-        for path in ['/jez237-site/not-found', '/other/games/a', '/jez237-site/games-evil/a']:
+        for path in ['/jez237-site/not-found', '/other/games/a', '/jez237-site/games-evil/a',
+                     '/jez237-site/multimedia/other/',
+                     '/jez237-site/multimedia/port-richmond-halloween-intro-evil/']:
             self.assertIsNone(run_script(source, {'pathname': path, 'search': '', 'hash': ''}))
 
     def test_retired_worker_only_moves_its_own_clients(self):
