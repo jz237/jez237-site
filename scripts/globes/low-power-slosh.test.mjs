@@ -1,8 +1,12 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { Vector3 } from 'three';
+import { BufferAttribute, BufferGeometry, Matrix3, Vector3 } from 'three';
 import { Slosh, SURFACE_RADIUS, WATER_LEVEL } from './src/lowPower/slosh.mjs';
-import { GLASS_INNER } from './src/render/scape/mesh.mjs';
+import { movingPlant } from './src/lowPower/plants.mjs';
+import { BettaSwim } from './src/fish/bettaSwim.mjs';
+import { buildScapePieces } from './src/render/scape/scene.mjs';
+import { BED_LEVEL, GLASS_INNER } from './src/render/scape/mesh.mjs';
+import { MOTION_VERTEX_STRIDE } from './src/render/scape/plantMotion.mjs';
 
 test('a shove raises one wall, the wave overshoots, then the film settles level', () => {
   for (const hz of [15, 30, 60]) {
@@ -29,4 +33,70 @@ test('surface sampling meets the drawn waterline on the sphere during repeated h
     assert.ok(Math.abs(rim.y - water.heightAt(rim.x, rim.z)) < 1e-8);
     assert.ok(Math.hypot(water.sx, water.sz) <= 0.371);
   }
+});
+
+test('a tilt produces reversing currents that are stronger near the surface and fade after release', () => {
+  const water = new Slosh(), upper = [], lower = [], edge = [];
+  for (let i = 0; i < 5; i++) water.step(1 / 30, [9, -24, 0], [0, 0, 0]);
+  water.currentAt(0, 0.18, 0, BED_LEVEL, upper);
+  water.currentAt(0, -0.55, 0, BED_LEVEL, lower);
+  water.currentAt(0.7, 0.18, 0, BED_LEVEL, edge);
+  assert.ok(upper[0] > 2 * lower[0] && lower[0] > 0.05);
+  assert.ok(edge[0] < upper[0] && edge[1] > 0.1);
+  let min = 0;
+  for (let i = 0; i < 240; i++) {
+    water.step(1 / 30, [0, -24, 0], [0, 0, 0]);
+    water.currentAt(0, 0.18, 0, BED_LEVEL, upper);
+    min = Math.min(min, upper[0]);
+  }
+  assert.ok(min < -0.1 && Math.hypot(...upper) < 0.012);
+});
+
+test('both rooted plants bend with a reversing flow and carry their collision capsules with them', () => {
+  const [{ meshes, obstacles }] = buildScapePieces({ only: ['plants'], detail: 0.28 });
+  for (const mesh of meshes) {
+    const bend = velocity => {
+      const geo = new BufferGeometry();
+      geo.setAttribute('position', new BufferAttribute(mesh.positions, 3));
+      geo.setAttribute('normal', new BufferAttribute(mesh.normals.slice(), 3));
+      geo.setIndex(new BufferAttribute(mesh.indices, 1));
+      const plant = movingPlant(mesh, geo, obstacles);
+      const water = new Slosh();
+      water.currentX = velocity;
+      const upright = new Matrix3();
+      for (let i = 0; i < 20; i++) plant.update(i / 30, 1 / 30, water, upright, [0, 0, 0], () => BED_LEVEL);
+      return { positions: geo.getAttribute('position').array, plant };
+    };
+    const left = bend(-0.65), right = bend(0.65);
+    let fixed = 0, tip = 0;
+    for (let i = 0; i < mesh.positions.length / 3; i++) {
+      const leaf = mesh.motion.vertex[i * MOTION_VERTEX_STRIDE];
+      if (leaf < 0) {
+        fixed++;
+        for (let k = 0; k < 3; k++) assert.equal(right.positions[i * 3 + k], mesh.positions[i * 3 + k]);
+      } else if (mesh.motion.vertex[i * MOTION_VERTEX_STRIDE + 1] > 0.9) {
+        tip = Math.max(tip, right.positions[i * 3] - left.positions[i * 3]);
+      }
+    }
+    assert.ok(fixed > 0 && tip > 0.02, mesh.name);
+    const offsets = obstacles.filter(o => o.follow?.mesh === mesh.name).map(o =>
+      right.plant.moveEnd(new Vector3(), o.b, o.follow.b).distanceTo(left.plant.moveEnd(new Vector3(), o.b, o.follow.b)));
+    assert.ok(Math.max(...offsets) > 0.012, mesh.name);
+  }
+});
+
+test('the swimming fish drifts downstream and aims into a cross-current on its route', () => {
+  const swimFor = speed => {
+    const fish = new BettaSwim();
+    fish.compensateDrift = true;
+    fish.heading = 0;
+    fish.target = [-0.45, fish.position[1], fish.position[2]];
+    const env = { radius: GLASS_INNER, level: WATER_LEVEL, sandLevel: BED_LEVEL, gravity: [0, -24, 0] };
+    const water = { flow: [0, 0, speed], angular: [0, 0, 0], sand: BED_LEVEL, surface: WATER_LEVEL, submerged: 1, airAbove: 0 };
+    for (let i = 0; i < 36; i++) fish.advance(1 / 30, water.flow, env, true, water);
+    return fish;
+  };
+  const left = swimFor(-0.28), right = swimFor(0.28);
+  assert.ok(left.drift[2] < -0.045 && right.drift[2] > 0.045);
+  assert.ok(left.heading > 0.15 && right.heading < -0.15);
 });

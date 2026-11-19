@@ -17,12 +17,12 @@ export const bettaSurfaceHeights = (level, out = new Float32Array(BETTA_SURFACE_
 const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
 const limit = (v, max) => { const l = Math.hypot(...v); return l > max ? v.map(x => x * max / l) : v; };
 
-export function readBettaWater(sense, points, env) {
+export function readBettaWater(sense, points, env, surfaceAtMouth) {
   const result = { flow: [0, 0, 0], angular: [0, 0, 0], submerged: 1, airAbove: 0, surface: null,
     sand: env.sandLevel, centroid: [0, (env.sandLevel + env.level) / 2, 0] };
   if (!sense) return result;
   result.centroid = [...sense.centroid];
-  result.surface = readBettaSurface(sense, env);
+  result.surface = surfaceAtMouth === undefined ? readBettaSurface(sense, env) : surfaceAtMouth;
   const wet = [], center = [0, 0, 0], mean = [0, 0, 0];
   let bodyWet = 0, bed = -Infinity;
   for (let i = 0; i < 16; i++) {

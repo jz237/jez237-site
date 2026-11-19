@@ -45,13 +45,17 @@ export function addSurfaceLife(liquid) {
   nest.renderOrder = 4;
   liquid.add(leaf, nest);
   const sense = { probes: new Float32Array((LIFE_PROBE_AT + 32) * 4) };
-  function update(dt, rotation, spin, swim, water, surface) {
+  const point = new T.Vector3(), filmFlow = new T.Vector3(), flow = [0, 0, 0];
+  function update(dt, rotation, spin, swim, surface, bedAt) {
     // Sample the shared leaf controller's four short columns in the sloshing film's frame.
     const points = life.probePoints();
+    point.set(points[0], WATER_LEVEL, points[2]).applyQuaternion(surface.rotation);
+    surface.currentAt(point.x, point.y, point.z, bedAt(point.x, point.z), flow);
+    filmFlow.fromArray(flow).applyQuaternion(surface.inverse);
     for (let i = 0; i < points.length; i += 4) {
       const k = 4 * LIFE_PROBE_AT + i;
-      sense.probes[k] = water.flow[0];
-      sense.probes[k + 2] = water.flow[2];
+      sense.probes[k] = filmFlow.x;
+      sense.probes[k + 2] = filmFlow.z;
       sense.probes[k + 3] = T.MathUtils.clamp(0.5 + (WATER_LEVEL - points[i + 1]) * 24, 0, 1);
     }
     life.update(dt, sense, WATER_LEVEL, 0.5, rotation, spin, swim.mode);

@@ -3,6 +3,7 @@ import { BOWL } from '../render/bowl';
 import { BED_LEVEL, BED_RADIUS, GLASS_INNER, MAT, stream } from '../render/scape/mesh.mjs';
 import { buildScapePieces } from '../render/scape/scene.mjs';
 import { WATER_LEVEL, SURFACE_RADIUS } from './slosh.mjs';
+import { movingPlant } from './plants.mjs';
 
 // The same bowl and furnishings, rasterized once per view. Their material and cavity detail is
 // baked into vertex colours at load time. No scene BVH, refraction pass or fluid grid is needed.
@@ -17,6 +18,8 @@ const palette = Object.fromEntries(Object.entries(colours).map(([k, hex]) => [k,
 function furnishings(scene) {
   const material = new T.MeshLambertMaterial({ vertexColors: true, side: T.DoubleSide });
   const pieces = buildScapePieces({ detail: 0.28 });
+  const obstacles = pieces.flatMap(p => p.obstacles);
+  const plants = new Map();
   for (const piece of pieces) for (const mesh of piece.meshes) {
     const { positions, indices, normals, materials, attrs } = mesh;
     const colour = new Float32Array(positions.length);
@@ -35,6 +38,7 @@ function furnishings(scene) {
     geometry.setAttribute('normal', new T.BufferAttribute(normals, 3));
     geometry.setAttribute('color', new T.BufferAttribute(colour, 3));
     geometry.setIndex(new T.BufferAttribute(indices, 1));
+    if (mesh.motion) plants.set(mesh.name, movingPlant(mesh, geometry, obstacles));
     const part = new T.Mesh(geometry, material);
     part.name = mesh.name;
     part.userData.topic = ({ driftwood: 'driftwood', rocks: 'rock', plantTall: 'anubias', plantSmall: 'rosette' })[mesh.name] ?? (materials.includes(MAT.HEATER) ? 'heater' : 'filter');
@@ -48,7 +52,7 @@ function furnishings(scene) {
     part.castShadow = part.receiveShadow = true;
     scene.add(part);
   }
-  return pieces;
+  return { plants, obstacles: obstacles.map(o => ({ ...o, leaf: !!o.follow })), bubbles: pieces.find(p => p.bubbles)?.bubbles };
 }
 
 function ring(radius, width, y, material) {
@@ -110,7 +114,7 @@ function glassMaterial() {
 }
 
 export function makeBowl(basin, shell, liquid, slosh) {
-  const pieces = furnishings(shell);
+  const scape = furnishings(shell);
   const glass = glassMaterial();
   const wall = new T.Mesh(sphereBand(1, BOWL.mouth, -0.99), glass);
   wall.renderOrder = 5;
@@ -166,5 +170,5 @@ export function makeBowl(basin, shell, liquid, slosh) {
   footprint.rotation.x = -Math.PI / 2;
   footprint.position.y = -0.985;
   basin.add(footprint);
-  return { lid, tint, obstacles: pieces.flatMap(p => p.obstacles).map(o => ({ ...o, leaf: !!o.follow })), bubbles: pieces.find(p => p.bubbles)?.bubbles };
+  return { lid, tint, ...scape };
 }

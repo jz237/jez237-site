@@ -12,6 +12,7 @@ import { createBetta } from '../../../betta-atelier/src/fish.js';
 import { FIN_QUALITY } from '../../../betta-atelier/src/fin-dynamics.js';
 import { VarietyPainter } from '../../../betta-atelier/src/varieties.js';
 import { BettaSwim, BETTA_SCALE, bettaMouth, swimPose } from '../fish/bettaSwim.mjs';
+import { BETTA_PROBES, readBettaWater } from '../fish/bettaWater.mjs';
 import { FramePace } from '../app/framePace.mjs';
 import { VarietyMenu } from '../app/VarietyMenu';
 import { NightToggle } from '../app/NightToggle';
@@ -31,7 +32,7 @@ export async function startLowPowerBowl() {
   const renderer = new T.WebGLRenderer({ canvas, context: gl, alpha: true, antialias: false });
   renderer.setClearColor(0, 0);
   renderer.toneMapping = T.ACESFilmicToneMapping;
-  // The wood, rocks and leaves are stationary here. Draw their lamp shadow map just once.
+  // Keep the shadow map between updates. Leaves move slowly enough to refresh it at 4 Hz.
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.autoUpdate = false;
   renderer.shadowMap.needsUpdate = true;
@@ -76,7 +77,7 @@ export async function startLowPowerBowl() {
   new ResizeObserver(resize).observe(stage);
   resize();
   const surface = new Slosh();
-  const { lid, obstacles, bubbles, tint } = makeBowl(basin, shell, liquid, surface);
+  const { lid, obstacles, bubbles, plants, tint } = makeBowl(basin, shell, liquid, surface);
   const floating = addSurfaceLife(liquid);
   const cover = new BowlLid(bowlShape(glass, true));
   const feeding = new Feeding(cover, controller);
@@ -102,13 +103,17 @@ export async function startLowPowerBowl() {
   }
   const rig = new T.Group();
   rig.scale.setScalar(BETTA_SCALE);
+  rig.updateMatrix();
   rig.add(fish);
   basin.add(rig);
   rig.userData.topic = 'fish';
   const swim = new BettaSwim();
+  swim.compensateDrift = true;
   swim.obstacles = obstacles.map(o => ({ ...o, a: [...o.a], b: [...o.b] }));
-  const env = { radius: GLASS_INNER, sandLevel: BED_LEVEL, level: WATER_LEVEL, gravity: [0, -24, 0] };
-  const water = { surface: WATER_LEVEL, sand: BED_LEVEL, submerged: 1, airAbove: 0, angular: [0, 0, 0], flow: [0, 0, 0], centroid: [0, -0.15, 0] };
+  const env = { radius: GLASS_INNER, sandLevel: BED_LEVEL, level: WATER_LEVEL, gravity: [0, -24, 0], iso: 0.5 };
+  const probes = new Float32Array(4 * BETTA_PROBES.length);
+  const sense = { probes: new Float32Array(probes.length), sand: new Float32Array(BETTA_PROBES.length), centroid: [0, -0.15, 0] };
+  let water;
   fish.userData.locomotion = swimPose(swim);
   fish.userData.update(0);
   const localFlow = [0, 0, 0];
@@ -219,7 +224,7 @@ export async function startLowPowerBowl() {
   const aim = new T.Vector3(), view = new T.Vector3(...CAMERA_VIEW), ringNormal = new T.Vector3(0, 0, 1);
   const matrix = new T.Matrix4(), point = new T.Vector3(), oldRotation = new T.Quaternion();
   const turn = [0, 0, 0];
-  let lastTwist = controller.twist;
+  let lastTwist = controller.twist, shadowAt = 0;
   const lamp = shell.children.find(part => part.userData.lampVertices);
   let lastLamp = -1;
   const bedAt = (x, z) => {
@@ -229,7 +234,7 @@ export async function startLowPowerBowl() {
   const pace = new FramePace();
   pace.frameMs = 1000 / 30;
   let last = null, t = 0, nightMix = Number(night.on);
-  const diagnostics = { frames: 0, swim, fish, renderer, painter, controller, surface, learn, waterCare, food, feeding, camera, basin, pickable };
+  const diagnostics = { frames: 0, swim, fish, renderer, painter, controller, surface, learn, waterCare, food, feeding, camera, basin, pickable, get water() { return water; } };
   if (new URLSearchParams(location.search).has('qa')) window.__bettaLow = diagnostics;
   await fish.userData.ready;
   stage.querySelector('.splash')?.remove();
@@ -241,13 +246,24 @@ export async function startLowPowerBowl() {
     const gravity = controller.bodyAccel(24);
     surface.step(dt, gravity, controller.omega);
     liquid.quaternion.copy(surface.rotation);
-    if (!shell.quaternion.equals(oldRotation)) {
-      for (let i = 0; i < obstacles.length; i++) {
-        const o = obstacles[i], turned = swim.obstacles[i];
+    const turning = !shell.quaternion.equals(oldRotation);
+    for (const plant of plants.values()) plant.update(t, dt, surface, controller.rotation, controller.omega, bedAt);
+    for (let i = 0; i < obstacles.length; i++) {
+      const o = obstacles[i], turned = swim.obstacles[i];
+      if (o.follow) {
+        const plant = plants.get(o.follow.mesh);
+        plant.moveEnd(point, o.a, o.follow.a).applyMatrix3(controller.rotation).toArray(turned.a);
+        plant.moveEnd(point, o.b, o.follow.b).applyMatrix3(controller.rotation).toArray(turned.b);
+      } else if (turning) {
         point.fromArray(o.a).applyMatrix3(controller.rotation).toArray(turned.a);
         point.fromArray(o.b).applyMatrix3(controller.rotation).toArray(turned.b);
       }
-      // Static casters and their lamp turn together. Reproject the existing shadow map.
+    }
+    if (t >= shadowAt) {
+      renderer.shadowMap.needsUpdate = true;
+      shadowAt = t + 0.25;
+    }
+    if (turning) {
       key.updateWorldMatrix(true, false);
       key.target.updateWorldMatrix(true, false);
       key.shadow.updateMatrices(key);
@@ -260,16 +276,7 @@ export async function startLowPowerBowl() {
       for (let i = 0; i < 3; i++) turn[i] = delta * controller.rotation.elements[3 + i];
       swim.turnWith(turn);
     }
-    const mouth = eater.mouthAt();
-    water.surface = surface.heightAt(mouth[0], mouth[2]);
-    water.sand = env.sandLevel = bedAt(swim.position[0], swim.position[2]);
-    // A gulp uses the measured local film. Hold off surface trips while it rocks hard.
-    env.level = water.surface;
     env.gravity = gravity;
-    water.flow[0] = 0.009 * Math.sin(0.68 * t + swim.position[2]) + 0.20 * surface.vx;
-    water.flow[2] = 0.006 * Math.cos(0.47 * t + swim.position[0]) + 0.20 * surface.vz;
-    water.angular[0] = 0.25 * surface.vz;
-    water.angular[2] = -0.25 * surface.vx;
     feeding.update(dt, p => food.spawn(p, 1), food.count);
     cover.update(dt, controller.rotation);
     lid.matrix.copy(cover.toLid).invert();
@@ -277,13 +284,33 @@ export async function startLowPowerBowl() {
     lid.visible = cover.shown;
   }
 
+  // Sample the same anatomical points as the full fish, in bowl-centred world
+  // axes. Differences across its trunk and fins let it feel a turning current.
+  const bodyPoint = [0, 0, 0];
+  function sampleFish() {
+    fish.updateMatrix();
+    matrix.multiplyMatrices(rig.matrix, fish.matrix);
+    for (let i = 0; i < BETTA_PROBES.length; i++) {
+      fish.userData.bodyMotion.transform(...BETTA_PROBES[i], bodyPoint);
+      const { x, y, z } = point.fromArray(bodyPoint).applyMatrix4(matrix);
+      point.toArray(probes, 4 * i);
+      const bed = sense.sand[i] = bedAt(x, z);
+      const top = surface.currentAt(x, y, z, bed, sense.probes, 4 * i);
+      sense.probes[4 * i + 3] = T.MathUtils.clamp(0.5 + (top - y) * 25, 0, 1);
+    }
+    const mouth = eater.mouthAt();
+    env.level = surface.heightAt(mouth[0], mouth[2]);
+    env.sandLevel = bedAt(swim.position[0], swim.position[2]);
+    water = readBettaWater(sense, probes, env, env.level);
+  }
+
   function moveFood(dt) {
     const probes = food.probePoints();
     for (let i = 0; i < FOOD_MAX; i++) {
       const k = 4 * i, x = probes[k], y = probes[k + 1], z = probes[k + 2];
-      foodSamples.set(water.flow, k);
-      foodSamples[k + 3] = T.MathUtils.clamp(0.5 + (surface.heightAt(x, z) - y) * 25, 0, 1);
       sandSamples[i] = bedAt(x, z);
+      const top = surface.currentAt(x, y, z, sandSamples[i], foodSamples, k);
+      foodSamples[k + 3] = T.MathUtils.clamp(0.5 + (top - y) * 25, 0, 1);
     }
     food.update(dt, foodSamples, sandSamples, 0, { rotation: controller.rotation.elements, gravity: env.gravity, iso: 0.5, radius: GLASS_INNER }, eaters);
     const data = food.renderData();
@@ -353,6 +380,7 @@ export async function startLowPowerBowl() {
     key.intensity = 2.3 - 1.52 * nightMix;
     key.color.setRGB(1 - 0.68 * nightMix, 0.84 - 0.33 * nightMix, 0.67 + 0.33 * nightMix);
     moveBowl(dt);
+    sampleFish();
     food.aim(eaters);
     swim.food = eater.food?.pos ?? null;
     swim.gape = eater.gapeWant;
@@ -364,13 +392,13 @@ export async function startLowPowerBowl() {
     floating.life.tending = fx.nest;
     swim.gulpUrge = floating.life.nestNeed;
     swim.fold = fish.userData.bodyMotion.turnAngles.at(-1) ?? 0;
-    swim.advance(dt, water.flow, env, true, water, fish.userData.stroke);
+    swim.advance(dt, water.flow, env, water.submerged > 0.5, water, fish.userData.stroke);
     fish.userData.locomotion = swimPose(swim);
     for (let k = 0; k < 3; k++) localFlow[k] = water.flow[k] / BETTA_SCALE;
     fish.userData.display.requested = flared || swim.flaring;
     fish.userData.update(t);
     moveFood(dt);
-    floating.update(dt, controller.rotation.elements, Math.hypot(...controller.omega), swim, water, surface);
+    floating.update(dt, controller.rotation.elements, Math.hypot(...controller.omega), swim, surface, bedAt);
     if (waterCare.on) waterCare.frame(dt);
     if (learn.on) learn.frame();
     showWater(dt, fx);

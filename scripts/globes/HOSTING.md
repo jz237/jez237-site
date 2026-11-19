@@ -587,7 +587,9 @@ Living Silk also offers **Low power** in the Graphics selector, or directly at
 `/demos/betta-bowl/?power=low`. This WebGL 2 renderer uses the compact Atelier
 specimen, the bowl's swimming controller and the same furnishing meshes. It draws
 glass with simple materials. Dragging tilts the bowl and excites a damped surface
-wave. Its height and currents are sampled by the fish and floating pellets.
+wave. Both planted species bend with the local current, with their roots fixed
+and the betta’s collision boundaries following the leaves. The fish senses flow
+across its body, drifts, and corrects its course. The same current carries food.
 Learn and Water care share the full simulation’s lessons, chemistry, chart and
 saved progress. Feeding, flaring, varieties, Follow and Night work in both modes.
 Full simulation adds ray-traced refraction and a three-dimensional fluid solver.

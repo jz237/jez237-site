@@ -13,6 +13,8 @@ const limit = (v, n) => Math.max(-n, Math.min(n, v));
 export class Slosh {
   sx = 0; sz = 0;
   vx = 0; vz = 0;
+  time = 0;
+  currentX = 0; currentZ = 0;
   normal = UP.clone();
   rotation = new Quaternion();
   inverse = new Quaternion();
@@ -20,6 +22,7 @@ export class Slosh {
   point = new Vector3();
 
   step(dt, gravity, omega) {
+    this.time += dt;
     const steps = Math.max(1, Math.ceil(dt * 120)), h = dt / steps;
     const gx = limit(gravity[0] / 24 + omega[2] * 0.075, 0.38);
     const gz = limit(gravity[2] / 24 - omega[0] * 0.075, 0.38);
@@ -37,6 +40,23 @@ export class Slosh {
     this.rotation.setFromUnitVectors(UP, this.normal);
     this.inverse.copy(this.rotation).invert();
     this.bend.value = limit((this.vx + this.vz) * 0.042, 0.075);
+    const gain = Math.min(1, 1.85 / (Math.hypot(this.vx, this.vz) || 1));
+    this.currentX = this.vx * gain;
+    this.currentZ = this.vz * gain;
+  }
+
+  // The rocking water moves fastest near the film. Its rising side lifts what is
+  // swimming there; near the glass the horizontal stream turns along the wall.
+  currentAt(x, y, z, bed, out, offset = 0) {
+    const top = this.heightAt(x, z);
+    const depth = Math.max(0, Math.min(1, (y - bed) / Math.max(0.04, top - bed)));
+    const along = this.currentX * x + this.currentZ * z;
+    const span = Math.max(0.1, GLASS_INNER ** 2 - y * y);
+    const speed = 0.26 + 0.72 * depth;
+    out[offset] = speed * (this.currentX - x * along / span) + 0.009 * Math.sin(0.68 * this.time + z);
+    out[offset + 1] = depth * along;
+    out[offset + 2] = speed * (this.currentZ - z * along / span) + 0.006 * Math.cos(0.47 * this.time + x);
+    return top;
   }
 
   heightAt(x, z) {
