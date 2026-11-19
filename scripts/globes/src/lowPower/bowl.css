@@ -1,0 +1,15 @@
+#stage.raster-bowl {
+  background:
+    linear-gradient(to bottom, transparent 56.9%, #163950 57%, #061a2b 82%, #04111c),
+    radial-gradient(ellipse at 50% 40%, #5888a8, #1f5a80 64%, #0e3b5b);
+}
+#stage.raster-night {
+  background: radial-gradient(ellipse at 50% 50%, #1c394e, #061321 65%, #040c15);
+}
+#stage.raster-bowl > canvas { width: 100%; height: 100%; }
+.site-links .graphics-choice { position: static; pointer-events: auto; align-self: center; }
+@media (max-width: 380px) {
+  html[data-graphics="low"] .site-links { gap: 4px; left: 6px; right: 6px; }
+  .site-links .graphics-choice select { max-width: 102px; }
+}
+.raster-bowl .betta-controls button:disabled { opacity: .55; }

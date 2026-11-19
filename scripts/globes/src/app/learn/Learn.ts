@@ -4,7 +4,7 @@
 // words are content.ts's. It is off until asked for (the Learn button among the fish's controls,
 // remembered on this device); off, it does nothing in a frame, and a tap does what it always did.
 
-import * as THREE from 'three/webgpu';
+import * as THREE from 'three';
 import { BOWL } from '../../render/bowl';
 import { BED, LEAF } from '../../render/bowlScape';
 import type { Betta } from '../../fish/Betta';
@@ -30,22 +30,29 @@ const FADE_MS = 500;
 const NEST_SHOWN = 8;
 
 /** What Learn mode reads of the page. */
-export interface LearnHost {
+interface LessonState {
+  betta: { flared: boolean; swim: { mode: string } };
+  life: Pick<BowlLife, 'bubbles'>;
+  food: Pick<FishFood, 'landed'>;
+  feeding: Pick<Feeding, 'state' | 'onDrop'>;
+  /** The fish's variety (fish/varieties.mjs id), for its card. */
+  variety: () => string;
+}
+
+interface TracedBowl extends LessonState {
   camera: THREE.Camera;
   canvas: HTMLCanvasElement;
   controller: GlobeController;
   betta: Betta;
   life: BowlLife;
-  food: FishFood;
-  feeding: Feeding;
   lid: BowlLid;
   /** The glass's radii. */
   glass: { outerRadius: number; innerRadius: number };
   /** The water's resting height (the sim frame). */
   level: () => number;
-  /** The fish's variety (fish/varieties.mjs id), for its card. */
-  variety: () => string;
 }
+
+export type LearnHost = TracedBowl | (LessonState & { pickTopic(x: number, y: number): TopicId | null });
 
 type Picking = typeof import('./pick.mjs');
 
@@ -153,7 +160,7 @@ export class Learn {
       this.hide();
       return;
     }
-    this.picking ??= import('./pick.mjs').then(
+    if (!('pickTopic' in this.host)) this.picking ??= import('./pick.mjs').then(
       (m) => {
         this.pickBowl = m.pickBowl;
       },
@@ -212,7 +219,7 @@ export class Learn {
    *  is on (or, off the bowl, the card put away), and true; off, false (the tap is the page's). */
   tap(clientX: number, clientY: number): boolean {
     if (!this.on) return false;
-    if (!this.pickBowl) {
+    if (!('pickTopic' in this.host) && !this.pickBowl) {
       void this.picking?.then(() => {
         if (this.pickBowl) this.tap(clientX, clientY);
       });
@@ -229,9 +236,10 @@ export class Learn {
   /** What is under client px (x, y), as the viewer sees it through the glass and the water
    *  (pick.mjs), or null: off the bowl, something it has no card for, or the picking not loaded. */
   pick(clientX: number, clientY: number): TopicId | null {
+    const h = this.host;
+    if ('pickTopic' in h) return h.pickTopic(clientX, clientY);
     const pickBowl = this.pickBowl;
     if (!pickBowl) return null;
-    const h = this.host;
     const r = h.canvas.getBoundingClientRect();
     this.raycaster.setFromCamera(this.ndc.set(((clientX - r.left) / r.width) * 2 - 1, 1 - ((clientY - r.top) / r.height) * 2), h.camera);
     const ray = this.raycaster.ray;
