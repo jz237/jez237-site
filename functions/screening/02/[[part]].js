@@ -76,38 +76,55 @@ function byteRange(value,size) {
   return lo<size&&hi>=lo?{lo,hi,partial:true}:null;
 }
 
-async function openSmall(ctx,asset,key) {
+async function archiveFile(raw, file, method, range) {
+  const suffix=encoder.encode('/reel/02b/read');
+  const input=new Uint8Array(raw.length+suffix.length);
+  input.set(raw);input.set(suffix,raw.length);
+  const verifier=new Uint8Array(await crypto.subtle.digest('SHA-256',input));
+  const headers=new Headers({'X-Screen-Source':Array.from(verifier,b=>b.toString(16).padStart(2,'0')).join('')});
+  if(range)headers.set('Range',range);
+  return fetch(selection.archive+file,{method,headers,redirect:'manual'});
+}
+
+async function openSmall(asset,key,raw) {
+  if(asset.bytes>selection.blockSize)throw new Error('Protected asset exceeds its expected limit');
   const iv=new Uint8Array(12);
   iv.set(decode(asset.nonce));
-  const source=await ctx.env.ASSETS.fetch(new URL(asset.path,ctx.request.url));
-  if(!source.ok || asset.bytes>selection.blockSize)throw new Error('Protected page is unavailable');
+  const source=await archiveFile(raw,asset.file,'GET');
+  if(source.status!==200)throw new Error('Protected page is unavailable');
   const encrypted=await source.arrayBuffer();
   if(encrypted.byteLength!==asset.bytes+16)throw new Error('Unexpected asset length');
   return crypto.subtle.decrypt({name:'AES-GCM',iv},key,encrypted);
 }
 
-async function segment(request,stream) {
-  const tag='"'+stream.sha256+'"';
-  const conditional=request.headers.get('If-Range');
-  const span=byteRange(conditional && conditional!==tag?null:request.headers.get('Range')?.trim(),stream.bytes);
-  if(!span)return blank(416,{'Content-Range':'bytes */'+stream.bytes});
+async function segment(request,version,part,raw) {
+  const stream=selection.streams[version];
+  if(!/^(0|[1-9][0-9]?)$/.test(part||''))return blank(404);
+  const size=stream.lengths[Number(part)];
+  if(!size)return blank(404);
+  const span=byteRange(request.headers.get('Range'),size);
+  if(!span)return blank(416,{'Content-Range':'bytes */'+size});
   const {lo,hi,partial}=span;
-  const count=hi-lo+1;
-  const headers={...header,'Content-Type':'video/mp2t','Accept-Ranges':'bytes',ETag:tag,'Content-Length':String(count)};
-  if(partial)headers['Content-Range']='bytes '+lo+'-'+hi+'/'+stream.bytes;
+  const headers={...header,'Content-Type':'video/mp2t','Accept-Ranges':'bytes','Content-Length':String(hi-lo+1)};
+  if(partial)headers['Content-Range']='bytes '+lo+'-'+hi+'/'+size;
   const status=partial?206:200;
   if(request.method==='HEAD')return new Response(null,{status,headers});
-  const outgoing=new Headers({'User-Agent':'jez237-screening-player'});
-  if(partial)outgoing.set('Range','bytes='+lo+'-'+hi);
-  const origin=await fetch(stream.origin,{headers:outgoing,redirect:'follow'});
-  if(origin.status!==status || (partial && origin.headers.get('Content-Range')!==headers['Content-Range']))return blank(503,{'Retry-After':'5'});
-  return new Response(origin.body,{status,headers});
+  const file=version+'-'+part.padStart(2,'0')+'.bin';
+  const origin=await archiveFile(raw,file,'GET',partial?'bytes='+lo+'-'+hi:undefined);
+  if(origin.status===status && (!partial || origin.headers.get('Content-Range')===headers['Content-Range']))
+    return new Response(origin.body,{status,headers});
+  // Some asset edges send the entire small part for an otherwise valid range.
+  if(partial && origin.status===200){
+    const bytes=await origin.arrayBuffer();
+    if(bytes.byteLength===size)return new Response(bytes.slice(lo,hi+1),{status,headers});
+  }
+  return blank(503,{'Retry-After':'5'});
 }
 async function playlist(env,version,raw) {
   const key=await grant(env,'key',raw);
   const uri=await grant(env,version+'.ts',raw);
   return selection.streams[version].playlist.replaceAll('"screening-key"','"'+key+'"')
-    .replaceAll('\n'+version+'.ts\n','\n'+uri+'\n');
+    .replace(/part-([0-9]+)\.ts/g,(_entry,i)=>uri+'&i='+i);
 }
 async function streamKey(raw) {
   const suffix=encoder.encode('/hls-screening/02/v1');
@@ -142,18 +159,18 @@ export async function onRequest(ctx) {
       return new Response(request.method==='HEAD'?null:await streamKey(raw),{headers:{...header,'Content-Type':'application/octet-stream'}});
     }
     if(hls){
-      if(hls[2]==='ts')return await segment(request,selection.streams[hls[1]]);
+      if(hls[2]==='ts')return await segment(request,hls[1],url.searchParams.get('i'),raw);
       const body=request.method==='HEAD'?null:await playlist(env,hls[1],raw);
       return new Response(body,{headers:{...header,'Content-Type':'application/vnd.apple.mpegurl'}});
     }
     const assetKey=await crypto.subtle.importKey('raw',raw,'AES-GCM',false,['decrypt']);
     if(route==='poster.jpg'){
-      const body=request.method==='HEAD'?null:await openSmall(ctx,selection.assets.poster,assetKey);
+      const body=request.method==='HEAD'?null:await openSmall(selection.assets.poster,assetKey,raw);
       return new Response(body,{headers:{...header,'Content-Type':'image/jpeg'}});
     }
     const headers={...header,'Content-Type':'text/html; charset=utf-8'};
     if(request.method==='HEAD')return new Response(null,{headers});
-    const card=await openSmall(ctx,selection.assets.card,assetKey);
+    const card=await openSmall(selection.assets.card,assetKey,raw);
     const fourK=url.searchParams.get('quality')==='4k';
     const source=await grant(env,fourK?'uhd.m3u8':'hd.m3u8',raw);
     const html=new TextDecoder().decode(card).replaceAll('[[VIDEO]]',source).replaceAll('[[SIZE]]',fourK?'4K UHD':'1080p')
