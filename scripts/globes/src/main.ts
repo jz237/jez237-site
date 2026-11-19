@@ -1047,6 +1047,7 @@ async function startApp(stage: HTMLElement, params: URLSearchParams, host: Deskt
   } catch (err) {
     console.error('[globes] could not start:', err);
     shell.ui.unsupported(classifyFailure(err));
+    if (BETTA_PAGE) window.dispatchEvent(new Event('betta-start-failed'));
   }
 }
 
