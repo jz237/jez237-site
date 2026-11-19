@@ -1,5 +1,116 @@
 [
   {
+    "id": "2026-11-19-factual-infographic-factual-infographic-peripheral-arterial",
+    "title": "Factual infographic: Peripheral Arterial Disease — Leg Blood Flow",
+    "tests": "factual_subtype: medical-health-infographic; source-backed clinical education; unboxed anatomical atlas; archive_slot=2026-11-19T17:20; concept=peripheral-arterial-plaque-leg-flow-claudication; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: medical-health-infographic",
+    "prompt": "Create the finished medical educational infographic directly, an exquisitely rendered flowing anatomical atlas, not a poster photographed in a room. Main headline: “PERIPHERAL ARTERIAL DISEASE”; subtitle: “When narrowed arteries limit leg blood flow”. Use refined anatomical gouache, fine technical ink and softly luminous scientific shading on a pale cool ivory canvas, arterial coral-red and warm plaque ochre, deep indigo typography and teal clinical annotations. Dominant diagonal leg study from upper thigh down to the toes sweeps across the composition, with semi-transparent skin and carefully drawn muscle fibers surrounding a schematic arterial supply. Show anatomical arterial routing believably, not decorative random vascular branches. A large organic circular magnification grows out of the thigh vessel on a curved fine leader: a longitudinal arterial cutaway with layered wall, eccentric fatty plaque constricting the lumen, red blood traveling through the remaining channel and smaller downstream flow arrows. Label “Plaque buildup”, “Narrowed artery”, “Reduced blood flow to leg and foot”. Magnification schematic, not to scale. Do not depict a vein or a clot as the usual underlying cause.\nWeave concise clinical explanations into open negative spaces along the anatomical sweep; no boxes, rigid grids, detached cards or equal panels. Upper-left adjacent to a small naturally painted calf silhouette: “Intermittent claudication” / “Leg pain with walking; eases after a few minutes of rest”. A tiny walking-to-resting study shows one fictional older man with medium-brown skin, short grey hair, rounded build, blue polo and dark trousers, first walking and then sitting, linked by an open curved arrow. Beside it: “Some people have no symptoms”. Near foot, delicate leaders to “Cold feet • weakness or numbness • sores that do not heal”. Keep skin intact, no graphic wounds.\nAn elegant lower-left arm-and-ankle cuff sketch supports “Assessment” / “Clinician checks symptoms and compares ankle and arm blood pressure (ankle-brachial index)”. A flowing short management ribbon alongside the arterial course reads “Care plan: stop smoking • clinician-guided exercise • prescribed medicines”; below, “Selected cases: procedures to improve blood flow”. Separate short subordinate notes: “Manage blood pressure and cholesterol” and “With diabetes: blood sugar control and foot care”. A small heart-and-brain line motif with text “PAD also raises heart attack and stroke risk”, no invented mechanism diagram.\nAn unmistakable but beautifully integrated rust-red emergency annotation near the lower edge reads: “EMERGENCY — CALL 911” followed by “Foot paler or colder than the other; cannot feel or move it; or pain / pins and needles at rest: seek immediate help.” Distinguish this urgent warning from ordinary walking-related pain. Footer: “General education, not a diagnosis. Discuss symptoms and treatment with a clinician.” Readable hierarchy and generous breathing room, substantial anatomical detail, carefully painted vessel-wall textures, precise uncluttered leaders. Include only these supported claims; no statistics, doses, cure claims, extra risks or citations. No bibliography, URLs, logos, watermark, photorealistic patient imagery or mockup. Composition remains artwork-led and asymmetrical, with the arterial mechanism visually dominant.",
+    "image": "images/2026-11-19-factual-infographic-factual-infographic-peripheral-arterial.jpg",
+    "thumb": "thumbs/2026-11-19-factual-infographic-factual-infographic-peripheral-arterial.webp",
+    "color": "#dcc1b6",
+    "date": "2026-11-19",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "peripheral-arterial-plaque-leg-flow-claudication",
+      "imageSha256": "c81c4627667fd930e766864f97e1889b2d67022cf0a1bd26d935b745eec9ffb4",
+      "imageDHash": "98d8d8ccb6d209a4"
+    },
+    "factualInfographic": {
+      "topic": "How peripheral arterial disease narrows leg arteries, reduces blood flow, causes walking-related pain, and is evaluated and managed",
+      "description": "Anatomical atlas of lower-limb PAD, claudication, assessment, management and urgent ischemic warning signs.",
+      "sourceNote": "NHLBI and NHS; verified mechanism, symptoms, assessment, care and emergency signs. https://www.nhlbi.nih.gov/health/peripheral-artery-disease https://www.nhs.uk/conditions/peripheral-arterial-disease-pad/ https://www.nhlbi.nih.gov/health/peripheral-artery-disease/living-with",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-19T22:20:57.658777+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "National Heart, Lung, and Blood Institute",
+            "title": "Peripheral Artery Disease — What Is PAD?",
+            "sourceType": "government-agency",
+            "url": "https://www.nhlbi.nih.gov/health/peripheral-artery-disease"
+          },
+          {
+            "id": "S2",
+            "publisher": "NHS",
+            "title": "Peripheral arterial disease (PAD)",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/conditions/peripheral-arterial-disease-pad/"
+          },
+          {
+            "id": "S3",
+            "publisher": "National Heart, Lung, and Blood Institute",
+            "title": "Peripheral Artery Disease — Living With",
+            "sourceType": "government-agency",
+            "url": "https://www.nhlbi.nih.gov/health/peripheral-artery-disease/living-with"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Peripheral arterial disease (PAD) commonly involves plaque buildup narrowing arteries and reducing blood flow to the legs and feet.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Arteries carry blood away from the heart; show a schematic leg arterial supply and a magnified plaque-narrowed lumen with reduced downstream flow, not a vein or a clot as the usual cause.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Intermittent claudication is leg muscle pain with walking that eases after a few minutes of rest; the calves are commonly affected. Some people have no symptoms.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Other symptoms can include cold feet, weakness or numbness and sores that do not heal.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Evaluation includes clinical assessment and comparing blood pressure at the ankle and arm with an ankle-brachial index.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Management may include an exercise programme guided by a clinician, stopping smoking, prescribed medicines and, in selected cases, procedures to improve blood flow.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Control blood pressure and cholesterol; people with diabetes should manage blood sugar and look after their feet.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "PAD is associated with higher heart attack and stroke risk.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Acute limb ischemia is an emergency: a foot paler or colder than the other, inability to feel or move the foot, or rest pain/pins and needles requires immediate medical help; call 911.",
+            "sourceIds": [
+              "S3"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
     "id": "2026-11-19-factual-infographic-factual-infographic-m-ni-re-disease-inn",
     "title": "Factual infographic: Ménière Disease — Inner Ear Episodes",
     "tests": "factual_subtype: medical-health-infographic; source-backed clinical education; flowing unboxed anatomical atlas; archive_slot=2026-11-19T14:20; concept=meniere-endolymph-hearing-balance-episodes; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: medical-health-infographic",
