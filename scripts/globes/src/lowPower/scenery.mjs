@@ -16,8 +16,9 @@ const colours = {
 };
 const palette = Object.fromEntries(Object.entries(colours).map(([k, hex]) => [k, new T.Color(hex)]));
 
-function furnishings(scene) {
+function furnishings(scene, waterFilm) {
   const material = new T.MeshLambertMaterial({ vertexColors: true, side: T.DoubleSide });
+  waterFilm.illuminate(material);
   const pieces = buildScapePieces({ detail: 0.28 });
   const obstacles = pieces.flatMap(p => p.obstacles);
   const plants = new Map();
@@ -114,8 +115,9 @@ function glassMaterial() {
   });
 }
 
-export function makeBowl(basin, shell, liquid, slosh) {
-  const scape = furnishings(shell);
+export function makeBowl(basin, shell, liquid, slosh, keyLight) {
+  const waterFilm = makeWaterFilm(liquid, slosh, keyLight);
+  const scape = furnishings(shell, waterFilm);
   const glass = glassMaterial();
   const wall = new T.Mesh(sphereBand(1, BOWL.mouth, -0.99), glass);
   wall.renderOrder = 5;
@@ -124,6 +126,7 @@ export function makeBowl(basin, shell, liquid, slosh) {
   const rim = new T.MeshPhongMaterial({ color: 0x9bc8cf, transparent: true, opacity: 0.63, depthWrite: false, shininess: 70 });
   shell.add(ring(Math.sqrt(1 - BOWL.mouth ** 2), BOWL.beadRadius, BOWL.mouth, rim));
   const sand = sandMaterial();
+  waterFilm.illuminate(sand);
   const bed = new T.Mesh(new T.RingGeometry(0, BED_RADIUS, 80, 10), sand);
   bed.rotation.x = -Math.PI / 2;
   bed.position.y = BED_LEVEL;
@@ -131,7 +134,6 @@ export function makeBowl(basin, shell, liquid, slosh) {
   const sandWall = new T.Mesh(sphereBand(GLASS_INNER, BED_LEVEL, -0.98), sand);
   bed.userData.topic = sandWall.userData.topic = 'sand';
   shell.add(sandWall, bed);
-  const waterFilm = makeWaterFilm(liquid, slosh, sand);
   const tint = new T.Mesh(sphereBand(GLASS_INNER, WATER_LEVEL, -0.98),
     new T.MeshBasicMaterial({ color: 0x77c5d9, transparent: true, depthWrite: false, opacity: 0.06 }));
   // Seen edge-on, the film still has a narrow dark contact line on the wet glass.

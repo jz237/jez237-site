@@ -3,8 +3,9 @@ import { Reflector } from 'three/addons/objects/Reflector.js';
 import { STUDIO_DAY, STUDIO_NIGHT } from '../render/studio';
 import { SURFACE_RADIUS, WATER_LEVEL } from './slosh.mjs';
 import { RIPPLE_HEIGHT, RIPPLE_SLOPE } from './ripples.mjs';
+import { makeRippleLight } from './caustics.mjs';
 
-export function makeWaterFilm(liquid, slosh, sand) {
+export function makeWaterFilm(liquid, slosh, lamp) {
   const field = slosh.ripples;
   const waves = new T.DataTexture(field.data, field.size, field.size, T.RGBAFormat);
   waves.minFilter = waves.magFilter = T.LinearFilter;
@@ -19,6 +20,7 @@ export function makeWaterFilm(liquid, slosh, sand) {
     waves: { value: waves }, bend: slosh.bend, mirrorMap: { value: target.texture },
     mirrorProjection: { value: new T.Matrix4() }, night: { value: 0 }, filmNormal: { value: slosh.normal },
   };
+  const rippleLight = makeRippleLight(uniforms.waves, uniforms.bend, uvScale, lamp);
   const material = new T.ShaderMaterial({
     name: 'Rippling water', uniforms, transparent: true, depthWrite: false, side: T.DoubleSide, forceSinglePass: true,
     vertexShader: `
@@ -96,29 +98,14 @@ export function makeWaterFilm(liquid, slosh, sand) {
   film.renderOrder = 3;
   liquid.add(film);
 
-  // Reuse the ripple curvature for the lamp's moving patches on the sand.
-  const toLiquid = { value: new T.Matrix4() };
-  sand.onBeforeCompile = shader => {
-    shader.uniforms.waterWaves = uniforms.waves;
-    shader.uniforms.toLiquid = toLiquid;
-    shader.vertexShader = 'uniform mat4 toLiquid; varying vec2 waterUV;\n' + shader.vertexShader.replace('#include <project_vertex>', `
-      #include <project_vertex>
-      vec3 p = (toLiquid * modelMatrix * vec4(transformed,1.)).xyz;
-      waterUV = .5 + (p.xz + vec2(-.13,.06)*(${WATER_LEVEL}-p.y))*${uvScale};`);
-    shader.fragmentShader = 'uniform sampler2D waterWaves; varying vec2 waterUV;\n' + shader.fragmentShader.replace('#include <opaque_fragment>', `
-      float focus = (texture2D(waterWaves,waterUV).a * 255.-128.) / 127.;
-      outgoingLight *= 1. + .36*focus;
-      #include <opaque_fragment>`);
-  };
-
   const flip = new T.Matrix4().makeRotationX(Math.PI), inverse = new T.Matrix4();
   const eye = new T.Vector3(), centre = new T.Vector3();
   let captureAt = -1, lastSide = 0;
-  function update(renderer, scene, camera, t, night) {
+  function update(renderer, scene, camera, t, night, clarity) {
     waves.needsUpdate = true;
     uniforms.night.value = night;
     film.updateWorldMatrix(true,false);
-    toLiquid.value.copy(liquid.matrixWorld).invert();
+    rippleLight.update(liquid, (1 - .76*night) * clarity);
     camera.updateMatrixWorld();
     centre.setFromMatrixPosition(film.matrixWorld);
     const side = eye.setFromMatrixPosition(camera.matrixWorld).sub(centre).dot(slosh.normal) >= 0 ? 1 : -1;
@@ -139,5 +126,5 @@ export function makeWaterFilm(liquid, slosh, sand) {
     lastSide = side;
     captureAt = t + .105;
   }
-  return { update };
+  return { update, illuminate: rippleLight.illuminate };
 }

@@ -78,7 +78,7 @@ export async function startLowPowerBowl() {
   new ResizeObserver(resize).observe(stage);
   resize();
   const surface = new Slosh();
-  const { lid, obstacles, bubbles, plants, tint, waterFilm } = makeBowl(basin, shell, liquid, surface);
+  const { lid, obstacles, bubbles, plants, tint, waterFilm } = makeBowl(basin, shell, liquid, surface, key);
   const floating = addSurfaceLife(liquid);
   const cover = new BowlLid(bowlShape(glass, true));
   const feeding = new Feeding(cover, controller);
@@ -92,6 +92,7 @@ export async function startLowPowerBowl() {
     if (part.isMesh) { part.receiveShadow = true; fishMaterials.add(part.material); }
   });
   for (const material of fishMaterials) {
+    waterFilm.illuminate(material);
     const original = material.onBeforeCompile.bind(material);
     const cacheKey = material.customProgramCacheKey();
     material.customProgramCacheKey = () => cacheKey + '-water-pale';
@@ -435,7 +436,7 @@ export async function startLowPowerBowl() {
       controller.followEye.lerp(aim, 1 - Math.exp(-5 * dt));
     }
     lens.uniforms.lensStrength.value = 0;
-    waterFilm.update(renderer, scene, camera, t, nightMix);
+    waterFilm.update(renderer, scene, camera, t, nightMix, 1 - .60*cloud - .20*tannin);
     lens.update(camera, basin, shell, surface);
     renderer.render(scene, camera);
     diagnostics.frames++;

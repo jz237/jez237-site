@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { BufferAttribute, BufferGeometry, Matrix3, Vector3 } from 'three';
 import { Slosh, SURFACE_RADIUS, WATER_LEVEL } from './src/lowPower/slosh.mjs';
-import { SurfaceRipples } from './src/lowPower/ripples.mjs';
+import { RIPPLE_CURVATURE, SurfaceRipples } from './src/lowPower/ripples.mjs';
 import { movingPlant } from './src/lowPower/plants.mjs';
 import { BettaSwim } from './src/fish/bettaSwim.mjs';
 import { buildScapePieces } from './src/render/scape/scene.mjs';
@@ -64,6 +64,23 @@ test('opposite tilts send opposite ripples inward from the glass', () => {
   assert.ok(Math.abs(right.heightAt(.65,0)) > .003);
   assert.ok(Math.abs(right.heightAt(.65,0) + left.heightAt(.65,0)) < 1e-6);
   assert.ok(Math.abs(right.heightAt(0,.65)) < 1e-6);
+});
+
+test('the light texture resolves a focusing crest and a spreading trough', () => {
+  const water = new SurfaceRipples(SURFACE_RADIUS);
+  const centre = (water.shown.length - 1) / 2;
+  const curvature = k => (water.data[4*k+3] - 128) / (127*RIPPLE_CURVATURE);
+  assert.equal(curvature(centre), 0);
+  water.disturb(0, 0, .22, .5);
+  water.step(1/30, 0, 0);
+  const h = water.shown, width = water.size;
+  for (const k of [centre, centre + 5]) {
+    const lap = (h[k-1] + h[k+1] + h[k-width] + h[k+width] - 4*h[k]) / water.cell**2;
+    assert.ok(Math.abs(curvature(k) - lap) <= .5 / (127*RIPPLE_CURVATURE));
+  }
+  assert.ok(curvature(centre) < 0 && curvature(centre + 5) > 0);
+  for (let i = 0; i < 300; i++) water.step(1/30, 0, 0);
+  assert.equal(curvature(centre), 0);
 });
 
 test('a tilt produces reversing currents that are stronger near the surface and fade after release', () => {

@@ -2,6 +2,8 @@
 // Fixed time steps keep the wave speed independent of the renderer's frame rate.
 const SIZE = 65, STEP = 1 / 60;
 export const RIPPLE_HEIGHT = 0.055, RIPPLE_SLOPE = 0.85;
+// Alpha stores this fraction of the signed surface Laplacian.
+export const RIPPLE_CURVATURE = 0.16;
 const byte = n => 128 + Math.round(127 * Math.max(-1, Math.min(1, n)));
 
 export class SurfaceRipples {
@@ -15,6 +17,7 @@ export class SurfaceRipples {
   taper = new Float32Array(SIZE * SIZE);
   debt = 0;
   lastX = 0; lastZ = 0;
+  wallTravel = 0;
 
   constructor(radius) {
     this.radius = radius;
@@ -54,7 +57,21 @@ export class SurfaceRipples {
     const drive = (v, last) => Math.max(-7, Math.min(7, 0.38 * (v - last) / (steps * STEP) + 2.2 * v)) * STEP ** 2;
     const dx = drive(vx, this.lastX), dz = drive(vz, this.lastZ);
     this.lastX = vx; this.lastZ = vz;
+    const speed = Math.hypot(vx, vz);
     for (let n = 0; n < steps; n++) {
+      // As the slosh runs up the curved wall, short crests spread back from
+      // either side of the high point. Their crossings concentrate the light.
+      this.wallTravel += speed * STEP;
+      if (this.wallTravel >= .095) {
+        this.wallTravel %= .095;
+        const x = this.radius * vx / speed, z = this.radius * vz / speed;
+        const kick = Math.min(.95, 1.35 * speed);
+        for (const side of [-.32, .32]) {
+          const px = .81*x - side*z, pz = .81*z + side*x;
+          this.disturb(px, pz, .13*this.radius, kick);
+          this.disturb(-px, -pz, .13*this.radius, -kick);
+        }
+      }
       const h = this.heights, next = this.previous;
       for (const k of this.inside) {
         const lap = h[k - 1] + h[k + 1] + h[k - SIZE] + h[k + SIZE] - 4 * h[k];
@@ -63,7 +80,7 @@ export class SurfaceRipples {
       this.previous = h;
       this.heights = next;
     }
-    const h = this.shown, inv = 0.5 / this.cell, curvature = 0.16 / this.cell ** 2;
+    const h = this.shown, inv = 0.5 / this.cell, curvature = RIPPLE_CURVATURE / this.cell ** 2;
     for (const k of this.inside) h[k] = this.taper[k] * Math.max(-RIPPLE_HEIGHT, Math.min(RIPPLE_HEIGHT, this.heights[k]));
     for (const k of this.inside) {
       const l = h[k - 1], r = h[k + 1], b = h[k - SIZE], f = h[k + SIZE];
