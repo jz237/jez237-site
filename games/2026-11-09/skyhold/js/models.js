@@ -2214,6 +2214,67 @@ const NATURE = {
   umbra: (p) => [crystals(5), crystals(12), darkTower(p)],
 };
 const SCN = new Map();
+// One recognisable installation on each planet's horizon. The housing and the illuminated
+// parts are batched separately, so every station along an orbit shares two draws.
+export function orbitalLandmark(key) {
+  const p = LOOKP[key], accent = { verdant: 0x65ddff, dune: 0x72e8e2, frost: 0x90bfff, cinder: 0xff8a43, umbra: 0xc98bff }[key];
+  return prop('orbital-station', 'build', 18, 14, (P) => {
+    P.add(cyl(3.6, 4.8, 1.35, 12), p.dark, 0, 0.58);
+    P.add(cyl(3.55, 3.7, 0.32, 12), p.hull, 0, 1.39);
+    for (const s of BOTH) {
+      P.add(box(3.8, 1.6, 2.6), p.trim, s * 4, 1.2, 0.1);
+      for (let j = 0; j < 4; j++) P.lit(box(0.44, 0.36, 0.09), p.win, 1.8, s * (2.8 + j * 0.78), 1.3, 1.43);
+      P.rod(p.dark, s * 3, 1.4, 0, s * 1.1, 4.8, 0, 0.24);
+      for (let j = 0; j < 3; j++) {
+        const x = s * (6.5 + j * 2.3);
+        P.add(box(0.45, 0.85, 0.45), p.dark, x, 0.42, 0.8);
+        P.lit(box(0.42, 0.27, 0.42), accent, 2.8, x, 0.97, 0.8);
+      }
+    }
+    if (key === 'verdant') {
+      // The white receiving dish, its suspended feed and the counterweighted yoke.
+      P.add(cyl(0.95, 1.6, 5.1, 12), p.trim, 0, 3.85);
+      P.add(cyl(1.75, 1.3, 0.65, 12), p.dark, 0, 6.55);
+      P.add(lathe('orbitalDish', [[0.12,0],[2.3,0.26],[4,0.85],[5.1,1.65],[5,1.86],[3.8,1.13],[2,0.62],[0.12,0.46]], 32), p.hull, 0, 7, 0, 0.48, 0, -0.34);
+      P.rod(p.trim, -4, 9.8, 0.7, 1.45, 11.5, 2.2, 0.1);
+      P.rod(p.trim, 4.6, 7.3, 0.7, 1.45, 11.5, 2.2, 0.1);
+      P.lit(sph(0.36, 10, 6), accent, 3, 1.45, 11.5, 2.2);
+    } else if (key === 'dune') {
+      // Hinged blue collector wings with silver cell dividers catch the twin suns.
+      for (const s of BOTH) {
+        P.add(cyl(0.42, 0.68, 6.3, 10), p.hull, s * 3.8, 4.5);
+        P.add(box(7, 0.25, 5.2), 0x315a86, s * 3.8, 7.75, 0, 0.5, 0, s * 0.1);
+        for (let j = -2; j <= 2; j++) P.add(box(0.10, 0.14, 5.18), 0xa5bdd5, s * 3.8 + j * 1.24, 7.93 + s * j * 0.123, 0, 0.5);
+        P.lit(box(7, 0.15, 0.14), accent, 1.5, s * 3.8, 6.73, 2.28, 0, 0, s * 0.1);
+      }
+      P.add(cyl(0.24, 0.55, 9.7, 8), p.trim, 0, 6.2);
+      P.lit(sph(0.3, 8, 6), p.win, 2.8, 0, 11.2);
+    } else if (key === 'frost') {
+      for (const s of BOTH) {
+        P.rod(p.hull, s * 4.6, 1.4, 0, s * 2.1, 10.6, 0, 0.68, 8);
+        P.rod(p.trim, s * 5.3, 1.4, -1.2, s * 2.1, 10.6, 0, 0.28);
+        P.add(cone(0.72, 2.3, 8), p.hull, s * 2.1, 11.6);
+        P.lit(tor(2.5, 0.14, 28, 5), accent, 2, 0, 8.0, 0, 0.24, s * 0.64);
+      }
+      P.lit(sph(0.65, 12, 8), 0xbeedff, 2.8, 0, 8);
+    } else if (key === 'cinder') {
+      for (let j = 0; j < 3; j++) {
+        const x = (j - 1) * 3.1, h = [6.2, 11.4, 8.6][j];
+        P.add(cyl(0.78, 1.15, h, 12), p.hull, x, 1.5 + h / 2);
+        for (const k of [0.35, 0.74, 1]) P.add(cyl(1.03, 1.03, 0.38, 12), p.dark, x, 1.5 + k * h);
+        P.lit(cyl(0.88, 0.88, 0.34, 12), accent, 2.4, x, 1.21 + h);
+      }
+      P.rod(p.trim, -3.1, 5, 0, 3.1, 5, 0, 0.5, 8);
+    } else {
+      P.add(cone(2.2, 7, 6), p.hull, 0, 5.0);
+      for (const s of BOTH) {
+        P.add(tor(4.0, 0.26, 36, 6), p.trim, 0, 8.6, 0, 0.22, s * 0.78);
+        P.lit(arcT(4.05, 0.13, Math.PI * 1.27, 28, 5), accent, 2.2, 0, 8.6, 0.07, 0.22, s * 0.78, s * 1.5);
+      }
+      P.lit(ico(0.86, 1), 0xffbbfa, 2.5, 0, 8.6);
+    }
+  });
+}
 export function scenery(lookKey) {
   if (!LOOKP[lookKey]) lookKey = 'verdant';
   if (!SCN.has(lookKey)) { const p = LOOKP[lookKey]; SCN.set(lookKey, [dome(p, lookKey), tower(p), mast(p), pad(p), ...NATURE[lookKey](p)]); }
