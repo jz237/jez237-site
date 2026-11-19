@@ -1,0 +1,421 @@
+{
+  "currentDate": "2026-11-19",
+  "historicDate": "1985-09-23",
+  "displayDate": "Week of September 23-29, 1985",
+  "edition": "Issue 165 - Weekly 1985 Computer & Culture Chronicle",
+  "masthead": {
+    "title": "Computer Chronicle",
+    "subtitle": "Issue 165 - Weekly 1985 Computer & Culture Chronicle",
+    "dateline": "Week of September 23-29, 1985",
+    "price": "75 cents"
+  },
+  "sectionChrome": {
+    "primary": "brick red",
+    "secondary": "royal blue",
+    "texture": "aged newsprint, fine column rules, ink bleed"
+  },
+  "visualProfile": {
+    "tone": "A computer cofounder goes to court; games explore new terrain",
+    "motifs": [
+      "Apple desktop and courthouse editorial halftone",
+      "Rescue on Fractalus! mountainous flight and Ballblazer split screen",
+      "Amiga and Atari ST computers"
+    ],
+    "layout": "Warm aged newsprint, dense columns, red and blue headers, boxed modules, halftone photographs, paper grain, slight ink bleed, no dead footer space"
+  },
+  "layoutPlan": {
+    "leadPlacement": "Apple lawsuit is the stronger exact-week historical lead. Lucasfilm games get a prominent color halftone feature. No NeXT product, logo or shipping claim.",
+    "secondaryRail": "Top 5 Computer Games are editorial shelf selections, not sales ranks; Japanese Mario is overseas coverage. Use verbatim feature headlines and fixed inside-page jump lines.",
+    "archiveNavigation": "Weekly archive with previous/next issue navigation"
+  },
+  "heroImage": {
+    "src": "media/computer-chronicle-gpt-image-2-week-1985-09-23.jpg",
+    "alt": "Computer Chronicle newspaper front page for September 23-29, 1985",
+    "caption": "Newspaper-style front page generated from structured Chronicle issue data.",
+    "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+  },
+  "editorNote": "Exact-week developments lead; September magazine reviews and earlier announcements are identified as such. Games are editorial shelf selections, not a sales chart.",
+  "morningLine": "Apple takes its dispute with Steve Jobs to court while Lucasfilm games give Atari owners new worlds to explore.",
+  "lead": {
+    "headline": "Apple takes Steve Jobs to court over his new computer venture",
+    "dek": "A $5-million suit turns the cofounder’s new venture into a legal battleground.",
+    "confidence": "exact-date",
+    "sourceRefs": [
+      0,
+      1
+    ],
+    "body": [
+      "Apple sued Steve Jobs on September 23, escalating the dispute surrounding its departed cofounder and his new computer venture. The Los Angeles Times reports the action in its September 24 edition under a headline describing a $5-million lawsuit.",
+      "Jobs has recruited five Apple employees for the new company. Apple’s complaint concerns alleged use of insider information: those accusations are claims in a dispute, not findings that wrongdoing has occurred.",
+      "The new venture’s machine specifications are not yet finished. There is no finished workstation to put on a shop counter, and readers should not mistake the personnel battle for a product introduction.",
+      "For personal-computer buyers, the immediate story is the split itself: a major manufacturer and the entrepreneur who helped build it now face one another across a legal divide. The new company’s eventual computer remains a question for another issue."
+    ]
+  },
+  "stories": [
+    {
+      "headline": "Lucasfilm’s delayed games reach Atari owners through Epyx",
+      "body": [
+        "Lucasfilm’s Rescue on Fractalus! and Ballblazer receive an enthusiastic Atari review from Tom R. Halfhill in September COMPUTE!. The magazine coverage gives players a close look at two delayed games rather than establishing a new release date this week.",
+        "Rescue on Fractalus! sends the pilot over fractal terrain on a rescue mission. Ballblazer trades that landscape for split-screen futuristic soccer, with two players or a computer opponent. The reviewed Atari versions require 48K, a disk drive and a joystick; a second stick is recommended for Ballblazer.",
+        "The listed Epyx price is $40 apiece. The games’ original Atari connection became entangled in Atari’s business troubles before Epyx secured marketing rights. Apple II and Commodore 64 versions remain pending in this review; the C64 Ballblazer is still in development."
+      ],
+      "confidence": "same-month",
+      "sourceRefs": [
+        4
+      ]
+    },
+    {
+      "headline": "Amiga review makes the case for a multimedia personal computer",
+      "body": [
+        "September COMPUTE! devotes a substantial pre-release review to the Amiga, treating it as a personal computer with ambitions stretching well beyond a single application. Tom R. Halfhill explores games, business, education, video art and electronic music.",
+        "The appeal is the combination: a machine that can make graphics and sound central to everyday computing rather than optional decorations. Halfhill’s comparisons with costlier business and dedicated graphics equipment are the reviewer’s assessments, not independent benchmark results.",
+        "The review follows the summer New York introduction and repeats Commodore’s expectation of availability by the end of August. A forecast in a pre-release review does not establish which shops have stock during this September week."
+      ],
+      "confidence": "same-month",
+      "sourceRefs": [
+        2
+      ]
+    },
+    {
+      "headline": "Atari’s ST roadmap promises cheaper machines and compact-disc storage",
+      "body": [
+        "September Antic surveys Atari ST plans first announced at June’s Consumer Electronics Show. The proposed 256K 260ST is priced at $399, with a 260STD incorporating a 3.5-inch drive proposed at $499; the report targets October or November.",
+        "ROM-resident GEM/TOS and built-in television RF modulation are among the promised changes. These are announcements, not confirmation that the machines have arrived. A $799 520ST package with monochrome monitor and disk drive provides a more concrete comparison in the report.",
+        "Storage and communications also figure in the roadmap: a proposed 500-megabyte CD-ROM system, plus Haba’s promised $499 10-megabyte hard disk and $299 Hayes-compatible modem. Availability and final specifications still need checking before a buyer spends the money."
+      ],
+      "confidence": "same-month",
+      "sourceRefs": [
+        3
+      ]
+    }
+  ],
+  "computerItems": [
+    {
+      "title": "ST family roadmap",
+      "summary": "260ST/260STD proposals and $799 520ST bundle reported in September Antic; distinguish announcement from delivery.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        3
+      ]
+    },
+    {
+      "title": "Amiga",
+      "summary": "Pre-release review coverage in COMPUTE!; no exact-week shipping claim established.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        2
+      ]
+    }
+  ],
+  "softwareList": [
+    {
+      "name": "HomePak terminal software",
+      "detail": "Jerry White recommends Batteries Included’s HomePak modem program at $49.95 in September Antic.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        6
+      ]
+    },
+    {
+      "name": "Freeware libraries flourish online",
+      "detail": "CompuServe SIG Atari offers more than 1,000 public-domain programs, with ordinary access charges still payable.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        6
+      ]
+    }
+  ],
+  "storeShelves": [
+    {
+      "label": "Top 5 Computer Games — editorial selections, not sales ranks; September and period coverage",
+      "items": [
+        "Rescue on Fractalus! — Atari, $40 review",
+        "Ballblazer — Atari, $40 review",
+        "Super Mario Bros. — Japan Famicom, September 13",
+        "Ultima IV: Quest of the Avatar — Apple II, September shelf",
+        "Karateka — period shelf pick; HOTWARE data July 6"
+      ],
+      "confidence": "period",
+      "sourceRefs": [
+        4,
+        8,
+        12,
+        13
+      ]
+    },
+    {
+      "label": "Top 5 Movies — domestic weekend September 27-29, 1985",
+      "items": [
+        "1. Invasion U.S.A.",
+        "2. Agnes of God",
+        "3. Back to the Future",
+        "4. Teen Wolf",
+        "5. Pee Wee’s Big Adventure"
+      ],
+      "confidence": "same-week",
+      "sourceRefs": [
+        10
+      ]
+    }
+  ],
+  "priceWatch": [
+    {
+      "item": "Epyx games",
+      "price": "$40 each for the reviewed Atari Rescue on Fractalus! and Ballblazer. US dollars, period list price.",
+      "note": "$40 each for the reviewed Atari Rescue on Fractalus! and Ballblazer. US dollars, period list price.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        4
+      ]
+    },
+    {
+      "item": "520ST bundle",
+      "price": "$799 including monochrome monitor and 3.5-inch drive as reported by Antic",
+      "note": "$799 including monochrome monitor and 3.5-inch drive as reported by Antic; not a universal street price.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        3
+      ]
+    },
+    {
+      "item": "Haba accessories",
+      "price": "Announced 10MB ST hard disk $499",
+      "note": "Announced 10MB ST hard disk $499; Hayes-compatible modem $299; promises, not verified retail stock.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        3
+      ]
+    },
+    {
+      "item": "HomePak",
+      "price": "$49.95, Batteries Included, as cited by Jerry White.",
+      "note": "$49.95, Batteries Included, as cited by Jerry White.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        6
+      ]
+    }
+  ],
+  "briefs": [
+    {
+      "headline": "International Mario watch",
+      "summary": "Japanese Famicom release is dated September 13 by Nintendo. Avoid declaring the NES American launch this week.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        8
+      ]
+    }
+  ],
+  "musicChart": [
+    {
+      "rank": 1,
+      "artist": "John Cougar Mellencamp",
+      "title": "Lonely Ol’ Night",
+      "song": "Lonely Ol’ Night",
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-09-28",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        9
+      ]
+    },
+    {
+      "rank": 2,
+      "artist": "Sting",
+      "title": "Fortress Around Your Heart",
+      "song": "Fortress Around Your Heart",
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-09-28",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        9
+      ]
+    },
+    {
+      "rank": 3,
+      "artist": "Loverboy",
+      "title": "Lovin’ Every Minute of It",
+      "song": "Lovin’ Every Minute of It",
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-09-28",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        9
+      ]
+    },
+    {
+      "rank": 4,
+      "artist": "The Hooters",
+      "title": "And We Danced",
+      "song": "And We Danced",
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-09-28",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        9
+      ]
+    },
+    {
+      "rank": 5,
+      "artist": "Mick Jagger & David Bowie",
+      "title": "Dancing in the Street",
+      "song": "Dancing in the Street",
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-09-28",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        9
+      ]
+    }
+  ],
+  "periodAd": {
+    "headline": "Two Lucasfilm worlds, $40 each",
+    "summary": "Epyx’s Atari editions of Rescue on Fractalus! and Ballblazer are listed at $40 apiece in September COMPUTE!. Requires 48K Atari, disk drive and joystick. Editorial reconstruction from published review prices, not a reproduced advertisement.",
+    "tagline": "Choose a rescue flight or a split-screen match.",
+    "sourceRefs": [
+      4
+    ]
+  },
+  "market": {
+    "headline": "Compare promises with complete systems",
+    "summary": "Antic reports a $799 520ST package with drive and monochrome monitor alongside lower-priced proposed models. Add peripherals and service access time when comparing computing budgets; announced accessories are not verified stock.",
+    "confidence": "same-month",
+    "sourceRefs": [
+      3,
+      5,
+      6
+    ]
+  },
+  "worldAnchor": {
+    "headline": "Hurricane Gloria strikes the East Coast",
+    "summary": "On September 27 Gloria crossed North Carolina’s Outer Banks and continued north. National Weather Service retrospective verifies the event; avoid importing later damage totals into a contemporaneous bulletin.",
+    "confidence": "exact-date",
+    "sourceRefs": [
+      11
+    ]
+  },
+  "bbsNote": {
+    "headline": "SIG wars: online communities become competitive assets",
+    "summary": "Arlan R. Levitan’s September COMPUTE! column reports earlier events, including May’s short-lived Delphi MAUG branch; use as same-month commentary, not a new September shutdown. Antic documents the practical appeal of CompuServe’s Atari library.",
+    "posts": [
+      {
+        "topic": "Forum competition",
+        "platform": "Delphi / CompuServe",
+        "text": "Reported by COMPUTE!, not an actual recovered BBS post: Delphi’s MAUG branch vanished after a few weeks and was replaced by a generic Apple SIG; CompuServe’s MAUG developed separate Apple II, Macintosh and developer forums."
+      },
+      {
+        "topic": "Connect-time economics",
+        "platform": "Delphi / CompuServe",
+        "text": "Levitan reports Delphi off-shift 1200-bps access cost half CompuServe’s comparable charge; even Delphi’s 2400-bps off-shift rate was lower. No absolute hourly rate verified."
+      },
+      {
+        "topic": "Public-domain software",
+        "platform": "CompuServe SIG Atari",
+        "text": "Jerry White credits sysop Richard Brudaynski and members with recommendations from a library exceeding 1,000 programs. Downloads were not separately charged beyond normal service access time."
+      }
+    ],
+    "sourceRefs": [
+      5,
+      6
+    ]
+  },
+  "curiosity": {
+    "headline": "Your television can schedule the lamps",
+    "summary": "General Electric’s HomeMinder turns the TV into a pictorial home-control interface.",
+    "detail": "David H. Ahl’s September Creative Computing evaluation describes control over existing house wiring, a stand-alone controller or a version built into a 25-inch TV, and up to 96 on/off times per controlled unit. Touch-tone telephone access can control devices and leave short messages. This is a review, not a verified launch this week.",
+    "sourceRefs": [
+      7
+    ]
+  },
+  "gadgetWatch": {
+    "headline": "GE HomeMinder brings home automation to the television",
+    "summary": "September review describes remote-controlled lights, appliances and heating/cooling using existing wiring, with television setup menus and telephone access. No retail price verified.",
+    "confidence": "same-month",
+    "sourceRefs": [
+      7
+    ]
+  },
+  "accuracyLedger": {
+    "items": [
+      "No milestone designation: the lawsuit is this week’s lead, but the cofounder’s departure was earlier in September; do not turn every important follow-up into an Extra Edition.",
+      "Same-month magazine coverage must be labeled as such. CES announcements reproduced in September are not September announcements.",
+      "No named cracking crews or boards verified after searching hobbyist and scene-source indexes; groups intentionally empty.",
+      "Quotes are short and attributed; no invented forum posts. Modem desk entries are labeled editorial paraphrases.",
+      "Apple claims remain allegations. No NeXT product or shipping claim.",
+      "Music September 28; movies September 27-29.",
+      "Games are shelf selections, not a current sales ranking; Karateka source chart data July 6."
+    ]
+  },
+  "sources": [
+    {
+      "title": "NeXT — retrospective chronology",
+      "url": "https://en.wikipedia.org/wiki/NeXT",
+      "date": "retrospective; event 1985-09-23"
+    },
+    {
+      "title": "Apple Files $5-Million Lawsuit Against Jobs — Los Angeles Times",
+      "url": "https://www.latimes.com/archives/la-xpm-1985-09-24-fi-18710-story.html",
+      "date": "1985-09-24"
+    },
+    {
+      "title": "The Amiga: An In-Depth Review — COMPUTE! 64 p.16",
+      "url": "https://www.atarimagazines.com/compute/issue64/amiga.php",
+      "date": "1985-09"
+    },
+    {
+      "title": "More ST Products Coming — Antic 4(5)",
+      "url": "https://www.atarimagazines.com/v4n5/morestproducts.php",
+      "date": "1985-09"
+    },
+    {
+      "title": "Rescue on Fractalus! and Ballblazer — COMPUTE! 64 p.61",
+      "url": "https://www.atarimagazines.com/compute/issue64/review_rescue.php",
+      "date": "1985-09"
+    },
+    {
+      "title": "Telecomputing Today: SIG Wars — COMPUTE! 64 p.105",
+      "url": "https://www.atarimagazines.com/compute/issue64/telecomputing.php",
+      "date": "1985-09"
+    },
+    {
+      "title": "SIG Atari’s Greatest Hits — Antic 4(5)",
+      "url": "https://www.atarimagazines.com/v4n5/sigatari.html",
+      "date": "1985-09"
+    },
+    {
+      "title": "HomeMinder — Creative Computing 11(9) p.68",
+      "url": "https://www.atarimagazines.com/creative/v11n9/68_HomeMinder_you_can_contr.php",
+      "date": "1985-09"
+    },
+    {
+      "title": "Nintendo: Mario history",
+      "url": "https://www.nintendo.com/us/explore/characters/mario/history/",
+      "date": "retrospective; release 1985-09-13"
+    },
+    {
+      "title": "Billboard: Top Rock Tracks",
+      "url": "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1985/BB-1985-09-28.pdf",
+      "date": "1985-09-28"
+    },
+    {
+      "title": "The Numbers: Weekend Domestic Box Office",
+      "url": "https://www.the-numbers.com/box-office-chart/weekend/1985/09/27",
+      "date": "1985-09-27/1985-09-29"
+    },
+    {
+      "title": "National Weather Service: Hurricane Gloria September 27, 1985",
+      "url": "https://www.weather.gov/mhx/Sep271985EventReview",
+      "date": "retrospective; event 1985-09-27"
+    },
+    {
+      "title": "GameSpot Ultima IV release record",
+      "url": "https://www.gamespot.com/games/ultima-iv-quest-of-the-avatar/",
+      "date": "undated retrospective; accessed 2026-11-17"
+    },
+    {
+      "title": "COMPUTE!: HOTWARE, p.65 (data July 6)",
+      "url": "https://www.atarimagazines.com/compute/issue64/hotwire.php",
+      "date": "1985-09"
+    }
+  ]
+}
