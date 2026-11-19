@@ -10,8 +10,13 @@ python3 make-normalize.py            # work/normalize.json from skeletal landmar
 bash run-exports.sh                  # eight headless Blender exports in parallel -> work/raw/*.glb (+ anchors, reports)
 node prepare.mjs                     # compress to ../../demos/anatomy-studio/assets/*.glb, write manifest.json + descriptions.json
 node check-assemblies.mjs            # prove the four nested assemblies resolve against real piece names
+node stamp.mjs                       # content-hash every ?v= (imports, CSS, JSON, models); run after prepare.mjs and after any edit to the demo
+node stamp.mjs --check               # exit 1 if any stamp is stale (also run by .github/workflows/anatomy-studio-stamps.yml)
+# both verify files also run in CI: .github/workflows/anatomy-studio-verify.yml (reports; it does not gate publishing)
 node preview.mjs                     # 1100x579 preview JPEG for the demos catalog (needs the site served on :8791)
 node verify.mjs                      # Playwright checks against STUDIO_URL (default http://127.0.0.1:8791/demos/anatomy-studio/)
+node verify-life.mjs                 # the living body and loading, as a separate run: either file can fail on its own
+node verify-section.mjs              # transformed/LOD cap bounds, then all 2,270 meshes under software WebGL
 ```
 
 `blender-inspect.py` dumps one CSV per FBX (name, suffix kind, parent chain, triangles, bounds). Read it before changing
@@ -38,8 +43,27 @@ Cloudflare Pages limit, derives each piece's body region from its centre, matche
 (exact → parenthetical → side → qualifier → “of …” → aliases → parent → path), computes the radial envelope used by
 `explode-rules.js`, and resolves the assembly member lists by importing `demos/anatomy-studio/assemblies.js`.
 
+`prepare.mjs` writes a full-resolution file only for systems that were decimated for the base tier; a system whose two tiers
+have the same triangle count (skeleton, heart) gets no `assets/hi` file and no `hi` entry in the manifest.
+
+`stamp.mjs` hashes text with LF line endings, so Windows and Linux checkouts produce the same stamps. Each module's hash
+covers its text after its own imports were stamped, so a change in a leaf module ripples up to `studio.js` and `index.html`,
+and every importer uses the same URL for a module (two different `?v=` values would load it twice).
+
+`verify-life.mjs` steps the motion by hand, so its checks do not depend on the frame rate: breathing, the heartbeat held at each
+phase with the valves in the right position, pace, sway, head and neck, eyes and blinking, swallowing, the monitor, blood flow,
+exact restoration on exploding, and lean loading. Under software WebGL the two files together take about twenty minutes.
+
 `verify.mjs` runs headless Chromium with SwiftShader (`--use-angle=swiftshader --enable-unsafe-swiftshader`) and
 `?quality=verify` (no shadows/AA) and checks piece counts per stage, rendered triangle count, explosion with intermediate
 motion, exact reassembly, each nested study (only members visible, members framed, primary members separated), filters,
 search, isolate and descriptions, finish modes, labels, sequence, keyboard, the non-overlapping all-parts board at three
 viewports, mobile layout, deep links, the manual and reduced motion. Screenshots land in `STUDIO_SHOTS` or the temp dir.
+
+The November 19 section regression checks cap passes only for meshes intersecting
+the cut plane while the body is still. Previously every closed opaque mesh drew
+two stencil passes and a full-screen cap, even when wholly on one side of the
+plane; software rendering starved topology timers. Current world transforms and
+LOD bounds are tested, and the conservative path is retained during shader-driven
+life motion. The test checks all meshes without relaxing the existing topology
+assertions or the behaviour suite's timeout.
