@@ -1,0 +1,34 @@
+{
+  "keyDigest": "de183e2a7a63279a9f74d6c5c43e65018c61cb15b424f79ad7476f2bbb9d19b5",
+  "blockSize": 524288,
+  "assets": {
+    "card": {
+      "path": "/assets/screenings/02/de0674264d21b9356eee.bin",
+      "remote": false,
+      "bytes": 1906,
+      "nonce": "PJtC1IzDCOQ",
+      "digest": "de0674264d21b9356eeef0e1061ba3ef0b00a4bd2b46a72235442284fa281df1"
+    },
+    "poster": {
+      "path": "/assets/screenings/02/d73c27ba0776afc6fc7a.bin",
+      "remote": false,
+      "bytes": 122497,
+      "nonce": "Fhmu9eF4Ppg",
+      "digest": "d73c27ba0776afc6fc7ad153590b68eeae226926c39368ce82eac794911b8ff6"
+    },
+    "hd": {
+      "path": "https://github.com/jz237/multimedia/releases/download/sealed-screening-02/a.bin",
+      "remote": true,
+      "bytes": 171401474,
+      "nonce": "XYYBqR80dLY",
+      "digest": "e6f4d8354a3ba1286dcf47cb07a9eed16bc4070a6e443e04ecbd2c61cdab34ce"
+    },
+    "uhd": {
+      "path": "https://github.com/jz237/multimedia/releases/download/sealed-screening-02/b.bin",
+      "remote": true,
+      "bytes": 468072970,
+      "nonce": "Aw1YEbUsAVE",
+      "digest": "9a4c1cfc7426f2b3b2453df24e05adad79c1a6241c5632d92a2e3af05421664a"
+    }
+  }
+}

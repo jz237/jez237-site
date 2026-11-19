@@ -1,6 +1,6 @@
 const statusLine = document.getElementById('status');
 const retry = document.getElementById('retry');
-const base = '/screening/01/';
+const base = location.pathname.replace(/\/?$/, '/');
 
 async function unlock() {
   retry.hidden = true;

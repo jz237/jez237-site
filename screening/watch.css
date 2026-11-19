@@ -25,6 +25,11 @@ a:hover, a:focus-visible { color: #fff1cd; }
 .entry h1 { font-size: clamp(2.2rem, 9vw, 4rem); }
 .entry p { color: #c6cbbb; line-height: 1.5; }
 .entry button { background: #e2c78e; color: #10221a; border: 0; border-radius: .3rem; padding: .7rem 1.05rem; font: inherit; cursor: pointer; }
+.film-name { margin: .48rem 0 0; color: #bfc7b6; letter-spacing: .025em; }
+.stream-links { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: .42rem 1rem; }
+.moments { display: flex; flex-wrap: wrap; gap: .45rem; padding-top: 1.15rem; }
+.moments button { background: #18221f; color: #e8dac0; border: 1px solid #3c4d43; border-radius: .28rem; padding: .55rem .74rem; font: 400 .82rem/1.25 system-ui, sans-serif; cursor: pointer; }
+.moments button:hover, .moments button:focus-visible { border-color: #e2c78e; }
 @media (max-width: 500px) {
   main { width: calc(100% - 1.4rem); padding-top: 2rem; }
   footer { font-size: .78rem; }

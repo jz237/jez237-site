@@ -4,6 +4,7 @@ const message = document.getElementById('play-status');
 let bufferedURL;
 let loadingCopy = false;
 let requested = false;
+const longFilm = film.dataset.stream === 'long';
 
 function status(text) {
   message.textContent = text;
@@ -24,6 +25,10 @@ function start() {
   });
 }
 async function bufferedCopy() {
+  if (longFilm) {
+    if (requested) status('Tap Open video below to use your phone’s video player.');
+    return;
+  }
   if (loadingCopy || bufferedURL) return;
   loadingCopy = true;
   if (requested) status('Loading the film…');
@@ -52,8 +57,15 @@ play.addEventListener('click', () => {
   status('');
   if (film.ended) film.currentTime = 0;
   start();
-  if (!bufferedURL) setTimeout(() => { if (requested && film.readyState < 1) bufferedCopy(); }, 5500);
+  if (!longFilm && !bufferedURL) setTimeout(() => { if (requested && film.readyState < 1) bufferedCopy(); }, 5500);
 });
+for (const cue of document.querySelectorAll('[data-jump]')) {
+  cue.addEventListener('click', () => {
+    requested = true;
+    film.currentTime = Number(cue.dataset.jump);
+    start();
+  });
+}
 film.querySelector('source').addEventListener('error', bufferedCopy);
 film.addEventListener('error', () => { if (!bufferedURL) bufferedCopy(); });
 film.addEventListener('playing', () => { play.hidden = true; status(''); });
