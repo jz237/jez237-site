@@ -9,12 +9,13 @@
 import * as THREE from 'three';
 import { createBetta } from '../../../betta-atelier/src/fish.js';
 import { BettaSwim, BETTA_SCALE as SCALE, swimPose } from './bettaSwim.mjs';
-import { BETTA_PROBES, readBettaWater } from './bettaWater.mjs';
+import { BETTA_LIPS, BETTA_PROBES, RIPPLE_TIME, readBettaWater } from './bettaWater.mjs';
+export { RIPPLE_TIME };
 
 /** The dimple the lips make at the film: for how long (s into the gulp), at what rate it adds speed
  *  to the water under them (world units/s per s), over what radius; the bubbles let go diving
  *  from the film and darting off it (per second), their radius. */
-export const RIPPLE_TIME = 0.34, RIPPLE_RATE = 6, RIPPLE_RADIUS = 0.045;
+export const RIPPLE_RATE = 6, RIPPLE_RADIUS = 0.045;
 const DIVE_BUBBLES = 14, STARTLE_BUBBLES = 36;
 export const BUBBLE_RADIUS = 0.0035;
 
@@ -324,7 +325,7 @@ export class BettaSpecimen {
       this.probes[i * 4] = p.x; this.probes[i * 4 + 1] = p.y; this.probes[i * 4 + 2] = p.z; this.probes[i * 4 + 3] = 0;
     }
     // The lips, where it would meet the surface.
-    this.fish.userData.bodyMotion.transform(-1.68, 0.0832, 0, scratch);
+    this.fish.userData.bodyMotion.transform(...BETTA_LIPS, scratch);
     this.mouth.set(scratch[0], scratch[1], scratch[2]).applyMatrix4(this.fish.matrixWorld);
   }
 

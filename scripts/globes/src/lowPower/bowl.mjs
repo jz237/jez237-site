@@ -12,7 +12,7 @@ import { createBetta } from '../../../betta-atelier/src/fish.js';
 import { FIN_QUALITY } from '../../../betta-atelier/src/fin-dynamics.js';
 import { VarietyPainter } from '../../../betta-atelier/src/varieties.js';
 import { BettaSwim, BETTA_SCALE, bettaMouth, swimPose } from '../fish/bettaSwim.mjs';
-import { BETTA_PROBES, readBettaWater } from '../fish/bettaWater.mjs';
+import { BETTA_LIPS, BETTA_PROBES, RIPPLE_TIME, readBettaWater } from '../fish/bettaWater.mjs';
 import { FramePace } from '../app/framePace.mjs';
 import { VarietyMenu } from '../app/VarietyMenu';
 import { NightToggle } from '../app/NightToggle';
@@ -23,6 +23,8 @@ import { makeBowl } from './scenery.mjs';
 import { addSurfaceLife } from './surfaceLife.mjs';
 import { createBowlOptics, WET_LAYER } from './glassOptics.mjs';
 import { Slosh, WATER_LEVEL } from './slosh.mjs';
+import { FilterBubbles } from './filterBubbles.mjs';
+import { BowlResolution } from './resolution.mjs';
 import '../app/styles.css';
 import './bowl.css';
 
@@ -64,12 +66,13 @@ export async function startLowPowerBowl() {
   controller.zoomTo(4.3, true);
   canvas.setAttribute('aria-label', 'Betta bowl. Drag to tilt, Ctrl-drag to turn, and scroll or pinch to zoom.');
   canvas.title = 'Drag to tilt · Ctrl-drag to turn · Scroll or pinch to zoom';
-  let pixelBudget = 720000;
+  const resolution = new BowlResolution();
+  let nativePixels = 0;
   const resize = () => {
     const { width, height } = stage.getBoundingClientRect();
     if (!(width && height)) return;
-    renderer.setPixelRatio(Math.min(devicePixelRatio, 1, Math.sqrt(pixelBudget / (width * height))));
-    renderer.setSize(width, height, false);
+    nativePixels = width * height * Math.min(devicePixelRatio, 1)**2;
+    renderer.setDrawingBufferSize(width, height, Math.min(devicePixelRatio, 1, Math.sqrt(resolution.pixels / (width * height))));
     camera.aspect = width / height;
     // Widen the field on narrow screens so the whole bowl fits at the starting distance.
     camera.fov = T.MathUtils.radToDeg(2 * Math.atan(Math.tan(17 * Math.PI / 180) / Math.min(1, camera.aspect)));
@@ -226,12 +229,9 @@ export async function startLowPowerBowl() {
     press = null;
     if (!learn.tap(e.clientX, e.clientY) && pickTopic(e.clientX, e.clientY) === 'lid') feeding.request();
   });
-  const air = new T.InstancedMesh(new T.SphereGeometry(1, 7, 5),
-    new T.MeshPhongMaterial({ color: 0xa5dbe2, transparent: true, opacity: 0.48, depthWrite: false }), 16);
-  air.frustumCulled = false;
-  air.renderOrder = 2;
-  if (bubbles) { basin.add(air); lens.install(air); }
-  const bubble = new T.Object3D();
+  const filterAir = bubbles ? new FilterBubbles(bubbles) : null;
+  if (filterAir) { basin.add(filterAir.mesh); lens.install(filterAir.mesh); }
+  const pellet = new T.Object3D();
   const aim = new T.Vector3(), view = new T.Vector3(...CAMERA_VIEW);
   const matrix = new T.Matrix4(), point = new T.Vector3(), oldRotation = new T.Quaternion();
   const turn = [0, 0, 0];
@@ -245,7 +245,7 @@ export async function startLowPowerBowl() {
   const pace = new FramePace();
   pace.frameMs = 1000 / 30;
   let last = null, t = 0, nightMix = Number(night.on);
-  const diagnostics = { frames: 0, swim, fish, renderer, painter, controller, surface, learn, waterCare, food, feeding, camera, basin, pickable, lens, get water() { return water; } };
+  const diagnostics = { frames: 0, swim, fish, renderer, painter, controller, surface, filterAir, resolution, learn, waterCare, food, feeding, camera, basin, pickable, lens, get water() { return water; } };
   if (new URLSearchParams(location.search).has('qa')) window.__bettaLow = diagnostics;
   await fish.userData.ready;
   stage.querySelector('.splash')?.remove();
@@ -328,15 +328,14 @@ export async function startLowPowerBowl() {
     pellets.count = data[0];
     for (let i = 0; i < pellets.count; i++) {
       const k = 4 + 8 * i;
-      bubble.position.fromArray(data, k);
-      bubble.scale.setScalar(data[k + 3]);
-      bubble.updateMatrix();
-      pellets.setMatrixAt(i, bubble.matrix);
+      pellet.position.fromArray(data, k);
+      pellet.scale.setScalar(data[k + 3]);
+      pellet.updateMatrix();
+      pellets.setMatrixAt(i, pellet.matrix);
     }
     if (pellets.count) pellets.instanceMatrix.needsUpdate = true;
     for (const splash of food.splashes) {
-      point.fromArray(splash).applyQuaternion(surface.inverse);
-      surface.ripples.disturb(point.x, point.z, 0.115, 1.15);
+      surface.disturbAtSurface(splash[0], surface.heightAt(splash[0],splash[2]), splash[2], 0.115, 1.15);
     }
     food.splashes.length = 0;
   }
@@ -356,24 +355,24 @@ export async function startLowPowerBowl() {
       colors.needsUpdate = true;
     }
   }
-  let sampledAt = null, samples = 0, longestGap = 0;
+  let lastGulp = -1;
+  function rippleAtLips() {
+    if (swim.mode !== 'gulp' || swim.gulps === lastGulp || swim.gulpClock < 0 || swim.gulpClock >= RIPPLE_TIME || swim.gulp < .12) return;
+    fish.updateMatrix();
+    matrix.multiplyMatrices(rig.matrix, fish.matrix);
+    fish.userData.bodyMotion.transform(...BETTA_LIPS, bodyPoint);
+    point.fromArray(bodyPoint).applyMatrix4(matrix);
+    const top = surface.heightAt(point.x, point.z);
+    if (Math.abs(point.y-top) < .03) {
+      // A single dimple when the open lips reach the film, including each
+      // separate breath when the fish lingers. The height field carries it.
+      surface.disturbAtSurface(point.x, top, point.z, .105, -.9);
+      lastGulp = swim.gulps;
+    }
+  }
   function draw(now) {
     if (!pace.draw(now)) return;
-    if (sampledAt === null) { sampledAt = now; samples = 0; longestGap = 0; }
-    else {
-      samples++;
-      longestGap = Math.max(longestGap, now - last);
-    }
-    if (samples >= 30 || now - sampledAt >= 2500) {
-      // Drop the worst frame (first draw, shader compilation, GC) before resizing the canvas.
-      if (samples > 1 && (now - sampledAt - longestGap) / (samples - 1) > 46 && pixelBudget > 180000) {
-        pixelBudget = Math.max(180000, Math.min(pixelBudget, canvas.width * canvas.height) * 0.7);
-        resize();
-      }
-      sampledAt = now;
-      samples = 0;
-      longestGap = 0;
-    }
+    if (last !== null && resolution.sample(now - last, canvas.width * canvas.height, nativePixels)) resize();
     const dt = last === null ? 1 / 30 : Math.min(0.067, Math.max(0, (now - last) / 1000));
     last = now;
     t += dt;
@@ -400,30 +399,13 @@ export async function startLowPowerBowl() {
     for (let k = 0; k < 3; k++) localFlow[k] = water.flow[k] / BETTA_SCALE;
     fish.userData.display.requested = flared || swim.flaring;
     fish.userData.update(t);
+    rippleAtLips();
     moveFood(dt);
     floating.update(dt, controller.rotation.elements, Math.hypot(...controller.omega), swim, surface, bedAt);
     if (waterCare.on) waterCare.frame(dt);
     if (learn.on) learn.frame();
     showWater(dt, fx);
-    if (bubbles) {
-      for (let i = 0; i < air.count; i++) {
-        const h = (t * 0.52 + i / air.count) % 1;
-        bubble.position.fromArray(bubbles.at).applyMatrix3(controller.rotation);
-        bubble.position.y += (surface.heightAt(bubble.position.x, bubble.position.z) - bubble.position.y) * h;
-        bubble.position.x += h * 0.02 * Math.sin(i * 5 + t * 3);
-        if (i % 4 === 0 && h < dt * 0.52) {
-          point.fromArray(bubbles.at).applyMatrix3(controller.rotation);
-          point.x += 0.02 * Math.sin(i * 5 + t * 3);
-          point.y = surface.heightAt(point.x, point.z);
-          point.applyQuaternion(surface.inverse);
-          surface.ripples.disturb(point.x, point.z, 0.095, 0.32);
-        }
-        bubble.scale.setScalar(bubbles.radius * (0.72 + 0.4 * h));
-        bubble.updateMatrix();
-        air.setMatrixAt(i, bubble.matrix);
-      }
-      air.instanceMatrix.needsUpdate = true;
-    }
+    filterAir?.update(dt, controller.rotation, surface, bedAt);
     controller.followShare = T.MathUtils.damp(controller.followShare, Number(follow.on), 4, dt);
     if (controller.followShare < 0.001 && !follow.on) controller.followShare = 0;
     if (follow.on) {
@@ -438,7 +420,7 @@ export async function startLowPowerBowl() {
   }
   const resume = () => {
     last = null;
-    sampledAt = null;
+    resolution.resetTiming();
     renderer.setAnimationLoop(document.hidden ? null : draw);
   };
   document.addEventListener('visibilitychange', resume);

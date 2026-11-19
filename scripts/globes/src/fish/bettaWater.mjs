@@ -1,3 +1,6 @@
+export const BETTA_LIPS = [-1.68, 0.0832, 0];
+export const RIPPLE_TIME = 0.34;
+
 // Anatomical probes, in Atelier units: six trunk samples, back/tail, ahead,
 // and both flanks. Unlike an axis-aligned line these rotate with the specimen.
 export const BETTA_PROBES = [

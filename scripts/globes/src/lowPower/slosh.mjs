@@ -71,6 +71,12 @@ export class Slosh {
     return this.bend.value*(1-r2)*(1-3*r2) + this.ripples.heightAt(x,z);
   }
 
+  disturbAtSurface(x, y, z, radius, speed) {
+    const p = this.point.set(x,y,z).applyQuaternion(this.inverse);
+    const scale = SURFACE_RADIUS / Math.sqrt(GLASS_INNER**2 - p.y*p.y);
+    this.ripples.disturb(p.x*scale, p.z*scale, radius, speed);
+  }
+
   sampleAtRise(x, z, dx, dz, rise) {
     // A ring of the surface widens as it falls and narrows as it rises along
     // the sphere. Recover its resting coordinates at this physical position.
