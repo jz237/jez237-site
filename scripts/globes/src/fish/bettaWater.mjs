@@ -1,3 +1,6 @@
+export const BETTA_LIPS = [-1.68, 0.0832, 0];
+export const RIPPLE_TIME = 0.34;
+
 // Anatomical probes, in Atelier units: six trunk samples, back/tail, ahead,
 // and both flanks. Unlike an axis-aligned line these rotate with the specimen.
 export const BETTA_PROBES = [
@@ -17,12 +20,12 @@ export const bettaSurfaceHeights = (level, out = new Float32Array(BETTA_SURFACE_
 const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
 const limit = (v, max) => { const l = Math.hypot(...v); return l > max ? v.map(x => x * max / l) : v; };
 
-export function readBettaWater(sense, points, env) {
+export function readBettaWater(sense, points, env, surfaceAtMouth) {
   const result = { flow: [0, 0, 0], angular: [0, 0, 0], submerged: 1, airAbove: 0, surface: null,
     sand: env.sandLevel, centroid: [0, (env.sandLevel + env.level) / 2, 0] };
   if (!sense) return result;
   result.centroid = [...sense.centroid];
-  result.surface = readBettaSurface(sense, env);
+  result.surface = surfaceAtMouth === undefined ? readBettaSurface(sense, env) : surfaceAtMouth;
   const wet = [], center = [0, 0, 0], mean = [0, 0, 0];
   let bodyWet = 0, bed = -Infinity;
   for (let i = 0; i < 16; i++) {
