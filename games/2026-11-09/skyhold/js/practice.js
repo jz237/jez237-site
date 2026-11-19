@@ -1,4 +1,4 @@
-import {makeWorld, wd, wp} from './sim.js?v=belt-rescue-1';
+import {makeWorld, wd, wp} from './sim.js?v=belt-rescue-2';
 
 // A separate, unranked world uses the real flight, beam, catch and landing rules.
 // Keeping its director in intro prevents timed waves or planetary hazards.

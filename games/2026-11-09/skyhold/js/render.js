@@ -12,7 +12,7 @@ import { AsteroidArt } from './asteroids.js?v=belt-rescue-1';
 import { FX, CALM } from './fx.js?v=26';
 import { NOISE, TONE } from './shaders.js?v=26';
 import { F, C, RP, H, ENEMY, BOSSES, POWERUPS, P2_LIVERY, LIVERIES, SETTLER, PHASE2 } from './config.js?v=26';
-import { wd, wp, nodePos, beamRange, dronePos as dronePosR } from './sim.js?v=belt-rescue-1';
+import { wd, wp, nodePos, beamRange, dronePos as dronePosR } from './sim.js?v=belt-rescue-2';
 
 export { CALM };
 const hdr = (hex, k) => new THREE.Color(hex).multiplyScalar(k);

@@ -1,10 +1,10 @@
 // ?test=1 self-test page: determinism, exact replays, the gentle start, the difficulty ramp shape, lifters taking
 // and fusing settlers, the carrier fight, the live loop with no console errors and no score posts, and the title
 // screen naming every gunship, machine and carrier with its picture drawn.
-import { makeWorld, addEnemy, step, drainEvents, STEP, settlersLeft, wp, wd } from './sim.js?v=belt-rescue-1';
-import { Autopilot } from './ai.js?v=belt-rescue-1';
+import { makeWorld, addEnemy, step, drainEvents, STEP, settlersLeft, wp, wd } from './sim.js?v=belt-rescue-2';
+import { Autopilot } from './ai.js?v=belt-rescue-2';
 import { RAMP, SECTORS, TYPICAL_UP, rampAt, endlessLevel, DIFF_KEYS, applyDiff, MIN_WARN, TUTOR, WAVES, SHIPS, SHIP_KEYS, C } from './config.js?v=26';
-import { Recorder, Replay } from './replay.js?v=belt-rescue-1';
+import { Recorder, Replay } from './replay.js?v=belt-rescue-2';
 
 export const hashW = (W) => JSON.stringify([W.n, W.score, W.lives, W.cp, W.phase, W.rs, W.players.map((p) => [p.x.toFixed(6), p.y.toFixed(6), p.alive, p.shield, p.nova]),
   W.enemies.map((e) => [e.id, e.type, e.x.toFixed(4), e.y.toFixed(4), e.hp]), W.settlers.map((s) => [s.id, s.st, s.x.toFixed(4), s.y.toFixed(4)]), W.bolts.length, W.boss ? [W.boss.st, W.boss.x.toFixed(4), W.boss.nodes.map((n) => n.hp).join()] : 0]);
@@ -142,6 +142,23 @@ export async function runTests(sh) {
     drive(W,new Autopilot(7,'demo'),75/STEP,null,() => W.phase === 'fight');
     return { ok:W.fallen && last.type==='husk' && warps.every(w=>w.T>0) && sides.size===2 && fired && closest<8 && W.phase==='break',
       info:warps.length+' warnings, rear pursuit closed to '+closest.toFixed(1)+' m, '+W.phase };
+  });
+  await T('full throttle alone cannot outrun space mutants on any difficulty', () => {
+    const losses = [];
+    for (const diff of DIFF_KEYS) {
+      const W = makeWorld({ sector:0, seed:17, diff, noTut:true }), p = W.players[0];
+      while (W.phase === 'intro') step(W, STEP);
+      for (const s of W.settlers) s.st = 'dead';
+      const last = W.settlers[0], e = addEnemy(W, 'lifter', wp(p.x - 65), 35.3);
+      Object.assign(e, { st:'lift', carry:last.id, tgt:last.id });
+      Object.assign(last, { st:'held', by:e.id });
+      p.inv = 0; p.vx = 44; p.input = { mx:1 };
+      const start = W.t;
+      while (W.t < start + 60 && !W.stats.deaths) { step(W, STEP); drainEvents(W); }
+      if (!W.stats.deaths) return { ok:false, info:diff + ' coasted clear' };
+      losses.push(diff + ' ' + (W.t - start).toFixed(1) + 's');
+    }
+    return { ok:true, info:losses.join(', ') };
   });
   await T('the patrol crosses the seam and visits every longitude when the colony is quiet', () => {
     const W = makeWorld({ seed: 11 }), p = W.players[0], visited = new Set();

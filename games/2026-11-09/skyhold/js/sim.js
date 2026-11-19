@@ -878,7 +878,8 @@ function husk(W, e, dt) {
     const ty = clamp(p.y + p.vy * lead + lane * 8 * approach + 2.2 * Math.sin(e.t * 3.1 + e.ph), 1.5, H - 1.5);
     const gunship = SHIPS[p.ship] || SHIPS.warden;
     const topSpeed = F.vmax * gunship.vmax * (1 + 0.08 * (W.up.thrust || 0));
-    const speed = (topSpeed * 1.07 + W.R.hV * 0.55) * D_OF(W).speed;
+    const difficulty = D_OF(W).speed;
+    const speed = Math.max(topSpeed + 6.5 * difficulty, (topSpeed * 1.07 + W.R.hV * 0.55) * difficulty);
     moveTo(e, tx, ty, speed, 56 + W.R.hV, dt);
     return;
   }

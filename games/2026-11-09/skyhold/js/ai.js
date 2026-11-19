@@ -13,7 +13,7 @@
 //             behind it, saves novas too long. The difficulty ramp is measured with this one.
 //   'demo'  — the attract mode: sharp and decisive. It never reads the world's random generator (replays stay exact).
 import { F, ENEMY, BOSSES, H, C, GATE, SHIPS, WAVES, SPECIAL } from './config.js?v=26';
-import { wd, wp, nodePos, beamRange, rescueAtGate } from './sim.js?v=belt-rescue-1';
+import { wd, wp, nodePos, beamRange, rescueAtGate } from './sim.js?v=belt-rescue-2';
 
 const clamp = (v, a, b) => (v < a ? a : v > b ? b : v);
 function mkr(seed) { let s = seed | 0; return () => { s = (s + 0x6D2B79F5) | 0; let t = Math.imul(s ^ (s >>> 15), s | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
