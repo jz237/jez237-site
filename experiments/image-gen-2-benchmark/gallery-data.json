@@ -34280,5 +34280,103 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-11-19-factual-infographic-factual-infographic-m-ni-re-disease-inn",
+    "title": "Factual infographic: Ménière Disease — Inner Ear Episodes",
+    "tests": "factual_subtype: medical-health-infographic; source-backed clinical education; flowing unboxed anatomical atlas; archive_slot=2026-11-19T14:20; concept=meniere-endolymph-hearing-balance-episodes; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: medical-health-infographic",
+    "prompt": "Create the finished artistic medical infographic itself, not a photographed page or framed poster. Title: “MÉNIÈRE DISEASE” with subtitle “When inner-ear hearing and balance signals are disrupted”. Dominant exquisite anatomical cutaway of an inner ear sweeping diagonally across a deep midnight-teal ground, luminous turquoise fluid and warm copper bone, pearly membranous structures, very fine technical-ink contours with softly painted volume. A small translucent ear silhouette provides location without a second competing hero. Anatomical precision: coiled cochlea, three curved semicircular canals, utricle and saccule in their appropriate vestibular position; distinguish membranous fluid spaces from the bony outer shell. Use concise open labels “Cochlea · hearing”, “Semicircular canals · balance”, “Utricle & saccule · balance”, “Endolymph · inner-ear fluid”. A nested magnified schematic of the membranous space naturally grows from the main cutaway, with an honest caption “Schematic, not to scale”, illustrating fluid buildup gently expanding that space, not crystals or an infection. Label “Endolymphatic hydrops · fluid buildup associated with disrupted signals” and “Underlying cause remains unclear”. Do not suggest pressure alone explains every case or show an invented blocked drainage pipe.\nFlow concise explanatory typography around the anatomy along sweeping thin leader lines, varied sizes and asymmetrical visual rhythm; no cards, boxed panels, matrix or dashboard. On one open arc read “Episodes: spinning vertigo • tinnitus • hearing loss • ear fullness” and beneath “Sometimes nausea or vomiting; usually one ear”. Small abstract rotational strokes suggest vertigo without drawing a second disease mechanism. Another quieter arc reads “Assessment: symptom history + hearing test; exclude other causes” and “No single definitive test”. At the base weave a readable management pathway into the contour of the illustration: “No cure yet; treatment aims to manage symptoms”, “Clinician-directed medicines for attacks”, “Hearing aids for hearing loss”, “Vestibular rehabilitation for persistent imbalance”, “Discuss salt reduction with your clinician; it may help some people”. A legible warm coral safety annotation in generous negative space reads “Do not drive during dizziness.” A separate prominent urgent line reads “Vertigo + new facial droop, arm weakness or speech difficulty: call emergency services immediately — possible stroke.” Final small readable line “General education, not a diagnosis”. Preserve nuanced wording, no dose advice, statistics, cures, patient portraits, bibliography, source URLs, logos or watermarks. Rich tactile anatomical detail, refined editorial typography, strong hierarchy, luminous but clinically credible colors and substantial breathing room. All facts restricted to the supplied labels; decoration must not invent anatomy.",
+    "image": "images/2026-11-19-factual-infographic-factual-infographic-m-ni-re-disease-inn.jpg",
+    "thumb": "thumbs/2026-11-19-factual-infographic-factual-infographic-m-ni-re-disease-inn.webp",
+    "color": "#385750",
+    "date": "2026-11-19",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1086x1448",
+    "dedup": {
+      "conceptKey": "meniere-endolymph-hearing-balance-episodes",
+      "imageSha256": "339cd569dc1daa60339e2c3ec0fa87285fa8e0072ad79ca1e57527010f854cf1",
+      "imageDHash": "07931b0b3337454b"
+    },
+    "factualInfographic": {
+      "topic": "How Ménière disease disrupts inner-ear hearing and balance, causes episodic vertigo, and is evaluated and managed",
+      "description": "Inner-ear anatomy, endolymphatic hydrops association, symptoms, evaluation, management and stroke warning signs.",
+      "sourceNote": "NIDCD https://www.nidcd.nih.gov/health/menieres-disease ; NHS https://www.nhs.uk/conditions/menieres-disease/ — verified anatomy, clinical context and safety; underlying cause remains uncertain.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-19T19:21:07.163497+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "NIDCD",
+            "title": "What Is Ménière’s Disease?",
+            "sourceType": "government-agency",
+            "url": "https://www.nidcd.nih.gov/health/menieres-disease"
+          },
+          {
+            "id": "S2",
+            "publisher": "NHS",
+            "title": "Ménière’s disease",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/conditions/menieres-disease/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "The inner-ear labyrinth contains the cochlea for hearing and semicircular canals and otolith organs, including utricle and saccule, for balance; the membranous labyrinth contains endolymph.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Endolymph buildup (endolymphatic hydrops) is associated with disrupted hearing and balance signals in Ménière disease; its underlying cause remains unclear.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Symptoms come and go: spinning vertigo, hearing loss, tinnitus, ear fullness, and sometimes nausea or vomiting; usually one ear is affected.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Diagnosis uses symptom history and hearing testing, with evaluation for other causes; there is no single definitive test.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "There is no cure yet; clinician-directed medicines may help attack symptoms, hearing aids may help hearing loss, and vestibular rehabilitation may help persistent balance problems.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Discuss dietary salt reduction with a clinician; it may help some people, but is not a cure.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Do not drive during dizziness or impending vertigo.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Vertigo with new facial droop, arm weakness or speech difficulty may be stroke: call emergency services immediately.",
+            "sourceIds": [
+              "S2"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
