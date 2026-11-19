@@ -2,8 +2,8 @@ import {createPractice, advancePractice} from './practice.js?v=1';
 // Skyhold 2026 — game flow, menus, HUD (with the scanner strip), commentary, demo director and the frame loop.
 import { VERSION, SECTORS, STEP, F, C, H, BOSSES, UPGRADES, UP_KEYS, UP_COST, MEDALS, parTime, TYPICAL_UP, START_LIVES, DIFFICULTY, POWERUPS, LIVERIES, CP_NAMES, WAVES, ENEMY, SHIPS, SHIP_KEYS, RIVALS, MASTERY, mastLevel, SPECIALS } from './config.js?v=26';
 import { makeWorld, step, stepGuest, drainEvents, wd, wp, settlersLeft, nodePos, CHAIN_T, chainMult, beamRange } from './sim.js?v=26';
-import { Autopilot } from './ai.js?v=26';
-import { Renderer, pickQuality, CALM, LOOKS, PW, PH } from './render.js?v=26';
+import { Autopilot } from './ai.js?v=orbital-patrol-1';
+import { Renderer, pickQuality, CALM, LOOKS, PW, PH } from './render.js?v=orbital-patrol-1';
 import { Audio } from './audio.js?v=26';
 import { Input } from './input.js?v=26';
 import { Scores, NO_POST } from './scores.js?v=26';
@@ -556,10 +556,11 @@ function handleEvents(list, W, live) {
         if (mine(e) || !live) R.kick(0.8);
         A.play('nova', { vol: 1, gap: 0 }); A.retro('nova', { vol: 0.5 }); cab('bomb', e);
         const p = P(e.x, e.y);
-        for (const r of [10, 22, 34]) fx.ring(p.x, p.y, p.z, r, 0xffd0a0);
-        R.novaWave(e.x, e.y);
-        fx.flash(p.x, p.y, p.z + 4, 120, 0xffc890, 0.6);
-        R.flashScreen(0.5, 0xffe8c8); R.addTrauma(0.6 * S); R.shock(e.x, e.y, 2.2);
+        fx.ring(p.x, p.y, p.z, 12, 0xffaf62);
+        fx.ring(p.x, p.y, p.z, 26, 0x80ccff);
+        R.novaWave(e.x, e.y, e.r);
+        fx.flash(p.x, p.y, p.z + 1, 24, 0xffc890, 0.44);
+        R.flashScreen(0.2, 0xffe8c8); R.addTrauma(0.45 * S); R.shock(e.x, e.y, 1.5);
         if (live && mine(e)) rumble(0.8, 0.8, 400);
         break;
       }
@@ -1336,7 +1337,7 @@ function tickFrame(dt, draw = true) {
   if (interp) lerpIn(cur, Math.min(1, (G.state === 'replay' ? G.replay.acc : G.acc) / STEP));
   const me = myPlayer(cur);
   const menu = G.state === 'title' || (['aiwatch', 'sectors', 'online', 'scores', 'medals', 'options', 'help'].includes(G.screen) && G.mode === 'title');
-  R.updateCamera(dt, { me: me && me.alive && !menu ? me : null, cine: menu, shake: +settings.shake, chase: !menu && chaseOn() });
+  R.updateCamera(dt, { me: me && me.alive && !menu ? me : null, cine: menu, shake: +settings.shake, chase: !menu && chaseOn(), watching: G.mode === 'demo' || G.mode === 'playthrough' });
   R.W = cur;
 
   R.danger = G.state === 'play' && me && me.alive && me.shield === 0 && cur.lives <= 1 && G.mode !== 'demo' && G.mode !== 'playthrough' && !cur.rivals;
@@ -1528,7 +1529,7 @@ async function boot() {
   toTitle();
   boardOf('campaign', settings.diff).fresh(); boardOf('endless', settings.diff).fresh();
   if (!G.fixed && !params.has('test')) R.prepareAll(true);
-  if (params.has('test')) { const m = await import('./tests.js?v=26'); m.runTests(window.__sh); }
+  if (params.has('test')) { const m = await import('./tests.js?v=orbital-patrol-1'); m.runTests(window.__sh); }
   else if (params.has('playthrough')) { A.unlock(); startPlaythrough(); }
   else if (params.has('room')) { act('online'); $('join-code').value = cleanCode(params.get('room')); }
   else if (G.autopilot) { A.unlock(); if (params.has('endless')) startEndless(); else startCampaign(+params.get('sector') || 0); }

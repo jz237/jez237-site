@@ -3,17 +3,16 @@
 //   CATCH    a settler is falling: get under it        LAND    carrying a settler: dive and set it down
 //   RESCUE   a lifter has a settler: shoot it down      DEFEND  a lifter is going down for a settler
 //   FIGHT    something dangerous is close              HUNT    go after the nearest machine
-//   CARRIER  line up on a weak point and fire          PATROL  nothing to do: fly toward the colony
+//   CARRIER  line up on a weak point and fire          PATROL  sweep the colony's orbital route
 // On top of the goal a safety layer dodges bolts, keeps off machines' hulls, steps out of a carrier's beam
 // sweep or rush, and lets off a NOVA when it is swamped (debug.dodge says which).
 // The demo spends its novas with a plan (novaPlan): they do not carry into the next world, so each world's few are
-// budgeted across its waves, its special wave and its carrier. A nova goes off when what it would destroy here is worth
-// more than a bar set by how many are in hand and what is still to come; it waits a moment for a crowd to close in,
-// flies into a crowd that is worth one, keeps one back for an emergency, and empties the rack on the carrier.
+// budgeted across its waves, its special wave and its carrier. The last charge can clear an escape route
+// when intersecting shots or hulls cut off the pilot's dodge.
 //   'human' — plays like a person: ~0.35 s reaction (scattered, sometimes late), wobbly altitude, misses things
 //             behind it, saves novas too long. The difficulty ramp is measured with this one.
 //   'demo'  — the attract mode: sharp and decisive. It never reads the world's random generator (replays stay exact).
-import { F, ENEMY, BOSSES, H, SHIPS, WAVES, SPECIAL } from './config.js?v=26';
+import { F, ENEMY, BOSSES, H, C, SHIPS, WAVES, SPECIAL } from './config.js?v=26';
 import { wd, wp, nodePos, beamRange } from './sim.js?v=26';
 
 const clamp = (v, a, b) => (v < a ? a : v > b ? b : v);
@@ -44,6 +43,7 @@ export class Autopilot {
     this.debug = { intent: '', target: null, dodge: '' };
     this.novaWas = false; this.blinkWas = false; this.dodgeY = 0; this.dodgeT = 0;
     this.nPeak = 0; this.nPeakT = 0; this.nHold = 0; this.nGap = 0; this.nWhy = ''; this.nWhyT = 0;
+    this.course = 0; this.exitUntil = 0; this.exitY = 0; this.nextPass = 0; this.fightUntil = 0;
   }
   // has the pilot noticed thing `id` yet? things behind it are noticed later, sometimes much later
   notice(W, id, x, me) {
@@ -73,15 +73,23 @@ export class Autopilot {
     }
     const B = W.boss;
     // the wave's last few machines: go and finish them rather than chasing the skimmer flocks that keep coming by
-    const HOST = ['lifter', 'husk', 'sower', 'hive', 'stinger', 'prowler', 'whirler', 'coil', 'spark', 'scorcher', 'maw'];
-    const left = W.enemies.filter((e) => e.hp > 0 && HOST.includes(e.type)).length;
-    const endgame = !B && W.plan && W.plan.left === 0 && W.plan.extra.every((x) => x.done) && left > 0 && left <= 3;
+    const sweeping = this.profile === 'demo';
+    const left = W.enemies.filter((e) => e.hp > 0 && NOVA_HOST.has(e.type)).length;
+    const endgame = !B && W.plan && W.plan.left === 0 && W.plan.extra.every((x) => x.done) && left > 0 && left <= (sweeping && !W.plan.packs ? 24 : 3);
+    if (sweeping) {
+      if (!this.course) this.course = me.face;
+      consider({ kind: 'patrol', tgt: wp(me.x + this.course * 120) }, 0, 'Sweeping ahead to the next colony');
+    }
     for (const e of W.enemies) {
       if (e.hp <= 0 || e.type === 'mine') continue;
       if (this.profile === 'demo' && e.type === 'stinger' && e.t < SWARM_HOLD && this.holding) continue;   // let the watcher see a fresh swarm
       if (!this.notice(W, e.id, e.x, me)) continue;
-      const d = Math.abs(wd(e.x - me.x));
+      const dx = wd(e.x - me.x), d = Math.abs(dx);
       if (e.born > 0 && d > 30) continue;
+      const last = endgame && NOVA_HOST.has(e.type) && !(e.cross && !e.link);
+      const rescue = e.type === 'lifter' && (e.st === 'lift' || e.st === 'grab');
+      const tail = e.type === 'prowler' && d < 32 && Math.abs(e.y - me.y) < 9;
+      if (sweeping && !last && !rescue && !tail && !B && W.t >= this.fightUntil && (dx * this.course < 0 || d > 150)) continue;
       let s = -d;
       let w = 'Hunting the nearest machine';
       if (e.type === 'lifter') {
@@ -96,23 +104,25 @@ export class Autopilot {
       else if (e.type === 'skimmer') { s = 30 - d * 1.2; w = 'Clearing a skimmer flock'; }
       else if (e.type === 'meteor') { s = 480 - d * 2 - e.y * 4; w = e.st === 'lava' ? 'Shooting down a lava bomb over the colony' : 'Shooting down a meteor before it hits the colony'; }
       if (e.tell > 0 && d < 40) { s += 150; w = 'Taking out a machine that is about to fire'; }
-      if (endgame && HOST.includes(e.type) && !(e.cross && !e.link) && s < 260 - d * 0.5) { s = 260 - d * 0.5; w = 'Hunting down the last machines of the wave'; }
+      if (last && s < 260 - d * 0.5) { s = 260 - d * 0.5; w = 'Hunting down the last machines of the wave'; }
+      if (sweeping && !B) {
+        if (dx * this.course >= 0 && d < 95) s = Math.max(s, 100 - d);
+        if (last) s = Math.max(s, 440 - d * 0.35);
+      }
       if (B) s -= 120;
-      consider({ kind: 'enemy', o: e }, s * P.greed + (1 - P.greed) * -d, w);
+      consider({ kind: 'enemy', o: e, engage: last || rescue || tail || !!B }, s * P.greed + (1 - P.greed) * -d, w);
     }
     if (B && B.st === 'fight') {
       let ni = -1, nd = 1e9;
       B.nodes.forEach((n, i) => { if (n.hp <= 0) return; const [x, y] = nodePos(B, i); const d = Math.abs(wd(x - me.x)) + Math.abs(y - me.y) * 2; if (d < nd) { nd = d; ni = i; } });
       if (ni >= 0) consider({ kind: 'node', i: ni, ph: B.phase || 1 }, 300, `Lining up on the carrier's weak point ${ni + 1}`);
     }
-    // the demo: nothing urgent, a crowd worth a nova nearby: fly into the middle of it
-    if (this.profile === 'demo' && score < 380 && !endgame && !B) {
-      const sk = this.novaSeek(W, me);
-      if (sk) return sk;
-    }
     if (!best) {
       const s = W.settlers.find((q) => q.st === 'walk');
       return { kind: 'patrol', tgt: s ? s.x : me.x + me.face * 50, why: 'Patrolling over the colony' };
+    }
+    if (sweeping && best.kind === 'enemy' && W.t >= this.nextPass && W.t >= this.exitUntil && Math.abs(wd(best.o.x - me.x)) < 49) {
+      this.fightUntil = W.t + 2.4; this.nextPass = this.fightUntil + 3.2;
     }
     return { ...best, why };
   }
@@ -130,8 +140,7 @@ export class Autopilot {
   }
   control(W, me) {
     const out = this.control0(W, me);
-    // a pod has just burst near us: hold fire (and the nova) for a moment so its swarm can be seen
-    if (this.profile === 'demo' && this.swarmHold(W, me)) { out.fire = false; out.nova = false; }
+    if (this.profile === 'demo' && this.swarmHold(W, me)) out.fire = false;
     return out;
   }
   control0(W, me) {
@@ -153,11 +162,9 @@ export class Autopilot {
       const s = g.o, tl = s.y / Math.max(0.5, W.R.fallV);
       tx = s.x; ty = Math.max(F.minY, s.y - W.R.fallV * Math.min(0.6, tl)); want = 1;
       D.target = { x: s.x, y: s.y };
-    } else if (g.kind === 'patrol') { tx = g.tgt; ty = 16; want = 0.7; D.target = null; }
-    else if (g.kind === 'nova') {
-      tx = g.x; ty = clamp(me.y, 8, H - 9); want = 1; D.target = { x: g.x, y: me.y };
-      // shoot whatever lines up on the way in
-      for (const e of W.enemies) { if (e.hp <= 0 || e.born > 0) continue; const dx = wd(e.x - me.x); if (Math.sign(dx) === me.face && Math.abs(dx) < range && Math.abs(e.y - me.y) < ENEMY[e.type].r + F.beamH * 0.9) { fire = true; break; } }
+    } else if (g.kind === 'patrol') {
+      tx = g.tgt; ty = this.profile === 'demo' ? 16 + 5 * Math.sin(me.x * 8 * Math.PI / C) : 16;
+      want = this.profile === 'demo' ? 1 : 0.7; D.target = null;
     }
     else {
       let ex, ey, evy = 0;
@@ -199,8 +206,11 @@ export class Autopilot {
       else mx = me.face === sB ? 0 : sB * 0.17;
       const closing = (me.vx - B.vx) * sB;
       if (closing > 10 && dB < near + closing * 0.5) mx = -sB;
-    } else if (g.kind !== 'land' && g.kind !== 'settler' && g.kind !== 'patrol' && g.kind !== 'nova' && !escape) {
-      const ax = g.kind === 'node' ? nodePos(W.boss, g.i)[0] : g.o.x, adx = wd(ax - me.x);
+    } else if (g.kind === 'enemy' && this.profile === 'demo' && !g.engage && W.t >= this.fightUntil) {
+      // Open the distance between firing passes while continuing along the orbital route.
+      mx = this.course;
+    } else if (g.kind === 'enemy' && !escape) {
+      const adx = wd(g.o.x - me.x);
       // keep facing what we shoot at: inside the stand-off, push gently toward it rather than turning away
       if (Math.abs(adx) < P.stand + 4) mx = Math.sign(adx) * 0.17;
       // closing too fast: brake (a short push the other way), then turn back to face it
@@ -208,11 +218,31 @@ export class Autopilot {
       if (closing > 12 && Math.abs(adx) < P.stand * 0.7 + closing * 0.45) mx = -Math.sign(adx);
     }
     let my = clamp((ty - me.y) / 2.5, -1, 1);
+    if (W.t < this.exitUntil) { mx = this.course; my = clamp((this.exitY - me.y) / 3, -1, 1); }
     // ---- safety: bolts, hulls, mines, the carrier's sweep and rush
-    let threat = 0;
+    let threat = 0, incoming = 0, left = 0, right = 0, upper = 0, lower = 0, impact = 1;
+    const assessBomb = this.profile === 'demo' && me.nova > 0 && me.novaT <= 0 && me.inv <= 0;
+    // Project the relative track against straight flight and two possible vertical dodges.
+    const track = (rx, ry, rvx, rvy, radius) => {
+      const closing = -(rx * rvx + ry * rvy);
+      if (Math.abs(rx) >= F.novaR || (closing <= 0 && rx * rx + ry * ry > radius * radius)) return;
+      const t = clamp(closing / Math.max(1, rvx * rvx + rvy * rvy), 0, 0.8);
+      const x = rx + rvx * t, y = ry + rvy * t;
+      if (Math.abs(x) > radius) return;
+      const reach = Math.min(F.vy * t, 0.5 * F.vyAcc * t * t);
+      const rise = Math.min(reach, Math.max(0, F.maxY - me.y));
+      const drop = Math.min(reach, Math.max(0, me.y - F.minY));
+      if (Math.abs(y - rise) < radius + 0.65) upper++;
+      if (Math.abs(y + drop) < radius + 0.65) lower++;
+      if (Math.abs(y) < radius + 0.65) {
+        incoming++; impact = Math.min(impact, t);
+        if (rx < 0) left++; else right++;
+      }
+    };
     for (const b of W.bolts) {
       if (!this.notice(W, 'b' + b.id, b.x, me)) continue;
       const rx = wd(b.x - me.x), ry = b.y - me.y, rvx = b.vx - me.vx, rvy = b.vy - me.vy, v2 = rvx * rvx + rvy * rvy || 1;
+      if (assessBomb) track(rx, ry, rvx, rvy, 1.65);
       const tc = clamp(-(rx * rvx + ry * rvy) / v2, 0, 1.2);
       const cx = rx + rvx * tc, cy = ry + rvy * tc;
       if (Math.abs(cx) < 1.6 && Math.abs(cy) < 1.4 && tc < P.dodge * 0.5) {
@@ -223,6 +253,7 @@ export class Autopilot {
     for (const e of W.enemies) {
       if (e.hp <= 0 || !this.notice(W, e.id, e.x, me)) continue;
       const dx = wd(e.x - me.x), dy = e.y - me.y, r = ENEMY[e.type].r + 1.4;
+      if (assessBomb && e.born <= 0) track(dx, dy, (e.vx || 0) - me.vx, (e.vy || 0) - me.vy, r);
       const closing = (e.vx - me.vx) * -Math.sign(dx);
       if (Math.abs(dx) < r + Math.max(0, closing) * 0.35 && Math.abs(dy) < r) {
         threat++; my = dy > 0 ? -1 : 1;
@@ -255,10 +286,23 @@ export class Autopilot {
     let near = 0;
     for (const e of W.enemies) if (e.hp > 0 && e.born <= 0 && e.type !== 'mine' && Math.abs(wd(e.x - me.x)) < 26) near += DANGER.has(e.type) ? 1.5 : 1;
     if (this.profile === 'demo') {
-      const why = this.novaPlan(W, me, threat);
+      const boxed = incoming > 0 && upper > 0 && lower > 0;
+      let escapeReason = '';
+      if (boxed && (incoming >= 2 || (me.shield <= 0 && impact < 0.17))) {
+        escapeReason = left && right ? 'NOVA: breaking out of crossfire' : 'NOVA: clearing a blocked escape route';
+      } else if (left && right && incoming >= 3) escapeReason = 'NOVA: breaking the encirclement';
+      const why = this.novaPlan(W, me, threat, escapeReason);
       out.nova = !!why && !this.novaWas; this.novaWas = out.nova;
       // the reason stays on the autopilot panel for a couple of seconds, so a watcher can read why
-      if (out.nova) { D.dodge = why; this.nWhy = why; this.nWhyT = 2.2; }
+      if (out.nova) {
+        D.dodge = why; this.nWhy = why; this.nWhyT = 2.2;
+        if (escapeReason) {
+          this.course = left === right ? (this.course || me.face) : left > right ? 1 : -1;
+          const climb = upper === lower ? me.y < H / 2 : upper < lower;
+          this.exitY = clamp(me.y + (climb ? 8 : -8), F.minY + 2, F.maxY - 2);
+          this.exitUntil = W.t + 0.9; mx = this.course; my = Math.sign(this.exitY - me.y);
+        }
+      }
       else if (this.nWhyT > 0) { this.nWhyT -= 1 / 120; if (!D.dodge) D.dodge = this.nWhy; }
     } else {
       const nova = me.nova > 0 && (near >= P.nova || (threat >= 2 && this.r() < P.novaDanger * 0.05));
@@ -268,7 +312,17 @@ export class Autopilot {
     out.mx = mx ? Math.sign(mx) * clamp(Math.max(0.17, Math.abs(mx) * P.slow), 0, 1) : 0; out.my = clamp(my, -1, 1);
     if (SH.weapon === 'missile' && W.enemies.some((e) => e.hp > 0 && e.born <= 0 && e.type !== 'mine' && Math.hypot(wd(e.x - me.x), e.y - me.y) < 40)) fire = true;
     if (SH.weapon === 'missile' && W.boss && W.boss.st === 'fight' && Math.abs(wd(W.boss.x - me.x)) < 45) fire = true;
-    out.fire = fire || (this.profile === 'demo' && near > 0 && this.r() < 0.02);
+    // Keep the route while taking a clear passing shot. The stick sets facing before the gun fires.
+    if (!fire && this.profile === 'demo') {
+      const face = Math.abs(out.mx) > 0.15 ? Math.sign(out.mx) : me.face;
+      for (const e of W.enemies) {
+        const ahead = wd(e.x - me.x) * face;
+        if (e.hp <= 0 || e.born > 0 || (e.cross && !e.link) || ahead < 1.9 || ahead > range) continue;
+        const interceptY = e.y + (e.vy || 0) * (ahead - 1.9) / F.beamV;
+        if (Math.abs(interceptY - me.y) <= ENEMY[e.type].r + F.beamH && this.notice(W, e.id, e.x, me)) { fire = true; break; }
+      }
+    }
+    out.fire = fire;
     return out;
   }
   // what a nova let off at x would do: { w: its worth, n: the machines it would destroy }
@@ -308,25 +362,21 @@ export class Autopilot {
       bar = W.special ? 3.5 : 4;
     }
     const spare = n - reserve;
-    if (spare <= 0) bar = 9;
-    else if (spare === 1) bar += 1;
+    if (spare === 1) bar += 1;
     else if (spare >= 3) bar -= 0.75;
     if (n >= F.novaMax) bar = Math.min(bar, 2.5);   // the rack is full: a nova picked up now would be wasted
     return { bar, spare };
   }
   // the demo's nova: returns why it is letting one off now, or ''
-  novaPlan(W, me, threat) {
+  novaPlan(W, me, threat, escapeReason) {
     this.nGap -= 1 / 120;
     if (me.nova <= 0 || me.novaT > 0) return '';
+    const go = (why) => { this.nGap = 2; this.nPeak = 0; this.nHold = 0; return why; };
+    if (escapeReason) return go(escapeReason);
     // a pod has just burst near us: let the swarm be seen first
     if (W.enemies.some((e) => e.type === 'stinger' && e.hp > 0 && e.t < SWARM_HOLD - 0.3 && Math.abs(wd(e.x - me.x)) < 60)) return '';
     const here = this.novaWorth(W, me.x, me);
     if (here.w < 1) { this.nPeak = 0; this.nHold = 0; return ''; }
-    const go = (why) => { this.nGap = 2; this.nPeak = 0; this.nHold = 0; return why; };
-    // EMERGENCIES: the bar does not apply
-    // the one kept back is for this: no shield left and something about to hit us
-    if (me.inv <= 0 && me.shield <= 0 && threat >= 1) return go('NOVA: no shield left and fire closing in');
-    if (me.inv <= 0 && me.shield <= 1 && threat >= 3 && here.w >= 3) return go('NOVA: boxed in on the last shield');
     const walking = W.settlers.filter((q) => q.st === 'walk' || q.st === 'held').length;
     for (const e of W.enemies) {
       if (e.hp <= 0 || e.type !== 'lifter' || Math.abs(wd(e.x - me.x)) > NOVA_REACH) continue;
@@ -335,8 +385,8 @@ export class Autopilot {
       if (walking <= 3 && (e.st === 'lift' || e.st === 'grab') && !lined) return go('NOVA: the colony is nearly gone');
     }
     // the plan: worth it against what is still to come
-    const { bar } = this.novaBudget(W, me);
-    if (this.nGap > 0 && !W.boss) return '';
+    const { bar, spare } = this.novaBudget(W, me);
+    if (spare <= 0 || (this.nGap > 0 && !W.boss)) return '';
     if (here.w < bar) { this.nPeak = 0; this.nHold = 0; return ''; }
     // the crowd is still closing in: wait a moment for more of it (not when something is about to hit us)
     this.nHold += 1 / 120;
@@ -345,24 +395,6 @@ export class Autopilot {
     if (W.boss && W.boss.st === 'fight' && Math.abs(wd(W.boss.x - me.x)) < NOVA_REACH) return go("NOVA: every weak point on the carrier (novas do not carry to the next world)");
     if (W.special) return go(`NOVA: into the special wave's squadrons (${here.n} machines)`);
     return go(`NOVA: ${here.n} machines in reach`);
-  }
-  // a crowd nearby worth a nova that is not in reach from here: { kind: 'nova', x } to fly into it, or null
-  novaSeek(W, me) {
-    if (me.nova <= 0 || this.nGap > 0 || me.shield < 1) return null;   // only with a shield up: a crowd shoots back
-    const { bar, spare } = this.novaBudget(W, me);
-    // only into a special wave's squadrons, or with novas to spare: in a normal wave the settlers need us nearer them
-    if (spare <= 0 || bar > 6 || (!W.special && spare < 2)) return null;
-    const here = this.novaWorth(W, me.x, me).w;
-    let bx = 0, bw = 0, bn = 0;
-    for (const e of W.enemies) {
-      if (e.hp <= 0 || !NOVA_HOST.has(e.type)) continue;
-      const d = Math.abs(wd(e.x - me.x));
-      if (d < 10 || d > 70 || !this.notice(W, e.id, e.x, me)) continue;
-      const q = this.novaWorth(W, e.x, me);
-      if (q.w - d * 0.02 > bw) { bw = q.w - d * 0.02; bx = e.x; bn = q.n; }
-    }
-    if (bw < bar + 1.5 || bw < here * 1.5 + 1.5) return null;
-    return { kind: 'nova', x: bx, why: `Flying into a crowd of ${bn} machines to let off a NOVA` };
   }
   stale(W, g) {
     if (!g) return true;

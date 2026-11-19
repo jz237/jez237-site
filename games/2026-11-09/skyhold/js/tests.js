@@ -1,9 +1,9 @@
 // ?test=1 self-test page: determinism, exact replays, the gentle start, the difficulty ramp shape, lifters taking
 // and fusing settlers, the carrier fight, the live loop with no console errors and no score posts, and the title
 // screen naming every gunship, machine and carrier with its picture drawn.
-import { makeWorld, step, drainEvents, STEP, settlersLeft } from './sim.js?v=26';
-import { Autopilot } from './ai.js?v=26';
-import { RAMP, SECTORS, TYPICAL_UP, rampAt, endlessLevel, DIFF_KEYS, applyDiff, MIN_WARN, TUTOR, WAVES, SHIPS, SHIP_KEYS } from './config.js?v=26';
+import { makeWorld, step, drainEvents, STEP, settlersLeft, wp, wd } from './sim.js?v=26';
+import { Autopilot } from './ai.js?v=orbital-patrol-1';
+import { RAMP, SECTORS, TYPICAL_UP, rampAt, endlessLevel, DIFF_KEYS, applyDiff, MIN_WARN, TUTOR, WAVES, SHIPS, SHIP_KEYS, C } from './config.js?v=26';
 import { Recorder, Replay } from './replay.js?v=26';
 
 export const hashW = (W) => JSON.stringify([W.n, W.score, W.lives, W.cp, W.phase, W.rs, W.players.map((p) => [p.x.toFixed(6), p.y.toFixed(6), p.alive, p.shield, p.nova]),
@@ -87,6 +87,32 @@ export async function runTests(sh) {
     let fused = 0, lifted = 0;
     for (let i = 0; i < 120 / STEP && !fused; i++) { step(W, STEP); for (const e of drainEvents(W)) { if (e.k === 'fuse') fused++; if (e.k === 'lifted') lifted++; } }
     return { ok: fused > 0 && lifted > 0, info: `lifted ${lifted}, fused ${fused}, settlers left ${settlersLeft(W)}` };
+  });
+  await T('the patrol crosses the seam and visits every longitude when the colony is quiet', () => {
+    const W = makeWorld({ seed: 11 }), p = W.players[0], visited = new Set();
+    W.phaseT = 60; W.gate = null; p.x = C - 3;
+    let last = p.x, distance = 0, wrapped = false;
+    drive(W, new Autopilot(11, 'demo'), 43 / STEP, null, () => {
+      visited.add(Math.floor(p.x * 16 / C)); wrapped ||= p.x < last;
+      distance += wd(p.x - last); last = p.x;
+    });
+    return { ok: visited.size === 16 && wrapped && distance > C, info: `${visited.size}/16 sections, ${Math.round(distance)} m` };
+  });
+  await T('the last NOVA breaks crossfire and is kept for a shot the pilot can dodge', () => {
+    function encounter(kind) {
+      const W = makeWorld({ seed: 5 }), p = W.players[0], ai = new Autopilot(5, 'demo');
+      W.phaseT = 10; p.x = 0.4; p.vx = 0; p.inv = kind === 'invulnerable' ? 1 : 0;
+      p.shield = 2; p.nova = 1;
+      const shot = (dx, vx, id) => ({ x: wp(p.x + dx), y: p.y, vx, vy: 0, id, from: 'lifter', t: 0 });
+      W.bolts = kind === 'dodge' ? [shot(12, -24, 11)] : [shot(-3, 25, 11), shot(3, -25, 12)];
+      if (kind === 'departing') for (const b of W.bolts) b.vx *= -1;
+      ai.control(W, p); W.t += 0.35; // let the normal perception delay elapse
+      p.input = ai.control(W, p); step(W, STEP);
+      return { used: W.stats.novas, bolts: W.bolts.length, exiting: ai.exitUntil > W.t, hp: p.shield };
+    }
+    const trap = encounter('crossfire');
+    const safe = ['dodge', 'departing', 'invulnerable'].every(k => encounter(k).used === 0);
+    return { ok: trap.used === 1 && !trap.bolts && trap.exiting && trap.hp === 2 && safe, info: JSON.stringify(trap) };
   });
   await T('the autopilot clears world 1 including the carrier', () => {
     const W = makeWorld({ sector: 0, seed: 21, up: {} });
