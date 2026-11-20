@@ -34836,5 +34836,91 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-11-20-factual-infographic-factual-infographic-the-tilt-window-tra",
+    "title": "Factual infographic: The Tilt-Window Trap — Compression in a Narrowing Gap",
+    "tests": "; archive_slot=2026-11-20T16:20; concept=feline-tilt-window-entrapment-compression; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: cat-infographic; cat_category: household-hazards",
+    "prompt": "Create an elaborate artistic feline safety atlas, directly rendered as the finished infographic, not a photographed print. Title: \"THE TILT-WINDOW TRAP\"; subtitle: \"A narrowing gap can become a veterinary emergency\". An asymmetrical, luminous technical-watercolor and graphite composition on cool pearl white with indigo, copper and restrained amber accents. The dominant architectural illustration is a realistic bottom-hung inward-tilting window, viewed obliquely from inside a quiet home; bottom hinge stays attached, top tilts inward, the side gap broad at top and tapering down to the hinge. Exquisitely detailed short-haired charcoal-and-white cat stands safely on the interior sill alongside it, never posed as attempting the hazard. Rich fur, glass reflections, wood grain and soft late-afternoon illumination. A separate translucent cat silhouette in the side-gap geometry is explicitly labeled \"Entrapment schematic — not to scale\"; show only a non-graphic conceptual torso caught between the last rib and pelvis, not a crushed live animal. Curved arrow into the narrowing lower gap labeled \"Struggling can lead to downward slipping\". Integrate an enlarged anatomical schematic into the flowing lower sweep: pressure arrows at the torso, simplified vessels and nerves, with restrained amber flow lines narrowing at compression and a delicate spinal cord outline. Label it \"Simplified mechanism\" and connect the exact short labels \"Vessel compression → reduced blood flow\", \"Direct nerve compression\", \"Muscles, nerves and spinal cord can be injured\". A small secondary hindlimb outline and open annotation: \"Weakness or paralysis may follow\". Another airy curved annotation reads \"After release: reperfusion injury can cause further tissue damage\". Clear bottom safety statement in readable bold type: \"Entrapment is an emergency — contact a veterinarian immediately.\" Include small source footer \"Sources: JFMS (2024); Vetmeduni Vienna (2024)\". These are source-backed mechanisms, not a disease overview or home rescue tutorial. No rescue procedure, drug advice, prognosis percentages, invented time thresholds or safe gap sizes. No gore or sensational animal suffering. Keep the window geometry physically plausible and distinguish diagrammatic anatomy from actual fur-covered cat. Dominant beautiful illustration, generous breathing room, legible typographic hierarchy, organically integrated open callouts, no cards, boxed grids, fake logos, or excessive decorative text. Do not add extra scientific claims or labels beyond those specified.",
+    "image": "images/2026-11-20-factual-infographic-factual-infographic-the-tilt-window-tra.jpg",
+    "thumb": "thumbs/2026-11-20-factual-infographic-factual-infographic-the-tilt-window-tra.webp",
+    "color": "#cebeba",
+    "date": "2026-11-20",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "feline-tilt-window-entrapment-compression",
+      "imageSha256": "afaf0ac66bc4cd8e4615a3ea3aeff9692fe84706e17e8b948e8f171c11b7eb2f",
+      "imageDHash": "d86ccc1c606524d8"
+    },
+    "factualInfographic": {
+      "topic": "How bottom-hung tilt windows entrap cats and compress blood vessels and nerves",
+      "description": "Explains tilt-window entrapment geometry, vascular and nerve compression, and the need for urgent veterinary attention.",
+      "sourceNote": "Read authoritative sources: https://pmc.ncbi.nlm.nih.gov/articles/PMC11682586/ ; https://www.vetmeduni.ac.at/en/universitaet/infoservice/presseinformationen/presseinformationen-2023/fenstersturz-bei-katzen-tipps-fuers-tier",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-20T21:21:00.557293+00:00",
+        "sources": [
+          {
+            "id": "s1",
+            "publisher": "Journal of Feline Medicine and Surgery",
+            "title": "Window entrapment trauma in cats: clinical, neurological and clinicopathological findings and outcome (70 cases)",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11682586/"
+          },
+          {
+            "id": "s2",
+            "publisher": "University of Veterinary Medicine Vienna",
+            "title": "Fenstersturz bei Katzen – Tipps fürs Tier",
+            "sourceType": "university",
+            "url": "https://www.vetmeduni.ac.at/en/universitaet/infoservice/presseinformationen/presseinformationen-2023/fenstersturz-bei-katzen-tipps-fuers-tier"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Bottom-hung windows tilt inward and create a narrowing side gap in which cats can become trapped.",
+            "sourceIds": [
+              "s1",
+              "s2"
+            ]
+          },
+          {
+            "claim": "Attempts to escape can cause a cat to slide downward in the window gap; entrapment may occur between the last rib and pelvis or involve a hindlimb.",
+            "sourceIds": [
+              "s2"
+            ]
+          },
+          {
+            "claim": "Compression of blood vessels reduces blood flow to muscles, nerves and spinal cord; direct nerve compression also contributes to injury.",
+            "sourceIds": [
+              "s1",
+              "s2"
+            ]
+          },
+          {
+            "claim": "Neurological injury may cause hindlimb weakness or paralysis.",
+            "sourceIds": [
+              "s1",
+              "s2"
+            ]
+          },
+          {
+            "claim": "Restoration of blood flow can cause reperfusion injury with further tissue damage and serious systemic complications.",
+            "sourceIds": [
+              "s1"
+            ]
+          },
+          {
+            "claim": "Window entrapment is potentially life-threatening and requires urgent veterinary attention.",
+            "sourceIds": [
+              "s1",
+              "s2"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
