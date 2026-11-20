@@ -95,6 +95,14 @@ button:focus-visible, input:focus-visible {
   pointer-events: none;
 }
 .object-label { padding-top: clamp(1.15rem, 2.8vh, 2rem); border-top: 1px solid var(--line); }
+.homepage-link {
+  display: inline-block;
+  margin-top: .55rem;
+  color: #d6c39e;
+  font-size: .9rem;
+  text-underline-offset: .2em;
+}
+.homepage-link:hover, .homepage-link:focus-visible { color: #f3d599; }
 h1 {
   font-family: Baskervville, "Baskerville Old Face", Georgia, serif;
   font-size: clamp(1.7rem, 3.5vw, 3.25rem);
