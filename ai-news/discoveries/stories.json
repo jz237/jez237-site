@@ -1,11 +1,85 @@
 {
   "version": 1,
   "title": "AI Discoveries, Explained",
-  "updated": "2026-11-18",
+  "updated": "2026-11-20",
   "coverageStart": "2026-09-21",
-  "coverageEnd": "2026-11-18",
+  "coverageEnd": "2026-11-20",
   "editorialNote": "Source-linked discoveries, research demonstrations, follow-ups and corrections from AI Discovery Watch. Historical milestones posted before the fresh-news brief are not included. Coverage dates are when a story was shared, not necessarily when its discovery occurred. Evidence labels reflect the linked report at that time; read later updates too.",
   "stories": [
+    {
+      "category": "Mathematics",
+      "evidenceKind": "proof",
+      "modelNote": "Anthropic Claude; model version not identified in the announcement. Alpöge guided the research and collaborated on the proof.",
+      "sources": [
+        "https://alpo.ge/remark.pdf",
+        "https://www.scientificamerican.com/article/anthropic-mathematician-claims-to-prove-riemann-hypothesis-most-famous-problem-in-all-of-math/"
+      ],
+      "status": "Author-reported proof and formalization; not independently verified here or established as an accepted solution.",
+      "takeaway": "Levent Alpöge says he and Claude have proved the Riemann hypothesis, a famous prediction about the pattern of prime numbers, and also claims its broader generalized version. His November 20 announcement credits human guidance with choosing the approach and Claude with crucial final ideas. He links a large computer-checkable proof, but has not yet supplied a readable mathematical account. If correct, this would settle a central question dating to 1859. This is a proof claim—not an accepted solution; independent checks of the argument and its exact scope are still needed.",
+      "title": "A mathematician and Claude claim a proof of a famous prime-number prediction",
+      "id": "d-1573356485621186713-alpoge-claude-riemann-proof-claim",
+      "coveredOn": "2026-11-20",
+      "context": "🔬 **AI Discovery Watch · November 20, 2026**\n\n**A mathematician and Claude claim a proof of a famous prime-number prediction**\nLevent Alpöge says he and Claude have proved the Riemann hypothesis, a famous prediction about the pattern of prime numbers, and also claims its broader generalized version. His November 20 announcement credits human guidance with choosing the approach and Claude with crucial final ideas. He links a large computer-checkable proof, but has not yet supplied a readable mathematical account. If correct, this would settle a central question dating to 1859. This is a proof claim—not an accepted solution; independent checks of the argument and its exact scope are still needed.\n\n**AI used:** Anthropic Claude; model version not identified in the announcement. Alpöge guided the research and collaborated on the proof.\n**Evidence:** Author-reported proof and formalization; not independently verified here or established as an accepted solution.\nOriginal source: <https://alpo.ge/remark.pdf>\nSupporting source: <https://www.scientificamerican.com/article/anthropic-mathematician-claims-to-prove-riemann-hypothesis-most-famous-problem-in-all-of-math/>"
+    },
+    {
+      "category": "Medicine & biology",
+      "evidenceKind": "lab",
+      "modelNote": "RhoAgent coordinates the RDiff RNA generator. The study’s underlying language-model version is not identified in the reviewed university report.",
+      "sources": [
+        "https://www.nature.com/articles/s41587-026-03362-3",
+        "https://www.cse.cuhk.edu.hk/news/rhoagent-a-virtual-scientist-for-the-programmable-design-of-functional-rna/"
+      ],
+      "status": "Peer-reviewed study; laboratory results reported by the research team, not independently replicated in the reviewed sources.",
+      "takeaway": "An AI system designed RNA molecules—chemical strands used by cells—and revised them after laboratory feedback. A November 19 study reports that RhoAgent improved designs that can cut themselves apart, a building block for biological tools. Among the five best candidates, the average share that split apart rose 12% in the second design round. People supplied design instructions and laboratory measurements; this was not a fully self-running lab. The study is peer-reviewed, but independent replication is not established in the university’s report, and no medical benefit was demonstrated.",
+      "title": "AI-designed RNA improves after laboratory feedback",
+      "id": "d-1573357155288096971-rhoagent-rna-lab-feedback",
+      "coveredOn": "2026-11-20",
+      "context": "🔬 **AI Discovery Watch · November 20, 2026**\n\n**AI-designed RNA improves after laboratory feedback**\nAn AI system designed RNA molecules—chemical strands used by cells—and revised them after laboratory feedback. A November 19 study reports that RhoAgent improved designs that can cut themselves apart, a building block for biological tools. Among the five best candidates, the average share that split apart rose 12% in the second design round. People supplied design instructions and laboratory measurements; this was not a fully self-running lab. The study is peer-reviewed, but independent replication is not established in the university’s report, and no medical benefit was demonstrated.\n\n**AI used:** RhoAgent coordinates the RDiff RNA generator. The study’s underlying language-model version is not identified in the reviewed university report.\n**Evidence:** Peer-reviewed study; laboratory results reported by the research team, not independently replicated in the reviewed sources.\nOriginal source: <https://www.nature.com/articles/s41587-026-03362-3>\nSupporting source: <https://www.cse.cuhk.edu.hk/news/rhoagent-a-virtual-scientist-for-the-programmable-design-of-functional-rna/>"
+    },
+    {
+      "category": "Research in action",
+      "evidenceKind": "demo",
+      "modelNote": "Claude Opus 5.5 through Claude Code; encoder experiments also tested Claude Fable 5.2 and Sonnet 5.",
+      "sources": [
+        "https://arxiv.org/abs/2611.23875",
+        "https://arxiv.org/html/2611.23875v1"
+      ],
+      "status": "Early laboratory capability demonstration; preprint, not independently confirmed.",
+      "takeaway": "AI tested a light-based computing device, examined camera images and devised ways to redirect the light, rather than just trying random settings. In a November 18 preprint, its best run recognized three handwritten digits with 96.8% accuracy, using notes from an earlier AI session. People built the equipment, software interface and tasks; the AI chose tests, interpreted results and designed adjustments. This shows promising experimental reasoning on real hardware, not a new law of physics. It remains a small laboratory demonstration without independent confirmation, and other runs performed less well.",
+      "title": "AI learns how to tune a light-based computer by experimenting",
+      "id": "d-1572994229225914518-optics-as-code-hardware-experiments",
+      "coveredOn": "2026-11-19",
+      "context": "🔬 **AI Discovery Watch · November 19, 2026**\n\n**AI learns how to tune a light-based computer by experimenting**\nAI tested a light-based computing device, examined camera images and devised ways to redirect the light, rather than just trying random settings. In a November 18 preprint, its best run recognized three handwritten digits with 96.8% accuracy, using notes from an earlier AI session. People built the equipment, software interface and tasks; the AI chose tests, interpreted results and designed adjustments. This shows promising experimental reasoning on real hardware, not a new law of physics. It remains a small laboratory demonstration without independent confirmation, and other runs performed less well.\n\n**AI used:** Claude Opus 5.5 through Claude Code; encoder experiments also tested Claude Fable 5.2 and Sonnet 5.\n**Evidence:** Early laboratory capability demonstration; preprint, not independently confirmed.\nOriginal source: <https://arxiv.org/abs/2611.23875>\nSupporting source: <https://arxiv.org/html/2611.23875v1>"
+    },
+    {
+      "category": "Mathematics",
+      "evidenceKind": "followup",
+      "modelNote": "Turing Agent used DeepSeek-V4-Pro and DeepSeek-V4.1-Flash for these research cases; Lean checked the formal proofs.",
+      "sources": [
+        "https://arxiv.org/abs/2611.21299",
+        "https://arxiv.org/html/2611.21299v1"
+      ],
+      "status": "Author-reported computer-checked proofs; preliminary preprint, not independently rebuilt here.",
+      "takeaway": "A second AI system reports filling missing steps in computer-checkable versions of earlier AI-written proofs. One concerns how predictably a growing collection of random logical rules becomes impossible to satisfy; another studies how networks change when connections are added. The November 16 preprint says Lean, a mathematical proof checker, accepted the completed arguments. Researchers selected the earlier manuscripts and built the checking workflow, while Turing Agent constructed the missing steps. This checks earlier claims rather than announcing new theorems. The reported checks have not been independently rerun here, and translating the original claims faithfully still matters.",
+      "title": "Another AI fills gaps in checking earlier AI-written mathematics",
+      "id": "d-1572994540049141842-turing-agent-completes-proof-checking",
+      "coveredOn": "2026-11-19",
+      "context": "🔬 **AI Discovery Watch · November 19, 2026**\n\n**Another AI fills gaps in checking earlier AI-written mathematics**\nA second AI system reports filling missing steps in computer-checkable versions of earlier AI-written proofs. One concerns how predictably a growing collection of random logical rules becomes impossible to satisfy; another studies how networks change when connections are added. The November 16 preprint says Lean, a mathematical proof checker, accepted the completed arguments. Researchers selected the earlier manuscripts and built the checking workflow, while Turing Agent constructed the missing steps. This checks earlier claims rather than announcing new theorems. The reported checks have not been independently rerun here, and translating the original claims faithfully still matters.\n\n**AI used:** Turing Agent used DeepSeek-V4-Pro and DeepSeek-V4.1-Flash for these research cases; Lean checked the formal proofs.\n**Evidence:** Author-reported computer-checked proofs; preliminary preprint, not independently rebuilt here.\nOriginal source: <https://arxiv.org/abs/2611.21299>\nSupporting source: <https://arxiv.org/html/2611.21299v1>"
+    },
+    {
+      "category": "Computing & engineering",
+      "evidenceKind": "demo",
+      "modelNote": "Architect Labs' AI agent teams; underlying model names and versions are not disclosed in this report.",
+      "sources": [
+        "https://architectlabs.com/blog/frostbite"
+      ],
+      "status": "Company-reported pre-manufacturing design results; not independently verified or demonstrated in working silicon.",
+      "takeaway": "Architect Labs says AI teams developed a processor whose busy sections can hand work to idle neighbors, like workers sharing a queue. Its November 18 report describes AI repeatedly changing the software and hardware together, then testing and keeping useful changes. People supplied the tools, constraints and evaluation workloads. The company reports better simulated energy efficiency than one unnamed comparison processor, including on tasks withheld during design. This is an early design-and-checking demonstration, not a tested manufactured chip; comparisons with a broader range of processors and independent checks are still missing.",
+      "title": "AI teams explore a processor design that shares spare computing capacity",
+      "id": "d-1572994998394159201-frostbite-ai-processor-codesign",
+      "coveredOn": "2026-11-19",
+      "context": "🔬 **AI Discovery Watch · November 19, 2026**\n\n**AI teams explore a processor design that shares spare computing capacity**\nArchitect Labs says AI teams developed a processor whose busy sections can hand work to idle neighbors, like workers sharing a queue. Its November 18 report describes AI repeatedly changing the software and hardware together, then testing and keeping useful changes. People supplied the tools, constraints and evaluation workloads. The company reports better simulated energy efficiency than one unnamed comparison processor, including on tasks withheld during design. This is an early design-and-checking demonstration, not a tested manufactured chip; comparisons with a broader range of processors and independent checks are still missing.\n\n**AI used:** Architect Labs' AI agent teams; underlying model names and versions are not disclosed in this report.\n**Evidence:** Company-reported pre-manufacturing design results; not independently verified or demonstrated in working silicon.\nOriginal source: <https://architectlabs.com/blog/frostbite>"
+    },
     {
       "category": "Physics & materials",
       "evidenceKind": "lab",
