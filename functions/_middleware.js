@@ -113,6 +113,8 @@ export async function onRequest(context) {
   }
 
   if (retiredPaths.includes(url.pathname)
+    || url.pathname === "/prototypes/bauder-70"
+    || url.pathname.startsWith("/prototypes/bauder-70/")
     || url.pathname === "/demos/elderwood-webgpu"
     || url.pathname.startsWith("/demos/elderwood-webgpu/")) {
     return notFound();
