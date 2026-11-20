@@ -24697,5 +24697,75 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-11-20-factual-infographic-factual-infographic-siamese-points-temp",
+    "title": "Factual infographic: Siamese Points — Temperature and Growing Fur",
+    "tests": "; archive_slot=2026-11-20T12:20; concept=siamese-temperature-pigmentation-fur-regrowth; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: cat-infographic; cat_category: coats-and-genetics",
+    "prompt": "Create a richly detailed artwork-led feline science atlas, directly rendered as the finished infographic, not a photographed page. Headline: “SIAMESE POINTS” with subtitle “Temperature shapes pigment in growing fur”. Category: Coats and Genetics. Use refined gouache and colored-pencil natural history illustration with extraordinarily convincing individual cream and seal-brown hairs, cool slate-blue shadows and warm ivory negative space, elegant readable ink typography. A dominant full-bodied adult seal-point domestic cat reclines diagonally across the composition, tail curving around the lower margin, ears erect, face turned three-quarter toward the viewer. Show credible feline anatomy, dark face, ears, legs and tail, pale cream central torso. This is a focused pigmentation mechanism atlas, not a breed profile. Organically weave open callouts and a magnified fur-growth comparison through the silhouette's surrounding space, no rigid boxes, equal-size panels, detached cards or grid. Delicate curved leaders connect cooler dark extremities and warmer pale trunk to a soft qualitative cool-to-warm ribbon; explicitly label “Relative skin temperature — schematic”, no numeric thresholds or thermal-camera claim. Main labels: “Cooler points: more pigment” and “Warmer trunk: less pigment”. Explain in one concise sentence: “Siamese TYR variants affect tyrosinase; pigment production is temperature-sensitive.” Include a beautiful large side-by-side schematic study of two growing fur tufts above skin: warmer skin with pale growing fur, cooler skin with darker growing fur. Keep cellular detail abstract, do not invent molecular anatomy. Label “Pigment is deposited as fur grows” as an explanation of the growth studies. Below, a small graceful visual sequence of a cream flank with a naturally missing tuft, then darker replacement fur, linked by a slow curved arrow, label “After fur loss in cold conditions, cooled skin can grow darker replacement fur.” Mark this “Illustrative regrowth sequence”. Do not show shaving tools, an experiment, injury, cold exposure instructions or a recommendation to remove fur. Do not imply existing hair instantly changes color. No inheritance ratios, breed history, unrelated eye/brain claims, exact temperature values, or unsupported genetics. Allow ample breathing room around the hero, substantial magnified fur texture, flowing asymmetry and restrained informative text. Small source credit: “UAF Geophysical Institute • Schmidt-Kunzel et al., Journal of Heredity (2005)”.",
+    "image": "images/2026-11-20-factual-infographic-factual-infographic-siamese-points-temp.jpg",
+    "thumb": "thumbs/2026-11-20-factual-infographic-factual-infographic-siamese-points-temp.webp",
+    "color": "#d5bfa4",
+    "date": "2026-11-20",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "siamese-temperature-pigmentation-fur-regrowth",
+      "imageSha256": "58cc6a5450f660918e1121506af613abce51a6a6ff344499b79afdb8e2eefa76",
+      "imageDHash": "d69e0ec2cccccccc"
+    },
+    "factualInfographic": {
+      "topic": "How temperature-sensitive Siamese pigmentation produces dark points and darker replacement fur in cooled skin",
+      "description": "A focused atlas of temperature-sensitive pigment production and regrowth in Siamese-pattern coats.",
+      "sourceNote": "https://www.gi.alaska.edu/alaska-science-forum/we-are-siamese-if-you-please ; https://nsuworks.nova.edu/cnso_bio_facarticles/535/",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-20T17:56:49.015376+00:00",
+        "sources": [
+          {
+            "id": "alaska",
+            "publisher": "University of Alaska Fairbanks Geophysical Institute",
+            "title": "We are Siamese if you Please",
+            "sourceType": "university",
+            "url": "https://www.gi.alaska.edu/alaska-science-forum/we-are-siamese-if-you-please"
+          },
+          {
+            "id": "nsu",
+            "publisher": "Nova Southeastern University",
+            "title": "Tyrosinase and Tyrosinase Related Protein 1 Alleles Specify Domestic Cat Coat Color Phenotypes of the albino and brown Loci",
+            "sourceType": "university",
+            "url": "https://nsuworks.nova.edu/cnso_bio_facarticles/535/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Siamese pigmentation is associated with variants of the tyrosinase gene TYR.",
+            "sourceIds": [
+              "nsu"
+            ]
+          },
+          {
+            "claim": "Pigment production in Siamese cats is inefficient at warmer trunk skin temperatures and occurs more readily in cooler skin.",
+            "sourceIds": [
+              "alaska"
+            ]
+          },
+          {
+            "claim": "The face, ears, legs and tail are normally cooler and darker than the central body in a seal-point Siamese.",
+            "sourceIds": [
+              "alaska"
+            ]
+          },
+          {
+            "claim": "When body fur is lost in cold conditions, cooler exposed skin can produce darker replacement fur as it grows back.",
+            "sourceIds": [
+              "alaska"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
