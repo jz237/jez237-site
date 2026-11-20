@@ -1,0 +1,5 @@
+torch==2.7.1+cu128
+torchvision==0.22.1+cu128
+numpy==2.5.5
+scipy==1.18.1
+librosa==1.0.1
