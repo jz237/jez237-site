@@ -1,0 +1,48 @@
+/* Keep the original thumbnail boxes and photograph crops. */
+.index-thumb-grid > div > a {
+  display: block;
+  height: 100%;
+}
+.index-thumb-grid > div > a,
+.portfolio-gallery-thumb,
+.portfolio-lightbox-thumb {
+  position: relative;
+  overflow: hidden;
+}
+:is(.index-thumb-grid > div > a, .portfolio-gallery-thumb, .portfolio-lightbox-thumb)::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse at var(--glow-x, 50%) var(--glow-y, 50%),
+                              rgba(255, 252, 255, .38), transparent 52%);
+  opacity: 0;
+  transition: opacity 150ms ease-out;
+}
+:is(.index-thumb-grid > div > a, .portfolio-gallery-thumb, .portfolio-lightbox-thumb).pointer-lit::after {
+  opacity: .86;
+}
+/* The frame uses its original pulse. Only the photograph scales. */
+#div4 .index-thumb-grid img {
+  animation: none !important;
+}
+:is(#div4 .index-thumb-grid a[href], .portfolio-gallery-thumb, .portfolio-lightbox-thumb) img {
+  transform: scale(var(--photo-scale, 1));
+  transform-origin: var(--glow-x, 50%) var(--glow-y, 50%);
+  transition: transform 400ms ease-out, filter 300ms ease, opacity 220ms ease;
+}
+@media (prefers-reduced-motion: no-preference) {
+  :is(.index-thumb-grid > div > a, .portfolio-gallery-thumb, .portfolio-lightbox-thumb).pointer-lit {
+    --photo-scale: 1.18;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  #div4 .index-thumb-grid > div,
+  .portfolio-gallery-thumb {
+    animation: none !important;
+  }
+  :is(#div4 .index-thumb-grid a[href], .portfolio-gallery-thumb, .portfolio-lightbox-thumb) img,
+  :is(.index-thumb-grid > div > a, .portfolio-gallery-thumb, .portfolio-lightbox-thumb)::after {
+    transition: none;
+  }
+}
