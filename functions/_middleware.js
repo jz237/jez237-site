@@ -98,6 +98,8 @@ export async function onRequest(context) {
   const reefRedirect = onRequestHiddenReef(context); if (reefRedirect) return reefRedirect;
   const url = new URL(context.request.url);
   const retiredPaths = [
+    "/demos/bauder-signs",
+    "/demos/assets/bauder-signs.jpg",
     "/games/2026-06-06/missile-command-3js",
     "/games/2026-06-06/missile-command-3js/",
     "/games/2026-06-06/missile-command-3js/index.html",
@@ -113,6 +115,9 @@ export async function onRequest(context) {
   }
 
   if (retiredPaths.includes(url.pathname)
+    || url.pathname.startsWith("/demos/bauder-signs/")
+    || url.pathname === "/prototypes/bauder-70"
+    || url.pathname.startsWith("/prototypes/bauder-70/")
     || url.pathname === "/demos/elderwood-webgpu"
     || url.pathname.startsWith("/demos/elderwood-webgpu/")) {
     return notFound();
@@ -136,7 +141,7 @@ export async function onRequest(context) {
 
   const contentType = response.headers.get("content-type") || "";
 
-  if (!contentType.includes("text/html")) {
+  if (url.pathname.startsWith("/screening/") || !contentType.includes("text/html")) {
     return response;
   }
 
