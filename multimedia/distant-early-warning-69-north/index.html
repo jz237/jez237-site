@@ -97,7 +97,6 @@
         <li><a href="#t=301.58"><time>5:02</time>Sunrise</a></li>
       </ol>
     </section>
-    <p class="companion"><a id="cut-link" href="?cut=clean">Watch the cut without the drum kit</a></p>
     <p class="companion"><a href="../limelight-escape-velocity/">Watch The Iris Machine, a film for Limelight</a></p>
   </main>
   <script>
@@ -105,14 +104,6 @@
     const sources = { "4k": document.getElementById("src-4k"), "1080p": document.getElementById("src-1080") };
     const buttons = [...document.querySelectorAll("[data-quality]")];
     const params = new URLSearchParams(location.search);
-    // ?cut=clean plays the earlier cut, without the ghost drum kit.
-    if (params.get("cut") === "clean") {
-      sources["4k"].src = sources["4k"].src.replace("69-north-drums2-", "69-north-");
-      sources["1080p"].src = sources["1080p"].src.replace("69-north-drums2-", "69-north-");
-      film.load();
-      const link = document.getElementById("cut-link");
-      link.href = location.pathname; link.textContent = "Watch the cut with the ghost drum kit";
-    }
     const DURATION = 315.5;
     let current = null;
 
