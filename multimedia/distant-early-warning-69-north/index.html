@@ -12,11 +12,11 @@
   <meta property="og:title" content="Rush — Distant Early Warning · 69° North">
   <meta property="og:description" content="A radar station on the DEW Line, a snowcat crossing the ice toward it, and a sky that listens. Every frame is computed from the live recording.">
   <meta property="og:url" content="https://jez237.com/multimedia/distant-early-warning-69-north/">
-  <meta property="og:image" content="https://jez237.com/multimedia/distant-early-warning-69-north/og.jpg?v=ghostkit">
+  <meta property="og:image" content="https://jez237.com/multimedia/distant-early-warning-69-north/og.jpg?v=ghostkit2">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:image:alt" content="An orange snowcat parked in front of a geodesic radar dome and a red lattice tower on arctic snow at dawn.">
-  <meta property="og:video" content="https://media.jez237.com/multimedia/distant-early-warning-69-north/69-north-drums-1080p60.mp4">
+  <meta property="og:video" content="https://media.jez237.com/multimedia/distant-early-warning-69-north/69-north-drums2-1080p60.mp4">
   <meta property="og:video:type" content="video/mp4">
   <meta property="og:video:width" content="1920">
   <meta property="og:video:height" content="1080">
@@ -61,11 +61,11 @@
       <div><p class="artist">Rush · Distant Early Warning (live)</p><h1>69° North</h1></div>
       <p class="credit">Procedural film · 5:15 · 4K60</p>
     </header>
-    <video id="film" controls playsinline preload="metadata" poster="poster.jpg?v=ghostkit" aria-label="69° North, a film for Distant Early Warning by Rush">
-      <source id="src-4k" src="https://media.jez237.com/multimedia/distant-early-warning-69-north/69-north-drums-2160p60.mp4" type='video/mp4; codecs="hvc1.2.4.L153.B0, mp4a.40.2"'>
-      <source id="src-1080" src="https://media.jez237.com/multimedia/distant-early-warning-69-north/69-north-drums-1080p60.mp4" type='video/mp4; codecs="avc1.64002A, mp4a.40.2"'>
-      <track kind="chapters" srclang="en" label="Chapters" src="chapters.vtt?v=ghostkit">
-      <a href="https://media.jez237.com/multimedia/distant-early-warning-69-north/69-north-drums-1080p60.mp4">Open the video</a>
+    <video id="film" controls playsinline preload="metadata" poster="poster.jpg?v=ghostkit2" aria-label="69° North, a film for Distant Early Warning by Rush">
+      <source id="src-4k" src="https://media.jez237.com/multimedia/distant-early-warning-69-north/69-north-drums2-2160p60.mp4" type='video/mp4; codecs="hvc1.2.4.L153.B0, mp4a.40.2"'>
+      <source id="src-1080" src="https://media.jez237.com/multimedia/distant-early-warning-69-north/69-north-drums2-1080p60.mp4" type='video/mp4; codecs="avc1.64002A, mp4a.40.2"'>
+      <track kind="chapters" srclang="en" label="Chapters" src="chapters.vtt?v=ghostkit2">
+      <a href="https://media.jez237.com/multimedia/distant-early-warning-69-north/69-north-drums2-1080p60.mp4">Open the video</a>
     </video>
     <div class="details">
       <p>A computed film for Rush · <cite>A Show of Hands</cite> (1989)</p>
@@ -75,7 +75,7 @@
       </div>
     </div>
     <p class="synopsis">A radar station on the DEW Line, a snowcat crossing the ice toward it, and a sky that listens. The aurora follows Geddy Lee’s voice and the synthesizers. Neil Peart’s kick drum sends rings out from every station and his snare sets off the lightning. Alex Lifeson’s solo runs as a filament of light down a tunnel whose walls are the recording’s own spectrum. When the song ends, the crowd’s applause glitters on the snow at sunrise.</p>
-    <p class="synopsis">In the corner, a ghost plays the drum part. Every stroke of the sticks and every kick of the pedal was transcribed from the isolated drum track, so each one lands on its drum or cymbal at the moment you hear it.</p>
+    <p class="synopsis">In the corner, a ghost plays the drum part on a double-bass kit. Every stroke of the sticks and every kick of the two pedals was transcribed from the isolated drum track, so each one lands on its drum or cymbal at the moment you hear it. The kit never sits still: it assembles itself in the intro, turns, tumbles, flies apart into an exploded view, and twice leaves the floor to circle in orbit while the sticks keep playing.</p>
     <p class="how">Nothing here is filmed or generated from pictures. The recording was separated into drums, bass, voice, guitar and keyboards, and every frame was computed from those parts.</p>
     <section aria-labelledby="chapters"><h2 id="chapters">Chapters</h2>
       <ol id="chapter-list">
@@ -107,8 +107,8 @@
     const params = new URLSearchParams(location.search);
     // ?cut=clean plays the earlier cut, without the ghost drum kit.
     if (params.get("cut") === "clean") {
-      sources["4k"].src = sources["4k"].src.replace("69-north-drums-", "69-north-");
-      sources["1080p"].src = sources["1080p"].src.replace("69-north-drums-", "69-north-");
+      sources["4k"].src = sources["4k"].src.replace("69-north-drums2-", "69-north-");
+      sources["1080p"].src = sources["1080p"].src.replace("69-north-drums2-", "69-north-");
       film.load();
       const link = document.getElementById("cut-link");
       link.href = location.pathname; link.textContent = "Watch the cut with the ghost drum kit";
