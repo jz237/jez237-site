@@ -1,0 +1,506 @@
+{
+  "currentDate": "2026-11-20",
+  "historicDate": "1985-09-30",
+  "displayDate": "Week of September 30-October 6, 1985",
+  "edition": "Issue 166 - Weekly 1985 Computer & Culture Chronicle",
+  "masthead": {
+    "title": "Computer Chronicle",
+    "subtitle": "Issue 166 - Weekly 1985 Computer & Culture Chronicle",
+    "dateline": "Week of September 30-October 6, 1985",
+    "price": "75 cents"
+  },
+  "sectionChrome": {
+    "primary": "brick red",
+    "secondary": "royal blue",
+    "texture": "aged newsprint, fine column rules, ink bleed"
+  },
+  "visualProfile": {
+    "tone": "A mysterious connection makes the game; winter sports meet the home computer",
+    "motifs": [
+      "Commodore 64 keyboard and simulated green terminal logon",
+      "Winter Games skiing and bobsled halftone",
+      "Atari 520ST mouse and monochrome monitor"
+    ],
+    "layout": "Warm aged newsprint, dense believable columns, red and blue headers, boxed modules, halftones, grain, slight ink bleed, no dead footer space"
+  },
+  "layoutPlan": {
+    "leadPlacement": "Hacker is the largest headline and gaming illustration; Winter Games is a prominent color feature. Both are October magazine reports, not launches this week.",
+    "secondaryRail": "Top 5 Computer Games are editorial shelf picks, not sales ranks. Top 5 Music is explicitly Billboard Hot 100 October 5, not a rock chart. Separate Rock Radio bulletin names Lonely Ol’ Night. Movies use October 4-6 box office. Print feature headlines verbatim and fixed page-map jump lines.",
+    "archiveNavigation": "Weekly archive with previous/next navigation"
+  },
+  "heroImage": {
+    "src": "media/computer-chronicle-gpt-image-2-week-1985-09-30.jpg",
+    "alt": "Computer Chronicle newspaper front page for September 30-October 6, 1985",
+    "caption": "Newspaper-style front page generated from structured Chronicle issue data.",
+    "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+  },
+  "editorNote": "October’s computer press brings a season of experiments: games without instruction books, winter sports on disk, and faster connections from home.",
+  "morningLine": "A logon problem opens an adventure; snow and ice follow the summer sports boom.",
+  "lead": {
+    "headline": "Hacker turns a mysterious computer connection into the game",
+    "dek": "Activision makes the unknown system itself the puzzle in October’s fall-game reports.",
+    "confidence": "same-month",
+    "sourceRefs": [
+      0
+    ],
+    "body": [
+      "The screen appears to have gone wrong. At a press demonstration described in October’s COMPUTE!, Activision president Jim Levy seems to struggle with a computer logon. Then comes the reveal: “That, ladies and gentlemen, is the game.” Hacker makes that uncertainty its opening invitation.",
+      "Rather than lead the player through a conventional instruction book, the program presents a simulated connection whose purpose must be discovered. What system is this, what does it want, and where are the hazards? The investigation is the play. This is fictional intrusion inside a commercial game, not access to a real remote computer.",
+      "Selby Bateman and Kathy Yakal’s roundup reports Commodore 64 and 128 versions first, with Apple and Atari editions to follow. No price was announced. These are the plans described in the October issue, rather than a claim that all versions reached shop counters during this week.",
+      "For home-computer players, the attraction is a change of pace: the familiar keyboard becomes a prop in an unexplained situation. Alongside expanding role-playing worlds and increasingly elaborate simulations, Hacker shows publishers looking beyond a straightforward score chase."
+    ]
+  },
+  "stories": [
+    {
+      "headline": "Winter Games takes the Epyx sports formula onto snow and ice",
+      "body": [
+        "Epyx is trading the summer stadium for snow and ice. October’s COMPUTE! presents Winter Games as the next step after Summer Games and Summer Games II, extending a sports formula already familiar to home-computer competitors.",
+        "The roundup lists ski jumping, speed and freestyle events, ski biathlon and a bobsled run. With the 1988 Winter Olympics still ahead, the appeal lies in trying several distinct disciplines rather than mastering one repeated contest.",
+        "Apple II, Commodore 64 and Macintosh editions are listed at $29–$35. These are the magazine’s announced platforms and price range, not proof that every port shipped this week. The article reports that Summer Games has sold more than 200,000 copies—a measure of the audience Epyx hopes will follow it into winter."
+      ],
+      "confidence": "same-month",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "headline": "Atari’s 520ST puts a mouse-driven 512K system below $1,000",
+      "body": [
+        "The price of a complete mouse-driven computer is taking a new shape. Tom R. Halfhill’s October hands-on report places Atari’s 520ST at $799 with a monochrome monitor or $999 with an RGB display. The machine was announced in January; this is a report on its growing availability, not a new weekly launch.",
+        "The package brings an 8-MHz Motorola 68000, 512K of RAM, GEM desktop, two-button mouse and external 3½-inch disk drive. Monochrome reaches 640 by 400 pixels; color offers 640 by 200 in four colors or 320 by 200 in sixteen selected from a palette of 512.",
+        "Built-in MIDI, RS-232 and Centronics connections widen the possibilities beyond the desktop. Buyers should still distinguish delivered software from promises: the early package tested has Logo, while BASIC was unfinished when the report was written. Future hard disks are not part of these quoted package prices."
+      ],
+      "confidence": "same-month",
+      "sourceRefs": [
+        1
+      ]
+    },
+    {
+      "headline": "Sinclair creditors back a Christmas survival campaign",
+      "body": [
+        "Sinclair’s October outlook turns on financing and the Christmas counter. Sinclair User reports that creditors and banks have extended support after Robert Maxwell withdrew his backing. Sir Clive remains chairman and director, with Bill Jeffrey heading the new management team as chief executive.",
+        "Thorn EMI, Timex and AB Electronics are among the named creditors; Barclays and Citibank are the banks. The magazine gives the rescue arrangements as current reporting, without an agreement date precise enough to place the negotiations within this seven-day issue.",
+        "Dixons provides a retail route through a reported £10 million deal covering 160,000 Spectrum Plus computers and televisions for 800 stores, including Currys. That is a combined equipment total, not 160,000 computers alone. A £139.99 bundle pairs the Spectrum Plus with recorder, joystick and ten software titles; a £199.99 offer combines computer, pocket television and five titles."
+      ],
+      "confidence": "same-month",
+      "sourceRefs": [
+        7
+      ]
+    }
+  ],
+  "computerItems": [
+    {
+      "title": "Atari 520ST configurations",
+      "summary": "512K RAM; 8-MHz 68000; MIDI; mouse; monitor-dependent resolutions. $799 monochrome or $999 color package.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        1
+      ]
+    },
+    {
+      "title": "Amiga memory distinction",
+      "summary": "October report lists base Amiga at $1,295 with 256K user RAM and an additional 256K writable control store reserved for boot-loaded system code. User-memory expansion to 512K is $200. Do not describe the reserved bank as another 256K available to applications.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        2
+      ]
+    },
+    {
+      "title": "Saga 3 Elite keyboard",
+      "summary": "Sinclair User Hardware World describes an 88-key Spectrum replacement keyboard with 27 single-key functions at £79.95 including tax; Saga 2 Profile is £49.95.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        9
+      ]
+    }
+  ],
+  "softwareList": [
+    {
+      "name": "Amiga IBM-PC emulation is a promise, not a proven replacement",
+      "detail": "Halfhill reports the July 23 Lotus 1-2-3 demonstration under PC-DOS 2.10 and Commodore’s all-software emulator claim. Performance doubts are explicitly noted; no emulator price was given. October article expected availability a month after the projected September launch; do not imply that deadline was met.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        2
+      ]
+    },
+    {
+      "name": "Racter converses from a reported 2,800-word vocabulary",
+      "detail": "Mindscape’s conversational program is listed for IBM PC, Apple IIe/IIc and Macintosh at $44.95. The roundup calls a related book computer-written; retain that as period promotional framing, not independent proof of entirely autonomous authorship.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0
+      ]
+    }
+  ],
+  "storeShelves": [
+    {
+      "label": "Top 5 Computer Games — editorial shelf picks, not sales ranks",
+      "items": [
+        "1. Hacker — Activision’s simulated connection; October preview; price unannounced.",
+        "2. Winter Games — Epyx winter sports; announced Apple II, C64 and Macintosh range $29–$35.",
+        "3. Karateka — Brøderbund martial-arts adventure; October review price $34.95.",
+        "4. Alternate Reality: The City — Datasoft role-playing world; Atari/Commodore $39.95, Apple II $49.95.",
+        "5. Wishbringer — Infocom adventure; Atari/Commodore $34.95, Apple II/IBM/Mac $39.95."
+      ],
+      "confidence": "same-month",
+      "sourceRefs": [
+        0,
+        4
+      ]
+    },
+    {
+      "label": "Top 5 Movies — U.S. weekend box office, October 4-6",
+      "items": [
+        "1. Commando",
+        "2. Jagged Edge",
+        "3. Agnes of God",
+        "4. Invasion U.S.A.",
+        "5. Back to the Future"
+      ],
+      "confidence": "same-week",
+      "sourceRefs": [
+        12
+      ]
+    }
+  ],
+  "priceWatch": [
+    {
+      "item": "Atari 520ST monochrome package",
+      "price": "$799.00",
+      "note": "Computer, drive, monitor, mouse and system software; published package price",
+      "confidence": "same-month",
+      "sourceRefs": [
+        1
+      ]
+    },
+    {
+      "item": "Atari 520ST color package",
+      "price": "$999.00",
+      "note": "RGB monitor package",
+      "confidence": "same-month",
+      "sourceRefs": [
+        1
+      ]
+    },
+    {
+      "item": "Amiga base system",
+      "price": "$1,295.00",
+      "note": "Base price; do not assume monitor included",
+      "confidence": "same-month",
+      "sourceRefs": [
+        2
+      ]
+    },
+    {
+      "item": "Amiga user-memory upgrade",
+      "price": "$200.00",
+      "note": "From 256K to 512K user RAM",
+      "confidence": "same-month",
+      "sourceRefs": [
+        2
+      ]
+    },
+    {
+      "item": "U.S. Robotics Courier 2400",
+      "price": "$695.00",
+      "note": "Reported reduced list price",
+      "confidence": "same-month",
+      "sourceRefs": [
+        3
+      ]
+    },
+    {
+      "item": "Hayes 2400-bps modem",
+      "price": "$895.00",
+      "note": "Column list-price comparison",
+      "confidence": "same-month",
+      "sourceRefs": [
+        3
+      ]
+    },
+    {
+      "item": "Cermetek Infomate 1200-TPC",
+      "price": "$198.00",
+      "note": "Internal IBM PC modem",
+      "confidence": "same-month",
+      "sourceRefs": [
+        3
+      ]
+    },
+    {
+      "item": "Karateka",
+      "price": "$34.95",
+      "note": "Review price",
+      "confidence": "same-month",
+      "sourceRefs": [
+        4
+      ]
+    },
+    {
+      "item": "Dixons Spectrum Plus bundle",
+      "price": "£139.99",
+      "note": "Recorder, joystick, ten software titles",
+      "confidence": "same-month",
+      "sourceRefs": [
+        7
+      ]
+    },
+    {
+      "item": "Saga 3 Elite",
+      "price": "£79.95",
+      "note": "Including tax",
+      "confidence": "same-month",
+      "sourceRefs": [
+        9
+      ]
+    }
+  ],
+  "briefs": [
+    {
+      "headline": "Micronet yacht race makes online play social",
+      "summary": "Sinclair User reports a Round Britain Yacht Race game on Micronet 800: players seek four secret locations, submit answers by mailbox, confer over strategies and compete for fortnightly £100 prizes. The report says it can cater for thousands weekly; do not call that a measured subscriber count or simultaneous real-time simulation.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        7
+      ]
+    },
+    {
+      "headline": "Spectrum accessory makers in liquidation",
+      "summary": "October Sinclair User reports Stonechip Electronics and Bud Computers in liquidation; Stonechip made memory upgrades, interfaces and keyboards, while Bud made Interstate joystick interfaces. No exact liquidation dates supplied.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        7
+      ]
+    },
+    {
+      "headline": "Billboard rock No. 1, week ending October 5",
+      "summary": "Lonely Ol’ Night — John Cougar Mellencamp; fifth week at No. 1. Weekly rock leader verified through a dated chart recap and historical number-one sequence. Full lower chart positions not independently recovered; do not invent a top ten.",
+      "confidence": "same-week",
+      "sourceRefs": [
+        10,
+        11
+      ]
+    }
+  ],
+  "musicChart": [
+    {
+      "rank": 1,
+      "title": "Money for Nothing",
+      "song": "Money for Nothing",
+      "artist": "Dire Straits",
+      "chart": "Billboard Hot 100",
+      "chartDate": "1985-10-05",
+      "confidence": "same-week",
+      "sourceRefs": [
+        15
+      ]
+    },
+    {
+      "rank": 2,
+      "title": "Cherish",
+      "song": "Cherish",
+      "artist": "Kool & The Gang",
+      "chart": "Billboard Hot 100",
+      "chartDate": "1985-10-05",
+      "confidence": "same-week",
+      "sourceRefs": [
+        15
+      ]
+    },
+    {
+      "rank": 3,
+      "title": "Oh Sheila",
+      "song": "Oh Sheila",
+      "artist": "Ready for the World",
+      "chart": "Billboard Hot 100",
+      "chartDate": "1985-10-05",
+      "confidence": "same-week",
+      "sourceRefs": [
+        15
+      ]
+    },
+    {
+      "rank": 4,
+      "title": "Take On Me",
+      "song": "Take On Me",
+      "artist": "a-ha",
+      "chart": "Billboard Hot 100",
+      "chartDate": "1985-10-05",
+      "confidence": "same-week",
+      "sourceRefs": [
+        15
+      ]
+    },
+    {
+      "rank": 5,
+      "title": "Dress You Up",
+      "song": "Dress You Up",
+      "artist": "Madonna",
+      "chart": "Billboard Hot 100",
+      "chartDate": "1985-10-05",
+      "confidence": "same-week",
+      "sourceRefs": [
+        15
+      ]
+    }
+  ],
+  "periodAd": {
+    "headline": "Spectrum Plus: a Christmas bundle at £139.99",
+    "summary": "Dixons offer reported in October Sinclair User: computer, recorder, joystick and ten Sinclair software titles.",
+    "tagline": "A period retail offer, not a present-day advertisement.",
+    "sourceRefs": [
+      7
+    ]
+  },
+  "market": {
+    "headline": "Whole-system prices challenge the shopping list",
+    "summary": "Atari’s $799 monochrome and $999 color packages include a monitor and drive. The Amiga’s quoted $1,295 base price should not be treated as the same configuration. Across the Atlantic, Sinclair’s support arrangements put Christmas retail bundles at the center of its survival campaign.",
+    "confidence": "same-month",
+    "sourceRefs": [
+      1,
+      2,
+      7
+    ]
+  },
+  "worldAnchor": {
+    "headline": "Israeli aircraft strike PLO headquarters near Tunis",
+    "summary": "On October 1, Israeli aircraft attacked the PLO headquarters near Tunis, Tunisia. Tunisia brought its complaint to the United Nations as the strike drew international condemnation.",
+    "confidence": "exact-date",
+    "sourceRefs": [
+      13
+    ]
+  },
+  "bbsNote": {
+    "headline": "2400-bps boards, falling modem prices, and a yacht race by mailbox",
+    "summary": "October US and UK magazine reports show both cheaper home connectivity and increasingly social online entertainment. These are reported developments of the month, not fabricated BBS messages.",
+    "posts": [
+      {
+        "topic": "Sysop incentives",
+        "platform": "Independent bulletin boards / U.S. Robotics",
+        "text": "Leviton reports a special Courier 2400 acquisition program for busy BBS operators; no named board or exact discount appears. Editorial digest, not an actual user post."
+      },
+      {
+        "topic": "Online service rate watch",
+        "platform": "The Source",
+        "text": "2400-bps access, introduced in August, adds $1.80 prime or $1.20 nonprime per hour to the 1200-bps rate; implied totals $27.60 and $12.00 are arithmetic, not separately quoted tariffs."
+      },
+      {
+        "topic": "Multiplayer exploration",
+        "platform": "Micronet 800",
+        "text": "October news describes a changing Round Britain Yacht Race, player discussion, mailbox submissions and fortnightly £100 prizes; not a quoted BBS post."
+      }
+    ],
+    "sourceRefs": [
+      3,
+      7
+    ]
+  },
+  "curiosity": {
+    "headline": "The robot passenger gets champagne from the captain",
+    "summary": "Fred D’Ignazio’s October column recounts flying with a Heath HEROjr nicknamed Junior.",
+    "detail": "In More Adventures of Junior, the Robot (COMPUTE!, p.106), the writer reports a flight attendant delivering champagne for the robot, compliments of the captain, and pushing Junior through O’Hare on a rented $1 luggage cart. Attribute the anecdote to the author; October is its publication date, not a verified travel date.",
+    "sourceRefs": [
+      6
+    ]
+  },
+  "gadgetWatch": {
+    "headline": "A 2400-bps modem for the cellular car-phone age",
+    "summary": "AT&T Technologies and Bell Atlantic have tested the CTS-1620 since July around Baltimore–Washington. October reporting projects a 1986 debut at $1,600–$2,600, requiring a cellular phone/transmitter and terminal. The column also lists an existing Motorola 300-bps cellular modem at $195 and Spectrum Cellular 1200-bps unit at $695. Test and forecast, not this week’s launch.",
+    "confidence": "same-month",
+    "sourceRefs": [
+      3
+    ]
+  },
+  "accuracyLedger": {
+    "items": [
+      "Computer and retail reports are October cover-dated evidence, not exact-week launch claims.",
+      "Games are editorial shelf selections, not sales rankings.",
+      "Music is the October 5 Billboard Hot 100; separate rock leader is Lonely Ol’ Night.",
+      "Movies are the October 4-6 U.S. weekend box office.",
+      "The October HOTWARE table uses July 27 data and is not presented as this week’s ranking.",
+      "No unsupported underground crew names or operational piracy instructions."
+    ]
+  },
+  "sources": [
+    {
+      "title": "COMPUTE! 65, The New Games, p.32",
+      "url": "https://www.atarimagazines.com/compute/issue65/new_games.php",
+      "date": "1985-10"
+    },
+    {
+      "title": "COMPUTE! 65, Atari 520ST: A Hands-On Report, p.22",
+      "url": "https://www.atarimagazines.com/compute/issue65/520st.php",
+      "date": "1985-10"
+    },
+    {
+      "title": "COMPUTE! 65, Amiga Goes IBM-Compatible, p.28",
+      "url": "https://www.atarimagazines.com/compute/issue65/amiga_goes_ibm.php",
+      "date": "1985-10"
+    },
+    {
+      "title": "COMPUTE! 65, Telecomputing Today: The Latest Developments, p.108",
+      "url": "https://www.atarimagazines.com/compute/issue65/telecomputing_today.php",
+      "date": "1985-10"
+    },
+    {
+      "title": "COMPUTE! 65, Karateka, p.76",
+      "url": "https://www.atarimagazines.com/compute/issue65/review_karateka.php",
+      "date": "1985-10"
+    },
+    {
+      "title": "COMPUTE! 65, HOTWARE, p.114 (data July 27)",
+      "url": "https://www.atarimagazines.com/compute/issue65/hotware.php",
+      "date": "1985-10"
+    },
+    {
+      "title": "COMPUTE! 65, More Adventures of Junior, p.106",
+      "url": "https://www.atarimagazines.com/compute/issue65/world_inside_computer.php",
+      "date": "1985-10"
+    },
+    {
+      "title": "Sinclair User 43, News",
+      "url": "https://sinclairuser.com/043/news.htm",
+      "date": "1985-10"
+    },
+    {
+      "title": "Sinclair User 43, Piracy, Wendie Pearson",
+      "url": "https://sinclairuser.com/043/piracy.htm",
+      "date": "1985-10"
+    },
+    {
+      "title": "Sinclair User 43, Hardware World",
+      "url": "https://sinclairuser.com/043/hardwre.htm",
+      "date": "1985-10"
+    },
+    {
+      "title": "Billboard No.1 recap, week ending October 5, 1985",
+      "url": "https://rbhsjukebox.wordpress.com/2015/10/03/billboard-1s-for-the-week-ending-october-5-1985/",
+      "date": "2015-10-03 (recap of 1985-10-05 chart)"
+    },
+    {
+      "title": "Billboard Mainstream Rock number ones of the 1980s",
+      "url": "https://en.wikipedia.org/wiki/List_of_Billboard_Mainstream_Rock_number-one_songs_of_the_1980s",
+      "date": "undated retrospective; 1985 chart sequence"
+    },
+    {
+      "title": "Box Office Mojo, Domestic Weekend 40, 1985",
+      "url": "https://www.boxofficemojo.com/weekend/1985W40/",
+      "date": "1985-10-04/1985-10-06 (chart period)"
+    },
+    {
+      "title": "UN Yearbook 1985, Question of Palestine excerpts",
+      "url": "https://www.un.org/unispal/document/auto-insert-208023/",
+      "date": "1985 (UN Yearbook; October 1 event)"
+    },
+    {
+      "title": "UPI, Actor Rock Hudson dies of AIDS at age 59",
+      "url": "https://www.upi.com/Archives/1985/10/02/Actor-Rock-Hudson-dies-of-AIDS-at-age-59/1751497073600/",
+      "date": "1985-10-02"
+    },
+    {
+      "title": "Billboard Hot 100, October 5, 1985",
+      "url": "https://www.billboard.com/charts/hot-100/1985-10-05/",
+      "date": "1985-10-05"
+    }
+  ]
+}

@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Thu, 19 Nov 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Fri, 20 Nov 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of September 30-October 6, 1985 — Hacker turns a mysterious computer connection into the game</title>
+      <link>https://jez237.com/computer-chronicle/?date=1985-09-30</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1985-09-30</guid>
+      <pubDate>Fri, 20 Nov 2026 12:00:00 GMT</pubDate>
+      <description>Activision makes the unknown system itself the puzzle in October’s fall-game reports. The screen appears to have gone wrong. At a press demonstration described in October’s COMPUTE!, Activision president Jim Levy seems to struggle with a computer logon. Then comes the reveal: “That, ladies and gentlemen, is the game.” Hacker makes that uncertainty its opening invitation. Also this week: Winter Games takes the Epyx sports formula onto snow and ice · Atari’s 520ST puts a mouse-driven 512K system below $1,000 · Sinclair creditors back a Christmas survival campaign.</description>
+    </item>
     <item>
       <title>Week of September 23-29, 1985 — Apple takes Steve Jobs to court over his new computer venture</title>
       <link>https://jez237.com/computer-chronicle/?date=1985-09-23</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1985-05-20</guid>
       <pubDate>Sun, 01 Nov 2026 12:00:00 GMT</pubDate>
       <description>Brøderbund’s advanced sequel trades the construction kit for fifty hard-won puzzles. Brøderbund has a demanding assignment for players who have exhausted Lode Runner: fifty more rooms, built to punish complacency. Championship Lode Runner is the subject of Michael B. Williams’s review in the May issue of COMPUTE!, and its audience is the veteran rather than the newcomer. The original game’s 150 screens form the apprenticeship; this collection is the examination. Also this week: GEM promises a graphical bridge between IBM PCs and Atari · MacVision turns videotape and camera pictures into Macintosh illustrations · Synapse sells adventures as electronic novels.</description>
-    </item>
-    <item>
-      <title>Week of May 13-19, 1985 — Mastertronic pitches Commodore games at $9.99</title>
-      <link>https://jez237.com/computer-chronicle/?date=1985-05-13</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1985-05-13</guid>
-      <pubDate>Sat, 31 Oct 2026 12:00:00 GMT</pubDate>
-      <description>A $9.99 price tag brings a fresh budget pitch to the Commodore 64 shelf. Mastertronic is making price the attraction on the Commodore 64 games rack. The May issue of COMPUTE! reports games at $9.99 apiece, a modest entry ticket for owners looking beyond the familiar full-price boxes. This is the month’s product-news coverage, not a claim that the games all arrived during this particular week. Also this week: Atari rejoins Summer CES; ST clears FCC hurdle · GEM brings the desktop metaphor to PCs and Atari · Star offers near-letter-quality printing from $299.</description>
     </item>
   </channel>
 </rss>

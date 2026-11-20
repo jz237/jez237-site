@@ -112,7 +112,7 @@ function cultureBullet(issue) {
 
   const music = issue.musicChart?.[0];
   if (music?.title && music?.artist) {
-    return `Rock chart: ${clean(music.title)} - ${clean(music.artist)}`;
+    return `${clean(music.chart || 'Music chart')}: ${clean(music.title)} - ${clean(music.artist)}`;
   }
 
   return "";
