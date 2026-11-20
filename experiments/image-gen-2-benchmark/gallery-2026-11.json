@@ -1,5 +1,88 @@
 [
   {
+    "id": "2026-11-20-factual-infographic-factual-infographic-the-cautious-invest",
+    "title": "Factual infographic: The Cautious Investigator — Exploring from Cover",
+    "tests": "; archive_slot=2026-11-20T04:20; concept=feline-novel-object-investigation-cover; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: cat-infographic; cat_category: curious-behaviors",
+    "prompt": "Create a richly detailed artwork-led feline behavioral atlas, a finished infographic, not a photographed print. Title: “THE CAUTIOUS INVESTIGATOR”; subtitle “Why cats explore from cover”. Category label “CURIOUS BEHAVIORS”. Dominant illustration: a naturalistic short-haired charcoal-and-white domestic cat, half emerging from a low, open-sided cardboard refuge, looking toward a newly placed plain blue ceramic bowl several body lengths away. Domestic room suggested only through warm floor reflections and a soft wall wash. The bowl is harmless, stationary and already visible, never a surprise prank. Exquisite tactile fur, accurate paws, expressive but nonhuman face, luminous reflected window light. Use gouache and fine graphite with muted indigo, warm ochre, ivory and copper accents. Asymmetric sweeping composition, generous negative space, no boxed grid.\nWeave four useful open annotated studies into the hero artwork: a small overhead spatial sketch linking cover, clear open floor and the unfamiliar object, labeled “Cover + a way out”; an enlarged nose/whiskered muzzle study labeled “Scent helps assess surroundings”, with no invented neural anatomy; two smaller translucent illustrative silhouettes along a curved path, one looking from cover and one cautiously approaching, paired with a returning arrow to the refuge labeled “Approach or retreat”. Explain beside this path: “Possible responses, not fixed steps.” A small contrasting open vignette of a cat noticing a newly visible object, no exaggerated airborne panic, captioned “Sudden novelty may startle”. Show variety as choices rather than an inevitable progression.\nExact concise explanatory text organically integrated in spacious typography: “A secure retreat can help a cat feel protected.” “Unfamiliar smells and sounds can be stressful.” “Cats differ: one may approach while another keeps its distance.” “A pose alone does not reveal a cat’s thoughts.” Bottom line: “Do not deliberately frighten a cat with surprise objects.” The pose-alone line is an epistemic caution, not a claim of a particular emotional state. No snake imagery, anthropomorphic thoughts, guaranteed emotional readings, medical diagnosis, statistics or brain pathways. Maintain credible feline anatomy. Elegant readable typography with clear hierarchy, delicate curved leaders and open labels. Secondary decorative details may be omitted for breathing room; keep the actual behavioral explanation substantial. Tiny source credit: “FelineVMA / iCatCare • Cornell Feline Health Center”.",
+    "image": "images/2026-11-20-factual-infographic-factual-infographic-the-cautious-invest.jpg",
+    "thumb": "thumbs/2026-11-20-factual-infographic-factual-infographic-the-cautious-invest.webp",
+    "color": "#d4c4b4",
+    "date": "2026-11-20",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "feline-novel-object-investigation-cover",
+      "imageSha256": "358faf71fa5e2fcda2126cdadc41662b9ebe9694fc223f8ce50044c720947e3b",
+      "imageDHash": "e198830f068c08cc"
+    },
+    "factualInfographic": {
+      "topic": "Why cats investigate unfamiliar objects from the safety of cover",
+      "description": "Feline responses to unfamiliar objects, safe retreats and individual variation.",
+      "sourceNote": "https://catvets.com/wp-content/uploads/2026/02/FelineVMA-Environmental-Needs-2026-PrintFormat.pdf ; https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/about-center/fhc-updates/cats-and-cucumbers-our-behavior-expert-talks-about-why-cats-are-freaking-out",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-20T09:21:10.231050+00:00",
+        "sources": [
+          {
+            "id": "vma",
+            "publisher": "Feline Veterinary Medical Association and iCatCare",
+            "title": "Your Cat’s Environmental Needs (2026)",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://catvets.com/wp-content/uploads/2026/02/FelineVMA-Environmental-Needs-2026-PrintFormat.pdf"
+          },
+          {
+            "id": "cornell",
+            "publisher": "Cornell University College of Veterinary Medicine",
+            "title": "Cats and Cucumbers — Our Behavior Expert Talks About Why Cats Are Freaking Out",
+            "sourceType": "university",
+            "url": "https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/about-center/fhc-updates/cats-and-cucumbers-our-behavior-expert-talks-about-why-cats-are-freaking-out"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Cats need protection from perceived dangers, including unfamiliar environments; a secure retreat helps them feel protected.",
+            "sourceIds": [
+              "vma"
+            ]
+          },
+          {
+            "claim": "A safe place may be a cardboard box or carrier, with surrounding sides and the ability to enter and leave; raised safe places are often preferred.",
+            "sourceIds": [
+              "vma"
+            ]
+          },
+          {
+            "claim": "Cats use smell to evaluate their surroundings; unfamiliar smells or sounds can be stressful.",
+            "sourceIds": [
+              "vma"
+            ]
+          },
+          {
+            "claim": "The sudden appearance of a novel object may provoke a startle response; individual cats differ and fearful cats may react more strongly.",
+            "sourceIds": [
+              "cornell"
+            ]
+          },
+          {
+            "claim": "Do not deliberately startle cats with surprise objects; frightened cats can associate the event with its location or person.",
+            "sourceIds": [
+              "cornell"
+            ]
+          },
+          {
+            "claim": "The artwork illustrates possible observation, approach and retreat, not an obligatory sequence or a diagnosis; individual responses vary.",
+            "sourceIds": [
+              "vma",
+              "cornell"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
     "id": "2026-11-19-factual-infographic-factual-infographic-peripheral-arterial",
     "title": "Factual infographic: Peripheral Arterial Disease — Leg Blood Flow",
     "tests": "factual_subtype: medical-health-infographic; source-backed clinical education; unboxed anatomical atlas; archive_slot=2026-11-19T17:20; concept=peripheral-arterial-plaque-leg-flow-claudication; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: medical-health-infographic",
