@@ -24,25 +24,6 @@
     "imageHeight": 760
   },
   {
-    "id": "035",
-    "title": "Bauder Signs",
-    "category": "Web design · Philadelphia sign shop",
-    "description": "Look closely at hand lettering, pinstriping, and vehicle graphics from Bauder Signs. Move across a thumbnail to magnify the detail under your pointer as the original red borders pulse.",
-    "url": "bauder-signs/",
-    "image": "assets/bauder-signs.jpg",
-    "imageAlt": "Bauder Graphics homepage with a Philadelphia skyline and red-framed sign photographs",
-    "source": "https://github.com/jz237/jez237-site/tree/main/demos/bauder-signs",
-    "features": [
-      "Pointer-following zoom and highlight",
-      "Searchable project galleries",
-      "Rotating 70th anniversary medallion"
-    ],
-    "facts": ["Philadelphia", "Sign painting", "Vehicle graphics"],
-    "note": "On a phone, press a thumbnail to see the highlight or tap it to open the gallery.",
-    "imageWidth": 1280,
-    "imageHeight": 940
-  },
-  {
     "id": "033",
     "title": "Voxel Engine",
     "category": "3D · Destruction sandbox",
