@@ -209,6 +209,114 @@
     }
   },
   {
+    "id": "2026-11-19-factual-infographic-factual-infographic-inguinal-hernia-abd",
+    "title": "Factual infographic: Inguinal Hernia — Abdominal Wall Passage",
+    "tests": "factual_subtype: medical-health-infographic; source-backed clinical education; flowing unboxed anatomical atlas; archive_slot=2026-11-19T23:20; concept=inguinal-hernia-groin-wall-protrusion; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: medical-health-infographic",
+    "prompt": "Create a finished public-health infographic titled “INGUINAL HERNIA”. Subtitle: “How a weak spot in the abdominal wall can form a bulge”. Use a clean, abstract educational model on a pale background, not a depiction of a patient. The main illustration is a tabletop teaching model: a freestanding layered wall made of overlapping teal felt bands, a thin golden lining behind them, and a smooth blue cord representing a loop of bowel. In the center a small section of cord and its enclosing lining project together through a gap in the wall. A second small edge-on view shows where the wall still supports the lining normally. Clearly label the objects “Abdominal wall”, “Lining”, “Loop of bowel”, and “Bulge”. Add “Simplified teaching model • not to scale.” No external body view or depiction of an operation. Use dimensional paper sculpture, tactile shadows and short leaders. The illustration is an analogy, not literal tissue. Set readable text around the model, with generous space:\n“What you may notice” — “A groin bulge, aching or heaviness. It may be more noticeable standing or coughing.”\n“Assessment and care” — “A clinician usually checks by examination. Surgery can repair the weak area. Some men with few symptoms can discuss watchful waiting.”\nIn a prominent contrasting band: “Seek emergency care for sudden severe pain, vomiting, or a newly stuck, red or very tender bulge.” Then: “Trapped tissue can lose its blood supply.”\nFooter: “General education, not a diagnosis.” Keep the wording concise and readable. No bibliography or logos.",
+    "image": "images/2026-11-19-factual-infographic-factual-infographic-inguinal-hernia-abd.jpg",
+    "thumb": "thumbs/2026-11-19-factual-infographic-factual-infographic-inguinal-hernia-abd.webp",
+    "color": "#c0bcab",
+    "date": "2026-11-19",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "inguinal-hernia-groin-wall-protrusion",
+      "imageSha256": "084068a0acd6ef21f9850081df37c4a2f0059b079d0da62e0233b579c639a2bf",
+      "imageDHash": "acd2c2c2888a1d61"
+    },
+    "factualInfographic": {
+      "topic": "How inguinal hernias protrude through the lower abdominal wall, cause groin symptoms, and are evaluated and managed",
+      "description": "Source-backed clinical anatomy, symptoms, assessment, management and urgent complications of inguinal hernia.",
+      "sourceNote": "NIDDK https://www.niddk.nih.gov/health-information/digestive-diseases/inguinal-hernia and NHS https://www.nhs.uk/conditions/hernia/; verified anatomy, symptoms, clinical assessment and care; NIDDK supports detailed mechanisms and emergency warnings.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-20T04:21:00.397937+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "National Institute of Diabetes and Digestive and Kidney Diseases",
+            "title": "Inguinal Hernia",
+            "sourceType": "government-agency",
+            "url": "https://www.niddk.nih.gov/health-information/digestive-diseases/inguinal-hernia"
+          },
+          {
+            "id": "S2",
+            "publisher": "NHS",
+            "title": "Hernia",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/conditions/hernia/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "An inguinal hernia is abdominal contents bulging through a weak area of the lower abdominal wall at the groin; contents often include fat or small intestine.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "The peritoneum forms a sac around the hernia; inguinal canals are passages through the lower abdominal wall.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Indirect hernias relate to an opening present at birth; direct hernias relate to wall weakness developing later.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Groin bulge, aching, burning or heaviness may worsen with coughing, straining, lifting or prolonged standing and improve lying down.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Clinical history and examination are used for diagnosis; imaging may help when the diagnosis is unclear.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Most patients need surgical repair; open or laparoscopic repair may use mesh to reinforce the weak area.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Watchful waiting may be appropriate for some men with few or no symptoms, with regular medical follow-up; this is not advice for everyone.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Incarceration means trapped contents; strangulation means blood supply is cut off and requires emergency care.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Seek urgent medical help for sudden severe pain, a suddenly larger or newly irreducible bulge, fever, redness, nausea or vomiting; obstruction may cause bloating.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Family history and aging are associated with increased risk; chronic cough, constipation and repeated heavy lifting may contribute through increased abdominal pressure.",
+            "sourceIds": [
+              "S1"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
     "id": "2026-11-18-factual-infographic-factual-infographic-yellow-watchman-gob",
     "title": "Factual infographic: Yellow Watchman Goby — The Burrow’s Lookout",
     "tests": "Complete factual topics and permanent scientific species reservations read; entire catalog checked for accepted name, synonym and common aliases: unused. Two independent museums plus taxonomy and manufacturer sources actually fetched and read. No subjective image critic or reroll.; archive_slot=2026-11-18T16:20; concept=yellow-watchman-goby-shrimp-burrow-vigilance-sandy-reef; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: reef-fish-infographic; fish_scientific_name: Cryptocentrus cinctus",
