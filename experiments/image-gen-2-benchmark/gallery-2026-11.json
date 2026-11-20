@@ -83,6 +83,92 @@
     }
   },
   {
+    "id": "2026-11-20-factual-infographic-factual-infographic-arginine-the-ammoni",
+    "title": "Factual infographic: Arginine — The Ammonia Detoxification Link",
+    "tests": "; archive_slot=2026-11-20T08:20; concept=feline-dietary-arginine-ammonia-detoxification; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: cat-infographic; cat_category: food-and-hydration",
+    "prompt": "Create a finished richly artistic scientific cat infographic, not a photographed poster or mockup. Heading: \"ARGININE\" with subtitle \"A dietary key to ammonia detoxification\". Artwork-led asymmetrical composition in deep petrol blue, warm ivory and glowing copper, fine scientific ink with sumptuous realistic gouache fur. A magnificent shorthaired chocolate-brown domestic cat reclining diagonally fills the central two-thirds; anatomically credible paws, fine whiskers, luminous eyes and individually resolved fur, no costume or anthropomorphism. Explain one focused nutritional mechanism, not a general feeding or enrichment guide. Sweep an elegant conceptual biochemical ribbon around the cat, not through its body as fictitious anatomy. Mark it \"Simplified metabolic pathway\". Food-protein bead motif at lower left branches into two readable routes: \"Dietary arginine — an essential amino acid\" and \"Protein breakdown releases ammonia\". The ammonia route enters an open circular brushstroke labeled \"Urea cycle\", with arginine shown feeding into the cycle as an important intermediate; an outgoing clean copper arrow labeled \"Urea\". Do not imply arginine is an enzyme or that it alone directly converts ammonia; no chemical formulas or unverified organs, molecular structures or complete reaction-step diagrams. Use delicate leader lines and ample negative space with these concise source-supported callouts: \"Cats depend on dietary arginine: their own synthesis is limited.\" \"The urea cycle converts ammonia to urea.\" \"Too little arginine can allow ammonia to accumulate.\" Beneath the latter, small but readable context: \"Deficiency can cause vomiting and neurological signs, and can be fatal.\" This is nutrient physiology, not a disease profile: healthy cat, no clinical patient scene. Along a quiet lower arc: \"A carefully formulated complete cat diet supplies essential nutrients. Meat alone is not a balanced diet.\" No doses, supplements, feeding quantities, raw-meat recommendations, emergency treatment instructions, or invented statistics. Small source footer \"Tufts Petfoodology • WikiVet / WALTHAM nutrition\". Integrate explanatory studies into the flowing artwork with varied scale, open typography and curved annotations. No rigid boxes, repeated card grids, UI, borders, gimmicky icons or walls of tiny prose. Prioritize beautiful feline illustration and clear essential mechanism over secondary trivia.",
+    "image": "images/2026-11-20-factual-infographic-factual-infographic-arginine-the-ammoni.jpg",
+    "thumb": "thumbs/2026-11-20-factual-infographic-factual-infographic-arginine-the-ammoni.webp",
+    "color": "#3d4137",
+    "date": "2026-11-20",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1199x1312",
+    "dedup": {
+      "conceptKey": "feline-dietary-arginine-ammonia-detoxification",
+      "imageSha256": "64660b7c8c2c5ffdd6339d30b55ad5a9765679d520d834b2e199865a8580ff46",
+      "imageDHash": "8e68ad953e43d3f6"
+    },
+    "factualInfographic": {
+      "topic": "Why dietary arginine is essential for feline ammonia detoxification",
+      "description": "Feline dietary arginine dependence and its role in ammonia detoxification, explained with a simplified metabolic schematic.",
+      "sourceNote": "https://sites.tufts.edu/petfoodology/2018/12/18/cats-are-not-small-dogs-unique-nutritional-needs-of-cats/ ; https://en.wikivet.net/Arginine_-_Nutrition",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-20T13:21:12.810457+00:00",
+        "sources": [
+          {
+            "id": "tufts",
+            "publisher": "Tufts University Cummings School of Veterinary Medicine",
+            "title": "Cats are not Small Dogs: Unique Nutritional Needs of Cats",
+            "sourceType": "university",
+            "url": "https://sites.tufts.edu/petfoodology/2018/12/18/cats-are-not-small-dogs-unique-nutritional-needs-of-cats/"
+          },
+          {
+            "id": "wikivet",
+            "publisher": "WikiVet (veterinary education; nutrition content endorsed by WALTHAM)",
+            "title": "Arginine - Nutrition",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://en.wikivet.net/Arginine_-_Nutrition"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Arginine is an essential amino acid and a building block of proteins; cats require it in their diet.",
+            "sourceIds": [
+              "tufts",
+              "wikivet"
+            ]
+          },
+          {
+            "claim": "Protein breakdown releases ammonia; arginine participates in ammonia detoxification.",
+            "sourceIds": [
+              "tufts",
+              "wikivet"
+            ]
+          },
+          {
+            "claim": "The urea cycle converts ammonia to urea, with arginine as an important intermediate.",
+            "sourceIds": [
+              "wikivet"
+            ]
+          },
+          {
+            "claim": "Cats have limited endogenous arginine synthesis and depend on dietary supply.",
+            "sourceIds": [
+              "tufts",
+              "wikivet"
+            ]
+          },
+          {
+            "claim": "Arginine deficiency can cause ammonia accumulation with vomiting, neurological signs and potentially death.",
+            "sourceIds": [
+              "tufts",
+              "wikivet"
+            ]
+          },
+          {
+            "claim": "A carefully formulated complete feline diet accounts for these special nutrient requirements; an all-meat diet is not balanced.",
+            "sourceIds": [
+              "tufts"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
     "id": "2026-11-19-factual-infographic-factual-infographic-peripheral-arterial",
     "title": "Factual infographic: Peripheral Arterial Disease — Leg Blood Flow",
     "tests": "factual_subtype: medical-health-infographic; source-backed clinical education; unboxed anatomical atlas; archive_slot=2026-11-19T17:20; concept=peripheral-arterial-plaque-leg-flow-claudication; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: medical-health-infographic",
