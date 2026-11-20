@@ -1,53 +1,58 @@
 (() => {
   const badges = Array.from(document.querySelectorAll(".anniversary-media"));
-  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
   const visible = new Set();
-
-  function showPoster(badge) {
-    if (!badge.hasAttribute("src")) return;
-    badge.pause();
-    badge.removeAttribute("src");
-    badge.load();
-  }
-
-  function update() {
-    for (const badge of badges) {
-      if (reducedMotion.matches || badge.dataset.failed) {
-        showPoster(badge);
-      } else if (document.hidden || !visible.has(badge)) {
-        badge.pause();
-      } else {
-        if (!badge.hasAttribute("src")) {
-          if (!badge.canPlayType("video/mp4")) continue;
-          badge.src = badge.dataset.video;
-        }
-        badge.play().catch(() => {});
-      }
-    }
-  }
-
-  const observer = new IntersectionObserver(entries => {
+  const observer = window.IntersectionObserver && new IntersectionObserver(entries => {
     for (const entry of entries) {
       if (entry.isIntersecting) visible.add(entry.target);
       else visible.delete(entry.target);
     }
     update();
   });
-  for (const badge of badges) {
-    badge.addEventListener("error", () => {
-      if (!badge.hasAttribute("src")) return;
-      badge.dataset.failed = "true";
-      showPoster(badge);
-    });
-    observer.observe(badge);
+
+  function useFrames(badge) {
+    if (!badge.isConnected) return;
+    const frames = document.createElement("span");
+    frames.className = "anniversary-media anniversary-frames";
+    frames.setAttribute("role", "img");
+    frames.setAttribute("aria-label", badge.getAttribute("aria-label"));
+    if (observer) observer.unobserve(badge);
+    visible.delete(badge);
+    badge.replaceWith(frames);
+    badge.pause();
   }
+
+  function update() {
+    for (const badge of badges) {
+      if (!badge.isConnected) continue;
+      if (document.hidden || (observer ? !visible.has(badge) : !badge.getClientRects().length)) {
+        badge.pause();
+      } else {
+        if (!badge.canPlayType("video/mp4")) {
+          useFrames(badge);
+          continue;
+        }
+        if (!badge.hasAttribute("src")) {
+          badge.src = badge.dataset.video;
+        }
+        badge.play().catch(error => {
+          // Scrolling away can interrupt a pending play. Other failures use the rendered frames.
+          if (error.name !== "AbortError") useFrames(badge);
+        });
+      }
+    }
+  }
+
+  for (const badge of badges) {
+    badge.addEventListener("error", () => useFrames(badge), {once: true});
+    if (observer) observer.observe(badge);
+  }
+  if (!observer) update();
   function scrollToAnniversary() {
     if (location.hash !== "#anniversary") return;
-    const badge = badges.find(element => element.getClientRects().length);
+    const badge = Array.from(document.querySelectorAll(".anniversary-media")).find(element => element.getClientRects().length);
     if (badge) badge.scrollIntoView({block: "center", inline: "nearest"});
   }
   window.addEventListener("hashchange", scrollToAnniversary);
   scrollToAnniversary();
   document.addEventListener("visibilitychange", update);
-  reducedMotion.addEventListener("change", update);
 })();

@@ -31,18 +31,31 @@
   transform-origin: var(--glow-x, 50%) var(--glow-y, 50%);
   transition: transform 400ms ease-out, filter 300ms ease, opacity 220ms ease;
 }
-@media (prefers-reduced-motion: no-preference) {
-  :is(.index-thumb-grid > div > a, .portfolio-gallery-thumb, .portfolio-lightbox-thumb).pointer-lit {
+:is(.index-thumb-grid > div > a, .portfolio-gallery-thumb, .portfolio-lightbox-thumb).pointer-lit {
+  --photo-scale: 1.18;
+}
+@media (any-hover: hover) {
+  :is(.index-thumb-grid > div > a, .portfolio-gallery-thumb, .portfolio-lightbox-thumb):hover {
     --photo-scale: 1.18;
   }
 }
-@media (prefers-reduced-motion: reduce) {
-  #div4 .index-thumb-grid > div,
-  .portfolio-gallery-thumb {
-    animation: none !important;
-  }
-  :is(#div4 .index-thumb-grid a[href], .portfolio-gallery-thumb, .portfolio-lightbox-thumb) img,
-  :is(.index-thumb-grid > div > a, .portfolio-gallery-thumb, .portfolio-lightbox-thumb)::after {
-    transition: none;
-  }
+
+/* The autoplay fallback uses the same 12-second turn, sampled at 24 fps.
+   Each of the 16 rows holds 18 successive frames, read from left to right. */
+.anniversary-frames {
+  display: inline-block;
+  width: 180px;
+  max-width: 100%;
+  background: #000 url("../images/70-years-rotation-frames.webp") 0 0 / 1800% 1600% no-repeat;
+  animation: medal-column 750ms steps(18, end) infinite, medal-row 12s steps(16, end) infinite;
+}
+#AnniversaryBadgeMobile .anniversary-frames {
+  width: 150px;
+  max-width: 60%;
+}
+@keyframes medal-column {
+  to { background-position-x: 105.88235294%; }
+}
+@keyframes medal-row {
+  to { background-position-y: 106.66666667%; }
 }
