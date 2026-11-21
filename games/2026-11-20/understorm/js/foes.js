@@ -1,5 +1,5 @@
 // UNDERSTORM 2026 — storm fauna, refinery machines and the bosses. Pure simulation behaviour.
-import { W, H, DT, clamp } from './config.js?v=110';
+import { W, H, DT, clamp } from './config.js?v=111';
 
 const sin = Math.sin, cos = Math.cos, TAU = 6.2832;
 const surf = (e, S) => { e.y = e.o.at === 'ceil' ? S.ceil(e.x) - 0.55 : S.floor(e.x) + 0.55; };

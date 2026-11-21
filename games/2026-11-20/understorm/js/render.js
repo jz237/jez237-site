@@ -1,9 +1,9 @@
 // UNDERSTORM 2026 — the renderer. Reads the simulation each frame; never writes to it.
 import * as THREE from '../vendor/three.module.min.js';
-import { W, H, clamp, lerp } from './config.js?v=110';
-import { Post } from './post.js?v=110';
-import { MAT, G, add, makeShip, makeAnchor, FOE_MODELS, PART_MODELS } from './models.js?v=110';
-import { surface, makeEnv, decorate, foreground } from './gfx.js?v=110';
+import { W, H, clamp, lerp } from './config.js?v=111';
+import { Post } from './post.js?v=111';
+import { MAT, G, add, makeShip, makeAnchor, FOE_MODELS, PART_MODELS } from './models.js?v=111';
+import { surface, makeEnv, decorate, foreground } from './gfx.js?v=111';
 
 export const QUAL = { low: { scale: 0.62, layers: 4, oct: 3, msaa: 0, parts: 0.4, bd: 0.5, shadow: 0, rays: 0, warp: 0 }, med: { scale: 0.85, layers: 6, oct: 4, msaa: 2, parts: 0.75, bd: 0.8, shadow: 0, rays: 1, warp: 1 }, high: { scale: 1, layers: 9, oct: 4, msaa: 4, parts: 1, bd: 1, shadow: 1, rays: 1, warp: 1 } };
 const PI = Math.PI, TAU = PI * 2, rand = Math.random, col = (h) => new THREE.Color(h);
@@ -275,7 +275,7 @@ export class Renderer {
     }
     for (const [e, g] of this.fm) if (g.userData.f !== this.frameN) { this.scene.remove(g); this.fm.delete(e); }
     // player ship
-    const ship = this.ship; ship.visible = p.alive && !(p.inv > 0 && (this.frameN & 4) && S.mode !== 'clear'); ship.position.set(p.x, p.y, 0); ship.userData.body.rotation.x = clamp(-p.vy * 0.07, -0.8, 0.8);
+    const ship = this.ship; ship.visible = p.alive && !(p.inv > 0 && (this.frameN & 4) && S.mode !== 'clear'); ship.position.set(p.x, p.y, 0); ship.userData.body.rotation.x = clamp(0.42 - p.vy * 0.07, -0.45, 1.2);
     if (p.alive) {
       const fl2 = 0.7 + rand() * 0.5; B.add(p.x - 1.25, p.y, 0.1, 0.9 * fl2, 0.2, 0, 0.3, 1, 0.9, 1, 3); for (const zz of [0.68, -0.68]) this.parts.push({ x: p.x - 0.85, y: p.y - 0.02 + zz * 0.12, z: zz * 0.6, vx: -9 - rand() * 4, vy: (rand() - 0.5) * 0.6, l: 0.22, m: 0.22, s: 0.09, r: 0.3, g: 1, b: 0.9, gr: 0, sh: 3, add: 1, dr: 3 }); B.add(p.x - 0.95, p.y, 0.1, 0.4, 0.4, 0, 0.6, 1, 0.95, 0.9, 0);
       if (p.tier > 0 || p.charge > 0.12) { const k = Math.min(1, p.charge / 1.65), s = 0.35 + k * 0.9 + Math.sin(t * 30) * 0.06; const c = p.tier === 3 ? [1, 1, 1] : p.tier === 2 ? [0.5, 1, 0.9] : [0.25, 0.9, 0.8]; B.add(p.x + 1.0, p.y, 0.5, s, s, 0, c[0], c[1], c[2], 1, 2); B.add(p.x + 1.0, p.y, 0.5, s * 2.4, s * 2.4, t * 4, c[0], c[1], c[2], 0.5, 1); if (this.frameN % 2 === 0) { const an = rand() * TAU, d = 1.6 + rand(); this.parts.push({ x: p.x + 1 + Math.cos(an) * d, y: p.y + Math.sin(an) * d, z: 0.5, vx: -Math.cos(an) * d * 4, vy: -Math.sin(an) * d * 4, l: 0.25, m: 0.25, s: 0.09, r: 0.4, g: 1, b: 0.9, gr: 0, sh: 0, add: 1, dr: 0 }); } }

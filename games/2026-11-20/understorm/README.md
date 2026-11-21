@@ -43,12 +43,12 @@ stick mid-flight. AI runs never post scores or unlock stages.
 
 ## Releasing
 
-The site caches scripts in the browser for hours, so every import carries a version query (`?v=110`).
+The site caches scripts in the browser for hours, so every import carries a version query (`?v=111`).
 Bump it everywhere in one go when you ship, or returning players get a mix of old and new files:
 
 ```
-sed -i -E "s#from '\./([a-z]+)\.js(\?v=[0-9]+)?'#from './\1.js?v=111'#g" js/*.js
-sed -i -E 's#src="js/main\.js(\?v=[0-9]+)?"#src="js/main.js?v=111"#' index.html
+sed -i -E "s#from '\./([a-z]+)\.js(\?v=[0-9]+)?'#from './\1.js?v=112'#g" js/*.js
+sed -i -E 's#src="js/main\.js(\?v=[0-9]+)?"#src="js/main.js?v=112"#' index.html
 ```
 
 ## Score boards

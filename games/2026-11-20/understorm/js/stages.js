@@ -1,6 +1,6 @@
 // UNDERSTORM 2026 — the twelve stages, authored as data through a small builder.
 // The builder keeps a cursor: "now" is the moment the cursor point reaches the right edge of the screen.
-import { W, H, BASE_SCROLL, lerp } from './config.js?v=110';
+import { W, H, BASE_SCROLL, lerp } from './config.js?v=111';
 
 const STEP = 0.5;
 const hash = (n) => { const s = Math.sin(n * 127.1) * 43758.5453; return s - Math.floor(s); };

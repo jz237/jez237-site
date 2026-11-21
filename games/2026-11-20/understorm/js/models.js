@@ -20,10 +20,21 @@ export const add = (g, geo, mat, p = [0, 0, 0], s = 1, r) => { const m = new THR
 const XP = [0, 0, -PI / 2], XM = [0, 0, PI / 2]; // cone pointing +x / -x
 
 export function makeShip(enemy) {
-  const g = grp(), body = grp(); g.add(body); g.userData.body = body; const H1 = enemy ? MAT.dark : MAT.white, H2 = enemy ? MAT.rust : MAT.hull, GL = enemy ? MAT.gR : MAT.gT;
-  add(body, G.cone, H1, [0.75, 0, 0], [0.2, 1.3, 0.2], XP); add(body, G.cyl, H1, [-0.2, 0, 0], [0.2, 0.7, 0.2], XP); add(body, G.sph, enemy ? MAT.gR : MAT.glassA, [0.28, 0.13, 0], [0.3, 0.13, 0.15]);
-  for (const s of [1, -1]) { add(body, G.box, H2, [-0.25, 0, s * 0.42], [0.95, 0.05, 0.5], [0, s * 0.5, 0]); add(body, G.cyl, H2, [-0.35, -0.02, s * 0.68], [0.09, 0.9, 0.09], XP); add(body, G.box, GL, [-0.1, 0.02, s * 0.68], [0.6, 0.03, 0.04]); add(body, G.sph, GL, [-0.82, -0.02, s * 0.68], 0.09); }
-  add(body, G.box, H2, [-0.55, 0.22, 0], [0.4, 0.34, 0.04], [0, 0, -0.5]); add(body, G.sph, GL, [-0.6, 0, 0], [0.14, 0.14, 0.14]);
+  // an original twin-boom salvage fighter: needle fuselage, swept wings out to two engine booms
+  const g = grp(), body = grp(); g.add(body); g.userData.body = body; const H1 = enemy ? MAT.dark : MAT.white, H2 = enemy ? MAT.rust : MAT.hull, GL = enemy ? MAT.gR : MAT.gT, DK = MAT.dark;
+  add(body, G.sph, H1, [-0.05, 0, 0], [0.82, 0.17, 0.22]); add(body, G.cone, H1, [0.98, -0.01, 0], [0.13, 0.9, 0.17], XP); add(body, G.cone, H2, [-0.72, 0, 0], [0.16, 0.5, 0.2], XM);
+  add(body, G.sph, enemy ? MAT.gR : MAT.glassA, [0.3, 0.11, 0], [0.34, 0.12, 0.13]); add(body, G.box, DK, [0.3, 0.06, 0], [0.74, 0.03, 0.3]);
+  add(body, G.box, H2, [-0.5, 0.26, 0], [0.42, 0.36, 0.035], [0, 0, -0.55]); add(body, G.box, GL, [-0.62, 0.42, 0], [0.12, 0.04, 0.045]);
+  add(body, G.box, DK, [0.05, -0.15, 0], [0.5, 0.08, 0.2]); add(body, G.box, GL, [0.05, -0.2, 0], [0.42, 0.015, 0.05]);
+  for (const s of [1, -1]) {
+    add(body, G.box, H2, [-0.18, -0.01, s * 0.4], [0.86, 0.045, 0.52], [0, s * 0.42, 0]); add(body, G.box, DK, [-0.34, 0.02, s * 0.36], [0.4, 0.05, 0.3], [0, s * 0.42, 0]);
+    add(body, G.cyl, H1, [-0.3, -0.02, s * 0.7], [0.095, 0.95, 0.095], XP); add(body, G.cone, H1, [0.3, -0.02, s * 0.7], [0.095, 0.26, 0.095], XP);
+    add(body, G.cyl, DK, [-0.8, -0.02, s * 0.7], [0.125, 0.16, 0.125], XP); add(body, G.sph, GL, [-0.86, -0.02, s * 0.7], [0.06, 0.09, 0.09]);
+    add(body, G.box, H2, [-0.55, 0.13, s * 0.74], [0.3, 0.22, 0.03], [s * 0.35, 0, -0.5]); add(body, G.box, GL, [-0.05, 0.035, s * 0.7], [0.5, 0.02, 0.03]);
+    add(body, G.sph, GL, [-0.52, 0, s * 0.93], 0.035); add(body, G.box, H2, [-0.4, -0.01, s * 0.86], [0.34, 0.03, 0.2], [0, s * 0.5, 0]);
+  }
+  add(body, G.sph, enemy ? MAT.gR : MAT.gA, [1.4, -0.01, 0], 0.03); add(body, G.sph, GL, [-0.95, 0, 0], [0.1, 0.11, 0.13]);
+  body.rotation.x = 0.42;
   if (enemy) g.scale.x = -1;
   return g;
 }

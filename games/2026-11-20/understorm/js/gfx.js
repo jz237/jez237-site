@@ -1,8 +1,8 @@
 // UNDERSTORM 2026 — generated surface textures with normal maps, the reflection environment,
 // scenery props that dress the terrain, and the near silhouettes. Everything is built at load.
 import * as THREE from '../vendor/three.module.min.js';
-import { H } from './config.js?v=110';
-import { G } from './models.js?v=110';
+import { H } from './config.js?v=111';
+import { G } from './models.js?v=111';
 
 const col = (h) => new THREE.Color(h);
 const hash2 = (x, y) => { const s = Math.sin(x * 127.1 + y * 311.7) * 43758.5453; return s - Math.floor(s); };
