@@ -1,5 +1,82 @@
 [
   {
+    "id": "2026-11-21-factual-infographic-factual-infographic-microphobia-when-sm",
+    "title": "Factual infographic: Microphobia — When Small Things Feel Overwhelming",
+    "tests": "factual_subtype: phobia-infographic; phobia: Microphobia; fictional photographic scene; headline readback MICROPHOBIA / Extreme fear of small things; archive_slot=2026-11-21T04:08; concept=microphobia-tiny-glass-beads-fingertips-workbench; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: phobia-infographic",
+    "prompt": "Create a complete portrait factual phobia infographic directly on canvas, dominated by lifelike, very scary photographic imagery, not a photographed printed poster. The two EXACT title lines at the top are:\nMICROPHOBIA\nExtreme fear of small things\nSet MICROPHOBIA in large bold clean type; its exact meaning directly beneath. Do not headline Specific Phobia.\n\nFear-inducing shot: camera almost flush with a dark workbench, looking down the narrow gap between a recoiling person's hand and the bench surface. Tiny loose glass craft beads, about 2 mm each, lie immediately beside and between the fingertips, with several sharply resolved only centimetres from the camera; their real smallness is demonstrated by believable fingerprint ridges and nail edges. A tipped bead vial is in the near background, spilling a thin irregular trail toward the hand. Use an unsettling immersive extreme close photographic perspective: tiny crisp curved highlights, minute round silhouettes disappearing into shallow focus beside skin, an obstructed low sightline and tense retreating fingers, making the small objects feel unavoidably close. No giant beads, swarming organisms, bugs, holes motif, dangerous shards, injury, contamination cloud or supernatural menace. The beads are ordinary inert objects, not represented as intrinsically harmful. This is an imagined subjective fear-trigger scene, not a clinical case photograph or evidence of danger. The sense of vulnerability comes from proximity and the focus on smallness, not invented hazards. Don't make this a pretty jewelry still life or a distant comfortable view.\n\nCast: fictional androgynous adult 28, pale freckled skin, red buzzcut, narrow build, charcoal overalls, crouching at their workbench. Show their forearm, retreating hand and a small off-centre sliver of profile in deep background; no generic frightened-face poster. Realistic five-finger anatomy, natural skin pores, worn workbench grain, crisp specular glass details, cool window sidelight and restrained warm reflected light. Scene occupies roughly two thirds of canvas; preserve breathing room and readable text in natural shadowed negative space. No cartoon, illustration, engraving, monsters, gore or rigid boxed grid.\n\nWeave the following concise educational annotations organically around the hero with fine open leaders, curved pathways and elegant readable typography. Use a subtle nonanatomical pulse-line motif beside the hand, not invented brain circuitry. Main labels and short text:\n'Anticipatory anxiety' — 'Even thinking about little things can trigger severe anxiety.'\n'Body alarm' — 'A racing heartbeat, trembling or dizziness can accompany a phobia.'\n'Avoidance' — 'Avoiding triggers can interfere with everyday life.'\n'Perceived threat ≠ actual danger' — 'Fear may greatly exceed the real risk. Most small everyday things cause no harm.'\n'Help is available' — 'CBT and other talking therapies can help. Seek a healthcare professional if fear disrupts daily life.'\nSmall subordinate terminology note: 'A descriptive phobia name; classified under specific phobia.'\nKeep the technical terms but plain-English glosses concise. Do not add diagnostic thresholds, statistics, causes, cures, unverified reinforcement claims, or DIY exposure exercises. Education, not diagnosis. Facts should guide the eye along the bead trail and hand, never crowd out the immediate photographic trigger. No bibliography, URLs, watermark, logos, cards or decorative filler. Beautifully finished photographic detail with highly readable integrated type, not a sparse title poster.",
+    "image": "images/2026-11-21-factual-infographic-factual-infographic-microphobia-when-sm.jpg",
+    "thumb": "thumbs/2026-11-21-factual-infographic-factual-infographic-microphobia-when-sm.webp",
+    "color": "#4c4440",
+    "date": "2026-11-21",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "microphobia-tiny-glass-beads-fingertips-workbench",
+      "imageSha256": "9550e7038b444a359c342e8bdce70fe1aa3ac4abdc60681b0a4dfa3a8550459f",
+      "imageDHash": "4218396db7cf3135"
+    },
+    "factualInfographic": {
+      "topic": "Microphobia: extreme fear of small things, anticipatory anxiety, bodily alarm, avoidance, and evidence-based help",
+      "description": "Microphobia, its subjective threat response and evidence-based clinical help, depicted with an imagined small-object trigger.",
+      "sourceNote": "Cleveland Clinic https://my.clevelandclinic.org/health/diseases/22427-microphobia and NHS https://www.nhs.uk/mental-health/conditions/phobias/; verified terminology, anxiety, symptoms, avoidance, proportional risk and talking therapies.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-21T09:09:05.270995+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "Cleveland Clinic",
+            "title": "Microphobia (Fear of Small Things)",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://my.clevelandclinic.org/health/diseases/22427-microphobia"
+          },
+          {
+            "id": "S2",
+            "publisher": "NHS",
+            "title": "Phobias",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/mental-health/conditions/phobias/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Microphobia means extreme fear of small things; it is described as a specific phobia, not a separately named diagnostic category.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Thoughts of little things can provoke severe anxiety; fear can be out of proportion to actual danger, and most small everyday things cause no harm.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Phobias can involve avoidance that interferes with everyday life.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Phobia symptoms can include palpitations, trembling, dizziness and severe anxiety.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Talking therapies including cognitive behavioural therapy (CBT) can help manage phobia symptoms; consult a healthcare provider when fear affects daily life.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
     "id": "2026-11-21-factual-infographic-factual-infographic-entomophobia-when-a",
     "title": "Factual infographic: Entomophobia — When an Insect Feels Too Close",
     "tests": "factual_subtype: phobia-infographic; phobia: Entomophobia; photographic fictional scene; headline readback ENTOMOPHOBIA / Intense fear of insects; archive_slot=2026-11-21T00:08; concept=entomophobia-cockroach-wrist-kitchen-table-encounter; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: phobia-infographic",
