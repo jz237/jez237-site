@@ -66,6 +66,12 @@ button { appearance: none; border: 0; background: none; font: inherit; color: in
 .pop.t { color: var(--teal); font-size: 3.6em; }
 @keyframes popup { to { transform: translate(-50%, -190%); opacity: 0; } }
 @keyframes blink { 50% { opacity: .3; } }
+#aibar { position: absolute; left: 50%; bottom: 2.2em; transform: translateX(-50%); text-align: center; white-space: nowrap; padding: .9em 1.6em; border-radius: .8em; background: rgba(3, 8, 12, .62); border: 1px solid rgba(82, 255, 216, .4); }
+#aibar .a0 { font-size: 1.3em; letter-spacing: .34em; color: var(--dim); }
+#aibar .a1 { font-size: 2.3em; letter-spacing: .14em; color: var(--teal); margin: .15em 0 .3em; min-width: 22em; }
+#aibar button { font-size: 1.35em; letter-spacing: .14em; padding: .45em .9em; margin: 0 .25em; border-radius: .4em; border: 1px solid var(--edge); background: rgba(255, 255, 255, .06); }
+#aibar button:hover { border-color: var(--teal); }
+#aibar kbd { font-size: .85em; margin-right: .4em; }
 #demo { position: absolute; left: 50%; bottom: 3em; transform: translateX(-50%); font-size: 1.5em; letter-spacing: .4em; color: var(--amber); animation: blink 1.4s infinite; }
 
 /* touch */
@@ -97,7 +103,8 @@ button { appearance: none; border: 0; background: none; font: inherit; color: in
 .row .btn.sm { font-size: .78em; margin: 0; padding: .45em .9em; }
 #title { align-items: stretch; justify-content: flex-start; }
 #title .left { width: 62em; padding: 5em 0 3em 6em; display: flex; flex-direction: column; justify-content: center; pointer-events: auto; }
-#logo { font-size: 13em; line-height: .9; letter-spacing: .04em; color: #fff; text-shadow: 0 0 .5em rgba(82, 255, 216, .45), 0 .05em .2em rgba(0, 0, 0, .8); }
+#title .btn { padding: .55em 1em; margin-top: .5em; }
+#logo { font-size: 12em; line-height: .9; letter-spacing: .04em; color: #fff; text-shadow: 0 0 .5em rgba(82, 255, 216, .45), 0 .05em .2em rgba(0, 0, 0, .8); }
 #logo span { display: block; font-size: .36em; letter-spacing: .62em; color: var(--amber); text-shadow: 0 .1em .5em #000; margin-top: .3em; }
 #tag { font-size: 1.9em; letter-spacing: .12em; color: #c9d3de; margin: 1.2em 0 1em; text-shadow: 0 .1em .5em #000; max-width: 28em; line-height: 1.45; }
 #title .btn { width: 21em; background: rgba(4, 9, 13, .6); }
@@ -105,7 +112,7 @@ button { appearance: none; border: 0; background: none; font: inherit; color: in
 #title:not(.hidden) #logo span { animation: fadeUp 1s .9s both; }
 #title:not(.hidden) #tag { animation: fadeUp 1s 1.2s both; }
 #title:not(.hidden) .btn { animation: fadeUp .6s both; }
-#title .btn:nth-of-type(1) { animation-delay: 1.5s; } #title .btn:nth-of-type(2) { animation-delay: 1.6s; } #title .btn:nth-of-type(3) { animation-delay: 1.7s; } #title .btn:nth-of-type(4) { animation-delay: 1.8s; } #title .btn:nth-of-type(5) { animation-delay: 1.9s; } #title .btn:nth-of-type(6) { animation-delay: 2s; }
+#title .btn:nth-of-type(1) { animation-delay: 1.5s; } #title .btn:nth-of-type(2) { animation-delay: 1.6s; } #title .btn:nth-of-type(3) { animation-delay: 1.7s; } #title .btn:nth-of-type(4) { animation-delay: 1.8s; } #title .btn:nth-of-type(5) { animation-delay: 1.9s; } #title .btn:nth-of-type(6) { animation-delay: 2s; } #title .btn:nth-of-type(7) { animation-delay: 2.1s; }
 @keyframes logoIn { from { opacity: 0; letter-spacing: .5em; filter: blur(.12em); } to { opacity: 1; letter-spacing: .04em; filter: blur(0); } }
 @keyframes fadeUp { from { opacity: 0; transform: translateY(.6em); } to { opacity: 1; transform: none; } }
 @media (prefers-reduced-motion: reduce) { #title * { animation: none !important; } }
@@ -138,6 +145,7 @@ kbd { font-family: inherit; font-size: .9em; padding: .05em .45em; border-radius
     <div id="banner"><div class="b0" id="b0"></div><div class="b1 sc" id="b1"></div><div class="b2" id="b2"></div></div>
     <div id="msg"></div>
     <div id="demo" class="hidden">DEMONSTRATION</div>
+    <div id="aibar" class="hidden"><div class="a0">AI PILOT &middot; NO CHEATS &middot; SAME RULES AS YOU</div><div class="a1" id="ai-intent"></div><button id="ai-take"><kbd>Enter</kbd>TAKE THE STICK</button><button id="ai-vis"><kbd>V</kbd>VISION <span id="ai-vis-s">ON</span></button><button id="ai-spd"><kbd>F</kbd>SPEED <span id="ai-spd-s">x1</span></button><button id="ai-next"><kbd>N</kbd>NEXT STAGE</button></div>
     <div id="touch" class="hidden"><button id="t-fire">CHARGE</button><button id="t-anchor">ANCHOR</button><button id="t-up">+</button><button id="t-dn">&minus;</button><button id="t-pause">II</button></div>
 
     <div id="title" class="screen hidden"><div class="left">
@@ -145,6 +153,7 @@ kbd { font-family: inherit; font-size: .9em; padding: .05em .45em; border-radius
       <div id="tag">Twelve stages down through the storm layer of a dead mining world. A Lance that charges. An Anchor on a live tether.</div>
       <button class="btn" id="m-start">START<small>New run from Stage 1</small></button>
       <button class="btn" id="m-cont">CONTINUE<small id="m-cont-s"></small></button>
+      <button class="btn" id="m-ai">WATCH THE AI FLY IT<small>All twelve stages, played live with no cheats. Take over any time</small></button>
       <button class="btn" id="m-select">STAGE SELECT<small>Practise any stage or boss you have reached</small></button>
       <button class="btn" id="m-scores">SCORES</button>
       <button class="btn" id="m-options">OPTIONS</button>

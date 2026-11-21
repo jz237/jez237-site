@@ -22,7 +22,7 @@ I.loadBinds(set.binds); A.mv = set.mus / 100; A.sv = set.sfx / 100;
 const applyOpt = () => { R.opt.flash = set.flash ? 0.25 : 1; R.opt.shake = set.shake ? 0.2 : 1; A.setVol(set.mus / 100, set.sfx / 100); S.auto = set.auto; };
 
 let mode = 'menu', demo = true, run = null, mem = {}, acc = 0, last = performance.now(), ff = +(P.get('ff') || 1), useBot = P.has('bot'), titleT = 0, screen = null, prevScreen = null, ema = 16, slow = 0, demoT = 0;
-let ghost = null, rec = [], bannerT = 0, msgT = 0, fadeTo = 1, quiet = false;
+let ghost = null, rec = [], bannerT = 0, msgT = 0, fadeTo = 1, quiet = false, vision = true, lastIntent = '';
 
 let lw = 0, lh = 0;
 function layout() {
@@ -59,21 +59,26 @@ function startDemo() {
 function startGame(o) {
   A.init(); A.sfx('ok'); demo = false; mode = 'play'; mem = {}; run = o; acc = 0; show(null); $('demo').classList.add('hidden'); $('hud').classList.remove('hidden'); $('touch').classList.toggle('hidden', !I.touch); $('credits').classList.add('hidden');
   const sight = o.diff === 'sight';
-  S.newGame({ diff: sight ? 'normal' : o.diff, sight, god: P.has('god'), stage: o.stage || 0, cp: o.cp || 0, practice: o.practice || null, loadout: o.loadout || null, auto: set.auto });
+  S.newGame({ diff: sight ? 'normal' : o.diff, sight, god: P.has('god'), stage: o.stage || 0, cp: o.cp || 0, practice: o.practice || null, loadout: o.loadout || null, auto: o.ai ? true : set.auto, endless: !!o.ai });
+  useBot = !!o.ai || P.has('bot'); ff = +(P.get('ff') || 1); $('aibar').classList.toggle('hidden', !o.ai); $('ai-spd-s').textContent = 'x' + ff; if (o.ai) $('touch').classList.add('hidden');
   if (o.loop) S.loop = o.loop;
 }
 function pause() { if (mode !== 'play') return; mode = 'pause'; show('s-pause'); A.suspend(true); }
 function resume() { if (mode !== 'pause') return; mode = 'play'; show(null); A.suspend(false); last = performance.now(); }
-function quit() { A.suspend(false); startDemo(); }
+function quit() { A.suspend(false); useBot = P.has('bot'); ff = +(P.get('ff') || 1); $('aibar').classList.add('hidden'); startDemo(); }
+function takeOver() { if (!run || !run.ai || mode !== 'play') return; run.ai = false; run.took = true; useBot = false; ff = 1; S.auto = set.auto; $('aibar').classList.add('hidden'); $('touch').classList.toggle('hidden', !I.touch); hud.lives = -99; message('YOU HAVE THE STICK', 2.4); A.sfx('ok'); }
+function aiSpeed() { ff = ff >= 4 ? 1 : ff * 2; $('ai-spd-s').textContent = 'x' + ff; }
+function aiVision() { vision = !vision; $('ai-vis-s').textContent = vision ? 'ON' : 'OFF'; }
+function aiNext() { if (run && run.ai && mode === 'play' && S.si < 11) { S.startStage(S.si + 1, 0); } }
 function gameOver() {
-  mode = 'over'; const arcade = run && !run.practice && run.diff !== 'sight' && !useBot, b = arcade ? boards[run.diff] : null;
+  mode = 'over'; $('aibar').classList.add('hidden'); const arcade = run && !run.practice && run.diff !== 'sight' && !useBot && !run.ai && !run.took, b = arcade ? boards[run.diff] : null;
   $('ov-t').textContent = S.won ? 'THE STORM BREAKS' : 'SHIP LOST'; $('ov-s').innerHTML = `Score <b>${S.score.toLocaleString()}</b> &nbsp; Stage <b>${S.si + 1}</b>${S.loop > 1 ? ' &nbsp; Loop <b>' + S.loop + '</b>' : ''} &nbsp; Best chain <b>x${S.maxChain}</b>`;
   const q = b && b.qualifies(S.score); $('ov-entry').classList.toggle('hidden', !q); if (q) { $('initials').value = b.initials(); }
   $('ov-retry').classList.toggle('hidden', !!(run && run.practice) || S.won); show('s-over'); if (q && !I.touch) $('initials').focus();
 }
 function fx() {
   for (const f of S.fx) {
-    if (f.k === 'stage') { R.loadStage(S.st); if (!demo) { A.music(S.si, S.st.act, S.st.bpm, 'stage'); if (S.si > prog.max && run && !run.practice) { prog.max = S.si; saveProg(); } ghost = set.ghost && run ? store.get(`understorm_ghost_${run.diff}_${S.si}`, null) : null; rec = []; $('stname').textContent = `${S.loop > 1 ? 'LOOP ' + S.loop + ' · ' : ''}STAGE ${S.si + 1} · ${S.st.name}`; } continue; }
+    if (f.k === 'stage') { R.loadStage(S.st); if (!demo) { A.music(S.si, S.st.act, S.st.bpm, 'stage'); if (S.si > prog.max && run && !run.practice && !run.ai) { prog.max = S.si; saveProg(); } ghost = set.ghost && run ? store.get(`understorm_ghost_${run.diff}_${S.si}`, null) : null; rec = []; $('stname').textContent = `${S.loop > 1 ? 'LOOP ' + S.loop + ' · ' : ''}STAGE ${S.si + 1} · ${S.st.name}`; } continue; }
     if (quiet) { if (f.k === 'over') gameOver(); else if (f.k === 'ending') ending(); continue; } R.event(f, S); if (demo) continue; A.event(f);
     switch (f.k) {
       case 'msg': if (f.text) banner(`ACT ${['', 'I', 'II', 'III'][S.st.act]} · ${ACTS[S.st.act]}`, f.sub, f.text, 3.6); else message(f.sub); break;
@@ -92,9 +97,9 @@ function fx() {
   }
   S.fx.length = 0;
 }
-function saveGhost() { if (!run || run.practice || !set.ghost) return; const sc = S.score - S.stageScore0, key = `understorm_ghost_${run.diff}_${S.si}`, old = store.get(key, null); if (!old || sc > old.s) store.set(key, { s: sc, d: rec }); }
+function saveGhost() { if (!run || run.practice || run.ai || !set.ghost) return; const sc = S.score - S.stageScore0, key = `understorm_ghost_${run.diff}_${S.si}`, old = store.get(key, null); if (!old || sc > old.s) store.set(key, { s: sc, d: rec }); }
 function ending() {
-  mode = 'ending'; if (S.si + 1 > prog.max) { prog.max = 11; saveProg(); }
+  mode = 'ending'; $('aibar').classList.add('hidden'); if (S.si + 1 > prog.max && !(run && run.ai)) { prog.max = 11; saveProg(); }
   $('cr-text').innerHTML = `The eye closes behind you and the sky is only sky.<br>Final score <b style="color:var(--amber)">${S.score.toLocaleString()}</b> &nbsp;·&nbsp; ${S.deaths} ship${S.deaths === 1 ? '' : 's'} lost &nbsp;·&nbsp; best chain x${S.maxChain}<br><br>UNDERSTORM 2026 — an original game for the GameMaster Arcade.<br>Design, code, models and score generated in the browser. No samples, no borrowed art.`;
   $('credits').classList.remove('hidden'); $('hud').classList.add('hidden'); A.sfx('clear');
 }
@@ -129,10 +134,13 @@ $('m-select').onclick = () => { A.init(); buildSelect(); show('s-select'); };
 $('m-scores').onclick = () => { A.init(); buildScores(); show('s-scores'); };
 $('m-options').onclick = () => { A.init(); buildOptions(); show('s-options'); };
 $('m-help').onclick = () => { A.init(); show('s-help'); };
+$('m-ai').onclick = () => startGame({ diff: 'normal', stage: 0, ai: true });
+$('ai-take').onclick = takeOver; $('ai-vis').onclick = aiVision; $('ai-spd').onclick = aiSpeed; $('ai-next').onclick = aiNext;
+I.onKey = (e) => { if (!run || !run.ai || mode !== 'play' || e.repeat) return; if (e.code === 'Enter' || e.code === 'NumpadEnter') takeOver(); else if (e.code === 'KeyV') aiVision(); else if (e.code === 'KeyF') aiSpeed(); else if (e.code === 'KeyN') aiNext(); };
 document.querySelectorAll('[data-diff]').forEach((b) => (b.onclick = () => { set.diff = b.dataset.diff; save(); startGame({ diff: set.diff, stage: 0 }); }));
 $('p-resume').onclick = resume; $('p-quit').onclick = quit; $('p-options').onclick = () => { buildOptions(); show('s-options'); };
 $('p-restart').onclick = () => { S.restore(false); S.fx.push({ k: 'respawn' }); resume(); };
-$('ov-quit').onclick = quit; $('cr-quit').onclick = () => { const arcade = run && !run.practice && run.diff !== 'sight' && !useBot; $('credits').classList.add('hidden'); if (arcade && boards[run.diff].qualifies(S.score)) gameOver(); else quit(); };
+$('ov-quit').onclick = quit; $('cr-quit').onclick = () => { const arcade = run && !run.practice && run.diff !== 'sight' && !useBot && !run.ai && !run.took; $('credits').classList.add('hidden'); if (arcade && boards[run.diff].qualifies(S.score)) gameOver(); else quit(); };
 $('ov-retry').onclick = () => startGame({ diff: run.diff, stage: S.si, loadout: { core: 1, lvl: 1 }, loop: S.loop });
 $('ov-submit').onclick = async () => { const b = boards[run.diff]; $('ov-entry').classList.add('hidden'); await b.submit($('initials').value, S.score, S.si + 1 + (S.loop - 1) * 12); tab = run.diff; };
 $('cr-loop').onclick = () => { $('credits').classList.add('hidden'); $('hud').classList.remove('hidden'); mode = 'play'; S.nextLoop(); };
@@ -147,7 +155,8 @@ const hud = { score: -1, lives: -1, core: '', ex: '', sp: -1, boss: null };
 function drawHud() {
   const p = S.p;
   if (S.score !== hud.score) { hud.score = S.score; $('score').textContent = S.score.toLocaleString(); }
-  const lv = S.sight ? -2 : run && run.practice ? -3 : S.lives; if (lv !== hud.lives) { hud.lives = lv; $('lives').innerHTML = lv === -2 ? '<span>SIGHTSEER</span>' : lv === -3 ? '<span>PRACTICE</span>' : lv > 5 ? `<i></i><span>x${lv}</span>` : '<i></i>'.repeat(Math.max(0, lv)) + (p.shield > 0 ? '<span>+SHIELD</span>' : ''); }
+  if (run && run.ai) { const it = mem.intent || ''; if (it !== lastIntent) { lastIntent = it; $('ai-intent').textContent = it; } }
+  const lv = run && run.ai ? -10 - S.deaths : S.sight ? -2 : run && (run.practice || run.took) ? -3 : S.lives; if (lv !== hud.lives) { hud.lives = lv; $('lives').innerHTML = lv <= -10 ? `<span>AI PILOT · ${-10 - lv} LOST</span>` : lv === -2 ? '<span>SIGHTSEER</span>' : lv === -3 ? '<span>PRACTICE</span>' : lv > 5 ? `<i></i><span>x${lv}</span>` : '<i></i>'.repeat(Math.max(0, lv)) + (p.shield > 0 ? '<span>+SHIELD</span>' : ''); }
   const core = S.a.st ? `${CORE_NAMES[p.core]} <b>${'I'.repeat(p.lvl)}</b>` : '—'; if (core !== hud.core) { hud.core = core; $('core').innerHTML = core; }
   const ex = [p.motes ? 'MOTES ' + p.motes : '', p.seek ? 'SEEKERS' : ''].filter(Boolean).join(' · '); if (ex !== hud.ex) { hud.ex = ex; $('extras').textContent = ex; }
   if (p.sp !== hud.sp) { hud.sp = p.sp; [...$('speed').querySelectorAll('i')].forEach((el, i) => el.classList.toggle('on', i <= p.sp)); }
@@ -164,6 +173,7 @@ function frame(now) {
   if (innerWidth !== lw || innerHeight !== lh) layout();
   if (mode === 'play') {
     if (inp.pause) pause(); else {
+      if (run && run.ai && I.pad && inp.ok) takeOver();
       acc += dt * ff; let n = 0; const max = 5 * ff;
       while (acc >= DT && n < max) { const i2 = useBot ? botInput(S, mem) : n === 0 ? inp : { ...inp, dx: 0, dy: 0, anchor: false, spUp: false, spDn: false }; S.step(i2); acc -= DT; n++; if (!S.boss && S.p.alive) { const gi = Math.floor(S.t * 15) * 2; rec[gi] = Math.round(S.p.x * 20); rec[gi + 1] = Math.round(S.p.y * 20); } fx(); if (mode !== 'play') break; }
       if (n === max) acc = 0;
@@ -175,7 +185,7 @@ function frame(now) {
   if (bannerT > 0 && (bannerT -= dt) <= 0) $('banner').classList.remove('on'); if (msgT > 0 && (msgT -= dt) <= 0) $('msg').classList.remove('on');
   R.fade += (fadeTo - R.fade) * Math.min(1, dt * 5);
   const gi = Math.floor(S.t * 15) * 2, gh = !demo && ghost && !S.boss && ghost.d[gi] != null ? [ghost.d[gi] / 20, ghost.d[gi + 1] / 20] : null;
-  R.frame(S, mode === 'pause' ? 0 : dt, { ghost: gh, onThunder: () => { if (!demo) A.sfx('thunder', 1); } });
+  R.frame(S, mode === 'pause' ? 0 : dt, { ghost: gh, ai: run && run.ai && vision && !demo && mode === 'play' ? mem : null, onThunder: () => { if (!demo) A.sfx('thunder', 1); } });
   if (demo) { titleT += dt; A.tick(titleT, 3, 0); } else if (mode === 'play') { const p = S.p, inten = S.boss || p.tier >= 2 || S.chain >= 3 ? 3 : S.en.length >= 4 || S.t > S.st.endT * 0.5 ? 2 : 1; A.tick(S.gt, inten, p.alive ? clamp(p.charge / CHARGE[2], 0, 1) : 0); } else A.tick(0, 0, 0);
   if (!demo) drawHud();
   // auto quality: step down if the frame rate will not hold

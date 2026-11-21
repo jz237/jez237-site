@@ -16,7 +16,7 @@ export class Sim {
   newGame(o = {}) {
     this.diff = DIFFS[o.diff || 'normal']; this.sight = !!o.sight; this.god = !!o.god; this.auto = o.auto !== false;
     this.loop = o.loop || 1; this.score = 0; this.lives = this.diff.lives; this.nextLife = 50000;
-    this.hits = 0; this.deaths = 0; this.seed = (o.seed || 20261120) >>> 0; this.practice = o.practice || null;
+    this.hits = 0; this.deaths = 0; this.seed = (o.seed || 20261120) >>> 0; this.practice = o.practice || null; this.endless = !!o.endless;
     this.over = false; this.won = false; this.tick = 0; this.maxChain = 0; this.tetherKills = 0;
     this.p = { x: 6, y: 9, alive: true, inv: 0, sp: 1, fireCd: 0, holdT: 0, charge: 0, tier: 0, heat: 0, lock: false, core: 0, lvl: 0,
       motes: 0, seek: false, seekCd: 0, coreCd: 0, beamT: 0, beamX: W, recoil: 0, shield: 0, light: 0, firing: false, vy: 0,
@@ -130,9 +130,9 @@ export class Sim {
   // ---------------------------------------------------------------- one fixed step
   step(inp) {
     if (this.over || this.won) return;
-    const st = this.st, p = this.p, a = this.a;
     this.tick++;
-    if (this.mode === 'clear') { if (--this.clearT <= 0) this.advance(); }
+    if (this.mode === 'clear') { if (--this.clearT <= 0) { this.advance(); if (this.over || this.won) return; } }
+    const st = this.st, p = this.p, a = this.a;
     if (this.bossDie > 0) {
       this.bossDie--; const b = this.boss;
       if (b && this.bossDie % 7 === 0) this.fx.push({ k: 'boom', x: b.x + (this.rnd() - 0.5) * 7, y: b.y + (this.rnd() - 0.5) * 7, s: 1 + this.rnd() * 1.6, big: 1 });
@@ -424,7 +424,7 @@ export class Sim {
     const p = this.p;
     if (this.sight || this.god) { this.hits++; p.inv = 70; this.fx.push({ k: 'hitp', why }); if (why === 'wall' || why === 'flood') this.unstick(); return; }
     if (p.shield > 0) { p.shield--; p.inv = 110; this.fx.push({ k: 'shield' }); if (why === 'wall' || why === 'flood') this.unstick(); return; }
-    p.alive = false; this.deadT = 85; this.deaths++; this.stageDeaths++; if (!this.practice) this.lives--; this.chain = 0;
+    p.alive = false; this.deadT = 85; this.deaths++; this.stageDeaths++; if (!this.practice && !this.endless) this.lives--; this.chain = 0;
     this.fx.push({ k: 'die', x: p.x, y: p.y, why });
   }
   unstick() { const p = this.p; for (let i = 0; i < 40; i++) { const f = Math.max(this.floor(p.x), this.flood === null ? -9 : this.flood, 0), c = Math.min(this.ceil(p.x), H); if (c - f > 1.4) { p.y = clamp(p.y, f + 0.7, c - 0.7); if (!this.solidAt(p.x, p.y, 0.3)) return; } p.x = Math.max(1, p.x - 0.4); } }

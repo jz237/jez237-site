@@ -12,7 +12,8 @@ a charging Lance and a tethered Anchor drone. No build step: plain ES modules an
 | `js/foes.js` | Enemy behaviours and the ten bosses |
 | `js/stages.js` | The twelve stages as data, written through a small builder |
 | `js/bot.js` | Autopilot used by the attract-mode demo and the headless tests |
-| `js/render.js`, `js/post.js`, `js/models.js` | three.js scene, HDR post chain, models built from primitives |
+| `js/render.js`, `js/post.js`, `js/models.js` | three.js scene, HDR post chain with light shafts, models built from primitives |
+| `js/gfx.js` | Generated normal-mapped surfaces, the reflection environment, scenery props, near silhouettes |
 | `js/audio.js` | Synthesised adaptive score and effects (WebAudio, no samples) |
 | `js/input.js`, `js/scores.js`, `js/main.js` | Input, score boards, game shell and menus |
 
@@ -32,6 +33,13 @@ URL switches for the browser: `?stage=5&cp=1` starts a practice run there, `?bot
 `?god` makes hits harmless, `?q=low|med|high` forces a picture tier, `?all` unlocks stage select.
 Any of `?stage`, `?bot`, `?god`, `?noscores` stops scores being posted. In the console, `__us.skip(30)`
 advances a practice run thirty seconds.
+
+## AI playthrough
+
+WATCH THE AI FLY IT on the title screen runs the autopilot through all twelve stages with no cheats and
+unlimited ships. The bar at the bottom shows what it is doing; `V` toggles its vision overlay (target,
+tracked bullets, intended move), `F` cycles speed, `N` skips to the next stage and `Enter` hands you the
+stick mid-flight. AI runs never post scores or unlock stages.
 
 ## Score boards
 

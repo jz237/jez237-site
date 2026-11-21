@@ -16,7 +16,7 @@ const PI = Math.PI;
 export const G = { sph: new THREE.SphereGeometry(1, 18, 12), ico: new THREE.IcosahedronGeometry(1, 0), ico1: new THREE.IcosahedronGeometry(1, 1), box: new THREE.BoxGeometry(1, 1, 1), cone: new THREE.ConeGeometry(1, 1, 10),
   cyl: new THREE.CylinderGeometry(1, 1, 1, 14), tor: new THREE.TorusGeometry(1, 0.12, 6, 22), torF: new THREE.TorusGeometry(1, 0.26, 8, 22), oct: new THREE.OctahedronGeometry(1, 0), half: new THREE.SphereGeometry(1, 18, 10, 0, PI * 2, 0, PI / 2), arc: new THREE.TorusGeometry(1, 0.14, 6, 14, PI) };
 const grp = () => new THREE.Group();
-export const add = (g, geo, mat, p = [0, 0, 0], s = 1, r) => { const m = new THREE.Mesh(geo, mat); m.position.set(p[0], p[1], p[2]); if (typeof s === 'number') m.scale.setScalar(s); else m.scale.set(s[0], s[1], s[2]); if (r) m.rotation.set(r[0], r[1], r[2]); g.add(m); return m; };
+export const add = (g, geo, mat, p = [0, 0, 0], s = 1, r) => { const m = new THREE.Mesh(geo, mat); m.position.set(p[0], p[1], p[2]); if (typeof s === 'number') m.scale.setScalar(s); else m.scale.set(s[0], s[1], s[2]); if (r) m.rotation.set(r[0], r[1], r[2]); m.castShadow = !!mat.isMeshStandardMaterial && !mat.transparent; g.add(m); return m; };
 const XP = [0, 0, -PI / 2], XM = [0, 0, PI / 2]; // cone pointing +x / -x
 
 export function makeShip(enemy) {
