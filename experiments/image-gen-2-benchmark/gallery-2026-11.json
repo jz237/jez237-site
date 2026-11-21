@@ -173,6 +173,96 @@
     }
   },
   {
+    "id": "2026-11-21-factual-infographic-factual-infographic-anthophobia-flowers",
+    "title": "Factual infographic: Anthophobia — Flowers Too Close",
+    "tests": "factual_subtype: phobia-infographic; phobia: Anthophobia; fictional photographic scene; headline readback ANTHOPHOBIA / Extreme fear of flowers; archive_slot=2026-11-21T08:08; concept=anthophobia-flower-petals-face-florist-aisle; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: phobia-infographic",
+    "prompt": "Create one finished portrait, richly detailed photographic factual phobia infographic, directly on the canvas, not a photographed poster or UI. Exact main title in large bold elegant typography: \"ANTHOPHOBIA\". Immediately below, exact definition line: \"Extreme fear of flowers\". These are the two headline lines; no umbrella diagnostic heading.\n\nFEAR-IMPACT PHOTOGRAPH: an immersive shoulder-height over-the-shoulder perspective in a narrow florist shop aisle, camera immediately beside the protagonist's cheek, as a dense bank of fresh flowers at head height intrudes into their personal space. The viewer is only about 15–25 cm from overlapping ordinary-sized lily and gerbera petals; realistic lens perspective makes these nearby petals fill the right foreground without biologically enlarging the flowers. Sharp nearest curling petal edges, dusty anthers, waxy sepals, slender stems and beadlike condensation make the floral trigger inescapably tangible. Several stems cross the line of sight, obscuring the aisle's far end; realistic stacked buckets and tightly spaced shelves create a constricted visual corridor. The apparent confinement belongs to the imagined fearful viewpoint, not actual imprisonment. Normal flowers, no predatory or animated plants. No insects or threatening pollen clouds; this is fear of flowers themselves, not allergy education. Harsh close raking daylight catches the fine surfaces with natural shadow falloff, not decorative romantic bouquet lighting. Shallow but controlled depth of field, fine photographic grain, realistic optics. Make the close encounter viscerally unnerving through proximity and obstructed sightlines, not a pretty still life or distant scenic garden.\n\nProtagonist: Fictional nonbinary adult 55, medium brown skin, round face, straight salt-and-pepper bob, soft build, maroon jacket, leaning back. Visible only as a partial side profile and shoulder at lower left, an open hand hovering near their chest; natural startled backward lean, no theatrical scream, no generic frightened-face poster. Distinct lifelike anatomy, real skin pores, individual grey hairs and woven jacket texture. Generated fictional scene, not a documentary patient photograph. The hero scene dominates roughly two thirds of the visual field; trigger must stay dominant.\n\nWeave concise readable factual typography into the quieter upper-left wall, the aisle's shadowed negative space and a restrained open lower margin, with varied scale, thin curved leaders and a flowing organic route. No rigid boxed grid or detached cards. Keep all the following information readable, but do not bury the photograph beneath paragraphs:\n- Open label beside foreground petals: \"Trigger: flowers, petals, leaves or stems\". Short secondary line: \"Even thinking about flowers can provoke anxiety.\"\n- A subtle unboxed body-alarm callout linked to the person's hand/chest: \"Body alarm\" and \"Racing heart • sweating • trembling • breathlessness\". No invented brain maps or ECG diagnosis.\n- A gentle curving visual path from the trigger toward an unobstructed scrap of aisle, text: \"Avoidance can narrow daily life\" and \"Work and social activities may become harder.\" Do not invent a causal brain circuit or imply all people respond identically.\n- Essential balanced caption: \"Felt danger ≠ actual danger\" / \"Intense alarm does not mean a flower is threatening.\"\n- In the spacious lower margin a flowing help line: \"Help: therapist-guided gradual exposure + CBT\" / \"A professional can help change fearful perceptions and responses.\" / \"Seek help when fear interferes with daily life.\" Depict no do-it-yourself exposure exercise or forced contact.\n- Subordinate small but legible classification: \"A named fear described within specific phobia—not a separate diagnostic category.\" Small contextual footer: \"General education • fictional photographic scene\".\n\nNo statistics, diagnostic thresholds, citations, URLs, invented anatomy, monsters, gore, unsafe exposure instructions, logos or watermarks. Flowers are ordinary living plants, not dangerous creatures. Photorealistic photographic medium throughout, not illustration, painting, engraving or fantasy horror. Generous typographic breathing room and refined hierarchy; a complete educational infographic, not a sparse title poster.",
+    "image": "images/2026-11-21-factual-infographic-factual-infographic-anthophobia-flowers.jpg",
+    "thumb": "thumbs/2026-11-21-factual-infographic-factual-infographic-anthophobia-flowers.webp",
+    "color": "#775a51",
+    "date": "2026-11-21",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "anthophobia-flower-petals-face-florist-aisle",
+      "imageSha256": "3f80b76b0f4c433e66ae0be34dec2a2d16fd778e23174e763cddeb1a1ac1ef68",
+      "imageDHash": "04e4e65293737c01"
+    },
+    "factualInfographic": {
+      "topic": "Anthophobia: extreme fear of flowers, flower-related triggers, bodily anxiety, avoidance, and evidence-based help",
+      "description": "Flower-related fear, body alarm, functional impact and professional treatment, distinguished from actual danger.",
+      "sourceNote": "Cleveland Clinic https://my.clevelandclinic.org/health/diseases/22559-anthophobia-fear-of-flowers and NHS https://www.nhs.uk/mental-health/conditions/phobias/; verified name, definition, triggers, symptoms, life impact and professional CBT/gradual exposure. No diagnostic thresholds or prevalence claims.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-21T13:09:36.251180+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "Cleveland Clinic",
+            "title": "Anthophobia (Fear of Flowers)",
+            "sourceType": "university",
+            "url": "https://my.clevelandclinic.org/health/diseases/22559-anthophobia-fear-of-flowers"
+          },
+          {
+            "id": "S2",
+            "publisher": "NHS",
+            "title": "Phobias",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/mental-health/conditions/phobias/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Anthophobia means an extreme fear of flowers; any flower or specific types, and parts including petals, leaves or stems, may trigger fear.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Anthophobia is described as a specific phobic disorder; this is a descriptive fear name, not a claim of a separate diagnostic category.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Thinking about flowers can trigger anxiety; possible bodily symptoms include palpitations, sweating, trembling and shortness of breath.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Phobic fear concerns something unlikely to cause harm; intense felt alarm is not itself proof of actual danger.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Avoiding flowers can restrict work and social life and make leaving home difficult.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "A mental health professional can guide gradual exposure therapy, often combined with CBT to change perceptions and responses.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Seek professional help when phobia symptoms affect daily life.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
     "id": "2026-11-20-factual-infographic-factual-infographic-the-tilt-window-tra",
     "title": "Factual infographic: The Tilt-Window Trap — Compression in a Narrowing Gap",
     "tests": "; archive_slot=2026-11-20T16:20; concept=feline-tilt-window-entrapment-compression; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: cat-infographic; cat_category: household-hazards",
