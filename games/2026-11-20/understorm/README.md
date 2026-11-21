@@ -27,6 +27,7 @@ node scripts/understorm/simtest.mjs            # every stage, autopilot, hits co
 node scripts/understorm/simtest.mjs --real     # no cheats, base loadout: deaths per checkpoint
 node scripts/understorm/simtest.mjs 7 --real --diff=hard
 node scripts/understorm/deaths.mjs 4 2         # where the autopilot dies from stage 4, checkpoint 2
+node scripts/understorm/aicheck.mjs            # how the autopilot uses the Anchor: throws, swaps, tether kills
 ```
 
 URL switches for the browser: `?stage=5&cp=1` starts a practice run there, `?bot` lets the autopilot fly,
@@ -43,12 +44,12 @@ stick mid-flight. AI runs never post scores or unlock stages.
 
 ## Releasing
 
-The site caches scripts in the browser for hours, so every import carries a version query (`?v=111`).
+The site caches scripts in the browser for hours, so every import carries a version query (`?v=120`).
 Bump it everywhere in one go when you ship, or returning players get a mix of old and new files:
 
 ```
-sed -i -E "s#from '\./([a-z]+)\.js(\?v=[0-9]+)?'#from './\1.js?v=112'#g" js/*.js
-sed -i -E 's#src="js/main\.js(\?v=[0-9]+)?"#src="js/main.js?v=112"#' index.html
+sed -i -E "s#from '\./([a-z]+)\.js(\?v=[0-9]+)?'#from './\1.js?v=121'#g" js/*.js
+sed -i -E 's#src="js/main\.js(\?v=[0-9]+)?"#src="js/main.js?v=121"#' index.html
 ```
 
 ## Score boards

@@ -1,9 +1,9 @@
 // UNDERSTORM 2026 — the renderer. Reads the simulation each frame; never writes to it.
 import * as THREE from '../vendor/three.module.min.js';
-import { W, H, clamp, lerp } from './config.js?v=111';
-import { Post } from './post.js?v=111';
-import { MAT, G, add, makeShip, makeAnchor, FOE_MODELS, PART_MODELS } from './models.js?v=111';
-import { surface, makeEnv, decorate, foreground } from './gfx.js?v=111';
+import { W, H, clamp, lerp } from './config.js?v=120';
+import { Post } from './post.js?v=120';
+import { MAT, G, add, makeShip, makeAnchor, FOE_MODELS, PART_MODELS, BOSS_BODIES, makePursuer } from './models.js?v=120';
+import { surface, makeEnv, decorate, foreground } from './gfx.js?v=120';
 
 export const QUAL = { low: { scale: 0.62, layers: 4, oct: 3, msaa: 0, parts: 0.4, bd: 0.5, shadow: 0, rays: 0, warp: 0 }, med: { scale: 0.85, layers: 6, oct: 4, msaa: 2, parts: 0.75, bd: 0.8, shadow: 0, rays: 1, warp: 1 }, high: { scale: 1, layers: 9, oct: 4, msaa: 4, parts: 1, bd: 1, shadow: 1, rays: 1, warp: 1 } };
 const PI = Math.PI, TAU = PI * 2, rand = Math.random, col = (h) => new THREE.Color(h);
@@ -89,6 +89,7 @@ export class Renderer {
     this.wallU = { t: { value: 0 }, c: { value: col(0xff4a6a) } };
     this.wallM = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), this.ribMat('varying vec2 vUv; uniform float t; uniform vec3 c; void main(){ float n = noise(vec2(vUv.y * 9.0, t * 3.0)) * 0.5 + noise(vec2(vUv.y * 23.0 + 4.0, t * 6.0)) * 0.3; float e = smoothstep(0.55 + n * 0.5, 1.0, vUv.x + n * 0.25); float body = smoothstep(1.0, 0.0, vUv.x) ; gl_FragColor = vec4(c * (e * 1.8 + 0.2 * body * n), 1.0); }', this.wallU)); this.wallM.visible = false; this.wallM.renderOrder = 27; this.scene.add(this.wallM);
     this.wallB = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), new THREE.MeshBasicMaterial({ color: 0x050205, transparent: true, opacity: 0.94, depthTest: false })); this.wallB.renderOrder = 26; this.wallB.visible = false; this.scene.add(this.wallB);
+    this.pursuer = makePursuer(); this.pursuer.visible = false; this.scene.add(this.pursuer);
     this.tSmooth = 0; this.ltT = 3; this.pal = null;
   }
 
@@ -225,6 +226,7 @@ export class Renderer {
       case 'growl': this.kick(0.3); break;
       case 'launch': this.spark(f.x, f.y, 10, 6, Tc, 0.14, 0.3); break;
       case 'dock': this.spark(f.x, f.y, 10, 4, Tc, 0.12, 0.3); break;
+      case 'swap': this.spark(f.x, f.y, 16, 6, Tc, 0.14, 0.35, 0, 3); this.parts.push({ x: f.x, y: f.y, z: 0.3, vx: 0, vy: 0, l: 0.3, m: 0.3, s: 0.3, r: 0.3, g: 1, b: 0.85, gr: 0, sh: 1, add: 1, dr: 0, grow: 5 }); break;
       case 'thunk': this.spark(f.x, f.y, 10, 6, Wt, 0.12, 0.3); this.kick(0.15); break;
       case 'panic': this.flashFx(0.2, 0xff4040); this.puff(f.x, f.y, 10, 4, 0.5, 1.4); break;
       case 'chain': this.spark(f.x, f.y, 6 + f.n * 3, 6, Tc, 0.16, 0.5); break;
@@ -239,7 +241,7 @@ export class Renderer {
     const fl = this.opt.flash;
     // sky, ambient lightning
     const u = this.bgU; u.uTime.value = t; u.uScroll.value = sc; u.uFlash.value *= Math.exp(-dt * 7); this.ambBoost = (this.ambBoost || 0) * Math.exp(-dt * 6);
-    if ((this.ltT -= dt) < 0) { this.ltT = (st.act === 3 ? 1.5 : 4) + rand() * (st.dark ? 9 : 6); this.bolt(0.5 + rand() * 0.5); if (o.onThunder) o.onThunder(); }
+    if (!st.calm && (this.ltT -= dt) < 0) { this.ltT = (st.act === 3 ? 1.5 : 4) + rand() * (st.dark ? 9 : 6); this.bolt(0.5 + rand() * 0.5); if (o.onThunder) o.onThunder(); }
     this.hemi.intensity = this.baseAmb + this.ambBoost * (st.dark ? 0.7 : 0.25) * fl; this.key.intensity = this.baseKey + this.ambBoost * (st.dark ? 1.6 : 0.4) * fl;
     // camera
     this.shake *= Math.exp(-dt * 7); const sh = this.shake * 0.35; this.cam.position.set(W / 2 + (rand() - 0.5) * sh, H / 2 + (rand() - 0.5) * sh, CAMZ); this.cam.rotation.z = (rand() - 0.5) * sh * 0.01;
@@ -313,7 +315,10 @@ export class Renderer {
     // liquid
     if (S.flood !== null && S.flood > -0.9) { this.liq.visible = true; const top = S.flood + Math.sin(t * 2) * 0.06; this.liq.position.set(W / 2, (top - 6) / 2, 0.55); this.liq.scale.set(W + 8, top + 6, 1); this.liqU.t.value = t; this.liqU.s.value = sc; if (this.frameN % 4 === 0) this.spark(rand() * W, top, 1, 1.5, st.liquid === 'lava' ? [1, 0.5, 0.15] : [0.5, 1, 0.9], 0.1, 0.7, st.liquid === 'lava' ? 2 : -3); } else this.liq.visible = false;
     // pursuit wall
-    if (S.wall !== null && S.wall > -1.5) { const wx = S.wall; this.wallM.visible = this.wallB.visible = true; this.wallB.position.set(wx - 10, H / 2, 1.6); this.wallB.scale.set(20, H + 8, 1); this.wallM.position.set(wx - 1.6, H / 2, 1.7); this.wallM.scale.set(3.6, H + 6, 1); this.wallU.t.value = t; this.wallU.c.value.set(P.glow); if (this.frameN % 2 === 0) this.spark(wx + 0.2, rand() * H, 1, 5, [1, 0.3, 0.4], 0.14, 0.5); this.kick(0.12); } else this.wallM.visible = this.wallB.visible = false;
+    if (S.wall !== null && S.wall > -1.5) { const wx = S.wall; this.wallM.visible = this.wallB.visible = true; this.wallB.position.set(wx - 10, H / 2, 1.6); this.wallB.scale.set(20, H + 8, 1); this.wallM.position.set(wx - 1.6, H / 2, 1.7); this.wallM.scale.set(3.6, H + 6, 1); this.wallU.t.value = t; this.wallU.c.value.set(P.glow); if (this.frameN % 2 === 0) this.spark(wx + 0.2, rand() * H, 1, 5, [1, 0.3, 0.4], 0.14, 0.5); this.kick(0.12);
+      if (st.idx === 10) { const pu = this.pursuer, gape = 0.55 + Math.sin(t * 5) * 0.35; const mid = (Math.max(S.floor(wx + 1), 0) + Math.min(S.ceil(wx + 1), H)) / 2; pu.visible = true; pu.position.set(wx + 0.5 + Math.sin(t * 9) * 0.1, pu.position.y + (mid - pu.position.y) * 0.08, 2.3); pu.scale.setScalar(0.78); this.wallM.visible = false; pu.userData.up.position.y = gape * 2.2; pu.userData.dn.position.y = -gape * 2.2; pu.userData.up.rotation.z = gape * 0.2; pu.userData.dn.rotation.z = -gape * 0.2; }
+      else { this.pursuer.visible = false; if (this.frameN % 3 === 0) this.fire(wx - 0.5, rand() * H, 1, 1.8, 0.6, 2, [0.8, 0.5, 1]); }
+    } else { this.wallM.visible = this.wallB.visible = false; this.pursuer.visible = false; }
     // boss-specific overlays
     const bs = S.boss; if (bs && bs.banks) for (const b of bs.banks) { const al = b.off > 0 ? Math.max(0, 1 - (330 - b.off) / 20) + Math.max(0, 1 - b.off / 40) : 1; for (let i = 0; i < 6; i++) this.smoke.add(b.x + Math.cos(i * 1.05 + t * 0.3) * 1.3, b.y + Math.sin(i * 1.05 + t * 0.25) * 1.3, 1.2, b.r * 0.85, b.r * 0.85, 0, 0.72, 0.72, 0.68, 0.34 * Math.min(1, al), 4); }
     if (bs && bs.boss === 'front') for (let i = 0; i < 12; i++) this.smoke.add(bs.x + 1.5 + Math.sin(i * 2.1 + t * 0.4) * 1.2, i * 1.7 - 0.5, 0.9, 3.4, 3.4, 0, 0.12, 0.14, 0.24, 0.85, 4);
@@ -368,6 +373,11 @@ export class Renderer {
 
   syncBoss(e, g, S, t) {
     const pm = g.userData.pm, B = this.add;
+    if (g.userData.body === undefined) { const mk = BOSS_BODIES[e.boss]; g.userData.body = mk ? mk() : null; if (g.userData.body) g.add(g.userData.body); }
+    const bd = g.userData.body; if (bd) { const ud = bd.userData; bd.position.set(e.x, e.y, ud.rot ? -0.5 : -1.5); if (ud.rot) bd.rotation.z = (e.rot || 0) + PI; if (ud.spin) ud.spin.rotation.z = t * 0.5; if (ud.spin2) ud.spin2.rotation.z = -t * 0.9;
+      if (ud.petals) for (const q of ud.petals) { const k = 1 + Math.sin(t * 1.3 + q.userData.a * 2) * 0.12; q.position.x = Math.cos(q.userData.a) * 2.7 * k; q.position.y = Math.sin(q.userData.a) * 2.7 * k; }
+      if (ud.rings) { ud.rings[0].rotation.set(t * 0.7, t * 0.4, 0); ud.rings[1].rotation.set(0.6 + t * 0.3, 0, t * 0.5); ud.rings[2].rotation.set(0, t * 0.6, 1 + t * 0.2); const k = e.phs === 3 ? 0.5 : 1; bd.scale.setScalar(bd.scale.x + (k - bd.scale.x) * 0.05); }
+      if (e.boss === 'veil') bd.scale.setScalar(e.stun > 0 ? 0.7 : 1); }
     for (const q of e.parts) {
       let m = pm.get(q); if (!m) { m = (PART_MODELS[q.kind] || PART_MODELS.hull)(); m.userData.s0 = m.scale.clone(); g.add(m); pm.set(q, m); }
       m.userData.f = this.frameN; const ud = m.userData; m.visible = q.on || !!ud.slide; m.position.set(q.x, q.y, q.kind === 'hull' ? -0.8 : 0); m.scale.copy(ud.s0).multiplyScalar(q.r);

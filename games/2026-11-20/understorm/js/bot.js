@@ -1,6 +1,6 @@
 // UNDERSTORM 2026 — autopilot. Drives the attract-mode demo and the headless stage tests.
 // It reads the simulation, scores nine candidate moves a short way into the future and takes the safest.
-import { W, H, DT, SPEEDS, clamp } from './config.js?v=111';
+import { W, H, DT, SPEEDS, clamp } from './config.js?v=120';
 
 const HOR = [5, 10, 16, 24, 34];
 
@@ -21,6 +21,9 @@ export function botInput(S, mem) {
   let ty = null, bd = 1e9;
   for (const e of S.en) { if (e.dead || e.hidden || e.type === 'whale') continue; const t = e.parts ? e.parts.find((q) => q.on && q.weak && !q.armor) : e; if (!t || t.x < p.x + 1 || t.x > W) continue; const d = t.x - p.x + Math.abs(t.y - p.y) * 2; if (d < bd) { bd = d; ty = t.y; tgt = { x: t.x, y: t.y, r: t.r || e.r || 0.7, name: e.boss ? e.name : e.type }; } }
   if (tgt) intent = 'LINING UP: ' + String(tgt.name).toUpperCase();
+  let nBehind = 0, nAhead = 0; for (const e of S.en) { if (e.dead || e.hidden || e.parts || e.type === 'whale') continue; if (e.x < p.x - 0.5 && e.dir > 0) nBehind++; else if (e.x > p.x) nAhead++; }
+  mem.bh = Math.max(0, (mem.bh || 0) + (S.vs < -0.5 || (nBehind >= 3 && nAhead === 0 && st.terr !== 'none') ? 2 : -2)); if (mem.bh > 200) mem.bh = 200; const behind = mem.bh > 60;
+  let machinery = false; for (const b of S.ab) if (b.k === 'pist') machinery = true; for (const v of S.vents) { const sx = v.x - S.scroll; if (sx > -1 && sx < W + 1 && v.x >= S.ventMin) machinery = true; }
   // the herd: never fire down a lane with a whale in it
   let herd = false; const whales = []; for (const e of S.en) if (!e.dead && e.type === 'whale' && e.x > p.x - 1) whales.push(e); for (const e of whales) if (e.x > p.x && Math.abs(e.y - p.y) < e.r + 0.7) herd = true;
   // the tether: when the Anchor is out, fly so the line between us passes through things
@@ -66,9 +69,10 @@ export function botInput(S, mem) {
   // throw the Anchor at bosses, call it home if it strays behind
   mem.at = (mem.at || 0) + 1;
   if (a.st === 1 && S.boss && S.boss.t > 200 && mem.at > 260) { inp.anchor = true; mem.at = 0; }
-  else if (a.st === 1 && !S.boss && foesAhead >= 3 && mem.at > 300 && !threats.length && S.wall === null && !whales.length) { inp.anchor = true; mem.at = 0; }
+  else if (a.st === 1 && !S.boss && foesAhead >= 2 && mem.at > 190 && threats.length < 6 && S.wall === null && !whales.length && !st.dark && !behind && !machinery) { inp.anchor = true; mem.at = 0; mem.thrown = 1; }
   else if (a.st >= 4 && ((!S.boss && (mem.at > 170 || foesAhead === 0 && mem.at > 60)) || mem.at > 520)) { inp.anchor = true; mem.at = 0; }
   if (sweep && intent.startsWith('LINING')) intent = 'ANCHOR OUT: SWEEPING THE TETHER';
+  if (a.st === 1 && behind) { inp.anchor = true; inp.x = -1; intent = 'SWAPPING THE ANCHOR ASTERN'; } else if (a.st === 2 && !behind) { inp.anchor = true; inp.x = 1; intent = 'ANCHOR BACK TO THE NOSE'; } else if (a.st === 2) intent = 'ANCHOR ASTERN: COVERING THE REAR';
   mem.intent = intent; mem.target = tgt; mem.threats = threats; mem.goal = [clamp(p.x + best[0] * 2, 1, W - 1), clamp(p.y + best[1] * 2, 1, H - 1)];
   return inp;
 }

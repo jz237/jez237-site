@@ -125,8 +125,18 @@ table.sc2 { width: 100%; font-size: 2.1em; border-collapse: collapse; font-varia
 table.sc2 td { padding: .22em .4em; border-bottom: 1px solid rgba(255, 255, 255, .07); } table.sc2 td:last-child { text-align: right; color: var(--amber); }
 #initials { font: inherit; font-size: 5em; width: 4.2em; text-align: center; letter-spacing: .3em; text-transform: uppercase; background: rgba(0, 0, 0, .4); border: 1px solid var(--teal); color: #fff; border-radius: .2em; padding: .1em; }
 kbd { font-family: inherit; font-size: .9em; padding: .05em .45em; border-radius: .3em; border: 1px solid rgba(255, 255, 255, .35); background: rgba(255, 255, 255, .08); }
-#credits { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; background: rgba(2, 4, 8, .55); pointer-events: auto; }
+#credits { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; background: linear-gradient(rgba(2, 4, 8, .1), rgba(2, 4, 8, .28) 45%, rgba(2, 4, 8, .6)); pointer-events: auto; text-shadow: 0 .1em .8em rgba(0, 0, 0, .8); }
 #credits .b1 { font-size: 9em; } #credits p { font-size: 2.2em; line-height: 1.7; color: #d9e2ec; max-width: 40em; letter-spacing: .06em; }
+#intro { position: absolute; inset: 0; pointer-events: none; }
+#intro .il { position: absolute; left: 10%; right: 10%; top: 44%; text-align: center; font-size: 3.1em; letter-spacing: .2em; line-height: 1.5; color: #e8eef4; text-shadow: 0 .1em 1em #000, 0 0 1.4em rgba(82, 255, 216, .25); opacity: 0; animation: lineIn 3.1s ease both; }
+#intro .il b { color: var(--teal); font-weight: 600; }
+#intro .i1 { animation-delay: .6s; } #intro .i2 { animation-delay: 3.6s; } #intro .i3 { animation-delay: 6.6s; animation-duration: 2.4s; } #intro .i4 { animation-delay: 8.9s; animation-duration: 3.4s; }
+#intro .iskip { position: absolute; right: 3em; bottom: 2.4em; font-size: 1.4em; letter-spacing: .34em; color: var(--dim); animation: blink 1.6s infinite; }
+@keyframes lineIn { 0% { opacity: 0; transform: translateY(.5em); filter: blur(.1em); } 18% { opacity: 1; transform: none; filter: blur(0); } 80% { opacity: 1; } 100% { opacity: 0; transform: translateY(-.3em); } }
+#credits .cl { opacity: 0; }
+#credits:not(.hidden) .cl { animation: fadeUp 1.8s ease both; }
+#credits .c1 { animation-delay: .8s !important; font-size: 2.6em; letter-spacing: .3em; color: #e8eef4; } #credits .c2 { animation-delay: 3.6s !important; font-size: 2.2em; letter-spacing: .26em; color: var(--amber); margin: .8em 0 1.2em; } #credits .c3 { animation-delay: 6.6s !important; } #credits .c4 { animation-delay: 8.6s !important; } #credits .c5 { animation-delay: 10.6s !important; margin-top: 1.4em; }
+@media (prefers-reduced-motion: reduce) { #intro .il, #credits .cl { animation-duration: .01s !important; } }
 #rotate { position: fixed; inset: 0; background: #05070a; color: var(--ink); font-family: 'Chakra Petch', sans-serif; display: none; align-items: center; justify-content: center; text-align: center; font-size: 18px; letter-spacing: .12em; padding: 30px; z-index: 5; }
 @media (orientation: portrait) and (max-width: 700px) { #rotate.need { display: flex; } }
 </style>
@@ -185,7 +195,7 @@ kbd { font-family: inherit; font-size: .9em; padding: .05em .45em; border-radius
     <div id="s-help" class="screen dim hidden"><div class="card wide"><h2>HOW TO PLAY</h2><div class="cols"><div>
       <h3>THE LANCE</h3><p>It fires on its own. <b>Hold</b> to charge through three tiers and release. The third is a screen-long beam that kicks back and overheats: the Lance locks until it cools.</p>
       <h3>THE ANCHOR</h3><p>Shoot a supply drone to collect one. It cannot be destroyed, it blocks bullets and it hurts whatever it touches. Docked to the nose or tail it fires the core weapon that way.</p>
-      <p><b>Press Anchor</b> to throw it. It stays out, joined to you by a <b>live tether that cuts anything it sweeps through</b>. Press again to call it home; touch it with your nose or tail to dock it there.</p>
+      <p><b>Press Anchor</b> to throw it. It stays out, joined to you by a <b>live tether that cuts anything it sweeps through</b>. Press again to call it home; touch it with your nose or tail to dock it there. While it is docked, <b>hold back and press Anchor</b> to swap it to the tail, or hold forward to bring it back to the nose.</p>
       <h3>CORES</h3><p><b>Arc</b> chains lightning. <b>Ricochet</b> bounces off walls. <b>Burrow</b> crawls along them. The same core again raises its level.</p>
     </div><div>
       <h3>CONTROLS</h3><p><kbd>Arrows</kbd>/<kbd>WASD</kbd> move &nbsp; <kbd>Space</kbd> Lance &nbsp; <kbd>X</kbd> Anchor<br><kbd>Q</kbd>/<kbd>E</kbd> speed down/up &nbsp; <kbd>Esc</kbd> pause</p>
@@ -198,10 +208,11 @@ kbd { font-family: inherit; font-size: .9em; padding: .05em .45em; border-radius
 
     <div id="s-over" class="screen dim hidden"><div class="card"><h2 id="ov-t">SHIP LOST</h2><p id="ov-s"></p><div id="ov-entry" class="hidden"><h3>ENTER INITIALS FOR THE BOARD</h3><input id="initials" maxlength="3" autocomplete="off" spellcheck="false"><button class="btn" id="ov-submit">SUBMIT</button></div><button class="btn" id="ov-retry">CONTINUE FROM THIS STAGE<small>Score resets</small></button><button class="btn" id="ov-quit">TITLE</button></div></div>
 
-    <div id="credits" class="hidden"><div class="b0" style="font-size:1.9em;letter-spacing:.6em;color:var(--teal)">THE STORM BREAKS</div><div class="b1 sc">UNDERSTORM</div><p id="cr-text"></p><button class="btn sm" id="cr-loop">FLY IT AGAIN, HARDER</button><button class="btn sm" id="cr-quit">TITLE</button></div>
+    <div id="credits" class="hidden"><div class="cl c1">THE EYE CLOSES BEHIND YOU.</div><div class="cl c2">FOR THE FIRST TIME IN NINE YEARS, THE SKY IS ONLY SKY.</div><div class="b1 sc cl c3">UNDERSTORM</div><p id="cr-text" class="cl c4"></p><div class="cl c5"><button class="btn sm" id="cr-loop">FLY IT AGAIN, HARDER</button><button class="btn sm" id="cr-quit">TITLE</button></div></div>
+    <div id="intro" class="hidden"><div class="il i1">NINE YEARS AGO THE CLOUD REFINERIES WENT QUIET.</div><div class="il i2">THE STORM CLOSED OVER THEM, AND SOMETHING GREW INTO WHAT WAS LEFT.</div><div class="il i3">NOBODY GOES DOWN THERE NOW.</div><div class="il i4">YOU HAVE A SALVAGE FIGHTER, <b>A LANCE</b>, AND <b>AN ANCHOR ON A LIVE TETHER</b>.</div><div class="iskip">ANY KEY</div></div>
   </div>
 </div>
 <div id="rotate" class="need">Turn your phone sideways to fly.</div>
-<script type="module" src="js/main.js?v=111"></script>
+<script type="module" src="js/main.js?v=120"></script>
 </body>
 </html>

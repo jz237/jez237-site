@@ -1,5 +1,5 @@
 // UNDERSTORM 2026 — storm fauna, refinery machines and the bosses. Pure simulation behaviour.
-import { W, H, DT, clamp } from './config.js?v=111';
+import { W, H, DT, clamp } from './config.js?v=120';
 
 const sin = Math.sin, cos = Math.cos, TAU = 6.2832;
 const surf = (e, S) => { e.y = e.o.at === 'ceil' ? S.ceil(e.x) - 0.55 : S.floor(e.x) + 0.55; };
@@ -118,7 +118,7 @@ export const BOSSES = {
       if (e.t > 120 && --e.cd <= 0) { e.n = (e.n || 0) + 1; e.cd = S.cdr(f < 0.5 ? 40 : 55); const m = e.n % 6; if (m === 5) S.hbolt(e.y, 60, 34, 1); else if (m === 2) { for (let i = 0; i < 3; i++) { const d = S.shoot(18 + S.rnd() * 12, H + 0.5, -2 - S.rnd() * 2, -3, 1, 6); if (d) d.ghost = true; } } else S.aim(e.x - 1.5, e.y, 6.8, f < 0.5 ? 4 : 3, 0.3); } } },
 
   // 4. The plant's control core, behind three shutters that open on the beat.
-  regulator: { name: 'THE REGULATOR', hp: 1500, sc: 28000,
+  regulator: { name: 'THE REGULATOR', hp: 800, sc: 28000,
     init(e, S) { e.sh = []; e.nd = []; for (const y of [-4.6, 0, 4.6]) { e.nd.push(S.part(e, 'core', 1.6, y, 1.4, { weak: true })); e.sh.push(S.part(e, 'shutter', -2.2, y, 2.25, { armor: true })); } S.part(e, 'hull', 4.4, 0, 3, { armor: true }); e.open = -1; },
     update(e, S) { enter(e, 26, 9); if (e.t < 140) return; const beat = Math.floor(S.gt / 0.5), bar = Math.floor(beat / 4), f = hpf(e);
       const seq = [0, 2, 1, 2, 0, 1][bar % 6], ph = beat % 4; e.open = ph < 3 ? seq : -1; e.sh.forEach((s, i) => { s.on = !(i === e.open); s.slide = i === e.open ? 1 : 0; });
@@ -163,8 +163,8 @@ export const BOSSES = {
       if (e.mode === 0 && e.t % 130 === 0 && S.en.length < 6) S.spawn('seeker', { x: S.rnd() < 0.5 ? W + 1 : -1, side: S.rnd() < 0.5 ? 'L' : 'R', y: 2 + S.rnd() * 14 }); } },
 
   // 9. The storm front itself.
-  front: { name: 'THE FRONT', hp: 1140, sc: 36000,
-    init(e, S) { e.eyes = [4, 9, 14].map((y) => S.part(e, 'eye', -1.5, y - 9, 1.35, { hp: 380, weak: true, armor: true })); e.x = W + 6; e.pat = 0; e.pt = 120; e.op = -1; },
+  front: { name: 'THE FRONT', hp: 780, sc: 36000,
+    init(e, S) { e.eyes = [4, 9, 14].map((y) => S.part(e, 'eye', -1.5, y - 9, 1.35, { hp: 260, weak: true, armor: true })); e.x = W + 6; e.pat = 0; e.pt = 120; e.op = -1; },
     update(e, S) { e.x += (28.5 - e.x) * 0.02; e.y = 9; if (e.t < 150) return; const live = e.eyes.filter((q) => q.on), f = hpf(e);
       S.bwx = sin(e.t * 0.013) * 3.2 - 0.8; S.bwy = sin(e.t * 0.019) * 1.4;
       if (--e.pt <= 0) { e.pat++; e.pt = f < 0.4 ? 165 : 210; const rows = [2.2, 5.6, 9, 12.4, 15.8], safe = (S.rnd() * 5) | 0, safe2 = f < 0.4 ? -1 : (safe + 2 + ((S.rnd() * 2) | 0)) % 5;

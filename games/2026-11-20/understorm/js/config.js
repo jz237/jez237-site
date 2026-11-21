@@ -1,6 +1,6 @@
 // UNDERSTORM 2026 — shared constants. The playfield is a fixed 32 x 18 plane; everything in the
 // simulation is measured in those units and advanced in fixed 1/60 s steps.
-export const VERSION = '1.1.1';
+export const VERSION = '1.2.0';
 export const W = 32, H = 18, DT = 1 / 60;
 export const SPEEDS = [5.5, 7.5, 9.5, 12];
 export const BASE_SCROLL = 2.4;

@@ -1,6 +1,6 @@
 // UNDERSTORM 2026 — the twelve stages, authored as data through a small builder.
 // The builder keeps a cursor: "now" is the moment the cursor point reaches the right edge of the screen.
-import { W, H, BASE_SCROLL, lerp } from './config.js?v=111';
+import { W, H, BASE_SCROLL, lerp } from './config.js?v=120';
 
 const STEP = 0.5;
 const hash = (n) => { const s = Math.sin(n * 127.1) * 43758.5453; return s - Math.floor(s); };
@@ -189,7 +189,7 @@ const DEFS = [
       b.wind(0, 2.4); b.msg('', 'UPDRAFT'); b.hbolt(3, 0.5); b.hbolt(6.5, 2.5); b.foe('glassback', { y: 6 }, 1); b.wave('mote', 6, { y: 5, amp: 1.5, fire: 140 }, 0.42, 3); b.go(7); b.wind(0, 0);
       b.go(5, 3, 15); b.cp(); b.turret(3); b.turret(8, 'ceil'); b.turret(13); b.hbolt(9, 1); b.hbolt(5, 3); b.hbolt(13, 3); b.foe('spinner', { y: 9, life: 380 }, 2); b.go(9, 4, 14);
       // the storm drags you back the way you came
-      b.msg('', 'REVERSE — DOCK THE ANCHOR ASTERN'); b.item('M', 9); b.go(4); b.speed(-BASE_SCROLL * 1.2); b.wind(0, 0);
+      b.msg('', 'REVERSE: HOLD BACK AND PRESS ANCHOR TO SWAP IT ASTERN'); b.item('M', 9); b.go(4); b.speed(-BASE_SCROLL * 1.2); b.wind(0, 0);
       b.wave('mote', 6, { y: 7, amp: 1.5, side: 'L' }, 0.42, 1.5); b.wave('shard', 3, { y: 9, side: 'L' }, 0.9, 4); b.foe('glassback', { y: 11, side: 'L' }, 6); b.wave('predator', 3, { y: 9, side: 'L' }, 0.8, 8); b.hbolt(9, 5); b.wait(11);
       b.speed(BASE_SCROLL); b.wait(11 * 1.2 + 1); b.cp();
       b.go(4, 2, 16); b.wind(-2.2, 0); b.msg('', 'HEADWIND'); b.hbolt(3, 1); b.hbolt(15, 1); b.hbolt(9, 3.2); b.foe('gunship', { y: 9, life: 560 }, 0.5); b.item('A', 6, 2); b.go(9);
@@ -214,7 +214,7 @@ const DEFS = [
     make(b) { b.rough = 0.25; b.start(2, 16); b.msg('STAGE 11', 'THE THROAT'); b.go(4); b.wave('mote', 6, { y: 9, amp: 2 }); b.item('A', 9, 2); b.go(6, 3, 15); b.cp();
       b.msg('', 'IT IS BEHIND YOU. DO NOT SLOW DOWN.'); b.go(3); b.speed(BASE_SCROLL * 3); b.pursuit(-2); b.go(1.5); b.pursuit(3.4);
       const path = [[5, 13], [7, 15], [4, 11], [2, 9], [5, 12], [8, 15.5], [6, 12.5], [3, 9.5], [2.5, 8.5], [6, 12], [9, 15.5], [7, 13], [4, 10], [2, 8.5], [5, 11], [8, 14.5], [9.5, 15.5], [6, 12], [3, 9], [5, 11.5], [7.5, 14], [4, 10.5], [2.5, 9], [5, 12], [8, 15], [5.5, 12], [3, 10], [6, 13]];
-      path.forEach(([f, c], i) => { if (i % 5 === 2) b.block(8, (f + c) / 2 + (i % 2 ? 1.4 : -1.4), 1.6, 1.6); if (i === 9 || i === 19) b.cp(); if (i % 7 === 3) b.wave('mote', 3, { y: (f + c) / 2, amp: 0.6, v: 9 }, 0.3); b.go(1.55, f, c + (i < 14 ? 0.6 : 0)); });
+      path.forEach(([f, c], i) => { if (i % 5 === 2) b.block(8, (f + c) / 2 + (i % 2 ? 1.4 : -1.4), 1.6, 1.6); if (i % 6 === 4) b.cry(5, f + 0.2, c - 0.2, 9); if (i === 9 || i === 19) b.cp(); if (i % 7 === 3) b.wave('mote', 3, { y: (f + c) / 2, amp: 0.6, v: 9 }, 0.3); b.go(1.55, f, c + (i < 14 ? 0.6 : 0)); });
       b.go(1.5, 3, 15); b.pursuit(3.4); b.speed(BASE_SCROLL); b.go(1.5, 2, 16); b.pursuit(-3); b.go(3); b.end(); } },
 
   { name: 'THE CORE', act: 3, bpm: 132, terr: 'core', backdrop: 'core', liquid: 'lava',
@@ -241,4 +241,8 @@ const DEFS = [
 ];
 
 export const STAGES = DEFS.map(compile);
+// after the last stage: clear air at dawn, nothing to shoot
+export const EPILOGUE = compile({ name: 'CLEAR AIR', act: 3, bpm: 84, terr: 'none', backdrop: 'herd', calm: 1,
+  pal: { sky0: 0x2c4c80, sky1: 0xffc88e, cl: 0xfff2dc, cs: 0x8e7ea0, fog: 0xcab4a4, key: 0xffe8c4, rim: 0x52ffd8, tb: 0x5a6a7a, ta: 0x9ab0c0, glow: 0xffd28a, bolt: 0xffffff },
+  make(b) { b.go(900); b.end(); } }, 12);
 export const ACTS = ['', 'THE DESCENT', 'THE DEEP', 'THE EYE'];

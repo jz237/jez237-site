@@ -1,12 +1,12 @@
 // UNDERSTORM 2026 — game shell: loop, menus, HUD, saves, ghosts, scores.
-import { W, H, DT, DIFFS, CORE_NAMES, CHARGE, P, VERSION, clamp } from './config.js?v=111';
-import { STAGES, ACTS } from './stages.js?v=111';
-import { Sim } from './sim.js?v=111';
-import { Renderer } from './render.js?v=111';
-import { Sound } from './audio.js?v=111';
-import { Input, ACTIONS, LABELS } from './input.js?v=111';
-import { Scores } from './scores.js?v=111';
-import { botInput } from './bot.js?v=111';
+import { W, H, DT, DIFFS, CORE_NAMES, CHARGE, P, VERSION, clamp } from './config.js?v=120';
+import { STAGES, ACTS, EPILOGUE } from './stages.js?v=120';
+import { Sim } from './sim.js?v=120';
+import { Renderer } from './render.js?v=120';
+import { Sound } from './audio.js?v=120';
+import { Input, ACTIONS, LABELS } from './input.js?v=120';
+import { Scores } from './scores.js?v=120';
+import { botInput } from './bot.js?v=120';
 
 const $ = (id) => document.getElementById(id);
 const store = { get(k, d) { try { const v = JSON.parse(localStorage.getItem(k)); return v === null || v === undefined ? d : v; } catch { return d; } }, set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch { /* private mode */ } } };
@@ -22,7 +22,7 @@ I.loadBinds(set.binds); A.mv = set.mus / 100; A.sv = set.sfx / 100;
 const applyOpt = () => { R.opt.flash = set.flash ? 0.25 : 1; R.opt.shake = set.shake ? 0.2 : 1; A.setVol(set.mus / 100, set.sfx / 100); S.auto = set.auto; };
 
 let mode = 'menu', demo = true, run = null, mem = {}, acc = 0, last = performance.now(), ff = +(P.get('ff') || 1), useBot = P.has('bot'), titleT = 0, screen = null, prevScreen = null, ema = 16, slow = 0, demoT = 0;
-let ghost = null, rec = [], bannerT = 0, msgT = 0, fadeTo = 1, quiet = false, vision = true, lastIntent = '';
+let ghost = null, rec = [], bannerT = 0, msgT = 0, fadeTo = 1, quiet = false, vision = true, lastIntent = '', ended = false, introT = 0, introSkip = false;
 
 let lw = 0, lh = 0;
 function layout() {
@@ -57,7 +57,7 @@ function startDemo() {
   A.music(0, 1, 104, 'stage'); titleT = 0;
 }
 function startGame(o) {
-  A.init(); A.sfx('ok'); demo = false; mode = 'play'; mem = {}; run = o; acc = 0; show(null); $('demo').classList.add('hidden'); $('hud').classList.remove('hidden'); $('touch').classList.toggle('hidden', !I.touch); $('credits').classList.add('hidden');
+  A.init(); A.sfx('ok'); endIntro(true); demo = false; ended = false; mode = 'play'; mem = {}; run = o; acc = 0; show(null); $('demo').classList.add('hidden'); $('hud').classList.remove('hidden'); $('touch').classList.toggle('hidden', !I.touch); $('credits').classList.add('hidden');
   const sight = o.diff === 'sight';
   S.newGame({ diff: sight ? 'normal' : o.diff, sight, god: P.has('god'), stage: o.stage || 0, cp: o.cp || 0, practice: o.practice || null, loadout: o.loadout || null, auto: o.ai ? true : set.auto, endless: !!o.ai });
   useBot = !!o.ai || P.has('bot'); ff = +(P.get('ff') || 1); $('aibar').classList.toggle('hidden', !o.ai); $('ai-spd-s').textContent = 'x' + ff; if (o.ai) $('touch').classList.add('hidden');
@@ -72,9 +72,9 @@ function aiVision() { vision = !vision; $('ai-vis-s').textContent = vision ? 'ON
 function aiNext() { if (run && run.ai && mode === 'play' && S.si < 11) { S.startStage(S.si + 1, 0); } }
 function gameOver() {
   mode = 'over'; $('aibar').classList.add('hidden'); const arcade = run && !run.practice && run.diff !== 'sight' && !useBot && !run.ai && !run.took, b = arcade ? boards[run.diff] : null;
-  $('ov-t').textContent = S.won ? 'THE STORM BREAKS' : 'SHIP LOST'; $('ov-s').innerHTML = `Score <b>${S.score.toLocaleString()}</b> &nbsp; Stage <b>${S.si + 1}</b>${S.loop > 1 ? ' &nbsp; Loop <b>' + S.loop + '</b>' : ''} &nbsp; Best chain <b>x${S.maxChain}</b>`;
+  $('ov-t').textContent = ended ? 'THE STORM BREAKS' : 'SHIP LOST'; $('ov-s').innerHTML = `Score <b>${S.score.toLocaleString()}</b> &nbsp; Stage <b>${S.si + 1}</b>${S.loop > 1 ? ' &nbsp; Loop <b>' + S.loop + '</b>' : ''} &nbsp; Best chain <b>x${S.maxChain}</b>`;
   const q = b && b.qualifies(S.score); $('ov-entry').classList.toggle('hidden', !q); if (q) { $('initials').value = b.initials(); }
-  $('ov-retry').classList.toggle('hidden', !!(run && run.practice) || S.won); show('s-over'); if (q && !I.touch) $('initials').focus();
+  $('ov-retry').classList.toggle('hidden', !!(run && run.practice) || ended); show('s-over'); if (q && !I.touch) $('initials').focus();
 }
 function fx() {
   for (const f of S.fx) {
@@ -101,7 +101,7 @@ function saveGhost() { if (!run || run.practice || run.ai || !set.ghost) return;
 function ending() {
   mode = 'ending'; $('aibar').classList.add('hidden'); if (S.si + 1 > prog.max && !(run && run.ai)) { prog.max = 11; saveProg(); }
   $('cr-text').innerHTML = `The eye closes behind you and the sky is only sky.<br>Final score <b style="color:var(--amber)">${S.score.toLocaleString()}</b> &nbsp;·&nbsp; ${S.deaths} ship${S.deaths === 1 ? '' : 's'} lost &nbsp;·&nbsp; best chain x${S.maxChain}<br><br>UNDERSTORM 2026 — an original game for the GameMaster Arcade.<br>Design, code, models and score generated in the browser. No samples, no borrowed art.`;
-  $('credits').classList.remove('hidden'); $('hud').classList.add('hidden'); A.sfx('clear');
+  ended = true; S.epilogue(EPILOGUE); $('banner').classList.remove('on'); $('msg').classList.remove('on'); $('credits').classList.remove('hidden'); $('hud').classList.add('hidden'); A.sfx('clear');
 }
 
 // ---------------------------------------------------------------- menus
@@ -143,7 +143,10 @@ $('p-restart').onclick = () => { S.restore(false); S.fx.push({ k: 'respawn' }); 
 $('ov-quit').onclick = quit; $('cr-quit').onclick = () => { const arcade = run && !run.practice && run.diff !== 'sight' && !useBot && !run.ai && !run.took; $('credits').classList.add('hidden'); if (arcade && boards[run.diff].qualifies(S.score)) gameOver(); else quit(); };
 $('ov-retry').onclick = () => startGame({ diff: run.diff, stage: S.si, loadout: { core: 1, lvl: 1 }, loop: S.loop });
 $('ov-submit').onclick = async () => { const b = boards[run.diff]; $('ov-entry').classList.add('hidden'); await b.submit($('initials').value, S.score, S.si + 1 + (S.loop - 1) * 12); tab = run.diff; };
-$('cr-loop').onclick = () => { $('credits').classList.add('hidden'); $('hud').classList.remove('hidden'); mode = 'play'; S.nextLoop(); };
+$('cr-loop').onclick = () => { $('credits').classList.add('hidden'); $('hud').classList.remove('hidden'); ended = false; mode = 'play'; S.nextLoop(); };
+function intro() { introT = 12.6; introSkip = false; show(null); $('demo').classList.add('hidden'); $('intro').classList.remove('hidden'); fadeTo = 0.42; }
+function endIntro(silent) { if (introT <= 0) return; introT = 0; $('intro').classList.add('hidden'); fadeTo = 1; if (!silent) { $('demo').classList.remove('hidden'); show('title'); } }
+addEventListener('keydown', () => { introSkip = true; }); addEventListener('pointerdown', () => { introSkip = true; });
 const tb = (id, dn, up) => { const b = $(id); b.addEventListener('pointerdown', (e) => { e.preventDefault(); b.classList.add('down'); dn(); }); const u = () => { b.classList.remove('down'); if (up) up(); }; b.addEventListener('pointerup', u); b.addEventListener('pointercancel', u); b.addEventListener('pointerleave', u); };
 tb('t-fire', () => (I.tf = true), () => (I.tf = false)); tb('t-anchor', () => (I.ta = true)); tb('t-up', () => (I.tu = true)); tb('t-dn', () => (I.td = true)); tb('t-pause', pause);
 I.onTouch = () => { if (mode === 'play') $('touch').classList.remove('hidden'); };
@@ -179,6 +182,8 @@ function frame(now) {
       if (n === max) acc = 0;
     }
   } else if (mode === 'menu' || mode === 'over' || mode === 'ending') {
+    if (introT > 0) { introT -= dt; if (introT <= 0 || introSkip) { introT = Math.max(introT, 0.001); endIntro(); } }
+    if (mode === 'ending') { S.step({}); fx(); }
     if (mode === 'menu') { demoT += dt; S.step(botInput(S, mem)); fx(); if (S.over || demoT > 55) { S.fx.length = 0; fadeTo = 0; if (R.fade < 0.03) { const sc = screen; startDemo(); show(sc); fadeTo = 1; } } }
     nav(inp);
   } else nav(inp);
@@ -186,13 +191,13 @@ function frame(now) {
   R.fade += (fadeTo - R.fade) * Math.min(1, dt * 5);
   const gi = Math.floor(S.t * 15) * 2, gh = !demo && ghost && !S.boss && ghost.d[gi] != null ? [ghost.d[gi] / 20, ghost.d[gi + 1] / 20] : null;
   R.frame(S, mode === 'pause' ? 0 : dt, { ghost: gh, ai: run && run.ai && vision && !demo && mode === 'play' ? mem : null, onThunder: () => { if (!demo) A.sfx('thunder', 1); } });
-  if (demo) { titleT += dt; A.tick(titleT, 3, 0); } else if (mode === 'play') { const p = S.p, inten = S.boss || p.tier >= 2 || S.chain >= 3 ? 3 : S.en.length >= 4 || S.t > S.st.endT * 0.5 ? 2 : 1; A.tick(S.gt, inten, p.alive ? clamp(p.charge / CHARGE[2], 0, 1) : 0); } else A.tick(0, 0, 0);
+  if (demo) { titleT += dt; A.tick(titleT, 3, 0); } else if (mode === 'play') { const p = S.p, inten = S.boss || p.tier >= 2 || S.chain >= 3 ? 3 : S.en.length >= 4 || S.t > S.st.endT * 0.5 ? 2 : 1; A.tick(S.gt, inten, p.alive ? clamp(p.charge / CHARGE[2], 0, 1) : 0); } else if (mode === 'ending') A.tick(S.gt, 3, 0); else A.tick(0, 0, 0);
   if (!demo) drawHud();
   // auto quality: step down if the frame rate will not hold
   if (set.quality === 'auto' && !P.get('q') && mode !== 'pause' && !document.hidden) { if (raw < 0.1) ema += (raw * 1000 - ema) * 0.03; if (ema > 21.5) slow += dt; else slow = Math.max(0, slow - dt * 2); if (slow > 2.5 && qual !== 'low') { qual = qual === 'high' ? 'med' : 'low'; R.setQuality(qual); slow = 0; ema = 16; } }
 }
 
-applyOpt(); startDemo();
+applyOpt(); startDemo(); if (!P.has('stage') && !P.has('nointro')) intro();
 if (P.has('stage')) startGame({ diff: P.get('diff') || 'normal', stage: clamp(+P.get('stage') - 1, 0, 11), cp: +(P.get('cp') || 0), practice: 'stage', loadout: { core: +(P.get('core') || 1), lvl: 2, motes: 1 } });
 window.__us = { S, R, A, I, set, prog, start: startGame, get mode() { return mode; }, get qual() { return qual; }, get ema() { return ema; }, ff(n) { ff = n; }, bot(on) { useBot = on; }, skip(sec) { const si = S.si; quiet = true; for (let i = 0; i < sec * 60 && mode === 'play' && S.si === si; i++) { S.step(botInput(S, mem)); fx(); } quiet = false; return S.t; } };
 requestAnimationFrame(frame);

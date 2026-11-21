@@ -1,7 +1,7 @@
 // UNDERSTORM 2026 — deterministic fixed-step simulation. No rendering, no audio, no DOM.
 // Positions are in screen space (0..32 x 0..18); things bolted to the world slide left by the scroll.
-import { W, H, DT, SPEEDS, DIFFS, CHARGE, clamp } from './config.js?v=111';
-import { FOES, BOSSES } from './foes.js?v=111';
+import { W, H, DT, SPEEDS, DIFFS, CHARGE, clamp } from './config.js?v=120';
+import { FOES, BOSSES } from './foes.js?v=120';
 
 const MAXB = 380;
 const segDist = (px, py, ax, ay, bx, by) => {
@@ -87,7 +87,7 @@ export class Sim {
   }
   spawnBoss(name) {
     const d = BOSSES[name]; const e = { type: 'boss', boss: name, x: W + 6, y: 9, vx: 0, vy: 0, hp: d.hp * this.diff.hp, r: 0, t: 0, dir: -1, sc: d.sc || 20000, flash: 0, parts: [], cd: 60, ph: 0, o: {}, name: d.name, seen: true, rot: 0 };
-    e.max = e.hp; d.init(e, this); this.en.push(e); this.boss = e; this.fx.push({ k: 'boss', name: d.name }); return e;
+    e.max = e.hp; e.gateMax = e.max / 20; e.gate = e.gateMax; d.init(e, this); this.en.push(e); this.boss = e; this.fx.push({ k: 'boss', name: d.name }); return e;
   }
   part(e, kind, ox, oy, r, o = {}) { const p = { kind, ox, oy, r, x: e.x + ox, y: e.y + oy, on: true, flash: 0, rot: 0, ...o }; if (p.hp !== undefined) { p.hp *= this.diff.hp; p.max = p.hp; } e.parts.push(p); return p; }
   addScore(n, x, y) { this.score += n; if (this.score >= this.nextLife) { this.nextLife += 80000; this.lives++; this.fx.push({ k: 'life' }); } if (x !== undefined && n >= 500) this.fx.push({ k: 'pts', x, y, n }); }
@@ -97,6 +97,7 @@ export class Sim {
     if (part) {
       if (!part.on) return false;
       if (part.armor) { if (src.k !== 'tether' && src.k !== 'anchor') this.fx.push({ k: 'tink', x: src.x ?? part.x, y: src.y ?? part.y }); return true; }
+      if (e.boss && part.weak) { dmg = Math.min(dmg, e.gate); e.gate -= dmg; if (dmg <= 0) return true; }
       if (part.hp !== undefined) {
         if (part.weak) dmg = Math.min(dmg, part.hp + 0.01);
         part.hp -= dmg; part.flash = 4;
@@ -130,6 +131,7 @@ export class Sim {
   // ---------------------------------------------------------------- one fixed step
   step(inp) {
     if (this.over || this.won) return;
+    if (this.epi) { this.tick++; this.gt += DT; this.t += DT; this.vs = 2.4; this.sT += 2.4 * DT; const o = this.scroll; this.scroll = this.sT; this.ds = this.scroll - o; this.ab = []; const p = this.p, a = this.a; p.x += (12 - p.x) * 0.02; p.y += (9 + Math.sin(this.gt * 0.7) * 1.3 - p.y) * 0.05; p.vy = Math.cos(this.gt * 0.7) * 0.9; p.inv = 0; p.firing = false; p.charge = 0; p.tier = 0; p.light = 0; if (a.st) { a.st = 1; a.x = p.x + 1.15; a.y = p.y; a.spin += 0.1; } for (let i = 0; i < 2; i++) { const m = p.m[i]; m.x += (p.x - 0.2 - m.x) * 0.2; m.y += (p.y + (i ? -1.65 : 1.65) - m.y) * 0.2; } return; }
     this.tick++;
     if (this.mode === 'clear') { if (--this.clearT <= 0) { this.advance(); if (this.over || this.won) return; } }
     const st = this.st, p = this.p, a = this.a;
@@ -169,7 +171,7 @@ export class Sim {
     for (let i = 0; i < en.length; i++) {
       const e = en[i]; if (e.dead) continue;
       e.t++; if (e.flash > 0) e.flash--; if (e.world) e.x -= ds;
-      if (e.boss) { BOSSES[e.boss].update(e, this); for (const q of e.parts) { q.x = e.x + q.ox; q.y = e.y + q.oy; if (q.flash > 0) q.flash--; } }
+      if (e.boss) { e.gate = Math.min(e.gateMax, e.gate + e.gateMax / 60); BOSSES[e.boss].update(e, this); for (const q of e.parts) { q.x = e.x + q.ox; q.y = e.y + q.oy; if (q.flash > 0) q.flash--; } }
       else FOES[e.type].update(e, this);
       if (!e.seen && e.x > -1 && e.x < W + 1) e.seen = true;
       if (!e.boss && (e.x < -9 || e.x > W + 12 || e.y < -9 || e.y > H + 9 || (e.seen && (e.x < -4 || e.x > W + 4.5)) || e.t > 5400)) e.dead = true, e.left = true;
@@ -207,7 +209,8 @@ export class Sim {
     if (this.si + 1 < this.stages.length) this.startStage(this.si + 1, 0);
     else { this.won = true; this.fx.push({ k: 'ending' }); }
   }
-  nextLoop() { this.won = false; this.loop++; this.startStage(0, 0); }
+  nextLoop() { this.won = false; this.epi = false; this.loop++; this.startStage(0, 0); }
+  epilogue(st) { this.won = false; this.epi = true; this.st = st; this.cp = 0; this.restore(true); this.fx.push({ k: 'stage', i: -1 }); }
 
   event(e) {
     if (e.k === 'foe') this.spawn(e.type, e.o);
@@ -293,7 +296,10 @@ export class Sim {
     a.spin += 0.12 + (a.st >= 3 ? 0.2 : 0);
     if (!p.alive) { a.st = a.st <= 2 ? a.st : 4; if (a.st <= 2) { a.x -= 0.02; } return; }
     if (inp.anchor) {
-      if (a.st <= 2) { a.vx = (a.st === 1 ? 1 : -1) * 30; a.st = 3; a.free = 0; this.fx.push({ k: 'launch', x: a.x, y: a.y }); }
+      const push = (inp.x || 0) + (inp.dx || 0) * 8;
+      if (a.st === 1 && push < -0.3) { a.st = 2; this.fx.push({ k: 'swap', x: p.x, y: p.y }); }
+      else if (a.st === 2 && push > 0.3) { a.st = 1; this.fx.push({ k: 'swap', x: p.x, y: p.y }); }
+      else if (a.st <= 2) { a.vx = (a.st === 1 ? 1 : -1) * 30; a.st = 3; a.free = 0; this.fx.push({ k: 'launch', x: a.x, y: a.y }); }
       else if (a.st !== 5) { a.st = 5; a.lat = null; this.fx.push({ k: 'recall' }); }
     }
     const lvl = p.lvl, src = { k: 'anchor' };

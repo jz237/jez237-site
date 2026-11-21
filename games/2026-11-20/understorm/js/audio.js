@@ -111,7 +111,7 @@ export class Sound {
       case 'boom': this.sfx(f.big ? 'boom' : 'boom', f.big ? 1.4 : 0.6); break; case 'bossdie': case 'bossgone': case 'phase': this.sfx('bigboom'); break;
       case 'hit': case 'tink': case 'absorb': case 'eshot': case 'pickup': case 'launch': case 'recall': case 'dock': case 'thunk': case 'zap': case 'rico': case 'burrow': case 'strike': case 'die': case 'cp': case 'clear': case 'lock': case 'unlock': case 'life': case 'grow': case 'shatter': case 'clank': case 'growl': case 'panic': this.sfx(f.k); break;
       case 'hitp': case 'shield': this.sfx('hurt'); break; case 'boss': this.sfx('warn'); break; case 'chain': this.sfx('chain', f.n); break; case 'speed': this.sfx('speed', f.n); break;
-      case 'tear': case 'wake': case 'cast': this.sfx('clank'); break; case 'reveal': case 'blink': this.sfx('growl'); break; case 'flash': this.sfx('thunder', 1.5); break;
+      case 'tear': case 'wake': case 'cast': this.sfx('clank'); break; case 'swap': this.sfx('dock'); break; case 'reveal': case 'blink': this.sfx('growl'); break; case 'flash': this.sfx('thunder', 1.5); break;
     }
   }
 }
