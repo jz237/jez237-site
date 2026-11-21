@@ -100,14 +100,14 @@ export const BOSSES = {
   // 2. Something that only exists inside the fog. Blow the fog away with a charged Lance.
   veil: { name: 'THE VEIL', hp: 1000, sc: 22000,
     init(e, S) { e.banks = [{ x: 22, y: 14, r: 3.3, off: 0 }, { x: 26.5, y: 9, r: 3.3, off: 0 }, { x: 22, y: 4, r: 3.3, off: 0 }]; e.in = 1; e.x = 26.5; e.y = 9; e.eye = S.part(e, 'eye', 0, 0, 1.3, { weak: true }); e.stun = 0; e.cd = 100; e.hop = 300;
-      const clear = (b) => { if (b.off > 0) return; b.off = 330; S.fx.push({ k: 'fogout', x: b.x, y: b.y }); if (e.banks[e.in] === b) { e.stun = 170; e.vul = 2; S.fx.push({ k: 'stun', x: e.x, y: e.y }); } };
+      const clear = (b) => { if (b.off > 0) return; b.off = 330; S.fx.push({ k: 'fogout', x: b.x, y: b.y }); if (e.banks[e.in] === b && !(e.imm > 0)) { e.stun = 170; e.vul = 2; S.fx.push({ k: 'stun', x: e.x, y: e.y }); } };
       e.onWave = (e2, S2, s) => { for (const b of e.banks) if (Math.hypot(b.x - s.x, b.y - s.y) < b.r) clear(b); };
       e.onBeam = (e2, S2, by, x0, xe) => { for (const b of e.banks) if (Math.abs(b.y - by) < b.r && b.x > x0 && b.x - b.r < xe) clear(b); }; },
     update(e, S) { for (const b of e.banks) if (b.off > 0) b.off--; const cur = e.banks[e.in];
-      if (e.stun > 0) { e.stun--; if (e.stun === 0) { e.vul = 1; e.hop = 0; } e.eye.ghost = false; }
-      if (e.stun <= 0 && --e.hop <= 0) { const live = e.banks.map((b, i) => i).filter((i) => e.banks[i].off <= 0 && i !== e.in); if (live.length) { e.in = live[(S.rnd() * live.length) | 0]; e.hop = 250; e.cd = 50; S.fx.push({ k: 'blink', x: e.x, y: e.y }); } else if (cur.off > 0) { e.stun = 150; e.vul = 2; } else e.hop = 120; }
+      if (e.imm > 0) e.imm--; if (e.stun > 0) { e.stun--; if (e.stun === 0) { e.vul = 1; e.hop = 0; e.imm = 90; } e.eye.ghost = false; }
+      if (e.stun <= 0 && --e.hop <= 0) { const live = e.banks.map((b, i) => i).filter((i) => e.banks[i].off <= 0 && i !== e.in); if (live.length) { e.in = live[(S.rnd() * live.length) | 0]; e.hop = 250; e.cd = 50; S.fx.push({ k: 'blink', x: e.x, y: e.y }); } else if (cur.off > 0 && !(e.imm > 0)) { e.stun = 150; e.vul = 2; } else e.hop = 120; }
       const b = e.banks[e.in]; e.x += (b.x - e.x) * 0.2; e.y += (b.y - e.y) * 0.2;
-      e.eye.armor = e.stun <= 0 && false; e.vis = e.stun > 0 ? 1 : 0.55;
+      e.eye.armor = false; e.vis = e.stun > 0 ? 1 : 0.55;
       if (e.stun <= 0 && --e.cd <= 0) { e.n = (e.n || 0) + 1; e.cd = S.cdr(hpf(e) < 0.5 ? 48 : 64); if (e.n % 3 === 0) S.ring(e.x, e.y, 16, 4.4, e.t * 0.1); else S.aim(e.x, e.y, 6.6, 3 + (hpf(e) < 0.5 ? 2 : 0), 0.22); if (e.n % 7 === 0) S.spawn('lurker', { x: 18 + S.rnd() * 8, y: 3 + S.rnd() * 12, sense: 30 }); } } },
 
   // 3. The hauler's reactor: spinning shield plates with gaps.

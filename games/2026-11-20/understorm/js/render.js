@@ -62,7 +62,7 @@ export class Renderer {
     // sky
     this.bgU = { uTime: { value: 0 }, uScroll: { value: 0 }, uFlash: { value: 0 }, uDens: { value: 0.5 }, uSeed: { value: 0 }, uSky0: { value: col(0) }, uSky1: { value: col(0) }, uCl: { value: col(0) }, uCs: { value: col(0) }, uBolt: { value: col(0xffffff) }, uLt: { value: new THREE.Vector2(0.5, 0.5) } };
     this.bg = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), null); this.bg.frustumCulled = false; this.bg.renderOrder = -1000; this.scene.add(this.bg); this.mkSky();
-    this.add = new Batch(2600, true); this.smoke = new Batch(500, false); this.scene.add(this.smoke.mesh, this.add.mesh);
+    this.add = new Batch(2600, true); this.smoke = new Batch(1100, false); this.scene.add(this.smoke.mesh, this.add.mesh);
     this.parts = []; this.world = new THREE.Group(); this.scene.add(this.world); this.far = new THREE.Group(); this.scene.add(this.far);
     this.fm = new Map(); this.bm = new Map();
     this.ship = makeShip(); this.scene.add(this.ship); this.anchor = makeAnchor(); this.scene.add(this.anchor); this.ghost = makeShip(); this.ghost.traverse((o) => { if (o.isMesh) o.material = MAT.glass; }); this.ghost.visible = false; this.scene.add(this.ghost);
@@ -122,7 +122,7 @@ export class Renderer {
     this.pistMat = new THREE.MeshStandardMaterial({ map: this.tex.panel, color: 0xb9a070, metalness: 0.8, roughness: 0.4 });
     if (st.terr !== 'none') for (const sign of [1, -1]) this.world.add(this.mkTerrain(st, sign > 0 ? st.floor : st.ceil, sign));
     this.mkBackdrop(st);
-    this.liqU.c.value.set(P.liq || 0x2fd0c0); this.liqU.hot.value = st.liquid === 'lava' ? 1 : 0;
+    this.rimC = col(P.rim); this.liqU.c.value.set(P.liq || 0x2fd0c0); this.liqU.hot.value = st.liquid === 'lava' ? 1 : 0;
   }
 
   mkTerrain(st, arr, sign) {
@@ -143,10 +143,10 @@ export class Renderer {
     const M = new THREE.Matrix4(), Q = new THREE.Quaternion(), E = new THREE.Euler(), V = new THREE.Vector3(), Sc = new THREE.Vector3();
     const put = (k, x, y, z, sx, sy, sz, rx = 0, ry = 0, rz = 0) => { E.set(rx, ry, rz); Q.setFromEuler(E); M.compose(V.set(x, y, z), Q, Sc.set(sx, sy, sz)); lists[k].push(M.clone()); };
     let seed = st.idx * 97 + 5; const R = () => { seed = (seed * 16807) % 2147483647; return seed / 2147483647; };
-    for (let i = 0; i < n; i++) { const x = R() * L, z = -22 - R() * R() * 75, y = R() * 40 - 11, s = 1 + R() * 2.5;
+    for (let i = 0; i < n; i++) { const x = R() * L, z = (kind === 'hauler' || kind === 'graveyard' ? -38 : -22) - R() * R() * 75, y = R() * 40 - 11, s = 1 + R() * 2.5;
       if (kind === 'pylons' || kind === 'works') { const h = 14 + R() * 40; put('box', x, y - 10, z, s * 0.8, h, s * 0.8); put('box', x, y + R() * 10, z, s * 5, 0.5, 0.5); if (R() < 0.6) put('cyl', x + 2, y - 4, z, s * 1.6, s * 4, s * 1.6); if (kind === 'works') put('cyl', x, y + 4, z, 0.5, 30, 0.5, 0, 0, PI / 2); put('glow', x, y + R() * 8 - 4, z + s * 0.5, 0.25, 0.25 + R() * 2, 0.1); }
       else if (kind === 'canyon' || kind === 'eyewall' || kind === 'deep') { const top = i % 2; put('ico', x, top ? 26 + R() * 6 : -9 - R() * 5, z, 5 + R() * 9, 10 + R() * 14, 5 + R() * 6, R(), R(), R() * 0.4); if (kind === 'eyewall' && R() < 0.5) put('ico', x + 5, R() * 18, z, s, s * 0.7, s, R() * 3, R() * 3, 0); if (kind === 'deep' && R() < 0.3) put('glow', x, R() * 18, z, 0.15, 0.15, 0.15); }
-      else if (kind === 'hauler' || kind === 'graveyard') { put('box', x, y, z, 6 + R() * 16, 1.5 + R() * 4, 3 + R() * 5, R() * 0.4, R() * 0.6, (R() - 0.5) * (kind === 'graveyard' ? 2 : 0.3)); if (R() < 0.5) put('cyl', x + 3, y + 2, z, 1 + R(), 5 + R() * 6, 1 + R(), 0, 0, PI / 2 + (R() - 0.5)); if (R() < 0.4) put('glow', x, y, z + 2, 0.2 + R() * 1.5, 0.15, 0.1); }
+      else if (kind === 'hauler' || kind === 'graveyard') { const gv = kind === 'graveyard'; put('box', x, y, z, gv ? 3 + R() * 7 : 6 + R() * 16, gv ? 0.8 + R() * 1.6 : 1.5 + R() * 4, 3 + R() * 5, R() * 0.4, R() * 0.6, (R() - 0.5) * (gv ? 2 : 0.3)); if (R() < 0.5) put('cyl', x + 3, y + 2, z, 1 + R(), 5 + R() * 6, 1 + R(), 0, 0, PI / 2 + (R() - 0.5)); if (R() < 0.4) put('glow', x, y, z + 2, 0.2 + R() * 1.5, 0.15, 0.1); }
       else if (kind === 'reef' || kind === 'core') { const top = i % 2; put('oct', x, top ? 20 + R() * 8 : -3 - R() * 6, z, 1.5 + R() * 3, 5 + R() * 12, 1.5 + R() * 3, (R() - 0.5) * 0.6, R() * 3, (R() - 0.5) * 0.7); if (R() < 0.35) put('glow', x + R() * 4, R() * 18, z, 0.2, 0.2, 0.2, 0, 0, 0.78); if (kind === 'core' && R() < 0.4) put('tor', x, 9, z - 20, 16 + R() * 10, 16 + R() * 10, 3, 0, R() * 1.2, 0); }
       else if (kind === 'herd') { if (i % 3 === 0) { put('sph', x, R() * 26 - 4, z - 10, 5 + R() * 5, 2 + R() * 2, 2.4 + R() * 2); put('glow', x - 1, R() * 26 - 4, z - 8, 1.2, 0.08, 0.08); } }
       else if (kind === 'foundry') { const h = 10 + R() * 30; put('cyl', x, y - 12, z, s * 1.5, h, s * 1.5); put('box', x, y + 12 + R() * 6, z, s * 4, 2, s * 2); put('glow', x, y - 12 + h / 2, z, s * 1.2, 0.3, s * 1.2); if (R() < 0.5) put('box', x + 4, 20 + R() * 4, z, 0.3, 14, 0.3); }
@@ -218,6 +218,7 @@ export class Renderer {
       m.userData.f = this.frameN; m.position.set(b.cx - sc, b.cy, b.k === 'cry' || b.k === 'seed' ? 0 : -1.1); if (b.rot) m.rotation.z = b.rot;
       if (b.grow) { const s = clamp((b.growT || 0) / 14 + 1, 0.05, 1); m.scale.set(b.w * 0.72 * s, b.h * 0.72 * s, 1.5 * s); }
       if (b.flash > 0) { b.flash--; B.add(b.cx - sc, b.cy, 1.7, b.w, b.h, 0, 1, 1, 1, 0.6, 0); }
+      if ((b.k === 'solid' || b.k === 'hull' || b.k === 'pist') && !b.det) { const x = b.cx - sc, hw = b.w / 2, hh = b.h / 2, c = this.rimC; B.add(x, b.cy + hh, 0.56, hw, 0.035, 0, c.r, c.g, c.b, 0.5, 5); B.add(x, b.cy - hh, 0.56, hw, 0.035, 0, c.r, c.g, c.b, 0.5, 5); B.add(x - hw, b.cy, 0.56, 0.035, hh, 0, c.r, c.g, c.b, 0.5, 5); B.add(x + hw, b.cy, 0.56, 0.035, hh, 0, c.r, c.g, c.b, 0.5, 5); }
       if (b.k === 'seed') { const s = 0.5 + Math.sin(t * 5 + b.x) * 0.06; m.scale.setScalar(b.grown ? 0.3 : s); if (!b.grown) B.add(b.cx - sc, b.cy, 1, 1.2, 1.2, 0, 0.7, 0.5, 1, 0.5, 0); }
     }
     for (const [b, m] of this.bm) if (m.userData.f !== this.frameN) { this.scene.remove(m); this.bm.delete(b); }
@@ -261,7 +262,7 @@ export class Renderer {
     // beam
     if (p.beamT > 0 && p.alive) { const x0 = p.x + 0.8, x1 = p.beamX, a2 = Math.min(1, p.beamT / 6); this.beam.visible = true; this.beam.position.set((x0 + x1) / 2, p.y, 0.6); this.beam.scale.set(Math.max(0.1, x1 - x0), 1.9, 1); this.beamU.t.value = t; this.beamU.a.value = a2; B.add(x1, p.y, 0.7, 1.6, 1.6, 0, 0.6, 1, 0.9, 1, 2); this.spark(x1, p.y, 3, 9, [0.5, 1, 0.9], 0.14, 0.3); this.heatBox = [x0 / W, p.y / H, (x1 - x0) / W, 0.09]; this.heat = a2; } else { this.beam.visible = false; this.heat = 0; }
     // enemy bullets, player shots, pickups
-    for (const b of S.eb) { const c = BCOL[b.k] || BCOL[0], s = b.r * 2.3; if (b.k === 3) B.add(b.x, b.y, 0.5, 0.7, 0.16, Math.atan2(b.vy, b.vx), c[0], c[1], c[2], 1, 3); B.add(b.x, b.y, 0.5, s, s, 0, c[0], c[1], c[2], 1, 2); }
+    for (const b of S.eb) { const c = BCOL[b.k] || BCOL[0], s = b.r * 2.3; this.smoke.add(b.x, b.y, 0.45, s * 1.5, s * 1.5, 0, 0, 0, 0, 0.6, 4); if (b.k === 3) B.add(b.x, b.y, 0.5, 0.7, 0.16, Math.atan2(b.vy, b.vx), c[0], c[1], c[2], 1, 3); B.add(b.x, b.y, 0.5, s, s, 0, c[0], c[1], c[2], 1, 2); }
     for (const s of S.ps) { const ang = Math.atan2(s.vy, s.vx);
       if (s.k === 0) B.add(s.x, s.y, 0.4, 0.75, 0.15, ang, 0.4, 1, 0.9, 1, 3);
       else if (s.k === 1) { B.add(s.x, s.y, 0.4, 1.2, 0.34, ang, 0.5, 1, 0.9, 1, 3); B.add(s.x, s.y, 0.4, 0.5, 0.5, 0, 0.8, 1, 1, 1, 2); }
