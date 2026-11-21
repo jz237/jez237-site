@@ -3,6 +3,11 @@
    full-viewport layer appended to body (games/, how-ai-works/, ai-explainer —
    their content sits at z-index 1, galaxy pseudo-elements at 0).
    Respects prefers-reduced-motion (static stars, no meteors).
+   Optional, set before this script loads: window.spaceFxOptions = { calmFps: 15 }
+   redraws at that rate, on wall-clock slots, while only the stars are twinkling
+   (full rate returns while a meteor is crossing). Pages that do not set it are
+   unchanged.
+   window.__spaceFx.stop() / .start() let a host page rest the layer.
    Debug: window.__spaceFx.renderFrame(dtMs) steps one frame manually — needed in
    headless previews where document.hidden keeps requestAnimationFrame from firing. */
 (function () {
@@ -168,8 +173,16 @@
   }
 
   var last = 0, rafId = 0;
+  var opts = window.spaceFxOptions || {};
+  var calmGap = opts.calmFps > 0 ? 1000 / opts.calmFps : 0;
+  var calmSlot = -1;
   function loop(now) {
     rafId = requestAnimationFrame(loop);
+    if (calmGap) {
+      var slot = Math.floor((performance.timeOrigin + now) / calmGap);
+      if (slot === calmSlot && !meteors.length) return;
+      calmSlot = slot;
+    }
     var dt = Math.min(0.05, (now - last) / 1000) || 0.016;
     last = now;
     drawFrame(dt);
@@ -198,6 +211,8 @@
     meteors: meteors,
     spawnMeteor: spawnMeteor,
     renderFrame: function (dtMs) { drawFrame((dtMs || 16.7) / 1000); },
+    start: start,
+    stop: stop,
     resize: resize
   };
 })();

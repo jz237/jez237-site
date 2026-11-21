@@ -158,6 +158,15 @@
       // instead of blending into the page behind the iframe.
       renderer.setClearColor(0x02070c, 1);
     }
+    // Power options for background mode, set by the host page: ?fps= caps the
+    // frame rate (full rate returns while the globe is being dragged) and
+    // ?dpr= caps the pixel ratio. The standalone page is unaffected.
+    const bgFps = parseFloat(bgParams.get("fps"));
+    const bgDpr = parseFloat(bgParams.get("dpr"));
+    const frameGap = BG_MODE && bgFps > 0 ? 1000 / bgFps : 0;
+    if (BG_MODE && bgDpr > 0) {
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, bgDpr));
+    }
 
     const world = new THREE.Group();
     world.rotation.set(0.06, -0.55, 0);
@@ -1094,8 +1103,19 @@
 
     let animClock = 0;
     let realClock = 0;
-    function animate() {
-      requestAnimationFrame(animate);
+    let rafId = 0;
+    let lastSlot = -1;
+    let fullRateUntil = 0;
+    let bgPaused = false;
+    function animate(now) {
+      rafId = requestAnimationFrame(animate);
+      if (frameGap) {
+        // Wall-clock slots, so the host page can draw its own capped animation
+        // on the same frames and the screen is only redrawn that often.
+        const slot = Math.floor((performance.timeOrigin + now) / frameGap);
+        if (slot === lastSlot && now >= fullRateUntil) return;
+        lastSlot = slot;
+      }
       // Only call getDelta() (calling getElapsedTime() too would consume the
       // delta and leave it ~0). Scale animation time by rotFactor so the whole
       // globe — camera spin, clouds, arcs, rings, stars — slows/speeds as one.
@@ -1151,7 +1171,45 @@
       renderer.render(scene, camera);
     }
 
-    animate();
+    rafId = requestAnimationFrame(animate);
+
+    if (BG_MODE) {
+      // The host page can rest the globe while nobody is using the page:
+      // postMessage({ type: "globe-bg", paused: true | false }).
+      window.addEventListener("message", (event) => {
+        if (event.origin !== location.origin) return;
+        const data = event.data;
+        if (!data || data.type !== "globe-bg") return;
+        const paused = !!data.paused;
+        if (paused === bgPaused) return;
+        bgPaused = paused;
+        if (paused) {
+          cancelAnimationFrame(rafId);
+          rafId = 0;
+        } else {
+          clock.getDelta(); // drop the time spent resting
+          lastSlot = -1;
+          rafId = requestAnimationFrame(animate);
+        }
+      });
+      // Tell the host when the pointer is over the globe, so it knows the page
+      // is in use, and render at full rate while the globe is being dragged.
+      let lastPing = 0;
+      const ping = () => {
+        const t = performance.now();
+        if (t - lastPing < 1000) return;
+        lastPing = t;
+        if (window.parent !== window) {
+          try { window.parent.postMessage({ type: "globe-activity" }, location.origin); } catch (err) { /* host unavailable */ }
+        }
+      };
+      window.addEventListener("pointermove", (event) => {
+        if (event.buttons) fullRateUntil = performance.now() + 1500;
+        ping();
+      }, { passive: true });
+      window.addEventListener("pointerdown", () => { fullRateUntil = performance.now() + 1500; ping(); }, { passive: true });
+      window.addEventListener("pointerup", () => { fullRateUntil = performance.now() + 1500; }, { passive: true });
+    }
   </script>
 </body>
 </html>
