@@ -4,6 +4,481 @@
   "fallbackPolicy": "Use exact-day computer news when verified. If none exists, use same-week or same-month personal-computing items with confidence labels, then fall back to a wider world/business headline.",
   "issues": [
     {
+      "sectionChrome": {
+        "primary": "brick red",
+        "secondary": "royal blue",
+        "texture": "aged newsprint, fine column rules, ink bleed"
+      },
+      "currentDate": "2026-11-21",
+      "historicDate": "1985-10-07",
+      "displayDate": "Week of October 7-13, 1985",
+      "edition": "Issue 167 - Weekly 1985 Computer & Culture Chronicle",
+      "masthead": {
+        "title": "Computer Chronicle",
+        "subtitle": "Issue 167 - Weekly 1985 Computer & Culture Chronicle",
+        "dateline": "Week of October 7-13, 1985",
+        "price": "75 cents"
+      },
+      "visualProfile": {
+        "tone": "Mystery at the keyboard: Hacker charts while British shops welcome the C128",
+        "motifs": [
+          "Commodore keyboard and simulated green terminal connection",
+          "C128 retail counter",
+          "miniature Spectrum surfboard accessory"
+        ],
+        "layout": "Warm aged newsprint, dense newspaper columns, red and blue headers, boxed modules, halftones, grain and slight ink bleed; no dead footer space"
+      },
+      "layoutPlan": {
+        "leadPlacement": "Hacker takes the biggest gaming headline and halftone illustration. Chart entry, not a release announcement.",
+        "secondaryRail": "Top 5 Computer Games: Billboard computer software October 12. Top 5 Music: Billboard Top Rock Tracks October 12. Movies: US weekend October 11. Print story headlines verbatim and fixed page-map jump lines."
+      },
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1985-10-07.jpg",
+        "alt": "Computer Chronicle newspaper front page for October 7-13, 1985",
+        "caption": "Newspaper-style front page generated from structured Chronicle issue data.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "sources": [
+        {
+          "title": "Popular Computing Weekly Vol.4 No.41, October 10–16, 1985; primary scan, pp.1–5,10,13",
+          "url": "https://www.computinghistory.org.uk/downloads/28812",
+          "date": "1985-10-10"
+        },
+        {
+          "title": "Centre for Computing History catalogue, CH28812, provenance for primary scan",
+          "url": "https://www.computinghistory.org.uk/det/28812/Popular-Computing-Weekly-Vol-4-No-41-10-16-October-1985/",
+          "date": "1985-10-10"
+        },
+        {
+          "title": "Billboard October 12, 1985; Top Rock Tracks and p.24 computer software chart",
+          "url": "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1985/BB-1985-10-12.pdf",
+          "date": "1985-10-12"
+        },
+        {
+          "title": "COMPUTE! issue 65 p.32: The New Games, Selby Bateman and Kathy Yakal",
+          "url": "https://www.atarimagazines.com/compute/issue65/new_games.php",
+          "date": "1985-10"
+        },
+        {
+          "title": "COMPUTE! issue 65 p.108: Telecomputing Today, Arlon R. Leviton",
+          "url": "https://www.atarimagazines.com/compute/issue65/telecomputing_today.php",
+          "date": "1985-10"
+        },
+        {
+          "title": "COMPUTE! issue 65 p.28: Amiga Goes IBM-Compatible, Tom R. Halfhill; software list Kathy Yakal",
+          "url": "https://www.atarimagazines.com/compute/issue65/amiga_goes_ibm.php",
+          "date": "1985-10"
+        },
+        {
+          "title": "The Numbers: Weekend Domestic Box Office October 11, 1985; retrospective dataset",
+          "url": "https://www.the-numbers.com/box-office-chart/weekend/1985/10/11",
+          "date": "1985-10-11"
+        },
+        {
+          "title": "White House statement by Larry Speakes on Achille Lauro; Reagan Library primary transcript",
+          "url": "https://www.reaganlibrary.gov/archives/speech/statement-principal-deputy-press-secretary-speakes-achille-lauro-hijacking-incident",
+          "date": "1985-10-10"
+        },
+        {
+          "title": "HISTORY retrospective: Achille Lauro aircraft interception",
+          "url": "https://www.history.com/this-day-in-history/october-10/achille-lauro-hijacking-ends?linkId=29526735",
+          "date": "1985-10-10 (event; retrospective article)"
+        }
+      ],
+      "lead": {
+        "headline": "No manual, no map: Hacker makes the software chart",
+        "dek": "Activision’s simulated mystery connection enters Billboard at No.7.",
+        "confidence": "same-week",
+        "sourceRefs": [
+          2,
+          3
+        ],
+        "body": [
+          "An unexplained connection is finding an audience. Hacker enters the computer-software chart in Billboard dated October 12 at No.7, marked NEW and described as a Mystery Adventure Game. It is a sales-chart arrival, not a newly established release date, but it gives the season’s most unusual keyboard puzzle a place alongside familiar flight simulations.",
+          "October’s COMPUTE! describes Activision president Jim Levy demonstrating what first appears to be a failed connection to company headquarters. The apparent mishap is the opening of the entertainment: players must discover the system, their objectives and the dangers without the usual explicit instructions. The uncertainty is the game.",
+          "This is an offline commercial adventure simulating network intrusion, not an invitation to connect to a real computer. The magazine reports Commodore 64 and 128 versions first, with Apple and Atari versions to follow; the price was still to be announced. Those are the advance report’s plans, not evidence that every edition shipped this week.",
+          "Billboard’s table puts F-15 Strike Eagle first and Gato second, with two flight simulators and Karateka completing the top five. Hacker’s new entry and Winter Games at No.8, up from No.16, show distinct alternatives competing for attention beside the established simulation leaders."
+        ]
+      },
+      "stories": [
+        {
+          "headline": "Commodore 128 reaches British shops as Amiga courts developers",
+          "body": [
+            "British retailers are beginning to receive the Commodore 128. Popular Computing Weekly’s October 10–16 edition says the first machines appeared the previous week, roughly a month later than intended. Small independent shops received early batches numbering only single figures.",
+            "The standalone machine costs £269. The report says neither the 1570 disk-drive bundle nor the 128D with its built-in drive has yet reached this UK release stage. Buyers must distinguish the machine actually on the counter from the fuller configurations still to come.",
+            "Meanwhile Commodore is recruiting an Amiga software library. NTSC development systems are offered at £1,340 without a monitor and £1,700 with one, including documentation and disks. Three machines had been delivered and ten further software houses had paid and were waiting. These are developer-system terms, not final UK consumer prices; named interested firms include Mirrorsoft, Hisoft, The Edge, Virgin and Electric Dreams."
+          ],
+          "confidence": "same-week",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "headline": "Apple–Digital Research dispute changes GEM’s screen furniture",
+          "body": [
+            "The graphical desktop has become a dispute over screen design. Popular Computing Weekly reports an out-of-court settlement following about six months of discussions between Apple and Digital Research over displays resembling the Macintosh.",
+            "GEM Desktop, GEM Paint and GEM Draw are the programs named in the report. Digital Research’s Frank Iveson describes the required alterations as screen-layout changes rather than code changes. The visible furniture of an interface, not merely its underlying program, is now a matter for negotiation.",
+            "The revised appearance is expected in a few weeks, with existing users meeting it through later upgrades. The report does not establish that every Atari ST ROM or every GEM implementation will change immediately. For buyers, the settled complaint and the promised revised software are separate stages."
+          ],
+          "confidence": "same-week",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "headline": "Amstrad’s computer gamble drives record profits",
+          "body": [
+            "Amstrad’s shift into home computing is visible in its accounts. The October 10 weekly reports £20.1 million in pretax profit for the year ended June 30, up 122 percent, on turnover of £136.1 million, up 60 percent. Computers account for 66 percent of sales, against 4 percent the previous year.",
+            "France and Germany are singled out as strong overseas markets. The newspaper reports shares reaching 134p after the figures and chairman Alan Sugar holding 50.2 percent. These are the period report’s figures, describing the completed financial year rather than a fresh weekly sales tally.",
+            "The October 5–6 Amstrad show at London’s Novotel drew a provisional estimate of about 10,000 visitors. Cumana demonstrated Pocket Wordstar at £119, while DK’Tronics advertised a £49.95 64K expansion and forthcoming £99.95 256K expansion and silicon-disk products. The counter is filling with accessories, but forthcoming products remain promises."
+          ],
+          "confidence": "same-week",
+          "sourceRefs": [
+            0
+          ]
+        }
+      ],
+      "editorNote": "A mysterious game climbs the chart as home-computer shops, software houses and modem users prepare for a busy autumn.",
+      "morningLine": "Hacker logs on at No.7; C128s reach British shops; GEM rearranges its desktop.",
+      "computerItems": [
+        {
+          "title": "Commodore 128 (UK)",
+          "summary": "Standalone £269 in early retail distribution; 1570 bundle/128D not yet available per October 10 weekly.",
+          "confidence": "same-week",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "title": "Amiga (US launch-period configuration)",
+          "summary": "October COMPUTE! quotes $1,295 base and $200 expansion from 256K user RAM to 512K user RAM. Separately describes 256K writable control store, excluded from advertised user RAM. These US figures must not be mixed with UK developer prices.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            5
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "Pocket Wordstar for Amstrad",
+          "detail": "Cumana demonstrated MicroPro’s word processor at the October 5–6 show; reported price £119.",
+          "confidence": "same-week",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "name": "GEM Desktop / Paint / Draw",
+          "detail": "Revised screen layouts are expected in a few weeks following the Apple settlement; not yet a verified shipment.",
+          "confidence": "same-week",
+          "sourceRefs": [
+            0
+          ]
+        }
+      ],
+      "storeShelves": [
+        {
+          "label": "Top 5 Computer Games — Billboard computer software chart, October 12, 1985",
+          "items": [
+            "1. F-15 Strike Eagle",
+            "2. Gato",
+            "3. Flight Simulator II",
+            "4. Flight Simulator",
+            "5. Karateka"
+          ],
+          "confidence": "same-week",
+          "sourceRefs": [
+            2
+          ]
+        },
+        {
+          "label": "Top 5 Movies — U.S. weekend chart, October 11, 1985",
+          "items": [
+            "1. Commando",
+            "2. Jagged Edge",
+            "3. Silver Bullet",
+            "4. Remo Williams: The Adventure Begins",
+            "5. Back to the Future"
+          ],
+          "confidence": "same-week",
+          "sourceRefs": [
+            6
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "C128 standalone",
+          "price": "£269",
+          "note": "UK retail reported, not US MSRP",
+          "confidence": "same-week",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "item": "Spectrum Plus",
+          "price": "£139.99",
+          "note": "Dixons offer cited by weekly in reporting an earlier survey",
+          "confidence": "same-week",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "item": "Sinclair QL",
+          "price": "£199",
+          "note": "reduced from £399 per weekly; not a cut newly dated to this week",
+          "confidence": "same-week",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "item": "Summer Games II C64/128 cassette",
+          "price": "£9.95",
+          "note": "Epyx advertisement p.2; disk C64/128 and Atari £14.95, advertised available in October",
+          "confidence": "same-week",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "item": "U.S. Robotics Courier 2400",
+          "price": "$695",
+          "note": "new list price in October telecom column; competing Hayes $895",
+          "confidence": "same-month",
+          "sourceRefs": [
+            4
+          ]
+        },
+        {
+          "item": "Cermetek Infomate 1200-TPC",
+          "price": "$198",
+          "note": "IBM PC internal Hayes-compatible modem, announced price",
+          "confidence": "same-month",
+          "sourceRefs": [
+            4
+          ]
+        }
+      ],
+      "musicChart": [
+        {
+          "rank": 1,
+          "title": "We Built This City",
+          "artist": "Starship",
+          "chart": "Billboard Top Rock Tracks",
+          "chartDate": "1985-10-12",
+          "basis": "National album-oriented radio airplay; not Hot 100, album sales, or Tunecaster.",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            2
+          ],
+          "song": "We Built This City"
+        },
+        {
+          "rank": 2,
+          "title": "You Belong to the City",
+          "artist": "Glenn Frey",
+          "chart": "Billboard Top Rock Tracks",
+          "chartDate": "1985-10-12",
+          "basis": "National album-oriented radio airplay; not Hot 100, album sales, or Tunecaster.",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            2
+          ],
+          "song": "You Belong to the City"
+        },
+        {
+          "rank": 3,
+          "title": "And We Danced",
+          "artist": "The Hooters",
+          "chart": "Billboard Top Rock Tracks",
+          "chartDate": "1985-10-12",
+          "basis": "National album-oriented radio airplay; not Hot 100, album sales, or Tunecaster.",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            2
+          ],
+          "song": "And We Danced"
+        },
+        {
+          "rank": 4,
+          "title": "After the Fire",
+          "artist": "Roger Daltrey",
+          "chart": "Billboard Top Rock Tracks",
+          "chartDate": "1985-10-12",
+          "basis": "National album-oriented radio airplay; not Hot 100, album sales, or Tunecaster.",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            2
+          ],
+          "song": "After the Fire"
+        },
+        {
+          "rank": 5,
+          "title": "Lonely Ol’ Night",
+          "artist": "John Cougar Mellencamp",
+          "chart": "Billboard Top Rock Tracks",
+          "chartDate": "1985-10-12",
+          "basis": "National album-oriented radio airplay; not Hot 100, album sales, or Tunecaster.",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            2
+          ],
+          "song": "Lonely Ol’ Night"
+        },
+        {
+          "rank": 6,
+          "title": "Lovin’ Every Minute of It",
+          "artist": "Loverboy",
+          "chart": "Billboard Top Rock Tracks",
+          "chartDate": "1985-10-12",
+          "basis": "National album-oriented radio airplay; not Hot 100, album sales, or Tunecaster.",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            2
+          ],
+          "song": "Lovin’ Every Minute of It"
+        },
+        {
+          "rank": 7,
+          "title": "One Night Love Affair",
+          "artist": "Bryan Adams",
+          "chart": "Billboard Top Rock Tracks",
+          "chartDate": "1985-10-12",
+          "basis": "National album-oriented radio airplay; not Hot 100, album sales, or Tunecaster.",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            2
+          ],
+          "song": "One Night Love Affair"
+        },
+        {
+          "rank": 8,
+          "title": "Never",
+          "artist": "Heart",
+          "chart": "Billboard Top Rock Tracks",
+          "chartDate": "1985-10-12",
+          "basis": "National album-oriented radio airplay; not Hot 100, album sales, or Tunecaster.",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            2
+          ],
+          "song": "Never"
+        },
+        {
+          "rank": 9,
+          "title": "Broken Wings",
+          "artist": "Mr. Mister",
+          "chart": "Billboard Top Rock Tracks",
+          "chartDate": "1985-10-12",
+          "basis": "National album-oriented radio airplay; not Hot 100, album sales, or Tunecaster.",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            2
+          ],
+          "song": "Broken Wings"
+        },
+        {
+          "rank": 10,
+          "title": "One World",
+          "artist": "Dire Straits",
+          "chart": "Billboard Top Rock Tracks",
+          "chartDate": "1985-10-12",
+          "basis": "National album-oriented radio airplay; not Hot 100, album sales, or Tunecaster.",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            2
+          ],
+          "song": "One World"
+        }
+      ],
+      "briefs": [
+        {
+          "headline": "Home Computing Weekly closes its run",
+          "summary": "Popular Computing Weekly reports that the October 8 issue is the final Home Computing Weekly after Scot Press purchased the title from Argus; popular features are to move into PCW.",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "headline": "Ariolasoft lines up three October games",
+          "summary": "The weekly reports Batalyx, Scarabeus and Wizard planned later in October at £12.95 disk or £9.95 cassette. No exact release day is established.",
+          "confidence": "same-week",
+          "sourceRefs": [
+            0
+          ]
+        }
+      ],
+      "periodAd": {
+        "headline": "Summer Games II: October sports on tape and disk",
+        "summary": "Epyx advertisement: C64/128 cassette £9.95; C64/128 and Atari disk £14.95, advertised available in October.",
+        "tagline": "Period UK advertisement.",
+        "sourceRefs": [
+          0
+        ]
+      },
+      "market": {
+        "headline": "Sinclair leads an earlier retail survey",
+        "summary": "The October weekly reports AGB figures for the four weeks ending September 7: Sinclair 56.8% overall, Spectrum Plus 50.5%, QL 5.8%. These are the earlier survey window, not October market shares.",
+        "confidence": "same-week",
+        "sourceRefs": [
+          0
+        ]
+      },
+      "worldAnchor": {
+        "headline": "U.S. intercepts aircraft carrying Achille Lauro hijackers",
+        "summary": "The October 10 White House statement says U.S. forces intercepted the aircraft over international airspace and diverted it to Sigonella, where Italy agreed to take the hijackers into custody. The statement mourned murdered American Leon Klinghoffer.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          7
+        ]
+      },
+      "bbsNote": {
+        "headline": "2400-bps prices fall while sysops get special offers",
+        "summary": "Arlon R. Leviton’s October COMPUTE! p.108 column documents faster BBS access, equipment prices and The Source’s new speed tier. Month-dated reporting, not newly established October 7–13 announcements.",
+        "posts": [
+          {
+            "topic": "Sysop acquisition program",
+            "platform": "Independent computer bulletin boards / U.S. Robotics",
+            "text": "Leviton reports a special Courier acquisition deal for operators of heavily trafficked BBSs to encourage 2400-bps access. No specific board name or deal price is given; do not invent either. This is a sourced desk summary, not a fabricated BBS quotation."
+          },
+          {
+            "topic": "The Source speed premium",
+            "platform": "The Source",
+            "text": "Column says 2400-bps access was added in August. Quoted premiums are $1.80 prime time and $1.20 nonprime over the 1200-bps rates of $25.80 and $10.80; these are usage-rate figures, not subscription-flat-rate claims."
+          },
+          {
+            "topic": "Cellular modem trials",
+            "platform": "AT&T Technologies / Bell Atlantic",
+            "text": "CTS-1620 2400-bps testing had been under way since July around Baltimore/Washington. Planned 1986 debut at $1,600–$2,600, requiring cellular phone/transmitter and terminal; not a shipping October product. Column also quotes Motorola 300-bps $195 and Spectrum Cellular 1200-bps $695."
+          }
+        ],
+        "sourceRefs": [
+          4
+        ]
+      },
+      "curiosity": {
+        "headline": "Catch a wave without leaving your Spectrum keyboard",
+        "summary": "Irish firm New Concepts announced Surf Champ with a miniature surfboard keyboard overlay.",
+        "detail": "PCW October 10–16, p.4: users press the board with the flat of a hand to steer through onscreen waves. Initial version planned for rubber-keyed Spectrum 48K at around £12, with Spectrum Plus and other overlays planned. An announced accessory, not a verified this-week retail shipment.",
+        "sourceRefs": [
+          0
+        ]
+      },
+      "accuracyLedger": {
+        "items": [
+          "Week is October 7–13, 1985; magazine publication dates are not inferred release dates.",
+          "Billboard software and Top Rock Tracks charts are dated October 12.",
+          "Movie ranks use the October 11 weekend dataset; ambiguous holiday grosses omitted.",
+          "UK developer prices, UK retail prices and US hardware figures remain distinct.",
+          "No verified crew or board names; no underground feature invented."
+        ]
+      }
+    },
+    {
       "currentDate": "2026-11-20",
       "historicDate": "1985-09-30",
       "displayDate": "Week of September 30-October 6, 1985",

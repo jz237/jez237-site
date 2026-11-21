@@ -2,6 +2,22 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-11-21",
+      "historicDate": "1985-10-07",
+      "displayDate": "Week of October 7-13, 1985",
+      "edition": "Issue 167 - Weekly 1985 Computer & Culture Chronicle",
+      "morningLine": "Hacker logs on at No.7; C128s reach British shops; GEM rearranges its desktop.",
+      "leadHeadline": "No manual, no map: Hacker makes the software chart",
+      "storyHeadlines": [
+        "Commodore 128 reaches British shops as Amiga courts developers",
+        "Apple–Digital Research dispute changes GEM’s screen furniture",
+        "Amstrad’s computer gamble drives record profits"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1985-10-07.jpg",
+      "thumb": "media/thumbs/1985-10-07.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-11-20",
       "historicDate": "1985-09-30",
       "displayDate": "Week of September 30-October 6, 1985",

@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Fri, 20 Nov 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Sat, 21 Nov 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of October 7-13, 1985 — No manual, no map: Hacker makes the software chart</title>
+      <link>https://jez237.com/computer-chronicle/?date=1985-10-07</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1985-10-07</guid>
+      <pubDate>Sat, 21 Nov 2026 12:00:00 GMT</pubDate>
+      <description>Activision’s simulated mystery connection enters Billboard at No.7. An unexplained connection is finding an audience. Hacker enters the computer-software chart in Billboard dated October 12 at No.7, marked NEW and described as a Mystery Adventure Game. It is a sales-chart arrival, not a newly established release date, but it gives the season’s most unusual keyboard puzzle a place alongside familiar flight simulations. Also this week: Commodore 128 reaches British shops as Amiga courts developers · Apple–Digital Research dispute changes GEM’s screen furniture · Amstrad’s computer gamble drives record profits.</description>
+    </item>
     <item>
       <title>Week of September 30-October 6, 1985 — Hacker turns a mysterious computer connection into the game</title>
       <link>https://jez237.com/computer-chronicle/?date=1985-09-30</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1985-05-27</guid>
       <pubDate>Mon, 02 Nov 2026 12:00:00 GMT</pubDate>
       <description>May 31 realignment centralizes operations under Sculley; co-founder remains chairman. Apple has stripped Steve Jobs of operational command of its Macintosh division in a major realignment announced Friday, May 31. The Macintosh and Apple II divisions are being merged, while marketing and manufacturing are centralized to remove overlapping functions. John Sculley remains president and chief executive officer. Also this week: Championship Lode Runner challenges the veterans · GEM brings the graphical desktop to IBM and Atari · MacVision turns video into Macintosh pictures.</description>
-    </item>
-    <item>
-      <title>Week of May 20-26, 1985 — Fifty punishing rooms put Lode Runner veterans to the test</title>
-      <link>https://jez237.com/computer-chronicle/?date=1985-05-20</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1985-05-20</guid>
-      <pubDate>Sun, 01 Nov 2026 12:00:00 GMT</pubDate>
-      <description>Brøderbund’s advanced sequel trades the construction kit for fifty hard-won puzzles. Brøderbund has a demanding assignment for players who have exhausted Lode Runner: fifty more rooms, built to punish complacency. Championship Lode Runner is the subject of Michael B. Williams’s review in the May issue of COMPUTE!, and its audience is the veteran rather than the newcomer. The original game’s 150 screens form the apprenticeship; this collection is the examination. Also this week: GEM promises a graphical bridge between IBM PCs and Atari · MacVision turns videotape and camera pictures into Macintosh illustrations · Synapse sells adventures as electronic novels.</description>
     </item>
   </channel>
 </rss>
