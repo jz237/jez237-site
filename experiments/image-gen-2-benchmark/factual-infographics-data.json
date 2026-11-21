@@ -24937,5 +24937,101 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-11-21-factual-infographic-factual-infographic-entomophobia-when-a",
+    "title": "Factual infographic: Entomophobia — When an Insect Feels Too Close",
+    "tests": "factual_subtype: phobia-infographic; phobia: Entomophobia; photographic fictional scene; headline readback ENTOMOPHOBIA / Intense fear of insects; archive_slot=2026-11-21T00:08; concept=entomophobia-cockroach-wrist-kitchen-table-encounter; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: phobia-infographic",
+    "prompt": "Create the finished portrait factual phobia infographic directly, an artwork-led flowing unboxed editorial photographic composition, not a printed poster mockup. Dominant very scary lifelike photograph, tactile realism and crisp readable typography. Exact headline in very prominent bold type: \"ENTOMOPHOBIA\". Directly beneath it, exact second line: \"Intense fear of insects\". These are the two requested title lines; no generic diagnosis headline.\n\nHero takes roughly two thirds of the canvas: immersive first-person seated viewpoint looking along a bare forearm toward an ordinary full-sized cockroach a few centimetres from the wrist on the edge of a cramped kitchen table. The insect is at natural scale relative to the hand, not a monster: six thin jointed legs, glossy segmented brown body, long delicate antennae sharply resolving as one antenna extends into the immediate foreground. Table edge cuts diagonally close beneath the lens; the viewer's recoiling hand and sleeve hem create a vulnerable near-field, not a distant observation scene. Camera is almost at table height; shallow but plausible focus holds insect and nearest fingertips crisp, with kitchen cabinetry compressed behind. Restrained overhead practical light makes minute leg shadows, cuticle highlights, pores, knit fibres, and scratches on worn laminate convincing. No gore, no swarm, no biting, no infestation assertion, no fantasy anatomy. Fear comes from sudden intimate proximity and the inability to look past the trigger, not dark scenic atmosphere. The scene depicts the subjective fear experience; do not portray the insect as an attacking predator or claim this staged encounter is objectively dangerous. Fictional man about 62, deep brown skin, broad nose, short silver curls, stocky build, olive knitted sweater; seated with shoulders recoiling, only his forearm and a sliver of shoulder visible from his own seated viewpoint. No generic frightened face poster.\n\nWeave substantial but concise explanations into pale negative space above and alongside the scene, with open typography, slender curved leader lines and varied scale, not boxes or a grid. Use this source-backed copy only:\n\"The trigger\" — \"Seeing or even thinking about insects may provoke intense anxiety. Indoor encounters, insect images, or fear of bites and stings may trigger alarm.\"\n\"Body alarm\" — \"Palpitations • trembling • chest tightness • dizziness\". A small airy pulse-line motif is symbolic, not a diagnostic trace.\n\"Avoidance\" — \"Avoiding outdoor activities or events can shrink daily life.\" Connect a tiny photographic ghosted crop of the same sleeve pausing at a doorway with a fine curved line; no added patient or graphic horror.\n\"Fear ≠ danger\" — \"A specific phobia: fear out of proportion to likely real-life harm. Feeling endangered is not a measurement of actual risk.\"\n\"Evidence-based help\" — \"CBT helps examine thoughts, feelings and actions. A therapist can tailor work on avoidance. Seek professional help when fear affects daily life.\"\nSmall footer: \"Educational illustration • Fictional photographic scene\". Keep headline dominant, fact text readable, photos richly detailed and organically connected. Do not add statistics, diagnostic codes, brain-region claims, insect disease claims, self-directed exposure instructions, URLs, bibliography, cartoons, paintings, framed charts, watermarks or logos. The name is established terminology for this fear; specific phobia is subordinate classification only. Render with photographic realism and visual breathing room, not a sparse title poster.",
+    "image": "images/2026-11-21-factual-infographic-factual-infographic-entomophobia-when-a.jpg",
+    "thumb": "thumbs/2026-11-21-factual-infographic-factual-infographic-entomophobia-when-a.webp",
+    "color": "#9f8f7a",
+    "date": "2026-11-21",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "entomophobia-cockroach-wrist-kitchen-table-encounter",
+      "imageSha256": "25ba99146d3b0d6c3f1f488c4216e2d654bfb23700f50cee21324f1dd1b82e9a",
+      "imageDHash": "b49a36e1e6244264"
+    },
+    "factualInfographic": {
+      "topic": "Entomophobia: intense fear of insects, encounter-related anxiety, bodily alarm, avoidance, and evidence-based help",
+      "description": "Photographic entomophobia education with immediate natural-scale insect proximity and clinical context.",
+      "sourceNote": "Cleveland Clinic https://my.clevelandclinic.org/health/diseases/22551-entomophobia-fear-of-insects; NHS https://www.nhs.uk/mental-health/conditions/phobias/; NHS CBT https://www.nhs.uk/tests-and-treatments/cognitive-behavioural-therapy-cbt/. Verified terminology, triggers, symptoms, avoidance, proportional risk and treatment.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-21T05:09:15.278759+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "Cleveland Clinic",
+            "title": "Entomophobia (Fear of Insects)",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://my.clevelandclinic.org/health/diseases/22551-entomophobia-fear-of-insects"
+          },
+          {
+            "id": "S2",
+            "publisher": "NHS",
+            "title": "Phobias",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/mental-health/conditions/phobias/"
+          },
+          {
+            "id": "S3",
+            "publisher": "NHS",
+            "title": "Cognitive behavioural therapy (CBT)",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/tests-and-treatments/cognitive-behavioural-therapy-cbt/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Entomophobia means fear of insects; seeing or thinking about insects can provoke extreme fear or anxiety.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Entomophobia is a specific phobia; fear is out of proportion to likely real-life harm, not proof that an insect encounter is dangerous.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Encounters indoors or outdoors, images, and fears of bites or stings can be triggers.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Phobia symptoms can include palpitations, trembling, chest tightness and dizziness.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Avoidance may restrict outdoor exercise, events or leaving home.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "CBT is a recommended treatment for phobias; a therapist helps examine thoughts, feelings and actions and change avoidance in an individualized plan.",
+            "sourceIds": [
+              "S2",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Seek professional help when symptoms affect daily life.",
+            "sourceIds": [
+              "S2"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
