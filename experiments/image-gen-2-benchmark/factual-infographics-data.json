@@ -24853,5 +24853,89 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-11-20-factual-infographic-factual-infographic-the-third-eyelid-a-",
+    "title": "Factual infographic: The Third Eyelid — A Protective Fold",
+    "tests": "; archive_slot=2026-11-20T20:20; concept=feline-nictitating-membrane-protective-extension; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: cat-infographic; cat_category: inside-the-cat",
+    "prompt": "Create an elaborate artwork-led feline anatomical infographic, directly rendered finished art, not a poster photograph. Title: “The Third Eyelid” and subtitle “A protective fold at the inner corner”. Small collection heading “Inside the Cat”. Focus entirely on normal nictitating-membrane anatomy and protective function, not a disease chart or vision overview.\nA dominant exquisite near-profile silver tabby cat face curves into the composition from the lower right, with finely articulated pale whiskers, individual fur strands, warm rose nose and a large luminous amber eye. Fine technical ink and richly shaded gouache on very pale blue-gray art paper, restrained copper and rose anatomical accents. Dramatic scale changes: the eye becomes the central anatomical landscape. Preserve realistic feline anatomy, no human eyelashes. The normal hero eye has only a small inner-corner third-eyelid glimpse, not a permanently covered pupil.\nAbove and left of the face, organically nest a greatly enlarged schematic anterior eye view, oriented with the nose side explicitly marked “Inner corner • near the nose”. Show the pale pink third eyelid emerging from this inner corner, with a delicate curved directional arrow indicating extension over the corneal surface. Label “Nictitating membrane (third eyelid)” and concise text “Extends to help protect the eye from scratches”. A lighter ghosted outline indicates its extended position; explicitly caption “Schematic extension • not to scale”. Do not invent a voluntary wink, speed, muscle mechanism, numerical coverage or transparency claim. Connect back to the cat’s eye with a fine sweeping leader line.\nA small adjacent simplified sectional anatomical study, clearly marked “Schematic”, identifies the third-eyelid fold and its associated gland, without elaborate unsupported cartilage/muscle labels. Label “Third-eyelid gland” with text “Contributes to the watery part of tears”. A thin blue surface ribbon represents moisture on the clear corneal dome, not a duct pouring directly into the pupil. Label “Cornea • clear front surface”. Delicate surrounding open typography identifies “Iris” and “Pupil” accurately. A flowing arc near the normal upper and lower eyelids carries “Blinking spreads tears and clears small particles”. No separate light-sensing or retinal studies.\nKeep these studies asymmetrical, unboxed, joined by curved annotations with generous breathing room. Rich anatomical texture and softly lit feline portrait dominate over prose; no grid, dashboard, fake stamps, filler facts, extra organs or decorative molecular symbols. Readable elegant typographic hierarchy, concise accurate labels. Small unobtrusive footer: “Eye discomfort or discharge? Seek veterinary care.” Sources in small readable footer: “MSD Veterinary Manual • Cornell Feline Health Center”. No treatment instructions or diagnostic claims. No artificial gore. Render the illustration itself with crisp refined detail.",
+    "image": "images/2026-11-20-factual-infographic-factual-infographic-the-third-eyelid-a-.jpg",
+    "thumb": "thumbs/2026-11-20-factual-infographic-factual-infographic-the-third-eyelid-a-.webp",
+    "color": "#b7b2ae",
+    "date": "2026-11-20",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1086x1448",
+    "dedup": {
+      "conceptKey": "feline-nictitating-membrane-protective-extension",
+      "imageSha256": "9c8b23261fa1c8b162a901e8bf626cb5a883f89bc674a1d12a1e42ce7e185d05",
+      "imageDHash": "f473f36fcedebfbe"
+    },
+    "factualInfographic": {
+      "topic": "How the feline nictitating membrane protects the eye and contributes to tears",
+      "description": "Normal feline third-eyelid location, protective extension and contribution to the tear film.",
+      "sourceNote": "Read authoritative anatomical and veterinary accounts: https://www.msdvetmanual.com/cat-owners/eye-disorders-of-cats/eye-structure-and-function-in-cats ; https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/conjunctivitis",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-21T01:20:55.300845+00:00",
+        "sources": [
+          {
+            "id": "msd",
+            "publisher": "MSD Veterinary Manual",
+            "title": "Eye Structure and Function in Cats",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://www.msdvetmanual.com/cat-owners/eye-disorders-of-cats/eye-structure-and-function-in-cats"
+          },
+          {
+            "id": "cornell",
+            "publisher": "Cornell University College of Veterinary Medicine",
+            "title": "Conjunctivitis",
+            "sourceType": "university",
+            "url": "https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/conjunctivitis"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "The nictitating membrane is the third eyelid: a whitish-pink membrane beneath the other eyelids at the inner corner near the nose.",
+            "sourceIds": [
+              "msd",
+              "cornell"
+            ]
+          },
+          {
+            "claim": "The third eyelid extends across the eye to help protect the eyeball from scratches. Depict extension schematically, not a timed voluntary wink.",
+            "sourceIds": [
+              "msd"
+            ]
+          },
+          {
+            "claim": "Glands within the third eyelid contribute to the watery portion of tears.",
+            "sourceIds": [
+              "msd"
+            ]
+          },
+          {
+            "claim": "Upper and lower eyelids blink and spread tears over the eye surface, keeping it moist and clearing small particles.",
+            "sourceIds": [
+              "msd",
+              "cornell"
+            ]
+          },
+          {
+            "claim": "The cornea is the clear dome at the front of the eye; the iris is the colored area surrounding the pupil.",
+            "sourceIds": [
+              "msd"
+            ]
+          },
+          {
+            "claim": "Seek veterinary care for apparent eye discomfort and discharge.",
+            "sourceIds": [
+              "cornell"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
