@@ -58,8 +58,8 @@ export const FOES = {
   // vast, harmless, and in the way. Hurting one costs you.
   whale: { hp: 1e9, r: 2.5, sc: 0, soft: true,
     init(e, S, o) { e.y0 = o.y ?? 9; e.r = o.r ?? 2.5; e.pan = 0; e.noRev = true; },
-    update(e, S) { e.x += e.dir * (e.o.v ?? 1.3) * DT * (e.panT > 0 ? 3 : 1); e.y = e.y0 + sin(e.t * 0.012 + e.x * 0.1) * 1.2; if (e.panT > 0) e.panT--; e.pan = Math.max(0, e.pan - 4 * DT); },
-    guard(e, src, S, dmg) { if (src.k === 'tether' || src.k === 'anchor' || src.k === 'mote') return true; e.pan += dmg; e.flash = 3; if (e.pan > 55 && !(e.panT > 0)) { e.pan = 0; e.panT = 120; S.ring(e.x, e.y, 14, 4.2, S.rnd() * TAU, 1); S.score = Math.max(0, S.score - 1000); S.chain = 0; S.fx.push({ k: 'panic', x: e.x, y: e.y }); } return true; } },
+    update(e, S) { e.x += e.dir * (e.o.v ?? 1.3) * DT * (e.panT > 0 ? 3 : 1); e.y = e.y0 + sin(e.t * 0.012 + e.x * 0.1) * 1.2; if (e.panT > 0) e.panT--; e.pan = Math.max(0, e.pan - 12 * DT); },
+    guard(e, src, S, dmg) { if (src.k === 'tether' || src.k === 'anchor' || src.k === 'mote') return true; e.pan += dmg; e.flash = 3; if (e.pan > 90 && !(e.panT > 0)) { e.pan = 0; e.panT = 120; S.ring(e.x, e.y, 14, 4.2, S.rnd() * TAU, 1); S.score = Math.max(0, S.score - 1000); S.chain = 0; S.fx.push({ k: 'panic', x: e.x, y: e.y }); } return true; } },
   predator: { hp: 30, r: 0.65, sc: 400,
     init(e, S, o) { e.y = o.y ?? 9; e.a = e.dir > 0 ? 0 : 3.1416; e.v = o.v ?? 9; },
     update(e, S) { const p = S.pl(); if (e.t < 300) { let d = Math.atan2(p.y - e.y, p.x - e.x) - e.a; while (d > 3.1416) d -= TAU; while (d < -3.1416) d += TAU; e.a += clamp(d, -2.3 * DT, 2.3 * DT); } e.x += cos(e.a) * e.v * DT; e.y += sin(e.a) * e.v * DT; e.rot = e.a; } },

@@ -59,7 +59,7 @@ const T = (o) => o;
 const DEFS = [
   { name: 'SKYHOOK APPROACH', act: 1, bpm: 104, terr: 'rust', backdrop: 'pylons',
     pal: T({ sky0: 0x1c3a52, sky1: 0xf2a65a, cl: 0xffd9a0, cs: 0x5a4a6a, fog: 0x9a7a70, key: 0xffd2a0, rim: 0x52ffd8, tb: 0x6a4a3a, ta: 0xc87a3a, glow: 0x52ffd8, bolt: 0xbfe8ff }),
-    make(b) { b.rough = 0.35; b.msg('STAGE 1', 'SKYHOOK APPROACH'); b.go(3);
+    make(b) { b.rough = 0.14; b.msg('STAGE 1', 'SKYHOOK APPROACH'); b.msg('', 'HOLD FIRE TO CHARGE THE LANCE', 4.5); b.msg('', 'THROW THE ANCHOR, THEN SWEEP ITS TETHER THROUGH THEM', 17); b.go(3);
       b.wave('mote', 5, { y: 12, amp: 1.4 }); b.go(4); b.wave('mote', 5, { y: 6, amp: 1.4 }); b.go(4);
       b.item('A', 9); b.go(5); b.wave('mote', 6, { y: 9, amp: 3 }); b.foe('shard', { y: 4 }, 2); b.foe('shard', { y: 14 }, 2.8); b.go(6);
       b.foe('puffer', { y: 12 }); b.foe('puffer', { y: 6 }, 1.6); b.wave('mote', 4, { y: 9, amp: 1 }, 0.42, 3); b.go(6);
@@ -140,7 +140,7 @@ const DEFS = [
 
   { name: 'THE MIGRATION', act: 2, bpm: 96, terr: 'none', backdrop: 'herd',
     pal: T({ sky0: 0x0c2a3a, sky1: 0x5fb0a0, cl: 0xcff0e0, cs: 0x245058, fog: 0x4f8f88, key: 0xe0fff0, rim: 0xffd28a, tb: 0x335a5a, ta: 0x7fc0b0, glow: 0xffd28a, bolt: 0xe8ffff }),
-    make(b) { b.msg('STAGE 6', 'THE MIGRATION', 0); b.msg('', 'DO NOT HARM THE HERD', 3.5); b.go(4);
+    make(b) { b.msg('STAGE 6', 'THE MIGRATION', 0); b.msg('', 'DO NOT HARM THE HERD', 3.5); b.msg('', 'HOLDING THE LANCE HOLDS YOUR FIRE', 8); b.go(4);
       const herd = (ys, dt = 0, v = 1.3) => ys.forEach((y, i) => b.foe('whale', { y, v: v + (i % 2) * 0.3, r: 2.2 + (i % 3) * 0.3 }, dt + i * 1.1));
       herd([13, 5]); b.go(6); b.wave('predator', 2, { y: 9 }, 1.2); herd([9, 15, 3], 2); b.go(7);
       b.item('A', 9); b.wave('predator', 3, { y: 2 }, 0.9, 2); herd([6, 12], 3); b.go(7); b.cp();
@@ -156,7 +156,7 @@ const DEFS = [
 
   { name: 'THE FOUNDRY', act: 2, bpm: 100, terr: 'foundry', backdrop: 'foundry', liquid: 'lava',
     pal: T({ sky0: 0x1a0a08, sky1: 0x7a2a12, cl: 0xff8a3a, cs: 0x2a1410, fog: 0x5a2616, key: 0xffa860, rim: 0xff5a2a, tb: 0x3a2c28, ta: 0x8a5a40, glow: 0xff7a2a, bolt: 0xffe0a0, liq: 0xff5a10 }),
-    make(b) { b.rough = 0.3; b.start(2.5, 16); b.heat(1.8); b.flood(1.2); b.msg('STAGE 7', 'THE FOUNDRY'); b.msg('', 'THE LANCE RUNS HOT HERE', 3.5); b.go(4);
+    make(b) { b.rough = 0.16; b.start(2.5, 16); b.heat(1.8); b.flood(1.2); b.msg('STAGE 7', 'THE FOUNDRY'); b.msg('', 'THE LANCE RUNS HOT HERE', 3.5); b.go(4);
       b.wave('mote', 5, { y: 10, amp: 2 }); b.fixt('spitter', 6, { at: 'ceil' }); b.go(5); b.flood(1.2);
       for (let i = 0; i < 4; i++) b.vent(3 + i * 5, { per: 3, duty: 0.4, ph: i * 0.25, half: 0.9, lava: 1 });
       b.item('C', 11, 1); b.wave('shard', 3, { y: 10 }, 1, 3); b.turret(12, 'ceil'); b.go(10, 2.5, 15);

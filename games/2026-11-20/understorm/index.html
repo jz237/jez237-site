@@ -101,6 +101,14 @@ button { appearance: none; border: 0; background: none; font: inherit; color: in
 #logo span { display: block; font-size: .36em; letter-spacing: .62em; color: var(--amber); text-shadow: 0 .1em .5em #000; margin-top: .3em; }
 #tag { font-size: 1.9em; letter-spacing: .12em; color: #c9d3de; margin: 1.2em 0 1em; text-shadow: 0 .1em .5em #000; max-width: 28em; line-height: 1.45; }
 #title .btn { width: 21em; background: rgba(4, 9, 13, .6); }
+#title:not(.hidden) #logo { animation: logoIn 1.6s cubic-bezier(.2, .8, .2, 1) both; }
+#title:not(.hidden) #logo span { animation: fadeUp 1s .9s both; }
+#title:not(.hidden) #tag { animation: fadeUp 1s 1.2s both; }
+#title:not(.hidden) .btn { animation: fadeUp .6s both; }
+#title .btn:nth-of-type(1) { animation-delay: 1.5s; } #title .btn:nth-of-type(2) { animation-delay: 1.6s; } #title .btn:nth-of-type(3) { animation-delay: 1.7s; } #title .btn:nth-of-type(4) { animation-delay: 1.8s; } #title .btn:nth-of-type(5) { animation-delay: 1.9s; } #title .btn:nth-of-type(6) { animation-delay: 2s; }
+@keyframes logoIn { from { opacity: 0; letter-spacing: .5em; filter: blur(.12em); } to { opacity: 1; letter-spacing: .04em; filter: blur(0); } }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(.6em); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { #title * { animation: none !important; } }
 #ver { position: absolute; right: 2em; bottom: 1.6em; font-size: 1.4em; letter-spacing: .2em; color: var(--dim); }
 #grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1em; margin-top: 1em; }
 #grid .btn { margin: 0; font-size: 1.9em; min-height: 5.2em; }
