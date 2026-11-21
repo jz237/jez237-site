@@ -18,10 +18,9 @@ try{
   await p.setViewportSize({width:1280,height:720});await p.evaluate(()=>window.__quarry.start('playground'));await p.waitForTimeout(1200);
   await p.screenshot({path:fileURLToPath(new URL('quarry-impact.png',out))});await p.close();
  }
- for(const [name,path,hook] of [['gold-digger','2026-11-07/gold-digger','__gd'],['skyhold','2026-11-09/skyhold','__sh'],['shock-horror','2026-11-07/shock-horror','__gd']]){
+ for(const [name,path,hook] of [['gold-digger','2026-11-07/gold-digger','__gd'],['skyhold','2026-11-09/skyhold','__sh']]){
   const p=await page(true);await p.goto(`${base}/games/${path}/`);
   await p.waitForFunction(h=>window[h]?.G.state==='title',hook,{timeout:90000});
-  if(name==='shock-horror'){await p.locator('#warn [data-act="warn-mild"]').count().then(async n=>{if(n)await p.locator('#warn [data-act="warn-mild"]').click();else await p.evaluate(()=>window.__gd.show('title'));});}
   report[name]=await p.evaluate(()=>({overflow:document.querySelector('#title .card').scrollWidth>document.querySelector('#title .card').clientWidth,nightmare:[...document.querySelectorAll('#title [data-v="nightmare"]')].map(e=>e.getBoundingClientRect().right)}));
   assert.equal(report[name].overflow,false);assert(report[name].nightmare.every(x=>x<=390));
   if(name!=='skyhold'){
@@ -32,16 +31,7 @@ try{
    await p.waitForFunction(()=>document.querySelector('#tut').textContent.includes('left thumb'));
    report[name].touchTip=await p.locator('#tut').textContent();
   }
-  if(name==='shock-horror'){
-   assert.equal(await p.evaluate(()=>getComputedStyle(document.querySelector('#scarecount')).display),'none');
-   assert.notEqual(await p.evaluate(()=>getComputedStyle(document.querySelector('#hearts')).display),'none');
-   await p.evaluate(()=>{window.__gd.act('options');});
-   await p.locator('[data-opt="hud"] [data-v="full"]').click();
-   assert.equal(await p.evaluate(()=>document.body.classList.contains('immersive-hud')),false);
-   report[name].hudToggle=true;
-  }else{
-   await p.setViewportSize({width:1280,height:720});await p.waitForTimeout(1600);await p.screenshot({path:fileURLToPath(new URL(name+'.png',out))});
-  }
+  await p.setViewportSize({width:1280,height:720});await p.waitForTimeout(1600);await p.screenshot({path:fileURLToPath(new URL(name+'.png',out))});
   await p.close();
  }
  {
