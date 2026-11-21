@@ -1,9 +1,9 @@
 // UNDERSTORM 2026 — the renderer. Reads the simulation each frame; never writes to it.
 import * as THREE from '../vendor/three.module.min.js';
-import { W, H, clamp, lerp } from './config.js';
-import { Post } from './post.js';
-import { MAT, G, add, makeShip, makeAnchor, FOE_MODELS, PART_MODELS } from './models.js';
-import { surface, makeEnv, decorate, foreground } from './gfx.js';
+import { W, H, clamp, lerp } from './config.js?v=110';
+import { Post } from './post.js?v=110';
+import { MAT, G, add, makeShip, makeAnchor, FOE_MODELS, PART_MODELS } from './models.js?v=110';
+import { surface, makeEnv, decorate, foreground } from './gfx.js?v=110';
 
 export const QUAL = { low: { scale: 0.62, layers: 4, oct: 3, msaa: 0, parts: 0.4, bd: 0.5, shadow: 0, rays: 0, warp: 0 }, med: { scale: 0.85, layers: 6, oct: 4, msaa: 2, parts: 0.75, bd: 0.8, shadow: 0, rays: 1, warp: 1 }, high: { scale: 1, layers: 9, oct: 4, msaa: 4, parts: 1, bd: 1, shadow: 1, rays: 1, warp: 1 } };
 const PI = Math.PI, TAU = PI * 2, rand = Math.random, col = (h) => new THREE.Color(h);

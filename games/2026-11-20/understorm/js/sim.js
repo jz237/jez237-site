@@ -1,7 +1,7 @@
 // UNDERSTORM 2026 — deterministic fixed-step simulation. No rendering, no audio, no DOM.
 // Positions are in screen space (0..32 x 0..18); things bolted to the world slide left by the scroll.
-import { W, H, DT, SPEEDS, DIFFS, CHARGE, clamp } from './config.js';
-import { FOES, BOSSES } from './foes.js';
+import { W, H, DT, SPEEDS, DIFFS, CHARGE, clamp } from './config.js?v=110';
+import { FOES, BOSSES } from './foes.js?v=110';
 
 const MAXB = 380;
 const segDist = (px, py, ax, ay, bx, by) => {

@@ -1,6 +1,6 @@
 // UNDERSTORM 2026 — autopilot. Drives the attract-mode demo and the headless stage tests.
 // It reads the simulation, scores nine candidate moves a short way into the future and takes the safest.
-import { W, H, DT, SPEEDS, clamp } from './config.js';
+import { W, H, DT, SPEEDS, clamp } from './config.js?v=110';
 
 const HOR = [5, 10, 16, 24, 34];
 

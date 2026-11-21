@@ -1,12 +1,12 @@
 // UNDERSTORM 2026 — game shell: loop, menus, HUD, saves, ghosts, scores.
-import { W, H, DT, DIFFS, CORE_NAMES, CHARGE, P, VERSION, clamp } from './config.js';
-import { STAGES, ACTS } from './stages.js';
-import { Sim } from './sim.js';
-import { Renderer } from './render.js';
-import { Sound } from './audio.js';
-import { Input, ACTIONS, LABELS } from './input.js';
-import { Scores } from './scores.js';
-import { botInput } from './bot.js';
+import { W, H, DT, DIFFS, CORE_NAMES, CHARGE, P, VERSION, clamp } from './config.js?v=110';
+import { STAGES, ACTS } from './stages.js?v=110';
+import { Sim } from './sim.js?v=110';
+import { Renderer } from './render.js?v=110';
+import { Sound } from './audio.js?v=110';
+import { Input, ACTIONS, LABELS } from './input.js?v=110';
+import { Scores } from './scores.js?v=110';
+import { botInput } from './bot.js?v=110';
 
 const $ = (id) => document.getElementById(id);
 const store = { get(k, d) { try { const v = JSON.parse(localStorage.getItem(k)); return v === null || v === undefined ? d : v; } catch { return d; } }, set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch { /* private mode */ } } };

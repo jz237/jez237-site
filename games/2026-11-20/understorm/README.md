@@ -41,6 +41,16 @@ unlimited ships. The bar at the bottom shows what it is doing; `V` toggles its v
 tracked bullets, intended move), `F` cycles speed, `N` skips to the next stage and `Enter` hands you the
 stick mid-flight. AI runs never post scores or unlock stages.
 
+## Releasing
+
+The site caches scripts in the browser for hours, so every import carries a version query (`?v=110`).
+Bump it everywhere in one go when you ship, or returning players get a mix of old and new files:
+
+```
+sed -i -E "s#from '\./([a-z]+)\.js(\?v=[0-9]+)?'#from './\1.js?v=111'#g" js/*.js
+sed -i -E 's#src="js/main\.js(\?v=[0-9]+)?"#src="js/main.js?v=111"#' index.html
+```
+
 ## Score boards
 
 `understorm-2026-easy`, `understorm-2026-normal` and `understorm-2026-hard` on the shared scores worker.
