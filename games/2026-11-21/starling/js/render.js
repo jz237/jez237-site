@@ -1,8 +1,8 @@
 // STARLING 2026 — renderer. A dusk sky over a lighthouse, flocks of folded machine-birds drawn as one
 // instanced mesh with wings flapped in the vertex shader, and an HDR bloom chain.
 import * as THREE from '../vendor/three.module.min.js';
-import { Post } from './post.js?v=100';
-import { W, H, TYPES } from './sim.js?v=100';
+import { Post } from './post.js?v=101';
+import { W, H, TYPES } from './sim.js?v=101';
 
 const PI = Math.PI, TAU = PI * 2, rand = Math.random, FOV = 30, TANH = Math.tan((FOV / 2) * PI / 180);
 const NOISE = `float hash(vec2 p){ p = fract(p*vec2(123.34, 456.21)); p += dot(p, p+45.32); return fract(p.x*p.y); }

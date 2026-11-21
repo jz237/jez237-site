@@ -1,10 +1,10 @@
 // STARLING 2026 — game shell: loop, input, menus, HUD, scores.
-import { Sim, bot, W, H, DT, clamp } from './sim.js?v=100';
-import { Renderer } from './render.js?v=100';
-import { Sound } from './audio.js?v=100';
-import { Scores } from './scores.js?v=100';
+import { Sim, bot, W, H, DT, clamp } from './sim.js?v=101';
+import { Renderer } from './render.js?v=101';
+import { Sound } from './audio.js?v=101';
+import { Scores } from './scores.js?v=101';
 
-const VERSION = '1.0.0', $ = (id) => document.getElementById(id), P = new URLSearchParams(location.search);
+const VERSION = '1.0.1', $ = (id) => document.getElementById(id), P = new URLSearchParams(location.search);
 const store = { get(k, d) { try { const v = JSON.parse(localStorage.getItem(k)); return v === null || v === undefined ? d : v; } catch { return d; } }, set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch { /* private mode */ } } };
 const set = Object.assign({ sound: true, auto: true, flash: false }, store.get('starling_settings', {})), save = () => store.set('starling_settings', set);
 const R = new Renderer($('gl')), A = new Sound(), S = new Sim(), board = new Scores('starling-2026');
@@ -18,7 +18,7 @@ const unit = () => lh / (2 * R.camD * Math.tan(15 * Math.PI / 180)); // pixels p
 // ---------------------------------------------------------------- input
 addEventListener('keydown', (e) => { if (['Space', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(e.code)) e.preventDefault(); if (!e.repeat) { keys.add(e.code); edge.add(e.code); } A.init(); });
 addEventListener('keyup', (e) => keys.delete(e.code)); addEventListener('blur', () => keys.clear());
-addEventListener('pointerdown', (e) => { A.init(); if (e.pointerType === 'mouse') return; touch = true; if (mode === 'play') $('touch').classList.remove('hidden'); if (e.target.closest('button,.card,input')) return; if (ptr === null) { ptr = e.pointerId; lx = e.clientX; } });
+addEventListener('pointerdown', (e) => { A.init(); if (e.pointerType === 'mouse') return; touch = true; if (mode === 'play') $('touch').classList.remove('hidden'); if (e.target && e.target.closest && e.target.closest('button,.card,input')) return; if (ptr === null) { ptr = e.pointerId; lx = e.clientX; } });
 addEventListener('pointermove', (e) => { if (e.pointerId !== ptr) return; tdx += (e.clientX - lx) / unit(); lx = e.clientX; });
 const pup = (e) => { if (e.pointerId === ptr) ptr = null; }; addEventListener('pointerup', pup); addEventListener('pointercancel', pup);
 function poll() {

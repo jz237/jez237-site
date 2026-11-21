@@ -33,9 +33,9 @@ The autopilot dodges far better than a person, so it is not a guide to difficult
 
 ## Releasing
 
-Every import carries a version query (`?v=100`). Bump it everywhere when you ship:
+Every import carries a version query (`?v=101`). Bump it everywhere when you ship:
 
 ```
 sed -i -E "s#from '\./([a-z]+)\.js(\?v=[0-9]+)?'#from './\1.js?v=101'#g" js/*.js
-sed -i -E 's#src="js/main\.js(\?v=[0-9]+)?"#src="js/main.js?v=101"#' index.html
+sed -i -E 's#src="js/main\.js(\?v=[0-9]+)?"#src="js/main.js?v=102"#' index.html
 ```
