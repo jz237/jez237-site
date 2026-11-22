@@ -1,0 +1,428 @@
+{
+  "currentDate": "2026-11-22",
+  "historicDate": "1985-10-14",
+  "displayDate": "Week of October 14-20, 1985",
+  "edition": "Issue 168 - Weekly 1985 Computer & Culture Chronicle",
+  "masthead": {
+    "title": "Computer Chronicle",
+    "subtitle": "Issue 168 - Weekly 1985 Computer & Culture Chronicle",
+    "dateline": "Week of October 14-20, 1985",
+    "price": "75 cents"
+  },
+  "sectionChrome": {
+    "primary": "brick red",
+    "secondary": "royal blue",
+    "texture": "aged newsprint, fine column rules, ink bleed"
+  },
+  "visualProfile": {
+    "tone": "Extra Edition: Nintendo takes a chance on New York",
+    "motifs": [
+      "NES console, R.O.B., Zapper and cartridges; period retail counter"
+    ],
+    "layout": "Full-page warm aged newsprint, dense columns, red and blue section headers, boxed modules, halftones, grain and slight ink bleed; no dead footer space"
+  },
+  "layoutPlan": {
+    "leadPlacement": "NES New York test market dominates headline and halftone; Intel 80386 secondary. No national rollout claim.",
+    "secondaryRail": "Top 5 Music: Billboard Top Rock Tracks October 19. Top 5 Movies: domestic weekend October 18-20. Top 5 Computer Games: editorial shelf selection, not sales ranking. Print feature headlines verbatim and use fixed web-edition page jump lines."
+  },
+  "milestone": {
+    "title": "NES begins its American test-market era",
+    "note": "The New York experiment marks the American entry of a console platform that would reshape home gaming after the crash."
+  },
+  "heroImage": {
+    "src": "media/computer-chronicle-gpt-image-2-week-1985-10-14.jpg",
+    "alt": "Computer Chronicle newspaper front page for October 14-20, 1985",
+    "caption": "Newspaper-style front page generated from structured Chronicle issue data.",
+    "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+  },
+  "sources": [
+    {
+      "title": "COMPUTE! issue 65: 520ST pp.22–29, fall games p.32 onward, telecomputing p.108, IBM games p.109",
+      "url": "https://colorcomputerarchive.com/repo/Documents/Magazines/Compute%20%28Clean%29/Compute_Issue_065_1985_Oct.pdf",
+      "date": "1985-10"
+    },
+    {
+      "title": "Computer Entertainer vol.4 no.7, Nintendo On Schedule p.13 (indexed text)",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/5/58/Computer_Entertainer_4-7.pdf",
+      "date": "1985-10"
+    },
+    {
+      "title": "Intel Microprocessor Quick Reference Guide, 1985 entry",
+      "url": "https://www.intel.com/pressroom/kits/quickrefyr.htm",
+      "date": "1985-10-17"
+    },
+    {
+      "title": "Centre for Computing History: Intel introduces the 80386",
+      "url": "https://www.computinghistory.org.uk/det/6192/Intel-introduces-the-80386-microprocessor/",
+      "date": "1985-10-17"
+    },
+    {
+      "title": "Intel Corporation Annual Report 1985",
+      "url": "https://www.intel.com/content/dam/www/central-libraries/us/en/documents/2025-05/history-1985-annual-report.pdf",
+      "date": "1985"
+    },
+    {
+      "title": "Billboard: Top Rock Tracks",
+      "url": "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1985/BB-1985-10-19.pdf",
+      "date": "1985-10-19"
+    },
+    {
+      "title": "Domestic weekend box office",
+      "url": "https://www.boxofficemojo.com/weekend/1985W42/",
+      "date": "1985-10-18/1985-10-20"
+    },
+    {
+      "title": "Notre Dame Observer, contemporary world wire coverage",
+      "url": "https://archives.nd.edu/observer/1985-10-17_v20_039.pdf",
+      "date": "1985-10-17"
+    },
+    {
+      "title": "Christian Science Monitor: Hijacking of the Achille Lauro, chronology",
+      "url": "https://www.csmonitor.com/1985/1015/ochron.html",
+      "date": "1985-10-15"
+    },
+    {
+      "title": "Chris Kohler, WIRED: NES launch retrospective",
+      "url": "https://www.wired.com/2010/10/1018nintendo-nes-launches/",
+      "date": "2010-10-18"
+    },
+    {
+      "title": "Frank Cifaldi: uncertainty over American Super Mario Bros. launch",
+      "url": "https://www.gamedeveloper.com/business/sad-but-true-we-can-t-prove-when-super-mario-bros-came-out",
+      "date": "2012-03"
+    }
+  ],
+  "lead": {
+    "headline": "Nintendo bets on New York with a new home-game system",
+    "dek": "A robot, a light gun and a cautious test market give the living-room console another chance.",
+    "confidence": "same-week",
+    "sourceRefs": [
+      1,
+      9,
+      10
+    ],
+    "body": [
+      "Nintendo is bringing its Entertainment System to the New York area in a mid-October test of American appetite for home video games. Computer Entertainer reports that the introduction is on schedule. Rather than promise an immediate national comeback for consoles, the company is starting with a single metropolitan market.",
+      "The package makes its case with more than a control pad. Two controllers accompany the console, while R.O.B. and Gyromite supply the robot attraction and the Zapper and Duck Hunt provide light-gun play. Computer Entertainer gives a suggested retail price of $159.95 for the package; that is an attributed suggested figure, not a claim that every shop charges the same amount.",
+      "The machine adapts Nintendo’s Famicom, introduced in Japan in 1983, for an American retail climate still marked by the console-market collapse. The accessories make an unusually visible sales demonstration: a robot on the counter and a light gun aimed at a television can explain a new system before a customer ever reads a specification sheet.",
+      "New York is the test, not the finish line. National distribution remains ahead, and the experiment must persuade retailers as well as players. For now the important news is that a manufacturer is again treating the American living room as a place for a dedicated game machine."
+    ]
+  },
+  "stories": [
+    {
+      "headline": "Intel introduces the 32-bit 80386",
+      "body": [
+        "Intel introduced the 80386 on October 17, opening a new 32-bit chapter for the x86 processor family. The chip contains 275,000 transistors, and Intel’s reference lists 12 MHz and 16 MHz versions manufactured on a 1.5-micron process.",
+        "Its addressable-memory space reaches four gigabytes. That is a processor capability, not a promise of four gigabytes installed in a deskbound computer. Compatibility with earlier x86 software is a central part of the proposal: a new processor must carry existing software investment forward as well as offer more room to grow.",
+        "Intel’s family announcement extends beyond the central chip to boards, compilers, operating systems, debugging and emulation tools, support circuits and coprocessors. Announcement is not retail availability of a finished 386 PC; full-function deliveries are a matter for 1986, not a machine ready to take home this week."
+      ],
+      "confidence": "exact-date",
+      "sourceRefs": [
+        2,
+        3,
+        4
+      ]
+    },
+    {
+      "headline": "Atari 520ST brings a mouse desktop under $800",
+      "body": [
+        "The Atari 520ST is becoming widely available, according to Tom R. Halfhill’s October COMPUTE! hands-on report. Its 512K of RAM and 8 MHz Motorola 68000 arrive with a mouse-driven GEM desktop of windows, menus and icons. This is an autumn buying report, not another claim that the machine was first announced this week.",
+        "A monochrome system with drive, monitor, mouse and system software costs $799 in the report. Choosing an RGB monitor raises the system price to $999. Monochrome display reaches 640 by 400 pixels; color modes offer 640 by 200 with four colors or 320 by 200 with sixteen colors chosen from a palette of 512.",
+        "MIDI, RS-232 and Centronics connections point beyond a sealed appliance toward music and peripherals. The software shelf still has gaps: Halfhill reports Logo shipping while BASIC remains unfinished. Plans for new drives and CD-ROM equipment should stay in the future tense until they become products."
+      ],
+      "confidence": "same-month",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "headline": "Fall games trade instructions for discovery and richer simulations",
+      "body": [
+        "Fall game makers are finding ways to make the first encounter part of the game. In COMPUTE!’s seasonal survey, Activision president Jim Levy demonstrates Hacker with what appears to be a failed company-computer connection. The unexplained connection is the fiction itself, not a report of an actual intrusion.",
+        "Datasoft’s Alternate Reality: The City asks players to think about food, money and the passage of day into night, alongside combat. The roundup lists Atari and Commodore versions at $39.95 and the Apple II family edition at $49.95. Its larger world is a plan, not a shelf already filled with every proposed sequel.",
+        "Beach-Head II adds synthesized speech and one- or two-player action at a listed $39.95. Sierra’s King’s Quest II: Romancing the Throne is discussed at $49.95, with dealer demonstration disks offering a taste of the adventure. MicroProse’s AeroJet, Gunship and Silent Service appear as a forthcoming simulation lineup; a preview must not be mistaken for a uniform release date."
+      ],
+      "confidence": "same-month",
+      "sourceRefs": [
+        0
+      ]
+    }
+  ],
+  "editorNote": "A robot and a light gun front a New York experiment while Intel opens a 32-bit frontier.",
+  "morningLine": "Nintendo tests New York; Intel announces the 80386; Atari’s mouse desktop reaches the shops.",
+  "computerItems": [
+    {
+      "title": "Intel 80386",
+      "summary": "32-bit processor announced October 17; 275,000 transistors; do not imply consumer PCs already shipping.",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        2,
+        3
+      ]
+    },
+    {
+      "title": "Atari 520ST",
+      "summary": "512K, 8 MHz 68000; monochrome system $799 or RGB system $999.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "title": "U.S. Robotics Courier 2400",
+      "summary": "List price reduced to $695; contemporary report describes BBS-sysop acquisition program.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0
+      ]
+    }
+  ],
+  "softwareList": [
+    {
+      "name": "GEM / TOS / Logo",
+      "detail": "520ST desktop and bundled language coverage; BASIC still unfinished at the reviewer’s writing.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0
+      ]
+    }
+  ],
+  "storeShelves": [
+    {
+      "label": "Top 5 Computer Games — editorial shelf selection, not a sales chart",
+      "items": [
+        "Hacker",
+        "Alternate Reality: The City",
+        "Beach-Head II",
+        "King’s Quest II: Romancing the Throne",
+        "Gyromite"
+      ],
+      "confidence": "same-month",
+      "sourceRefs": [
+        0,
+        1
+      ]
+    },
+    {
+      "label": "Top 5 Movies — US weekend box office, October 18-20, 1985",
+      "items": [
+        "1. Commando",
+        "2. Jagged Edge",
+        "3. Back to the Future",
+        "4. Remo Williams: The Adventure Begins",
+        "5. Silver Bullet"
+      ],
+      "confidence": "same-week",
+      "sourceRefs": [
+        6
+      ]
+    }
+  ],
+  "priceWatch": [
+    {
+      "item": "NES launch package",
+      "price": "$159.95",
+      "note": "suggested retail; Computer Entertainer p.13; attributed contemporary figure, not a universal store price.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        1
+      ]
+    },
+    {
+      "item": "Atari 520ST monochrome package",
+      "price": "$799.00",
+      "note": "complete-system price; Includes drive, monitor, mouse and system software; COMPUTE! pp.22–23.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "item": "Atari 520ST RGB package",
+      "price": "$999.00",
+      "note": "complete-system price; Same report; monitor choice changes the package price.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "item": "Courier 2400",
+      "price": "$695.00",
+      "note": "list; COMPUTE! p.108 reports a price reduction, not a new launch.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "item": "Cermetek Infomate 1200-TPC",
+      "price": "$198.00",
+      "note": "announced price; Bare-minimum Hayes-compatible internal IBM PC modem, p.108.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0
+      ]
+    }
+  ],
+  "musicChart": [
+    {
+      "rank": 1,
+      "title": "You Belong to the City",
+      "song": "You Belong to the City",
+      "artist": "Glenn Frey",
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-10-19",
+      "basis": "Top Rock Tracks; not Hot 100 or album sales",
+      "confidence": "same-week",
+      "sourceRefs": [
+        5
+      ]
+    },
+    {
+      "rank": 2,
+      "title": "We Built This City",
+      "song": "We Built This City",
+      "artist": "Starship",
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-10-19",
+      "basis": "Top Rock Tracks; not Hot 100 or album sales",
+      "confidence": "same-week",
+      "sourceRefs": [
+        5
+      ]
+    },
+    {
+      "rank": 3,
+      "title": "After the Fire",
+      "song": "After the Fire",
+      "artist": "Roger Daltrey",
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-10-19",
+      "basis": "Top Rock Tracks; not Hot 100 or album sales",
+      "confidence": "same-week",
+      "sourceRefs": [
+        5
+      ]
+    },
+    {
+      "rank": 4,
+      "title": "Never",
+      "song": "Never",
+      "artist": "Heart",
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-10-19",
+      "basis": "Top Rock Tracks; not Hot 100 or album sales",
+      "confidence": "same-week",
+      "sourceRefs": [
+        5
+      ]
+    },
+    {
+      "rank": 5,
+      "title": "Broken Wings",
+      "song": "Broken Wings",
+      "artist": "Mr. Mister",
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-10-19",
+      "basis": "Top Rock Tracks; not Hot 100 or album sales",
+      "confidence": "same-week",
+      "sourceRefs": [
+        5
+      ]
+    }
+  ],
+  "briefs": [
+    {
+      "headline": "Logo accompanies the ST while BASIC waits",
+      "summary": "October’s hands-on report finds Logo shipping with the 520ST, but BASIC unfinished.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "headline": "Demo disks open the castle gate",
+      "summary": "COMPUTE! reports Sierra’s campaign of 15,000 incomplete King’s Quest II dealer demonstration copies.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0
+      ]
+    }
+  ],
+  "periodAd": {
+    "headline": "Atari 520ST: choose the screen for the job",
+    "summary": "October COMPUTE! buying figures: $799 monochrome package or $999 RGB package, including drive, monitor, mouse and system software.",
+    "tagline": "Period buying desk; editorial reconstruction, not a quoted advertisement.",
+    "sourceRefs": [
+      0
+    ]
+  },
+  "market": {
+    "headline": "A test market, not a national verdict",
+    "summary": "Nintendo’s New York experiment confronts a wary post-crash console trade. A limited introduction cannot yet establish national demand; the accessories and $159.95 suggested package price are the immediate retail proposition.",
+    "confidence": "same-month",
+    "sourceRefs": [
+      1
+    ]
+  },
+  "worldAnchor": {
+    "headline": "Achille Lauro aftermath strains Italy’s coalition",
+    "summary": "Contemporary October 17 wire coverage describes divisions in Prime Minister Bettino Craxi’s coalition over the handling of the Achille Lauro hijacking. The political and diplomatic aftermath, rather than the previous week’s ship seizure, anchors this week.",
+    "confidence": "same-week",
+    "sourceRefs": [
+      7,
+      8
+    ]
+  },
+  "bbsNote": {
+    "headline": "2400 bps moves from luxury toward BBS expectation",
+    "summary": "Arlan R. Levitan, COMPUTE!, October 1985, p.108, reports lower modem prices, The Source’s faster access and U.S. Robotics’ sysop program. Monthly reporting, not a new announcement on a known day this week.",
+    "posts": [
+      {
+        "topic": "Sysop hardware economics",
+        "platform": "Independent BBS systems / U.S. Robotics",
+        "text": "Reported note, not a recovered BBS post: U.S. Robotics offers heavily used bulletin boards a special acquisition program to encourage 2400-bps service; Courier 2400 list price is $695."
+      },
+      {
+        "topic": "Commercial service surcharges",
+        "platform": "The Source",
+        "text": "Reported note: 2400-bps access began in August. October coverage quotes $1.80 prime-time and $1.20 nonprime premiums above 1200-bps rates of $25.80 and $10.80 respectively. Attribute the rates; no new October launch claim."
+      },
+      {
+        "topic": "Desktop omission",
+        "platform": "Atari ST terminal accessory",
+        "text": "Levitan reports finding 300, 1200, 4800 and 9600 selections but no 2400 option during a visit to Atari; an anecdote about then-current software, not a limitation of the serial hardware."
+      }
+    ],
+    "sourceRefs": [
+      0
+    ]
+  },
+  "curiosity": {
+    "headline": "The modem with its own cheat sheet underneath",
+    "summary": "U.S. Robotics puts reference information on the bottom of the Courier 2400.",
+    "detail": "COMPUTE! p.108 describes a command/register summary and RS-232 pin-assignment reference printed under the modem, plus three online help screens and a sliding speaker-volume control. A practical period oddity; do not reproduce working command sequences.",
+    "sourceRefs": [
+      0
+    ]
+  },
+  "gadgetWatch": {
+    "headline": "Cellular data modem heads for the dashboard",
+    "summary": "COMPUTE! p.108 reports AT&T Technologies/Bell Atlantic testing of the CTS-1620 at 2400 bps since July in the Baltimore–Washington area. Expected 1986 debut and projected $1,600–$2,600 price require a cellular phone/transmitter and terminal. This is a reported trial and future plan, not an available consumer product.",
+    "confidence": "same-month",
+    "sourceRefs": [
+      0
+    ]
+  },
+  "accuracyLedger": {
+    "items": [
+      "Week October 14-20, 1985. NES contemporary report supports mid-October; October 18 is a conventional retrospective date, not an independently verified first sale.",
+      "No definitive opening-day NES catalog or exact American Super Mario Bros. date asserted.",
+      "Top 5 Computer Games is an editorial selection, not a sales chart; Gyromite is a console game.",
+      "Movie top five supplemented by direct Box Office Mojo readback on 2026-11-22.",
+      "Monthly features, previews and announced future products retain their timing distinctions.",
+      "No real underground event inferred from the fictional game Hacker."
+    ]
+  }
+}
