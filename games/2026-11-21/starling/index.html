@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="theme-color" content="#000000">
+<meta name="description" content="Starling 2026: an original formation shooter in real-time 3D. Flocks of machine-birds murmurate over a lighthouse at dusk, settle into formation and stoop on you. Call the lighthouse beam to dazzle them. Endless waves, global scores, plays upright on a phone.">
+<title>Starling 2026</title>
+<link rel="icon" href="data:,">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Saira+Condensed:wght@600;800&display=swap" rel="stylesheet">
+<style>
+:root { --amber: #ffb347; --teal: #52ffd8; --ink: #eef2f6; --dim: #9aa2b8; --edge: rgba(200, 200, 235, .24); --red: #ff5a4a; --u: 1vmin; }
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body { margin: 0; height: 100%; background: #05040c; overflow: hidden; touch-action: none; user-select: none; -webkit-user-select: none; overscroll-behavior: none; }
+canvas#gl { position: fixed; inset: 0; width: 100%; height: 100%; display: block; }
+#ui { position: fixed; inset: 0; font-family: 'Chakra Petch', sans-serif; color: var(--ink); pointer-events: none; font-size: calc(var(--u) * 1.5); }
+#ui button, #ui input, #ui .card { pointer-events: auto; }
+.hidden { display: none !important; }
+button { appearance: none; border: 0; background: none; font: inherit; color: inherit; cursor: pointer; }
+.sc { font-family: 'Saira Condensed', sans-serif; font-weight: 800; }
+#hud > div { position: absolute; text-shadow: 0 .15em .6em #000; }
+.lbl { font-size: .9em; letter-spacing: .24em; color: var(--dim); }
+#h-l { left: max(1.2em, env(safe-area-inset-left)); top: max(1em, env(safe-area-inset-top)); }
+#score { font-size: 3em; line-height: 1; font-variant-numeric: tabular-nums; }
+#h-c { left: 50%; top: max(1em, env(safe-area-inset-top)); transform: translateX(-50%); text-align: center; white-space: nowrap; }
+#wave { font-size: 1.1em; letter-spacing: .3em; color: var(--amber); }
+#chain { font-size: 1.9em; color: var(--teal); opacity: 0; transition: opacity .25s; } #chain.on { opacity: 1; }
+#h-r { right: max(1.2em, env(safe-area-inset-right)); top: max(1em, env(safe-area-inset-top)); text-align: right; }
+#hi { font-size: 1.8em; font-variant-numeric: tabular-nums; }
+#h-b { left: max(1.2em, env(safe-area-inset-left)); bottom: max(1em, env(safe-area-inset-bottom)); }
+#lives { display: flex; gap: .4em; align-items: center; } #lives i { width: 1em; height: 1.2em; background: var(--teal); clip-path: polygon(50% 0, 100% 100%, 50% 72%, 0 100%); display: block; } #lives span { font-size: 1.1em; color: var(--teal); }
+#h-m { right: max(1.2em, env(safe-area-inset-right)); bottom: max(1em, env(safe-area-inset-bottom)); width: 12em; text-align: right; }
+.bar { height: .7em; border-radius: .35em; background: rgba(0, 0, 0, .5); border: 1px solid var(--edge); overflow: hidden; margin: .3em 0 .6em; } .bar i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, #b98a3c, #ffe9a8); } #twinbar i { background: linear-gradient(90deg, #1f8f80, var(--teal)); }
+#beamlbl.ready { color: #ffe9a8; animation: blink 1s infinite; }
+#banner { position: absolute; left: 0; right: 0; top: 40%; text-align: center; transform: translateY(-50%); opacity: 0; transition: opacity .4s; } #banner.on { opacity: 1; }
+#b1 { font-size: 6em; letter-spacing: .06em; line-height: 1.05; text-shadow: 0 .05em .3em rgba(0, 0, 0, .8), 0 0 .5em rgba(255, 179, 71, .35); } #b2 { font-size: 1.3em; letter-spacing: .4em; color: var(--amber); text-shadow: 0 .2em 1em #000; }
+#popups { position: absolute; inset: 0; overflow: hidden; }
+.pop { position: absolute; transform: translate(-50%, -50%); font-family: 'Saira Condensed'; font-weight: 800; font-size: 1.7em; color: var(--amber); text-shadow: 0 .1em .4em #000; white-space: nowrap; animation: popup 1s ease-out forwards; }
+@keyframes popup { to { transform: translate(-50%, -190%); opacity: 0; } } @keyframes blink { 50% { opacity: .35; } }
+#demo { position: absolute; left: 50%; bottom: max(1.4em, env(safe-area-inset-bottom)); transform: translateX(-50%); font-size: 1em; letter-spacing: .36em; color: var(--amber); animation: blink 1.4s infinite; white-space: nowrap; }
+#touch button { position: absolute; border-radius: 50%; border: .2em solid rgba(255, 255, 255, .35); background: rgba(10, 12, 22, .45); font-size: 1.2em; letter-spacing: .12em; font-weight: 700; }
+#touch button:active { background: rgba(255, 233, 168, .35); border-color: #ffe9a8; }
+#t-beam { right: max(1em, env(safe-area-inset-right)); bottom: calc(max(1em, env(safe-area-inset-bottom)) + 5em); width: 6.4em; height: 6.4em; }
+#t-pause { right: max(1em, env(safe-area-inset-right)); top: calc(max(1em, env(safe-area-inset-top)) + 4.4em); width: 3.2em; height: 2.4em; border-radius: .6em !important; opacity: .7; }
+.screen { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; padding: 1em; }
+.screen.dim { background: radial-gradient(ellipse at center, rgba(5, 4, 12, .4), rgba(5, 4, 12, .82)); }
+.card { width: min(36em, 94vw); max-height: 94%; overflow: auto; padding: 2em 2.2em; border-radius: 1.3em; background: linear-gradient(170deg, rgba(26, 22, 44, .9), rgba(6, 5, 14, .93)); border: 1px solid var(--edge); box-shadow: 0 1.5em 5em rgba(0, 0, 0, .6); }
+.card h2 { margin: 0 0 .2em; font-family: 'Saira Condensed'; font-weight: 800; font-size: 3em; letter-spacing: .06em; }
+.card h3 { margin: 1.2em 0 .4em; font-size: .95em; letter-spacing: .3em; color: var(--amber); font-weight: 600; }
+.card p { font-size: 1.2em; line-height: 1.5; color: #cfd3e4; margin: .4em 0; } .card p b { color: var(--teal); font-weight: 600; }
+.btn { display: block; width: 100%; margin-top: .5em; padding: .6em 1em; font-size: 1.5em; letter-spacing: .18em; font-weight: 700; border-radius: .45em; border: 1px solid var(--edge); background: rgba(8, 7, 18, .6); text-align: left; transition: background .12s, transform .12s; }
+.btn small { display: block; font-size: .56em; letter-spacing: .08em; color: var(--dim); font-weight: 500; margin-top: .2em; }
+.btn:hover, .btn:focus-visible { outline: none; background: rgba(82, 255, 216, .16); border-color: var(--teal); transform: translateX(.25em); }
+.btn.sm { display: inline-block; width: auto; font-size: 1.1em; margin-right: .4em; } .btn.on { border-color: var(--amber); color: var(--amber); }
+#title { flex-direction: column; align-items: flex-start; justify-content: center; padding-left: max(6vw, env(safe-area-inset-left)); }
+#title .btn { width: min(19em, 82vw); }
+#logo { font-size: 7.5em; line-height: .9; letter-spacing: .04em; text-shadow: 0 0 .5em rgba(255, 179, 71, .45), 0 .05em .2em rgba(0, 0, 0, .8); animation: logoIn 1.4s cubic-bezier(.2, .8, .2, 1) both; }
+#logo span { display: block; font-size: .34em; letter-spacing: .62em; color: var(--amber); margin-top: .3em; }
+#tag { font-size: 1.25em; letter-spacing: .1em; color: #d5d8ea; margin: 1em 0 .8em; max-width: 26em; line-height: 1.45; text-shadow: 0 .1em .5em #000; }
+@keyframes logoIn { from { opacity: 0; letter-spacing: .4em; } to { opacity: 1; letter-spacing: .04em; } }
+#ver { position: absolute; right: 1.2em; bottom: 1em; font-size: .9em; letter-spacing: .2em; color: var(--dim); }
+table.sc2 { width: 100%; font-size: 1.3em; border-collapse: collapse; font-variant-numeric: tabular-nums; } table.sc2 td { padding: .2em .4em; border-bottom: 1px solid rgba(255, 255, 255, .07); } table.sc2 td:last-child { text-align: right; color: var(--amber); }
+.cols { display: grid; grid-template-columns: 1fr 1fr; gap: 0 2em; }
+#initials { font: inherit; font-size: 3em; width: 4.2em; text-align: center; letter-spacing: .3em; text-transform: uppercase; background: rgba(0, 0, 0, .4); border: 1px solid var(--teal); color: #fff; border-radius: .2em; padding: .1em; }
+kbd { font-family: inherit; font-size: .9em; padding: .05em .45em; border-radius: .3em; border: 1px solid rgba(255, 255, 255, .35); background: rgba(255, 255, 255, .08); }
+</style>
+</head>
+<body>
+<canvas id="gl"></canvas>
+<div id="ui">
+  <div id="hud" class="hidden">
+    <div id="h-l"><div class="lbl">SCORE</div><div id="score" class="sc">0</div></div>
+    <div id="h-c"><div id="wave"></div><div id="chain" class="sc"></div></div>
+    <div id="h-r"><div class="lbl">BEST</div><div id="hi" class="sc">0</div></div>
+    <div id="h-b"><div id="lives"></div></div>
+    <div id="h-m"><div class="lbl" id="twinlbl">TWIN SHOT</div><div class="bar" id="twinbar"><i id="twinfill"></i></div><div class="lbl" id="beamlbl">BEAM</div><div class="bar"><i id="beamfill"></i></div></div>
+  </div>
+  <div id="popups"></div>
+  <div id="banner"><div id="b1" class="sc"></div><div id="b2"></div></div>
+  <div id="demo" class="hidden">DEMONSTRATION</div>
+  <div id="touch" class="hidden"><button id="t-beam">BEAM</button><button id="t-pause">II</button></div>
+
+  <div id="title" class="screen hidden">
+    <div id="logo" class="sc">STARLING<span>2026</span></div>
+    <div id="tag">The flock comes in at dusk. Hold the lighthouse. Call its beam down when they stoop.</div>
+    <button class="btn" id="m-play">PLAY</button>
+    <button class="btn" id="m-ai">WATCH THE AI<small>The autopilot plays by the same rules</small></button>
+    <button class="btn" id="m-scores">SCORES</button>
+    <button class="btn" id="m-help">HOW TO PLAY</button>
+    <div style="margin-top:.8em"><button class="btn sm" id="o-sound"></button><button class="btn sm" id="o-auto"></button><button class="btn sm" id="o-flash"></button><button class="btn sm" id="o-test"></button></div>
+    <div id="ver"></div>
+  </div>
+
+  <div id="s-help" class="screen dim hidden"><div class="card"><h2>HOW TO PLAY</h2>
+    <p>Machine-birds arrive in ribbons, wheel overhead as a flock, then settle into formation and <b>stoop</b> on you. One hit costs a ship.</p>
+    <h3>THE BEAM</h3><p>The lighthouse sweeps the sky on its own. <b>Call the beam</b> and it drops a column of light on you for a few seconds: anything inside is <b>dazzled</b>, slowed, silenced and worth double. It takes ten seconds to recharge.</p>
+    <h3>SCORING</h3><p>Birds shot mid-stoop are worth double. Quick kills build a chain up to x5. Catch a falling <b>ember</b> for fifteen seconds of twin shot. Down a red Kite and its escorts lose their nerve.</p>
+    <p>Every third wave is a passing flight that does not shoot back: clear all forty for a bonus. Every fifth is the Roost.</p>
+    <h3>CONTROLS</h3><p><kbd>Left</kbd>/<kbd>Right</kbd> or <kbd>A</kbd>/<kbd>D</kbd> move &nbsp; <kbd>Space</kbd> fire &nbsp; <kbd>X</kbd> beam &nbsp; <kbd>Esc</kbd> pause<br>Controller: stick, <kbd>A</kbd> fire, <kbd>X</kbd> beam. Touch: drag to move, tap BEAM.</p>
+    <button class="btn sm" data-back>BACK</button></div></div>
+
+  <div id="s-scores" class="screen dim hidden"><div class="card"><h2>SCORES</h2><div class="cols"><div><h3>THIS DEVICE</h3><table class="sc2" id="sc-local"></table></div><div><h3>WORLD</h3><table class="sc2" id="sc-global"></table></div></div><button class="btn sm" data-back>BACK</button></div></div>
+
+  <div id="s-pause" class="screen dim hidden"><div class="card"><h2>PAUSED</h2><button class="btn" id="p-resume">RESUME</button><button class="btn" id="p-quit">QUIT TO TITLE</button></div></div>
+
+  <div id="s-over" class="screen dim hidden"><div class="card"><h2>THE LIGHT GOES OUT</h2><p id="ov-s"></p><div id="ov-entry" class="hidden"><h3>ENTER INITIALS FOR THE BOARD</h3><input id="initials" maxlength="3" autocomplete="off" spellcheck="false"><button class="btn" id="ov-submit">SUBMIT</button></div><button class="btn" id="ov-again">PLAY AGAIN</button><button class="btn" id="ov-quit">TITLE</button></div></div>
+</div>
+<script type="module" src="js/main.js?v=130"></script>
+</body>
+</html>
