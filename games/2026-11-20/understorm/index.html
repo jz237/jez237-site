@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="theme-color" content="#000000">
+<meta name="description" content="Understorm 2026: an original side-scrolling shooter in real-time 3D. Fly a salvage fighter through the storm layer of a gas giant with a charging Lance and a tethered Anchor drone. Twelve hand-built stages in three acts, ten bosses, three difficulties, global scores.">
+<title>Understorm 2026</title>
+<link rel="icon" href="data:,">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Saira+Condensed:wght@600;800&display=swap" rel="stylesheet">
+<style>
+:root { --amber: #ffb347; --teal: #52ffd8; --violet: #c8b0ff; --ink: #eef2f6; --dim: #8a96a8; --edge: rgba(190, 215, 225, .22); --red: #ff5a4a; }
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body { margin: 0; height: 100%; background: #000; overflow: hidden; touch-action: none; user-select: none; -webkit-user-select: none; overscroll-behavior: none; }
+#box { position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%); overflow: hidden; background: #05070a; font-size: 8px; }
+canvas#gl { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+#ui { position: absolute; inset: 0; font-family: 'Chakra Petch', sans-serif; color: var(--ink); pointer-events: none; }
+#ui button, #ui input, #ui .card { pointer-events: auto; }
+.hidden { display: none !important; }
+button { appearance: none; border: 0; background: none; font: inherit; color: inherit; cursor: pointer; }
+.sc { font-family: 'Saira Condensed', sans-serif; font-weight: 800; }
+
+/* HUD: 1em = 1% of the playfield height */
+#hud > div { position: absolute; text-shadow: 0 .2em .6em #000; }
+.lbl { font-size: 1.5em; letter-spacing: .22em; color: var(--dim); }
+#h-l { left: 2.2em; top: 1.8em; }
+#score { font-size: 5em; line-height: 1; letter-spacing: .03em; font-variant-numeric: tabular-nums; }
+#lives { display: flex; gap: .5em; margin-top: .6em; align-items: center; }
+#lives i { width: 1.7em; height: .8em; background: var(--teal); clip-path: polygon(0 0, 100% 50%, 0 100%, 22% 50%); display: block; }
+#lives span { font-size: 1.7em; color: var(--teal); }
+#h-c { left: 50%; top: 1.8em; transform: translateX(-50%); text-align: center; white-space: nowrap; }
+#stname { font-size: 1.6em; letter-spacing: .34em; color: var(--amber); }
+#chain { font-size: 3.2em; color: var(--teal); margin-top: .1em; opacity: 0; transition: opacity .3s; }
+#chain.on { opacity: 1; }
+#bossbar { margin-top: .8em; width: 46em; }
+#bossbar .lbl { color: var(--red); letter-spacing: .32em; }
+#bossbar .bar { margin-top: .5em; height: 1em; border-radius: .5em; background: rgba(255, 255, 255, .12); overflow: hidden; border: 1px solid rgba(255, 90, 74, .5); }
+#bossbar .bar i { display: block; height: 100%; width: 100%; background: linear-gradient(90deg, #ff3b2f, #ffb347); }
+#h-r { right: 2.2em; top: 1.8em; text-align: right; }
+#core { font-size: 2.6em; letter-spacing: .08em; }
+#core b { color: var(--teal); }
+#extras { font-size: 1.5em; letter-spacing: .16em; color: var(--dim); margin-top: .3em; }
+#h-b { left: 2.2em; bottom: 2em; width: 30em; }
+#gauge { position: relative; height: 1.5em; border-radius: .4em; background: rgba(0, 0, 0, .5); border: 1px solid var(--edge); overflow: hidden; margin-top: .4em; }
+#gauge i { position: absolute; left: 0; top: 0; bottom: 0; width: 0; background: linear-gradient(90deg, #1f8f80, var(--teal)); }
+#gauge i.t3 { background: linear-gradient(90deg, var(--teal), #fff); }
+#gauge u { position: absolute; top: 0; bottom: 0; width: 1px; background: rgba(255, 255, 255, .55); }
+#heat { height: .6em; margin-top: .4em; border-radius: .3em; background: rgba(0, 0, 0, .5); overflow: hidden; }
+#heat i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, #ffb347, #ff3b2f); }
+#heat.lock i { animation: blink .25s infinite; }
+#speed { display: flex; gap: .4em; margin-top: .7em; align-items: center; }
+#speed i { width: 1.6em; height: .6em; background: rgba(255, 255, 255, .2); transform: skewX(-20deg); }
+#speed i.on { background: var(--amber); }
+#banner { position: absolute; left: 0; right: 0; top: 36%; text-align: center; transform: translateY(-50%); opacity: 0; transition: opacity .5s; }
+#banner.on { opacity: 1; }
+#banner .b0 { font-size: 1.9em; letter-spacing: .6em; color: var(--teal); text-shadow: 0 .2em 1em #000; }
+#banner .b1 { font-size: 11em; letter-spacing: .06em; line-height: 1.05; color: #fff; text-shadow: 0 .05em .3em rgba(0, 0, 0, .8), 0 0 .5em rgba(255, 179, 71, .3); }
+#banner .b2 { font-size: 2em; letter-spacing: .5em; color: var(--amber); text-shadow: 0 .2em 1em #000; }
+#banner.warn .b1 { color: var(--red); animation: blink .5s 4; }
+#msg { position: absolute; left: 50%; bottom: 13%; transform: translateX(-50%); font-size: 2.1em; letter-spacing: .28em; color: var(--amber); padding: .5em 1.2em; background: rgba(0, 0, 0, .5); border: 1px solid rgba(255, 179, 71, .4); border-radius: .5em; white-space: nowrap; opacity: 0; transition: opacity .4s; text-align: center; }
+#msg.on { opacity: 1; }
+#popups { position: absolute; inset: 0; overflow: hidden; }
+.pop { position: absolute; transform: translate(-50%, -50%); font-family: 'Saira Condensed'; font-weight: 800; font-size: 2.8em; color: var(--amber); text-shadow: 0 .1em .4em #000; white-space: nowrap; animation: popup 1.1s ease-out forwards; }
+.pop.t { color: var(--teal); font-size: 3.6em; }
+@keyframes popup { to { transform: translate(-50%, -190%); opacity: 0; } }
+@keyframes blink { 50% { opacity: .3; } }
+#aibar { position: absolute; left: 50%; bottom: 2.2em; transform: translateX(-50%); text-align: center; white-space: nowrap; padding: .9em 1.6em; border-radius: .8em; background: rgba(3, 8, 12, .62); border: 1px solid rgba(82, 255, 216, .4); }
+#aibar .a0 { font-size: 1.3em; letter-spacing: .34em; color: var(--dim); }
+#aibar .a1 { font-size: 2.3em; letter-spacing: .14em; color: var(--teal); margin: .15em 0 .3em; min-width: 22em; }
+#aibar button { font-size: 1.35em; letter-spacing: .14em; padding: .45em .9em; margin: 0 .25em; border-radius: .4em; border: 1px solid var(--edge); background: rgba(255, 255, 255, .06); }
+#aibar button:hover { border-color: var(--teal); }
+#aibar kbd { font-size: .85em; margin-right: .4em; }
+#demo { position: absolute; left: 50%; bottom: 3em; transform: translateX(-50%); font-size: 1.5em; letter-spacing: .4em; color: var(--amber); animation: blink 1.4s infinite; }
+
+/* touch */
+#touch button { position: absolute; border-radius: 50%; border: .25em solid rgba(255, 255, 255, .35); background: rgba(10, 16, 22, .45); font-size: 1.7em; letter-spacing: .12em; font-weight: 700; }
+#touch button:active, #touch button.down { background: rgba(82, 255, 216, .35); border-color: var(--teal); }
+#t-fire { right: 2.5em; bottom: 3em; width: 9em; height: 9em; }
+#t-anchor { right: 13em; bottom: 2.2em; width: 7.4em; height: 7.4em; }
+#t-up, #t-dn { right: 2.8em; width: 4.4em; height: 4.4em; border-radius: 1em !important; }
+#t-up { bottom: 19em; } #t-dn { bottom: 13.6em; }
+#t-pause { right: 50%; margin-right: -2.2em; bottom: 1.2em; width: 4.4em; height: 3em; border-radius: 1em !important; font-size: 1.3em !important; opacity: .7; }
+
+/* menus */
+.screen { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; pointer-events: none; }
+.screen.dim { background: radial-gradient(ellipse at center, rgba(3, 6, 10, .35), rgba(3, 6, 10, .78)); }
+.card { width: 62em; max-height: 94%; overflow: auto; padding: 3em 3.4em; border-radius: 2em; background: linear-gradient(170deg, rgba(18, 28, 36, .9), rgba(4, 7, 11, .93)); border: 1px solid var(--edge); box-shadow: 0 2em 6em rgba(0, 0, 0, .6); }
+.card.wide { width: 110em; }
+.card h2 { margin: 0 0 .2em; font-family: 'Saira Condensed'; font-weight: 800; font-size: 5em; letter-spacing: .06em; }
+.card h3 { margin: 1.4em 0 .6em; font-size: 1.5em; letter-spacing: .3em; color: var(--amber); font-weight: 600; }
+.card p { font-size: 2em; line-height: 1.5; color: #c9d3de; margin: .4em 0; }
+.card p b { color: var(--teal); font-weight: 600; }
+.btn { display: block; width: 100%; margin-top: .6em; padding: .7em 1em; font-size: 2.4em; letter-spacing: .18em; font-weight: 700; border-radius: .5em; border: 1px solid var(--edge); background: rgba(255, 255, 255, .04); text-align: left; transition: background .12s, transform .12s; }
+.btn small { display: block; font-size: .56em; letter-spacing: .08em; color: var(--dim); font-weight: 500; margin-top: .2em; }
+.btn:hover, .btn:focus-visible { outline: none; background: rgba(82, 255, 216, .16); border-color: var(--teal); transform: translateX(.3em); }
+.btn.sm { display: inline-block; width: auto; font-size: 1.8em; margin-right: .5em; }
+.btn.on { border-color: var(--amber); color: var(--amber); }
+.btn[disabled] { opacity: .35; pointer-events: none; }
+.row { display: flex; align-items: center; justify-content: space-between; gap: 2em; margin-top: 1em; font-size: 2em; }
+.row input[type=range] { width: 16em; accent-color: var(--teal); }
+.row .btn.sm { font-size: .78em; margin: 0; padding: .45em .9em; }
+#title { align-items: stretch; justify-content: flex-start; }
+#title .left { width: 62em; padding: 5em 0 3em 6em; display: flex; flex-direction: column; justify-content: center; pointer-events: auto; }
+#title .btn { padding: .55em 1em; margin-top: .5em; }
+#logo { font-size: 12em; line-height: .9; letter-spacing: .04em; color: #fff; text-shadow: 0 0 .5em rgba(82, 255, 216, .45), 0 .05em .2em rgba(0, 0, 0, .8); }
+#logo span { display: block; font-size: .36em; letter-spacing: .62em; color: var(--amber); text-shadow: 0 .1em .5em #000; margin-top: .3em; }
+#tag { font-size: 1.9em; letter-spacing: .12em; color: #c9d3de; margin: 1.2em 0 1em; text-shadow: 0 .1em .5em #000; max-width: 28em; line-height: 1.45; }
+#title .btn { width: 21em; background: rgba(4, 9, 13, .6); }
+#title:not(.hidden) #logo { animation: logoIn 1.6s cubic-bezier(.2, .8, .2, 1) both; }
+#title:not(.hidden) #logo span { animation: fadeUp 1s .9s both; }
+#title:not(.hidden) #tag { animation: fadeUp 1s 1.2s both; }
+#title:not(.hidden) .btn { animation: fadeUp .6s both; }
+#title .btn:nth-of-type(1) { animation-delay: 1.5s; } #title .btn:nth-of-type(2) { animation-delay: 1.6s; } #title .btn:nth-of-type(3) { animation-delay: 1.7s; } #title .btn:nth-of-type(4) { animation-delay: 1.8s; } #title .btn:nth-of-type(5) { animation-delay: 1.9s; } #title .btn:nth-of-type(6) { animation-delay: 2s; } #title .btn:nth-of-type(7) { animation-delay: 2.1s; }
+@keyframes logoIn { from { opacity: 0; letter-spacing: .5em; filter: blur(.12em); } to { opacity: 1; letter-spacing: .04em; filter: blur(0); } }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(.6em); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { #title * { animation: none !important; } }
+#ver { position: absolute; right: 2em; bottom: 1.6em; font-size: 1.4em; letter-spacing: .2em; color: var(--dim); }
+#grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1em; margin-top: 1em; }
+#grid .btn { margin: 0; font-size: 1.9em; min-height: 5.2em; }
+#grid .btn em { font-style: normal; display: block; font-size: .62em; color: var(--amber); letter-spacing: .2em; }
+.cols { display: grid; grid-template-columns: 1fr 1fr; gap: 0 4em; }
+table.sc2 { width: 100%; font-size: 2.1em; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+table.sc2 td { padding: .22em .4em; border-bottom: 1px solid rgba(255, 255, 255, .07); } table.sc2 td:last-child { text-align: right; color: var(--amber); }
+#initials { font: inherit; font-size: 5em; width: 4.2em; text-align: center; letter-spacing: .3em; text-transform: uppercase; background: rgba(0, 0, 0, .4); border: 1px solid var(--teal); color: #fff; border-radius: .2em; padding: .1em; }
+kbd { font-family: inherit; font-size: .9em; padding: .05em .45em; border-radius: .3em; border: 1px solid rgba(255, 255, 255, .35); background: rgba(255, 255, 255, .08); }
+#credits { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; background: linear-gradient(rgba(2, 4, 8, .1), rgba(2, 4, 8, .28) 45%, rgba(2, 4, 8, .6)); pointer-events: auto; text-shadow: 0 .1em .8em rgba(0, 0, 0, .8); }
+#credits .b1 { font-size: 9em; } #credits p { font-size: 2.2em; line-height: 1.7; color: #d9e2ec; max-width: 40em; letter-spacing: .06em; }
+#intro { position: absolute; inset: 0; pointer-events: none; }
+#intro .il { position: absolute; left: 10%; right: 10%; top: 44%; text-align: center; font-size: 3.1em; letter-spacing: .2em; line-height: 1.5; color: #e8eef4; text-shadow: 0 .1em 1em #000, 0 0 1.4em rgba(82, 255, 216, .25); opacity: 0; animation: lineIn 3.1s ease both; }
+#intro .il b { color: var(--teal); font-weight: 600; }
+#intro .i1 { animation-delay: .6s; } #intro .i2 { animation-delay: 3.6s; } #intro .i3 { animation-delay: 6.6s; animation-duration: 2.4s; } #intro .i4 { animation-delay: 8.9s; animation-duration: 3.4s; }
+#intro .iskip { position: absolute; right: 3em; bottom: 2.4em; font-size: 1.4em; letter-spacing: .34em; color: var(--dim); animation: blink 1.6s infinite; }
+@keyframes lineIn { 0% { opacity: 0; transform: translateY(.5em); filter: blur(.1em); } 18% { opacity: 1; transform: none; filter: blur(0); } 80% { opacity: 1; } 100% { opacity: 0; transform: translateY(-.3em); } }
+#credits .cl { opacity: 0; }
+#credits:not(.hidden) .cl { animation: fadeUp 1.8s ease both; }
+#credits .c1 { animation-delay: .8s !important; font-size: 2.6em; letter-spacing: .3em; color: #e8eef4; } #credits .c2 { animation-delay: 3.6s !important; font-size: 2.2em; letter-spacing: .26em; color: var(--amber); margin: .8em 0 1.2em; } #credits .c3 { animation-delay: 6.6s !important; } #credits .c4 { animation-delay: 8.6s !important; } #credits .c5 { animation-delay: 10.6s !important; margin-top: 1.4em; }
+@media (prefers-reduced-motion: reduce) { #intro .il, #credits .cl { animation-duration: .01s !important; } }
+#rotate { position: fixed; inset: 0; background: #05070a; color: var(--ink); font-family: 'Chakra Petch', sans-serif; display: none; align-items: center; justify-content: center; text-align: center; font-size: 18px; letter-spacing: .12em; padding: 30px; z-index: 5; }
+@media (orientation: portrait) and (max-width: 700px) { #rotate.need { display: flex; } }
+</style>
+</head>
+<body>
+<div id="box">
+  <canvas id="gl"></canvas>
+  <div id="ui">
+    <div id="hud" class="hidden">
+      <div id="h-l"><div class="lbl">SCORE</div><div id="score" class="sc">0</div><div id="lives"></div></div>
+      <div id="h-c"><div id="stname"></div><div id="chain" class="sc"></div><div id="bossbar" class="hidden"><div class="lbl" id="bossname"></div><div class="bar"><i id="bosshp"></i></div></div></div>
+      <div id="h-r"><div class="lbl">ANCHOR CORE</div><div id="core" class="sc">&mdash;</div><div id="extras"></div></div>
+      <div id="h-b"><div class="lbl">LANCE</div><div id="gauge"><i id="gfill"></i><u style="left:25.5%"></u><u style="left:57.5%"></u></div><div id="heat"><i id="hfill"></i></div><div id="speed"><span class="lbl">SPEED&nbsp;</span><i></i><i></i><i></i><i></i></div></div>
+    </div>
+    <div id="popups"></div>
+    <div id="banner"><div class="b0" id="b0"></div><div class="b1 sc" id="b1"></div><div class="b2" id="b2"></div></div>
+    <div id="msg"></div>
+    <div id="demo" class="hidden">DEMONSTRATION</div>
+    <div id="aibar" class="hidden"><div class="a0">AI PILOT &middot; NO CHEATS &middot; SAME RULES AS YOU</div><div class="a1" id="ai-intent"></div><button id="ai-take"><kbd>Enter</kbd>TAKE THE STICK</button><button id="ai-vis"><kbd>V</kbd>VISION <span id="ai-vis-s">ON</span></button><button id="ai-spd"><kbd>F</kbd>SPEED <span id="ai-spd-s">x1</span></button><button id="ai-next"><kbd>N</kbd>NEXT STAGE</button></div>
+    <div id="touch" class="hidden"><button id="t-fire">CHARGE</button><button id="t-anchor">ANCHOR</button><button id="t-up">+</button><button id="t-dn">&minus;</button><button id="t-pause">II</button></div>
+
+    <div id="title" class="screen hidden"><div class="left">
+      <div id="logo" class="sc">UNDERSTORM<span>2026</span></div>
+      <div id="tag">Twelve stages down through the storm layer of a dead mining world. A Lance that charges. An Anchor on a live tether.</div>
+      <button class="btn" id="m-start">START<small>New run from Stage 1</small></button>
+      <button class="btn" id="m-cont">CONTINUE<small id="m-cont-s"></small></button>
+      <button class="btn" id="m-ai">WATCH THE AI FLY IT<small>All twelve stages, played live with no cheats. Take over any time</small></button>
+      <button class="btn" id="m-select">STAGE SELECT<small>Practise any stage or boss you have reached</small></button>
+      <button class="btn" id="m-scores">SCORES</button>
+      <button class="btn" id="m-options">OPTIONS</button>
+      <button class="btn" id="m-help">HOW TO PLAY</button>
+    </div><div id="ver"></div></div>
+
+    <div id="s-diff" class="screen dim hidden"><div class="card"><h2>CHOOSE YOUR RANK</h2>
+      <button class="btn" data-diff="easy">CADET<small>Slower fire, five lives, one shield per checkpoint</small></button>
+      <button class="btn" data-diff="normal">PILOT<small>The game as built. Three lives, one hit kills</small></button>
+      <button class="btn" data-diff="hard">STORMRIDER<small>Faster, denser, and the dead shoot back</small></button>
+      <button class="btn" data-diff="sight">SIGHTSEER<small>No fail state. See all twelve stages. No score posted</small></button>
+      <button class="btn sm" data-back>BACK</button></div></div>
+
+    <div id="s-select" class="screen dim hidden"><div class="card wide"><h2>STAGE SELECT</h2><p>Practice runs do not post scores. <b>Stage</b> starts from the beginning; <b>Boss</b> starts at its door with a level-two Anchor.</p><div id="grid"></div><button class="btn sm" data-back>BACK</button></div></div>
+
+    <div id="s-scores" class="screen dim hidden"><div class="card wide"><h2>SCORES</h2><div id="sc-tabs"></div><div class="cols"><div><h3>THIS DEVICE</h3><table class="sc2" id="sc-local"></table></div><div><h3>WORLD</h3><table class="sc2" id="sc-global"></table></div></div><button class="btn sm" data-back>BACK</button></div></div>
+
+    <div id="s-options" class="screen dim hidden"><div class="card wide"><h2>OPTIONS</h2><div class="cols"><div>
+      <h3>PICTURE</h3><div id="o-q"></div>
+      <div class="row"><span>Reduced flashing</span><button class="btn sm" id="o-flash"></button></div>
+      <div class="row"><span>Reduced screen shake</span><button class="btn sm" id="o-shake"></button></div>
+      <div class="row"><span>Best-run ghost</span><button class="btn sm" id="o-ghost"></button></div>
+      <h3>SOUND</h3>
+      <div class="row"><span>Music</span><input type="range" id="o-mus" min="0" max="100"></div>
+      <div class="row"><span>Effects</span><input type="range" id="o-sfx" min="0" max="100"></div>
+      <div class="row"><span>Score</span><button class="btn sm" id="o-score"></button></div>
+      <div class="row"><span>Sound test</span><span><button class="btn sm" id="o-st-prev" aria-label="Previous sound">&#9664;</button><button class="btn sm" id="o-st-play"></button><button class="btn sm" id="o-st-next" aria-label="Next sound">&#9654;</button></span></div>
+      <h3>PLAY</h3><div class="row"><span>Auto-fire</span><button class="btn sm" id="o-auto"></button></div>
+    </div><div><h3>KEYS (select, then press a key)</h3><div id="o-keys"></div><button class="btn sm" id="o-reset">RESET KEYS</button></div></div><button class="btn sm" data-back>BACK</button></div></div>
+
+    <div id="s-help" class="screen dim hidden"><div class="card wide"><h2>HOW TO PLAY</h2><div class="cols"><div>
+      <h3>THE LANCE</h3><p>It fires on its own. <b>Hold</b> to charge through three tiers and release. The third is a screen-long beam that kicks back and overheats: the Lance locks until it cools.</p>
+      <h3>THE ANCHOR</h3><p>Shoot a supply drone to collect one. It cannot be destroyed, it blocks bullets and it hurts whatever it touches. Docked to the nose or tail it fires the core weapon that way.</p>
+      <p><b>Press Anchor</b> to throw it. It stays out, joined to you by a <b>live tether that cuts anything it sweeps through</b>. Press again to call it home; touch it with your nose or tail to dock it there. While it is docked, <b>hold back and press Anchor</b> to swap it to the tail, or hold forward to bring it back to the nose.</p>
+      <h3>CORES</h3><p><b>Arc</b> chains lightning. <b>Ricochet</b> bounces off walls. <b>Burrow</b> crawls along them. The same core again raises its level.</p>
+    </div><div>
+      <h3>CONTROLS</h3><p><kbd>Arrows</kbd>/<kbd>WASD</kbd> move &nbsp; <kbd>Space</kbd> Lance &nbsp; <kbd>X</kbd> Anchor<br><kbd>Q</kbd>/<kbd>E</kbd> speed down/up &nbsp; <kbd>Esc</kbd> pause</p>
+      <p>Controller: stick, <kbd>A</kbd> Lance, <kbd>X</kbd> Anchor, bumpers for speed.<br>Touch: drag anywhere to move, hold CHARGE, tap ANCHOR.</p>
+      <h3>SURVIVING</h3><p>One hit kills. You restart at the last checkpoint with a level-one Anchor. Every enemy appears the same way every time, so each death teaches the route.</p>
+      <p>Kills made with the tether or the Anchor build a <b>chain</b> up to x8.</p>
+    </div></div><button class="btn sm" data-back>BACK</button></div></div>
+
+    <div id="s-pause" class="screen dim hidden"><div class="card"><h2>PAUSED</h2><button class="btn" id="p-resume">RESUME</button><button class="btn" id="p-restart">RESTART FROM CHECKPOINT</button><button class="btn" id="p-options">OPTIONS</button><button class="btn" id="p-quit">QUIT TO TITLE</button></div></div>
+
+    <div id="s-over" class="screen dim hidden"><div class="card"><h2 id="ov-t">SHIP LOST</h2><p id="ov-s"></p><div id="ov-entry" class="hidden"><h3>ENTER INITIALS FOR THE BOARD</h3><input id="initials" maxlength="3" autocomplete="off" spellcheck="false"><button class="btn" id="ov-submit">SUBMIT</button></div><button class="btn" id="ov-retry">CONTINUE FROM THIS STAGE<small>Score resets</small></button><button class="btn" id="ov-quit">TITLE</button></div></div>
+
+    <div id="credits" class="hidden"><div class="cl c1">THE EYE CLOSES BEHIND YOU.</div><div class="cl c2">FOR THE FIRST TIME IN NINE YEARS, THE SKY IS ONLY SKY.</div><div class="b1 sc cl c3">UNDERSTORM</div><p id="cr-text" class="cl c4"></p><div class="cl c5"><button class="btn sm" id="cr-loop">FLY IT AGAIN, HARDER</button><button class="btn sm" id="cr-quit">TITLE</button></div></div>
+    <div id="intro" class="hidden"><div class="il i1">NINE YEARS AGO THE CLOUD REFINERIES WENT QUIET.</div><div class="il i2">THE STORM CLOSED OVER THEM, AND SOMETHING GREW INTO WHAT WAS LEFT.</div><div class="il i3">NOBODY GOES DOWN THERE NOW.</div><div class="il i4">YOU HAVE A SALVAGE FIGHTER, <b>A LANCE</b>, AND <b>AN ANCHOR ON A LIVE TETHER</b>.</div><div class="iskip">ANY KEY</div></div>
+  </div>
+</div>
+<div id="rotate" class="need">Turn your phone sideways to fly.</div>
+<script type="module" src="js/main.js?v=150"></script>
+</body>
+</html>
