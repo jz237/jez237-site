@@ -1,0 +1,484 @@
+{
+  "currentDate": "2026-11-23",
+  "historicDate": "1985-10-21",
+  "displayDate": "Week of October 21-27, 1985",
+  "edition": "Issue 169 - Weekly 1985 Computer & Culture Chronicle",
+  "masthead": {
+    "title": "Computer Chronicle",
+    "subtitle": "Issue 169 - Weekly 1985 Computer & Culture Chronicle",
+    "dateline": "Week of October 21-27, 1985",
+    "price": "75 cents"
+  },
+  "sectionChrome": {
+    "primary": "brick red",
+    "secondary": "royal blue",
+    "texture": "aged newsprint, fine column rules, ink bleed"
+  },
+  "visualProfile": {
+    "tone": "Winter sports on the Commodore: a fall software showcase",
+    "motifs": [
+      "Commodore 64, joystick, Winter Games ski jump and ice skating halftones"
+    ],
+    "layout": "Full-page warm aged newsprint, dense columns, red and blue section headers, boxed modules, paper grain, slight ink bleed, no dead footer space"
+  },
+  "layoutPlan": {
+    "leadPlacement": "Winter Games dominates headline and sporting halftone. GEnie announcement and Atari 520ST feature secondary.",
+    "secondaryRail": "Top 5 Music: Billboard Top Rock Tracks October 26. Top 5 Movies: October 25-27 domestic weekend. Top 5 Computer Games: editorial shelf selection, not sales chart. Feature headlines verbatim; fixed web page jump lines."
+  },
+  "heroImage": {
+    "src": "media/computer-chronicle-gpt-image-2-week-1985-10-21.jpg",
+    "alt": "Computer Chronicle newspaper front page for October 21-27, 1985",
+    "caption": "Newspaper-style front page generated from structured Chronicle issue data.",
+    "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+  },
+  "sources": [
+    {
+      "title": "COMPUTE! issue 65: Atari 520ST, Amiga compatibility, New Games, Telecomputing Today, Personal Computing",
+      "url": "https://colorcomputerarchive.com/repo/Documents/Magazines/Compute/Compute_Issue_065_1985_Oct.pdf",
+      "date": "1985-10"
+    },
+    {
+      "title": "Computer Entertainer volume 4 number 7: Winter Games; Nintendo On Schedule, p.13",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/5/58/Computer_Entertainer_4-7.pdf",
+      "date": "1985-10"
+    },
+    {
+      "title": "Billboard: Top Rock Tracks, week ending October 26, 1985",
+      "url": "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1985/BB-1985-10-26.pdf",
+      "date": "1985-10-26"
+    },
+    {
+      "title": "InfoWorld: Marc Stern, Hardcard Uses Board for Hard Disk, p.45 (bibliography verified; page text unavailable)",
+      "url": "https://books.google.com/books?id=jy8EAAAAMBAJ&pg=PA45",
+      "date": "1985-10-21"
+    },
+    {
+      "title": "Hardcard product history and contemporary-source bibliography",
+      "url": "https://en.wikipedia.org/wiki/Hardcard",
+      "date": null
+    },
+    {
+      "title": "Nieman Reports: Online Timeline (retrospective)",
+      "url": "https://niemanreports.org/online-timeline/",
+      "date": "2005"
+    },
+    {
+      "title": "ANALOG Computing 52: Andy Eddy, GEnie review (retrospective launch-date corroboration)",
+      "url": "https://www.atarimania.com/mags/pdf/analog_no_52.pdf",
+      "date": "1987-03"
+    },
+    {
+      "title": "Antic: Online, Inside GEnie (conflicting October 1 start date)",
+      "url": "https://www.atarimagazines.com/v6n11/insidegenie.php",
+      "date": "1988-02"
+    },
+    {
+      "title": "Old Vintage Computing Research: GEIS AppleLink and GEnie history",
+      "url": "https://oldvcr.blogspot.com/2024/03/an-apple-district-managers-macintosh.html",
+      "date": "2024-03"
+    },
+    {
+      "title": "Epyx: Winter Games title history",
+      "url": "https://epyxgames.com/titles/winter-games/",
+      "date": null
+    },
+    {
+      "title": "Winter Games C64 manual: source transcription and provenance",
+      "url": "https://frameadvance.net/sources/winter-games-c64-manual/",
+      "date": "1985 (manual)"
+    },
+    {
+      "title": "Winter Games October review transcription and ratings",
+      "url": "https://frameadvance.net/claims/winter-games-history/",
+      "date": null
+    },
+    {
+      "title": "Nintendo World Report: Today Is the 25th Anniversary of the NES",
+      "url": "https://www.nintendoworldreport.com/news/24285/today-is-the-25th-anniversary-of-the-nes",
+      "date": "2010-10-18"
+    },
+    {
+      "title": "The Numbers: Weekend Domestic Box Office October 25, 1985",
+      "url": "https://www.the-numbers.com/box-office-chart/weekend/1985/10/25",
+      "date": "1985-10-25/1985-10-27"
+    },
+    {
+      "title": "Reagan: Address to the 40th Session of the UN General Assembly",
+      "url": "https://www.reaganlibrary.gov/archives/speech/address-40th-session-united-nations-general-assembly-new-york-new-york",
+      "date": "1985-10-24"
+    },
+    {
+      "title": "Office of the Historian: UN address, document 253",
+      "url": "https://history.state.gov/historicaldocuments/frus1981-88v01/d253",
+      "date": "1985-10-24"
+    },
+    {
+      "title": "Canon Camera Museum: VM-E1",
+      "url": "https://global.canon/en/c-museum/product/8mmvc310.html",
+      "date": "1985-10 (marketed)"
+    },
+    {
+      "title": "Brock N. Meeks: Adventures in the Electronic Underground / San Diego computer pirates busted by FBI",
+      "url": "https://www.sandiegoreader.com/news/1985/nov/21/cover-adventures-in-the-electronic-underground/",
+      "date": "1985-11-21"
+    },
+    {
+      "title": "Adam L. Penenberg, Viral Loop: bibliography identifying David Sanger’s October 19 NYT report",
+      "url": "https://asiaghosts.com/wp-content/uploads/2024/07/Adam-L-Penenberg-Viral-Loop-From.pdf",
+      "date": "2009 (book)"
+    },
+    {
+      "title": "Tunecaster Weekly Rock Top 20 (different chart; not used as Billboard data)",
+      "url": "https://tunecaster.com/charts/80/rock8543.html",
+      "date": "1985-10-26"
+    }
+  ],
+  "lead": {
+    "headline": "Winter Games brings snow and ice to the Commodore",
+    "dek": "Epyx turns the home computer into a seven-event winter arena, with October reviewers cheering from the sidelines.",
+    "confidence": "same-month",
+    "sourceRefs": [
+      1,
+      9,
+      10
+    ],
+    "body": [
+      "Epyx is taking its sporting competition into colder country. Winter Games, reviewed for the Commodore 64 in October’s Computer Entertainer, offers a winter counterpart to Summer Games and Summer Games II. The newsletter gives it four out of four for both graphics and play value. This is a game on the current month’s review desk, not a claim of a release on a particular day this week.",
+      "The original Commodore manual sets out seven events: Ski Jump, Bobsled, Figure Skating, Free Skating, Hot Dog Aerials, Speed Skating and Biathlon. That range shifts the contest between ice, snow and the air above the slope. These are the computer edition’s events, not a roster borrowed from a later console version.",
+      "Epyx’s title history describes solo competition or as many as eight people taking turns. A home-computer sports evening can therefore be a shared contest without eight machines or a connection to an online service. The joystick and the next attempt remain the center of attention.",
+      "For a fall software shelf, the appeal is variety within one sporting package. October’s enthusiastic review gives Commodore owners a concrete title to investigate as winter approaches; it does not establish a national sales ranking. The competition here is on the screen, with no later commercial totals smuggled onto the scoreboard."
+    ]
+  },
+  "stories": [
+    {
+      "headline": "GEnie courts the home-computer caller",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        5,
+        6,
+        7,
+        8
+      ],
+      "body": [
+        "General Electric is bringing its information-services resources to home-computer owners through GEnie. The online-history timeline dates the announcement to October 21; a later ANALOG review also identifies that date in its account of the service’s beginnings. Dial-up information and entertainment are the proposition for personal-computer callers.",
+        "The recorded launch rates are $35 per hour in prime time and $5 per hour in evenings and on weekends. Those are hourly charges, not a monthly subscription. The historical account gives 300- and 1200-bps access with the same off-peak rate, a useful distinction for callers comparing modem speed against the connect-time bill.",
+        "The announcement date should not be confused with an undisputed first day of operation: another period retrospective gives October 1 for going online. October 21 is the announcement peg here. Later signup fees and later speed surcharges are not part of this launch account."
+      ]
+    },
+    {
+      "headline": "Atari puts a mouse-driven desktop below $1,000",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0
+      ],
+      "body": [
+        "October’s COMPUTE! hands-on report finds the Atari 520ST becoming widely available after its January announcement. The reviewed system combines 512K of memory with an 8-MHz Motorola 68000, a two-button mouse and GEM’s icons, windows and drop-down menus.",
+        "The editorial prices are $799 for a monochrome system and $999 for an RGB system. The adjacent advertisement gives $999.95 for its color-monitor bundle, plus shipping and applicable taxes. These are published package quotations, not a survey of completed street transactions.",
+        "MIDI, RS-232 and parallel interfaces broaden the machine’s uses. Early systems load TOS from disk; Logo is shipping, while BASIC was unfinished when the reporter wrote. The report’s future storage plans and prototypes should not be mistaken for accessories already on the counter."
+      ]
+    },
+    {
+      "headline": "Nintendo keeps its New York experiment local",
+      "confidence": "same-month",
+      "sourceRefs": [
+        1,
+        12
+      ],
+      "body": [
+        "Computer Entertainer’s October report describes a limited mid-October Nintendo release in the New York City area. That opening precedes this issue’s week: it is a continuing regional experiment, not a new nationwide console launch.",
+        "The contemporary package quotation is $159.95 suggested retail for the control deck, two controllers, R.O.B. with Gyromite, and the Zapper with Duck Hunt. The newsletter names area retailers including Crazy Eddie’s, J&R Music and Toys-R-Us.",
+        "A national release in early 1986 remains an expectation in that report. The immediate story is a robot, a light gun and a carefully bounded retail test, with the rest of the country still waiting for a broader rollout."
+      ]
+    }
+  ],
+  "editorNote": "Winter sports lead the software shelf; GEnie courts callers and Atari brings GEM to the desktop.",
+  "morningLine": "Winter Games on the C64; GEnie’s announcement; Atari’s mouse-driven desktop.",
+  "computerItems": [
+    {
+      "title": "Atari 520ST",
+      "summary": "512K, an 8-MHz 68000, a mouse and GEM; October’s hands-on report finds the 520ST becoming widely available.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "title": "Plus Hardcard",
+      "summary": "10MB disk/controller on a PC expansion card; $1,095 list, secondary-source verified; InfoWorld review dated October 21.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        4,
+        3
+      ]
+    },
+    {
+      "title": "U.S. Robotics Courier 2400",
+      "summary": "COMPUTE! October p.108 reports list price cut to $695, underside command/register reference, online help and accessible DIP switches and speaker volume control.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0
+      ]
+    }
+  ],
+  "softwareList": [
+    {
+      "name": "Digital Research Logo / Atari BASIC",
+      "detail": "Logo accompanies the Atari 520ST on disk; BASIC remains unfinished in October’s hands-on report.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "name": "Blue Chip financial simulations",
+      "detail": "Millionaire, Tycoon and Baron simulate stocks, commodities and real estate. October COMPUTE! quotes IBM versions at $49.95 each.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0
+      ]
+    }
+  ],
+  "storeShelves": [
+    {
+      "label": "Top 5 Computer Games — editorial shelf selection, not a sales chart",
+      "items": [
+        "Winter Games",
+        "King’s Quest II: Romancing the Throne",
+        "Hacker",
+        "Alternate Reality: The City",
+        "Gyromite"
+      ],
+      "confidence": "same-month",
+      "sourceRefs": [
+        0,
+        1
+      ]
+    },
+    {
+      "label": "Top 5 Movies — US weekend box office, October 25-27, 1985",
+      "items": [
+        "Jagged Edge",
+        "Krush Groove",
+        "Commando",
+        "Back to the Future",
+        "Remo Williams: The Adventure Begins"
+      ],
+      "confidence": "same-week",
+      "sourceRefs": [
+        13
+      ]
+    }
+  ],
+  "priceWatch": [
+    {
+      "item": "Courier 2400",
+      "price": "$695",
+      "note": "List price reported in October COMPUTE!; 2400 bps.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "item": "Cermetek Infomate 1200-TPC",
+      "price": "$198",
+      "note": "Internal PC modem; 1200 bps, not 2400.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "item": "Atari 520ST color bundle",
+      "price": "$999.95",
+      "note": "Adjacent October Atari advertisement; shipping and taxes additional.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "item": "Nintendo New York bundle",
+      "price": "$159.95",
+      "note": "Contemporary suggested retail quotation, Computer Entertainer p.13.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        1
+      ]
+    }
+  ],
+  "musicChart": [
+    {
+      "rank": 1,
+      "title": "You Belong to the City",
+      "song": "You Belong to the City",
+      "artist": "Glenn Frey",
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-10-26",
+      "basis": "Top Rock Tracks, not Hot 100 or album sales",
+      "confidence": "same-week",
+      "sourceRefs": [
+        2
+      ]
+    },
+    {
+      "rank": 2,
+      "title": "Never",
+      "song": "Never",
+      "artist": "Heart",
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-10-26",
+      "basis": "Top Rock Tracks, not Hot 100 or album sales",
+      "confidence": "same-week",
+      "sourceRefs": [
+        2
+      ]
+    },
+    {
+      "rank": 3,
+      "title": "After the Fire",
+      "song": "After the Fire",
+      "artist": "Roger Daltrey",
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-10-26",
+      "basis": "Top Rock Tracks, not Hot 100 or album sales",
+      "confidence": "same-week",
+      "sourceRefs": [
+        2
+      ]
+    },
+    {
+      "rank": 4,
+      "title": "Broken Wings",
+      "song": "Broken Wings",
+      "artist": "Mr. Mister",
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-10-26",
+      "basis": "Top Rock Tracks, not Hot 100 or album sales",
+      "confidence": "same-week",
+      "sourceRefs": [
+        2
+      ]
+    },
+    {
+      "rank": 5,
+      "title": "We Built This City",
+      "song": "We Built This City",
+      "artist": "Starship",
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-10-26",
+      "basis": "Top Rock Tracks, not Hot 100 or album sales",
+      "confidence": "same-week",
+      "sourceRefs": [
+        2
+      ]
+    }
+  ],
+  "briefs": [
+    {
+      "headline": "King’s Quest II reaches the review desk",
+      "summary": "COMPUTE! describes 93 animated screens and a $49.95 IBM PC/PCjr edition requiring 128K, a disk drive and color monitor. Apple II development is still under way.",
+      "sourceRefs": [
+        0
+      ],
+      "confidence": "same-month"
+    },
+    {
+      "headline": "Hacker is a fictional online mystery",
+      "summary": "Activision’s game dispenses with instructions in October’s demonstration report. Its simulated computer mystery is not a live network intrusion.",
+      "sourceRefs": [
+        0
+      ],
+      "confidence": "same-month"
+    },
+    {
+      "headline": "A hard disk takes an expansion slot",
+      "summary": "Plus Development’s 10MB Hardcard carries its disk and controller on a PC expansion board at $1,095 list. InfoWorld’s October 21 review is bibliographically verified; no review verdict is quoted.",
+      "sourceRefs": [
+        3,
+        4
+      ],
+      "confidence": "same-week"
+    }
+  ],
+  "periodAd": {
+    "headline": "A faster line for the bulletin-board evening",
+    "summary": "Courier 2400: $695 list in October COMPUTE! The internal Cermetek Infomate 1200-TPC is a different, 1200-bps proposition at $198.",
+    "tagline": "Period buying desk; editorial reconstruction, not a quoted advertisement.",
+    "sourceRefs": [
+      0
+    ]
+  },
+  "market": {
+    "headline": "Connect time is part of the computer budget",
+    "summary": "GEnie’s recorded $5-per-hour evening/weekend launch rate competes for the home caller. October COMPUTE! quotes The Source at $10.80 per nonprime hour at 1200 bps, with a further $1.20 for 2400 bps. Rates and speeds must be compared together.",
+    "sourceRefs": [
+      0,
+      5,
+      8
+    ],
+    "confidence": "same-month"
+  },
+  "worldAnchor": {
+    "headline": "Reagan addresses the United Nations on its fortieth anniversary",
+    "summary": "On October 24, President Reagan addressed the United Nations on its fortieth anniversary, discussing regional conflicts and his forthcoming meeting with Mikhail Gorbachev. The Geneva meeting is still ahead.",
+    "sourceRefs": [
+      14,
+      15
+    ],
+    "confidence": "exact-date"
+  },
+  "bbsNote": {
+    "headline": "2400 bps gets cheaper while GEnie seeks home callers",
+    "summary": "October’s COMPUTE! reports modem price cuts and a U.S. Robotics program for heavily used bulletin boards. The following are reported desk notes, not recovered historical posts.",
+    "posts": [
+      {
+        "topic": "Sysop upgrade program",
+        "platform": "Independent BBSs / U.S. Robotics",
+        "text": "Arlan R. Levitan reports that U.S. Robotics is working with bulletin-board system operators and offering a special acquisition deal to operators of heavily used boards to promote 2400-bps access. No specific board names or numeric sysop discount are supplied."
+      },
+      {
+        "topic": "Online-service economics",
+        "platform": "The Source",
+        "text": "2400-bps access was added in August. October reporting gives the prime/nonprime supplements as $1.80/$1.20 over the 1200-bps hourly rates; this is month-level coverage, not a new October 21 event."
+      },
+      {
+        "topic": "Lower-cost hardware",
+        "platform": "IBM PC / Courier 2400",
+        "text": "Courier 2400 list price is $695; Cermetek’s internal Infomate 1200-TPC is $198. These are different speeds and products, not interchangeable quotations."
+      }
+    ],
+    "sourceRefs": [
+      0,
+      5,
+      6
+    ]
+  },
+  "curiosity": {
+    "headline": "Atari’s terminal menu skips the fashionable speed",
+    "summary": "A contemporary columnist found 2400 bps missing from an Atari ST terminal-accessory menu.",
+    "detail": "In COMPUTE! October p.108, Arlan R. Levitan describes an ST demonstration whose terminal-emulator configuration offered 300, 1200, 4800 and 9600 bps but omitted 2400. He asked, “What happened to 2400?” The anecdote concerns that demonstrated configuration, not a claim that the ST serial hardware cannot support 2400 bps.",
+    "sourceRefs": [
+      0
+    ]
+  },
+  "gadgetWatch": {
+    "headline": "Canon’s VM-E1 combines camera and 8mm recorder",
+    "summary": "Canon’s October introduction combines camera and 8mm recorder in one unit at 298,000 yen in its manufacturer history. The VM-E1 has a monochrome viewfinder and an 8.5–51mm lens; a US on-sale date is not established.",
+    "sourceRefs": [
+      16
+    ],
+    "confidence": "same-month"
+  },
+  "accuracyLedger": {
+    "items": [
+      "GEnie: October 21 announcement/start is supported by Nieman and the March 1987 ANALOG review, but other period retrospectives say October 1 for operation. A contemporary launch dispatch was not recovered. Treat exact operational day as unresolved; rates are corroborated retrospectively.",
+      "InfoWorld October 21 p.45 metadata and review title are verified, but Google Books returned no readable review image; detailed Hardcard claims remain secondary-source verified, and no review quotation is supplied.",
+      "Computer Entertainer full PDF download was blocked by HTTP 403 / web open size limit. Its indexed Nintendo p.13 text and indexed Winter Games review details were readable; no fabricated further review details or game prices added.",
+      "Gaming stories are same-month pegs, not exact-week release announcements. No new milestone is asserted for this week.",
+      "Underground scene reporting recovered in detail is dated November 21 and looks back to October 15. Its later reporting must not become a fictional current-week dispatch. No independently read October 19 NYT text was obtained.",
+      "Games are an editorial shelf selection, not sales rankings. Music uses Billboard Top Rock Tracks dated October 26; movies use the October 25-27 domestic weekend.",
+      "Detailed underground coverage dated November 21 is omitted rather than backdated."
+    ]
+  }
+}
