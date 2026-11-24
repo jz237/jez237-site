@@ -539,24 +539,6 @@
       }
     ]
   },
-  "2026-08-18-factual-infographic-factual-infographic-gecko-grip-dry-adhe": {
-    "sources": [
-      {
-        "id": "S1",
-        "publisher": "UC Berkeley",
-        "title": "Researchers find secret of gecko’s sticky feet",
-        "url": "https://newsarchive.berkeley.edu/news/media/releases/2002/08/26_gecko.html"
-      }
-    ],
-    "claims": [
-      {
-        "claim": "Multitudes of tiny split hair tips make close contact with a surface. The summed intermolecular attraction, known as van der Waals force, provides adhesion without a liquid glue.",
-        "sourceIds": [
-          "S1"
-        ]
-      }
-    ]
-  },
   "2026-07-21-factual-infographic-factual-infographic-how-a-whale-fall-fe": {
     "sources": [
       {
@@ -695,6 +677,348 @@
     "claims": [
       {
         "claim": "A lightning discharge through suitable sand can briefly melt material around its path. The melt cools into a glassy fulgurite, preserving some of the shape of the route the discharge took.",
+        "sourceIds": [
+          "S1"
+        ]
+      }
+    ]
+  },
+  "2026-07-21-factual-infographic-factual-infographic-how-gecko-toes-grip": {
+    "sources": [
+      {
+        "id": "S1",
+        "publisher": "UC Berkeley",
+        "title": "How gecko feet stick",
+        "url": "https://newsarchive.berkeley.edu/news/media/releases/2002/08/26_gecko.html"
+      }
+    ],
+    "claims": [
+      {
+        "claim": "Tiny hair tips make close contact with a surface. Their combined van der Waals attraction lets the gecko grip without secreting glue.",
+        "sourceIds": [
+          "S1"
+        ]
+      }
+    ]
+  },
+  "2026-07-28-factual-infographic-factual-infographic-how-honeybees-map-a": {
+    "sources": [
+      {
+        "id": "S1",
+        "publisher": "NC State Extension",
+        "title": "The Honey Bee Dance Language",
+        "url": "https://content.ces.ncsu.edu/honey-bee-dance-language"
+      }
+    ],
+    "claims": [
+      {
+        "claim": "The angle of a returning bee's waggle run conveys direction relative to the sun; the duration conveys distance. Recruits use that information to search for food.",
+        "sourceIds": [
+          "S1"
+        ]
+      }
+    ]
+  },
+  "2026-07-28-factual-infographic-factual-infographic-inside-a-hydrotherm": {
+    "sources": [
+      {
+        "id": "S1",
+        "publisher": "NOAA Ocean Service",
+        "title": "What is a hydrothermal vent?",
+        "url": "https://oceanservice.noaa.gov/facts/vents.html"
+      }
+    ],
+    "claims": [
+      {
+        "claim": "Hot seawater circulating through the crust carries dissolved minerals. When the vent fluid cools against seawater, minerals precipitate, forming a chimney and sometimes a dark plume.",
+        "sourceIds": [
+          "S1"
+        ]
+      }
+    ]
+  },
+  "2026-07-28-factual-infographic-factual-infographic-how-a-spacecraft-he": {
+    "sources": [
+      {
+        "id": "S1",
+        "publisher": "NASA Ames Research Center",
+        "title": "Thermal Protection Materials and Systems: Past and Future",
+        "url": "https://ntrs.nasa.gov/api/citations/20160001151/downloads/20160001151.pdf"
+      }
+    ],
+    "claims": [
+      {
+        "claim": "A charring ablator changes as it heats: decomposition releases gases, leaves char behind and can allow the surface to recede, limiting the heat that reaches the spacecraft.",
+        "sourceIds": [
+          "S1"
+        ]
+      }
+    ]
+  },
+  "2026-07-28-factual-infographic-factual-infographic-lord-howe-island-ph": {
+    "sources": [
+      {
+        "id": "S1",
+        "publisher": "New South Wales Threatened Species Scientific Committee",
+        "title": "Lord Howe Island phasmid — critically endangered species listing",
+        "url": "https://www.environment.nsw.gov.au/topics/animals-and-plants/threatened-species/nsw-threatened-species-scientific-committee/determinations/final-determinations/2011-2012/lord-howe-island-phasmid-dryococelus-australis-critically-endangered-species-listing"
+      }
+    ],
+    "claims": [
+      {
+        "claim": "This large flightless stick insect once lived on Lord Howe Island and persisted on nearby Ball’s Pyramid. Its very restricted range is central to its conservation status.",
+        "sourceIds": [
+          "S1"
+        ]
+      }
+    ]
+  },
+  "2026-08-04-factual-infographic-factual-infographic-how-a-venus-flytrap": {
+    "sources": [
+      {
+        "id": "S1",
+        "publisher": "Nature Communications",
+        "title": "MSL10 is a high-sensitivity mechanosensor in the tactile sense of the Venus flytrap",
+        "url": "https://www.nature.com/articles/s41467-025-63419-w"
+      }
+    ],
+    "claims": [
+      {
+        "claim": "A Venus flytrap's trigger hairs turn physical deflection into electrical signals. The studied mechanosensitive channel contributes to detecting weak stimuli.",
+        "sourceIds": [
+          "S1"
+        ]
+      }
+    ]
+  },
+  "2026-08-04-factual-infographic-factual-infographic-how-the-elongate-bo": {
+    "sources": [
+      {
+        "id": "S1",
+        "publisher": "The Science of Nature",
+        "title": "Biosynthetic origin of benzoquinones in the explosive discharge of the bombardier beetle",
+        "url": "https://doi.org/10.1007/s00114-020-01683-0"
+      }
+    ],
+    "claims": [
+      {
+        "claim": "The discharge contains benzoquinones. The study traced how these compounds are made in Brachinus elongatulus, distinguishing their biosynthesis from the process of ejecting the spray.",
+        "sourceIds": [
+          "S1"
+        ]
+      }
+    ]
+  },
+  "2026-08-04-factual-infographic-factual-infographic-how-the-wood-frog-s": {
+    "sources": [
+      {
+        "id": "S1",
+        "publisher": "PLOS ONE",
+        "title": "Cryoprotectants and Extreme Freeze Tolerance in a Subarctic Population of the Wood Frog",
+        "url": "https://doi.org/10.1371/journal.pone.0117234"
+      }
+    ],
+    "claims": [
+      {
+        "claim": "The studied subarctic wood frogs accumulated urea before freezing and mobilized glucose after freezing began. These solutes help protect tissues during freezing.",
+        "sourceIds": [
+          "S1"
+        ]
+      }
+    ]
+  },
+  "2026-08-04-factual-infographic-factual-infographic-how-xenos-vesparum-": {
+    "sources": [
+      {
+        "id": "S1",
+        "publisher": "PLOS ONE",
+        "title": "Expression of the Pupal Determinant broad during Metamorphic and Neotenic Development of Xenos vesparum",
+        "url": "https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0093614"
+      }
+    ],
+    "claims": [
+      {
+        "claim": "Male and female development diverges: the male undergoes conspicuous metamorphosis, while the adult female retains juvenile features and remains mostly inside the host.",
+        "sourceIds": [
+          "S1"
+        ]
+      }
+    ]
+  },
+  "2026-08-04-factual-infographic-factual-infographic-how-cuttlefish-skin": {
+    "sources": [
+      {
+        "id": "S1",
+        "publisher": "Journal of the Royal Society Interface",
+        "title": "Mechanisms and behavioural functions of structural coloration in cephalopods",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2706477/"
+      }
+    ],
+    "claims": [
+      {
+        "claim": "Cephalopod skin combines pigment-bearing chromatophores with cells that reflect light structurally. The two mechanisms contribute different kinds of pattern and color.",
+        "sourceIds": [
+          "S1"
+        ]
+      }
+    ]
+  },
+  "2026-08-04-factual-infographic-factual-infographic-how-the-emerald-jew": {
+    "sources": [
+      {
+        "id": "S1",
+        "publisher": "Journal of Hymenoptera Research",
+        "title": "Life History of the Emerald Jewel Wasp Ampulex compressa",
+        "url": "https://doi.org/10.3897/jhr.63.21762"
+      }
+    ],
+    "claims": [
+      {
+        "claim": "The wasp uses a cockroach as a living host for its young. The host is subdued for reproduction; the attack and host handling are part of the wasp’s life cycle, not simply a means of killing prey.",
+        "sourceIds": [
+          "S1"
+        ]
+      }
+    ]
+  },
+  "2026-08-11-factual-infographic-factual-infographic-how-a-brinicle-grow": {
+    "sources": [
+      {
+        "id": "S1",
+        "publisher": "The Cryosphere",
+        "title": "Experimental modelling of the growth of tubular ice brinicles from brine flows under sea ice",
+        "url": "https://tc.copernicus.org/articles/18/2195/2024/"
+      }
+    ],
+    "claims": [
+      {
+        "claim": "Cold dense brine flows down from sea ice. Seawater around the flow freezes into a hollow tube, through which brine can continue descending.",
+        "sourceIds": [
+          "S1"
+        ]
+      }
+    ]
+  },
+  "2026-08-11-factual-infographic-factual-infographic-how-bertholdia-trig": {
+    "sources": [
+      {
+        "id": "S1",
+        "publisher": "PLOS ONE",
+        "title": "Optimal Predator Risk Assessment by the Sonar-Jamming Arctiine Moth Bertholdia trigona",
+        "url": "https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0063609"
+      }
+    ],
+    "claims": [
+      {
+        "claim": "The tiger moth emits bursts of ultrasound in response to an approaching bat. Researchers tested how the moth times its clicking to features of the bat’s echolocation sequence.",
+        "sourceIds": [
+          "S1"
+        ]
+      }
+    ]
+  },
+  "2026-08-11-factual-infographic-factual-infographic-antarctic-icefish-l": {
+    "sources": [
+      {
+        "id": "S1",
+        "publisher": "Communications Biology",
+        "title": "Draft genome assembly and transcriptome data of the icefish Chionodraco myersi",
+        "url": "https://www.nature.com/articles/s42003-019-0685-y"
+      }
+    ],
+    "claims": [
+      {
+        "claim": "The studied Antarctic icefish lacks functional hemoglobin. It relies on oxygen dissolved in its blood, and the study examines cellular adaptations associated with this unusual physiology.",
+        "sourceIds": [
+          "S1"
+        ]
+      }
+    ]
+  },
+  "2026-08-11-factual-infographic-factual-infographic-how-the-reindeer-ey": {
+    "sources": [
+      {
+        "id": "S1",
+        "publisher": "Proceedings of the Royal Society B",
+        "title": "Shifting mirrors: adaptive changes in retinal reflections to winter darkness in Arctic reindeer",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3826237/"
+      }
+    ],
+    "claims": [
+      {
+        "claim": "The reflecting layer behind the retina is golden in summer and blue in winter. Its winter state is associated with greater visual sensitivity under dim conditions.",
+        "sourceIds": [
+          "S1"
+        ]
+      }
+    ]
+  },
+  "2026-08-11-factual-infographic-factual-infographic-how-the-crypt-keepe": {
+    "sources": [
+      {
+        "id": "S1",
+        "publisher": "Proceedings of the Royal Society B",
+        "title": "Tales from the crypt: a parasitoid manipulates the behaviour of its parasite host",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5310038/"
+      }
+    ],
+    "claims": [
+      {
+        "claim": "An infected gall wasp can stop with its head blocking its exit tunnel. The parasitoid later escapes through the host; the precise mechanism behind the behavior remains uncertain.",
+        "sourceIds": [
+          "S1"
+        ]
+      }
+    ]
+  },
+  "2026-08-04-factual-infographic-factual-infographic-how-a-hailstone-rec": {
+    "sources": [
+      {
+        "id": "S1",
+        "publisher": "Met Office",
+        "title": "Hail",
+        "url": "https://weather.metoffice.gov.uk/learn-about/weather/types-of-weather/hail"
+      }
+    ],
+    "claims": [
+      {
+        "claim": "Strong updrafts can keep developing hail suspended while more ice accumulates. The layers reflect changes in how the ice grew, but they are not a precise map of the hailstone’s path through the storm.",
+        "sourceIds": [
+          "S1"
+        ]
+      }
+    ]
+  },
+  "2026-08-04-factual-infographic-factual-infographic-how-the-malaysian-s": {
+    "sources": [
+      {
+        "id": "S1",
+        "publisher": "Small et al., Animal Behaviour",
+        "title": "Male eyespan and resource ownership affect contest outcome in the stalk-eyed fly, Teleopsis dalmanni",
+        "url": "https://doi.org/10.1016/j.anbehav.2009.08.009"
+      }
+    ],
+    "claims": [
+      {
+        "claim": "The study linked contest outcome to both male eyespan and whether the fly already held the resource. Eye span is therefore not the only factor to consider when interpreting a contest.",
+        "sourceIds": [
+          "S1"
+        ]
+      }
+    ]
+  },
+  "2026-08-11-factual-infographic-factual-infographic-thorn-bug-family-al": {
+    "sources": [
+      {
+        "id": "S1",
+        "publisher": "Frontiers in Ecology and Evolution",
+        "title": "Review of vibrational communication and parental care",
+        "url": "https://www.frontiersin.org/journals/ecology-and-evolution/articles/10.3389/fevo.2019.00204/full"
+      }
+    ],
+    "claims": [
+      {
+        "claim": "Thornbug offspring can send coordinated vibrations through the host plant when disturbed. Studies of Umbonia crassicornis report that these signals evoke a defensive response from the mother.",
         "sourceIds": [
           "S1"
         ]
