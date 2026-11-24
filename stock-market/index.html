@@ -5,12 +5,12 @@
     <link rel="icon" type="image/svg+xml" href="favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#050b12" />
-    <title>Stock Command Center</title>
+    <title>Stock Command Center — Jez237</title>
     <meta
       name="description"
       content="Live market dashboard: watchlist, candlestick charts, portfolio P&L with an equity curve, and research notes for AI-era stocks."
     />
-    <meta property="og:title" content="Stock Command Center" />
+    <meta property="og:title" content="Stock Command Center — Jez237" />
     <meta
       property="og:description"
       content="Live market dashboard: watchlist, candlestick charts, portfolio P&L, and research notes."
@@ -26,10 +26,17 @@
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <script>
+      // Apply the saved light theme before first paint (see src/lib/theme.js).
+      try {
+        if (localStorage.getItem("theme") === "light")
+          document.documentElement.setAttribute("data-theme", "light");
+      } catch (_) {}
+    </script>
     <script src="stock-live-refresh.js"></script>
-    <script src="portfolio-tools.js" defer></script>
-    <script type="module" crossorigin src="./assets/index-DqIdqtbE.js"></script>
-    <link rel="stylesheet" crossorigin href="./assets/index-CsVXzz58.css">
+    <script src="portfolio-tools.js" defer></script>
+    <script type="module" crossorigin src="./assets/index-CcHd1S8o.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-B2omeuQq.css">
   </head>
   <body>
     <div id="root"></div>

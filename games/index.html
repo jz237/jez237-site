@@ -4,9 +4,8 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <script>(function(){try{if(localStorage.getItem("theme")==="light")document.documentElement.setAttribute("data-theme","light");}catch(e){}})();</script>
-  <title>Free Online Browser Games — GameMaster Arcade | Jez237</title>
+  <title>Free Online Browser Games — GameMaster Arcade — Jez237</title>
   <meta name="description" content="Play free online browser games at GameMaster Arcade: mobile-friendly HTML5 arcade games, retro remakes, puzzle prototypes, and WebGL demos by Jez237." />
-  <meta name="keywords" content="free online games, free browser games, play online games, HTML5 games, no download games, mobile browser games, retro arcade games, JavaScript games, WebGL games, arcade game prototypes, GameMaster Arcade, Pay Dirt, Vector Arena, Steel Duel" />
   <meta name="robots" content="index, follow" />
   <link rel="canonical" href="https://jez237.com/games/" />
   <meta property="og:title" content="GameMaster Arcade — Free Online Browser Games" />
@@ -1155,6 +1154,18 @@
        stages in lockstep — must stay after the animation shorthands */
     .arcade-svg .an { animation-delay: calc(var(--d, 0s) + var(--sd, 0s)); }
     .game-count { color: #aab7e4; }
+    /* Power saver: the script at the end of the page adds .arcade-idle to <body>
+       after two minutes without input; ambient motion rests until the next input. */
+    body.arcade-idle *, body.arcade-idle *::before, body.arcade-idle *::after { animation-play-state: paused !important; }
+    body.arcade-idle .cover-art .ca-motion { animation-play-state: paused !important; }
+    /* Card art is stepped from script at 30 frames a second (CardMotion), so the CSS
+       clocks themselves stay paused. */
+    body.motion-stepped .game-card .icon-wrap,
+    body.motion-stepped .game-card .icon-wrap::before,
+    body.motion-stepped .game-card .icon-wrap::after,
+    body.motion-stepped .game-card .icon-wrap *,
+    body.motion-stepped .game-card .icon-wrap *::before,
+    body.motion-stepped .game-card .icon-wrap *::after { animation-play-state: paused !important; }
     main.container footer { border-top-color: rgba(255,255,255,.1) !important; }
     main.container footer a { color: #8fa3ff !important; }
     @media (min-width: 900px){
@@ -1263,9 +1274,12 @@
     .device-filter{display:flex;justify-content:center;align-items:center;gap:10px;margin:0 0 20px;font-size:13px}.device-filter select{background:#131e35;color:#fff;border:1px solid #7392ba;border-radius:8px;padding:10px;font:inherit}
     @media(max-width:620px){.hero-editorial{padding:16px!important}.hero-editorial h1{font-size:29px!important;margin:10px 0!important}.hero-editorial .lede{font-size:13px!important;line-height:1.5;margin:10px 0 0}.hero-editorial .eyebrow{font-size:9px!important}.game-filters{gap:6px;margin:14px 0}.game-filters button{padding:7px 10px;font-size:11px}}
   </style>
+  <link rel="apple-touch-icon" href="../assets/icons/apple-touch-icon.png" />
+  <meta name="theme-color" content="#0b0f14" />
+  <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "CollectionPage", "@id": "https://jez237.com/games/#page", "url": "https://jez237.com/games/", "name": "Free Online Browser Games — GameMaster Arcade — Jez237", "description": "Play free online browser games at GameMaster Arcade: mobile-friendly HTML5 arcade games, retro remakes, puzzle prototypes, and WebGL demos by Jez237.", "isPartOf": {"@id": "https://jez237.com/#website"}, "author": {"@id": "https://jez237.com/#person"}, "inLanguage": "en"}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Jez237", "item": "https://jez237.com/"}, {"@type": "ListItem", "position": 2, "name": "Arcade", "item": "https://jez237.com/games/"}]}]}</script>
 </head>
 <body class="arcade-galaxy-page">
-  <iframe id="globe-bg" src="../experiments/blueforest-globe/?bg=1&r=0.125&v=globe-big7" title="" aria-hidden="true" tabindex="-1" scrolling="no" loading="eager"></iframe>
+  <iframe id="globe-bg" src="../experiments/blueforest-globe/?bg=1&r=0.125&fps=30&dpr=1.25&v=globe-big8" title="" aria-hidden="true" tabindex="-1" scrolling="no" loading="eager"></iframe>
   <div id="globe-scrim" aria-hidden="true"></div>
   <header id="site-nav"></header>
 
@@ -1307,12 +1321,13 @@
     </footer>
   </main>
 
-  <script src="card-art.js?v=20261109-shockhorror"></script>
+  <script src="card-art.js?v=20261121"></script>
   <script>
     const SITE_BASE = './';
     const gameHref = g => g.href || `${SITE_BASE}${g.path}`;
     const games = [
-      { title: 'Shock Horror', path: '2026-11-07/shock-horror/', emoji: '💀', date: 'Nov 7', cat: 'arcade', tag: 'featured', desc: 'v1.0.0 — an all-out survival-horror version of Gold Digger with over three hundred different scares. In 1911 the night shift went down the pit and never came up; take the lift down after them with a pick, dynamite, flares and a dying lamp. Figures wait at the edge of your light, the lost miners walk in the dark (the same realistic, motion-captured body as you), your own double stands ahead, words bleed onto the walls, hanged men turn to face you, hands burst from the rock, the walls breathe and bleed, whispers call your name, and real jump scares wait in the blackouts. Five depths of dread, from the Night Shift and the Rot Garden to the Ossuary, the Drowned Chapel and the living flesh of the Red Heart, each with three levels and a monster at the bottom: the Gnawer, the Shrieking Mother, the Bone Saint, the Drowned Bride and the Red Heart. Every scare you witness goes in the Fear Ledger. Cursed relics, the night shift diary, a cursed museum, the Endless Dark, four difficulties, medals, world boards, instant replays and an AI playthrough. Dread music, screams, stingers, whispers and the Voice by ElevenLabs. Contains loud jump scares, gore and flashing lights (MILD scares and REDUCED flashes in the options). Keyboard, gamepad and touch.' },
+      { title: 'Starling 2026', path: '2026-11-21/starling/', emoji: '🕊️', date: 'Nov 21', cat: 'arcade', tag: 'featured', desc: 'v1.3.0 — an original formation shooter in real-time 3D. At dusk, flocks of machine-birds come in over a lighthouse in ribbons, wheel overhead as a real murmuration, then settle into formation and stoop on you in ones and threes. One hit costs a ship. The lighthouse sweeps the sky on its own, and you can call its beam down onto your column for a few seconds: anything caught in it is dazzled, slowed, silenced and worth double, then the lamp takes ten seconds to recharge. Birds shot mid-stoop score double, quick kills build a chain to x5, a falling ember gives fifteen seconds of twin shot, and downing a red Kite makes its escorts lose their nerve. Every third wave is a passing flight that does not shoot back, with a bonus for clearing all forty; every fifth is the Roost, which sheds birds as it burns. Endless waves that get faster and angrier, a world score board, an attract demo and WATCH THE AI, where the autopilot plays by the same rules. The whole flock is one instanced mesh with wings flapped in the shader, under an HDR bloom chain; music and sound effects by ElevenLabs. Plays upright on a phone or wide on a desktop. Keyboard, gamepad and touch (drag to move, tap BEAM).' },
+      { title: 'Understorm 2026', path: '2026-11-20/understorm/', emoji: '🌩️', date: 'Nov 20', cat: 'arcade', tag: 'featured', desc: 'v1.5.0 — an original side-scrolling shooter in real-time 3D. You fly a salvage fighter down through the storm layer of a gas giant, where a mining civilisation left its cloud refineries and something grew into them. The pace is deliberate: the screen scrolls slowly through tight spaces, every enemy appears the same way every time, and one hit kills, so each stage is a route you learn. Two systems carry it. The Lance fires on its own; hold to charge it through three tiers, the last a screen-long beam that kicks the ship back and overheats. The Anchor is an indestructible drone that blocks bullets and hurts what it touches: dock it to the nose or the tail to fire its core weapon that way, or throw it and it stays out on a live tether that cuts anything you sweep it through. Three cores (Arc, Ricochet, Burrow) with three levels each, guard motes, seekers, and four speed steps you can raise and lower at will. Twelve hand-built stages in three acts, each with its own idea: canyons where things hide in fog you can blow away, a mile-long hauler tearing apart around you, a refinery whose crushers keep time with the music, a glass reef your own shots reshape, a herd you must not harm, a foundry that overheats the Lance, a blackout where charging lights the way and gives you away, lightning rows and a stretch flown backwards, a rival ace with an Anchor of its own, a sprint down the Throat, and the Core, followed by a timed escape. Ten bosses. Finish it and a harder second loop begins. Checkpoints restart you on a clear screen with a level-one Anchor. Three ranks with their own world boards, plus Sightseer, which has no fail state. Stage select and boss practice for anything you have reached, a ghost of your best run, tether-kill chains to x8, an attract-mode demo, reduced-flashing and reduced-shake options, remappable keys and three picture-quality tiers. WATCH THE AI FLY IT plays all twelve stages live with no cheats and the same rules you get: a bar shows what the pilot is thinking, a vision overlay marks its target, the bullets it is tracking and the move it intends, you can speed it up or skip ahead, and Enter hands you the stick mid-flight. Metal and glass reflect a sky generated for each stage, with soft shadows, normal-mapped surfaces, light shafts through the cloud, lightning forks, rain, embers and fire shaded in the browser, and three picture tiers that step down on their own if the frame rate will not hold. Music and sound effects by ElevenLabs, with the original synthesised score as an option. Contains flashing lights. Keyboard, gamepad with rumble, and touch (drag to move, hold CHARGE, tap ANCHOR); best in landscape.' },
       { title: 'Skyhold 2026', path: '2026-11-09/skyhold/', emoji: '🪐', date: 'Nov 9', cat: 'arcade', tag: 'featured', desc: 'v1.16.0 — an original planet-defence shooter in real-time 3D. You fly a gunship round and round a small planet, from the day side through sunset into the night, guarding the settlers in its domed colonies. Lifters warp in and carry settlers off the ground; one that reaches the top of the sky fuses with its captive into a vicious husk. Shoot them down, catch the settlers as they fall and set them down safely, fight off packs of fighters that keep warping in ahead of you so there is always something to shoot, and swarms of machines: sowers, hive pods that break apart into swarms of stingers (get in close behind one and it never turns round), and prowlers, catch two shielded pods as they lock together in a POD INTERSECTION and burst both for a bonus, then face a second wave of machines: spinning whirler rings that dive together, coils that keep spawning sparks, scorchers that throw homing firebrands and maws that dash in to bite, and fly through the SKYGATE to be thrown to wherever a settler needs you under a nebula sky and shimmering colony shields, survive the SPECIAL WAVE of each world (a whirler storm, a stinger swarm, a spark storm, a husk raid, the armada: dozens of fighters in squadrons), and after four waves bring down a colossal carrier that tears through the sky, sheds its armour and fights on from its core. Fill the HYPER meter to slow the world and wreck everything in reach, survive meteor showers, sandstorms, solar flares, eruptions and eclipses, unlock three more gunships (heavy cannon, chain lightning, homing missiles), all four on show by name on the title screen beside every machine and carrier, and master each one for two perks, and fly it side-on or in the new CHASE CAMERA, low behind your ship along the curve of the planet. Craters, scorch marks and wrecks stay on the ground for the rest of the world, and the music builds with the fight: drums join as machines close in, then a pulsing lead. Five worlds (Verdant Reach, Red Dune Belt, Frostveil, Cinderfall, Umbra Prime) with five carriers, the endless Endless Orbit, a scanner of the whole planet, nova and blink, an escort drone, carriers that enrage, a kill-chain multiplier, checkpoints, ship upgrades, medals and liveries, online co-op and rivals, exact instant replays, a smart AI demo that spends its novas with a plan and an AI PLAYTHROUGH you can start from any world and wave, featuring any machine you pick. Lose every settler and the planet shatters: fight on in open space among its wreckage. Cinematic screen effects (lens streaks, a zoom blur in HYPER, heat haze), snow, fireflies, embers and spores in the air of each world, and a PHOTO MODE that saves pictures. Gentle first world, gradual ramp, four difficulties with their own world boards. Music, effects and a rare, low and ominous colony-command voice by ElevenLabs, with the original 1980 arcade cabinet sound effects layered on top (switchable) and an optional retro sound layer. Keyboard, gamepad with rumble and touch with auto-fire (best held sideways).' },
       { title: 'Sini 2026', path: '2026-11-07/sini-2026/', emoji: '☄️', date: 'Nov 7', cat: 'arcade', tag: 'featured', desc: 'v1.1.1 — an original space shooter in real-time 3D. Out in a wrap-around asteroid belt, machines are building a colossal construct, plate by plate, from crystals. Crack asteroids with your twin cannons to knock their crystals loose, scoop them up as homing nova charges, shoot down the gatherers ferrying crystals to the build site and fight off the reavers, then wake the half-built construct early with one charge (or let it finish and wake at full strength) and bring it down, landing charges while its core is open, as it hunts you and dodging its tractor pull and lunges. Five sectors (Amber Drift, Frost Ring, Iron Shoals, Ember Veil, Void Crown) with five constructs, the endless Deep Field, checkpoints you can continue from, ship upgrades, medals and liveries, a scanner, online co-op, exact instant replays, a smart AI demo and AI PLAYTHROUGH. Gentle first sector, gradual ramp, four difficulties with their own world boards. Music, effects and a rare flight-controller voice by ElevenLabs. Keyboard, mouse, gamepad with rumble and touch.' },
       { title: 'Gold Digger', path: '2026-11-07/gold-digger/', emoji: '⛏️', date: 'Nov 7', cat: 'arcade', tag: 'featured', desc: 'v1.8.0 — an original cave-exploration platformer in real-time 3D, starring a realistic, motion-captured digger, in a physical cave you can dig and knock about: swing the pick at any ordinary rock wall or floor and it bites in, cracks and gives way, rubble tumbling out into heaps; dynamite craters and scorches the rock and brings stalactites down; buckets, barrels, sacks, crates, urns, lanterns and loose stones tip, roll and smash when you run into them or hit them, fall into the holes you dig and float in the water, and hanging lanterns swing their light about. The caves are alive and dense with detail too: grass, roots, kelp and glow-worm threads bend as you push through them and spring back, glowing fungus and wall lichen light up as you pass and ripple with light when you land, crystals glow and glitter in your lamp, moths circle the beam, and pebbles, crystals, icicles and old clay pots can be kicked or smashed. Every one of the fifteen levels has a look of its own: rust seams and copper-green drifts, bluecap forests and a root cathedral, frozen quartz and rose geodes, salt cisterns, a glowing tide, obsidian glass and sulfur vents. Ride the old lift down into a mountain full of secrets: swing your pick through rubble and gold veins, blow open sealed vaults with dynamite (then run), drive off bats and pale shades with flares, and keep your lamp fed with oil. Five depths, from the timbered Copper Hollows and the glowing Glowroot Grotto to the crystal Geode Vaults, the Drowned Halls of a lost city and the molten Ember Core, each with three generated levels and a guardian: Rockjaw, Gloomwing, the Prism Warden, Tidewyrm and the Molten Heart. Every level hides relics, fossils, wonders, old notes, secret rooms and a treasure map to a buried cache; your relics go on show in a museum, finished collections unlock lamp colours, pick skins and perks in the Locker, and the Endless Deep keeps making new finds forever. Gentle start, gradual ramp, four difficulties, general store, 16 medals, world boards, exact instant replays, a smart AI demo and AI PLAYTHROUGH. Music, effects and a rare old-prospector voice by ElevenLabs. Keyboard, gamepad with rumble and touch.' },
@@ -1567,8 +1582,9 @@
     const reviewed = {
       'Quarry Impact': {controls:['touch','keyboard','controller'],orientation:'landscape',summary:'Race, explore and trade dents in a woodland quarry. Vehicles load as you choose them.',preview:'quarry-impact'},
       'Skyhold 2026': {controls:['touch','keyboard','controller'],orientation:'landscape',summary:'Defend a small planet: stop the lifters, catch falling settlers and take on giant carriers.',preview:'skyhold'},
+      'Starling 2026': {controls:['touch','keyboard','controller'],orientation:'portrait',summary:'Hold a lighthouse against flocks of machine-birds. Call its beam down to dazzle them as they stoop.',preview:'starling'},
+      'Understorm 2026': {controls:['touch','keyboard','controller'],orientation:'landscape',summary:'Fly down through a gas giant’s storm layer with a charging Lance and a tethered Anchor drone. Twelve stages, ten bosses.',preview:'understorm'},
       'Gold Digger': {controls:['touch','keyboard','controller'],orientation:'landscape',summary:'Dig toward the next lift, keep your lamp alive and discover the mountain’s secrets.',preview:'gold-digger'},
-      'Shock Horror': {controls:['touch','keyboard','controller'],orientation:'landscape',summary:'Explore a haunted mine with a dying lamp. Jump scares and flashing lights; gentler settings are available.'},
       'Glimmer Grotto': {controls:['touch','keyboard','controller'],orientation:'portrait',summary:'Carry a little light through quiet cave puzzles. A gentle adventure with no failure.',preview:'glimmer-grotto'},
       'Plasma Pong': {controls:['touch','keyboard'],orientation:'landscape',summary:'Battle through shield walls and reactor cores, or play the original neon pong.'}
     };
@@ -1603,6 +1619,49 @@
       `;
     }
 
+    // Ambient motion on this page (globe, fireworks, card art, sparkles) is drawn 30 times
+    // a second on shared wall-clock slots, so every layer changes on the same frames and
+    // the browser only has to redraw the page on those frames.
+    const MOTION_FPS = 30;
+    const motionSlot = ts => Math.floor((performance.timeOrigin + ts) / (1000 / MOTION_FPS));
+
+    // Card art motion. The cover scenes and icons are CSS animations inside SVGs, which the
+    // browser repaints on every screen refresh. Here they are held paused (see .motion-stepped
+    // in the styles) and their clocks are moved forward MOTION_FPS times a second, only for
+    // cards that are on screen. Without the needed browser features the CSS runs as before.
+    const CardMotion = (() => {
+      const ok = 'IntersectionObserver' in window && typeof Element.prototype.getAnimations === 'function' && typeof CSSAnimation !== 'undefined';
+      const seen = new Map(); // icon wrap on screen -> its animations (looked up lazily)
+      let observer = null, raf = 0, slot = -1;
+      function tick(ts) {
+        raf = 0;
+        if (document.body.classList.contains('arcade-idle')) return; // resting; restarted by the arcade-idle event
+        const now = motionSlot(ts);
+        if (now !== slot) {
+          slot = now;
+          seen.forEach((list, wrap) => {
+            if (!list) { list = wrap.getAnimations({ subtree: true }).filter(a => a instanceof CSSAnimation); seen.set(wrap, list); }
+            for (let i = 0; i < list.length; i++) list[i].currentTime = ts;
+          });
+        }
+        if (seen.size) raf = requestAnimationFrame(tick);
+      }
+      function kick() { if (ok && !raf && seen.size) raf = requestAnimationFrame(tick); }
+      function mount() {
+        if (!ok) return;
+        if (observer) observer.disconnect();
+        seen.clear();
+        document.body.classList.add('motion-stepped');
+        observer = new IntersectionObserver(entries => {
+          entries.forEach(entry => { if (entry.isIntersecting) { if (!seen.has(entry.target)) seen.set(entry.target, null); } else seen.delete(entry.target); });
+          kick();
+        }, { rootMargin: '60px' });
+        document.querySelectorAll('.game-card .icon-wrap').forEach(el => observer.observe(el));
+      }
+      window.addEventListener('arcade-idle', kick);
+      return { mount };
+    })();
+
     // Subtle ambient particle layer drawn over each SVG thumbnail:
     // edge twinkles, a few orbiting glints, and an occasional comet streak.
     // Kept sparse and small so the vector icon underneath stays readable.
@@ -1611,6 +1670,7 @@
       const reduceMotion = window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)') : null;
       let icons = [];
       let raf = 0;
+      let lastSlot = -1;
       let observer = null;
 
       function hashString(str) {
@@ -1779,7 +1839,9 @@
       }
       function frame(ts) {
         raf = 0;
-        if (document.visibilityState !== 'hidden') {
+        if (document.body.classList.contains('arcade-idle')) return; // resting; restarted by the arcade-idle event
+        if (document.visibilityState !== 'hidden' && motionSlot(ts) !== lastSlot) {
+          lastSlot = motionSlot(ts);
           icons = icons.filter(icon => document.contains(icon.canvas));
           icons.forEach(icon => {
             if (icon.visible) drawIcon(icon, ts);
@@ -1807,6 +1869,7 @@
         if (!raf && icons.length) raf = requestAnimationFrame(frame);
       }
       window.addEventListener('resize', () => icons.forEach(resizeIcon));
+      window.addEventListener('arcade-idle', () => { if (!raf && icons.length) raf = requestAnimationFrame(frame); });
       return { mount };
     })();
 
@@ -1849,6 +1912,7 @@
         });
         ParticleIconRuntime.mount();
         window.GameCardArt?.mount();
+        CardMotion.mount();
       });
     }
 
@@ -2089,9 +2153,15 @@
         const fade=1-e.life/e.ttl;
         ctx.save();ctx.globalCompositeOperation='lighter';ctx.globalAlpha=fade*.78;ctx.fillStyle=e.color;ctx.beginPath();ctx.arc(e.x,e.y,e.radius,0,TAU);ctx.fill();ctx.restore();
       }
+      let heroRaf=0,heroSeen=true,heroSlot=-1;
+      const heroCanRun=()=>heroSeen&&!document.body.classList.contains('arcade-idle');
+      function heroKick(){if(!heroRaf&&heroCanRun()){state.last=0;heroRaf=requestAnimationFrame(loop);}}
       function loop(ts){
+        heroRaf=0;
+        if(motionSlot(ts)===heroSlot){if(heroCanRun())heroRaf=requestAnimationFrame(loop);return;}
+        heroSlot=motionSlot(ts);
         if(!state.last)state.last=ts;
-        const dt=Math.min(.033,(ts-state.last)/1000);
+        const dt=Math.min(.05,(ts-state.last)/1000);
         state.last=ts;state.now+=dt;state.wind=Math.sin(state.now*.18)*5+Math.sin(state.now*.71)*2;
         schedule(dt);
         state.rockets=state.rockets.filter(r=>updateRocket(r,dt));
@@ -2107,7 +2177,7 @@
         state.rockets.forEach(drawRocket);
         state.sparks.forEach(drawSpark);
         state.embers.forEach(drawEmber);
-        requestAnimationFrame(loop);
+        if(heroCanRun())heroRaf=requestAnimationFrame(loop);
       }
       resize();
       window.addEventListener('resize',resize);
@@ -2123,7 +2193,10 @@
         });
       }
       for(let i=0;i<4;i++)createRocket(rand(.18,.82),null,rand(state.h*.12,state.h*.42),i===1);
-      requestAnimationFrame(loop);
+      heroRaf=requestAnimationFrame(loop);
+      // Rest the show while it is scrolled out of view or the page is idle.
+      if('IntersectionObserver' in window)new IntersectionObserver(items=>{heroSeen=items[items.length-1].isIntersecting;heroKick();}).observe(canvas);
+      window.addEventListener('arcade-idle',heroKick);
     })();
   </script>
   <script>
@@ -2153,6 +2226,39 @@
   </script>
   <script src="../assets/site-enhance.js" defer></script>
   <script src="../assets/nav.js?v=nav-20260702b" defer></script>
-  <script src="../assets/space-fx.js?v=20260702b" defer></script>
+  <script>
+    // Power saver. The globe, star field, fireworks and card art animate for as long as
+    // the page is open, so after two minutes without any input they rest, and the next
+    // pointer move, scroll, key press or touch starts them again.
+    // ?idle=<seconds> changes the wait; ?idle=0 turns the saver off.
+    window.spaceFxOptions = { calmFps: 15 }; // star twinkle is slow; meteors still draw at full rate
+    (function () {
+      const param = parseFloat(new URLSearchParams(location.search).get('idle'));
+      const IDLE_MS = (param >= 0 ? param : 120) * 1000;
+      if (!IDLE_MS) return;
+      const globe = document.getElementById('globe-bg');
+      let idle = false, last = performance.now();
+      function tellGlobe() {
+        try { globe.contentWindow.postMessage({ type: 'globe-bg', paused: idle }, location.origin); } catch (err) { /* no globe */ }
+      }
+      function setIdle(value) {
+        if (idle === value) return;
+        idle = value;
+        document.body.classList.toggle('arcade-idle', value);
+        tellGlobe();
+        const fx = window.__spaceFx;
+        if (fx && fx.stop && fx.start) { if (value) fx.stop(); else if (!document.hidden) fx.start(); }
+        window.dispatchEvent(new CustomEvent('arcade-idle', { detail: value }));
+      }
+      function active() { last = performance.now(); if (idle) setIdle(false); }
+      ['pointermove', 'pointerdown', 'keydown', 'wheel', 'touchstart', 'scroll'].forEach(type => window.addEventListener(type, active, { passive: true, capture: true }));
+      // the globe fills the margins in its own frame, so it reports pointer activity itself
+      window.addEventListener('message', event => { if (event.origin === location.origin && event.data && event.data.type === 'globe-activity') active(); });
+      document.addEventListener('visibilitychange', () => { if (!document.hidden) active(); });
+      if (globe) globe.addEventListener('load', () => { if (idle) tellGlobe(); });
+      setInterval(() => { if (!idle && !document.hidden && performance.now() - last >= IDLE_MS) setIdle(true); }, Math.min(5000, Math.max(250, IDLE_MS / 4)));
+    })();
+  </script>
+  <script src="../assets/space-fx.js?v=20261121-calm" defer></script>
 </body>
 </html>

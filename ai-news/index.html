@@ -4,12 +4,11 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <script>(function(){try{if(localStorage.getItem("theme")==="light")document.documentElement.setAttribute("data-theme","light");}catch(e){}})();</script>
-  <title>Jez237 — AI News Feed</title>
+  <title>AI News Feed — Jez237</title>
   <meta name="description" content="A curated AI news feed tracking model releases, AI tools, research updates, developer platforms, image and video generation, and practical AI workflows." />
-  <meta name="keywords" content="AI news, artificial intelligence news, AI model releases, AI tools, generative AI, OpenAI, Anthropic, Google DeepMind, xAI, image generation, video generation, AI agents, developer tools, Jez237" />
   <meta name="robots" content="index, follow" />
   <link rel="canonical" href="https://jez237.com/ai-news/" />
-  <meta property="og:title" content="Jez237 — AI News Feed" />
+  <meta property="og:title" content="AI News Feed — Jez237" />
   <meta property="og:description" content="Curated AI model, tooling, research, image generation, video generation, and developer platform updates." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://jez237.com/ai-news/" />
@@ -18,6 +17,9 @@
   <link rel="stylesheet" href="../assets/site-enhance.css" />
   <link rel="stylesheet" href="../assets/workbench-theme.css" />
   <link rel="stylesheet" href="../assets/ai-news.css?v=20260710-tools-images-v2" />
+  <link rel="apple-touch-icon" href="../assets/icons/apple-touch-icon.png" />
+  <meta name="theme-color" content="#0b0f14" />
+  <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "CollectionPage", "@id": "https://jez237.com/ai-news/#page", "url": "https://jez237.com/ai-news/", "name": "AI News Feed — Jez237", "description": "A curated AI news feed tracking model releases, AI tools, research updates, developer platforms, image and video generation, and practical AI workflows.", "isPartOf": {"@id": "https://jez237.com/#website"}, "author": {"@id": "https://jez237.com/#person"}, "inLanguage": "en"}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Jez237", "item": "https://jez237.com/"}, {"@type": "ListItem", "position": 2, "name": "AI News", "item": "https://jez237.com/ai-news/"}]}]}</script>
 </head>
 <body class="ai-news-page">
   <header id="site-nav"></header>
@@ -37,21 +39,21 @@
 
     <section class="card col-12" style="margin-top:16px;">
       <div class="news-controls">
-        <select id="news-category" class="control">
+        <select id="news-category" class="control" aria-label="News category">
           <option value="AI">🤖 AI News</option>
           <option value="Science">🔬 Discovery News</option>
         </select>
-        <select id="news-archive" class="control archive-control">
+        <select id="news-archive" class="control archive-control" aria-label="Briefing date">
           <option value="">Latest briefing</option>
         </select>
-        <select id="news-source" class="control"></select>
-        <select id="news-tier" class="control">
+        <select id="news-source" class="control" aria-label="Source"></select>
+        <select id="news-tier" class="control" aria-label="Source tier">
           <option value="">All source tiers</option>
           <option value="primary">Primary sources</option>
           <option value="secondary">Reported sources</option>
           <option value="watchlist">Watchlist sources</option>
         </select>
-        <input id="news-query" class="control" type="search" placeholder="Filter headline/summary..." />
+        <input id="news-query" class="control" type="search" aria-label="Filter headlines and summaries" placeholder="Filter headline/summary..." />
         <span id="news-updated" class="news-meta"></span>
       </div>
       <div id="news-summary" class="news-summary" aria-live="polite"></div>
@@ -68,7 +70,7 @@
     </footer>
   </main>
 
-  <script src="../assets/news.js?v=20260710-tools-images-v2"></script>
+  <script src="../assets/news.js?v=20261118-safe-links"></script>
   <script src="../assets/site-enhance.js" defer></script>
   <script src="../assets/nav.js?v=nav-20260702b" defer></script>
 </body>

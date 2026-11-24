@@ -13,7 +13,6 @@
   <script>(function(){try{var root=document.documentElement;if(localStorage.getItem("theme")==="light")root.setAttribute("data-theme","light");var touch=navigator.maxTouchPoints&&navigator.maxTouchPoints>0;var wide=window.innerWidth>=761||Math.min(screen.width||0,screen.height||0)>=700;if(touch&&wide)root.classList.add("is-touch-tablet");}catch(e){}})();</script>
   <title>Jez237 — AI, Online Games & Philadelphia Garden</title>
   <meta name="description" content="Jez237 is Jez Bauder's home base for AI tools, free online browser games, Philadelphia Zone 7a garden notes, plant progress, photos, and web prototypes." />
-  <meta name="keywords" content="Jez237, Jez Bauder, AI tools, AI news, free online games, browser games, HTML5 games, mobile browser games, GameMaster Arcade, creative coding, Philadelphia garden, Zone 7a garden, garden calendar, plant progress, photo archive, weather dashboard, web experiments, Bauder Signs" />
   <meta name="robots" content="index, follow" />
   <link rel="canonical" href="https://jez237.com/" />
   <meta property="og:title" content="Jez237 — AI, Games, Garden, Photos, and Experiments" />
@@ -95,6 +94,12 @@
       letter-spacing: 0.02em;
     }
     .hero-meta span strong { color: var(--ink-mid); font-weight: 500; }
+    .hub-card-private {
+      display: inline-block; margin-left: 6px; padding: 2px 7px; vertical-align: middle;
+      border: 1px solid rgba(232,197,122,0.45); border-radius: 999px;
+      color: #e8c57a; font: 700 10px/1.4 var(--font-sans, 'Inter', system-ui, sans-serif);
+      letter-spacing: 0.06em; text-transform: uppercase;
+    }
     .ai-sounds-card-animation {
       position: relative;
       background: linear-gradient(180deg, rgba(0,0,0,.02), rgba(0,0,0,.34)), url('assets/ai-sounds/realistic-waveform-20260531.webp') center / cover no-repeat;
@@ -184,13 +189,18 @@
     .mm-card-rec { right: 8px; bottom: 16px; }
     @keyframes mmRec { 50% { opacity: .15; } }
     .hub-card:hover .mm-card-animation video { filter: saturate(1.15) contrast(1.08) brightness(1.06); }
+    .skip-link { position: fixed; top: -80px; left: 16px; z-index: 1000; padding: 12px 16px; border-radius: 8px; background: #0b0f14; color: #fff; border: 1px solid rgba(232,197,122,.6); text-decoration: none; }
+    .skip-link:focus { top: 12px; }
   </style>
   <link rel="stylesheet" href="assets/workbench-theme.css" />
+  <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png" />
+  <meta name="theme-color" content="#0b0f14" />
 </head>
 <body class="home-page">
+  <a class="skip-link" href="#main">Skip to content</a>
   <header id="site-nav" class="home-hidden-nav"></header>
 
-  <main class="container workbench-home">
+  <main id="main" class="container workbench-home">
     <section class="desktop-hub" aria-labelledby="home-title">
       <div data-space-fx aria-hidden="true"></div>
       <aside class="hub-sidebar" aria-label="Site sections">
@@ -381,17 +391,20 @@
             <span>Watch →</span>
           </a>
           <a class="hub-card" href="demos/">
-            <div class="hub-card-media" style="background-image:url('demos/assets/skynet.webp')"></div>
+            <div class="hub-card-media" style="background-image:url('assets/home-cards/website-demos-thumb-20261123.webp')"></div>
             <h2>Website Demos</h2>
             <p>Interactive web builds, from the exploded human body and Model S studios to the 3D V8 Engine Laboratory.</p>
             <span>Explore →</span>
           </a>
-          <a class="hub-card" href="https://hidden-reef.pages.dev/" target="_blank" rel="noopener">
+          <article class="hub-card">
             <div class="hub-card-media" style="background-image:url('assets/home-cards/hidden-reef-thumb-20260530.webp')"></div>
             <h2>The Hidden Reef</h2>
             <p>Aquarium store redesign prototype — freshwater, saltwater, pond, and beyond.</p>
-            <span>Explore →</span>
-          </a>
+            <div class="hub-card-actions">
+              <a href="https://thehiddenreef.net/" target="_blank" rel="noopener">Explore →</a>
+              <a href="https://hidden-reef-lab.pages.dev/" target="_blank" rel="noopener">Lab →</a>
+            </div>
+          </article>
           <a class="hub-card" href="experiments/fish-health-lab/">
             <div class="hub-card-media" style="background-image:url('assets/home-cards/fish-health-lab-thumb-20261106.webp')"></div>
             <h2>Fish Health Lab</h2>
@@ -417,7 +430,7 @@
             <span>Read →</span>
           </a>
           <a class="hub-card" href="computer-chronicle/">
-            <div class="hub-card-media" style="background-image:url('computer-chronicle/media/retro-computer-desk-1986.webp')"></div>
+            <div class="hub-card-media" style="background-image:url('assets/home-cards/computer-chronicle-thumb-20261123.webp')"></div>
             <h2>Computer Chronicle</h2>
             <p>Retro computing zine issues, BBS flavor, vintage ads, and AI-assisted art direction.</p>
             <span>Open →</span>
@@ -432,9 +445,9 @@
           </a>
           <a class="hub-card" href="ops/">
             <div class="hub-card-media" style="background-image:url('assets/home-cards/operations-statistics-thumb-20260530.webp')"></div>
-            <h2>Operations &amp; Statistics</h2>
-            <p>Computer info, agent stats, runtime notes, and whatever belongs on the dashboard next.</p>
-            <span>Inspect →</span>
+            <h2>Operations &amp; Statistics <small class="hub-card-private">Private</small></h2>
+            <p>Computer info, agent stats, and runtime notes. Owner sign-in required.</p>
+            <span>Sign in →</span>
           </a>
           <a class="hub-card" href="how-ai-works/">
             <div class="hub-card-media" style="background-image:url('assets/home-cards/ai-explainer-thumb-20260530.webp')"></div>
@@ -447,10 +460,10 @@
         <section class="quick-glance" aria-label="Quick glance">
           <h2>Quick Glance</h2>
           <div class="glance-grid">
-            <div><span>Weather</span><strong>61°F · Partly Cloudy</strong></div>
-            <div><span>Next Task</span><strong>Water new plantings</strong></div>
-            <div><span>Next Event</span><strong>Prune grapevine · May 20</strong></div>
-            <div><span>Moon Phase</span><strong>Waxing Gibbous</strong></div>
+            <div><span>Weather</span><strong id="glance-weather">Loading…</strong></div>
+            <div><span>Today</span><strong id="glance-today">Loading…</strong></div>
+            <div><span>Next in Garden</span><strong id="glance-garden">Loading…</strong></div>
+            <div><span>Moon Phase</span><strong id="glance-moon">—</strong></div>
             <div><span>AI News</span><strong id="home-ai-news-status">Loading feed…</strong></div>
             <div><span>Markets</span><strong>Stock Command Center linked</strong></div>
             <div><span>Garden Zone</span><strong>Zone 7a</strong></div>
@@ -487,6 +500,7 @@
       <a href="https://github.com/jz237/jez237-site" target="_blank" rel="noopener" style="color:var(--brand-gold)">github.com/jz237/jez237-site</a>
       <span aria-hidden="true" style="display:inline-block;margin:0 10px;color:rgba(255,255,255,0.22)">·</span>
       <a href="mailto:jez@jez237.com" style="color:var(--brand-gold)">jez@jez237.com</a>
+      <p style="margin:10px 0 0;font-size:12px;opacity:.8">Visits are counted with Google Analytics.</p>
     </footer>
     <script>
       // Multimedia card: film timecode (MM:SS:FF) that runs with the looping reel preview.
@@ -525,6 +539,60 @@
             mount.textContent = 'Could not load llms.txt (' + e.message + ')';
           }
         });
+      })();
+    </script>
+    <script>
+      // Quick Glance: live weather, next garden calendar entry and moon phase.
+      (function () {
+        const $ = (id) => document.getElementById(id);
+        const set = (id, text, title) => { const el = $(id); if (el) { el.textContent = text; el.title = title || text; } };
+
+        // Moon phase from the mean synodic month (reference new moon: 2000-01-06 18:14 UTC).
+        const age = (((Date.now() - Date.UTC(2000, 0, 6, 18, 14)) / 86400000) % 29.530588853 + 29.530588853) % 29.530588853;
+        const phases = ['New Moon', 'Waxing Crescent', 'First Quarter', 'Waxing Gibbous', 'Full Moon', 'Waning Gibbous', 'Last Quarter', 'Waning Crescent'];
+        set('glance-moon', phases[Math.round(age / 29.530588853 * 8) % 8]);
+
+        // Same Open-Meteo source and location as /weather/ and /garden/.
+        const WX_DESC = {
+          0: 'Clear', 1: 'Mostly clear', 2: 'Partly cloudy', 3: 'Cloudy', 45: 'Fog', 48: 'Fog',
+          51: 'Light drizzle', 53: 'Drizzle', 55: 'Heavy drizzle', 56: 'Freezing drizzle', 57: 'Freezing drizzle',
+          61: 'Light rain', 63: 'Rain', 65: 'Heavy rain', 66: 'Freezing rain', 67: 'Freezing rain',
+          71: 'Light snow', 73: 'Snow', 75: 'Heavy snow', 77: 'Snow grains', 80: 'Showers', 81: 'Showers', 82: 'Heavy showers',
+          85: 'Snow showers', 86: 'Snow showers', 95: 'Storms', 96: 'Storms', 99: 'Severe storms'
+        };
+        const wxUrl = 'https://api.open-meteo.com/v1/forecast?latitude=40.0607&longitude=-75.0802&current=temperature_2m,weather_code&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max&temperature_unit=fahrenheit&timezone=America%2FNew_York&forecast_days=1';
+        // Open-Meteo occasionally answers 503; try once more before giving up.
+        fetch(wxUrl)
+          .catch(() => null)
+          .then((r) => (r && r.ok) ? r : new Promise((res) => setTimeout(res, 1500)).then(() => fetch(wxUrl)))
+          .then((r) => { if (!r.ok) throw new Error(r.status); return r.json(); })
+          .then((j) => {
+            const temp = Math.round(j.current.temperature_2m);
+            set('glance-weather', temp + '°F · ' + (WX_DESC[j.current.weather_code] || 'Philadelphia'));
+            const d = j.daily;
+            const rain = d.precipitation_probability_max && d.precipitation_probability_max[0];
+            set('glance-today', 'High ' + Math.round(d.temperature_2m_max[0]) + '° · Low ' + Math.round(d.temperature_2m_min[0]) + '°' + (Number.isFinite(rain) ? ' · ' + rain + '% rain' : ''));
+          })
+          .catch(() => { set('glance-weather', 'See Weather Console'); set('glance-today', 'Unavailable'); });
+
+        // The garden calendar keeps its yearly entries as add(year, month, day, icon, label, …) lines.
+        fetch('garden/')
+          .then((r) => { if (!r.ok) throw new Error(r.status); return r.text(); })
+          .then((html) => {
+            const now = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/New_York' }).format(new Date()).split('-').map(Number);
+            const today = now[1] * 100 + now[2];
+            let best = null;
+            const re = /add\(year,\s*(\d+),\s*(\d+),\s*"[^"]*",\s*"([^"]+)"/g;
+            for (let m; (m = re.exec(html));) {
+              const key = Number(m[1]) * 100 + Number(m[2]);
+              const rank = key >= today ? key : key + 1300; // wraps into next year
+              if (!best || rank < best.rank) best = { rank, month: Number(m[1]), day: Number(m[2]), label: m[3] };
+            }
+            if (!best) throw new Error('no entries');
+            const when = best.rank === today ? 'Today' : new Date(2000, best.month - 1, best.day).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+            set('glance-garden', best.label + ' · ' + when);
+          })
+          .catch(() => set('glance-garden', 'See Garden Calendar'));
       })();
     </script>
     <script>
@@ -582,13 +650,23 @@
             .slice(0, 3);
         }
 
+        // Feed entries come from third-party sources: link only to web pages.
+        function safeLink(url) {
+          try {
+            const parsed = new URL(String(url || ''), document.baseURI);
+            return parsed.protocol === 'https:' || parsed.protocol === 'http:' ? parsed.href : '#';
+          } catch {
+            return '#';
+          }
+        }
+
         function renderItem(item) {
           const article = document.createElement('article');
           article.className = 'home-ai-briefing-item';
 
           const thumb = document.createElement('a');
           thumb.className = 'home-ai-briefing-thumb';
-          thumb.href = item.url;
+          thumb.href = safeLink(item.url);
           thumb.target = '_blank';
           thumb.rel = 'noopener';
 
@@ -615,7 +693,7 @@
           label.textContent = signalLabel(item);
 
           const title = document.createElement('a');
-          title.href = item.url;
+          title.href = safeLink(item.url);
           title.target = '_blank';
           title.rel = 'noopener';
           title.textContent = item.title || 'Untitled update';
