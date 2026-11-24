@@ -64,3 +64,15 @@ test('Ledger calendar previews stay scoped to Ledger downloads', async () => {
  }
  assert.equal((await worker.fetch(new Request(base+'2026.10.12-beta.1-Setup-x64.exe',{method:'HEAD'}),env)).status,404);
 });
+
+test('serves VoiceStudio official betas only for VoiceStudio', async () => {
+ const base='https://jez237.com/software-downloads/voicestudio/'+'c'.repeat(64)+'/VoiceStudio-0.5.9-beta.9-Setup-x64.exe';
+ const env={INSTALLERS:{head:async()=>({size:5,httpEtag:'e'})}};
+ assert.equal((await worker.fetch(new Request(base,{method:'HEAD'}),env)).status,200);
+ const none={INSTALLERS:{head:()=>{throw Error('must not read storage');}}};
+ for (const bad of [base.replace('beta.9','beta'), base.replace('beta.9','rc.1'), base.replace('beta.9','beta.x'),
+   'https://jez237.com/software-downloads/photocraft/'+'c'.repeat(64)+'/PhotoCraft-0.5.9-beta.9-Setup-x64.exe',
+   base.replace('/voicestudio/','/pdfcraft/')]) {
+  assert.equal((await worker.fetch(new Request(bad,{method:'HEAD'}),none)).status,404, bad);
+ }
+});
