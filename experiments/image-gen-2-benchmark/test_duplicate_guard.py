@@ -83,6 +83,14 @@ class DuplicateGuardTests(unittest.TestCase):
             style_family="scratchboard",
         ))
 
+        strict_matches = self.check(
+            title="Scratchboard Lunar Bakery",
+            concept_key="lunar bakery night shift",
+            style_family="scratchboard",
+            allow_style_reuse=False,
+        )
+        self.assertTrue(any(item["reason"] == "rendering-style-family" for item in strict_matches))
+
         concept_reasons = {item["reason"] for item in self.check(
             title="Scratchboard Floodgate Fish Passage",
             concept_key="scratchboard floodgate fish passage",

@@ -277,6 +277,7 @@ def find_duplicates(
     style_family: str = "",
     image: Path | None = None,
     style_approvals_path: Path = DEFAULT_STYLE_APPROVALS_PATH,
+    allow_style_reuse: bool = True,
 ) -> list[dict]:
     candidate_core = core_title(title)
     candidate_key = normalize_key(concept_key)
@@ -293,7 +294,7 @@ def find_duplicates(
     if len(candidate_key_tokens) < 3:
         return [{"reason": "weak-concept-key", "message": "Concept key must contain at least three meaningful terms."}]
 
-    approved_style_keys = load_approved_style_keys(style_approvals_path)
+    approved_style_keys = load_approved_style_keys(style_approvals_path) if allow_style_reuse else set()
 
     candidate_hash = image_fingerprint(image) if image else None
     duplicates: list[dict] = []
@@ -391,6 +392,7 @@ def main() -> None:
     parser.add_argument("--concept-key", required=True)
     parser.add_argument("--style-family", default="")
     parser.add_argument("--image", type=Path)
+    parser.add_argument("--no-style-reuse", action="store_true")
     parser.add_argument("--style-approvals", type=Path, default=DEFAULT_STYLE_APPROVALS_PATH)
     args = parser.parse_args()
     prompt = args.prompt_file.read_text() if args.prompt_file else args.prompt
@@ -403,6 +405,7 @@ def main() -> None:
         style_family=args.style_family,
         image=args.image.resolve() if args.image else None,
         style_approvals_path=args.style_approvals.resolve(),
+        allow_style_reuse=not args.no_style_reuse,
     )
     print(json.dumps({"unique": not duplicates, "duplicates": duplicates}, indent=2, ensure_ascii=False))
 

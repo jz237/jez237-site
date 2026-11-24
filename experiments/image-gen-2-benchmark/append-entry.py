@@ -287,6 +287,7 @@ def main() -> None:
     ap.add_argument("--size", default="1024x1024")
     ap.add_argument("--enforce-unique", action="store_true", help="Reject archive-wide duplicate concepts, styles, and image pixels")
     ap.add_argument("--concept-key", default="", help="Stable subject/action/setting identity used by the duplicate gate")
+    ap.add_argument("--no-style-reuse", action="store_true", help="Reject previously used rendering families even if approved for reuse")
     ap.add_argument("--style-family", default="", help="Canonical broad rendering family; required for scheduled random-style entries")
     ap.add_argument("--world-name", default="")
     ap.add_argument("--world-description", default="")
@@ -386,6 +387,7 @@ def main() -> None:
             concept_key=args.concept_key,
             style_family=args.style_family,
             image=src,
+            allow_style_reuse=not args.no_style_reuse,
         )
 
     IMAGES.mkdir(parents=True, exist_ok=True)
