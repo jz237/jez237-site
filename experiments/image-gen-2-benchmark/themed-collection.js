@@ -5,6 +5,30 @@
   const emptyText = body.dataset.collectionEmpty || 'No images have been archived in this collection yet.';
   const order = body.dataset.collectionOrder || 'newest';
   const subtype = body.dataset.collectionSubtype || '';
+  // Factual infographics are split into topics. The daily job tags most entries
+  // with "factual_subtype: <name>" in their notes; older and general entries carry
+  // no specific tag, so those are sorted by title keywords instead.
+  const topic = body.dataset.collectionTopic || '';
+  const TAGGED_TOPICS = {
+    'cat-infographic': 'cats',
+    'bizarre-insect-life': 'insects',
+    'rare-insect': 'insects',
+    'phobia-infographic': 'phobias',
+    'medical-health-infographic': 'health',
+    'reef-fish-infographic': 'reef-fish'
+  };
+  const KEYWORD_TOPICS = [
+    ['insects', /beetle|honeybee|\bbees?\b|wasp|\bfly\b|\bants?\b|termite|\bmoth\b|phasmid|insect|cricket|cicada|grasshopper|mayfly|antlion|hangingfly|nymph|weevil|\bbug\b|lacewing|scorpionfly|dobsonfly|salmonfly|spittlebug|water scorpion|glow-worm/i],
+    ['how-things-work', /decal|receipt|sprinkler|watch|freehub|refrigerator|can opener|zipper|pencil|battery|smart glass|vinyl|heat shield|solar sail|gravitational-wave|ferrofluid|radiocarbon|cherenkov/i],
+    ['earth-space', /heat dome|frost|sprite|basalt|lightning|fulgurite|hailstone|atmospheric river|pyrocumulonimbus|volcanic|snow crystal|aurora|tsunami|cave pearl|enceladus|pulsar|geyser|pillow lava|\bopal\b|saharan dust|soil crust|upwelling|internal waves|brinicle|black smoker|hydrothermal/i]
+  ];
+  function topicOf(item) {
+    const tag = String(item.tests || '').match(/(?:^|;)\s*factual_subtype:\s*([a-z-]+)(?=;|\s|$)/);
+    if (tag && TAGGED_TOPICS[tag[1]]) return TAGGED_TOPICS[tag[1]];
+    const title = String(item.title || '');
+    const hit = KEYWORD_TOPICS.find((entry) => entry[1].test(title));
+    return hit ? hit[0] : 'nature-science';
+  }
   const grid = document.getElementById('collection-grid');
   const count = document.getElementById('collection-count');
   const viewer = document.getElementById('collection-lightbox');
@@ -82,7 +106,7 @@
     const matching = subtype ? items.filter((item) => {
       const match = String(item.tests || '').match(/(?:^|;)\s*factual_subtype:\s*([a-z-]+)(?=;|\s|$)/);
       return match && match[1] === subtype;
-    }) : items;
+    }) : topic ? items.filter((item) => topicOf(item) === topic) : items;
     const indexed = matching.map((item, index) => ({ item, index }));
     indexed.sort((a, b) => {
       const dateOrder = String(b.item.date || '').localeCompare(String(a.item.date || ''));
