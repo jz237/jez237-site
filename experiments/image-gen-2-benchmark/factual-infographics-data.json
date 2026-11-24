@@ -25793,5 +25793,154 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-11-24-factual-infographic-factual-infographic-lichens-two-kingdom",
+    "title": "Factual infographic: Lichens — Two Kingdoms, One Body",
+    "tests": "; archive_slot=2026-11-24T16:20; concept=lichen-fungus-photobiont-symbiosis-layered-thallus-rock; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: factual-infographic",
+    "prompt": "Create a luminous, flowing, artwork-led natural-history infographic about lichens, rendered directly as one continuous illustrated canvas in fine technical ink with rich watercolor and gouache on a soft mineral-gray paper texture; no frame, poster mockup, room, table or boxed panels. DOMINANT HERO: a sweeping, exquisitely detailed weathered granite boulder and the mossless bark of an old tree, colonized by lichens of all three growth forms: bright orange and sulfur-yellow crustose lichens pressed flat into the rock like painted crusts; a ruffled gray-green leafy foliose rosette lifting at its lobes; and fruticose lichens: pale shrubby branches, little cup-shaped trumpet stalks, and long pale hair-like old man's beard (Usnea) hanging from a branch. Label the three forms 'crustose', 'foliose' and 'fruticose' with one short definition each. CENTRAL CUTAWAY, flowing out of a foliose lobe as a magnified cross-section rising in a curve: labeled layers from top: 'cortex' of tightly packed fungal cells, 'algal layer' of round green photobiont cells with a few blue-green cyanobacteria, 'medulla' of loose cottony threadlike fungal filaments, and 'rhizines' anchoring to the surface with the note 'anchor only, not roots'. Delicate arrows show sugars passing from the green photobiont cells to the fungal threads, and water and nutrients entering from air and rain. Caption: 'fungus + photobiont: a mutualism'. WET/DRY STUDY: the same foliose lobe shown dry and gray beside wet and vivid green, captioned 'wet cortex turns transparent; the green algae show through'. REPRODUCTION PATHWAY curving along the lower edge: a cup-shaped fungal fruiting body releasing spores with 'a new fungus must find a partner'; magnified powdery soredia granules of intertwined algae and fungus drifting on air; finger-like isidia; and a broken fragment growing into a new thallus. A rock-tripe lichen attached by one central holdfast, labeled 'umbilicate: one central holdfast'. ENVIRONMENT NOTES woven in: a sunny dry cliff with lichen, captioned 'fungus shelters its partner from drying'; drifting smoke-gray particles absorbed into hanging old man's beard, captioned 'absorbs pollutants: an air-quality monitor'; and a small side-by-side of a true moss with leaf-like structures versus a lichen, captioned 'not a moss, not a plant'. Title: 'Lichens: Two Kingdoms, One Body', in elegant natural-history lettering. Clear typographic hierarchy, readable labels and short captions, asymmetrical breathable composition with generous space around the boulder hero; organic curved leaders connect the studies. No invented statistics, no species-specific claims beyond those named, no bibliography, URLs, watermark or logo.",
+    "image": "images/2026-11-24-factual-infographic-factual-infographic-lichens-two-kingdom.jpg",
+    "thumb": "thumbs/2026-11-24-factual-infographic-factual-infographic-lichens-two-kingdom.webp",
+    "color": "#bdb7a1",
+    "date": "2026-11-24",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1199x1312",
+    "dedup": {
+      "conceptKey": "lichen-fungus-photobiont-symbiosis-layered-thallus-rock",
+      "imageSha256": "769359e70bd064118ad3477f6bf1f1d94817ad62edc953a0fe2ce104034e2683",
+      "imageDHash": "323217cc4c642a66"
+    },
+    "factualInfographic": {
+      "topic": "How lichens form a fungus-photobiont partnership with a layered thallus, three growth forms and dual reproduction",
+      "description": "How lichens form a fungus-photobiont partnership with a layered thallus, three growth forms and dual reproduction",
+      "sourceNote": "USDA Forest Service https://www.fs.usda.gov/wildflowers/beauty/lichens/about.shtml and https://www.fs.usda.gov/wildflowers/beauty/lichens/biology.shtml; British Lichen Society https://www.britishlichensociety.org.uk/learning/what-is-a-lichen. Symbiosis, thallus layers, growth forms, reproduction and air-quality monitoring.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-24T21:25:12.870315+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "USDA Forest Service",
+            "title": "What Are Lichens?",
+            "sourceType": "government-agency",
+            "url": "https://www.fs.usda.gov/wildflowers/beauty/lichens/about.shtml"
+          },
+          {
+            "id": "S2",
+            "publisher": "USDA Forest Service",
+            "title": "Lichen Biology",
+            "sourceType": "government-agency",
+            "url": "https://www.fs.usda.gov/wildflowers/beauty/lichens/biology.shtml"
+          },
+          {
+            "id": "S3",
+            "publisher": "British Lichen Society",
+            "title": "What is a Lichen?",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://www.britishlichensociety.org.uk/learning/what-is-a-lichen"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "A lichen is a stable symbiotic partnership between a fungus and a photosynthetic partner (photobiont): green algae and/or cyanobacteria.",
+            "sourceIds": [
+              "S1",
+              "S3"
+            ]
+          },
+          {
+            "claim": "The photobiont photosynthesizes and supplies sugars (carbon) to the fungus; the partnership is thought to be a mutualism.",
+            "sourceIds": [
+              "S1",
+              "S3"
+            ]
+          },
+          {
+            "claim": "The fungus is the dominant partner and gives the lichen most of its characteristics, including thallus shape and fruiting bodies.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "About 90% of lichens use a green-algal photobiont; some lichens have both green algae and cyanobacteria.",
+            "sourceIds": [
+              "S1",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Lichens have no roots, stems, leaves, waxy cuticle or vascular tissue; they absorb water and nutrients from air and rain.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "The thallus is layered: an outer cortex of tightly packed fungal cells, an algal layer beneath it, and a medulla of loosely packed threadlike fungal filaments.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "When a lichen is wet, cortex cells become transparent and the algal layer's color shows through; green algae often make a wet lichen bright green.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Rhizines are fungal filaments from the medulla that attach the lichen to its surface; they do not move water or nutrients like roots.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Some foliose lichens attach by one central holdfast (umbilicate lichens, such as rock tripe).",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Three main growth forms: crustose (pressed against the surface like a crust), foliose (leafy, with distinct upper and lower sides), fruticose (hair-like, shrubby or cup-like).",
+            "sourceIds": [
+              "S2",
+              "S3"
+            ]
+          },
+          {
+            "claim": "The fungus produces spores from fruiting bodies; a new fungus must find a compatible photobiont partner.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Lichens also reproduce vegetatively: soredia are granules of algae and fungi intertwined for dispersal, isidia are vegetative outgrowths, and fragments can grow into new thalli.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "By protecting its photobiont, the fungus lets lichens live in dry, sunny places where algae alone could not, recharging with occasional rain.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Lichens absorb pollutants such as heavy metals and sulfur from the air, so scientists use them to monitor air quality; old man's beard (Usnea longissima) is an air-pollution indicator.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Lichens are not mosses: mosses are plants with leaf-like structures, while lichens are not plants.",
+            "sourceIds": [
+              "S1"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
