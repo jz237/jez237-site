@@ -322,5 +322,383 @@
         ]
       }
     ]
+  },
+  "2026-06-26-factual-infographic-factual-infographic-how-a-honeybee-wagg": {
+    "sources": [
+      {
+        "id": "S1",
+        "publisher": "NC State Extension",
+        "title": "The Honey Bee Dance Language",
+        "url": "https://content.ces.ncsu.edu/honey-bee-dance-language"
+      }
+    ],
+    "claims": [
+      {
+        "claim": "In the waggle dance, the orientation of the waggle run encodes direction relative to the sun, while the duration of the waggle run conveys distance. Returning foragers use the dance to recruit nestmates to a resource.",
+        "sourceIds": [
+          "S1"
+        ]
+      }
+    ]
+  },
+  "2026-07-07-factual-infographic-factual-infographic-how-a-pistol-shrimp": {
+    "sources": [
+      {
+        "id": "S1",
+        "publisher": "Lohse et al., Nature",
+        "title": "Snapping shrimp make flashing bubbles",
+        "url": "https://www.nature.com/articles/35097152"
+      }
+    ],
+    "claims": [
+      {
+        "claim": "The closing claw drives water fast enough to form a cavitation bubble. The bubble collapse, rather than the two claws striking each other, produces the characteristic pressure pulse and can emit a brief flash of light.",
+        "sourceIds": [
+          "S1"
+        ]
+      }
+    ]
+  },
+  "2026-07-08-factual-infographic-factual-infographic-how-lithium-ion-bat": {
+    "sources": [
+      {
+        "id": "S1",
+        "publisher": "Federal Aviation Administration",
+        "title": "Lithium Battery Thermal Runaway Vent Gas Analysis",
+        "url": "https://www.fire.tc.faa.gov/pdf/TC-16-37.pdf"
+      }
+    ],
+    "claims": [
+      {
+        "claim": "A lithium-ion cell in thermal runaway can release flammable vent gases. This makes the event more than a temperature rise inside a single cell, especially when gases can accumulate in an enclosed space.",
+        "sourceIds": [
+          "S1"
+        ]
+      }
+    ]
+  },
+  "2026-07-09-factual-infographic-factual-infographic-how-electrochromic-": {
+    "sources": [
+      {
+        "id": "S1",
+        "publisher": "Lawrence Berkeley National Laboratory",
+        "title": "Electrochromic Materials",
+        "url": "https://windows.lbl.gov/electrochromic-materials"
+      }
+    ],
+    "claims": [
+      {
+        "claim": "Electrochromic glazing changes visible light transmission when electrically switched. Researchers evaluate the absorbing and transmitting states together with switching speed and stability; exact performance differs among materials.",
+        "sourceIds": [
+          "S1"
+        ]
+      }
+    ]
+  },
+  "2026-07-10-factual-infographic-factual-infographic-how-termite-mounds-": {
+    "sources": [
+      {
+        "id": "S1",
+        "publisher": "King, Ocko and Mahadevan, PNAS",
+        "title": "Termite mounds harness diurnal temperature oscillations for ventilation",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4577200/"
+      }
+    ],
+    "claims": [
+      {
+        "claim": "In the mounds studied, day-to-night temperature changes drove reversing airflows that helped flush carbon dioxide from the nest. The result describes a measured mechanism, not a single design used by every termite species.",
+        "sourceIds": [
+          "S1"
+        ]
+      }
+    ]
+  },
+  "2026-07-13-factual-infographic-factual-infographic-how-red-sprites-fla": {
+    "sources": [
+      {
+        "id": "S1",
+        "publisher": "NASA",
+        "title": "Spritacular",
+        "url": "https://science.nasa.gov/citizen-science/spritacular/"
+      }
+    ],
+    "claims": [
+      {
+        "claim": "Sprites are one type of transient luminous event above thunderstorms. Their brief flashes occur high above the clouds, rather than following the near-ground path of an ordinary cloud-to-ground lightning strike.",
+        "sourceIds": [
+          "S1"
+        ]
+      }
+    ]
+  },
+  "2026-07-14-factual-infographic-factual-infographic-how-basalt-columns-": {
+    "sources": [
+      {
+        "id": "S1",
+        "publisher": "National Park Service",
+        "title": "Columnar Jointing",
+        "url": "https://www.nps.gov/subjects/volcanoes/columnar-jointing.htm"
+      }
+    ],
+    "claims": [
+      {
+        "claim": "Cooling volcanic rock contracts. Fractures form and advance through the cooling body, dividing it into columns that are often hexagonal but can have other polygonal cross sections.",
+        "sourceIds": [
+          "S1"
+        ]
+      }
+    ]
+  },
+  "2026-07-14-factual-infographic-factual-infographic-why-spider-silk-shr": {
+    "sources": [
+      {
+        "id": "S1",
+        "publisher": "Vehoff et al., Biophysical Journal",
+        "title": "Mechanical Properties of Spider Dragline Silk: Humidity, Hysteresis, and Relaxation",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2098708/"
+      }
+    ],
+    "claims": [
+      {
+        "claim": "Humidity changes the mechanical behavior of dragline silk. Wet dragline fibers can supercontract, shortening when free to move and developing contraction stress when restrained.",
+        "sourceIds": [
+          "S1"
+        ]
+      }
+    ]
+  },
+  "2026-07-14-factual-infographic-factual-infographic-how-mantis-shrimp-d": {
+    "sources": [
+      {
+        "id": "S1",
+        "publisher": "University of Queensland",
+        "title": "New type of vision found in shrimp",
+        "url": "https://news.uq.edu.au/2008-03-20-new-type-vision-found-shrimp"
+      }
+    ],
+    "claims": [
+      {
+        "claim": "Experiments showed that studied mantis shrimp could detect circular as well as linear polarization. This is not the same as color vision, and the finding should not be generalized to all species without further evidence.",
+        "sourceIds": [
+          "S1"
+        ]
+      }
+    ]
+  },
+  "2026-07-14-factual-infographic-factual-infographic-how-trees-pull-wate": {
+    "sources": [
+      {
+        "id": "S1",
+        "publisher": "OpenStax",
+        "title": "Transport of Water and Solutes in Plants",
+        "url": "https://openstax.org/books/biology-2e/pages/30-5-transport-of-water-and-solutes-in-plants"
+      }
+    ],
+    "claims": [
+      {
+        "claim": "Evaporation in leaves lowers water potential and creates tension in the xylem. Cohesion helps keep the water column connected so this pull can draw water upward from the roots.",
+        "sourceIds": [
+          "S1"
+        ]
+      }
+    ]
+  },
+  "2026-07-21-factual-infographic-factual-infographic-how-octopus-skin-ch": {
+    "sources": [
+      {
+        "id": "S1",
+        "publisher": "Monterey Bay Aquarium",
+        "title": "Giant Pacific Octopus",
+        "url": "https://www.montereybayaquarium.org/animals-the-ocean/animals-a-to-z/giant-pacific-octopus"
+      }
+    ],
+    "claims": [
+      {
+        "claim": "Pigment-filled chromatophores can expand and contract, altering which colors are visible at the skin. Rapidly changing the extent of these pigment cells helps an octopus adapt its pattern to its surroundings.",
+        "sourceIds": [
+          "S1"
+        ]
+      }
+    ]
+  },
+  "2026-07-21-factual-infographic-factual-infographic-how-black-smoker-ch": {
+    "sources": [
+      {
+        "id": "S1",
+        "publisher": "NOAA Ocean Service",
+        "title": "What is a hydrothermal vent?",
+        "url": "https://oceanservice.noaa.gov/facts/vents.html"
+      }
+    ],
+    "claims": [
+      {
+        "claim": "As hot mineral-rich vent fluid cools against surrounding seawater, minerals solidify and build up chimney-like structures. Iron sulfide gives black smokers their characteristic dark appearance.",
+        "sourceIds": [
+          "S1"
+        ]
+      }
+    ]
+  },
+  "2026-08-18-factual-infographic-factual-infographic-gecko-grip-dry-adhe": {
+    "sources": [
+      {
+        "id": "S1",
+        "publisher": "UC Berkeley",
+        "title": "Researchers find secret of gecko’s sticky feet",
+        "url": "https://newsarchive.berkeley.edu/news/media/releases/2002/08/26_gecko.html"
+      }
+    ],
+    "claims": [
+      {
+        "claim": "Multitudes of tiny split hair tips make close contact with a surface. The summed intermolecular attraction, known as van der Waals force, provides adhesion without a liquid glue.",
+        "sourceIds": [
+          "S1"
+        ]
+      }
+    ]
+  },
+  "2026-07-21-factual-infographic-factual-infographic-how-a-whale-fall-fe": {
+    "sources": [
+      {
+        "id": "S1",
+        "publisher": "NOAA Ocean Service",
+        "title": "What is a whale fall?",
+        "url": "https://oceanservice.noaa.gov/facts/whale-fall.html"
+      }
+    ],
+    "claims": [
+      {
+        "claim": "A whale carcass becomes both food and habitat. As organic material in the bones breaks down, sulfides can support microbes that use chemical energy and, in turn, the animals that depend on them.",
+        "sourceIds": [
+          "S1"
+        ]
+      }
+    ]
+  },
+  "2026-07-21-factual-infographic-factual-infographic-how-saharan-dust-fe": {
+    "sources": [
+      {
+        "id": "S1",
+        "publisher": "NASA",
+        "title": "The Sahara Desert Feeds the Amazon Rainforest",
+        "url": "https://science.nasa.gov/science-research/earth-science/29apr_amazondust/"
+      }
+    ],
+    "claims": [
+      {
+        "claim": "Winds can carry mineral dust from North Africa across the Atlantic. When some of that dust settles in the Amazon, it delivers phosphorus, an important plant nutrient.",
+        "sourceIds": [
+          "S1"
+        ]
+      }
+    ]
+  },
+  "2026-07-21-factual-infographic-factual-infographic-how-a-gravitational": {
+    "sources": [
+      {
+        "id": "S1",
+        "publisher": "NSF LIGO",
+        "title": "LIGO's Interferometer",
+        "url": "https://www.ligo.caltech.edu/page/ligos-ifo/"
+      }
+    ],
+    "claims": [
+      {
+        "claim": "A beam splitter sends laser light along perpendicular arms. The returning beams are recombined, producing an interference signal that responds to tiny differences in their optical path lengths.",
+        "sourceIds": [
+          "S1"
+        ]
+      }
+    ]
+  },
+  "2026-07-21-factual-infographic-factual-infographic-how-lightning-build": {
+    "sources": [
+      {
+        "id": "S1",
+        "publisher": "NOAA National Severe Storms Laboratory",
+        "title": "Severe Weather 101: Lightning Types",
+        "url": "https://www.nssl.noaa.gov/education/svrwx101/lightning/types/"
+      }
+    ],
+    "claims": [
+      {
+        "claim": "In a common negative cloud-to-ground flash, a stepped leader descends and can meet an upward streamer. That connection allows the bright return stroke to travel back up the existing channel.",
+        "sourceIds": [
+          "S1"
+        ]
+      }
+    ]
+  },
+  "2026-07-28-factual-infographic-factual-infographic-how-electric-eels-s": {
+    "sources": [
+      {
+        "id": "S1",
+        "publisher": "Smithsonian’s National Zoo",
+        "title": "Electric Eel",
+        "url": "https://nationalzoo.si.edu/animals/electric-eel"
+      }
+    ],
+    "claims": [
+      {
+        "claim": "Electric eels have specialized electric organs that generate strong and weak pulses. Stronger pulses are used in predation and defense, while weaker outputs support navigation and communication.",
+        "sourceIds": [
+          "S1"
+        ]
+      }
+    ]
+  },
+  "2026-07-28-factual-infographic-factual-infographic-how-mantis-shrimp-r": {
+    "sources": [
+      {
+        "id": "S1",
+        "publisher": "University of Queensland",
+        "title": "New type of vision found in shrimp",
+        "url": "https://news.uq.edu.au/2008-03-20-new-type-vision-found-shrimp"
+      }
+    ],
+    "claims": [
+      {
+        "claim": "Polarization describes how light waves are oriented, rather than their color. Researchers found that the studied mantis shrimp could distinguish both linear and circular polarization.",
+        "sourceIds": [
+          "S1"
+        ]
+      }
+    ]
+  },
+  "2026-07-28-factual-infographic-factual-infographic-how-fog-basking-bee": {
+    "sources": [
+      {
+        "id": "S1",
+        "publisher": "Nørgaard and Dacke, Frontiers in Zoology",
+        "title": "Fog-basking behaviour and water collection efficiency in Namib Desert darkling beetles",
+        "url": "https://link.springer.com/article/10.1186/1742-9994-7-23"
+      }
+    ],
+    "claims": [
+      {
+        "claim": "Fog-basking is documented in particular Namib beetles, including Onymacris unguicularis. Their behavior helps them collect fog droplets; it should not be treated as a universal trait of all darkling beetles.",
+        "sourceIds": [
+          "S1"
+        ]
+      }
+    ]
+  },
+  "2026-07-28-factual-infographic-factual-infographic-how-lightning-makes": {
+    "sources": [
+      {
+        "id": "S1",
+        "publisher": "National Park Service",
+        "title": "Fulgurites",
+        "url": "https://www.nps.gov/articles/grsa-fulgurites.htm"
+      }
+    ],
+    "claims": [
+      {
+        "claim": "A lightning discharge through suitable sand can briefly melt material around its path. The melt cools into a glassy fulgurite, preserving some of the shape of the route the discharge took.",
+        "sourceIds": [
+          "S1"
+        ]
+      }
+    ]
   }
 }
