@@ -327,3 +327,12 @@ body[data-density="3"] .content h3, body[data-density="3"] .card h3 { font-size:
 }
 .lightbox-close:hover, .lightbox-btn:hover { background: rgba(201, 162, 75, .12) !important; }
 .lightbox-stage img { border: 1px solid rgba(216, 185, 106, .25); }
+
+/* Grouped collections: the group's link is marked aria-current="true" on its
+   member pages, and a second row lists the pages inside that group. */
+.series-nav a[aria-current="true"] { color: var(--ivory); border-bottom-color: var(--gold-bright); }
+.museum-hero .series-nav a[aria-current="true"] { color: #f3ead8; }
+:root[data-theme="light"] .series-nav a[aria-current="true"] { color: var(--ivory); }
+:root[data-theme="light"] .museum-hero .series-nav a[aria-current="true"] { color: #f3ead8; }
+.series-nav.series-subnav { margin-top: 10px; }
+.series-nav.series-subnav a { font-size: .66rem; letter-spacing: .12em; }

@@ -54,3 +54,8 @@ body { margin: 0; background: #0f1110; color: #eee9df; }
   #site-nav .links { overflow-x: auto; justify-content: flex-start; }
   #site-nav .links a { flex-shrink: 0; }
 }
+
+/* Grouped collections: highlight the group, and list its pages on a second row. */
+.series-nav a[aria-current="true"] { color: #16130d; background: var(--collection-accent); border-color: var(--collection-accent); }
+.series-nav.series-subnav { margin-top: 10px; }
+.series-nav.series-subnav a { padding: 6px 11px; font-size: .78rem; }
