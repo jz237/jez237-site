@@ -1,11 +1,460 @@
 {
   "version": 1,
   "title": "AI Discoveries, Explained",
-  "updated": "2026-11-12",
+  "updated": "2026-11-24",
   "coverageStart": "2026-09-21",
-  "coverageEnd": "2026-11-12",
+  "coverageEnd": "2026-11-24",
   "editorialNote": "Source-linked discoveries, research demonstrations, follow-ups and corrections from AI Discovery Watch. Historical milestones posted before the fresh-news brief are not included. Coverage dates are when a story was shared, not necessarily when its discovery occurred. Evidence labels reflect the linked report at that time; read later updates too.",
   "stories": [
+    {
+      "category": "Research in action",
+      "evidenceKind": "demo",
+      "modelNote": "JARVIS uses Claude Opus 5.5 for reasoning and machine control.",
+      "sources": [
+        "https://arxiv.org/abs/2611.26503",
+        "https://arxiv.org/html/2611.26503v1#S7.SS3"
+      ],
+      "status": "Early laboratory demonstration; author-reported, not independently replicated.",
+      "takeaway": "An AI-controlled robot designed, built and tested a circuit board that filters electrical hum, then diagnosed a flaw and proposed a revised design. The November 19 preprint reports a 2-hour-39-minute run without human intervention after approval. People prepared the equipment, set the goal and stood by for safety. This is a demonstration of AI learning from physical experiments, not a newly discovered electrical principle. Only one board was built: it missed one performance requirement, and the proposed improvement was checked in simulation, not built and tested.",
+      "title": "An AI robot builds a circuit board and works out what to fix",
+      "id": "d-1574806076149473351-jarvis-builds-tests-circuit-board",
+      "coveredOn": "2026-11-24",
+      "context": "🔬 **AI Discovery Watch · November 24, 2026**\n\n**An AI robot builds a circuit board and works out what to fix**\nAn AI-controlled robot designed, built and tested a circuit board that filters electrical hum, then diagnosed a flaw and proposed a revised design. The November 19 preprint reports a 2-hour-39-minute run without human intervention after approval. People prepared the equipment, set the goal and stood by for safety. This is a demonstration of AI learning from physical experiments, not a newly discovered electrical principle. Only one board was built: it missed one performance requirement, and the proposed improvement was checked in simulation, not built and tested.\n\n**AI used:** JARVIS uses Claude Opus 5.5 for reasoning and machine control.\n**Evidence:** Early laboratory demonstration; author-reported, not independently replicated.\nOriginal source: <https://arxiv.org/abs/2611.26503>\nSupporting source: <https://arxiv.org/html/2611.26503v1#S7.SS3>"
+    },
+    {
+      "category": "Research in action",
+      "evidenceKind": "demo",
+      "modelNote": "CASPER and the comparison sessions used Claude Opus 5.5; CASPER added specialist review roles.",
+      "sources": [
+        "https://arxiv.org/abs/2611.29902",
+        "https://arxiv.org/html/2611.29902v1#S3"
+      ],
+      "status": "Preliminary computational research demonstration; code and run logs promised upon acceptance.",
+      "takeaway": "An AI research system spotted when apparently successful chemistry calculations were describing the wrong behavior, then changed its approach and recalculated. A November 23 preprint tested CASPER on five previously studied reactions involving metals. In two comparisons, it caught important problems that a separate session of the same AI missed. People supplied the reaction paths, chemical rules and checking framework, then reviewed the results. This demonstrates scientific troubleshooting in computer experiments—not a newly discovered reaction; the small study lacks independent replication, and its code and run logs are not yet public.",
+      "title": "AI catches misleading results while studying chemical reactions",
+      "id": "d-1574806285491109909-casper-checks-chemical-reaction-calculations",
+      "coveredOn": "2026-11-24",
+      "context": "🔬 **AI Discovery Watch · November 24, 2026**\n\n**AI catches misleading results while studying chemical reactions**\nAn AI research system spotted when apparently successful chemistry calculations were describing the wrong behavior, then changed its approach and recalculated. A November 23 preprint tested CASPER on five previously studied reactions involving metals. In two comparisons, it caught important problems that a separate session of the same AI missed. People supplied the reaction paths, chemical rules and checking framework, then reviewed the results. This demonstrates scientific troubleshooting in computer experiments—not a newly discovered reaction; the small study lacks independent replication, and its code and run logs are not yet public.\n\n**AI used:** CASPER and the comparison sessions used Claude Opus 5.5; CASPER added specialist review roles.\n**Evidence:** Preliminary computational research demonstration; code and run logs promised upon acceptance.\nOriginal source: <https://arxiv.org/abs/2611.29902>\nSupporting source: <https://arxiv.org/html/2611.29902v1#S3>"
+    },
+    {
+      "category": "Computing & engineering",
+      "evidenceKind": "demo",
+      "modelNote": "GPT-6 Astra proposed stent shapes and interpreted simulation results; people supplied the simulation and design limits.",
+      "sources": [
+        "https://arxiv.org/abs/2611.26003",
+        "https://arxiv.org/html/2611.26003v2#S5.SS2"
+      ],
+      "status": "Preliminary simulation study. A detailed follow-up simulation of an earlier design showed trade-offs: lower worst-spot damage, but more metal above a damage threshold.",
+      "takeaway": "AI redesigned a metal stent—a small scaffold used to hold a passage open—by studying where it bent too much in computer tests. A November 19 preprint, revised November 22, reports a 32% reduction in a measure of concentrated stretching after 15 simulations. People built the simulator, chose the goal and defined which shapes were allowed; GPT-6 Astra proposed and revised the designs. This shows informed engineering exploration, not just automatic drawing. No new device was physically tested, and the study does not establish a safer medical implant.",
+      "title": "AI reshapes a tiny metal scaffold using simulated stress tests",
+      "id": "d-1574806515670319226-ai-redesigns-stent-in-simulation",
+      "coveredOn": "2026-11-24",
+      "context": "🔬 **AI Discovery Watch · November 24, 2026**\n\n**AI reshapes a tiny metal scaffold using simulated stress tests**\nAI redesigned a metal stent—a small scaffold used to hold a passage open—by studying where it bent too much in computer tests. A November 19 preprint, revised November 22, reports a 32% reduction in a measure of concentrated stretching after 15 simulations. People built the simulator, chose the goal and defined which shapes were allowed; GPT-6 Astra proposed and revised the designs. This shows informed engineering exploration, not just automatic drawing. No new device was physically tested, and the study does not establish a safer medical implant.\n\n**AI used:** GPT-6 Astra proposed stent shapes and interpreted simulation results; people supplied the simulation and design limits.\n**Evidence:** Preliminary simulation study. A detailed follow-up simulation of an earlier design showed trade-offs: lower worst-spot damage, but more metal above a damage threshold.\nOriginal source: <https://arxiv.org/abs/2611.26003>\nSupporting source: <https://arxiv.org/html/2611.26003v2#S5.SS2>"
+    },
+    {
+      "category": "Research in action",
+      "evidenceKind": "demo",
+      "modelNote": "Phasonaut used GPT-5.4 for the unexplored model and GPT-5.2 with high reasoning for known-system tests.",
+      "sources": [
+        "https://arxiv.org/abs/2611.26749",
+        "https://arxiv.org/html/2611.26749v1#S3.SS1"
+      ],
+      "status": "Early autonomous-research demonstration in simulations; author-reported, not independently reproduced.",
+      "takeaway": "Phasonaut chose simulated experiments, interpreted their results and mapped where magnetic patterns change, much like locating boundaries on a map. The November 19 preprint reports success on known examples and a plausible map for a model the authors say was previously unexplored. People supplied the simulators, instructions and analysis tools; AI chose measurements and revised its explanations. This demonstrates a research process, not a new material or a physical laboratory experiment. Researchers checked the new map with their own calculations, but independent confirmation is missing and the system can overlook entire patterns.",
+      "title": "AI chooses its own tests to map how simulated magnets behave",
+      "id": "d-1574443666188140586-phasonaut-maps-simulated-magnetic-states",
+      "coveredOn": "2026-11-23",
+      "context": "🔬 **AI Discovery Watch · November 23, 2026**\n\n**AI chooses its own tests to map how simulated magnets behave**\nPhasonaut chose simulated experiments, interpreted their results and mapped where magnetic patterns change, much like locating boundaries on a map. The November 19 preprint reports success on known examples and a plausible map for a model the authors say was previously unexplored. People supplied the simulators, instructions and analysis tools; AI chose measurements and revised its explanations. This demonstrates a research process, not a new material or a physical laboratory experiment. Researchers checked the new map with their own calculations, but independent confirmation is missing and the system can overlook entire patterns.\n\n**AI used:** Phasonaut used GPT-5.4 for the unexplored model and GPT-5.2 with high reasoning for known-system tests.\n**Evidence:** Early autonomous-research demonstration in simulations; author-reported, not independently reproduced.\nOriginal source: <https://arxiv.org/abs/2611.26749>\nSupporting source: <https://arxiv.org/html/2611.26749v1#S3.SS1>"
+    },
+    {
+      "category": "Physics & materials",
+      "evidenceKind": "followup",
+      "modelNote": "Shanghai AI Laboratory's 书生·能工 agent on its 书生·端砚 platform; underlying model/version not disclosed.",
+      "sources": [
+        "https://finance.sina.com.cn/jjxw/2026-11-23/doc-inizskhn2338616.shtml",
+        "https://www.shlab.org.cn/news/5444221"
+      ],
+      "status": "Project-reported deployment update, described in newspaper interviews; performance and commissioning dates not independently verified.",
+      "takeaway": "New reporting says an AI-suggested vitamin C recipe is now being used in large batteries that store wind and solar electricity. This November 23 update concerns deployment in Henan and Guangdong—not a discovery made today: the AI's suggestion dates to late 2025. Shanghai AI Lab's agent connected clues from scientific literature; people chose the goal, ran experiments and refined and scaled the recipe. The team reports better storage and lower costs, but the article supplies no paper, raw tests or independent performance assessment.",
+      "title": "Reported update: an AI-suggested battery recipe moves into use",
+      "id": "d-1574444327772622889-vitamin-c-battery-recipe-reported-deployment",
+      "coveredOn": "2026-11-23",
+      "context": "🔬 **AI Discovery Watch · November 23, 2026**\n\n**Reported update: an AI-suggested battery recipe moves into use**\nNew reporting says an AI-suggested vitamin C recipe is now being used in large batteries that store wind and solar electricity. This November 23 update concerns deployment in Henan and Guangdong—not a discovery made today: the AI's suggestion dates to late 2025. Shanghai AI Lab's agent connected clues from scientific literature; people chose the goal, ran experiments and refined and scaled the recipe. The team reports better storage and lower costs, but the article supplies no paper, raw tests or independent performance assessment.\n\n**AI used:** Shanghai AI Laboratory's 书生·能工 agent on its 书生·端砚 platform; underlying model/version not disclosed.\n**Evidence:** Project-reported deployment update, described in newspaper interviews; performance and commissioning dates not independently verified.\nOriginal source: <https://finance.sina.com.cn/jjxw/2026-11-23/doc-inizskhn2338616.shtml>\nSupporting source: <https://www.shlab.org.cn/news/5444221>"
+    },
+    {
+      "category": "Research in action",
+      "evidenceKind": "demo",
+      "modelNote": "Claude Code with Opus 4.8 performed the galaxy-model search; automodel supplied the workflow.",
+      "sources": [
+        "https://arxiv.org/abs/2611.24347",
+        "https://arxiv.org/html/2611.24347v1#S4"
+      ],
+      "status": "Early preprint; author-reported tests, not independent confirmation or a separate-survey test.",
+      "takeaway": "AI agents found a shorter formula for describing how common galaxies of different stellar masses are. A November 18 preprint reports that it describes sky-survey measurements better than the tested standard formulas after accounting for complexity. Researchers supplied the data, scientific rules and scoring method; Claude proposed and tested new formulas through the automodel workflow. Both datasets came from the same survey, so broader reliability remains uncertain. This is a human-guided research demonstration, not a new law of nature.",
+      "title": "A guided AI search finds a simpler way to describe galaxy populations",
+      "id": "d-1574081537333526710-automodel-galaxy-population-formula",
+      "coveredOn": "2026-11-22",
+      "context": "🔬 **AI Discovery Watch · November 22, 2026**\n\n**A guided AI search finds a simpler way to describe galaxy populations**\nAI agents found a shorter formula for describing how common galaxies of different stellar masses are. A November 18 preprint reports that it describes sky-survey measurements better than the tested standard formulas after accounting for complexity. Researchers supplied the data, scientific rules and scoring method; Claude proposed and tested new formulas through the automodel workflow. Both datasets came from the same survey, so broader reliability remains uncertain. This is a human-guided research demonstration, not a new law of nature.\n\n**AI used:** Claude Code with Opus 4.8 performed the galaxy-model search; automodel supplied the workflow.\n**Evidence:** Early preprint; author-reported tests, not independent confirmation or a separate-survey test.\nOriginal source: <https://arxiv.org/abs/2611.24347>\nSupporting source: <https://arxiv.org/html/2611.24347v1#S4>"
+    },
+    {
+      "category": "Mathematics",
+      "evidenceKind": "followup",
+      "modelNote": "Claude helped develop the original proof; version unspecified. Lean and independent proof-checking programs checked it.",
+      "sources": [
+        "https://leanprover-community.github.io/blog/posts/riemann-hypothesis/",
+        "https://math.mit.edu/~drew/grh/"
+      ],
+      "status": "Independent formal checks reported by specialists; not rerun here. This is a validation update, not a second discovery.",
+      "takeaway": "The Riemann hypothesis proof reported yesterday has passed important independent checks, according to the Lean and Mathlib communities. Their November 21 statement says specialists checked both the computer-written argument and whether it actually proves the intended prediction about prime numbers. MIT mathematician Andrew Sutherland also reports checks covering a related prediction for a particular family of mathematical functions—not every broader version. Levent Alpöge guided the original research, with Claude supplying crucial ideas. These reports strengthen the earlier claim; explaining the proof's mathematical ideas remains work ahead, and this monitor has not rerun the checks.",
+      "title": "Independent specialists report checking the AI-assisted prime-number proof",
+      "id": "d-1573718758017732803-riemann-proof-independent-formal-checks",
+      "coveredOn": "2026-11-21",
+      "context": "🔬 **AI Discovery Watch · November 21, 2026**\n\n**Independent specialists report checking the AI-assisted prime-number proof**\nThe Riemann hypothesis proof reported yesterday has passed important independent checks, according to the Lean and Mathlib communities. Their November 21 statement says specialists checked both the computer-written argument and whether it actually proves the intended prediction about prime numbers. MIT mathematician Andrew Sutherland also reports checks covering a related prediction for a particular family of mathematical functions—not every broader version. Levent Alpöge guided the original research, with Claude supplying crucial ideas. These reports strengthen the earlier claim; explaining the proof's mathematical ideas remains work ahead, and this monitor has not rerun the checks.\n\n**AI used:** Claude helped develop the original proof; version unspecified. Lean and independent proof-checking programs checked it.\n**Evidence:** Independent formal checks reported by specialists; not rerun here. This is a validation update, not a second discovery.\nOriginal source: <https://leanprover-community.github.io/blog/posts/riemann-hypothesis/>\nSupporting source: <https://math.mit.edu/~drew/grh/>"
+    },
+    {
+      "category": "Mathematics",
+      "evidenceKind": "followup",
+      "modelNote": "Original Alpöge collaboration: Claude, version unspecified. Models used to flag problems in the competing proof are unnamed.",
+      "sources": [
+        "https://math216.wordpress.com/2026/11/20/hurried-announcement-alessandro-masullo-grh/",
+        "https://www.scientificamerican.com/article/dueling-claims-of-riemann-hypothesis-proofs-emerge/"
+      ],
+      "status": "Priority clarification: competing human proof remains unverified, with problems reported.",
+      "takeaway": "A separate human-only proof claim complicates who first solved the prime-number prediction discussed yesterday. Stanford mathematician Ravi Vakil announced Alessandro Masullo's proposed proof on November 20, saying Brian Conrad had reviewed it for months. Vakil later added that several people had reported problems with help from different AI models; he does not endorse the proof strategy's correctness. Scientific American reports that major revision is needed. This does not overturn the checks of Alpöge and Claude's separate proof, but neither an earlier successful human proof nor its priority has been established.",
+      "title": "A competing human proof claim leaves credit for the prime-number breakthrough unresolved",
+      "id": "d-1573719084112289914-riemann-competing-human-proof-priority",
+      "coveredOn": "2026-11-21",
+      "context": "🔬 **AI Discovery Watch · November 21, 2026**\n\n**A competing human proof claim leaves credit for the prime-number breakthrough unresolved**\nA separate human-only proof claim complicates who first solved the prime-number prediction discussed yesterday. Stanford mathematician Ravi Vakil announced Alessandro Masullo's proposed proof on November 20, saying Brian Conrad had reviewed it for months. Vakil later added that several people had reported problems with help from different AI models; he does not endorse the proof strategy's correctness. Scientific American reports that major revision is needed. This does not overturn the checks of Alpöge and Claude's separate proof, but neither an earlier successful human proof nor its priority has been established.\n\n**AI used:** Original Alpöge collaboration: Claude, version unspecified. Models used to flag problems in the competing proof are unnamed.\n**Evidence:** Priority clarification: competing human proof remains unverified, with problems reported.\nOriginal source: <https://math216.wordpress.com/2026/11/20/hurried-announcement-alessandro-masullo-grh/>\nSupporting source: <https://www.scientificamerican.com/article/dueling-claims-of-riemann-hypothesis-proofs-emerge/>"
+    },
+    {
+      "category": "Mathematics",
+      "evidenceKind": "proof",
+      "modelNote": "Anthropic Claude; model version not identified in the announcement. Alpöge guided the research and collaborated on the proof.",
+      "sources": [
+        "https://alpo.ge/remark.pdf",
+        "https://www.scientificamerican.com/article/anthropic-mathematician-claims-to-prove-riemann-hypothesis-most-famous-problem-in-all-of-math/"
+      ],
+      "status": "Author-reported proof and formalization; not independently verified here or established as an accepted solution.",
+      "takeaway": "Levent Alpöge says he and Claude have proved the Riemann hypothesis, a famous prediction about the pattern of prime numbers, and also claims its broader generalized version. His November 20 announcement credits human guidance with choosing the approach and Claude with crucial final ideas. He links a large computer-checkable proof, but has not yet supplied a readable mathematical account. If correct, this would settle a central question dating to 1859. This is a proof claim—not an accepted solution; independent checks of the argument and its exact scope are still needed.",
+      "title": "A mathematician and Claude claim a proof of a famous prime-number prediction",
+      "id": "d-1573356485621186713-alpoge-claude-riemann-proof-claim",
+      "coveredOn": "2026-11-20",
+      "context": "🔬 **AI Discovery Watch · November 20, 2026**\n\n**A mathematician and Claude claim a proof of a famous prime-number prediction**\nLevent Alpöge says he and Claude have proved the Riemann hypothesis, a famous prediction about the pattern of prime numbers, and also claims its broader generalized version. His November 20 announcement credits human guidance with choosing the approach and Claude with crucial final ideas. He links a large computer-checkable proof, but has not yet supplied a readable mathematical account. If correct, this would settle a central question dating to 1859. This is a proof claim—not an accepted solution; independent checks of the argument and its exact scope are still needed.\n\n**AI used:** Anthropic Claude; model version not identified in the announcement. Alpöge guided the research and collaborated on the proof.\n**Evidence:** Author-reported proof and formalization; not independently verified here or established as an accepted solution.\nOriginal source: <https://alpo.ge/remark.pdf>\nSupporting source: <https://www.scientificamerican.com/article/anthropic-mathematician-claims-to-prove-riemann-hypothesis-most-famous-problem-in-all-of-math/>"
+    },
+    {
+      "category": "Medicine & biology",
+      "evidenceKind": "lab",
+      "modelNote": "RhoAgent coordinates the RDiff RNA generator. The study’s underlying language-model version is not identified in the reviewed university report.",
+      "sources": [
+        "https://www.nature.com/articles/s41587-026-03362-3",
+        "https://www.cse.cuhk.edu.hk/news/rhoagent-a-virtual-scientist-for-the-programmable-design-of-functional-rna/"
+      ],
+      "status": "Peer-reviewed study; laboratory results reported by the research team, not independently replicated in the reviewed sources.",
+      "takeaway": "An AI system designed RNA molecules—chemical strands used by cells—and revised them after laboratory feedback. A November 19 study reports that RhoAgent improved designs that can cut themselves apart, a building block for biological tools. Among the five best candidates, the average share that split apart rose 12% in the second design round. People supplied design instructions and laboratory measurements; this was not a fully self-running lab. The study is peer-reviewed, but independent replication is not established in the university’s report, and no medical benefit was demonstrated.",
+      "title": "AI-designed RNA improves after laboratory feedback",
+      "id": "d-1573357155288096971-rhoagent-rna-lab-feedback",
+      "coveredOn": "2026-11-20",
+      "context": "🔬 **AI Discovery Watch · November 20, 2026**\n\n**AI-designed RNA improves after laboratory feedback**\nAn AI system designed RNA molecules—chemical strands used by cells—and revised them after laboratory feedback. A November 19 study reports that RhoAgent improved designs that can cut themselves apart, a building block for biological tools. Among the five best candidates, the average share that split apart rose 12% in the second design round. People supplied design instructions and laboratory measurements; this was not a fully self-running lab. The study is peer-reviewed, but independent replication is not established in the university’s report, and no medical benefit was demonstrated.\n\n**AI used:** RhoAgent coordinates the RDiff RNA generator. The study’s underlying language-model version is not identified in the reviewed university report.\n**Evidence:** Peer-reviewed study; laboratory results reported by the research team, not independently replicated in the reviewed sources.\nOriginal source: <https://www.nature.com/articles/s41587-026-03362-3>\nSupporting source: <https://www.cse.cuhk.edu.hk/news/rhoagent-a-virtual-scientist-for-the-programmable-design-of-functional-rna/>"
+    },
+    {
+      "category": "Research in action",
+      "evidenceKind": "demo",
+      "modelNote": "Claude Opus 5.5 through Claude Code; encoder experiments also tested Claude Fable 5.2 and Sonnet 5.",
+      "sources": [
+        "https://arxiv.org/abs/2611.23875",
+        "https://arxiv.org/html/2611.23875v1"
+      ],
+      "status": "Early laboratory capability demonstration; preprint, not independently confirmed.",
+      "takeaway": "AI tested a light-based computing device, examined camera images and devised ways to redirect the light, rather than just trying random settings. In a November 18 preprint, its best run recognized three handwritten digits with 96.8% accuracy, using notes from an earlier AI session. People built the equipment, software interface and tasks; the AI chose tests, interpreted results and designed adjustments. This shows promising experimental reasoning on real hardware, not a new law of physics. It remains a small laboratory demonstration without independent confirmation, and other runs performed less well.",
+      "title": "AI learns how to tune a light-based computer by experimenting",
+      "id": "d-1572994229225914518-optics-as-code-hardware-experiments",
+      "coveredOn": "2026-11-19",
+      "context": "🔬 **AI Discovery Watch · November 19, 2026**\n\n**AI learns how to tune a light-based computer by experimenting**\nAI tested a light-based computing device, examined camera images and devised ways to redirect the light, rather than just trying random settings. In a November 18 preprint, its best run recognized three handwritten digits with 96.8% accuracy, using notes from an earlier AI session. People built the equipment, software interface and tasks; the AI chose tests, interpreted results and designed adjustments. This shows promising experimental reasoning on real hardware, not a new law of physics. It remains a small laboratory demonstration without independent confirmation, and other runs performed less well.\n\n**AI used:** Claude Opus 5.5 through Claude Code; encoder experiments also tested Claude Fable 5.2 and Sonnet 5.\n**Evidence:** Early laboratory capability demonstration; preprint, not independently confirmed.\nOriginal source: <https://arxiv.org/abs/2611.23875>\nSupporting source: <https://arxiv.org/html/2611.23875v1>"
+    },
+    {
+      "category": "Mathematics",
+      "evidenceKind": "followup",
+      "modelNote": "Turing Agent used DeepSeek-V4-Pro and DeepSeek-V4.1-Flash for these research cases; Lean checked the formal proofs.",
+      "sources": [
+        "https://arxiv.org/abs/2611.21299",
+        "https://arxiv.org/html/2611.21299v1"
+      ],
+      "status": "Author-reported computer-checked proofs; preliminary preprint, not independently rebuilt here.",
+      "takeaway": "A second AI system reports filling missing steps in computer-checkable versions of earlier AI-written proofs. One concerns how predictably a growing collection of random logical rules becomes impossible to satisfy; another studies how networks change when connections are added. The November 16 preprint says Lean, a mathematical proof checker, accepted the completed arguments. Researchers selected the earlier manuscripts and built the checking workflow, while Turing Agent constructed the missing steps. This checks earlier claims rather than announcing new theorems. The reported checks have not been independently rerun here, and translating the original claims faithfully still matters.",
+      "title": "Another AI fills gaps in checking earlier AI-written mathematics",
+      "id": "d-1572994540049141842-turing-agent-completes-proof-checking",
+      "coveredOn": "2026-11-19",
+      "context": "🔬 **AI Discovery Watch · November 19, 2026**\n\n**Another AI fills gaps in checking earlier AI-written mathematics**\nA second AI system reports filling missing steps in computer-checkable versions of earlier AI-written proofs. One concerns how predictably a growing collection of random logical rules becomes impossible to satisfy; another studies how networks change when connections are added. The November 16 preprint says Lean, a mathematical proof checker, accepted the completed arguments. Researchers selected the earlier manuscripts and built the checking workflow, while Turing Agent constructed the missing steps. This checks earlier claims rather than announcing new theorems. The reported checks have not been independently rerun here, and translating the original claims faithfully still matters.\n\n**AI used:** Turing Agent used DeepSeek-V4-Pro and DeepSeek-V4.1-Flash for these research cases; Lean checked the formal proofs.\n**Evidence:** Author-reported computer-checked proofs; preliminary preprint, not independently rebuilt here.\nOriginal source: <https://arxiv.org/abs/2611.21299>\nSupporting source: <https://arxiv.org/html/2611.21299v1>"
+    },
+    {
+      "category": "Computing & engineering",
+      "evidenceKind": "demo",
+      "modelNote": "Architect Labs' AI agent teams; underlying model names and versions are not disclosed in this report.",
+      "sources": [
+        "https://architectlabs.com/blog/frostbite"
+      ],
+      "status": "Company-reported pre-manufacturing design results; not independently verified or demonstrated in working silicon.",
+      "takeaway": "Architect Labs says AI teams developed a processor whose busy sections can hand work to idle neighbors, like workers sharing a queue. Its November 18 report describes AI repeatedly changing the software and hardware together, then testing and keeping useful changes. People supplied the tools, constraints and evaluation workloads. The company reports better simulated energy efficiency than one unnamed comparison processor, including on tasks withheld during design. This is an early design-and-checking demonstration, not a tested manufactured chip; comparisons with a broader range of processors and independent checks are still missing.",
+      "title": "AI teams explore a processor design that shares spare computing capacity",
+      "id": "d-1572994998394159201-frostbite-ai-processor-codesign",
+      "coveredOn": "2026-11-19",
+      "context": "🔬 **AI Discovery Watch · November 19, 2026**\n\n**AI teams explore a processor design that shares spare computing capacity**\nArchitect Labs says AI teams developed a processor whose busy sections can hand work to idle neighbors, like workers sharing a queue. Its November 18 report describes AI repeatedly changing the software and hardware together, then testing and keeping useful changes. People supplied the tools, constraints and evaluation workloads. The company reports better simulated energy efficiency than one unnamed comparison processor, including on tasks withheld during design. This is an early design-and-checking demonstration, not a tested manufactured chip; comparisons with a broader range of processors and independent checks are still missing.\n\n**AI used:** Architect Labs' AI agent teams; underlying model names and versions are not disclosed in this report.\n**Evidence:** Company-reported pre-manufacturing design results; not independently verified or demonstrated in working silicon.\nOriginal source: <https://architectlabs.com/blog/frostbite>"
+    },
+    {
+      "category": "Physics & materials",
+      "evidenceKind": "lab",
+      "modelNote": "QORA uses GPT-6-Astra and Sorol for its theory-and-experiment agent system; finer model-role assignments are not specified.",
+      "sources": [
+        "https://arxiv.org/abs/2611.21765",
+        "https://arxiv.org/html/2611.21765v1"
+      ],
+      "status": "Early laboratory result reported by the authors; not independently replicated or established by peer review.",
+      "takeaway": "AI agents designed and tested microwave pulse patterns that kept quantum states in diamond stable for almost twice as long as a leading human-designed pattern. The November 16 preprint reports roughly 19 microseconds instead of 10—a small timespan, but an important laboratory measure of protection from noise. People set the goals, supervised the apparatus and worked out why the new patterns helped; the agents proposed patterns, calibrated equipment and used measurements to guide further searches. This is an early result in one diamond system, not a demonstrated improvement to a complete quantum computer.",
+      "title": "AI finds microwave patterns that protect fragile quantum states",
+      "id": "d-1572631645046046827-qora-protects-diamond-quantum-states",
+      "coveredOn": "2026-11-18",
+      "context": "🔬 **AI Discovery Watch · November 18, 2026**\n\n**AI finds microwave patterns that protect fragile quantum states**\nAI agents designed and tested microwave pulse patterns that kept quantum states in diamond stable for almost twice as long as a leading human-designed pattern. The November 16 preprint reports roughly 19 microseconds instead of 10—a small timespan, but an important laboratory measure of protection from noise. People set the goals, supervised the apparatus and worked out why the new patterns helped; the agents proposed patterns, calibrated equipment and used measurements to guide further searches. This is an early result in one diamond system, not a demonstrated improvement to a complete quantum computer.\n\n**AI used:** QORA uses GPT-6-Astra and Sorol for its theory-and-experiment agent system; finer model-role assignments are not specified.\n**Evidence:** Early laboratory result reported by the authors; not independently replicated or established by peer review.\nOriginal source: <https://arxiv.org/abs/2611.21765>\nSupporting source: <https://arxiv.org/html/2611.21765v1>"
+    },
+    {
+      "category": "Medicine & biology",
+      "evidenceKind": "lab",
+      "modelNote": "Abelio generated the proposals using commercial OpenAI, Anthropic, Google and xAI models; exact hypothesis-generating versions are not identified in the inspected methods.",
+      "sources": [
+        "https://arxiv.org/abs/2611.22988",
+        "https://arxiv.org/html/2611.22988v1"
+      ],
+      "status": "Early laboratory proof of concept, not a treatment; two experiments per assay, with researchers aware of treatment groups.",
+      "takeaway": "AI proposed using matching DNA strands attached to neighboring cells as tiny, reversible bridges across a damaged intestinal barrier. In a November 17 preprint, researchers report that treated cell layers leaked less, and adding a strand that disrupted the DNA pairing reversed the effect. People chose the research goal, selected proposals, refined the experimental details and performed the laboratory work. This offers a testable new repair strategy, but the bridges themselves were not directly seen. Results come from cultured cells, not animals or patients, and need independent confirmation.",
+      "title": "AI proposes DNA bridges to reduce leaks between intestinal cells",
+      "id": "d-1572631882888257659-abelio-dna-bridges-cell-barrier",
+      "coveredOn": "2026-11-18",
+      "context": "🔬 **AI Discovery Watch · November 18, 2026**\n\n**AI proposes DNA bridges to reduce leaks between intestinal cells**\nAI proposed using matching DNA strands attached to neighboring cells as tiny, reversible bridges across a damaged intestinal barrier. In a November 17 preprint, researchers report that treated cell layers leaked less, and adding a strand that disrupted the DNA pairing reversed the effect. People chose the research goal, selected proposals, refined the experimental details and performed the laboratory work. This offers a testable new repair strategy, but the bridges themselves were not directly seen. Results come from cultured cells, not animals or patients, and need independent confirmation.\n\n**AI used:** Abelio generated the proposals using commercial OpenAI, Anthropic, Google and xAI models; exact hypothesis-generating versions are not identified in the inspected methods.\n**Evidence:** Early laboratory proof of concept, not a treatment; two experiments per assay, with researchers aware of treatment groups.\nOriginal source: <https://arxiv.org/abs/2611.22988>\nSupporting source: <https://arxiv.org/html/2611.22988v1>"
+    },
+    {
+      "category": "Medicine & biology",
+      "evidenceKind": "followup",
+      "modelNote": "Claude Mythos 5 supplied the original discovery; Claude Opus 5 planned the new tests, with substantial human oversight.",
+      "sources": [
+        "https://cloud.ginkgo.bio/blog/art-reverse-transcriptase-activity",
+        "https://maccus.fr/en/ai-enzyme-lab-validation/"
+      ],
+      "status": "Company-reported follow-up with published assay data, not peer-reviewed. Specificity and DNA-product sequencing remain untested.",
+      "takeaway": "Two enzymes from a family first flagged by Claude in September have now passed their first activity tests. Ginkgo’s November 17 report says they copied their associated RNA into DNA; two other candidates remained inconclusive. Claude planned the experiments using a robotic laboratory’s available procedures, while people reviewed designs, added controls and rescued an insensitive measurement. This closes an important gap between spotting an unusual genetic pattern and showing biochemical activity. The tests do not establish the enzymes’ job in living organisms or whether they defend against viruses.",
+      "title": "New lab tests show that two AI-discovered enzymes actually work",
+      "id": "d-1572632092863504506-art-enzymes-first-activity-tests",
+      "coveredOn": "2026-11-18",
+      "context": "🔬 **AI Discovery Watch · November 18, 2026**\n\n**New lab tests show that two AI-discovered enzymes actually work**\nTwo enzymes from a family first flagged by Claude in September have now passed their first activity tests. Ginkgo’s November 17 report says they copied their associated RNA into DNA; two other candidates remained inconclusive. Claude planned the experiments using a robotic laboratory’s available procedures, while people reviewed designs, added controls and rescued an insensitive measurement. This closes an important gap between spotting an unusual genetic pattern and showing biochemical activity. The tests do not establish the enzymes’ job in living organisms or whether they defend against viruses.\n\n**AI used:** Claude Mythos 5 supplied the original discovery; Claude Opus 5 planned the new tests, with substantial human oversight.\n**Evidence:** Company-reported follow-up with published assay data, not peer-reviewed. Specificity and DNA-product sequencing remain untested.\nOriginal source: <https://cloud.ginkgo.bio/blog/art-reverse-transcriptase-activity>\nSupporting source: <https://maccus.fr/en/ai-enzyme-lab-validation/>"
+    },
+    {
+      "category": "Medicine & biology",
+      "evidenceKind": "early",
+      "modelNote": "Claude Opus 4.6 directed the research; Sonnet 4.5 ran early analyses, then Opus 4.6. Humans steered hypotheses across 13 rounds.",
+      "sources": [
+        "https://arxiv.org/abs/2611.21950",
+        "https://arxiv.org/html/2611.21950v1"
+      ],
+      "status": "Early computational finding from existing experimental data, not independently confirmed; association is not proof of disease causation.",
+      "takeaway": "AI spotted a pattern in existing immune-cell data: genes that receive many regulatory signals and influence many other genes were unusually associated with autoimmune disease. The November 16 preprint calls them “relay genes,” like busy junctions in a communications network. DiscoveryAgent proposed this idea and tested alternatives while a biologist chose research directions and interpreted the evidence. The association could guide follow-up experiments, but it does not identify which genes cause an individual disease. The disease link did not carry over to a different cell type, and no new treatment was tested.",
+      "title": "AI spots gene-network relays linked to autoimmune disease",
+      "id": "d-1572632558213013585-discoveryagent-immune-gene-relays",
+      "coveredOn": "2026-11-18",
+      "context": "🔬 **AI Discovery Watch · November 18, 2026**\n\n**AI spots gene-network relays linked to autoimmune disease**\nAI spotted a pattern in existing immune-cell data: genes that receive many regulatory signals and influence many other genes were unusually associated with autoimmune disease. The November 16 preprint calls them “relay genes,” like busy junctions in a communications network. DiscoveryAgent proposed this idea and tested alternatives while a biologist chose research directions and interpreted the evidence. The association could guide follow-up experiments, but it does not identify which genes cause an individual disease. The disease link did not carry over to a different cell type, and no new treatment was tested.\n\n**AI used:** Claude Opus 4.6 directed the research; Sonnet 4.5 ran early analyses, then Opus 4.6. Humans steered hypotheses across 13 rounds.\n**Evidence:** Early computational finding from existing experimental data, not independently confirmed; association is not proof of disease causation.\nOriginal source: <https://arxiv.org/abs/2611.21950>\nSupporting source: <https://arxiv.org/html/2611.21950v1>"
+    },
+    {
+      "category": "Research in action",
+      "evidenceKind": "demo",
+      "modelNote": "VibeSyn: primarily OpenAI o3-2025-04-16 for task agents; GPT-5-2025-08-07 for image analysis.",
+      "sources": [
+        "https://arxiv.org/abs/2611.18772",
+        "https://arxiv.org/pdf/2611.18772"
+      ],
+      "status": "Author-reported laboratory demonstration; unreviewed preprint, not independently replicated.",
+      "takeaway": "An AI-led lab adjusted a ten-step chemical recipe as results arrived. In a November 12 preprint, VibeSyn’s team reports making 160 milligrams of catharanthine, a known molecule. The system changed reaction conditions after poor yields and adapted handling when mixtures caused problems. People chose the target and starting route, approved key choices and manually performed one step. This demonstrates adaptive laboratory research—not a new drug—and remains unreviewed and not independently replicated.",
+      "title": "An AI-led lab adapts a ten-step chemical recipe",
+      "id": "d-1572269502790508569-vibesyn-adaptive-ten-step-synthesis",
+      "coveredOn": "2026-11-17",
+      "context": "🔬 **AI Discovery Watch · November 17, 2026**\n\n**An AI-led lab adapts a ten-step chemical recipe**\nAn AI-led lab adjusted a ten-step chemical recipe as results arrived. In a November 12 preprint, VibeSyn’s team reports making 160 milligrams of catharanthine, a known molecule. The system changed reaction conditions after poor yields and adapted handling when mixtures caused problems. People chose the target and starting route, approved key choices and manually performed one step. This demonstrates adaptive laboratory research—not a new drug—and remains unreviewed and not independently replicated.\n\n**AI used:** VibeSyn: primarily OpenAI o3-2025-04-16 for task agents; GPT-5-2025-08-07 for image analysis.\n**Evidence:** Author-reported laboratory demonstration; unreviewed preprint, not independently replicated.\nOriginal source: <https://arxiv.org/abs/2611.18772>\nSupporting source: <https://arxiv.org/pdf/2611.18772>"
+    },
+    {
+      "category": "Mathematics",
+      "evidenceKind": "proof",
+      "modelNote": "GPT-Astra, as named by the authors; exact model version not specified.",
+      "sources": [
+        "https://arxiv.org/abs/2611.17567",
+        "https://arxiv.org/pdf/2611.17567"
+      ],
+      "status": "Unreviewed mathematical proof claim; no independent verification established.",
+      "takeaway": "Mathematicians report a general way to describe hidden patterns that ordinary wave-based analysis can miss. Their November 12 paper claims to settle the Jamneshan–Tao conjecture by connecting these patterns to a family of geometric models. This would give researchers a more unified toolkit for studying mathematical patterns. People supplied earlier results; collaboration with GPT-Astra produced an initial general proof, which they then refined together over many iterations. The paper is an unreviewed proof claim, not an independently checked theorem.",
+      "title": "AI collaboration tackles a general rule for hidden patterns",
+      "id": "d-1572269763713957911-jamneshan-tao-pattern-proof-claim",
+      "coveredOn": "2026-11-17",
+      "context": "🔬 **AI Discovery Watch · November 17, 2026**\n\n**AI collaboration tackles a general rule for hidden patterns**\nMathematicians report a general way to describe hidden patterns that ordinary wave-based analysis can miss. Their November 12 paper claims to settle the Jamneshan–Tao conjecture by connecting these patterns to a family of geometric models. This would give researchers a more unified toolkit for studying mathematical patterns. People supplied earlier results; collaboration with GPT-Astra produced an initial general proof, which they then refined together over many iterations. The paper is an unreviewed proof claim, not an independently checked theorem.\n\n**AI used:** GPT-Astra, as named by the authors; exact model version not specified.\n**Evidence:** Unreviewed mathematical proof claim; no independent verification established.\nOriginal source: <https://arxiv.org/abs/2611.17567>\nSupporting source: <https://arxiv.org/pdf/2611.17567>"
+    },
+    {
+      "category": "Research in action",
+      "evidenceKind": "demo",
+      "modelNote": "GPT-5.6 Sol in Codex performed the simulated training investigations and real-data analyses; model weights stayed fixed.",
+      "sources": [
+        "https://arxiv.org/abs/2611.17539",
+        "https://arxiv.org/html/2611.17539v1"
+      ],
+      "status": "Early preprint; author-reported analysis of existing measurements, not independently replicated.",
+      "takeaway": "In a November 12 preprint, an AI learned from simulated X-ray puzzles and wrote tools for interpreting real crystal mixtures. It reconstructed a known crystal component missing from its reference library by adapting a related structure, showing how simulated practice can improve scientific investigation. People supplied earlier measurements, scientific software and training rules; the AI did not run physical experiments. This is a research-capability demonstration, not a newly discovered material. Tests covered only 15 measurements, better-fitting patterns do not prove the structures correct, and simply providing more scientific context produced better average fits than the learned strategy.",
+      "title": "AI learns a new search strategy for identifying crystal mixtures",
+      "id": "d-1571907181794824233-ai-learns-to-identify-missing-crystal-component",
+      "coveredOn": "2026-11-16",
+      "context": "🔬 **AI Discovery Watch · November 16, 2026**\n\n**AI learns a new search strategy for identifying crystal mixtures**\nIn a November 12 preprint, an AI learned from simulated X-ray puzzles and wrote tools for interpreting real crystal mixtures. It reconstructed a known crystal component missing from its reference library by adapting a related structure, showing how simulated practice can improve scientific investigation. People supplied earlier measurements, scientific software and training rules; the AI did not run physical experiments. This is a research-capability demonstration, not a newly discovered material. Tests covered only 15 measurements, better-fitting patterns do not prove the structures correct, and simply providing more scientific context produced better average fits than the learned strategy.\n\n**AI used:** GPT-5.6 Sol in Codex performed the simulated training investigations and real-data analyses; model weights stayed fixed.\n**Evidence:** Early preprint; author-reported analysis of existing measurements, not independently replicated.\nOriginal source: <https://arxiv.org/abs/2611.17539>\nSupporting source: <https://arxiv.org/html/2611.17539v1>"
+    },
+    {
+      "category": "Mathematics",
+      "evidenceKind": "early",
+      "modelNote": "GPT-6-Pro, as named by the contributor, researched, self-reviewed and polished the manuscript.",
+      "sources": [
+        "https://hexagonmath.org/2611.00426v1",
+        "https://hexagonmath.org/pdf/2611.00426v1"
+      ],
+      "status": "Unreviewed proof claim. No independent expert check or formal verification established; a promised separate AI review is still pending.",
+      "takeaway": "A November 13 manuscript claims to settle one major case of a longstanding question about how many mathematical descriptions a symmetry system can have. If correct, it would bound that number using a smaller structure within the system, helping mathematicians classify these systems. Qiyue Tang posted the AI-generated work for scrutiny and reports about 29 hours of GPT-6-Pro research, followed by the same model reviewing its arguments. The deposit declares no human understanding of the work; this is an unverified proof claim, not an established solution, and it does not cover the conjecture in full.",
+      "title": "AI submits an unchecked proof about counting symmetries",
+      "id": "d-1571544744134311947-brauer-prime-two-unchecked-ai-proof-claim",
+      "coveredOn": "2026-11-15",
+      "context": "🔬 **AI Discovery Watch · November 15, 2026**\n\n**AI submits an unchecked proof about counting symmetries**\nA November 13 manuscript claims to settle one major case of a longstanding question about how many mathematical descriptions a symmetry system can have. If correct, it would bound that number using a smaller structure within the system, helping mathematicians classify these systems. Qiyue Tang posted the AI-generated work for scrutiny and reports about 29 hours of GPT-6-Pro research, followed by the same model reviewing its arguments. The deposit declares no human understanding of the work; this is an unverified proof claim, not an established solution, and it does not cover the conjecture in full.\n\n**AI used:** GPT-6-Pro, as named by the contributor, researched, self-reviewed and polished the manuscript.\n**Evidence:** Unreviewed proof claim. No independent expert check or formal verification established; a promised separate AI review is still pending.\nOriginal source: <https://hexagonmath.org/2611.00426v1>\nSupporting source: <https://hexagonmath.org/pdf/2611.00426v1>"
+    },
+    {
+      "category": "Research in action",
+      "evidenceKind": "demo",
+      "modelNote": "Claude Opus 5 with high thinking effort selected experiments and fitted models using Python; people supplied the fixed robotic workflow.",
+      "sources": [
+        "https://arxiv.org/abs/2611.11690",
+        "https://arxiv.org/html/2611.11690v1"
+      ],
+      "status": "Early laboratory capability demonstration, not independently replicated. Three targets, one run per method per target; not a general superiority claim.",
+      "takeaway": "A robot lab let Claude Opus 5 choose dye mixtures, examine measurements and change its mathematical strategy without people stepping in during three four-hour trials. The November 8 preprint reports that the agent reached three targets using fewer tests than a fixed statistical optimizer. People built the lab and software, chose the ingredients, targets and limits, and supplied the measurement rules. This demonstrates adaptive experimental control, not new chemistry: success meant matching just three light-absorption readings, sometimes despite visibly different colors. Only three targets were compared, and later trials repeated similar mixtures seeking favorable measurement noise.",
+      "title": "AI changes its experimental strategy while a robot mixes and measures",
+      "id": "d-1571545053401321486-claude-adapts-robot-dye-experiments",
+      "coveredOn": "2026-11-15",
+      "context": "🔬 **AI Discovery Watch · November 15, 2026**\n\n**AI changes its experimental strategy while a robot mixes and measures**\nA robot lab let Claude Opus 5 choose dye mixtures, examine measurements and change its mathematical strategy without people stepping in during three four-hour trials. The November 8 preprint reports that the agent reached three targets using fewer tests than a fixed statistical optimizer. People built the lab and software, chose the ingredients, targets and limits, and supplied the measurement rules. This demonstrates adaptive experimental control, not new chemistry: success meant matching just three light-absorption readings, sometimes despite visibly different colors. Only three targets were compared, and later trials repeated similar mixtures seeking favorable measurement noise.\n\n**AI used:** Claude Opus 5 with high thinking effort selected experiments and fitted models using Python; people supplied the fixed robotic workflow.\n**Evidence:** Early laboratory capability demonstration, not independently replicated. Three targets, one run per method per target; not a general superiority claim.\nOriginal source: <https://arxiv.org/abs/2611.11690>\nSupporting source: <https://arxiv.org/html/2611.11690v1>"
+    },
+    {
+      "category": "Computing & engineering",
+      "evidenceKind": "proof",
+      "modelNote": "GPT-6 Astra Ultra supplied the upper bound; Stellar Colosseum supplied the lower bound. Google identifies Gemini 4 involvement, but not its variant for this result.",
+      "sources": [
+        "https://arxiv.org/abs/2611.09809",
+        "https://research.google/blog/advancing-science-engineering-with-antigravitys-teamwork-feature/"
+      ],
+      "status": "Preprint; authors report human checking and a Lean-checked lower-bound proof. No independent verification established.",
+      "takeaway": "Even a quantum computer cannot always answer a yes-or-no question about a hidden string of bits with only half as many information requests as there are bits. A November 6 preprint supplies examples that need more, settling a question listed in 2014, and sharpens the limits for counting the ones. GPT-6 Astra Ultra found a faster counting method; Google's Stellar Colosseum found matching limits. People posed the questions, requested a simpler example, checked the arguments and rewrote them. This is a theoretical result about information requests, not a demonstrated speedup on quantum hardware.",
+      "title": "AI helps show why some quantum questions need extra checks",
+      "id": "d-1571182244972728454-quantum-halfway-query-limit",
+      "coveredOn": "2026-11-14",
+      "context": "🔬 **AI Discovery Watch · November 14, 2026**\n\n**AI helps show why some quantum questions need extra checks**\nEven a quantum computer cannot always answer a yes-or-no question about a hidden string of bits with only half as many information requests as there are bits. A November 6 preprint supplies examples that need more, settling a question listed in 2014, and sharpens the limits for counting the ones. GPT-6 Astra Ultra found a faster counting method; Google's Stellar Colosseum found matching limits. People posed the questions, requested a simpler example, checked the arguments and rewrote them. This is a theoretical result about information requests, not a demonstrated speedup on quantum hardware.\n\n**AI used:** GPT-6 Astra Ultra supplied the upper bound; Stellar Colosseum supplied the lower bound. Google identifies Gemini 4 involvement, but not its variant for this result.\n**Evidence:** Preprint; authors report human checking and a Lean-checked lower-bound proof. No independent verification established.\nOriginal source: <https://arxiv.org/abs/2611.09809>\nSupporting source: <https://research.google/blog/advancing-science-engineering-with-antigravitys-teamwork-feature/>"
+    },
+    {
+      "category": "Mathematics",
+      "evidenceKind": "proof",
+      "modelNote": "Gemini 4, exact variant unspecified, working through the Colosseum multi-agent harness.",
+      "sources": [
+        "https://arxiv.org/abs/2611.12867",
+        "https://github.com/sharaelong/optimal-injectivity-sparsestack"
+      ],
+      "status": "Preprint; authors report a full Lean-checked proof and human audit. No independent verification established.",
+      "takeaway": "A large table of numbers can be shrunk before calculations, but the summary must not erase a whole direction of information. A November 9 preprint shows that a standard random-mixing method can do this with fewer mixing operations than older guarantees required, and gives a nearly matching limit under stated assumptions. Gemini 4 generated most of the proofs; people supplied key supporting results, checked the mathematics and audited its translation into the Lean proof checker. The guarantee allows some distortion—it is not lossless file compression or a measured speedup in software.",
+      "title": "AI helps prove that useful mathematical summaries can take less work",
+      "id": "d-1571182446840381512-sparsestack-ai-compression-proof",
+      "coveredOn": "2026-11-14",
+      "context": "🔬 **AI Discovery Watch · November 14, 2026**\n\n**AI helps prove that useful mathematical summaries can take less work**\nA large table of numbers can be shrunk before calculations, but the summary must not erase a whole direction of information. A November 9 preprint shows that a standard random-mixing method can do this with fewer mixing operations than older guarantees required, and gives a nearly matching limit under stated assumptions. Gemini 4 generated most of the proofs; people supplied key supporting results, checked the mathematics and audited its translation into the Lean proof checker. The guarantee allows some distortion—it is not lossless file compression or a measured speedup in software.\n\n**AI used:** Gemini 4, exact variant unspecified, working through the Colosseum multi-agent harness.\n**Evidence:** Preprint; authors report a full Lean-checked proof and human audit. No independent verification established.\nOriginal source: <https://arxiv.org/abs/2611.12867>\nSupporting source: <https://github.com/sharaelong/optimal-injectivity-sparsestack>"
+    },
+    {
+      "category": "Computing & engineering",
+      "evidenceKind": "proof",
+      "modelNote": "Gemini 4 agents developed constructions, proofs and formalization; exact variant unspecified.",
+      "sources": [
+        "https://arxiv.org/abs/2611.06717",
+        "https://github.com/lockqueue/bmm"
+      ],
+      "status": "Preprint; author-checked proofs and conditional Lean verification. No independent verification or practical benchmark established.",
+      "takeaway": "Imagine checking whether two people share a mutual friend, or whether three people all know one another. A November 4 preprint, revised November 10, gives a faster theoretical method for the huge yes-or-no tables behind these searches, meeting a target left open in 2024. Gemini 4 agents developed the algorithms and proofs after people chose the problem and direction; the authors then checked and edited the work. Its Lean proof checks assume some previously published tools and use an abstract accounting of work. This is not a demonstrated software speedup or the fastest method of every kind.",
+      "title": "AI finds a better way to search huge networks for connections",
+      "id": "d-1571182690764464225-gemini-faster-connection-search",
+      "coveredOn": "2026-11-14",
+      "context": "🔬 **AI Discovery Watch · November 14, 2026**\n\n**AI finds a better way to search huge networks for connections**\nImagine checking whether two people share a mutual friend, or whether three people all know one another. A November 4 preprint, revised November 10, gives a faster theoretical method for the huge yes-or-no tables behind these searches, meeting a target left open in 2024. Gemini 4 agents developed the algorithms and proofs after people chose the problem and direction; the authors then checked and edited the work. Its Lean proof checks assume some previously published tools and use an abstract accounting of work. This is not a demonstrated software speedup or the fastest method of every kind.\n\n**AI used:** Gemini 4 agents developed constructions, proofs and formalization; exact variant unspecified.\n**Evidence:** Preprint; author-checked proofs and conditional Lean verification. No independent verification or practical benchmark established.\nOriginal source: <https://arxiv.org/abs/2611.06717>\nSupporting source: <https://github.com/lockqueue/bmm>"
+    },
+    {
+      "category": "Research in action",
+      "evidenceKind": "lab",
+      "modelNote": "CatAI combines 30 specialized geometric graph-network modules; ACEP handles experiments and measurements. No chat-model identity established.",
+      "sources": [
+        "https://arxiv.org/abs/2611.13536",
+        "https://arxiv.org/pdf/2611.13536"
+      ],
+      "status": "Early laboratory result; closed-loop search within a human-defined space. No independent replication established.",
+      "takeaway": "An AI-guided lab search switched from nickel to a promising copper catalyst after learning from its own experiments. A November 10 preprint reports that CatAI and automated lab equipment raised the target reaction's yield to 90% while testing about 4% of a preset candidate pool. People built the models, chose the reaction and materials library, and supplied the starting experiments; the system selected later tests using predicted results and uncertainty. The advance is a feedback-driven search for a better chemical recipe, not unrestricted AI inventing chemistry. Its laboratory results remain author-reported, without independent replication.",
+      "title": "AI and a robotic lab change course to find a better reaction recipe",
+      "id": "d-1571182959552241836-catai-feedback-copper-catalyst",
+      "coveredOn": "2026-11-14",
+      "context": "🔬 **AI Discovery Watch · November 14, 2026**\n\n**AI and a robotic lab change course to find a better reaction recipe**\nAn AI-guided lab search switched from nickel to a promising copper catalyst after learning from its own experiments. A November 10 preprint reports that CatAI and automated lab equipment raised the target reaction's yield to 90% while testing about 4% of a preset candidate pool. People built the models, chose the reaction and materials library, and supplied the starting experiments; the system selected later tests using predicted results and uncertainty. The advance is a feedback-driven search for a better chemical recipe, not unrestricted AI inventing chemistry. Its laboratory results remain author-reported, without independent replication.\n\n**AI used:** CatAI combines 30 specialized geometric graph-network modules; ACEP handles experiments and measurements. No chat-model identity established.\n**Evidence:** Early laboratory result; closed-loop search within a human-defined space. No independent replication established.\nOriginal source: <https://arxiv.org/abs/2611.13536>\nSupporting source: <https://arxiv.org/pdf/2611.13536>"
+    },
+    {
+      "category": "Research in action",
+      "evidenceKind": "demo",
+      "modelNote": "Claude Opus 5.5 via Claude Code; Matra-Genoa generated structures, Tuga models estimated their properties.",
+      "sources": [
+        "https://arxiv.org/abs/2611.15451",
+        "https://arxiv.org/html/2611.15451v1"
+      ],
+      "status": "Early research-planning demonstration; author-reported calculations, no laboratory confirmation or independent replication.",
+      "takeaway": "An AI assistant identified a possibly overlooked compound in a materials database and worked out an experiment to test whether it can exist. In a November 11 preprint, it also rejected unsuitable candidates and planned how to make promising ones, including choosing containers that should not react with them. People supplied the research questions, databases, prediction tools and laboratory know-how. The advance is connecting those resources into a reasoned research plan—not running a laboratory. None of the proposed materials was made, and some predictions sit within the calculations’ uncertainty.",
+      "title": "AI spots a possible missing material—and plans how to test it",
+      "id": "d-1570819840724439061-claude-alexandria-materials-plans",
+      "coveredOn": "2026-11-13",
+      "context": "🔬 **AI Discovery Watch · November 13, 2026**\n\n**AI spots a possible missing material—and plans how to test it**\nAn AI assistant identified a possibly overlooked compound in a materials database and worked out an experiment to test whether it can exist. In a November 11 preprint, it also rejected unsuitable candidates and planned how to make promising ones, including choosing containers that should not react with them. People supplied the research questions, databases, prediction tools and laboratory know-how. The advance is connecting those resources into a reasoned research plan—not running a laboratory. None of the proposed materials was made, and some predictions sit within the calculations’ uncertainty.\n\n**AI used:** Claude Opus 5.5 via Claude Code; Matra-Genoa generated structures, Tuga models estimated their properties.\n**Evidence:** Early research-planning demonstration; author-reported calculations, no laboratory confirmation or independent replication.\nOriginal source: <https://arxiv.org/abs/2611.15451>\nSupporting source: <https://arxiv.org/html/2611.15451v1>"
+    },
+    {
+      "category": "Mathematics",
+      "evidenceKind": "proof",
+      "modelNote": "GPT-6 Astra generated the paper. Claude Fable 5.2 is also listed, but its role is unspecified.",
+      "sources": [
+        "https://hexagonmath.org/2611.00301",
+        "https://hexagonmath.org/src/2611.00301v1/files"
+      ],
+      "status": "Unrefereed proof claim; contributors understand some parts. No independent or machine-checked confirmation established.",
+      "takeaway": "A new proof claims that a broad family of abstract mathematical structures can be described through a common framework, like translating different construction kits into one shared language. The November 11 release goes beyond an earlier result covering only a restricted case. GPT-6 Astra generated the paper; five mathematicians supplied questions, possible shortcuts and proof ideas, including two who helped pose the original problem. This could connect previously separate mathematical tools, but it remains a proof claim. The contributors report understanding only parts of it; independent confirmation and a fully checked proof are not established.",
+      "title": "AI-generated proof claims a broader map of mathematical structures",
+      "id": "d-1570820138217775165-beo-full-ai-proof-claim",
+      "coveredOn": "2026-11-13",
+      "context": "🔬 **AI Discovery Watch · November 13, 2026**\n\n**AI-generated proof claims a broader map of mathematical structures**\nA new proof claims that a broad family of abstract mathematical structures can be described through a common framework, like translating different construction kits into one shared language. The November 11 release goes beyond an earlier result covering only a restricted case. GPT-6 Astra generated the paper; five mathematicians supplied questions, possible shortcuts and proof ideas, including two who helped pose the original problem. This could connect previously separate mathematical tools, but it remains a proof claim. The contributors report understanding only parts of it; independent confirmation and a fully checked proof are not established.\n\n**AI used:** GPT-6 Astra generated the paper. Claude Fable 5.2 is also listed, but its role is unspecified.\n**Evidence:** Unrefereed proof claim; contributors understand some parts. No independent or machine-checked confirmation established.\nOriginal source: <https://hexagonmath.org/2611.00301>\nSupporting source: <https://hexagonmath.org/src/2611.00301v1/files>"
+    },
+    {
+      "category": "Mathematics",
+      "evidenceKind": "proof",
+      "modelNote": "GPT-6 supplied key arguments; exact variant unspecified. Claude Fable also listed, version and role unspecified.",
+      "sources": [
+        "https://hexagonmath.org/2611.00294",
+        "https://github.com/grottofrancesco/UltimateMatchingTheorem"
+      ],
+      "status": "Unrefereed proof claim; mostly AI-written and AI-checked. No independent or formal verification established.",
+      "takeaway": "Imagine pairing randomly scattered dots with a neat grid while keeping long moves rare both sideways and vertically. A November 11 paper claims an AI-assisted solution to a long-standing question about how tightly both directions can be controlled—and shows that two extreme versions fail. GPT-6 helped find the arguments through weeks of exchanges with three mathematicians, building on their earlier work. This sharpens the mathematics of matching and movement, not a demonstrated improvement to delivery routes. The authors report only an overall understanding so far; independent verification and a fully digested proof are still missing.",
+      "title": "AI helps tackle how to pair scattered points without large moves",
+      "id": "d-1570820404690550855-ultimate-matching-ai-proof-claim",
+      "coveredOn": "2026-11-13",
+      "context": "🔬 **AI Discovery Watch · November 13, 2026**\n\n**AI helps tackle how to pair scattered points without large moves**\nImagine pairing randomly scattered dots with a neat grid while keeping long moves rare both sideways and vertically. A November 11 paper claims an AI-assisted solution to a long-standing question about how tightly both directions can be controlled—and shows that two extreme versions fail. GPT-6 helped find the arguments through weeks of exchanges with three mathematicians, building on their earlier work. This sharpens the mathematics of matching and movement, not a demonstrated improvement to delivery routes. The authors report only an overall understanding so far; independent verification and a fully digested proof are still missing.\n\n**AI used:** GPT-6 supplied key arguments; exact variant unspecified. Claude Fable also listed, version and role unspecified.\n**Evidence:** Unrefereed proof claim; mostly AI-written and AI-checked. No independent or formal verification established.\nOriginal source: <https://hexagonmath.org/2611.00294>\nSupporting source: <https://github.com/grottofrancesco/UltimateMatchingTheorem>"
+    },
+    {
+      "category": "Computing & engineering",
+      "evidenceKind": "early",
+      "modelNote": "AutoAssumption uses language-model agents; exact research-model version unstated. Claude Code appears in its workflow; Codex assisted auditing/editing.",
+      "sources": [
+        "https://arxiv.org/abs/2611.14844",
+        "https://arxiv.org/html/2611.14844v1"
+      ],
+      "status": "Early algorithm-discovery result; proofs reportedly checked in Lean. Performance is author-tested, not independently confirmed.",
+      "takeaway": "AI agents found new ways to decide what an AI model should remember and which internal connections it can discard. Instead of randomly rewriting code, AutoAssumption changes one underlying rule, rebuilds the argument and uses the Lean proof checker before testing it. The November 10 preprint reports better results than the published methods the team tested in those two areas. People selected existing methods, built the tests and must check that the mathematical promises mean what researchers intend. The proofs do not guarantee answer quality; performance gains remain author-run test results, not independently replicated.",
+      "title": "AI improves computing methods by questioning one rule at a time",
+      "id": "d-1570820813521952954-autoassumption-checked-algorithm-search",
+      "coveredOn": "2026-11-13",
+      "context": "🔬 **AI Discovery Watch · November 13, 2026**\n\n**AI improves computing methods by questioning one rule at a time**\nAI agents found new ways to decide what an AI model should remember and which internal connections it can discard. Instead of randomly rewriting code, AutoAssumption changes one underlying rule, rebuilds the argument and uses the Lean proof checker before testing it. The November 10 preprint reports better results than the published methods the team tested in those two areas. People selected existing methods, built the tests and must check that the mathematical promises mean what researchers intend. The proofs do not guarantee answer quality; performance gains remain author-run test results, not independently replicated.\n\n**AI used:** AutoAssumption uses language-model agents; exact research-model version unstated. Claude Code appears in its workflow; Codex assisted auditing/editing.\n**Evidence:** Early algorithm-discovery result; proofs reportedly checked in Lean. Performance is author-tested, not independently confirmed.\nOriginal source: <https://arxiv.org/abs/2611.14844>\nSupporting source: <https://arxiv.org/html/2611.14844v1>"
+    },
     {
       "category": "Physics & materials",
       "evidenceKind": "followup",
