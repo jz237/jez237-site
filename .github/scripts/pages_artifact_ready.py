@@ -2,6 +2,12 @@
 """Wait for the exact uploaded artifact to appear in Pages' discovery API.
 
 Read-only and bounded: never upload, delete, retry, or create a deployment.
+
+GitHub's artifact listing is eventually consistent: one read can show a fresh
+upload and the next, a second later, can miss it. The deploy action looks the
+artifact up by name and fails outright on such a miss, so a single sighting is
+not enough. Require several consecutive sightings, confirming with the same
+name-filtered query the deploy action uses.
 """
 import json
 import os
@@ -50,23 +56,32 @@ def read_artifacts(endpoint, timeout):
 
 
 def wait_for_artifact(repository, run_id, attempt, artifact_id, sha, *, reader=read_artifacts,
-                      now=time.monotonic, pause=time.sleep, timeout=120, log=print):
+                      now=time.monotonic, pause=time.sleep, timeout=120, log=print, stable=1):
     if (repository != 'jz237/jez237-site' or not re.fullmatch(r'[0-9a-f]{40}', sha)
             or any(type(value) is not int or value <= 0 for value in [run_id, attempt, artifact_id])
-            or not 0 < timeout <= 120):
+            or not 0 < timeout <= 120 or type(stable) is not int or not 1 <= stable <= 5):
         raise ValueError('Invalid artifact readiness inputs; publication stopped')
     endpoint = f'repos/{repository}/actions/runs/{run_id}/artifacts?per_page=100'
+    # After the first sighting, confirm with the deploy action's own lookup.
+    by_name = f'{endpoint}&name=github-pages-{run_id}-{attempt}'
     deadline = now() + timeout
     checks = 0
+    sightings = 0
     while now() < deadline:
-        payload = reader(endpoint, min(20, deadline - now()))
+        payload = reader(by_name if sightings else endpoint, min(20, deadline - now()))
         checks += 1
         if now() >= deadline:
             break
         if artifact_visible(payload, run_id, attempt, artifact_id, sha):
-            log(f'Exact Pages artifact {artifact_id} is visible for run {run_id}, attempt {attempt}.')
-            return checks
-        log(f'Uploaded artifact is absent or its listing has not settled (check {checks}); waiting before deployment.')
+            sightings += 1
+            if sightings >= stable:
+                log(f'Exact Pages artifact {artifact_id} is visible for run {run_id}, attempt {attempt}.')
+                return checks
+            log(f'Uploaded artifact seen {sightings} of {stable} consecutive times (check {checks}); confirming.')
+        else:
+            # A miss after a sighting is exactly the flicker that breaks the deploy action: start over.
+            sightings = 0
+            log(f'Uploaded artifact is absent or its listing has not settled (check {checks}); waiting before deployment.')
         pause(min(5, max(0, deadline - now())))
     raise ValueError('Uploaded artifact did not become visible within the readiness deadline; no deployment submitted')
 
@@ -75,7 +90,7 @@ def main():
     try:
         wait_for_artifact(os.environ['GITHUB_REPOSITORY'], int(os.environ['GITHUB_RUN_ID']),
                           int(os.environ['GITHUB_RUN_ATTEMPT']), int(os.environ['PAGES_ARTIFACT_ID']),
-                          os.environ['GITHUB_SHA'])
+                          os.environ['GITHUB_SHA'], stable=3)
     except (ValueError, KeyError, OSError, subprocess.TimeoutExpired) as error:
         # Errors here occur before the deploy action, so its recovery path must not run.
         raise SystemExit(str(error)) from None

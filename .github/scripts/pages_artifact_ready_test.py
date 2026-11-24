@@ -44,6 +44,62 @@ class ArtifactReadinessTests(unittest.TestCase):
         self.assertEqual(clock.elapsed, 10)
         self.assertTrue(all(endpoint.endswith('/runs/123/artifacts?per_page=100') for endpoint, _ in calls))
 
+    def test_stable_readiness_needs_consecutive_sightings_confirmed_by_name(self):
+        clock = Clock()
+        calls = []
+
+        def reader(endpoint, timeout):
+            calls.append(endpoint)
+            return visible()
+
+        checks = wait_for_artifact(REPO, RUN, ATTEMPT, ARTIFACT, SHA, reader=reader,
+                                  now=clock.now, pause=clock.pause, log=lambda _: None, stable=3)
+        self.assertEqual(checks, 3)
+        self.assertEqual(clock.elapsed, 10)
+        self.assertTrue(calls[0].endswith('/runs/123/artifacts?per_page=100'))
+        self.assertTrue(all(call.endswith('/runs/123/artifacts?per_page=100&name=github-pages-123-2')
+                            for call in calls[1:]))
+
+    def test_flicker_after_a_sighting_restarts_the_count(self):
+        clock = Clock()
+        missing = {'total_count': 0, 'artifacts': []}
+        replies = iter([visible(), missing, visible(), visible(), visible()])
+        calls = []
+
+        def reader(endpoint, timeout):
+            calls.append(endpoint)
+            return next(replies)
+
+        checks = wait_for_artifact(REPO, RUN, ATTEMPT, ARTIFACT, SHA, reader=reader,
+                                  now=clock.now, pause=clock.pause, log=lambda _: None, stable=3)
+        self.assertEqual(checks, 5)
+        self.assertEqual(clock.elapsed, 20)
+        # The read after the miss goes back to the full listing.
+        self.assertTrue(calls[2].endswith('artifacts?per_page=100'))
+
+    def test_persistent_flicker_never_permits_deployment(self):
+        clock = Clock()
+        missing = {'total_count': 0, 'artifacts': []}
+        state = {'n': 0}
+
+        def reader(*_):
+            state['n'] += 1
+            return visible() if state['n'] % 2 else missing
+
+        with self.assertRaisesRegex(ValueError, 'no deployment submitted'):
+            wait_for_artifact(REPO, RUN, ATTEMPT, ARTIFACT, SHA, reader=reader, now=clock.now,
+                              pause=clock.pause, timeout=30, log=lambda _: None, stable=3)
+
+    def test_invalid_stability_requirement_stops_before_api(self):
+        for stable in [0, 6, True, '3']:
+            with self.subTest(stable=stable), self.assertRaises(ValueError):
+                wait_for_artifact(REPO, RUN, ATTEMPT, ARTIFACT, SHA, stable=stable,
+                                  reader=lambda *_: self.fail('API called'))
+
+    def test_workflow_entry_point_requires_three_sightings(self):
+        source = (Path(__file__).parent / 'pages_artifact_ready.py').read_text()
+        self.assertIn("os.environ['GITHUB_SHA'], stable=3)", source)
+
     def test_existing_exact_artifact_does_not_wait_or_deploy(self):
         with patch('pages_artifact_ready.subprocess.run') as process:
             self.assertEqual(wait_for_artifact(REPO, RUN, ATTEMPT, ARTIFACT, SHA,
