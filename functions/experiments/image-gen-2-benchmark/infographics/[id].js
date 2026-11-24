@@ -7,7 +7,7 @@ export async function onRequestGet({ request, env, params }) {
   }
 
   const packUrl = new URL(`${ARCHIVE_PATH}infographic-articles-${id.slice(0, 7)}.json`, request.url);
-  const asset = await env.ASSETS.fetch(new Request(packUrl, { redirect: 'error' }));
+  const asset = await env.ASSETS.fetch(new Request(packUrl, { redirect: 'manual' }));
   if (!asset.ok) {
     const status = asset.status === 404 ? 404 : 502;
     return new Response(status === 404 ? 'Infographic not found.' : 'Article archive is unavailable.', { status });
