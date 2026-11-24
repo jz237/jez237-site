@@ -334,5 +334,52 @@ body[data-density="3"] .content h3, body[data-density="3"] .card h3 { font-size:
 .museum-hero .series-nav a[aria-current="true"] { color: #f3ead8; }
 :root[data-theme="light"] .series-nav a[aria-current="true"] { color: var(--ivory); }
 :root[data-theme="light"] .museum-hero .series-nav a[aria-current="true"] { color: #f3ead8; }
-.series-nav.series-subnav { margin-top: 10px; }
-.series-nav.series-subnav a { font-size: .66rem; letter-spacing: .12em; }
+
+/* Second row: the pages inside the current group. Set apart from the main row
+   as a labelled panel with quieter, sentence-case links. */
+.series-nav.series-subnav {
+  margin-top: 20px;
+  max-width: 820px;
+  padding: 10px 16px 12px;
+  gap: 2px 4px;
+  border: 1px solid rgba(216, 185, 106, .3);
+  border-radius: 14px;
+  background: rgba(216, 185, 106, .07);
+}
+.series-nav.series-subnav::before {
+  content: "In " attr(aria-label);
+  flex-basis: 100%;
+  margin-bottom: 4px;
+  text-align: center;
+  font-size: .64rem;
+  font-weight: 700;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: #a8966a;
+}
+.series-nav.series-subnav a,
+:root[data-theme="light"] .series-nav.series-subnav a {
+  padding: 4px 11px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: transparent;
+  color: #d9cfb8;
+  font-size: .84rem;
+  font-weight: 500;
+  letter-spacing: .01em;
+  text-transform: none;
+  text-shadow: none;
+}
+.series-nav.series-subnav a:hover,
+:root[data-theme="light"] .series-nav.series-subnav a:hover {
+  color: #f3ead8;
+  background: rgba(216, 185, 106, .12);
+  border-color: transparent;
+}
+.series-nav.series-subnav a[aria-current="page"],
+:root[data-theme="light"] .series-nav.series-subnav a[aria-current="page"] {
+  color: #f0d79a;
+  background: rgba(216, 185, 106, .14);
+  border-color: rgba(216, 185, 106, .75);
+  font-weight: 700;
+}
