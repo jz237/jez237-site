@@ -12,12 +12,12 @@
     "three": "0.186.0"
   },
   "devDependencies": {
-    "esbuild": "0.25.10",
-    "playwright": "1.55.1",
     "@gltf-transform/core": "4.2.1",
     "@gltf-transform/extensions": "4.2.1",
     "@gltf-transform/functions": "4.2.1",
+    "esbuild": "0.25.10",
     "meshoptimizer": "0.25.0",
-    "sharp": "0.34.4"
+    "playwright": "1.55.1",
+    "sharp": "0.35.5"
   }
 }

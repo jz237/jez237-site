@@ -13,5 +13,8 @@
     "@gltf-transform/functions": "4.5.0",
     "playwright": "1.63.0",
     "three": "0.180.0"
+  },
+  "overrides": {
+    "glob": "14.0.6"
   }
 }
