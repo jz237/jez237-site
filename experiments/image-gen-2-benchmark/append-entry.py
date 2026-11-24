@@ -27,18 +27,14 @@ ROOT = Path(__file__).resolve().parent
 DATA = ROOT / "gallery-data.json"
 PROMPTS = ROOT / "prompts.json"
 WORLDS = ROOT / "worlds-data.json"
-DATA_ARTIFACTS = ROOT / "data-artifacts-data.json"
-SUBJECT_ARTIFACTS = ROOT / "subject-artifacts-data.json"
 FACTUAL_INFOGRAPHICS = ROOT / "factual-infographics-data.json"
 HYBRID_CREATURES = ROOT / "hybrid-creatures-data.json"
 CREATURE_DESIGNS = ROOT / "creature-designs-data.json"
 RANDOM_RENDERING_STYLES = ROOT / "random-rendering-style-data.json"
 WORLD_THAT_NEVER_WAS = ROOT / "world-that-never-was-data.json"
 MACHINE_DREAMS = ROOT / "machine-dreams-data.json"
-VISUAL_THOUGHT_EXPERIMENTS = ROOT / "visual-thought-experiments-data.json"
 IMPOSSIBLE_DOCUMENTARY = ROOT / "impossible-documentary-data.json"
 STRANGE_BOTANICALS = ROOT / "strange-botanicals-data.json"
-CINEMATIC_CATS = ROOT / "cinematic-cats-data.json"
 OCEAN_SCENES = ROOT / "ocean-scenes-data.json"
 GALACTIC_PICTURES = ROOT / "galactic-pictures-data.json"
 IMAGES = ROOT / "images"
@@ -297,14 +293,6 @@ def main() -> None:
     ap.add_argument("--world-continuity", default="")
     ap.add_argument("--world-entry-description", default="")
     ap.add_argument("--world-only", action="store_true", help="Append to worlds-data.json only, not the main prompt gallery")
-    ap.add_argument("--artifact-category", default="")
-    ap.add_argument("--artifact-description", default="")
-    ap.add_argument("--artifact-continuity", default="")
-    ap.add_argument("--data-artifact-only", action="store_true", help="Append to data-artifacts-data.json only, not the main prompt gallery")
-    ap.add_argument("--subject-kind", default="")
-    ap.add_argument("--subject-description", default="")
-    ap.add_argument("--subject-continuity", default="")
-    ap.add_argument("--subject-artifact-only", action="store_true", help="Append to subject-artifacts-data.json only, not the main prompt gallery")
     ap.add_argument("--factual-topic", default="")
     ap.add_argument("--factual-description", default="")
     ap.add_argument("--factual-source-note", default="")
@@ -343,6 +331,11 @@ def main() -> None:
     ap.add_argument("--r2-public-base-url", default=os.environ.get("IMAGE_ARCHIVE_R2_PUBLIC_BASE_URL", DEFAULT_R2_PUBLIC_BASE_URL))
     ap.add_argument("--wrangler-bin", default=os.environ.get("WRANGLER_BIN", "wrangler"))
     args = ap.parse_args()
+
+    if args.slot in {"serious-cinematic-cat", "visual-thought-experiment"} or normalized_text(args.batch) in {
+        "data as artifact", "subject as artifact", "cats doing people things", "visual thought experiments",
+    }:
+        ap.error("This image collection has been retired.")
 
     if args.slot == "quietly-uncanny-domestic":
         raise SystemExit("Quietly Uncanny was retired by the owner on 2026-10-15; do not upload or republish it.")
@@ -435,18 +428,6 @@ def main() -> None:
             "continuity": args.world_continuity.strip(),
             "entryDescription": args.world_entry_description.strip() or args.tests,
         }
-    if args.artifact_category.strip():
-        entry["artifact"] = {
-            "category": args.artifact_category.strip(),
-            "description": args.artifact_description.strip(),
-            "continuity": args.artifact_continuity.strip(),
-        }
-    if args.subject_kind.strip():
-        entry["subjectArtifact"] = {
-            "kind": args.subject_kind.strip(),
-            "description": args.subject_description.strip(),
-            "continuity": args.subject_continuity.strip(),
-        }
     if is_factual_infographic:
         entry["factualInfographic"] = {
             "topic": args.factual_topic.strip(),
@@ -480,15 +461,11 @@ def main() -> None:
             "template": args.world_that_never_was_template.strip(),
         }
 
-    exclusive = [args.world_only, args.data_artifact_only, args.subject_artifact_only, args.factual_infographic_only, args.hybrid_creature_only, args.creature_design_only, args.random_rendering_style_only, args.world_that_never_was_only]
+    exclusive = [args.world_only, args.factual_infographic_only, args.hybrid_creature_only, args.creature_design_only, args.random_rendering_style_only, args.world_that_never_was_only]
     if sum(1 for flag in exclusive if flag) > 1:
-        raise SystemExit("--world-only, --data-artifact-only, --subject-artifact-only, --factual-infographic-only, --hybrid-creature-only, --creature-design-only, --random-rendering-style-only, and --world-that-never-was-only are mutually exclusive")
+        raise SystemExit("--world-only, --factual-infographic-only, --hybrid-creature-only, --creature-design-only, --random-rendering-style-only, and --world-that-never-was-only are mutually exclusive")
     if args.world_only:
         paths = (WORLDS,)
-    elif args.data_artifact_only:
-        paths = (DATA_ARTIFACTS,)
-    elif args.subject_artifact_only:
-        paths = (SUBJECT_ARTIFACTS,)
     elif args.factual_infographic_only:
         paths = (FACTUAL_INFOGRAPHICS,)
     elif args.hybrid_creature_only:
@@ -513,14 +490,10 @@ def main() -> None:
             paths = (*paths, WORLD_THAT_NEVER_WAS)
         if args.slot == "machine-dream":
             paths = (*paths, MACHINE_DREAMS)
-        if args.slot == "visual-thought-experiment":
-            paths = (*paths, VISUAL_THOUGHT_EXPERIMENTS)
         if args.slot == "impossible-documentary":
             paths = (*paths, IMPOSSIBLE_DOCUMENTARY)
         if args.slot == "strange-botanical":
             paths = (*paths, STRANGE_BOTANICALS)
-        if args.slot == "serious-cinematic-cat":
-            paths = (*paths, CINEMATIC_CATS)
         if args.slot == "ocean-exploration":
             paths = (*paths, OCEAN_SCENES)
         if args.slot == "outer-space-exploration":

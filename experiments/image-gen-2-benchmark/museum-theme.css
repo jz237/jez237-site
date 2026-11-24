@@ -186,15 +186,6 @@ footer { color: var(--muted) !important; }
 }
 .world-count { color: var(--muted) !important; }
 
-/* featured artifact blocks (subject/data artifacts) */
-.featured-artifact {
-  background: var(--panel) !important;
-  border: 1px solid var(--hair) !important;
-  box-shadow: var(--shadow) !important;
-}
-.featured-copy h2, .featured-copy h3 { font-family: var(--serif); color: var(--ivory) !important; }
-.featured-media { background: #0b0906 !important; }
-
 /* unified centered museum header (series pages) */
 .museum-hero {
   /* assets/styles.css makes bare <header> sticky; force normal flow */
