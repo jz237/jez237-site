@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-"""Build static factual infographic articles and their main sitemap entries."""
+"""Pack factual infographic pages by month and refresh their main sitemap entries."""
 import html
 import json
 import re
+from collections import defaultdict
 from pathlib import Path
 from urllib.parse import urlsplit
 
@@ -142,8 +143,14 @@ def main():
         raise ValueError("Unexpected sitemap structure")
     entries = [f"  <url><loc>{url}</loc><lastmod>{escape(date)}</lastmod></url>"
                for url, date, _ in sorted(pages.values())]
-    for key, (_, _, page) in pages.items():
-        write_if_changed(ARCHIVE / "infographics" / key / "index.html", page)
+    packs = defaultdict(dict)
+    for key, (_, date, page) in sorted(pages.items()):
+        if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", date) or not key.startswith(date + "-"):
+            raise ValueError(f"Invalid dated article ID: {key}")
+        packs[date[:7]][key] = page
+    for month, pack in packs.items():
+        write_if_changed(ARCHIVE / f"infographic-articles-{month}.json",
+                         json.dumps(pack, ensure_ascii=False, separators=(",", ":")) + "\n")
     write_if_changed(sitemap, original.replace("</urlset>", "\n".join([BEGIN, *entries, END, "</urlset>"])))
     print(f"Built {len(pages)} infographic articles and sitemap URLs.")
 

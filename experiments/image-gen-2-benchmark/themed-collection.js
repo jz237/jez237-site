@@ -65,7 +65,7 @@
       <div class="collection-content">
         <div class="collection-kicker">${escapeHtml(item.date)} · ${escapeHtml(label)}</div>
         <h2>${dataFile === 'factual-infographics-data.json'
-          ? `<a href="infographics/${encodeURIComponent(item.id)}/">${escapeHtml(item.title)}</a>`
+          ? `<a href="https://jez237.com/experiments/image-gen-2-benchmark/infographics/${encodeURIComponent(item.id)}/">${escapeHtml(item.title)}</a>`
           : escapeHtml(item.title)}</h2>
         <details><summary>Show prompt</summary><pre>${escapeHtml(item.prompt)}</pre></details>
       </div>
