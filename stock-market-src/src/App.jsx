@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import HiResChart from "./components/HiResChart.jsx";
 import PortfolioPanel from "./components/PortfolioPanel.jsx";
+import { setTheme, useTheme } from "./lib/theme.js";
 import {
   AUTO_REFRESH_MS,
   FALLBACK_STOCKS,
@@ -53,6 +54,7 @@ import {
 } from "./lib/format.js";
 
 export default function App() {
+  const theme = useTheme();
   const [stocksData, setStocksData] = useState(null);
   const [historyBySymbol, setHistoryBySymbol] = useState({});
   const [portfolio, setPortfolio] = useState({ positions: [] });
@@ -859,6 +861,16 @@ export default function App() {
               </button>
             ))}
           </div>
+          <button
+            type="button"
+            className="theme-toggle"
+            aria-label={
+              theme === "light" ? "Switch to dark theme" : "Switch to light theme"
+            }
+            onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+          >
+            {theme === "light" ? "🌙 Dark" : "☀ Light"}
+          </button>
         </header>
         {triggeredAlerts.length > 0 && (
           <div className="alert-banner">

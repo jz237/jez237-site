@@ -7,6 +7,7 @@ import {
 } from "lightweight-charts";
 import { fmt, sma } from "../lib/format.js";
 import { historyForRange } from "../lib/data.js";
+import { chartColors, useTheme } from "../lib/theme.js";
 
 export default function HiResChart({
   chartMode,
@@ -22,6 +23,8 @@ export default function HiResChart({
   const volumeRef = useRef(null);
   const smaRef = useRef(null);
   const [hovered, setHovered] = useState(null);
+  const theme = useTheme();
+  const colors = chartColors(theme);
   const rows = useMemo(
     () => historyForRange(history, range),
     [history, range],
@@ -37,49 +40,49 @@ export default function HiResChart({
       autoSize: true,
       layout: {
         background: { color: "transparent" },
-        textColor: "#8aa0bd",
+        textColor: colors.text,
         fontSize: 11,
       },
       grid: {
-        vertLines: { color: "rgba(120,144,173,.08)" },
-        horzLines: { color: "rgba(120,144,173,.12)" },
+        vertLines: { color: colors.gridVert },
+        horzLines: { color: colors.gridHorz },
       },
       rightPriceScale: {
-        borderColor: "rgba(120,144,173,.22)",
+        borderColor: colors.priceBorder,
         scaleMargins: { top: 0.08, bottom: 0.24 },
       },
       timeScale: {
-        borderColor: "rgba(120,144,173,.18)",
+        borderColor: colors.timeBorder,
         timeVisible: range === "1D" || range === "5D",
         secondsVisible: false,
       },
       crosshair: {
         mode: 1,
-        vertLine: { color: "rgba(226,239,251,.25)" },
-        horzLine: { color: "rgba(226,239,251,.18)" },
+        vertLine: { color: colors.crosshairVert },
+        horzLine: { color: colors.crosshairHorz },
       },
     });
     const line = chart.addSeries(AreaSeries, {
-      lineColor: "#29d681",
-      topColor: "rgba(41,214,129,.30)",
-      bottomColor: "rgba(41,214,129,0)",
+      lineColor: colors.line,
+      topColor: `rgba(${colors.lineFill},.30)`,
+      bottomColor: `rgba(${colors.lineFill},0)`,
       lineWidth: 2,
-      priceLineColor: "rgba(41,214,129,.55)",
+      priceLineColor: colors.priceLine,
     });
     const candles = chart.addSeries(CandlestickSeries, {
-      upColor: "#40d982",
-      downColor: "#f05268",
-      borderUpColor: "#40d982",
-      borderDownColor: "#f05268",
-      wickUpColor: "#9af7bf",
-      wickDownColor: "#ff9aaa",
+      upColor: colors.up,
+      downColor: colors.down,
+      borderUpColor: colors.up,
+      borderDownColor: colors.down,
+      wickUpColor: colors.wickUp,
+      wickDownColor: colors.wickDown,
     });
     const volume = chart.addSeries(HistogramSeries, {
       priceFormat: { type: "volume" },
       priceScaleId: "",
     });
     const smaLine = chart.addSeries(AreaSeries, {
-      lineColor: "rgba(125,103,255,.95)",
+      lineColor: colors.secondary,
       topColor: "rgba(0,0,0,0)",
       bottomColor: "rgba(0,0,0,0)",
       lineWidth: 1,
@@ -106,7 +109,7 @@ export default function HiResChart({
       chart.remove();
       chartRef.current = null;
     };
-  }, [range, !rows]);
+  }, [range, !rows, theme]);
 
   useEffect(() => {
     if (!rows || !chartRef.current) return;
@@ -115,7 +118,7 @@ export default function HiResChart({
       time: row.time,
       value: row.volume,
       color:
-        row.close >= row.open ? "rgba(64,217,130,.28)" : "rgba(240,82,104,.28)",
+        row.close >= row.open ? colors.volumeUp : colors.volumeDown,
     }));
     const smaData = sma(
       rows.map((row) => row.close),
@@ -134,7 +137,7 @@ export default function HiResChart({
       visible: indicators && chartMode !== "Volume",
     });
     chartRef.current.timeScale().fitContent();
-  }, [chartMode, hasVolume, indicators, range, rows]);
+  }, [chartMode, hasVolume, indicators, range, rows, theme]);
 
   if (!rows) {
     return (

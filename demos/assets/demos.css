@@ -339,3 +339,35 @@
 .pagination{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin:20px 0;padding:15px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}.page-summary{margin:0;font-size:12px;color:var(--muted)}.page-links{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.page-links a,.page-links>span{display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;padding:9px 12px;border:1px solid var(--line);border-radius:7px;font-size:12px}.page-links a:hover{background:#197dde30}.page-links [aria-current="page"]{background:#1764cc;color:white;border-color:#73baff6b;font-weight:700}.page-links .page-disabled{opacity:.45}@media(max-width:650px){.pagination{align-items:flex-start;gap:12px}.page-summary{flex-basis:100%}.page-links{gap:6px}.page-links a,.page-links>span{padding:9px 10px}}
 /* Preserve the captured view and its imagery attribution. */
 .preview img[src*="philadelphia-city-hall-"]{object-fit:contain;background:#152f3b}
+
+/* Theme toggle (added by theme.js) and the light theme it switches to. */
+.theme-toggle{margin:4px 10px 0;padding:7px 12px;border:1px solid var(--line);border-radius:999px;background:none;color:#b7c7d9;font:inherit;font-size:12px;cursor:pointer}.theme-toggle:hover{background:#197dde16;color:#eef7ff}.theme-toggle:focus-visible{outline:2px solid #29c9ff;outline-offset:3px}@media(max-width:650px){.theme-toggle{margin:0}}
+:root[data-theme="light"]{color-scheme:light;color:#2a1f14;background:#f6efdf;--muted:#5a4a34;--blue:#1764cc;--line:#6b4a2f33}
+:root[data-theme="light"] body{background:radial-gradient(circle at top,#f9f3e4 0%,#eee3cc 55%,#dfd0b0 100%) fixed}
+:root[data-theme="light"] a:hover{color:#1557b0}
+:root[data-theme="light"] a:focus-visible,:root[data-theme="light"] .theme-toggle:focus-visible{outline-color:#1764cc}
+:root[data-theme="light"] .skip{background:#f6efdf}
+:root[data-theme="light"] .brand span,:root[data-theme="light"] .rail-note,:root[data-theme="light"] .rail-home,:root[data-theme="light"] .masthead,:root[data-theme="light"] .collection-count span,:root[data-theme="light"] .compatibility,:root[data-theme="light"] footer{color:#6b5a40}
+:root[data-theme="light"] .side-nav-heading,:root[data-theme="light"] .collection-heading>span{color:#75654b}
+:root[data-theme="light"] .side-nav a{color:#5a4a34}
+:root[data-theme="light"] .side-nav a:hover{background:#1764cc14;color:#2a1f14}
+:root[data-theme="light"] .side-nav a.active{color:#0f4fa8;background:linear-gradient(100deg,#1764cc24,#1764cc08);border-color:#1764cc55}
+:root[data-theme="light"] .theme-toggle{color:#5a4a34}
+:root[data-theme="light"] .theme-toggle:hover{background:#6b4a2f1a;color:#2a1f14}
+:root[data-theme="light"] .signal{background:#3f9a1c;box-shadow:0 0 8px #3f9a1c55}
+:root[data-theme="light"] .eyebrow,:root[data-theme="light"] .card-meta{color:#1260a8}
+:root[data-theme="light"] h1 em{color:#1764cc}
+:root[data-theme="light"] .collection-count strong{color:#2a1f14}
+:root[data-theme="light"] .demo-card{border-color:#6b4a2f38;background:linear-gradient(135deg,#fffaf0,#f7eedb);box-shadow:0 14px 36px rgba(80,55,30,.14)}
+:root[data-theme="light"] .details{border-color:#6b4a2f24}
+:root[data-theme="light"] .preview,:root[data-theme="light"] .preview:hover{color:#f4ecdf}
+:root[data-theme="light"] .live{color:#3d6b2a}
+:root[data-theme="light"] .features li{border-color:#6b4a2f33;color:#4a3b28;background:#6b4a2f0a}
+:root[data-theme="light"] .primary,:root[data-theme="light"] .primary:hover{color:#fff}
+:root[data-theme="light"] .facts{border-top-color:#6b4a2f2e;color:#5a4a34}
+:root[data-theme="light"] .collection-note{border-color:#6b4a2f44;background:#fffaf088}
+:root[data-theme="light"] .note-symbol{color:#1764cc99}
+:root[data-theme="light"] .collection-note p{color:#5a4a34}
+:root[data-theme="light"] .note-line{background:linear-gradient(90deg,transparent,#6b4a2f55)}
+:root[data-theme="light"] .note-end{color:#8a7a62}
+:root[data-theme="light"] .page-links a:hover{background:#1764cc1f}

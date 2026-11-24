@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { chartColors, useTheme } from "../lib/theme.js";
 import { AreaSeries, createChart } from "lightweight-charts";
 import { dayChangeAmount, fmt } from "../lib/format.js";
 
@@ -129,6 +130,8 @@ export default function PortfolioPanel({
   positions,
 }) {
   const containerRef = useRef(null);
+  const theme = useTheme();
+  const colors = chartColors(theme);
   const [curveRange, setCurveRange] = useState("3M");
   const [contribMode, setContribMode] = useState("day");
   const [benchmarkKey, setBenchmarkKey] = useState(benchmarks[0].key);
@@ -161,19 +164,19 @@ export default function PortfolioPanel({
       autoSize: true,
       layout: {
         background: { color: "transparent" },
-        textColor: "#8aa0bd",
+        textColor: colors.text,
         fontSize: 11,
       },
       grid: {
-        vertLines: { color: "rgba(120,144,173,.08)" },
-        horzLines: { color: "rgba(120,144,173,.12)" },
+        vertLines: { color: colors.gridVert },
+        horzLines: { color: colors.gridHorz },
       },
       rightPriceScale: {
-        borderColor: "rgba(120,144,173,.22)",
+        borderColor: colors.priceBorder,
         scaleMargins: { top: 0.12, bottom: 0.08 },
       },
       timeScale: {
-        borderColor: "rgba(120,144,173,.18)",
+        borderColor: colors.timeBorder,
         timeVisible: false,
         secondsVisible: false,
       },
@@ -181,14 +184,14 @@ export default function PortfolioPanel({
       localization: { priceFormatter: (v) => `${v.toFixed(1)}%` },
     });
     const portfolioSeries = chart.addSeries(AreaSeries, {
-      lineColor: "#29d681",
-      topColor: "rgba(41,214,129,.25)",
-      bottomColor: "rgba(41,214,129,0)",
+      lineColor: colors.line,
+      topColor: `rgba(${colors.lineFill},.25)`,
+      bottomColor: `rgba(${colors.lineFill},0)`,
       lineWidth: 2,
       priceFormat: { type: "custom", formatter: (v) => `${v.toFixed(1)}%` },
     });
     const benchSeries = chart.addSeries(AreaSeries, {
-      lineColor: "rgba(125,103,255,.95)",
+      lineColor: colors.secondary,
       topColor: "rgba(0,0,0,0)",
       bottomColor: "rgba(0,0,0,0)",
       lineWidth: 1,
@@ -199,7 +202,7 @@ export default function PortfolioPanel({
     benchSeries.setData(curve.benchmark);
     chart.timeScale().fitContent();
     return () => chart.remove();
-  }, [curve]);
+  }, [curve, theme]);
 
   const allocation = [...sized]
     .map((position) => ({

@@ -5,7 +5,11 @@
 <meta name="description" content="A growing collection of interactive experiments from the Jez237 workbench. Explore, inspect, and take a working demo for a spin.">
 <link rel="canonical" href="https://jez237.com/demos/">
 <link rel="icon" href="../assets/brand.svg" type="image/svg+xml">
-<link rel="stylesheet" href="assets/demos.css?v=20261015-photo-cover">
+<link rel="stylesheet" href="assets/demos.css?v=20261124-light-theme">
+<script src="assets/theme.js?v=20261124"></script>
+  <link rel="apple-touch-icon" href="../assets/icons/apple-touch-icon.png" />
+  <meta name="theme-color" content="#0b0f14" />
+  <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "CollectionPage", "@id": "https://jez237.com/demos/#page", "url": "https://jez237.com/demos/", "name": "Website Demos — Jez237", "description": "A growing collection of interactive experiments from the Jez237 workbench. Explore, inspect, and take a working demo for a spin.", "isPartOf": {"@id": "https://jez237.com/#website"}, "author": {"@id": "https://jez237.com/#person"}, "inLanguage": "en"}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Jez237", "item": "https://jez237.com/"}, {"@type": "ListItem", "position": 2, "name": "Website Demos", "item": "https://jez237.com/demos/"}]}]}</script>
 </head><body>
 <a class="skip" href="#experiments">Skip to demos</a>
 <div class="workbench">
@@ -19,13 +23,13 @@
 <header class="masthead"><span><i class="signal"></i> WORKBENCH / DEMOS</span><a href="https://github.com/jz237/jez237-site/tree/main/demos">THE COLLECTION ON GITHUB ↗</a></header>
 <section class="intro" aria-labelledby="title">
 <div><p class="eyebrow">IDEAS, BROUGHT TO LIFE</p><h1 id="title">Website <em>demos.</em></h1><p class="deck">A place for curious builds and hands-on experiments.<br> Open one up. Look closer. See what makes it work.</p></div>
-<div class="collection-count"><strong data-demo-count>28</strong><span>IN THE<br>COLLECTION</span></div>
+<div class="collection-count"><strong data-demo-count>29</strong><span>IN THE<br>COLLECTION</span></div>
 </section>
 <section id="experiments" aria-label="Interactive demo collection">
 <div class="collection-heading"><h2>On the workbench</h2><span>EXPLORE / INTERACT / INSPECT</span></div>
 <!-- PAGINATION TOP START -->
 <nav class="pagination" aria-label="Demo pages (top)">
-  <p class="page-summary">Demos 1–10 of 28 · Page 1 of 3</p>
+  <p class="page-summary">Demos 1–10 of 29 · Page 1 of 3</p>
   <div class="page-links"><span class="page-disabled" aria-disabled="true">← Previous</span>
   <span aria-current="page" aria-label="Page 1">1</span><a href="page-2#experiments" aria-label="Page 2">2</a><a href="page-3#experiments" aria-label="Page 3">3</a>
   <a href="page-2#experiments" rel="next">Next →</a></div></nav>
@@ -33,7 +37,14 @@
 <div class="demo-grid">
 <!-- CATALOG START -->
 <article class="demo-card featured">
-  <a class="preview" href="voxel-engine/" aria-label="Open Voxel Engine"><span class="preview-label">EXPERIMENT / 033</span><img src="assets/voxel-engine.jpg" width="1280" height="800" alt="Voxel town with buildings, roads and a destruction-tool belt" fetchpriority="high"><span class="preview-hint"><b aria-hidden="true">↗</b> OPEN INTERACTIVE DEMO</span></a>
+  <a class="preview" href="ocean-water-lab/" aria-label="Open Ocean Water Lab"><span class="preview-label">EXPERIMENT / 034</span><img src="assets/ocean-water-lab.jpg" width="1280" height="760" alt="Golden coastal ocean and the Ocean Water Lab controls" fetchpriority="high"><span class="preview-hint"><b aria-hidden="true">↗</b> OPEN INTERACTIVE DEMO</span></a>
+  <div class="details"><div class="card-meta"><span>3D · Ocean simulation</span><span class="live"><i class="signal"></i> LIVE DEMO</span></div><h2>Ocean Water Lab</h2><p class="description">Shape a living ocean: rolling FFT waves, breaking surf, tides, storms and rogue waves. Cruise in a speedboat or take the helm of a cannon-firing pirate ship.</p>
+  <ul class="features"><li>Nine ocean looks and a cinematic tour</li><li>Speedboat and pirate-ship sailing</li><li>Weather, buoyancy and procedural sound</li><li>Advanced controls and engine-setting exports</li></ul>
+  <div class="actions"><a class="primary" href="ocean-water-lab/">Launch demo <span aria-hidden="true">→</span></a><a href="https://github.com/jz237/jez237-site/tree/main/scripts/ocean-water-lab">View source ↗</a></div>
+  <p class="compatibility">Original by Rahul Bhola · MIT license · Touch helm added · Demanding scenes work best on desktop.</p><div class="facts"><span>Self-hosted</span><span>WebGL2</span><span>v1.4.0</span></div></div>
+  </article>
+<article class="demo-card">
+  <a class="preview" href="voxel-engine/" aria-label="Open Voxel Engine"><span class="preview-label">EXPERIMENT / 033</span><img src="assets/voxel-engine.jpg" width="1280" height="800" alt="Voxel town with buildings, roads and a destruction-tool belt" loading="lazy"><span class="preview-hint"><b aria-hidden="true">↗</b> OPEN INTERACTIVE DEMO</span></a>
   <div class="details"><div class="card-meta"><span>3D · Destruction sandbox</span><span class="live"><i class="signal"></i> LIVE DEMO</span></div><h2>Voxel Engine</h2><p class="description">A town made of 10 cm voxels. Break buildings, drive vehicles and bring entire structures down in this standalone copy of @mattshumer’s Voxel Engine on Spawn.</p>
   <ul class="features"><li>Eight scenes, from town streets to castle keeps</li><li>Destructible buildings and physics-driven debris</li><li>Tools, vehicles, objectives and replays</li><li>Keyboard, gamepad and touch controls</li></ul>
   <div class="actions"><a class="primary" href="voxel-engine/">Launch demo <span aria-hidden="true">→</span></a><a href="https://github.com/jz237/jez237-site/tree/main/demos/voxel-engine">View source ↗</a></div>
@@ -95,18 +106,11 @@
   <div class="actions"><a class="primary" href="rotatable-aquascape/">Launch demo <span aria-hidden="true">→</span></a><a href="living-aquascape/">Photographic aquarium</a><a href="https://github.com/jz237/jez237-site/tree/main/scripts/rotatable-aquascape">View source ↗</a></div>
   <p class="compatibility">WebGL 2 · Desktop &amp; touch · Switch views inside the aquarium</p><div class="facts"><span>3D by default</span><span>Two aquarium views</span><span>Mouse &amp; touch</span></div></div>
   </article>
-<article class="demo-card">
-  <a class="preview" href="model-s-studio/" aria-label="Open Model S Studio"><span class="preview-label">EXPERIMENT / 007</span><img src="assets/model-s-studio.jpg" width="1100" height="579" alt="Actual Model S Studio showing a silver Tesla Model S Plaid with separated body panels, glass, wheels, cabin surfaces and an added schematic battery" loading="lazy"><span class="preview-hint"><b aria-hidden="true">↗</b> OPEN INTERACTIVE DEMO</span></a>
-  <div class="details"><div class="card-meta"><span>3D · Electric vehicle</span><span class="live"><i class="signal"></i> LIVE DEMO</span></div><h2>Model S Studio</h2><p class="description">Explore a silver Model S Plaid in 308 selectable pieces, then take the driver’s seat. Take a guided tour, inspect four interior close-ups, try the interactive display and discover the schematic battery anatomy.</p>
-  <ul class="features"><li>All 308 pieces on one board</li><li>Driver’s seat &amp; interactive display</li><li>Layered schematic battery anatomy</li><li>Infographic, manual &amp; technical reference</li></ul>
-  <div class="actions"><a class="primary" href="model-s-studio/">Launch demo <span aria-hidden="true">→</span></a><a href="model-s-studio/tour">Take the guided tour</a><a href="https://github.com/jz237/jez237-site/tree/main/demos/model-s-studio">View source ↗</a></div>
-  <p class="compatibility">WebGL 2 · Desktop &amp; mobile · Artist model by 3D Hawk, CC BY 4.0 · Preview captured from the running demo</p><div class="facts"><span>Tesla Model S Plaid</span><span>308 visual pieces</span><span>Mouse &amp; touch</span></div></div>
-  </article>
 <!-- CATALOG END -->
 </div>
 <!-- PAGINATION BOTTOM START -->
 <nav class="pagination" aria-label="Demo pages (bottom)">
-  <p class="page-summary">Demos 1–10 of 28 · Page 1 of 3</p>
+  <p class="page-summary">Demos 1–10 of 29 · Page 1 of 3</p>
   <div class="page-links"><span class="page-disabled" aria-disabled="true">← Previous</span>
   <span aria-current="page" aria-label="Page 1">1</span><a href="page-2#experiments" aria-label="Page 2">2</a><a href="page-3#experiments" aria-label="Page 3">3</a>
   <a href="page-2#experiments" rel="next">Next →</a></div></nav>
