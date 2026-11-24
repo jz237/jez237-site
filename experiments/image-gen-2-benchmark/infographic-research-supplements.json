@@ -178,5 +178,149 @@
         ]
       }
     ]
+  },
+  "2026-06-29-factual-infographic-factual-infographic-how-a-manual-can-op": {
+    "sources": [
+      {
+        "id": "S1",
+        "publisher": "U.S. Patent Office",
+        "title": "US1838525A: Can opener",
+        "url": "https://patents.google.com/patent/US1838525A/en"
+      }
+    ],
+    "claims": [
+      {
+        "claim": "In this rotary design, the can rim guides the opener while the cutting wheel moves along the inside edge. The wheels keep the opener positioned so the cutter can make a continuous cut around the top.",
+        "sourceIds": [
+          "S1"
+        ]
+      }
+    ]
+  },
+  "2026-07-01-factual-infographic-factual-infographic-how-a-mechanical-pe": {
+    "sources": [
+      {
+        "id": "S1",
+        "publisher": "U.S. Patent and Trademark Office",
+        "title": "US4521126A: Mechanical pencil",
+        "url": "https://patents.google.com/patent/US4521126A/en"
+      }
+    ],
+    "claims": [
+      {
+        "claim": "The patent shows a lead-gripping collet controlled by a tapered receiver. Moving the pieces together and then returning the receiver separately advances the lead by a small step instead of letting it slide freely.",
+        "sourceIds": [
+          "S1"
+        ]
+      }
+    ]
+  },
+  "2026-07-03-factual-infographic-factual-infographic-how-retroreflective": {
+    "sources": [
+      {
+        "id": "S1",
+        "publisher": "Minnesota Department of Transportation",
+        "title": "Signs 101 Manual",
+        "url": "https://www.dot.state.mn.us/trafficeng/signing/docs/signs-101-manual.pdf"
+      }
+    ],
+    "claims": [
+      {
+        "claim": "Traffic-sign sheeting uses tiny glass beads or cube-corner reflectors to send much of the incoming light back toward its source. That is why a sign can appear bright to a driver whose eyes are close to the headlights.",
+        "sourceIds": [
+          "S1"
+        ]
+      }
+    ]
+  },
+  "2026-06-28-factual-infographic-factual-infographic-how-a-refrigerator-": {
+    "sources": [
+      {
+        "id": "S1",
+        "publisher": "HIGA Magnetic Materials",
+        "title": "Extruded Door Seal Magnetic Strip",
+        "url": "https://www.higamaterials.com/products/extruded-door-seal-magnetic-strip"
+      }
+    ],
+    "claims": [
+      {
+        "claim": "Magnetic refrigerator seals can use an extruded magnetic strip shaped for the door gasket. The strip is part of the seal; the gasket is the material that closes the gap around the door.",
+        "sourceIds": [
+          "S1"
+        ]
+      }
+    ]
+  },
+  "2026-07-05-factual-infographic-factual-infographic-how-frost-flowers-g": {
+    "sources": [
+      {
+        "id": "S1",
+        "publisher": "National Snow and Ice Data Center",
+        "title": "Frost flowers",
+        "url": "https://nsidc.org/learn/cryosphere-glossary/frost-flowers"
+      }
+    ],
+    "claims": [
+      {
+        "claim": "Frost flowers are ice crystals, not plants. Water vapor deposits as solid ice on the sea-ice surface without first turning into liquid water.",
+        "sourceIds": [
+          "S1"
+        ]
+      }
+    ]
+  },
+  "2026-07-21-factual-infographic-factual-infographic-how-frost-flowers-b": {
+    "sources": [
+      {
+        "id": "S1",
+        "publisher": "National Snow and Ice Data Center",
+        "title": "Frost flowers",
+        "url": "https://nsidc.org/learn/cryosphere-glossary/frost-flowers"
+      }
+    ],
+    "claims": [
+      {
+        "claim": "Water vapor deposits directly as ice to form these crystals. Their texture roughens the sea-ice surface enough to affect its electromagnetic signal.",
+        "sourceIds": [
+          "S1"
+        ]
+      }
+    ]
+  },
+  "2026-07-11-factual-infographic-factual-infographic-how-solar-sails-get": {
+    "sources": [
+      {
+        "id": "S1",
+        "publisher": "NASA",
+        "title": "Solar Sails Activity",
+        "url": "https://science.nasa.gov/wp-content/uploads/2023/09/Solar_Sails_Activity.pdf"
+      }
+    ],
+    "claims": [
+      {
+        "claim": "Photons carry momentum even though they have no rest mass. When they hit a reflective sail, they transfer momentum to the spacecraft; the small pushes add up over a large illuminated area.",
+        "sourceIds": [
+          "S1"
+        ]
+      }
+    ]
+  },
+  "2026-07-14-factual-infographic-factual-infographic-how-magnetotactic-b": {
+    "sources": [
+      {
+        "id": "S1",
+        "publisher": "American Society for Microbiology",
+        "title": "Magnetotaxis and the Magnetosome",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7549360/"
+      }
+    ],
+    "claims": [
+      {
+        "claim": "Magnetosomes contain tiny crystals of magnetic iron minerals. Arranged in a chain, they act like an internal compass that aligns the cells with a magnetic field as they swim.",
+        "sourceIds": [
+          "S1"
+        ]
+      }
+    ]
   }
 }
