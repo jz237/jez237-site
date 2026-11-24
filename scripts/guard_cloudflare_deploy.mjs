@@ -5,7 +5,7 @@ import { checkGamesCatalogSyntax } from "./check_games_catalog_syntax.mjs";
 import { checkAquariumSync } from "./check_aquarium_sync.mjs";
 import { checkAquariumRelease } from "./check_aquarium_release.mjs";
 
-const BASELINE_COMMIT = "d8579c5193579c2b710064cd9dc0bc0a6d0abc8c";
+const BASELINE_COMMIT = "b26fbdb4c9db3705300fc4f118668466d5d8c974";
 const BASELINE_LABEL = "2026-08-24 Final Blow 1.9E live-safe baseline";
 const BASELINE_MARKER_PATH = "scripts/live-deploy-baseline.json";
 const PRODUCTION_BRANCHES = new Set(["main"]);
