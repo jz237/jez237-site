@@ -38,8 +38,8 @@ def web_url(value):
     raise ValueError(f"Invalid source URL: {value}")
 
 
-def research(facts):
-    evidence = facts.get("evidence") or {}
+def research(facts, supplement):
+    evidence = facts.get("evidence") or supplement or {}
     if not evidence.get("sources"):
         note = facts.get("sourceNote", "")
         parts = []
@@ -66,11 +66,12 @@ def research(facts):
     for index, item in sources.values():
         citations.append(f'<li id="source-{index}"><a href="{web_url(item["url"])}">'
                          f'{escape(item["title"])}</a> — {escape(item["publisher"])}</li>')
-    return ('<section><h2>Research behind the infographic</h2><ul>' + "".join(claims)
+    heading = "Research behind the infographic" if facts.get("evidence") else "Research added after publication"
+    return (f'<section><h2>{heading}</h2><ul>' + "".join(claims)
             + '</ul><h3>Sources</h3><ol>' + "".join(citations) + '</ol></section>')
 
 
-def article(row, url):
+def article(row, url, supplement):
     facts = row["factualInfographic"]
     title = row["title"].removeprefix("Factual infographic:").strip()
     description = facts["description"]
@@ -108,7 +109,7 @@ def article(row, url):
 <h1>{escape(title)}</h1><p class="intro">{escape(description)}</p></header>
 <figure><a href="{escape(image)}"><img src="{escape(image)}" alt="{escape(title)}"></a>
 <figcaption><a href="{escape(image)}">View full-size infographic</a></figcaption></figure>
-{research(facts)}
+{research(facts, supplement)}
 </article></main>
 </body>
 </html>
@@ -123,14 +124,17 @@ def write_if_changed(path, value):
 
 def main():
     rows = json.loads((ARCHIVE / "factual-infographics-data.json").read_text())
+    supplements = json.loads((ARCHIVE / "infographic-research-supplements.json").read_text())
     pages = {}
     for row in rows:
         key = row["id"]
         if not re.fullmatch(r"[a-z0-9][a-z0-9-]*", key) or key in pages:
             raise ValueError(f"Invalid or duplicate infographic ID: {key}")
         url = BASE + f"infographics/{key}/"
-        pages[key] = (url, row["date"], article(row, url))
+        pages[key] = (url, row["date"], article(row, url, supplements.get(key)))
 
+    if set(supplements) - pages.keys():
+        raise ValueError("Research supplement has no matching infographic")
     sitemap = ARCHIVE.parents[1] / "sitemap.xml"
     original = sitemap.read_text(encoding="utf-8")
     original = re.sub(r"(?ms)^" + re.escape(BEGIN) + r"\n.*?^" + re.escape(END) + r"\n", "", original)

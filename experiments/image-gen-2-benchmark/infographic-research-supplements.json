@@ -1,0 +1,74 @@
+{
+  "2026-06-24-factual-infographic-factual-infographic-cut-vinyl-decal-bui": {
+    "sources": [
+      {
+        "id": "S1",
+        "publisher": "Avery Dennison",
+        "title": "Application Instructions for Avery Dennison Films",
+        "url": "https://graphics.averydennison.com/content/dam/averydennison/graphics/na/en/documents/Instructional-Bulletins/Application-and-Removal-Information/ib400-application-instructions-ad-films.pdf"
+      }
+    ],
+    "claims": [
+      {
+        "claim": "Application pressure helps seat the adhesive. Avery Dennison recommends squeegeeing the decal before removing the premask and again afterward, particularly around edges that could lift as the premask peels away.",
+        "sourceIds": [
+          "S1"
+        ]
+      }
+    ]
+  },
+  "2026-06-24-factual-infographic-factual-infographic-planted-aquarium-ni": {
+    "sources": [
+      {
+        "id": "S1",
+        "publisher": "University of Florida IFAS Extension",
+        "title": "Ammonia in Aquatic Systems",
+        "url": "https://ask.ifas.ufl.edu/publication/FA031.pdf"
+      }
+    ],
+    "claims": [
+      {
+        "claim": "Nitrification happens in two biological steps: ammonia is oxidized to nitrite, then nitrite is oxidized to nitrate. It requires oxygen; nitrate production does not mean nitrogen has left the aquarium.",
+        "sourceIds": [
+          "S1"
+        ]
+      }
+    ]
+  },
+  "2026-06-24-factual-infographic-factual-infographic-how-a-thermal-recei": {
+    "sources": [
+      {
+        "id": "S1",
+        "publisher": "Jujo Thermal",
+        "title": "Correct storing",
+        "url": "https://www.jujothermal.com/technical-guide/correct-storing/"
+      }
+    ],
+    "claims": [
+      {
+        "claim": "A direct-thermal print can fade in sunlight or prolonged fluorescent light. The manufacturer also warns that plasticizers in some tapes and sleeves can fade the printed image, so the storage material matters as well as the light exposure.",
+        "sourceIds": [
+          "S1"
+        ]
+      }
+    ]
+  },
+  "2026-06-25-factual-infographic-factual-infographic-how-a-mechanical-fi": {
+    "sources": [
+      {
+        "id": "S1",
+        "publisher": "British Automatic Fire Sprinkler Association",
+        "title": "Sprinkler Heads",
+        "url": "https://www.bafsa.org.uk/assets/Downloads/BIF-8C-Sprinkler-Heads.pdf"
+      }
+    ],
+    "claims": [
+      {
+        "claim": "The heat-responsive element holds an automatic sprinkler closed until heating causes it to break or release. A liquid-filled glass bulb is one design; other heads use a fusible metal link.",
+        "sourceIds": [
+          "S1"
+        ]
+      }
+    ]
+  }
+}
