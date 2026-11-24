@@ -97,7 +97,9 @@ export function skinTint(geometry, world) {
 export const lifeUniforms = {time: {value: 0}, gain: {value: 0}, breath: {value: 0}, trunk: {value: new THREE.Vector4(1.1, 1.41, .95, 1.18)}, spine: {value: new THREE.Vector2(-.083, .074)}, chest: {value: new THREE.Vector4(.012, .004, .036, .007)},
   lung: {value: new THREE.Vector2(1.43, .016)}, bodyInverse: {value: new THREE.Matrix4()}, headTurn: {value: new THREE.Vector3()}, neckPivot: {value: new THREE.Vector3(0, 1.484, -.043)}, neckRange: {value: new THREE.Vector2(1.438, 1.53)},
   blink: {value: 0}, eyes: {value: [new THREE.Vector3(.03, 1.581, .047), new THREE.Vector3(-.03, 1.581, .047)]},
-  elbows: {value: [new THREE.Vector3(.2, 1.08, -.04), new THREE.Vector3(-.2, 1.08, -.04)]}, elbowTurn: {value: [new THREE.Vector3(), new THREE.Vector3()]}, xray: {value: 1}};
+  elbows: {value: [new THREE.Vector3(.2, 1.08, -.04), new THREE.Vector3(-.2, 1.08, -.04)]}, elbowTurn: {value: [new THREE.Vector3(), new THREE.Vector3()]}, xray: {value: 1},
+  wrists: {value: [new THREE.Vector3(.255, .847, -.02), new THREE.Vector3(-.255, .847, -.02)]}, wristTurn: {value: [new THREE.Vector3(), new THREE.Vector3()]},
+  jaw: {value: new THREE.Vector4(1.563, -.007, 1.519, 1.487)}, jawTurn: {value: 0}};   // jaw: hinge height, hinge depth, where the lips meet, the chin
 /** Run another shader edit after whatever the material already does, and keep the program cache key distinct. */
 function alsoCompile(mat, tag, edit) {
   const before = mat.onBeforeCompile, key = Object.hasOwn(mat, 'customProgramCacheKey') ? mat.customProgramCacheKey() : 'plain';
@@ -109,7 +111,8 @@ function alsoCompile(mat, tag, edit) {
  *   WALL  the soft layers of the body wall: skin, muscle and fascia, and the vessels, nerves, ligaments and lymph
  *         nodes threaded through them. They lie on each other with no gap, so they must all move by exactly the
  *         same rule or one shows through the next;
- *   ARM_L, ARM_R  wall layers of an arm: as WALL, and below the elbow they also turn with the forearm. The arm hangs
+ *   ARM_L, ARM_R  wall layers of an arm: as WALL, and below the elbow they also turn with the forearm, and below the
+ *         wrist with the hand. The arm hangs
  *         beside the hip, so which limb a vertex belongs to cannot be told from where it is; the piece says so;
  *   SOFT  lungs, pleura and bronchi: carried by the wall and drawn down by the diaphragm, each vertex by its own
  *         amount, so a lung lengthens from a fixed apex instead of stretching as a block.
@@ -125,11 +128,13 @@ export function tagLayer(geometry, layer) { if (layer && !geometry.attributes.li
 export function enliven(mat) {
   alsoCompile(mat, 'alive', shader => {
     Object.assign(shader.uniforms, {uBreath: lifeUniforms.breath, uTrunk: lifeUniforms.trunk, uSpine: lifeUniforms.spine, uChest: lifeUniforms.chest, uLung: lifeUniforms.lung, uBodyInverse: lifeUniforms.bodyInverse,
-      uHeadTurn: lifeUniforms.headTurn, uNeckPivot: lifeUniforms.neckPivot, uNeckRange: lifeUniforms.neckRange, uBlink: lifeUniforms.blink, uEyes: lifeUniforms.eyes, uElbows: lifeUniforms.elbows, uElbowTurn: lifeUniforms.elbowTurn});
+      uHeadTurn: lifeUniforms.headTurn, uNeckPivot: lifeUniforms.neckPivot, uNeckRange: lifeUniforms.neckRange, uBlink: lifeUniforms.blink, uEyes: lifeUniforms.eyes, uElbows: lifeUniforms.elbows, uElbowTurn: lifeUniforms.elbowTurn,
+      uWrists: lifeUniforms.wrists, uWristTurn: lifeUniforms.wristTurn, uJaw: lifeUniforms.jaw, uJawTurn: lifeUniforms.jawTurn});
     shader.vertexShader = shader.vertexShader.replace('#include <common>', `#include <common>
 attribute float lifeLayer;
 uniform float uBreath; uniform vec4 uTrunk; uniform vec2 uSpine; uniform vec4 uChest; uniform vec2 uLung; uniform mat4 uBodyInverse;
 uniform vec3 uHeadTurn; uniform vec3 uNeckPivot; uniform vec2 uNeckRange; uniform float uBlink; uniform vec3 uEyes[ 2 ]; uniform vec3 uElbows[ 2 ]; uniform vec3 uElbowTurn[ 2 ];
+uniform vec3 uWrists[ 2 ]; uniform vec3 uWristTurn[ 2 ]; uniform vec4 uJaw; uniform float uJawTurn;
 float lifeStep( float a, float b, float x ) { float t = clamp( ( x - a ) / ( b - a ), 0.0, 1.0 ); return t * t * ( 3.0 - 2.0 * t ); }
 vec3 lifeField( vec3 p, float soft, float layer ) {
 	float side = 1.0 - lifeStep( 0.19, 0.27, abs( p.x ) );
@@ -139,6 +144,11 @@ vec3 lifeField( vec3 p, float soft, float layer ) {
 	vec3 d = vec3( p.x * uChest.x * chest, uChest.y * f * chest, max( 0.0, p.z - uSpine.x ) * uChest.z * chest + uChest.w * f * f * belly );
 	if ( soft > 0.5 ) d.y = - uLung.y * side * ( p.y >= uTrunk.w ? lifeStep( uLung.x, uTrunk.w, p.y ) : 1.0 - lifeStep( uTrunk.w, uTrunk.z, p.y ) );
 	d *= uBreath;
+	// the jaw drops for mouth breathing: the soft tissue below the lips and in front of the hinge turns with the mandible
+	if ( uJawTurn > 0.0 && layer < 0.55 ) {
+		float chin = ( 1.0 - lifeStep( uJaw.z - 0.004, uJaw.z + 0.005, p.y ) ) * lifeStep( uJaw.w - 0.03, uJaw.w - 0.004, p.y ) * lifeStep( uJaw.y + 0.012, uJaw.y + 0.05, p.z ) * ( 1.0 - lifeStep( 0.05, 0.075, abs( p.x ) ) );
+		d += cross( vec3( uJawTurn, 0.0, 0.0 ), p - vec3( 0.0, uJaw.x, uJaw.y ) ) * chin;
+	}
 	d += cross( uHeadTurn, p - uNeckPivot ) * lifeStep( uNeckRange.x, uNeckRange.y, p.y );
 	if ( uBlink > 0.0 ) for ( int i = 0; i < 2; i ++ ) {
 		vec3 q = p - uEyes[ i ];
@@ -146,7 +156,12 @@ vec3 lifeField( vec3 p, float soft, float layer ) {
 		d.y -= uBlink * 0.009 * lid; d.z += uBlink * 0.0012 * lid;
 	}
 	// below the elbow the arm's layers turn with the forearm; the turn fades in across the joint so the skin folds, not tears
-	if ( layer > 0.55 && layer < 0.75 ) { int arm = layer < 0.65 ? 0 : 1; d += cross( uElbowTurn[ arm ], p - uElbows[ arm ] ) * lifeStep( - 0.035, 0.035, uElbows[ arm ].y - p.y ); }
+	if ( layer > 0.55 && layer < 0.75 ) {
+		int arm = layer < 0.65 ? 0 : 1;
+		vec3 fore = cross( uElbowTurn[ arm ], p - uElbows[ arm ] ) * lifeStep( - 0.035, 0.035, uElbows[ arm ].y - p.y );
+		vec3 wrist = uWrists[ arm ] + cross( uElbowTurn[ arm ], uWrists[ arm ] - uElbows[ arm ] );   // the wrist has already been carried by the forearm
+		d += fore + cross( uWristTurn[ arm ], p + fore - wrist ) * lifeStep( - 0.02, 0.02, uWrists[ arm ].y - p.y );
+	}
 	return d;
 }`).replace('#include <begin_vertex>', `#include <begin_vertex>
 	if ( lifeLayer > 0.25 ) { mat4 lifeBody = uBodyInverse * modelMatrix; mat3 lifeTurn = mat3( lifeBody ); transformed += transpose( lifeTurn ) * lifeField( ( lifeBody * vec4( transformed, 1.0 ) ).xyz, step( 0.75, lifeLayer ), lifeLayer ) / dot( lifeTurn[ 0 ], lifeTurn[ 0 ] ); }`);
@@ -177,7 +192,7 @@ function realistic(p) {
       if (/omentum|mesocolon|meso-appendix|taenia/.test(L)) return {color: '#e5cf9c', roughness: .35, clearcoat: .6, opacity: .82, transparent: true};
       if (/liver/.test(L)) return {color: '#7b2f2b', ...wet, roughness: .2, clearcoat: 1, clearcoatRoughness: .08, bumpScale: .0013};   // smooth, glossy capsule
       if (/gallbladder|bile duct/.test(L)) return {color: '#5e8a58', ...wet};
-      if (/stomach|duodenum|jejunum|ileum|oesophagus|pharynx/.test(L)) return {color: '#cc8f7f', ...wet, roughness: .25, clearcoat: .95, clearcoatRoughness: .12, gut: /stomach/.test(L) ? .0018 : /oesophagus|pharynx/.test(L) ? 0 : .0013};   // slick serosa
+      if (/stomach|duodenum|jejunum|ileum|oesophagus|pharynx/.test(L)) return {color: '#cc8f7f', ...wet, roughness: .25, clearcoat: .95, clearcoatRoughness: .12, gut: /stomach/.test(L) ? .0018 : /pharynx/.test(L) ? 0 : /oesophagus/.test(L) ? .0009 : .0013};   // slick serosa
       if (/colon|appendix|anal|rectum/.test(L)) return {color: '#b98079', ...wet, roughness: .27, clearcoat: .92, clearcoatRoughness: .14, gut: /colon/.test(L) ? .0011 : 0};
       if (/kidney|renal|suprarenal/.test(L)) return {color: '#7d3038', ...wet, roughness: .23, clearcoat: .95, clearcoatRoughness: .1};
       if (/ureter|urethra|bladder/.test(L)) return {color: '#d9b0a0', ...wet, gut: /ureter/.test(L) ? .0005 : 0};   // the ureters squeeze urine down in waves too

@@ -16,6 +16,9 @@
  *               irregularly, more front-to-back than side-to-side, and the calf and shin muscles take turns to hold it.
  *   head        turns and nods a degree or two, the neck bending with it vertebra by vertebra.
  *   elbows      each forearm bends a few degrees at the elbow and straightens again, slowly and independently.
+ *   wrists      each hand flexes and extends a few degrees at the wrist, on its own slow rhythm.
+ *   effort      with the heart rate up (exercise), the arteries widen and pulse harder and the jaw drops a few
+ *               millimetres on each breath in, as it does when breathing through the mouth.
  *   eyes        both eyes jump together to a new point of gaze every second or two, with small corrections between,
  *               and blink every few seconds.
  *   swallowing  now and then the larynx and hyoid rise about two centimetres and drop back, stretching the trachea.
@@ -39,7 +42,7 @@
  * This is an illustration of the motion, not a measurement of it.
  */
 import * as THREE from 'three';
-import { lifeUniforms, layerOf } from './materials.js?v=5290592a00';
+import { lifeUniforms, layerOf } from './materials.js?v=4f6f543d94';
 
 const smooth = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a))); return t * t * (3 - 2 * t); };
 const smoother = t => { t = Math.min(1, Math.max(0, t)); return t * t * t * (t * (t * 6 - 15) + 10); };
@@ -96,6 +99,10 @@ const BLINK_SECONDS = 0.32;
 const BRAIN_PULSE = 0.003, VEIN_BREATH = 0.012;
 const OUTFLOW_SWING = 1.0, INFLOW_SWING = 0.9;   // radians a leaflet turns on its ring between shut and open
 const ELBOW_BEND = 0.075;                        // radians: the forearm wanders between straight and about 4 degrees bent
+const WRIST_BEND = 0.085;                        // radians: the hand wanders about 5 degrees either side of straight
+const JAW_DROP = 0.06;                           // radians: about 5 mm between the front teeth, for mouth breathing
+const ARTERY_EFFORT = 0.045, PULSE_EFFORT = 0.7; // exercise: arteries this much wider, and the pulse this much stronger
+const LOWER_TOOTH = /^Lower (medial incisor|lateral incisor|canine|first premolar|second premolar|first molar tooth|second molar tooth|third molar tooth)$/;
 
 /**
  * Conditions for teaching. Each is a deliberately simplified picture of one thing going wrong, built from the same
@@ -107,14 +114,20 @@ export const CONDITIONS = {
   slow: { name: 'Slow heartbeat', note: 'Bradycardia: under 60 beats a minute. Normal in sleep and in trained athletes; otherwise each beat has to do more.', rates: { bpm: 44, breaths: 12, depth: 1 } },
   irregular: { name: 'Irregular heartbeat', note: 'As in atrial fibrillation: the atria quiver instead of contracting, so there is no P wave and no atrial kick, and the ventricles beat at uneven intervals.', rates: { bpm: 96, breaths: 15, depth: 1 }, irregular: true },
   shallow: { name: 'Shallow breathing', note: 'Fast, shallow breaths: the diaphragm and ribs travel less than half as far, so each breath moves much less air.', rates: { bpm: 88, breaths: 26, depth: 0.42 } },
-  leak: { name: 'Leaking aortic valve', note: 'Aortic regurgitation: the valve does not shut fully, so some blood falls back into the left ventricle while it should be filling from the atrium.', rates: { bpm: 76, breaths: 14, depth: 1 }, leak: 0.3 }
+  leak: { name: 'Leaking aortic valve', note: 'Aortic regurgitation: the valve does not shut fully, so some blood falls back into the left ventricle while it should be filling from the atrium.', rates: { bpm: 76, breaths: 14, depth: 1 }, leak: 0.3 },
+  // the next three change the shape of something, not only its timing
+  enlarged: { name: 'Enlarged heart', note: 'Cardiomegaly: a heart that has stretched to keep up, here about a fifth bigger. Its walls move less with each beat, so it pumps less of what it holds. Switch off the skeleton under Systems shown for a clear view.', rates: { bpm: 88, breaths: 18, depth: 1 }, shape: 'heart' },
+  collapsed: { name: 'Collapsed lung', note: 'Pneumothorax: air between the left lung and the chest wall lets the lung shrink towards its root. The ribs still move but that lung takes in little air, so breathing and the heart speed up. Switch off the skeleton under Systems shown for a clear view.', rates: { bpm: 108, breaths: 26, depth: 0.8 }, shape: 'lung' },
+  narrowed: { name: 'Narrowed leg artery', note: 'Peripheral arterial disease: the left femoral artery is narrowed, so less blood gets past it and the pulse below the knee is weak. Switch on Blood flow to see it slow.', rates: { bpm: 74, breaths: 14, depth: 1 }, shape: 'artery' }
 };
+export const SHAPES = { heart: 1.2, lung: 0.58, artery: 0.5 };   // how big the affected pieces become
 
 export function createLife() {
   const life = { on: true, breath: 0.15, beat: 0, time: Math.random() * 60, weight: 0, anchors: null, animated: [], planned: 0, swayGain: 0, swayX: 0, swayZ: 0,
-    rate: { ...REST }, speed: 1, scrub: null, head: [0, 0, 0], elbow: [0, 0], condition: 'normal', interval: 1, loopBeat: null, loopBreath: null,
+    rate: { ...REST }, speed: 1, scrub: null, head: [0, 0, 0], elbow: [0, 0], wrist: [0, 0], jaw: 0, effort: 0, shape: { heart: 0, lung: 0, artery: 0 }, condition: 'normal', interval: 1, loopBeat: null, loopBreath: null, loopSwallow: null,
     gaze: { x: 0, y: 0, fromX: 0, fromY: 0, toX: 0, toY: 0, t: 1, seconds: 0.05, wait: 1.2 }, swallow: { t: -1, wait: 14 + Math.random() * 14 }, blink: { t: -1, wait: 2 + Math.random() * 3 } };
-  const signals = { breath: 0, ventricle: 0, atrium: 0, sway: 0, swallow: 0, outflow: 0, inflow: 1, blink: 0, leak: 0 };
+  const signals = { breath: 0, ventricle: 0, atrium: 0, sway: 0, swallow: 0, outflow: 0, inflow: 1, blink: 0, leak: 0, effort: 0, narrow: 0 };
+  const wristNow = [new THREE.Vector3(), new THREE.Vector3()], wristPivot = [[0, 0, 0], [0, 0, 0]];
   const turn = new THREE.Quaternion(), arm = new THREE.Vector3(), axis = new THREE.Vector3();
   const eyeTurn = new THREE.Quaternion(), eyeNow = new THREE.Quaternion(), lean = new THREE.Quaternion(), tilt = new THREE.Quaternion(), UP = new THREE.Vector3(0, 1, 0), ACROSS = new THREE.Vector3(1, 0, 0), FORWARD = new THREE.Vector3(0, 0, 1);
 
@@ -127,6 +140,12 @@ export function createLife() {
     const c1 = piece('Atlas (C1)'), c4 = piece('Vertebra C4'), c7 = piece('Vertebra C7');
     // the elbow: the lower end of each humerus (left first, to match the shader's arrays)
     const elbows = [1, -1].map(sign => { const h = manifest.pieces.find(p => p.name === 'Humerus' && Math.sign(p.center[0]) === sign); return h ? [h.center[0] + sign * 0.02, h.center[1] - h.size[1] / 2 + 0.012, h.center[2] + 0.005] : [sign * 0.217, 1.09, -0.039]; });
+    // the wrist: the lower end of each radius. The jaw: the hinge in front of the ear, where the lips meet, and the chin
+    const wrists = [1, -1].map(sign => { const r = manifest.pieces.find(p => p.name === 'Radius' && Math.sign(p.center[0]) === sign); return r ? [r.center[0], r.center[1] - r.size[1] / 2 + 0.006, r.center[2] + 0.012] : [sign * 0.255, 0.853, -0.012]; });
+    const mandible = piece('Mandible'), incisor = piece('Lower medial incisor');
+    const jaw = mandible ? { pivot: [0, mandible.center[1] + mandible.size[1] / 2 - 0.006, mandible.center[2] - mandible.size[2] / 2 + 0.008], lips: incisor ? incisor.center[1] + incisor.size[1] / 2 : mandible.center[1], chin: mandible.center[1] - mandible.size[1] / 2 } : null;
+    // conditions that change a shape: what they act on, and the point each shrinks or swells about
+    const lungSet = new Set(manifest.assemblies?.lungs || []), root = piece('Left main bronchus'), femoral = manifest.pieces.find(p => p.name === 'Femoral artery' && p.center[0] > 0);
     const apex = mark('Apex of heart') || [0.099, 1.231, 0.072], base = mark('Base of heart') || [-0.066, 1.311, -0.018];
     const heart = lv ? lv.center : [0.04, 1.27, 0.01];
     const a = life.anchors = {
@@ -145,7 +164,9 @@ export function createLife() {
       larynx: new Set(manifest.assemblies?.larynx || []),
       // the head turns about the middle of the neck; the turn fades in from the base of the neck to the base of the skull
       neckPivot: c4 ? [0, c4.center[1], c4.center[2]] : [0, 1.484, -0.043], neckBase: c7 ? c7.center[1] - 0.005 : 1.438, skullBase: c1 ? c1.center[1] - 0.004 : 1.53,
-      valves: new Map(), elbows
+      valves: new Map(), elbows, wrists, jaw,
+      collapse: new Set(manifest.pieces.filter(p => lungSet.has(p.id) && p.center[0] > 0.03).map(p => p.id)), lungRoot: root ? [root.center[0] + root.size[0] / 2, root.center[1] - 0.01, root.center[2]] : [0.04, 1.3, -0.02],
+      heartMiddle: apex.map((v, i) => (v + base[i]) / 2), narrow: femoral ? femoral.id : null, narrowBelow: femoral ? femoral.center[1] - femoral.size[1] / 2 + 0.03 : 0
     };
     // Valve leaflets. Each hinges on the valve ring, at its edge furthest from the middle of the valve, about an
     // axis lying in the ring; turning it swings its free edge the way the blood goes.
@@ -168,6 +189,8 @@ export function createLife() {
     lifeUniforms.lung.value.set(a.lungTop, DIAPHRAGM_DROP); lifeUniforms.neckPivot.value.fromArray(a.neckPivot); lifeUniforms.neckRange.value.set(a.neckBase, a.skullBase);
     a.eyes.slice(0, 2).forEach((e, i) => lifeUniforms.eyes.value[i].fromArray(e));
     a.elbows.forEach((e, i) => lifeUniforms.elbows.value[i].fromArray(e));
+    a.wrists.forEach((w, i) => lifeUniforms.wrists.value[i].fromArray(w));
+    if (jaw) lifeUniforms.jaw.value.set(jaw.pivot[1], jaw.pivot[2], jaw.lips, jaw.chin);
   }
 
   // ---- breathing fields. Each returns the displacement of a body-space point at full inhalation.
@@ -239,7 +262,7 @@ export function createLife() {
   function plan(part) {
     const a = life.anchors, piece = part.piece, c = piece.center, channels = [], NONE = [0, 0, 0], layered = layerOf(piece) > 0;
     const add = (signal, offset, stretch, delay = 0) => { if (offset.some(v => Math.abs(v) > 2e-5) || stretch.some(v => Math.abs(v) > 2e-4)) channels.push({ signal, offset, stretch, delay }); };
-    let rib = null, eye = null, head = 0, elbow = null;
+    let rib = null, eye = null, head = 0, elbow = null, wrist = null, shape = null;
     // breathing (layered pieces follow the same fields per vertex, in their shaders)
     if (!layered && piece.region !== 'upper limb' && piece.region !== 'lower limb' && piece.region !== 'head') {
       if (piece.file === 'skeletal' && RIB.test(piece.name)) rib = ribSwing(piece);
@@ -271,6 +294,9 @@ export function createLife() {
       const longest = piece.size.indexOf(Math.max(...piece.size));
       const delay = Math.hypot(c[0] - a.heart[0], c[1] - a.heart[1], c[2] - a.heart[2]) / PULSE_SPEED / (60 / REST.bpm);
       add('pulse', NONE, [0, 1, 2].map(i => i === longest ? 0 : ARTERY), delay);
+      add('effort', NONE, [0, 1, 2].map(i => i === longest ? 0 : ARTERY_EFFORT));   // exercise opens the arteries
+      if (piece.id === a.narrow) shape = { kind: 'artery', pivot: c, k: [0, 1, 2].map(i => i === longest ? 1 : SHAPES.artery) };
+      else if (a.narrow && piece.region === 'lower limb' && c[0] > 0 && c[1] < a.narrowBelow) channels.forEach(ch => { if (ch.signal === 'pulse') ch.weak = true; });   // downstream of the narrowing
     }
     // veins: the big ones empty towards the chest on the in-breath and fill below the diaphragm
     if (piece.file === 'vessels' && !isArtery(piece) && /thorax|neck|abdomen/.test(piece.region)) {
@@ -294,10 +320,18 @@ export function createLife() {
     // the head and neck: whole pieces turn about the neck by their share of the head's turn
     if (!layered && (piece.region === 'head' || piece.region === 'neck')) head = smooth(a.neckBase, a.skullBase, c[1]);
     // the forearm and hand: whole pieces below the elbow turn about it (their soft layers do the same per vertex)
-    if (!layered && piece.region === 'upper limb') { const arm = c[0] > 0 ? 0 : 1, share = smooth(-0.035, 0.035, a.elbows[arm][1] - c[1]); if (share > 0.001) elbow = { arm, share }; }
-    if (!channels.length && !rib && !eye && !valve && !elbow && head <= 0.001) return null;
-    if (rib || eye || valve || elbow || head > 0.001) part.baseQuaternion = part.mesh.quaternion.clone();
-    return { channels, rib, eye, valve, elbow, head: head > 0.001 ? head : 0 };
+    if (!layered && piece.region === 'upper limb') {
+      const arm = c[0] > 0 ? 0 : 1, share = smooth(-0.035, 0.035, a.elbows[arm][1] - c[1]), hand = smooth(-0.02, 0.02, a.wrists[arm][1] - c[1]);
+      if (share > 0.001) elbow = { arm, share }; if (hand > 0.001) wrist = { arm, share: hand };
+    }
+    // the mandible and the teeth in it hinge at the jaw joint (the soft tissue over them follows per vertex)
+    const jaw = !!a.jaw && (piece.name === 'Mandible' || LOWER_TOOTH.test(piece.name));
+    // conditions: an enlarged heart swells about its middle, a collapsed lung shrinks towards its root
+    if (piece.file === 'heart' && !/vena cava|pulmonary (artery|vein)|aort/i.test(piece.name)) shape = { kind: 'heart', pivot: a.heartMiddle, k: [SHAPES.heart, SHAPES.heart, SHAPES.heart] };
+    else if (a.collapse.has(piece.id)) shape = { kind: 'lung', pivot: a.lungRoot, k: [SHAPES.lung, SHAPES.lung, SHAPES.lung] };
+    if (!channels.length && !rib && !eye && !valve && !elbow && !wrist && !jaw && !shape && head <= 0.001) return null;
+    if (rib || eye || valve || elbow || wrist || jaw || head > 0.001) part.baseQuaternion = part.mesh.quaternion.clone();
+    return { channels, rib, eye, valve, elbow, wrist, jaw, shape, head: head > 0.001 ? head : 0 };
   }
 
   /** Advance the clocks. The heart runs a little faster during inhalation. */
@@ -317,7 +351,12 @@ export function createLife() {
       life.beat = next % 1;
     }
     signals.atrium = cond.irregular ? 0.1 + 0.05 * Math.sin(life.time * 38) : atrialCurve(life.beat);   // fibrillating atria only quiver
-    signals.ventricle = ventricularCurve(life.beat);
+    // effort follows the heart rate, a few seconds behind; a condition's change of shape eases in and out the same way
+    const ease = 1 - Math.exp(-dt / 1.6);
+    life.effort += (smooth(84, 132, life.rate.bpm) * (cond.shape || cond.irregular || life.condition === 'fast' ? 0 : 1) - life.effort) * ease; signals.effort = life.effort;
+    for (const k in life.shape) life.shape[k] += ((cond.shape === k ? 1 : 0) - life.shape[k]) * ease * 1.6;
+    signals.narrow = life.shape.artery;
+    signals.ventricle = ventricularCurve(life.beat) * (1 - 0.4 * life.shape.heart);   // a stretched heart squeezes less
     signals.outflow = Math.max(outflowOpen(life.beat), cond.leak || 0);   // a leaking valve never quite shuts
     signals.inflow = inflowOpen(life.beat);
     signals.leak = cond.leak ? 1 - outflowOpen(life.beat) : 0;            // and lets blood back while it should be shut
@@ -333,6 +372,10 @@ export function createLife() {
     // the elbows: each arm on its own slow rhythm, between straight and slightly bent (an elbow does not bend backwards)
     life.elbow[0] = ELBOW_BEND * (0.5 + 0.3 * Math.sin(TAU * t / 9.1 + 1.7) + 0.2 * Math.sin(TAU * t / 4.7));
     life.elbow[1] = ELBOW_BEND * (0.5 + 0.3 * Math.sin(TAU * t / 11.3 + 4.0) + 0.2 * Math.sin(TAU * t / 6.1 + 2.2));
+    life.wrist[0] = WRIST_BEND * (0.15 + 0.5 * Math.sin(TAU * t / 7.7 + 0.9) + 0.35 * Math.sin(TAU * t / 3.9 + 2.6));
+    life.wrist[1] = WRIST_BEND * (0.15 + 0.5 * Math.sin(TAU * t / 8.9 + 3.3) + 0.35 * Math.sin(TAU * t / 4.3));
+    // mouth breathing: only when breathing deeply, and wider on the way in
+    life.jaw = JAW_DROP * smooth(1.15, 1.6, life.rate.depth) * life.effort * (0.55 + 0.45 * Math.min(1, signals.breath / Math.max(1, life.rate.depth)));
     // eyes: hold, then jump. Larger jumps take longer (about 30 ms plus 2.5 ms a degree), as real saccades do
     const g = life.gaze;
     if (g.t >= 1 && (g.wait -= dt) <= 0) {
@@ -346,7 +389,8 @@ export function createLife() {
     eyeTurn.setFromAxisAngle(UP, g.x).multiply(turn.setFromAxisAngle(ACROSS, -g.y));
     // swallowing: every twenty to forty seconds. Blinking: every two to six, shut in a third of the time it takes to open
     const s = life.swallow;
-    if (s.t < 0) { if ((s.wait -= dt) <= 0) s.t = 0; signals.swallow = 0; }
+    if (life.loopSwallow) { const [from, to] = life.loopSwallow; s.t = from + ((Math.max(from, Math.min(to, s.t)) - from + dt * 0.22) % (to - from)); signals.swallow = contraction(s.t, 0, 0.3, 1); }   // a lesson: one part of a swallow, over and over
+    else if (s.t < 0) { if ((s.wait -= dt) <= 0) s.t = 0; signals.swallow = 0; }
     else { s.t += dt / SWALLOW_SECONDS; signals.swallow = contraction(s.t, 0, 0.3, 1); if (s.t >= 1) { s.t = -1; s.wait = 20 + Math.random() * 20; } }
     const b = life.blink;
     if (b.t < 0) { if ((b.wait -= dt) <= 0) b.t = 0; signals.blink = 0; }
@@ -382,6 +426,14 @@ export function createLife() {
     lifeUniforms.headTurn.value.set(hx, hy, hz); lifeUniforms.blink.value = signals.blink * weight;
     const bend = [life.elbow[0] * life.swayGain, life.elbow[1] * life.swayGain];   // bending brings the forearm forward: a turn about the body's left-right axis
     lifeUniforms.elbowTurn.value[0].set(-bend[0], 0, 0); lifeUniforms.elbowTurn.value[1].set(-bend[1], 0, 0);
+    // the hand turns about the wrist, which the forearm has already carried
+    const flex = [life.wrist[0] * life.swayGain, life.wrist[1] * life.swayGain], jawAngle = life.jaw * weight;
+    for (let i = 0; i < 2; i++) {
+      lifeUniforms.wristTurn.value[i].set(-flex[i], 0, 0);
+      const e = life.anchors.elbows[i], w = life.anchors.wrists[i]; turn.setFromAxisAngle(ACROSS, -bend[i]); wristNow[i].set(w[0] - e[0], w[1] - e[1], w[2] - e[2]).applyQuaternion(turn);
+      wristPivot[i][0] = e[0] + wristNow[i].x; wristPivot[i][1] = e[1] + wristNow[i].y; wristPivot[i][2] = e[2] + wristNow[i].z;
+    }
+    lifeUniforms.jawTurn.value = jawAngle;
     eyeNow.identity().slerp(eyeTurn, weight);
     if (parts.length !== life.planned) { for (const p of parts) if (p.life === undefined) { p.life = plan(p); if (p.life) life.animated.push(p); } life.planned = parts.length; }
     const was = life.weight;
@@ -393,13 +445,15 @@ export function createLife() {
       const mesh = p.mesh, s0 = p.baseScale, plan = p.life;
       let ox = 0, oy = 0, oz = 0, kx = 1, ky = 1, kz = 1;
       if (weight > 0) for (const ch of plan.channels) {
-        const v = (ch.signal === 'pulse' ? pulseCurve(life.beat - ch.delay) : signals[ch.signal]) * weight;
+        const v = (ch.signal === 'pulse' ? pulseCurve(life.beat - ch.delay) * (1 + PULSE_EFFORT * life.effort) * (ch.weak ? 1 - 0.75 * life.shape.artery : 1) : signals[ch.signal]) * weight;
         if (v === 0) continue;
         ox += ch.offset[0] * v; oy += ch.offset[1] * v; oz += ch.offset[2] * v;
         kx += ch.stretch[0] * v; ky += ch.stretch[1] * v; kz += ch.stretch[2] * v;
       }
       // scale about the piece's centre: the mesh origin sits somewhere else, so it shifts by (1 - k) x (centre - origin)
       const c = p.piece.center, b = p.base;
+      if (plan.shape) { const g = life.shape[plan.shape.kind] * weight; if (g > 1e-4) { const sh = plan.shape, sx = 1 + (sh.k[0] - 1) * g, sy = 1 + (sh.k[1] - 1) * g, sz = 1 + (sh.k[2] - 1) * g;   // about the condition's own centre, not the piece's
+        ox += (c[0] - sh.pivot[0]) * (sx - 1); oy += (c[1] - sh.pivot[1]) * (sy - 1); oz += (c[2] - sh.pivot[2]) * (sz - 1); kx *= sx; ky *= sy; kz *= sz; } }
       mesh.position.x += ox + (1 - kx) * (c[0] - b.x); mesh.position.y += oy + (1 - ky) * (c[1] - b.y); mesh.position.z += oz + (1 - kz) * (c[2] - b.z);
       mesh.scale.set(s0.x * kx, s0.y * ky, s0.z * kz);
       if (!p.baseQuaternion) continue;
@@ -416,6 +470,8 @@ export function createLife() {
         if (angle > 0) { turn.setFromAxisAngle(axis.normalize(), angle); swing(mesh, plan.rib.pivot, turn); }
       }
       if (plan.elbow && bend[plan.elbow.arm] > 1e-6) { turn.setFromAxisAngle(ACROSS, -bend[plan.elbow.arm] * plan.elbow.share); swing(mesh, life.anchors.elbows[plan.elbow.arm], turn); }
+      if (plan.wrist && Math.abs(flex[plan.wrist.arm]) > 1e-6) { turn.setFromAxisAngle(ACROSS, -flex[plan.wrist.arm] * plan.wrist.share); swing(mesh, wristPivot[plan.wrist.arm], turn); }
+      if (plan.jaw && jawAngle > 1e-6) { turn.setFromAxisAngle(ACROSS, jawAngle); swing(mesh, life.anchors.jaw.pivot, turn); }
       if (plan.head && headAngle > 1e-6) { axis.set(hx, hy, hz).normalize(); turn.setFromAxisAngle(axis, headAngle * plan.head); swing(mesh, neck, turn); }
     }
   }
@@ -438,12 +494,13 @@ export function createLife() {
     /** Run one stretch of the heartbeat, or of the breath, over and over ([from, to] as fractions; null to stop). */
     loopBeat(range) { life.loopBeat = range && range[1] > range[0] ? range : null; },
     loopBreath(range) { life.loopBreath = range && range[1] > range[0] ? range : null; },
+    loopSwallow(range) { life.loopSwallow = range && range[1] > range[0] ? range : null; if (!life.loopSwallow) { life.swallow.t = -1; life.swallow.wait = 12 + Math.random() * 12; } },
     /** Start a swallow or a blink now (they otherwise happen on their own). */
     swallow() { if (life.swallow.t < 0) life.swallow.t = 0; },
     blink() { if (life.blink.t < 0) life.blink.t = 0; },
     signals,
     getState: () => ({ on: life.on, weight: +life.weight.toFixed(3), animated: life.animated.length, breath: +signals.breath.toFixed(3), ventricle: +signals.ventricle.toFixed(3),
-      beat: +life.beat.toFixed(4), phase: beatPhase(life.beat).name, breathPhase: +life.breath.toFixed(4), bpm: life.rate.bpm, breaths: life.rate.breaths, depth: life.rate.depth, speed: life.speed, scrub: life.scrub, condition: life.condition, looping: !!(life.loopBeat || life.loopBreath), elbow: life.elbow.map(v => +(v * life.swayGain * 180 / Math.PI).toFixed(2)),
+      beat: +life.beat.toFixed(4), phase: beatPhase(life.beat).name, breathPhase: +life.breath.toFixed(4), bpm: life.rate.bpm, breaths: life.rate.breaths, depth: life.rate.depth, speed: life.speed, scrub: life.scrub, condition: life.condition, looping: !!(life.loopBeat || life.loopBreath || life.loopSwallow), wrist: life.wrist.map(v => +(v * life.swayGain * 180 / Math.PI).toFixed(2)), jaw: +(life.jaw * 180 / Math.PI).toFixed(2), effort: +life.effort.toFixed(3), shape: Object.fromEntries(Object.entries(life.shape).map(([k, v]) => [k, +v.toFixed(3)])), elbow: life.elbow.map(v => +(v * life.swayGain * 180 / Math.PI).toFixed(2)),
       outflow: +signals.outflow.toFixed(3), inflow: +signals.inflow.toFixed(3), blink: +signals.blink.toFixed(3), head: life.head.map(v => +(v * life.swayGain * 180 / Math.PI).toFixed(3)),
       sway: [life.swayX * life.swayGain, life.swayZ * life.swayGain].map(v => +(v * 180 / Math.PI).toFixed(4)), gaze: [+life.gaze.x.toFixed(4), +life.gaze.y.toFixed(4)], swallow: +signals.swallow.toFixed(3) })
   };

@@ -2,6 +2,19 @@
 
 Newest first. The README says what the studio does now; this says how it got there.
 
+## 2026-11-24, round 9: the whole circulation, more lessons, measuring, notes, offline
+
+- **Blood flow** runs out to the legs, arms and head and back through the veins, and speeds up with the heart.
+- **Three more lessons**: one swallow, the blood's round trip (one part of the circulation lit at a time) and a meal's route. Lessons moved out of `studio.js` into `lessons.js`.
+- **Conditions that change a shape**: an enlarged heart, a collapsed lung, a narrowed leg artery.
+- **Wrists** flex; with **exercise** the arteries widen, the pulse strengthens and the jaw drops for mouth breathing. The oesophagus shows its wave.
+- **Quiz**: "which system?" and a sixty-second naming round; progress per system.
+- **Hear the name** and **word origins** for about a hundred roots.
+- **Measure** between two points; **pin notes** to pieces, carried in the link.
+- **Embed** takes `&assembly=` and `&lesson=`. **Offline**: a service worker keeps a visit's files.
+- Tests: the fast-forward hook no longer draws every intermediate frame (that was what made the browser suites slow and stall under software rendering); CI runs the three suites in parallel with a cached browser; screenshots are compared with references (`compare-shots.mjs`) and uploaded.
+- Not done: knee and other large joint movement, "what does this attach to?" (the model has no attachment data).
+
 ## 2026-11-17, round 8: lessons, conditions, compare, an elbow
 
 - **Calmer opening view.** Blood flow and the monitor start off; the sway and head hold still while the pointer is over the model.

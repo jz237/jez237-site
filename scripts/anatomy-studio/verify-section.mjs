@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 
 const url = process.env.STUDIO_URL || 'http://127.0.0.1:8791/demos/anatomy-studio/';
 const SLOW = Number(process.env.STUDIO_SLOW) || 1;
-const browser = await chromium.launch({headless: true, args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader']});
+const browser = await chromium.launch({executablePath: process.env.CHROME_PATH || undefined, headless: true, args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader']});
 try {
   const page = await browser.newPage({viewport: {width: 1280, height: 860}});
   page.setDefaultTimeout(30000 * SLOW);

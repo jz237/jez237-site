@@ -138,3 +138,16 @@ h1 em{color:#c9a99c}.hero .eyebrow{color:var(--mint)}
 /* lessons and tours: the card holds its four buttons, and on a phone the monitor moves below the model while the camera buttons step aside */
 @media(min-width:761px){.tour-card{width:min(372px,calc(100% - 64px))}}
 @media(max-width:760px){.tour-card:not([hidden])~.view-toolbar{display:none}.stage:has(.tour-card:not([hidden])) .vitals-hud{top:auto;bottom:262px;transform-origin:bottom right}}
+/* round 9: lessons row, the name's origin and voice, pinned notes, measuring, quiz progress */
+.lesson-row{display:grid;grid-template-columns:1fr 1fr;gap:6px}.lesson-row button{font-size:10px;padding:8px 6px;white-space:nowrap}.lesson-row button:last-child{grid-column:1/-1}
+.part-say{display:inline-block;margin:6px 0 0;font-size:9px;letter-spacing:.6px;padding:5px 9px}.part-say[hidden]{display:none}
+.part-origin{margin:8px 0 0;font-size:10.5px;line-height:1.55;font-style:italic;color:#c9b8a8}
+.pin-row{display:flex;gap:6px;margin-top:8px}.pin-row input{flex:1;min-width:0;padding:8px 10px;border:1px solid var(--line);border-radius:6px;background:#0c131a;color:var(--text);font:inherit;font-size:11px}.pin-row input:disabled{opacity:.45}.pin-row button{font-size:10px;padding:8px 12px}
+.landmark.landmark-pin{background:#2c2110f2;border-color:#ffd28a;color:#ffe3b0}
+.measure-label{position:absolute;z-index:3;transform:translate(-50%,-150%);padding:3px 8px;border:1px solid #ffd28a;border-radius:5px;background:#1c1608f0;color:#ffd28a;font-size:11px;font-weight:600;white-space:nowrap;pointer-events:none}
+.measure-readout{position:absolute;top:66px;left:50%;transform:translateX(-50%);z-index:3;margin:0;max-width:min(420px,calc(100% - 32px));padding:7px 12px;border:1px solid #6b5a30;border-radius:6px;background:#1c1608e6;color:#ffe3b0;font-size:10.5px;text-align:center;pointer-events:none}.measure-readout:empty{display:none}
+.measuring canvas{cursor:crosshair!important}
+.board-mode .measure-label,.board-mode .measure-readout{display:none}
+.quiz-progress div{display:grid;grid-template-columns:1fr 72px 36px;gap:8px;align-items:center;margin-top:5px;font-size:9.5px;letter-spacing:.5px;color:var(--muted)}.quiz-progress meter{width:100%;height:6px}.quiz-progress span:last-child{text-align:right}
+/* a lesson inside an embed: a small card beside the model, not over it */
+@media(min-width:521px){.embed .tour-card{top:10px;left:10px;width:min(300px,46%);padding:11px 13px}.embed .tour-card h3{font-size:15px;margin:5px 0}.embed .tour-card p{font-size:10.5px;line-height:1.5;max-height:9em;margin-bottom:9px}.embed .tour-actions{gap:4px}.embed .tour-actions button{font-size:9px;padding:6px 5px}.embed .vitals-hud{top:52px;bottom:auto;right:10px;transform:scale(.7);transform-origin:top right}}

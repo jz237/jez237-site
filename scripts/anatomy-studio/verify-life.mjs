@@ -49,6 +49,20 @@ try {
  assert.deepEqual(held, [0, 0], 'the body holds still while the pointer is over it');
  // sound: the two heart sounds are triggered on each beat
  await alive.locator('#sound-toggle').dispatchEvent('click'); await alive.evaluate(() => window.anatomyStudio._advance(3)); const heard = await alive.evaluate(() => window.anatomyStudio.getState().vitals); assert.ok(heard.sound && heard.thumps >= 4, `heart sounds are triggered (${heard.thumps})`); await alive.locator('#sound-toggle').dispatchEvent('click');
+ // the wrist: the hand turns further than the forearm that carries it
+ const hand = await alive.evaluate(() => { const A = window.anatomyStudio, f = id => A.getParts().findIndex(p => p.id === id), capitate = f('skeletal/capitate-bone-l'), radius = f('skeletal/radius-l'); let a = 0, b = 0; for (let i = 0; i < 300; i++) { A._advance(.05); const ps = A.getParts(); a = Math.max(a, ps[capitate].turned); b = Math.max(b, ps[radius].turned); } return {a, b}; });
+ assert.ok(hand.a > hand.b + .02 && hand.a < .2, `the hand flexes at the wrist (${hand.a} against ${hand.b})`);
+ // exercise shows: the jaw drops for mouth breathing, and comes back up at rest
+ await alive.locator('[data-preset="exercise"]').dispatchEvent('click');
+ const effort = await alive.evaluate(() => { const A = window.anatomyStudio, jaw = A.getParts().findIndex(p => p.id === 'skeletal/mandible'); let open = 0, turned = 0; for (let i = 0; i < 240; i++) { A._advance(.05); open = Math.max(open, A.getState().life.jaw); turned = Math.max(turned, A.getParts()[jaw].turned); } return {open, turned, effort: A.getState().life.effort}; });
+ assert.ok(effort.effort > .95 && effort.open > 2 && effort.open < 4 && effort.turned > .03, `the jaw drops a few degrees when breathing hard (${JSON.stringify(effort)})`);
+ await alive.locator('[data-preset="rest"]').dispatchEvent('click'); assert.ok((await alive.evaluate(() => { window.anatomyStudio._advance(14); return window.anatomyStudio.getState().life.jaw; })) < .02, 'and closes at rest');
+ // conditions that change a shape: an enlarged heart, a collapsed left lung; both go back
+ const shaped = await alive.evaluate(() => { const A = window.anatomyStudio, f = id => A.getParts().findIndex(p => p.id === id), lv = f('heart/left-ventricle'), left = f('visceral/inferior-lobe-of-left-lung'), right = f('visceral/inferior-lobe-of-right-lung'), pick = id => { const el = document.getElementById('condition'); el.value = id; el.dispatchEvent(new Event('change')); }, res = {};
+  pick('enlarged'); { let hi = 0; for (let i = 0; i < 200; i++) { A._advance(.05); hi = Math.max(hi, A.getParts()[lv].scale[0]); } res.heart = hi; }
+  pick('collapsed'); A._advance(10); res.left = A.getParts()[left].scale[0]; res.right = A.getParts()[right].scale[0];
+  pick('normal'); A._advance(12); res.back = A.getParts()[left].scale[0]; res.shape = A.getState().life.shape; return res; });
+ assert.ok(shaped.heart > 1.15 && shaped.heart < 1.21, `an enlarged heart is about a fifth bigger (${shaped.heart})`); assert.ok(shaped.left > .57 && shaped.left < .6 && shaped.right === 1, 'only the left lung collapses'); assert.ok(Math.abs(shaped.back - 1) < .002, 'and it reinflates');
  // the rest of the body: it sways about the ankles, the eyes move, and a swallow lifts the hyoid
  const stance = await alive.evaluate(() => { const A = window.anatomyStudio, i = A.getParts().findIndex(p => p.id === 'skeletal/hyoid-bone'), j = A.getParts().findIndex(p => p.id === 'brain/iris-l'); let sway = 0, lo = 9, hi = -9, rise = 0, eye = 0; A.swallow();
   for (let k = 0; k < 300; k++) { A._advance(.05); const s = A.getState().life, ps = A.getParts(); sway = Math.max(sway, Math.abs(s.sway[0])); lo = Math.min(lo, s.gaze[0]); hi = Math.max(hi, s.gaze[0]); rise = Math.max(rise, ps[i].position[1] - ps[i].base[1]); eye = Math.max(eye, ps[j].turned); }
@@ -70,6 +84,7 @@ try {
   return {a, b, c, blink, state: A.getState()}; });
  assert.ok(head.a > .01 && head.b > .003 && head.b < head.a && head.c < 1e-6, 'the head turns and the neck bends progressively'); assert.ok(head.blink > .85, `a blink closes (${head.blink})`);
  assert.ok(head.state.vitals.monitor && head.state.vitals.samples > 20, 'the monitor is drawing'); assert.ok(head.state.flow.shown && head.state.flow.particles > 100, 'blood flow is shown in the X-ray finish');
+ { const f = await alive.evaluate(() => window.anatomyStudio.getState().flow); assert.ok(f.routes === 14 && f.low < .2 && f.high > 1.5 && f.wide > .4, `the blood flow runs from the feet to the head and out to the arms (${JSON.stringify(f)})`); }
  await alive.evaluate(() => { window.anatomyStudio.setAmount(1); window.anatomyStudio._advance(5); });
  assert.deepEqual(await alive.evaluate(() => { const A = window.anatomyStudio; return [A.getState().life.weight, A.getParts().filter(p => p.scale.some(v => v !== 1)).length, A.getParts().filter(p => p.turned > 1e-6).length, ...A.getState().life.sway.map(Math.abs)]; }), [0, 0, 0, 0, 0], 'exploding stops the motion and restores every size and angle');
  await alive.close();
@@ -81,15 +96,30 @@ try {
  assert.deepEqual(taught, {phases: ['Ejection'], looping: true, flow: true, monitor: true, stops: 6}, 'the ejection stage loops on its own');
  await lesson.locator('#tour-end').dispatchEvent('click'); await lesson.evaluate(() => window.anatomyStudio._advance(1));
  assert.deepEqual(await lesson.evaluate(() => { const s = window.anatomyStudio.getState(); return [s.tour.active, s.lesson, s.life.looping, s.flow.on, s.vitals.monitor, s.life.speed]; }), [false, null, false, false, false, 1], 'ending a lesson restores the view');
+ // the round trip lights one part of the circulation at a time; a swallow loops; both put everything back
+ await lesson.evaluate(() => window.anatomyStudio.startLesson('trip')); await lesson.waitForFunction(() => window.anatomyStudio.getState().tour.active && window.anatomyStudio.getState().flow.focus === 'venous');
+ await lesson.locator('#tour-next').dispatchEvent('click'); await lesson.locator('#tour-next').dispatchEvent('click'); await lesson.waitForFunction(() => window.anatomyStudio.getState().flow.focus === 'lungs');
+ await lesson.locator('#tour-end').dispatchEvent('click'); assert.deepEqual(await lesson.evaluate(() => { const s = window.anatomyStudio.getState(); return [s.flow.focus, s.flow.on, s.lesson]; }), [null, false, null]);
+ await lesson.evaluate(() => window.anatomyStudio.startLesson('swallow')); await lesson.waitForFunction(() => window.anatomyStudio.getState().tour.active && window.anatomyStudio.getState().life.looping);
+ const gulp = await lesson.evaluate(() => { const A = window.anatomyStudio; let hi = 0; for (let i = 0; i < 120; i++) { A._advance(.05); hi = Math.max(hi, A.getState().life.swallow); } return hi; }); assert.ok(gulp > .9, `the larynx rises over and over (${gulp})`);
+ await lesson.locator('#tour-end').dispatchEvent('click'); assert.equal(await lesson.evaluate(() => { window.anatomyStudio._advance(1); return window.anatomyStudio.getState().life.looping; }), false);
  await lesson.close();
  // a desktop link that opens in Organs & vessels loads what that finish shows and keeps the muscles back until a view needs them
  const lean = await browser.newPage({viewport: {width: 1280, height: 860}}); lean.on('pageerror', e => errors.push(e.message)); await lean.goto(`${url}?quality=verify&mode=organs`); await ready(lean);
  await lean.waitForFunction(() => { const x = window.anatomyStudio.getState(); return !x.loading && x.files.length === 9; }, null, {timeout: 240000 * SLOW}); assert.ok(!(await lean.evaluate(() => window.anatomyStudio.getState().files)).includes('muscular'), 'muscles wait');
  await lean.locator('[data-mode="realistic"]').click(); await full(lean); assert.equal((await lean.evaluate(() => window.anatomyStudio.getState().pieces)), manifest.pieces.length, 'a finish that shows muscles fetches them'); await lean.close();
  // embed: the stage and the explode slider, nothing else
- const embed = await browser.newPage({viewport: {width: 640, height: 420}}); embed.on('pageerror', e => errors.push(e.message)); await embed.goto(`${url}?quality=verify&stage=core&embed`, {timeout: 180000 * SLOW}); await ready(embed);
+ const embed = await browser.newPage({viewport: {width: 640, height: 420}}); embed.on('pageerror', e => errors.push(e.message)); await embed.goto(`${url}?quality=verify&stage=core&embed&lesson=breath`, {timeout: 180000 * SLOW}); await ready(embed);
  assert.deepEqual(await embed.evaluate(() => [getComputedStyle(document.querySelector('.inspector')).display, getComputedStyle(document.querySelector('.topbar')).display, getComputedStyle(document.querySelector('.embed-link')).display, document.documentElement.scrollHeight <= innerHeight + 1, !!document.getElementById('explode').offsetParent]), ['none', 'none', 'block', true, true], 'the embed view is the stage, the slider and a link out');
+ await embed.waitForFunction(() => window.anatomyStudio.getState().lesson === 'breath' && window.anatomyStudio.getState().tour.active, null, {timeout: 120000 * SLOW});   // ?lesson= opens straight into one
  await embed.close();
+ // offline: after one visit with the worker in charge, the studio opens with no connection
+ { const context = await browser.newContext({viewport: {width: 900, height: 700}}), page = await context.newPage(); page.setDefaultTimeout(60000 * SLOW); page.on('pageerror', e => errors.push(e.message));
+  const go = `${url}?quality=verify&stage=core&life=0&offline`; await page.goto(go, {timeout: 180000 * SLOW}); await ready(page);
+  await page.evaluate(() => navigator.serviceWorker.ready); await page.waitForFunction(() => !!navigator.serviceWorker.controller, null, {timeout: 60000 * SLOW});
+  await page.reload({timeout: 180000 * SLOW}); await ready(page); await page.waitForFunction(() => !window.anatomyStudio.getState().loading, null, {timeout: 240000 * SLOW});   // this visit goes through the worker, which keeps it
+  await context.setOffline(true); await page.reload({timeout: 180000 * SLOW}); await ready(page);
+  assert.ok((await page.evaluate(() => window.anatomyStudio.getState().pieces)) > 500, 'the studio opens offline from the kept copy'); await context.setOffline(false); await context.close(); }
  assert.deepEqual(errors, []);
- console.log(`PASS (life and loading): ${url} — breathing, heartbeat and valves by phase, pace, conditions, lessons, sway and holding still, head, neck and elbows, eyes and blinking, swallowing, monitor, blood flow, sound, motion cost, exact restoration on exploding, lean loading for Organs & vessels links.`);
+ console.log(`PASS (life and loading): ${url} — breathing, heartbeat and valves by phase, pace, conditions (timing and shape), five lessons, sway and holding still, head, neck, elbows, wrists and jaw, eyes and blinking, swallowing, monitor, blood flow, sound, motion cost, exact restoration on exploding, lean loading for Organs & vessels links, embed with a lesson, offline use.`);
 } finally { await browser.close(); }

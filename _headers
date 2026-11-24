@@ -160,6 +160,10 @@
 /demos/anatomy-studio/assets/*
   Cache-Control: public, max-age=31536000, immutable
 
+# Its offline worker must never be served stale, or a fix to it could not reach visitors.
+/demos/anatomy-studio/sw.js
+  Cache-Control: no-cache
+
 # Content-hashed reef assets, including the embedded store copies.
 /demos/reef-aquarium/assets/*
   Cache-Control: public, max-age=31536000, immutable

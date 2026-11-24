@@ -1,8 +1,11 @@
 name: Anatomy Studio Browser Tests
 
-# Runs the two Playwright suites for /demos/anatomy-studio/ in headless Chromium with software WebGL: behaviour
-# (verify.mjs) and the living body plus loading (verify-life.mjs), including the size and work budgets in
-# scripts/anatomy-studio/budget.json. Software rendering is slow, so allow about half an hour.
+# Runs the Playwright suites for /demos/anatomy-studio/ in headless Chromium with software WebGL: cross-sections
+# (verify-section.mjs), behaviour (verify.mjs) and the living body plus loading (verify-life.mjs), including the size
+# and work budgets in scripts/anatomy-studio/budget.json. The three run side by side, each on its own runner, so the
+# whole thing takes as long as the slowest (about half an hour) instead of the sum; the browser download is cached.
+# After the behaviour suite its screenshots are compared with scripts/anatomy-studio/reference (report only) and
+# uploaded, so a change in appearance can be looked at.
 # It does not gate publishing: Cloudflare builds main regardless. It reports.
 on:
   push:
@@ -22,10 +25,23 @@ concurrency:
 
 jobs:
   browser:
+    name: ${{ matrix.name }}
     runs-on: ubuntu-latest
-    timeout-minutes: 120
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: Cross-sections
+            script: verify-section.mjs
+          - name: Behaviour
+            script: verify.mjs
+            shots: true
+          - name: Living body and loading
+            script: verify-life.mjs
     env:
       STUDIO_SLOW: '4'
+      STUDIO_SHOTS: ${{ github.workspace }}/shots
     steps:
       - uses: actions/checkout@v4
         with:
@@ -41,19 +57,34 @@ jobs:
           node-version: '22'
       - name: Install test tooling
         working-directory: scripts/anatomy-studio
+        run: npm ci
+      - name: Browser cache
+        id: browser-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('scripts/anatomy-studio/package-lock.json') }}
+      - name: Install the browser
+        working-directory: scripts/anatomy-studio
         run: |
-          npm ci
-          npx playwright install --with-deps chromium
+          if [ "${{ steps.browser-cache.outputs.cache-hit }}" = "true" ]; then npx playwright install-deps chromium; else npx playwright install --with-deps chromium; fi
       - name: Serve the site
         run: |
           python3 -m http.server 8791 --bind 127.0.0.1 >/dev/null 2>&1 &
           for i in $(seq 1 30); do curl -sf http://127.0.0.1:8791/demos/anatomy-studio/ >/dev/null && break; sleep 1; done
-      - name: Section topology and culling regression
+      - name: ${{ matrix.name }}
         working-directory: scripts/anatomy-studio
-        run: node verify-section.mjs
-      - name: Behaviour
+        run: node ${{ matrix.script }}
+      - name: Compare screenshots with the references (report only)
+        if: ${{ matrix.shots && !cancelled() }}
+        continue-on-error: true
         working-directory: scripts/anatomy-studio
-        run: node verify.mjs
-      - name: Living body and loading
-        working-directory: scripts/anatomy-studio
-        run: node verify-life.mjs
+        run: node compare-shots.mjs
+      - name: Keep the screenshots
+        if: ${{ matrix.shots && !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: anatomy-studio-screenshots
+          path: shots
+          retention-days: 14
+          if-no-files-found: ignore

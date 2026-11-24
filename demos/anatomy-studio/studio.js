@@ -6,23 +6,26 @@ import { EffectComposer } from './vendor/postprocessing/EffectComposer.js';
 import { RenderPass } from './vendor/postprocessing/RenderPass.js';
 import { GTAOPass } from './vendor/postprocessing/GTAOPass.js';
 import { OutputPass } from './vendor/postprocessing/OutputPass.js';
-import { PartsBoard } from './parts-board.js?v=e3b7b13125';
-import { finishMaterial, studioEnvironment, fileLabels, fileColors, modes, organPiece, projectedUV, skinTint, tagLayer, enliven, lifeUniforms } from './materials.js?v=5290592a00';
+import { PartsBoard } from './parts-board.js?v=38cf991a91';
+import { finishMaterial, studioEnvironment, fileLabels, fileColors, modes, organPiece, projectedUV, skinTint, tagLayer, enliven, lifeUniforms } from './materials.js?v=4f6f543d94';
 import { assemblies, bodyLandmarks, assemblyContext, assemblyOffset } from './assemblies.js?v=98fdd3ac69';
 import { bodyOffset, bodySpread, explodeSchedule } from './explode-rules.js?v=742c72af7e';
 import { layoutLabels } from './labels.js?v=5a33037751';
-import { createSection } from './section.js?v=beb859e964';
-import { createQuiz } from './quiz.js?v=c8d5755f3b';
+import { createSection } from './section.js?v=1cae92ac81';
+import { createQuiz } from './quiz.js?v=1721c22256';
 import { createTour } from './tour.js?v=37c81856aa';
 import { keyFacts, relatedPieces, summary } from './facts.js?v=12aa155dc7';
-import { readURL, writeURL } from './url-state.js?v=d7621eb958';
+import { readURL, writeURL, cleanPin } from './url-state.js?v=39ee241538';
 import { systemNotes, pieceNotes } from './tour-notes.js?v=bb3933d4cf';
 import { UnrealBloomPass } from './vendor/postprocessing/UnrealBloomPass.js';
 import { BokehPass } from './vendor/postprocessing/BokehPass.js';
-import { createOutline, syncSkinDepth, skinDepthMaterial, cavityTint, createFloorReflection, tubePath } from './effects.js?v=e6f679f535';
-import { createLife, BEAT_PHASES } from './life.js?v=19dcaad8b1';
-import { createVitals } from './vitals.js?v=e2cd010288';
-import { createFlow } from './flow.js?v=d5412ec2d6';
+import { createOutline, syncSkinDepth, skinDepthMaterial, cavityTint, createFloorReflection, tubePath } from './effects.js?v=5807f634b1';
+import { createLife } from './life.js?v=b85a6d00ce';
+import { LESSONS, lessonPlan } from './lessons.js?v=8478007a8a';
+import { wordOrigins, sayName, canSay } from './words.js?v=f4a9f131ed';
+import { createMeasure } from './measure.js?v=84b9161a79';
+import { createVitals } from './vitals.js?v=eca702b2dd';
+import { createFlow } from './flow.js?v=885bed84fa';
 import { searchTerms } from './synonyms.js?v=47fefaf02f';
 
 const $ = id => document.getElementById(id);
@@ -49,7 +52,8 @@ let resizeStage = () => {};
 let outline = null, mirror = null, bloomPass = null, bokehPass = null, tinting = false;
 // The assembled body breathes and its heart beats (life.js). Off for reduced motion, in the verification runs (they compare exact positions) and with ?life=0.
 const life = createLife(); life.on = params.has('life') ? params.get('life') !== '0' : !reducedMotion && !verifyQuality && !mobile;
-let vitals = null, flow = null, flowOn = false, lifeSkip = false, saveShot = false, hovering = false, lesson = null;   // flow and the monitor wait to be asked for: the opening view is the model
+const pins = new Map();   // piece id -> a short note pinned to it
+let dryRun = false, vitals = null, flow = null, measure = null, flowOn = false, lifeSkip = false, saveShot = false, hovering = false, lesson = null;   // flow and the monitor wait to be asked for: the opening view is the model
 if (params.has('embed')) document.body.classList.add('embed');   // a bare stage for dropping into another page
 const pathQueue = [];
 const tintQueue = [];
@@ -125,8 +129,10 @@ function init(){
  renderer.domElement.addEventListener('webglcontextlost', e => { e.preventDefault(); $('scene-status').textContent = 'GRAPHICS PAUSED · RESTORING'; clearTimeout(lostTimer); lostTimer = setTimeout(() => fail(new Error('WebGL context lost')), 8000); });
  renderer.domElement.addEventListener('webglcontextrestored', () => { clearTimeout(lostTimer); $('error').hidden = true; scene.environment = studioEnvironment(renderer); updateUI(); invalidate(30); });
  renderer.domElement.addEventListener('pointerdown', e => pointerStart = { x:e.clientX, y:e.clientY });
- renderer.domElement.addEventListener('pointerup', e => { if (state.ready && pointerStart && Math.hypot(e.clientX - pointerStart.x, e.clientY - pointerStart.y) < 6) { const hit = pick(e); if (hit && !quiz.answer(hit.userData.part)) selectPart(hit.userData.part); } pointerStart = null; });
- renderer.domElement.addEventListener('dblclick', e => { if (!state.ready || state.board || state.quiz) return; const hit = pick(e); if (hit) { selectPart(hit.userData.part); focusSelected(); } });   // double-click frames a piece without isolating it
+ renderer.domElement.addEventListener('pointerup', e => { if (state.ready && pointerStart && Math.hypot(e.clientX - pointerStart.x, e.clientY - pointerStart.y) < 6) { const hit = pick(e);
+   if (measure.active) { const at = hit && !state.board ? raycaster.intersectObject(hit, false).find(h => !section.clips(h.point)) : null; if (at) measure.add(at.point); pointerStart = null; return; }   // measuring: the click marks a point instead of selecting
+   if (hit && !quiz.answer(hit.userData.part)) selectPart(hit.userData.part); } pointerStart = null; });
+ renderer.domElement.addEventListener('dblclick', e => { if (!state.ready || state.board || state.quiz || measure.active) return; const hit = pick(e); if (hit) { selectPart(hit.userData.part); focusSelected(); } });   // double-click frames a piece without isolating it
  let lastMove = 0;
  renderer.domElement.addEventListener('pointermove', e => { if (e.buttons || !state.ready || state.quiz) { $('tooltip').hidden = true; return; } if (performance.now() - lastMove < 40) return; lastMove = performance.now(); const hit = pick(e); renderer.domElement.style.cursor = hit ? 'pointer' : 'grab'; $('tooltip').hidden = !hit; if (hit) { const r = host.getBoundingClientRect(); $('tooltip').textContent = hit.userData.part.label; $('tooltip').style.left = `${Math.min(e.clientX - r.left + 15, r.width - 230)}px`; $('tooltip').style.top = `${e.clientY - r.top + 18}px`; } });
  renderer.domElement.addEventListener('pointerleave', () => { $('tooltip').hidden = true; pointerStart = null; hovering = false; });
@@ -148,6 +154,7 @@ async function loadStudio(){
   box.onchange = async () => { if (box.checked) { state.off.delete(f.id); await loadFiles([f.id]); } else state.off.add(f.id); if (state.selected && state.off.has(state.selected.file)) selectPart(null); updateVisibility(); section.refit(); syncURL(); };
   label.append(box, ` ${fileLabels[f.id] || f.id}`); return label; }));
  flow = createFlow({ manifest, parent:model });
+ measure = createMeasure({ parent:model, label:$('measure-label'), readout:$('measure-readout'), onChange:() => invalidate(4) });
  const requested = params.get('stage'); const target = requested && stageOrder.includes(requested) ? requested : requested === 'full' ? 'detail' : mobile ? 'core' : params.get('mode') === 'organs' ? 'lean' : 'detail';   // lean: everything the opening view shows; the muscles (a third of the download) wait until they are needed
  await loadStage('core');
  state.ready = true; document.body.dataset.ready = 'true'; $('loading').hidden = true;
@@ -156,15 +163,18 @@ async function loadStudio(){
  updateList(); updateUI(); setView('hero', true); $('fx-toggle').setAttribute('aria-pressed', state.fx); $('life-toggle').setAttribute('aria-pressed', life.on);
  if (!reducedMotion && !verifyQuality) { camera.position.sub(controls.target).multiplyScalar(1.24).add(controls.target); setView('hero'); if (viewTween) viewTween.duration = 2400; }   // a slow push-in on arrival
  window.anatomyStudio = {
-  getState:() => ({ ready:state.ready, pieces:parts.length, visible:parts.filter(p => p.mesh.visible).length, amount:state.amount, target:state.target, selected:state.selected?.label ?? null, isolated:state.isolated, system:state.system, board:state.board, mode:state.mode, ao:state.ao, detail:state.detail, hiFiles:[...hi.loaded], hiLoading:[...hi.loading], assembly:state.assembly, assemblySide:state.assemblySide, stage:state.stage, loading:state.loading, hidden:state.hidden.size, off:[...state.off], flow:{ on:flowOn, shown:!!flow?.points.visible, particles:flow?.particles ?? 0 }, compare:state.compare, lesson, draw:{ calls:renderer.info.render.calls, triangles:renderer.info.render.triangles }, hovering, vitals:vitals?.getState(), rendered, life:life.getState(), fx:state.fx, dof:bokehPass.enabled, only:state.only, quality:quality.level, section:section.state, quiz:quiz.getState(), tour:tour.getState(), triangles:parts.reduce((n, p) => n + (p.mesh.visible ? p.triangles : 0), 0), drawCalls:parts.reduce((n, p) => n + (p.mesh.visible ? 1 : 0), 0), files:manifest.files.filter(f => f.loaded).map(f => f.id) }),
+  getState:() => ({ ready:state.ready, pieces:parts.length, visible:parts.filter(p => p.mesh.visible).length, amount:state.amount, target:state.target, selected:state.selected?.label ?? null, isolated:state.isolated, system:state.system, board:state.board, mode:state.mode, ao:state.ao, detail:state.detail, hiFiles:[...hi.loaded], hiLoading:[...hi.loading], assembly:state.assembly, assemblySide:state.assemblySide, stage:state.stage, loading:state.loading, hidden:state.hidden.size, off:[...state.off], flow:{ on:flowOn, shown:!!flow?.points.visible, ...flow?.getState() }, measure:measure.getState(), pins:[...pins], compare:state.compare, lesson, draw:{ calls:renderer.info.render.calls, triangles:renderer.info.render.triangles }, hovering, vitals:vitals?.getState(), rendered, life:life.getState(), fx:state.fx, dof:bokehPass.enabled, only:state.only, quality:quality.level, section:section.state, quiz:quiz.getState(), tour:tour.getState(), triangles:parts.reduce((n, p) => n + (p.mesh.visible ? p.triangles : 0), 0), drawCalls:parts.reduce((n, p) => n + (p.mesh.visible ? 1 : 0), 0), files:manifest.files.filter(f => f.loaded).map(f => f.id) }),
   getParts:() => parts.map(p => ({ id:p.id, name:p.name, turned:p.baseQuaternion ? p.mesh.quaternion.angleTo(p.baseQuaternion) : 0, scale:p.mesh.scale.toArray().map((v, i) => v / p.baseScale.getComponent(i)), side:p.side, file:p.file, region:p.region, visible:p.mesh.visible, lod:p.lod, triangles:Math.round((p.mesh.geometry.index?.count ?? p.mesh.geometry.attributes.position.count) / 3), radius:(p.mesh.geometry.boundingSphere || p.mesh.geometry.computeBoundingSphere() || p.mesh.geometry.boundingSphere).radius * Math.max(p.mesh.scale.x, p.mesh.scale.y, p.mesh.scale.z), extent:p.size.length() / 2, position:p.mesh.position.toArray(), base:p.base.toArray(), inAssembly:!!(state.assembly && isMember(p)) })),
   getAssembly:id => { const a = assemblies[id]; if (!a) return null; const members = assemblyMembers(id); return { side:state.assemblySide, paired:!!a.paired, members:members.map(p => p.id), primary:members.filter(p => a.primary?.(p.piece)).map(p => p.id), framed:members.filter(p => !a.frame || a.frame(p.piece)).map(p => p.id), rectangles:projectedRectangles(members.filter(p => p.mesh.visible)) }; },
   getBoardRectangles:() => board ? board.rectangles() : [],
-  loadStage, enterAssembly, leaveAssembly, setMode, setAmount, reset, loadHi, setDetail, lodPass, choosePiece, hideSelected, swallow:() => life.swallow(), life, pickAt:(x, y) => pick({ clientX:x, clientY:y })?.userData.part.id ?? null, getManifest:() => manifest,
+  loadStage, enterAssembly, leaveAssembly, setMode, setAmount, reset, loadHi, setDetail, lodPass, choosePiece, hideSelected, swallow:() => life.swallow(), life, startLesson, setPin, quizTick:s => quiz.tick(s), measureAt:(x, y) => { const hit = pick({ clientX:x, clientY:y }); const at = hit ? raycaster.intersectObject(hit, false)[0] : null; if (at) measure.add(at.point); return !!at; }, pickAt:(x, y) => pick({ clientX:x, clientY:y })?.userData.part.id ?? null, getManifest:() => manifest,
   // inspection hooks for the verification scripts and for debugging: ?quality=verify or ?debug
-  ...(verifyQuality || params.has('debug') ? { _bench:(n = 200) => { const t0 = performance.now(); for (let i = 0; i < n; i++) { for (const p of parts) p.mesh.position.copy(p.base); life.advance(1 / 60); life.apply(parts, 1, model, false); } lastApplied = -1; return (performance.now() - t0) / n; }, _advance:(seconds = 1) => { let t = Math.max(last, performance.now()); for (let i = 0, n = Math.ceil(seconds * 60); i < n; i++) tick(t += 1000 / 60); },   /* step the loop by hand: a background tab gets no animation frames */ _radius:id => { const p = partsById.get(id); return p ? projectedRadiusPx(p) : null; }, _edges:(id, limit = .03) => { const p = partsById.get(id); if (!p) return null; const g = p.mesh.geometry, pos = g.attributes.position, idx = g.index, s = p.mesh.scale.x; let long = 0, max = 0; const n = idx ? idx.count : pos.count; const v = i => [pos.getX(i), pos.getY(i), pos.getZ(i)]; for (let t = 0; t < n; t += 3) { const a = v(idx ? idx.getX(t) : t), b = v(idx ? idx.getX(t + 1) : t + 1), c = v(idx ? idx.getX(t + 2) : t + 2); const L = Math.max(Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]), Math.hypot(b[0] - c[0], b[1] - c[1], b[2] - c[2]), Math.hypot(a[0] - c[0], a[1] - c[1], a[2] - c[2])) * s; if (L > max) max = L; if (L > limit) long++; } return { tris:n / 3, long, max:+max.toFixed(4), lod:p.lod }; }, _focus:(id, distance = .6, dir = [1, .35, 1.4]) => { const p = partsById.get(id); if (!p) return false; const c = p.center.clone().add(p.mesh.position).sub(p.base); viewTween = null; controls.target.copy(c); camera.position.copy(c).addScaledVector(new THREE.Vector3().fromArray(dir).normalize(), distance); return true; }, _side:v => { for (const p of parts) p.mesh.material.side = v; }, _normals:on => { for (const p of parts) { if (on) { p.mesh.userData.savedMat = p.mesh.material; p.mesh.material = new THREE.MeshNormalMaterial(); } else if (p.mesh.userData.savedMat) { p.mesh.material = p.mesh.userData.savedMat; delete p.mesh.userData.savedMat; } } }, _flat:on => { for (const p of parts) { if (on) { p.mesh.userData.savedMat = p.mesh.material; p.mesh.material = new THREE.MeshStandardMaterial({ color:'#d9ad8e', roughness:.6, flatShading:false }); } else if (p.mesh.userData.savedMat) { p.mesh.material = p.mesh.userData.savedMat; delete p.mesh.userData.savedMat; } } }, _gtao:gtaoPass, _GTAOPass:GTAOPass, _camera:() => ({ position:camera.position.toArray(), target:controls.target.toArray(), tween:!!viewTween }) } : {})
+  ...(verifyQuality || params.has('debug') ? { _bench:(n = 200) => { const t0 = performance.now(); for (let i = 0; i < n; i++) { for (const p of parts) p.mesh.position.copy(p.base); life.advance(1 / 60); life.apply(parts, 1, model, false); } lastApplied = -1; return (performance.now() - t0) / n; }, _advance:(seconds = 1) => { let t = Math.max(last, performance.now()); for (let i = 0, n = Math.ceil(seconds * 60); i < n; i++) { dryRun = true; tick(t += 1000 / 60); } dryRun = false; invalidate(3); },   /* step the loop by hand: a background tab gets no animation frames. Nothing is drawn here (the next animation frame does that): a test that steps thousands of times would otherwise queue thousands of frames for a software renderer */ _radius:id => { const p = partsById.get(id); return p ? projectedRadiusPx(p) : null; }, _edges:(id, limit = .03) => { const p = partsById.get(id); if (!p) return null; const g = p.mesh.geometry, pos = g.attributes.position, idx = g.index, s = p.mesh.scale.x; let long = 0, max = 0; const n = idx ? idx.count : pos.count; const v = i => [pos.getX(i), pos.getY(i), pos.getZ(i)]; for (let t = 0; t < n; t += 3) { const a = v(idx ? idx.getX(t) : t), b = v(idx ? idx.getX(t + 1) : t + 1), c = v(idx ? idx.getX(t + 2) : t + 2); const L = Math.max(Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]), Math.hypot(b[0] - c[0], b[1] - c[1], b[2] - c[2]), Math.hypot(a[0] - c[0], a[1] - c[1], a[2] - c[2])) * s; if (L > max) max = L; if (L > limit) long++; } return { tris:n / 3, long, max:+max.toFixed(4), lod:p.lod }; }, _focus:(id, distance = .6, dir = [1, .35, 1.4]) => { const p = partsById.get(id); if (!p) return false; const c = p.center.clone().add(p.mesh.position).sub(p.base); viewTween = null; controls.target.copy(c); camera.position.copy(c).addScaledVector(new THREE.Vector3().fromArray(dir).normalize(), distance); return true; }, _side:v => { for (const p of parts) p.mesh.material.side = v; }, _normals:on => { for (const p of parts) { if (on) { p.mesh.userData.savedMat = p.mesh.material; p.mesh.material = new THREE.MeshNormalMaterial(); } else if (p.mesh.userData.savedMat) { p.mesh.material = p.mesh.userData.savedMat; delete p.mesh.userData.savedMat; } } }, _flat:on => { for (const p of parts) { if (on) { p.mesh.userData.savedMat = p.mesh.material; p.mesh.material = new THREE.MeshStandardMaterial({ color:'#d9ad8e', roughness:.6, flatShading:false }); } else if (p.mesh.userData.savedMat) { p.mesh.material = p.mesh.userData.savedMat; delete p.mesh.userData.savedMat; } } }, _gtao:gtaoPass, _GTAOPass:GTAOPass, _camera:() => ({ position:camera.position.toArray(), target:controls.target.toArray(), tween:!!viewTween }) } : {})
  };
  await applyURL(readURL(), { initial:true });
+ if (LESSONS[params.get('lesson')]) startLesson(params.get('lesson'));   // ?lesson=beat opens straight into a lesson (useful with ?embed)
+ // Offline use: a service worker keeps a copy of whatever this visit loaded (sw.js). Not in the test runs, and only over https (or with ?offline, to try it locally).
+ if ('serviceWorker' in navigator && (params.has('offline') || (!verifyQuality && location.protocol === 'https:'))) navigator.serviceWorker.register('./sw.js').catch(() => {});
  addEventListener('popstate', () => applyURL(readURL()));
  if (target === 'lean') { state.loading = true; $('stage-status').hidden = false; loadFiles(manifest.stages.detail).finally(() => { state.loading = false; $('stage-status').hidden = true; updateStageUI(); }); }
  else if (target !== 'core') loadStage(target);
@@ -238,6 +248,7 @@ function buildBodyLandmarks(){
  for (const l of landmarks.filter(l => l.kind === 'body')) l.el.remove(); for (let i = landmarks.length - 1; i >= 0; i--) if (landmarks[i].kind === 'body') landmarks.splice(i, 1);
  const seen = new Set();
  for (const l of bodyLandmarks) { if (seen.has(l.file)) continue; const part = parts.find(p => p.file === l.file && p.name === l.piece && (!l.side || p.side === l.side)); if (!part) continue; seen.add(l.file); const el = document.createElement('span'); el.className = 'landmark'; el.textContent = l.label; $('labels').append(el); landmarks.push({ el, part, kind:'body' }); }
+showPins();
 }
 function projectedRectangles(list){ model.updateMatrixWorld(true); camera.updateMatrixWorld(true); return list.map(p => { const b = new THREE.Box3().setFromObject(p.mesh), min = [Infinity, Infinity], max = [-Infinity, -Infinity]; for (let i = 0; i < 8; i++) { const v = new THREE.Vector3(i & 1 ? b.max.x : b.min.x, i & 2 ? b.max.y : b.min.y, i & 4 ? b.max.z : b.min.z).project(camera); min[0] = Math.min(min[0], v.x); min[1] = Math.min(min[1], v.y); max[0] = Math.max(max[0], v.x); max[1] = Math.max(max[1], v.y); } return { id:p.id, min, max, center:p.center.clone().add(p.mesh.position).sub(p.base).toArray() }; }); }
 
@@ -375,6 +386,8 @@ function selectPart(part){
  $('part-category').textContent = masked ? 'QUIZ' : part ? `${part.short.toUpperCase()} / ${part.region.toUpperCase()} / PIECE ${String(part.index + 1).padStart(4, '0')}` : 'NO PIECE SELECTED';
  $('part-title').textContent = masked ? 'Which piece is this?' : part ? plain(part) : 'Curiosity starts with a click.';
  $('part-path').textContent = part && !masked ? part.path.replace(/ \/ /g, ' › ') : '';
+ const origins = part && !masked ? wordOrigins(part.name) : []; $('part-origin').hidden = !origins.length; $('part-origin').textContent = origins.join(' ');
+ $('part-say').hidden = !part || masked || !canSay(); pinUI();
  $('part-description').textContent = masked ? 'Choose its name from the options next to the model.' : part ? 'Loading description…' : 'Select directly on the body or choose from the list. Each piece can be viewed on its own.';
  renderFacts(null); if (part && !masked) describe(part).then(text => { if (state.selected !== part) return; $('part-description').textContent = text; renderFacts(part, text); });
  $('part-meta').textContent = part && !masked ? `${part.piece.schematic ? 'Added schematic reconstruction' : part.merged.length > 1 ? `${part.merged.length} merged structures` : 'Single structure'} · ${part.size.toArray().map(v => Math.round(v * 1000)).join(' × ')} mm · ${part.triangles.toLocaleString()} triangles${part.merged.length > 1 ? ` · includes ${part.merged.slice(0, 6).join(', ')}${part.merged.length > 6 ? '…' : ''}` : ''}` : '';
@@ -491,11 +504,16 @@ function bindControls(){
   handle.addEventListener('pointerdown', e => { dragging = true; handle.setPointerCapture(e.pointerId); }); handle.addEventListener('pointermove', move); handle.addEventListener('pointerup', () => { dragging = false; });
   handle.addEventListener('keydown', e => { const step = e.key === 'ArrowLeft' ? -.03 : e.key === 'ArrowRight' ? .03 : 0; if (!step) return; e.preventDefault(); e.stopPropagation(); state.compareX = THREE.MathUtils.clamp(state.compareX + step, .05, .95); placeCompare(); invalidate(4); }); }
  $('save-image').onclick = () => { saveShot = true; invalidate(4); };
- $('lesson-beat').onclick = () => startLesson('beat'); $('lesson-breath').onclick = () => startLesson('breath');
+ for (const b of document.querySelectorAll('[data-lesson]')) b.onclick = () => startLesson(b.dataset.lesson);
+ $('part-say').onclick = () => { if (state.selected) sayName(plain(state.selected)); };
+ $('pin-save').onclick = () => { if (state.selected && !setPin(state.selected.id, $('pin-text').value)) $('pin-note').textContent = 'Ten notes is the most a link can carry. Clear one to add another.'; };
+ $('pin-text').addEventListener('keydown', e => { e.stopPropagation(); if (e.key === 'Enter') $('pin-save').click(); });
+ $('measure').onclick = () => { measure.setActive(!measure.active); $('measure').setAttribute('aria-pressed', measure.active); $('viewport').classList.toggle('measuring', measure.active); $('tooltip').hidden = true; };
  quiz = createQuiz({
   candidates:() => { const region = $('quiz-region').value; return parts.filter(p => p.mesh.visible && p.piece.descriptionKey && p.size.length() > .04 && (region === 'all' || p.region === region) && (state.system !== 'all' || state.assembly || QUIZ_FILES.has(p.file))); },   // described and big enough to click; with the whole body up, stick to bones, organs, muscles, heart and brain
   reveal:part => { state.isolated = false; selectPart(part); updateVisibility(); focusSelected(2); }, clear:() => selectPart(null),
   present:part => { state.selected = part; state.isolated = true; selectPart(part); },   // alone on the stage, so its shape is the only clue
+  systems:fileLabels,
   onToggle:on => { state.quiz = on; $('tooltip').hidden = true; if (on) { tour.end(); if (state.board) toggleBoard(false); state.isolated = false; } updateVisibility(); }
  });
  tour = createTour({
@@ -541,7 +559,7 @@ function bindControls(){
  document.addEventListener('keydown', e => { const typing = /SELECT|TEXTAREA/.test(e.target.tagName) || (e.target.tagName === 'INPUT' && e.target.type !== 'range');   // a focused button or slider must not swallow the shortcuts
   if (typing || e.ctrlKey || e.metaKey || e.altKey || !state.ready) return; const k = e.key.toLowerCase(); if (k === 'e') setAmount(state.target > .5 ? 0 : 1, { animate:true }); if (k === 'r') reset(); if (k === 'f') focusSelected(); if (k === 'x') hideSelected();
   if (tour.active && e.target.tagName !== 'INPUT' && e.target.id !== 'viewport') { if (e.key === 'ArrowRight') tour.next(); if (e.key === 'ArrowLeft') tour.prev(); }
-  if (e.key === 'Escape') { if (tour.active) tour.end(); else if (state.selected) selectPart(null); else if (state.assembly) leaveAssembly(); } const map = { h:'heart', l:'lungs', s:'spine', b:'brain' }; const order = Object.keys(assemblies); if (/^[0-9]$/.test(k)) map[k] = order[(Number(k) + 9) % 10]; if (map[k]) (state.assembly === map[k] ? leaveAssembly() : enterAssembly(map[k])); });
+  if (e.key === 'Escape') { if (measure.active) $('measure').click(); else if (tour.active) tour.end(); else if (state.selected) selectPart(null); else if (state.assembly) leaveAssembly(); } const map = { h:'heart', l:'lungs', s:'spine', b:'brain' }; const order = Object.keys(assemblies); if (/^[0-9]$/.test(k)) map[k] = order[(Number(k) + 9) % 10]; if (map[k]) (state.assembly === map[k] ? leaveAssembly() : enterAssembly(map[k])); });
 }
 /** Desktop keeps the muscles back until a view needs them; this fetches whatever is still missing. Phones load by button only. */
 function loadRest(){ if (mobile || !state.ready || manifest.files.every(f => f.loaded)) return Promise.resolve(); return loadStage('detail'); }
@@ -559,7 +577,7 @@ function stepDown(){
 function syncURL(){
  if (applyingURL || !state.ready) return; clearTimeout(urlTimer);
  urlTimer = setTimeout(() => { if (applyingURL || state.sequence) return; const a = state.assembly && assemblies[state.assembly], mode = state.restoreMode || state.mode, x = Math.round(state.target * 100);
-  writeURL({ assembly:state.assembly, side:a?.paired ? state.assemblySide : null, piece:state.quiz ? null : state.selected?.id, mode:mode !== DEFAULT_MODE ? mode : null, system:state.system !== 'all' ? state.system : null, hide:[...state.off], amount:(a ? x < 100 : x > 0) ? state.target : null, board:state.board }, { push:state.assembly !== lastURLAssembly });   // opening or leaving a study is a step Back can undo
+  writeURL({ assembly:state.assembly, side:a?.paired ? state.assemblySide : null, piece:state.quiz ? null : state.selected?.id, pins:[...pins], mode:mode !== DEFAULT_MODE ? mode : null, system:state.system !== 'all' ? state.system : null, hide:[...state.off], amount:(a ? x < 100 : x > 0) ? state.target : null, board:state.board }, { push:state.assembly !== lastURLAssembly });   // opening or leaving a study is a step Back can undo
   lastURLAssembly = state.assembly; }, 200);
 }
 async function applyURL(u, { initial = false } = {}){
@@ -575,6 +593,7 @@ async function applyURL(u, { initial = false } = {}){
   const off = new Set((u.hide || []).filter(id => manifest.files.some(f => f.id === id)));
   if (off.size !== state.off.size || [...off].some(id => !state.off.has(id))) { state.off = off; for (const box of document.querySelectorAll('[data-layer]')) box.checked = !off.has(box.dataset.layer); updateVisibility(); }
   if (u.amount != null) setAmount(u.amount); else if (!initial && !state.board) setAmount(state.assembly ? 1 : 0);
+  const wantedPins = (u.pins || []).filter(([id]) => pieceById.has(id)); if (wantedPins.length !== pins.size || wantedPins.some(([id, text]) => pins.get(id) !== text)) { pins.clear(); for (const [id, text] of wantedPins) pins.set(id, text); showPins(); pinUI(); }
   if (pieceById.has(u.piece)) await choosePiece(u.piece, { focus:initial && !state.board }); else if (!initial && state.selected) selectPart(null);
  } finally { applyingURL = false; lastURLAssembly = state.assembly; }
 }
@@ -589,46 +608,47 @@ function startStudyTour(){
  tourKind = 'study'; tour.start(a.title.toUpperCase(), stops);
 }
 /**
- * Lessons: one heartbeat, or one breath, taken a stage at a time. Each stop runs its stretch of the cycle over
- * and over, slowed down, with the monitor and (for the heart) the blood flow switched on; ending puts everything back.
+ * Lessons (lessons.js): one cycle of the living body taken a stage at a time. Each stop runs its stretch of the
+ * cycle over and over, slowed down; this sets the stage for one and puts everything back when it ends.
  */
+function flowTo(on){ if (flowOn !== !!on) $('flow-toggle').click(); }   // a declaration, not a const: a lesson can be started from the link while the module is still loading
 function startLesson(kind){
+ if (!LESSONS[kind] || !state.ready) return;
  tour.end(); if (quiz.active) quiz.stop(); if (state.board) toggleBoard(false); if (state.assembly) leaveAssembly(); if (state.compare) setCompare(null);
  if (!life.on) { life.on = true; $('life-toggle').setAttribute('aria-pressed', 'true'); }
  const before = { mode:state.mode, flow:flowOn, monitor:vitals.monitor, amount:state.target };
  if (state.target > 0) setAmount(0, { animate:true });
  if (state.mode !== 'xray') setMode('xray'); loadRest();
- vitals.setMonitor(true); $('flow-toggle').click(); if (!flowOn) $('flow-toggle').click();   // on, whichever way it was
- const look = (id, distance, dir) => choosePiece(id, { focus:false }).then(part => { if (!part) return; selectPart(null); const d = new THREE.Vector3().fromArray(dir).normalize(), wide = $('viewport').clientWidth > 760,
+ const look = (id, distance, dir) => { const stop = tour.getState().at; return choosePiece(id, { focus:false }).then(part => { if (!part || lesson !== kind || tour.getState().at !== stop) return;   // the visitor has moved on while the piece was loading
+  selectPart(null); const d = new THREE.Vector3().fromArray(dir).normalize(), wide = $('viewport').clientWidth > (document.body.classList.contains('embed') ? 520 : 760),
    // keep the subject clear of the lesson card: to its right on a wide stage, below it on a narrow one
    c = part.center.clone().addScaledVector(wide ? new THREE.Vector3(0, 1, 0).cross(d).normalize() : new THREE.Vector3(0, 1, 0), (wide ? -.2 : .24) * distance);
-  viewTween = { start:performance.now(), from:camera.position.clone(), to:c.clone().addScaledVector(d, distance), fromTarget:controls.target.clone(), toTarget:c, duration:1400 }; });
- let stops;
- if (kind === 'beat') {
-  let from = 0;
-  stops = BEAT_PHASES.map((ph, i) => { const range = [from + .004, ph.until - .004]; from = ph.until; return { title:`${i + 1}. ${ph.name}`, text:`${ph.note} ${BEAT_NOTES[i]}`, run:async () => { life.loopBreath(null); life.loopBeat(range); if (i === 0) await look('heart/left-ventricle', .62, [.35, .12, 1]); } }; });
-  stops.push({ title:'The whole beat', text:'All five stages run together in under a second, about seventy times a minute at rest. Watch the monitor: each QRS spike is one ejection, and the dots in the heart stop and go with the valves.', run:() => { life.loopBeat(null); life.setSpeed(.5); $('life-speed').value = '0.5'; } });
- } else {
-  stops = [
-   { title:'1. Breathing in', text:'The diaphragm contracts and flattens, moving down about a centimetre and a half; the muscles between the ribs lift them up and out, and the sternum swings forward. The chest gets bigger, pressure inside it falls, and air is drawn in. The lungs lengthen to follow the diaphragm.', run:async () => { life.loopBeat(null); life.loopBreath([.01, .38]); await look('skeletal/body-of-sternum', 1.55, [.75, .1, 1]); } },
-   { title:'2. Breathing out', text:'At rest nothing has to push: the diaphragm relaxes and domes back up, the ribs settle under their own weight and the stretched lungs recoil like elastic. It is quick at first and then eases. Forced breathing out (a cough, blowing) adds the abdominal muscles.', run:() => life.loopBreath([.38, .92]) },
-   { title:'3. The pause', text:'A short rest before the next breath. The lungs are not empty: about two and a half litres stay in them. The heart beats a little slower in this half of the cycle and quicker while breathing in.', run:() => life.loopBreath([.9, .999]) },
-   { title:'The whole breath', text:'About fourteen of these a minute at rest. Follow the blue curve on the monitor: a quick rise, a slower fall, a flat pause.', run:() => life.loopBreath(null) }
-  ];
- }
- lesson = kind; tourKind = 'lesson'; tourRestore = before; tour.start(kind === 'beat' ? 'ONE HEARTBEAT' : 'ONE BREATH', stops);
+  viewTween = { start:performance.now(), from:camera.position.clone(), to:c.clone().addScaledVector(d, distance), fromTarget:controls.target.clone(), toTarget:c, duration:1400 }; }); };
+ const plan = lessonPlan(kind, { life, look, view:name => { selectPart(null); setView(name); }, speed:k => { life.setSpeed(k); $('life-speed').value = String(k); }, zone:z => flow.setFocus(z) });
+ vitals.setMonitor(plan.monitor); flowTo(plan.flow);
+ lesson = kind; tourKind = 'lesson'; tourRestore = before; tour.start(plan.name, plan.stops);
 }
-const BEAT_NOTES = [
- 'On the monitor this follows the small P wave. Most filling has already happened; this adds the last fifth.',
- 'This starts at the tall QRS spike. It lasts about a twentieth of a second and makes the first heart sound, "lub", as the inflow valves shut.',
- 'About 70 millilitres leave each ventricle. The aorta and pulmonary trunk swell with it, which is the pulse you can feel at the wrist a moment later.',
- 'The second heart sound, "dub", is the outflow valves closing. On the monitor the T wave has just finished.',
- 'The longest stage at rest, and the one that shortens most when the heart speeds up. Blood falls in passively until the next atrial contraction.'
-];
 function endLesson(){
- const before = tourRestore; lesson = null; life.loopBeat(null); life.loopBreath(null); life.setSpeed(1); $('life-speed').value = '1'; vitals.show();
- if (before) { vitals.setMonitor(before.monitor); if (flowOn !== before.flow) $('flow-toggle').click(); if (before.mode !== state.mode) setMode(before.mode); }
+ const before = tourRestore; lesson = null; life.loopBeat(null); life.loopBreath(null); life.loopSwallow(null); flow.setFocus(null); life.setSpeed(1); $('life-speed').value = '1'; vitals.show();
+ if (before) { vitals.setMonitor(before.monitor); flowTo(before.flow); if (before.mode !== state.mode) setMode(before.mode); }
  setView('hero');
+}
+// ---------------------------------------------------------------- notes pinned to pieces
+/** Up to ten short notes, each on a piece. They are drawn as labels and travel in the page link. */
+function showPins(){
+ for (let i = landmarks.length - 1; i >= 0; i--) if (landmarks[i].kind === 'pin') { landmarks[i].el.remove(); landmarks.splice(i, 1); }
+ for (const [id, text] of pins) { const part = partsById.get(id); if (!part) continue; const el = document.createElement('span'); el.className = 'landmark landmark-pin'; el.textContent = text; $('labels').append(el); landmarks.push({ el, part, kind:'pin' }); }
+ invalidate(4);
+}
+function pinUI(){
+ const p = state.selected, open = !!p && !quiz?.masking;
+ $('pin-text').disabled = $('pin-save').disabled = !open; $('pin-text').value = open ? pins.get(p.id) || '' : ''; $('pin-save').textContent = open && pins.has(p.id) ? 'Update' : 'Pin';
+ $('pin-note').hidden = !pins.size; if (pins.size) $('pin-note').textContent = `${pins.size} ${pins.size === 1 ? 'note' : 'notes'} pinned (ten at most). They are part of this page’s link, so copying the link shares them.`;
+}
+function setPin(id, text){
+ text = cleanPin(text);
+ if (text) { if (!pins.has(id) && pins.size >= 10) return false; pins.set(id, text); } else pins.delete(id);
+ showPins(); pinUI(); syncURL(); return true;
 }
 function startBodyTour(){
  tour.end(); if (state.assembly) leaveAssembly(); if (state.board) toggleBoard(false); const before = state.mode;
@@ -668,22 +688,25 @@ function tick(now){
  if (state.ready && state.detail && !state.board && (++hi.frame % 10 === 0 || renderFrames === 0)) lodPass();
  if (!state.board) { const under = camera.position.y < -.1; for (const o of studioObjects) o.visible = !under; }   // from underneath, the floor and platform would hide the body
  const placed = []; const W = renderer.domElement.clientWidth, H = renderer.domElement.clientHeight;
- for (const l of landmarks) { const show = !state.board && !state.quiz && l.part.mesh.visible && (l.kind === 'assembly' ? state.amount > .35 && !state.labelAll : l.kind === 'all' ? state.amount > .35 : state.labels && !state.assembly); l.el.hidden = !show; if (!show) continue; const anchor = l.anchor ? l.anchor.clone() : l.part.center.clone(); const p = anchor.add(l.part.mesh.position).sub(l.part.base).project(camera); l.el.hidden = Math.abs(p.x) > .95 || Math.abs(p.y) > .95 || p.z > 1; if (l.el.hidden) continue; l.x = (p.x * .5 + .5) * W; l.y = (-p.y * .5 + .5) * H; l.depth = p.z; l.priority = l.part.size.length(); placed.push(l); }
+ for (const l of landmarks) { const show = !state.board && !state.quiz && l.part.mesh.visible && (l.kind === 'pin' ? true : l.kind === 'assembly' ? state.amount > .35 && !state.labelAll : l.kind === 'all' ? state.amount > .35 : state.labels && !state.assembly); l.el.hidden = !show; if (!show) continue; const anchor = l.anchor ? l.anchor.clone() : l.part.center.clone(); const p = anchor.add(l.part.mesh.position).sub(l.part.base).project(camera); l.el.hidden = Math.abs(p.x) > .95 || Math.abs(p.y) > .95 || p.z > 1; if (l.el.hidden) continue; l.x = (p.x * .5 + .5) * W; l.y = (-p.y * .5 + .5) * H; l.depth = p.z; l.priority = l.part.size.length(); placed.push(l); }
  // Layout lives in labels.js: floating labels are nudged apart, "label every piece" goes to a column down each side.
  const layout = layoutLabels(placed, W, H);
  if (layout.leaders !== lastLeaders) { $('leaders').innerHTML = layout.leaders; lastLeaders = layout.leaders; }
  const note = layout.total > layout.shown ? `${layout.shown} OF ${layout.total} LABELS SHOWN · ZOOM IN FOR THE REST` : ''; if (note !== labelNote) { labelNote = note; $('label-note').textContent = note; $('label-note').hidden = !note; }
+ if (measure?.active && (state.amount > .02 || state.board) && measure.getState().points) measure.clear();   // the points mark places on the assembled body
+ measure?.frame(camera, W, H);
  section.frame(parts, !state.board);
  renderer.info.reset();
- lifeUniforms.xray.value = .55 + .45 * THREE.MathUtils.smoothstep(camera.position.distanceTo(controls.target), .45, 2.4);   // many glass layers fill the screen in close-up: ease them down
+ lifeUniforms.xray.value = .55 + .45 * THREE.MathUtils.smoothstep(camera.position.distanceTo(controls.target), .45, 2.4);
+ if (flow) flow.points.material.size = THREE.MathUtils.clamp(.0062 * camera.position.distanceTo(controls.target), .0075, .019);   // from across the room the dots would vanish: let them grow with distance   // many glass layers fill the screen in close-up: ease them down
  const planes = section.planes, fx = state.fx && !state.board;
  for (const m of [skinDepthMaterial, gtaoPass.normalMaterial]) if ((m.clippingPlanes || null) !== planes) { m.clippingPlanes = planes; m.needsUpdate = true; }   // helpers and the occlusion pass honour the cut
  outline.update(camera, H, planes);
- vitals.frame(dt, alive); flow?.update(dt * life.getState().speed * (life.getState().scrub === null ? 1 : 0), life.signals, flowOn && alive > 0 && state.mode === 'xray' && !state.board);
+ vitals.frame(dt, alive); flow?.update(dt * life.getState().speed * (life.getState().scrub === null ? 1 : 0), life.signals, flowOn && alive > 0 && state.mode === 'xray' && !state.board, THREE.MathUtils.clamp(life.getState().bpm / 70, .6, 2));   // the blood moves faster when the heart does
  mirror.visible = fx && !section.active && camera.position.y > -.1; mirror.userData.fresh = false;   // a section's cap quads need a stencil buffer the mirror does not have
  gtaoPass.enabled = state.ao; bloomPass.enabled = fx; bokehPass.enabled = fx && state.dof && !!state.selected && !section.active;
  if (bokehPass.enabled) { const p = state.selected; bokehPass.camera = camera; bokehPass.uniforms.focus.value = _v.copy(p.center).add(p.mesh.position).sub(p.base).distanceTo(camera.position); }
- if (state.compare && !state.board) {
+ if (dryRun) { /* fast-forwarding: everything above has been advanced, the picture is not needed */ } else if (state.compare && !state.board) {
   // the same view twice, each clipped to its side of the divider; the second pass swaps in the other finish
   const x = Math.round(W * state.compareX);
   renderer.setScissorTest(true); renderer.setScissor(0, 0, x, H); renderer.render(scene, camera);

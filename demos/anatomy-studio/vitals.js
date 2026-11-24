@@ -12,7 +12,7 @@
  * The monitor and the blood-flow overlay start switched off: the opening view is the model, and these are asked for.
  * A screen reader gets the same information as text (#vitals-text), announced when the pace or condition changes.
  */
-import { REST, EXERCISE, BEAT_PHASES, CONDITIONS, beatPhase } from './life.js?v=19dcaad8b1';
+import { REST, EXERCISE, BEAT_PHASES, CONDITIONS, beatPhase } from './life.js?v=b85a6d00ce';
 
 const el = id => document.getElementById(id);
 const bump = (x, at, width, height) => height * Math.exp(-((x - at) ** 2) / (2 * width * width));
