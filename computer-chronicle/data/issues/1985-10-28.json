@@ -1,0 +1,464 @@
+{
+  "currentDate": "2026-11-24",
+  "historicDate": "1985-10-28",
+  "displayDate": "Week of October 28-November 3, 1985",
+  "edition": "Issue 170 - Weekly 1985 Computer & Culture Chronicle",
+  "masthead": {
+    "title": "Computer Chronicle",
+    "subtitle": "Issue 170 - Weekly 1985 Computer & Culture Chronicle",
+    "dateline": "Week of October 28-November 3, 1985",
+    "price": "75 cents"
+  },
+  "sectionChrome": {
+    "primary": "brick red",
+    "secondary": "royal blue",
+    "texture": "aged newsprint, fine column rules, ink bleed"
+  },
+  "visualProfile": {
+    "tone": "An instructionless computer mystery leads the fall game desk",
+    "motifs": [
+      "Commodore 64 keyboard and CRT showing a fictional logon prompt; mysterious map and disk; no real intrusion instructions"
+    ],
+    "layout": "Full-page warm aged newsprint, dense columns, red and blue headers, boxed modules, halftone photos, paper grain and slight ink bleed; no dead footer space"
+  },
+  "layoutPlan": {
+    "leadPlacement": "Hacker receives the largest headline and C64 mystery-game halftone. Atari 520ST and Amiga features secondary.",
+    "secondaryRail": "Top 5 Music: Billboard Top Rock Tracks November 2. Top 5 Movies: November 1-3 US weekend. Top 5 Computer Games: editorial selection, not sales ranking. Print feature headlines verbatim and fixed page-map jump lines."
+  },
+  "heroImage": {
+    "src": "media/computer-chronicle-gpt-image-2-week-1985-10-28.jpg",
+    "alt": "Computer Chronicle newspaper front page for October 28-November 3, 1985",
+    "caption": "Newspaper-style front page generated from structured Chronicle issue data.",
+    "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+  },
+  "sources": [
+    {
+      "title": "COMPUTE! issue 65: The New Games pp.32–34 and Amiga report p.28",
+      "url": "https://archive.org/stream/1985-10-compute-magazine/Compute_Issue_065_1985_Oct_djvu.txt",
+      "date": "1985-10"
+    },
+    {
+      "title": "Atari 520ST: A Hands-On Report, Tom R. Halfhill",
+      "url": "https://www.atarimagazines.com/compute/issue65/520st.php",
+      "date": "1985-10"
+    },
+    {
+      "title": "Amiga Goes IBM-Compatible and announced software sidebar",
+      "url": "https://www.atarimagazines.com/compute/issue65/amiga_goes_ibm.php",
+      "date": "1985-10"
+    },
+    {
+      "title": "Telecomputing Today: The Latest Developments, p.108",
+      "url": "https://www.atarimagazines.com/compute/issue65/telecomputing_today.php",
+      "date": "1985-10"
+    },
+    {
+      "title": "Billboard vol.97 no.44: Top Rock Tracks",
+      "url": "https://archive.org/stream/bub_gb_RyQEAAAAMBAJ/bub_gb_RyQEAAAAMBAJ_djvu.txt",
+      "date": "1985-11-02"
+    },
+    {
+      "title": "Sinclair User 43: Piracy, Wendie Pearson",
+      "url": "https://sinclairuser.com/043/piracy.htm",
+      "date": "1985-10"
+    },
+    {
+      "title": "NASA STS-61A mission facts",
+      "url": "https://www.nasa.gov/mission/sts-61a/",
+      "date": "Historical mission 1985-10-30; retrospective page undated"
+    },
+    {
+      "title": "Box Office Mojo domestic weekend 44",
+      "url": "https://www.boxofficemojo.com/weekend/1985W44/",
+      "date": "1985-11-01/1985-11-03"
+    },
+    {
+      "title": "Gauntlet retrospective; regional dates inconsistent",
+      "url": "https://en.wikipedia.org/wiki/Gauntlet_(1985_video_game)",
+      "date": "Undated retrospective"
+    },
+    {
+      "title": "Internet Archive Gauntlet catalog record",
+      "url": "https://archive.org/details/arcade_gauntlet",
+      "date": "1985 (catalog publication year)"
+    }
+  ],
+  "lead": {
+    "headline": "Hacker leaves players alone at the logon prompt",
+    "dek": "Activision turns a simulated computer connection into a mystery without a rule book.",
+    "confidence": "same-month",
+    "sourceRefs": [
+      0
+    ],
+    "body": [
+      "A computer connection appears to be going wrong. Activision president Jim Levy struggles to reach headquarters, then reveals that the apparent remote session is the game itself. October’s COMPUTE! recounts the demonstration in its fall-games survey: Hacker makes uncertainty its opening attraction, rather than a problem to be explained away in a manual.",
+      "There are no instructions, rules or clues to consult. Players must discover whose simulated computer they have reached, what they are trying to accomplish and what will end their attempt. This is a fictional telecomputing puzzle played on a home computer, not access to a real remote service. The screen’s invitation is theatrical, and the investigation belongs to the game.",
+      "The magazine lists initial Commodore 64/128 versions, with Apple and Atari editions to follow, and gives the price as not yet announced. Those are the survey’s plans; they do not establish that every version has reached shops during this week. The demonstration itself is not dated in the report.",
+      "Hacker shares the fall desk with MicroProse’s submarine simulation Silent Service, Datasoft’s Alternate Reality: The City and Sierra’s King’s Quest II. The competition is widening from reflexes to discovery, command and worlds that reward patient exploration. For the Commodore player, a blinking prompt may now be as enticing as a screen full of targets."
+    ]
+  },
+  "stories": [
+    {
+      "headline": "Atari’s $799 desktop puts a mouse and 512K within reach",
+      "confidence": "same-month",
+      "sourceRefs": [
+        1
+      ],
+      "body": [
+        "Atari’s 520ST is becoming widely available, according to Tom R. Halfhill’s October COMPUTE! hands-on report. Its 512K of memory and 8-MHz Motorola 68000 serve a mouse-driven GEM desktop with icons, windows and drop-down menus. The machine was announced in January; this is the autumn buying desk, not a new launch announcement.",
+        "The report’s $799 monochrome package includes the computer, external floppy drive, monitor, mouse and system software. A color-monitor package is quoted at $999. Monochrome gives 640 by 400 pixels at 70 Hz; color offers either four colors at 640 by 200 or sixteen at 320 by 200 from a 512-color palette.",
+        "Built-in MIDI, RS-232 and Centronics connections give musicians, modem users and printer owners room to work. Logo accompanies the system, while BASIC was still unfinished when the reporter wrote. Buyers should distinguish what is in that package from future storage products and prototypes."
+      ]
+    },
+    {
+      "headline": "Amiga promises PC software without an 8088 board",
+      "confidence": "same-month",
+      "sourceRefs": [
+        2,
+        0
+      ],
+      "body": [
+        "The new Amiga faces a familiar question: what can it run? October’s COMPUTE! revisits Commodore’s July 23 Lincoln Center demonstration, where an engineer loaded a software PC emulator, booted PC-DOS 2.10 through an optional external 5¼-inch drive and demonstrated Lotus 1-2-3. No 8088 expansion board was part of the demonstration.",
+        "Commodore claimed the emulator occupied about 40K of RAM excluding video memory, but the report records doubts about matching a real PC’s speed. A successful demonstration is not a promise that every PC program will work well. No emulator price was announced, and the company’s availability forecast is not proof of delivery.",
+        "The quoted base Amiga costs $1,295 with 256K of user RAM. Another 256K of writable control store holds the disk-loaded system image; it is not extra general-purpose user memory. The report lists a $200 option to reach 512K user RAM, alongside announced software including Graphicraft, Textcraft, Telecraft, ABasiC and Lattice C."
+      ]
+    },
+    {
+      "headline": "2400-bit modems become an affordable step up",
+      "confidence": "same-month",
+      "sourceRefs": [
+        3
+      ],
+      "body": [
+        "The price of a faster bulletin-board evening is coming down. October’s COMPUTE! reports a $695 list price for U.S. Robotics’ Courier 2400, against $895 for Hayes and $795 for most competitors. These are modem prices, not the online-service bill.",
+        "The Courier puts command and register references underneath its case, offers three callable help screens and keeps DIP switches and speaker volume within reach. U.S. Robotics is also working with operators of busy bulletin boards on an acquisition program intended to encourage 2400-bps access; the column names no particular board or sysop.",
+        "The Source added 2400-bps access in August. October’s quoted premiums are $1.80 per prime-time hour and $1.20 per nonprime hour above its 1200-bps prices of $25.80 and $10.80. For a less expensive hardware entry, Cermetek’s internal Infomate 1200-TPC is listed at $198, but it is a 1200-bps modem rather than a 2400-bps substitute."
+      ]
+    }
+  ],
+  "editorNote": "A logon mystery leads the fall games desk; mouse-driven desktops and cheaper modems fill the workbench.",
+  "morningLine": "Hacker without a rule book; Atari’s $799 desktop; Challenger carries Spacelab D-1.",
+  "computerItems": [
+    {
+      "title": "Atari 520ST",
+      "summary": "512K, 8 MHz 68000, mouse-driven GEM, external 3½-inch floppy and built-in MIDI.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        1
+      ]
+    },
+    {
+      "title": "Amiga writable control store",
+      "summary": "An extra protected 256K holds the disk-loaded system, separate from 256K user RAM; $1,295 reported base price.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0,
+        2
+      ]
+    },
+    {
+      "title": "Courier 2400",
+      "summary": "U.S. Robotics 2400-bps modem, $695 list in October reporting.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        3
+      ]
+    }
+  ],
+  "softwareList": [
+    {
+      "name": "Graphicraft / Textcraft / Telecraft",
+      "detail": "Graphics, word processing and communications in the Amiga announced-software list; delivery dates unverified.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        2
+      ]
+    },
+    {
+      "name": "ABasiC / Lattice C",
+      "detail": "Programming packages listed for Amiga in October’s announcement survey, not verified shipments this week.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        2
+      ]
+    },
+    {
+      "name": "Digital Research Logo",
+      "detail": "Included with early Atari 520ST systems; BASIC remained unfinished at report time.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        1
+      ]
+    }
+  ],
+  "storeShelves": [
+    {
+      "label": "Top 5 Computer Games — editorial selection, not a sales chart",
+      "items": [
+        "Hacker",
+        "Silent Service",
+        "Alternate Reality: The City",
+        "King’s Quest II: Romancing the Throne",
+        "Spy vs. Spy: The Island Caper"
+      ],
+      "confidence": "same-month",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "label": "Top 5 Movies — US weekend box office, November 1-3, 1985",
+      "items": [
+        "Death Wish 3",
+        "To Live and Die in L.A.",
+        "Jagged Edge",
+        "A Nightmare on Elm Street Part 2: Freddy’s Revenge",
+        "Back to the Future"
+      ],
+      "confidence": "same-week",
+      "sourceRefs": [
+        7
+      ]
+    }
+  ],
+  "priceWatch": [
+    {
+      "item": "520ST monochrome system",
+      "price": "$799",
+      "note": "Computer, floppy, monitor, mouse and system software",
+      "confidence": "same-month",
+      "sourceRefs": [
+        1
+      ]
+    },
+    {
+      "item": "520ST RGB system",
+      "price": "$999",
+      "note": "Complete color-monitor package",
+      "confidence": "same-month",
+      "sourceRefs": [
+        1
+      ]
+    },
+    {
+      "item": "Amiga base configuration",
+      "price": "$1,295",
+      "note": "256K user RAM; monitor inclusion not established here",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "item": "Amiga user-RAM expansion",
+      "price": "$200",
+      "note": "Quoted option to reach 512K user RAM",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "item": "Courier 2400",
+      "price": "$695",
+      "note": "U.S. Robotics list price",
+      "confidence": "same-month",
+      "sourceRefs": [
+        3
+      ]
+    },
+    {
+      "item": "Hayes 2400-bps modem",
+      "price": "$895",
+      "note": "Column comparison price",
+      "confidence": "same-month",
+      "sourceRefs": [
+        3
+      ]
+    },
+    {
+      "item": "Infomate 1200-TPC",
+      "price": "$198",
+      "note": "Cermetek internal IBM PC modem",
+      "confidence": "same-month",
+      "sourceRefs": [
+        3
+      ]
+    }
+  ],
+  "musicChart": [
+    {
+      "rank": 1,
+      "title": "You Belong to the City",
+      "song": "You Belong to the City",
+      "artist": "Glenn Frey",
+      "chart": "Billboard Top Rock Tracks (album-oriented radio airplay; not Hot 100)",
+      "chartDate": "1985-11-02",
+      "basis": "Album-oriented radio airplay; not Hot 100",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        4
+      ]
+    },
+    {
+      "rank": 2,
+      "title": "Never",
+      "song": "Never",
+      "artist": "Heart",
+      "chart": "Billboard Top Rock Tracks (album-oriented radio airplay; not Hot 100)",
+      "chartDate": "1985-11-02",
+      "basis": "Album-oriented radio airplay; not Hot 100",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        4
+      ]
+    },
+    {
+      "rank": 3,
+      "title": "Sleeping Bag",
+      "song": "Sleeping Bag",
+      "artist": "ZZ Top",
+      "chart": "Billboard Top Rock Tracks (album-oriented radio airplay; not Hot 100)",
+      "chartDate": "1985-11-02",
+      "basis": "Album-oriented radio airplay; not Hot 100",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        4
+      ]
+    },
+    {
+      "rank": 4,
+      "title": "Broken Wings",
+      "song": "Broken Wings",
+      "artist": "Mr. Mister",
+      "chart": "Billboard Top Rock Tracks (album-oriented radio airplay; not Hot 100)",
+      "chartDate": "1985-11-02",
+      "basis": "Album-oriented radio airplay; not Hot 100",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        4
+      ]
+    },
+    {
+      "rank": 5,
+      "title": "Small Town",
+      "song": "Small Town",
+      "artist": "John Cougar Mellencamp",
+      "chart": "Billboard Top Rock Tracks (album-oriented radio airplay; not Hot 100)",
+      "chartDate": "1985-11-02",
+      "basis": "Album-oriented radio airplay; not Hot 100",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        4
+      ]
+    }
+  ],
+  "briefs": [
+    {
+      "headline": "Silent Service",
+      "summary": "MicroProse WWII submarine simulation in the fall survey; Apple II and Commodore announced at $34.95. Other simulation previews are not evidence of delivery.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "headline": "Alternate Reality: The City",
+      "summary": "Datasoft role-playing game: alien abduction, changing day/night, food and money, and moral traits alongside combat. Listed at $39.95 Atari/Commodore and $49.95 Apple II; a projected multi-part series is a plan.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "headline": "King’s Quest II: Romancing the Throne",
+      "summary": "Sierra graphical adventure with King Graham; IBM PC/compatible edition listed at $49.95.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "headline": "Spy vs. Spy: The Island Caper",
+      "summary": "First Star sequel with simultaneous split-screen play; C64/128 $29.95 and Apple II $34.95 in the survey.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0
+      ]
+    }
+  ],
+  "periodAd": {
+    "headline": "A faster line for the evening caller",
+    "summary": "Courier 2400 at $695 list; Cermetek Infomate 1200-TPC at $198 for 1200 bps. October COMPUTE! buying-desk quotations.",
+    "tagline": "Editorial reconstruction, not a quoted advertisement.",
+    "sourceRefs": [
+      3
+    ]
+  },
+  "market": {
+    "headline": "Speed costs more than the modem",
+    "summary": "The Source’s quoted nonprime 1200-bps service is $10.80 an hour; its 2400-bps premium adds $1.20. Prime-time figures are $25.80 plus $1.80. Hardware and connection charges belong in the same budget.",
+    "confidence": "same-month",
+    "sourceRefs": [
+      3
+    ]
+  },
+  "worldAnchor": {
+    "headline": "Challenger launches German Spacelab D-1",
+    "summary": "Challenger launched October 30 at noon EST with an eight-person crew and the German Spacelab D-1 mission. The laboratory carries 75 numbered experiments, with some operations controlled from Oberpfaffenhofen near Munich.",
+    "confidence": "exact-date",
+    "sourceRefs": [
+      6
+    ]
+  },
+  "bbsNote": {
+    "headline": "BBS operators help push 2400 bps",
+    "summary": "October’s telecomputing column connects cheaper modems, sysop incentives and higher-speed service access. The following are sourced desk paraphrases, not invented BBS messages.",
+    "posts": [
+      {
+        "topic": "Sysop acquisition deal",
+        "platform": "Bulletin-board systems; no named board",
+        "text": "U.S. Robotics is working with operators of busy boards on a special acquisition program to encourage 2400-bps service."
+      },
+      {
+        "topic": "The Source moves faster",
+        "platform": "The Source",
+        "text": "2400-bps access added in August; October reporting lists prime/nonprime premiums of $1.80/$1.20 above the 1200-bps service prices."
+      },
+      {
+        "topic": "Courier price cut",
+        "platform": "U.S. Robotics Courier 2400",
+        "text": "Reported list price now $695, with help screens and a command reference printed on the bottom of the modem."
+      }
+    ],
+    "sourceRefs": [
+      3
+    ]
+  },
+  "curiosity": {
+    "headline": "The new Atari terminal skips one increasingly popular speed",
+    "summary": "A reporter found 300, 1200, 4800 and 9600 bps in an ST terminal accessory’s menu—but no 2400.",
+    "detail": "October COMPUTE!’s telecomputing columnist describes a visit to Atari and a demonstrator changing the subject to a graphics demo after the missing speed was pointed out. Treat it as an observed software version, not proof that ST hardware cannot communicate at 2400 bps.",
+    "sourceRefs": [
+      3
+    ]
+  },
+  "gadgetWatch": {
+    "headline": "A cellular modem carries a four-figure forecast",
+    "summary": "October COMPUTE! reports AT&T Technologies and Bell Atlantic trials in the Baltimore–Washington area since July of a 2400-bps CTS-1620 cellular modem, expected in 1986 at $1,600–$2,600. It requires a cellular telephone/transmitter and an input/display device. Already available lower-speed alternatives are reported as Motorola 300 bps at $195 and Spectrum Cellular 1200 bps at $695. Trials and forecasts are not this week’s product releases.",
+    "confidence": "same-month",
+    "sourceRefs": [
+      3
+    ]
+  },
+  "accuracyLedger": {
+    "items": [
+      "Computer stories use October magazine coverage, not invented October 28-November 3 release dates.",
+      "Game shelves are editorial selections, not sales rankings. Music is Billboard Top Rock Tracks November 2; films are November 1-3 US weekend box office.",
+      "Amiga PC emulation was demonstrated July 23; availability, compatibility and speed are not guaranteed. Separate user RAM from writable control store.",
+      "The ST curiosity concerns a demonstrated terminal software version, not a hardware speed limit.",
+      "No milestone is asserted. Gauntlet regional release timing is unresolved and it is not used as a dated launch.",
+      "Piracy feature omitted this week; no verified named crew or handle was recovered."
+    ]
+  }
+}

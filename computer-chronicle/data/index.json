@@ -2,6 +2,199 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-11-24",
+      "historicDate": "1985-10-28",
+      "displayDate": "Week of October 28-November 3, 1985",
+      "edition": "Issue 170 - Weekly 1985 Computer & Culture Chronicle",
+      "morningLine": "Hacker without a rule book; Atari’s $799 desktop; Challenger carries Spacelab D-1.",
+      "leadHeadline": "Hacker leaves players alone at the logon prompt",
+      "storyHeadlines": [
+        "Atari’s $799 desktop puts a mouse and 512K within reach",
+        "Amiga promises PC software without an 8088 board",
+        "2400-bit modems become an affordable step up"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1985-10-28.jpg",
+      "thumb": "media/thumbs/1985-10-28.webp",
+      "milestone": false
+    },
+    {
+      "currentDate": "2026-11-23",
+      "historicDate": "1985-10-21",
+      "displayDate": "Week of October 21-27, 1985",
+      "edition": "Issue 169 - Weekly 1985 Computer & Culture Chronicle",
+      "morningLine": "Winter Games on the C64; GEnie’s announcement; Atari’s mouse-driven desktop.",
+      "leadHeadline": "Winter Games brings snow and ice to the Commodore",
+      "storyHeadlines": [
+        "GEnie courts the home-computer caller",
+        "Atari puts a mouse-driven desktop below $1,000",
+        "Nintendo keeps its New York experiment local"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1985-10-21.jpg",
+      "thumb": "media/thumbs/1985-10-21.webp",
+      "milestone": false
+    },
+    {
+      "currentDate": "2026-11-22",
+      "historicDate": "1985-10-14",
+      "displayDate": "Week of October 14-20, 1985",
+      "edition": "Issue 168 - Weekly 1985 Computer & Culture Chronicle",
+      "morningLine": "Nintendo tests New York; Intel announces the 80386; Atari’s mouse desktop reaches the shops.",
+      "leadHeadline": "Nintendo bets on New York with a new home-game system",
+      "storyHeadlines": [
+        "Intel introduces the 32-bit 80386",
+        "Atari 520ST brings a mouse desktop under $800",
+        "Fall games trade instructions for discovery and richer simulations"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1985-10-14.jpg",
+      "thumb": "media/thumbs/1985-10-14.webp",
+      "milestone": true
+    },
+    {
+      "currentDate": "2026-11-21",
+      "historicDate": "1985-10-07",
+      "displayDate": "Week of October 7-13, 1985",
+      "edition": "Issue 167 - Weekly 1985 Computer & Culture Chronicle",
+      "morningLine": "Hacker logs on at No.7; C128s reach British shops; GEM rearranges its desktop.",
+      "leadHeadline": "No manual, no map: Hacker makes the software chart",
+      "storyHeadlines": [
+        "Commodore 128 reaches British shops as Amiga courts developers",
+        "Apple–Digital Research dispute changes GEM’s screen furniture",
+        "Amstrad’s computer gamble drives record profits"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1985-10-07.jpg",
+      "thumb": "media/thumbs/1985-10-07.webp",
+      "milestone": false
+    },
+    {
+      "currentDate": "2026-11-20",
+      "historicDate": "1985-09-30",
+      "displayDate": "Week of September 30-October 6, 1985",
+      "edition": "Issue 166 - Weekly 1985 Computer & Culture Chronicle",
+      "morningLine": "A logon problem opens an adventure; snow and ice follow the summer sports boom.",
+      "leadHeadline": "Hacker turns a mysterious computer connection into the game",
+      "storyHeadlines": [
+        "Winter Games takes the Epyx sports formula onto snow and ice",
+        "Atari’s 520ST puts a mouse-driven 512K system below $1,000",
+        "Sinclair creditors back a Christmas survival campaign"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1985-09-30.jpg",
+      "thumb": "media/thumbs/1985-09-30.webp",
+      "milestone": false
+    },
+    {
+      "currentDate": "2026-11-19",
+      "historicDate": "1985-09-23",
+      "displayDate": "Week of September 23-29, 1985",
+      "edition": "Issue 165 - Weekly 1985 Computer & Culture Chronicle",
+      "morningLine": "Apple takes its dispute with Steve Jobs to court while Lucasfilm games give Atari owners new worlds to explore.",
+      "leadHeadline": "Apple takes Steve Jobs to court over his new computer venture",
+      "storyHeadlines": [
+        "Lucasfilm’s delayed games reach Atari owners through Epyx",
+        "Amiga review makes the case for a multimedia personal computer",
+        "Atari’s ST roadmap promises cheaper machines and compact-disc storage"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1985-09-23.jpg",
+      "thumb": "media/thumbs/1985-09-23.webp",
+      "milestone": false
+    },
+    {
+      "currentDate": "2026-11-18",
+      "historicDate": "1985-09-16",
+      "displayDate": "Week of September 16-22, 1985",
+      "edition": "Issue 164 - Weekly 1985 Computer & Culture Chronicle",
+      "morningLine": "Jobs leaves Apple; Britannia asks what kind of hero you will become.",
+      "leadHeadline": "Jobs resigns from Apple",
+      "storyHeadlines": [
+        "Ultima IV makes virtue the object of the adventure",
+        "Amiga promises a multimedia desktop, but buyers must separate promise from delivery",
+        "A modem becomes a route to college credit",
+        "Britain gives computer programs explicit copyright protection"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1985-09-16.jpg",
+      "thumb": "media/thumbs/1985-09-16.webp",
+      "milestone": true
+    },
+    {
+      "currentDate": "2026-11-17",
+      "historicDate": "1985-09-09",
+      "displayDate": "Week of September 9-15, 1985",
+      "edition": "Issue 163 - Weekly 1985 Computer & Culture Chronicle",
+      "morningLine": "Mario takes a running jump; Apple faces another turn in its founder’s career.",
+      "leadHeadline": "Super Mario Bros. arrives on Japan’s Famicom",
+      "storyHeadlines": [
+        "Jobs tells Apple board he intends to start another computer company",
+        "COMPUTE! puts the Amiga under the microscope",
+        "Atari ST expansion promises fill the autumn calendar"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1985-09-09.jpg",
+      "thumb": "media/thumbs/1985-09-09.webp",
+      "milestone": false
+    },
+    {
+      "currentDate": "2026-11-16",
+      "historicDate": "1985-09-02",
+      "displayDate": "Week of September 2-8, 1985",
+      "edition": "Issue 162 - Weekly 1985 Computer & Culture Chronicle",
+      "morningLine": "A new machine gives color and sound room to play; Lucasfilm puts the joystick back in the picture.",
+      "leadHeadline": "Amiga opens a new frontier in color and sound",
+      "storyHeadlines": [
+        "Lucasfilm games escape limbo through Epyx",
+        "SIG wars ask who owns an online community",
+        "Powerhouse promises home control without leaving the computer on"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1985-09-02.jpg",
+      "thumb": "media/thumbs/1985-09-02.webp",
+      "milestone": false
+    },
+    {
+      "currentDate": "2026-11-15",
+      "historicDate": "1985-08-26",
+      "displayDate": "Week of August 26-September 1, 1985",
+      "edition": "Issue 161 - Weekly 1985 Computer & Culture Chronicle",
+      "morningLine": "Four elements, four Adepts—and a reserve of magic that will not last forever.",
+      "leadHeadline": "Archon II: Adept makes every spell count",
+      "storyHeadlines": [
+        "Atari puts an encyclopedia on an optical disc",
+        "WordPerfect makes a blank screen its selling point",
+        "Behind the SIG, an online business"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1985-08-26.jpg",
+      "thumb": "media/thumbs/1985-08-26.webp",
+      "milestone": false
+    },
+    {
+      "currentDate": "2026-11-14",
+      "historicDate": "1985-08-19",
+      "displayDate": "Week of August 19-25, 1985",
+      "edition": "Issue 160 - Weekly 1985 Computer & Culture Chronicle",
+      "morningLine": "Amiga and ST compete for the desk; Lucasfilm takes the Atari into the mountains.",
+      "leadHeadline": "Amiga and Atari ST bring color and a new price war to the showroom",
+      "storyHeadlines": [
+        "Lucasfilm puts sport and mountain rescue on the Atari",
+        "ST software makers race to fill the new machine’s shelves",
+        "Adventure Master turns players into authors"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1985-08-19.jpg",
+      "thumb": "media/thumbs/1985-08-19.webp",
+      "milestone": false
+    },
+    {
+      "currentDate": "2026-11-13",
+      "historicDate": "1985-08-12",
+      "displayDate": "Week of August 12-18, 1985",
+      "edition": "Issue 159 - Weekly 1985 Computer & Culture Chronicle",
+      "morningLine": "A movie studio takes the joystick; the neighborhood bulletin board grows up.",
+      "leadHeadline": "Lucasfilm brings the movie studio’s flair to Atari game screens",
+      "storyHeadlines": [
+        "Atari puts an encyclopedia on an optical disc",
+        "The ST’s next test is software, not specifications",
+        "A construction set for the neighborhood bulletin board"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1985-08-12.jpg",
+      "thumb": "media/thumbs/1985-08-12.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-11-12",
       "historicDate": "1985-08-05",
       "displayDate": "Week of August 5-11, 1985",
