@@ -64,7 +64,9 @@
       </div>
       <div class="collection-content">
         <div class="collection-kicker">${escapeHtml(item.date)} · ${escapeHtml(label)}</div>
-        <h2>${escapeHtml(item.title)}</h2>
+        <h2>${subtype === 'cat-infographic'
+          ? `<a href="infographics/${encodeURIComponent(item.id)}/">${escapeHtml(item.title)}</a>`
+          : escapeHtml(item.title)}</h2>
         <details><summary>Show prompt</summary><pre>${escapeHtml(item.prompt)}</pre></details>
       </div>
     </article>`;
