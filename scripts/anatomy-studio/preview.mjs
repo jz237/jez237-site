@@ -1,8 +1,9 @@
 /** Capture the demos-page preview image (1100x579 JPEG) from the running studio. Env: STUDIO_URL, OUT. */
 import {chromium} from 'playwright';
 import path from 'node:path';
+import {fileURLToPath} from 'node:url';
 const url = process.env.STUDIO_URL || 'http://127.0.0.1:8791/demos/anatomy-studio/';
-const out = process.env.OUT || path.resolve(path.dirname(new URL(import.meta.url).pathname), '../../demos/assets/anatomy-studio.jpg');
+const out = process.env.OUT || path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../demos/assets/anatomy-studio.jpg');
 const browser = await chromium.launch({headless: true, args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist', '--enable-webgl', '--disable-gpu-sandbox']});
 const page = await browser.newPage({viewport: {width: 1560, height: 1000}, deviceScaleFactor: 1});
 await page.goto(`${url}?stage=full`); await page.waitForFunction(() => document.body.dataset.ready === 'true', null, {timeout: 300000});

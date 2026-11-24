@@ -177,11 +177,6 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://jez237.com/games/2026-06-11/eight-ball-deluxe/</loc>
-    <lastmod>2026-06-18</lastmod>
-    <priority>0.6</priority>
-  </url>
-  <url>
     <loc>https://jez237.com/games/2026-06-10/eddy/</loc>
     <lastmod>2026-06-18</lastmod>
     <priority>0.6</priority>
@@ -207,11 +202,6 @@
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://jez237.com/games/2026-06-09/fluid/</loc>
-    <lastmod>2026-09-08</lastmod>
-    <priority>0.5</priority>
-  </url>
-  <url>
     <loc>https://jez237.com/games/2026-06-09/subway-siege-blackout/</loc>
     <lastmod>2026-07-15</lastmod>
     <priority>0.5</priority>
@@ -219,11 +209,6 @@
   <url>
     <loc>https://jez237.com/games/2026-06-05/invaders/</loc>
     <lastmod>2026-11-02</lastmod>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://jez237.com/games/2026-06-05/neon-invaders/</loc>
-    <lastmod>2026-06-18</lastmod>
     <priority>0.5</priority>
   </url>
   <url>
@@ -381,4 +366,88 @@
   <url><loc>https://jez237.com/multimedia/port-richmond-weikel-tulip-walk/</loc><lastmod>2026-10-11</lastmod></url>
 <url><loc>https://jez237.com/demos/bearded-dragon-terrarium/</loc><lastmod>2026-11-17</lastmod></url>
   <url><loc>https://jez237.com/ai-news/discoveries/</loc><lastmod>2026-11-23</lastmod></url>
+  <url><loc>https://jez237.com/computer-generated-sounds/</loc><lastmod>2026-11-24</lastmod></url>
+  <url><loc>https://jez237.com/demos/apx9-bee/</loc><lastmod>2026-10-02</lastmod></url>
+  <url><loc>https://jez237.com/demos/aquarium-filtration/</loc><lastmod>2026-11-01</lastmod></url>
+  <url><loc>https://jez237.com/demos/betta-atelier/</loc><lastmod>2026-11-01</lastmod></url>
+  <url><loc>https://jez237.com/demos/betta-bowl/</loc><lastmod>2026-11-19</lastmod></url>
+  <url><loc>https://jez237.com/demos/clockwork-garden/</loc><lastmod>2026-10-11</lastmod></url>
+  <url><loc>https://jez237.com/demos/coastal-village/</loc><lastmod>2026-10-06</lastmod></url>
+  <url><loc>https://jez237.com/demos/defender-exhibit/</loc><lastmod>2026-09-13</lastmod></url>
+  <url><loc>https://jez237.com/demos/fire-pro/</loc><lastmod>2026-10-06</lastmod></url>
+  <url><loc>https://jez237.com/demos/fluid-lab/</loc><lastmod>2026-09-08</lastmod></url>
+  <url><loc>https://jez237.com/demos/globes/</loc><lastmod>2026-10-31</lastmod></url>
+  <url><loc>https://jez237.com/demos/h2d-explorer/</loc><lastmod>2026-09-20</lastmod></url>
+  <url><loc>https://jez237.com/demos/koi-pond-garden/</loc><lastmod>2026-10-01</lastmod></url>
+  <url><loc>https://jez237.com/demos/mechanical-flower-exploded/</loc><lastmod>2026-10-05</lastmod></url>
+  <url><loc>https://jez237.com/demos/ocean-water-lab/</loc><lastmod>2026-11-17</lastmod></url>
+  <url><loc>https://jez237.com/demos/philadelphia-relief/</loc><lastmod>2026-11-24</lastmod></url>
+  <url><loc>https://jez237.com/demos/point-lookout/</loc><lastmod>2026-10-04</lastmod></url>
+  <url><loc>https://jez237.com/demos/procedural-fire/</loc><lastmod>2026-10-25</lastmod></url>
+  <url><loc>https://jez237.com/demos/reef-aquarium/</loc><lastmod>2026-10-24</lastmod></url>
+  <url><loc>https://jez237.com/demos/skynet-3d/</loc><lastmod>2026-09-17</lastmod></url>
+  <url><loc>https://jez237.com/demos/terrarium/</loc><lastmod>2026-10-14</lastmod></url>
+  <url><loc>https://jez237.com/demos/voxel-engine/</loc><lastmod>2026-11-09</lastmod></url>
+  <url><loc>https://jez237.com/demos/weatherglass/</loc><lastmod>2026-10-08</lastmod></url>
+  <url><loc>https://jez237.com/experiments/image-gen-2-benchmark/aureline-shelf-story</loc><lastmod>2026-10-23</lastmod></url>
+  <url><loc>https://jez237.com/experiments/image-gen-2-benchmark/cat-infographics</loc><lastmod>2026-11-24</lastmod></url>
+  <url><loc>https://jez237.com/experiments/image-gen-2-benchmark/impossible-documentary</loc><lastmod>2026-11-24</lastmod></url>
+  <url><loc>https://jez237.com/experiments/image-gen-2-benchmark/machine-dreams</loc><lastmod>2026-11-24</lastmod></url>
+  <url><loc>https://jez237.com/experiments/image-gen-2-benchmark/strange-botanicals</loc><lastmod>2026-11-24</lastmod></url>
+  <url><loc>https://jez237.com/experiments/image-gen-2-benchmark/world-that-never-was</loc><lastmod>2026-11-24</lastmod></url>
+  <url><loc>https://jez237.com/experiments/lunker/</loc><lastmod>2026-11-17</lastmod></url>
+  <url><loc>https://jez237.com/experiments/particle-graphics-cat/</loc><lastmod>2026-06-24</lastmod></url>
+  <url><loc>https://jez237.com/games/2026-03-03/gravity-weaver/</loc><lastmod>2026-07-12</lastmod></url>
+  <url><loc>https://jez237.com/games/2026-03-04/slash/</loc><lastmod>2026-07-04</lastmod></url>
+  <url><loc>https://jez237.com/games/2026-03-05/boulder-dash/</loc><lastmod>2026-07-05</lastmod></url>
+  <url><loc>https://jez237.com/games/2026-03-06/glassrail-bastion/</loc><lastmod>2026-07-16</lastmod></url>
+  <url><loc>https://jez237.com/games/2026-03-08/depth-charge/</loc><lastmod>2026-07-12</lastmod></url>
+  <url><loc>https://jez237.com/games/2026-03-09/asteroids-hd/</loc><lastmod>2026-11-03</lastmod></url>
+  <url><loc>https://jez237.com/games/2026-03-10/plasma-pong/</loc><lastmod>2026-11-11</lastmod></url>
+  <url><loc>https://jez237.com/games/2026-03-11/shatter-storm/</loc><lastmod>2026-10-31</lastmod></url>
+  <url><loc>https://jez237.com/games/2026-03-16/crystal-cavern/</loc><lastmod>2026-07-12</lastmod></url>
+  <url><loc>https://jez237.com/games/2026-03-25/stellar-drift/</loc><lastmod>2026-07-14</lastmod></url>
+  <url><loc>https://jez237.com/games/2026-03-27/star-trek/</loc><lastmod>2026-07-12</lastmod></url>
+  <url><loc>https://jez237.com/games/2026-04-09/quix-modern/</loc><lastmod>2026-07-05</lastmod></url>
+  <url><loc>https://jez237.com/games/2026-04-23/fireworks-nocturne/</loc><lastmod>2026-11-01</lastmod></url>
+  <url><loc>https://jez237.com/games/2026-04-28/millipede/</loc><lastmod>2026-11-01</lastmod></url>
+  <url><loc>https://jez237.com/games/2026-05-11/sky-joust/</loc><lastmod>2026-07-04</lastmod></url>
+  <url><loc>https://jez237.com/games/2026-05-30/subway-siege/</loc><lastmod>2026-11-01</lastmod></url>
+  <url><loc>https://jez237.com/games/2026-06-22/snake-awakening/</loc><lastmod>2026-07-13</lastmod></url>
+  <url><loc>https://jez237.com/games/2026-06-29/steel-ribbon-racer/</loc><lastmod>2026-07-19</lastmod></url>
+  <url><loc>https://jez237.com/games/2026-07-05/joust/</loc><lastmod>2026-09-27</lastmod></url>
+  <url><loc>https://jez237.com/games/2026-07-06/primordia/</loc><lastmod>2026-07-12</lastmod></url>
+  <url><loc>https://jez237.com/games/2026-07-06/turrican-2/</loc><lastmod>2026-11-02</lastmod></url>
+  <url><loc>https://jez237.com/games/2026-07-16/lumen/</loc><lastmod>2026-10-23</lastmod></url>
+  <url><loc>https://jez237.com/games/2026-07-22/chrome-riot/</loc><lastmod>2026-07-29</lastmod></url>
+  <url><loc>https://jez237.com/games/2026-07-22/skyhook/</loc><lastmod>2026-07-22</lastmod></url>
+  <url><loc>https://jez237.com/games/2026-07-24/smoke-lab/</loc><lastmod>2026-07-24</lastmod></url>
+  <url><loc>https://jez237.com/games/2026-07-24/volcano/</loc><lastmod>2026-09-26</lastmod></url>
+  <url><loc>https://jez237.com/games/2026-07-28/pinball-fantasies/</loc><lastmod>2026-08-08</lastmod></url>
+  <url><loc>https://jez237.com/games/2026-08-01/commando/</loc><lastmod>2026-10-23</lastmod></url>
+  <url><loc>https://jez237.com/games/2026-08-01/pinball-illusions/</loc><lastmod>2026-08-16</lastmod></url>
+  <url><loc>https://jez237.com/games/2026-09-13/first-light/</loc><lastmod>2026-09-15</lastmod></url>
+  <url><loc>https://jez237.com/games/2026-09-13/mini-moto-park/</loc><lastmod>2026-09-13</lastmod></url>
+  <url><loc>https://jez237.com/games/2026-09-24/tidewater/</loc><lastmod>2026-10-23</lastmod></url>
+  <url><loc>https://jez237.com/games/2026-09-27/quarry-impact/</loc><lastmod>2026-11-11</lastmod></url>
+  <url><loc>https://jez237.com/games/2026-10-31/tiny-bastion/</loc><lastmod>2026-10-31</lastmod></url>
+  <url><loc>https://jez237.com/games/2026-11-01/descent2/</loc><lastmod>2026-11-03</lastmod></url>
+  <url><loc>https://jez237.com/games/2026-11-03/descent-ii-astra/</loc><lastmod>2026-11-18</lastmod></url>
+  <url><loc>https://jez237.com/games/2026-11-04/crater-runner/</loc><lastmod>2026-11-04</lastmod></url>
+  <url><loc>https://jez237.com/games/2026-11-05/swarmbreak/</loc><lastmod>2026-11-09</lastmod></url>
+  <url><loc>https://jez237.com/games/2026-11-06/lancewing/</loc><lastmod>2026-11-08</lastmod></url>
+  <url><loc>https://jez237.com/games/2026-11-06/rimstorm/</loc><lastmod>2026-11-07</lastmod></url>
+  <url><loc>https://jez237.com/games/2026-11-06/voltmaze/</loc><lastmod>2026-11-07</lastmod></url>
+  <url><loc>https://jez237.com/games/2026-11-07/gold-digger/</loc><lastmod>2026-11-11</lastmod></url>
+  <url><loc>https://jez237.com/games/2026-11-07/sini-2026/</loc><lastmod>2026-11-07</lastmod></url>
+  <url><loc>https://jez237.com/games/2026-11-09/skyhold/</loc><lastmod>2026-11-18</lastmod></url>
+  <url><loc>https://jez237.com/games/2026-11-20/understorm/</loc><lastmod>2026-11-21</lastmod></url>
+  <url><loc>https://jez237.com/games/2026-11-21/starling/</loc><lastmod>2026-11-21</lastmod></url>
+  <url><loc>https://jez237.com/games/lunar-lander/lunar-lander</loc><lastmod>2026-07-09</lastmod></url>
+  <url><loc>https://jez237.com/games/missile-command/</loc><lastmod>2026-11-01</lastmod></url>
+  <url><loc>https://jez237.com/plants/bobo-hydrangea/</loc><lastmod>2026-10-23</lastmod></url>
+  <url><loc>https://jez237.com/plants/daylily/</loc><lastmod>2026-10-23</lastmod></url>
+  <url><loc>https://jez237.com/plants/limelight-prime-hydrangea/</loc><lastmod>2026-10-23</lastmod></url>
+  <url><loc>https://jez237.com/plants/ornamental-onion/</loc><lastmod>2026-10-23</lastmod></url>
+  <url><loc>https://jez237.com/plants/yarrow/</loc><lastmod>2026-10-23</lastmod></url>
 </urlset>

@@ -6,8 +6,9 @@
 import fs from "node:fs";
 import path from "node:path";
 import { spawnSync } from "node:child_process";
+import { fileURLToPath } from "node:url";
 
-const root = path.dirname(new URL(import.meta.url).pathname);
+const root = path.dirname(fileURLToPath(import.meta.url));
 const dataPath = path.join(root, "data", "issues.json");
 const issuesDir = path.join(root, "data", "issues");
 const indexPath = path.join(root, "data", "index.json");

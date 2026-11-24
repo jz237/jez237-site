@@ -1,8 +1,8 @@
 /** Print how each nested assembly resolves against the manifest, so member regexes can be tuned against real names. */
 import {readFileSync} from 'node:fs';
 import path from 'node:path';
-import {pathToFileURL} from 'node:url';
-const HERE = path.dirname(new URL(import.meta.url).pathname), DEMO = path.resolve(HERE, '../../demos/anatomy-studio');
+import {fileURLToPath, pathToFileURL} from 'node:url';
+const HERE = path.dirname(fileURLToPath(import.meta.url)), DEMO = path.resolve(HERE, '../../demos/anatomy-studio');
 const manifest = JSON.parse(readFileSync(path.join(DEMO, 'manifest.json'), 'utf8'));
 const {assemblies, assemblyContext, assemblyOffset} = await import(pathToFileURL(path.join(DEMO, 'assemblies.js')).href);
 let failures = 0;

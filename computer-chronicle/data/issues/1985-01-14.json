@@ -99,7 +99,7 @@
     "price": "75 cents"
   },
   "heroImage": {
-    "src": "media/computer-chronicle-gpt-image-2-week-1985-01-14.png",
+    "src": "media/computer-chronicle-gpt-image-2-week-1985-01-14.jpg",
     "alt": "GPT Image 2 Computer Chronicle newspaper for January 14–20, 1985",
     "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data",
     "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"

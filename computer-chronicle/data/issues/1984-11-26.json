@@ -525,7 +525,7 @@
     }
   ],
   "heroImage": {
-    "src": "media/computer-chronicle-gpt-image-2-week-1984-11-26.png",
+    "src": "media/computer-chronicle-gpt-image-2-week-1984-11-26.jpg",
     "alt": "GPT Image 2 Computer Chronicle front page for November 26-December 2, 1984",
     "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
     "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"

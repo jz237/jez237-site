@@ -9,9 +9,9 @@ import {MeshoptEncoder, MeshoptDecoder} from 'meshoptimizer';
 import {readFileSync, writeFileSync, readdirSync, existsSync, statSync, mkdirSync, rmSync} from 'node:fs';
 import {homedir} from 'node:os';
 import path from 'node:path';
-import {pathToFileURL} from 'node:url';
+import {fileURLToPath, pathToFileURL} from 'node:url';
 
-const HERE = path.dirname(new URL(import.meta.url).pathname);
+const HERE = path.dirname(fileURLToPath(import.meta.url));
 const SRC = process.env.ANATOMY_SRC || path.join(homedir(), '.cache/anatomy-studio/z-anatomy');
 const WORK = process.env.ANATOMY_WORK || path.join(homedir(), '.cache/anatomy-studio/work');
 const DEMO = path.resolve(HERE, '../../demos/anatomy-studio');
