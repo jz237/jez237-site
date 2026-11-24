@@ -70,5 +70,113 @@
         ]
       }
     ]
+  },
+  "2026-06-25-factual-infographic-factual-infographic-how-a-quartz-watch-": {
+    "sources": [
+      {
+        "id": "S1",
+        "publisher": "The Seiko Museum Ginza",
+        "title": "Quartz Timepieces",
+        "url": "https://museum.seiko.co.jp/en/knowledge/Quartz01/"
+      }
+    ],
+    "claims": [
+      {
+        "claim": "A quartz oscillator provides a precise timing frequency. The first Seiko Quartz Astron used 8,192 Hz; 32,768 Hz became standard in later quartz timepieces, so not every early quartz watch used the same frequency.",
+        "sourceIds": [
+          "S1"
+        ]
+      }
+    ]
+  },
+  "2026-06-27-factual-infographic-factual-infographic-how-a-bicycle-freeh": {
+    "sources": [
+      {
+        "id": "S1",
+        "publisher": "Park Tool",
+        "title": "Freehub Service",
+        "url": "https://www.parktool.com/en-us/blog/repair-help/freehub-service"
+      }
+    ],
+    "claims": [
+      {
+        "claim": "A typical pawl-and-ratchet freehub lets the wheel turn independently of the cassette while coasting. When you pedal, the pawls engage the ratchet teeth so the cassette can drive the hub.",
+        "sourceIds": [
+          "S1"
+        ]
+      }
+    ]
+  },
+  "2026-06-30-factual-infographic-factual-infographic-how-a-zipper-slider": {
+    "sources": [
+      {
+        "id": "S1",
+        "publisher": "YKK",
+        "title": "The Structure of a Zipper",
+        "url": "https://www.ykk.com/english/ykk/tech/01.html"
+      }
+    ],
+    "claims": [
+      {
+        "claim": "A zipper has two rows of matching elements, a slider and fabric tapes. Moving the slider brings the elements together so they mesh; reversing it separates the rows.",
+        "sourceIds": [
+          "S1"
+        ]
+      }
+    ]
+  },
+  "2026-07-02-factual-infographic-factual-infographic-how-bioluminescent-": {
+    "sources": [
+      {
+        "id": "S1",
+        "publisher": "Scripps Institution of Oceanography",
+        "title": "Red Tides and Bioluminescence",
+        "url": "https://scripps.ucsd.edu/news/red-tides-and-bioluminescence"
+      }
+    ],
+    "claims": [
+      {
+        "claim": "Some dinoflagellates emit blue light when disturbed by breaking waves or other water motion. Not every bloom or red tide glows; it depends on which organisms are present.",
+        "sourceIds": [
+          "S1"
+        ]
+      }
+    ]
+  },
+  "2026-07-04-factual-infographic-factual-infographic-how-comb-jellies-ma": {
+    "sources": [
+      {
+        "id": "S1",
+        "publisher": "Monterey Bay Aquarium",
+        "title": "Comb Jelly",
+        "url": "https://www.montereybayaquarium.org/animals-the-ocean/animals-a-to-z/comb-jelly"
+      }
+    ],
+    "claims": [
+      {
+        "claim": "A comb jelly's beating cilia split incoming light into shimmering colors as it swims. This comb-row rainbow is an optical effect, distinct from biologically produced light.",
+        "sourceIds": [
+          "S1"
+        ]
+      }
+    ]
+  },
+  "2026-07-04-factual-infographic-factual-infographic-how-a-heat-dome-wor": {
+    "sources": [
+      {
+        "id": "S1",
+        "publisher": "NOAA NESDIS",
+        "title": "Extreme Heat and Severe Weather Plague Parts of North America",
+        "url": "https://www.nesdis.noaa.gov/news/extreme-heat-and-severe-weather-plague-parts-of-north-america"
+      }
+    ],
+    "claims": [
+      {
+        "claim": "A heat dome is associated with a persistent region of high pressure. Descending air can warm, and the resulting weather pattern can keep very hot conditions in place for days or longer.",
+        "sourceIds": [
+          "S1"
+        ]
+      }
+    ]
   }
 }
