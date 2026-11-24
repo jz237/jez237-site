@@ -14,6 +14,7 @@ END = "  <!-- End factual infographic articles -->"
 CATEGORIES = {
     "factual-infographic": "General Science",
     "bizarre-insect-life": "Bizarre Insect Life",
+    "rare-insect": "Bizarre Insect Life",
     "reef-fish-infographic": "Reef Fish Atlas",
     "medical-health-infographic": "Medical & Health",
     "cat-infographic": "Cat Atlas",
@@ -41,8 +42,17 @@ def research(facts):
     evidence = facts.get("evidence") or {}
     if not evidence.get("sources"):
         note = facts.get("sourceNote", "")
+        parts = []
+        cursor = 0
+        for match in re.finditer(r"""https?://[^\s<>"']+""", note):
+            url = match[0].rstrip(".,;)]")
+            parts.append(escape(note[cursor:match.start()]))
+            target = web_url(url)
+            parts.append(f'<a href="{target}">{target}</a>')
+            cursor = match.start() + len(url)
+        parts.append(escape(note[cursor:]))
         return f"""<section><h2>Archive source notes</h2>
-<p>{escape(note)}</p>
+<p>{"".join(parts)}</p>
 <p>This older entry does not yet have a source-by-source research record.</p></section>"""
     sources = {}
     for index, item in enumerate(evidence["sources"], start=1):
