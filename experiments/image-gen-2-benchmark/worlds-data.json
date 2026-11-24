@@ -4566,5 +4566,355 @@
       "continuity": "Chalk-white seasonal CO2 ice over charcoal basaltic fines; restrained lavender shadows and pale gold low spring sunlight from upper left. Crescent Scarp curves along upper right, three dark low basalt knobs called Three Teeth stand at mid-left, branching Basin Loom drains toward a central vent called Pin Eye. No liquid water, vegetation, animals, people, cities, machinery or lava.",
       "entryDescription": "First restrained dust-laden gas eruption through a narrow fracture; gas itself mostly invisible."
     }
+  },
+  {
+    "id": "2026-11-16-weekly-world-pelagic-hinge-the-salt-engine-introductory-fie",
+    "title": "Pelagic Hinge: The Salt Engine — Introductory Field Chart",
+    "tests": "NSIDC and NOAA sources read 2026-11-16. Mechanisms verified for Earth only; assumed planet conditions not claimed as observations. Prior two world compact metadata inspected; distinct fluid and causal mechanism.; archive_slot=2026-11-16T00:20; concept=pelagic-hinge-sea-ice-brine-circulation-field-chart; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; Story beat: 0/7",
+    "prompt": "Create the finished artistic planetary field atlas itself, not a photographed book, framed print, poster mockup or interface. Title: PELAGIC HINGE. Subtitle: The Salt Engine. Clearly print “Science-informed speculative world / artist’s impression”. A dominant exquisitely detailed realistic environmental cutaway fills the composition: oblique view across a dark teal polar ocean on an invented world, with a curved white floating floe (Hook Raft), a slender dark open-water lead (Needle Lead) and three small overlapping ice slabs (Stepstones) at its southern tip. No land. Low peach sunlight upper right, delicate steel-blue shadows, translucent blue-green thin ice, rough white floe top, subtle wavelets and floating crystal slush. Lift the foreground water into a graceful scientific section integrated with the main seascape, showing floating ice above liquid water and the submerged ice edge; no impossible hovering blocks. Photoreal material detail, fine restrained scientific ink leader lines, elegant highly legible typography, asymmetric organic flow, rich artwork and negative space. Not a rigid boxed dashboard or repeated panels.\nWeave three meaningful studies into this one environment: a large open magnification of needle-like frazil crystals collecting at a water surface; a sea-ice microsection showing nearly fresh ice crystals separated by tiny trapped brine pockets; and a subtle schematic descending curved arrow below the ice showing denser salt-enriched water mixing downward. Dissolved salt and currents are not luminous visible colored rivers: explicitly label the arrows “Schematic flow”. Supporting ice-overlap study at Stepstones shows buoyant thin slabs rafting, both contacting water. Restrained white, teal, steel blue and peach palette, never neon. Keep all educational text concise and readable.\nUse exact source-status headings woven into margins, not boxed: “EARTH ANALOGUES — OBSERVED”, with lines “Frazil crystals begin seawater freezing”, “Ice can retain brine pockets”, “Salt rejection can drive dense water downward”. “INFERRED HERE”, with “Earth sea-ice physics applied to an assumed saline ocean”. “SPECULATIVE”, with “Planet, landmarks and chronology invented”, “No life claimed or depicted”. Add a small elegant assumed-conditions line: “Assumed: Earthlike gravity • nitrogen-rich air • saline water ocean”. Label Hook Raft, Needle Lead, Stepstones, Frazil crystals, Brine pockets and Salt-enriched water with precise leader lines. A small circulation arc may connect freezing to drainage to mixing, with no claim of a complete global overturning solution. No infrastructure or inhabited-habitat study: explicitly abiotic world. Water ice, not carbon-dioxide ice; no dust geysers, magma, landscape crystals, organisms, buildings, vehicles, planets dominating the sky or stars visible through daylight. This is beat zero: establish the geography and mechanism, not the later fully closed ice cover. The upper lead remains substantially open. Small footer “Physics references: NSIDC; NOAA • Geography is fictional”.",
+    "image": "images/2026-11-16-weekly-world-pelagic-hinge-the-salt-engine-introductory-fie.jpg",
+    "thumb": "thumbs/2026-11-16-weekly-world-pelagic-hinge-the-salt-engine-introductory-fie.webp",
+    "color": "#546d75",
+    "date": "2026-11-16",
+    "batch": "Daily Prompt",
+    "slot": "weekly-world",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1086x1448",
+    "dedup": {
+      "conceptKey": "pelagic-hinge-sea-ice-brine-circulation-field-chart",
+      "imageSha256": "3739b15a07dd68c99df228226d05169f9d74a1f1f9d5cf482926b90ada856a04",
+      "imageDHash": "841c0f0579617379"
+    },
+    "world": {
+      "name": "Pelagic Hinge",
+      "description": "An explicitly hypothetical ocean exoplanet: freezing seawater separates salt and reorganizes circulation beneath drifting ice.",
+      "continuity": "An endless saline ocean with no exposed land. A long curved white floe called Hook Raft borders a dark teal opening called Needle Lead; three small rafted ice slabs at its southern tip are Stepstones. Low peach sunlight from upper right, steel-blue shadows, sea-green water; no CO2 ice, dust, volcanoes, vegetation, creatures, cities or machinery.",
+      "entryDescription": "Artistic introductory field chart establishes ocean, ice and the hidden density mechanism."
+    }
+  },
+  {
+    "id": "2026-11-16-weekly-world-pelagic-hinge-first-needles",
+    "title": "Pelagic Hinge: First Needles",
+    "tests": "NSIDC Science of Sea Ice and NOAA How does sea ice affect global climate read 2026-11-16. NSIDC supports frazil crystals accumulating at surface and calm-water grease ice. Earth analogue only; geography and chronology speculative.; archive_slot=2026-11-16T03:20; concept=pelagic-hinge-frazil-aggregation-sheltered-lead-margin; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; Story beat: 1/7",
+    "prompt": "Create one finished realistic scientific-documentary artist’s impression, a scene not an infographic or collage. Pelagic Hinge: First Needles, episode 1 after the establishing field chart. The next natural-history discovery is intimate: frazil crystals beginning to aggregate in the sheltered surface water along the inner curve of Hook Raft. Extremely low near-water camera, macro-wide environmental perspective, foreground in exquisite focus and middle distance gently softened. Tiny millimetric ice needles and flattened crystals float partially submerged, forming delicate loose interlocking clusters and faint silky grease-ice streaks across dark translucent teal water. They are not giant quartz spikes, snowflakes in air, shore frost, botanical shapes or glass shards. Render liquid menisci, minute ripples, subtle subsurface scattering and peach pinlights with believable physical detail. Some crystals remain separated, some gather into thin soft slush; the central lead is still open liquid water. No solid closed lid yet. The dominant visual is the fine first-crystal texture at water level, not a repeated planetary chart, cross section or world map.\nContinuity: a long curved low white sea-ice floe called Hook Raft borders dark teal Needle Lead. Show its curving low edge sweeping from left foreground into middle distance; three small overlapping buoyant slabs at its southern tip, Stepstones, appear as a modest distant landmark, not mountains. Endless saline ocean, no land or cliffs. Low peach sunlight from upper right, steel-blue shadows on rough white ice, sea-green and dark teal water. Plausible water-ice contact, no hovering or unsupported ice. Atmospheric perspective, naturalistic photographic realism, fine variations in wet ice texture and calm ripples, composed negative space. No magical luminescence. No creatures, humans, vegetation, cities, ships, machinery, dust, volcanoes, carbon-dioxide ice, alien buildings or oversized planet in sky. No visible salt crystals or colored salt waterfalls. Do not illustrate later brine-drainage or rafting episodes.\nAdd only restrained elegant small typography in quiet sky/water negative space: heading “PELAGIC HINGE — FIRST NEEDLES”; caption “Science-informed speculative world / artist’s impression”; small source-status note “Earth analogue: frazil aggregation • Planet and landmarks invented”. No arrows, fact cards, boxed grids, exploded study insets, or frame. The world is explicitly hypothetical; no claim of photographed alien observations. Richly detailed camera-like materials, subtle cold atmosphere and warm grazing sunlight, immersive and physically coherent.",
+    "image": "images/2026-11-16-weekly-world-pelagic-hinge-first-needles.jpg",
+    "thumb": "thumbs/2026-11-16-weekly-world-pelagic-hinge-first-needles.webp",
+    "color": "#646f71",
+    "date": "2026-11-16",
+    "batch": "Daily Prompt",
+    "slot": "weekly-world",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1672x941",
+    "dedup": {
+      "conceptKey": "pelagic-hinge-frazil-aggregation-sheltered-lead-margin",
+      "imageSha256": "f82b9599be2d7db6f98e8eba3c1cd10c16cc9318ca7c7ad19c3c7dc594e12dce",
+      "imageDHash": "00007868f6b0ceba"
+    },
+    "world": {
+      "name": "Pelagic Hinge",
+      "description": "An explicitly hypothetical ocean exoplanet: freezing seawater separates salt and reorganizes circulation beneath drifting ice.",
+      "continuity": "An endless saline ocean with no exposed land. A long curved white floe called Hook Raft borders a dark teal opening called Needle Lead; three small rafted ice slabs at its southern tip are Stepstones. Low peach sunlight from upper right, steel-blue shadows, sea-green water; no CO2 ice, dust, volcanoes, vegetation, creatures, cities or machinery.",
+      "entryDescription": "At the sheltered margin of Needle Lead, frazil crystals aggregate in cold surface water."
+    }
+  },
+  {
+    "id": "2026-11-16-weekly-world-pelagic-hinge-the-rafting-edge",
+    "title": "Pelagic Hinge: The Rafting Edge",
+    "tests": "NSIDC Science of Sea Ice and NOAA sea-ice-climate read 2026-11-16. NSIDC explicitly supports light winds/currents pushing nilas sheets over one another (rafting); NOAA supports saline ocean ice. Fictional geography and wind episode are speculative. Beat 2 follows frazil formation, prior to underwater brine exploration.; archive_slot=2026-11-16T07:20; concept=stepstones-young-ice-sheets-rafting-overlap; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; Story beat: 2/7",
+    "prompt": "Create a finished science-informed speculative alien-ocean artist impression, realistic scientific documentary photography aesthetics, richly detailed wide environmental scene. Pelagic Hinge, Where the Salt Goes, beat 2: The Rafting Edge. This is explicitly hypothetical, NOT a measured exoplanet view. Earth-established mechanism: light wind/current pushes thin young sea ice so one sheet slides across another, rafting and locally thickening the cover. Show that mechanism as the actual visual subject rather than another crystal-formation close-up.\nCamera is very low over sea-green water, oblique across the southern tip of a long curved white floating floe called Hook Raft. A dark teal opening, Needle Lead, recedes beside its inside curve. Exactly three modest small ice slabs, Stepstones, sit at its southern tip; these are floating ice landmarks, not rocks or islands. Foreground hero: broad thin translucent gray-green nilas sheets converge with shallow overlapping tongues, one thin sheet visibly riding upon another with coherent contact shadows and wet polished seam; brittle feathered margins, delicate pale stress lines, trapped bubbles, small wind ripples on exposed water. Make sheet overlap unmistakable and physically modest, not towering glacier collisions or a dramatic mountain ridge. Main overlapping sheets remain broad and planar, not shards suspended in air. Strong near-to-far scale hierarchy, a diagonal seam leading toward the three Stepstones and recognizable curved Hook Raft beyond. Open lead still present; do not depict the final fully consolidated state. No subaquatic section in this beat.\nEndless saline liquid H2O ocean, no exposed land; invented Earthlike gravity and pressure with cold polar winter air. Low peach sunlight enters from upper right, steel-blue shadows, white ice and sea-green/dark-teal water, gentle atmospheric depth. Tactile layered translucent ice with subtle subsurface scatter, shallow wet meniscus and credible buoyancy; ice almost entirely supported by water, low freeboard. Detailed naturalistic surface, excellent optical clarity on rafting seam, distance gently softened, restrained contrast, no neon colors. No people, animals, plants, cities, vehicles, machinery, volcanoes, CO2 ice, dust, visible salt falls or glowing brine. No fantasy physics. No grid, inset panels or infographic dashboard. Sparse elegant typography in quiet sky: “PELAGIC HINGE” and small subtitle “The Rafting Edge”; discreet footer “Science-informed speculative world / artist’s impression”. One short open callout near the seam “Rafting: thin ice slides over thin ice”. This label explains established Earth physics; all geography and chronology are speculative. Render the scene itself, no frame, printed poster mockup, logo or watermark. Request openai/gpt-image-2.6-sunburst, medium quality, auto size, opaque background.",
+    "image": "images/2026-11-16-weekly-world-pelagic-hinge-the-rafting-edge.jpg",
+    "thumb": "thumbs/2026-11-16-weekly-world-pelagic-hinge-the-rafting-edge.webp",
+    "color": "#676e6c",
+    "date": "2026-11-16",
+    "batch": "Daily Prompt",
+    "slot": "weekly-world",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1672x941",
+    "dedup": {
+      "conceptKey": "stepstones-young-ice-sheets-rafting-overlap",
+      "imageSha256": "63e172498d3648f775fdbd401d3eee00e63027a0809fcef2f497fde205b3ca15",
+      "imageDHash": "80008308001c3856"
+    },
+    "world": {
+      "name": "Pelagic Hinge",
+      "description": "An explicitly hypothetical ocean exoplanet: freezing seawater separates salt and reorganizes circulation beneath drifting ice.",
+      "continuity": "An endless saline ocean with no exposed land. A long curved white floe called Hook Raft borders a dark teal opening called Needle Lead; three small rafted ice slabs at its southern tip are Stepstones. Low peach sunlight from upper right, steel-blue shadows, sea-green water; no CO2 ice, dust, volcanoes, vegetation, creatures, cities or machinery.",
+      "entryDescription": "Wind converges thin young ice at Stepstones; overlapping sheets thicken the ice edge."
+    }
+  },
+  {
+    "id": "2026-11-16-weekly-world-pelagic-hinge-salt-between-crystals",
+    "title": "Pelagic Hinge: Salt Between Crystals",
+    "tests": "NSIDC Science of Sea Ice and NOAA sea-ice-climate read 2026-11-16. Brine pockets, liquid salt-rich droplets and gravity-aided drainage explicitly supported by NSIDC; NOAA independently supports trapped pockets and salt rejection. Microstructure is illustrative, not measured on an exoplanet. Beat 3 examines internal pockets, not the later large-scale ocean descent.; archive_slot=2026-11-16T10:20; concept=hook-raft-brine-pockets-draining-crystal-channels; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; Story beat: 3/7",
+    "prompt": "Create a finished realistic scientific-documentary artist impression of an explicitly hypothetical saline ocean world, PELAGIC HINGE — Salt Between Crystals. Beat 3 of Where the Salt Goes: reveal what lies inside the ice beneath Hook Raft after surface rafting. Main composition is a very close underwater view looking obliquely upward at the translucent underside of the floe; an elegantly integrated scientific cutaway opens one small region of the foreground ice into a magnified crystal-scale study. This is a conceptual change of scale, labeled “Magnified schematic — not to scale”, not a giant cavern in nature. Dominant exquisite ice textures: pale translucent vertical crystal boundaries, small irregular elongated clear liquid pockets in the spaces between crystals, a few connected fine drainage channels leading to the bottom interface. Brine is transparent liquid, not blue dye, orange liquid, luminous veins or waterfalls. Render crystal interfaces with subtle optical refraction and tiny entrained air bubbles, irregular rather than machined geometries. Show a few fine restrained white annotation arrows INSIDE the magnified schematic channels pointing downward toward the ocean; label “Gravity-aided brine drainage”. These graphic arrows are conceptual, not physical objects. An open delicate leader points to a liquid pocket with exact label “Trapped brine: concentrated liquid seawater”. Another reads “Ice crystals exclude most salt”. Small explanatory line “Dissolved salt is not naturally visible”. No large descending ocean plume here: the next beat will explore broader circulation. Show just a subtle clear liquid interface below the channel mouth, no waterfall or jet.\nAbove and behind this near-focus underwater study, a narrow strip of real-scale surface context: recognizable curved white Hook Raft bordering dark teal Needle Lead, and three modest overlapping floating ice slabs called Stepstones at the distant southern tip, never land or rocks. A slim above-water horizon may be shown through a scientifically illustrated split-level view; scale transitions are unmistakably schematic. Ocean is sea-green, steel-blue shaded ice, low peach sunlight from upper right filtering through thin ice. Keep visual richness, translucent layered ice grain, wet surfaces, natural buoyancy and convincing refraction. No deep glacier caves, open void tunnels, unsupported hanging floes, exaggerated icicle forest, giant channels or invented solid salt crystals. Endless saline ocean, no land, no organisms, no vegetation, no cities, no machinery, no CO2 ice, no dust, no volcanoes. Documentary realism with restrained technical overlay, not fantasy or cartoon. No boxed grid, detached cards, printed-chart mockup or frame. Clear visual hierarchy with immense tactile ice detail, breathing room for sparse open annotations. Title “PELAGIC HINGE” and subtitle “Salt Between Crystals”. Footer “Science-informed speculative world / artist’s impression”. Small evidence line “Earth mechanism: sea-ice brine pockets and drainage. Planet and geography: invented.” Do not imply alien observations or measured microstructure. Request openai/gpt-image-2.6-sunburst, medium quality, auto size, opaque background.",
+    "image": "images/2026-11-16-weekly-world-pelagic-hinge-salt-between-crystals.jpg",
+    "thumb": "thumbs/2026-11-16-weekly-world-pelagic-hinge-salt-between-crystals.webp",
+    "color": "#5d7675",
+    "date": "2026-11-16",
+    "batch": "Daily Prompt",
+    "slot": "weekly-world",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1536x1024",
+    "dedup": {
+      "conceptKey": "hook-raft-brine-pockets-draining-crystal-channels",
+      "imageSha256": "db11dfa6a6cab5cb41a71ea092aa9539d205587e3ba737e44b4d697fe8d360de",
+      "imageDHash": "0018664e0a110b0b"
+    },
+    "world": {
+      "name": "Pelagic Hinge",
+      "description": "An explicitly hypothetical ocean exoplanet: freezing seawater separates salt and reorganizes circulation beneath drifting ice.",
+      "continuity": "An endless saline ocean with no exposed land. A long curved white floe called Hook Raft borders a dark teal opening called Needle Lead; three small rafted ice slabs at its southern tip are Stepstones. Low peach sunlight from upper right, steel-blue shadows, sea-green water; no CO2 ice, dust, volcanoes, vegetation, creatures, cities or machinery.",
+      "entryDescription": "Underwater close view of brine pockets and gravity drainage beneath Hook Raft; arrows schematic, dissolved salt not colored naturally."
+    }
+  },
+  {
+    "id": "2026-11-16-weekly-world-pelagic-hinge-the-closing-lead",
+    "title": "Pelagic Hinge: The Closing Lead",
+    "tests": "Read NSIDC Science of Sea Ice and NOAA sea-ice-climate 2026-11-16. NSIDC explicitly supports wave-bumped raised pancake rims and wind/current closure of winter leads. Fictional location, chronology and planetary conditions are assumptions, not observations.; archive_slot=2026-11-16T14:20; concept=pelagic-hinge-pancake-ice-narrowing-lead-waterlevel; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; Story beat: 4/7",
+    "prompt": "Create one finished realistic scientific-documentary artist impression, the fifth image (story order 4) in Pelagic Hinge's seven-beat Where the Salt Goes sequence. This is a science-informed speculative ocean planet, NOT an observed exoplanet photograph. Visually advance the story from microscopic brine pockets to an immersive open-water view of a narrowing lead. A low camera about 60 cm above the water, 28 mm environmental lens, looks along a winding dark-teal channel. Foreground dominated by several irregular circular pancake ice disks, thin slushy white centers with raised granular rims from repeated wave-driven collisions; small ripples and wet edges, convincing floating thickness and mostly submerged volume. Disks jostle and crowd into the channel's middle distance, leaving a sinuous liquid passage visibly narrowing into the distance. Show a small wind ruffle on the exposed water; not a frozen solid river, giant storm or dramatic explosion. This is a surface scene, no underwater section, arrows, inset diagrams or brine visualization.\nMaintain exact weekly geography: the long curved white floe Hook Raft borders Needle Lead to the left, curving gently inward toward the distant opening. Three small overlapping rafted slabs, the Stepstones, remain at its southern/near tip on the left midground, identifiable as three discrete thin ledges, not mountains or buildings. Endless saline ocean and floating ice beyond, no exposed land or skyline cliffs. White water ice, steel-blue shadows, sea-green and dark teal liquid water, warm low oblique peach sunlight from upper right, fine surface frost, delicate granular slush, realistic specular reflections and atmospheric depth. Layer near pancake rims, midground curved floe and narrowing water gap, far level icy horizon. Physical natural materials, subtle irregularity, rich detail, no cartoon or stylized painting. Assume Earthlike gravity and saline water near freezing under a nitrogen atmosphere; do not print invented planetary measurements or imply simulation certainty.\nSmall restrained editorial text in sky negative space, world name 'PELAGIC HINGE', subordinate title 'The Closing Lead', and discreet legible footer 'Science-informed speculative world / artist’s impression'. No other text, no logos or watermark. Earth analogue physics: rough-water frazil forms pancakes whose rims are raised by collisions; winds and currents can close winter leads. The depicted geography and timing are invented. No life, people, animals, vegetation, craft, cities, machinery, land, volcanoes, dry CO2 ice, dust jets, glowing brine, visible salt waterfalls, or fantasy physics. Leave the lead still open; complete consolidation belongs to a later story beat. Render the scene itself, not a framed print or book.",
+    "image": "images/2026-11-16-weekly-world-pelagic-hinge-the-closing-lead.jpg",
+    "thumb": "thumbs/2026-11-16-weekly-world-pelagic-hinge-the-closing-lead.webp",
+    "color": "#7f7e7c",
+    "date": "2026-11-16",
+    "batch": "Daily Prompt",
+    "slot": "weekly-world",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1672x941",
+    "dedup": {
+      "conceptKey": "pelagic-hinge-pancake-ice-narrowing-lead-waterlevel",
+      "imageSha256": "1377a24e1932c3f9eaf32d4e048c934bb175d0d1901aca958544708d1d096992",
+      "imageDHash": "001078e182092c9c"
+    },
+    "world": {
+      "name": "Pelagic Hinge",
+      "description": "An explicitly hypothetical ocean exoplanet: freezing seawater separates salt and reorganizes circulation beneath drifting ice.",
+      "continuity": "An endless saline ocean with no exposed land. A long curved white floe called Hook Raft borders a dark teal opening called Needle Lead; three small rafted ice slabs at its southern tip are Stepstones. Low peach sunlight from upper right, steel-blue shadows, sea-green water; no CO2 ice, dust, volcanoes, vegetation, creatures, cities or machinery.",
+      "entryDescription": "Wind compresses the lead: a perspective from the open water reveals wave-rounded pancakes and a narrowing opening."
+    }
+  },
+  {
+    "id": "2026-11-16-weekly-world-pelagic-hinge-the-hidden-descent",
+    "title": "Pelagic Hinge: The Hidden Descent",
+    "tests": "NSIDC Science of Sea Ice and NOAA sea-ice-climate read 2026-11-16. Both support salt rejection increasing underlying density and sinking; NSIDC supports gravity-aided brine drainage. Exact flow paths are schematic assumptions, not a simulation or observed planet.; archive_slot=2026-11-16T17:20; concept=pelagic-hinge-saline-descent-underwater-density-section; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; Story beat: 5/7",
+    "prompt": "Create a finished scientific-documentary underwater sectional artist impression for PELAGIC HINGE, The Hidden Descent, story order 5, sixth of seven connected images. A dominant deep underwater volume occupies three quarters of the composition: looking obliquely through a naturalistic sea-green ocean beneath the narrowing Needle Lead. Above, a thin strip of peach winter sky and a sharply defined waterline gives geographic orientation. Hook Raft is a long curved white floating floe bordering the lead on the left, its three small overlapping thin ice ledges called Stepstones visible at its near southern tip. Upper-right low peach sunlight, white saline water ice with steel-blue shadows, teal open water; no exposed land. Surface freezing continues as fine granular ice and thin young ice at the edge, not a sealed solid ocean. Realistic ice underside, refracted light, fine crystalline texture, physically credible floating freeboard and submerged thickness. The camera is much farther back than a microscopic brine-pocket study: the narrative is now the water column, not ice microstructure. No enlarged pockets, laboratory inset or repeated surface-only view.\nUse an editorial scientific SECTION convention, a subtle cut-plane showing a thin slice of ice and open water above a broad descending water-column view, not a literal cliff cut through the ocean. Beneath the growing ice edge, slender muted ivory dashed arrows descend, broaden, curve and disperse into a few short fading branches within the surrounding water, demonstrating increased density and local mixing schematically. Water itself remains optically continuous and naturally teal: dissolved salt is invisible, no separate colored river, no luminous plumes, waterfall, visible salt crystals, ropes, tubes or opaque fluid curtain. Arrows are clearly drawn explanatory overlays, not objects. Avoid claiming a precise modeled velocity, depth, planetwide circulation loop or seafloor current. No seabed visible: kilometer-deep ocean extends beyond frame. Negative space and rich water-depth gradation keep this artwork-led, not a boxed lesson chart.\nRestrained elegant typography: top title 'PELAGIC HINGE' and 'The Hidden Descent'. Three concise open annotations follow the causal path: 'Freezing excludes salt', 'Denser saline water sinks', 'Mixing below the ice'. Beside the arrows print 'Schematic flow — not directly visible'. Footer 'Science-informed speculative world / artist’s impression'. A small secondary line 'Earth analogue physics; fictional geography' distinguishes verified mechanisms from invented conditions. Keep annotations readable without crowding the water; no numbers or invented observations. Mechanism is supported by NSIDC Science of Sea Ice and NOAA sea-ice-climate: sea-ice formation rejects salt, increasing underlying water density; brine can drain downward aided by gravity. Transfer to this hypothetical Earth-gravity saline ocean is conditional, the specific paths and chronology are speculative. No inhabitants, organisms, vegetation, machines, ships, cities, volcanoes, dust, CO2 ice or fantasy physics. Realistic scientific environmental rendering, detailed tactile ice and water optics, no cartoon, framed print, book mockup, logos or watermark. Do not jump to the final consolidated ice margin; the narrow lead remains open.",
+    "image": "images/2026-11-16-weekly-world-pelagic-hinge-the-hidden-descent.jpg",
+    "thumb": "thumbs/2026-11-16-weekly-world-pelagic-hinge-the-hidden-descent.webp",
+    "color": "#37595b",
+    "date": "2026-11-16",
+    "batch": "Daily Prompt",
+    "slot": "weekly-world",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1122x1402",
+    "dedup": {
+      "conceptKey": "pelagic-hinge-saline-descent-underwater-density-section",
+      "imageSha256": "4ca8e34124a7f852ad10d6641bbec6a293f5eff843e7e568fa276317ec9a8f7d",
+      "imageDHash": "6070700307090b13"
+    },
+    "world": {
+      "name": "Pelagic Hinge",
+      "description": "An explicitly hypothetical ocean exoplanet: freezing seawater separates salt and reorganizes circulation beneath drifting ice.",
+      "continuity": "An endless saline ocean with no exposed land. A long curved white floe called Hook Raft borders a dark teal opening called Needle Lead; three small rafted ice slabs at its southern tip are Stepstones. Low peach sunlight from upper right, steel-blue shadows, sea-green water; no CO2 ice, dust, volcanoes, vegetation, creatures, cities or machinery.",
+      "entryDescription": "A scientific underwater section traces dense saline water descending and mixing, while surface freezing continues; no luminous visible salt rivers."
+    }
+  },
+  {
+    "id": "2026-11-16-weekly-world-pelagic-hinge-a-changed-boundary",
+    "title": "Pelagic Hinge: A Changed Boundary",
+    "tests": "NSIDC Science of Sea Ice and NOAA sea-ice-climate read 2026-11-16. Sea ice growth, wind/current convergence, salt exclusion and density-driven sinking supported. Fictional geography, timing and planetary climate remain assumptions; no simulated or observed planetary circulation claimed.; archive_slot=2026-11-16T21:20; concept=pelagic-hinge-consolidated-margin-wide-return; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; Story beat: 6/7",
+    "prompt": "Create the seventh and final connected scientific-documentary artist impression for PELAGIC HINGE, titled A Changed Boundary. A majestic wide oblique aerial return over an endless saline ocean, no land anywhere. The camera looks down from far above the southern tip of Hook Raft, a long curved white floe whose arc sweeps from lower left toward upper center. Three small overlapping rafted ice ledges called Stepstones sit at its southern tip in the near foreground. The dramatic new consequence is a broad connected apron of thin newly consolidated grey-white water ice attached along the inner curve, reducing the once broad dark teal Needle Lead to a sinuous narrow residual opening. Show that opening clearly as water, still connected to the open ocean at one end, not a sealed lake. A quiet concluding landscape, not a section diagram or close-up pancake study: the widened pale young-ice surface and shrunken water opening tell the story at a glance. The continuous thin young sheet retains subtle seams and delicate granular textures, while older Hook Raft is brighter, thicker and more weathered; no giant cliffs or icebergs. Stepstones remain just three modest overlapping ledges, not mountains or islands. Physically credible floating freeboard, detailed translucent thin ice edges, tiny freeze textures and natural slight water ripples in the remaining open slit. Distant ocean horizon under a subdued winter sky. Low peach sunlight from upper right, steel-blue ice shadows, dark teal and sea-green water, realistic atmospheric perspective and exceptional tactile natural materials. Photographic scientific-documentary realism, sweeping environmental composition with generous visual breathing room, no rigid boxes or large diagrams.\nRestrained elegant title in upper sky: 'PELAGIC HINGE' with 'A Changed Boundary' below. Only three subtle geographic open labels: 'Hook Raft', 'Needle Lead', 'Stepstones', unobtrusive fine leader lines. A small concluding line reads 'The surface changes; circulation below is inferred'. Footer reads 'Science-informed speculative world / artist’s impression'. Additional tiny line 'Earth analogue physics; fictional geography'. Dissolved salt and subsurface currents are NOT visible; no underwater arrows, cutaway, luminous brine, waterfall, colored plume or exposed seabed. Underlying salt rejection and density-driven sinking are supported by NOAA and NSIDC on Earth, transferred conditionally to this hypothetical Earth-gravity saline ocean. No observations or solved planetary circulation are claimed; all geography and episode timing are invented. This is the resolution after freezing, rafting, brine drainage, lead narrowing and hidden descent, not a repetition of the prior underwater section. No creatures, vegetation, humans, machinery, settlements, ships, dust jets, CO2 ice, volcanoes, fantasy physics, decorative planets, logos, watermark, framed poster or book mockup. Render the finished image directly.",
+    "image": "images/2026-11-16-weekly-world-pelagic-hinge-a-changed-boundary.jpg",
+    "thumb": "thumbs/2026-11-16-weekly-world-pelagic-hinge-a-changed-boundary.webp",
+    "color": "#6c7479",
+    "date": "2026-11-16",
+    "batch": "Daily Prompt",
+    "slot": "weekly-world",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1672x941",
+    "dedup": {
+      "conceptKey": "pelagic-hinge-consolidated-margin-wide-return",
+      "imageSha256": "34e83c31f35f371b5f700f161fd8ce41236e5b4cc106d6bde51d0f0921216c9d",
+      "imageDHash": "c08c0c604860601c"
+    },
+    "world": {
+      "name": "Pelagic Hinge",
+      "description": "An explicitly hypothetical ocean exoplanet: freezing seawater separates salt and reorganizes circulation beneath drifting ice.",
+      "continuity": "An endless saline ocean with no exposed land. A long curved white floe called Hook Raft borders a dark teal opening called Needle Lead; three small rafted ice slabs at its southern tip are Stepstones. Low peach sunlight from upper right, steel-blue shadows, sea-green water; no CO2 ice, dust, volcanoes, vegetation, creatures, cities or machinery.",
+      "entryDescription": "A wide return reveals a newly consolidated ice margin and residual narrow lead; circulation remains inferred rather than directly visible."
+    }
+  },
+  {
+    "id": "2026-11-23-weekly-world-saffron-watershed-methane-field-atlas",
+    "title": "Saffron Watershed: Methane Field Atlas",
+    "tests": "Read NASA Titan Facts and ESA Titan surface; observations apply only to Titan, all fictional parameters explicitly assumed.; archive_slot=2026-11-23T00:20; concept=methane-watershed-ice-bedrock-field-atlas; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; Story beat: 0/7",
+    "prompt": "Create the finished introductory scientific field atlas titled SAFFRON WATERSHED. Subtitle: Science-informed speculative world / artist’s impression. An exquisite expansive natural-history environmental artwork, not a photographed poster or UI. Dominant oblique aerial landscape: an ochre organic-sediment watershed over pale water-ice bedrock, a distinctive Y-shaped channel labelled Split Reed descending across a low eroded terrace into the scalloped dark-amber methane lake Quiet Basin. Three small rounded ivory ice cobbles at the channel mouth anchor scale. Diffuse saffron atmospheric haze, tactile granular sediment, subtle wet banks, finely textured ice rock, atmospheric perspective. Scientifically restrained documentary artist impression with warm amber illumination, not fantasy neon. No beings, vegetation, structures or machinery. Organically weave an enlarged ground-level cobble study into the lower margin and a small graceful landscape section showing solid water-ice bedrock supporting liquid methane; use thin curved leader lines, not boxes or a grid. Show a modest cloud-to-rain-to-channel-to-lake pathway in the upper negative space, with discreet arrows explicitly labelled conceptual cycle, not measured flow. Keep the landscape dominant and text concise but readable. Typeset three open evidence notes: “OBSERVED ON TITAN: methane weather and hydrocarbon lakes”; “INFERRED HERE: gravity directs runoff toward a basin”; “SPECULATIVE: this moon, landscape and storm sequence”. Small physical assumptions line: “Assumed: ~94 K · 1.5 bar · nitrogen-rich air”. Near the geological section label “Water ice: solid bedrock” and “Methane: surface liquid”. Clearly state “No life detected or depicted; fictional setting”. Bottom source line “Physical analogue: NASA / ESA Cassini–Huygens”. Do not suggest this fictional world was observed; do not depict liquid water, salt rejection, freezing sea ice, CO2 vents, lava, cities, a giant planet or stars shining through haze. Richly resolved material detail, elegant asymmetry and breathing room, not a sparse title poster.",
+    "image": "images/2026-11-23-weekly-world-saffron-watershed-methane-field-atlas.jpg",
+    "thumb": "thumbs/2026-11-23-weekly-world-saffron-watershed-methane-field-atlas.webp",
+    "color": "#c78b4e",
+    "date": "2026-11-23",
+    "batch": "Daily Prompt",
+    "slot": "weekly-world",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1086x1448",
+    "dedup": {
+      "conceptKey": "methane-watershed-ice-bedrock-field-atlas",
+      "imageSha256": "cb3424b019ad3742bd1d2a97384c68e9575fcb5903bec91cf72b8a6a4c0cbadc",
+      "imageDHash": "6d2fd47173bf4c44"
+    },
+    "world": {
+      "name": "Saffron Watershed",
+      "description": "An explicitly hypothetical cold moon explores methane rainfall and runoff across water-ice rock, using Titan as a physical analogue, not claiming to depict Titan.",
+      "continuity": "Saffron haze over ochre organic sediment and pale water-ice bedrock. A forked channel called Split Reed crosses a low ice terrace into a scalloped methane lake called Quiet Basin. Three rounded ice cobbles mark the channel mouth. Diffuse amber illumination, no visible ringed planet, no trees, organisms, settlements or machines.",
+      "entryDescription": "Field atlas establishes a methane watershed and evidence boundary."
+    }
+  },
+  {
+    "id": "2026-11-23-weekly-world-saffron-watershed-drops-before-rain",
+    "title": "Saffron Watershed: Drops Before Rain",
+    "tests": "Read NASA Titan Facts and ESA Titan surface on 2026-11-23; methane weather, ice bedrock, hydrocarbon lakes and rounded pebbles supported. Droplet arrangement and storm chronology speculative. Sources: https://science.nasa.gov/saturn/moons/titan/facts/ ; https://www.esa.int/Science_Exploration/Space_Science/Cassini-Huygens/Titan_s_surface; archive_slot=2026-11-23T03:20; concept=methane-droplets-ice-terrace-storm-onset; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; Story beat: 1/7",
+    "prompt": "Create a finished highly realistic scientific-documentary artist impression, not a poster mockup: SAFFRON WATERSHED — DROPS BEFORE RAIN. This is story beat 1 following a field atlas, the onset of a methane storm on an explicitly fictional cold moon. Make a new intimate ground-level macro environmental composition: the lower half is a pale ivory water-ice bedrock terrace, behaving as hard stone at an assumed 94 K, dusted with fine ochre-brown organic grains. A scattering of transparent liquid methane droplets has just collected on the irregular ice-rock surface. Resolve subtle contact menisci, gentle lensing of the mineral-like ice texture beneath, tiny restrained amber reflections and realistic surface tension; not luminous jewels, not enormous spherical marbles or frozen water beads. The viewpoint is only centimeters above the terrace; focus on several delicately wet hollows in the foreground while the distant landscape remains recognizable with gradual depth of field. No heavy rainfall yet, no flowing flood or active sediment transport: this is the first wetting before the main shower. Beyond the terrace the dry Y-shaped Split Reed channel descends toward the scalloped dark amber methane lake Quiet Basin. Preserve exactly three rounded ivory ice cobbles grouped at the distant channel mouth. Low dark methane clouds gather within a diffuse saffron nitrogen-rich atmospheric haze; illumination is faint and amber, physically diffuse with no direct solar spotlight. Convey natural tactile unfamiliar terrain, finely fractured solid ice rock, sparse grains and gently layered distant shore contours. No life, trees, human artifacts, architecture, vehicles, giant planet, blue sky, stars, lava, gas vents, liquid-water ocean, sea-ice floes, magic or glowing liquids. Richly detailed photographic material realism with restrained cinematic framing, not painting, cartoon, CGI toys or infographic boxes. Use small elegant readable typography in the upper atmospheric negative space: “SAFFRON WATERSHED” then “Drops Before Rain”. At the bottom include “Science-informed speculative world / artist’s impression”. A discreet small line distinguishes “Titan analogue: methane weather · Fictional landscape and storm”. Do not present the imagined moon as observed or measured. Landscape and droplets dominate; no charts or long explanatory text.",
+    "image": "images/2026-11-23-weekly-world-saffron-watershed-drops-before-rain.jpg",
+    "thumb": "thumbs/2026-11-23-weekly-world-saffron-watershed-drops-before-rain.webp",
+    "color": "#7e5833",
+    "date": "2026-11-23",
+    "batch": "Daily Prompt",
+    "slot": "weekly-world",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1672x941",
+    "dedup": {
+      "conceptKey": "methane-droplets-ice-terrace-storm-onset",
+      "imageSha256": "491242f6e98e01626efec9733491efd876cc2335a167b48be9b59e805cff021d",
+      "imageDHash": "fe7eccdc99064ba3"
+    },
+    "world": {
+      "name": "Saffron Watershed",
+      "description": "An explicitly hypothetical cold moon explores methane rainfall and runoff across water-ice rock, using Titan as a physical analogue, not claiming to depict Titan.",
+      "continuity": "Saffron haze over ochre organic sediment and pale water-ice bedrock. A forked channel called Split Reed crosses a low ice terrace into a scalloped methane lake called Quiet Basin. Three rounded ice cobbles mark the channel mouth. Diffuse amber illumination, no visible ringed planet, no trees, organisms, settlements or machines.",
+      "entryDescription": "Methane droplets collect on the cold ice terrace before rain."
+    }
+  },
+  {
+    "id": "2026-11-23-weekly-world-saffron-watershed-the-channel-awakens",
+    "title": "Saffron Watershed: The Channel Awakens",
+    "tests": "Read NASA Titan Facts and ESA Titan surface on 2026-11-23: methane storms, flowing hydrocarbons, ice as rock and rounded pebbles supported. Fictional runoff timing and geometry are assumptions. Sources: https://science.nasa.gov/saturn/moons/titan/facts/; https://www.esa.int/Science_Exploration/Space_Science/Cassini-Huygens/Titan_s_surface; archive_slot=2026-11-23T07:20; concept=methane-runoff-tributary-channel-confluence; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; Story beat: 2/7",
+    "prompt": "Create a finished photographic scientific-documentary artist's impression of SAFFRON WATERSHED — THE CHANNEL AWAKENS, connected story beat 2 on a fictional Titan-analogue moon, not a depiction of observed Titan geography. Show the first connected shallow runoff AFTER the rain: an oblique elevated close environmental view looking across a small tributary joining the Y-shaped Split Reed channel, not a macro photograph of droplets and not a wide field atlas. The confluence occupies the central foreground in exquisite tactile detail. A narrow dark transparent methane-rich liquid thread descends from upper left over an irregular pale ivory water-ice rock terrace and joins a slightly wider channel running diagonally toward the upper right distance. Both watercourses obey the same gently downhill bed topography; restrained small ripples and fine dark organic grains just wetted at the margin, but no rapids, huge flood, dramatic waterfall or sediment fan yet. Surface liquid is methane, NOT liquid water; ice is solid bedrock at an assumed 94 K, not melting ice. Resolve fractured stone-like water ice with shallow pits and matte weathered edges, ochre sediment dry beyond the narrow wet margins, darker wet sediment at the channel edges, tiny subdued amber reflections on nearly colorless shallow liquid. The confluence and branching banks dominate, with medium depth of field maintaining legible spatial continuity to the distant scalloped dark amber methane lake Quiet Basin. At the distant channel mouth retain exactly three rounded pale ice cobbles as a small recognizable group, not three giant boulders beside the confluence. No pebble transport close-up yet: that is the next beat. Diffuse saffron nitrogen haze and low receding methane storm clouds soften the horizon, faint broad amber illumination with believable shadows and atmospheric perspective, no direct golden solar beam, no blue terrestrial sky. Rich realistic terrain microtextures and restrained natural color; no painting, cartoon, stylized CGI toy surfaces or glowing liquids. No organisms, trees, grass, inhabitants, architecture, equipment, giant ringed planet, stars, lava, gas vents, liquid-water ocean, sea-ice floes or magic. Watercourses must visibly connect and flow downhill rather than crossing banks or climbing ridges. Use modest elegant readable type in upper sky negative space: 'SAFFRON WATERSHED' and below 'The Channel Awakens'. Small bottom line: 'Science-informed speculative world / artist’s impression'. A small secondary line: 'Titan analogue: methane runoff · Fictional landscape and storm'. No other labels, grids, panels or infographics. All scene geography, timing and parameters are speculative, not newly measured alien-world facts.",
+    "image": "images/2026-11-23-weekly-world-saffron-watershed-the-channel-awakens.jpg",
+    "thumb": "thumbs/2026-11-23-weekly-world-saffron-watershed-the-channel-awakens.webp",
+    "color": "#956b3e",
+    "date": "2026-11-23",
+    "batch": "Daily Prompt",
+    "slot": "weekly-world",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1195x1316",
+    "dedup": {
+      "conceptKey": "methane-runoff-tributary-channel-confluence",
+      "imageSha256": "22d47d9af556afeb3a5b667aec0f7e16844c8337d3ffb8763c658a0691dab812",
+      "imageDHash": "481f2e8ce0e0c009"
+    },
+    "world": {
+      "name": "Saffron Watershed",
+      "description": "An explicitly hypothetical cold moon explores methane rainfall and runoff across water-ice rock, using Titan as a physical analogue, not claiming to depict Titan.",
+      "continuity": "Saffron haze over ochre organic sediment and pale water-ice bedrock. A forked channel called Split Reed crosses a low ice terrace into a scalloped methane lake called Quiet Basin. Three rounded ice cobbles mark the channel mouth. Diffuse amber illumination, no visible ringed planet, no trees, organisms, settlements or machines.",
+      "entryDescription": "After the rain, a shallow runoff thread joins Split Reed; the lake remains distant."
+    }
+  },
+  {
+    "id": "2026-11-23-weekly-world-saffron-watershed-ice-pebbles-in-transit",
+    "title": "Saffron Watershed: Ice Pebbles in Transit",
+    "tests": "Read NASA Titan Facts and ESA Titan surface on 2026-11-23. Titan supports methane runoff, water ice as rock, and rounded pebbles. Transport arrangement and fictional geography inferred/speculative. Sources: https://science.nasa.gov/saturn/moons/titan/facts/; https://www.esa.int/Science_Exploration/Space_Science/Cassini-Huygens/Titan_s_surface; archive_slot=2026-11-23T10:20; concept=ice-cobble-channel-bedload-closeup; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; Story beat: 3/7",
+    "prompt": "Create a finished realistic planetary-science artist impression, not an infographic or mockup. Saffron Watershed: Ice Pebbles in Transit, ordered story beat 3. Science-informed speculative world / artist’s impression. Extreme low, intimate channel-bed viewpoint, camera only centimeters above a shallow methane-rich runoff thread, looking obliquely downstream through Split Reed toward a softly distant scalloped dark amber lake, Quiet Basin. Dominant foreground: a small cluster of smooth rounded pale ivory WATER-ICE cobbles, opaque rocklike frozen material, partially ochre-stained, settled solidly in a dark organic granular bed. Three rounded cobbles farther downstream mark the channel mouth. Shallow transparent hydrocarbon liquid splits and rejoins around the stationary stones, showing delicate refracted edges, tiny ripples, wet dark grain streaks and scattered finer sediment being transported. Show restrained, physically plausible gentle flow, not raging whitewater, airborne boulders or glowing liquid. An exquisitely resolved foreground of individual brown-black grains, deposited grain tails behind cobbles, scoured edges, tiny liquid menisci and matte ice abrasion; the interpretation of transport is a hypothetical causal illustration, not measured erosion rates. Pale ice-bedrock terrace edges recede to a fork visible in the middle distance. Diffuse saffron haze, muted ochre-brown sediment, ivory rocklike ice, dark amber distant lake. No direct solar disk, rings, planet, blue Earth sky, trees, life, buildings or machines. Cold roughly 94 K nitrogen atmosphere at assumed 1.5 bar, assumed gravity 1.35 m/s2. Water is solid rock here, NOT a water stream with melting ice; the moving liquid is methane-rich. Tactile documentary photographic realism, natural asymmetrical stones, grounded contact shadows, subtle wet highlights, atmospheric depth, restrained cinematic detail. Foreground cobbles and sediment transport dominate rather than repeating the earlier wide channel-runoff composition. No storms erupting or volcanic vents. A small elegant unobtrusive lower-margin caption reads exactly “Saffron Watershed” and beneath it “Science-informed speculative world / artist’s impression”. No other text, arrows, charts, logos or watermarks. Verified analogue only: NASA documents methane storms and flowing hydrocarbons sculpting Titan, water ice acting as rock; ESA documents rounded pebbles and river-like terrain. This invented moon, names, exact pebble arrangement, runoff chronology and assumed parameters are not observations of Titan or any exoplanet.",
+    "image": "images/2026-11-23-weekly-world-saffron-watershed-ice-pebbles-in-transit.jpg",
+    "thumb": "thumbs/2026-11-23-weekly-world-saffron-watershed-ice-pebbles-in-transit.webp",
+    "color": "#7d542f",
+    "date": "2026-11-23",
+    "batch": "Daily Prompt",
+    "slot": "weekly-world",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1672x941",
+    "dedup": {
+      "conceptKey": "ice-cobble-channel-bedload-closeup",
+      "imageSha256": "328f5db019c51c4c5a4f7fd920c2fc275980c73f6d062c52ec30ddcd1f42bf54",
+      "imageDHash": "7f663666c992b1e9"
+    },
+    "world": {
+      "name": "Saffron Watershed",
+      "description": "An explicitly hypothetical cold moon explores methane rainfall and runoff across water-ice rock, using Titan as a physical analogue, not claiming to depict Titan.",
+      "continuity": "Saffron haze over ochre organic sediment and pale water-ice bedrock. A forked channel called Split Reed crosses a low ice terrace into a scalloped methane lake called Quiet Basin. Three rounded ice cobbles mark the channel mouth. Diffuse amber illumination, no visible ringed planet, no trees, organisms, settlements or machines.",
+      "entryDescription": "A low channel view reveals rounded water-ice cobbles and sediment transport."
+    }
+  },
+  {
+    "id": "2026-11-23-weekly-world-saffron-watershed-arrival-at-quiet-basin",
+    "title": "Saffron Watershed: Arrival at Quiet Basin",
+    "tests": "Read NASA Titan Facts and ESA Titan surface on 2026-11-23. Methane weather, hydrocarbon lakes, ice bedrock and rounded pebbles supported; fictional fan geometry, chronology and transport inferred, not measured. Sources: https://science.nasa.gov/saturn/moons/titan/facts/; https://www.esa.int/Science_Exploration/Space_Science/Cassini-Huygens/Titan_s_surface; archive_slot=2026-11-23T14:20; concept=methane-channel-mouth-sediment-fan-lake-arrival; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; Story beat: 4/7",
+    "prompt": "Create a finished wide, immersive scientific-documentary artist's impression of Saffron Watershed, a fictional Titan-analogue cold moon. Beat 4, Arrival at Quiet Basin: after rain, runoff from Split Reed reaches the scalloped shoreline of Quiet Basin and spreads a small dark sediment fan into a still methane-rich lake. This is NOT a factual photograph of Titan. Use realistic photographic materials, subtle diffuse lighting, exquisite geological detail and natural perspective, not a painting, infographic grid or movie-poster montage.\n\nComposition: an elevated oblique shoreline view looking from the low water-ice terrace over the channel mouth and into the broad lake. The sediment fan is the focal process, distinct from the previous low channel-level pebble-transport scene: show its small triangular spreading geometry, several delicate distributary threads and a gently submerged dark granular apron with a convincing transition from shallow to deep water. The forked channel is readable upstream across the pale terrace at upper left; its shallow brownish-transparent methane runoff curves into the basin near center. Three rounded pale ivory WATER-ICE cobbles, naturally rocklike and modest in scale, remain beside the mouth, grounded in sediment. Quiet Basin's scalloped pale bedrock shoreline recedes across the composition to the right. Restrained surface ripples and subtle wetting identify liquid without giant waves or glowing fluid. Fine organic grains, damp dark sediment bands, mineral-like ice fractures, scattered small rounded ice gravel and shallow depositional lobes reward close inspection. Deposition is a conditional gravity-driven inference, not an observed measurement of this invented world; no quantified erosion rates.\n\nContinuity: saffron atmospheric haze, ochre-brown organic sediment, ivory water-ice bedrock, dark amber lake under diffuse muted amber illumination. Assumed approximately 94 K, dense nitrogen atmosphere at 1.5 bar, gravity 1.35 m/s2: methane may flow, water ice is solid rock. No melting water, floating sea ice, steaming heat, lava, CO2 vents or neon liquids. A distant giant exists outside this view: no ringed planet or celestial spectacle. No trees, reeds despite the channel name, plants, animals, aliens, people, structures or machines. No elaborate terrestrial delta vegetation. Natural low-relief terrain and physically connected liquid channels; no suspended streams or impossible waterfalls. Weak sunlight diffused through haze, no harsh noon blue sky or sunset sun disk. Fine photographic depth, not plastic CGI.\n\nSet a small elegant unobtrusive lower-margin inscription within the image: 'Saffron Watershed — Arrival at Quiet Basin' and below it 'Science-informed speculative world / artist’s impression'. Keep all other space for the landscape. The fictional scene's materials and methane cycle draw on NASA/ESA Titan studies; the moon, all landmarks and this event's chronology are invented. No factual-measurement claim, branding or watermark.",
+    "image": "images/2026-11-23-weekly-world-saffron-watershed-arrival-at-quiet-basin.jpg",
+    "thumb": "thumbs/2026-11-23-weekly-world-saffron-watershed-arrival-at-quiet-basin.webp",
+    "color": "#895927",
+    "date": "2026-11-23",
+    "batch": "Daily Prompt",
+    "slot": "weekly-world",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1672x941",
+    "dedup": {
+      "conceptKey": "methane-channel-mouth-sediment-fan-lake-arrival",
+      "imageSha256": "395b39efb2d7c35d8cd1fb980e3ead92c5350493442b2fa8f553a700fc5765e8",
+      "imageDHash": "40b098dcf6ef7f7b"
+    },
+    "world": {
+      "name": "Saffron Watershed",
+      "description": "An explicitly hypothetical cold moon explores methane rainfall and runoff across water-ice rock, using Titan as a physical analogue, not claiming to depict Titan.",
+      "continuity": "Saffron haze over ochre organic sediment and pale water-ice bedrock. A forked channel called Split Reed crosses a low ice terrace into a scalloped methane lake called Quiet Basin. Three rounded ice cobbles mark the channel mouth. Diffuse amber illumination, no visible ringed planet, no trees, organisms, settlements or machines.",
+      "entryDescription": "The runoff reaches the scalloped lake margin and lays down a small sediment fan."
+    }
+  },
+  {
+    "id": "2026-11-23-weekly-world-saffron-watershed-the-storm-deposit",
+    "title": "Saffron Watershed: The Storm Deposit",
+    "tests": "Read NASA Titan Facts and ESA Titan surface on 2026-11-23. Methane weather, ice acting as rock, organic grains and rounded pebbles supported. Fictional deposit geometry and chronology inferred/speculative. Sources: https://science.nasa.gov/saturn/moons/titan/facts/, https://www.esa.int/Science_Exploration/Space_Science/Cassini-Huygens/Titan_s_surface; archive_slot=2026-11-23T17:20; concept=shoreline-dark-grain-deposit-wetted-ice-closeup; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; Story beat: 5/7",
+    "prompt": "Create a richly detailed scientific-documentary artist's impression of Saffron Watershed, an explicitly hypothetical Titan-analogue cold moon, not a photograph of Titan. Beat 5 of the established seven-image story: THE STORM DEPOSIT. The storm has passed; its consequence is now visible at intimate scale, not another active-flow panorama or advancing sediment fan. Camera a few centimetres above the shoreline, oblique macro landscape lens, focus-stacked detail across the foreground, distant shoreline falling softly into saffron atmospheric haze. A newly deposited thin crescent of very dark brown organic grains has collected in the shallow lee of one pale ivory water-ice cobble. Show individual coffee-ground-like grains, minute interlocking ice-rock facets, subdued methane-wetted sheen, tiny menisci between grains, and a crisp boundary between damp dark sediment and higher dry ochre sediment. This is solid ice functioning as geological rock at approximately 94 K, not melting ice or terrestrial slush. Methane-rich liquid only, dark from reflection and sediment, with subtle amber skylight; no luminous fluid, no water rain, no steam, no snow, no blue terrestrial sea. The deposit is quiet and mostly exposed, just a narrow still liquid edge below it; no dramatic pouring or suspended flying debris. Foreground sediment textures and the wetted cobble dominate roughly three quarters of the composition. Keep the other two rounded marker cobbles visible farther along the same scalloped shoreline, establishing the recurring three-cobble landmark without duplicating or multiplying rocks into a wall. A restrained upper background glimpse of Quiet Basin and the low water-ice terrace with the forked Split Reed channel provides geographic continuity; not a wide aerial survey. Diffuse amber illumination through nitrogen-rich saffron haze, weak distant sunlight, realistic contact shadows, matte organic sediment contrasting with wet ice rock. Entirely abiotic: no plants, organisms, people, machines, buildings, ringed planet, lava or fantasy crystals. High-fidelity tactile materials, physically coherent small-scale deposition, generous tonal separation and exquisitely resolved macro textures. Render the scene itself, no frame, book, room or display mockup. Small tasteful unobtrusive bottom-edge typography: “Saffron Watershed — The Storm Deposit” and beneath it “Science-informed speculative world / artist's impression”. No other text or invented measurement labels. The real Titan evidence supports methane rain, hydrocarbon lakes, organic grains, water ice acting as rock and rounded pebbles. This particular moon, shoreline geometry, deposit and storm chronology are invented conditional extrapolations, not observed exoplanet facts.",
+    "image": "images/2026-11-23-weekly-world-saffron-watershed-the-storm-deposit.jpg",
+    "thumb": "thumbs/2026-11-23-weekly-world-saffron-watershed-the-storm-deposit.webp",
+    "color": "#875227",
+    "date": "2026-11-23",
+    "batch": "Daily Prompt",
+    "slot": "weekly-world",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1672x941",
+    "dedup": {
+      "conceptKey": "shoreline-dark-grain-deposit-wetted-ice-closeup",
+      "imageSha256": "3c825a3ccb7d94f8e296c90119dd1fb98f6932f721d89cd6f77d3a055b5c3285",
+      "imageDHash": "07e2341819794305"
+    },
+    "world": {
+      "name": "Saffron Watershed",
+      "description": "An explicitly hypothetical cold moon explores methane rainfall and runoff across water-ice rock, using Titan as a physical analogue, not claiming to depict Titan.",
+      "continuity": "Saffron haze over ochre organic sediment and pale water-ice bedrock. A forked channel called Split Reed crosses a low ice terrace into a scalloped methane lake called Quiet Basin. Three rounded ice cobbles mark the channel mouth. Diffuse amber illumination, no visible ringed planet, no trees, organisms, settlements or machines.",
+      "entryDescription": "After the storm, a close shoreline view reveals deposited dark grains and wetted ice."
+    }
+  },
+  {
+    "id": "2026-11-23-weekly-world-saffron-watershed-watershed-after-rain",
+    "title": "Saffron Watershed: Watershed After Rain",
+    "tests": "Read NASA Titan Facts and ESA Titan surface on 2026-11-23. Methane weather, hydrocarbon lakes, ice bedrock and rounded pebbles supported; fictional geography and chronology are speculative. Sources: https://science.nasa.gov/saturn/moons/titan/facts/, https://www.esa.int/Science_Exploration/Space_Science/Cassini-Huygens/Titan_s_surface; archive_slot=2026-11-23T21:20; concept=poststorm-watershed-channel-lake-wide-reunion; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; Story beat: 6/7",
+    "prompt": "Create the final connected scientific-documentary artist's impression of Saffron Watershed, an explicitly hypothetical cold moon using Titan as a physical analogue, not an observed exoplanet or photograph of Titan. Story beat 6: WATERSHED AFTER RAIN. A magnificent oblique elevated wide landscape reconnects the entire drainage basin after the storm. This is a new basin-scale resolution, not another shoreline macro or active sediment-fan arrival. From a high ice-rock ridge, look down across a broad low ivory water-ice terrace. The unmistakably forked Split Reed drainage crosses ochre-brown organic sediment and joins the scalloped shoreline of dark Quiet Basin. Place the fork in the middle distance and its junction with the lake lower right; use branching natural geometry rather than canals. Thin remnant methane-cloud layers open overhead to diffuse saffron illumination, not blue Earth skies or strong sunbeams. Quiet shallow residual methane threads follow gravity through the channels. A modest newly darkened sediment crescent at the channel mouth records the previous storm, with three rounded pale ice cobbles grouped at that same mouth as the recurring landmark. Keep those three coherent at landscape scale, not giant monuments. Show textured solid ice functioning as rock at about 94 K, pale low scarps with cracks and dull granular organic deposits, wetted dark drainage edges and still reflective lake margins. Ice is solid geology, not melting slush, terrestrial sea ice or a glacier calving into water. Liquid is methane-rich and non-glowing; subdued dark amber reflections. Weak distant sunlight through dense nitrogen-rich haze; credible atmospheric perspective, natural contrast, tactile materials and fine branching terrain detail across a carefully layered composition. The lake extends toward the left horizon, low terrace to right, distant hazy basin rim. Visual hierarchy follows clouds to forked channel to shoreline storage without arrows, process panels or explanatory boxes. The quiet altered shore is the story's ending, not a new disaster or a different world. Entirely abiotic: no plants, organisms, people, buildings, spacecraft, machinery, visible planet, rings, lava, steam, water rain, open water ocean, snow or fantasy crystals. Render the landscape itself, no frame, book or presentation mockup. Small elegant bottom-edge typography: 'Saffron Watershed — Watershed After Rain' and below it 'Science-informed speculative world / artist's impression'. No additional text or invented measurements. Actual Titan evidence supports methane storms, hydrocarbon lakes, water ice as rock and rounded pebbles; all names, geography, poststorm appearance and chronology here are fictional conditional extrapolations. Preserve diffuse amber sky, ivory ice and ochre sediment continuity, with no life claimed.",
+    "image": "images/2026-11-23-weekly-world-saffron-watershed-watershed-after-rain.jpg",
+    "thumb": "thumbs/2026-11-23-weekly-world-saffron-watershed-watershed-after-rain.webp",
+    "color": "#9f6933",
+    "date": "2026-11-23",
+    "batch": "Daily Prompt",
+    "slot": "weekly-world",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1672x941",
+    "dedup": {
+      "conceptKey": "poststorm-watershed-channel-lake-wide-reunion",
+      "imageSha256": "288d847f683242ce37d5e0734631d862c53643d7a197d3e2615004e0a9730378",
+      "imageDHash": "8ff78893c8a4facf"
+    },
+    "world": {
+      "name": "Saffron Watershed",
+      "description": "An explicitly hypothetical cold moon explores methane rainfall and runoff across water-ice rock, using Titan as a physical analogue, not claiming to depict Titan.",
+      "continuity": "Saffron haze over ochre organic sediment and pale water-ice bedrock. A forked channel called Split Reed crosses a low ice terrace into a scalloped methane lake called Quiet Basin. Three rounded ice cobbles mark the channel mouth. Diffuse amber illumination, no visible ringed planet, no trees, organisms, settlements or machines.",
+      "entryDescription": "The wide watershed returns under thinning clouds, linking rainfall, transport and storage."
+    }
   }
 ]
