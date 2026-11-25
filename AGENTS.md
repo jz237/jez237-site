@@ -82,8 +82,13 @@ Cloudflare, which serves jez237.com, is not affected by a mirror failure.
   infographic id. It may only restate that entry's research record (`factualInfographic.evidence`, or its entry in
   `infographic-research-supplements.json`): no fact or figure from memory, hedges kept, American spelling. The
   builder refuses text whose figures are not in the entry's record; `--check <file>` checks a file without building.
-  An entry with no written text still gets a page showing its research notes, so a new daily infographic needs its
-  text added to that file to match the others. Page styles: `infographic-article.css` (raise `STYLE_VERSION` in the
+  The daily job writes the text for each new factual infographic (Jez, Nov 25 2026: "have the daily job write the
+  text for new ones too"): write it from the claim sheet as `experiments/image-gen-2-benchmark/INFOGRAPHIC_TEXT.md`
+  describes and pass it to `append-entry.py` as `--factual-text-file <text.json>`, next to
+  `--factual-evidence-file`. The script checks it before saving or uploading anything and stores it under the new
+  id. For an infographic already in the archive, `build-infographic-articles.py --add-text <id> <text.json>` does
+  the same. An entry with no written text still gets a page showing its research notes, and both scripts print
+  `ACTION NEEDED` with its id until the text is written; do not leave one that way. Page styles: `infographic-article.css` (raise `STYLE_VERSION` in the
   builder when it changes). The gallery cards link to the page ("Read about it").
 - In the galleries the text page opens as a pop-up over the gallery, in the same window (Jez, Nov 25 2026: "have the
   read about it info page pop right up in the same window when you click on one"): a click on a factual infographic's

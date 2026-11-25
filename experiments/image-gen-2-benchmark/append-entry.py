@@ -10,6 +10,7 @@ from __future__ import annotations
 import argparse
 import datetime as dt
 import fcntl
+import importlib.util
 import json
 import mimetypes
 import os
@@ -59,6 +60,14 @@ FACTUAL_SOURCE_TYPES = {
     "standards-body",
     "manufacturer-technical-documentation",
 }
+
+
+def article_builder():
+    """build-infographic-articles.py as a module: it owns the checks and the file for the factual page text."""
+    spec = importlib.util.spec_from_file_location("build_infographic_articles", ROOT / "build-infographic-articles.py")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
 
 
 def slugify(value: str) -> str:
@@ -307,6 +316,12 @@ def main() -> None:
         default="",
         help="JSON claim sheet with the independently fetched sources supporting a factual infographic",
     )
+    ap.add_argument(
+        "--factual-text-file",
+        default="",
+        help="JSON with the infographic's page text (dek, glance, sections), written from the claim sheet as "
+             "INFOGRAPHIC_TEXT.md describes; checked here and saved to infographic-article-text.json",
+    )
     ap.add_argument("--factual-infographic-only", action="store_true", help="Append to factual-infographics-data.json only, not the main prompt gallery")
     ap.add_argument("--hybrid-name", default="")
     ap.add_argument("--hybrid-image-kind", choices=["infographic", "wild"], default="infographic")
@@ -371,6 +386,29 @@ def main() -> None:
             args.factual_topic.strip(),
             source_note,
         )
+
+    # The text for the infographic's text page. It is checked now, before anything is saved or uploaded,
+    # against the same record the page builder will check it against.
+    factual_text: dict | None = None
+    builder = None
+    if args.factual_text_file.strip():
+        if not is_factual_infographic:
+            raise SystemExit("--factual-text-file is only for factual infographics.")
+        builder = article_builder()
+        factual_text = builder.read_text_file(Path(args.factual_text_file).expanduser().resolve())
+        draft_row = {
+            "title": args.title,
+            "factualInfographic": {
+                "topic": args.factual_topic.strip(),
+                "description": args.factual_description.strip(),
+                "sourceNote": source_note,
+            },
+        }
+        problems = builder.check_text("page text", factual_text, draft_row, factual_evidence)
+        if problems:
+            raise SystemExit(
+                f"The factual page text needs fixing (see {builder.GUIDE}):\n  " + "\n  ".join(problems)
+            )
 
     src = Path(args.image).expanduser().resolve()
     if not src.exists():
@@ -512,6 +550,9 @@ def main() -> None:
         save(path, data)
         if path == DATA:
             rebuild_monthly(data)
+    in_factual_archive = FACTUAL_INFOGRAPHICS in paths and bool(entry.get("factualInfographic"))
+    if factual_text is not None and in_factual_archive:
+        builder.store_text(entry["id"], factual_text)
 
     if args.delete_source_after_success:
         src.unlink()
@@ -521,6 +562,11 @@ def main() -> None:
         base = args.r2_public_base_url.rstrip("/") + "/"
         print(f"Uploaded image to R2: {base}{dest.name}")
     print(json.dumps(entry, indent=2, ensure_ascii=False))
+    if in_factual_archive:
+        if factual_text is not None:
+            print(f"Saved the page text for {entry['id']}. Run build-infographic-articles.py to build its page.")
+        else:
+            print(article_builder().missing_text_notice([entry["id"]]))
 
 
 if __name__ == "__main__":

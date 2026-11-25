@@ -14,6 +14,11 @@ appears in the entry's own record. An entry with no written text still gets a pa
 
     python3 build-infographic-articles.py                 build the packs and the sitemap block
     python3 build-infographic-articles.py --check FILE    check a text file (or a draft batch) and build nothing
+    python3 build-infographic-articles.py --add-text ID FILE
+                                                          check one page's text, save it for that infographic, build
+
+INFOGRAPHIC_TEXT.md says how the text is written. The daily job passes a new infographic's text to
+append-entry.py (--factual-text-file), which uses check_text() and store_text() from this file.
 """
 import html
 import json
@@ -29,6 +34,8 @@ MEDIA = "https://media.jez237.com/image-gen-2-benchmark/"
 BEGIN = "  <!-- Factual infographic articles: generated -->"
 END = "  <!-- End factual infographic articles -->"
 STYLE_VERSION = "20261125"
+TEXT_FILE = "infographic-article-text.json"
+GUIDE = "INFOGRAPHIC_TEXT.md"
 # Topic group -> (label, gallery page). The groups are the ones in factual_groups.py.
 GROUPS = {
     "cats": ("Cat Atlas", "cat-infographics"),
@@ -337,6 +344,49 @@ def load(name):
     return json.loads((ARCHIVE / name).read_text(encoding="utf-8"))
 
 
+def read_text_file(path):
+    """One page's written text from a JSON file: {"dek": ..., "glance": [...], "sections": [...]}."""
+    try:
+        return json.loads(Path(path).read_text(encoding="utf-8"))
+    except (OSError, ValueError) as error:
+        raise SystemExit(f"Cannot read the page text file {path}: {error}") from error
+
+
+def store_text(key, text):
+    """Save one page's written text, keeping the text file in the order of the data file."""
+    order = {row["id"]: index for index, row in enumerate(load("factual-infographics-data.json"))}
+    texts = load(TEXT_FILE)
+    texts[key] = text
+    texts = dict(sorted(texts.items(), key=lambda item: order.get(item[0], len(order))))
+    (ARCHIVE / TEXT_FILE).write_text(json.dumps(texts, ensure_ascii=False, indent=1) + "\n", encoding="utf-8",
+                                     newline="\n")
+
+
+def missing_text_notice(keys):
+    """What to print when infographics have no written text, worded for whoever (or whatever) runs the job."""
+    lines = [f"ACTION NEEDED: {len(keys)} factual infographic(s) have a page with research notes only, because "
+             "their page text has not been written:"]
+    lines += [f"  {key}" for key in keys]
+    lines += [f"Write each one's text as {GUIDE} (next to this script) describes, then save it with:",
+              "  python3 build-infographic-articles.py --add-text <id> <text.json>"]
+    return "\n".join(lines)
+
+
+def add_text(key, path):
+    """Check one page's text against that infographic's record, save it and rebuild."""
+    rows = {row["id"]: row for row in load("factual-infographics-data.json")}
+    if key not in rows:
+        raise SystemExit(f"No factual infographic has the id {key}")
+    text = read_text_file(path)
+    evidence = evidence_for(rows[key], load("infographic-research-supplements.json").get(key))
+    problems = check_text(key, text, rows[key], evidence)
+    if problems:
+        raise SystemExit(f"The page text for {key} needs fixing (see {GUIDE}):\n  " + "\n  ".join(problems))
+    store_text(key, text)
+    print(f"Saved the page text for {key}.")
+    main()
+
+
 def check_file(path):
     """Check a text file, or a draft batch of the form {"text": {...}, "claims": {id: [added claims]}}."""
     rows = {row["id"]: row for row in load("factual-infographics-data.json")}
@@ -360,7 +410,7 @@ def check_file(path):
 def main():
     rows = load("factual-infographics-data.json")
     supplements = load("infographic-research-supplements.json")
-    texts = load("infographic-article-text.json")
+    texts = load(TEXT_FILE)
     nearby = neighbours_for(rows)
     pages = {}
     for row in rows:
@@ -397,9 +447,16 @@ def main():
                          json.dumps(pack, ensure_ascii=False, separators=(",", ":")) + "\n")
     write_if_changed(sitemap, original.replace("</urlset>", "\n".join([BEGIN, *entries, END, "</urlset>"])))
     print(f"Built {len(pages)} infographic articles ({len(texts)} with written text) and sitemap URLs.")
+    missing = [key for key in pages if key not in texts]
+    if missing:
+        print(missing_text_notice(missing))
 
 
 if __name__ == "__main__":
     if len(sys.argv) == 3 and sys.argv[1] == "--check":
         sys.exit(check_file(sys.argv[2]))
+    if len(sys.argv) == 4 and sys.argv[1] == "--add-text":
+        sys.exit(add_text(sys.argv[2], sys.argv[3]))
+    if len(sys.argv) > 1:
+        raise SystemExit(__doc__)
     main()
