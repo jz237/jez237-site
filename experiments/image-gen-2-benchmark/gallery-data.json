@@ -35875,5 +35875,122 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-11-25-factual-infographic-factual-infographic-midas-blenny",
+    "title": "Factual infographic: Midas Blenny",
+    "tests": "factual_subtype: reef-fish-infographic; ; archive_slot=2026-11-25T04:20; concept=midas-blenny-plankton-hunting-open-reef-water; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; fish_scientific_name: Ecsenius midas",
+    "prompt": "Create a fancy, exceptionally detailed, richly colorful PHOTOREALISTIC reef aquarium fish atlas, finished artwork itself, not a photographed printed chart. ONE fish species: Midas blenny, Ecsenius midas. Premium natural-history underwater photography integrated with delicate scientific annotation. Organic flowing asymmetric composition, no grid, no rectangular cards. Dominant sinuous golden-yellow adult fish sweeps diagonally upward from an intricately weathered coral-rock refuge at lower right into deep cobalt-blue open water upper left. Accurate elongated blenny body, blunt rounded face, large luminous blue eyes, continuous long dorsal fin with a fine dark anterior edge, translucent fin rays and long adult tail; realistic smooth skin rather than invented big scales. Exquisite wet reflections, delicate cyan caustics, soft sun shafts through suspended particles. Rich magenta, orange and lilac reef colors remain subordinate to the gold hero. Natural fin anatomy, no fantasy appendages. Leave generous open water around its face and headline.\nProminent exact headline \"MIDAS BLENNY\" with italic \"Ecsenius midas\" directly underneath, smaller subtitle \"A golden plankton hunter above the reef\". Small graceful length ruler follows body: \"Up to 13 cm / 5.1 in total length\".\nIntegrate three meaningful studies along flowing curved leaders, each at a different scale, no detached boxes: a crisp blue-eye and blunt-face macro detail near the head; an enlarged naturalistic copepod-like zooplankton study floating along a feeding path toward the mouth, labeled \"Zooplankton prey\"; a smaller view OF THE SAME SPECIES peeking from a rock crevice near the bottom, labeled \"A refuge between swims\". These are detailed supporting views, not additional species. Do not show anthias or invent a jaw dissection. Connect the mouth, plankton and coral ledge with a fine current ribbon labeled \"Feeds 2–3 m above the reef bottom\"; show this as a schematic spatial relationship, not the fish's length.\nOrganically place exact concise readable text in spacious water pockets:\n\"WILD HOME\" / \"Indo-Pacific coral reefs\" / \"Gulf of Aqaba & southeast Africa to the Marquesas\" / \"Reported depth: 2–40 m\".\n\"OPEN-WATER FEEDER\" / \"Takes zooplankton in moderate currents\" / \"Can change color between shelter and open water\".\n\"AQUARIUM CARE — HATCHERY GUIDANCE\" / \"Rockwork refuges + a tight-fitting lid\" / \"Offer small prepared foods, brine shrimp and mysis\" / \"At least 114 L / 30 US gal; larger preferred\".\n\"COMPATIBILITY\" / \"Generally reef-safe; individuals may defend a refuge\" / \"Own kind and similar-shaped fish may be chased\" / \"Assess tankmates individually—no blanket guarantee\".\nThe aquarium recommendations are visibly distinguished from wild observations; the tank recommendation is from hatchery guidance, not a universal threshold. No unsourced temperature or salinity numbers, no algae-cleaner claim, no invented venom, no captive breeding claim. Keep substantial explanations readable while allowing the luminous hero and biological details to dominate. Delicate open annotation, elegant typography, varied scales, photorealistic underwater depth, no gimmicks or mockups. Subtle footer \"Biology: FishBase • Identity: CSIRO / WoRMS • Husbandry: Sustainable Aquatics\". Opaque background.",
+    "image": "images/2026-11-25-factual-infographic-factual-infographic-midas-blenny.jpg",
+    "thumb": "thumbs/2026-11-25-factual-infographic-factual-infographic-midas-blenny.webp",
+    "color": "#3f4457",
+    "date": "2026-11-25",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "midas-blenny-plankton-hunting-open-reef-water",
+      "imageSha256": "7c4f3189a01529ca8f1dd684f2aef5553736d0f4e4bffa6f3577b43ad05dc8fc",
+      "imageDHash": "4d390e61644e4a30"
+    },
+    "factualInfographic": {
+      "topic": "Midas blenny (Ecsenius midas) open-water plankton feeding, reef refuge and aquarium care",
+      "description": "Midas blenny identification, Indo-Pacific reef habitat, zooplankton feeding and separately labeled hatchery husbandry recommendations.",
+      "sourceNote": "Actual pages read. CSIRO full HTML extracted because readability returned only the image caption; FishBase biology and synonym table, WoRMS acceptance/no synonyms, and hatchery technical husbandry documentation. https://www.fishbase.se/summary/Ecsenius-midas.html https://www.cmar.csiro.au/data/caab/taxon_report.cfm?caab_code=37408028 https://www.marinespecies.org/rest/AphiaRecordByAphiaID/219271 https://sustainableaquatics.com/sustainable-islands-fish/blennies/the-midas-blenny/ https://www.fishbase.se/Nomenclature/SynonymsList.php?ID=7561&SynCode=9972&GenusName=Ecsenius&SpeciesName=midas",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-25T09:21:33.961361+00:00",
+        "sources": [
+          {
+            "id": "fb",
+            "publisher": "FishBase",
+            "title": "Ecsenius midas species summary",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://www.fishbase.se/summary/Ecsenius-midas.html"
+          },
+          {
+            "id": "csiro",
+            "publisher": "CSIRO",
+            "title": "CAAB taxon report 37408028",
+            "sourceType": "government-agency",
+            "url": "https://www.cmar.csiro.au/data/caab/taxon_report.cfm?caab_code=37408028"
+          },
+          {
+            "id": "worms",
+            "publisher": "WoRMS",
+            "title": "Ecsenius midas accepted record",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://www.marinespecies.org/rest/AphiaRecordByAphiaID/219271"
+          },
+          {
+            "id": "hatchery",
+            "publisher": "Sustainable Aquatics",
+            "title": "Midas blenny: hatchery feeding and husbandry documentation",
+            "sourceType": "manufacturer-technical-documentation",
+            "url": "https://sustainableaquatics.com/sustainable-islands-fish/blennies/the-midas-blenny/"
+          },
+          {
+            "id": "syn",
+            "publisher": "FishBase",
+            "title": "Synonyms of Ecsenius midas",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://www.fishbase.se/Nomenclature/SynonymsList.php?ID=7561&SynCode=9972&GenusName=Ecsenius&SpeciesName=midas"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Ecsenius midas is the accepted marine blenniid species; common names include Midas Combtooth Blenny and Midas blenny. FishBase lists only the accepted original combination; WoRMS returns no synonyms.",
+            "sourceIds": [
+              "csiro",
+              "worms",
+              "syn"
+            ]
+          },
+          {
+            "claim": "Indo-Pacific range from Gulf of Aqaba and southeast Africa to Marquesas; coral reefs, moderate currents, coastal to outer walls; reported depth 2–40 m.",
+            "sourceIds": [
+              "fb"
+            ]
+          },
+          {
+            "claim": "Maximum reported total length 13 cm (about 5.1 inches); elongated body, golden-orange coloration, long adult tail, narrow dark anterior dorsal margin.",
+            "sourceIds": [
+              "fb"
+            ]
+          },
+          {
+            "claim": "Feeds on zooplankton while swimming 2–3 m above benthos; can change color when moving from bottom into open water; may swim with similarly colored anthias.",
+            "sourceIds": [
+              "fb"
+            ]
+          },
+          {
+            "claim": "Golden-yellow body, blunt face, large blue eyes, comb-like teeth, eel-like swimming, shelter in rock or coral crevices.",
+            "sourceIds": [
+              "hatchery"
+            ]
+          },
+          {
+            "claim": "Hatchery reports feeding prepared hatchery diet, Spirulina brine and mysis; provide rockwork and a tight-fitting lid because fish can jump.",
+            "sourceIds": [
+              "hatchery"
+            ]
+          },
+          {
+            "claim": "Hatchery describes reef-safe, generally peaceful but potentially territorial toward own kind or similar body shapes. Compatibility should be assessed individually, not guaranteed.",
+            "sourceIds": [
+              "hatchery"
+            ]
+          },
+          {
+            "claim": "Hatchery recommends at least 30 US gallons, larger preferable to reduce aggression; 30 US gallons is approximately 114 liters. This is a husbandry recommendation, not a universal biological threshold.",
+            "sourceIds": [
+              "hatchery"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
