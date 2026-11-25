@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Tue, 24 Nov 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Wed, 25 Nov 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of November 4-10, 1985 — Kampfgruppe takes Computer Gaming World’s first crown</title>
+      <link>https://jez237.com/computer-chronicle/?date=1985-11-04</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1985-11-04</guid>
+      <pubDate>Wed, 25 Nov 2026 12:00:00 GMT</pubDate>
+      <description>Gary Grigsby’s tactical battlefield wins overall honors as computer bookkeeping makes a demanding wargame playable. Computer Gaming World’s first annual awards have a clear winner: Kampfgruppe. The November–December issue names Strategic Simulations’ tactical World War II simulation its overall game of the year and its wargame-category winner. These are honors for an existing game, not a release announcement for this week. Also this week: The Bard’s Tale fills Skara Brae with music and danger · QuantumLink brings color games to the Commodore connection · PC Pursuit puts a flat fee against the long-distance bill.</description>
+    </item>
     <item>
       <title>Week of October 28-November 3, 1985 — Hacker leaves players alone at the logon prompt</title>
       <link>https://jez237.com/computer-chronicle/?date=1985-10-28</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1985-06-24</guid>
       <pubDate>Fri, 06 Nov 2026 12:00:00 GMT</pubDate>
       <description>Three plants face closure as the personal-computer maker lowers its break-even point. Apple Computer is cutting 1,200 jobs and closing three of its six production plants, according to the June 24 Computerworld. The recently announced restructuring removes roughly one-fifth of the workforce as the company prepares for what it expects will be its first quarterly loss in eight years. Also this week: Electronic novels recruit poets as well as science-fiction stars · Commodore 128 promises three computing worlds in one box · Commodore LCD portable slips beyond September.</description>
-    </item>
-    <item>
-      <title>Week of June 17-23, 1985 — Elite brings its trading galaxy to the Commodore 64</title>
-      <link>https://jez237.com/computer-chronicle/?date=1985-06-17</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1985-06-17</guid>
-      <pubDate>Thu, 05 Nov 2026 12:00:00 GMT</pubDate>
-      <description>Firebird’s space-trading adventure gains colour on another home micro, with a few changes at the docking bay. The Commodore 64 has a new galaxy to explore. Martin Croft’s review in the June 20–26 Popular Computing Weekly finds Elite available from Firebird, carrying across the space-trading and combat formula that made it a major BBC and Electron success in 1984. The review establishes its arrival by this week’s issue, rather than a precise launch day. Also this week: Sinclair faces a Maxwell rescue and a smaller role for Sir Clive · Atari courts more than 100 British software houses for the ST · Dixons keeps the Plus/4 below £100 despite Commodore’s bundling push.</description>
     </item>
   </channel>
 </rss>

@@ -4,6 +4,430 @@
   "fallbackPolicy": "Use exact-day computer news when verified. If none exists, use same-week or same-month personal-computing items with confidence labels, then fall back to a wider world/business headline.",
   "issues": [
     {
+      "currentDate": "2026-11-25",
+      "historicDate": "1985-11-04",
+      "displayDate": "Week of November 4-10, 1985",
+      "edition": "Issue 171 - Weekly 1985 Computer & Culture Chronicle",
+      "masthead": {
+        "title": "Computer Chronicle",
+        "subtitle": "Issue 171 - Weekly 1985 Computer & Culture Chronicle",
+        "dateline": "Week of November 4-10, 1985",
+        "price": "75 cents"
+      },
+      "sectionChrome": {
+        "primary": "brick red",
+        "secondary": "royal blue",
+        "texture": "aged newsprint, fine column rules, ink bleed"
+      },
+      "visualProfile": {
+        "tone": "The computer wargame takes the trophy",
+        "motifs": [
+          "1985 home computer showing a tactical WWII map; boxed game and halftone tank scene; Commodore keyboard and modem"
+        ],
+        "layout": "Full-page warm aged newsprint, dense columns, red and blue headers, boxed modules, halftone photos, paper grain and slight ink bleed; no dead footer space"
+      },
+      "layoutPlan": {
+        "leadPlacement": "Kampfgruppe awards receive largest headline and tactical-game halftone; Bard’s Tale and QuantumLink secondary.",
+        "secondaryRail": "Top 5 Music: Billboard Top Rock Tracks November 9. Top 5 Movies: November 8-10 US weekend. Top 5 Computer Games: editorial selection, not sales ranking. Print feature headlines verbatim and fixed page-map jump lines."
+      },
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1985-11-04.jpg",
+        "alt": "Computer Chronicle newspaper front page for November 4-10, 1985",
+        "caption": "Newspaper-style front page generated from structured Chronicle issue data.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "sources": [
+        {
+          "title": "COMPUTE! issue 66: telecomputing feature pp. 18–20, online-service roundup through p. 28, Atari advertisement, Gato and PaperClip reviews",
+          "url": "https://colorcomputerarchive.com/repo/Documents/Magazines/Compute/Compute_Issue_066_1985_Nov.pdf",
+          "date": "1985-11"
+        },
+        {
+          "title": "Computer Gaming World 5.5: The Bard’s Tale p. 27 onward; Game of the Year pp. 32–33; telegaming survey",
+          "url": "https://www.cgwmuseum.org/galleries/issues/cgw_5.5.pdf",
+          "date": "1985-11/1985-12"
+        },
+        {
+          "title": "Billboard: Top Rock Tracks, week ending November 9",
+          "url": "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1985/BB-1985-11-09.pdf",
+          "date": "1985-11-09"
+        },
+        {
+          "title": "The Numbers: domestic weekend box office",
+          "url": "https://www.the-numbers.com/box-office-chart/weekend/1985/11/08",
+          "date": "1985-11-08/1985-11-10"
+        },
+        {
+          "title": "The Digital Antiquarian: A New Force in Games, Part 2 (retrospective context)",
+          "url": "https://www.filfre.net/2015/07/a-new-force-in-games-part-2-a-habitat-in-cyberspace/",
+          "date": "2015-07-17"
+        },
+        {
+          "title": "National Security Archive: After Black November, with November 6–7, 1985 embassy cables",
+          "url": "https://nsarchive.gwu.edu/briefing-book/colombia/2023-09-19/after-black-november-us-and-1985-palace-justice-tragedy",
+          "date": "2023-09-19"
+        },
+        {
+          "title": "Colombian judiciary: Memoria Viva (retrospective official account)",
+          "url": "https://www.ramajudicial.gov.co/web/memoriaviva",
+          "date": null
+        }
+      ],
+      "lead": {
+        "headline": "Kampfgruppe takes Computer Gaming World’s first crown",
+        "dek": "Gary Grigsby’s tactical battlefield wins overall honors as computer bookkeeping makes a demanding wargame playable.",
+        "confidence": "same-month",
+        "sourceRefs": [
+          1
+        ],
+        "body": [
+          "Computer Gaming World’s first annual awards have a clear winner: Kampfgruppe. The November–December issue names Strategic Simulations’ tactical World War II simulation its overall game of the year and its wargame-category winner. These are honors for an existing game, not a release announcement for this week.",
+          "Designer Gary Grigsby puts the fighting in Europe and gives players a random scenario generator as well as tactical problems to solve. The attraction is not simply a tank on the screen. A computer can shoulder line-of-sight calculations and opportunity-fire bookkeeping that would slow a comparable tabletop battle, leaving the commander to make decisions.",
+          "The magazine says Kampfgruppe led the voting throughout and finished substantially ahead of the closest non-wargame competitor, Ultima III. No numerical ballot total is supplied. SSI reports 8,000 copies sold and projects eventual sales of 25,000; that larger figure is a forecast, not a count already reached.",
+          "The other category awards show the range of the computer-game shelf: Ultima III wins adventure, Seven Cities of Gold takes strategy, and F-15 Strike Eagle receives action honors. The first ballot puts a demanding simulation at the head of a field that also embraces exploration, role-playing and flight."
+        ]
+      },
+      "stories": [
+        {
+          "headline": "The Bard’s Tale fills Skara Brae with music and danger",
+          "body": [
+            "Electronic Arts and Interplay’s The Bard’s Tale receives a substantial Scorpia review in the November–December Computer Gaming World. Its product box lists Apple and a Commodore 64 edition for November at $44.95. That is the magazine’s availability listing, not independent confirmation of a particular shipping day.",
+            "Players recruit a party from several races and professions to challenge Mangar’s hold on Skara Brae. The bard’s music supplies a distinctive role in a world whose shops and dangers change between day and night.",
+            "Scorpia counts five dungeons and sixteen levels besides the town, making careful mapping a major part of the expedition. Three disks—Main, Dungeon and Character—carry the adventure. The promise is a substantial campaign, rather than a quick visit to a single maze."
+          ],
+          "sourceRefs": [
+            1
+          ],
+          "confidence": "same-month"
+        },
+        {
+          "headline": "QuantumLink brings color games to the Commodore connection",
+          "body": [
+            "A Commodore 64 or 128 can become a graphical online meeting place in November’s COMPUTE! account of QuantumLink. Stephen Case of Quantum Computer Services describes a basic $9.95 monthly service, with some activities including communications time.",
+            "Special disk software holds graphics and sound for chess, backgammon and hangman. Bulletin boards, software previews, computer information, news and shopping extend the service beyond the game table. Chat and downloads add six cents a minute, or $3.60 an hour; the monthly subscription does not make every activity unlimited.",
+            "The report describes Uninet access and a year-end offer of terminal software and a free month, followed by a planned $25 signup fee after January 1. Launch-day accounts disagree, so this is November service coverage rather than a claim of a verified launch on a particular day this week."
+          ],
+          "sourceRefs": [
+            0
+          ],
+          "confidence": "same-month"
+        },
+        {
+          "headline": "PC Pursuit puts a flat fee against the long-distance bill",
+          "body": [
+            "GTE Telenet is trying a different price proposition for hobbyists: $25 a month for evening and weekend access to distant bulletin boards, other computer users and noncommercial databases. November’s COMPUTE! describes a twelve-city experiment, not nationwide availability.",
+            "The network draws on capacity left idle after business hours, according to spokesperson Claudia Houston. A callback arrangement and automatic credit-card billing support the service. Expansion depends on the response to the trial.",
+            "A flat network charge can make a long session less alarming, but it does not erase a commercial information service’s own bill. CompuServe and The Source charges remain separate. For the BBS caller, the important comparison is a recurring network fee against an unpredictable long-distance telephone bill."
+          ],
+          "sourceRefs": [
+            0
+          ],
+          "confidence": "same-month"
+        }
+      ],
+      "editorNote": "Computer gaming awards lead the desk; graphical online play and flat-rate BBS experiments follow.",
+      "morningLine": "Kampfgruppe takes the crown; Skara Brae beckons; the modem bill meets flat-rate experiments.",
+      "computerItems": [
+        {
+          "title": "Atari 520ST",
+          "summary": "November advertisement offers 512K, 8 MHz Motorola 68000, mouse, 3½-inch drive and monochrome monitor.",
+          "sourceRefs": [
+            0
+          ],
+          "confidence": "same-month"
+        },
+        {
+          "title": "Westridge 6420",
+          "summary": "300-bps modem with software, listed at $49.95.",
+          "sourceRefs": [
+            0
+          ],
+          "confidence": "same-month"
+        },
+        {
+          "title": "Volksmodem 12",
+          "summary": "1200-bps modem listed at $189.95 in the November service roundup.",
+          "sourceRefs": [
+            0
+          ],
+          "confidence": "same-month"
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "Atari PaperClip",
+          "detail": "Robert L. Riggs’s November COMPUTE! review covers embedded graphics, built-in arithmetic, AtariWriter file conversion and two-column printing without rolling paper back; a revised manual accompanies later PaperClip 1.1 copies. This is a review, not a new release this week.",
+          "sourceRefs": [
+            0
+          ],
+          "confidence": "same-month"
+        },
+        {
+          "name": "QuantumLink terminal software",
+          "detail": "Disk software stores online-game graphics and sound for Commodore 64 and 128 users; year-end registration offer includes software.",
+          "sourceRefs": [
+            0
+          ],
+          "confidence": "same-month"
+        },
+        {
+          "name": "Logo / Atari BASIC",
+          "detail": "Listed in the November Atari 520ST advertised bundle; advertising terms, not a new-release report.",
+          "sourceRefs": [
+            0
+          ],
+          "confidence": "same-month"
+        }
+      ],
+      "storeShelves": [
+        {
+          "label": "Top 5 Computer Games — editorial selection, not a sales chart",
+          "items": [
+            "Kampfgruppe",
+            "The Bard’s Tale",
+            "Ultima III",
+            "Seven Cities of Gold",
+            "F-15 Strike Eagle"
+          ],
+          "sourceRefs": [
+            1
+          ],
+          "confidence": "same-month"
+        },
+        {
+          "label": "Top 5 Movies — US weekend box office, November 8-10, 1985",
+          "items": [
+            "Death Wish 3",
+            "Target",
+            "Jagged Edge",
+            "To Live and Die in L.A.",
+            "Transylvania 6-5000"
+          ],
+          "sourceRefs": [
+            3
+          ],
+          "confidence": "same-week"
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "Atari 520ST monochrome bundle",
+          "price": "$799.95",
+          "note": "Advertised system; RGB monitor option adds $200",
+          "sourceRefs": [
+            0
+          ],
+          "confidence": "same-month"
+        },
+        {
+          "item": "Westridge 6420",
+          "price": "$49.95",
+          "note": "300 bps with software",
+          "sourceRefs": [
+            0
+          ],
+          "confidence": "same-month"
+        },
+        {
+          "item": "Volksmodem 12",
+          "price": "$189.95",
+          "note": "1200 bps",
+          "sourceRefs": [
+            0
+          ],
+          "confidence": "same-month"
+        },
+        {
+          "item": "The Bard’s Tale",
+          "price": "$44.95",
+          "note": "CGW product-box listing",
+          "sourceRefs": [
+            1
+          ],
+          "confidence": "same-month"
+        },
+        {
+          "item": "PC Pursuit",
+          "price": "$25/month",
+          "note": "Twelve-city evening/weekend network trial; service charges separate",
+          "sourceRefs": [
+            0
+          ],
+          "confidence": "same-month"
+        },
+        {
+          "item": "QuantumLink",
+          "price": "$9.95/month",
+          "note": "Selected activities add six cents/minute",
+          "sourceRefs": [
+            0
+          ],
+          "confidence": "same-month"
+        }
+      ],
+      "musicChart": [
+        {
+          "rank": 1,
+          "title": "Sleeping Bag",
+          "artist": "ZZ Top",
+          "song": "Sleeping Bag",
+          "chart": "Billboard Top Rock Tracks",
+          "chartDate": "1985-11-09",
+          "basis": "Album-oriented radio airplay; not Hot 100",
+          "sourceRefs": [
+            2
+          ],
+          "confidence": "same-week"
+        },
+        {
+          "rank": 2,
+          "title": "Small Town",
+          "artist": "John Cougar Mellencamp",
+          "song": "Small Town",
+          "chart": "Billboard Top Rock Tracks",
+          "chartDate": "1985-11-09",
+          "basis": "Album-oriented radio airplay; not Hot 100",
+          "sourceRefs": [
+            2
+          ],
+          "confidence": "same-week"
+        },
+        {
+          "rank": 3,
+          "title": "You Belong to the City",
+          "artist": "Glenn Frey",
+          "song": "You Belong to the City",
+          "chart": "Billboard Top Rock Tracks",
+          "chartDate": "1985-11-09",
+          "basis": "Album-oriented radio airplay; not Hot 100",
+          "sourceRefs": [
+            2
+          ],
+          "confidence": "same-week"
+        },
+        {
+          "rank": 4,
+          "title": "The Big Money",
+          "artist": "Rush",
+          "song": "The Big Money",
+          "chart": "Billboard Top Rock Tracks",
+          "chartDate": "1985-11-09",
+          "basis": "Album-oriented radio airplay; not Hot 100",
+          "sourceRefs": [
+            2
+          ],
+          "confidence": "same-week"
+        },
+        {
+          "rank": 5,
+          "title": "Never",
+          "artist": "Heart",
+          "song": "Never",
+          "chart": "Billboard Top Rock Tracks",
+          "chartDate": "1985-11-09",
+          "basis": "Album-oriented radio airplay; not Hot 100",
+          "sourceRefs": [
+            2
+          ],
+          "confidence": "same-week"
+        }
+      ],
+      "briefs": [
+        {
+          "headline": "User-group BBS discovery",
+          "summary": "CGW’s telegaming survey points readers to local user groups and the P.A.M.S. BBS list via CompuServe GameSIG and The Source Member Publishing. It notes many free boards and some sysops charging $10–$30 yearly.",
+          "sourceRefs": [
+            1
+          ],
+          "confidence": "same-month"
+        },
+        {
+          "headline": "Viewtron at home",
+          "summary": "COMPUTE! p. 28 lists a $9.95 software starter kit including one free hour; later rates are nine cents/minute off-peak and 22 cents/minute daytime weekdays, with no monthly minimum or 1200-bps surcharge.",
+          "sourceRefs": [
+            0
+          ],
+          "confidence": "same-month"
+        },
+        {
+          "headline": "Gato patrols the South Pacific",
+          "summary": "COMPUTE! November review describes South Pacific submarine simulation with ten difficulty levels; Spectrum HoloByte; Apple/IBM $39.95, Macintosh $49.95.",
+          "sourceRefs": [
+            0
+          ],
+          "confidence": "same-month"
+        }
+      ],
+      "periodAd": {
+        "headline": "A mouse-driven desktop for $799.95",
+        "summary": "Atari’s November advertisement pairs the 520ST with monochrome monitor, drive, mouse and software. RGB color adds $200.",
+        "tagline": "Editorial reconstruction from a period advertisement, not quoted ad copy.",
+        "sourceRefs": [
+          0
+        ]
+      },
+      "market": {
+        "headline": "Online prices need two columns",
+        "summary": "CGW’s 300-baud telegaming table quotes subscription/off-peak hourly charges of $29.95/$6 for CompuServe, $49.95/$8.40 for The Source, $49.95/$6 for Delphi and $39.95/$2 for PlayNet. Compare signup and usage charges separately; these are the table’s terms, not every promotional offer.",
+        "sourceRefs": [
+          1
+        ],
+        "confidence": "same-month"
+      },
+      "worldAnchor": {
+        "headline": "Siege devastates Bogotá’s Palace of Justice",
+        "summary": "M-19 seized the Palace of Justice on November 6; the military retook it during November 6–7. Fire and the assault killed hostages and members of the judiciary.",
+        "sourceRefs": [
+          5
+        ],
+        "confidence": "exact-date"
+      },
+      "bbsNote": {
+        "headline": "Flat-rate experiments meet the telegaming boom",
+        "summary": "November primary coverage documents both PC Pursuit’s limited $25 BBS network trial and QuantumLink’s Commodore-focused graphics service. Editorial desk notes below are sourced summaries, not invented verbatim BBS messages.",
+        "posts": [
+          {
+            "topic": "BBS costs",
+            "platform": "GTE Telenet PC Pursuit",
+            "text": "Twelve-city evening/weekend trial: $25 monthly network access; commercial-service charges remain separate."
+          },
+          {
+            "topic": "Commodore online games",
+            "platform": "QuantumLink",
+            "text": "Special disk software supplies graphics and sound; chess, backgammon and hangman are described. Basic service $9.95 monthly; selected activities add six cents/minute."
+          },
+          {
+            "topic": "Finding local boards",
+            "platform": "CompuServe GameSIG / The Source",
+            "text": "CGW recommends the P.A.M.S. BBS list and user-group advice; free boards coexist with some $10–$30 annual memberships."
+          }
+        ],
+        "sourceRefs": [
+          0,
+          1
+        ]
+      },
+      "curiosity": {
+        "headline": "Read tomorrow’s science fiction over your modem",
+        "summary": "Baen Books lets online readers preview book chapters—and local BBSs may redistribute the files.",
+        "detail": "COMPUTE! November 1985 p. 20 reports Baen previews in CompuServe’s Science Fiction and Fantasy Forum. Files may be read, copied and distributed freely provided they are neither altered nor sold; local bulletin boards may retrieve and offer them without charge. Normal CompuServe connection charges still apply. This is a concrete early electronic-publishing experiment, not a claim that entire books are free.",
+        "sourceRefs": [
+          0
+        ]
+      },
+      "accuracyLedger": {
+        "items": [
+          "No milestone: current sources support important monthly stories but not an independently established era-defining event within November 4–10.",
+          "Gadget and underground beats were searched; no sufficiently verified week/month-specific breaking item or named scene identity was established, so optional fields are omitted.",
+          "Magazine cover dates establish monthly editorial context, not exact on-sale, shipment or announcement days. CGW is a combined November–December issue; date its awards and review to that issue rather than a fabricated day.",
+          "Keep QuantumLink launch-date uncertainty visible; November 1 predates this issue week.",
+          "Games are editorial selections, not a sales ranking. Music uses Billboard Top Rock Tracks November 9; movies use November 8–10 weekend receipts.",
+          "SSI’s 25,000 sales figure is a projection; 8,000 is the reported achieved total.",
+          "World bulletin uses the dated embassy-cable chronology, without later accountability findings or an unsupported casualty total."
+        ]
+      }
+    },
+    {
       "currentDate": "2026-11-24",
       "historicDate": "1985-10-28",
       "displayDate": "Week of October 28-November 3, 1985",

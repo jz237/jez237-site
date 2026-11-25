@@ -2,6 +2,22 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-11-25",
+      "historicDate": "1985-11-04",
+      "displayDate": "Week of November 4-10, 1985",
+      "edition": "Issue 171 - Weekly 1985 Computer & Culture Chronicle",
+      "morningLine": "Kampfgruppe takes the crown; Skara Brae beckons; the modem bill meets flat-rate experiments.",
+      "leadHeadline": "Kampfgruppe takes Computer Gaming World’s first crown",
+      "storyHeadlines": [
+        "The Bard’s Tale fills Skara Brae with music and danger",
+        "QuantumLink brings color games to the Commodore connection",
+        "PC Pursuit puts a flat fee against the long-distance bill"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1985-11-04.jpg",
+      "thumb": "media/thumbs/1985-11-04.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-11-24",
       "historicDate": "1985-10-28",
       "displayDate": "Week of October 28-November 3, 1985",
