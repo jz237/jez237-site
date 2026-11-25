@@ -284,6 +284,35 @@ def validate_factual_evidence(
     }
 
 
+def validate_factual_text(
+    text_path: Path,
+    title: str,
+    factual_topic: str,
+    factual_description: str,
+    source_note: str,
+    evidence: dict,
+) -> dict:
+    """Load and check one infographic's page text against its own record, before anything is made or saved.
+
+    The daily pipeline calls this before it generates the picture, and main() calls it before it saves or
+    uploads anything, so a text that needs fixing never leaves a half-finished entry behind.
+    """
+    builder = article_builder()
+    text = builder.read_text_file(Path(text_path).expanduser().resolve())
+    draft_row = {
+        "title": title,
+        "factualInfographic": {
+            "topic": factual_topic.strip(),
+            "description": factual_description.strip(),
+            "sourceNote": source_note.strip(),
+        },
+    }
+    problems = builder.check_text("page text", text, draft_row, evidence)
+    if problems:
+        raise SystemExit(f"The factual page text needs fixing (see {builder.GUIDE}):\n  " + "\n  ".join(problems))
+    return text
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--title", required=True)
@@ -395,20 +424,10 @@ def main() -> None:
         if not is_factual_infographic:
             raise SystemExit("--factual-text-file is only for factual infographics.")
         builder = article_builder()
-        factual_text = builder.read_text_file(Path(args.factual_text_file).expanduser().resolve())
-        draft_row = {
-            "title": args.title,
-            "factualInfographic": {
-                "topic": args.factual_topic.strip(),
-                "description": args.factual_description.strip(),
-                "sourceNote": source_note,
-            },
-        }
-        problems = builder.check_text("page text", factual_text, draft_row, factual_evidence)
-        if problems:
-            raise SystemExit(
-                f"The factual page text needs fixing (see {builder.GUIDE}):\n  " + "\n  ".join(problems)
-            )
+        factual_text = validate_factual_text(
+            Path(args.factual_text_file), args.title, args.factual_topic, args.factual_description,
+            source_note, factual_evidence,
+        )
 
     src = Path(args.image).expanduser().resolve()
     if not src.exists():

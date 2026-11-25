@@ -8,10 +8,19 @@ made, from the same claim sheet (`--factual-evidence-file`) that the picture was
     python3 append-entry.py ... --factual-evidence-file evidence.json --factual-text-file text.json
 
 `append-entry.py` checks the text before it saves or uploads anything. If it lists problems, fix the text
-file and run the same command again. To add or replace the text of an infographic that is already in the
-archive:
+file and run the same command again.
+
+The scheduled image pipeline (`image_archive_pipeline.py`) does not call `append-entry.py` by hand. There,
+save the text file next to the claim sheet and name it in `spec.json` as `factual.text_file`, beside
+`factual.evidence_file`. The pipeline checks it before the picture is generated, passes it on when it
+publishes, and commits it with the new entry. Fix any problem it reports and run the same step again.
+
+To add or replace the text of an infographic that is already in the archive:
 
     python3 build-infographic-articles.py --add-text <id> text.json
+
+That command changes files that then have to be committed and pushed. Do not run it in the scheduled
+pipeline's checkout between runs: the next run stops when it finds uncommitted changes there.
 
 Both save the text in `infographic-article-text.json`; do not edit that file or the monthly
 `infographic-articles-*.json` packs by hand. Without a text file the infographic still gets a page, but it

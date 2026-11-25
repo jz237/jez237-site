@@ -86,7 +86,9 @@ Cloudflare, which serves jez237.com, is not affected by a mirror failure.
   text for new ones too"): write it from the claim sheet as `experiments/image-gen-2-benchmark/INFOGRAPHIC_TEXT.md`
   describes and pass it to `append-entry.py` as `--factual-text-file <text.json>`, next to
   `--factual-evidence-file`. The script checks it before saving or uploading anything and stores it under the new
-  id. For an infographic already in the archive, `build-infographic-articles.py --add-text <id> <text.json>` does
+  id. The scheduled pipeline on the Evo X2 takes the same file as `factual.text_file` in its `spec.json` and
+  checks it with `append-entry.py`'s `validate_factual_text()` before it generates the picture; keep that
+  function's arguments as they are, or change the pipeline with it. For an infographic already in the archive, `build-infographic-articles.py --add-text <id> <text.json>` does
   the same. An entry with no written text still gets a page showing its research notes, and both scripts print
   `ACTION NEEDED` with its id until the text is written; do not leave one that way. Page styles: `infographic-article.css` (raise `STYLE_VERSION` in the
   builder when it changes). The gallery cards link to the page ("Read about it").
