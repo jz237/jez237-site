@@ -35765,5 +35765,115 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-11-25-factual-infographic-factual-infographic-sixline-wrasse",
+    "title": "Factual infographic: Sixline Wrasse",
+    "tests": "factual_subtype: reef-fish-infographic; ; archive_slot=2026-11-25T00:20; concept=sixline-wrasse-crustacean-foraging-branching-coral; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; fish_scientific_name: Pseudocheilinus hexataenia",
+    "prompt": "Create a fancy, highly detailed, colorful PHOTOREALISTIC reef-fish educational atlas, the finished artwork itself, not a photographed page or display. One species only: the sixline wrasse Pseudocheilinus hexataenia. Flowing asymmetric composition with exquisite photographic underwater realism and elegant legible typography, no rigid grid, no boxed cards. A large hero fish spans the central diagonal, emerging nose-first from an intricate branching coral thicket. Deep sapphire water, delicate cyan caustic rays, peach and lavender coral branches, emerald tail, vivid purple and orange fish. Preserve calm negative water around the head and title; soft depth of field behind, crisp overlapping scales, translucent fin rays, wet reflective eye and believable caudal anatomy on the hero. Correct real proportions of a small slender wrasse; no fantasy extensions, no mammalian teeth, no extra fins. On the purple body show the six orange longitudinal lines accurately, orange cheek stippled with tiny yellow dots, green caudal fin and peduncle, black spot edged blue on upper caudal peduncle. Red eye crossed by two fine pale horizontal stripes. Do not alter diagnostic markings for decoration.\nExact prominent title: \"SIXLINE WRASSE\". Immediately below, italic \"Pseudocheilinus hexataenia\". Secondary small line \"A ribbon hunter among coral branches\".\nWeave factual explanations into the reef through fine curved leader lines and unboxed open annotations. The hero is the clear visual anchor; three supporting studies blend naturally into the coral and open water at different scales: an enlarged cheek-and-eye photographic detail with label \"Orange cheek • fine yellow dots\"; a caudal-peduncle close-up labeled \"Blue-edged black eyespot\" (do not claim unverified function); and a magnified naturalistic small crustacean resting among coral branches, reached by a subtle feeding-path line from the hero's mouth, labeled \"Small crustaceans are prey\". Avoid making all studies equal size. Keep lines from covering the fish. A fine unobtrusive length marker below the fish reads \"About 7.5 cm / 3 in\". No other fish species.\nPlace concise, exact readable explanatory text in organically separated open water pockets, not panels:\n\"WILD HOME\" / \"Tropical Indo-West & Central Pacific\" / \"Clear coastal and seaward reefs • commonly 2–35 m deep\".\n\"SHELTER & FORAGING\" / \"Shy among branching corals; feeds on small crustaceans\" / \"May occur in small loose groups\".\n\"AQUARIUM IMPLICATIONS\" / \"Provide complex refuges and small meaty foods\" / \"Small crustaceans may be eaten—not all invertebrates are safe\" / \"Assess tankmates individually\".\nUnder the aquarium text, a small legible qualifier: \"Planning guidance inferred from wild habitat and diet—not a guarantee of compatibility.\" Do not invent minimum tank volumes, temperature, aggression ratings, disease cures, cleaning services, spawning cycles or blanket reef-safe claims. No tank-size number is needed. A subtle bottom credit: \"Sources: Australian Museum • Oregon Coast Aquarium • WoRMS\". Dense biological beauty with breathable spacing; precise clean text, premium underwater natural-history art, not a dashboard. Opaque finished image.",
+    "image": "images/2026-11-25-factual-infographic-factual-infographic-sixline-wrasse.jpg",
+    "thumb": "thumbs/2026-11-25-factual-infographic-factual-infographic-sixline-wrasse.webp",
+    "color": "#4f4b58",
+    "date": "2026-11-25",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "sixline-wrasse-crustacean-foraging-branching-coral",
+      "imageSha256": "ba57a3c61964ebcde878583089bae523c9ab62f2a01bffe58bb0cf80bc609f33",
+      "imageDHash": "1425a5d2620d34f5"
+    },
+    "factualInfographic": {
+      "topic": "Sixline wrasse (Pseudocheilinus hexataenia) branching-coral shelter, crustacean feeding and aquarium implications",
+      "description": "A photorealistic atlas of sixline wrasse identification, reef habitat, crustacean feeding and cautiously inferred aquarium planning.",
+      "sourceNote": "Actual source pages read; aquarium guidance explicitly distinguished as habitat/diet inference. https://australian.museum/learn/animals/fishes/sixline-wrasse-pseudocheilinus-hexataenia/ https://aquarium.org/animals/six-line-wrasse/ https://www.marinespecies.org/rest/AphiaRecordByAphiaID/208915 https://www.marinespecies.org/rest/AphiaSynonymsByAphiaID/208915",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-25T05:21:42.783111+00:00",
+        "sources": [
+          {
+            "id": "AM",
+            "publisher": "Australian Museum",
+            "title": "Sixline Wrasse, Pseudocheilinus hexataenia",
+            "sourceType": "museum",
+            "url": "https://australian.museum/learn/animals/fishes/sixline-wrasse-pseudocheilinus-hexataenia/"
+          },
+          {
+            "id": "OCA",
+            "publisher": "Oregon Coast Aquarium",
+            "title": "Six-line Wrasse",
+            "sourceType": "museum",
+            "url": "https://aquarium.org/animals/six-line-wrasse/"
+          },
+          {
+            "id": "W",
+            "publisher": "World Register of Marine Species",
+            "title": "Pseudocheilinus hexataenia accepted record",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://www.marinespecies.org/rest/AphiaRecordByAphiaID/208915"
+          },
+          {
+            "id": "WS",
+            "publisher": "World Register of Marine Species",
+            "title": "Synonyms of Pseudocheilinus hexataenia",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://www.marinespecies.org/rest/AphiaSynonymsByAphiaID/208915"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "The accepted marine species is Pseudocheilinus hexataenia (Bleeker, 1857), family Labridae; synonyms and recorded misspellings are those in the retained WoRMS response.",
+            "sourceIds": [
+              "W",
+              "WS"
+            ]
+          },
+          {
+            "claim": "The purplish body has six orange longitudinal stripes; orange cheek has fine yellow dots; caudal peduncle and fin are green with a blue-edged black ocellus on the upper peduncle.",
+            "sourceIds": [
+              "AM",
+              "OCA"
+            ]
+          },
+          {
+            "claim": "Eyes are red with two white horizontal stripes.",
+            "sourceIds": [
+              "OCA"
+            ]
+          },
+          {
+            "claim": "It occurs in tropical Indo-West and Central Pacific marine waters.",
+            "sourceIds": [
+              "AM"
+            ]
+          },
+          {
+            "claim": "It grows to about 7.5 cm (about 3 inches).",
+            "sourceIds": [
+              "OCA"
+            ]
+          },
+          {
+            "claim": "It inhabits seaward reefs among coral branches and dense clear coastal reefs, commonly at 2–35 m depth.",
+            "sourceIds": [
+              "OCA"
+            ]
+          },
+          {
+            "claim": "It feeds on small crustaceans and is shy, swimming within the protection of coral branches; small loose groups occur.",
+            "sourceIds": [
+              "OCA"
+            ]
+          },
+          {
+            "claim": "Aquarium planning inference, not a tested tank-size prescription: provide complex shelter reflecting its branching-coral habitat and small meaty foods reflecting its crustacean diet. Small crustaceans are potential prey, so no blanket all-invertebrates-safe claim is warranted; assess tankmate compatibility individually.",
+            "sourceIds": [
+              "OCA"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
