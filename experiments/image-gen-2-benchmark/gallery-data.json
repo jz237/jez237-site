@@ -35661,5 +35661,109 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-11-24-factual-infographic-factual-infographic-elephant-mosquito-t",
+    "title": "Factual infographic: Elephant Mosquito, Tree-Hole Predator",
+    "tests": "factual_subtype: bizarre-insect-life; ; archive_slot=2026-11-24T20:20; concept=elephant-mosquito-larvae-treehole-predation; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto",
+    "prompt": "Create a flowing unboxed natural-history atlas of the predatory elephant mosquito Toxorhynchites rutilus septentrionalis. Dominant whole adult macro hero with six legs, single pair of wings, iridescent scales and sharply down-curved proboscis, against water-filled woodland tree hole. Prominent labeled simplified GENERALIZED INSECT BODY PLAN schematic, not a species dissection: digestive tube, heart, spiracles and branching breathing tubes. Weave large detailed close-ups of curved nectar-feeding proboscis, predatory aquatic larva grasping smaller mosquito larva with mouth brushes, and larval head with powerful mandibles. Add organic curved life-stage sequence egg, aquatic larva, pupa, adult, and a tree-hole habitat vignette, scale note adult body may exceed 7 mm, range note Connecticut and southern New York. Explain larvae locate moving prey and eat mosquito larvae; adults take nectar, not blood. Use scientifically naturalistic fine detail, readable sparse labels, coherent deep green and iridescent blue light, delicate open leaders and generous breathing room. No grids, boxes, poster mockup or invented structures.",
+    "image": "images/2026-11-24-factual-infographic-factual-infographic-elephant-mosquito-t.jpg",
+    "thumb": "thumbs/2026-11-24-factual-infographic-factual-infographic-elephant-mosquito-t.webp",
+    "color": "#aeab89",
+    "date": "2026-11-24",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "elephant-mosquito-larvae-treehole-predation",
+      "imageSha256": "e8994f62803372278dd6242c8cf67c719db1764650f9d21367afa026951e20ab",
+      "imageDHash": "7efa3808c6660dc4"
+    },
+    "factualInfographic": {
+      "topic": "How predatory elephant mosquito Toxorhynchites rutilus septentrionalis larvae hunt in water-filled tree holes while adults feed on nectar",
+      "description": "Predatory larval and nectar-feeding adult life of the elephant mosquito.",
+      "sourceNote": "Rutgers and University of Kentucky describe the mosquito; Cornell supports generalized anatomy. https://vectorbio.rutgers.edu/outreach/species/sp2.htm https://www.uky.edu/Ag/Entomology/entdept/faculty/Brown/index_files/Page789.htm https://biocontrol.entomology.cornell.edu/bio.php",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-25T01:21:00.040230+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "Rutgers University",
+            "title": "The Carnivores, Toxorhynchites",
+            "sourceType": "university",
+            "url": "https://vectorbio.rutgers.edu/outreach/species/sp2.htm"
+          },
+          {
+            "id": "S2",
+            "publisher": "University of Kentucky",
+            "title": "Predatory Mosquito, Toxorhynchites rutilus septentrionalis",
+            "sourceType": "university",
+            "url": "https://www.uky.edu/Ag/Entomology/entdept/faculty/Brown/index_files/Page789.htm"
+          },
+          {
+            "id": "S3",
+            "publisher": "Cornell University",
+            "title": "Insect Biology and Ecology: A Primer",
+            "sourceType": "university",
+            "url": "https://biocontrol.entomology.cornell.edu/bio.php"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Toxorhynchites rutilus septentrionalis is a predatory mosquito found north to Connecticut and southern New York.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Larvae inhabit water-filled tree holes and containers, prey on mosquito larvae, and locate prey by movement.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Larval mouth brushes grasp prey and mandibles are powerful.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Adults feed on nectar, not blood, with a strongly curved proboscis.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Adults bear iridescent scales and can exceed 7 mm in body length.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Egg, larva, pupa and adult are stages of complete metamorphosis in flies.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "Generalized insect anatomy includes a digestive tube, heart, spiracles and branching breathing tubes.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "Insects have head, thorax, abdomen and three pairs of legs.",
+            "sourceIds": [
+              "S3"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
