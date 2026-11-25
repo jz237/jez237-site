@@ -213,6 +213,8 @@ export function createSection({ materials, bounds, onChange, scene }) {
 
   return {
     get active() { return active(); },
+    /** True while pieces are still being tested for watertightness (the studio draws less often meanwhile, so the test gets the time). */
+    get sweeping() { return untested.length > 0; },
     get state() { return { axis: s.axis, position: s.t, flip: s.flip, caps: s.caps, capped: capped.size, closed: [...closed.values()].filter(Boolean).length, tested: closed.size }; },
     applyTo,
     frame,

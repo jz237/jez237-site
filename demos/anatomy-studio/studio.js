@@ -11,7 +11,7 @@ import { finishMaterial, studioEnvironment, fileLabels, fileColors, modes, organ
 import { assemblies, bodyLandmarks, assemblyContext, assemblyOffset } from './assemblies.js?v=98fdd3ac69';
 import { bodyOffset, bodySpread, explodeSchedule } from './explode-rules.js?v=742c72af7e';
 import { layoutLabels } from './labels.js?v=5a33037751';
-import { createSection } from './section.js?v=1cae92ac81';
+import { createSection } from './section.js?v=0cc11da02a';
 import { createQuiz } from './quiz.js?v=1721c22256';
 import { createTour } from './tour.js?v=37c81856aa';
 import { keyFacts, relatedPieces, summary } from './facts.js?v=12aa155dc7';
@@ -53,7 +53,7 @@ let outline = null, mirror = null, bloomPass = null, bokehPass = null, tinting =
 // The assembled body breathes and its heart beats (life.js). Off for reduced motion, in the verification runs (they compare exact positions) and with ?life=0.
 const life = createLife(); life.on = params.has('life') ? params.get('life') !== '0' : !reducedMotion && !verifyQuality && !mobile;
 const pins = new Map();   // piece id -> a short note pinned to it
-let dryRun = false, vitals = null, flow = null, measure = null, flowOn = false, lifeSkip = false, saveShot = false, hovering = false, lesson = null;   // flow and the monitor wait to be asked for: the opening view is the model
+let dryRun = false, sweepDrawn = 0, vitals = null, flow = null, measure = null, flowOn = false, lifeSkip = false, saveShot = false, hovering = false, lesson = null;   // flow and the monitor wait to be asked for: the opening view is the model
 if (params.has('embed')) document.body.classList.add('embed');   // a bare stage for dropping into another page
 const pathQueue = [];
 const tintQueue = [];
@@ -681,7 +681,10 @@ function tick(now){
  const moved = controls.update(dt);
  const busy = moved || alwaysRender || state.sequence || explodeTween || viewTween || controls.autoRotate || state.amount !== state.target || state.loading || hi.loading.size;
  if (busy) invalidate(3);
- if (renderFrames <= 0) { quality.last = 0; return; }   // nothing changed: leave the last frame on screen
+ if (renderFrames <= 0) { quality.last = 0; return; }
+ // While a cross-section is still testing pieces for watertightness, draw about three frames a second: the test runs on timers,
+ // and on a slow machine back-to-back frames leave it no time (a software renderer took minutes over what should take seconds).
+ if (section?.sweeping && now - sweepDrawn < 330) { quality.last = 0; return; } sweepDrawn = now;   // nothing changed: leave the last frame on screen
  // Breathing and a heartbeat are slow: when they are the only thing moving, every other frame is enough and halves the work.
  if (alive > 0 && !busy && renderFrames <= 2 && (lifeSkip = !lifeSkip)) { quality.last = 0; return; }
  renderFrames--; rendered++;
