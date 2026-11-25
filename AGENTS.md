@@ -84,6 +84,14 @@ Cloudflare, which serves jez237.com, is not affected by a mirror failure.
   builder refuses text whose figures are not in the entry's record; `--check <file>` checks a file without building.
   An entry with no written text still gets a page showing its research notes, so a new daily infographic needs its
   text added to that file to match the others. Page styles: `infographic-article.css` (raise `STYLE_VERSION` in the
-  builder when it changes). The gallery cards and the enlarged view link to the page ("Read about it").
+  builder when it changes). The gallery cards link to the page ("Read about it").
+- In the galleries the text page opens as a pop-up over the gallery, in the same window (Jez, Nov 25 2026: "have the
+  read about it info page pop right up in the same window when you click on one"): a click on a factual infographic's
+  picture, its title or "Read about it" opens it. `experiments/image-gen-2-benchmark/infographic-reader.js` fetches
+  the page and shows its `<main>`, so there is still one copy of the text; `infographic-reader.css` styles the frame.
+  Back or Escape closes it, a click on the picture inside enlarges it, and if the fetch fails (or on the GitHub
+  mirror) the link opens the page itself. `themed-collection.js` loads the script on factual galleries and
+  `factual-infographics.html` has its own tag; raise `VERSION` in the script and the `?v=` in both when it changes.
+  The other galleries keep the plain enlarged view.
 - Scripts that locate themselves must use `fileURLToPath(import.meta.url)`, not `new URL(import.meta.url).pathname`,
   which yields `D:\D:\...` on Windows.

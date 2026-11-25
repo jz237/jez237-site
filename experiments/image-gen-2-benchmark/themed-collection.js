@@ -46,6 +46,17 @@
   const ARTICLE_BASE = location.hostname === 'jz237.github.io'
     ? 'https://jez237.com/experiments/image-gen-2-benchmark/infographics/' : 'infographics/';
   const articleUrl = (item) => `${ARTICLE_BASE}${encodeURIComponent(item.id)}/`;
+  // The text page opens as a pop-up over the gallery (infographic-reader.js), which also takes over the links to it.
+  if (isFactual) {
+    const reader = document.createElement('script');
+    reader.src = new URL('infographic-reader.js?v=20261125-popup', document.currentScript.src).href;
+    document.head.append(reader);
+  }
+  // A factual infographic's picture opens its text page; any other picture, or a failure, opens the enlarged view.
+  const showImage = (image) => {
+    if (image.dataset.article && window.InfographicReader && window.InfographicReader.open(image.dataset.article)) return;
+    openViewer(image.currentSrc || image.src, image.alt, image.dataset.article);
+  };
 
   const escapeHtml = (value) => String(value || '').replace(/[&<>'"]/g, (char) => ({
     '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
@@ -111,11 +122,11 @@
   function bindImages() {
     grid.querySelectorAll('.collection-image img').forEach((image) => {
       image.tabIndex = 0;
-      image.addEventListener('click', () => openViewer(image.currentSrc || image.src, image.alt, image.dataset.article));
+      image.addEventListener('click', () => showImage(image));
       image.addEventListener('keydown', (event) => {
         if (event.key === 'Enter' || event.key === ' ') {
           event.preventDefault();
-          openViewer(image.currentSrc || image.src, image.alt, image.dataset.article);
+          showImage(image);
         }
       });
     });

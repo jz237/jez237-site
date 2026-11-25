@@ -1,0 +1,40 @@
+/* The pop-up that shows a factual infographic's text page over its gallery (infographic-reader.js).
+   The page inside it is styled by infographic-article.css; colors come from museum-theme.css. */
+.ir-layer { position: fixed; inset: 0; z-index: 2000; display: flex; align-items: center; justify-content: center;
+  padding: 16px; background: rgba(4, 3, 2, .82); backdrop-filter: blur(6px); }
+.ir-layer[hidden], .ir-zoom[hidden] { display: none; }
+.ir-dialog { display: flex; flex-direction: column; width: min(100%, 1260px); height: 100%; overflow: hidden;
+  border: 1px solid var(--hair-strong); border-radius: 8px; background: var(--bg); color: var(--text); box-shadow: var(--shadow); }
+.ir-dialog:focus { outline: none; }
+.ir-bar { display: flex; flex: none; align-items: center; justify-content: space-between; gap: 12px; padding: 8px 12px 8px 18px;
+  border-bottom: 1px solid var(--hair); background: var(--panel); }
+.ir-page { color: var(--gold-bright); font-size: .82rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+  text-decoration: none; padding: 10px 0; }
+.ir-page:hover { text-decoration: underline; }
+.ir-close { min-height: 44px; padding: 8px 16px; border: 1px solid var(--hair-strong); border-radius: 999px; background: var(--panel-2);
+  color: var(--ivory); font: inherit; font-size: .92rem; font-weight: 700; cursor: pointer; }
+.ir-close:hover, .ir-close:focus-visible { border-color: var(--gold-bright); color: var(--gold-bright); }
+.ir-scroll { flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
+.ir-scroll:focus { outline: none; }
+.ir-wait { margin: 0; padding: 48px 24px; color: var(--muted); text-align: center; }
+
+/* Inside the pop-up the bar above does the job of the breadcrumb, and the picture has less height to sit in. */
+.ir-scroll .ia { padding-top: 22px; padding-bottom: 36px; }
+.ir-scroll .ia-crumbs { display: none; }
+.ir-scroll .ia-figure { top: 18px; }
+.ir-scroll .ia-figure img { max-height: calc(100vh - 190px); max-height: calc(100dvh - 190px); }
+.ir-scroll .ia-wide .ia-figure img { max-height: none; }
+.ir-scroll .ir-target { background: rgba(201, 162, 75, .16); outline: 6px solid rgba(201, 162, 75, .16); border-radius: 2px; }
+
+/* The picture at full size, over the pop-up; a click anywhere puts it away. */
+.ir-zoom { position: fixed; inset: 0; z-index: 1; overflow: auto; padding: 64px 12px 24px; background: rgba(3, 4, 3, .96);
+  text-align: center; cursor: zoom-out; }
+.ir-zoom img { display: inline-block; max-width: 100%; height: auto; }
+.ir-zoom-close { position: fixed; top: 10px; right: 14px; }
+
+@media (max-width: 860px) {
+  .ir-layer { padding: 0; }
+  .ir-dialog { width: 100%; border: 0; border-radius: 0; }
+  .ir-scroll .ia-figure img { max-height: none; }
+}
+@media print { .ir-layer { display: none; } }
