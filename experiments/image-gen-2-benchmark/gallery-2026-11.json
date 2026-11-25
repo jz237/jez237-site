@@ -227,6 +227,143 @@
     }
   },
   {
+    "id": "2026-11-25-factual-infographic-factual-infographic-green-chromis",
+    "title": "Factual infographic: Green Chromis",
+    "tests": "factual_subtype: reef-fish-infographic; Permanent fish reservations and complete factual topics checked; no repeated species or synonym. Two independent scientific publishers read in full. OATA supplemental industry guidance, not a scientific-publisher substitute. No tank-volume prescription; no subjective visual review.; archive_slot=2026-11-25T12:20; concept=green-chromis-plankton-feeding-acropora-shelter; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; fish_scientific_name: Chromis viridis",
+    "prompt": "Create a premium PHOTOREALISTIC scientific reef-fish atlas infographic, the finished artwork itself, not a photographed print. Feature ONE species only: GREEN CHROMIS, Chromis viridis. Prominent exact common-name heading “GREEN CHROMIS”, italic scientific name “Chromis viridis” directly beneath, with small subtitle “Plankton above, shelter below”. An asymmetric luminous underwater composition, not a grid: the dominant hero fish sweeps diagonally through the middle above a branching Acropora thicket. Exquisitely lifelike pale jade/blue-green iridescent scales, silvery paler belly, almond-shaped laterally compressed body, small mouth and large alert eye, translucent anatomically accurate fins and deep forked tail. No broad black patch at pectoral base (do not substitute blackaxil chromis). Natural photographic marine textures and underwater optics, fine fin rays and translucent membranes; cyan caustic sunlight, jade glints, deep petrol-blue negative space, restrained warm peach and violet coral accents. Hero dominates, delicate readable ivory typography and elegant fine leader lines integrated into light shafts and current curves; typography does not obscure the fish.\n\nA diminishing school of this SAME species curves from upper water down toward coral shelter, with two small fish visibly slipping between branches, all natural-sized relative to the coral. Label “A living refuge” and explain “Groups hover above branching Acropora, then retreat into shelter.” A tiny open habitat annotation, without an invented distribution map, reads “Tropical Indo-Pacific • including the Red Sea” and “Sheltered reef flats & lagoons • 1–20 m deep”. Beside a clean scale guide on the hero write “Reported maximum: 10 cm / about 4 in”.\n\nFlow into a large, airy close-up of the terminal mouth with a small translucent copepod and phytoplankton outside the lips: show modest believable jaw protrusion, no monstrous teeth. Clearly label the enlargement “Feeding close-up — enlarged, not to scale”. Exact concise explanation: “Daytime plankton feeder” / “Takes tiny drifting animals and phytoplankton.” Plankton should be natural scientific microforms, not decorative glowing eggs or oversized prey. This is feeding in open water, NOT biting coral.\n\nNear the lower reef edge, a smaller biological vignette shows a male hovering over a little patch of substrate-attached eggs, with subtle water-flow arrows from the caudal fin, clearly separated in scale from the main scene. Label “Nest guardian” and “The male guards and fans the eggs.” No pregnant belly, live birth, mouthbrooding or second fish species.\n\nIntegrate an unboxed, elegant aquarium-care ribbon along the quieter lower-right water gradient, with short readable lines beneath the heading “In a reef aquarium”. Use exact text: “Open swimming room + sheltered rockwork.” / “Generally peaceful; group members may squabble.” / “Check every tank mate — a wild shoal is not a guarantee.” / “Varied small foods: quality pellets or flakes plus frozen feeds.” / “Mature filtration; ammonia & nitrite: zero.” / “Corals have their own water-quality needs.” Clearly label these as aquarium guidance rather than measurements of wild ecology. Do not state universally reef-safe, guaranteed peaceful, beginner-proof, pest control, or a minimum tank volume; no unsupported care numbers. Keep beautiful reef colors, photorealism and biological accuracy; rich informative visual studies flowing organically with generous breathing space, no detached cards, no equal boxes, no dashboard, no oil paint or cartoon. If space is tight shorten ornamental material, not the species identity or care caveats. Small source credit: “Sources: FishBase • DORIS/FFESSM • Oregon Coast Aquarium • OATA”. No invented statistics or extraneous text.",
+    "image": "images/2026-11-25-factual-infographic-factual-infographic-green-chromis.jpg",
+    "thumb": "thumbs/2026-11-25-factual-infographic-factual-infographic-green-chromis.webp",
+    "color": "#39595d",
+    "date": "2026-11-25",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "green-chromis-plankton-feeding-acropora-shelter",
+      "imageSha256": "3e8ccdb26cd8880b5ab8a5c18f05e78555ece96df5addab0cc7008b935cb378c",
+      "imageDHash": "0047464df5f39533"
+    },
+    "factualInfographic": {
+      "topic": "Green chromis (Chromis viridis) plankton feeding, branching-coral shelter and aquarium compatibility",
+      "description": "A photorealistic atlas of the green chromis: verified identification, plankton feeding, branching-coral refuge, nest care and qualified aquarium guidance.",
+      "sourceNote": "Read scientific biology and identity from FishBase and DORIS, plus aquarium museum interpretation; WoRMS REST verified accepted identity and synonyms. Supplemental OATA industry technical guidance is explicitly distinguished from wild biology. Sources: https://www.fishbase.se/summary/Chromis-viridis.html https://doris.ffessm.fr/Especes/Chromis-viridis-Demoiselle-bleu-vert-2372 https://aquarium.org/animals/blue-green-chromis/ https://www.marinespecies.org/rest/AphiaSynonymsByAphiaID/212811 https://ornamentalfish.org/what-we-do/advice-information/care-sheets/caresheets-marine-fish/how-to-look-after-chromis-damselfish/",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-25T17:22:27.441556+00:00",
+        "sources": [
+          {
+            "id": "fb",
+            "publisher": "FishBase",
+            "title": "Chromis viridis, Blue green damselfish",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://www.fishbase.se/summary/Chromis-viridis.html"
+          },
+          {
+            "id": "doris",
+            "publisher": "FFESSM — DORIS biological commission",
+            "title": "Chromis viridis — Demoiselle bleu-vert",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://doris.ffessm.fr/Especes/Chromis-viridis-Demoiselle-bleu-vert-2372"
+          },
+          {
+            "id": "oca",
+            "publisher": "Oregon Coast Aquarium",
+            "title": "Blue-green Chromis",
+            "sourceType": "museum",
+            "url": "https://aquarium.org/animals/blue-green-chromis/"
+          },
+          {
+            "id": "worms",
+            "publisher": "WoRMS / VLIZ",
+            "title": "Chromis viridis accepted taxonomy and synonyms",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://www.marinespecies.org/rest/AphiaSynonymsByAphiaID/212811"
+          },
+          {
+            "id": "oata",
+            "publisher": "Ornamental Aquatic Trade Association",
+            "title": "How to look after chromis & damselfish — technical husbandry care sheet",
+            "sourceType": "manufacturer-technical-documentation",
+            "url": "https://ornamentalfish.org/what-we-do/advice-information/care-sheets/caresheets-marine-fish/how-to-look-after-chromis-damselfish/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Accepted marine species Chromis viridis (Cuvier, 1830), family Pomacentridae; synonyms Dascyllus cyanurus, Glyphisodon bandanensis, Heliases frenatus, Heliases lepisurus, Pomacentrus viridis.",
+            "sourceIds": [
+              "worms",
+              "doris"
+            ]
+          },
+          {
+            "claim": "Pale blue-green iridescent compressed body, visible scales, small terminal protractile mouth, translucent fins and deeply forked tail; lacks the distinct black pectoral-base patch of C. atripectoralis.",
+            "sourceIds": [
+              "doris",
+              "oca"
+            ]
+          },
+          {
+            "claim": "Reported maximum total length 10 cm (about 4 inches); other guides give smaller maxima, so label as up to 10 cm, not typical adult size.",
+            "sourceIds": [
+              "fb",
+              "oca"
+            ]
+          },
+          {
+            "claim": "Tropical Indo-Pacific including the Red Sea; sheltered reef flats and lagoons; reported depth 1–20 m.",
+            "sourceIds": [
+              "fb",
+              "oca",
+              "doris"
+            ]
+          },
+          {
+            "claim": "Diurnal plankton feeder, taking phytoplankton and zooplankton including copepods with a protrusible mouth; do not show a coral bite.",
+            "sourceIds": [
+              "doris",
+              "fb"
+            ]
+          },
+          {
+            "claim": "Large aggregations above branching Acropora; juveniles remain closely tied to coral heads; fish retreat into the coral for shelter.",
+            "sourceIds": [
+              "fb",
+              "oca",
+              "doris"
+            ]
+          },
+          {
+            "claim": "Male prepares nest, guards substrate-attached eggs and ventilates them with the caudal fin.",
+            "sourceIds": [
+              "fb",
+              "doris",
+              "oca"
+            ]
+          },
+          {
+            "claim": "Aquarium guidance for chromis: open swimming space plus rockwork cover; generally peaceful with peaceful species but may squabble; check compatibility rather than promise a harmonious school.",
+            "sourceIds": [
+              "oata"
+            ]
+          },
+          {
+            "claim": "Aquarium diet guidance for chromis: quality flake or pellet supplemented with appropriate frozen foods; avoid overfeeding.",
+            "sourceIds": [
+              "oata"
+            ]
+          },
+          {
+            "claim": "Reef aquarium caveat: coral requirements may alter group water recommendations; ammonia and nitrite should be zero; assess all tank mates and provide a mature filtered system rather than infer universal reef safety from wild schooling.",
+            "sourceIds": [
+              "oata"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
     "id": "2026-11-25-factual-infographic-factual-infographic-flame-hawkfish",
     "title": "Factual infographic: Flame Hawkfish",
     "tests": "factual_subtype: reef-fish-infographic; Wednesday reef-fish species unique; WoRMS and FishBase synonym verified; full packet topics checked; no tank-volume prescription; no subjective image review.; archive_slot=2026-11-25T08:20; concept=flame-hawkfish-scarlet-refuge-branching-pocillopora; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; fish_scientific_name: Neocirrhites armatus",
