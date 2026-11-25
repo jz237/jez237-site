@@ -19336,5 +19336,77 @@
     ]
    }
   ]
+ },
+ "2026-11-25-factual-infographic-factual-infographic-coral-beauty": {
+  "dek": "The coral beauty, Centropyge bispinosa, is a small angelfish of outer reef slopes. It grazes algae by day, shelters in reef crevices at night and is only conditionally suited to a reef aquarium.",
+  "glance": [
+   [
+    "Scientific name",
+    "Centropyge bispinosa"
+   ],
+   [
+    "Size",
+    "Adults can reach 10 cm, about 4 inches"
+   ],
+   [
+    "Range",
+    "Tropical Indo-West and Central Pacific"
+   ],
+   [
+    "Habitat",
+    "Outer reef slopes with crevices, at 5 to 45 m"
+   ],
+   [
+    "Diet",
+    "Mainly grazed algae, with plankton and some worms or small crustaceans"
+   ],
+   [
+    "Reef aquarium",
+    "Conditional: some individuals nip corals and clams"
+   ]
+  ],
+  "sections": [
+   {
+    "heading": "How to recognize it",
+    "body": [
+     "The coral beauty is a small angelfish with a laterally compressed body. Its head and its dorsal, anal and caudal fins are blue-purple, and the middle of the body is orange-yellow with blue lines or spots. Adults can reach 10 cm, about 4 inches.",
+     "FishBase lists Centropyge bispinosa as the accepted name, with the synonyms Holacanthus bispinosus and Centropyge bispinosus and the misspelling Centropyge hispinosus."
+    ],
+    "sources": [
+     "am",
+     "aop",
+     "fb"
+    ]
+   },
+   {
+    "heading": "Where it lives",
+    "body": [
+     "The species occurs in the tropical Indo-West and Central Pacific, from East Africa to Japan, Australia and the Tuamotu Islands. It lives on outer reef slopes, uses reef crevices for shelter and is found singly or in small groups. The Australian Museum reports depths of 5 to 45 m."
+    ],
+    "sources": [
+     "am"
+    ]
+   },
+   {
+    "heading": "Food and daily routine",
+    "body": [
+     "Grazing on algae is central to its diet. The fish is omnivorous and also takes plankton and some worms or small crustaceans. It feeds during the day and shelters in reef crevices at night. Its feeding territories can lead to mild aggression."
+    ],
+    "sources": [
+     "am",
+     "aop"
+    ]
+   },
+   {
+    "heading": "In an aquarium",
+    "body": [
+     "The aquarium guidance comes from an industry care sheet for dwarf angelfish in general, published by the Ornamental Aquatic Trade Association. It recommends a mature, filtered aquarium with plentiful rockwork for cover. Most dwarf angelfish do not tolerate their own or similar species, so the advice is to keep one unless the system is particularly large, has visual barriers and expert compatibility advice has been taken.",
+     "Compatibility with a reef aquarium is conditional. Some individuals nip corals and clams, so the fish cannot be guaranteed reef safe. For food, the care sheet suggests varied vegetable matter such as nori together with appropriate meaty frozen feeds, and many dwarf angelfish accept pellets and flakes. Ammonia and nitrite should be zero, and salinity and water quality should be monitored."
+    ],
+    "sources": [
+     "oata"
+    ]
+   }
+  ]
  }
 }
