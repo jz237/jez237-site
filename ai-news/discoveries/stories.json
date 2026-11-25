@@ -1,11 +1,57 @@
 {
   "version": 1,
   "title": "AI Discoveries, Explained",
-  "updated": "2026-11-24",
+  "updated": "2026-11-25",
   "coverageStart": "2026-09-21",
-  "coverageEnd": "2026-11-24",
+  "coverageEnd": "2026-11-25",
   "editorialNote": "Source-linked discoveries, research demonstrations, follow-ups and corrections from AI Discovery Watch. Historical milestones posted before the fresh-news brief are not included. Coverage dates are when a story was shared, not necessarily when its discovery occurred. Evidence labels reflect the linked report at that time; read later updates too.",
   "stories": [
+    {
+      "category": "Mathematics",
+      "evidenceKind": "proof",
+      "modelNote": "An internal Claude research model discovered the result; exact version undisclosed. Lean and nanoda are proof checkers, not discovery models.",
+      "sources": [
+        "https://hexagonmath.org/2611.00954v1",
+        "https://github.com/anthropics/formal-math/tree/main/vp-vnp",
+        "https://github.com/openai/math/tree/main/preprints/VP-and-VNP-are-different-November-23-2026",
+        "https://blog.computationalcomplexity.org/2026/11/vp-vnp.html"
+      ],
+      "status": "Major proof claim with author-reported machine checks; Anthropic says no human mathematician has checked its proof. Not independently verified here.",
+      "takeaway": "Anthropic says Claude found a proof that some calculations cannot be compressed into short chains of additions and multiplications. Released November 23, it would settle a decades-old question about the limits of this restricted kind of computing—not the broader P versus NP problem. Claude reportedly discovered the proof; people helped improve its presentation, while the full research setup is not disclosed. OpenAI released a separate proof claim the same day. Automated checking supports Anthropic’s formal proof, but does not establish that its formal statement captures everything claimed.",
+      "title": "Claude claims a major limit on shortcuts for calculations",
+      "id": "d-1575168532390478026-claude-valiant-arithmetic-shortcuts-proof-claim",
+      "coveredOn": "2026-11-25",
+      "context": "🔬 **AI Discovery Watch · November 25, 2026**\n\n**Claude claims a major limit on shortcuts for calculations**\nAnthropic says Claude found a proof that some calculations cannot be compressed into short chains of additions and multiplications. Released November 23, it would settle a decades-old question about the limits of this restricted kind of computing—not the broader P versus NP problem. Claude reportedly discovered the proof; people helped improve its presentation, while the full research setup is not disclosed. OpenAI released a separate proof claim the same day. Automated checking supports Anthropic’s formal proof, but does not establish that its formal statement captures everything claimed.\n\n**AI used:** An internal Claude research model discovered the result; exact version undisclosed. Lean and nanoda are proof checkers, not discovery models.\n**Evidence:** Major proof claim with author-reported machine checks; Anthropic says no human mathematician has checked its proof. Not independently verified here.\nOriginal source: <https://hexagonmath.org/2611.00954v1>\nSupporting source: <https://github.com/anthropics/formal-math/tree/main/vp-vnp>\nSupporting source: <https://github.com/openai/math/tree/main/preprints/VP-and-VNP-are-different-November-23-2026>\nSupporting source: <https://blog.computationalcomplexity.org/2026/11/vp-vnp.html>"
+    },
+    {
+      "category": "Medicine & biology",
+      "evidenceKind": "lab",
+      "modelNote": "Pre-release GPT-6.2 designed shapes and redesigned sequences. SolubleMPNN/ProteinMPNN supplied sequences in other stages; specialized models filtered candidates.",
+      "sources": [
+        "https://openai.com/index/gpt-6-models-demonstrate-intrinsic-protein-design-capabilities/"
+      ],
+      "status": "Early laboratory results reported by OpenAI and its research partner; not independent replication. Binding alone does not establish biological benefit or safety.",
+      "takeaway": "OpenAI reports that proteins built from GPT-6.2’s designs attached to five chosen biological targets in laboratory tests. In the November 24 report, 35 of 322 tested designs showed binding—a first step toward useful biological tools, not proof of a medicine. GPT-6.2 designed the shapes using reasoning and code; specialized biology models supplied their building-block sequences and helped select candidates. People chose target sites and arranged testing with research partner Onava. Separate tests also found binding after GPT-6.2 redesigned sequences, but this was not a fully independent, end-to-end protein-design system.",
+      "title": "GPT-designed protein shapes pass early laboratory tests",
+      "id": "d-1575168722619072625-gpt62-protein-shapes-laboratory-binding",
+      "coveredOn": "2026-11-25",
+      "context": "🔬 **AI Discovery Watch · November 25, 2026**\n\n**GPT-designed protein shapes pass early laboratory tests**\nOpenAI reports that proteins built from GPT-6.2’s designs attached to five chosen biological targets in laboratory tests. In the November 24 report, 35 of 322 tested designs showed binding—a first step toward useful biological tools, not proof of a medicine. GPT-6.2 designed the shapes using reasoning and code; specialized biology models supplied their building-block sequences and helped select candidates. People chose target sites and arranged testing with research partner Onava. Separate tests also found binding after GPT-6.2 redesigned sequences, but this was not a fully independent, end-to-end protein-design system.\n\n**AI used:** Pre-release GPT-6.2 designed shapes and redesigned sequences. SolubleMPNN/ProteinMPNN supplied sequences in other stages; specialized models filtered candidates.\n**Evidence:** Early laboratory results reported by OpenAI and its research partner; not independent replication. Binding alone does not establish biological benefit or safety.\nOriginal source: <https://openai.com/index/gpt-6-models-demonstrate-intrinsic-protein-design-capabilities/>"
+    },
+    {
+      "category": "Research in action",
+      "evidenceKind": "demo",
+      "modelNote": "Source identifiers: claude-opus-4-8 led research/deep auditing; Haiku 4.5 triaged checks. Planning also used Gemini 3.1 Pro, GPT-5.5 and DeepSeek V4 Pro; Sonnet 4.5 wrote.",
+      "sources": [
+        "https://arxiv.org/abs/2611.28324",
+        "https://arxiv.org/html/2611.28324v1#A9"
+      ],
+      "status": "Early simulation-based demonstration, not independently replicated. Only 21 of 50 main calculations met the strict settling criterion; others were retained as approximate results.",
+      "takeaway": "An AI research team changed its explanation of a simulated catalyst after spotting an unfair comparison. In a November 20 preprint, MatHarness initially blamed a surface’s shape for changing how atoms gather there, then designed follow-up calculations showing that crowding also mattered. It revised hypotheses and experiments across a weeks-long computational study. People supplied expert procedures, set the goal and intervened 16 times, including approving changes. This is a promising research-process demonstration, not a proven improvement to an industrial catalyst; it covers one study, and many calculations did not fully settle.",
+      "title": "AI revises a catalyst study after catching a misleading explanation",
+      "id": "d-1575168977565384785-matharness-corrects-catalyst-simulation-explanation",
+      "coveredOn": "2026-11-25",
+      "context": "🔬 **AI Discovery Watch · November 25, 2026**\n\n**AI revises a catalyst study after catching a misleading explanation**\nAn AI research team changed its explanation of a simulated catalyst after spotting an unfair comparison. In a November 20 preprint, MatHarness initially blamed a surface’s shape for changing how atoms gather there, then designed follow-up calculations showing that crowding also mattered. It revised hypotheses and experiments across a weeks-long computational study. People supplied expert procedures, set the goal and intervened 16 times, including approving changes. This is a promising research-process demonstration, not a proven improvement to an industrial catalyst; it covers one study, and many calculations did not fully settle.\n\n**AI used:** Source identifiers: claude-opus-4-8 led research/deep auditing; Haiku 4.5 triaged checks. Planning also used Gemini 3.1 Pro, GPT-5.5 and DeepSeek V4 Pro; Sonnet 4.5 wrote.\n**Evidence:** Early simulation-based demonstration, not independently replicated. Only 21 of 50 main calculations met the strict settling criterion; others were retained as approximate results.\nOriginal source: <https://arxiv.org/abs/2611.28324>\nSupporting source: <https://arxiv.org/html/2611.28324v1#A9>"
+    },
     {
       "category": "Research in action",
       "evidenceKind": "demo",
