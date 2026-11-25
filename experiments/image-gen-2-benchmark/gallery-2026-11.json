@@ -227,6 +227,126 @@
     }
   },
   {
+    "id": "2026-11-25-factual-infographic-factual-infographic-flame-hawkfish",
+    "title": "Factual infographic: Flame Hawkfish",
+    "tests": "factual_subtype: reef-fish-infographic; Wednesday reef-fish species unique; WoRMS and FishBase synonym verified; full packet topics checked; no tank-volume prescription; no subjective image review.; archive_slot=2026-11-25T08:20; concept=flame-hawkfish-scarlet-refuge-branching-pocillopora; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; fish_scientific_name: Neocirrhites armatus",
+    "prompt": "Create a lavish, highly detailed COLOR PHOTOREALISTIC aquarium reef-fish educational atlas as one finished flowing artwork, not a photographed printed poster. Title in elegant clear type: FLAME HAWKFISH. Directly beneath: Neocirrhites armatus. Secondary line: Scarlet life among coral branches.\n\nOne species only. Dominant large anatomically credible flame hawkfish diagonally nestled into a luminous branching Pocillopora refuge, occupying the central half of the composition, head down-right and tail upper-left. Accurate compact deep scarlet-red body, short blunt snout, conspicuous dark ring around the eye, dark blackish band/saddle along upper back and dorsal area, realistic red fins, fine scale microtexture, moist reflective cornea, gill cover and natural fin membranes. Do not turn it into the longnose hawkfish: no elongated beak, no white body with a red lattice. Keep fins anatomically placed, naturally articulated and continuous with the body. Showcase minute skin texture and sophisticated underwater macro photography, real depth of field and delicate particulate sparkle. Hero rests within branch shelter, not a cartoon posing on a pedestal.\n\nBuild an asymmetrical, immersive underwater composition with azure negative water above and right, peach-pink branching coral curling up from lower left, subtly violet reef shadows and scarlet focal color. Beautiful caustic lighting, controlled vibrant reef colors, sunlight shafts, luminous but physically plausible tissue. No rigid grid, no cards, no border boxes. Open typographic callouts linked with exceptionally fine warm-white leader curves, generous breathing space, large readable typography. Weave a few biological studies into the coral/water space: a large detail of the dark eye-ring and upper-back marking continuing naturally from the hero through a curved leader; a small ecological vignette showing the SAME species retreating between coral branches; and a delicate enlarged small-crustacean prey study labeled enlargement, without a false claim of a particular prey species. A restrained blue Pacific range motif can sit behind the habitat text, no exact boundary polygon or invented geographic locations. A curved scale annotation beside the fish reads 'Up to 9 cm / 3.5 in total length'.\n\nRender these concise factual text passages legibly and integrate them into the visual journey, not paragraphs in detached boxes:\n'Pacific reef resident — Ryukyu Islands to the Line Islands and Mangareva; south to the Great Barrier Reef and Austral Islands.'\n'Shallow coral refuge — typically 1–10 m deep. Shelters within Pocillopora and Stylophora; retreats deeper when approached.'\n'Small-prey hunter — adults eat small crustaceans.'\n'Natural history → aquarium care' as a subtle flowing transition, followed by 'Well-oxygenated water and secure shelter matter.'\n'Reef-tank caveat — coral shelter is not a universal reef-safe guarantee. Small ornamental crustaceans may be at risk; assess the whole livestock community.' Make clear the aquarium caution is inferred from feeding biology, not proof every individual attacks every shrimp. Avoid unsupported aggression ratings, longevity, temperature prescriptions, conservation status, venom or reproduction diagrams. Do not print a tank-volume number, do not imply suitable for a tiny aquarium, and do not claim a guaranteed peaceful temperament.\n\nFine discreet source footer: 'Sources: FishBase • Leray et al., PeerJ (2015) • University of Michigan ADW • WoRMS'. Keep the dominant animal sumptuous and lifelike; this is a richly informative flowing photographic atlas, not a sparse title poster or crowded wall of text. No invented anatomical cutaway, no other fish species as decorative foreground heroes.",
+    "image": "images/2026-11-25-factual-infographic-factual-infographic-flame-hawkfish.jpg",
+    "thumb": "thumbs/2026-11-25-factual-infographic-factual-infographic-flame-hawkfish.webp",
+    "color": "#5e4f59",
+    "date": "2026-11-25",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "flame-hawkfish-scarlet-refuge-branching-pocillopora",
+      "imageSha256": "e0044d34adcf16971a2761b585e08929581f776114f1eaaf79e2b1d6c93b9cc7",
+      "imageDHash": "c041ede33395b85b"
+    },
+    "factualInfographic": {
+      "topic": "Flame hawkfish (Neocirrhites armatus) branching-coral refuge, small-crustacean diet and aquarium implications",
+      "description": "A photorealistic atlas of the flame hawkfish: diagnostic coloration, Pacific distribution, branching-coral refuge, crustacean feeding and carefully qualified aquarium implications.",
+      "sourceNote": "Read FishBase species and synonym pages, WoRMS API records, PeerJ abstract/introduction/methods via PMC, and ADW original page plus identified adult photograph. Aquarium compatibility caution is explicitly diet-based inference. Sources: https://www.fishbase.se/summary/Neocirrhites-armatus.html ; https://pmc.ncbi.nlm.nih.gov/articles/PMC4485734/ ; https://animaldiversity.org/collections/contributors/tanya_dewey/unknownfish1/ ; https://www.marinespecies.org/rest/AphiaRecordByAphiaID/281678 ; https://www.marinespecies.org/rest/AphiaSynonymsByAphiaID/281678",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-25T13:22:00.836361+00:00",
+        "sources": [
+          {
+            "id": "fishbase",
+            "publisher": "FishBase Consortium",
+            "title": "Neocirrhites armatus species summary",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://www.fishbase.se/summary/Neocirrhites-armatus.html"
+          },
+          {
+            "id": "peerj",
+            "publisher": "PeerJ",
+            "title": "Metabarcoding dietary analysis of coral dwelling predatory fish",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4485734/"
+          },
+          {
+            "id": "adw",
+            "publisher": "University of Michigan Museum of Zoology",
+            "title": "Flame hawkfish photograph by Tanya Dewey, Dallas Aquarium",
+            "sourceType": "university",
+            "url": "https://animaldiversity.org/collections/contributors/tanya_dewey/unknownfish1/"
+          },
+          {
+            "id": "worms",
+            "publisher": "World Register of Marine Species",
+            "title": "Neocirrhites armatus accepted record",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://www.marinespecies.org/rest/AphiaRecordByAphiaID/281678"
+          },
+          {
+            "id": "synonyms",
+            "publisher": "World Register of Marine Species",
+            "title": "Neocirrhites armatus synonyms",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://www.marinespecies.org/rest/AphiaSynonymsByAphiaID/281678"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Accepted scientific name Neocirrhites armatus, family Cirrhitidae; Neocirrhitus armatus is an unaccepted misspelling referring to the same species.",
+            "sourceIds": [
+              "worms",
+              "synonyms"
+            ]
+          },
+          {
+            "claim": "The adult specimen photographed by Tanya Dewey has a scarlet body, dark upper-back/dorsal marking and black ring around the eye, short snout and deep compact body; reproduce those external features, not a longnose hawkfish pattern.",
+            "sourceIds": [
+              "adw"
+            ]
+          },
+          {
+            "claim": "Pacific range from Ryukyu Islands to Line Islands and Mangareva, south to Great Barrier Reef and Austral Islands; reef-associated shallow tropical habitat, typical depth range 1–10 m.",
+            "sourceIds": [
+              "fishbase"
+            ]
+          },
+          {
+            "claim": "Maximum reported total length is 9 cm, approximately 3.5 inches, not a guaranteed size for every adult.",
+            "sourceIds": [
+              "fishbase"
+            ]
+          },
+          {
+            "claim": "Lives among branches of live Pocillopora and Stylophora corals; retreats deep into coral when approached.",
+            "sourceIds": [
+              "fishbase",
+              "peerj"
+            ]
+          },
+          {
+            "claim": "Adults eat small crustaceans. A Moorea dietary DNA study identified a broad prey assemblage; do not portray this as an obligate coral-polyp eater or assume all coral-associated prey are consumed equally.",
+            "sourceIds": [
+              "fishbase",
+              "peerj"
+            ]
+          },
+          {
+            "claim": "Aquarium relevance: commercially kept species requiring well-oxygenated water. Provide refuge and oxygenation as habitat-informed recommendations; small ornamental crustaceans should not be assumed safe because this fish eats small crustaceans. The latter is a precaution inferred from diet, not a quantified aquarium trial or universal reef-safe label.",
+            "sourceIds": [
+              "fishbase",
+              "peerj"
+            ]
+          },
+          {
+            "claim": "Coral refuge in the wild does not by itself prove universal reef-tank compatibility; assess livestock and individual behavior rather than asserting harmlessness to every tank mate. This is a scope-of-evidence caveat.",
+            "sourceIds": [
+              "fishbase",
+              "peerj"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
     "id": "2026-11-24-factual-infographic-factual-infographic-wheel-bug-the-cog-c",
     "title": "Factual infographic: Wheel Bug, the Cog-Crested Predator",
     "tests": "factual_subtype: bizarre-insect-life; species: Arilus cristatus; mechanism: enzyme injection and sucking liquefied prey; archive_slot=2026-11-24T12:20; concept=wheel-bug-piercing-beak-prey-digestion; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: bizarre-insect-life",
