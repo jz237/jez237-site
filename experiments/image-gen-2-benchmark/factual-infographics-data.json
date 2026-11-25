@@ -26820,5 +26820,122 @@
       },
       "group": "reef-fish"
     }
+  },
+  {
+    "id": "2026-11-25-factual-infographic-factual-infographic-coral-beauty",
+    "title": "Factual infographic: Coral Beauty",
+    "tests": "factual_subtype: reef-fish-infographic; Permanent fish reservations and full factual topics checked; accepted synonyms verified. Two independent museum publishers read; OATA supplemental industry guidance. No tank-volume prescription or subjective review.; archive_slot=2026-11-25T16:20; concept=coral-beauty-algae-cropping-outer-reef-crevice; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; fish_scientific_name: Centropyge bispinosa",
+    "prompt": "Create a fancy, richly colorful, highly detailed PHOTOREALISTIC reef-fish educational atlas as one finished flowing artwork, not a photographed poster. Title prominently “CORAL BEAUTY” and scientific name “Centropyge bispinosa” immediately underneath; smaller subtitle “The reef’s jewel-toned grazer”. Luxurious underwater photography realism, exquisite precise scales, believable fins and mouth, natural caustic lighting, readable graceful typography. Only this one fish species, no invented morphs or other fish. A dominant large adult coral beauty curves diagonally from lower-left to upper-right against an outer reef slope: laterally compressed dwarf-angelfish body, blue-purple head and dorsal/anal/caudal fins, glowing orange-yellow central flank carrying blue lines and spots, authentic natural pattern rather than fanciful stripes. Sharp eye, translucent pectoral fin, individual fin rays and fine scale relief. Electric indigo and warm amber fish against cool jade/turquoise water, soft rose coral textures and shadowed mineral crevices. Keep realistic coloration under clean balanced underwater lighting, never neon fantasy anatomy.\nCompose asymmetric open studies around the hero with generous negative water space; follow an S-shaped visual journey, delicate curved leader lines, no boxes, cards, grids or rigid panel structure. Upper-left open habitat vignette recedes down a rocky coral-covered slope into blue depth. Label “Tropical Indo-West & Central Pacific” and short note “Outer reef slopes • 5–45 m deep”. A fine locator line names “East Africa → Japan, Australia & Tuamotu Islands” without a detailed potentially misleading map. Below the hero a fine scale annotation reads “Up to 10 cm / 4 in”. Large intimate external macro study of its mouth beside algae-coated rock, visibly cropping fine algal growth, connected to the main fish by an elegant curved line; no invented internal anatomy or enlarged humanlike teeth. Label “Algae first” with concise text “An omnivore: algae plus plankton and small animal foods.” A small twilight crevice study at right shows the same species partly sheltered, with “Feed by day. Shelter by night.” and “Seen alone or in small groups; feeding territories can prompt aggression.” Keep all minor fish recognizable as studies of the same species, not a school or additional species.\nAlong the lower flowing reef silhouette weave clearly distinguished aquarium guidance, not claims that a reef scene itself proves aquarium suitability. Heading “IN THE AQUARIUM”. Three readable unboxed notes connected by subtle current-like lines: “Mature, filtered system • plenty of rockwork cover”; “Varied foods: nori, suitable frozen foods & accepted pellets”; “Usually one dwarf angel: similar species can clash.” Final important, clearly readable amber open callout near a subtle coral-and-clam silhouette, not a fish biting anything: “REEF COMPATIBILITY IS CONDITIONAL” followed by “Some individuals nip corals and clams. Check tank mates and monitor behavior.” Tiny useful maintenance note “Ammonia & nitrite: zero. Monitor salinity and water quality.” Do not invent a minimum tank volume or universal reef-safe badge. Preserve essentials while keeping main artwork dominant; omit decorative flourishes rather than shrinking text. No spawning, sex-change diagrams, longevity or conservation claims. Footer in refined small readable lettering “Sources: Australian Museum • Aquarium of the Pacific • FishBase • OATA husbandry guidance”. Render the finished infographic directly with luxurious depth and anatomical fidelity.",
+    "image": "images/2026-11-25-factual-infographic-factual-infographic-coral-beauty.jpg",
+    "thumb": "thumbs/2026-11-25-factual-infographic-factual-infographic-coral-beauty.webp",
+    "color": "#48515b",
+    "date": "2026-11-25",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "coral-beauty-algae-cropping-outer-reef-crevice",
+      "imageSha256": "b2d430a8451bc4651e74396381d333bacd0b44e2b017f1d65bad023ae61c7b28",
+      "imageDHash": "30ccccc8f6991307"
+    },
+    "factualInfographic": {
+      "topic": "Coral beauty (Centropyge bispinosa) algae grazing, reef-crevice shelter and aquarium compatibility",
+      "description": "Photorealistic species atlas connecting algae grazing, outer-reef shelter and conditional aquarium compatibility.",
+      "sourceNote": "Australian Museum and Aquarium of the Pacific independently read; FishBase accepted taxonomy and synonyms read; OATA supplemental industry husbandry guidance, not counted as either scientific publisher. https://australian.museum/learn/animals/fishes/coral-beauty-centropyge-bispinosa-guumlnther-1860/ https://www.aquariumofpacific.org/onlinelearningcenter/species/coral_beauty_angelfish https://fishbase.se/Nomenclature/SynonymsList.php?GenusName=Centropyge&ID=5458&SpeciesName=bispinosa&SynCode=143216 https://ornamentalfish.org/what-we-do/advice-information/care-sheets/caresheets-marine-fish/how-to-look-after-dwarf-angelfish/",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-25T21:21:51.359721+00:00",
+        "sources": [
+          {
+            "id": "am",
+            "publisher": "Australian Museum",
+            "title": "Coral Beauty, Centropyge bispinosa",
+            "sourceType": "museum",
+            "url": "https://australian.museum/learn/animals/fishes/coral-beauty-centropyge-bispinosa-guumlnther-1860/"
+          },
+          {
+            "id": "aop",
+            "publisher": "Aquarium of the Pacific",
+            "title": "Coral Beauty Angelfish",
+            "sourceType": "museum",
+            "url": "https://www.aquariumofpacific.org/onlinelearningcenter/species/coral_beauty_angelfish"
+          },
+          {
+            "id": "fb",
+            "publisher": "FishBase",
+            "title": "Synonyms of Centropyge bispinosa",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://fishbase.se/Nomenclature/SynonymsList.php?GenusName=Centropyge&ID=5458&SpeciesName=bispinosa&SynCode=143216"
+          },
+          {
+            "id": "oata",
+            "publisher": "Ornamental Aquatic Trade Association",
+            "title": "How to look after dwarf angelfish — industry technical husbandry care sheet",
+            "sourceType": "manufacturer-technical-documentation",
+            "url": "https://ornamentalfish.org/what-we-do/advice-information/care-sheets/caresheets-marine-fish/how-to-look-after-dwarf-angelfish/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Accepted name Centropyge bispinosa; synonyms Holacanthus bispinosus, Centropyge bispinosus, and misspelling Centropyge hispinosus.",
+            "sourceIds": [
+              "fb"
+            ]
+          },
+          {
+            "claim": "Blue-purple head and dorsal, anal and caudal fins; orange-yellow mid-body with blue lines or spots; small laterally compressed angelfish shape.",
+            "sourceIds": [
+              "am",
+              "aop"
+            ]
+          },
+          {
+            "claim": "Adults can reach 10 cm, about 4 inches.",
+            "sourceIds": [
+              "aop"
+            ]
+          },
+          {
+            "claim": "Tropical Indo-West and Central Pacific from East Africa to Japan, Australia and Tuamotu Islands; outer reef slopes, reef crevices for shelter, singly or small groups. Australian Museum reports depths 5–45 m.",
+            "sourceIds": [
+              "am"
+            ]
+          },
+          {
+            "claim": "Algae grazing is central to diet; omnivorous, also plankton and some worms or small crustaceans.",
+            "sourceIds": [
+              "am",
+              "aop"
+            ]
+          },
+          {
+            "claim": "Daytime feeding, night shelter in reef crevices; feeding territories can lead to mild aggression.",
+            "sourceIds": [
+              "aop"
+            ]
+          },
+          {
+            "claim": "Aquarium recommendations for dwarf angelfish: mature filtered aquarium, plentiful rockwork cover; most do not tolerate same or similar species, keep one unless system is particularly large with visual barriers and expert compatibility advice.",
+            "sourceIds": [
+              "oata"
+            ]
+          },
+          {
+            "claim": "Reef aquarium compatibility is conditional: some individuals nip corals and clams; do not guarantee reef safety.",
+            "sourceIds": [
+              "oata"
+            ]
+          },
+          {
+            "claim": "Dwarf angelfish aquarium feeding: varied vegetable matter such as nori plus appropriate meaty frozen feeds; many accept pellets and flakes. Ammonia and nitrite zero; monitor salinity and water quality.",
+            "sourceIds": [
+              "oata"
+            ]
+          }
+        ]
+      },
+      "group": "reef-fish"
+    }
   }
 ]
