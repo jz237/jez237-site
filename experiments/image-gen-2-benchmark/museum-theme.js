@@ -14,3 +14,11 @@
     set(document.body.dataset.density === '3' ? '2' : '3', true);
   });
 })();
+
+// On phones the section row scrolls sideways; bring the current section into view.
+(function () {
+  var nav = document.querySelector('.series-nav:not(.series-subnav)');
+  var current = nav && nav.querySelector('a[aria-current]');
+  if (!current || nav.scrollWidth <= nav.clientWidth) return;
+  nav.scrollLeft = Math.max(0, current.offsetLeft - (nav.clientWidth - current.offsetWidth) / 2);
+})();

@@ -13,7 +13,8 @@
     "factualInfographic": {
       "topic": "Cut vinyl decal construction and application",
       "description": "A real-world sign-shop infographic showing how cut vinyl, adhesive, liner, transfer tape, weeding, alignment, surface prep, pressure, and peel angle fit together.",
-      "sourceNote": "Real-world/non-fiction topic; general sign-shop workflow, no invented statistics."
+      "sourceNote": "Real-world/non-fiction topic; general sign-shop workflow, no invented statistics.",
+      "group": "how-things-work"
     }
   },
   {
@@ -30,7 +31,8 @@
     "factualInfographic": {
       "topic": "Planted aquarium nitrogen cycle",
       "description": "A real-world aquarium-care infographic showing how waste becomes ammonia, nitrite, and nitrate, how nitrifying bacteria and plants interact, and why testing and water changes matter.",
-      "sourceNote": "Real-world/non-fiction topic; conservative aquarium-care basics, no invented statistics."
+      "sourceNote": "Real-world/non-fiction topic; conservative aquarium-care basics, no invented statistics.",
+      "group": "nature-science"
     }
   },
   {
@@ -47,7 +49,8 @@
     "factualInfographic": {
       "topic": "Direct thermal receipt paper fading",
       "description": "A real-world materials-science infographic explaining how direct thermal receipt paper forms marks through heat-activated coating chemistry and why heat, UV, abrasion, oils, plasticizers, solvents, humidity, and poor storage can fade it.",
-      "sourceNote": "Conservative general materials knowledge: direct thermal paper uses heat-sensitive dye/developer coatings; storage advice avoids heat, sunlight, abrasion, solvents, plasticizers, oils, and humidity."
+      "sourceNote": "Conservative general materials knowledge: direct thermal paper uses heat-sensitive dye/developer coatings; storage advice avoids heat, sunlight, abrasion, solvents, plasticizers, oils, and humidity.",
+      "group": "how-things-work"
     }
   },
   {
@@ -64,7 +67,8 @@
     "factualInfographic": {
       "topic": "mechanical fire sprinkler head",
       "description": "Explains a common automatic fire sprinkler head with cutaway parts, heat-release concept, water path, deflector spray behavior, and conservative inspection-safe visual clues.",
-      "sourceNote": "Conservative general fire-protection engineering knowledge; no installation procedure, legal/code advice, or fake exact statistics."
+      "sourceNote": "Conservative general fire-protection engineering knowledge; no installation procedure, legal/code advice, or fake exact statistics.",
+      "group": "how-things-work"
     }
   },
   {
@@ -81,7 +85,8 @@
     "factualInfographic": {
       "topic": "How a Quartz Watch Keeps Time",
       "description": "A conservative real-world horology/electronics infographic explaining how a quartz wristwatch turns a battery-powered crystal oscillator into hand movement.",
-      "sourceNote": "Evergreen general horology/electronics knowledge; uses conservative mechanism descriptions and a typical 32,768 Hz quartz watch oscillator reference."
+      "sourceNote": "Evergreen general horology/electronics knowledge; uses conservative mechanism descriptions and a typical 32,768 Hz quartz watch oscillator reference.",
+      "group": "how-things-work"
     }
   },
   {
@@ -98,7 +103,8 @@
     "factualInfographic": {
       "topic": "honeybee waggle dance communication",
       "description": "Explains how a worker honeybee's waggle run, return loops, dance angle, and waggle duration/vigor communicate food direction and general distance to nestmates.",
-      "sourceNote": "Conservative general entomology knowledge; avoids fake exact statistics and presents only widely accepted concepts."
+      "sourceNote": "Conservative general entomology knowledge; avoids fake exact statistics and presents only widely accepted concepts.",
+      "group": "insects"
     }
   },
   {
@@ -115,7 +121,8 @@
     "factualInfographic": {
       "topic": "bicycle freehub body",
       "description": "Explains how a bicycle freehub body engages under pedaling load and clicks while coasting, with core parts and maintenance observations.",
-      "sourceNote": "Conservative general bicycle-mechanics knowledge; avoids brand-specific claims and precise statistics."
+      "sourceNote": "Conservative general bicycle-mechanics knowledge; avoids brand-specific claims and precise statistics.",
+      "group": "how-things-work"
     }
   },
   {
@@ -132,7 +139,8 @@
     "factualInfographic": {
       "topic": "magnetic refrigerator gasket",
       "description": "Shows how a flexible magnetic refrigerator door gasket compresses against the cabinet, limits warm-air leaks, and can develop condensation risk when dirty, twisted, or poorly seated.",
-      "sourceNote": "Conservative general appliance-engineering knowledge; avoids brand-specific instructions, fake statistics, and unsafe bypass details."
+      "sourceNote": "Conservative general appliance-engineering knowledge; avoids brand-specific instructions, fake statistics, and unsafe bypass details.",
+      "group": "how-things-work"
     }
   },
   {
@@ -149,7 +157,8 @@
     "factualInfographic": {
       "topic": "Manual can opener mechanism",
       "description": "A conservative non-fiction engineering infographic explaining how a handheld rotary can opener clamps, feeds, and cuts around a can lid.",
-      "sourceNote": "General real-world mechanical description; no brand-specific claims, exact statistics, or repair instructions."
+      "sourceNote": "General real-world mechanical description; no brand-specific claims, exact statistics, or repair instructions.",
+      "group": "how-things-work"
     }
   },
   {
@@ -166,7 +175,8 @@
     "factualInfographic": {
       "topic": "Zipper slider tooth interlocking mechanism",
       "description": "Explains how a real zipper slider guides separated teeth into an interlocked chain, with conservative engineering labels and repair-bench context.",
-      "sourceNote": "Real-world/non-fiction mechanical topic; conservative general zipper construction, no invented statistics or repair procedure."
+      "sourceNote": "Real-world/non-fiction mechanical topic; conservative general zipper construction, no invented statistics or repair procedure.",
+      "group": "how-things-work"
     }
   },
   {
@@ -183,7 +193,8 @@
     "factualInfographic": {
       "topic": "Mechanical pencil clutch mechanism",
       "description": "A real-world engineering infographic explaining how a push-button mechanical pencil opens its clutch, advances graphite lead, and grips it again.",
-      "sourceNote": "Conservative general mechanical description of common push-button mechanical pencil clutch mechanisms; exact construction varies by pencil design."
+      "sourceNote": "Conservative general mechanical description of common push-button mechanical pencil clutch mechanisms; exact construction varies by pencil design.",
+      "group": "how-things-work"
     }
   },
   {
@@ -200,7 +211,8 @@
     "factualInfographic": {
       "topic": "Dinoflagellate bioluminescence in glowing surf",
       "description": "A non-fiction marine science infographic explaining why disturbed plankton-rich seawater can flash blue in breaking waves.",
-      "sourceNote": "Real-world/non-fiction topic; based on conservative general marine biology: many glowing surf events involve dinoflagellates whose bioluminescence is triggered by mechanical disturbance, with visibility affected by darkness and bloom density."
+      "sourceNote": "Real-world/non-fiction topic; based on conservative general marine biology: many glowing surf events involve dinoflagellates whose bioluminescence is triggered by mechanical disturbance, with visibility affected by darkness and bloom density.",
+      "group": "nature-science"
     }
   },
   {
@@ -217,7 +229,8 @@
     "factualInfographic": {
       "topic": "Retroreflective sign vinyl optics",
       "description": "Real-world sign-material science explaining how microprismatic or glass-bead retroreflective sheeting sends headlight rays back toward the driver instead of glowing on its own.",
-      "sourceNote": "Conservative general optics/materials summary: retroreflective sheeting uses glass beads or cube-corner microprisms to return much of incoming light toward its source; no proprietary specifications or exact performance numbers."
+      "sourceNote": "Conservative general optics/materials summary: retroreflective sheeting uses glass beads or cube-corner microprisms to return much of incoming light toward its source; no proprietary specifications or exact performance numbers.",
+      "group": "how-things-work"
     }
   },
   {
@@ -234,7 +247,8 @@
     "factualInfographic": {
       "topic": "Ctenophore comb-row iridescence from moving cilia",
       "description": "Explains how comb jellies produce traveling rainbow shimmer through structural light scattering from beating ciliary plates, contrasted with true bioluminescence.",
-      "sourceNote": "Real-world/non-fiction marine biology and optics; comb-jelly rainbow bands are primarily structural scattering/diffraction from moving comb rows under external light, distinct from bioluminescence."
+      "sourceNote": "Real-world/non-fiction marine biology and optics; comb-jelly rainbow bands are primarily structural scattering/diffraction from moving comb rows under external light, distinct from bioluminescence.",
+      "group": "nature-science"
     }
   },
   {
@@ -251,7 +265,8 @@
     "factualInfographic": {
       "topic": "Heat dome formation and persistence",
       "description": "A real-world weather infographic explaining how a persistent high-pressure ridge can suppress clouds and mixing, steer storms around a region, and allow repeated solar heating and warm nights to build dangerous heat.",
-      "sourceNote": "Conservative general meteorology: heat domes involve persistent high pressure/ridging, sinking/compressing air, reduced cloud cover and mixing, jet-stream blocking patterns, and cumulative surface heating; not a literal glass dome."
+      "sourceNote": "Conservative general meteorology: heat domes involve persistent high pressure/ridging, sinking/compressing air, reduced cloud cover and mixing, jet-stream blocking patterns, and cumulative surface heating; not a literal glass dome.",
+      "group": "earth-space"
     }
   },
   {
@@ -270,7 +285,8 @@
     "factualInfographic": {
       "topic": "Frost flower formation on young sea ice",
       "description": "Explains how delicate frost flower ice crystals form over young sea ice in cold calm conditions and become salty by interacting with brine.",
-      "sourceNote": "Conservative real-world polar sea-ice science: frost flowers are non-living ice crystals produced by vapor gradients over young sea ice, with salinity from brine interaction."
+      "sourceNote": "Conservative real-world polar sea-ice science: frost flowers are non-living ice crystals produced by vapor gradients over young sea ice, with salinity from brine interaction.",
+      "group": "earth-space"
     }
   },
   {
@@ -289,7 +305,8 @@
     "factualInfographic": {
       "topic": "Pistol shrimp claw cavitation and bubble-collapse flash",
       "description": "A real-world marine biology and physics infographic explaining how a snapping shrimp claw creates a fast water jet, cavitation bubble, pressure pulse, and tiny flash.",
-      "sourceNote": "Conservative summary of established pistol shrimp cavitation observations: rapid claw closure forms a water jet, a vapor bubble collapses, and the collapse can create a pressure wave plus brief sonoluminescent light."
+      "sourceNote": "Conservative summary of established pistol shrimp cavitation observations: rapid claw closure forms a water jet, a vapor bubble collapses, and the collapse can create a pressure wave plus brief sonoluminescent light.",
+      "group": "nature-science"
     }
   },
   {
@@ -308,7 +325,8 @@
     "factualInfographic": {
       "topic": "Lithium-ion battery thermal runaway propagation",
       "description": "A conservative engineering infographic showing how overheating, separator failure, heat/gas generation, venting, and adjacent-cell heat transfer can propagate in lithium-ion cells, plus non-actionable safety design concepts.",
-      "sourceNote": "Based on broadly accepted lithium-ion battery safety concepts: layered cell construction, internal shorts, heat and gas generation, venting, thermal barriers, spacing, monitoring, and isolation; labels avoid exact temperatures and procedural failure instructions."
+      "sourceNote": "Based on broadly accepted lithium-ion battery safety concepts: layered cell construction, internal shorts, heat and gas generation, venting, thermal barriers, spacing, monitoring, and isolation; labels avoid exact temperatures and procedural failure instructions.",
+      "group": "how-things-work"
     }
   },
   {
@@ -327,7 +345,8 @@
     "factualInfographic": {
       "topic": "Electrochromic smart glass tinting and ion movement in thin-film windows",
       "description": "Explains how electrochromic window layers darken and clear through ion movement, color-center formation, conductive coatings, and laminated material design.",
-      "sourceNote": "Real-world/non-fiction materials-science summary based on established electrochromic glass principles; no exact voltages or build instructions included."
+      "sourceNote": "Real-world/non-fiction materials-science summary based on established electrochromic glass principles; no exact voltages or build instructions included.",
+      "group": "how-things-work"
     }
   },
   {
@@ -346,7 +365,8 @@
     "factualInfographic": {
       "topic": "Termite mound ventilation and gas exchange",
       "description": "Explains how termite mounds buffer heat, humidity, oxygen, and carbon dioxide through porous walls, galleries, chimney passages, and temperature-driven airflow.",
-      "sourceNote": "General conservative biology: termite mounds vary by species, but many combine porosity, tunnels, thermal gradients, wind, and humidity buffering to support nest gas exchange."
+      "sourceNote": "General conservative biology: termite mounds vary by species, but many combine porosity, tunnels, thermal gradients, wind, and humidity buffering to support nest gas exchange.",
+      "group": "insects"
     }
   },
   {
@@ -365,7 +385,8 @@
     "factualInfographic": {
       "topic": "Solar sail photon momentum and reflective light-pressure propulsion",
       "description": "A real-world physics infographic explaining how reflective solar sails use photon momentum for tiny continuous thrust without onboard propellant.",
-      "sourceNote": "Conservative summary of standard solar-sail physics: photons carry momentum; reflection changes photon momentum and transfers a small continuous force to the sail; steering changes sail angle; sunlight weakens with distance from the Sun."
+      "sourceNote": "Conservative summary of standard solar-sail physics: photons carry momentum; reflection changes photon momentum and transfers a small continuous force to the sail; steering changes sail angle; sunlight weakens with distance from the Sun.",
+      "group": "how-things-work"
     }
   },
   {
@@ -384,7 +405,8 @@
     "factualInfographic": {
       "topic": "Red sprite formation above thunderstorms and transient luminous event morphology",
       "description": "A field-station science display explains how lightning-driven electric-field changes briefly excite thin upper-atmosphere nitrogen, producing vast red sprites above thunderstorms.",
-      "sourceNote": "Conservative synthesis of established atmospheric-science descriptions of transient luminous events: sprites occur in the mesosphere above strong thunderstorms, are associated with major lightning-driven electric-field changes, glow mainly through excited nitrogen emissions, and are distinct from blue jets and elves."
+      "sourceNote": "Conservative synthesis of established atmospheric-science descriptions of transient luminous events: sprites occur in the mesosphere above strong thunderstorms, are associated with major lightning-driven electric-field changes, glow mainly through excited nitrogen emissions, and are distinct from blue jets and elves.",
+      "group": "earth-space"
     }
   },
   {
@@ -403,7 +425,8 @@
     "factualInfographic": {
       "topic": "Magnetotactic bacteria, magnetosome chains, and geomagnetic alignment",
       "description": "A geomicrobiology workbench infographic showing how magnetite or greigite magnetosome chains orient swimming bacteria while flagella and chemical sensing help them navigate sediment oxygen gradients.",
-      "sourceNote": "Real-world non-fiction overview based on established geomicrobiology: magnetotactic bacteria biomineralize magnetite or greigite magnetosomes; magnetic alignment works with active swimming and chemical sensing, with behavior varying among species and environments."
+      "sourceNote": "Real-world non-fiction overview based on established geomicrobiology: magnetotactic bacteria biomineralize magnetite or greigite magnetosomes; magnetic alignment works with active swimming and chemical sensing, with behavior varying among species and environments.",
+      "group": "nature-science"
     }
   },
   {
@@ -422,7 +445,8 @@
     "factualInfographic": {
       "topic": "Columnar jointing in cooling basalt lava flows",
       "description": "A volcanology-bench infographic showing how cooling and thermal contraction organize fractures into polygonal basalt columns.",
-      "sourceNote": "Conservative synthesis of established geology: cooling lava contracts, tensile fractures form polygonal joint networks, and cracks advance as the cooling front moves through the rock."
+      "sourceNote": "Conservative synthesis of established geology: cooling lava contracts, tensile fractures form polygonal joint networks, and cracks advance as the cooling front moves through the rock.",
+      "group": "earth-space"
     }
   },
   {
@@ -441,7 +465,8 @@
     "factualInfographic": {
       "topic": "Humidity-driven supercontraction in orb-weaver dragline spider silk",
       "description": "A real-world biomaterials infographic explaining why many orb-weaver dragline silks shorten and tighten when exposed to high humidity.",
-      "sourceNote": "Conservative synthesis of established spider-silk research: absorbed water alters hydrogen-bonded and other molecular interactions in dragline silk, permitting protein chains to rearrange and the fiber to contract; magnitude varies among species and silk types."
+      "sourceNote": "Conservative synthesis of established spider-silk research: absorbed water alters hydrogen-bonded and other molecular interactions in dragline silk, permitting protein chains to rearrange and the fiber to contract; magnitude varies among species and silk types.",
+      "group": "nature-science"
     }
   },
   {
@@ -460,7 +485,8 @@
     "factualInfographic": {
       "topic": "Mantis shrimp polarization vision and specialized compound-eye photoreceptors",
       "description": "A museum-grade marine sensory-biology infographic showing how specialized stomatopod compound eyes detect linear polarization and, in some groups, circular polarization, with anatomy, optics, habitat context, and species-variation caveats.",
-      "sourceNote": "Conservative real-world summary: many stomatopods detect linear polarization; circular-polarization sensitivity occurs in some groups, and capabilities vary among species."
+      "sourceNote": "Conservative real-world summary: many stomatopods detect linear polarization; circular-polarization sensitivity occurs in some groups, and capabilities vary among species.",
+      "group": "nature-science"
     }
   },
   {
@@ -479,7 +505,8 @@
     "factualInfographic": {
       "topic": "Cohesion-tension transport of water through tree xylem",
       "description": "A field-lab infographic showing how transpiration tension, water cohesion, and xylem anatomy move water from soil to a tree canopy, including stomata, pit membranes, and cavitation limits.",
-      "sourceNote": "Real-world/non-fiction plant physiology presented conservatively; transport anatomy and behavior vary among plant groups and environmental conditions."
+      "sourceNote": "Real-world/non-fiction plant physiology presented conservatively; transport anatomy and behavior vary among plant groups and environmental conditions.",
+      "group": "nature-science"
     }
   },
   {
@@ -498,7 +525,8 @@
     "factualInfographic": {
       "topic": "Octopus rapid camouflage through chromatophores, reflective skin cells, and muscular papillae",
       "description": "A real-world marine-biology bench infographic showing how octopuses coordinate pigment organs, reflective cells, and muscular skin texture for rapid camouflage.",
-      "sourceNote": "Conservative synthesis of established cephalopod skin physiology; capabilities and cell arrangements vary among species."
+      "sourceNote": "Conservative synthesis of established cephalopod skin physiology; capabilities and cell arrangements vary among species.",
+      "group": "nature-science"
     }
   },
   {
@@ -517,7 +545,8 @@
     "factualInfographic": {
       "topic": "How black smoker hydrothermal-vent chimneys grow",
       "description": "A non-fiction deep-sea geology infographic showing seawater circulation, water-rock reaction, mineral precipitation, chimney accretion, mineral zoning, vent ecology, and structural renewal.",
-      "sourceNote": "Real-world/non-fiction synthesis; vent chemistry, mineral assemblages, temperatures, and organisms vary among sites."
+      "sourceNote": "Real-world/non-fiction synthesis; vent chemistry, mineral assemblages, temperatures, and organisms vary among sites.",
+      "group": "earth-space"
     }
   },
   {
@@ -536,7 +565,8 @@
     "factualInfographic": {
       "topic": "Frost-flower formation on young sea ice",
       "description": "A non-fiction cryosphere infographic explaining how water vapor deposits as delicate ice crystals above young sea ice, how rejected brine can coat them with salts, and how weather affects their growth.",
-      "sourceNote": "Conservative qualitative synthesis of established sea-ice physics and polar atmospheric chemistry; local conditions and chemical importance vary."
+      "sourceNote": "Conservative qualitative synthesis of established sea-ice physics and polar atmospheric chemistry; local conditions and chemical importance vary.",
+      "group": "earth-space"
     }
   },
   {
@@ -555,7 +585,8 @@
     "factualInfographic": {
       "topic": "How gecko toe pads produce controllable dry adhesion",
       "description": "A direct-canvas scientific infographic showing how branching setae, nanoscale contact, directional shear, and active peeling let many adhesive geckos grip and release surfaces without glue or suction.",
-      "sourceNote": "Conservative synthesis of established gecko adhesion biomechanics; performance and anatomy vary among species and surfaces."
+      "sourceNote": "Conservative synthesis of established gecko adhesion biomechanics; performance and anatomy vary among species and surfaces.",
+      "group": "nature-science"
     }
   },
   {
@@ -574,7 +605,8 @@
     "factualInfographic": {
       "topic": "Whale-fall ecological succession and chemosynthesis",
       "description": "A direct-canvas deep-sea ecology infographic showing how whale tissue, enriched sediment, bone lipids, microbes, Osedax worms, and sulfur oxidation support overlapping communities around a whale fall.",
-      "sourceNote": "Conservative synthesis of established whale-fall ecology; phases overlap and vary with carcass size, depth, oxygen, currents, and region."
+      "sourceNote": "Conservative synthesis of established whale-fall ecology; phases overlap and vary with carcass size, depth, oxygen, currents, and region.",
+      "group": "nature-science"
     }
   },
   {
@@ -593,7 +625,8 @@
     "factualInfographic": {
       "topic": "Saharan mineral dust transport and Amazon nutrient inputs",
       "description": "A direct-canvas scientific infographic tracing mineral dust from the Bodélé Depression across the Atlantic into Amazon nutrient cycles, with particle physics, cloud removal, mineral composition, seasonal variability, and evidence panels.",
-      "sourceNote": "Conservative synthesis: African mineral dust reaches the Amazon and contributes phosphorus and other minerals; source fractions, atmospheric routes, delivery, and ecological importance vary by season and study."
+      "sourceNote": "Conservative synthesis: African mineral dust reaches the Amazon and contributes phosphorus and other minerals; source fractions, atmospheric routes, delivery, and ecological importance vary by season and study.",
+      "group": "earth-space"
     }
   },
   {
@@ -612,7 +645,8 @@
     "factualInfographic": {
       "topic": "Ground-based gravitational-wave laser interferometry",
       "description": "A direct-canvas museum infographic explaining how perpendicular laser arms encode tiny spacetime strains as changing interference, and how isolation, multiple detectors, and waveform analysis separate astrophysical signals from noise.",
-      "sourceNote": "Conservative non-fiction overview based on established ground-based interferometer principles; visual deformations are explicitly exaggerated and exact sensitivity varies by event and detector state."
+      "sourceNote": "Conservative non-fiction overview based on established ground-based interferometer principles; visual deformations are explicitly exaggerated and exact sensitivity varies by event and detector state.",
+      "group": "how-things-work"
     }
   },
   {
@@ -631,7 +665,8 @@
     "factualInfographic": {
       "topic": "Cloud-to-ground lightning formation",
       "description": "A direct-canvas scientific infographic showing how charge separation, a stepped leader, competing upward streamers, attachment, and the return stroke build a cloud-to-ground lightning flash, plus how rapid channel heating produces thunder.",
-      "sourceNote": "Conservative synthesis of established atmospheric-electricity principles; exact storm charge structure and flash behavior vary."
+      "sourceNote": "Conservative synthesis of established atmospheric-electricity principles; exact storm charge structure and flash behavior vary.",
+      "group": "earth-space"
     }
   },
   {
@@ -650,7 +685,8 @@
     "factualInfographic": {
       "topic": "How electric eels generate and use electrical discharges",
       "description": "A direct-canvas scientific infographic connecting whole-animal electric-organ anatomy to electrocyte membrane activation, stacked voltage, pulse patterns, electrolocation, behavior, habitat, and research measurement.",
-      "sourceNote": "Conservative synthesis of established comparative physiology: electric eels are Electrophorus knifefishes; modified muscle-derived electrocytes activate in coordinated stacks; discharge patterns and strength vary by species, size, and context."
+      "sourceNote": "Conservative synthesis of established comparative physiology: electric eels are Electrophorus knifefishes; modified muscle-derived electrocytes activate in coordinated stacks; discharge patterns and strength vary by species, size, and context.",
+      "group": "nature-science"
     }
   },
   {
@@ -669,7 +705,8 @@
     "factualInfographic": {
       "topic": "How mantis shrimp eyes detect and use polarized light",
       "description": "A museum-style anatomy and optics infographic connecting the stomatopod eye midband, ommatidial microvilli, polarization states, eye rotation, reef reflections, behavior, and research methods.",
-      "sourceNote": "Real-world non-fiction; conservative synthesis emphasizing that visual mechanisms and sensitivities vary among stomatopod species."
+      "sourceNote": "Real-world non-fiction; conservative synthesis emphasizing that visual mechanisms and sensitivities vary among stomatopod species.",
+      "group": "nature-science"
     }
   },
   {
@@ -688,7 +725,8 @@
     "factualInfographic": {
       "topic": "Fog-basking water collection in Namib darkling beetles",
       "description": "A non-fiction visual explanation of how posture, fog, surface texture, droplet adhesion, coalescence, and gravity can work together in fog-basking beetles.",
-      "sourceNote": "Conservative synthesis: fog-basking and cuticular collection strategies vary by species; the familiar hydrophilic-bump model is not treated as universal."
+      "sourceNote": "Conservative synthesis: fog-basking and cuticular collection strategies vary by species; the familiar hydrophilic-bump model is not treated as universal.",
+      "group": "insects"
     }
   },
   {
@@ -707,7 +745,8 @@
     "factualInfographic": {
       "topic": "Fulgurite formation by lightning in sand, soil, and rock",
       "description": "A non-fiction visual explanation of how a brief lightning current can locally melt suitable geological material, which rapidly quenches into variable glassy fulgurite structures.",
-      "sourceNote": "Conservative synthesis: fulgurite form and composition vary with lightning energy, current path, moisture, grain size, mineralogy, and cooling; not every strike makes one."
+      "sourceNote": "Conservative synthesis: fulgurite form and composition vary with lightning energy, current path, moisture, grain size, mineralogy, and cooling; not every strike makes one.",
+      "group": "earth-space"
     }
   },
   {
@@ -726,7 +765,8 @@
     "factualInfographic": {
       "topic": "Honeybee waggle-dance recruitment and spatial communication",
       "description": "How successful western honeybee foragers communicate an approximate sun-relative direction and distance to a food source through waggle-run orientation, duration, repeated circuits, and close-range sensory cues.",
-      "sourceNote": "Source-checked against NC State Extension, The Honey Bee Dance Language (https://content.ces.ncsu.edu/honey-bee-dance-language); Kohl and Rutschmann 2021, Honey bees communicate distance via non-linear waggle duration functions, PeerJ/PMC (https://pmc.ncbi.nlm.nih.gov/articles/PMC8029670/); and Landgraf et al. 2019, Neuroethology of the Waggle Dance, Insects/PMC (https://pmc.ncbi.nlm.nih.gov/articles/PMC6835826/). Claims kept qualitative where calibration and sensory decoding vary."
+      "sourceNote": "Source-checked against NC State Extension, The Honey Bee Dance Language (https://content.ces.ncsu.edu/honey-bee-dance-language); Kohl and Rutschmann 2021, Honey bees communicate distance via non-linear waggle duration functions, PeerJ/PMC (https://pmc.ncbi.nlm.nih.gov/articles/PMC8029670/); and Landgraf et al. 2019, Neuroethology of the Waggle Dance, Insects/PMC (https://pmc.ncbi.nlm.nih.gov/articles/PMC6835826/). Claims kept qualitative where calibration and sensory decoding vary.",
+      "group": "insects"
     }
   },
   {
@@ -745,7 +785,8 @@
     "factualInfographic": {
       "topic": "Inside a hydrothermal vent chimney",
       "description": "A source-verified cutaway of how seawater circulates through fractured oceanic crust, becomes hot mineral-rich vent fluid, builds a black-smoker chimney through cooling and mineral precipitation, and supports chemosynthetic ecosystems at fluid-seawater mixing zones.",
-      "sourceNote": "Verified against NOAA Ocean Service, ‘What is a hydrothermal vent?’ (https://oceanservice.noaa.gov/facts/vents.html), for seawater circulation, heating, mixing, sulfide particles, and vent communities; and Woods Hole Oceanographic Institution, ‘The birth of a black smoker’ (https://www.whoi.edu/ocean-learning-hub/multimedia/the-birth-of-a-black-smoker/), for anhydrite scaffold formation, chalcopyrite lining, sulfide zoning, and wall porosity. Claims are qualitative and variation-aware; no universal numeric values are asserted."
+      "sourceNote": "Verified against NOAA Ocean Service, ‘What is a hydrothermal vent?’ (https://oceanservice.noaa.gov/facts/vents.html), for seawater circulation, heating, mixing, sulfide particles, and vent communities; and Woods Hole Oceanographic Institution, ‘The birth of a black smoker’ (https://www.whoi.edu/ocean-learning-hub/multimedia/the-birth-of-a-black-smoker/), for anhydrite scaffold formation, chalcopyrite lining, sulfide zoning, and wall porosity. Claims are qualitative and variation-aware; no universal numeric values are asserted.",
+      "group": "earth-space"
     }
   },
   {
@@ -764,7 +805,8 @@
     "factualInfographic": {
       "topic": "How charring ablative spacecraft heat shields manage atmospheric-entry heating through decomposition, char formation, outward gas flow, insulation, surface reactions, and controlled recession.",
       "description": "A direct-canvas scientific cutaway connecting a blunt capsule's bow shock and shock layer to the layered response of an ablative thermal-protection system, with trajectory, pore-scale, sensor, material, and mission-context panels.",
-      "sourceNote": "Source-checked against NASA Ames/NTRS: Thermal Protection Materials and Systems: Past and Future, https://ntrs.nasa.gov/api/citations/20160001151/downloads/20160001151.pdf ; History of Ablative TPS Used in NASA Missions, https://ntrs.nasa.gov/api/citations/20240005698/downloads/IPPW-2024_Short%20Course_04-10-24.pdf . Claims are qualitative and material/trajectory variation is stated."
+      "sourceNote": "Source-checked against NASA Ames/NTRS: Thermal Protection Materials and Systems: Past and Future, https://ntrs.nasa.gov/api/citations/20160001151/downloads/20160001151.pdf ; History of Ablative TPS Used in NASA Missions, https://ntrs.nasa.gov/api/citations/20240005698/downloads/IPPW-2024_Short%20Course_04-10-24.pdf . Claims are qualitative and material/trajectory variation is stated.",
+      "group": "how-things-work"
     }
   },
   {
@@ -783,7 +825,8 @@
     "factualInfographic": {
       "topic": "Lord Howe Island phasmid (Dryococelus australis)",
       "description": "A real-world rare-insect infographic explaining the Lord Howe Island phasmid's flightless anatomy, nocturnal ecology, exceptionally restricted Ball's Pyramid refuge, rediscovery, threats, and conservation breeding.",
-      "sourceNote": "Verified 2026-07-28 against Australian Government DCCEEW species pages (EPBC status: Critically Endangered; restricted occurrence and recovery context), the NSW threatened-species determination, and peer-reviewed recovery-program literature: https://www.dcceew.gov.au/environment/biodiversity/threatened/action-plan/priority-invertebrates/lord-howe-island-phasmid ; https://www.dcceew.gov.au/environment/biodiversity/threatened/conservation-advices/dryococelus-australis ; https://www.environment.nsw.gov.au/topics/animals-and-plants/threatened-species/nsw-threatened-species-scientific-committee/determinations/final-determinations/2011-2012/lord-howe-island-phasmid-dryococelus-australis-critically-endangered-species-listing ; https://doi.org/10.1111/j.1442-8903.2009.00450.x"
+      "sourceNote": "Verified 2026-07-28 against Australian Government DCCEEW species pages (EPBC status: Critically Endangered; restricted occurrence and recovery context), the NSW threatened-species determination, and peer-reviewed recovery-program literature: https://www.dcceew.gov.au/environment/biodiversity/threatened/action-plan/priority-invertebrates/lord-howe-island-phasmid ; https://www.dcceew.gov.au/environment/biodiversity/threatened/conservation-advices/dryococelus-australis ; https://www.environment.nsw.gov.au/topics/animals-and-plants/threatened-species/nsw-threatened-species-scientific-committee/determinations/final-determinations/2011-2012/lord-howe-island-phasmid-dryococelus-australis-critically-endangered-species-listing ; https://doi.org/10.1111/j.1442-8903.2009.00450.x",
+      "group": "insects"
     }
   },
   {
@@ -802,7 +845,8 @@
     "factualInfographic": {
       "topic": "How the Venus flytrap (Dionaea muscipula) integrates touch-triggered action potentials to close and begin digestion",
       "description": "A direct-canvas botanical science infographic explaining how timed trigger-hair contacts produce action potentials, rapid snap closure, continued signaling, digestive-enzyme activation, sealing, and nutrient uptake.",
-      "sourceNote": "Sources verified 2026-08-04: Böhm et al., Current Biology 26 (2016), https://europepmc.org/article/PMC/4751343 supports the two-action-potential/15–20 second closure threshold, the more-than-three-action-potential hydrolase-gene response, response scaling with stimulation, and gland-mediated sodium uptake. Suda et al., Nature Communications (2025), https://www.nature.com/articles/s41467-025-63419-w supports the high-sensitivity trigger-hair mechanosensor mechanism."
+      "sourceNote": "Sources verified 2026-08-04: Böhm et al., Current Biology 26 (2016), https://europepmc.org/article/PMC/4751343 supports the two-action-potential/15–20 second closure threshold, the more-than-three-action-potential hydrolase-gene response, response scaling with stimulation, and gland-mediated sodium uptake. Suda et al., Nature Communications (2025), https://www.nature.com/articles/s41467-025-63419-w supports the high-sensitivity trigger-hair mechanosensor mechanism.",
+      "group": "nature-science"
     }
   },
   {
@@ -821,7 +865,8 @@
     "factualInfographic": {
       "topic": "How the elongate bombardier beetle (Brachinus elongatulus) uses a mechanically pulsed chemical defense system",
       "description": "An insect-first direct-canvas infographic showing three extreme-macro views of the real beetle and the reservoir, flexible membrane, valve, reaction chamber, aiming nozzle, quinone chemistry, and passive explosion-driven pulse cycle behind its defensive spray.",
-      "sourceNote": "Sources verified 2026-08-04: Arndt et al., Science 348 (2015), https://doi.org/10.1126/science.1261166 and https://europepmc.org/article/MED/25931557 support the rapid discrete explosions, hot pulsed quinone spray, synchrotron observation, connected reservoir/reaction-chamber anatomy, and passive mechanical-feedback control by specialized cuticular structures. Attygalle et al., The Science of Nature 107 (2020), https://doi.org/10.1007/s00114-020-01683-0 supports the species Brachinus elongatulus, the two-compartment apparatus, the hydroquinone precursors, and the two major benzoquinone products."
+      "sourceNote": "Sources verified 2026-08-04: Arndt et al., Science 348 (2015), https://doi.org/10.1126/science.1261166 and https://europepmc.org/article/MED/25931557 support the rapid discrete explosions, hot pulsed quinone spray, synchrotron observation, connected reservoir/reaction-chamber anatomy, and passive mechanical-feedback control by specialized cuticular structures. Attygalle et al., The Science of Nature 107 (2020), https://doi.org/10.1007/s00114-020-01683-0 supports the species Brachinus elongatulus, the two-compartment apparatus, the hydroquinone precursors, and the two major benzoquinone products.",
+      "group": "insects"
     }
   },
   {
@@ -840,7 +885,8 @@
     "factualInfographic": {
       "topic": "How a hailstone records a supercell flight",
       "description": "A real-world non-fiction meteorology infographic showing how supercooled droplets, storm flow, residence time, wet and dry growth, and melting build the layered anatomy of hail.",
-      "sourceNote": "Verified 2026-08-04 against NOAA JetStream, Thunderstorm Hazards — Hail: https://www.noaa.gov/jetstream/hail and Pounds, Ziegler, Adams-Selin & Biggerstaff, Analysis of Hail Production via Simulated Hailstone Trajectories in the 29 May 2012 Kingfisher, Oklahoma, Supercell, Monthly Weather Review 152 (2024), DOI 10.1175/MWR-D-23-0073.1: https://doi.org/10.1175/MWR-D-23-0073.1"
+      "sourceNote": "Verified 2026-08-04 against NOAA JetStream, Thunderstorm Hazards — Hail: https://www.noaa.gov/jetstream/hail and Pounds, Ziegler, Adams-Selin & Biggerstaff, Analysis of Hail Production via Simulated Hailstone Trajectories in the 29 May 2012 Kingfisher, Oklahoma, Supercell, Monthly Weather Review 152 (2024), DOI 10.1175/MWR-D-23-0073.1: https://doi.org/10.1175/MWR-D-23-0073.1",
+      "group": "earth-space"
     }
   },
   {
@@ -859,7 +905,8 @@
     "factualInfographic": {
       "topic": "Malaysian stalk-eyed fly (Teleopsis dalmanni): exaggerated eyespan, mate choice, and male contests",
       "description": "A direct-canvas, insect-first scientific infographic showing how both sexes carry lateral eyestalks, why males have a more exaggerated relative eyespan, and how researchers connect that ornament with mate choice, ritualized contests, resource ownership, development, and reproductive quality.",
-      "sourceNote": "Peer-reviewed evidence gate passed before prompting. Crossref records verified: Cotton et al., Male mate preference for female eyespan and fecundity in the stalk-eyed fly, Teleopsis dalmanni, Behavioral Ecology, DOI 10.1093/beheco/aru192 (https://doi.org/10.1093/beheco/aru192); Small et al., Male eyespan and resource ownership affect contest outcome in the stalk-eyed fly, Teleopsis dalmanni, Animal Behaviour, DOI 10.1016/j.anbehav.2009.08.009 (https://doi.org/10.1016/j.anbehav.2009.08.009); Cotton et al., Eyespan reflects reproductive quality in wild stalk-eyed flies, Evolutionary Ecology, DOI 10.1007/s10682-009-9292-6 (https://doi.org/10.1007/s10682-009-9292-6). Claims were qualified as associations and context-dependent outcomes; no invented numerical values."
+      "sourceNote": "Peer-reviewed evidence gate passed before prompting. Crossref records verified: Cotton et al., Male mate preference for female eyespan and fecundity in the stalk-eyed fly, Teleopsis dalmanni, Behavioral Ecology, DOI 10.1093/beheco/aru192 (https://doi.org/10.1093/beheco/aru192); Small et al., Male eyespan and resource ownership affect contest outcome in the stalk-eyed fly, Teleopsis dalmanni, Animal Behaviour, DOI 10.1016/j.anbehav.2009.08.009 (https://doi.org/10.1016/j.anbehav.2009.08.009); Cotton et al., Eyespan reflects reproductive quality in wild stalk-eyed flies, Evolutionary Ecology, DOI 10.1007/s10682-009-9292-6 (https://doi.org/10.1007/s10682-009-9292-6). Claims were qualified as associations and context-dependent outcomes; no invented numerical values.",
+      "group": "insects"
     }
   },
   {
@@ -878,7 +925,8 @@
     "factualInfographic": {
       "topic": "How the wood frog (Rana sylvatica) survives whole-body freezing",
       "description": "A real-world non-fiction physiology infographic showing how wood frogs coordinate extracellular ice formation, liver-derived glucose, winter urea accumulation, cellular water balance, metabolic depression, and controlled thawing—and why tolerance varies among populations and conditions.",
-      "sourceNote": "Sources verified 2026-08-04: Costanzo et al., Cryoprotectants and Extreme Freeze Tolerance in a Subarctic Population of the Wood Frog, PLOS ONE 10(2): e0117234, https://doi.org/10.1371/journal.pone.0117234, supports winter urea accrual, glucose mobilization from liver glycogen after freezing begins, organ water loss as ice forms, freeze-thaw enhancement of glucose delivery, and strong population differences. Costanzo et al., Hibernation physiology, freezing adaptation and extreme freeze tolerance in a northern population of the wood frog, Journal of Experimental Biology 216, https://doi.org/10.1242/jeb.089342, supports the northern-population comparison and winter-conditioning context. Exact survival limits were deliberately not generalized."
+      "sourceNote": "Sources verified 2026-08-04: Costanzo et al., Cryoprotectants and Extreme Freeze Tolerance in a Subarctic Population of the Wood Frog, PLOS ONE 10(2): e0117234, https://doi.org/10.1371/journal.pone.0117234, supports winter urea accrual, glucose mobilization from liver glycogen after freezing begins, organ water loss as ice forms, freeze-thaw enhancement of glucose delivery, and strong population differences. Costanzo et al., Hibernation physiology, freezing adaptation and extreme freeze tolerance in a northern population of the wood frog, Journal of Experimental Biology 216, https://doi.org/10.1242/jeb.089342, supports the northern-population comparison and winter-conditioning context. Exact survival limits were deliberately not generalized.",
+      "group": "nature-science"
     }
   },
   {
@@ -897,7 +945,8 @@
     "factualInfographic": {
       "topic": "Twisted-wing parasite (Xenos vesparum): extreme sexual dimorphism and sex-specific development inside the European paper wasp",
       "description": "A direct-canvas insect-first infographic explaining how Xenos vesparum males pupate and emerge as winged adults while females remain larviform inside Polistes dominula with only the cephalothorax exposed.",
-      "sourceNote": "Peer-reviewed sources: https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0093614 for sex-specific metamorphosis, female neoteny, exposed cephalothorax, brood canal, and life cycle; https://doi.org/10.3897/asp.75.e31910 for female cephalothorax morphology; https://doi.org/10.1093/beheco/arh111 for altered aggregation behavior in parasitized paper wasps. Labels are conservative and distinguish association from proven mechanism."
+      "sourceNote": "Peer-reviewed sources: https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0093614 for sex-specific metamorphosis, female neoteny, exposed cephalothorax, brood canal, and life cycle; https://doi.org/10.3897/asp.75.e31910 for female cephalothorax morphology; https://doi.org/10.1093/beheco/arh111 for altered aggregation behavior in parasitized paper wasps. Labels are conservative and distinguish association from proven mechanism.",
+      "group": "insects"
     }
   },
   {
@@ -916,7 +965,8 @@
     "factualInfographic": {
       "topic": "Rapid adaptive coloration in the common cuttlefish Sepia officinalis",
       "description": "A real-world, non-fiction mechanism map showing how neurally controlled chromatophore muscles expand pigment sacs above iridophore and leucophore reflector layers to produce camouflage and signaling patterns.",
-      "sourceNote": "Peer-reviewed mechanism review: https://pmc.ncbi.nlm.nih.gov/articles/PMC2706477/ ; peer-reviewed chromatophore optics study: https://doi.org/10.1038/s41467-019-08891-x (sources accessed 2026-08-04)."
+      "sourceNote": "Peer-reviewed mechanism review: https://pmc.ncbi.nlm.nih.gov/articles/PMC2706477/ ; peer-reviewed chromatophore optics study: https://doi.org/10.1038/s41467-019-08891-x (sources accessed 2026-08-04).",
+      "group": "nature-science"
     }
   },
   {
@@ -935,7 +985,8 @@
     "factualInfographic": {
       "topic": "Emerald jewel wasp (Ampulex compressa) host-behavior manipulation",
       "description": "A direct-canvas, insect-first natural-history infographic showing how the emerald jewel wasp uses two precisely targeted stings to transiently affect the forelegs and then suppress spontaneous cockroach escape behavior without simply immobilizing the host, followed by antenna-guided walking and the parasitoid life cycle.",
-      "sourceNote": "Real-world/non-fiction. Verified 2026-08-04 against Kaiser et al., Journal of Experimental Biology 226 (2023), DOI 10.1242/jeb.245252, https://doi.org/10.1242/jeb.245252 ; Buys, Journal of Hymenoptera Research 63 (2018), DOI 10.3897/jhr.63.21762, https://doi.org/10.3897/jhr.63.21762 ; and Catania, Brain Behavior and Evolution 95 (2020), DOI 10.1159/000511548, https://doi.org/10.1159/000511548 . Claims are limited to demonstrated locomotor and escape suppression, not conscious mind control."
+      "sourceNote": "Real-world/non-fiction. Verified 2026-08-04 against Kaiser et al., Journal of Experimental Biology 226 (2023), DOI 10.1242/jeb.245252, https://doi.org/10.1242/jeb.245252 ; Buys, Journal of Hymenoptera Research 63 (2018), DOI 10.3897/jhr.63.21762, https://doi.org/10.3897/jhr.63.21762 ; and Catania, Brain Behavior and Evolution 95 (2020), DOI 10.1159/000511548, https://doi.org/10.1159/000511548 . Claims are limited to demonstrated locomotor and escape suppression, not conscious mind control.",
+      "group": "insects"
     }
   },
   {
@@ -954,7 +1005,8 @@
     "factualInfographic": {
       "topic": "How a brinicle grows beneath sea ice",
       "description": "A real-world, non-fiction polar-ocean infographic showing how salt rejected during young sea-ice growth drains as cold dense brine and freezes surrounding seawater into a hollow tubular ice stalactite.",
-      "sourceNote": "Testón-Martínez et al., The Cryosphere 18 (2024), https://tc.copernicus.org/articles/18/2195/2024/ ; Cartwright et al., Langmuir 29 (2013), https://doi.org/10.1021/la4009703 ; NOAA PMEL sea-ice overview by Peter Wadhams, https://pmel.noaa.gov/arctic-zone/essay_wadhams.html . Claims are qualitative and condition-dependent; no universal rates or thresholds are asserted."
+      "sourceNote": "Testón-Martínez et al., The Cryosphere 18 (2024), https://tc.copernicus.org/articles/18/2195/2024/ ; Cartwright et al., Langmuir 29 (2013), https://doi.org/10.1021/la4009703 ; NOAA PMEL sea-ice overview by Peter Wadhams, https://pmel.noaa.gov/arctic-zone/essay_wadhams.html . Claims are qualitative and condition-dependent; no universal rates or thresholds are asserted.",
+      "group": "earth-space"
     }
   },
   {
@@ -973,7 +1025,8 @@
     "factualInfographic": {
       "topic": "Sonar-jamming tiger moth (Bertholdia trigona): ultrasonic tymbal clicks that interfere with hunting bat echolocation",
       "description": "A direct-canvas insect-first infographic showing how Bertholdia trigona produces dense ultrasonic click trains with paired thoracic tymbals, how those clicks can overlap a bat's echo-processing window, and how bats may adjust their terminal buzz.",
-      "sourceNote": "Sources: https://www.science.org/doi/10.1126/science.1174096 ; https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0063609 ; https://pmc.ncbi.nlm.nih.gov/articles/PMC9637272/ . These peer-reviewed studies support sonar jamming, attack-stage response, duty-cycle effects, and bat terminal-buzz adjustment."
+      "sourceNote": "Sources: https://www.science.org/doi/10.1126/science.1174096 ; https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0063609 ; https://pmc.ncbi.nlm.nih.gov/articles/PMC9637272/ . These peer-reviewed studies support sonar jamming, attack-stage response, duty-cycle effects, and bat terminal-buzz adjustment.",
+      "group": "insects"
     }
   },
   {
@@ -992,7 +1045,8 @@
     "factualInfographic": {
       "topic": "How Antarctic crocodile icefish transport oxygen without hemoglobin",
       "description": "A source-verified direct-canvas museum infographic explaining how crocodile icefishes carry oxygen dissolved in plasma and compensate with cold oxygen-rich seawater, an enlarged heart, high-volume circulation, wide low-resistance vessels, dense capillaries, and abundant mitochondria.",
-      "sourceNote": "https://www.nature.com/articles/s42003-019-0685-y ; https://pmc.ncbi.nlm.nih.gov/articles/PMC6788497/ ; https://pmc.ncbi.nlm.nih.gov/articles/PMC6861181/"
+      "sourceNote": "https://www.nature.com/articles/s42003-019-0685-y ; https://pmc.ncbi.nlm.nih.gov/articles/PMC6788497/ ; https://pmc.ncbi.nlm.nih.gov/articles/PMC6861181/",
+      "group": "nature-science"
     }
   },
   {
@@ -1011,7 +1065,8 @@
     "factualInfographic": {
       "topic": "Umbonia crassicornis maternal defense and synchronized nymph vibration alarms",
       "description": "A direct-canvas natural-history infographic explaining how real thorn bug nymphs coordinate substrate-borne vibration bursts through their host twig to recruit maternal defense.",
-      "sourceNote": "https://ask.ifas.ufl.edu/publication/IN332 — accepted name, range, host plants, morphology, size, eggs, development, and maternal tending; https://brill.com/view/journals/beh/136/1/article-p1_1.xml — Cocroft, Behaviour 136 (1999), synchronized nymph vibration bursts and maternal antipredator response."
+      "sourceNote": "https://ask.ifas.ufl.edu/publication/IN332 — accepted name, range, host plants, morphology, size, eggs, development, and maternal tending; https://brill.com/view/journals/beh/136/1/article-p1_1.xml — Cocroft, Behaviour 136 (1999), synchronized nymph vibration bursts and maternal antipredator response.",
+      "group": "insects"
     }
   },
   {
@@ -1030,7 +1085,8 @@
     "factualInfographic": {
       "topic": "How Arctic reindeer seasonally tune the tapetum lucidum from a golden summer reflector to a deep-blue winter reflector",
       "description": "A museum-style anatomical and optical explainer comparing golden summer and blue winter tapeta in Arctic reindeer, with collagen packing, photon paths, seasonal light, and the sensitivity-acuity tradeoff.",
-      "sourceNote": "Stokkan et al., Proceedings of the Royal Society B 2013 primary study: https://pmc.ncbi.nlm.nih.gov/articles/PMC3826237/ ; Dominy and Harris, Proceedings of the Royal Society B 2022 independent commentary: https://pmc.ncbi.nlm.nih.gov/articles/PMC9489282/ ; UCL Institute of Ophthalmology research summary: https://www.ucl.ac.uk/news/2013/oct/reindeers-eyes-change-colour-arctic-seasons"
+      "sourceNote": "Stokkan et al., Proceedings of the Royal Society B 2013 primary study: https://pmc.ncbi.nlm.nih.gov/articles/PMC3826237/ ; Dominy and Harris, Proceedings of the Royal Society B 2022 independent commentary: https://pmc.ncbi.nlm.nih.gov/articles/PMC9489282/ ; UCL Institute of Ophthalmology research summary: https://www.ucl.ac.uk/news/2013/oct/reindeers-eyes-change-colour-arctic-seasons",
+      "group": "nature-science"
     }
   },
   {
@@ -1049,7 +1105,8 @@
     "factualInfographic": {
       "topic": "Crypt-keeper wasp (Euderus set) manipulation of Bassettia pallida in live-oak stem crypts",
       "description": "A direct-canvas scientific infographic showing how the real parasitoid Euderus set manipulates its gall-wasp host into preparing and plugging an oak-stem exit, then uses that route to emerge.",
-      "sourceNote": "Source-verified against https://zookeys.pensoft.net/article/11117/ and https://pmc.ncbi.nlm.nih.gov/articles/PMC5310038/ . Claims are conservative; the exact biochemical or neurological manipulation mechanism is not known."
+      "sourceNote": "Source-verified against https://zookeys.pensoft.net/article/11117/ and https://pmc.ncbi.nlm.nih.gov/articles/PMC5310038/ . Claims are conservative; the exact biochemical or neurological manipulation mechanism is not known.",
+      "group": "insects"
     }
   },
   {
@@ -1172,7 +1229,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "nature-science"
     }
   },
   {
@@ -1302,7 +1360,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "insects"
     }
   },
   {
@@ -1395,7 +1454,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "nature-science"
     }
   },
   {
@@ -1506,7 +1566,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "insects"
     }
   },
   {
@@ -1622,7 +1683,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "earth-space"
     }
   },
   {
@@ -1715,7 +1777,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "earth-space"
     }
   },
   {
@@ -1826,7 +1889,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "insects"
     }
   },
   {
@@ -1927,7 +1991,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "insects"
     }
   },
   {
@@ -2018,7 +2083,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "earth-space"
     }
   },
   {
@@ -2156,7 +2222,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "insects"
     }
   },
   {
@@ -2269,7 +2336,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "earth-space"
     }
   },
   {
@@ -2392,7 +2460,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "insects"
     }
   },
   {
@@ -2495,7 +2564,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "nature-science"
     }
   },
   {
@@ -2592,7 +2662,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "insects"
     }
   },
   {
@@ -2692,7 +2763,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "nature-science"
     }
   },
   {
@@ -2787,7 +2859,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "insects"
     }
   },
   {
@@ -2884,7 +2957,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "nature-science"
     }
   },
   {
@@ -2991,7 +3065,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "insects"
     }
   },
   {
@@ -3096,7 +3171,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "earth-space"
     }
   },
   {
@@ -3213,7 +3289,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "insects"
     }
   },
   {
@@ -3301,7 +3378,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "nature-science"
     }
   },
   {
@@ -3411,7 +3489,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "insects"
     }
   },
   {
@@ -3508,7 +3587,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "nature-science"
     }
   },
   {
@@ -3626,7 +3706,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "insects"
     }
   },
   {
@@ -3738,7 +3819,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "earth-space"
     }
   },
   {
@@ -3828,7 +3910,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "insects"
     }
   },
   {
@@ -3942,7 +4025,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "phobias"
     }
   },
   {
@@ -4048,7 +4132,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "phobias"
     }
   },
   {
@@ -4145,7 +4230,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "nature-science"
     }
   },
   {
@@ -4263,7 +4349,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "insects"
     }
   },
   {
@@ -4366,7 +4453,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "nature-science"
     }
   },
   {
@@ -4481,7 +4569,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "insects"
     }
   },
   {
@@ -4571,7 +4660,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "nature-science"
     }
   },
   {
@@ -4683,7 +4773,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "insects"
     }
   },
   {
@@ -4800,7 +4891,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "health"
     }
   },
   {
@@ -4956,7 +5048,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "health"
     }
   },
   {
@@ -5103,7 +5196,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "health"
     }
   },
   {
@@ -5244,7 +5338,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "health"
     }
   },
   {
@@ -5349,7 +5444,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "phobias"
     }
   },
   {
@@ -5458,7 +5554,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "phobias"
     }
   },
   {
@@ -5553,7 +5650,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "phobias"
     }
   },
   {
@@ -5659,7 +5757,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "phobias"
     }
   },
   {
@@ -5763,7 +5862,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "phobias"
     }
   },
   {
@@ -5860,7 +5960,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "earth-space"
     }
   },
   {
@@ -5979,7 +6080,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "insects"
     }
   },
   {
@@ -6093,7 +6195,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "earth-space"
     }
   },
   {
@@ -6196,7 +6299,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "insects"
     }
   },
   {
@@ -6304,7 +6408,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "insects"
     }
   },
   {
@@ -6442,7 +6547,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "insects"
     }
   },
   {
@@ -6579,7 +6685,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "health"
     }
   },
   {
@@ -6688,7 +6795,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "health"
     }
   },
   {
@@ -6823,7 +6931,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "health"
     }
   },
   {
@@ -6964,7 +7073,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "health"
     }
   },
   {
@@ -7077,7 +7187,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "phobias"
     }
   },
   {
@@ -7190,7 +7301,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "phobias"
     }
   },
   {
@@ -7289,7 +7401,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "phobias"
     }
   },
   {
@@ -7399,7 +7512,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "phobias"
     }
   },
   {
@@ -7523,7 +7637,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "phobias"
     }
   },
   {
@@ -7638,7 +7753,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "nature-science"
     }
   },
   {
@@ -7740,7 +7856,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "insects"
     }
   },
   {
@@ -7869,7 +7986,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "nature-science"
     }
   },
   {
@@ -7987,7 +8105,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "insects"
     }
   },
   {
@@ -8096,7 +8215,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "nature-science"
     }
   },
   {
@@ -8218,7 +8338,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "insects"
     }
   },
   {
@@ -8380,7 +8501,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "health"
     }
   },
   {
@@ -8511,7 +8633,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "health"
     }
   },
   {
@@ -8651,7 +8774,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "health"
     }
   },
   {
@@ -8819,7 +8943,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "health"
     }
   },
   {
@@ -8951,7 +9076,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "phobias"
     }
   },
   {
@@ -9077,7 +9203,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "phobias"
     }
   },
   {
@@ -9215,7 +9342,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "phobias"
     }
   },
   {
@@ -9336,7 +9464,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "phobias"
     }
   },
   {
@@ -9455,7 +9584,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "earth-space"
     }
   },
   {
@@ -9600,7 +9730,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "insects"
     }
   },
   {
@@ -9710,7 +9841,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "earth-space"
     }
   },
   {
@@ -9842,7 +9974,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "insects"
     }
   },
   {
@@ -9956,7 +10089,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "nature-science"
     }
   },
   {
@@ -10082,7 +10216,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "insects"
     }
   },
   {
@@ -10236,7 +10371,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "health"
     }
   },
   {
@@ -10365,7 +10501,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "health"
     }
   },
   {
@@ -10500,7 +10637,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "health"
     }
   },
   {
@@ -10638,7 +10776,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "health"
     }
   },
   {
@@ -10761,7 +10900,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "phobias"
     }
   },
   {
@@ -10897,7 +11037,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "phobias"
     }
   },
   {
@@ -11035,7 +11176,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "phobias"
     }
   },
   {
@@ -11140,7 +11282,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "health"
     }
   },
   {
@@ -11244,7 +11387,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "health"
     }
   },
   {
@@ -11364,7 +11508,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "health"
     }
   },
   {
@@ -11461,7 +11606,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "health"
     }
   },
   {
@@ -11597,7 +11743,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "health"
     }
   },
   {
@@ -11739,7 +11886,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "health"
     }
   },
   {
@@ -11850,7 +11998,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "cats"
     }
   },
   {
@@ -11973,7 +12122,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "cats"
     }
   },
   {
@@ -12102,7 +12252,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "cats"
     }
   },
   {
@@ -12191,7 +12342,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "cats"
     }
   },
   {
@@ -12269,7 +12421,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "cats"
     }
   },
   {
@@ -12353,7 +12506,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "cats"
     }
   },
   {
@@ -12436,7 +12590,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "cats"
     }
   },
   {
@@ -12526,7 +12681,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "cats"
     }
   },
   {
@@ -12605,7 +12761,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "cats"
     }
   },
   {
@@ -12712,7 +12869,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "phobias"
     }
   },
   {
@@ -12823,7 +12981,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "phobias"
     }
   },
   {
@@ -12936,7 +13095,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "phobias"
     }
   },
   {
@@ -13049,7 +13209,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "phobias"
     }
   },
   {
@@ -13172,7 +13333,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "phobias"
     }
   },
   {
@@ -13274,7 +13436,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "phobias"
     }
   },
   {
@@ -13366,7 +13529,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "nature-science"
     }
   },
   {
@@ -13476,7 +13640,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "insects"
     }
   },
   {
@@ -13573,7 +13738,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "how-things-work"
     }
   },
   {
@@ -13720,7 +13886,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "insects"
     }
   },
   {
@@ -13827,7 +13994,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "earth-space"
     }
   },
   {
@@ -13953,7 +14121,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "insects"
     }
   },
   {
@@ -14081,7 +14250,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "health"
     }
   },
   {
@@ -14229,7 +14399,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "health"
     }
   },
   {
@@ -14379,7 +14550,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "health"
     }
   },
   {
@@ -14492,7 +14664,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "health"
     }
   },
   {
@@ -14619,7 +14792,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "health"
     }
   },
   {
@@ -14738,7 +14912,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "health"
     }
   },
   {
@@ -14848,7 +15023,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "cats"
     }
   },
   {
@@ -14931,7 +15107,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "cats"
     }
   },
   {
@@ -15017,7 +15194,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "cats"
     }
   },
   {
@@ -15102,7 +15280,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "cats"
     }
   },
   {
@@ -15192,7 +15371,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "cats"
     }
   },
   {
@@ -15291,7 +15471,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "cats"
     }
   },
   {
@@ -15402,7 +15583,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "phobias"
     }
   },
   {
@@ -15522,7 +15704,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "phobias"
     }
   },
   {
@@ -15637,7 +15820,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "phobias"
     }
   },
   {
@@ -15754,7 +15938,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "phobias"
     }
   },
   {
@@ -15866,7 +16051,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "phobias"
     }
   },
   {
@@ -15978,7 +16164,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "phobias"
     }
   },
   {
@@ -16091,7 +16278,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "earth-space"
     }
   },
   {
@@ -16241,7 +16429,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "insects"
     }
   },
   {
@@ -16367,7 +16556,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "how-things-work"
     }
   },
   {
@@ -16480,7 +16670,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "insects"
     }
   },
   {
@@ -16587,7 +16778,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "earth-space"
     }
   },
   {
@@ -16702,7 +16894,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "insects"
     }
   },
   {
@@ -16814,7 +17007,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "health"
     }
   },
   {
@@ -16922,7 +17116,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "health"
     }
   },
   {
@@ -17073,7 +17268,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "health"
     }
   },
   {
@@ -17172,7 +17368,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "health"
     }
   },
   {
@@ -17303,7 +17500,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "health"
     }
   },
   {
@@ -17390,7 +17588,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "cats"
     }
   },
   {
@@ -17471,7 +17670,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "cats"
     }
   },
   {
@@ -17553,7 +17753,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "cats"
     }
   },
   {
@@ -17630,7 +17831,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "cats"
     }
   },
   {
@@ -17709,7 +17911,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "cats"
     }
   },
   {
@@ -17825,7 +18028,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "phobias"
     }
   },
   {
@@ -17920,7 +18124,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "phobias"
     }
   },
   {
@@ -18042,7 +18247,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "phobias"
     }
   },
   {
@@ -18162,7 +18368,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "phobias"
     }
   },
   {
@@ -18257,7 +18464,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "phobias"
     }
   },
   {
@@ -18363,7 +18571,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "phobias"
     }
   },
   {
@@ -18457,7 +18666,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "nature-science"
     }
   },
   {
@@ -18556,7 +18766,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "insects"
     }
   },
   {
@@ -18641,7 +18852,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "nature-science"
     }
   },
   {
@@ -18754,7 +18966,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "insects"
     }
   },
   {
@@ -18864,7 +19077,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "insects"
     }
   },
   {
@@ -18951,7 +19165,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "reef-fish"
     }
   },
   {
@@ -19030,7 +19245,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "reef-fish"
     }
   },
   {
@@ -19102,7 +19318,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "reef-fish"
     }
   },
   {
@@ -19217,7 +19434,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "health"
     }
   },
   {
@@ -19317,7 +19535,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "health"
     }
   },
   {
@@ -19423,7 +19642,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "health"
     }
   },
   {
@@ -19527,7 +19747,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "health"
     }
   },
   {
@@ -19631,7 +19852,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "health"
     }
   },
   {
@@ -19714,7 +19936,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "cats"
     }
   },
   {
@@ -19786,7 +20009,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "cats"
     }
   },
   {
@@ -19869,7 +20093,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "cats"
     }
   },
   {
@@ -19949,7 +20174,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "cats"
     }
   },
   {
@@ -20031,7 +20257,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "cats"
     }
   },
   {
@@ -20118,7 +20345,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "cats"
     }
   },
   {
@@ -20227,7 +20455,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "phobias"
     }
   },
   {
@@ -20335,7 +20564,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "phobias"
     }
   },
   {
@@ -20423,7 +20653,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "phobias"
     }
   },
   {
@@ -20532,7 +20763,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "phobias"
     }
   },
   {
@@ -20614,7 +20846,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "phobias"
     }
   },
   {
@@ -20717,7 +20950,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "phobias"
     }
   },
   {
@@ -20788,7 +21022,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "earth-space"
     }
   },
   {
@@ -20904,7 +21139,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "reef-fish"
     }
   },
   {
@@ -21036,7 +21272,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "reef-fish"
     }
   },
   {
@@ -21156,7 +21393,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "reef-fish"
     }
   },
   {
@@ -21270,7 +21508,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "reef-fish"
     }
   },
   {
@@ -21361,7 +21600,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "health"
     }
   },
   {
@@ -21468,7 +21708,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "health"
     }
   },
   {
@@ -21581,7 +21822,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "health"
     }
   },
   {
@@ -21697,7 +21939,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "health"
     }
   },
   {
@@ -21821,7 +22064,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "health"
     }
   },
   {
@@ -21923,7 +22167,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "health"
     }
   },
   {
@@ -22007,7 +22252,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "cats"
     }
   },
   {
@@ -22078,7 +22324,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "cats"
     }
   },
   {
@@ -22177,7 +22424,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "cats"
     }
   },
   {
@@ -22255,7 +22503,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "cats"
     }
   },
   {
@@ -22339,7 +22588,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "cats"
     }
   },
   {
@@ -22436,7 +22686,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "phobias"
     }
   },
   {
@@ -22533,7 +22784,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "phobias"
     }
   },
   {
@@ -22609,7 +22861,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "phobias"
     }
   },
   {
@@ -22702,7 +22955,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "phobias"
     }
   },
   {
@@ -22799,7 +23053,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "phobias"
     }
   },
   {
@@ -22896,7 +23151,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "phobias"
     }
   },
   {
@@ -23007,7 +23263,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "earth-space"
     }
   },
   {
@@ -23161,7 +23418,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "insects"
     }
   },
   {
@@ -23247,7 +23505,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "earth-space"
     }
   },
   {
@@ -23335,7 +23594,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "insects"
     }
   },
   {
@@ -23429,7 +23689,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "how-things-work"
     }
   },
   {
@@ -23559,7 +23820,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "reef-fish"
     }
   },
   {
@@ -23678,7 +23940,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "reef-fish"
     }
   },
   {
@@ -23803,7 +24066,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "reef-fish"
     }
   },
   {
@@ -23938,7 +24202,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "reef-fish"
     }
   },
   {
@@ -24055,7 +24320,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "reef-fish"
     }
   },
   {
@@ -24209,7 +24475,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "reef-fish"
     }
   },
   {
@@ -24307,7 +24574,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "health"
     }
   },
   {
@@ -24418,7 +24686,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "health"
     }
   },
   {
@@ -24526,7 +24795,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "health"
     }
   },
   {
@@ -24609,7 +24879,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "cats"
     }
   },
   {
@@ -24695,7 +24966,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "cats"
     }
   },
   {
@@ -24765,7 +25037,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "cats"
     }
   },
   {
@@ -24851,7 +25124,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "cats"
     }
   },
   {
@@ -24935,7 +25209,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "cats"
     }
   },
   {
@@ -25031,7 +25306,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "phobias"
     }
   },
   {
@@ -25108,7 +25384,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "phobias"
     }
   },
   {
@@ -25198,7 +25475,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "phobias"
     }
   },
   {
@@ -25281,7 +25559,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "phobias"
     }
   },
   {
@@ -25369,7 +25648,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "phobias"
     }
   },
   {
@@ -25440,7 +25720,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "nature-science"
     }
   },
   {
@@ -25630,7 +25911,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "insects"
     }
   },
   {
@@ -25702,7 +25984,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "earth-space"
     }
   },
   {
@@ -25791,7 +26074,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "insects"
     }
   },
   {
@@ -25940,7 +26224,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "nature-science"
     }
   },
   {
@@ -26044,7 +26329,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "insects"
     }
   },
   {
@@ -26154,7 +26440,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "reef-fish"
     }
   },
   {
@@ -26271,7 +26558,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "reef-fish"
     }
   },
   {
@@ -26391,7 +26679,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "reef-fish"
     }
   },
   {
@@ -26528,7 +26817,8 @@
             ]
           }
         ]
-      }
+      },
+      "group": "reef-fish"
     }
   }
 ]

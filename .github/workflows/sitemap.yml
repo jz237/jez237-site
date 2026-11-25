@@ -1,0 +1,68 @@
+name: Update Sitemap
+
+# Adds newly published games, demos, plant pages and AI Images pages to
+# sitemap.xml. It only ever adds: the checkout below is partial, so a file
+# that is absent here does not mean its page is gone. Removing dead entries
+# is done from a full checkout with `node scripts/update_sitemap.mjs --write`.
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - games/index.html
+      - demos/catalog.json
+      - plants/*/index.html
+      - experiments/*/index.html
+      - experiments/image-gen-2-benchmark/*.html
+      - scripts/update_sitemap.mjs
+      - .github/workflows/sitemap.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sitemap
+  cancel-in-progress: false
+
+jobs:
+  sitemap:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout page files only
+        uses: actions/checkout@v4
+        with:
+          # Blobless + sparse: only the HTML and catalogue files the script reads.
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /sitemap.xml
+            /scripts/update_sitemap.mjs
+            /demos/catalog.json
+            /*/index.html
+            /plants/*/index.html
+            /experiments/*/index.html
+            /experiments/image-gen-2-benchmark/*.html
+            /demos/*/index.html
+            /games/**/index.html
+            /games/*/*.html
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Add missing pages
+        run: node scripts/update_sitemap.mjs --write --add-only
+
+      - name: Commit and push changes (if any)
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- sitemap.xml
+          if git diff --staged --quiet; then
+            echo "Sitemap already up to date."
+          else
+            git commit -m "chore: add new pages to sitemap"
+            git push || { git pull --rebase --autostash origin main && git push; }
+          fi

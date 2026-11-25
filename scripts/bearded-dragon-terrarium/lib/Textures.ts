@@ -16,14 +16,18 @@ function hash2(x: number, y: number, s: number) {
   return ((h ^ (h >>> 16)) >>> 0) / 4294967295;
 }
 
+// Module-level so tileNoise does not allocate a closure on every call.
+function wrapCell(a: number, period: number) {
+  return ((a % period) + period) % period;
+}
+
 /** Tileable value noise on an integer lattice of `period` cells. */
 export function tileNoise(x: number, y: number, period: number, seed = 0) {
   const xi = Math.floor(x), yi = Math.floor(y);
   const xf = x - xi, yf = y - yi;
   const u = xf * xf * (3 - 2 * xf), v = yf * yf * (3 - 2 * yf);
-  const m = (a: number) => ((a % period) + period) % period;
-  const a = hash2(m(xi), m(yi), seed), b = hash2(m(xi + 1), m(yi), seed);
-  const c = hash2(m(xi), m(yi + 1), seed), d = hash2(m(xi + 1), m(yi + 1), seed);
+  const a = hash2(wrapCell(xi, period), wrapCell(yi, period), seed), b = hash2(wrapCell(xi + 1, period), wrapCell(yi, period), seed);
+  const c = hash2(wrapCell(xi, period), wrapCell(yi + 1, period), seed), d = hash2(wrapCell(xi + 1, period), wrapCell(yi + 1, period), seed);
   return a + (b - a) * u + (c - a) * v + (a - b - c + d) * u * v;
 }
 export function tileFbm(x: number, y: number, period: number, octaves = 4, seed = 0) {

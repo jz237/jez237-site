@@ -41,3 +41,37 @@ commits were confirmed live that way). The Anatomy Studio releases of 2026-11-17
 The wrapper cannot be run from a fresh checkout as it stands: it needs `wrangler` resolvable from `scripts/` (it is not
 a dependency of this repository) and an upload directory prepared by hand. This note records what was observed; it does
 not change the rule above. If the wrapper is still required for some releases, say here which ones.
+
+# Things that block or break a release (learned 2026-11-24)
+
+**History was rewritten on 2026-11-24.** `main`, 17 recent branches and all tags were rewritten to drop superseded
+file versions (about 8 GB down to 5.6 GB); every commit ID changed. A checkout made before that date must be re-cloned,
+or fetched and reset to `origin/main` — never pushed. The deploy guard's baseline moved with it: the 2026-08-24 Final
+Blow 1.9E commit is now `b26fbdb4c9` (was `d8579c5193`) in both `scripts/guard_cloudflare_deploy.mjs` and
+`scripts/live-deploy-baseline.json`. `main` forbids force pushes and requires linear history.
+
+**Rotatable Aquascape has a release gate.** `scripts/check_aquarium_release.mjs` runs in the Cloudflare build, the
+deploy guard and the mirror workflow. It fails the *whole site's* deploy unless
+`scripts/rotatable-aquascape/qa/approved-build.json` matches the committed build in `demos/rotatable-aquascape/`.
+Rebuilding that demo changes the hash. Do not commit a rebuild without running `npm run check:release` in
+`scripts/rotatable-aquascape` and reviewing its screenshots; never edit the receipt by hand. Before pushing anything
+that touches the aquarium, run `node scripts/check_aquarium_release.mjs` from the repository root.
+
+**A failed push leaves the old site up.** When a guard fails, Cloudflare keeps serving the previous deployment, so
+check the commit's checks after every push (`gh api repos/jz237/jez237-site/commits/<sha>/check-runs`) rather than
+assuming it went live.
+
+**GitHub Pages mirror.** Its deploy step can fail with `No artifacts named "github-pages-<run>-<attempt>"` when
+GitHub's artifact listing flickers; the recovery step then refuses to retry by design. Re-run the failed job
+(`gh run rerun <run-id> --failed`). The readiness check waits for three consecutive sightings to make this rare.
+Cloudflare, which serves jez237.com, is not affected by a mirror failure.
+
+# Housekeeping scripts
+
+- `node scripts/update_sitemap.mjs` reports pages missing from `sitemap.xml` and entries whose page is gone or
+  redirects; `--write` fixes both. `.github/workflows/sitemap.yml` adds new pages automatically on push (add-only).
+- AI Images factual infographics carry `factualInfographic.group` (see
+  `experiments/image-gen-2-benchmark/factual_groups.py` for the list). `append-entry.py` sets it; pass
+  `--factual-group` to choose, or omit it to derive the group from the `factual_subtype` note and the title.
+- Scripts that locate themselves must use `fileURLToPath(import.meta.url)`, not `new URL(import.meta.url).pathname`,
+  which yields `D:\D:\...` on Windows.

@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <script>(function(){try{if(localStorage.getItem("theme")==="light")document.documentElement.setAttribute("data-theme","light");}catch(e){}})();</script>
-  <title>Factual Infographics</title>
+  <title>Factual Infographics — AI Images — Jez237</title>
   <meta name="description" content="Factual Infographics: Non-fiction AI Images infographic experiments from the daily archive, kept separate from fictional worlds and style tests. An AI Images collection on Jez237.">
   <link rel="icon" type="image/svg+xml" href="../../assets/brand.svg">
   <link rel="stylesheet" href="../../assets/styles.css">
@@ -141,7 +141,7 @@
       .lightbox-hint { display: none; }
     }
   </style>
-  <link rel="stylesheet" href="museum-theme.css?v=5">
+  <link rel="stylesheet" href="museum-theme.css?v=6">
 </head>
 <body>
   <header id="site-nav"></header>
@@ -152,6 +152,7 @@
     <div class="ornament" aria-hidden="true">✦</div>
     <p class="lede">Non-fiction AI Images infographic experiments from the daily archive, kept separate from fictional worlds and style tests.</p>
     <div class="hero-controls" aria-label="Page controls">
+      <select class="control" id="topic-filter" aria-label="Filter by topic"><option value="">All topics</option></select>
       <button class="control" id="density-toggle" type="button" title="Toggle grid density">Grid: 3 columns</button>
     </div>
     <nav class="series-nav" aria-label="Image series">
@@ -254,7 +255,7 @@
 
       function render(items) {
         if (!items.length) {
-          listRoot.innerHTML = '<p class="empty">No factual infographics have been archived yet.</p>';
+          listRoot.innerHTML = `<p class="empty">${topicFilter.value ? 'No infographics in this topic yet.' : 'No factual infographics have been archived yet.'}</p>`;
           countPill.textContent = 'Infographics: 0';
           return;
         }
@@ -263,6 +264,35 @@
         bindImages();
         updateNavHeight();
       }
+
+      // Topic filter: narrows the list in place; ?topic=<group> preselects one.
+      const TOPICS = [['cats', 'Cat Atlas'], ['insects', 'Insects'], ['phobias', 'Phobias'], ['health', 'Health conditions'],
+        ['reef-fish', 'Reef fish'], ['earth-space', 'Earth & space'], ['how-things-work', 'How things work'],
+        ['nature-science', 'Nature & science']];
+      const topicFilter = document.getElementById('topic-filter');
+      let allItems = [];
+      const topicOf = (item) => (item.factualInfographic && item.factualInfographic.group) || 'nature-science';
+      function setUpTopics(items) {
+        allItems = items;
+        const counts = {};
+        items.forEach((item) => { counts[topicOf(item)] = (counts[topicOf(item)] || 0) + 1; });
+        topicFilter.innerHTML = `<option value="">All topics (${items.length})</option>` + TOPICS
+          .filter(([key]) => counts[key])
+          .map(([key, label]) => `<option value="${key}">${escapeHtml(label)} (${counts[key]})</option>`).join('');
+        const wanted = new URLSearchParams(location.search).get('topic') || '';
+        if (counts[wanted]) topicFilter.value = wanted;
+        applyTopic();
+      }
+      function applyTopic() {
+        const key = topicFilter.value;
+        render(key ? allItems.filter((item) => topicOf(item) === key) : allItems);
+      }
+      topicFilter.addEventListener('change', () => {
+        const url = new URL(location.href);
+        if (topicFilter.value) url.searchParams.set('topic', topicFilter.value); else url.searchParams.delete('topic');
+        history.replaceState(null, '', url);
+        applyTopic();
+      });
 
       function bindImages() {
         document.querySelectorAll('.image-wrap img').forEach((thumb) => {
@@ -307,11 +337,11 @@
 
       fetch('factual-infographics-data.json', { cache: 'no-cache' })
         .then((r) => r.ok ? r.json() : Promise.reject(new Error('Could not load factual-infographics-data.json')))
-        .then((items) => render(items.sort((a, b) => String(b.date || '').localeCompare(String(a.date || '')) || String(b.slot || '').localeCompare(String(a.slot || '')))))
+        .then((items) => setUpTopics(items.sort((a, b) => String(b.date || '').localeCompare(String(a.date || '')) || String(b.slot || '').localeCompare(String(a.slot || '')))))
         .catch((err) => { listRoot.innerHTML = `<p class="empty">${escapeHtml(err.message)}</p>`; });
     })();
   </script>
   <script src="../../assets/nav.js?v=ai-images-20260930" defer></script>
-  <script src="museum-theme.js?v=3" defer></script>
+  <script src="museum-theme.js?v=4" defer></script>
 </body>
 </html>

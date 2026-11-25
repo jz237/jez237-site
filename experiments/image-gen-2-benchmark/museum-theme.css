@@ -383,3 +383,21 @@ body[data-density="3"] .content h3, body[data-density="3"] .card h3 { font-size:
   border-color: rgba(216, 185, 106, .75);
   font-weight: 700;
 }
+
+/* Phones: the main row becomes a single swipeable line instead of a tall stack. */
+@media (max-width: 640px) {
+  .series-nav:not(.series-subnav) {
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    max-width: 100%;
+    padding: 2px 18px 6px;
+    column-gap: 8px;
+    -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 18px, #000 calc(100% - 28px), transparent 100%);
+    mask-image: linear-gradient(90deg, transparent 0, #000 18px, #000 calc(100% - 28px), transparent 100%);
+  }
+  .series-nav:not(.series-subnav)::-webkit-scrollbar { display: none; }
+  .series-nav:not(.series-subnav) a { flex: 0 0 auto; }
+}

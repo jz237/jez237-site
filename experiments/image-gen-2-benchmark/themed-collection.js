@@ -23,6 +23,10 @@
     ['earth-space', /heat dome|frost|sprite|basalt|lightning|fulgurite|hailstone|atmospheric river|pyrocumulonimbus|volcanic|snow crystal|aurora|tsunami|cave pearl|enceladus|pulsar|geyser|pillow lava|\bopal\b|saharan dust|soil crust|upwelling|internal waves|brinicle|black smoker|hydrothermal/i]
   ];
   function topicOf(item) {
+    // Entries carry an explicit group (written by append-entry.py / factual_groups.py);
+    // the tag and keyword rules below only cover entries that predate it.
+    const group = item.factualInfographic && item.factualInfographic.group;
+    if (group) return group;
     const tag = String(item.tests || '').match(/(?:^|;)\s*factual_subtype:\s*([a-z-]+)(?=;|\s|$)/);
     if (tag && TAGGED_TOPICS[tag[1]]) return TAGGED_TOPICS[tag[1]];
     const title = String(item.title || '');

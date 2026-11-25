@@ -22,6 +22,7 @@ from PIL import Image, ImageOps
 from urllib.parse import urlparse
 
 from duplicate_guard import assert_unique_candidate, build_metadata
+from factual_groups import GROUPS as FACTUAL_GROUPS, classify as classify_factual_group
 
 ROOT = Path(__file__).resolve().parent
 DATA = ROOT / "gallery-data.json"
@@ -298,6 +299,10 @@ def main() -> None:
     ap.add_argument("--factual-description", default="")
     ap.add_argument("--factual-source-note", default="")
     ap.add_argument(
+        "--factual-group", default="", choices=("",) + FACTUAL_GROUPS,
+        help="Topic page for a factual infographic. Omit to derive it from the factual_subtype note and the title.",
+    )
+    ap.add_argument(
         "--factual-evidence-file",
         default="",
         help="JSON claim sheet with the independently fetched sources supporting a factual infographic",
@@ -436,6 +441,7 @@ def main() -> None:
             "description": args.factual_description.strip(),
             "sourceNote": source_note,
             "evidence": factual_evidence,
+            "group": args.factual_group or classify_factual_group(args.title, args.tests),
         }
     if args.hybrid_name.strip() or args.slot in {"hybrid-creature-infographic", "hybrid-creature-wild"}:
         entry["hybridCreature"] = {

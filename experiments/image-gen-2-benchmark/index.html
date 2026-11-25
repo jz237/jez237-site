@@ -468,6 +468,24 @@
       .lightbox-hint { display: none; }
       .lightbox-nav { width: 40px; height: 40px; }
     }
+  
+    /* Phones: the main row becomes a single swipeable line instead of a tall stack. */
+    @media (max-width: 640px) {
+      .series-nav:not(.series-subnav) {
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+        overflow-x: auto;
+        scrollbar-width: none;
+        -webkit-overflow-scrolling: touch;
+        max-width: 100%;
+        padding: 2px 18px 6px;
+        column-gap: 8px;
+        -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 18px, #000 calc(100% - 28px), transparent 100%);
+        mask-image: linear-gradient(90deg, transparent 0, #000 18px, #000 calc(100% - 28px), transparent 100%);
+      }
+      .series-nav:not(.series-subnav)::-webkit-scrollbar { display: none; }
+      .series-nav:not(.series-subnav) a { flex: 0 0 auto; }
+    }
   </style>
   <link rel="apple-touch-icon" href="../../assets/icons/apple-touch-icon.png" />
   <meta name="theme-color" content="#0b0f14" />
@@ -954,5 +972,12 @@
     })();
   </script>
   <script src="../../assets/nav.js?v=ai-images-20260930" defer></script>
+  <script>// On phones the section row scrolls sideways; bring the current section into view.
+(function () {
+  var nav = document.querySelector('.series-nav:not(.series-subnav)');
+  var current = nav && nav.querySelector('a[aria-current]');
+  if (!current || nav.scrollWidth <= nav.clientWidth) return;
+  nav.scrollLeft = Math.max(0, current.offsetLeft - (nav.clientWidth - current.offsetWidth) / 2);
+})();</script>
 </body>
 </html>

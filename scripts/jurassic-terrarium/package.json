@@ -17,7 +17,6 @@
     "@gltf-transform/functions": "4.2.1",
     "esbuild": "0.25.10",
     "meshoptimizer": "0.25.0",
-    "playwright": "1.55.1",
-    "sharp": "0.35.5"
+    "playwright": "1.55.1"
   }
 }
