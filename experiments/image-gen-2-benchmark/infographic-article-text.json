@@ -1075,7 +1075,7 @@
    {
     "heading": "What thermal runaway is",
     "body": [
-     "A Federal Aviation Administration report describes thermal runaway as a chemical reaction within a cell that results in a dramatic, uncontrolled rise in temperature and pressure. Lithium cells use a hydrocarbon-based electrolyte that is flammable, unlike the water-based electrolytes of traditional batteries. As the temperature rises, pressure inside the cell increases and activates its pressure-relief ports, releasing the electrolyte. The electrolyte may ignite on contact with hot cell cases or from burning packaging.",
+     "A Federal Aviation Administration report, a summary of its studies of lithium cells in aircraft cargo compartments, describes thermal runaway as a chemical reaction within a cell that results in a dramatic, uncontrolled rise in temperature and pressure. Lithium cells use a hydrocarbon-based electrolyte that is flammable, unlike the water-based electrolytes of traditional batteries. As the temperature rises, pressure inside the cell increases and activates its pressure-relief ports, releasing the electrolyte. The electrolyte may ignite on contact with hot cell cases or from burning packaging.",
      "The report says many circumstances may start it. They include internal cell failure, heating such as exposure to an external fire, physical abuse, rapid discharge, over-charging, or a manufacturing contaminant that shows itself later."
     ],
     "sources": [
@@ -3451,23 +3451,27 @@
   ]
  },
  "2026-08-11-factual-infographic-factual-infographic-thorn-bug-family-al": {
-  "dek": "The thorn bug, Umbonia crassicornis, is a treehopper whose young raise an alarm by vibrating the plant they live on. Studies report that their coordinated signals bring a defensive response from the mother.",
+  "dek": "The thorn bug, Umbonia crassicornis, is a treehopper whose young raise an alarm by vibrating the plant they live on. Their synchronized bursts of signals bring on the mother's defense against predators.",
   "glance": [
    [
     "Scientific name",
     "Umbonia crassicornis"
    ],
    [
-    "Signal",
-    "Coordinated vibrations sent through the host plant"
+    "Range",
+    "South and Central America, Mexico and southern Florida"
    ],
    [
-    "Sent by",
-    "The offspring, when disturbed"
+    "Adult size",
+    "Typically about 0.5 inch long"
    ],
    [
-    "Effect",
-    "A defensive response from the mother"
+    "Brood",
+    "From 15 to 50 young, tended by the mother"
+   ],
+   [
+    "Alarm",
+    "Synchronized bursts of vibration through the plant"
    ],
    [
     "Mother's defense",
@@ -3478,39 +3482,42 @@
    {
     "heading": "An alarm sent through the twig",
     "body": [
-     "When disturbed, thorn bug offspring can send coordinated vibrations through the host plant. Studies of Umbonia crassicornis report that these group signals evoke a defensive response from the mother.",
-     "The infographic lays this out as a four-stage alarm sequence. In contact, a predator-like touch reaches one nymph. In local signal, the touched nymph vibrates the twig. In group burst, its siblings answer with rapid, synchronized vibrations. In mother responds, the mother detects the group vibration and turns to interpose and defend the brood. A cross-section of the twig is labeled substrate motion through twig, not airborne sound."
+     "The study that described the alarm reports that the clustered nymphs of Umbonia crassicornis produce vibrational signals that travel through the plant, in synchronized bursts that bring on the mother's antipredator behavior. In the laboratory, nymphs were made to signal by a light touch imitating the approach of a predator. Signals from the nymphs at the site of the disturbance set off a rapid wave of signaling by many others in the group. When the vibrations were blocked from reaching the mother, her response was abolished. Only the study's published summary was read for this page.",
+     "The infographic lays this out as four stages: a predator-like touch reaches one nymph, that nymph vibrates the twig, its siblings answer with rapid, synchronized vibrations, and the mother turns to defend the brood. A cross-section of the twig is labeled substrate motion through twig, not airborne sound."
     ],
     "sources": [
-     "S1"
+     "S3"
+    ]
+   },
+   {
+    "heading": "Why the timing matters",
+    "body": [
+     "According to the summary, nymphs in an otherwise undisturbed group signaled only in response to signals coordinated into synchronized group displays, and not to signals in random patterns. After a period of simulated attack, the playback of one individual signal could set off a coordinated burst. It remains unknown whether siblings coordinate entirely cooperatively or compete to have the mother close by.",
+     "The infographic's signal timing panel says coordinated group bursts elicit a stronger maternal response, and random scattered signals a weaker one. In the summary, the comparison of synchronized and random signals is about how the nymphs respond; the mother's defensive behavior is described as associated with the coordinated signaling."
+    ],
+    "sources": [
+     "S3"
     ]
    },
    {
     "heading": "The mother's defense, and false alarms",
     "body": [
-     "A research paper on a closely related treehopper says female thornbug treehoppers defend their offspring against invertebrate predators with kicks and wing-buzzes. The same paper notes that thornbug juveniles often continue signaling after attacks end, which produces false alarms unless the mother's own signals inhibit them.",
-     "The infographic's signal timing panel says coordinated group bursts elicit a stronger maternal response, and random scattered signals a weaker one."
+     "A research paper on the closely related oak treehopper, Platycotis vittata, says female thornbug treehoppers, like female oak treehoppers, defend their offspring against invertebrate predators with kicks and wing-buzzes. It notes that thornbug juveniles often continue signaling after attacks end, which produces false alarms unless the mother's own signals inhibit them.",
+     "That paper's field experiment was on the oak treehopper. It showed that offspring signals evoke maternal defense and that maternal signals can inhibit offspring signaling."
     ],
     "sources": [
      "S1"
     ]
    },
    {
-    "heading": "The closely related oak treehopper",
+    "heading": "The insect and its brood",
     "body": [
-     "That paper's own experiments were on the oak treehopper, Platycotis vittata. In that species, mothers and clustered offspring communicate with one another during predator encounters through vibrations in the plant. A field playback experiment showed that offspring signals evoke maternal defense and that maternal signals can inhibit offspring signaling. Oak treehopper offspring produced very few signals after attacks ended."
+     "The University of Florida's profile gives the thorn bug's range as South and Central America, Mexico and southern Florida. The adult is typically about 0.5 inch long and green or yellow with reddish lines and brownish markings, and the species varies in size, color and structure, particularly the males' horn. The female's horn is described as tall and essentially perpendicular.",
+     "Females lay their eggs in the tender bark of twigs, and the eggs hatch about 20 days later. The female actively tends her brood, which can number from 15 to 50, and lays only a single clutch. Young nymphs have three horns instead of the one seen on adults. The profile says a chemical passes between the parent and the nymphs, making them distasteful to potential predators.",
+     "The thorn bug feeds by piercing plant tissue and sucking the sap, and it cuts into the plant to lay its eggs. Hosts that have been severely damaged include hibiscus, powder-puff (Calliandra), woman's tongue tree and acacia. The infographic adds that development is gradual, with no pupa, and that the function of the nymph's three pronotal structures is not settled."
     ],
     "sources": [
-     "S1"
-    ]
-   },
-   {
-    "heading": "The rest of the infographic",
-    "body": [
-     "The infographic also shows the insect itself. It labels a tall pronotal horn on the adult female, a variable pronotal horn on the adult male and three pronotal structures on the nymph, with the note that their function is not settled. Other panels say the female lays eggs in tender bark and actively tends one brood, that nymphs and adults feed on plant sap, and that development is gradual, with no pupa. It gives the range as South and Central America, Mexico and southern Florida, and names Calliandra as one documented host, not the only host."
-    ],
-    "sources": [
-     "S1"
+     "S2"
     ]
    }
   ]

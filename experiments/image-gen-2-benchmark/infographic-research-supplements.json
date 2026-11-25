@@ -1428,7 +1428,7 @@
       {
         "id": "S1",
         "publisher": "Federal Aviation Administration",
-        "title": "Lithium Battery Thermal Runaway Vent Gas Analysis",
+        "title": "Summary of FAA Studies Related to the Hazards Produced by Lithium Cells in Thermal Runaway in Aircraft Cargo Compartments (DOT/FAA/TC-16/37, June 2016)",
         "url": "https://www.fire.tc.faa.gov/pdf/TC-16-37.pdf"
       }
     ],
@@ -1500,7 +1500,7 @@
         ]
       }
     ],
-    "checkedAt": "2026-11-25T18:47:29.895804+00:00"
+    "checkedAt": "2026-11-25T21:41:30.171467+00:00"
   },
   "2026-07-09-factual-infographic-factual-infographic-how-electrochromic-": {
     "sources": [
@@ -4145,8 +4145,20 @@
       {
         "id": "S1",
         "publisher": "Frontiers in Ecology and Evolution",
-        "title": "Review of vibrational communication and parental care",
+        "title": "Maternal Vibrational Signals Reduce the Risk of Attracting Eavesdropping Predators (Hamel and Cocroft, 2019; a study of the oak treehopper)",
         "url": "https://www.frontiersin.org/journals/ecology-and-evolution/articles/10.3389/fevo.2019.00204/full"
+      },
+      {
+        "id": "S2",
+        "publisher": "University of Florida IFAS Extension, Featured Creatures",
+        "title": "Thorn Bug, Umbonia crassicornis (Amyot and Serville) (Insecta: Hemiptera: Membracidae), EENY175/IN332",
+        "url": "https://ask.ifas.ufl.edu/publication/IN332"
+      },
+      {
+        "id": "S3",
+        "publisher": "Behaviour (Brill)",
+        "title": "Offspring-Parent Communication in a Subsocial Treehopper (Hemiptera: Membracidae: Umbonia crassicornis) (Cocroft, 1999; abstract only, the full paper is paywalled)",
+        "url": "https://brill.com/view/journals/beh/136/1/article-p1_1.xml"
       }
     ],
     "claims": [
@@ -4191,8 +4203,98 @@
         "sourceIds": [
           "S1"
         ]
+      },
+      {
+        "claim": "The University of Florida profile says this thorn bug has been found throughout South and Central America, Mexico, and southern Florida.",
+        "sourceIds": [
+          "S2"
+        ]
+      },
+      {
+        "claim": "Typically, the adult is about 0.5 inch in length and is green or yellow with reddish lines and brownish markings; the species is variable in size, color and structure, particularly the pronotal horn of males.",
+        "sourceIds": [
+          "S2"
+        ]
+      },
+      {
+        "claim": "The profile describes the female thorn bug's horn as tall and essentially perpendicular.",
+        "sourceIds": [
+          "S2"
+        ]
+      },
+      {
+        "claim": "Females lay their eggs in the tender bark of twigs and the eggs hatch about 20 days later.",
+        "sourceIds": [
+          "S2"
+        ]
+      },
+      {
+        "claim": "The female actively tends her brood or colony, which can number from 15 to 50 individuals; four generations occur per year, but females lay only a single clutch of eggs.",
+        "sourceIds": [
+          "S2"
+        ]
+      },
+      {
+        "claim": "Young nymphs have three horns instead of the one seen on the adults.",
+        "sourceIds": [
+          "S2"
+        ]
+      },
+      {
+        "claim": "The profile says the species has a chemical communication that aids in the defense of the young: the chemical passes between the parent and nymphs, making them distasteful to potential predators.",
+        "sourceIds": [
+          "S2"
+        ]
+      },
+      {
+        "claim": "The thorn bug causes damage by piercing the plant tissue and sucking the sap and by making cuts in the plant for egg laying.",
+        "sourceIds": [
+          "S2"
+        ]
+      },
+      {
+        "claim": "The thorn bug is an occasional pest of ornamentals and fruit trees in southern Florida; hosts that have been severely damaged include Hibiscus, powder-puff (Calliandra spp.), woman's tongue tree and Acacia.",
+        "sourceIds": [
+          "S2"
+        ]
+      },
+      {
+        "claim": "The paper's abstract says that in Umbonia crassicornis, aggregated nymphal offspring produce substrate-borne vibrational signals in synchronized bursts that elicit the mother's antipredator behavior.",
+        "sourceIds": [
+          "S3"
+        ]
+      },
+      {
+        "claim": "Nymphs were stimulated to signal in the laboratory by light contact simulating the approach of a predator, and signals of nymphs at the site of disturbance triggered a rapid wave of signaling by many individuals within the aggregation.",
+        "sourceIds": [
+          "S3"
+        ]
+      },
+      {
+        "claim": "When transmission of vibrations was blocked between signaling nymphs and the mother, the mother's response was abolished.",
+        "sourceIds": [
+          "S3"
+        ]
+      },
+      {
+        "claim": "Nymphs in otherwise undisturbed aggregations signaled only in response to signals coordinated into synchronized group displays, and not to signals in random temporal patterns.",
+        "sourceIds": [
+          "S3"
+        ]
+      },
+      {
+        "claim": "After a period in which nymphs were stimulated to signal, playback of one individual signal could trigger a coordinated burst within the aggregation.",
+        "sourceIds": [
+          "S3"
+        ]
+      },
+      {
+        "claim": "The abstract says the coordinated signaling was associated with the mother's defensive behavior, and that it remains unknown if coordination among siblings is completely cooperative or if siblings compete for the mother's proximity.",
+        "sourceIds": [
+          "S3"
+        ]
       }
     ],
-    "checkedAt": "2026-11-25T18:47:29.895804+00:00"
+    "checkedAt": "2026-11-25T21:41:30.171467+00:00"
   }
 }
