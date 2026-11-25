@@ -14,8 +14,69 @@
         "sourceIds": [
           "S1"
         ]
+      },
+      {
+        "claim": "Before application, the bulletin says to consult the film's product data bulletin for minimum and maximum application temperatures and recommended substrates.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Every application surface must be considered contaminated and must be cleaned before the decal is applied.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The surface must be completely dry before application.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "On a painted surface, the drying or curing period of the paint system must be followed; the bulletin says failing to do so can result in poor decal performance and difficult removal.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The bulletin's step-by-step procedure uses a top hinge: once the decal is positioned, a masking tape hinge is applied along its top edge.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The decal is flipped up over the hinge and the liner is removed.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The decal is squeegeed from the top center downward and outward with firm, short, overlapping strokes.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The premask, also called application tape, is removed by peeling back a corner and pulling it back at a 180° angle.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "After the premask is removed, the entire decal is squeegeed again with very firm pressure, including all edges; air bubbles are punctured with a straight pin and squeegeed from the edge of the bubble toward the puncture.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Avery Dennison says not to use application fluid or the wet method; water or fluid not squeezed out can remain between the substrate and the decal and reduce ultimate adhesion.",
+        "sourceIds": [
+          "S1"
+        ]
       }
-    ]
+    ],
+    "checkedAt": "2026-11-25T18:38:02.534763+00:00"
   },
   "2026-06-24-factual-infographic-factual-infographic-planted-aquarium-ni": {
     "sources": [
@@ -32,8 +93,69 @@
         "sourceIds": [
           "S1"
         ]
+      },
+      {
+        "claim": "In fish, the primary metabolic waste product is ammonia, and most of it leaves the body by diffusion through the gills into the water.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The decay of uneaten feed and organic matter contributes to ammonia, but in most aquaculture or hobbyist systems the digestion of the feed eaten by the fish is the primary source.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Ammonia is colorless and, even at levels toxic to fish, odorless, so the only way to know whether it is present is to test the water.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "In water, ammonia exists as un-ionized ammonia and ionized ammonium; the un-ionized form is approximately 100 times more toxic to fish than the ionized form.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Ammonia-oxidizing bacteria, including Nitrosospira and Nitrosomonas, convert ammonia to nitrite; nitrite-oxidizing bacteria, including Nitrospira and Nitrobacter, convert nitrite to the much less toxic nitrate.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "In tanks or aquaria a biological filter (biofilter) must be provided as a place where the nitrifying bacteria can colonize; a new biofilter requires six to eight weeks to build up enough bacteria to effectively reduce ammonia and nitrite.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Both groups of nitrifying bacteria need oxygen; if oxygen levels are not sufficient, the bacteria can stop functioning or die, and ammonia and nitrite levels will increase.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "In natural systems and ponds, nitrate is taken up as a fertilizer by plants, including phytoplankton, so levels typically remain low.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "In closed systems with little or no water exchange nitrate can accumulate; water changes or separate denitrification systems are needed to remove nitrate from recirculating system water.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "In healthy ponds and tanks ammonia levels should always be zero, and overfeeding is a major cause of high ammonia concentrations.",
+        "sourceIds": [
+          "S1"
+        ]
       }
-    ]
+    ],
+    "checkedAt": "2026-11-25T18:47:29.895804+00:00"
   },
   "2026-06-24-factual-infographic-factual-infographic-how-a-thermal-recei": {
     "sources": [
@@ -50,8 +172,69 @@
         "sourceIds": [
           "S1"
         ]
+      },
+      {
+        "claim": "Jujo Thermal says its thermal papers begin to develop color at temperatures between 60 °C and 100 °C and reach an applicable density at 70 to 120 °C, depending on the grade.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The paper shows similar signs of development at high temperature or in conditions of high humidity.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "For long-term storage, the manufacturer says papers should be kept in the dark at an average ambient temperature of less than 25 °C and a relative humidity of less than 65%.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "All papers turn yellow with time, especially if exposed to direct sunlight for prolonged periods.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "PVC film contains plasticizer; prolonged contact with such film reduces the image-forming property of thermal paper and causes the printed image to fade.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "For storing thermal papers, the manufacturer recommends files and cases made of polyolefins or polyester.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Adhesives containing volatile organic solvents, such as alcohols, esters and ketones, cause color formation in the paper.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Human body fluids such as sweat cause the printed image to fade.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Frictional heat from scratching, or pressure from hard metal objects or fingernails, causes an image to develop on the paper.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Because the image tends to fade under conventional fluorescent light over prolonged periods, the manufacturer advises filing printed paper soon after printing.",
+        "sourceIds": [
+          "S1"
+        ]
       }
-    ]
+    ],
+    "checkedAt": "2026-11-25T18:38:02.534763+00:00"
   },
   "2026-06-25-factual-infographic-factual-infographic-how-a-mechanical-fi": {
     "sources": [
@@ -68,8 +251,69 @@
         "sourceIds": [
           "S1"
         ]
+      },
+      {
+        "claim": "Each sprinkler head operates only when it reaches its predetermined operating temperature.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Sprinklers operate independently of one another, so only those closest to the fire open; sprinklers in areas where there is no fire remain closed and do not release water.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "In normal conditions the heat-responsive element holds the waterway of the head closed by applying pressure to a sealing mechanism.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "When the element breaks apart, water pressure in the sprinkler piping overcomes the sealing mechanism and sprays water on the fire.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The association's table of operating temperature ratings pairs each rating with a color of glass bulb filling, from 57 °C (orange) to 182 °C (mauve); a 68 °C (155 °F) rating has a red filling.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Sprinkler heads are spaced on or close to ceiling level, where heat collects as it rises during a fire.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The water discharged from the sprinkler is distributed by a deflector over the location of the fire.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "In addition to extinguishing or controlling the fire, the water helps to cool the hot gases produced and pre-wets areas immediately adjacent to the fire to inhibit fire growth.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Because the air or water inside sprinkler piping may be corrosive, even after many years in the field, the sprinkler frame must be made of materials that resist that corrosion.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Concealed sprinklers sit flush with the ceiling behind a small metal disc soldered to a support bracket; when heated in a fire this melts, letting the disc fall away and exposing the sprinkler head.",
+        "sourceIds": [
+          "S1"
+        ]
       }
-    ]
+    ],
+    "checkedAt": "2026-11-25T18:38:02.534763+00:00"
   },
   "2026-06-25-factual-infographic-factual-infographic-how-a-quartz-watch-": {
     "sources": [
@@ -86,8 +330,57 @@
         "sourceIds": [
           "S1"
         ]
+      },
+      {
+        "claim": "A quartz timepiece uses a quartz crystal's property of oscillating at a precise frequency when a voltage is applied to it.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Using the quartz oscillator's vibration frequency as the standard for keeping time, in place of the conventional pendulum or balance wheel, increased the precision of timepieces dramatically.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The quartz clock was invented in America by Warren Marrison in 1927.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "On December 25, 1969, Seiko launched the Seiko Quartz Astron 35SQ, described by the museum as the world's first quartz wristwatch.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The Astron's accuracy was ±0.2 seconds per day and ±5 seconds per month, when a few seconds to a few dozen seconds per day was considered normal for high-precision mechanical wristwatches.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The technologies the museum lists for Seiko's quartz watches include a miniature, low-power, shock-resistant tuning-fork type quartz oscillator and a second hand that ticks once per second to save power; it says their use in Seiko's watches made them the global standard.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The listed technologies also include an open-type stepping motor that enabled a space-saving arrangement of the coil, stator and rotor.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Bulova's tuning fork watch, launched in 1960, vibrated at 360 Hz and was accurate to within two seconds per day; the museum says the pursuit of even higher precision led to the age of quartz watches.",
+        "sourceIds": [
+          "S1"
+        ]
       }
-    ]
+    ],
+    "checkedAt": "2026-11-25T18:38:02.534763+00:00"
   },
   "2026-06-27-factual-infographic-factual-infographic-how-a-bicycle-freeh": {
     "sources": [
@@ -104,8 +397,69 @@
         "sourceIds": [
           "S1"
         ]
+      },
+      {
+        "claim": "The freehub is the ratcheting mechanism attached to the rear hub of most modern derailleur bikes.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The freehub uses a splined cylinder to hold the cassette cogs.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Inside the freehub are bearings and a clutch system, usually ratcheting teeth and pawls.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The cassette cogs have no moving parts; all the moving parts are in the freehub body.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The freehub's pawls and bearings operate only while the bike is coasting, when there is very little load or stress on the freehub; when the bike is pedaled, the pawls lock onto the ratcheting teeth and the freehub bearings take very little stress.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Because of that low load, bicycle grease is typically not required inside a freehub, and most manufacturers recommend liquid lubricant.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "With enough use a freehub wears out: the pawls may begin to slip and the bearings may become rough.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "If cleaning and lubricating the freehub does not resolve slipping, sticking or noise, the guide says to replace the freehub unit with a new one.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Some brand-specific procedures in the guide call for grease on particular parts: for Campagnolo freehubs, the springs and pawls are greased before they are installed.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "In the DT-Hugi design the guide describes, the clutch is made up of two star ratchet gears whose angled teeth face one another, each pushed by a spring.",
+        "sourceIds": [
+          "S1"
+        ]
       }
-    ]
+    ],
+    "checkedAt": "2026-11-25T18:38:02.534763+00:00"
   },
   "2026-06-30-factual-infographic-factual-infographic-how-a-zipper-slider": {
     "sources": [
@@ -122,8 +476,57 @@
         "sourceIds": [
           "S1"
         ]
+      },
+      {
+        "claim": "YKK divides zippers broadly into three components: elements, slider and tape.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The elements are the component with teeth that mesh with each other.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The slider is the component moved by the user's hand, and the tape is the fabric component.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The slider, which YKK calls the key to opening and closing, has a Y-shaped tunnel inside; pulling the slider down widens the gap between the meshing elements and opens the zipper.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Pulling the slider up causes the elements to mesh, closing the zipper.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The uneven sections on the left and right elements mesh together like gears, which lets the zipper engage and disengage.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Smooth opening and closing is highly dependent on the shape and dimensions of each component; with a measurement error in the elements, the zipper will not open properly and a zipper that should be closed will come open from the center.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Manufacturing the elements requires high precision, to within one hundredth of a millimeter.",
+        "sourceIds": [
+          "S1"
+        ]
       }
-    ]
+    ],
+    "checkedAt": "2026-11-25T18:38:02.534763+00:00"
   },
   "2026-07-02-factual-infographic-factual-infographic-how-bioluminescent-": {
     "sources": [
@@ -140,8 +543,69 @@
         "sourceIds": [
           "S1"
         ]
+      },
+      {
+        "claim": "Red tides occur when microscopic plankton called dinoflagellates multiply rapidly, forming dense blooms that can discolor the water.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "In Southern California the most common species behind red tides, and the one most often responsible for the glowing displays, is Lingulaulax polyedra (formerly named Lingulodinium polyedra); each cell measures 35-60 micrometers across.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "At night, when the phytoplankton are disturbed by waves or other movement in the water, they emit a neon-blue glow that can be seen with the naked eye.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Scientists think bioluminescence acts as a predator-avoidance mechanism, startling or confusing organisms that might eat the plankton.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Each L. polyedra cell contains pigments that give it a reddish-brown color; on sunny days the organisms swim toward the surface, where they concentrate and intensify the coloration of the water.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "During a red tide dominated by light-producing species, displays are best seen from a dark beach at least two hours after sunset; visibility is not guaranteed because the events are unpredictable and vary in intensity and location.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Prorocentrum micans, another bloom-forming dinoflagellate common in Southern California waters, is non-toxic and non-luminescent but can still contribute to red tide events.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Red tide is not synonymous with harmful algal bloom: many red tides are relatively harmless, while others can cause harm through toxin production or other mechanisms, depending on the species of plankton present.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Most red tides along the California coast are not considered dangerous to humans, but they can sometimes cause skin or eye irritation, or respiratory discomfort.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Off the coast of Washington, bioluminescent blooms have been linked to the dinoflagellate Alexandrium catenella; these blooms are often harmful because it produces saxitoxin, a neurotoxin.",
+        "sourceIds": [
+          "S1"
+        ]
       }
-    ]
+    ],
+    "checkedAt": "2026-11-25T18:47:29.895804+00:00"
   },
   "2026-07-04-factual-infographic-factual-infographic-how-comb-jellies-ma": {
     "sources": [
@@ -158,8 +622,51 @@
         "sourceIds": [
           "S1"
         ]
+      },
+      {
+        "claim": "The comb jelly is an oval-shaped animal with eight rows of tiny comblike plates that it beats to move through the water.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Comb jellies are voracious predators; some species can expand their stomachs to capture other jellies half their own size.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The aquarium lists the comb jelly's diet as plankton, small crustaceans and other jellies.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Comb jellies belong to the phylum Ctenophora; relatives listed include the sea gooseberry, lobed comb jelly and bloody-belly comb jelly.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "A comb jelly's soft body is thin skin stretched over a body composed of more than 95 percent water, with no bones or shells.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "A jelly is a gelatinous creature with few specialized organs; many species have a gravity-sensitive structure called a statocyst that helps with orientation in the water.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The aquarium lists the comb jelly's ecosystem as the open ocean and says its range and size vary with species.",
+        "sourceIds": [
+          "S1"
+        ]
       }
-    ]
+    ],
+    "checkedAt": "2026-11-25T18:47:29.895804+00:00"
   },
   "2026-07-04-factual-infographic-factual-infographic-how-a-heat-dome-wor": {
     "sources": [
@@ -176,8 +683,69 @@
         "sourceIds": [
           "S1"
         ]
+      },
+      {
+        "claim": "A heat dome occurs when a persistent region of high pressure traps heat over a particular area, and it can linger for days to weeks.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Heat domes are typically linked to the behavior of the jet stream, a band of fast-moving winds high in the atmosphere that moves in meandering, wavelike patterns.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "When the jet stream meanders north, it moves slower and can sink, which lowers humidity; this allows the sun to create progressively hotter conditions on the ground.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Air descending down mountains can also contribute to heat domes, as it warms even more.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Because of the heat island effect, temperatures in cities are generally higher than in surrounding rural areas, since dense concentrations of pavement, buildings and other hard surfaces tend to absorb and retain more heat.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "NOAA's article was written during a heat wave in June 2023 that affected more than 50 million people across the southern U.S. and Mexico and was brought on by what is called a heat dome.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "During that heat wave, overnight temperatures were expected to be abnormally warm and to provide little to no relief from the heat.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The Weather Prediction Center said there might be more danger than in a typical heat event, due to the longevity of near-record or record high nighttime lows and elevated heat index readings.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "During that heat wave, storms formed along the edge of a ridge of high pressure; a meteorologist quoted in the article said such storms are sometimes called ridge-riding storms.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "According to the weather service, heat causes more deaths across the United States each year than any other weather event, including tornadoes, floods and hurricanes.",
+        "sourceIds": [
+          "S1"
+        ]
       }
-    ]
+    ],
+    "checkedAt": "2026-11-25T18:47:29.895804+00:00"
   },
   "2026-06-29-factual-infographic-factual-infographic-how-a-manual-can-op": {
     "sources": [
@@ -194,8 +762,69 @@
         "sourceIds": [
           "S1"
         ]
+      },
+      {
+        "claim": "US patent US1838525A for a can opener names Charles Arthur Bunker as inventor; it was filed on May 20, 1926, and granted on December 29, 1931.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The patented opener has a pair of levers with handle portions pivotally mounted on a plate member, a cutter member rotatably mounted on one lever, and a feed member rotatably mounted on the other lever in alignment with the cutter.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Gears on the cutter and feeder members mesh when the handles are moved toward each other.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "To use the opener, the handles are spread to separate the cutter and feed member so the chime or bead of the can goes between them, with the cutter on the inner side of the can wall.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Closing the handles makes the feeder wheel engage the lower edge of the bead or chime and forces the cutter into and through the top of the can.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "After the can end has been pierced, turning the crank handle rotates the cutter, and the cutter and feed member travel around the bead formed by the can's seam.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The opener cuts through the end of the can, inward of the seam between the end and the side wall, instead of through the side wall as had been done previously.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The cutter turns the cut edge of the can downward into and against the body of the can.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The feeder wheel engages the outer wall of the can and the lower edge of the chime.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The cutter member is beveled.",
+        "sourceIds": [
+          "S1"
+        ]
       }
-    ]
+    ],
+    "checkedAt": "2026-11-25T18:38:02.534763+00:00"
   },
   "2026-07-01-factual-infographic-factual-infographic-how-a-mechanical-pe": {
     "sources": [
@@ -212,8 +841,69 @@
         "sourceIds": [
           "S1"
         ]
+      },
+      {
+        "claim": "The patent's pencil has a lead-engaging collet, a collet receiver tube with a tapered guide face, and rolling elements between the two that produce the clamping force on the lead.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The collet has split jaws made of spring material that normally tend to spring open, away from clamping the lead.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "In the normal position the lead is held firmly by the collet's clamping force, which comes from a wedging action of the collet, the receiver tube and the balls.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "When the button is operated, the receiver tube moves forward together with the collet, with the lead gripped, until the receiver tube stops against the tip piece.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Pushing the button farther lets the receiver tube move back at once on its own, driven by a spring.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "At the same time the pusher pushes the collet farther forward toward the conical tip piece, where the collet is fully opened.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "When the button is released, springs return the pusher and the collet to their original positions, and the retracted collet firmly grasps the lead again.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The patent says that in earlier pencils of this kind an opened chuck was likely to close first and then retract, so the small increment of lead could be pulled back into the pencil and lost.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The pencil in the patent's drawings is worked by a button that slides along a slot in the casing.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The patent says a general type of push button on the rear end of the casing may be used in place of the sliding button.",
+        "sourceIds": [
+          "S1"
+        ]
       }
-    ]
+    ],
+    "checkedAt": "2026-11-25T18:47:29.895804+00:00"
   },
   "2026-07-03-factual-infographic-factual-infographic-how-retroreflective": {
     "sources": [
@@ -230,8 +920,69 @@
         "sourceIds": [
           "S1"
         ]
+      },
+      {
+        "claim": "The manual says the MN MUTCD requires traffic signs to be either retroreflective or illuminated, so that they show the same shape and color both day and night.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Because it is more cost effective to make signs retroreflective than to illuminate them, the manual says retroreflective sheeting material is used on all signs.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Most objects reflect light, and the most common type is diffuse reflection, in which light scatters after striking rough surfaces such as trees, clothing and carpet; only a very small amount of the diffused light reflects back toward the light source.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Retroreflection is the ability of a surface to reflect light back toward the light source, and retroreflectivity is the measurable property of a material's ability to redirect light back to its source.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "To make signs retroreflective, sign manufacturers apply retroreflective sheeting, which contains either microscopic glass beads or cube corner reflectors, to the face of each sign.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The manual says that if all glass beads and cube corner reflectors could be made perfectly shaped, all reflected light would return directly to the headlights.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Retroreflective sheeting does not have perfectly shaped lenses, but drivers see more reflected light the closer their eyes are to the headlights.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The angle formed between the headlights, the sign and the driver's eyes is called the observation angle, and the smaller the angle, the higher the retroreflectivity.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Retroreflective materials are more efficient when the light source is approximately perpendicular to the sign face, which is why the manual says it is important to orient signs to face approaching traffic.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Some traffic signs may look almost new during the day but be completely ineffective at night, a problem the manual says is usually a function of the type and age of the retroreflective material.",
+        "sourceIds": [
+          "S1"
+        ]
       }
-    ]
+    ],
+    "checkedAt": "2026-11-25T18:47:29.895804+00:00"
   },
   "2026-06-28-factual-infographic-factual-infographic-how-a-refrigerator-": {
     "sources": [
@@ -248,8 +999,39 @@
         "sourceIds": [
           "S1"
         ]
+      },
+      {
+        "claim": "HIGA lists its extruded door seal magnetic strips as used in magnetic door seals for refrigerators, water bars, tea bar machines, upright freezers and medical freezers.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The maker describes the purpose of these magnetic door seals as providing insulation and freshness and preventing cold leakage.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The strips are offered with cross-sections and pole layouts made to order.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The maker says it developed extrusion screw materials for magnetic granules, for efficient extrusion.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The maker says its in-house magnetizing fixtures and magnetic circuit design improve magnetic performance.",
+        "sourceIds": [
+          "S1"
+        ]
       }
-    ]
+    ],
+    "checkedAt": "2026-11-25T18:38:02.534763+00:00"
   },
   "2026-07-05-factual-infographic-factual-infographic-how-frost-flowers-g": {
     "sources": [
@@ -266,8 +1048,33 @@
         "sourceIds": [
           "S1"
         ]
+      },
+      {
+        "claim": "Frost flowers roughen the sea-ice surface.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Frost flowers dramatically affect the electromagnetic signal of the sea-ice surface.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The glossary entry describes the water vapor as becoming a solid and bypassing the liquid phase.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The glossary entry is illustrated with a close-up view of frost flowers, credited to Don Perovich of the U.S. Army Cold Regions Research and Engineering Laboratory.",
+        "sourceIds": [
+          "S1"
+        ]
       }
-    ]
+    ],
+    "checkedAt": "2026-11-25T18:47:29.895804+00:00"
   },
   "2026-07-21-factual-infographic-factual-infographic-how-frost-flowers-b": {
     "sources": [
@@ -284,8 +1091,33 @@
         "sourceIds": [
           "S1"
         ]
+      },
+      {
+        "claim": "The National Snow and Ice Data Center defines frost flowers as crystals of ice that form when water vapor becomes a solid.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "In forming, the vapor bypasses the liquid phase and deposits itself on the sea ice surface.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The glossary describes the effect of frost flowers on the surface's electromagnetic signal as dramatic.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The glossary entry is illustrated with a close-up view of frost flowers, credited to Don Perovich of the U.S. Army Cold Regions Research and Engineering Laboratory.",
+        "sourceIds": [
+          "S1"
+        ]
       }
-    ]
+    ],
+    "checkedAt": "2026-11-25T18:47:29.895804+00:00"
   },
   "2026-07-11-factual-infographic-factual-infographic-how-solar-sails-get": {
     "sources": [
@@ -302,8 +1134,69 @@
         "sourceIds": [
           "S1"
         ]
+      },
+      {
+        "claim": "Solar sails use large, lightweight, mirror-like surfaces that capture the momentum from sunlight to push the spacecraft forward.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Light is made up of massless particles called photons.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "As in ion thrusters, where every ejected atom creates a small thrust, every photon that hits the sails can create a small thrust forward.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The activity's diagram shows momentum transferred by light particles bouncing off the slightly curved surface of a solar sail, moving the sail forward.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Thrust is the force that accelerates a rocket through the air and through space.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "In traditional chemical rockets, hot gas exhaust is pushed out from the back, moving the rocket forward, and these rockets take tons of liquid and solid fuel.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Ion thrusters eject ions instead of combustion gases, and their propellant is an inert gas like xenon.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "A solar sail's velocity depends on its size and its mass.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The activity names Starshot, a proposed mission, as using solar sails to travel to Alpha Centauri, the star system nearest our solar system.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The activity asks students how the distance from the Sun affects a solar sail's acceleration and does not state the answer.",
+        "sourceIds": [
+          "S1"
+        ]
       }
-    ]
+    ],
+    "checkedAt": "2026-11-25T18:47:29.895804+00:00"
   },
   "2026-07-14-factual-infographic-factual-infographic-how-magnetotactic-b": {
     "sources": [
@@ -320,8 +1213,69 @@
         "sourceIds": [
           "S1"
         ]
+      },
+      {
+        "claim": "Magnetotactic bacteria are aquatic or sediment-dwelling microorganisms able to take advantage of the Earth's magnetic field for directed motility.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Early studies indicated that each magnetite particle is enveloped by a membrane containing phospholipids and proteins; the mineral core plus its membrane is the magnetosome, and a similar membrane was later confirmed in apparently all other magnetotactic bacteria.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Mature magnetosomes contain a single-domain magnetite (or greigite) crystal of species-specific shape and size, mostly between 30 and 100 nm.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "In the two model species Magnetospirillum magneticum and Magnetospirillum gryphiswaldense, magnetosomes consist of single cuboctahedral crystals of magnetite that are about 45 nm in size when mature.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The number, size, shape, arrangement and chemical composition of the magnetic crystals vary considerably between phylogenetic groups of these bacteria.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The force generated by a single magnetosome in the geomagnetic field is too weak to align a cell effectively; stacked into a linear structure, the magnetosomes add their magnetic moments to form a much stronger magnetic dipole, strong enough to align whole cells to the rather weak geomagnetic field akin to a compass needle.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The review says the findings suggest that cell alignment to the magnetic field is a passive, physical effect.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Magnetospirilla and all other magnetotactic bacteria characterized so far use flagella for motility.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Alignment to the geomagnetic field reduces three-dimensional trial-and-error swimming to a linear movement; together with chemotactic responses such as aerotaxis (a response to oxygen), the bacteria are efficiently guided to their preferred oxygen concentration in stratified environments.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "In early studies cells seemed to prefer one direction along the field over the other; in the Earth's northern hemisphere predominantly north-seeking cells were isolated and in the southern hemisphere predominantly south-seeking cells. It is currently not understood exactly how this swimming polarity is controlled.",
+        "sourceIds": [
+          "S1"
+        ]
       }
-    ]
+    ],
+    "checkedAt": "2026-11-25T18:47:29.895804+00:00"
   },
   "2026-06-26-factual-infographic-factual-infographic-how-a-honeybee-wagg": {
     "sources": [
@@ -338,8 +1292,69 @@
         "sourceIds": [
           "S1"
         ]
+      },
+      {
+        "claim": "The dance is most often used when an experienced forager returns to her colony with a load of food, either nectar or pollen.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "If the food is of high enough quality, the forager will often dance on the surface of the wax comb.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The waggle dance is performed by bees foraging at food sources more than 150 meters from the hive.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "In a waggle dance the bee runs straight ahead for a short distance, returns in a semicircle to her starting point and runs the straight course again.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "She then makes a semicircle in the opposite direction, which completes a full figure-eight circuit.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "During the straight run the bee's body, especially the abdomen, wags vigorously sideways.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "As the distance to the food source increases, the waggling part of the dance, the waggle run, lasts longer.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The publication calls the duration of the straight run the simplest and most reliable indicator of distance.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The angle the bee takes relative to vertical represents the angle to the flowers relative to the direction of the sun outside.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The most commonly accepted view is that recruits go to the area shown in the dance and then home in on the flower patch using odor cues.",
+        "sourceIds": [
+          "S1"
+        ]
       }
-    ]
+    ],
+    "checkedAt": "2026-11-25T18:47:29.895804+00:00"
   },
   "2026-07-07-factual-infographic-factual-infographic-how-a-pistol-shrimp": {
     "sources": [
@@ -356,8 +1371,57 @@
         "sourceIds": [
           "S1"
         ]
+      },
+      {
+        "claim": "Snapping shrimp produce a loud crackling noise that is intense enough to disturb underwater communication.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The sound originates from the violent collapse of a large cavitation bubble, generated under the tensile forces of a high-velocity water jet formed when the shrimp's snapper-claw snaps shut.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The authors show that a short, intense flash of light is emitted as the bubble collapses.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The flash indicates that extreme pressures and temperatures of at least 5,000 K must exist inside the bubble at the point of collapse.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The authors named the phenomenon shrimpoluminescence and describe it as, to their knowledge, the first observation of this mode of light production in any animal.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The name reflects an apparent similarity to sonoluminescence, the light emission from a bubble periodically driven by ultrasound.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The article's summary line says the shrimp create the cavitation bubbles in stunning their prey.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The sound and light recordings shown are from the snapping shrimp Alpheus heterochaelis.",
+        "sourceIds": [
+          "S1"
+        ]
       }
-    ]
+    ],
+    "checkedAt": "2026-11-25T18:47:29.895804+00:00"
   },
   "2026-07-08-factual-infographic-factual-infographic-how-lithium-ion-bat": {
     "sources": [
@@ -374,8 +1438,69 @@
         "sourceIds": [
           "S1"
         ]
+      },
+      {
+        "claim": "Thermal runaway is a chemical reaction within the cell that results in a dramatic, uncontrolled rise in temperature and pressure.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Lithium batteries and cells use a hydrocarbon-based electrolyte that is flammable, unlike the water-based electrolytes of traditional batteries, which are not flammable.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "As the temperature rises, pressure within the cell increases and activates the pressure-relief ports, releasing the electrolyte, which may ignite on contact with hot cell cases or from burning packaging.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The report says thermal runaway may be started by many circumstances, including internal cell failure, heating such as exposure to an external fire, physical abuse, rapid discharge, over-charging, or the latent manifestation of a manufacturing contaminant.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "A cell in thermal runaway produces enough heat to heat up adjacent cells; once they reach a threshold temperature they go into thermal runaway too, a process the report calls thermal runaway propagation.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The flammable gases expelled by cells in thermal runaway include hydrocarbons and high concentrations of hydrogen.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The volume of gas emitted during thermal runaway depends on the cell's state of charge, and higher states of charge yield greater volumes of flammable gases.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "In a thermal runaway, cells shipped in confined spaces such as fire-resistant containers or plastic-wrapped pallets may trap vent gases and lead to explosive conditions.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The lithium polymer cells in the tests are encased in a plastic film; when heated they build pressure and inflate the film until it bursts, releasing the electrolyte all at once.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "In a packaging test, fiberglass separators placed in a shipping box of cells in place of the cardboard ones did not perform as well as the original cardboard separators, and thermal runaway propagated at a faster rate than in the baseline test.",
+        "sourceIds": [
+          "S1"
+        ]
       }
-    ]
+    ],
+    "checkedAt": "2026-11-25T18:47:29.895804+00:00"
   },
   "2026-07-09-factual-infographic-factual-infographic-how-electrochromic-": {
     "sources": [
@@ -392,8 +1517,69 @@
         "sourceIds": [
           "S1"
         ]
+      },
+      {
+        "claim": "Electrochromic smart windows can dynamically control the light transmitted by windows in buildings, automobiles and aircraft.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Electrochromic glazings typically change visible light transmission from 10% to 70%, with moderately fast switching times and low dc power consumption.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The glazings have memory, so they need power only to make a change in transmission.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The laboratory's own electrochromic window is constructed of thin films of tungsten oxide and lithium nickel oxide laminated with a polymer ion conductor.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "That window's visible transmittance ranges from 0.68 to 0.10 and its solar transmittance from 0.47 to 0.07.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Energy simulations of office buildings indicate that smart windows with lighting controls in arid climates can provide 30 to 40% energy savings over conventional windows.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The savings are realized in cooling, lighting and peak utility electric loads.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The laboratory's simulated office sequence starts with the glass at full transmittance, a visible transmittance of 74%.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "In that sequence the electrochromic glazing begins to color at its maximum rate at 15:00:12.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "In that sequence the glazing reaches its maximum coloration, a visible transmittance of 3.2%, at 15:17:42.",
+        "sourceIds": [
+          "S1"
+        ]
       }
-    ]
+    ],
+    "checkedAt": "2026-11-25T18:47:29.895804+00:00"
   },
   "2026-07-10-factual-infographic-factual-infographic-how-termite-mounds-": {
     "sources": [
@@ -410,8 +1596,69 @@
         "sourceIds": [
           "S1"
         ]
+      },
+      {
+        "claim": "The study measured mounds of the termite Odontotermes obesus, which is common in southern Asia in a variety of habitats.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The structure these termites build includes an underground nest that contains the brood and a symbiotic fungus.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Inside, the basic layout is a large central chimney with many surface conduits in parts of the mound called flutes.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Healthy mounds have no visible holes to the outside, and breaches in the surface are quickly repaired.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The walls are highly porous, so they give little resistance to gases diffusing across them.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The small size of the pores makes the mound very resistant to air being driven through its walls by pressure.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The exposed, slender flutes heat quickly during the day and cool during the night.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "By day air is pushed up the flutes and down the chimney in a closed convection cell, and the situation is reversed at night.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "During the day, when the flows are relatively small, carbon dioxide gradually builds up to nearly 6% in the nest.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The data come entirely from one termite species; the authors describe the mechanism as very generic and likely dominant in similarly massive mounds.",
+        "sourceIds": [
+          "S1"
+        ]
       }
-    ]
+    ],
+    "checkedAt": "2026-11-25T18:47:29.895804+00:00"
   },
   "2026-07-13-factual-infographic-factual-infographic-how-red-sprites-fla": {
     "sources": [
@@ -428,8 +1675,63 @@
         "sourceIds": [
           "S1"
         ]
+      },
+      {
+        "claim": "Transient luminous events (TLEs) are colorful, bright, faster-than-lightning flashes that thunderstorms generate above the clouds.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "TLEs can take a variety of shapes, each with its own name.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Sprites are the most frequently observed TLEs, and are named like the fairies of folklore.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "NASA's Spritacular project invites photographers from all over the world to contribute observations of TLEs, to help researchers better understand them.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The project asks observers to locate a nearby storm and place themselves 60-250 miles away, where they can see clear, dark sky above the clouds.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The equipment the project lists is a dedicated DSLR or mirrorless camera and a tripod, with the camera aimed above the storm.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "One photograph on the page is captioned as a cluster of red jellyfish sprites hovering above a large storm cloud.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The page carries a safety note: anyone observing a thunderstorm should use caution and keep a viable, quick exit to safety.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The page also pictures a gigantic jet, another TLE, captured on February 10, 2007 above Tucson, Arizona.",
+        "sourceIds": [
+          "S1"
+        ]
       }
-    ]
+    ],
+    "checkedAt": "2026-11-25T18:47:29.895804+00:00"
   },
   "2026-07-14-factual-infographic-factual-infographic-how-basalt-columns-": {
     "sources": [
@@ -446,8 +1748,69 @@
         "sourceIds": [
           "S1"
         ]
+      },
+      {
+        "claim": "Columnar jointing consists of sets of regularly spaced parallel fractures, called joints, that intersect in a roughly prismatic pattern.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Most columns are hexagonal, but they may have anywhere from three to seven sides.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Columnar jointing is most commonly found in basaltic lava flows, but it also occurs in lava flows of other compositions, pyroclastic flow deposits, some lava domes, volcanic necks and some shallow intrusions.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Cooling causes contraction, which in turn causes fracturing; the fractures propagate from the top and bottom of flows inward toward the center.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The predominantly hexagonal pattern arises because contractional stress is most efficiently relieved by three fractures that intersect at angles of 120 degrees, which creates six-sided polygons.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Columns are oriented perpendicular to the main cooling surfaces of lava flows and other igneous bodies.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Columnar jointing forms after a lava flow or other igneous body has solidified but while it is still at high to medium temperature; it is thought to form during rapid cooling, and the fracture system is thought to let fluids circulate, which can further hasten cooling.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Some lava flows have irregular columnar jointing known as entablature, typically found in the interior portion or near the top of a flow; its irregular fracturing is likely due to a different cooling rate in the flow's interior.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Devils Postpile National Monument has columns up to 60 ft (18 m) long in a basalt flow up to 400 ft (122 m) thick that pooled after it erupted approximately 100,000 years ago.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "At Devils Postpile a high percentage of the columns, 55%, are hexagonal.",
+        "sourceIds": [
+          "S1"
+        ]
       }
-    ]
+    ],
+    "checkedAt": "2026-11-25T18:47:29.895804+00:00"
   },
   "2026-07-14-factual-infographic-factual-infographic-why-spider-silk-shr": {
     "sources": [
@@ -464,8 +1827,69 @@
         "sourceIds": [
           "S1"
         ]
+      },
+      {
+        "claim": "The study examined the mechanical properties of dragline (major ampullate) silk from the spiders Nephila clavipes and Nephila senegalensis and quantified the effect of relative humidity on them.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The humidity analysis is based on 126 single fiber measurements.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The shape of the stress-strain curve varies significantly with humidity: below 35% relative humidity the curve consists of two linear regimes, and above 75% an elastomeric shape is observed.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The breaking strain increases with rising humidity in a linear way, predicting an extensibility range from 13% to 42% for spider dragline silk.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The elastic modulus decreases with increasing humidity.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The breaking force varies little with relative humidity compared to the error within the ensembles.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The authors conclude that the influence of humidity is sufficient to explain the great range of mechanical properties and force-strain curves found in the literature.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "X-ray fiber diffraction has been used to deduce a composite structure for the silk: beta-sheet crystallites embedded in an amorphous matrix.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The authors say water can easily permeate into the fiber and is incorporated in the amorphous matrix; they assume this hydration interferes with hydrogen bonds between the amorphous chains, which leads to a loss of rigidity.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Weighing measurements that the authors call very preliminary indicate that almost two-thirds of the fiber mass at full hydration is due to water uptake.",
+        "sourceIds": [
+          "S1"
+        ]
       }
-    ]
+    ],
+    "checkedAt": "2026-11-25T18:47:29.895804+00:00"
   },
   "2026-07-14-factual-infographic-factual-infographic-how-mantis-shrimp-d": {
     "sources": [
@@ -482,8 +1906,69 @@
         "sourceIds": [
           "S1"
         ]
+      },
+      {
+        "claim": "University of Queensland research led by Professor Justin Marshall found that mantis shrimp can see circular polarised light.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The university's news release describes this as a completely new type of vision never seen before in the animal world.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "After tests over the years of mantis shrimp physiology and behaviour, Marshall concluded the ability is used for sex; he says only the males have it and that it is probably a secret communication channel between males and females that keeps predators from knowing what is going on.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Marshall says humans are sensitive to light intensity and colour but need cameras and filters to see different types of light.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Marshall says humans have only three colour channels, while mantis shrimp have 12 and can see both linear and circular polarized light.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Marshall says the mantis shrimp has a very small brain but one of the world's most complex visual systems.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Humans can see the effect of linear polarisation through things such as polarised sunglasses, which cut out glare for driving and boating.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Circular polarisation is used by humans in things such as 3D glasses for movies, filters for cameras and medical imaging systems.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The research was published in the scientific journal Current Biology.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The news release is dated 20 March 2008.",
+        "sourceIds": [
+          "S1"
+        ]
       }
-    ]
+    ],
+    "checkedAt": "2026-11-25T18:47:29.895804+00:00"
   },
   "2026-07-14-factual-infographic-factual-infographic-how-trees-pull-wate": {
     "sources": [
@@ -500,8 +1985,69 @@
         "sourceIds": [
           "S1"
         ]
+      },
+      {
+        "claim": "Transpiration is the loss of water from the plant through evaporation at the leaf surface, and it is the main driver of water movement in the xylem.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Transpiration creates negative pressure (tension) equivalent to –2 MPa at the leaf surface; the value varies greatly with the vapor pressure deficit, which can be negligible at high relative humidity and substantial at low relative humidity. Water from the roots is pulled up by this tension.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "At night, when stomata shut and transpiration stops, the water is held in the stem and leaf by the adhesion of water to the cell walls of the xylem vessels and tracheids and the cohesion of water molecules to each other; this is called the cohesion–tension theory of sap ascent.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Water moves from a system with higher water potential to one with lower water potential, so for water to move from soil to air the water potential must fall from soil to root to stem to leaf to atmosphere.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Inside the leaf, water on the surface of the mesophyll cells evaporates into the leaf's air spaces, which creates a greater tension on the water in those cells and increases the pull on the water in the xylem vessels.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Transpiration is a passive process: metabolic energy in the form of ATP is not required for water movement.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The formation of gas bubbles in xylem (cavitation) interrupts the continuous stream of water from the base to the top of the plant, causing a break called an embolism; the taller the tree, the greater the tension needed and the more cavitation events, and in larger trees embolisms can plug xylem vessels, making them nonfunctional.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Up to 90 percent of the water taken up by roots may be lost through transpiration.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Regulation of transpiration is achieved primarily through the opening and closing of stomata on the leaf surface; when stomata are open, water vapor is lost to the external environment.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Stomata are surrounded by two specialized guard cells, which open and close in response to environmental cues such as light intensity and quality, leaf water status and carbon dioxide concentrations.",
+        "sourceIds": [
+          "S1"
+        ]
       }
-    ]
+    ],
+    "checkedAt": "2026-11-25T18:47:29.895804+00:00"
   },
   "2026-07-21-factual-infographic-factual-infographic-how-octopus-skin-ch": {
     "sources": [
@@ -518,8 +2064,57 @@
         "sourceIds": [
           "S1"
         ]
+      },
+      {
+        "claim": "Lacking a shell, the giant Pacific octopus protects itself with what the aquarium calls one of the most sophisticated camouflage systems in the animal world, a complex orchestration of pigment cells, muscle fibers and nerves.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The giant Pacific octopus has millions of elastic cells under the skin, called chromatophores, that contain colored pigments.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The octopus uses its eyes to match the patterns and colors of its background nearly perfectly, then adjusts its skin color by stretching the chromatophores open or squeezing them shut from moment to moment.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Experiments have shown that the octopus is color-blind, which the aquarium says makes these feats that much more mystifying.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The giant Pacific octopus (Enteroctopus dofleini), the largest octopus species, is usually reddish-pink with a delicate, veinlike pattern, fading to white on the underside of the arms.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "For the giant Pacific octopus, changing color may be a way to communicate with a mate or scare off predators.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The giant Pacific octopus catches prey by surprise, using camouflage, jet propulsion and the grip that comes with having eight arms.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The giant Pacific octopus avoids encounters with predators by staying in its den, hiding in the kelp forest and using its camouflage.",
+        "sourceIds": [
+          "S1"
+        ]
       }
-    ]
+    ],
+    "checkedAt": "2026-11-25T18:47:29.895804+00:00"
   },
   "2026-07-21-factual-infographic-factual-infographic-how-black-smoker-ch": {
     "sources": [
@@ -536,8 +2131,63 @@
         "sourceIds": [
           "S1"
         ]
+      },
+      {
+        "claim": "Hydrothermal vents form at locations where seawater meets magma.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "A venting black smoker emits jets of particle-laden fluids; the particles are predominantly very fine-grained sulfide minerals formed when the hot hydrothermal fluids mix with near-freezing seawater.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "White smokers are chimneys formed from deposits of barium, calcium and silicon, which are white.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Underwater volcanoes at spreading ridges and convergent plate boundaries produce hot springs known as hydrothermal vents.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Hydrothermal vents are the result of seawater percolating down through fissures in the ocean crust near spreading centers or subduction zones; the cold seawater is heated by hot magma and reemerges to form the vents.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Seawater in hydrothermal vents may reach temperatures of over 700° Fahrenheit.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Hot seawater in hydrothermal vents does not boil because of the extreme pressure at the depths where the vents are formed.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Scientists first discovered hydrothermal vents in 1977 while exploring an oceanic spreading ridge near the Galapagos Islands, and found them surrounded by large numbers of organisms that had never been seen before.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The biological communities around vents depend upon chemical processes that result from the interaction of seawater and hot magma associated with underwater volcanoes.",
+        "sourceIds": [
+          "S1"
+        ]
       }
-    ]
+    ],
+    "checkedAt": "2026-11-25T18:47:29.895804+00:00"
   },
   "2026-07-21-factual-infographic-factual-infographic-how-a-whale-fall-fe": {
     "sources": [
@@ -554,8 +2204,63 @@
         "sourceIds": [
           "S1"
         ]
+      },
+      {
+        "claim": "The ocean's depths are supplied by nutrients falling down from the surface waters.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "When whales die and sink, their carcasses, called whale falls, give deep-sea organisms a sudden, concentrated food source.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Different stages in the decomposition of a whale carcass support a succession of marine biological communities.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Scavengers consume the soft tissue in a matter of months.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Organic fragments, or detritus, enrich the nearby sediments for over a year.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The whale skeleton can support rich communities for years to decades, as a hard surface for invertebrates to colonize and as a source of sulfides.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Microbes live off the energy released by the chemical reactions and form the basis of ecosystems for as long as the food source lasts.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "In the deep sea this forms a new food web and provides energy to support single-celled and multi-celled organisms and sponges.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "During a 2019 expedition, researchers discovered a whale fall at 10,623 feet below the surface near Davidson Seamount in NOAA's Monterey Bay National Marine Sanctuary.",
+        "sourceIds": [
+          "S1"
+        ]
       }
-    ]
+    ],
+    "checkedAt": "2026-11-25T18:47:29.895804+00:00"
   },
   "2026-07-21-factual-infographic-factual-infographic-how-saharan-dust-fe": {
     "sources": [
@@ -572,8 +2277,69 @@
         "sourceIds": [
           "S1"
         ]
+      },
+      {
+        "claim": "The Sahara and the Amazon basin are connected by a 10,000 mile long intermittent atmospheric river of dust.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Every year, intense Saharan winds send enormous clouds of dust on a trans-Atlantic journey to the Amazon basin.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Much of the dust originates in an ancient lakebed in Chad, and the dust is rich in phosphorus.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Phosphorus is essential to plant growth and is in short supply in the Amazon; desert dust dumped into the forest every year helps to diminish this deficit.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The nutrients the dust provides are the remains of long-dead organisms of the Sahara.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "NASA's CALIPSO satellite was launched in 2006.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "CALIPSO quantified the dust for the first time: of the 182 million tons that leave the Sahara each year, 27.7 million tons, or 15% of the total, are scattered over the Amazon basin.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "CALIPSO uses a laser range finder, or lidar, to scan the atmosphere for the vertical distribution of dust and other aerosols.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "CALIPSO revealed that the connection varies, changing as much as 86 percent between 2007 and 2011.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Researchers found a possible connection with rainfall in the Sahel, the strip of semi-arid land on the southern border of the Sahara: when rainfall there is higher, the volume of dust is lower. The exact reason is unknown.",
+        "sourceIds": [
+          "S1"
+        ]
       }
-    ]
+    ],
+    "checkedAt": "2026-11-25T18:47:29.895804+00:00"
   },
   "2026-07-21-factual-infographic-factual-infographic-how-a-gravitational": {
     "sources": [
@@ -590,8 +2356,69 @@
         "sourceIds": [
           "S1"
         ]
+      },
+      {
+        "claim": "At their cores the LIGO detectors are Michelson interferometers, L-shaped with two equal-length arms.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "LIGO's arms are 4 km (2.5 mi) long, and LIGO says its interferometers are by far the largest ever built.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Having to measure a change in distance 1,000 times smaller than a proton means LIGO has to be larger and more sensitive than any interferometer built before.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "As simple Michelson interferometers, LIGO's instruments with 4 km arms would still be too short to detect gravitational waves.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "An additional mirror is placed in each arm near the beam splitter, 4 km from the end mirror, forming a Fabry Perot cavity in which the laser bounces about 300 times before being merged with the beam from the other arm.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The reflections increase the effective distance traveled by each laser from 4 km to about 1200 km and build up the laser light within the interferometer, which increases sensitivity.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "LIGO's laser first enters the interferometer with a power of about 40 Watts, but the instrument needs to operate closer to 750 kW.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Power recycling mirrors continually reflect laser light that has already traveled through the instrument back into the interferometer, which boosts the stored power and sharpens the interference fringes that appear when the two beams are superimposed.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "LIGO's interferometers also have signal recycling mirrors, which further enhance the signal received by the photodetector.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "LIGO's interferometers were constructed with mechanisms to damp out unwanted vibrations, or noise, so the instruments can more easily sense the vibrations caused by gravitational waves.",
+        "sourceIds": [
+          "S1"
+        ]
       }
-    ]
+    ],
+    "checkedAt": "2026-11-25T18:47:29.895804+00:00"
   },
   "2026-07-21-factual-infographic-factual-infographic-how-lightning-build": {
     "sources": [
@@ -608,8 +2435,69 @@
         "sourceIds": [
           "S1"
         ]
+      },
+      {
+        "claim": "Most lightning starts inside a thunderstorm and travels through the cloud; it can then stay within the cloud or continue through the open air and eventually to ground.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "There are roughly 5 to 10 times as many flashes that remain in the cloud as flashes that travel to the ground, but individual storms may have more or fewer flashes reaching ground.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "In the most common type of cloud-to-ground lightning, a channel of negative charge called a stepped leader zigzags downward in roughly 50-yard segments in a forked pattern; it is invisible to the human eye and shoots to the ground in less time than it takes to blink.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "As it nears the ground, the negatively charged stepped leader causes streamer channels of positive charge to reach upward, normally from taller objects in the area, such as a tree, house or telephone pole.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "When the oppositely charged leader and streamer connect, a powerful electrical current begins flowing; this return stroke of bright luminosity travels about 60,000 miles per second back toward the cloud.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "A negative cloud-to-ground flash consists of one or perhaps as many as 20 return strokes; lightning flickers when the process rapidly repeats itself several times along the same path.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The actual diameter of the lightning channel current is one to two inches, surrounded by a region of charged particles.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Less commonly, a downward positive leader followed by an upward return stroke lowers positive charge to earth; these positive flashes typically have only a single return stroke and are more likely than negative ones to have a sustained current flow.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Most flashes that do not reach ground remain within the cloud and are called intra-cloud flashes; lightning can also travel from one cloud to another.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "A bolt from the blue starts inside a cloud, goes out the side of the storm and travels horizontally away before going to ground, so even a storm that is 6 miles away can be dangerous.",
+        "sourceIds": [
+          "S1"
+        ]
       }
-    ]
+    ],
+    "checkedAt": "2026-11-25T18:47:29.895804+00:00"
   },
   "2026-07-28-factual-infographic-factual-infographic-how-electric-eels-s": {
     "sources": [
@@ -626,8 +2514,69 @@
         "sourceIds": [
           "S1"
         ]
+      },
+      {
+        "claim": "Three specialized electric organs, the main electrical organ, the Hunter's organ and the Sachs' organ, make up about 80 percent of the electric eel's body.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The strongest electric pulses are produced by the main electrical organ and two-thirds of the Hunter's organ.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The remainder of the Hunter's organ and the Sachs' organ produce the weaker electric discharges.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Electric eels grow to lengths of 6 to 8 feet (2 to 2.5 meters).",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Electric eels live in the quiet, slow-moving waters of ox-bow lakes, streams, pools and flooded forests of the Amazon and Orinoco Rivers.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Electric eels are obligate air-breathers, which means they surface for air periodically.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "A hunting eel's doublet of pulses affects the prey's muscles, making it twitch involuntarily and alerting the eel to its presence.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The eel then paralyzes its prey with a series of high-voltage pulses, as many as 400 per second.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Electric eels communicate using low electric organ discharges, produced in pulses whose duration is much shorter than the time between pulses.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The zoo states that electric eels are capable of generating up to 800 volts of electricity.",
+        "sourceIds": [
+          "S1"
+        ]
       }
-    ]
+    ],
+    "checkedAt": "2026-11-25T18:47:29.895804+00:00"
   },
   "2026-07-28-factual-infographic-factual-infographic-how-mantis-shrimp-r": {
     "sources": [
@@ -644,8 +2593,69 @@
         "sourceIds": [
           "S1"
         ]
+      },
+      {
+        "claim": "University of Queensland research identified what it called a completely new type of vision in the mantis shrimp (news release dated 20 March 2008).",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The researcher is Professor Justin Marshall, of the university's School of Biomedical Sciences and the Queensland Brain Institute.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Marshall said humans have only three color channels.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Marshall said mantis shrimp have 12 color channels and can see both linear and circular polarized light.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Marshall said only the males have the ability to see circular polarized light, which implies it has something to do with sex.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Marshall said it is probably a secret communication channel between males and females that keeps predators from knowing what is going on.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Marshall said the mantis shrimp has a very small brain but one of the world's most complex visual systems.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Humans can see the effect of linear polarization through polarized sunglasses, which cut out glare.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Humans use circular polarization in things such as 3D glasses for movies and filters for cameras.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The research was published in the journal Current Biology.",
+        "sourceIds": [
+          "S1"
+        ]
       }
-    ]
+    ],
+    "checkedAt": "2026-11-25T18:47:29.895804+00:00"
   },
   "2026-07-28-factual-infographic-factual-infographic-how-fog-basking-bee": {
     "sources": [
@@ -662,8 +2672,69 @@
         "sourceIds": [
           "S1"
         ]
+      },
+      {
+        "claim": "Namib darkling beetles get fog water in different ways: some dig trenches in the sand, and others use their own bodies as fog collectors in a fog-basking stance.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "A fog-basking beetle takes a head-standing posture facing into the wind; fog water collects on its wing covers (elytra) and runs down to its mouth.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Only two of approximately 200 beetle species living in the area have ever been observed to fog-bask, and both are in the genus Onymacris.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Of the four species tested in a fog chamber, only Onymacris unguicularis could be seen actively collecting water from the fog.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The beetles well known to fog-bask do not have bumpy wing covers; they have smooth wing covers with regular grooves.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "In the mechanism described for a bumpy-backed beetle, the structures are believed to be water-attracting (hydrophilic) peaks surrounded by water-repelling (hydrophobic) areas, with fog water settling on the peaks of smooth bumps.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The paper notes that applying this mechanism to water collection by fog-basking beetles has been questioned.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "In this study the wing covers of all four beetle species were found to be completely water-repelling (hydrophobic).",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The authors conclude that the fog-basking behavior itself is a more important factor than structural adaptations when O. unguicularis collects water from fog.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The cold current along the coast is the origin of fog that can reach as much as 100 km inland.",
+        "sourceIds": [
+          "S1"
+        ]
       }
-    ]
+    ],
+    "checkedAt": "2026-11-25T18:47:29.895804+00:00"
   },
   "2026-07-28-factual-infographic-factual-infographic-how-lightning-makes": {
     "sources": [
@@ -680,8 +2751,51 @@
         "sourceIds": [
           "S1"
         ]
+      },
+      {
+        "claim": "At Great Sand Dunes National Park and Preserve, fulgurites are blackish tubes of glass that capture the power of lightning.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The National Park Service gives lightning a temperature of 50,000 degrees F, hotter than the surface of the sun.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Lightning vaporizes the area where the bolt of electricity shoots through the sand and melts the surrounding sand into dark glass.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Fulgur is the Latin word for lightning.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Cicero used the expression condere fulmina, meaning to dig up thunderbolts, which the Park Service says indicates early Romans had knowledge of fulgurite formation in sandy areas of Italy.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The presence of fulgurites in the sand is a reminder that lightning can and does strike the exposed dunefield during storms.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The Park Service asks visitors who find a fulgurite in the dunes to study and enjoy it but leave it in the sand for the next visitor.",
+        "sourceIds": [
+          "S1"
+        ]
       }
-    ]
+    ],
+    "checkedAt": "2026-11-25T18:47:29.895804+00:00"
   },
   "2026-07-21-factual-infographic-factual-infographic-how-gecko-toes-grip": {
     "sources": [
@@ -698,8 +2812,69 @@
         "sourceIds": [
           "S1"
         ]
+      },
+      {
+        "claim": "Geckos use millions of tiny foot hairs to adhere even to molecularly smooth surfaces such as polished glass.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The researchers reported earlier that gecko toe hairs stick without the use of suction, glue or static electricity.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The angle a hair makes with the surface is critical for controlling both sticking and release.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The tiny pads at the ends of the hairs are called spatulae and are like split ends; each is only 200 billionths of a meter wide, below the wavelength of visible light.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "A gecko foot has up to 500,000 hairs, and each hair has hundreds to a thousand split ends.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The sum of the intermolecular forces, known as van der Waals forces, can amount to 1,000 times the weight of a gecko.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Many animals that stick by a film of liquid have foot glands that secrete liquid; geckos have no such glands.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "In the tests, gecko toes, which repel water themselves, stuck equally well to a water-repelling (hydrophobic) and a water-attracting (hydrophilic) semiconductor surface.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The experiments confirmed that van der Waals forces are the most likely adhesive mechanism.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Engineers at UC Berkeley made synthetic hair tips that stick almost as well as the geckos' own.",
+        "sourceIds": [
+          "S1"
+        ]
       }
-    ]
+    ],
+    "checkedAt": "2026-11-25T18:47:29.895804+00:00"
   },
   "2026-07-28-factual-infographic-factual-infographic-how-honeybees-map-a": {
     "sources": [
@@ -716,8 +2891,69 @@
         "sourceIds": [
           "S1"
         ]
+      },
+      {
+        "claim": "If the food source lies directly away from the sun, the straight run of the dance points vertically down.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "If the food source is 60 degrees to the left of the sun, the waggle run is 60 degrees to the left of vertical.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Because the direction is given relative to the sun, a forager's dance for a particular food source changes over time.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "In the publication's example, a food source due east has foragers dancing approximately straight up in the morning and approximately straight down in the late afternoon.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "As distance to the food increases, the waggle run lasts longer, and the publication describes the relationship as roughly linear.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Recruits follow the dancing bee to get the information, then leave the hive and travel to the location.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The most commonly accepted view is that recruits go to the area shown in the dance and then home in on the flower patch using odor cues.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "In the research the publication describes, marked foragers were trained to food placed at known distances from a colony, and the angle and duration of their dances were measured.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "A complete waggle dance traces a full figure-eight circuit.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "If the food is of high enough quality, the forager will often dance on the surface of the wax comb.",
+        "sourceIds": [
+          "S1"
+        ]
       }
-    ]
+    ],
+    "checkedAt": "2026-11-25T18:47:29.895804+00:00"
   },
   "2026-07-28-factual-infographic-factual-infographic-inside-a-hydrotherm": {
     "sources": [
@@ -734,8 +2970,63 @@
         "sourceIds": [
           "S1"
         ]
+      },
+      {
+        "claim": "Hydrothermal vents form at locations where seawater meets magma.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "A venting black smoker emits jets of particle-laden fluids; the particles are predominantly very fine-grained sulfide minerals formed when the hot hydrothermal fluids mix with near-freezing seawater.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "White smokers are chimneys formed from deposits of barium, calcium and silicon, which are white.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Underwater volcanoes at spreading ridges and convergent plate boundaries produce hot springs known as hydrothermal vents.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Hydrothermal vents are the result of seawater percolating down through fissures in the ocean crust near spreading centers or subduction zones; the cold seawater is heated by hot magma and reemerges to form the vents.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Seawater in hydrothermal vents may reach temperatures of over 700° Fahrenheit.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Hot seawater in hydrothermal vents does not boil because of the extreme pressure at the depths where the vents are formed.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Scientists first discovered hydrothermal vents in 1977 while exploring an oceanic spreading ridge near the Galapagos Islands, and found them surrounded by large numbers of organisms that had never been seen before.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The biological communities around vents depend upon chemical processes that result from the interaction of seawater and hot magma associated with underwater volcanoes.",
+        "sourceIds": [
+          "S1"
+        ]
       }
-    ]
+    ],
+    "checkedAt": "2026-11-25T18:47:29.895804+00:00"
   },
   "2026-07-28-factual-infographic-factual-infographic-how-a-spacecraft-he": {
     "sources": [
@@ -752,8 +3043,69 @@
         "sourceIds": [
           "S1"
         ]
+      },
+      {
+        "claim": "The presentation names convective heating as one of two primary sources of reentry heating: it comes from the flow of hot gas past the vehicle's surface and from catalytic chemical recombination reactions at the surface.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The other primary source is radiation heating from the energetic shock layer in front of the vehicle.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Heating depends on reentry speed, the vehicle's effective radius and atmospheric density.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The presentation describes ablative thermal protection as energy management through material consumption: exposed to entry heating, the material pyrolyzes (chars) and rejects heat in several ways.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "One way an ablator rejects heat is the endothermic decomposition of its polymer.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Another is that ablation products blown into the boundary layer reduce convective heating.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Another is the formation of a char layer and re-radiation.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Insulative, reusable thermal protection instead manages energy through storage and re-radiation, with the material unchanged.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "PICA was the enabling thermal protection material for the Stardust mission, where it was used as a single-piece heat shield.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "For Orion the decision was made to use Avcoat, a material first used on Apollo.",
+        "sourceIds": [
+          "S1"
+        ]
       }
-    ]
+    ],
+    "checkedAt": "2026-11-25T18:47:29.895804+00:00"
   },
   "2026-07-28-factual-infographic-factual-infographic-lord-howe-island-ph": {
     "sources": [
@@ -770,8 +3122,69 @@
         "sourceIds": [
           "S1"
         ]
+      },
+      {
+        "claim": "Adult males reach 120 mm, more commonly 106 mm, and adult females reach 150 mm, more commonly 120 mm.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The phasmid is currently known only from a single site on Balls Pyramid, a rocky outcrop 23 km south east of Lord Howe Island.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The insects have been reported only from within a foraging area considered to be 30 m x 6 m.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Melaleuca howeana is likely to be the only host plant for the phasmid at this site.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The phasmid was once very common on Lord Howe Island, to the extent that it was used as bait for fishing.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The species became extinct on Lord Howe Island soon after a supply ship ran aground in 1918 and the ship rat came ashore.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "It was considered extinct until live individuals were discovered on Balls Pyramid in 2001.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The wild population is estimated to be extremely low, with fewer than 50 mature individuals.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "In 2003, two pairs of phasmids were collected from Balls Pyramid and a captive breeding program was started.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "As of a July 2011 communication cited in the listing, there were 800 adults in captivity producing viable eggs.",
+        "sourceIds": [
+          "S1"
+        ]
       }
-    ]
+    ],
+    "checkedAt": "2026-11-25T18:47:29.895804+00:00"
   },
   "2026-08-04-factual-infographic-factual-infographic-how-a-venus-flytrap": {
     "sources": [
@@ -788,8 +3201,69 @@
         "sourceIds": [
           "S1"
         ]
+      },
+      {
+        "claim": "The Venus flytrap (Dionaea muscipula) is a carnivorous plant that catches prey by closing its leaf blade.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The plant senses mechanical stimuli through organs called sensory hairs, six of which form on the leaf blade.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "After a touch, the hair generates an action potential and a long-range calcium signal that travel to the leaf blade; the leaf moves to catch prey after two successive calcium signals.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "A stimulated sensory hair typically generates a single action potential, with several in some cases, depending on the angle and angular speed of the stimulus.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The study identifies a two-step system in the sensory hairs: mechanosensing limited to the stimulated cell, then threshold-dependent firing of an action potential and spread of the calcium signal.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Weak stimuli generate only receptor potentials below the threshold; strong stimuli produce receptor potentials large enough to trigger action potentials.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "DmMSL10 is a stretch-activated chloride channel that is concentrated in the outermost cells at the base of the sensory hair, called indented cells.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "In plants with DmMSL10 knocked out, no action potentials were observed at bending speeds below 0.1 rad/s, while unmodified (wild-type) plants kept generating them at reduced speeds.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "When ants visited the traps, the probability of a calcium signal was significantly reduced, by 18.5%, in the knockout traps.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The knockout traps also tended to close 13.3% less often when ants visited, but that difference was not statistically significant.",
+        "sourceIds": [
+          "S1"
+        ]
       }
-    ]
+    ],
+    "checkedAt": "2026-11-25T18:47:29.895804+00:00"
   },
   "2026-08-04-factual-infographic-factual-infographic-how-the-elongate-bo": {
     "sources": [
@@ -806,8 +3280,69 @@
         "sourceIds": [
           "S1"
         ]
+      },
+      {
+        "claim": "The defensive apparatus of bombardier beetles has two compartments, the reservoir and the reaction chamber.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "When the beetle is challenged, muscles around the reservoir contract and send chemical precursors into the reaction chamber, where they mix with enzymes.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The result is an explosive discharge of a hot, noxious chemical spray containing two major quinones: 1,4-benzoquinone and 2-methyl-1,4-benzoquinone (toluquinone).",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Untransformed fluid sampled from the reservoir held significant quantities of 1,4-hydroquinone and 2-methyl-1,4-hydroquinone.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "It had previously been speculated that all the benzoquinones originate from one core precursor, 1,4-hydroquinone.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The researchers injected or fed Brachinus elongatulus beetles with precursors carrying stable-isotope labels.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Labeled 1,4-hydroquinone given to the beetles was converted specifically to 1,4-benzoquinone.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The compound m-cresol is metabolized to 2-methyl-1,4-hydroquinone, which is then oxidized to 2-methyl-1,4-benzoquinone in the hot spray.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The results show that the two quinones are products of two independent biosynthetic pathways.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The authors suggest this kind of pathway is not restricted to bombardier beetles and could well be a general pathway to benzoquinones.",
+        "sourceIds": [
+          "S1"
+        ]
       }
-    ]
+    ],
+    "checkedAt": "2026-11-25T18:47:29.895804+00:00"
   },
   "2026-08-04-factual-infographic-factual-infographic-how-the-wood-frog-s": {
     "sources": [
@@ -824,8 +3359,69 @@
         "sourceIds": [
           "S1"
         ]
+      },
+      {
+        "claim": "The wood frog (Rana sylvatica) is a North American species that ranges from the southern Appalachians to within the Arctic Circle.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Frogs native to the upper Midwestern United States and southern Canada tolerate freezing only to temperatures as low as -3 to -6°C.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Frogs from Interior Alaska readily survived experimental freezing to -16°C.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "In Interior Alaska, frogs must survive extended freezing with hibernaculum (winter shelter) temperatures reaching minimums of -9 to -18°C.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The authors hypothesize that the northern frogs' extreme freeze tolerance derives in part from an enhanced cryoprotectant system: urea accumulates in autumn and early winter, before freezing, and glucose is quickly mobilized from liver glycogen after freezing begins.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Both urea and glucose reduce the amount of ice that forms in the body.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Alaskan frogs collected in late summer had plasma urea levels near 10 micromoles per milliliter.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "During preparation for winter, plasma urea rose to 85.5 micromoles per milliliter in frogs that remained fully hydrated.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "During experimental freezing, organs shed up to one-half (skeletal muscle) or two-thirds (liver) of their water.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Cycles of freezing and thawing, which winter-conditioned frogs readily survived, greatly increased the breakdown of liver glycogen and the delivery of glucose, but not urea, to skeletal muscle.",
+        "sourceIds": [
+          "S1"
+        ]
       }
-    ]
+    ],
+    "checkedAt": "2026-11-25T18:47:29.895804+00:00"
   },
   "2026-08-04-factual-infographic-factual-infographic-how-xenos-vesparum-": {
     "sources": [
@@ -842,8 +3438,69 @@
         "sourceIds": [
           "S1"
         ]
+      },
+      {
+        "claim": "The free-living first-stage (1st instar) larvae seek a host within paper wasp nests.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "On entering a host, the first-stage larva molts to a legless second-stage larva with a soft cuticle that lives inside the host.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The female produces first-stage larvae that leave through the brood canal in her extruded cephalothorax.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Male larvae in the 4th stage (4th instar) molt to form a pupa, which pushes out from the abdomen of the host.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Adult females remain larva-like and lack eyes, mouthparts, antennae, wings and external genitalia.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Females develop a cephalothorax that is pushed out through the host's cuticle, for mating and for releasing first-stage larvae.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "In insects in which both sexes go through metamorphosis, the gene broad has been shown to be required for pupal development.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The researchers detected raised levels of broad in the last larval stage of males, but not of females.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The authors write that the data suggest the females' retained juvenile form (neoteny) could be linked to the suppression of pupal determination.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "In the laboratory, larvae of the paper wasp Polistes dominula were infected individually in the nest.",
+        "sourceIds": [
+          "S1"
+        ]
       }
-    ]
+    ],
+    "checkedAt": "2026-11-25T18:47:29.895804+00:00"
   },
   "2026-08-04-factual-infographic-factual-infographic-how-cuttlefish-skin": {
     "sources": [
@@ -860,8 +3517,69 @@
         "sourceIds": [
           "S1"
         ]
+      },
+      {
+        "claim": "A chromatophore consists of a pigment-containing sac with dozens of radial muscles attached around its edge.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The chromatophore muscles are innervated directly by the brain.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "By contracting and relaxing the muscles, the pigment sac increases or decreases in area in less than a second.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "By selectively expanding and retracting distinct groups of chromatophores, cephalopods can produce patterns such as bands, stripes and spots.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Iridophores contain stacks of thin plates that reflect light by thin-film interference.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "With a multilayer reflector, the more oblique the angle, the shorter the peak wavelengths of the reflected light.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The final appearance of the animal is frequently the result of optical interactions between iridophores and chromatophores.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Besides iridophores, cuttlefish and octopus have another structural reflector type, leucophores, that creates bright white patterns, shapes and spots.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The leucophores of the cuttlefish Sepia officinalis have the optical properties of a perfect diffuser, appearing equally bright from all angles of view.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Cephalopods show a wide repertoire of body patterns for camouflage and signaling despite their apparent color blindness.",
+        "sourceIds": [
+          "S1"
+        ]
       }
-    ]
+    ],
+    "checkedAt": "2026-11-25T18:47:29.895804+00:00"
   },
   "2026-08-04-factual-infographic-factual-infographic-how-the-emerald-jew": {
     "sources": [
@@ -878,8 +3596,69 @@
         "sourceIds": [
           "S1"
         ]
+      },
+      {
+        "claim": "Ampulex compressa is a parasitoid that develops inside the American cockroach, Periplaneta americana.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The attack has two stings: a swift sting into the thorax that briefly paralyzes the front (prothoracic) legs, then a sting into the head cavity.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The wasp can sense the location of the head ganglia through mechanical sensing in its stinger.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Venom in the head ganglia brings on behavioral changes lasting 7 to 10 days: a higher escape threshold, shorter escape distance and less spontaneous walking.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The stung cockroach becomes a lethargic and compliant, but not paralyzed, living food supply for the wasp's offspring.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The wasp leads the stung cockroach into its burrow by grasping the cockroach's shortened antennae.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The wasp lays a single egg on a mesothoracic leg (one of the middle pair), and the egg hatches three days later.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The larva develops through three stages (instars): the first two feed from outside the host and the third lives only inside it.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The cockroach stays alive through the first two larval stages and many hours into the third, as its organs are consumed selectively.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The wasp spins a cocoon and pupates inside the cockroach, and develops into an adult after several weeks.",
+        "sourceIds": [
+          "S1"
+        ]
       }
-    ]
+    ],
+    "checkedAt": "2026-11-25T18:47:29.895804+00:00"
   },
   "2026-08-11-factual-infographic-factual-infographic-how-a-brinicle-grow": {
     "sources": [
@@ -896,8 +3675,69 @@
         "sourceIds": [
           "S1"
         ]
+      },
+      {
+        "claim": "Ice brinicles are tubular, finger-like formations that grow downward from the underside of sea ice into the underlying seawater.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "They are formed when pockets of concentrated salt brine in the sea ice are released, causing a plume of cold, dense brine to flow downward from the bottom of the ice layer.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Owing to freezing point depression, the brine may reach as low as −23 °C while remaining liquid, while the seawater is near its freezing point, about −1.8 °C; this temperature difference leads to a hollow tube of ice forming around the brine.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The hollow tube of ice can extend several meters down into the ocean, sometimes even reaching the seafloor.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Brinicles have been found in both the Arctic and Antarctic oceans.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Earlier literature also called brinicles ice stalactites; the authors argue against the term because an icicle is an ice stalactite with a different growth mechanism.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Natural brinicle growth speeds have been reported from about 0.2 to 2 cm per minute.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Both small brinicles (10 to 100 cm long) and large ones (1 to 6 m long, 5 to 25 cm wide) have been observed in McMurdo Sound, Antarctica.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The study grew brinicles in the laboratory by injecting a cold brine flow into a reservoir of less-salty water.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Growth of brinicles in a laboratory setting is highly dependent on the parameters of the experimental setup.",
+        "sourceIds": [
+          "S1"
+        ]
       }
-    ]
+    ],
+    "checkedAt": "2026-11-25T18:47:29.895804+00:00"
   },
   "2026-08-11-factual-infographic-factual-infographic-how-bertholdia-trig": {
     "sources": [
@@ -914,8 +3754,69 @@
         "sourceIds": [
           "S1"
         ]
+      },
+      {
+        "claim": "Tiger moths respond to high-intensity bat calls with ultrasonic clicks.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Depending on the tiger moth species, the clicks can warn bats that the prey is toxic.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Bertholdia trigona is a sonar-jamming moth, and its clicking is paired with diving.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "When a bat detects a prey echo it gradually increases its call rate, which begins the approach phase of echolocation.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The study found that moths clicked soon after bats detected and targeted them.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Moths typically clicked in response to bats in the early to middle approach phase.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Moth clicking was preceded by bat calls that increased in intensity and slightly decreased in pulse interval.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "This happened when bats were at distances of 1 to 3 m.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The moths' clicking thresholds closely matched the predicted optimal thresholds for telling real threats from false threats.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "In the study a real threat was a bat attacking the moth itself, and a false threat was a bat attacking a nearby moth.",
+        "sourceIds": [
+          "S1"
+        ]
       }
-    ]
+    ],
+    "checkedAt": "2026-11-25T18:47:29.895804+00:00"
   },
   "2026-08-11-factual-infographic-factual-infographic-antarctic-icefish-l": {
     "sources": [
@@ -932,8 +3833,69 @@
         "sourceIds": [
           "S1"
         ]
+      },
+      {
+        "claim": "Antarctic fish of the family Channichthyidae are the only vertebrates that lack hemoglobin.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "British whalers sailing the Southern Ocean named them icefish for their translucent look, which is due to the absence of respiratory pigments and to scaleless skin.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The extremely low water temperature (−1.8 °C) is considered the necessary condition for the evolutionary loss of hemoglobin in the icefish.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Oxygen solubility rises as water temperature falls, so the subzero Southern Ocean has a substantially higher concentration of dissolved oxygen than temperate waters.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The higher dissolved oxygen is not sufficient to compensate for the lack of hemoglobin.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Icefish show cardiovascular modifications, such as greater blood volume, wider capillaries and larger hearts, that offset the absence of oxygen carriers.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Icefish show extraordinarily high mitochondrial density.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Icefish have very few circulating red blood cells (erythrocytes).",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Studies have asked whether the loss of hemoglobin is an adaptation to the extreme Antarctic environment or, conversely, an example of disaptation.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The study's genome comparison suggests that hemoglobin was lost through a series of deletion events, rapid sequence divergence, or both.",
+        "sourceIds": [
+          "S1"
+        ]
       }
-    ]
+    ],
+    "checkedAt": "2026-11-25T18:47:29.895804+00:00"
   },
   "2026-08-11-factual-infographic-factual-infographic-how-the-reindeer-ey": {
     "sources": [
@@ -950,8 +3912,69 @@
         "sourceIds": [
           "S1"
         ]
+      },
+      {
+        "claim": "The tapetum lucidum works as a mirror, giving a second opportunity for photon capture by reflecting light back through the retina, which enhances visual sensitivity.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The experiments were carried out at the University of Tromsø, Norway (70° N).",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The wavelength the tapetum reflects depends on the spacing of its collagen, with reduced spacing giving shorter wavelengths.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The measured spacing between collagen fibers was 26 nm in winter eyes and 43.1 nm in summer eyes.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "More than 95% of the light was reflected directly back in summer eyes, compared with only 40% in winter eyes.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Winter animals have significantly increased pressure inside the eye, probably produced by permanent pupil dilation blocking the eye's drainage.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "When a summer tapetum was covered with a cover slip and an 8 g weight was applied, its reflection changed to blue immediately.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The shift to a blue reflection may scatter light through the photoreceptors instead of reflecting it directly, raising retinal sensitivity through increased photon capture.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Increased sensitivity comes at the cost of reduced acuity, but may be an important adaptation for reindeer to detect moving predators in the dark Arctic winter.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The authors stress that they have not proved the functional relationships between these changes.",
+        "sourceIds": [
+          "S1"
+        ]
       }
-    ]
+    ],
+    "checkedAt": "2026-11-25T18:47:29.895804+00:00"
   },
   "2026-08-11-factual-infographic-factual-infographic-how-the-crypt-keepe": {
     "sources": [
@@ -968,8 +3991,69 @@
         "sourceIds": [
           "S1"
         ]
+      },
+      {
+        "claim": "The host, the crypt gall wasp Bassettia pallida, is found on sand live oaks (Quercus geminata) and southern live oaks (Quercus virginiana) in the southeastern USA.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The stem galls, called crypts, are tiny compartments in which B. pallida develops before it excavates through the stem to emerge as an adult.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The researchers named the parasitoid the crypt-keeper wasp, Euderus set, after Set, the Ancient Egyptian god of evil and chaos.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "When parasitized by E. set, adult B. pallida excavate an emergence hole in the crypt wall, plug the hole with their head and die.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Euderus set emerges through the host's head capsule when it reaches its adult stage.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The researchers never observed the egg stage of the parasitoid.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The parasitoid appears to infect the adult stage of the host.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "In the experiment, E. set that had to excavate an emergence hole themselves were about three times more likely to die trapped in the crypt.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The authors describe working out the specific induction methods, beyond the presence of E. set, as the next step.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The authors report an observation that suggests variability in the ability of E. set to manipulate its host.",
+        "sourceIds": [
+          "S1"
+        ]
       }
-    ]
+    ],
+    "checkedAt": "2026-11-25T18:47:29.895804+00:00"
   },
   "2026-08-04-factual-infographic-factual-infographic-how-a-hailstone-rec": {
     "sources": [
@@ -986,8 +4070,57 @@
         "sourceIds": [
           "S1"
         ]
+      },
+      {
+        "claim": "Hail is solid precipitation in the form of balls or pieces of ice known as hailstones.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Hail develops in thunderclouds, where strong updrafts (rising air currents) and downdrafts (falling air currents) move water droplets up and down through the cloud.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "When the droplets reach the top of the cloud, they freeze due to the cold temperatures.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Powerful updrafts can keep hailstones suspended for a long time, allowing them to grow larger as more layers of ice accumulate.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "When hailstones become too heavy for the updrafts to support, they fall to the ground as solid balls of ice.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Unlike snow, which can form in various weather conditions, hail only forms in these convective clouds.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Hailstones are typically spherical or conical, ranging from 5 mm to over 50 mm in diameter, though most are smaller than 25 mm.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The Met Office says the largest hailstones form in multicell storms, which are more common in places like the United States.",
+        "sourceIds": [
+          "S1"
+        ]
       }
-    ]
+    ],
+    "checkedAt": "2026-11-25T18:47:29.895804+00:00"
   },
   "2026-08-04-factual-infographic-factual-infographic-how-the-malaysian-s": {
     "sources": [
@@ -1022,7 +4155,44 @@
         "sourceIds": [
           "S1"
         ]
+      },
+      {
+        "claim": "Juvenile thornbug treehoppers (Umbonia crassicornis) evoke maternal defense with group vibrational signals.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Thornbug juveniles often continue signaling after attacks end, which produces false alarms unless maternal signals inhibit them.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Female thornbug treehoppers, like female oak treehoppers, defend offspring against invertebrate predators with kicks and wing-buzzes.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "In oak treehoppers, Platycotis vittata, mothers and clustered offspring communicate with one another during predator encounters through vibrations in the plant.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "The paper's field playback experiment on oak treehoppers showed that offspring vibrational signals evoke maternal defense and that maternal signals can inhibit offspring signaling.",
+        "sourceIds": [
+          "S1"
+        ]
+      },
+      {
+        "claim": "Oak treehopper offspring produced very few signals after attacks ended.",
+        "sourceIds": [
+          "S1"
+        ]
       }
-    ]
+    ],
+    "checkedAt": "2026-11-25T18:47:29.895804+00:00"
   }
 }

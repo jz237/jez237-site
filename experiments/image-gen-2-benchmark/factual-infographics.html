@@ -109,6 +109,10 @@
     h3 { margin: 7px 0 10px; font-size: 1.28rem; line-height: 1.1; }
     .desc, .tests, .source { color: var(--muted); margin: 0 0 13px; }
     .source { font-size: .9rem; }
+    .read { margin: 0 0 14px; }
+    .read .pill { display: inline-block; text-decoration: none; }
+    .lightbox-read { padding: 8px 12px; text-decoration: none; white-space: nowrap; }
+    .lightbox-read[hidden] { display: none; }
     details { border-top: 1px solid var(--line); padding-top: 13px; }
     summary { cursor: pointer; color: var(--text); font-weight: 750; margin-bottom: 10px; }
     pre {
@@ -186,7 +190,7 @@
     </div>
   </main>
   <footer>
-    Infographic entries are generated from <code>factual-infographics-data.json</code>. Click any image for fullscreen, then click it again for true 1:1 size.
+    Infographic entries are generated from <code>factual-infographics-data.json</code>. Each infographic has a page of text about its subject: follow “Read about it”. Click any image for fullscreen, then click it again for true 1:1 size.
   </footer>
 
   <div class="lightbox" id="image-lightbox" aria-hidden="true" role="dialog" aria-label="Expanded image viewer">
@@ -209,6 +213,15 @@
       const title = document.getElementById('lightbox-title');
       const close = document.getElementById('lightbox-close');
       const IMAGE_BASE_URL = 'https://media.jez237.com/image-gen-2-benchmark/images/';
+      // Every infographic has a text page. The GitHub mirror cannot serve those pages, so it links to the main site.
+      const ARTICLE_BASE = location.hostname === 'jz237.github.io'
+        ? 'https://jez237.com/experiments/image-gen-2-benchmark/infographics/' : 'infographics/';
+      const articleUrl = (item) => `${ARTICLE_BASE}${encodeURIComponent(item.id)}/`;
+      const readLink = document.createElement('a');
+      readLink.className = 'lightbox-btn lightbox-read';
+      readLink.textContent = 'Read about it →';
+      readLink.hidden = true;
+      close.before(readLink);
       const escapeHtml = (value) => String(value || '').replace(/[&<>'"]/g, (ch) => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[ch]));
       const imageUrl = (value) => {
         const path = String(value || '');
@@ -239,11 +252,12 @@
         const src = imageUrl(item.image);
         return `
           <article class="card">
-            <div class="image-wrap${sizeClass(item.size)}"><img src="${escapeHtml(src)}" alt="${escapeHtml(item.title)}" loading="lazy"></div>
+            <div class="image-wrap${sizeClass(item.size)}"><img src="${escapeHtml(src)}" alt="${escapeHtml(item.title)}" loading="lazy" data-article="${escapeHtml(articleUrl(item))}"></div>
             <div class="content">
               <div class="kicker">${escapeHtml(item.date || '')} · ${escapeHtml(item.slot || '')}</div>
-              <h3><a href="https://jez237.com/experiments/image-gen-2-benchmark/infographics/${encodeURIComponent(item.id)}/">${escapeHtml(item.title)}</a></h3>
+              <h3><a href="${escapeHtml(articleUrl(item))}">${escapeHtml(item.title)}</a></h3>
               ${factual.description ? `<p class="desc">${escapeHtml(factual.description)}</p>` : ''}
+              <p class="read"><a class="pill featured" href="${escapeHtml(articleUrl(item))}">Read about it <span aria-hidden="true">→</span></a></p>
               ${factual.sourceNote ? `<details class="source"><summary>Source notes</summary><p>${escapeHtml(factual.sourceNote)}</p></details>` : ''}
               <details>
                 <summary>Show prompt</summary>
@@ -297,16 +311,18 @@
       function bindImages() {
         document.querySelectorAll('.image-wrap img').forEach((thumb) => {
           thumb.setAttribute('tabindex', '0');
-          thumb.addEventListener('click', () => openViewer(thumb.currentSrc || thumb.src, thumb.alt));
+          thumb.addEventListener('click', () => openViewer(thumb.currentSrc || thumb.src, thumb.alt, thumb.dataset.article));
           thumb.addEventListener('keydown', (event) => {
             if (event.key === 'Enter' || event.key === ' ') {
               event.preventDefault();
-              openViewer(thumb.currentSrc || thumb.src, thumb.alt);
+              openViewer(thumb.currentSrc || thumb.src, thumb.alt, thumb.dataset.article);
             }
           });
         });
       }
-      function openViewer(src, alt) {
+      function openViewer(src, alt, article) {
+        readLink.hidden = !article;
+        if (article) readLink.href = article;
         image.src = src;
         image.alt = alt || 'Expanded generated image';
         title.textContent = alt || 'Generated image';

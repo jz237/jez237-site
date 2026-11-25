@@ -41,6 +41,11 @@
   const viewerTitle = document.getElementById('collection-lightbox-title');
   const closeButton = document.getElementById('collection-lightbox-close');
   const IMAGE_BASE = 'https://media.jez237.com/image-gen-2-benchmark/images/';
+  // Every factual infographic has a text page. The GitHub mirror cannot serve those pages, so it links to the main site.
+  const isFactual = dataFile === 'factual-infographics-data.json';
+  const ARTICLE_BASE = location.hostname === 'jz237.github.io'
+    ? 'https://jez237.com/experiments/image-gen-2-benchmark/infographics/' : 'infographics/';
+  const articleUrl = (item) => `${ARTICLE_BASE}${encodeURIComponent(item.id)}/`;
 
   const escapeHtml = (value) => String(value || '').replace(/[&<>'"]/g, (char) => ({
     '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
@@ -64,19 +69,27 @@
     const source = imageUrl(item.image);
     return `<article class="collection-card">
       <div class="collection-image${sizeClass(item.size)}">
-        <img src="${escapeHtml(source)}" alt="${escapeHtml(item.title)}" loading="lazy">
+        <img src="${escapeHtml(source)}" alt="${escapeHtml(item.title)}" loading="lazy"${isFactual ? ` data-article="${escapeHtml(articleUrl(item))}"` : ''}>
       </div>
       <div class="collection-content">
         <div class="collection-kicker">${escapeHtml(item.date)} · ${escapeHtml(label)}</div>
-        <h2>${dataFile === 'factual-infographics-data.json'
-          ? `<a href="https://jez237.com/experiments/image-gen-2-benchmark/infographics/${encodeURIComponent(item.id)}/">${escapeHtml(item.title)}</a>`
-          : escapeHtml(item.title)}</h2>
+        <h2>${isFactual ? `<a href="${escapeHtml(articleUrl(item))}">${escapeHtml(item.title)}</a>` : escapeHtml(item.title)}</h2>
+        ${isFactual ? `<p class="collection-read"><a href="${escapeHtml(articleUrl(item))}">Read about it <span aria-hidden="true">→</span></a></p>` : ''}
         <details><summary>Show prompt</summary><pre>${escapeHtml(item.prompt)}</pre></details>
       </div>
     </article>`;
   }
 
-  function openViewer(source, alt) {
+  // In the enlarged view, a link to the infographic's text page sits beside Close.
+  const readLink = document.createElement('a');
+  readLink.className = 'collection-lightbox-read';
+  readLink.textContent = 'Read about it →';
+  readLink.hidden = true;
+  closeButton.before(readLink);
+
+  function openViewer(source, alt, article) {
+    readLink.hidden = !article;
+    if (article) readLink.href = article;
     viewerImage.src = source;
     viewerImage.alt = alt || 'Expanded generated image';
     viewerTitle.textContent = alt || 'Generated image';
@@ -98,11 +111,11 @@
   function bindImages() {
     grid.querySelectorAll('.collection-image img').forEach((image) => {
       image.tabIndex = 0;
-      image.addEventListener('click', () => openViewer(image.currentSrc || image.src, image.alt));
+      image.addEventListener('click', () => openViewer(image.currentSrc || image.src, image.alt, image.dataset.article));
       image.addEventListener('keydown', (event) => {
         if (event.key === 'Enter' || event.key === ' ') {
           event.preventDefault();
-          openViewer(image.currentSrc || image.src, image.alt);
+          openViewer(image.currentSrc || image.src, image.alt, image.dataset.article);
         }
       });
     });

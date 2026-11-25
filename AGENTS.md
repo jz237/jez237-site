@@ -73,5 +73,17 @@ Cloudflare, which serves jez237.com, is not affected by a mirror failure.
 - AI Images factual infographics carry `factualInfographic.group` (see
   `experiments/image-gen-2-benchmark/factual_groups.py` for the list). `append-entry.py` sets it; pass
   `--factual-group` to choose, or omit it to derive the group from the `factual_subtype` note and the title.
+- Every factual infographic has a text page (Jez, Nov 25 2026: do for the factual infographics what The Hidden Reef's
+  four infographic sections do, "each infographic having a text page with information about whatever it is"). The
+  pages are at `/experiments/image-gen-2-benchmark/infographics/<id>/`, built by
+  `experiments/image-gen-2-benchmark/build-infographic-articles.py` into the monthly `infographic-articles-*.json`
+  packs and served by `functions/experiments/image-gen-2-benchmark/infographics/[id].js`; never edit a pack by hand.
+  The written text (introduction, "At a glance", titled sections) is in `infographic-article-text.json`, keyed by
+  infographic id. It may only restate that entry's research record (`factualInfographic.evidence`, or its entry in
+  `infographic-research-supplements.json`): no fact or figure from memory, hedges kept, American spelling. The
+  builder refuses text whose figures are not in the entry's record; `--check <file>` checks a file without building.
+  An entry with no written text still gets a page showing its research notes, so a new daily infographic needs its
+  text added to that file to match the others. Page styles: `infographic-article.css` (raise `STYLE_VERSION` in the
+  builder when it changes). The gallery cards and the enlarged view link to the page ("Read about it").
 - Scripts that locate themselves must use `fileURLToPath(import.meta.url)`, not `new URL(import.meta.url).pathname`,
   which yields `D:\D:\...` on Windows.

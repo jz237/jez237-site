@@ -27,6 +27,10 @@ body { margin: 0; background: #0f1110; color: #eee9df; }
 .collection-kicker { color: var(--collection-accent); font-size: .72rem; text-transform: uppercase; letter-spacing: .12em; }
 .collection-card h2 { margin: 8px 0 10px; font-size: 1.3rem; line-height: 1.15; }
 .collection-description { margin: 0 0 14px; color: #c3beb5; line-height: 1.55; }
+.collection-read { margin: 0 0 14px; }
+.collection-read a, .collection-lightbox-read { display: inline-block; padding: 8px 13px; border: 1px solid rgba(216,183,118,.5); border-radius: 4px; color: #e4cc9c; font-size: .76rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; text-decoration: none; white-space: nowrap; }
+.collection-read a:hover, .collection-lightbox-read:hover { background: rgba(216,183,118,.14); border-color: var(--collection-accent); color: #f3ead8; text-decoration: none; }
+.collection-lightbox-read[hidden] { display: none; }
 .collection-card details { border-top: 1px solid rgba(255,255,255,.09); padding-top: 12px; }
 .collection-card summary { color: #e3d3b1; cursor: pointer; }
 .collection-card pre { white-space: pre-wrap; word-break: break-word; color: #c9c5bd; font: .84rem/1.55 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
