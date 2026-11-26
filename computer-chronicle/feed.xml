@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Wed, 25 Nov 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Thu, 26 Nov 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of November 11-17, 1985 — Kampfgruppe wins Computer Gaming World’s first Game of the Year ballot</title>
+      <link>https://jez237.com/computer-chronicle/?date=1985-11-11</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1985-11-11</guid>
+      <pubDate>Thu, 26 Nov 2026 12:00:00 GMT</pubDate>
+      <description>SSI’s tactical simulation takes the overall prize in Computer Gaming World’s first annual awards. A specialist wargame has won the broadest honor in Computer Gaming World’s first annual awards. The November/December issue names SSI’s Kampfgruppe overall Game of the Year as well as the wargame winner. Gary Grigsby’s tactical simulation has carried its readership ballot beyond the boundaries of a single category. Also this week: Flat-rate experiments promise a cheaper evening on the modem · Amiga graphics: a palette becomes a programming challenge · PaperClip lets Atari owners work in two windows—and carries a hardware key.</description>
+    </item>
     <item>
       <title>Week of November 4-10, 1985 — Kampfgruppe takes Computer Gaming World’s first crown</title>
       <link>https://jez237.com/computer-chronicle/?date=1985-11-04</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1985-07-01</guid>
       <pubDate>Sat, 07 Nov 2026 12:00:00 GMT</pubDate>
       <description>A war-game specialist sends Apple and Commodore players underground. Strategic Simulations Inc., best known for detailed war games, is trying a different sort of battle. James V. Trunzo’s July COMPUTE! review finds Gemstone Warrior an arcade-oriented adventure in which fast decisions and quick reflexes matter more than the patient calculations of a historical simulation. This is a current review, not a claim that the game first appeared this week. Also this week: Atari prepares the ST for summer buyers · HomePak bundles writing, filing and telecommunications for $49.95 · The online information boom comes with a running meter.</description>
-    </item>
-    <item>
-      <title>Week of June 24-30, 1985 — Apple cuts one-fifth of workforce as first quarterly loss looms</title>
-      <link>https://jez237.com/computer-chronicle/?date=1985-06-24</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1985-06-24</guid>
-      <pubDate>Fri, 06 Nov 2026 12:00:00 GMT</pubDate>
-      <description>Three plants face closure as the personal-computer maker lowers its break-even point. Apple Computer is cutting 1,200 jobs and closing three of its six production plants, according to the June 24 Computerworld. The recently announced restructuring removes roughly one-fifth of the workforce as the company prepares for what it expects will be its first quarterly loss in eight years. Also this week: Electronic novels recruit poets as well as science-fiction stars · Commodore 128 promises three computing worlds in one box · Commodore LCD portable slips beyond September.</description>
     </item>
   </channel>
 </rss>

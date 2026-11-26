@@ -2,6 +2,22 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-11-26",
+      "historicDate": "1985-11-11",
+      "displayDate": "Week of November 11-17, 1985",
+      "edition": "Issue 172 - Weekly 1985 Computer & Culture Chronicle",
+      "morningLine": "A small wargame wins big; modems promise longer evenings; Amiga programmers count their colors.",
+      "leadHeadline": "Kampfgruppe wins Computer Gaming World’s first Game of the Year ballot",
+      "storyHeadlines": [
+        "Flat-rate experiments promise a cheaper evening on the modem",
+        "Amiga graphics: a palette becomes a programming challenge",
+        "PaperClip lets Atari owners work in two windows—and carries a hardware key"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1985-11-11.jpg",
+      "thumb": "media/thumbs/1985-11-11.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-11-25",
       "historicDate": "1985-11-04",
       "displayDate": "Week of November 4-10, 1985",

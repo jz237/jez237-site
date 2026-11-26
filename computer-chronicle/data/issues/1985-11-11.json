@@ -1,0 +1,396 @@
+{
+  "currentDate": "2026-11-26",
+  "historicDate": "1985-11-11",
+  "displayDate": "Week of November 11-17, 1985",
+  "edition": "Issue 172 - Weekly 1985 Computer & Culture Chronicle",
+  "masthead": {
+    "title": "Computer Chronicle",
+    "subtitle": "Issue 172 - Weekly 1985 Computer & Culture Chronicle",
+    "dateline": "Week of November 11-17, 1985",
+    "price": "75 cents"
+  },
+  "sectionChrome": {
+    "primary": "brick red",
+    "secondary": "royal blue",
+    "texture": "aged newsprint, fine column rules, ink bleed"
+  },
+  "visualProfile": {
+    "tone": "A tactical game beats the giants",
+    "motifs": [
+      "1985 home computer with tactical map, boxed wargame and halftone tank scene; modem and Amiga keyboard"
+    ],
+    "layout": "Full-page warm aged newsprint, dense columns, red and blue headers, boxed modules, halftone photos, paper grain and slight ink bleed; no dead footer space"
+  },
+  "layoutPlan": {
+    "leadPlacement": "Kampfgruppe gaming award is the largest headline and image; Amiga graphics and modem experiments secondary.",
+    "secondaryRail": "Top 5 Music: Billboard Top Rock Tracks November 16. Top 5 Movies: November 15-17 US weekend. Top 5 Computer Games: editorial selection, not sales ranking. Print feature headlines verbatim with fixed page-map jump lines."
+  },
+  "heroImage": {
+    "src": "media/computer-chronicle-gpt-image-2-week-1985-11-11.jpg",
+    "alt": "Computer Chronicle newspaper artifact for November 11-17, 1985",
+    "caption": "Newspaper-style front page generated from structured Chronicle issue data.",
+    "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+  },
+  "editorNote": "November magazine coverage puts tactical gaming, home-computer graphics and the price of going online on the front page.",
+  "morningLine": "A small wargame wins big; modems promise longer evenings; Amiga programmers count their colors.",
+  "lead": {
+    "headline": "Kampfgruppe wins Computer Gaming World’s first Game of the Year ballot",
+    "dek": "SSI’s tactical simulation takes the overall prize in Computer Gaming World’s first annual awards.",
+    "body": [
+      "A specialist wargame has won the broadest honor in Computer Gaming World’s first annual awards. The November/December issue names SSI’s Kampfgruppe overall Game of the Year as well as the wargame winner. Gary Grigsby’s tactical simulation has carried its readership ballot beyond the boundaries of a single category.",
+      "The size of that victory is not measured by sales alone. The magazine reports sales of 8,000 copies and quotes an eventual expectation of 25,000. The latter is a forecast, not a completed tally. Other winning games had passed 100,000 copies, according to the feature, yet the smaller title drew a formidable response from voters.",
+      "Kampfgruppe sets its battles in World War II Europe. Random scenarios and computer-managed bookkeeping help turn the machinery of tactical warfare into a repeatable home-computer contest. The report presents those strengths as reasons for its following, rather than suggesting that the award depends on spectacular sales.",
+      "Ultima III, its closest non-wargame competitor, wins the Adventure award. The Seven Cities of Gold takes Strategy and F-15 Strike Eagle takes Action. All are honors for existing games: the combined November/December magazine supplies the news, not a claim that these programs first reached stores during this week."
+    ],
+    "sourceRefs": [
+      1
+    ],
+    "confidence": "same-month"
+  },
+  "stories": [
+    {
+      "headline": "Flat-rate experiments promise a cheaper evening on the modem",
+      "body": [
+        "The price of a long session at the keyboard is becoming a selling point. COMPUTE!’s November survey describes GTE Telenet’s PC Pursuit experiment in twelve metropolitan areas: $25 per month for evening and weekend connections to bulletin boards, individual computers and noncommercial databases.",
+        "That offer does not erase the separate charges of commercial information services. Nor is national expansion a completed fact: Telenet describes an experiment whose future depends on demand. For callers exploring local boards, however, a predictable network bill changes the arithmetic of browsing.",
+        "QuantumLink takes a different route for Commodore 64 and 128 owners. Its $9.95 monthly base includes selected services, while chat and software downloads add six cents per minute. Graphics and sounds for games such as chess, backgammon and hangman reside in the client software. The November report also offers free software and a free month for registration before year’s end; it is not evidence for a precise launch day."
+      ],
+      "sourceRefs": [
+        0,
+        7
+      ],
+      "confidence": "same-month"
+    },
+    {
+      "headline": "Amiga graphics: a palette becomes a programming challenge",
+      "body": [
+        "A large color universe is only the beginning of an Amiga picture. Charles Brannon’s November COMPUTE! technical feature describes 4,096 possible colors, produced by sixteen intensity levels each of red, green and blue through an analog RGB display.",
+        "Ordinary modes draw from selected palettes of sixteen or thirty-two colors; the full universe should not be mistaken for a promise that every mode puts all 4,096 on screen at once. Bitplanes and color registers supply the programmer’s control, while a 640-by-400 bitmap mode illustrates the machine’s resolution options.",
+        "The surrounding system combines a 68000 processor, stereo sound, multitasking and an internal 880K floppy drive. Custom graphics hardware aids animation, but the specifications remain an invitation to programmers, not a guarantee that every desired application is already on the shelf."
+      ],
+      "sourceRefs": [
+        0
+      ],
+      "confidence": "same-month"
+    },
+    {
+      "headline": "PaperClip lets Atari owners work in two windows—and carries a hardware key",
+      "body": [
+        "Atari owners can keep two documents open in PaperClip and cut and paste between windows. Robert L. Riggs’s November COMPUTE! review covers Batteries Included’s word processor for Atari 400/800, XL and XE machines with at least 48K, a disk drive and a printer.",
+        "Line lengths can run from fifteen to 132 characters. Colors, horizontal scrolling, macros and automatic saves after a chosen number of keystrokes allow the workspace to be adjusted to the job. These are practical review findings, not a claim of a new release this week.",
+        "Its copy protection sits off the disk: backup copies are permitted, but operation requires the supplied joystick-port key. Printer compatibility deserves attention as well. The tested version 1.0 mishandled proportional spacing on the Atari 825; version 1.1 adds microspacing without delivering true proportional spacing on that printer."
+      ],
+      "sourceRefs": [
+        0
+      ],
+      "confidence": "same-month"
+    }
+  ],
+  "computerItems": [
+    {
+      "title": "Commodore Amiga",
+      "summary": "68000, 880K built-in disk drive, stereo sound, custom graphics and multitasking as described by November COMPUTE! technical coverage.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "title": "Westridge 6420",
+      "summary": "300 bps modem with software, $49.95 in COMPUTE!’s Viewtron coverage, p. 28.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "title": "Volksmodem 12",
+      "summary": "1200 bps, $189.95 in the same Viewtron report; distinguish from other dealers’ advertised prices.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0
+      ]
+    }
+  ],
+  "softwareList": [
+    {
+      "name": "Atari PaperClip",
+      "detail": "Two-document editing, macros and joystick-port hardware key; 48K minimum. Review evidence, not a dated launch.",
+      "sourceRefs": [
+        0
+      ],
+      "confidence": "same-month"
+    },
+    {
+      "name": "QuantumLink client",
+      "detail": "Dedicated C64/128 client with locally stored graphics and tele-games; registration offer supplies software without charge before year end.",
+      "sourceRefs": [
+        0
+      ],
+      "confidence": "same-month"
+    }
+  ],
+  "storeShelves": [
+    {
+      "label": "Top 5 Computer Games — editorial selection, not a sales chart",
+      "items": [
+        "Kampfgruppe",
+        "Ultima III",
+        "The Seven Cities of Gold",
+        "F-15 Strike Eagle",
+        "Gato"
+      ],
+      "sourceRefs": [
+        0,
+        1
+      ],
+      "confidence": "same-month"
+    },
+    {
+      "label": "Top 5 Movies — US weekend box office, November 15-17, 1985",
+      "items": [
+        "Once Bitten",
+        "Jagged Edge",
+        "Target",
+        "Death Wish 3",
+        "Back to the Future"
+      ],
+      "sourceRefs": [
+        3
+      ],
+      "confidence": "same-week"
+    }
+  ],
+  "priceWatch": [
+    {
+      "item": "PC Pursuit",
+      "price": "$25/month",
+      "note": "Twelve-city evening/weekend experiment; commercial service fees separate",
+      "sourceRefs": [
+        0
+      ],
+      "confidence": "same-month"
+    },
+    {
+      "item": "QuantumLink",
+      "price": "$9.95/month",
+      "note": "Selected premium uses add $0.06/minute",
+      "sourceRefs": [
+        0
+      ],
+      "confidence": "same-month"
+    },
+    {
+      "item": "Gato, Apple/IBM",
+      "price": "$39.95",
+      "note": "Review-listed price; Macintosh $49.95",
+      "sourceRefs": [
+        0
+      ],
+      "confidence": "same-month"
+    },
+    {
+      "item": "Westridge 6420",
+      "price": "$49.95",
+      "note": "300 bps modem with software in Viewtron coverage",
+      "sourceRefs": [
+        0
+      ],
+      "confidence": "same-month"
+    }
+  ],
+  "musicChart": [
+    {
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-11-16",
+      "confidence": "same-week",
+      "rank": 1,
+      "artist": "ZZ Top",
+      "title": "Sleeping Bag",
+      "song": "Sleeping Bag",
+      "basis": "Album-oriented radio airplay; not Hot 100",
+      "sourceRefs": [
+        2
+      ]
+    },
+    {
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-11-16",
+      "confidence": "same-week",
+      "rank": 2,
+      "artist": "John Cougar Mellencamp",
+      "title": "Small Town",
+      "song": "Small Town",
+      "basis": "Album-oriented radio airplay; not Hot 100",
+      "sourceRefs": [
+        2
+      ]
+    },
+    {
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-11-16",
+      "confidence": "same-week",
+      "rank": 3,
+      "artist": "The Cars",
+      "title": "Tonight She Comes",
+      "song": "Tonight She Comes",
+      "basis": "Album-oriented radio airplay; not Hot 100",
+      "sourceRefs": [
+        2
+      ]
+    },
+    {
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-11-16",
+      "confidence": "same-week",
+      "rank": 4,
+      "artist": "Rush",
+      "title": "The Big Money",
+      "song": "The Big Money",
+      "basis": "Album-oriented radio airplay; not Hot 100",
+      "sourceRefs": [
+        2
+      ]
+    },
+    {
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-11-16",
+      "confidence": "same-week",
+      "rank": 5,
+      "artist": "Simple Minds",
+      "title": "Alive & Kicking",
+      "song": "Alive & Kicking",
+      "basis": "Album-oriented radio airplay; not Hot 100",
+      "sourceRefs": [
+        2
+      ]
+    }
+  ],
+  "briefs": [
+    {
+      "headline": "Baen previews fiction online",
+      "summary": "COMPUTE! p. 20 reports downloadable chapters in CompuServe’s Science Fiction and Fantasy Forum. Files may be redistributed unchanged and not sold; ordinary service connect charges apply.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "headline": "Delphi adds faster access and interest groups",
+      "summary": "November service survey reports 2400-bps access introduced in June with an additional $5/hour, plus AP news and platform-specific groups. This is background, not a new November launch.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0
+      ]
+    }
+  ],
+  "periodAd": {
+    "headline": "A modem evening for a flat $25",
+    "summary": "GTE Telenet’s PC Pursuit experiment offers twelve metropolitan areas evening/weekend access to boards, individual computers and noncommercial databases. Commercial-service charges are separate.",
+    "tagline": "Editorial reconstruction of a period offer, not quoted advertisement copy.",
+    "sourceRefs": [
+      0
+    ]
+  },
+  "market": {
+    "headline": "The meter has more than one dial",
+    "summary": "A flat network charge is not the same as unlimited commercial-service use. PC Pursuit’s $25 experiment and QuantumLink’s $9.95 base subscription address different costs; selected QuantumLink chat and downloads still add six cents per minute. Compare the included activities as carefully as the headline price.",
+    "sourceRefs": [
+      0
+    ],
+    "confidence": "same-month"
+  },
+  "worldAnchor": {
+    "headline": "Nevado del Ruiz eruption devastates Armero",
+    "summary": "Colombia’s Nevado del Ruiz erupted on November 13. Volcanic mudflows swept into Armero, bringing catastrophe to the town below.",
+    "sourceRefs": [
+      4
+    ],
+    "confidence": "exact-date"
+  },
+  "bbsNote": {
+    "headline": "A $25 flat rate, graphical tele-games and fiction by modem",
+    "summary": "November’s telecomputing coverage makes cost and community the story. These are source-derived desk notes, not fabricated historical BBS messages or quotations.",
+    "posts": [
+      {
+        "topic": "Cheaper BBS exploration",
+        "platform": "GTE Telenet PC Pursuit",
+        "text": "Twelve-city evening/weekend experiment at $25 monthly; commercial information-service fees remain separate."
+      },
+      {
+        "topic": "Commodore online play",
+        "platform": "QuantumLink",
+        "text": "C64/128 service offers a graphical client, bulletin boards and locally stored games. $9.95 base fee; chat/download premiums cost six cents a minute."
+      },
+      {
+        "topic": "Book previews",
+        "platform": "CompuServe Science Fiction and Fantasy Forum",
+        "text": "Baen supplies preview chapters; unaltered noncommercial redistribution to local boards is permitted according to COMPUTE!."
+      }
+    ],
+    "sourceRefs": [
+      0
+    ]
+  },
+  "curiosity": {
+    "headline": "The submarine simulator with a spreadsheet disguise",
+    "summary": "Gato contains a deliberately work-looking screen.",
+    "detail": "COMPUTE!’s November review, p. 90, describes a fake spreadsheet display players can switch to when the boss approaches. This is an explicitly documented feature of the reviewed game, not an invented office anecdote.",
+    "sourceRefs": [
+      0
+    ]
+  },
+  "accuracyLedger": {
+    "items": [
+      "Exact-day personal-computing news proved thin; use the expressly permitted same-month reporting without claiming the magazine features happened in this particular week.",
+      "No milestone: monthly awards and technical coverage do not meet the era-defining threshold.",
+      "No gadgetCandidates: searches found broader 1985 camcorder context, not verified breaking gadget news in the target week/month strong enough to carry.",
+      "Underground searches surfaced April, August and October incidents and a November 21 retrospective. Do not relocate those incidents into November 11–17; the included protection debate is directly documented in November print.",
+      "Windows commercial release on November 20 falls after this week and must not be reported as already shipped.",
+      "CGW’s November/December issue calls Ultima IV upcoming. Do not use its January/February 1986 review as November evidence.",
+      "Prices are nominal US dollars, specific to the named report/offer. Chart is Top Rock Tracks, not Hot 100."
+    ]
+  },
+  "sources": [
+    {
+      "title": "COMPUTE! issue 66: telecomputing pp. 18–28; Gato/PaperClip pp. 90–91; Amiga graphics p. 119 onward",
+      "url": "https://colorcomputerarchive.com/repo/Documents/Magazines/Compute%20%28Clean%29/Compute_Issue_066_1985_Nov.pdf",
+      "date": "1985-11"
+    },
+    {
+      "title": "Computer Gaming World 5.5: first annual Game of the Year awards",
+      "url": "https://www.cgwmuseum.org/galleries/issues/cgw_5.5.pdf",
+      "date": "1985-11/1985-12"
+    },
+    {
+      "title": "Billboard: Top Rock Tracks, week ending November 16",
+      "url": "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1985/BB-1985-11-16.pdf",
+      "date": "1985-11-16"
+    },
+    {
+      "title": "The Numbers: domestic weekend box office November 15–17, 1985",
+      "url": "https://www.the-numbers.com/box-office-chart/weekend/1985/11/15",
+      "date": "1985-11-15"
+    },
+    {
+      "title": "USGS: Lessons Learned from the Armero, Colombia Tragedy (retrospective)",
+      "url": "https://www.usgs.gov/observatories/hvo/news/volcano-watch-lessons-learned-armero-colombia-tragedy",
+      "date": "2009-11"
+    },
+    {
+      "title": "Anglo-Irish Agreement, primary treaty text preserved by CAIN",
+      "url": "https://cain.ulster.ac.uk/hmso/aia.htm",
+      "date": "1985-11-15"
+    },
+    {
+      "title": "CAIN: Anglo-Irish Agreement chronology",
+      "url": "https://conflict.ulster.ac.uk/events/aia/chron.htm",
+      "date": "1985-11-15 (event)"
+    },
+    {
+      "title": "The Digital Antiquarian: A New Force in Games, Part 2 (retrospective)",
+      "url": "https://www.filfre.net/2015/07/a-new-force-in-games-part-2-a-habitat-in-cyberspace/",
+      "date": "2015-07-17"
+    }
+  ]
+}
