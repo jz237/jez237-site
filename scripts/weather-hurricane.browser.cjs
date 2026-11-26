@@ -120,8 +120,9 @@ async function run() {
     const page = await context.newPage();
     const errors=[];
     page.on('pageerror',error=>errors.push(error.message));
-    // The tracker sits below the live local forecast, whose late-arriving content can push it out of view; keep it on screen until it starts loading.
-    const revealTracker = () => page.waitForFunction(()=>{ const root=document.querySelector('#weather-hurricanes'), box=root?.getBoundingClientRect(); if (!root) return false; if (box.bottom<0||box.top>innerHeight) root.scrollIntoView({block:'start'}); return !!root.dataset.feed||document.querySelector('#hurricane-refresh')?.textContent==='Checking…'; });
+    // The tracker sits below the live local forecast, whose late-arriving content can push it out of view (pausing playback).
+    // Wait for that forecast to render, then keep the tracker on screen until it starts loading.
+    const revealTracker = () => page.waitForFunction(()=>{ const widget=document.querySelector('#philly-weather-widget'); if (!widget?.querySelector('#weather-five-day') && !/temporarily unavailable/.test(widget?.textContent||'')) return false; const root=document.querySelector('#weather-hurricanes'), box=root?.getBoundingClientRect(); if (!root) return false; if (box.bottom<0||box.top>innerHeight) root.scrollIntoView({block:'start'}); return !!root.dataset.feed||document.querySelector('#hurricane-refresh')?.textContent==='Checking…'; },null,{timeout:60000});
     await page.goto(BASE,{waitUntil:'domcontentloaded'});
     await revealTracker();
     await page.waitForFunction(()=>document.querySelector('#hurricane-feed-status')?.textContent.includes('NOAA checked'));
@@ -217,7 +218,8 @@ async function run() {
     await page.setViewportSize({width:1280,height:900});
     results.push('Larger desktop/mobile map, Escape and close-button focus restoration, forecast table selection, and mobile home navigation');
 
-    assert.equal(satelliteRequests.length,0,'Satellite uses no network until enabled');
+    assert.equal(await page.locator('#hurricane-satellite').isChecked(),true,'Infrared satellite is on by default');
+    assert.ok(satelliteRequests.length>0,'Default satellite imagery loads with the tracker');
     await page.locator('#hurricane-satellite').check();
     await page.waitForFunction(()=>document.querySelector('#hurricane-satellite-status').textContent.startsWith('Infrared mosaic') && !document.querySelector('#hurricane-satellite-status').textContent.includes('loading'));
     assert.ok(await page.locator('.leaflet-hurricane-satellite-pane img').count()>0);

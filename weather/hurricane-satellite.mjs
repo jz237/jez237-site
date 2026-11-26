@@ -1,5 +1,5 @@
 // Optional NOAA/NESDIS infrared imagery, served directly by NOAA nowCOAST.
-// No imagery or metadata is requested until the visitor enables the layer.
+// On by default: imagery and metadata load when the tracker starts, and nothing is requested while the visitor has it switched off.
 export const SATELLITE_URL = 'https://nowcoast.noaa.gov/geoserver/observations/satellite/ows';
 export const SATELLITE_LAYER = 'global_longwave_imagery_mosaic';
 const MAX_IMAGE_AGE = 6 * 3600000;

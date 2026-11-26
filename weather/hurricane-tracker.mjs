@@ -4,7 +4,7 @@ import {
   position, probability, riskColor, basinFor, validateLayerCollection, validateForecastCollection, wind
 } from './hurricane-data.mjs?v=20261010-10';
 import { combinedStorms, fetchWpcForecasts, validateWpcCollection } from './hurricane-wpc.mjs?v=20261010-10';
-import { createSatelliteOverlay } from './hurricane-satellite.mjs?v=20261010-5';
+import { createSatelliteOverlay } from './hurricane-satellite.mjs?v=20261125-1';
 import { createRegionalContext } from './hurricane-regions.mjs?v=20261010-15';
 
 const root = document.getElementById('weather-hurricanes');
@@ -371,7 +371,7 @@ function addMapLabels() {
 }
 
 async function initializeMap() {
-  if (!window.L) { $('#hurricane-satellite').disabled = true; showMapMessage('Interactive map unavailable · storm details are listed below'); return; }
+  if (!window.L) { $('#hurricane-satellite').checked = false; $('#hurricane-satellite').disabled = true; showMapMessage('Interactive map unavailable · storm details are listed below'); return; }
   const L = window.L;
   map = L.map('hurricane-map', {
     zoomSnap: .25, zoomDelta: .5, minZoom: 1.25, maxZoom: 6.5,
