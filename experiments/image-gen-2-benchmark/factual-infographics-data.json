@@ -27061,5 +27061,123 @@
       },
       "group": "reef-fish"
     }
+  },
+  {
+    "id": "2026-11-26-factual-infographic-factual-infographic-acute-otitis-media",
+    "title": "Factual infographic: Acute Otitis Media",
+    "tests": "factual_subtype: medical-health-infographic; {\"factual_subtype\": \"medical-health-infographic\"}; archive_slot=2026-11-26T02:20; concept=child-middle-ear-infection-fluid-drainage; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto",
+    "prompt": "Create the finished medical educational infographic directly, not a photographed poster. Title: ACUTE OTITIS MEDIA. Subtitle: Behind the eardrum. Artwork-led flowing anatomical atlas in refined translucent gouache and precise technical ink, cool midnight teal background, warm coral inflammation and pale ivory lettering. A dominant exquisite sagittal ear cutaway sweeps diagonally across the canvas: external pinna and canal ending at the eardrum, middle ear cavity behind it with restrained amber fluid and reddened bulging eardrum, tiny malleus/incus/stapes, inner ear silhouette, eustachian tube descending toward the upper throat. Label only ear canal, eardrum, middle ear, inner ear, eustachian tube, and the three named ossicles. Never put the fluid in the ear canal or depict a ruptured membrane. Anatomically plausible tissue layers, cartilage, bone texture, fine specular moisture; no gore. A slender curved leader follows the tube toward the throat: \"A cold can swell or block the drainage pathway.\" Smaller open comparison shows an air-filled middle ear versus inflamed middle ear with trapped fluid, with no disconnected boxes. Near it: \"Children’s tubes are smaller and more level.\" Integrate concise callouts into spacious organic negative space: \"Bacteria or viruses can cause infection\"; \"Ear pain • fever • fussiness • ear tugging • sleep difficulty\"; \"An otoscope examination helps establish the diagnosis\". A small otoscope-tip study points at the eardrum, not through it. Lower flowing clinical ribbon, not a grid: \"Many cases improve without antibiotics. Mild cases may suit clinician-directed observation; severe or persistent cases may need antibiotics. Ask a clinician about age-appropriate pain relief.\" Small side annotation: \"Fluid without infection is otitis media with effusion; persistent fluid can affect hearing.\" Readable coral-accent warning text at the bottom: \"Seek care: worsening symptoms, discharge, hearing loss, fever ≥102.2°F (39°C), or symptoms beyond 2–3 days. Under 3 months with fever ≥100.4°F (38°C): medical attention right away.\" Prevention footer: \"Recommended vaccines • clean hands • avoid secondhand smoke. Reduce risk, not a guarantee.\" End \"General education, not a diagnosis.\" Make warning and treatment text genuinely legible. Use varied type scale, delicate leaders, generous breathing room, richly detailed hero anatomy; no equal-sized panels, cards, bibliography, URLs, logos, invented numbers or unsupported complications. Do not imply every child requires antibiotics or that ear tugging alone diagnoses infection.",
+    "image": "images/2026-11-26-factual-infographic-factual-infographic-acute-otitis-media.jpg",
+    "thumb": "thumbs/2026-11-26-factual-infographic-factual-infographic-acute-otitis-media.webp",
+    "color": "#4d544a",
+    "date": "2026-11-26",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "child-middle-ear-infection-fluid-drainage",
+      "imageSha256": "6e4ccaa0429736b06332be03c07ed05d6be7bad07e3660898c6eca0a6c34086e",
+      "imageDHash": "4b73617092157b07"
+    },
+    "factualInfographic": {
+      "topic": "How acute otitis media inflames the middle ear, traps fluid behind the eardrum, and is evaluated and managed in children",
+      "description": "An artwork-led anatomical explanation of childhood middle ear infection, clinical evaluation, management and warning signs.",
+      "sourceNote": "NIDCD https://www.nidcd.nih.gov/health/ear-infections-children and CDC https://www.cdc.gov/ear-infection/about/index.html support anatomy, symptoms, assessment and qualified management.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-26T07:21:34.476463+00:00",
+        "sources": [
+          {
+            "id": "N",
+            "publisher": "National Institute on Deafness and Other Communication Disorders",
+            "title": "Ear Infections in Children",
+            "sourceType": "government-agency",
+            "url": "https://www.nidcd.nih.gov/health/ear-infections-children"
+          },
+          {
+            "id": "C",
+            "publisher": "Centers for Disease Control and Prevention",
+            "title": "Ear Infection Basics",
+            "sourceType": "government-agency",
+            "url": "https://www.cdc.gov/ear-infection/about/index.html"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Acute otitis media is a middle ear infection with swelling and fluid trapped behind the eardrum; it is different from an outer ear canal infection.",
+            "sourceIds": [
+              "N",
+              "C"
+            ]
+          },
+          {
+            "claim": "The ear canal ends at the eardrum; the middle ear lies between the eardrum and inner ear. The malleus, incus and stapes transmit sound vibrations toward the inner ear.",
+            "sourceIds": [
+              "N"
+            ]
+          },
+          {
+            "claim": "The eustachian tube connects the middle ear to the upper throat, supplies air, drains fluid and helps maintain pressure. In children it is smaller and more level; swelling or mucus during a cold can impede drainage.",
+            "sourceIds": [
+              "N"
+            ]
+          },
+          {
+            "claim": "Bacteria or viruses can cause middle ear infections, often after an upper respiratory infection.",
+            "sourceIds": [
+              "N",
+              "C"
+            ]
+          },
+          {
+            "claim": "Symptoms can include ear pain, fever, fussiness, ear tugging and difficulty sleeping; symptoms alone do not establish the diagnosis.",
+            "sourceIds": [
+              "N",
+              "C"
+            ]
+          },
+          {
+            "claim": "Clinicians ask about symptoms and examine the eardrum with an otoscope; a red bulging eardrum can indicate infection. Pneumatic otoscopy can check eardrum movement for fluid.",
+            "sourceIds": [
+              "N",
+              "C"
+            ]
+          },
+          {
+            "claim": "Otitis media with effusion is fluid in the middle ear without infection; fluid may remain after an infection. Persistent fluid can affect hearing.",
+            "sourceIds": [
+              "N",
+              "C"
+            ]
+          },
+          {
+            "claim": "Many middle ear infections improve without antibiotics. Clinician-directed watchful waiting or delayed prescribing may suit mild cases; severe or persistent cases may need antibiotics. Treatment depends on clinical assessment.",
+            "sourceIds": [
+              "C"
+            ]
+          },
+          {
+            "claim": "Pain or fever relief should be selected with a healthcare provider for the child's age and size; no prescription doses or universal antibiotic recommendation are given.",
+            "sourceIds": [
+              "C"
+            ]
+          },
+          {
+            "claim": "Medical care is needed for worsening symptoms, ear discharge, hearing loss, fever of 102.2°F (39°C) or higher, or symptoms lasting more than 2 to 3 days. A baby under 3 months with fever of 100.4°F (38°C) or higher needs medical attention right away.",
+            "sourceIds": [
+              "C"
+            ]
+          },
+          {
+            "claim": "Recommended flu and pneumococcal vaccines, clean hands and avoiding secondhand smoke help reduce risk, but do not guarantee prevention.",
+            "sourceIds": [
+              "C"
+            ]
+          }
+        ]
+      },
+      "group": "health"
+    }
   }
 ]

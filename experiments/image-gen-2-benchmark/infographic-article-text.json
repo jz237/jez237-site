@@ -19472,5 +19472,56 @@
     ]
    }
   ]
+ },
+ "2026-11-26-factual-infographic-factual-infographic-acute-otitis-media": {
+  "dek": "Acute otitis media is an infection of the middle ear with swelling and fluid behind the eardrum. Children are especially vulnerable because their eustachian tubes drain less easily.",
+  "glance": [
+   [
+    "Site",
+    "Middle ear, behind the eardrum"
+   ],
+   [
+    "Causes",
+    "Bacteria or viruses, often after an upper respiratory infection"
+   ],
+   [
+    "Assessment",
+    "Symptoms and an examination of the eardrum"
+   ]
+  ],
+  "sections": [
+   {
+    "heading": "Why fluid becomes trapped",
+    "body": [
+     "The ear canal ends at the eardrum. Beyond it, the middle ear contains the malleus, incus and stapes, which transmit sound vibrations toward the inner ear. The eustachian tube connects this space to the upper throat and helps supply air, drain fluid and maintain pressure.",
+     "In children, this tube is smaller and more level. Swelling or mucus during a cold can impede drainage. Acute otitis media involves infection and swelling, unlike an outer ear canal infection. Fluid without infection is called otitis media with effusion. It may remain after an infection, and persistent fluid can affect hearing."
+    ],
+    "sources": [
+     "N",
+     "C"
+    ]
+   },
+   {
+    "heading": "Symptoms and clinical assessment",
+    "body": [
+     "Ear pain, fever, fussiness, ear tugging and difficulty sleeping can occur. Symptoms alone do not establish the diagnosis. Clinicians ask about symptoms and examine the eardrum with an otoscope. A red, bulging eardrum can indicate infection; pneumatic otoscopy can check its movement for fluid.",
+     "Many middle ear infections improve without antibiotics. Clinician-directed watchful waiting or delayed prescribing may suit mild cases, while severe or persistent cases may need antibiotics. Pain or fever relief is selected with a healthcare provider for the child’s age and size."
+    ],
+    "sources": [
+     "N",
+     "C"
+    ]
+   },
+   {
+    "heading": "When care is needed",
+    "body": [
+     "Medical care is needed for worsening symptoms, ear discharge, hearing loss, fever of 102.2°F (39°C) or higher, or symptoms lasting more than 2 to 3 days. A baby under 3 months with fever of 100.4°F (38°C) or higher needs medical attention right away.",
+     "Recommended flu and pneumococcal vaccines, clean hands and avoiding secondhand smoke help reduce risk. These measures do not guarantee prevention."
+    ],
+    "sources": [
+     "C"
+    ]
+   }
+  ]
  }
 }
