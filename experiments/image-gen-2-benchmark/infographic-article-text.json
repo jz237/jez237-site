@@ -19701,5 +19701,54 @@
     ]
    }
   ]
+ },
+ "2026-11-26-factual-infographic-factual-infographic-bursitis": {
+  "dek": "Bursitis is inflammation of the small fluid-filled sacs that cushion moving tissues around joints. It can cause aching pain, tenderness, warmth and swelling.",
+  "glance": [
+   [
+    "Structure",
+    "Fluid-filled cushioning sac"
+   ],
+   [
+    "Common sites",
+    "Shoulders, elbows, hips and knees"
+   ],
+   [
+    "Typical symptoms",
+    "Aching pain, warmth, tenderness and swelling"
+   ]
+  ],
+  "sections": [
+   {
+    "heading": "A cushion under pressure",
+    "body": [
+     "Bursae cushion between bone and moving muscles, tendons or skin. Bursitis is inflammation of these small fluid-filled sacs. It commonly affects the shoulders, elbows, hips and knees. A blow or fall, repeated motion, or prolonged pressure from leaning on elbows or kneeling can cause it.",
+     "Pain is often a dull ache and may worsen with movement or pressure. The area can become tender, warm and swollen. Redness can be harder to see on brown or black skin."
+    ],
+    "sources": [
+     "niams",
+     "nhs"
+    ]
+   },
+   {
+    "heading": "Assessment and treatment",
+    "body": [
+     "A clinician examines the affected area. Fluid sampling may test for infection or gout; blood tests or scans may also be used. Management may include rest from aggravating activities and pressure, wrapped ice packs and pain relief. Many cases settle within a few weeks.",
+     "Infection-related bursitis may need antibiotics. Steroid injections may reduce swelling but are not given if infection is the cause. Aspiration may ease symptoms."
+    ],
+    "sources": [
+     "nhs"
+    ]
+   },
+   {
+    "heading": "When symptoms need assessment",
+    "body": [
+     "Fever or chills, inability to move the joint, very severe pain, or symptoms persisting or worsening after 1 to 2 weeks of self-care warrant medical assessment. Padding during kneeling and regular breaks from pressure-producing activities may help prevent recurrence."
+    ],
+    "sources": [
+     "nhs"
+    ]
+   }
+  ]
  }
 }

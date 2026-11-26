@@ -36916,5 +36916,108 @@
       },
       "group": "health"
     }
+  },
+  {
+    "id": "2026-11-26-factual-infographic-factual-infographic-bursitis",
+    "title": "Factual infographic: Bursitis",
+    "tests": "factual_subtype: medical-health-infographic; factual_subtype: medical-health-infographic; complete catalog checked: Bell palsy and rheumatoid arthritis already archived, bursitis unused.; archive_slot=2026-11-26T17:20; concept=elbow-bursa-pressure-inflammation-cushion; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto",
+    "prompt": "Create a finished direct-canvas medical infographic headed BURSITIS with subtitle “When a cushioning sac becomes inflamed”. Refined anatomical gouache and delicate technical ink, pale cool blue background, warm coral inflammation accents, ivory bone, muted indigo type. Dominant large oblique elbow-region anatomical teaching schematic: intact elbow bones beneath softly transparent skin and nearby soft tissues; a superficial fluid-filled cushioning sac between bone and skin, enlarged and warm coral where inflamed. Label “Bursa: fluid-filled cushion” and “Bursitis: inflamed sac”. Treat enlargement as an explanatory schematic, not a quantitative scan. Render fine layered tissue textures, subtle fluid translucency and carefully controlled light without gore. A smaller normal sac beside the enlarged one provides a restrained conceptual contrast, no invented cellular structures. Anatomical illustration dominates; no equal-size boxes, cards, panel grid, photographed poster, book, room or UI.\nWeave a curved visual path through airy open annotations and soft inset studies. Upper left: small graceful location silhouettes labeled “Common sites: shoulder, elbow, hip, knee”. Along the elbow contour explain “A blow or fall • Repeated motion • Prolonged pressure”; add a small dignified fictional middle-aged brown-skinned man with short graying hair, broad build and green work shirt leaning an elbow on a desk as the pressure example, with no implication that all such activity causes illness. Keep the person secondary to the anatomy. Lower left symptom callout: “Dull ache • Tenderness • Warmth • Swelling”, then “Often worse with movement or pressure”; small note “Redness can be harder to see on brown or black skin”.\nA flowing lower ribbon has readable concise management and evaluation notes: “Clinical examination; fluid testing may check infection or gout”; “Rest from aggravating pressure • Wrapped ice packs • Pain relief”; “Many cases settle within weeks”; “Infection may need antibiotics”; “Steroid injection: not when infection is the cause”; “Aspiration may ease symptoms”. A tiny kneeling-pad vignette supports “Padding and breaks may help prevent recurrence”. Use no doses or procedural self-treatment demonstration. Give the safety note clear breathing room and stronger amber typography: “Medical assessment: fever or chills, inability to move the joint, very severe pain, or persistent/worsening symptoms after 1 to 2 weeks of self-care”. Footer “General education, not a diagnosis”. No claims of guaranteed recovery or cure. All displayed anatomy, causal arrows and clinical content restricted to these statements. Elegant readable typography, asymmetric organic integration, generous negative space, sophisticated tactile detail. No source URLs, bibliography, logos or watermark.",
+    "image": "images/2026-11-26-factual-infographic-factual-infographic-bursitis.jpg",
+    "thumb": "thumbs/2026-11-26-factual-infographic-factual-infographic-bursitis.webp",
+    "color": "#cec7c6",
+    "date": "2026-11-26",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "elbow-bursa-pressure-inflammation-cushion",
+      "imageSha256": "6d196e104d71ca1e4946be08943e2ca584a793413a3dc1102be22c698d3ed4a0",
+      "imageDHash": "c4b6b4a0629292a8"
+    },
+    "factualInfographic": {
+      "topic": "How bursitis inflames fluid-filled cushioning sacs around joints and is evaluated and managed",
+      "description": "An artwork-led anatomical guide to bursae, bursitis symptoms, causes, clinical assessment, management and warning signs.",
+      "sourceNote": "NIAMS https://www.niams.nih.gov/health-topics/sports-injuries and NHS https://www.nhs.uk/conditions/bursitis/ support cushioning anatomy, triggers, symptoms and clinical context.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-26T22:21:06.120776+00:00",
+        "sources": [
+          {
+            "id": "niams",
+            "publisher": "National Institute of Arthritis and Musculoskeletal and Skin Diseases",
+            "title": "Sports Injuries",
+            "sourceType": "government-agency",
+            "url": "https://www.niams.nih.gov/health-topics/sports-injuries"
+          },
+          {
+            "id": "nhs",
+            "publisher": "NHS",
+            "title": "Bursitis",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/conditions/bursitis/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Bursae are small fluid-filled sacs cushioning between bone and moving muscles, tendons or skin; bursitis means inflammation of these sacs.",
+            "sourceIds": [
+              "niams",
+              "nhs"
+            ]
+          },
+          {
+            "claim": "Bursitis commonly affects shoulders, elbows, hips and knees.",
+            "sourceIds": [
+              "niams",
+              "nhs"
+            ]
+          },
+          {
+            "claim": "A blow or fall, repeated motion, or prolonged pressure such as leaning on elbows or kneeling can cause bursitis.",
+            "sourceIds": [
+              "niams"
+            ]
+          },
+          {
+            "claim": "Symptoms include dull aching pain, tenderness, warmth and swelling, often worse with movement or pressure; redness can be harder to see on brown or black skin.",
+            "sourceIds": [
+              "nhs"
+            ]
+          },
+          {
+            "claim": "A clinician examines the affected area; fluid sampling may test for infection or gout, and blood tests or scans may also be used.",
+            "sourceIds": [
+              "nhs"
+            ]
+          },
+          {
+            "claim": "Management may include rest from aggravating activities and pressure, wrapped ice packs and pain relief; many cases settle within a few weeks.",
+            "sourceIds": [
+              "nhs"
+            ]
+          },
+          {
+            "claim": "Infection-related bursitis may need antibiotics. Steroid injections may reduce swelling but are not given if infection is the cause; aspiration may ease symptoms.",
+            "sourceIds": [
+              "nhs"
+            ]
+          },
+          {
+            "claim": "Fever or chills, inability to move the joint, very severe pain, or symptoms persisting or worsening after 1 to 2 weeks of self-care warrant medical assessment.",
+            "sourceIds": [
+              "nhs"
+            ]
+          },
+          {
+            "claim": "Padding during kneeling and regular breaks from pressure-producing activities may help prevent recurrence.",
+            "sourceIds": [
+              "nhs"
+            ]
+          }
+        ]
+      },
+      "group": "health"
+    }
   }
 ]
