@@ -364,6 +364,130 @@
     }
   },
   {
+    "id": "2026-11-25-factual-infographic-factual-infographic-forceps-butterflyfi",
+    "title": "Factual infographic: Forceps Butterflyfish",
+    "tests": "factual_subtype: reef-fish-infographic; Permanent species reservations and complete factual catalog checked. Misapplied longirostris names are not true synonyms. Two independent authoritative publishers; supplemental OATA care guidance. No tank volume prescription or subjective critic.; archive_slot=2026-11-25T20:20; concept=forceps-butterflyfish-jaw-tearing-reef-crevice-prey; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; fish_scientific_name: Forcipiger flavissimus",
+    "prompt": "Create a lavish, highly detailed, richly colorful PHOTOREALISTIC reef-fish infographic, a finished flowing underwater atlas, not a photographed poster. Prominent title FORCEPS BUTTERFLYFISH, scientific name Forcipiger flavissimus directly beneath, smaller alternate name Yellow longnose butterflyfish. A monumental anatomically accurate adult swims diagonally downward from upper right toward a shadowed reef crevice at lower left. Its tall laterally compressed body glows golden yellow against deep cobalt and peacock-teal water, with fine realistic scale relief, delicate fin rays, convincing translucent edges and underwater sunbeam caustics. Correct diagnostic markings: upper head black, lower head silvery white, extremely elongated pointed snout but NOT the even longer snout of F. longirostris; curved gill-cover margin; black spot on the anal fin close to tail base, not an invented spot on the tail. Natural reef with rich coral textures, subtle magenta and orange accents, shadowed rock cracks and believable depth. Keep the fish bright but naturally photographic, never fantasy neon. No other fish species. Vary scale and asymmetry and leave breathing room for sophisticated very readable typography.\nAn organic curved visual journey links the hero's snout to a large external close-up of the same fish's mouth near worm tentacles in a rock fissure. No gore, no invented internal anatomy or exaggerated teeth. Caption this open biological study JAWS THAT PLUCK AND TEAR, with concise text: Probes coral branches and reef crevices. Takes small crustaceans and fish eggs; tears pieces from worm tentacles and sea-urchin tube feet. A small carefully labeled illustrative prey silhouette of a sea urchin foot and worm tentacles can accompany the mouth close-up; clearly label prey details, not fish anatomy. Use fine graceful leader lines. Another subtle close-up follows the anal-fin spot with label Black spot near tail base. A fine curved measuring annotation by the hero reads Reported maximum: 22 cm total length.\nOpen habitat vignette across the upper left shows the same species over an exposed seaward reef fading toward a lagoon context, never a map requiring precise unsourced boundaries. Readable labels Western Indian Ocean to Eastern Pacific, including Hawaii and Seaward reefs and lagoon reefs. A small distant pair of this same species can appear with Usually pairs; also alone or in small groups. Distinguish the pair as a supporting study rather than crowding the main scene.\nAlong the lower reef silhouette, weave a useful aquarium section into calm negative space. Heading AQUARIUM NOTES, with clear subordinate attribution OATA husbandry guidance. Notes: Mature filtration; add fish slowly. Ammonia and nitrite: zero. Test water quality and monitor salinity. Confirm appropriate tank size with expert advice. No invented tank-volume prescription. An important amber open callout states REEF COMPATIBILITY IS NOT GUARANTEED and Ornamental invertebrates may be at risk from its natural feeding behavior. Do not depict it consuming coral polyps or assert all corals are unsafe or safe. The caution is an implication of documented invertebrate feeding, not a universal aquarium outcome. No compatibility checkmark badge. Footer Sources: Australian Museum • Waikiki Aquarium • FishBase • OATA care guidance. Integrate studies and concise text organically with delicate current-like arcs, no boxes, cards, fixed grid or dashboard. Artwork first, substantial legible education, exquisite photographic realism. Render infographic directly, no frame or props.",
+    "image": "images/2026-11-25-factual-infographic-factual-infographic-forceps-butterflyfi.jpg",
+    "thumb": "thumbs/2026-11-25-factual-infographic-factual-infographic-forceps-butterflyfi.webp",
+    "color": "#3f574c",
+    "date": "2026-11-25",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1086x1448",
+    "dedup": {
+      "conceptKey": "forceps-butterflyfish-jaw-tearing-reef-crevice-prey",
+      "imageSha256": "4b2efdeccfe00f22671e618afafcca6c28c663392702691add48746bd28fda9a",
+      "imageDHash": "584367c5b1767624"
+    },
+    "factualInfographic": {
+      "topic": "Forceps butterflyfish (Forcipiger flavissimus) reef-crevice feeding, forceps-like jaws and aquarium implications",
+      "description": "Photorealistic reef atlas of forceps-like feeding jaws, reef habitat and cautious aquarium implications.",
+      "sourceNote": "Australian Museum and University of Hawaii Waikiki Aquarium independently read; FishBase taxonomy and species summary read. OATA supplemental industry guidance, not counted toward scientific publishers. https://australian.museum/learn/animals/fishes/forceps-fish-forcipiger-flavissimus/ https://www.waikikiaquarium.org/experience/animal-guide/fishes/butterflyfishes/forceps-butterflyfish/ https://fishbase.se/summary/Forcipiger-flavissimus.html https://fishbase.se/Nomenclature/SynonymsList.php?GenusName=Forcipiger&ID=5584&SpeciesName=flavissimus&SynCode=31452 https://ornamentalfish.org/what-we-do/advice-information/care-sheets/caresheets-marine-fish/how-to-look-after-butterfly-fish/",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-26T01:21:52.393695+00:00",
+        "sources": [
+          {
+            "id": "am",
+            "publisher": "Australian Museum",
+            "title": "Forceps Fish, Forcipiger flavissimus",
+            "sourceType": "museum",
+            "url": "https://australian.museum/learn/animals/fishes/forceps-fish-forcipiger-flavissimus/"
+          },
+          {
+            "id": "wa",
+            "publisher": "University of Hawaii, Waikiki Aquarium",
+            "title": "Forceps Butterflyfish",
+            "sourceType": "university",
+            "url": "https://www.waikikiaquarium.org/experience/animal-guide/fishes/butterflyfishes/forceps-butterflyfish/"
+          },
+          {
+            "id": "fb",
+            "publisher": "FishBase",
+            "title": "Forcipiger flavissimus species summary",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://fishbase.se/summary/Forcipiger-flavissimus.html"
+          },
+          {
+            "id": "tax",
+            "publisher": "FishBase",
+            "title": "Synonyms of Forcipiger flavissimus",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://fishbase.se/Nomenclature/SynonymsList.php?GenusName=Forcipiger&ID=5584&SpeciesName=flavissimus&SynCode=31452"
+          },
+          {
+            "id": "oata",
+            "publisher": "Ornamental Aquatic Trade Association",
+            "title": "Butterflyfish industry technical husbandry care sheet",
+            "sourceType": "manufacturer-technical-documentation",
+            "url": "https://ornamentalfish.org/what-we-do/advice-information/care-sheets/caresheets-marine-fish/how-to-look-after-butterfly-fish/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Accepted name Forcipiger flavissimus, family Chaetodontidae; forceps butterflyfish or forcepsfish, also called yellow longnose butterflyfish. Foreipiger flavissimus is a misspelling. Chelmo longirostris and Forcipiger longirostris appear as misapplied names, not true synonyms; the valid species Forcipiger longirostris is distinct.",
+            "sourceIds": [
+              "tax",
+              "fb",
+              "wa"
+            ]
+          },
+          {
+            "claim": "Bright yellow, tall laterally compressed body; very long pointed snout with black upper head and silvery-white lower head; black spot on anal fin near the tail base; curved operculum margin. The distinct Forcipiger longirostris has an even longer snout and angular operculum.",
+            "sourceIds": [
+              "am",
+              "wa"
+            ]
+          },
+          {
+            "claim": "Reported maximum total length 22 cm; this is a maximum, not typical adult size.",
+            "sourceIds": [
+              "fb"
+            ]
+          },
+          {
+            "claim": "Range spans Western Indian Ocean to Eastern Pacific, including Hawaii; common on exposed seaward reefs, also lagoon reefs.",
+            "sourceIds": [
+              "am",
+              "wa",
+              "fb"
+            ]
+          },
+          {
+            "claim": "Usually seen in pairs, but also singly or in small groups.",
+            "sourceIds": [
+              "am",
+              "fb"
+            ]
+          },
+          {
+            "claim": "Probes coral branches and reef crevices for invertebrates. Mouth opens widely enough to tear off pieces of larger prey such as worm tentacles and sea-urchin tube feet, and also plucks small crustaceans and fish eggs. Hydroids are also food.",
+            "sourceIds": [
+              "wa",
+              "am"
+            ]
+          },
+          {
+            "claim": "Reef-aquarium implication of documented invertebrate feeding: ornamental invertebrates may be at risk; wild reef association is not a guarantee of reef-aquarium compatibility. This is a cautious implication, not a universal claim of coral predation or reef safety.",
+            "sourceIds": [
+              "wa",
+              "am"
+            ]
+          },
+          {
+            "claim": "OATA industry aquarium guidance for butterflyfish: confirm suitable aquarium size with a knowledgeable retailer; mature filtration, add fish slowly; ammonia and nitrite zero; test water quality and monitor salinity. No species-specific tank capacity is prescribed here.",
+            "sourceIds": [
+              "oata"
+            ]
+          }
+        ]
+      },
+      "group": "reef-fish"
+    }
+  },
+  {
     "id": "2026-11-25-factual-infographic-factual-infographic-flame-hawkfish",
     "title": "Factual infographic: Flame Hawkfish",
     "tests": "factual_subtype: reef-fish-infographic; Wednesday reef-fish species unique; WoRMS and FishBase synonym verified; full packet topics checked; no tank-volume prescription; no subjective image review.; archive_slot=2026-11-25T08:20; concept=flame-hawkfish-scarlet-refuge-branching-pocillopora; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; fish_scientific_name: Neocirrhites armatus",

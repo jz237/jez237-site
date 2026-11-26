@@ -19408,5 +19408,69 @@
     ]
    }
   ]
+ },
+ "2026-11-25-factual-infographic-factual-infographic-forceps-butterflyfi": {
+  "dek": "The forceps butterflyfish probes reef crevices with an elongated jaw, plucking small prey and tearing pieces from larger invertebrates. Its feeding biology matters when considering aquarium compatibility.",
+  "glance": [
+   [
+    "Scientific name",
+    "Forcipiger flavissimus"
+   ],
+   [
+    "Family",
+    "Chaetodontidae"
+   ],
+   [
+    "Reported maximum",
+    "22 cm total length"
+   ],
+   [
+    "Habitat",
+    "Exposed seaward reefs and lagoon reefs"
+   ],
+   [
+    "Social pattern",
+    "Usually pairs, also alone or in small groups"
+   ]
+  ],
+  "sections": [
+   {
+    "heading": "Recognizing the forceps butterflyfish",
+    "body": [
+     "Forcipiger flavissimus, also called the yellow longnose butterflyfish, has a tall, flattened yellow body and a very long, pointed snout. The upper head is black and the lower head is silvery-white. A black spot marks the anal fin near the tail base, and the gill cover has a curved margin.",
+     "Forcipiger longirostris is a distinct species with an even longer snout and an angular gill cover. The reported maximum total length of the forceps butterflyfish is 22 cm, not a typical adult size."
+    ],
+    "sources": [
+     "am",
+     "wa",
+     "fb",
+     "tax"
+    ]
+   },
+   {
+    "heading": "Life around reef crevices",
+    "body": [
+     "Its range stretches from the Western Indian Ocean to the Eastern Pacific, including Hawaii. It is common on exposed seaward reefs and also occurs on lagoon reefs. Fish are usually seen in pairs, although individuals and small groups also occur.",
+     "The elongated jaw probes coral branches and reef crevices. The mouth can open widely enough to tear pieces from larger prey, including worm tentacles and sea-urchin tube feet. It also plucks small crustaceans and fish eggs, and eats hydroids."
+    ],
+    "sources": [
+     "am",
+     "wa",
+     "fb"
+    ]
+   },
+   {
+    "heading": "Aquarium compatibility needs caution",
+    "body": [
+     "Invertebrate feeding means ornamental invertebrates may be at risk in an aquarium. Living on wild reefs does not guarantee compatibility with a reef aquarium. This is a caution based on feeding biology, not a claim that every individual eats coral or that any individual is universally reef safe.",
+     "OATA industry guidance for butterflyfish calls for mature filtration, slow additions of fish, and ammonia and nitrite levels of zero. It recommends testing water quality, monitoring salinity, and checking suitable aquarium size with a knowledgeable retailer. No species-specific tank capacity is prescribed here."
+    ],
+    "sources": [
+     "am",
+     "wa",
+     "oata"
+    ]
+   }
+  ]
  }
 }
