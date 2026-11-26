@@ -27280,5 +27280,106 @@
       },
       "group": "health"
     }
+  },
+  {
+    "id": "2026-11-26-factual-infographic-factual-infographic-tinnitus-sound-with",
+    "title": "Factual infographic: Tinnitus — Sound Without an External Source",
+    "tests": "factual_subtype: medical-health-infographic; factual_subtype: medical-health-infographic; archive_slot=2026-11-26T11:20; concept=tinnitus-phantom-sound-auditory-pathway-assessment; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto",
+    "prompt": "Create the finished medical educational infographic directly on canvas. Headline: TINNITUS. Subtitle: Sound without an external source. An artwork-led flowing anatomical atlas in luminous navy, muted teal, coral and warm ivory, shaded colored-pencil anatomy and crisp technical ink. Dominant asymmetric lateral cutaway of a fictional middle-aged Black man with close-cropped salt-and-pepper hair, broad features and relaxed neutral expression; ear and translucent temporal region reveal a beautifully rendered cochlear spiral and a simplified curved nerve route toward a softly outlined auditory cortex. The ear anatomy must remain credible, delicately modeled with fine cartilage and tissue shading, not fantastical machinery. Label cochlea, inner ear, auditory cortex. A dotted coral route is explicitly labeled 'One leading theory: changed signals after inner-ear damage'; nearby caveat 'Mechanisms are not fully understood'. Do not present this pathway as a proven universal cause. Soft abstract contour ribbons inside the head represent perceived sound, not incoming sound waves. Label 'Usually heard only by the affected person'.\nWeave open annotations and small studies into the curved negative space, no boxed grid or detached cards. At upper left, four graceful typographic sound motifs read 'Ringing / Buzzing / Hissing / Humming' and 'May come and go, or stay constant; one ear, both ears, or the head'. Along the lower ear silhouette integrate the concise association callout 'Linked with hearing loss and noise exposure; sometimes earwax, infection or medications'. Do not imply every case has these causes. A modest open ear-examination study flows into a delicate hearing-assessment motif with label 'Assessment: ear exam, history, hearing check'. A flowing lower ribbon titled 'Reducing the impact' contains finely drawn hearing aid, soft-sound device and conversational silhouettes, with readable text 'Treat an identifiable cause when possible', 'Hearing aids when hearing loss is present', 'Sound therapy and cognitive behavioral therapy may help'. Add 'No guaranteed cure; effects vary' and 'Can affect sleep, concentration and mood'.\nKeep a clearly readable coral-accent clinical note at bottom: 'Urgent assessment: sound in time with the pulse. Emergency evaluation: after head injury, or with sudden hearing loss, facial weakness or vertigo.' Footer 'General education, not a diagnosis. Usually not a sign of a serious medical problem.' Avoid drug doses, invented statistics, external source waves, exaggerated brain lesions, promises of cures, URLs, bibliography, branding or watermark. Rich fine anatomy and restrained layered texture, deliberate airy asymmetry, large readable labels, no rigid panels, no photographic poster mockup. Preserve essential caution text over secondary embellishments.",
+    "image": "images/2026-11-26-factual-infographic-factual-infographic-tinnitus-sound-with.jpg",
+    "thumb": "thumbs/2026-11-26-factual-infographic-factual-infographic-tinnitus-sound-with.webp",
+    "color": "#cab6a6",
+    "date": "2026-11-26",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "tinnitus-phantom-sound-auditory-pathway-assessment",
+      "imageSha256": "54a363082fe1ee918bf9758aa29fb4c83f1876853c976e339fa5c3dfb833ddd5",
+      "imageDHash": "f038c0620c9dada2"
+    },
+    "factualInfographic": {
+      "topic": "How tinnitus creates perceived sound without an external source and is evaluated and managed",
+      "description": "An anatomical guide to tinnitus, uncertain mechanisms, symptoms, assessment, management and urgent warning signs.",
+      "sourceNote": "NIDCD https://www.nidcd.nih.gov/health/tinnitus and NHS https://www.nhs.uk/conditions/tinnitus/; verified definition, associations, uncertain neural mechanism, assessment, management and urgent warning signs.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-26T16:21:11.533603+00:00",
+        "sources": [
+          {
+            "id": "NIDCD",
+            "publisher": "National Institute on Deafness and Other Communication Disorders",
+            "title": "Tinnitus",
+            "sourceType": "government-agency",
+            "url": "https://www.nidcd.nih.gov/health/tinnitus"
+          },
+          {
+            "id": "NHS",
+            "publisher": "National Health Service",
+            "title": "Tinnitus",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/conditions/tinnitus/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Tinnitus is perceived sound without an external source. Most cases are subjective, heard only by the affected person.",
+            "sourceIds": [
+              "NIDCD",
+              "NHS"
+            ]
+          },
+          {
+            "claim": "Sounds may ring, buzz, hiss or hum, occur in one or both ears or the head, and come and go or remain constant.",
+            "sourceIds": [
+              "NIDCD",
+              "NHS"
+            ]
+          },
+          {
+            "claim": "Hearing loss and loud noise exposure are linked to tinnitus; earwax or ear infection and some medications can also be associated. The exact causes are not fully understood.",
+            "sourceIds": [
+              "NIDCD",
+              "NHS"
+            ]
+          },
+          {
+            "claim": "One leading theory is that inner-ear damage changes nerve signals to sound-processing brain regions, including the auditory cortex. This is a theory, not a universal proven mechanism. The cochlea is the inner-ear structure that senses sound.",
+            "sourceIds": [
+              "NIDCD"
+            ]
+          },
+          {
+            "claim": "Tinnitus may affect sleep, concentration and mood. It is usually not a sign of a serious medical problem.",
+            "sourceIds": [
+              "NIDCD",
+              "NHS"
+            ]
+          },
+          {
+            "claim": "Evaluation includes an ear examination for earwax or infection, medical and medication history, and hearing assessment; specialist evaluation or imaging may be appropriate, especially for pulsating tinnitus.",
+            "sourceIds": [
+              "NIDCD",
+              "NHS"
+            ]
+          },
+          {
+            "claim": "Treating an identifiable underlying cause may reduce tinnitus. Hearing aids can help when hearing loss is present; sound therapy and cognitive behavioral therapy can reduce its impact, without promising a cure. There is currently no cure for tinnitus and no medication specifically for treating it.",
+            "sourceIds": [
+              "NIDCD",
+              "NHS"
+            ]
+          },
+          {
+            "claim": "Tinnitus that beats with the pulse needs urgent assessment. Tinnitus after head injury, or with sudden hearing loss, facial weakness or vertigo, warrants emergency evaluation.",
+            "sourceIds": [
+              "NHS"
+            ]
+          }
+        ]
+      },
+      "group": "health"
+    }
   }
 ]

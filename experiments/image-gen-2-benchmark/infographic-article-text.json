@@ -19583,5 +19583,68 @@
     ]
    }
   ]
+ },
+ "2026-11-26-factual-infographic-factual-infographic-tinnitus-sound-with": {
+  "dek": "Tinnitus is sound perceived without an external source. Its causes are not fully understood, but assessment can identify treatable problems and therapies can reduce its impact.",
+  "glance": [
+   [
+    "Perception",
+    "Ringing, buzzing, hissing or humming"
+   ],
+   [
+    "Pattern",
+    "Intermittent or constant"
+   ],
+   [
+    "Common association",
+    "Hearing loss"
+   ],
+   [
+    "Assessment",
+    "Ear examination and hearing assessment"
+   ]
+  ],
+  "sections": [
+   {
+    "heading": "Sound without an outside source",
+    "body": [
+     "Most tinnitus is subjective, meaning only the affected person hears it. The sound may occur in one or both ears or in the head, and may come and go or remain constant. Tinnitus may affect sleep, concentration and mood, but it is usually not a sign of a serious medical problem."
+    ],
+    "sources": [
+     "NIDCD",
+     "NHS"
+    ]
+   },
+   {
+    "heading": "Links and an uncertain mechanism",
+    "body": [
+     "Hearing loss and loud noise exposure are linked to tinnitus. Earwax, ear infection and some medications can also be associated. The exact causes are not fully understood. One leading theory is that inner-ear damage changes nerve signals to sound-processing brain regions, including the auditory cortex. This is not a universal proven mechanism. The cochlea is the inner-ear structure that senses sound."
+    ],
+    "sources": [
+     "NIDCD",
+     "NHS"
+    ]
+   },
+   {
+    "heading": "Assessment and symptom management",
+    "body": [
+     "Evaluation includes an ear examination, medical and medication history, and hearing assessment. Specialist evaluation or imaging may be appropriate, especially for pulsating tinnitus. Treating an identifiable underlying cause may reduce symptoms.",
+     "Hearing aids can help when hearing loss is present. Sound therapy and cognitive behavioral therapy can reduce the impact of tinnitus, without promising a cure. There is currently no cure for tinnitus and no medication specifically for treating it."
+    ],
+    "sources": [
+     "NIDCD",
+     "NHS"
+    ]
+   },
+   {
+    "heading": "When assessment is urgent",
+    "body": [
+     "Tinnitus that beats with the pulse needs urgent assessment. Tinnitus after a head injury, or with sudden hearing loss, facial weakness or vertigo, warrants emergency evaluation."
+    ],
+    "sources": [
+     "NHS"
+    ]
+   }
+  ]
  }
 }
