@@ -120,7 +120,10 @@ async function run() {
     const page = await context.newPage();
     const errors=[];
     page.on('pageerror',error=>errors.push(error.message));
+    // The tracker sits below the live local forecast, whose late-arriving content can push it out of view; keep it on screen until it starts loading.
+    const revealTracker = () => page.waitForFunction(()=>{ const root=document.querySelector('#weather-hurricanes'), box=root?.getBoundingClientRect(); if (!root) return false; if (box.bottom<0||box.top>innerHeight) root.scrollIntoView({block:'start'}); return !!root.dataset.feed||document.querySelector('#hurricane-refresh')?.textContent==='Checking…'; });
     await page.goto(BASE,{waitUntil:'domcontentloaded'});
+    await revealTracker();
     await page.waitForFunction(()=>document.querySelector('#hurricane-feed-status')?.textContent.includes('NOAA checked'));
     assert.equal(await page.locator('[data-storm]').count(),1);
     assert.equal(regionRequests,0,'Regional detail must not load for a broad basin overview');
@@ -199,6 +202,7 @@ async function run() {
     assert.equal(await page.locator('#hurricane-forecast-step').inputValue(),'3');
     assert.equal(await page.locator('#hurricane-expand').getAttribute('aria-expanded'),'false');
     assert.equal(await page.locator('#weather-hurricanes').evaluate(el=>el.parentElement.classList.contains('hub-main')),true);
+    assert.deepEqual(await page.locator('#weather-hurricanes').evaluate(el=>[el.previousElementSibling?.id,!!el.nextElementSibling?.querySelector(':scope > #weather-almanac')]),['philly-weather',true],'Tracker sits between the local forecast and the almanac');
     await page.setViewportSize({width:390,height:844});
     assert.equal(await page.locator('.weather-home-link').isVisible(),true);
     await page.locator('#hurricane-expand').click();
@@ -274,7 +278,7 @@ async function run() {
       localStorage.setItem('jez237-hurricane-map-v1',JSON.stringify(cached));
     });
     await page.reload({waitUntil:'domcontentloaded'});
-    await page.locator('#weather-hurricanes').scrollIntoViewIfNeeded();
+    await revealTracker();
     await page.waitForFunction(()=>document.querySelector('#hurricane-feed-status').textContent.includes('Saved data'));
     await page.waitForFunction(()=>document.querySelectorAll('.leaflet-hurricane-land-pane path').length>0);
     assert.equal(await page.locator('#hurricane-notice').isVisible(),false);
@@ -343,7 +347,7 @@ async function run() {
     await context.clearCookies();
     await page.evaluate(()=>localStorage.clear());
     await page.reload({waitUntil:'domcontentloaded'});
-    await page.locator('#weather-hurricanes').scrollIntoViewIfNeeded();
+    await revealTracker();
     await page.waitForFunction(()=>document.querySelector('#weather-hurricanes').dataset.feed==='error');
     assert.match(await page.locator('#hurricane-notice').innerText(),/does not mean there are no storms/);
     assert.match(await page.locator('#hurricane-storm-list').innerText(),/unavailable/);
@@ -355,7 +359,7 @@ async function run() {
       mode=nextMode;
       await page.evaluate(()=>localStorage.clear());
       await page.reload({waitUntil:'domcontentloaded'});
-      await page.locator('#weather-hurricanes').scrollIntoViewIfNeeded();
+      await revealTracker();
       await page.waitForFunction(()=>document.querySelector('#hurricane-feed-status').textContent.includes('NOAA checked'));
       if (mode==='partial') { assert.match(await page.locator('#hurricane-notice').innerText(),/forecast cones/); assert.equal(await page.locator('[data-storm]').count(),1); }
       if (mode==='empty') { assert.equal(await page.locator('[data-storm]').count(),0); assert.match(await page.locator('#hurricane-storm-list').innerText(),/No systems/); assert.equal(await page.locator('#hurricane-notice').isVisible(),false); }
@@ -374,6 +378,7 @@ async function run() {
     mode='normal';wpcMode='normal';regionRequests=0;
     await page.evaluate(()=>localStorage.clear());
     await page.reload({waitUntil:'domcontentloaded'});
+    await revealTracker();
     await page.waitForSelector('[data-storm="al982026"]');
     assert.equal(await page.locator('[data-storm]').count(),2);
     assert.equal(await page.locator('.hurricane-map-marker').count(),2);
@@ -452,6 +457,7 @@ async function run() {
     for(const nextRegion of ['offline','malformed']) {
       regionMode=nextRegion;
       await page.reload({waitUntil:'domcontentloaded'});
+      await revealTracker();
       await page.waitForFunction(()=>!document.querySelector('#hurricane-refresh').disabled);
       await page.locator('[data-storm="al982026"]').click();
       await page.waitForFunction(()=>document.querySelector('#hurricane-notice').textContent.includes('State and province boundaries could not load'));
