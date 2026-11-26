@@ -19646,5 +19646,60 @@
     ]
    }
   ]
+ },
+ "2026-11-26-factual-infographic-factual-infographic-trigger-finger": {
+  "dek": "Trigger finger causes painful catching or locking when a flexor tendon cannot glide smoothly through the pulley at the base of a finger or thumb.",
+  "glance": [
+   [
+    "Also called",
+    "Stenosing tenosynovitis"
+   ],
+   [
+    "Main mechanism",
+    "A size mismatch between the flexor tendon and A1 pulley"
+   ],
+   [
+    "Symptoms",
+    "Catching, locking, pain and stiffness"
+   ],
+   [
+    "Assessment",
+    "Usually symptom history and hand examination"
+   ]
+  ],
+  "sections": [
+   {
+    "heading": "Where the tendon catches",
+    "body": [
+     "Flexor tendons connect muscles in the forearm to finger bones. On the palm side, they pull the fingers into a fist. Pulleys hold these tendons close to the bones. The A1 pulley sits in the palm at the base of the finger.",
+     "A tendon may thicken or develop a bump, and the A1 pulley may thicken and narrow. This size mismatch prevents smooth gliding. Movement can then cause painful catching or locking."
+    ],
+    "sources": [
+     "aaos"
+    ]
+   },
+   {
+    "heading": "Symptoms and assessment",
+    "body": [
+     "Trigger finger may cause clicking, popping, a tender lump at the finger base, or a finger stuck in a bent position. Stiffness and locking can be worse in the morning or after inactivity. Diagnosis usually relies on symptom history and a hand examination rather than X-rays.",
+     "Many cases have no clear cause. Diabetes and rheumatoid arthritis are associated with greater likelihood, as is repetitive gripping or pinching. These associations do not establish a cause in every case."
+    ],
+    "sources": [
+     "aaos",
+     "nhs"
+    ]
+   },
+   {
+    "heading": "Management depends on symptoms",
+    "body": [
+     "Some cases improve on their own. Options include reducing aggravating activities, a straight-finger splint, pain relief and a clinician-administered steroid injection. Surgical release opens the A1 pulley to give the tendon more room. Surgery may be considered for severe symptoms, failed treatment or a finger that cannot be straightened.",
+     "Persistent symptoms or difficulty with daily activities warrant clinical assessment. A finger that cannot be straightened needs medical evaluation rather than forced manipulation. This information is general education, not individualized treatment."
+    ],
+    "sources": [
+     "aaos",
+     "nhs"
+    ]
+   }
+  ]
  }
 }

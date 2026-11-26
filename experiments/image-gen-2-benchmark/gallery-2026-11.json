@@ -1,5 +1,111 @@
 [
   {
+    "id": "2026-11-26-factual-infographic-factual-infographic-trigger-finger",
+    "title": "Factual infographic: Trigger Finger",
+    "tests": "factual_subtype: medical-health-infographic; factual_subtype: medical-health-infographic; archive_slot=2026-11-26T14:20; concept=finger-flexor-tendon-pulley-catching; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto",
+    "prompt": "Create the finished medical educational infographic directly, not a photographed poster, book, frame or UI. Headline: TRIGGER FINGER. Subtitle: When a flexor tendon catches at the A1 pulley. Refined anatomical gouache, colored-pencil microtexture and precise technical ink on cool ivory, with teal tendon pathways and restrained coral accents. Artwork-led asymmetrical composition, no rigid boxes or matrix. Dominant oblique palmar hand cutaway fills the center: anatomically coherent hand with ring finger gently flexed, translucent skin window exposing the flexor tendon and the A1 pulley at its base in the palm. Carefully render tendon fibers, pulley band and pale bone silhouettes; retain orientation and readable negative space. A curved leader grows into a large magnified schematic of the tendon bump approaching a narrowed A1 pulley; show size mismatch and interrupted glide, not a ruptured tendon or damaged joint. Label flexor tendon, A1 pulley, tendon thickening, narrowed passage, catching. Place a smaller normal-glide comparison beside it, organically nested rather than boxed. Add a graceful motion arc connecting relaxed and caught finger silhouettes; no forceful straightening demonstration.\nIntegrate concise factual callouts: 'Flexor tendons pull fingers into a fist'; 'A thickened tendon or narrowed pulley can interrupt smooth gliding'; 'Catching, clicking, pain and stiffness'; 'Often worse after rest or in the morning'; 'Sometimes a tender lump at the finger base'. A fine open text pathway reads 'Often no clear cause' and 'Associated with diabetes, rheumatoid arthritis and repetitive gripping', without suggesting every case has these causes. Bottom artwork flows toward a small, elegantly illustrated straight-finger splint and an abstract open-pulley diagram, not a DIY surgical guide. Management text: 'Assessment: history and hand examination; tests usually not needed'; 'Options depend on symptoms: activity changes, splinting, pain relief or a clinician-given steroid injection'; 'Surgery may release the A1 pulley if symptoms are severe or other care fails'. Clearly legible care note: 'Seek assessment for persistent symptoms or difficulty with daily activities. If the finger cannot straighten, obtain medical evaluation; do not force it.' Small footer: 'General education, not individualized medical advice'. No doses, statistics, cure promises, invented risk claims, URLs or bibliography. Keep the hero anatomy richly shaded and tactile, varied-scale close studies connected with delicate curved lines; readable elegant typography and breathing room, not a wall of text. All anatomy is educational schematic, not a real patient photograph.",
+    "image": "images/2026-11-26-factual-infographic-factual-infographic-trigger-finger.jpg",
+    "thumb": "thumbs/2026-11-26-factual-infographic-factual-infographic-trigger-finger.webp",
+    "color": "#dfd1c3",
+    "date": "2026-11-26",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "finger-flexor-tendon-pulley-catching",
+      "imageSha256": "4a25cb85864609962be2a27eefd31dffd4500cafee6725e4f05fb01e3cde797a",
+      "imageDHash": "c46ce4e6628d88b2"
+    },
+    "factualInfographic": {
+      "topic": "How trigger finger causes flexor tendon catching at the A1 pulley and is evaluated and managed",
+      "description": "An anatomical atlas of tendon gliding, pulley narrowing, symptoms, assessment and management of trigger finger.",
+      "sourceNote": "AAOS https://www.orthoinfo.org/bodypart/hand-wrist/trigger-finger/ and NHS https://www.nhs.uk/conditions/trigger-finger/ support the anatomy, symptoms, assessment and management; causes and treatment are qualified.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-26T19:21:07.946892+00:00",
+        "sources": [
+          {
+            "id": "aaos",
+            "publisher": "American Academy of Orthopaedic Surgeons",
+            "title": "Trigger Finger",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://www.orthoinfo.org/bodypart/hand-wrist/trigger-finger/"
+          },
+          {
+            "id": "nhs",
+            "publisher": "NHS",
+            "title": "Trigger finger",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/conditions/trigger-finger/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Trigger finger, also called stenosing tenosynovitis, causes catching, locking, pain and stiffness in a finger or thumb.",
+            "sourceIds": [
+              "aaos",
+              "nhs"
+            ]
+          },
+          {
+            "claim": "Flexor tendons connect forearm muscles to finger bones and pull the fingers into a fist on the palm side. Pulleys hold tendons close to bone; the A1 pulley lies in the palm at the base of the finger.",
+            "sourceIds": [
+              "aaos"
+            ]
+          },
+          {
+            "claim": "A tendon may thicken or develop a bump, and the A1 pulley may thicken and narrow. This size mismatch prevents smooth gliding and causes catching or locking.",
+            "sourceIds": [
+              "aaos"
+            ]
+          },
+          {
+            "claim": "Symptoms may include a tender lump at the finger base, clicking or popping, and a finger stuck bent; stiffness and locking can be worse after inactivity or in the morning.",
+            "sourceIds": [
+              "aaos",
+              "nhs"
+            ]
+          },
+          {
+            "claim": "Many cases have no clear cause. Diabetes and rheumatoid arthritis are associated with greater likelihood; repetitive gripping or pinching is another association, not a universal cause.",
+            "sourceIds": [
+              "aaos",
+              "nhs"
+            ]
+          },
+          {
+            "claim": "Diagnosis usually uses symptom history and hand examination; X-rays or other tests are typically unnecessary.",
+            "sourceIds": [
+              "aaos"
+            ]
+          },
+          {
+            "claim": "Some cases improve on their own. Treatment options depend on symptoms and include reducing aggravating activities, a straight-finger splint, pain relief, and clinician-administered steroid injection.",
+            "sourceIds": [
+              "aaos",
+              "nhs"
+            ]
+          },
+          {
+            "claim": "Surgical release opens the A1 pulley to give the tendon room; surgery may be considered when symptoms are severe, other treatments fail, or the finger cannot be straightened.",
+            "sourceIds": [
+              "aaos"
+            ]
+          },
+          {
+            "claim": "Persistent symptoms or interference with daily activities warrant clinical assessment. A finger that cannot be straightened needs medical evaluation rather than forced manipulation. This is general education, not individualized treatment.",
+            "sourceIds": [
+              "nhs",
+              "aaos"
+            ]
+          }
+        ]
+      },
+      "group": "health"
+    }
+  },
+  {
     "id": "2026-11-26-factual-infographic-factual-infographic-tinnitus-sound-with",
     "title": "Factual infographic: Tinnitus — Sound Without an External Source",
     "tests": "factual_subtype: medical-health-infographic; factual_subtype: medical-health-infographic; archive_slot=2026-11-26T11:20; concept=tinnitus-phantom-sound-auditory-pathway-assessment; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto",
