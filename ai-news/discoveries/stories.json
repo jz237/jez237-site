@@ -1,11 +1,71 @@
 {
   "version": 1,
   "title": "AI Discoveries, Explained",
-  "updated": "2026-11-25",
+  "updated": "2026-11-26",
   "coverageStart": "2026-09-21",
-  "coverageEnd": "2026-11-25",
+  "coverageEnd": "2026-11-26",
   "editorialNote": "Source-linked discoveries, research demonstrations, follow-ups and corrections from AI Discovery Watch. Historical milestones posted before the fresh-news brief are not included. Coverage dates are when a story was shared, not necessarily when its discovery occurred. Evidence labels reflect the linked report at that time; read later updates too.",
   "stories": [
+    {
+      "category": "Research in action",
+      "evidenceKind": "early",
+      "modelNote": "Claude Opus 5.5 and Fable 5.2, GPT-6 Astra and GPT-6.2 Astra developed search programs; people supervised and reviewed results.",
+      "sources": [
+        "https://ale-astronomy.org/blog/old-light-new-worlds/",
+        "https://github.com/huangzesen/decam-rsi-pipeline"
+      ],
+      "status": "Team-reported research demonstration with public code and candidate data; not independently confirmed. Some candidates retain false-match warnings.",
+      "takeaway": "A team reports 127 possible objects beyond Neptune in old telescope images in its November 25 announcement. Its AI agents repeatedly redesigned the search, including how to connect faint moving dots across different nights, then checked whether each change found more known objects. Astronomers chose the goals, reviewed programs and checked candidates. This shows AI developing and testing research methods, not just running a fixed search. The objects still need outside confirmation; this is not a discovery of Planet Nine.",
+      "title": "AI improves a sky search and flags 127 possible distant worlds",
+      "id": "d-1575530772012470358-ai-search-distant-solar-system-candidates",
+      "coveredOn": "2026-11-26",
+      "context": "🔬 **AI Discovery Watch · November 26, 2026**\n\n**AI improves a sky search and flags 127 possible distant worlds**\nA team reports 127 possible objects beyond Neptune in old telescope images in its November 25 announcement. Its AI agents repeatedly redesigned the search, including how to connect faint moving dots across different nights, then checked whether each change found more known objects. Astronomers chose the goals, reviewed programs and checked candidates. This shows AI developing and testing research methods, not just running a fixed search. The objects still need outside confirmation; this is not a discovery of Planet Nine.\n\n**AI used:** Claude Opus 5.5 and Fable 5.2, GPT-6 Astra and GPT-6.2 Astra developed search programs; people supervised and reviewed results.\n**Evidence:** Team-reported research demonstration with public code and candidate data; not independently confirmed. Some candidates retain false-match warnings.\nOriginal source: <https://ale-astronomy.org/blog/old-light-new-worlds/>\nSupporting source: <https://github.com/huangzesen/decam-rsi-pipeline>"
+    },
+    {
+      "category": "Mathematics",
+      "evidenceKind": "proof",
+      "modelNote": "GPT-6.2 Astra developed the argument; Lean and Mathlib provided formal proof tools, not discovery models.",
+      "sources": [
+        "https://www.vals.ai/blogs/smoktunowicz-gap-theorem",
+        "https://www.vals.ai/blogs/2026-11-18-smoktunowicz-gap-theorem/proof/index.html"
+      ],
+      "status": "Vals AI reports computer checking and manual review. This is a known theorem; the alternative method’s originality is not independently settled.",
+      "takeaway": "An AI reportedly found a different proof about how quickly a particular family of mathematical systems grows as basic building blocks are multiplied. Vals AI’s November 18 report says the model replaced several powerful tools from existing proofs with a more direct argument. People supplied the theorem, software and automated checks; Vals says nobody guided the run. This matters as a demonstration of AI developing a proof method, not solving a previously unsolved theorem. The argument resembles older ideas, so its full originality remains open.",
+      "title": "AI finds a different route to a theorem humans proved in 2006",
+      "id": "d-1575531036362932235-astra-alternative-proof-known-gap-theorem",
+      "coveredOn": "2026-11-26",
+      "context": "🔬 **AI Discovery Watch · November 26, 2026**\n\n**AI finds a different route to a theorem humans proved in 2006**\nAn AI reportedly found a different proof about how quickly a particular family of mathematical systems grows as basic building blocks are multiplied. Vals AI’s November 18 report says the model replaced several powerful tools from existing proofs with a more direct argument. People supplied the theorem, software and automated checks; Vals says nobody guided the run. This matters as a demonstration of AI developing a proof method, not solving a previously unsolved theorem. The argument resembles older ideas, so its full originality remains open.\n\n**AI used:** GPT-6.2 Astra developed the argument; Lean and Mathlib provided formal proof tools, not discovery models.\n**Evidence:** Vals AI reports computer checking and manual review. This is a known theorem; the alternative method’s originality is not independently settled.\nOriginal source: <https://www.vals.ai/blogs/smoktunowicz-gap-theorem>\nSupporting source: <https://www.vals.ai/blogs/2026-11-18-smoktunowicz-gap-theorem/proof/index.html>"
+    },
+    {
+      "category": "Research in action",
+      "evidenceKind": "demo",
+      "modelNote": "QuOptLab uses GPT-6 Astra in scientist and experiment-agent roles; people supplied the simulated equipment and research tasks.",
+      "sources": [
+        "https://arxiv.org/abs/2611.32000",
+        "https://arxiv.org/html/2611.32000v1#S4"
+      ],
+      "status": "Early, author-reported simulation study. No physical experiments or independent replication; the virtual lab itself still needs further validation.",
+      "takeaway": "An AI in a simulated optics lab improved its experiments by asking why measurements were going wrong. In a November 24 preprint, it changed how it measured a thin coating, then used remaining errors to develop a correction. It also tested changes that helped a simulated chip send more light into an optical fiber. People built the virtual lab and supplied starting setups, goals and constraints. This is a research-process demonstration, not a new law of physics; neither the improvements nor the simulator’s accuracy have been established in a real laboratory.",
+      "title": "AI changes its experiments after diagnosing errors in a virtual lab",
+      "id": "d-1575531245142806590-quoptlab-simulated-optics-research",
+      "coveredOn": "2026-11-26",
+      "context": "🔬 **AI Discovery Watch · November 26, 2026**\n\n**AI changes its experiments after diagnosing errors in a virtual lab**\nAn AI in a simulated optics lab improved its experiments by asking why measurements were going wrong. In a November 24 preprint, it changed how it measured a thin coating, then used remaining errors to develop a correction. It also tested changes that helped a simulated chip send more light into an optical fiber. People built the virtual lab and supplied starting setups, goals and constraints. This is a research-process demonstration, not a new law of physics; neither the improvements nor the simulator’s accuracy have been established in a real laboratory.\n\n**AI used:** QuOptLab uses GPT-6 Astra in scientist and experiment-agent roles; people supplied the simulated equipment and research tasks.\n**Evidence:** Early, author-reported simulation study. No physical experiments or independent replication; the virtual lab itself still needs further validation.\nOriginal source: <https://arxiv.org/abs/2611.32000>\nSupporting source: <https://arxiv.org/html/2611.32000v1#S4>"
+    },
+    {
+      "category": "Mathematics",
+      "evidenceKind": "followup",
+      "modelNote": "Claude helped produce the rewrite; its model version is undisclosed. Claude Code assisted Sutherland’s checks; Lean and separate kernels checked proofs.",
+      "sources": [
+        "https://github.com/lsernau/grh-lean",
+        "https://math.mit.edu/~drew/shortgrh/"
+      ],
+      "status": "New rewrite with independent machine checking reported by MIT. Human understanding and mathematical review remain outstanding; related claims cover only the stated family of functions.",
+      "takeaway": "A November 25 rewrite makes the previously reported Riemann-hypothesis proof much smaller: about 76,000 lines in its compact version, versus roughly 17 million originally. This is the same claim about a hidden pattern behind prime numbers, not a second discovery. Luke Sernau, colleagues at Anthropic and Claude produced the rewrite. MIT mathematician Andrew Sutherland reports that several separate proof-checking programs accept it. A shorter version should be easier to investigate, but nobody has read it through; computer checking is not mathematical peer review or general acceptance.",
+      "title": "AI-assisted Riemann proof gets a much smaller, separately checked rewrite",
+      "id": "d-1575531595186700360-riemann-proof-shorter-rewrite-checked",
+      "coveredOn": "2026-11-26",
+      "context": "🔬 **AI Discovery Watch · November 26, 2026**\n\n**AI-assisted Riemann proof gets a much smaller, separately checked rewrite**\nA November 25 rewrite makes the previously reported Riemann-hypothesis proof much smaller: about 76,000 lines in its compact version, versus roughly 17 million originally. This is the same claim about a hidden pattern behind prime numbers, not a second discovery. Luke Sernau, colleagues at Anthropic and Claude produced the rewrite. MIT mathematician Andrew Sutherland reports that several separate proof-checking programs accept it. A shorter version should be easier to investigate, but nobody has read it through; computer checking is not mathematical peer review or general acceptance.\n\n**AI used:** Claude helped produce the rewrite; its model version is undisclosed. Claude Code assisted Sutherland’s checks; Lean and separate kernels checked proofs.\n**Evidence:** New rewrite with independent machine checking reported by MIT. Human understanding and mathematical review remain outstanding; related claims cover only the stated family of functions.\nOriginal source: <https://github.com/lsernau/grh-lean>\nSupporting source: <https://math.mit.edu/~drew/shortgrh/>"
+    },
     {
       "category": "Mathematics",
       "evidenceKind": "proof",
