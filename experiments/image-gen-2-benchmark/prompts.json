@@ -36608,5 +36608,106 @@
       },
       "group": "health"
     }
+  },
+  {
+    "id": "2026-11-26-factual-infographic-factual-infographic-bronchiectasis",
+    "title": "Factual infographic: Bronchiectasis",
+    "tests": "factual_subtype: medical-health-infographic; factual_subtype: medical-health-infographic; archive_slot=2026-11-26T05:20; concept=damaged-bronchial-airways-mucus-infection-cycle; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto",
+    "prompt": "Create the finished medical infographic directly, titled \"BRONCHIECTASIS\" with subtitle \"When damaged airways cannot clear mucus\". An artwork-led anatomical atlas in refined colored-pencil, fine technical ink and luminous medical gouache on cool ivory. A dominant translucent pair of lungs fills an asymmetric vertical composition, the branching bronchial tree in warm coral against muted blue lung tissue. Follow one bronchial branch into a large flowing longitudinal cutaway: widened irregular scarred airway walls, translucent amber retained mucus, and a small schematic bacterial cluster. A nearby smaller normal-airway comparison shows a narrower unobstructed lumen, labeled normal airway. Label affected airway, widened wall, retained mucus, bacteria. Do not imply every airway is involved. Use delicate curved leaders and an open circular annotation path reading \"Airway damage → poor mucus clearance → infection → more damage\". These relationships are schematic, not a literal bacterial invasion illustration. Rich tissue shading, delicate branching, readable type, ample breathing room, no boxed grid, no cards, no photographic poster mockup, no logos, URLs or bibliography.\nWeave concise open callouts into negative space: \"Persistent cough • mucus • repeated chest infections\"; \"Breathlessness and fatigue can occur\". A small open diagnostic branch reads \"Assessment: mucus and lung-function tests; CT may confirm diagnosis\". Along the lower lung margin integrate an airy treatment pathway reading \"Clinician-guided care: airway clearance • antibiotics for infections when indicated • exercise • recommended vaccines\" and \"Usually not curable; treatment helps manage symptoms\". A separate restrained rust-colored safety annotation reads \"Urgent assessment: blood streaks, worsening breathlessness or infection symptoms. Emergency care: severe breathing difficulty or more than a few spots or streaks of blood.\" Small footer: \"General education, not a diagnosis. Causes vary and may remain unclear.\" No doses or universal treatment promises. Do not add other clinical claims, numbers, anatomy labels or risk factors. Make the lung cutaway the visual hero, not text. All causal visual content follows the verified facts below:\nBronchiectasis damages the airways that carry air through the lungs, leaving them widened, loose and scarred.\nDamaged airways clear mucus poorly; retained mucus allows harmful bacteria to grow, and repeated infections can cause further airway damage.\nPossible causes include severe lung infection and immune system problems; for many people the cause is unclear.\nMain symptoms include a persistent cough, coughing up mucus and frequent chest infections; breathlessness and tiredness can also occur.\nSymptoms overlap with other conditions. Assessment can include mucus testing, lung function testing and blood tests; a specialist may use a CT scan to confirm the diagnosis.\nBronchiectasis cannot usually be cured. Treatment aims to manage symptoms and prevent worsening, with a care plan tailored by the clinical team.\nA specialist physiotherapist teaches airway-clearance breathing techniques; devices may help clear mucus. Antibiotics treat chest infections when indicated by the care team.\nExercise and recommended vaccinations can help manage the condition and reduce infection risk; avoiding smoking is recommended.\nSmall blood streaks in mucus, worsening breathlessness or chest infection symptoms warrant urgent medical assessment. Severe breathing difficulty or coughing up more than a few spots or streaks of blood requires emergency care.",
+    "image": "images/2026-11-26-factual-infographic-factual-infographic-bronchiectasis.jpg",
+    "thumb": "thumbs/2026-11-26-factual-infographic-factual-infographic-bronchiectasis.webp",
+    "color": "#d9c5c0",
+    "date": "2026-11-26",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1132x1390",
+    "dedup": {
+      "conceptKey": "damaged-bronchial-airways-mucus-infection-cycle",
+      "imageSha256": "e9e708a81c8ac50428ffc9455dd53403522d10b80107d929ba97e31134f0626e",
+      "imageDHash": "c4846621b8dacc90"
+    },
+    "factualInfographic": {
+      "topic": "How bronchiectasis widens damaged airways, traps mucus, promotes repeated infections, and is evaluated and managed",
+      "description": "An anatomical atlas of damaged, widened airways, impaired mucus clearance and the infection cycle, with source-backed clinical context.",
+      "sourceNote": "NHLBI https://www.nhlbi.nih.gov/health/bronchiectasis and NHS https://www.nhs.uk/conditions/bronchiectasis/ support airway damage, symptoms, evaluation, management and urgent warning signs.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-26T10:20:59.085933+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "National Heart, Lung, and Blood Institute",
+            "title": "Bronchiectasis: What Is Bronchiectasis?",
+            "sourceType": "government-agency",
+            "url": "https://www.nhlbi.nih.gov/health/bronchiectasis"
+          },
+          {
+            "id": "S2",
+            "publisher": "NHS",
+            "title": "Bronchiectasis",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/conditions/bronchiectasis/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Bronchiectasis damages the airways that carry air through the lungs, leaving them widened, loose and scarred.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Damaged airways clear mucus poorly; retained mucus allows harmful bacteria to grow, and repeated infections can cause further airway damage.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Possible causes include severe lung infection and immune system problems; for many people the cause is unclear.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Main symptoms include a persistent cough, coughing up mucus and frequent chest infections; breathlessness and tiredness can also occur.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Symptoms overlap with other conditions. Assessment can include mucus testing, lung function testing and blood tests; a specialist may use a CT scan to confirm the diagnosis.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Bronchiectasis cannot usually be cured. Treatment aims to manage symptoms and prevent worsening, with a care plan tailored by the clinical team.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "A specialist physiotherapist teaches airway-clearance breathing techniques; devices may help clear mucus. Antibiotics treat chest infections when indicated by the care team.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Exercise and recommended vaccinations can help manage the condition and reduce infection risk; avoiding smoking is recommended.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Small blood streaks in mucus, worsening breathlessness or chest infection symptoms warrant urgent medical assessment. Severe breathing difficulty or coughing up more than a few spots or streaks of blood requires emergency care.",
+            "sourceIds": [
+              "S2"
+            ]
+          }
+        ]
+      },
+      "group": "health"
+    }
   }
 ]

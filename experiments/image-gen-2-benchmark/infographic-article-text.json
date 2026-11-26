@@ -19523,5 +19523,65 @@
     ]
    }
   ]
+ },
+ "2026-11-26-factual-infographic-factual-infographic-bronchiectasis": {
+  "dek": "Bronchiectasis leaves damaged airways widened and less able to clear mucus. Repeated infections can cause further damage, while treatment aims to manage symptoms and prevent worsening.",
+  "glance": [
+   [
+    "Affected structures",
+    "Airways in the lungs"
+   ],
+   [
+    "Main symptoms",
+    "Persistent cough, mucus and frequent chest infections"
+   ],
+   [
+    "Confirmation",
+    "A specialist may use a CT scan"
+   ],
+   [
+    "Treatment goal",
+    "Manage symptoms and prevent worsening"
+   ]
+  ],
+  "sections": [
+   {
+    "heading": "When mucus stays behind",
+    "body": [
+     "Bronchiectasis damages the airways that carry air through the lungs, leaving them widened, loose and scarred. Damaged airways clear mucus poorly; retained mucus allows harmful bacteria to grow, and repeated infections can cause further airway damage. Possible causes include severe lung infection and immune system problems; for many people the cause is unclear."
+    ],
+    "sources": [
+     "S1",
+     "S2"
+    ]
+   },
+   {
+    "heading": "Symptoms and assessment",
+    "body": [
+     "Main symptoms include a persistent cough, coughing up mucus and frequent chest infections; breathlessness and tiredness can also occur. Symptoms overlap with other conditions. Assessment can include mucus testing, lung function testing and blood tests; a specialist may use a CT scan to confirm the diagnosis."
+    ],
+    "sources": [
+     "S2"
+    ]
+   },
+   {
+    "heading": "Managing the condition",
+    "body": [
+     "Bronchiectasis cannot usually be cured. Treatment aims to manage symptoms and prevent worsening, with a care plan tailored by the clinical team. A specialist physiotherapist teaches airway-clearance breathing techniques; devices may help clear mucus. Antibiotics treat chest infections when indicated by the care team. Exercise and recommended vaccinations can help manage the condition and reduce infection risk; avoiding smoking is recommended."
+    ],
+    "sources": [
+     "S2"
+    ]
+   },
+   {
+    "heading": "When urgent care is needed",
+    "body": [
+     "Small blood streaks in mucus, worsening breathlessness or chest infection symptoms warrant urgent medical assessment. Severe breathing difficulty or coughing up more than a few spots or streaks of blood requires emergency care."
+    ],
+    "sources": [
+     "S2"
+    ]
+   }
+  ]
  }
 }
