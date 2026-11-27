@@ -1,0 +1,409 @@
+{
+  "currentDate": "2026-11-27",
+  "historicDate": "1985-11-18",
+  "displayDate": "Week of November 18-24, 1985",
+  "edition": "Issue 173 - Weekly 1985 Computer & Culture Chronicle",
+  "masthead": {
+    "title": "Computer Chronicle",
+    "subtitle": "Issue 173 - Weekly 1985 Computer & Culture Chronicle",
+    "dateline": "Week of November 18-24, 1985",
+    "price": "75 cents"
+  },
+  "sectionChrome": {
+    "primary": "brick red",
+    "secondary": "royal blue",
+    "texture": "aged newsprint, fine column rules, ink bleed"
+  },
+  "visualProfile": {
+    "tone": "Extra Edition: Windows reaches retail",
+    "motifs": [
+      "IBM PC with tiled Windows 1.0 applications and Reversi; boxed Kampfgruppe and Amiga graphics"
+    ],
+    "layout": "Full-page warm aged newsprint, dense columns, red and blue headers, boxed modules, halftone photos, paper grain and slight ink bleed; no dead footer space"
+  },
+  "layoutPlan": {
+    "leadPlacement": "Windows shipping is the historically stronger lead and largest headline; prominent gaming award photo module beside it.",
+    "secondaryRail": "Top 5 Music: Billboard Top Rock Tracks November 23. Top 5 Movies: November 22-24 US weekend. Top 5 Computer Games: editorial selection, not sales ranking. Print feature headlines verbatim and fixed-page jump lines."
+  },
+  "milestone": {
+    "title": "Windows reaches retail",
+    "note": "The first commercial Windows release begins a graphical software platform that ultimately reshapes mass-market personal computing."
+  },
+  "heroImage": {
+    "src": "media/computer-chronicle-gpt-image-2-week-1985-11-18.jpg",
+    "alt": "Computer Chronicle newspaper artifact for November 18-24, 1985",
+    "caption": "Newspaper-style front page generated from structured Chronicle issue data.",
+    "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+  },
+  "editorNote": "Windows reaches the shop counter while the game shelf celebrates its own prizewinners.",
+  "morningLine": "A mouse, tiled windows, and a $99 invitation to try another way of working.",
+  "lead": {
+    "headline": "Windows finally ships for the IBM PC",
+    "dek": "Microsoft’s $99 graphical environment arrives November 20 after a long wait.",
+    "body": [
+      "Microsoft has shipped Windows, giving owners of DOS personal computers a new way to move among programs with menus, icons and a mouse. The November 20 retail arrival ends the wait that followed its original 1983 announcement. The first US retail revision is 1.01, part of the Windows 1.0 product family.",
+      "The $99 introductory software price buys an operating environment above MS-DOS, not a replacement computer or a complete system. DOS, suitable graphics hardware and a mouse remain separate considerations. Published requirements call for at least 256K of memory, two double-sided floppy drives and a graphics adapter; 512K and a hard disk are recommended for running multiple programs or using DOS 3.0 and higher.",
+      "Windows tiles its application windows rather than offering the overlapping desktop familiar to some other graphical systems. Scroll bars, dialog boxes and menus bring a visual vocabulary to machines more often addressed through typed commands. Paint, Notepad, Calculator, Calendar, Card File and a clock provide practical starting points.",
+      "There is room for play, too: Reversi comes in the package. For the PC owner, this week’s immediate question is what that visual environment can do on the hardware already on the desk. Shipment is the milestone; the platform’s eventual reach is not yet a result to report."
+    ],
+    "sourceRefs": [
+      2,
+      3,
+      4
+    ],
+    "confidence": "exact-date"
+  },
+  "stories": [
+    {
+      "headline": "Kampfgruppe takes the gaming crown",
+      "body": [
+        "Computer Gaming World’s November/December awards put SSI’s Kampfgruppe at the top of the ballot. The tactical World War II simulation wins both the overall Game of the Year honor and the wargame category. These are period magazine awards for existing games, not a claim of a new release this week.",
+        "The magazine points to scenario generation and computer-managed battlefield bookkeeping as strengths. Line-of-sight and opportunity-fire calculations that can slow a tabletop battle become part of the machine’s work. It reports 8,000 copies sold and an SSI expectation of 25,000 eventually; the latter remains a forecast.",
+        "Ultima III wins Adventure, Seven Cities of Gold wins Strategy, and F-15 Strike Eagle wins Action. The feature reports sales above 100,000 for Seven Cities and 100,000 for F-15, figures attributed to the period report rather than an independently audited tally."
+      ],
+      "sourceRefs": [
+        1
+      ],
+      "confidence": "period"
+    },
+    {
+      "headline": "Amiga puts color under the programmer’s control",
+      "body": [
+        "Charles Brannon’s November COMPUTE! feature examines the Amiga’s custom graphics machinery. A 4,096-color universe and animation support give programmers a lively new canvas, alongside a 68000 processor, stereo sound and multitasking.",
+        "The palette needs careful reading: ordinary modes use 16 or 32 selected colors depending on mode, not all 4,096 at once in every display. The article also describes a 640-by-400 high-resolution bitmap mode and the built-in 880K disk drive. This is current-month technical coverage of an already introduced computer, not a new launch during this week."
+      ],
+      "sourceRefs": [
+        0
+      ],
+      "confidence": "same-month"
+    },
+    {
+      "headline": "Fastlink puts a premium price on speed",
+      "body": [
+        "Arlan R. Levitan’s November COMPUTE! telecomputing column describes DCA’s Fastlink reaching roughly 10,000 bits per second on local voice-grade lines. The reported figures fall to about 8,000 on the leading long-distance carrier and about 7,000 on other common carriers. Those are the column’s claims, not independent benchmarks.",
+        "The internal PC-compatible version lists at $1,995 with special Crosstalk software; an external RS-232 model is $2,395. Both ends need Fastlinks for the high-speed connection. Other modems meet it at 300 or 1200 bps, while an equal two-way load divides the claimed maximum to about 5,000 bps in each direction."
+      ],
+      "sourceRefs": [
+        0
+      ],
+      "confidence": "same-month"
+    }
+  ],
+  "computerItems": [
+    {
+      "title": "Amiga graphics hardware",
+      "summary": "COMPUTE! November feature: 68000, 880K drive, stereo sound, custom graphics; selectable 4,096-color universe, mode-dependent palettes.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "title": "DCA Fastlink",
+      "summary": "Internal IBM PC and external RS-232 models; reported 10,000-bps local-line performance subject to peer and line conditions.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0
+      ]
+    }
+  ],
+  "softwareList": [
+    {
+      "name": "Windows 1.0 / retail 1.01",
+      "detail": "November 20 US shipment; $99 graphical operating environment above DOS.",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        2,
+        3,
+        4
+      ]
+    },
+    {
+      "name": "Crosstalk for Fastlink",
+      "detail": "Special adapted communications software bundled with the $1,995 internal Fastlink modem.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0
+      ]
+    }
+  ],
+  "storeShelves": [
+    {
+      "label": "Top 5 Computer Games — editorial selection, not sales ranking",
+      "items": [
+        "Kampfgruppe",
+        "Ultima III",
+        "Seven Cities of Gold",
+        "F-15 Strike Eagle",
+        "Reversi"
+      ],
+      "sourceRefs": [
+        1,
+        3
+      ],
+      "confidence": "period"
+    },
+    {
+      "label": "Top 5 Movies — November 22-24 US weekend box office",
+      "items": [
+        "King Solomon’s Mines",
+        "One Magic Christmas",
+        "Once Bitten",
+        "Jagged Edge",
+        "Back to the Future"
+      ],
+      "sourceRefs": [
+        7
+      ],
+      "confidence": "same-week"
+    }
+  ],
+  "priceWatch": [
+    {
+      "item": "Windows introductory price",
+      "price": "$99",
+      "note": "$99 US initial retail software price; hardware and DOS separate.",
+      "sourceRefs": [
+        4
+      ],
+      "confidence": "exact-date"
+    },
+    {
+      "item": "Internal Fastlink",
+      "price": "$1,995",
+      "note": "$1,995 with adapted Crosstalk; magazine-listed price, not a weekly discount.",
+      "sourceRefs": [
+        0
+      ],
+      "confidence": "same-month"
+    },
+    {
+      "item": "External Fastlink",
+      "price": "$2,395",
+      "note": "$2,395 RS-232 model.",
+      "sourceRefs": [
+        0
+      ],
+      "confidence": "same-month"
+    },
+    {
+      "item": "Westridge 6420 modem",
+      "price": "$49.95",
+      "note": "Viewtron offer lists 300-bps model with software at $49.95.",
+      "sourceRefs": [
+        0
+      ],
+      "confidence": "same-month"
+    },
+    {
+      "item": "Volksmodem 12",
+      "price": "$189.95",
+      "note": "Viewtron offer lists 1200-bps modem at $189.95.",
+      "sourceRefs": [
+        0
+      ],
+      "confidence": "same-month"
+    }
+  ],
+  "musicChart": [
+    {
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-11-23",
+      "rank": 1,
+      "artist": "The Cars",
+      "title": "Tonight She Comes",
+      "song": "Tonight She Comes",
+      "basis": "Album-oriented radio airplay; not Hot 100",
+      "confidence": "same-week",
+      "sourceRefs": [
+        6
+      ]
+    },
+    {
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-11-23",
+      "rank": 2,
+      "artist": "ZZ Top",
+      "title": "Sleeping Bag",
+      "song": "Sleeping Bag",
+      "basis": "Album-oriented radio airplay; not Hot 100",
+      "confidence": "same-week",
+      "sourceRefs": [
+        6
+      ]
+    },
+    {
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-11-23",
+      "rank": 3,
+      "artist": "Simple Minds",
+      "title": "Alive & Kicking",
+      "song": "Alive & Kicking",
+      "basis": "Album-oriented radio airplay; not Hot 100",
+      "confidence": "same-week",
+      "sourceRefs": [
+        6
+      ]
+    },
+    {
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-11-23",
+      "rank": 4,
+      "artist": "John Cougar Mellencamp",
+      "title": "Small Town",
+      "song": "Small Town",
+      "basis": "Album-oriented radio airplay; not Hot 100",
+      "confidence": "same-week",
+      "sourceRefs": [
+        6
+      ]
+    },
+    {
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-11-23",
+      "rank": 5,
+      "artist": "Pete Townshend",
+      "title": "Face the Face",
+      "song": "Face the Face",
+      "basis": "Album-oriented radio airplay; not Hot 100",
+      "confidence": "same-week",
+      "sourceRefs": [
+        6
+      ]
+    }
+  ],
+  "briefs": [
+    {
+      "headline": "Online services add more than conversation",
+      "summary": "COMPUTE! November online-service roundup describes Delphi’s AP news and computer-owner SIGs, and Dow Jones college and medical databases. Features were reported this month, not necessarily launched this week.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "headline": "Apple and Microsoft sign a display agreement",
+      "summary": "On November 22 the companies enter a visual-display licensing agreement. Retrospective court records establish the date and terms; this archive note does not imply ordinary readers had the private contract that week. It was not a blanket license to every future Macintosh feature.",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        5
+      ]
+    }
+  ],
+  "periodAd": {
+    "headline": "Spartan: a second identity for the Commodore 64",
+    "summary": "Mimic Systems advertises Apple II Plus hardware/software capabilities for $599, plus 64K expansion and four software-selectable Commodore cartridge slots.",
+    "tagline": "Editorial reconstruction of advertiser claims, not a tested endorsement or quoted ad.",
+    "sourceRefs": [
+      0
+    ]
+  },
+  "market": {
+    "headline": "The price of a new interface",
+    "summary": "Windows starts at $99 for software, but DOS and suitable hardware remain separate. At the communications counter, Fastlink asks $1,995 for its internal version and a matching high-speed peer at the far end. The sticker price is only the beginning of a workable system.",
+    "sourceRefs": [
+      0,
+      4
+    ],
+    "confidence": "same-month"
+  },
+  "worldAnchor": {
+    "headline": "Reagan and Gorbachev meet in Geneva",
+    "summary": "First meeting between the two leaders, November 19–21; November 21 joint statement calls for accelerated arms negotiations and further meetings. No arms-control treaty was signed at this summit.",
+    "confidence": "exact-date",
+    "sourceRefs": [
+      8
+    ]
+  },
+  "bbsNote": {
+    "headline": "Faster links, richer services, and a very real hourly bill",
+    "summary": "Verified November COMPUTE! coverage, principally printed pages 28–29 and 133. Posts below are editorial summaries, not recovered BBS messages or invented user quotations.",
+    "posts": [
+      {
+        "topic": "Fastlink speed and price",
+        "platform": "DCA Fastlink / IBM PC and RS-232",
+        "text": "The $1,995 internal and $2,395 external models promise about 10,000 bps on local lines; high-speed peers must both be Fastlinks. Current-month technical coverage, not this week’s launch."
+      },
+      {
+        "topic": "Delphi grows",
+        "platform": "Delphi",
+        "text": "November roundup says 2400-bps service has been available since June at an extra $5 an hour; AP news, sports and financial information and Commodore, Apple II, Macintosh and Atari SIGs are described."
+      },
+      {
+        "topic": "Viewtron comes to personal computers",
+        "platform": "Viewtron",
+        "text": "Roundup describes a planned October 1 start in most covered US areas, with exclusions in four New England states. Starter kit $9.95 with first hour; subsequent off-peak access 9 cents/minute and weekday daytime 22 cents/minute, no monthly minimum or extra 1200-bps fee. Plans and advertised terms are not independent confirmation of actual nationwide operation."
+      }
+    ],
+    "sourceRefs": [
+      0
+    ]
+  },
+  "curiosity": {
+    "headline": "A $599 box promises to turn a Commodore 64 into an Apple II Plus",
+    "summary": "Mimic Systems’ Spartan advertisement in November COMPUTE! offers a surprisingly literal route across the home-computer divide.",
+    "detail": "The ad prices Spartan at US $599 and claims Apple II Plus hardware/software capabilities, 64K RAM expansion, four software-selectable Commodore cartridge slots and an 8-bit parallel port. These are advertiser claims, not the magazine’s tested findings. Do not silently call it a software emulator download.",
+    "sourceRefs": [
+      0
+    ]
+  },
+  "accuracyLedger": {
+    "items": [
+      "Previous two dossiers (November 4 and 11) have no milestone; November 20 Windows debut merits the rare historical milestone designation.",
+      "Music entries deliberately preserve verified ranks 1, 3, 4 and 5 rather than inventing a complete chart. Chart is album-oriented rock radio airplay, not Hot 100.",
+      "Nov/Dec CGW is period evidence spanning two months; no exact November award day is established.",
+      "No independently verified breaking non-computer gadget event found; gadgetCandidates omitted.",
+      "Underground coverage is the verified same-month anti-piracy advertisement only; no crew names or new enforcement events established.",
+      "Contemporary source PDFs and OCR inspected directly. Legal contract facts come from later court records and must be labeled retrospective.",
+      "Rank 2 Sleeping Bag confirmed against indexed November 23 Billboard table; full Top 5 movies checked against The Numbers weekend table.",
+      "No Underground Desk: advocacy advertisement alone supplies no named scene or breaking event."
+    ]
+  },
+  "sources": [
+    {
+      "title": "COMPUTE! issue 66; November 1985; online roundup pp. 28–29, Spartan ad, Amiga graphics p. 119, telecom column p. 133, ADAPSO advertisement",
+      "url": "https://archive.org/details/1985-11-compute-magazine",
+      "date": "1985-11"
+    },
+    {
+      "title": "Computer Gaming World 5.5, awards feature",
+      "url": "https://www.cgwmuseum.org/galleries/issues/cgw_5.5.pdf",
+      "date": "1985-11/1985-12"
+    },
+    {
+      "title": "Microsoft historical chronology, 1985",
+      "url": "https://learn.microsoft.com/en-us/shows/history/history-of-microsoft-1985",
+      "date": "2009-05-28"
+    },
+    {
+      "title": "EDN: Microsoft ships Windows 1.0",
+      "url": "https://www.edn.com/microsoft-ships-windows-1-0-november-20-1985/",
+      "date": "2019-11-20"
+    },
+    {
+      "title": "First Versions: Microsoft Windows",
+      "url": "https://www.firstversions.com/2015/05/microsoft-windows.html",
+      "date": "2015-05"
+    },
+    {
+      "title": "Apple v Microsoft, 759 F. Supp. 1444 (retrospective agreement terms)",
+      "url": "https://law.justia.com/cases/federal/district-courts/FSupp/759/1444/1472666/",
+      "date": "1991"
+    },
+    {
+      "title": "Billboard: Top Rock Tracks",
+      "url": "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1985/BB-1985-11-23.pdf",
+      "date": "1985-11-23"
+    },
+    {
+      "title": "The Numbers: November 22 weekend",
+      "url": "https://www.the-numbers.com/box-office-chart/weekend/1985/11/22",
+      "date": "1985-11-22/1985-11-24"
+    },
+    {
+      "title": "Joint Soviet–United States Statement, Geneva",
+      "url": "https://www.reaganlibrary.gov/archives/speech/joint-soviet-united-states-statement-summit-meeting-geneva",
+      "date": "1985-11-21"
+    }
+  ]
+}

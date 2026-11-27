@@ -2,6 +2,22 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-11-27",
+      "historicDate": "1985-11-18",
+      "displayDate": "Week of November 18-24, 1985",
+      "edition": "Issue 173 - Weekly 1985 Computer & Culture Chronicle",
+      "morningLine": "A mouse, tiled windows, and a $99 invitation to try another way of working.",
+      "leadHeadline": "Windows finally ships for the IBM PC",
+      "storyHeadlines": [
+        "Kampfgruppe takes the gaming crown",
+        "Amiga puts color under the programmer’s control",
+        "Fastlink puts a premium price on speed"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1985-11-18.jpg",
+      "thumb": "media/thumbs/1985-11-18.webp",
+      "milestone": true
+    },
+    {
       "currentDate": "2026-11-26",
       "historicDate": "1985-11-11",
       "displayDate": "Week of November 11-17, 1985",
