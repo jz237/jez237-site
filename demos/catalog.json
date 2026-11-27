@@ -12,16 +12,16 @@
     "source": "https://github.com/jz237/jez237-site/tree/main/demos/last-boring-slide",
     "features": [
       "Thirteen scenes with animated transitions",
-      "Arrow keys, space or click to advance",
+      "Its own recorded music for every scene",
       "Speaker notes, slide overview and autoplay",
-      "Press ? for every shortcut"
+      "Press ? for every shortcut, M for sound"
     ],
     "facts": [
       "Self-hosted",
       "WebGL 2",
       "Single file"
     ],
-    "note": "Not by Jez: a copy of a public Claude artifact whose author is not named · WebGL 2 required · Best on a computer with a keyboard."
+    "note": "Not by Jez: a copy of a public Claude artifact whose author is not named · Per-scene music added here, generated with ElevenLabs · WebGL 2 required · Best on a computer with a keyboard."
   },
   {
     "id": "034",
