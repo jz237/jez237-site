@@ -1,5 +1,29 @@
 [
   {
+    "id": "035",
+    "title": "The Last Boring Slide",
+    "category": "WebGL · Animated presentation",
+    "description": "A thirteen-part talk on where AI is heading, staged as one continuous animated film instead of slides: a chart that outgrows its page, thirty dominoes, a swarm of agents and a calendar that runs out. Step through it beat by beat, or let it play by itself.",
+    "url": "last-boring-slide/",
+    "image": "assets/last-boring-slide.jpg",
+    "imageAlt": "A chart titled How long a task AI can finish on its own, standing like a billboard on a pale salt flat under a dusk sky",
+    "imageWidth": 1280,
+    "imageHeight": 720,
+    "source": "https://github.com/jz237/jez237-site/tree/main/demos/last-boring-slide",
+    "features": [
+      "Thirteen scenes with animated transitions",
+      "Arrow keys, space or click to advance",
+      "Speaker notes, slide overview and autoplay",
+      "Press ? for every shortcut"
+    ],
+    "facts": [
+      "Self-hosted",
+      "WebGL 2",
+      "Single file"
+    ],
+    "note": "Not by Jez: a copy of a public Claude artifact whose author is not named · WebGL 2 required · Best on a computer with a keyboard."
+  },
+  {
     "id": "034",
     "title": "Ocean Water Lab",
     "category": "3D · Ocean simulation",

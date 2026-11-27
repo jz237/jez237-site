@@ -17,6 +17,7 @@ use these instructions before writing code or snippets.
 ## Current site map
 
 - `/demos/` - website demo gallery, linked from the home card grid and Projects navigation. Add entries to `demos/catalog.json` and run `node scripts/build-demos.mjs` to rebuild the static cards; the first entry is featured. See `demos/README.md`.
+- `/demos/last-boring-slide/` - "The Last Boring Slide", a single-file WebGL 2 animated presentation on AI progress. Not by Jez: a copy of a public Claude artifact whose author is not named; the code is a minified bundle with no separate source.
 - `/demos/bearded-dragon-terrarium/` - a separate dry bearded dragon habitat with sandstone basking ledges, shaded hides, driftwood, feeding and day/night lighting. Source: `scripts/bearded-dragon-terrarium/`. The rainforest at `/demos/terrarium/` retains its fish and toad and no longer contains a dragon.
 - `/demos/living-aquascape/` - photographic interactive aquarium, six exploration modes, ten ecosystem scenarios. Source: `scripts/living-aquascape/`.
 - `/demos/open-sea/` - real-time WebGL 2 ocean (FFT waves, sky and volumetric clouds, sailing yacht, rain and lightning, underwater view). No build step or assets. Source and notes: `demos/open-sea/`.
