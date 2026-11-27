@@ -19894,5 +19894,56 @@
     ]
    }
   ]
+ },
+ "2026-11-27-factual-infographic-factual-infographic-food-covering": {
+  "dek": "Cats sometimes paw at the floor around leftover food as if trying to bury it. Food covering has proposed instinctive explanations, but the gesture does not reveal a cat’s exact intention.",
+  "glance": [
+   [
+    "Behavior",
+    "Pawing around uneaten food"
+   ],
+   [
+    "Also called",
+    "Food covering or food caching"
+   ],
+   [
+    "Interpretation",
+    "Proposed explanations, not proven intentions"
+   ],
+   [
+    "Important distinction",
+    "Covering food is not the same as sustained appetite loss"
+   ]
+  ],
+  "sections": [
+   {
+    "heading": "The gesture around the bowl",
+    "body": [
+     "Cats Protection describes cats pawing at the floor around a food bowl as if trying to bury their leftovers. It calls this behavior food covering or food caching. A cat can make the gesture indoors without actually burying the meal."
+    ],
+    "sources": [
+     "cp"
+    ]
+   },
+   {
+    "heading": "Explanations and their limits",
+    "body": [
+     "Cats Protection explains the behavior as instinctive and suggests hiding food from predators, preventing other animals from taking it, or preserving leftovers as possible explanations. These are proposed explanations, not proof of what an individual cat intends. Pet cats may cover food even without a real predator threat. Pawing on an indoor floor does not actually preserve the food."
+    ],
+    "sources": [
+     "cp"
+    ]
+   },
+   {
+    "heading": "When appetite changes the picture",
+    "body": [
+     "Cats Protection describes food covering as usually harmless, but advises veterinary consultation when it suddenly becomes excessive, eating stops, or health or behavior changes occur. Cornell describes sustained appetite loss as a clinical sign with diverse possible causes and recommends immediate veterinary consultation for signs of feline anorexia. Food covering alone does not establish why a cat refuses food."
+    ],
+    "sources": [
+     "cp",
+     "cu"
+    ]
+   }
+  ]
  }
 }

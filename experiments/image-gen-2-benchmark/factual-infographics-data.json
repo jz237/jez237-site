@@ -27871,5 +27871,82 @@
       },
       "group": "cats"
     }
+  },
+  {
+    "id": "2026-11-27-factual-infographic-factual-infographic-food-covering",
+    "title": "Factual infographic: Food Covering",
+    "tests": "factual_subtype: cat-infographic; cat_category: curious-behaviors; ; archive_slot=2026-11-27T08:20; concept=feline-leftover-food-covering-pawing-gesture; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto",
+    "prompt": "Create a richly detailed, artwork-led feline behavior infographic, rendered directly as the finished artwork, with no frame, photographed poster or UI. Title: “FOOD COVERING”. Subtitle: “The pawing gesture around a leftover meal”. Elegant contemporary natural-history illustration with colored pencil, translucent gouache and fine charcoal on warm pearl gray, jade and rust accents, luminous natural side light. Dominant three-quarter overhead view of a realistic shorthaired blue-gray domestic cat, exquisitely layered fur, credible feline anatomy, standing beside a shallow ceramic bowl with a small amount of leftover food. One front paw reaches across the bare floor beside the bowl in a gentle scraping gesture. The paw must be beside the bowl, not stirring the food. Tail follows a sweeping compositional curve. Delicate motion arcs identify “Pawing around the bowl”. An enlarged open pencil study of the paw and floor grows naturally from the main scene. No dirt piled on food, no successful burial indoors. Keep a beautiful dominant cat and spacious asymmetrical visual journey, not panels or boxed grids.\nWeave concise readable explanations into negative space along curved leader lines. Label “Food covering / food caching”. Under a distinct heading “Proposed explanations”, use three small flowing conceptual ink motifs of hidden leftovers, a distant other animal, and a sheltered meal, with short labels “Hide food from predators”, “Keep other animals from taking it”, “Save leftovers”. These are muted conceptual motifs, not literal dangers surrounding this pet. Explicitly caption “Cats Protection offers these explanations; the gesture does not prove a cat’s intention.” Do not portray the floor gesture as actually cooling, preserving or burying food. Include “May happen even without a predator threat”. At the lower edge a clear but restrained care note reads “Usually harmless. Sudden excessive covering, stopped eating, or health changes warrant veterinary advice.” Adjacent tiny open annotation: “Appetite loss is a separate clinical sign. Cornell recommends prompt veterinary consultation.” No disease diagrams, nutritional recommendations, wild-cat evolutionary scenes, personality claims, statistics, invented physiology or anthropomorphism. Small source footer: “Cats Protection • Cornell Feline Health Center”. Typography must be clean and readable with strong title hierarchy; informative yet artwork-first. Render only these source-backed claims, preserving all uncertainty. No mandatory fact boxes, equal grid, extra decorative text or repetitive cat portraits.",
+    "image": "images/2026-11-27-factual-infographic-factual-infographic-food-covering.jpg",
+    "thumb": "thumbs/2026-11-27-factual-infographic-factual-infographic-food-covering.webp",
+    "color": "#b9ada0",
+    "date": "2026-11-27",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "feline-leftover-food-covering-pawing-gesture",
+      "imageSha256": "c6e488bd3349ab1210f7b06b16ea7621fe8fccad8ce09a0d61973530d64613e8",
+      "imageDHash": "a6c1f9e9349a8820"
+    },
+    "factualInfographic": {
+      "topic": "Why cats paw around uneaten food and the limits of food-covering explanations",
+      "description": "A focused feline-behavior plate distinguishing observed food-covering gestures from proposed explanations and separate appetite concerns.",
+      "sourceNote": "Sources read: https://www.cats.org.uk/cats-blog/why-do-cats-try-to-cover-their-food ; https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/anorexia",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-27T13:21:04.856833+00:00",
+        "sources": [
+          {
+            "id": "cp",
+            "publisher": "Cats Protection",
+            "title": "Why do cats try to cover their food?",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://www.cats.org.uk/cats-blog/why-do-cats-try-to-cover-their-food"
+          },
+          {
+            "id": "cu",
+            "publisher": "Cornell University College of Veterinary Medicine",
+            "title": "Anorexia",
+            "sourceType": "university",
+            "url": "https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/anorexia"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Cats may paw at the floor around their food bowl as if trying to bury leftovers; Cats Protection calls this food covering or food caching.",
+            "sourceIds": [
+              "cp"
+            ]
+          },
+          {
+            "claim": "Cats Protection explains food covering as instinctive behavior and suggests hiding food from predators, preventing theft by other animals, or preserving leftovers as possible explanations. Present these as proposed explanations, not proven intentions of the pictured domestic cat.",
+            "sourceIds": [
+              "cp"
+            ]
+          },
+          {
+            "claim": "Cats Protection notes that pet cats may cover food even without a real predator threat; pawing on an indoor floor does not actually bury or preserve the meal. The illustration shows the observed gesture, not successful preservation.",
+            "sourceIds": [
+              "cp"
+            ]
+          },
+          {
+            "claim": "Cats Protection describes food covering as usually harmless but advises speaking to a veterinarian if it suddenly becomes excessive, the cat stops eating, or health or behavior changes occur.",
+            "sourceIds": [
+              "cp"
+            ]
+          },
+          {
+            "claim": "Cornell distinguishes sustained loss of appetite as a clinical sign with diverse possible causes and recommends immediate veterinary consultation for signs of feline anorexia. Food covering alone does not establish the cause of food refusal.",
+            "sourceIds": [
+              "cu"
+            ]
+          }
+        ]
+      },
+      "group": "cats"
+    }
   }
 ]
