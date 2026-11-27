@@ -35,7 +35,7 @@ exploded views (heart, lungs, spine, brain, skull, eye, hand, knee, rib cage, di
 
 `index.html` + `studio.js` (engine), `life.js` (the living body), `vitals.js` (pace, conditions, monitor, sound), `flow.js` (blood-flow particles round the whole circulation), `lessons.js` (the five lessons), `words.js` (word origins and reading names aloud), `measure.js`, `sw.js` (offline copy), `synonyms.js` (everyday names for search), `CHANGELOG.md`, `labels.js` (label layout), `effects.js` (selection outline, skin depth pre-pass, bone cavity shading, platform reflection), `section.js` (cross-section plane), `quiz.js`, `tour.js`, `tour-notes.js` (text written for the tours), `facts.js` (key facts and related pieces from descriptions), `url-state.js` (shareable links), `assemblies.js` (nested explodes, dependency-free), `explode-rules.js` (whole-body vectors),
 `materials.js` (per-system finishes), `parts-board.js`, `manifest.json` (every piece: id, system, hierarchy, side, region, centre, size),
-`descriptions.json`, `assets/*.glb.gz` (one meshopt-compressed, gzipped file per system, each under 25 MiB; unzipped in the browser), `manual.html`, `vendor/` (three.js 0.180).
+`descriptions.json`, `assets/*.glb.gz` (one meshopt-compressed, gzipped file per system, each under 25 MiB; unzipped in the browser), `manual.html`, `vendor/` (three.js 0.180; `three-mesh-bvh.min.js`, a minified bundle of MeshBVH and acceleratedRaycast from three-mesh-bvh 0.9.18, MIT).
 
 ## Life
 

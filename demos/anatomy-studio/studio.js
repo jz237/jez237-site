@@ -6,6 +6,8 @@ import { EffectComposer } from './vendor/postprocessing/EffectComposer.js';
 import { RenderPass } from './vendor/postprocessing/RenderPass.js';
 import { GTAOPass } from './vendor/postprocessing/GTAOPass.js';
 import { OutputPass } from './vendor/postprocessing/OutputPass.js';
+import { FullScreenQuad } from './vendor/postprocessing/Pass.js';
+import { MeshBVH, acceleratedRaycast } from './vendor/three-mesh-bvh.min.js';
 import { PartsBoard } from './parts-board.js?v=38cf991a91';
 import { finishMaterial, studioEnvironment, fileLabels, fileColors, modes, organPiece, projectedUV, skinTint, tagLayer, enliven, lifeUniforms } from './materials.js?v=4f6f543d94';
 import { assemblies, bodyLandmarks, assemblyContext, assemblyOffset } from './assemblies.js?v=98fdd3ac69';
@@ -53,7 +55,7 @@ let outline = null, mirror = null, bloomPass = null, bokehPass = null, tinting =
 // The assembled body breathes and its heart beats (life.js). Off for reduced motion, in the verification runs (they compare exact positions) and with ?life=0.
 const life = createLife(); life.on = params.has('life') ? params.get('life') !== '0' : !reducedMotion && !verifyQuality && !mobile;
 const pins = new Map();   // piece id -> a short note pinned to it
-let dryRun = false, sweepDrawn = 0, vitals = null, flow = null, measure = null, flowOn = false, lifeSkip = false, saveShot = false, hovering = false, lesson = null;   // flow and the monitor wait to be asked for: the opening view is the model
+let dryRun = false, sweepDrawn = 0, vitals = null, flow = null, measure = null, flowOn = false, saveShot = false, hovering = false, lesson = null;   // flow and the monitor wait to be asked for: the opening view is the model
 if (params.has('embed')) document.body.classList.add('embed');   // a bare stage for dropping into another page
 const pathQueue = [];
 const tintQueue = [];
@@ -61,7 +63,7 @@ const tintQueue = [];
 const LAG = { regions:0, muscular:.05, lymphoid:.1, vessels:.12, nerves:.14, joints:.2, visceral:.2, heart:.24, brain:.24, skeletal:.3 }, LAG_SPAN = .7;
 const invalidate = (frames = 3) => { if (frames > renderFrames) renderFrames = frames; };
 // Declared up here because the module awaits loadStudio() below: anything it needs must exist before that line runs.
-let attachQueue = Promise.resolve(), settleSkip = false, occlusionDepth = null, onScreen = true;
+let attachQueue = Promise.resolve(), settleSkip = false, occlusionDepth = null, sceneDepth = null, onScreen = true, lastInput = 0, lifeCount = 0;
 const assetURL = entry => `./${entry.path}?v=${entry.v || 2}`;
 /**
  * A model file as an ArrayBuffer, with progress in bytes received. The files are gzipped (scripts/anatomy-studio/pack.mjs:
@@ -76,6 +78,26 @@ async function fetchModel(url, onProgress){
  return head[0] === 0x1f && head[1] === 0x8b ? new Response(data.stream().pipeThrough(new DecompressionStream('gzip'))).arrayBuffer() : data.arrayBuffer();
 }
 const loadModel = async (loader, url, onProgress) => loader.parseAsync(await fetchModel(url, onProgress), './');
+/**
+ * Picking (hover, click, measuring) tests the pointer's ray against triangles. Without help that meant every triangle of every
+ * piece the ray passes near: 20 to 90 ms a pick, several times a second while the mouse moves. A piece the ray reaches gets a
+ * bounding-volume tree (three-mesh-bvh), after which a pick takes well under a millisecond. Small pieces get theirs on the spot;
+ * a large one is tested the old way that once and its tree is built in idle time, so the pointer never waits on building.
+ * Nothing is built for pieces nobody points at. `indirect` leaves the geometry's own index untouched.
+ */
+const _raySphere = new THREE.Sphere(), treeQueue = new Set(), whenIdle = window.requestIdleCallback ? f => requestIdleCallback(f, { timeout:250 }) : f => setTimeout(f, 60);
+let treeTask = 0;
+const buildTree = g => { if (!g.boundsTree) g.boundsTree = new MeshBVH(g, { indirect:true }); };
+function buildTrees(){ treeTask = 0; const start = performance.now(); for (const g of treeQueue) { treeQueue.delete(g); buildTree(g); if (performance.now() - start > 10) break; } if (treeQueue.size) treeTask = whenIdle(buildTrees); }   // about 10 ms at a time: a busy page is rarely idle for long
+function treeRaycast(raycaster, intersects){
+ const g = this.geometry;
+ if (!g.boundsTree) {
+  if (!g.boundingSphere) g.computeBoundingSphere(); if (!raycaster.ray.intersectsSphere(_raySphere.copy(g.boundingSphere).applyMatrix4(this.matrixWorld))) return;
+  if ((g.index?.count ?? g.attributes.position.count) > 12000) { treeQueue.add(g); if (!treeTask) treeTask = whenIdle(buildTrees); THREE.Mesh.prototype.raycast.call(this, raycaster, intersects); return; }
+  buildTree(g);
+ }
+ acceleratedRaycast.call(this, raycaster, intersects);
+}
 const baseTarget = new THREE.Vector3(0, .9, 0);
 const views = { hero:[1.76, 1.57, 2.44], front:[0, .95, 3.8], side:[3.8, .95, 0], back:[0, .95, -3.8], top:[.01, 4.4, .01] };
 const stageOrder = ['core', 'muscles', 'detail'];
@@ -113,13 +135,22 @@ function init(){
  composer = new EffectComposer(renderer, rt); renderPass = new RenderPass(scene, camera); composer.addPass(renderPass);
  gtaoPass = new GTAOPass(scene, camera, 1, 1, undefined, { radius:.14, distanceExponent:1.1, thickness:1, scale:1.6, samples:14, distanceFallOff:1, screenSpaceRadius:false }, { lumaPhi:8, depthPhi:2.5, normalPhi:3.5, radius:4, radiusExponent:1, rings:2, samples:14 });
  gtaoPass.output = GTAOPass.OUTPUT.Default; gtaoPass.blendIntensity = 1; composer.addPass(gtaoPass);
- if (sharedDepth) { composer.renderTarget2.depthTexture ??= depth(); gtaoPass.setGBuffer(composer.readBuffer.depthTexture); occlusionDepth = () => { const d = composer.readBuffer.depthTexture; gtaoPass.gtaoMaterial.uniforms.tDepth.value = d; gtaoPass.pdMaterial.uniforms.tDepth.value = d; }; }   // the composer swaps its two targets: follow whichever the scene is drawn into
+ if (sharedDepth) { composer.renderTarget2.depthTexture ??= depth(); gtaoPass.setGBuffer(composer.readBuffer.depthTexture); occlusionDepth = () => { const d = sceneDepth = composer.readBuffer.depthTexture; gtaoPass.gtaoMaterial.uniforms.tDepth.value = d; gtaoPass.pdMaterial.uniforms.tDepth.value = d; }; }   // the composer swaps its two targets: follow whichever the scene is drawn into
  else {
   enliven(gtaoPass.normalMaterial);   // occlusion is worked out from the body as it is posed, not as it was built
   // The occlusion pass draws the whole scene with one material, so the cap quads (which rely on a stencil test) are hidden for it.
   const drawOcclusion = gtaoPass.render.bind(gtaoPass); gtaoPass.render = (...args) => { section.showCaps(false); drawOcclusion(...args); section.showCaps(true); };
  }
  bokehPass = new BokehPass(scene, camera, { focus:1, aperture:.03, maxblur:.006 }); bokehPass.enabled = false; composer.addPass(bokehPass);   // depth of field, only while a piece of a study is in focus
+ if (sharedDepth) {   // depth of field too: one full-screen copy of the main pass's depth instead of drawing every piece again
+  const pack = new FullScreenQuad(new THREE.ShaderMaterial({ uniforms:{ tDepth:{ value:null } }, depthTest:false, depthWrite:false,
+   vertexShader:'varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.); }',
+   fragmentShader:'#include <packing>\nuniform sampler2D tDepth; varying vec2 vUv; void main(){ gl_FragColor = packDepthToRGBA(texture2D(tDepth, vUv).x); }' }));
+  bokehPass.render = function(renderer, writeBuffer, readBuffer){
+   pack.material.uniforms.tDepth.value = sceneDepth; renderer.setRenderTarget(this._renderTargetDepth); pack.render(renderer);   // packed the way the pass's own depth pass would have
+   this.uniforms.tColor.value = readBuffer.texture; this.uniforms.nearClip.value = this.camera.near; this.uniforms.farClip.value = this.camera.far;
+   renderer.setRenderTarget(this.renderToScreen ? null : writeBuffer); this._fsQuad.render(renderer); };
+ }
  bloomPass = new UnrealBloomPass(new THREE.Vector2(256, 256), .16, .5, 2.6); composer.addPass(bloomPass);   // a light glow on true highlights only: the threshold sits well above brightly lit bone
  composer.addPass(new OutputPass());
  state.ao = !verifyQuality && !mobile; gtaoPass.enabled = state.ao; state.fx = state.ao && params.get('fx') !== '0';
@@ -163,7 +194,7 @@ function init(){
  renderer.domElement.addEventListener('pointerenter', e => { hovering = e.pointerType === 'mouse'; });   // the sway and the head hold still under the pointer, so a piece can be aimed at
  renderer.info.autoReset = false;   // counted per frame, across every pass (see the budget in the tests)
  bindControls();
- for (const type of ['pointerdown', 'pointermove', 'pointerup', 'wheel', 'keydown', 'click', 'input', 'change', 'touchmove']) addEventListener(type, () => invalidate(90), { passive:true, capture:true });   // any input keeps the picture live for a moment
+ for (const type of ['pointerdown', 'pointermove', 'pointerup', 'wheel', 'keydown', 'click', 'input', 'change', 'touchmove']) addEventListener(type, () => { lastInput = performance.now(); invalidate(90); }, { passive:true, capture:true });   // any input keeps the picture live for a moment
  document.addEventListener('visibilitychange', () => { quality.last = 0; invalidate(4); });
  renderer.setAnimationLoop(tick);
 }
@@ -187,13 +218,13 @@ async function loadStudio(){
  updateList(); updateUI(); setView('hero', true); $('fx-toggle').setAttribute('aria-pressed', state.fx); $('life-toggle').setAttribute('aria-pressed', life.on);
  if (!reducedMotion && !verifyQuality) { camera.position.sub(controls.target).multiplyScalar(1.24).add(controls.target); setView('hero'); if (viewTween) viewTween.duration = 2400; }   // a slow push-in on arrival
  window.anatomyStudio = {
-  getState:() => ({ ready:state.ready, pieces:parts.length, visible:parts.filter(p => p.mesh.visible).length, amount:state.amount, target:state.target, selected:state.selected?.label ?? null, isolated:state.isolated, system:state.system, board:state.board, mode:state.mode, ao:state.ao, detail:state.detail, hiFiles:[...hi.loaded], hiLoading:[...hi.loading], assembly:state.assembly, assemblySide:state.assemblySide, stage:state.stage, loading:state.loading, hidden:state.hidden.size, off:[...state.off], flow:{ on:flowOn, shown:!!flow?.points.visible, ...flow?.getState() }, measure:measure.getState(), pins:[...pins], compare:state.compare, lesson, draw:{ calls:renderer.info.render.calls, triangles:renderer.info.render.triangles }, hovering, vitals:vitals?.getState(), rendered, life:life.getState(), fx:state.fx, dof:bokehPass.enabled, only:state.only, quality:quality.level, section:section.state, quiz:quiz.getState(), tour:tour.getState(), triangles:parts.reduce((n, p) => n + (p.mesh.visible ? p.triangles : 0), 0), drawCalls:parts.reduce((n, p) => n + (p.mesh.visible ? 1 : 0), 0), files:manifest.files.filter(f => f.loaded).map(f => f.id) }),
+  getState:() => ({ ready:state.ready, pieces:parts.length, visible:parts.filter(p => p.mesh.visible).length, amount:state.amount, target:state.target, selected:state.selected?.label ?? null, isolated:state.isolated, system:state.system, board:state.board, mode:state.mode, ao:state.ao, detail:state.detail, hiFiles:[...hi.loaded], hiLoading:[...hi.loading], assembly:state.assembly, assemblySide:state.assemblySide, stage:state.stage, loading:state.loading, hidden:state.hidden.size, off:[...state.off], flow:{ on:flowOn, shown:!!flow?.points.visible, ...flow?.getState() }, measure:measure.getState(), pins:[...pins], compare:state.compare, lesson, draw:{ calls:renderer.info.render.calls, triangles:renderer.info.render.triangles, programs:renderer.info.programs?.length ?? 0 }, hovering, vitals:vitals?.getState(), rendered, life:life.getState(), fx:state.fx, dof:bokehPass.enabled, only:state.only, quality:quality.level, section:section.state, quiz:quiz.getState(), tour:tour.getState(), triangles:parts.reduce((n, p) => n + (p.mesh.visible ? p.triangles : 0), 0), drawCalls:parts.reduce((n, p) => n + (p.mesh.visible ? 1 : 0), 0), files:manifest.files.filter(f => f.loaded).map(f => f.id) }),
   getParts:() => parts.map(p => ({ id:p.id, name:p.name, turned:p.baseQuaternion ? p.mesh.quaternion.angleTo(p.baseQuaternion) : 0, scale:p.mesh.scale.toArray().map((v, i) => v / p.baseScale.getComponent(i)), side:p.side, file:p.file, region:p.region, visible:p.mesh.visible, lod:p.lod, triangles:Math.round((p.mesh.geometry.index?.count ?? p.mesh.geometry.attributes.position.count) / 3), radius:(p.mesh.geometry.boundingSphere || p.mesh.geometry.computeBoundingSphere() || p.mesh.geometry.boundingSphere).radius * Math.max(p.mesh.scale.x, p.mesh.scale.y, p.mesh.scale.z), extent:p.size.length() / 2, position:p.mesh.position.toArray(), base:p.base.toArray(), inAssembly:!!(state.assembly && isMember(p)) })),
   getAssembly:id => { const a = assemblies[id]; if (!a) return null; const members = assemblyMembers(id); return { side:state.assemblySide, paired:!!a.paired, members:members.map(p => p.id), primary:members.filter(p => a.primary?.(p.piece)).map(p => p.id), framed:members.filter(p => !a.frame || a.frame(p.piece)).map(p => p.id), rectangles:projectedRectangles(members.filter(p => p.mesh.visible)) }; },
   getBoardRectangles:() => board ? board.rectangles() : [],
   loadStage, enterAssembly, leaveAssembly, setMode, setAmount, reset, loadHi, setDetail, lodPass, choosePiece, hideSelected, swallow:() => life.swallow(), life, startLesson, setPin, quizTick:s => quiz.tick(s), measureAt:(x, y) => { const hit = pick({ clientX:x, clientY:y }); const at = hit ? raycaster.intersectObject(hit, false)[0] : null; if (at) measure.add(at.point); return !!at; }, pickAt:(x, y) => pick({ clientX:x, clientY:y })?.userData.part.id ?? null, getManifest:() => manifest,
   // inspection hooks for the verification scripts and for debugging: ?quality=verify or ?debug
-  ...(verifyQuality || params.has('debug') ? { _bench:(n = 200) => { const t0 = performance.now(); for (let i = 0; i < n; i++) { for (const p of parts) p.mesh.position.copy(p.base); life.advance(1 / 60); life.apply(parts, 1, model, false); } lastApplied = -1; return (performance.now() - t0) / n; }, _advance:(seconds = 1) => { let t = Math.max(last, performance.now()); for (let i = 0, n = Math.ceil(seconds * 60); i < n; i++) { dryRun = true; tick(t += 1000 / 60); } dryRun = false; invalidate(3); },   /* step the loop by hand: a background tab gets no animation frames. Nothing is drawn here (the next animation frame does that): a test that steps thousands of times would otherwise queue thousands of frames for a software renderer */ _radius:id => { const p = partsById.get(id); return p ? projectedRadiusPx(p) : null; }, _edges:(id, limit = .03) => { const p = partsById.get(id); if (!p) return null; const g = p.mesh.geometry, pos = g.attributes.position, idx = g.index, s = p.mesh.scale.x; let long = 0, max = 0; const n = idx ? idx.count : pos.count; const v = i => [pos.getX(i), pos.getY(i), pos.getZ(i)]; for (let t = 0; t < n; t += 3) { const a = v(idx ? idx.getX(t) : t), b = v(idx ? idx.getX(t + 1) : t + 1), c = v(idx ? idx.getX(t + 2) : t + 2); const L = Math.max(Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]), Math.hypot(b[0] - c[0], b[1] - c[1], b[2] - c[2]), Math.hypot(a[0] - c[0], a[1] - c[1], a[2] - c[2])) * s; if (L > max) max = L; if (L > limit) long++; } return { tris:n / 3, long, max:+max.toFixed(4), lod:p.lod }; }, _focus:(id, distance = .6, dir = [1, .35, 1.4]) => { const p = partsById.get(id); if (!p) return false; const c = p.center.clone().add(p.mesh.position).sub(p.base); viewTween = null; controls.target.copy(c); camera.position.copy(c).addScaledVector(new THREE.Vector3().fromArray(dir).normalize(), distance); return true; }, _side:v => { for (const p of parts) p.mesh.material.side = v; }, _normals:on => { for (const p of parts) { if (on) { p.mesh.userData.savedMat = p.mesh.material; p.mesh.material = new THREE.MeshNormalMaterial(); } else if (p.mesh.userData.savedMat) { p.mesh.material = p.mesh.userData.savedMat; delete p.mesh.userData.savedMat; } } }, _flat:on => { for (const p of parts) { if (on) { p.mesh.userData.savedMat = p.mesh.material; p.mesh.material = new THREE.MeshStandardMaterial({ color:'#d9ad8e', roughness:.6, flatShading:false }); } else if (p.mesh.userData.savedMat) { p.mesh.material = p.mesh.userData.savedMat; delete p.mesh.userData.savedMat; } } }, _gtao:gtaoPass, _GTAOPass:GTAOPass, _camera:() => ({ position:camera.position.toArray(), target:controls.target.toArray(), tween:!!viewTween }) } : {})
+  ...(verifyQuality || params.has('debug') ? { _bench:(n = 200) => { const t0 = performance.now(); for (let i = 0; i < n; i++) { for (const p of parts) p.mesh.position.copy(p.base); life.advance(1 / 60); life.apply(parts, 1, model, false); } lastApplied = -1; return (performance.now() - t0) / n; }, _advance:(seconds = 1) => { let t = Math.max(last, performance.now()); for (let i = 0, n = Math.ceil(seconds * 60); i < n; i++) { dryRun = true; tick(t += 1000 / 60); } dryRun = false; invalidate(3); },   /* step the loop by hand: a background tab gets no animation frames. Nothing is drawn here (the next animation frame does that): a test that steps thousands of times would otherwise queue thousands of frames for a software renderer */ _trees:(time = false) => { let built = 0, worst = 0, worstName = null, total = 0; for (const p of parts) { const g = p.mesh.geometry; if (time && !g.boundsTree) { const t = performance.now(); buildTree(g); const ms = performance.now() - t; total += ms; if (ms > worst) { worst = ms; worstName = p.name; } } if (g.boundsTree) built++; } return { built, queued:treeQueue.size, total:Math.round(total), worst:Math.round(worst), worstName }; }, _radius:id => { const p = partsById.get(id); return p ? projectedRadiusPx(p) : null; }, _edges:(id, limit = .03) => { const p = partsById.get(id); if (!p) return null; const g = p.mesh.geometry, pos = g.attributes.position, idx = g.index, s = p.mesh.scale.x; let long = 0, max = 0; const n = idx ? idx.count : pos.count; const v = i => [pos.getX(i), pos.getY(i), pos.getZ(i)]; for (let t = 0; t < n; t += 3) { const a = v(idx ? idx.getX(t) : t), b = v(idx ? idx.getX(t + 1) : t + 1), c = v(idx ? idx.getX(t + 2) : t + 2); const L = Math.max(Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]), Math.hypot(b[0] - c[0], b[1] - c[1], b[2] - c[2]), Math.hypot(a[0] - c[0], a[1] - c[1], a[2] - c[2])) * s; if (L > max) max = L; if (L > limit) long++; } return { tris:n / 3, long, max:+max.toFixed(4), lod:p.lod }; }, _focus:(id, distance = .6, dir = [1, .35, 1.4]) => { const p = partsById.get(id); if (!p) return false; const c = p.center.clone().add(p.mesh.position).sub(p.base); viewTween = null; controls.target.copy(c); camera.position.copy(c).addScaledVector(new THREE.Vector3().fromArray(dir).normalize(), distance); return true; }, _side:v => { for (const p of parts) p.mesh.material.side = v; }, _normals:on => { for (const p of parts) { if (on) { p.mesh.userData.savedMat = p.mesh.material; p.mesh.material = new THREE.MeshNormalMaterial(); } else if (p.mesh.userData.savedMat) { p.mesh.material = p.mesh.userData.savedMat; delete p.mesh.userData.savedMat; } } }, _flat:on => { for (const p of parts) { if (on) { p.mesh.userData.savedMat = p.mesh.material; p.mesh.material = new THREE.MeshStandardMaterial({ color:'#d9ad8e', roughness:.6, flatShading:false }); } else if (p.mesh.userData.savedMat) { p.mesh.material = p.mesh.userData.savedMat; delete p.mesh.userData.savedMat; } } }, _gtao:gtaoPass, _GTAOPass:GTAOPass, _camera:() => ({ position:camera.position.toArray(), target:controls.target.toArray(), tween:!!viewTween }) } : {})
  };
  await applyURL(readURL(), { initial:true });
  if (LESSONS[params.get('lesson')]) startLesson(params.get('lesson'));   // ?lesson=beat opens straight into a lesson (useful with ?embed)
@@ -222,7 +253,7 @@ async function loadFiles(ids){
     const part = { id:piece.id, piece, mesh, baseScale:mesh.scale.clone(), lag:LAG[piece.file] ?? .15, file:piece.file, group:piece.file, short:fileLabels[piece.file], name:piece.name, side:piece.side, region:piece.region, path:piece.path, parent:piece.parent, merged:piece.merged, triangles:piece.triangles, index, label:`${sided(piece)} · ${String(index + 1).padStart(4, '0')}`, base:mesh.position.clone(), center:new THREE.Vector3().fromArray(piece.center), size:new THREE.Vector3().fromArray(piece.size), assemblies:Object.keys(assemblies).filter(k => assemblies[k].paired ? (assemblies[k].match(piece, 'L') || assemblies[k].match(piece, 'R')) : (manifest.assemblies[k] || []).includes(piece.id)) };
     part.assembly = part.assemblies[0] || null;
     finishMaterial(mesh, piece, state.mode); captureMaterial(part); part.loGeometry = mesh.geometry; part.lod = 'lo';
-    mesh.castShadow = !mesh.material.transparent; mesh.receiveShadow = true; mesh.userData.part = part; mesh.frustumCulled = true;
+    mesh.castShadow = !mesh.material.transparent; mesh.receiveShadow = true; mesh.raycast = treeRaycast; mesh.userData.part = part; mesh.frustumCulled = true;
     part.offset = new THREE.Vector3().fromArray(bodyOffset(piece, env)); part.spread = new THREE.Vector3().fromArray(bodySpread(piece, index, part.assemblies.length > 0));
     parts.push(part); partsById.set(part.id, part);
    }
@@ -711,7 +742,8 @@ function tick(now){
  // and on a slow machine back-to-back frames leave it no time (a software renderer took minutes over what should take seconds).
  if (section?.sweeping && now - sweepDrawn < 330) { quality.last = 0; return; } sweepDrawn = now;   // nothing changed: leave the last frame on screen
  // Breathing and a heartbeat are slow: when they are the only thing moving, every other frame is enough and halves the work.
- if (alive > 0 && !busy && renderFrames <= 2 && (lifeSkip = !lifeSkip)) { quality.last = 0; return; }
+ // Left alone for a minute (no input, no tour or lesson running), every third frame: the studio keeps living at a third of the cost.
+ if (alive > 0 && !busy && renderFrames <= 2 && ++lifeCount % (now - lastInput > 60000 && !tour.active ? 3 : 2)) { quality.last = 0; return; }
  renderFrames--; rendered++;
  if (state.ready && state.detail && !state.board && (++hi.frame % 10 === 0 || renderFrames === 0)) lodPass();
  if (!state.board) { const under = camera.position.y < -.1; for (const o of studioObjects) o.visible = !under; }   // from underneath, the floor and platform would hide the body

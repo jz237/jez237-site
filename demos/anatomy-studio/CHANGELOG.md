@@ -9,6 +9,9 @@ Newest first. The README says what the studio does now; this says how it got the
 - **Ambient occlusion reuses the main pass's depth** instead of drawing every piece a second time: draw calls per frame at default quality drop from about 4,960 to 2,730. `?ao=own` restores the old pass for comparison.
 - **Shadows drawn once per frame**, and with the floor reflection only every other frame while just the breathing and heartbeat move.
 - **Nothing is drawn while the 3D view is scrolled out of sight**, and models are decoded in worker threads.
+- **Picking takes under a millisecond** instead of 20 to 90 ms: a piece the pointer reaches gets a bounding-volume tree (`vendor/three-mesh-bvh.min.js`, MIT, only the two parts used), built on the spot for small pieces and in idle time for large ones. Hovering no longer eats the main thread.
+- **Depth of field reuses the main pass's depth** too, instead of drawing every piece again while a study piece is in focus.
+- **Left alone for a minute** (no input, no tour or lesson), the living body redraws every third frame instead of every other.
 
 ## 2026-11-24, round 9: the whole circulation, more lessons, measuring, notes, offline
 
