@@ -37217,5 +37217,88 @@
       },
       "group": "cats"
     }
+  },
+  {
+    "id": "2026-11-27-factual-infographic-factual-infographic-the-exposed-belly",
+    "title": "Factual infographic: The Exposed Belly",
+    "tests": "factual_subtype: cat-infographic; cat_category: body-language; ; archive_slot=2026-11-27T04:20; concept=feline-exposed-belly-comfort-versus-defense; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto",
+    "prompt": "Create a richly detailed artwork-led feline educational atlas, the finished infographic itself, not a photographed print. Title: \"THE EXPOSED BELLY\". Subtitle: \"Comfort is not an invitation\". Flowing unboxed composition in soft gouache and precise colored-pencil natural-history illustration, cool slate blue ground with warm apricot light, cream typography and delicate copper leader lines. A dominant silver-gray tabby lies loosely on its side diagonally across the lower center, showing softly rendered belly fur, anatomically credible paws and individually painted whiskers. No hands touching the belly. Its relaxed ears point up, eyes half-closed. Label \"Side lying can show comfort\" and \"Usually not asking for belly rubs\". Above and to the right, a smaller clearly separated study of the same coat type lying on its back defensively, not a crouch, with paws poised, ears back and flat, whiskers forward and a hard stare. Keep natural anatomy, no exaggerated monsters or human expressions. Label \"On the back can also be defensive\". Open curved annotations identify \"Ears back and flat\", \"Hard stare can express irritation\", and \"Can bite, scratch and bunny-kick\". An airy facial detail near the relaxed hero links \"Ears up; eyes half-closed\" to \"Can indicate relaxation\". The supporting study occupies less than a third of the artwork, hero fur detail dominates. A subtle flowing ribbon connects the contrasting postures but no causal arrows, time sequence, panels, boxes or grid. Bottom statement, clearly readable: \"Read the whole body and the situation. Individual cats differ.\" Do not claim exposed belly always means trust, submission or aggression. Do not imply that comfort gives permission for belly rubs. Minimal setting, soft textile shadow only, no props, human figures, diagnoses or extra claims. Elegant confident title, concise readable labels with generous breathing room, exquisite fur and paw structure. Small source credit: \"Virginia Tech • University of Edinburgh\".",
+    "image": "images/2026-11-27-factual-infographic-factual-infographic-the-exposed-belly.jpg",
+    "thumb": "thumbs/2026-11-27-factual-infographic-factual-infographic-the-exposed-belly.webp",
+    "color": "#7a777a",
+    "date": "2026-11-27",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1199x1312",
+    "dedup": {
+      "conceptKey": "feline-exposed-belly-comfort-versus-defense",
+      "imageSha256": "73facc0cc9dd7eb72e1cd56e90a78c613f94f464ee03cf0a0533d58093703712",
+      "imageDHash": "8a66664227639c56"
+    },
+    "factualInfographic": {
+      "topic": "Interpreting feline belly exposure as comfort or defense in context",
+      "description": "Contrasting feline belly-exposing postures with contextual interpretation, relaxed and defensive facial cues, and no implied permission to touch.",
+      "sourceNote": "Sources read: https://vth.vetmed.vt.edu/animal-care-tips/pet-communication.html ; https://vet.ed.ac.uk/sites/default/files/2024-09/Feline%20body%20language.pdf",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-27T09:21:09.111811+00:00",
+        "sources": [
+          {
+            "id": "vt",
+            "publisher": "Virginia Tech Veterinary Teaching Hospital",
+            "title": "Love languages: Understanding how your pet communicates",
+            "sourceType": "university",
+            "url": "https://vth.vetmed.vt.edu/animal-care-tips/pet-communication.html"
+          },
+          {
+            "id": "ed",
+            "publisher": "University of Edinburgh",
+            "title": "Feline body language",
+            "sourceType": "university",
+            "url": "https://vet.ed.ac.uk/sites/default/files/2024-09/Feline%20body%20language.pdf"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "When a cat shows its belly, it is usually not asking for belly rubs; it can express comfort with a person.",
+            "sourceIds": [
+              "vt"
+            ]
+          },
+          {
+            "claim": "Lying on the side with the belly showing can display comfort.",
+            "sourceIds": [
+              "vt"
+            ]
+          },
+          {
+            "claim": "Lying on the back can also be defensive; a cat in this position can bite, scratch and bunny-kick.",
+            "sourceIds": [
+              "ed"
+            ]
+          },
+          {
+            "claim": "Interpret body language in its environment and specific situation, looking at overall posture rather than treating exposed belly as a guaranteed emotion or invitation to touch. Individuals differ.",
+            "sourceIds": [
+              "vt"
+            ]
+          },
+          {
+            "claim": "Relaxed eyes can accompany a happy cat; a hard stare can express irritation.",
+            "sourceIds": [
+              "vt"
+            ]
+          },
+          {
+            "claim": "Ears up with eyes closed or half-closed can indicate relaxation; ears back and flat with whiskers forward can indicate defensive or aggressive behavior.",
+            "sourceIds": [
+              "ed"
+            ]
+          }
+        ]
+      },
+      "group": "cats"
+    }
   }
 ]
