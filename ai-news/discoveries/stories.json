@@ -1,11 +1,41 @@
 {
   "version": 1,
   "title": "AI Discoveries, Explained",
-  "updated": "2026-11-26",
+  "updated": "2026-11-27",
   "coverageStart": "2026-09-21",
-  "coverageEnd": "2026-11-26",
+  "coverageEnd": "2026-11-27",
   "editorialNote": "Source-linked discoveries, research demonstrations, follow-ups and corrections from AI Discovery Watch. Historical milestones posted before the fresh-news brief are not included. Coverage dates are when a story was shared, not necessarily when its discovery occurred. Evidence labels reflect the linked report at that time; read later updates too.",
   "stories": [
+    {
+      "category": "Research in action",
+      "evidenceKind": "demo",
+      "modelNote": "PerovAgent used GPT-5.6 Sol for decisions and hypotheses, with MatterSim for atomic simulations.",
+      "sources": [
+        "https://arxiv.org/abs/2611.33913",
+        "https://arxiv.org/pdf/2611.33913"
+      ],
+      "status": "Preliminary simulation study; checks reported by the authors, not independent laboratory confirmation.",
+      "takeaway": "PerovAgent designed molecules to coat tiny crystals and tested its own ideas about why some should stick more strongly. The November 25 preprint reports 35 proposed design rules; seven survived follow-up checks, representing four distinct chemical ideas. Researchers supplied the crystal model, search limits and checking tools, then tested one rule with more detailed calculations. This demonstrates AI forming and challenging scientific explanations, not just ranking candidates. Everything happened in computer simulations: no coatings were physically tested, and better solar cells or lights have not been demonstrated.",
+      "title": "AI designs crystal coatings—and tests why they should stick",
+      "id": "d-1575893171693420625-perovagent-tests-molecular-coating-rules",
+      "coveredOn": "2026-11-27",
+      "context": "🔬 **AI Discovery Watch · November 27, 2026**\n\n**AI designs crystal coatings—and tests why they should stick**\nPerovAgent designed molecules to coat tiny crystals and tested its own ideas about why some should stick more strongly. The November 25 preprint reports 35 proposed design rules; seven survived follow-up checks, representing four distinct chemical ideas. Researchers supplied the crystal model, search limits and checking tools, then tested one rule with more detailed calculations. This demonstrates AI forming and challenging scientific explanations, not just ranking candidates. Everything happened in computer simulations: no coatings were physically tested, and better solar cells or lights have not been demonstrated.\n\n**AI used:** PerovAgent used GPT-5.6 Sol for decisions and hypotheses, with MatterSim for atomic simulations.\n**Evidence:** Preliminary simulation study; checks reported by the authors, not independent laboratory confirmation.\nOriginal source: <https://arxiv.org/abs/2611.33913>\nSupporting source: <https://arxiv.org/pdf/2611.33913>"
+    },
+    {
+      "category": "Mathematics",
+      "evidenceKind": "proof",
+      "modelNote": "Gemini 4 Carbon discovered the argument and produced the Lean 4 formalization through Google research harnesses.",
+      "sources": [
+        "https://arxiv.org/abs/2611.32334",
+        "https://www.johndcook.com/blog/2026/11/25/hadwiger-covering/"
+      ],
+      "status": "Preprint proof claim; Lean checks reported by the authors, not independently rerun here.",
+      "takeaway": "A Google team reports an AI-found proof that any solid three-dimensional shape with no inward dents can be covered by eight smaller copies of itself, moved without rotation. This would settle a geometry question open since 1957. The November 24 preprint, revised November 25, credits Gemini 4 Carbon with finding the proof under light human guidance; the researchers checked the mathematics and wrote the paper. They also report a computer-checked proof, but independent verification and peer review are not established here. The broader question in higher dimensions remains open.",
+      "title": "AI finds a proof that eight smaller copies can cover a solid shape",
+      "id": "d-1575893778802155531-gemini-eight-copy-shape-covering-claim",
+      "coveredOn": "2026-11-27",
+      "context": "🔬 **AI Discovery Watch · November 27, 2026**\n\n**AI finds a proof that eight smaller copies can cover a solid shape**\nA Google team reports an AI-found proof that any solid three-dimensional shape with no inward dents can be covered by eight smaller copies of itself, moved without rotation. This would settle a geometry question open since 1957. The November 24 preprint, revised November 25, credits Gemini 4 Carbon with finding the proof under light human guidance; the researchers checked the mathematics and wrote the paper. They also report a computer-checked proof, but independent verification and peer review are not established here. The broader question in higher dimensions remains open.\n\n**AI used:** Gemini 4 Carbon discovered the argument and produced the Lean 4 formalization through Google research harnesses.\n**Evidence:** Preprint proof claim; Lean checks reported by the authors, not independently rerun here.\nOriginal source: <https://arxiv.org/abs/2611.32334>\nSupporting source: <https://www.johndcook.com/blog/2026/11/25/hadwiger-covering/>"
+    },
     {
       "category": "Research in action",
       "evidenceKind": "early",
