@@ -1,5 +1,19 @@
 [
  {
+  "id": "2026-11-27-creature-mutations-local-glasswater-gill-webbed-kingfisher",
+  "title": "Glasswatergill Webbed Kingfisher",
+  "description": "Found in a flooded alder grove, with axolotl-like fringes.",
+  "prompt": "Photorealistic field photograph of a single fictional Kingfisher with axolotl-like fringes, in a flooded alder grove, under dappled sunlight. Feathery tissue fans out behind the jaw. Depict it with translucent webbing between its digits. One coherent living body plan with the feature growing organically out of the host anatomy; real joints, muscles and skin transitions. Show the whole animal at eye level, alert in its habitat, with fine natural surface texture and debris in the foreground. Unsettling but believable wildlife photography, no text or watermark.",
+  "image": "images/creature-mutations/2026-11-27-glasswatergill-webbed-kingfisher-905661ed.jpg",
+  "thumb": "images/creature-mutations/thumbs/2026-11-27-glasswatergill-webbed-kingfisher-905661ed.jpg",
+  "date": "2026-11-27",
+  "slot": "2026-11-27T00:30",
+  "size": "1024x1536",
+  "model": "local/moss-image-sft",
+  "source": "Discord #creatures",
+  "discordMessageId": "1575715476531838980"
+ },
+ {
   "id": "2026-11-26-creature-mutations-desert-cistern-solifuge-electric-ray",
   "title": "Voltcrypt Sunspider",
   "description": "A broad-shielded cistern hunter probes mineral-dark stone with living sensory paddles.",
