@@ -358,3 +358,14 @@ test('"This looks more like mine" swaps the result coherently', () => {
     }
   }
 });
+
+test('pregnancy is a "could also be" for a swollen guppy or molly, including the old "livebearer" id, never with eating less', () => {
+  const swollen = extra => assessDiagnosis(input(['swollen'], { closer: 'flat', ...extra }));
+  for (const fishType of ['guppy', 'molly', 'livebearer']) {
+    const result = swollen({ fishType });
+    assert.equal(result.primary.id, 'bloat', fishType);
+    assert.ok(result.alternatives.some(c => c.id === 'pregnant'), fishType);
+  }
+  for (const fishType of ['', 'betta', 'goldfish', 'cory']) assert.ok(!swollen({ fishType }).alternatives.some(c => c.id === 'pregnant'), fishType || 'none');
+  for (const fishType of ['guppy', 'livebearer']) assert.ok(!assessDiagnosis(input(['swollen', 'appetite'], { closer: 'flat', fishType })).alternatives.some(c => c.id === 'pregnant'), fishType);
+});

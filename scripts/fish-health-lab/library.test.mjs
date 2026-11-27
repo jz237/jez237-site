@@ -9,7 +9,7 @@ import { CROPS, IMAGE_SOURCE } from '../../experiments/fish-health-lab/library-i
 const receipt = JSON.parse(readFileSync(new URL('./library-images-20261106.json', import.meta.url)));
 
 test('every fish disease page has four close-ups, a fish map, a timeline and a lead picture', () => {
-  for (const c of CONDITIONS.filter(c => c.id !== 'normal')) {
+  for (const c of CONDITIONS.filter(c => c.id !== 'normal' && c.id !== 'pregnant')) { // not illnesses
     assert.equal(closeupsFor(c.id).length, 4, c.id);
     for (const im of closeupsFor(c.id)) assert.ok(im.url && im.caption && im.alt, `${c.id} ${im.id}`);
     const info = LIB_INFO[c.id];

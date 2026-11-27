@@ -30,6 +30,8 @@ const fixUrl = id => FIX_IMAGE_SOURCE === 'media' ? MEDIA_BASE + FISH_FIX(id).ke
 // Saltwater dropsy with raised scales was added per fish on Nov 6 2026 (dropsy-images-20261106.json).
 const groupKey = (key, group) => key.startsWith(`experiments/fish-health-lab/${group}/${group}-`) || key.startsWith(`experiments/fish-health-lab/fixes/fish-${group}-`) || key.startsWith(`experiments/fish-health-lab/dropsy/fish-${group}-`) || key.startsWith(`experiments/fish-health-lab/audit/fish-${group}-`);
 const freshConditions = CONDITIONS.filter(c => c.scope !== 'marine');
+// An entry limited to some fish types (onlyFish, e.g. pregnancy) needs pictures only for those fish.
+const forFish = (group, condition) => !condition.onlyFish || condition.onlyFish.includes(group);
 const marineConditions = CONDITIONS.filter(c => c.scope !== 'fresh');
 const MARINE = FISH_TYPES.marine.map(f => f.id);
 // The five groups of freshwater-images-20261105.json (livebearer, cichlid and catfish were split later).
@@ -112,7 +114,7 @@ for (const group of ['goldfish', 'community']) {
       assert.equal(got.images[0].key, expectedKey(FRESH_CROPS, set.signs[sign.id]));
       assert.ok(groupKey(got.images[0].key, group), got.images[0].key);
     }
-    for (const condition of freshConditions) {
+    for (const condition of freshConditions.filter(c => forFish(group, c))) {
       const got = imagesFor(group, condition.id, 'fresh');
       if (NO_PICTURE[group].includes(condition.id)) {
         assert.equal(got.fishSpecific, false, `${group} ${condition.id} should fall back`);
@@ -145,7 +147,7 @@ for (const [group, parent] of Object.entries(SPLIT)) {
       assert.ok(got.fishSpecific, `${group} sign ${sign.id}`);
       assert.equal(got.images.length, 1);
     }
-    for (const condition of freshConditions) {
+    for (const condition of freshConditions.filter(c => forFish(group, c))) {
       const got = imagesFor(group, condition.id, 'fresh');
       if (NO_PICTURE[group].includes(condition.id)) {
         assert.equal(got.fishSpecific, false, `${group} ${condition.id} should fall back`);
@@ -219,7 +221,7 @@ test('betta set covers every symptom picture and every freshwater result', () =>
     assert.ok(got.fishSpecific, `betta sign ${sign.id}`);
     assert.match(got.images[0].url, /betta-/);
   }
-  for (const condition of freshConditions) {
+  for (const condition of freshConditions.filter(c => forFish('betta', c))) {
     const got = imagesFor('betta', condition.id, 'fresh');
     assert.ok(got.fishSpecific && got.images.length, `betta condition ${condition.id}`);
   }

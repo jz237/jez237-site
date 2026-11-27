@@ -27,7 +27,7 @@ test('every condition has a "What to do now" plan and a Read-more link in its wa
     for (const water of c.scope === 'both' ? ['fresh', 'marine'] : [c.scope]) {
       const plan = carePlanFor(c.id, water);
       assert.ok(plan.steps.length >= 3 && plan.treatment && plan.recovery, `${c.id} ${water}`);
-      if (c.id !== 'normal') assert.ok(treatmentGuideFor(c.id, water), `${c.id} ${water} link`);
+      if (c.id !== 'normal' && c.id !== 'pregnant') assert.ok(treatmentGuideFor(c.id, water), `${c.id} ${water} link`);
       else assert.equal(treatmentGuideFor(c.id, water), null); // stable markings need no medicine link
     }
   }

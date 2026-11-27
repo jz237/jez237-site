@@ -6,7 +6,7 @@ import { CONDITIONS } from '../../experiments/fish-health-lab/data.mjs';
 import { REEF_CONDITIONS } from '../../experiments/fish-health-lab/reef-data.mjs';
 
 // Placement, behaviour and "normal" results have no scientific name.
-const NONE = ['normal', 'coral-normal', 'flow-placement', 'anemone-stress', 'nipped', 'flipped', 'predator'];
+const NONE = ['normal', 'pregnant', 'coral-normal', 'flow-placement', 'anemone-stress', 'nipped', 'flipped', 'predator'];
 
 test('every diagnosis has a scientific name (except normal/placement results), and every name belongs to one', () => {
   const ids = [...CONDITIONS, ...REEF_CONDITIONS].map(c => c.id);
