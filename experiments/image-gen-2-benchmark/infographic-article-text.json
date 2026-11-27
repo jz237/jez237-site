@@ -19996,5 +19996,56 @@
     ]
    }
   ]
+ },
+ "2026-11-27-factual-infographic-factual-infographic-when-coat-color-dil": {
+  "dek": "Feline coat dilution is a recessive trait linked to MLPH, the melanophilin gene. It changes the appearance of coat colors, including black to blue and red to cream.",
+  "glance": [
+   [
+    "Gene",
+    "MLPH (melanophilin)"
+   ],
+   [
+    "Inheritance",
+    "Autosomal recessive"
+   ],
+   [
+    "Dilute coat",
+    "d/d"
+   ],
+   [
+    "Carrier",
+    "D/d, without coat dilution"
+   ]
+  ],
+  "sections": [
+   {
+    "heading": "The dilute gene",
+    "body": [
+     "MLPH-related coat dilution is an autosomal recessive single-gene trait in domestic cats. MLPH encodes melanophilin. The identified dilute variant is a single-base deletion that causes a frameshift. OMIA classifies this coat-color trait as not disease-related."
+    ],
+    "sources": [
+     "omia"
+    ]
+   },
+   {
+    "heading": "Reading the allele pairs",
+    "body": [
+     "D is dominant to d. A cat with D/D does not carry the dilute allele, while a cat with D/d is a carrier without dilution of its coat color. A cat with d/d has a diluted coat."
+    ],
+    "sources": [
+     "langford"
+    ]
+   },
+   {
+    "heading": "From full color to dilute",
+    "body": [
+     "Dilution changes black to blue, chocolate to lilac, cinnamon to fawn, and red to cream. These terms name coat colors. Blue refers to a gray coat, not vivid blue. The comparisons describe color outcomes rather than different breeds, personalities or diseases."
+    ],
+    "sources": [
+     "langford",
+     "omia"
+    ]
+   }
+  ]
  }
 }

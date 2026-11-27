@@ -37454,5 +37454,83 @@
       },
       "group": "cats"
     }
+  },
+  {
+    "id": "2026-11-27-factual-infographic-factual-infographic-when-coat-color-dil",
+    "title": "Factual infographic: When Coat Color Dilutes",
+    "tests": "factual_subtype: cat-infographic; cat_category: coats-and-genetics; ; archive_slot=2026-11-27T16:20; concept=feline-mlph-recessive-dilution-coat-color-pairs; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto",
+    "prompt": "Create a richly detailed artistic feline genetics atlas, rendered directly as the finished infographic, not a photo of a poster. Title: \"WHEN COAT COLOR DILUTES\"; subtitle \"Recessive MLPH inheritance\". Dominant hero: a naturalistic solid blue-gray domestic shorthair reclining diagonally across the lower center, exquisitely individual fine hairs, soft silver rim light, anatomically credible ears and paws, relaxed neutral pose. A smaller solid black domestic cat sits behind on the left, giving a clear natural black-to-blue comparison without implying a transformation over time. Use luminous charcoal, blue-gray, ivory and warm copper accents, fine colored-pencil scientific illustration and soft gouache, pale ivory background with generous negative space. No breed identity is implied.\nWeave an open sweeping ribbon of paired fur studies around the upper and right margins: black → blue, chocolate → lilac, cinnamon → fawn, red → cream. Label each pair in elegant highly readable type. Natural fur colors only: blue means gray, lilac a soft pale gray-brown, fawn pale warm beige, cream pale warm cream. The fur swatches are illustrative color comparisons, not standardized color measurements. Do not create a rigid grid or boxed cards. The cat hero and texture studies must dominate, balanced with useful concise science.\nA curved fine-ink inheritance branch in the upper left reads \"D/D • not diluted\", \"D/d • carrier, not diluted\", \"d/d • diluted\". Adjacent small explanatory text: \"D is dominant to d. Dilution is autosomal recessive.\" Do not invent a pedigree, percentages, kittens or linked disease claims. A delicate typographic gene annotation follows the curve of the hero's back: \"MLPH • melanophilin\" and \"A single-base deletion causes a frameshift.\" This is a genetic annotation, not a molecular structure diagram. Footer: \"Coat-color inheritance, not a breed or personality test.\" Add restrained source credit \"Langford Vets • University of Sydney OMIA\". Use only these supported facts, no invented cellular mechanism, hair cross sections, pigment granule arrangement, health advice or extra numerical claims. Vary scale, elegant open leader lines, refined readable typography, luxurious fur rendering and organic visual pathways; no dashboard, no uniform panels, no photographic frame, no extra limbs, no anthropomorphism.",
+    "image": "images/2026-11-27-factual-infographic-factual-infographic-when-coat-color-dil.jpg",
+    "thumb": "thumbs/2026-11-27-factual-infographic-factual-infographic-when-coat-color-dil.webp",
+    "color": "#bdb6ae",
+    "date": "2026-11-27",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1199x1312",
+    "dedup": {
+      "conceptKey": "feline-mlph-recessive-dilution-coat-color-pairs",
+      "imageSha256": "25a4cebada853b97a853ccaf7727e8505b6acabd260dbbaf4667b47af58672c1",
+      "imageDHash": "9850989c0cd0d8cc"
+    },
+    "factualInfographic": {
+      "topic": "How recessive MLPH-related dilution changes feline coat colors",
+      "description": "MLPH-related recessive coat dilution, allele states and paired coat-color outcomes in domestic cats.",
+      "sourceNote": "Sources read: https://www.langfordvets.co.uk/diagnostic-laboratories/cat-genetic-testing/genetic-disease-and-trait-tests/dilute-coat-colour/; https://omia.org/OMIA000031/9685/",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-27T21:21:11.712609+00:00",
+        "sources": [
+          {
+            "id": "langford",
+            "publisher": "Langford Vets, University of Bristol",
+            "title": "Dilute Coat Colour",
+            "sourceType": "university",
+            "url": "https://www.langfordvets.co.uk/diagnostic-laboratories/cat-genetic-testing/genetic-disease-and-trait-tests/dilute-coat-colour/"
+          },
+          {
+            "id": "omia",
+            "publisher": "University of Sydney, OMIA",
+            "title": "Coat colour, dilution, MLPH-related in Felis catus",
+            "sourceType": "university",
+            "url": "https://omia.org/OMIA000031/9685/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Feline MLPH-related coat dilution is an autosomal recessive single-gene trait; MLPH encodes melanophilin.",
+            "sourceIds": [
+              "omia"
+            ]
+          },
+          {
+            "claim": "The identified dilute variant is a single-base deletion in MLPH that causes a frameshift.",
+            "sourceIds": [
+              "omia"
+            ]
+          },
+          {
+            "claim": "D is dominant to d: D/D and D/d do not dilute the coat, while d/d dilutes it; D/d is a carrier.",
+            "sourceIds": [
+              "langford"
+            ]
+          },
+          {
+            "claim": "Dilution changes black to blue, chocolate to lilac, cinnamon to fawn, and red to cream. These are coat color names; blue is a gray coat, not vivid blue.",
+            "sourceIds": [
+              "langford"
+            ]
+          },
+          {
+            "claim": "The diagram compares coat-color outcomes and inheritance states, not different breeds, personalities or diseases. OMIA classifies this trait as not disease-related.",
+            "sourceIds": [
+              "omia",
+              "langford"
+            ]
+          }
+        ]
+      },
+      "group": "cats"
+    }
   }
 ]
