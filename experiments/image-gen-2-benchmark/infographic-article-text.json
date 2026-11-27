@@ -19750,5 +19750,60 @@
     ]
    }
   ]
+ },
+ "2026-11-26-factual-infographic-factual-infographic-hidradenitis-suppur": {
+  "dek": "Hidradenitis suppurativa is a chronic skin disease that causes recurrent painful lumps beneath the skin. Lesions may drain and leave scars or tunnels, with severity varying between people.",
+  "glance": [
+   [
+    "Also called",
+    "HS"
+   ],
+   [
+    "Common sites",
+    "Armpits and groin"
+   ],
+   [
+    "Not caused by",
+    "Poor hygiene"
+   ],
+   [
+    "Diagnosis",
+    "Symptom history and skin examination"
+   ]
+  ],
+  "sections": [
+   {
+    "heading": "Follicles, lumps and tunnels",
+    "body": [
+     "Blocked hair follicles are involved in HS, but the exact cause is unknown. Follicles may become inflamed and rupture. Painful boil-like lumps often occur in the armpits and groin, where skin rubs together. Lumps may break open and drain fluid or pus. Repeated lesions can leave scars and tunnels beneath the skin.",
+     "HS is not contagious and is not caused by poor hygiene. Smoking and obesity are associated with HS, but neither explains every case."
+    ],
+    "sources": [
+     "NLM",
+     "NHS"
+    ]
+   },
+   {
+    "heading": "Assessment and treatment",
+    "body": [
+     "Diagnosis uses symptom history and examination of the skin. There is no specific diagnostic test. A clinician may sample skin or pus and refer to dermatology. Treatment depends on severity and may include antibiotics, inflammation-reducing medicines, biologics, and procedures or surgery. Treatments are not effective for everyone.",
+     "Loose-fitting clothing and stopping smoking may help. HS is recurring and requires individualized management rather than a promised cure."
+    ],
+    "sources": [
+     "NLM",
+     "NHS"
+    ]
+   },
+   {
+    "heading": "Possible secondary infection",
+    "body": [
+     "Some HS lumps develop a secondary bacterial infection. For an abscess, fever or chills, or spreading swelling or redness warrants urgent medical assessment. Redness can be harder to see on brown or black skin."
+    ],
+    "sources": [
+     "NHS",
+     "ABS"
+    ]
+   }
+  ]
  }
 }

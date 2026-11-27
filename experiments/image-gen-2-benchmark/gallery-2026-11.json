@@ -207,6 +207,121 @@
     }
   },
   {
+    "id": "2026-11-26-factual-infographic-factual-infographic-hidradenitis-suppur",
+    "title": "Factual infographic: Hidradenitis Suppurativa",
+    "tests": "factual_subtype: medical-health-infographic; factual_subtype: medical-health-infographic; full topic catalog checked; unused HS subject replaces already archived deck candidates.; archive_slot=2026-11-26T23:20; concept=hidradenitis-follicular-lumps-skin-tunnels-recurrence; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto",
+    "prompt": "Create the finished medical infographic directly, not a photograph of a poster. Title: HIDRADENITIS SUPPURATIVA. Subtitle: Recurrent inflammation beneath the skin. Artwork-led flowing anatomical atlas in luminous gouache, fine technical ink and soft layered shading, warm ivory background, oxblood, coral, muted violet and deep teal accents. The dominant illustration is an oblique enlarged cutaway of an armpit skin fold: tactile brown skin surface with fine hairs, a blocked hair follicle, an inflamed lump beneath the surface, and a separate established subcutaneous tunnel connecting surface openings beside a healed scar. Label clearly as a schematic, not to scale. Illustrate medically restrained non-gory tissue, distinguish a hair follicle from an established tunnel; do not depict primary sweat-gland disease or bacteria as the whole cause. Let curved hair and skin contours carry delicate open leader lines through asymmetrical supporting studies, not boxed panels or a rigid grid. Small surface comparison studies show a closed painful lump, a draining opening and a scar, labeled 'Possible features, not an inevitable sequence'. Use the following exact concise labels around the hero: 'Blocked hair follicle', 'Inflamed lump', 'Tunnel beneath skin', 'Scar', 'May drain fluid or pus'. An open annotation states 'Exact cause unknown. Severity varies.' An understated body-location silhouette marks only armpits and groin, captioned 'Common sites where skin rubs together'. No identifiable patient or clinical photograph. Across a spacious upper margin, state prominently 'Not contagious. Not caused by poor hygiene.' A gently curving lower care pathway integrates readable short labels: 'Assessment: symptom history + skin examination', 'No specific diagnostic test', 'Care depends on severity', 'Medicines may include antibiotics, inflammation treatments or biologics', 'Procedures or surgery may help some cases'. Beneath that, 'Treatments do not work for everyone. Loose clothing and stopping smoking may help.' Smaller context: 'Smoking and obesity are associated with HS, not explanations for every case.' Reserve a clear crimson-accent open footer: 'Possible secondary infection: fever or chills, or spreading swelling or redness around an abscess needs urgent assessment. Redness may be less visible on brown or black skin.' Close with 'General education, not a diagnosis. Individual care with a clinician.' Keep elegant large typography, generous negative space and exquisite subject-specific skin detail. No bibliography, URLs, invented statistics, medication doses, cure promise, logos, watermark or detached fact cards. Maintain clinical dignity and a clear visual hierarchy, with anatomy larger than text.",
+    "image": "images/2026-11-26-factual-infographic-factual-infographic-hidradenitis-suppur.jpg",
+    "thumb": "thumbs/2026-11-26-factual-infographic-factual-infographic-hidradenitis-suppur.webp",
+    "color": "#ddb3a1",
+    "date": "2026-11-26",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1086x1448",
+    "dedup": {
+      "conceptKey": "hidradenitis-follicular-lumps-skin-tunnels-recurrence",
+      "imageSha256": "1dcf6560f2dbc10d4f4dd77aa2d7fbed79c78e4ae0563b1693bf939e181f82d4",
+      "imageDHash": "08017144a4a41d22"
+    },
+    "factualInfographic": {
+      "topic": "How hidradenitis suppurativa causes recurrent painful follicular lumps, skin tunnels and scarring and is evaluated and managed",
+      "description": "An artwork-led clinical skin atlas of HS, follicular inflammation, recurring lesions, tunnels, evaluation and individualized care.",
+      "sourceNote": "National Library of Medicine https://medlineplus.gov/hidradenitissuppurativa.html; NHS https://www.nhs.uk/conditions/hidradenitis-suppurativa/; NHS abscess guidance https://www.nhs.uk/conditions/skin-abscess/. Read directly for anatomy, symptoms, uncertainty, treatment and infection warning signs.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-27T04:21:32.727960+00:00",
+        "sources": [
+          {
+            "id": "NLM",
+            "publisher": "National Library of Medicine",
+            "title": "Hidradenitis Suppurativa",
+            "sourceType": "government-agency",
+            "url": "https://medlineplus.gov/hidradenitissuppurativa.html"
+          },
+          {
+            "id": "NHS",
+            "publisher": "National Health Service",
+            "title": "Hidradenitis suppurativa (HS)",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/conditions/hidradenitis-suppurativa/"
+          },
+          {
+            "id": "ABS",
+            "publisher": "National Health Service",
+            "title": "Skin abscess",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/conditions/skin-abscess/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "HS is a chronic skin disease causing recurrent painful boil-like lumps beneath the skin, often in armpits and groin where skin rubs together.",
+            "sourceIds": [
+              "NLM",
+              "NHS"
+            ]
+          },
+          {
+            "claim": "Blocked hair follicles are involved; the exact cause is unknown. Follicles may become inflamed and rupture.",
+            "sourceIds": [
+              "NLM",
+              "NHS"
+            ]
+          },
+          {
+            "claim": "Lumps may break open and drain fluid or pus. Repeated lesions can leave scars and tunnels under the skin; severity varies.",
+            "sourceIds": [
+              "NLM",
+              "NHS"
+            ]
+          },
+          {
+            "claim": "HS is not caused by poor hygiene and is not contagious.",
+            "sourceIds": [
+              "NLM",
+              "NHS"
+            ]
+          },
+          {
+            "claim": "Smoking and obesity are associated with HS; this does not mean either explains every case.",
+            "sourceIds": [
+              "NHS",
+              "NLM"
+            ]
+          },
+          {
+            "claim": "Diagnosis uses symptom history and skin examination; there is no specific diagnostic test. A clinician may sample pus or skin and refer to dermatology.",
+            "sourceIds": [
+              "NLM"
+            ]
+          },
+          {
+            "claim": "Treatment depends on severity and may include antibiotics, medicines that reduce inflammation, biologics, and procedures or surgery. Treatments are not effective for everyone.",
+            "sourceIds": [
+              "NLM"
+            ]
+          },
+          {
+            "claim": "Loose-fitting clothing and stopping smoking may help; HS is recurring and requires individualized management rather than a promised cure.",
+            "sourceIds": [
+              "NLM",
+              "NHS"
+            ]
+          },
+          {
+            "claim": "Some HS lumps can develop a secondary bacterial infection. For an abscess, fever or chills, or spreading swelling or redness warrants urgent medical assessment. Redness can be harder to see on brown or black skin.",
+            "sourceIds": [
+              "NHS",
+              "ABS"
+            ]
+          }
+        ]
+      },
+      "group": "health"
+    }
+  },
+  {
     "id": "2026-11-26-factual-infographic-factual-infographic-bursitis",
     "title": "Factual infographic: Bursitis",
     "tests": "factual_subtype: medical-health-infographic; factual_subtype: medical-health-infographic; complete catalog checked: Bell palsy and rheumatoid arthritis already archived, bursitis unused.; archive_slot=2026-11-26T17:20; concept=elbow-bursa-pressure-inflammation-cushion; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto",
