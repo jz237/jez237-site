@@ -37134,5 +37134,88 @@
       },
       "group": "health"
     }
+  },
+  {
+    "id": "2026-11-27-factual-infographic-factual-infographic-the-missing-feline-",
+    "title": "Factual infographic: The Missing Feline Sweet Receptor",
+    "tests": "factual_subtype: cat-infographic; cat_category: extraordinary-senses; ; archive_slot=2026-11-27T00:20; concept=feline-tas1r2-loss-sweet-receptor-pairing; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto",
+    "prompt": "Create an elaborate artistic Cat Atlas infographic titled \"Why Cats Do Not Taste Sweetness\", subtitle \"A missing receptor partner, not a missing sense\". Direct finished artwork, no frame or photograph of paper. Dominant exquisitely detailed silver-gray domestic shorthair in three-quarter close portrait, nose and slightly visible pink tongue, softly lit fur with individual guard hairs against a deep petrol-blue and warm ivory wash. Scientific watercolor with precise fine ink, copper and turquoise accents. Strong asymmetric organic flow, never a grid or detached cards. From a delicate curved leader at the tongue, grow an enlarged schematic taste-bud study into the open lower right; label \"Taste bud\" and \"Conceptual receptor schematic\". Nested within it, show a cell membrane with T1R3 present and an explicitly empty outlined partner position labeled \"T1R2 absent\"; never imply this empty outline is a real protein. Above, a small comparison of the normal mammalian pair labeled \"T1R2 + T1R3: functional sweet receptor\" contrasts with the cat mechanism. Along the lower left, an elegant open DNA ribbon with a clear interruption labeled \"Tas1r2: unexpressed pseudogene\" and short text \"Deletion and premature stop codons; no detectable T1R2 protein in the study\". Do not invent base sequences, atomic structures or anatomical locations. Tie the studies together using delicate curved ink leaders and generous breathing room. Readable main callouts: \"Tas1r3 is expressed in taste buds and appears functional\"; \"Without T1R2, the functional sweet receptor cannot form\"; \"Cats still respond to amino acids, salty, sour and bitter stimuli\". A restrained scent wisp near the nose carries \"Smell also contributes to taste\". Tiny secondary tongue texture annotation \"Rough tongue spines help with food handling and grooming, not sweet detection\". No sweets offered to the cat, no feeding advice, no claim of total taste loss. All molecular studies explicitly schematic and not to scale. Large graceful typography, short scientifically precise captions, fur-rich hero dominates, diagrams interwoven rather than boxed, luxurious detail and legible negative space.",
+    "image": "images/2026-11-27-factual-infographic-factual-infographic-the-missing-feline-.jpg",
+    "thumb": "thumbs/2026-11-27-factual-infographic-factual-infographic-the-missing-feline-.webp",
+    "color": "#bbb3a9",
+    "date": "2026-11-27",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1086x1448",
+    "dedup": {
+      "conceptKey": "feline-tas1r2-loss-sweet-receptor-pairing",
+      "imageSha256": "808511add83f89a83209a7c3e849f89431fcd3e46229c56c3ec7ef871c7156b1",
+      "imageDHash": "581b23669665e51b"
+    },
+    "factualInfographic": {
+      "topic": "How loss of functional Tas1r2 prevents the feline sweet-taste receptor from forming",
+      "description": "Feline sweet-receptor loss explained through Tas1r2 pseudogenization and retained other taste responses.",
+      "sourceNote": "Sources read: https://journals.plos.org/plosgenetics/article?id=10.1371/journal.pgen.0010003 ; https://www.merckvetmanual.com/cat-owners/introduction-to-cats/physical-description-of-cats",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-27T05:21:06.870793+00:00",
+        "sources": [
+          {
+            "id": "plos",
+            "publisher": "PLOS Genetics",
+            "title": "Pseudogenization of a Sweet-Receptor Gene Accounts for Cats’ Indifference toward Sugar",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://journals.plos.org/plosgenetics/article?id=10.1371/journal.pgen.0010003"
+          },
+          {
+            "id": "merck",
+            "publisher": "Merck Veterinary Manual",
+            "title": "Physical Description of Cats",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://www.merckvetmanual.com/cat-owners/introduction-to-cats/physical-description-of-cats"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Domestic cats show indifference to sugars and lack a functional sweet-taste receptor; this does not mean they lack taste entirely.",
+            "sourceIds": [
+              "plos"
+            ]
+          },
+          {
+            "claim": "The mammalian sweet receptor normally pairs proteins T1R2 and T1R3; depict a conceptual receptor schematic, not a measured molecular structure.",
+            "sourceIds": [
+              "plos"
+            ]
+          },
+          {
+            "claim": "Cat Tas1r2 is an unexpressed pseudogene with a deletion and premature stop codons; no detectable T1R2 protein expression was found in the study.",
+            "sourceIds": [
+              "plos"
+            ]
+          },
+          {
+            "claim": "Cat Tas1r3 is expressed in taste buds and is apparently functional, but the functional T1R2/T1R3 sweet receptor cannot form.",
+            "sourceIds": [
+              "plos"
+            ]
+          },
+          {
+            "claim": "Cats respond to other taste stimuli, including amino acids, salty, sour and bitter stimuli; do not depict total taste loss.",
+            "sourceIds": [
+              "plos"
+            ]
+          },
+          {
+            "claim": "Smell is important for feline taste. A cat tongue has surface papillae; the rough spines assist food handling and grooming. Do not equate the rough spines with the sweet receptor.",
+            "sourceIds": [
+              "merck"
+            ]
+          }
+        ]
+      },
+      "group": "cats"
+    }
   }
 ]

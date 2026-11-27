@@ -19805,5 +19805,49 @@
     ]
    }
   ]
+ },
+ "2026-11-27-factual-infographic-factual-infographic-the-missing-feline-": {
+  "dek": "Domestic cats lack a functional sweet-taste receptor, but they still respond to other tastes. The missing receptor reflects an unexpressed gene rather than a complete loss of taste.",
+  "glance": [
+   [
+    "Sweet receptor",
+    "Cannot form normally"
+   ],
+   [
+    "Affected gene",
+    "Tas1r2, an unexpressed pseudogene"
+   ],
+   [
+    "Other tastes",
+    "Responses remain"
+   ],
+   [
+    "Smell",
+    "Important for feline taste"
+   ]
+  ],
+  "sections": [
+   {
+    "heading": "A receptor needs its partner",
+    "body": [
+     "The mammalian sweet-taste receptor normally pairs the proteins T1R2 and T1R3. In cats, Tas1r3 is expressed in taste buds and is apparently functional. But the functional sweet receptor cannot form without its partner. The receptor diagram is a conceptual schematic, not a measured molecular structure.",
+     "Cat Tas1r2 is an unexpressed pseudogene with a deletion and premature stop codons. The study found no detectable T1R2 protein expression. This provides a molecular explanation for domestic cats’ indifference to sugars."
+    ],
+    "sources": [
+     "plos"
+    ]
+   },
+   {
+    "heading": "Taste is not absent",
+    "body": [
+     "Cats still respond to other taste stimuli, including amino acids, salty, sour and bitter stimuli. The absent functional sweet receptor does not mean that cats lack taste entirely. Smell is also important for feline taste.",
+     "The tongue has surface papillae. Its rough spines assist food handling and grooming, but those spines are not the sweet receptor. The surface texture and the receptor mechanism describe different aspects of the tongue."
+    ],
+    "sources": [
+     "plos",
+     "merck"
+    ]
+   }
+  ]
  }
 }
