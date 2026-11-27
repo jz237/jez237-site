@@ -27948,5 +27948,82 @@
       },
       "group": "cats"
     }
+  },
+  {
+    "id": "2026-11-27-factual-infographic-factual-infographic-preformed-vitamin-a",
+    "title": "Factual infographic: Preformed Vitamin A",
+    "tests": "factual_subtype: cat-infographic; cat_category: food-and-hydration; ; archive_slot=2026-11-27T12:20; concept=feline-preformed-vitamin-a-intestinal-uptake-liver-storage; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto",
+    "prompt": "Create a richly detailed, artwork-led feline nutritional atlas titled \"Preformed Vitamin A\" with subtitle \"A dietary need, not a carrot shortcut\". Render the finished infographic directly, not a photographed page. A luminous cream-and-cinnamon domestic shorthair in three-quarter seated profile occupies the dominant center-right, anatomically credible with exquisite individual fur and alert amber eye. Palette: midnight teal, warm cream, copper and muted coral, fine scientific ink and translucent gouache, refined editorial typography. Organically weave a graceful nutrient pathway through the cat silhouette: small intestine -> lymph transport (chylomicrons) -> liver storage (retinyl esters), with only these organs lightly revealed in a clean selective anatomical overlay, clearly labeled \"Simplified pathway\". Do not invent other exposed anatomy. At upper left a small botanical carrot study labeled \"Plant beta-carotene\" feeds into a delicate dotted, thin arrow labeled \"Very limited conversion to retinol\"; distinguish this from a clear sweeping ribbon labeled \"Dietary preformed vitamin A\" leading toward the intestine. Do NOT draw an absolute blocked conversion or claim cats convert none. A small open typographic note says \"Animal-derived or synthetic sources\" and \"Retinyl acetate is used in pet food\" without implying a homemade feeding recipe. At the hero eye weave a fine leader to a carefully rendered eye detail with label \"Supports vision\"; a small stylized epithelial surface study below says \"Helps maintain epithelial tissues\". These are function labels, not a claim of improved night vision from supplements. Lower left in spacious negative space place the essential readable note \"More is not always better\" and \"With a complete and balanced diet, supplements are usually unnecessary. Veterinary approval is needed.\" Source footer: \"Sources: Animals review; Cornell Feline Health Center\". No dosage, liver feeding recommendation, pills in a cat bowl, deficiency-disease profile, numerical claims, chemical structural formula, brand, grid, detached cards or rigid boxes. Curved hairline annotations, asymmetrical scale, generous breathing room and beautifully controlled light. Accurate purposeful diagrams and readable concise labels, not a sparse poster; prioritize the detailed feline art and the sourced nutrient pathway.",
+    "image": "images/2026-11-27-factual-infographic-factual-infographic-preformed-vitamin-a.jpg",
+    "thumb": "thumbs/2026-11-27-factual-infographic-factual-infographic-preformed-vitamin-a.webp",
+    "color": "#5c5540",
+    "date": "2026-11-27",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1199x1312",
+    "dedup": {
+      "conceptKey": "feline-preformed-vitamin-a-intestinal-uptake-liver-storage",
+      "imageSha256": "2a369f5f4a7fcd4ec38e448a0c9b63fd7c0141f2f212d1e733710341cbc0f5c6",
+      "imageDHash": "5966665612cb4743"
+    },
+    "factualInfographic": {
+      "topic": "Why cats need preformed dietary vitamin A and have very limited beta-carotene conversion",
+      "description": "Feline dietary preformed vitamin A, limited carotene conversion, uptake and storage, and supplement caveats.",
+      "sourceNote": "Sources read: https://pmc.ncbi.nlm.nih.gov/articles/PMC11010875/ ; https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/feeding-your-cat",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-27T17:21:01.832527+00:00",
+        "sources": [
+          {
+            "id": "review",
+            "publisher": "Animals (MDPI)",
+            "title": "Pet Wellness and Vitamin A: A Narrative Overview",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11010875/"
+          },
+          {
+            "id": "cornell",
+            "publisher": "Cornell University College of Veterinary Medicine",
+            "title": "Feeding Your Cat",
+            "sourceType": "university",
+            "url": "https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/feeding-your-cat"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Cats require dietary preformed vitamin A; conversion of plant beta-carotene to retinol is very limited, not necessarily completely absent. Animal-derived or synthetic vitamin A sources meet this nutritional need.",
+            "sourceIds": [
+              "review"
+            ]
+          },
+          {
+            "claim": "Preformed vitamin A is absorbed in the small intestine, transported in chylomicrons through lymph to the liver, and stored there as retinyl esters. The pathway shown is a simplified schematic, not a quantitative map.",
+            "sourceIds": [
+              "review"
+            ]
+          },
+          {
+            "claim": "Vitamin A has roles in vision, epithelial tissue integrity, immune function and reproduction. The chart emphasizes vision and epithelial tissues without suggesting supplements improve normal vision.",
+            "sourceIds": [
+              "review"
+            ]
+          },
+          {
+            "claim": "Cornell advises that vitamin and mineral supplements are usually unnecessary with a complete and balanced diet, can be harmful, and require veterinary approval. More is not always better.",
+            "sourceIds": [
+              "cornell"
+            ]
+          },
+          {
+            "claim": "Synthetic vitamin A, primarily retinyl acetate, is used in pet food formulations. This is a nutrient explanation, not a supplement dose or a homemade diet recipe.",
+            "sourceIds": [
+              "review"
+            ]
+          }
+        ]
+      },
+      "group": "cats"
+    }
   }
 ]

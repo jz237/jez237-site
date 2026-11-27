@@ -19945,5 +19945,56 @@
     ]
    }
   ]
+ },
+ "2026-11-27-factual-infographic-factual-infographic-preformed-vitamin-a": {
+  "dek": "Cats need preformed vitamin A in their diet. They convert plant beta-carotene to retinol only to a very limited extent, so it is not an equivalent nutritional source.",
+  "glance": [
+   [
+    "Dietary need",
+    "Preformed vitamin A"
+   ],
+   [
+    "Plant conversion",
+    "Very limited, not necessarily absent"
+   ],
+   [
+    "Storage",
+    "Retinyl esters in the liver"
+   ],
+   [
+    "Supplement guidance",
+    "Veterinary approval, not routine addition"
+   ]
+  ],
+  "sections": [
+   {
+    "heading": "Preformed vitamin A",
+    "body": [
+     "Cats need dietary preformed vitamin A. Animal-derived or synthetic vitamin A sources meet this need. Their conversion of plant beta-carotene to retinol is very limited, rather than necessarily completely absent. Synthetic vitamin A, primarily retinyl acetate, is used in pet food formulations."
+    ],
+    "sources": [
+     "review"
+    ]
+   },
+   {
+    "heading": "Absorption and storage",
+    "body": [
+     "Preformed vitamin A is absorbed in the small intestine. Chylomicrons carry it through lymph to the liver, where it is stored as retinyl esters. This is a simplified pathway, not a quantitative map. Vitamin A contributes to vision, epithelial tissue integrity, immune function and reproduction. These roles do not mean that supplements improve normal vision."
+    ],
+    "sources": [
+     "review"
+    ]
+   },
+   {
+    "heading": "More is not always better",
+    "body": [
+     "Cornell advises that vitamin and mineral supplements are usually unnecessary with a complete and balanced diet. They can be harmful and require veterinary approval. The nutrient pathway is an explanation of dietary needs, not a supplement dose or a recipe for a homemade diet."
+    ],
+    "sources": [
+     "cornell",
+     "review"
+    ]
+   }
+  ]
  }
 }
