@@ -176,6 +176,8 @@ export function rankForFeature(feature, input) {
   const fish = fishTypeFor(input.water, input.fishType);
   return CONDITIONS.filter(c => inScope(c, input.water))
     .map(c => {
+      // An entry can be limited to certain fish types (pregnancy: livebearers only).
+      if (c.onlyFish && !c.onlyFish.includes(fish?.id)) return null;
       const base = weightOf(c, feature, input.water);
       if (base <= 0) return null;
       const behaviorScore = behaviors.reduce((sum, id) => sum + (weightsFor(c, input.water)[id] || 0), 0);
@@ -251,7 +253,7 @@ function reasonFor(condition, input, fits) {
 }
 
 // "Nothing obvious" leads to the water as the first check. Its usual wording is about fast breathing
-// and red gills, which the person did not report (Jez, Nov 6 19:13 screenshot), so say why instead.
+// and red gills, which the person did not report (seen in a test on Nov 6 2026), so say why instead.
 // Gasping or red gills keep the usual breathing wording, which then fits.
 const GILL_SIGNS = ['red-gills', 'gasping'];
 function quietWater(condition, input, fits) {
@@ -327,7 +329,7 @@ export function assessDiagnosis(input) {
   const assessment = assessUrgency(input);
   // Care-form alarms count too, including after a look-alike swap. Never put
   // "it may be normal" beside toxic readings or several affected fish.
-  if (assessment.urgent.length || input.affected === 'several') natural = '';
+  if (assessment.urgent.length || input.affected === 'several') { natural = ''; alternatives = alternatives.filter(c => c.id !== 'pregnant'); }
   const contextConcerns = [];
   if (assessment.checks.length && !findings.some(c => c.id === 'water')) {
     contextConcerns.push({ ...CONDITIONS.find(c => c.id === 'water'), reason: assessment.checks.join(' ') });
@@ -376,7 +378,7 @@ const LOOKALIKES = {
   hlle: [['uronema', 'Look for fresh, red, growing sores instead of pale pits.'], ['brooklynella', 'Look for peeling slime instead of pits.']],
   'hole-in-head': [['columnaris', 'Look for flat pale patches instead of pits.']],
   dropsy: [['bloat', 'Look from above: scales lying flat = bloat.']],
-  bloat: [['dropsy', 'Look from above: scales sticking out like a pinecone = dropsy.'], ['swim-bladder', 'Watch it swim: floating or tilting = swim bladder.'], ['normal', 'Watch it: a full or pregnant fish acts normally.']],
+  bloat: [['dropsy', 'Look from above: scales sticking out like a pinecone = dropsy.'], ['swim-bladder', 'Watch it swim: floating or tilting = swim bladder.'], ['pregnant', 'Look for a female, eating normally, with a dark vent spot.'], ['normal', 'Watch it: a full or pregnant fish acts normally.']],
   popeye: [['injury', 'Check both eyes: only one, after a bump = injury.'], ['cloudy-eye', 'Look for a milky film without bulging.']],
   'cloudy-eye': [['popeye', 'Look from above: a bulging eye = popeye.'], ['injury', 'Check both eyes: only one, after a bump = injury.']],
   'swim-bladder': [['water', 'Check tankmates: several struggling points to the water.'], ['bloat', 'Look for a swollen belly with flat scales = bloat.']],
@@ -414,6 +416,7 @@ export const LOOK_FOR = {
   'black-spot': 'Look for black pepper specks, mostly on tangs.',
   hlle: 'Look for pale pits on the head or side line.',
   'hole-in-head': 'Look for small pits or holes on the head.',
+  pregnant: 'Look for a female, eating normally, with a dark vent spot.',
   normal: 'Check old photos: natural markings never change.',
 };
 
@@ -430,6 +433,7 @@ export const TREATMENT_FAMILY = {
   'hole-in-head': 'metronidazole',
   bloat: 'diet', 'swim-bladder': 'diet',
   lymphocystis: 'supportive', growth: 'supportive', hlle: 'supportive', injury: 'supportive',
+  pregnant: 'none',
   normal: 'none',
 };
 
@@ -452,8 +456,8 @@ const MAX_ALTERNATIVES = 3;
 const ALARMS = ['deaths', 'gasping', 'collapse', 'several'];
 const LIVEBEARERS = ['guppy', 'molly', ''];
 
-// "Why it could be this" for a look-alike (Jez, Nov 6 2026: "brief explanations of why it could
-// also be that. Same as the why we think so"): which of your answers it also fits.
+// "Why it could be this" for a look-alike (Nov 6 2026: a brief explanation of why it could
+// also be that, like the "why we think so"): which of your answers it also fits.
 function alsoReason(condition, finding, input) {
   const signs = (finding?.fits || []).filter(f => weightOf(condition, f, input.water) > 0).map(f => labelFor(f, input));
   const behaviors = (input.signs || []).filter(id => BEHAVIORS.some(b => b.id === id) && weightOf(condition, id, input.water) > 0).map(id => labelFor(id, input).toLowerCase());
@@ -472,12 +476,17 @@ function couldAlsoBe(findings, ranked, input, pinned = null) {
   const taken = new Set(findings.map(c => c.id));
   const out = new Map();
   let natural = '';
+  // The current fish id: an old one from a link or a saved answer ("livebearer") counts as its new group ("guppy").
+  const fishId = input.fishType ? fishTypeFor(input.water, input.fishType)?.id || input.fishType : '';
   const add = (condition, reason, from) => {
     if (!condition || taken.has(condition.id) || out.has(condition.id) || !inScope(condition, input.water)) return;
+    // Pregnancy is offered only for livebearers, and, like "it may be normal", never next to deaths, gasping,
+    // collapse, several sick fish, raised scales or eating less.
+    if (condition.id === 'pregnant' && (!condition.onlyFish.includes(fishId) || [...ALARMS, 'pinecone', 'appetite'].some(id => (input.signs || []).includes(id)) || input.closer === 'pinecone')) return;
     if (condition.id === 'normal') {
       // No "it may be normal" line next to deaths, gasping, collapse or several sick fish, or possible Malawi bloat.
       if (ALARMS.some(id => (input.signs || []).includes(id)) || findings.some(f => f.id === 'bloat' && input.fishType === 'african')) return;
-      natural ||= from === 'bloat' ? (input.water === 'fresh' && (!input.fishType || LIVEBEARERS.includes(input.fishType)) ? ALTERNATIVE_TEXT.naturalBelly : ALTERNATIVE_TEXT.naturalFull) : ALTERNATIVE_TEXT.natural;
+      natural ||= from === 'bloat' ? (input.water === 'fresh' && LIVEBEARERS.includes(fishId) && !out.has('pregnant') ? ALTERNATIVE_TEXT.naturalBelly : ALTERNATIVE_TEXT.naturalFull) : ALTERNATIVE_TEXT.natural;
       return;
     }
     const catfishReason = CATFISH.includes(input.fishType) && /scales/i.test(reason || LOOK_FOR[condition.id] || '') ? CATFISH_REASONS[condition.id] : '';

@@ -121,12 +121,12 @@ export const FISH_SETS = {
   // the rest are new cells. Old ids map to the first sub-group (LEGACY_FISH_IDS).
   // Guppies: a pregnant female is shown beside bloat because the two look alike.
   guppy: freshSet('guppy', {
-    extra: { bloat: ['swollen', 'pregnant'] }, skip: ['hole-in-head'],
+    extra: { bloat: ['swollen', 'pregnant'], pregnant: ['pregnant'] }, skip: ['hole-in-head'],
     reuse: from('livebearer', ['fuzz', 'fins', 'lumps', 'balance', 'unclear', 'septicemia', 'pregnant', 'normal']),
   }),
   // Mollies and platies: the "shimmies" (the listless picture) is usually the water.
   molly: freshSet('molly', {
-    extra: { bloat: ['swollen', 'pregnant'], water: ['breathing', 'red-gills', 'unclear'] }, skip: ['hole-in-head'],
+    extra: { bloat: ['swollen', 'pregnant'], pregnant: ['pregnant'], water: ['breathing', 'red-gills', 'unclear'] }, skip: ['hole-in-head'],
     reuse: from('livebearer', ['dots', 'dust', 'patch', 'sores', 'swollen', 'eyes', 'breathing', 'dropsy', 'cloudy-eye', 'growth', 'flukes', 'injury', 'red-gills', 'cotton-mouth', 'sinking', 'slime']),
   }),
   // Barbs and danios: a second ich picture shows dots across a school.
@@ -205,8 +205,8 @@ const genericCondition = (id, water) => {
 };
 
 // What a picture shows, read from its written description (alt text). A result leads with
-// the picture of the answer that led to it (Jez, Nov 6 2026 19:21: "check all the combinations
-// so that this type of mismatch does not occur"). File names are not reliable for this: a
+// the picture of the answer that led to it (Nov 6 2026: every combination is checked
+// so that this kind of mismatch does not occur). File names are not reliable for this: a
 // saltwater "-eyes" crop is a cloudy eye, a freshwater one a bulging eye (Astra, 19:50).
 const WHITE = [/white (salt-?)?(grains?|dots?|spots?)|salt-like|salt-grain|sprinkled with salt/i, /black (pepper|speck)|dust/i];
 const BALANCE = [/tilt|float|sink|upside|headstand|head-?down|on its back|drifting/i];

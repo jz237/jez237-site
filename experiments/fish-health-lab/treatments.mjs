@@ -242,6 +242,11 @@ const PLANS = {
     treatment: 'Metronidazole + water changes and a better diet',
     recovery: 'Weeks to months.', medicated: true,
   },
+  pregnant: {
+    steps: ['Check it is a female: a fan-shaped fin under the belly, not a narrow rod.', 'Keep feeding as usual and keep the water clean—no medicine and no fasting.', 'Look from above each day. Scales sticking out, not eating, or floating and tilting mean it is something else: run the check again.', 'Give her plants or other cover; the young are born free-swimming and hide in it.'],
+    treatment: 'None needed',
+    recovery: 'Nothing to recover from.',
+  },
   normal: {
     steps: ['Compare with older photos of this fish or others of the same kind.', 'Watch for a week—normal markings don’t change or spread.', 'Keep testing the water as usual.'],
     treatment: 'None needed',

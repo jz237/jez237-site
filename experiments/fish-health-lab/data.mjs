@@ -464,6 +464,20 @@ export const CONDITIONS = [
     avoid: 'Don’t ignore it—the pits can get deeper.', source: ['parasites'],
     tips: { angelfish: 'Discus and angelfish get HITH—clean water and a varied diet help.', african: 'Oscars get HITH most often—big water changes and a varied diet help.' },
   },
+  // Nov 26 2026: pregnancy as a possibility for swollen livebearers.
+  // Shown only for the livebearer fish types (onlyFish); never a diagnosis of illness, and never beside alarm signs.
+  {
+    id: 'pregnant', title: 'Pregnant (carrying fry)', scope: 'fresh', kind: 'Not an illness', art: 'swollen', urgency: 'watch',
+    onlyFish: ['guppy', 'molly'],
+    summary: 'Female guppies, mollies, platies and swordtails give birth to live young, and a pregnant one looks swollen. It is normal and needs no medicine.',
+    hint: 'A rounded female that eats and swims normally.',
+    weights: { swollen: 3, 'swollen:flat': 4, 'swollen:pinecone': 0 },
+    clues: ['A female whose belly has filled out gradually, with the scales lying flat.', 'Often a dark “gravid spot” near the vent—hard to see on dark fish such as black mollies.', 'She eats and swims normally.'],
+    distinguish: 'Only females get pregnant: a male has a narrow, rod-shaped fin under the belly, a female a fan-shaped one. Scales sticking out like a pinecone mean dropsy, not pregnancy. A swollen fish that stops eating, hides, floats or tilts, or passes stringy poop is more likely bloat.',
+    check: 'A swollen female livebearer that eats and acts normally may simply be pregnant.',
+    avoid: 'Don’t medicate or fast a fish only because she is pregnant.', source: ['management', 'bassleer-swelling'],
+    tips: { guppy: 'Thin red threads poking out of the vent are Camallanus worms, not pregnancy, and need a dewormer.' },
+  },
   {
     id: 'normal', title: 'Normal markings or anatomy', scope: 'both', kind: 'Look-alike', art: 'plain', urgency: 'watch',
     summary: 'Some “spots” and bumps are perfectly normal for the species. Compare with older photos.',
