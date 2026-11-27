@@ -364,6 +364,34 @@
   "discordMessageId": "1574568068401856543"
  },
  {
+  "id": "2026-11-23-creature-mutations-h3-cinderquill-gecko-close-up",
+  "title": "Cinderquill Gecko, up close",
+  "description": "A native 4096 × 4096 close-up of the Cinderquill Gecko, rendered on Spark with H3 Image Full (BF16).",
+  "prompt": "Reference-guided high-resolution close-up of the original Cinderquill Gecko image (Jez: \"Do the same with this one. High resolution\"). The exact H3 prompt text was not recorded.",
+  "image": "images/creature-mutations/2026-11-23-cinderquill-gecko-up-close-05039c91.jpg",
+  "thumb": "images/creature-mutations/thumbs/2026-11-23-cinderquill-gecko-up-close-05039c91.jpg",
+  "date": "2026-11-23",
+  "slot": "2026-11-23T18:13",
+  "size": "4096x4096",
+  "model": "local/h3-image-full-bf16",
+  "source": "Discord #creatures",
+  "discordMessageId": "1574488170345537681"
+ },
+ {
+  "id": "2026-11-23-creature-mutations-h3-thornwatch-tarsier-close-up",
+  "title": "Thornwatch Tarsier, up close",
+  "description": "A face-only close-up of the Thornwatch Tarsier, rendered on Spark with H3 Image Full (BF16).",
+  "prompt": "Reference-guided face-only close-up of the original Thornwatch Tarsier image (Jez: \"Use h3 image high quality and zoom in on just its face\"). The exact H3 prompt text was not recorded.",
+  "image": "images/creature-mutations/2026-11-23-thornwatch-tarsier-up-close-11631023.jpg",
+  "thumb": "images/creature-mutations/thumbs/2026-11-23-thornwatch-tarsier-up-close-11631023.jpg",
+  "date": "2026-11-23",
+  "slot": "2026-11-23T17:37",
+  "size": "2048x2048",
+  "model": "local/h3-image-full-bf16",
+  "source": "Discord #creatures",
+  "discordMessageId": "1574479053489180933"
+ },
+ {
   "id": "2026-11-23-creature-mutations-pelagic-hammerhead-comb-jelly",
   "title": "Prismjaw Hammerhead",
   "description": "A translucent abyssal hunter bends living rainbow combs through the open ocean's blue twilight.",
@@ -558,6 +586,34 @@
   "model": "openai/gpt-image-2.6-sunburst",
   "source": "Discord #creatures",
   "discordMessageId": "1573982324998021120"
+ },
+ {
+  "id": "2026-11-21-creature-mutations-spark-salamander-hornet",
+  "title": "Salamander / Hornet Mutation",
+  "description": "Spark 1 creature study — salamander / hornet mutation in a rain-soaked forest ravine.",
+  "prompt": "Photorealistic documentary nature photograph of a scary, gory, anatomically coherent creature mutation: a giant salamander base fused with a hornet donor, a single evolutionary body plan, not two bodies glued together. Convergent evolution and homology: homologous structures, analogous traits, evolutionary fusion, shared lineage. Tissue integration: seamless tissue integration, epidermal continuity, subcutaneous chitin, vascularized exoskeleton, interwoven muscle and shell, skin becoming shell and shell growing from skin. Biomechanical logic: load-bearing architecture, jointed biomechanics, articulated segments, tendon visibility, muscular hypertrophy adapted for explosive leaps through undergrowth. Physiological realism: moist mucous membranes, bioluminescent capillaries, keratinized scales, gill slits, tracheal tubes, asymmetrical growth, scarring from molting, wet living texture, exposed raw tissue and dark blood beneath split chitin plates. Environmental context: ecological niche, camouflage adaptation, biological weathering, natural debris, in a rain-soaked forest ravine with interacting storm light, slick bark and leaf litter. Photorealistic documentary / nature photograph, scary, gory, highly realistic, vary the lens and lighting. No on-screen text, no watermark.",
+  "image": "images/creature-mutations/2026-11-21-salamander-hornet-mutation-f29d6de3.jpg",
+  "thumb": "images/creature-mutations/thumbs/2026-11-21-salamander-hornet-mutation-f29d6de3.jpg",
+  "date": "2026-11-21",
+  "slot": "2026-11-21T17:29",
+  "size": "1024x688",
+  "model": "local/moss-image-sft",
+  "source": "Discord #creatures",
+  "discordMessageId": "1573827707555283175"
+ },
+ {
+  "id": "2026-11-21-creature-mutations-spark-centipede-lamprey",
+  "title": "Centipede / Lamprey Mutation",
+  "description": "Spark 1 creature study — centipede / lamprey mutation in a flooded root cellar.",
+  "prompt": "Photorealistic documentary nature photograph of a scary, gory, anatomically coherent creature mutation: a giant centipede base fused with a lamprey donor, a single evolutionary body plan, not two bodies glued together. Convergent evolution and homology: homologous structures, analogous traits, evolutionary fusion, shared lineage. Tissue integration: seamless tissue integration, epidermal continuity, subcutaneous chitin, vascularized exoskeleton, interwoven muscle and shell, skin becoming shell and shell growing from skin. Biomechanical logic: load-bearing architecture, jointed biomechanics, articulated segments, tendon visibility, muscular hypertrophy adapted for rapid burrowing. Physiological realism: moist mucous membranes, bioluminescent capillaries, keratinized scales, gill slits, tracheal tubes, asymmetrical growth, scarring from molting, wet living texture, torn flesh and dark blood at the natural seams of a recent molt. Environmental context: ecological niche, camouflage adaptation, biological weathering, natural debris, in a flooded root cellar with interacting cold lantern light and wet soil texture. Photorealistic documentary / nature photograph, scary, gory, highly realistic, vary the lens and lighting. No on-screen text, no watermark.",
+  "image": "images/creature-mutations/2026-11-21-centipede-lamprey-mutation-41b6592d.jpg",
+  "thumb": "images/creature-mutations/thumbs/2026-11-21-centipede-lamprey-mutation-41b6592d.jpg",
+  "date": "2026-11-21",
+  "slot": "2026-11-21T17:29",
+  "size": "1024x688",
+  "model": "local/moss-image-sft",
+  "source": "Discord #creatures",
+  "discordMessageId": "1573827703323361281"
  },
  {
   "id": "2026-11-21-creature-mutations-horror-sample-mycelium",
