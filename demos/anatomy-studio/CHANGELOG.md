@@ -2,6 +2,14 @@
 
 Newest first. The README says what the studio does now; this says how it got there.
 
+## 2026-11-27: faster loading, less work per frame
+
+- **Models about half the size** (90 MB → 47 MB in all; the opening view 16.0 MB → 9.0 MB): normals stored with meshopt's octahedral filter at the same 10-bit precision, then gzipped (`scripts/anatomy-studio/pack.mjs`), because Cloudflare does not compress glTF. The studio unzips them with the browser's DecompressionStream.
+- **Everything requested at once**: `index.html` lists every module, the manifest and the opening view's models (written by `stamp.mjs`), so they no longer wait on each other. On an emulated 30 Mbit/s, 60 ms connection the studio is usable after about 3.9 s instead of 6.5 s.
+- **Ambient occlusion reuses the main pass's depth** instead of drawing every piece a second time: draw calls per frame at default quality drop from about 4,960 to 2,730. `?ao=own` restores the old pass for comparison.
+- **Shadows drawn once per frame**, and with the floor reflection only every other frame while just the breathing and heartbeat move.
+- **Nothing is drawn while the 3D view is scrolled out of sight**, and models are decoded in worker threads.
+
 ## 2026-11-24, round 9: the whole circulation, more lessons, measuring, notes, offline
 
 - **Blood flow** runs out to the legs, arms and head and back through the veins, and speeds up with the heart.

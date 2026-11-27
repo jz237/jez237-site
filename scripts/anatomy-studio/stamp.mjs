@@ -64,12 +64,46 @@ function stamp(name, trail = []) {
 }
 for (const name of modules) stamp(name);
 
-// ---- 3. pages
+// ---- 3. what index.html asks for up front
+// Without hints the browser finds the modules one level of imports at a time (about five round trips), and only then
+// asks for manifest.json and, after that, the models. Listing every module, the manifest and the opening view's model
+// files in the page lets all of it start at once. The URLs must match what the code requests exactly, ?v= included.
+const finalText = name => (check ? text.get(name) : read(name));
+function moduleGraph() {
+  const seen = new Set(), order = [], FROM = /(?:\bfrom\s*|\bimport\s*)['"]([^'"]+)['"]/g;
+  const visit = file => {
+    if (seen.has(file)) return; seen.add(file);
+    const source = path.dirname(file) === '.' && text.has(file) ? finalText(file) : readFileSync(path.join(DEMO, file), 'utf8');
+    for (const [, spec] of source.matchAll(FROM)) {
+      const bare = spec.split('?')[0];
+      const target = bare === 'three' ? 'vendor/three.module.min.js' : bare.startsWith('.') ? path.posix.normalize(path.posix.join(path.posix.dirname(file), bare)) : null;
+      if (target && /\.js$/.test(target)) visit(target);
+    }
+    order.push(file);
+  };
+  visit('studio.js');
+  return order.reverse();
+}
+const url = file => (path.posix.dirname(file) === '.' && versions.has(file) ? `${file}?v=${versions.get(file)}` : file);
+const coreModels = manifest.stages.core.map(id => manifest.files.find(f => f.id === id)).map(f => `${f.path}?v=${f.v}`);
+const hints = ['<!-- preload: written by scripts/anatomy-studio/stamp.mjs -->',
+  ...moduleGraph().map(f => `<link rel="modulepreload" href="${url(f)}">`),
+  `<link rel="preload" as="fetch" crossorigin href="manifest.json?v=${versions.get('manifest.json')}">`,
+  ...coreModels.map(u => `<link rel="preload" as="fetch" crossorigin href="${u}">`),
+  '<!-- /preload -->'].join('');
+const HINTS = /<!-- preload: written by scripts\/anatomy-studio\/stamp\.mjs -->.*?<!-- \/preload -->/s;
+
+// ---- 4. pages
 for (const name of readdirSync(DEMO).filter(n => n.endsWith('.css'))) versions.set(name, hash(read(name)));
 const ASSET = /((?:href|src)=")([\w-]+\.(?:css|js))(?:\?v=[\w-]+)?(")/g;
 for (const page of ['index.html', 'manual.html']) {
   const before = read(page);
-  save(page, before, before.replace(ASSET, (all, head, file, tail) => (versions.has(file) ? `${head}${file}?v=${versions.get(file)}${tail}` : all)));
+  let after = before.replace(ASSET, (all, head, file, tail) => (versions.has(file) ? `${head}${file}?v=${versions.get(file)}${tail}` : all));
+  if (page === 'index.html') {
+    if (!HINTS.test(after)) after = after.replace(/(<script type="importmap">.*?<\/script>)/, `$1\n${'<!-- preload: written by scripts/anatomy-studio/stamp.mjs --><!-- /preload -->'}`);   // after the import map, which must come first
+    after = after.replace(HINTS, () => hints);
+  }
+  save(page, before, after);
 }
 
 if (check) {

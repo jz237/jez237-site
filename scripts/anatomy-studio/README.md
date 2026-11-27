@@ -9,8 +9,9 @@ blender -b --factory-startup -P blender-inspect.py -- --fbx <SkeletalSystem100.f
 python3 make-normalize.py            # work/normalize.json from skeletal landmarks (feet on y=0, trunk axis at origin)
 bash run-exports.sh                  # eight headless Blender exports in parallel -> work/raw/*.glb (+ anchors, reports)
 node prepare.mjs                     # compress to ../../demos/anatomy-studio/assets/*.glb, write manifest.json + descriptions.json
+node pack.mjs                        # octahedral normals + gzip: assets/*.glb -> assets/*.glb.gz (what the studio loads), about half the bytes
 node check-assemblies.mjs            # prove the four nested assemblies resolve against real piece names
-node stamp.mjs                       # content-hash every ?v= (imports, CSS, JSON, models); run after prepare.mjs and after any edit to the demo
+node stamp.mjs                       # content-hash every ?v= (imports, CSS, JSON, models) and write index.html's preload hints; run after pack.mjs and after any edit to the demo
 node stamp.mjs --check               # exit 1 if any stamp is stale (also run by .github/workflows/anatomy-studio-stamps.yml)
 # the verify files also run in CI, side by side: .github/workflows/anatomy-studio-verify.yml (reports; it does not gate publishing)
 node compare-shots.mjs               # compare the pictures verify.mjs just saved with reference/*.jpg; --update replaces the references

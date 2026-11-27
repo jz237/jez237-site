@@ -61,8 +61,21 @@ const tintQueue = [];
 const LAG = { regions:0, muscular:.05, lymphoid:.1, vessels:.12, nerves:.14, joints:.2, visceral:.2, heart:.24, brain:.24, skeletal:.3 }, LAG_SPAN = .7;
 const invalidate = (frames = 3) => { if (frames > renderFrames) renderFrames = frames; };
 // Declared up here because the module awaits loadStudio() below: anything it needs must exist before that line runs.
-let attachQueue = Promise.resolve();
+let attachQueue = Promise.resolve(), settleSkip = false, occlusionDepth = null, onScreen = true;
 const assetURL = entry => `./${entry.path}?v=${entry.v || 2}`;
+/**
+ * A model file as an ArrayBuffer, with progress in bytes received. The files are gzipped (scripts/anatomy-studio/pack.mjs:
+ * Cloudflare does not compress glTF on the way out), so they are unzipped here with the browser's own DecompressionStream.
+ * A file that arrives already unzipped (a server that sends it with Content-Encoding: gzip) is used as it is.
+ */
+async function fetchModel(url, onProgress){
+ const response = await fetch(url); if (!response.ok) throw new Error(`${url}: HTTP ${response.status}`);
+ const total = Number(response.headers.get('content-length')) || 0, reader = response.body.getReader(), chunks = []; let loaded = 0;
+ for (;;) { const { done, value } = await reader.read(); if (done) break; chunks.push(value); loaded += value.length; onProgress?.({ loaded, total }); }
+ const data = new Blob(chunks), head = new Uint8Array(await data.slice(0, 2).arrayBuffer());
+ return head[0] === 0x1f && head[1] === 0x8b ? new Response(data.stream().pipeThrough(new DecompressionStream('gzip'))).arrayBuffer() : data.arrayBuffer();
+}
+const loadModel = async (loader, url, onProgress) => loader.parseAsync(await fetchModel(url, onProgress), './');
 const baseTarget = new THREE.Vector3(0, .9, 0);
 const views = { hero:[1.76, 1.57, 2.44], front:[0, .95, 3.8], side:[3.8, .95, 0], back:[0, .95, -3.8], top:[.01, 4.4, .01] };
 const stageOrder = ['core', 'muscles', 'detail'];
@@ -88,16 +101,24 @@ function init(){
  renderer = new THREE.WebGLRenderer({ antialias:!verifyQuality, alpha:true, stencil:true, powerPreference:'high-performance' });   // stencil: capped cross-sections
  renderer.setPixelRatio(verifyQuality ? 1 : Math.min(devicePixelRatio, 1.7)); renderer.setClearColor('#090e14', 0);
  renderer.shadowMap.enabled = !verifyQuality && !mobile; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+ renderer.shadowMap.autoUpdate = false;   // redrawn by tick() once per frame: left automatic, every pass that draws the scene (occlusion, the floor reflection) would redraw it too
  renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.05;
  host.appendChild(renderer.domElement); renderer.localClippingEnabled = true;   // the cross-section plane clips per material
  camera = new THREE.PerspectiveCamera(36, 1, .03, 120); camera.position.fromArray(views.hero);
  // Ground-truth ambient occlusion (GTAO) so pieces shade each other; off for phones and headless verification.
- const rt = new THREE.WebGLRenderTarget(1, 1, { type:THREE.HalfFloatType, stencilBuffer:true, samples:(verifyQuality || params.get('msaa') === '0') ? 0 : 4 });   // multisampled so occlusion does not cost anti-aliasing
+ // The occlusion reads the depth the main pass has just drawn (sharedDepth) instead of drawing every piece a second time for
+ // depth and normals: that second pass was half of each frame's draw calls. Normals are worked out from the depth. ?ao=own goes back.
+ const sharedDepth = params.get('ao') !== 'own', depth = () => Object.assign(new THREE.DepthTexture(1, 1), { format:THREE.DepthStencilFormat, type:THREE.UnsignedInt248Type });
+ const rt = new THREE.WebGLRenderTarget(1, 1, { type:THREE.HalfFloatType, stencilBuffer:true, samples:(verifyQuality || params.get('msaa') === '0') ? 0 : 4, depthTexture:sharedDepth ? depth() : null });   // multisampled so occlusion does not cost anti-aliasing
  composer = new EffectComposer(renderer, rt); renderPass = new RenderPass(scene, camera); composer.addPass(renderPass);
  gtaoPass = new GTAOPass(scene, camera, 1, 1, undefined, { radius:.14, distanceExponent:1.1, thickness:1, scale:1.6, samples:14, distanceFallOff:1, screenSpaceRadius:false }, { lumaPhi:8, depthPhi:2.5, normalPhi:3.5, radius:4, radiusExponent:1, rings:2, samples:14 });
- gtaoPass.output = GTAOPass.OUTPUT.Default; gtaoPass.blendIntensity = 1; composer.addPass(gtaoPass); enliven(gtaoPass.normalMaterial);   // occlusion is worked out from the body as it is posed, not as it was built
- // The occlusion pass draws the whole scene with one material, so the cap quads (which rely on a stencil test) are hidden for it.
- const drawOcclusion = gtaoPass.render.bind(gtaoPass); gtaoPass.render = (...args) => { section.showCaps(false); drawOcclusion(...args); section.showCaps(true); };
+ gtaoPass.output = GTAOPass.OUTPUT.Default; gtaoPass.blendIntensity = 1; composer.addPass(gtaoPass);
+ if (sharedDepth) { composer.renderTarget2.depthTexture ??= depth(); gtaoPass.setGBuffer(composer.readBuffer.depthTexture); occlusionDepth = () => { const d = composer.readBuffer.depthTexture; gtaoPass.gtaoMaterial.uniforms.tDepth.value = d; gtaoPass.pdMaterial.uniforms.tDepth.value = d; }; }   // the composer swaps its two targets: follow whichever the scene is drawn into
+ else {
+  enliven(gtaoPass.normalMaterial);   // occlusion is worked out from the body as it is posed, not as it was built
+  // The occlusion pass draws the whole scene with one material, so the cap quads (which rely on a stencil test) are hidden for it.
+  const drawOcclusion = gtaoPass.render.bind(gtaoPass); gtaoPass.render = (...args) => { section.showCaps(false); drawOcclusion(...args); section.showCaps(true); };
+ }
  bokehPass = new BokehPass(scene, camera, { focus:1, aperture:.03, maxblur:.006 }); bokehPass.enabled = false; composer.addPass(bokehPass);   // depth of field, only while a piece of a study is in focus
  bloomPass = new UnrealBloomPass(new THREE.Vector2(256, 256), .16, .5, 2.6); composer.addPass(bloomPass);   // a light glow on true highlights only: the threshold sits well above brightly lit bone
  composer.addPass(new OutputPass());
@@ -125,6 +146,9 @@ function init(){
  bodyCamera = camera; bodyControls = controls; studioFog = scene.fog; studioObjects = scene.children.filter(o => o.isMesh || o.isLineSegments);
  mirror = createFloorReflection(); mirror.visible = false; scene.add(mirror); outline = createOutline();
  const resize = () => { const w = host.clientWidth, h = host.clientHeight; renderer.setSize(w, h); composer.setSize(w, h); invalidate(4); bodyCamera.aspect = w / h; bodyCamera.updateProjectionMatrix(); if (state.ready) { if (state.board) reflowBoard(true); else setView(state.view, true); } }; resizeStage = resize; new ResizeObserver(resize).observe(host); resize();
+ // Scrolled out of sight (a phone reading the inspector below the stage, an embed further down a page): stop drawing altogether.
+ new IntersectionObserver(([e]) => { onScreen = e.isIntersecting; if (onScreen) invalidate(4); }).observe(host);
+ MeshoptDecoder.useWorkers(Math.min(4, Math.max(1, (navigator.hardwareConcurrency || 2) - 1)));   // models are unpacked off the main thread, so the page stays responsive while they arrive
  // A lost graphics context usually comes back (driver reset, laptop waking, too many tabs): wait for it before giving up.
  renderer.domElement.addEventListener('webglcontextlost', e => { e.preventDefault(); $('scene-status').textContent = 'GRAPHICS PAUSED · RESTORING'; clearTimeout(lostTimer); lostTimer = setTimeout(() => fail(new Error('WebGL context lost')), 8000); });
  renderer.domElement.addEventListener('webglcontextrestored', () => { clearTimeout(lostTimer); $('error').hidden = true; scene.environment = studioEnvironment(renderer); updateUI(); invalidate(30); });
@@ -145,7 +169,7 @@ function init(){
 }
 
 async function loadStudio(){
- manifest = await (await fetch('./manifest.json?v=7194a4b870')).json();
+ manifest = await (await fetch('./manifest.json?v=d01265d206')).json();
  $('piece-total').textContent = manifest.stats.pieces.toLocaleString(); life.setup(manifest); pieceById = new Map(manifest.pieces.map(p => [p.id, p])); pieceOrder = new Map(manifest.pieces.map((p, i) => [p.id, i]));
  model = new THREE.Group(); model.name = 'Human body'; scene.add(model);
  const select = $('system'); select.replaceChildren(new Option('Complete body', 'all'), ...manifest.files.map(f => new Option(fileLabels[f.id] || f.id, f.id)));
@@ -187,7 +211,7 @@ async function loadFiles(ids){
  const wanted = manifest.files.filter(f => ids.includes(f.id) && !f.loaded), fresh = wanted.filter(f => !f.loadingPromise), received = new Map();
  const report = () => { const total = fresh.reduce((n, f) => n + f.bytes, 0), done = fresh.reduce((n, f) => n + Math.min(received.get(f.id) || 0, f.bytes), 0), pct = Math.round(done / total * 100), what = fresh.length > 2 ? `${fresh.length} systems` : fresh.map(f => fileLabels[f.id].toLowerCase()).join(' and '); $('load-progress').textContent = `Loading ${what} · ${pct}%`; $('stage-status').textContent = `LOADING ${what.toUpperCase()} · ${pct}%`; };
  for (const f of fresh) {
-  const download = loader.loadAsync(assetURL(f), progress => { received.set(f.id, progress.loaded); report(); }); download.catch(() => {});
+  const download = loadModel(loader, assetURL(f), progress => { received.set(f.id, progress.loaded); report(); }); download.catch(() => {});
   const previous = attachQueue;
   f.loadingPromise = (async () => {
    await previous; const gltf = await download;
@@ -471,7 +495,7 @@ async function loadHi(fileId){
  hi.loading.add(fileId); $('stage-status').hidden = false; console.info('detail tier: loading', fileId);
  try {
   const loader = new GLTFLoader().setMeshoptDecoder(MeshoptDecoder);
-  const gltf = await loader.loadAsync(assetURL(f.hi), progress => { if (progress.total) $('stage-status').textContent = `DETAIL · ${fileLabels[fileId].toUpperCase()} · ${Math.round(progress.loaded / progress.total * 100)}%`; });
+  const gltf = await loadModel(loader, assetURL(f.hi), progress => { if (progress.total) $('stage-status').textContent = `DETAIL · ${fileLabels[fileId].toUpperCase()} · ${Math.round(progress.loaded / progress.total * 100)}%`; });
   gltf.scene.updateMatrixWorld(true);
   gltf.scene.traverse(o => { if (!o.isMesh) return; const id = o.userData.id || o.parent?.userData.id; const part = partsById.get(id); if (!part) return;
    const g = o.geometry; o.updateWorldMatrix(true, false); const m = o.matrixWorld.clone();
@@ -661,6 +685,7 @@ function startBodyTour(){
 
 function tick(now){
  const dt = Math.min(Math.max(now - last, 0) / 1000, .05); last = now;
+ if (!onScreen && !dryRun) { quality.last = 0; return; }   // out of sight: nothing moves and nothing is drawn until it is back
  if (state.sequence) { state.sequenceTime += dt; const t = state.sequenceTime; const v = t < 1 ? 0 : t < 6 ? (t - 1) / 5 : t < 9 ? 1 : t < 14 ? 1 - (t - 9) / 5 : 0; state.target = v; updateUI(); if (t >= 15) stopSequence();
   if (!state.assembly) { const target = baseTarget.clone().add(new THREE.Vector3(0, v * .12, v * .25)); const direction = camera.position.clone().sub(controls.target).normalize(); const distance = new THREE.Vector3().fromArray(views[state.view]).sub(baseTarget).length() * (1 + v * 1.05) * Math.max(1, Math.sqrt(1.4 / camera.aspect)); controls.target.lerp(target, .05); camera.position.lerp(target.addScaledVector(direction, distance), .05); } }
  if (explodeTween) { const t = Math.min(1, (now - explodeTween.start) / explodeTween.duration), ease = t * t * (3 - 2 * t); state.amount = THREE.MathUtils.lerp(explodeTween.from, explodeTween.to, ease); if (t === 1) { state.amount = explodeTween.to; explodeTween = null; } updateUI(); }
@@ -705,8 +730,12 @@ function tick(now){
  const planes = section.planes, fx = state.fx && !state.board;
  for (const m of [skinDepthMaterial, gtaoPass.normalMaterial]) if ((m.clippingPlanes || null) !== planes) { m.clippingPlanes = planes; m.needsUpdate = true; }   // helpers and the occlusion pass honour the cut
  outline.update(camera, H, planes);
+ // While only the living body moves (a breath, a heartbeat: millimetres) and the camera is still, the shadow map and the floor
+ // reflection are redrawn every other frame; anything else (a turn of the camera, a click, an explosion) redraws them every frame.
+ const settle = alive > 0 && !busy && (settleSkip = !settleSkip);
+ renderer.shadowMap.needsUpdate = !settle;
  vitals.frame(dt, alive); flow?.update(dt * life.getState().speed * (life.getState().scrub === null ? 1 : 0), life.signals, flowOn && alive > 0 && state.mode === 'xray' && !state.board, THREE.MathUtils.clamp(life.getState().bpm / 70, .6, 2));   // the blood moves faster when the heart does
- mirror.visible = fx && !section.active && camera.position.y > -.1; mirror.userData.fresh = false;   // a section's cap quads need a stencil buffer the mirror does not have
+ const mirrorWas = mirror.visible; mirror.visible = fx && !section.active && camera.position.y > -.1; mirror.userData.fresh = settle && mirrorWas;   // fresh: keep last frame's reflection   // a section's cap quads need a stencil buffer the mirror does not have
  gtaoPass.enabled = state.ao; bloomPass.enabled = fx; bokehPass.enabled = fx && state.dof && !!state.selected && !section.active;
  if (bokehPass.enabled) { const p = state.selected; bokehPass.camera = camera; bokehPass.uniforms.focus.value = _v.copy(p.center).add(p.mesh.position).sub(p.base).distanceTo(camera.position); }
  if (dryRun) { /* fast-forwarding: everything above has been advanced, the picture is not needed */ } else if (state.compare && !state.board) {
@@ -717,7 +746,7 @@ function tick(now){
   renderer.setScissor(x, 0, W - x, H); renderer.render(scene, camera);
   for (const p of parts) { p.mesh.material = p.ownMaterial; p.mesh.visible = p.ownVisible; }
   renderer.setScissorTest(false);
- } else if ((state.ao || fx) && !state.board) { renderPass.camera = camera; gtaoPass.camera = camera; composer.render(); } else renderer.render(scene, camera);
+ } else if ((state.ao || fx) && !state.board) { renderPass.camera = camera; gtaoPass.camera = camera; occlusionDepth?.(); composer.render(); } else renderer.render(scene, camera);
  if (saveShot) { saveShot = false; const name = `anatomy-studio-${(state.selected ? plain(state.selected) : state.assembly || state.mode).toLowerCase().replace(/[^a-z0-9]+/g, '-')}.png`;   // straight after drawing, while the picture is still in the buffer
   renderer.domElement.toBlob(blob => { if (!blob) return; const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 4000); $('save-image').dataset.saved = name; }, 'image/png'); }
  if (quality.auto && state.ready && !state.loading && !hi.loading.size) { const t = performance.now(), gap = t - quality.last; quality.last = t;

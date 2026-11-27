@@ -12,3 +12,6 @@ scripts/rotatable-aquascape/public/load/** -text
 demos/rotatable-aquascape/load/** -text
 prototypes/hidden-reef/showroom/aquarium/load/** -text
 prototypes/hidden-reef-header-preview/showroom/aquarium/load/** -text
+
+# Anatomy Studio models are gzipped binaries (scripts/anatomy-studio/pack.mjs); never touch their line endings.
+demos/anatomy-studio/assets/**/*.gz -text
