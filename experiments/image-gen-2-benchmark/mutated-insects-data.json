@@ -1,5 +1,19 @@
 [
  {
+  "id": "2026-11-27-mutated-insects-cellular-velvetcowl-caddisfly-red-alga",
+  "title": "Velvetcowl Caddisfly",
+  "description": "A fictional streamside insect with wine-dark pleated wings and imagined branching-vacuole cells.",
+  "prompt": "Create one convincing photorealistic macro nature photograph of an ORIGINAL FICTIONAL mutated adult caddisfly, order Trichoptera, with red-alga-inspired analogous traits integrated into a single coherent insect body plan. This is speculative fictional anatomy, not a real organism or scientific claim. Portrait composition. The entire insect is visible and dominant, occupying about 78 percent of the image, perched diagonally on a wet quartz pebble beside a clear woodland riffle at blue hour. Six articulated legs, two long fine antennae, one coherent head and thorax, tapered abdomen and two pairs of tent-roof folded wings: a sharp angular triangular silhouette. Its wine-dark velvet wings have fleshy pleated algae-like ridges emerging seamlessly from wing veins, smoked burgundy and pale pearl coloration, tiny amber compound eyes and unsettling hooked mouth palps. No extra animals. Evolutionary fusion through homologous structures and analogous traits, seamless tissue integration and epidermal continuity between wing membrane and organic ridges, subcutaneous chitin, integrated hemolymph channels rather than glued-on plant parts. Load-bearing architecture and jointed biomechanics, articulated segments and tendon-like fibers at leg articulations, credible weight on the pebble. Fine setae trap water droplets, moist mouthparts, visible tiny spiracles and subtle asymmetrical growth and scarring from molting. Ecological niche and camouflage adaptation to submerged red stream algae; biological weathering, natural debris, quartz grains, trickling reflected water, a curled brown leaf blurred in background. Scary but anatomically coherent and alive, restrained no gore. 90mm macro lens, focus-stacked body detail with natural optical falloff, cool blue-hour sky and a soft warm off-axis field flash, specular wet highlights, natural documentary color. Add ONE small clearly distinct microscope-style circular inset in the lower right, occupying no more than 17 percent of image area, thin neutral border and no leader lines, no lettering. The inset represents fictional altered cells from this SAME insect: realistic transmitted-light microscopy texture, irregular polygonal cells with delicate translucent membranes, each containing a distinct dark plum branching tree-shaped vacuole surrounded by tiny pearl droplets. This imagined branching-vacuole motif is new, not spirals, honeycomb, or crescent rings. Cellular inset must look like an optical micrograph, NOT a second insect or magnified insect head. Main insect unobscured and photograph dominant. No text, no labels, no watermark, no diagrams, no laboratory procedures.",
+  "image": "images/mutated-insects/2026-11-27-velvetcowl-caddisfly-834cce8e.jpg",
+  "thumb": "images/mutated-insects/thumbs/2026-11-27-velvetcowl-caddisfly-834cce8e.jpg",
+  "date": "2026-11-27",
+  "slot": "2026-11-27T19:30",
+  "size": "1086x1448",
+  "model": "openai/gpt-image-2.6-sunburst",
+  "source": "Discord #mutated-insects",
+  "discordMessageId": "1576032690975670393"
+ },
+ {
   "id": "2026-11-26-mutated-insects-cellular-cinderdrum-mole-cricket-ironfern",
   "title": "Cinderdrum Mole Cricket",
   "description": "A fictional volcanic-soil insect with iron-red digging shields and imagined spiral-granule cells.",
