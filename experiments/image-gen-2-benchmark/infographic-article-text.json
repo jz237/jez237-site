@@ -20146,5 +20146,50 @@
     ]
    }
   ]
+ },
+ "2026-11-28-factual-infographic-factual-infographic-aichmophobia": {
+  "dek": "Aichmophobia is an intense fear of sharp objects. Encounters and anticipation can bring bodily anxiety, while avoidance can interfere with everyday activities.",
+  "glance": [
+   [
+    "Name",
+    "Aichmophobia"
+   ],
+   [
+    "Meaning",
+    "Intense fear of sharp objects"
+   ],
+   [
+    "Possible symptoms",
+    "Rapid heartbeat, trembling and an urge to escape"
+   ],
+   [
+    "Help",
+    "Cognitive behavioral therapy and gradual exposure therapy"
+   ]
+  ],
+  "sections": [
+   {
+    "heading": "Sharp objects and anticipation",
+    "body": [
+     "Aichmophobia is a specific phobia involving sharp objects such as scissors, knives, needles and pencils. Anticipatory anxiety means dreading future encounters with those objects. The fear can interfere with daily activities and be out of proportion to an appropriate level of caution.",
+     "Symptoms may include rapid heartbeat, trembling, shortness of breath, dizziness and an urge to escape. Experiences vary. Sharp objects still require appropriate caution; disproportionate phobic fear is distinct from ordinary caution."
+    ],
+    "sources": [
+     "CC",
+     "NHS"
+    ]
+   },
+   {
+    "heading": "Avoidance and treatment",
+    "body": [
+     "Avoiding sharp objects can limit cooking and hobbies. It can also prevent learning that fear is manageable and that feared outcomes often do not happen.",
+     "Cognitive behavioral therapy and gradual exposure therapy can help. Exposure is paced and tailored by a therapist or psychologist, not forced confrontation. A healthcare professional can assess symptoms that affect daily life."
+    ],
+    "sources": [
+     "CC",
+     "NHS"
+    ]
+   }
+  ]
  }
 }

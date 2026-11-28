@@ -90,6 +90,91 @@
     }
   },
   {
+    "id": "2026-11-28-factual-infographic-factual-infographic-aichmophobia",
+    "title": "Factual infographic: Aichmophobia",
+    "tests": "factual_subtype: phobia-infographic; factual_subtype: phobia-infographic; phobia: Aichmophobia; pronunciation Farlex Medical Dictionary (īk-mō-fō’bē-ă), rendered ike-moh-FOH-bee-uh; fictional photography; archive_slot=2026-11-28T04:08; concept=aichmophobia-sewing-bench-sharp-scissor-proximity; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto",
+    "prompt": "Create a finished portrait photographic factual infographic, flowing and unboxed, not a poster mockup. Dominant very scary photorealistic hero photograph occupies most of the canvas. Immersive shoulder-height near-first-person view at a cramped sewing workbench: the viewer is just behind the shoulder of a fictional 42-year-old Black woman with short natural hair, round face, muscular build and burgundy blouse, standing three-quarter view with hands withdrawn close to her torso. At natural real scale, sharp steel dressmaker scissor tips rest on the bench in the extreme foreground, directed diagonally toward the camera but NOT held against a person. A nearby upright pincushion has several fine points in crisp macro focus. Camera proximity makes the actual pointed objects immediate and overwhelming; close bench edge, fabric and shallow working distance compress the depth, with no spacious scenic escape. The person is secondary, not a frightened-face poster. No assault, injury, blood or monsters. Convincing normal anatomy, true perspective, brushed-steel micro scratches, reflected window highlights along the cutting edges, woven burgundy sleeve, individual pinheads, worn wood grain and fabric fibers. Clear focused light, not darkness as the mechanism. These are fictional photographic depictions of a fear trigger, not clinical documentary evidence and not a therapy exercise.\nAt the top in uncluttered pale wall negative space place these THREE exact lines vertically, first large bold, second directly underneath, third smaller but readable:\nAichmophobia\nIntense fear of sharp objects\nPronunciation: ike-moh-FOH-bee-uh\nNo literal Markdown asterisks. Keep all three readable.\nWeave concise accurate information into natural side and lower negative space using delicate curved leaders, asymmetry and open typography, no boxes or grid. A small airy pathway labels: 'Anticipatory anxiety: dreading the next encounter' leading to 'Body alarm: rapid heartbeat, trembling, breathlessness may occur' leading to 'Avoidance can limit cooking and hobbies'. Add a modest explanatory line: 'Avoidance can prevent learning that fear is manageable.' Do not imply everyone has all symptoms. Below the hero place two spacious readable explanatory groupings, not cards: 'Perceived threat ≠ actual risk' and 'Sharp objects need caution. Phobic fear can exceed appropriate caution and disrupt daily life.' Then 'Evidence-based help' with 'CBT and gradual, therapist-paced exposure can help. No forced confrontation.' A small subordinate line: 'A specific phobia; professional assessment matters when daily life is affected.' No extra claims, statistics, sources or URLs on image. Retain rich photographic detail and educational depth without shrinking the trigger scene into a decorative background. No cartoon, painting, engraving, unsafe exposure instructions, weapon attack or impossible enlarged objects. Direct canvas, opaque background, auto size.",
+    "image": "images/2026-11-28-factual-infographic-factual-infographic-aichmophobia.jpg",
+    "thumb": "thumbs/2026-11-28-factual-infographic-factual-infographic-aichmophobia.webp",
+    "color": "#a18a83",
+    "date": "2026-11-28",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "aichmophobia-sewing-bench-sharp-scissor-proximity",
+      "imageSha256": "609ad07d95c972841fc629bd0c699f6a91a9123e5774781cd54c32ae0d247440",
+      "imageDHash": "c68cc6e387170b87"
+    },
+    "factualInfographic": {
+      "topic": "Aichmophobia: intense fear of sharp objects, anticipatory anxiety, bodily alarm, avoidance and evidence-based help",
+      "description": "Sharp-object fear at a sewing workbench, with clinical context and therapist-paced help.",
+      "sourceNote": "Cleveland Clinic https://my.clevelandclinic.org/health/diseases/21694-aichmophobia and NHS https://www.nhs.uk/mental-health/conditions/phobias/, read for definition, anticipatory anxiety, symptoms, avoidance and treatment.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-28T09:09:38.281894+00:00",
+        "sources": [
+          {
+            "id": "CC",
+            "publisher": "Cleveland Clinic",
+            "title": "Aichmophobia",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://my.clevelandclinic.org/health/diseases/21694-aichmophobia"
+          },
+          {
+            "id": "NHS",
+            "publisher": "National Health Service",
+            "title": "Phobias",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/mental-health/conditions/phobias/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Aichmophobia means intense fear of sharp objects, including scissors, knives, needles and pencils. It is a specific phobia, not a separately named diagnostic category.",
+            "sourceIds": [
+              "CC"
+            ]
+          },
+          {
+            "claim": "Anticipatory anxiety means dreading future encounters with sharp objects. Fear can be out of proportion to an appropriate level of caution and interfere with daily activities.",
+            "sourceIds": [
+              "CC"
+            ]
+          },
+          {
+            "claim": "Symptoms may include rapid heartbeat, trembling, shortness of breath, dizziness and an urge to escape. Experiences vary.",
+            "sourceIds": [
+              "CC",
+              "NHS"
+            ]
+          },
+          {
+            "claim": "Avoiding sharp objects can limit cooking and hobbies. Avoidance can prevent learning that fear is manageable and feared outcomes often do not happen.",
+            "sourceIds": [
+              "CC"
+            ]
+          },
+          {
+            "claim": "Sharp objects require appropriate caution; disproportionate phobic fear is distinct from ordinary caution. The graphic does not portray sharp objects as harmless.",
+            "sourceIds": [
+              "CC"
+            ]
+          },
+          {
+            "claim": "Cognitive behavioral therapy and gradual exposure therapy can help. Exposure is paced and tailored by a therapist or psychologist, not forced confrontation. A healthcare professional can assess symptoms that affect daily life.",
+            "sourceIds": [
+              "CC",
+              "NHS"
+            ]
+          }
+        ]
+      },
+      "group": "phobias"
+    }
+  },
+  {
     "id": "2026-11-27-factual-infographic-factual-infographic-when-coat-color-dil",
     "title": "Factual infographic: When Coat Color Dilutes",
     "tests": "factual_subtype: cat-infographic; cat_category: coats-and-genetics; ; archive_slot=2026-11-27T16:20; concept=feline-mlph-recessive-dilution-coat-color-pairs; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto",
