@@ -1,11 +1,26 @@
 {
   "version": 1,
   "title": "AI Discoveries, Explained",
-  "updated": "2026-11-27",
+  "updated": "2026-11-28",
   "coverageStart": "2026-09-21",
-  "coverageEnd": "2026-11-27",
+  "coverageEnd": "2026-11-28",
   "editorialNote": "Source-linked discoveries, research demonstrations, follow-ups and corrections from AI Discovery Watch. Historical milestones posted before the fresh-news brief are not included. Coverage dates are when a story was shared, not necessarily when its discovery occurred. Evidence labels reflect the linked report at that time; read later updates too.",
   "stories": [
+    {
+      "category": "Research in action",
+      "evidenceKind": "lab",
+      "modelNote": "PaccMannRL generated first-round molecules; MoLeR and Regression Transformer refined later designs. RoboRXN and Ulysses handled parts of synthesis and testing.",
+      "sources": [
+        "https://pmc.ncbi.nlm.nih.gov/articles/PMC13703138/",
+        "https://doi.org/10.1039/d6dd00404k"
+      ],
+      "status": "Peer-reviewed laboratory study; results reported by the authors, not independently replicated. Human intervention remained essential.",
+      "takeaway": "AI-designed molecules were made and tested, then the measurements helped guide a second round of designs. An October 26 study reports stronger blocking of four immune-signaling proteins in the second round, across 36 tested compounds. Researchers chose the targets and methods, checked synthesis plans, and handled purification and some chemistry. This demonstrates a partially automated research loop—not an independent robot scientist or a new medicine. Some designs resemble known drugs, and the study did not establish safety, effects in cells, or whether the compounds selectively block their intended targets.",
+      "title": "AI-designed molecules improve after a round of real laboratory tests",
+      "id": "d-1576255863516041227-jak-design-test-feedback-loop",
+      "coveredOn": "2026-11-28",
+      "context": "🔬 **AI Discovery Watch · November 28, 2026**\n\n**AI-designed molecules improve after a round of real laboratory tests**\nAI-designed molecules were made and tested, then the measurements helped guide a second round of designs. An October 26 study reports stronger blocking of four immune-signaling proteins in the second round, across 36 tested compounds. Researchers chose the targets and methods, checked synthesis plans, and handled purification and some chemistry. This demonstrates a partially automated research loop—not an independent robot scientist or a new medicine. Some designs resemble known drugs, and the study did not establish safety, effects in cells, or whether the compounds selectively block their intended targets.\n\n**AI used:** PaccMannRL generated first-round molecules; MoLeR and Regression Transformer refined later designs. RoboRXN and Ulysses handled parts of synthesis and testing.\n**Evidence:** Peer-reviewed laboratory study; results reported by the authors, not independently replicated. Human intervention remained essential.\nOriginal source: <https://pmc.ncbi.nlm.nih.gov/articles/PMC13703138/>\nSupporting source: <https://doi.org/10.1039/d6dd00404k>"
+    },
     {
       "category": "Research in action",
       "evidenceKind": "demo",
