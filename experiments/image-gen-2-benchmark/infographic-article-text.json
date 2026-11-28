@@ -20235,5 +20235,58 @@
     ]
    }
   ]
+ },
+ "2026-11-28-factual-infographic-factual-infographic-heliophobia": {
+  "dek": "Heliophobia is a descriptive name for fear of sunlight. Phobic fear can feel overwhelming and interfere with everyday activities even when the felt danger exceeds the situation.",
+  "glance": [
+   [
+    "Name",
+    "Heliophobia"
+   ],
+   [
+    "Meaning",
+    "Fear of sunlight"
+   ],
+   [
+    "Possible symptoms",
+    "Palpitations, trembling, dizziness and chest tightness"
+   ],
+   [
+    "Treatment",
+    "Talking therapies such as cognitive behavioral therapy"
+   ]
+  ],
+  "sections": [
+   {
+    "heading": "A name for the fear",
+    "body": [
+     "Heliophobia is an established descriptive term for fear of sunlight or exposure to the sun. It is not presented as a separately named diagnostic category. Phobias involve severe fear or anxiety that can disrupt everyday life. The felt fear may be much greater than the situation warrants."
+    ],
+    "sources": [
+     "med",
+     "cc"
+    ]
+   },
+   {
+    "heading": "When the trigger feels overwhelming",
+    "body": [
+     "Encountering a feared trigger can produce overwhelming anxiety. Possible symptoms include palpitations, trembling, dizziness and chest tightness. Symptoms vary between people. Phobias can make functioning extremely difficult, and avoiding a feared situation can restrict daily activities. The fictional photographic scene depicts perceived threat, not evidence that ordinary sunlight causes immediate injury."
+    ],
+    "sources": [
+     "nhs",
+     "cc",
+     "med"
+    ]
+   },
+   {
+    "heading": "Help for daily life",
+    "body": [
+     "Talking therapies such as cognitive behavioral therapy (CBT) are treatments for phobias. Symptoms that affect daily life warrant assessment by a healthcare professional."
+    ],
+    "sources": [
+     "nhs"
+    ]
+   }
+  ]
  }
 }

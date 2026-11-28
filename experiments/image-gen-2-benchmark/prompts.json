@@ -37882,5 +37882,98 @@
       },
       "group": "phobias"
     }
+  },
+  {
+    "id": "2026-11-28-factual-infographic-factual-infographic-heliophobia",
+    "title": "Factual infographic: Heliophobia",
+    "tests": "factual_subtype: phobia-infographic; factual_subtype: phobia-infographic; phobia: Heliophobia; pronunciation Wordsmith.org (hee-lee-uh-FO-bee-uh); fictional photography; archive_slot=2026-11-28T12:08; concept=heliophobia-sunlight-boundary-shaded-room; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto",
+    "prompt": "Create a complete richly detailed flowing unboxed factual educational infographic, directly rendered canvas, with lifelike very scary photorealistic photography, not illustration or a printed poster mockup. Portrait-oriented composition if useful. Exact three text lines at the top in natural dark negative space: first line large prominent BOLD type \"Heliophobia\"; immediately beneath it \"Fear of sunlight\"; readable third line directly beneath meaning \"Pronunciation: hee-lee-uh-FOH-bee-uh\". Do not print Markdown stars.\nDominant fear-specific hero photograph occupies most of canvas: the viewer is inside a narrow shaded room at shoulder level immediately behind and beside a seated fictional tall 68-year-old white man with a bald crown, narrow face, blue cardigan, long slim build, profile posture recoiling slightly from a brilliant shaft of sunlight. The sharp light boundary falls centimeters in front of his resting fingers and crosses the floor toward the camera; overwhelming white-gold solar glare floods a close window and pinches the remaining shaded space against the viewer. Believable clipped window highlights, high dynamic range shadow detail, fine woven cardigan fibers, weathered wood grain, fine airborne dust visible only in the light beam, realistic hand anatomy, sharp diagonal hard shadows and natural lens flare. Make the proximity of the bright light and constrained shade viscerally immediate, not a comfortable distant sunny landscape, not a generic frightened-face poster. Do not depict staring into the sun, burns, injury or imply that normal light is physically attacking him. The dominant visual is his subjective perceived threat, not an objective hazard demonstration.\nOrganically weave concise open annotations into negative space along the diagonal light boundary and darker wall, no rigid boxes or equal panel grid. Use elegant cream text with warm restrained accents and delicate curved leaders. Readable educational labels: \"Trigger: sunlight\"; \"Body alarm\" with \"Palpitations, trembling, dizziness or chest tightness may occur\"; \"Symptoms vary\". An open path toward the shaded doorway carries \"Avoidance can restrict daily life\". Beneath the main photograph integrate a subtle small photographic detail of the same person's hand with no injury, not a redundant portrait. Place the essential distinction in clear text: \"Felt danger can exceed the situation\" and \"This scene depicts perceived threat, not immediate injury from ordinary sunlight.\" Finish with readable calm supporting text: \"Help: cognitive behavioral therapy (CBT) and professional assessment when symptoms affect daily life.\" Subordinate terminology note: \"Established descriptive name; not a separate diagnostic category here.\" Do not add unverified biology, prevalence, guarantees, monsters, gore, unsafe exposure instructions, bibliography, URLs or watermark. Generative fictional photography, not documentary patient photography. Keep the hero dominant while retaining factual explanations and technical clarity; no decorative secondary studies that crowd the scene.",
+    "image": "images/2026-11-28-factual-infographic-factual-infographic-heliophobia.jpg",
+    "thumb": "thumbs/2026-11-28-factual-infographic-factual-infographic-heliophobia.webp",
+    "color": "#544637",
+    "date": "2026-11-28",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "heliophobia-sunlight-boundary-shaded-room",
+      "imageSha256": "fd05ee4e9331cded38834c590424c18fe6a5ff38c2b9917767d7007faca2ff07",
+      "imageDHash": "5c30909181717918"
+    },
+    "factualInfographic": {
+      "topic": "Heliophobia: fear of sunlight, trigger-related anxiety, bodily alarm, daily-life disruption and evidence-based help",
+      "description": "Heliophobia and its general phobia context, illustrated through a fictional sunlight-boundary scene.",
+      "sourceNote": "NHS https://www.nhs.uk/mental-health/conditions/phobias/; Cleveland Clinic https://my.clevelandclinic.org/health/diseases/24757-phobias; Millodot: Dictionary of Optometry and Visual Science, Butterworth-Heinemann https://medical-dictionary.thefreedictionary.com/heliophobia",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-28T17:09:42.858167+00:00",
+        "sources": [
+          {
+            "id": "nhs",
+            "publisher": "NHS",
+            "title": "Phobias",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/mental-health/conditions/phobias/"
+          },
+          {
+            "id": "cc",
+            "publisher": "Cleveland Clinic",
+            "title": "Phobias",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://my.clevelandclinic.org/health/diseases/24757-phobias"
+          },
+          {
+            "id": "med",
+            "publisher": "Millodot: Dictionary of Optometry and Visual Science, Butterworth-Heinemann",
+            "title": "Heliophobia, medical dictionary entry",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://medical-dictionary.thefreedictionary.com/heliophobia"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Heliophobia is an established descriptive term for fear of sunlight or exposure to the sun; it is not presented here as a separately named diagnostic category.",
+            "sourceIds": [
+              "med",
+              "cc"
+            ]
+          },
+          {
+            "claim": "Phobias involve severe fear or anxiety that can disrupt everyday life; the felt fear may be much greater than the situation warrants.",
+            "sourceIds": [
+              "cc"
+            ]
+          },
+          {
+            "claim": "Encountering a trigger can produce overwhelming fear; symptoms may include palpitations, trembling, dizziness and chest tightness. Symptoms vary between people.",
+            "sourceIds": [
+              "nhs",
+              "cc"
+            ]
+          },
+          {
+            "claim": "Phobias can make functioning extremely difficult; avoiding a feared situation can restrict daily activities.",
+            "sourceIds": [
+              "cc"
+            ]
+          },
+          {
+            "claim": "Talking therapies such as cognitive behavioral therapy (CBT) are treatments for phobias; symptoms affecting daily life warrant assessment by a healthcare professional.",
+            "sourceIds": [
+              "nhs"
+            ]
+          },
+          {
+            "claim": "The scene is a fictional photographic depiction of perceived threat, not proof that ordinary sunlight causes immediate injury.",
+            "sourceIds": [
+              "cc",
+              "med"
+            ]
+          }
+        ]
+      },
+      "group": "phobias"
+    }
   }
 ]
