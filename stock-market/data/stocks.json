@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-27T22:54:36.115Z",
+  "updatedAt": "2026-11-28T00:00:20.856Z",
   "source": "yahoo-finance-chart",
   "stocks": [
     {
@@ -2464,21 +2464,20 @@
         "Dollar/yield moves"
       ],
       "kind": "instrument",
-      "price": 59772.39,
-      "change": -2.3502,
-      "changeAmount": -1438.594,
-      "prevClose": 61210.984,
+      "price": 59866.91,
+      "change": 0.1994,
+      "changeAmount": 119.144,
+      "prevClose": 59747.766,
       "dayLow": 59007.89,
       "dayHigh": 62085.707,
       "range52w": [
         55149.566,
         97860.6
       ],
-      "volume": 32063000576,
+      "volume": 32031352832,
       "currency": "USD",
       "exchange": "CCC",
       "chart": [
-        83622.4297,
         83553.8516,
         84853.1016,
         84497.2109,
@@ -2537,10 +2536,11 @@
         59747.7656,
         60378.1992,
         60494.7109,
-        59772.3906
+        59772.3906,
+        59866.9102
       ],
       "quoteSource": "yahoo-finance-chart",
-      "quoteUpdatedAt": "2026-11-27T22:54:53.000Z",
+      "quoteUpdatedAt": "2026-11-28T00:00:34.000Z",
       "yahooSymbol": "BTC-USD"
     },
     {
