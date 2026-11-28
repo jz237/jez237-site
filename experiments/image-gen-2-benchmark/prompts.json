@@ -37792,5 +37792,95 @@
       },
       "group": "phobias"
     }
+  },
+  {
+    "id": "2026-11-28-factual-infographic-factual-infographic-eisoptrophobia",
+    "title": "Factual infographic: Eisoptrophobia",
+    "tests": "factual_subtype: phobia-infographic; factual_subtype: phobia-infographic; phobia: Eisoptrophobia; fictional photographic scene; pronunciation checked against HowToPronounce English phonetic spelling and IPA.; archive_slot=2026-11-28T08:08; concept=eisoptrophobia-close-reflection-dressing-room; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto",
+    "prompt": "Create a complete photographic educational phobia infographic, directly rendered on the canvas, portrait-oriented if suitable, not a photograph of a poster. Use lifelike, very scary photorealistic imagery, never painting, cartoon, engraving or fantasy horror. Dominant immersive hero photograph occupies most of the image: camera immediately behind the left shoulder of a person standing just inches from a large intact dressing-room mirror. The glass fills the field of view and the ordinary reflected face confronts the viewer at intimate proximity, hemmed in visually by the near mirror edge, shoulder and narrow changing-room wall. The mirrored gaze seems inescapable through photographic framing, not invented supernatural properties. An optically correct normal reflection, no double face, no apparition, no sinister entity or distorted anatomy. Intense immediate fear of encountering one's own reflection rather than a generic frightened-face poster: include the glass edge, reflected room depth, sharply detailed fingerprints, tiny dust specks, brushed metal mounting, woven sweater fibers and real skin pores. Cool overhead light catches the close glass while a warmer side light models the face; sufficient brightness to see the trigger clearly. No darkness-as-horror shortcut, no scenic distance, no gore or monsters. Show the fictional person's rigid shoulders and half-turned posture, natural restrained anxiety rather than caricature. CASTING: Fictional slender 30-year-old light-skinned nonbinary adult, black bob, angular face, green sweater, side-on at a mirror.\nElegant flowing unboxed infographic integrated into natural negative space around the dominant mirror photograph. No cards, grid or printed-page mockup. Typography is refined, large and readable, ivory against quiet slate surfaces with restrained teal leader lines. At the top put these exact THREE lines, in this exact vertical order: first a prominent BOLD phobia name (actual bold typography, no asterisks), second its meaning directly underneath, third a smaller but clearly readable pronunciation:\nEisoptrophobia\nIntense fear of mirrors\nPronunciation: eye-suhp-truh-FOH-bee-uh\nUse asymmetric open callouts and a delicate curved pathway along the mirror margin, leaving the reflection dominant. Include these concise source-backed labels, not a wall of text: 'Anticipatory anxiety: thinking about mirrors can trigger intense fear.' 'Body alarm: palpitations, trembling or dizziness may occur.' 'Avoidance: efforts to escape triggers can disrupt daily life and worsen over time.' Subordinate caption: 'An established name for mirror fear within specific phobia, not a separate diagnosis.' A quiet but readable perceived-versus-actual-danger note: 'Fear can greatly exceed actual danger. This ordinary reflection is not a threat.' Add 'Triggers vary: self-image concerns or distorted reflections may play a role.' Bottom flowing help annotation, not a detached box: 'Help: cognitive behavioral therapy (CBT). A healthcare provider can discuss symptoms that affect daily life and refer for therapy.' Small footer: 'General education • Fictional photographic scene • Experiences vary'. No invented brain circuits, statistics, danger claims, unsafe exposure instructions or unsourced treatments. The photograph should feel viscerally close and confronting through realistic perspective, not manufactured hazards. No URLs or citations on the image. Rich tactile detail, substantial readable factual content, breathing room, no watermark.",
+    "image": "images/2026-11-28-factual-infographic-factual-infographic-eisoptrophobia.jpg",
+    "thumb": "thumbs/2026-11-28-factual-infographic-factual-infographic-eisoptrophobia.webp",
+    "color": "#414138",
+    "date": "2026-11-28",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "eisoptrophobia-close-reflection-dressing-room",
+      "imageSha256": "c9fa26828565800485a5944dc926477a2dcd4bbd3b2bbefd9d6b7ca0c6aba73f",
+      "imageDHash": "07c7124c50d04745"
+    },
+    "factualInfographic": {
+      "topic": "Eisoptrophobia: intense fear of mirrors, anticipatory anxiety, bodily alarm, avoidance and evidence-based help",
+      "description": "Photographic mirror-fear infographic with a close optically correct reflection, definition, bodily alarm, avoidance, perceived versus actual danger and clinical help.",
+      "sourceNote": "Cleveland Clinic https://my.clevelandclinic.org/health/diseases/22603-eisoptrophobia-fear-of-mirrors; NHS https://www.nhs.uk/mental-health/conditions/phobias/. Definition, triggers, anxiety, avoidance and CBT verified from fetched clinical sources.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-28T13:10:10.463417+00:00",
+        "sources": [
+          {
+            "id": "cc",
+            "publisher": "Cleveland Clinic",
+            "title": "Eisoptrophobia (Fear of Mirrors)",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://my.clevelandclinic.org/health/diseases/22603-eisoptrophobia-fear-of-mirrors"
+          },
+          {
+            "id": "nhs",
+            "publisher": "NHS",
+            "title": "Phobias",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/mental-health/conditions/phobias/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Eisoptrophobia is an intense fear of mirrors; this established descriptive name refers to a specific phobia, not a separately named diagnosis.",
+            "sourceIds": [
+              "cc"
+            ]
+          },
+          {
+            "claim": "The fear is typically much greater than the actual risk of danger.",
+            "sourceIds": [
+              "cc"
+            ]
+          },
+          {
+            "claim": "Thinking about mirrors can bring intense anxiety and sometimes panic attacks.",
+            "sourceIds": [
+              "cc"
+            ]
+          },
+          {
+            "claim": "Some people fear their reflection because of self-image issues or the way mirrors distort objects.",
+            "sourceIds": [
+              "cc"
+            ]
+          },
+          {
+            "claim": "People may go out of their way to avoid triggers; these efforts can disrupt daily life and worsen over time.",
+            "sourceIds": [
+              "cc"
+            ]
+          },
+          {
+            "claim": "Phobia symptoms can include palpitations, trembling, dizziness and severe anxiety; experiences differ between people.",
+            "sourceIds": [
+              "nhs"
+            ]
+          },
+          {
+            "claim": "Treatments for phobias include cognitive behavioral therapy (CBT). A healthcare provider can discuss symptoms that affect daily life and refer for therapy.",
+            "sourceIds": [
+              "cc",
+              "nhs"
+            ]
+          }
+        ]
+      },
+      "group": "phobias"
+    }
   }
 ]
