@@ -28103,5 +28103,90 @@
       },
       "group": "cats"
     }
+  },
+  {
+    "id": "2026-11-27-factual-infographic-factual-infographic-maine-coon",
+    "title": "Factual infographic: Maine Coon",
+    "tests": "factual_subtype: cat-infographic; cat_category: cat-breeds; ; archive_slot=2026-11-27T20:20; concept=maine-coon-rectangular-build-coat-variation; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto",
+    "prompt": "Create a richly detailed artwork-led feline breed atlas, directly rendered as finished art, not a photographed page. Headline MAINE COON, subtitle Working-cat origins in Maine, New England. Use luminous gouache, colored pencil and meticulous fine ink on cool pearl-gray ground, copper and muted pine accents. Dominant three-quarter side-view standing brown classic tabby Maine Coon fills the central diagonal: credible long rectangular muscular broad-chested body, substantial legs, normal balanced proportions, large round tufted paws, square muzzle, strong chin, slightly concave profile, large wide-based tufted ears, wide-set open oval eyes. Render coppery brown fur with broad black classic-tabby swirls, individual hairs and soft shadows. Long flowing tapering tail curls organically through the lower composition, without hiding the body silhouette. No exaggerated giant scale or lynx-like distortion. Integrate a large delicate profile head study near the upper right showing the square muzzle and chin, connected by fine curved leader lines. A flowing fur-length study along the hero's outline labels Shorter over shoulders and Longer on stomach and britches, plus Silky, shaggy coat and Frontal ruff desirable. Around the tail arc weave two smaller complete naturalistic breed studies, silver classic tabby with pale silver ground and black markings, and solid black; label these Silver classic tabby and Black, and the hero Brown classic tabby. Caption this visual group Coat variation within the breed. Leave generous breathing room. Add precise open labels Long rectangular body, Tufted paws, Long flowing tail, Large tufted ears, Square muzzle. In a quiet upper-left margin include concise origin note From working cats on farms in Maine, New England. Another small note: Females are generally smaller than males. Final understated note Balanced proportions, not exaggerated size. Elegant clear typography, unboxed asymmetric composition, organic visual flow, detailed anatomy and luxurious coat rendering. No rigid grid, cards, invented mechanisms, temperament stereotypes, ancestry legends, size records, numerical scales, disease, icons, mockup, or decorative unreadable text. Only the stated sourced facts; supporting studies remain proportionate and anatomically normal.",
+    "image": "images/2026-11-27-factual-infographic-factual-infographic-maine-coon.jpg",
+    "thumb": "thumbs/2026-11-27-factual-infographic-factual-infographic-maine-coon.webp",
+    "color": "#b1a296",
+    "date": "2026-11-27",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1199x1312",
+    "dedup": {
+      "conceptKey": "maine-coon-rectangular-build-coat-variation",
+      "imageSha256": "75302e45edf4593c602e151d913cf23800c7f2d2defb88d1e7d82283b014b502",
+      "imageDHash": "2b8ff1d8dedcd824"
+    },
+    "factualInfographic": {
+      "topic": "Maine Coon",
+      "description": "Maine Coon breed origin, balanced rectangular build, distinguishing physical traits and coat variation.",
+      "sourceNote": "Breed descriptions and standards: https://fifeweb.org/cats/breeds/maine-coon/; https://cfa.org/wp-content/uploads/2024/03/maine-coon-standard.pdf",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-28T01:21:09.162224+00:00",
+        "sources": [
+          {
+            "id": "fife",
+            "publisher": "Fédération Internationale Féline",
+            "title": "Maine Coon",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://fifeweb.org/cats/breeds/maine-coon/"
+          },
+          {
+            "id": "cfa",
+            "publisher": "The Cat Fanciers’ Association",
+            "title": "Maine Coon Cat Show Standard",
+            "sourceType": "standards-body",
+            "url": "https://cfa.org/wp-content/uploads/2024/03/maine-coon-standard.pdf"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "The Maine Coon comes from working cats on farms in Maine, New England. Legends about its ancestry are not established history; a cat-raccoon mating is biologically impossible.",
+            "sourceIds": [
+              "fife"
+            ]
+          },
+          {
+            "claim": "The Maine Coon has a long, muscular, broad-chested rectangular body, with balanced proportions rather than exaggerated size. Females are generally smaller than males.",
+            "sourceIds": [
+              "cfa",
+              "fife"
+            ]
+          },
+          {
+            "claim": "The muzzle is visibly square, with a strong chin; the profile has a slight concavity. Ears are large, wide at the base and well tufted. Eyes are large, wide set and open oval.",
+            "sourceIds": [
+              "cfa"
+            ]
+          },
+          {
+            "claim": "The heavy, shaggy coat has a silky texture, shorter on the shoulders and longer on the stomach and britches; a frontal ruff is desirable in the CFA standard.",
+            "sourceIds": [
+              "cfa"
+            ]
+          },
+          {
+            "claim": "Paws are large, round and well tufted. The long tail is wide at its base and tapers, with long flowing fur.",
+            "sourceIds": [
+              "cfa",
+              "fife"
+            ]
+          },
+          {
+            "claim": "The CFA standard includes brown classic tabby, silver classic tabby, black and white coats among its color classes. Brown classic tabby has black broad swirling markings on a coppery brown ground; silver tabby has black markings on pale silver. Coat color alone is not the breed description, which also specifies body, head and coat structure.",
+            "sourceIds": [
+              "cfa"
+            ]
+          }
+        ]
+      },
+      "group": "cats"
+    }
   }
 ]

@@ -20047,5 +20047,58 @@
     ]
    }
   ]
+ },
+ "2026-11-27-factual-infographic-factual-infographic-maine-coon": {
+  "dek": "The Maine Coon is a breed from working cats on farms in Maine, New England. Its long rectangular body, square muzzle and unevenly long, shaggy coat distinguish its physical profile.",
+  "glance": [
+   [
+    "Origin",
+    "Maine, New England"
+   ],
+   [
+    "Body",
+    "Long, muscular and rectangular"
+   ],
+   [
+    "Coat",
+    "Shaggy, with a silky texture"
+   ],
+   [
+    "Tail",
+    "Long, tapering and flowing"
+   ]
+  ],
+  "sections": [
+   {
+    "heading": "Working-cat origins",
+    "body": [
+     "The Maine Coon comes from working cats on farms in Maine, New England. Legends about its ancestry are not established history. A cat-raccoon mating is biologically impossible."
+    ],
+    "sources": [
+     "fife"
+    ]
+   },
+   {
+    "heading": "Shape and proportions",
+    "body": [
+     "The body is long, muscular and broad chested, creating a rectangular outline. Balanced proportions matter rather than exaggerated size. Females are generally smaller than males. The square muzzle, strong chin and slightly concave profile give the head its characteristic structure. Large ears are wide at the base and well tufted, while the large, wide-set eyes have an open oval shape."
+    ],
+    "sources": [
+     "cfa",
+     "fife"
+    ]
+   },
+   {
+    "heading": "Coat and color variation",
+    "body": [
+     "The heavy, shaggy coat has a silky texture. It is shorter over the shoulders and longer on the stomach and britches. The CFA standard describes a frontal ruff as desirable. Large, round paws are well tufted, and the long tail tapers from a broad base beneath flowing fur.",
+     "The CFA standard includes brown classic tabby, silver classic tabby, black and white coats. Brown classic tabby has broad black swirls on a coppery brown ground; silver tabby has black markings on pale silver. Coat color alone is not the breed description, which also specifies body, head and coat structure."
+    ],
+    "sources": [
+     "cfa",
+     "fife"
+    ]
+   }
+  ]
  }
 }
