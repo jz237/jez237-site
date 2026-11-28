@@ -37617,5 +37617,95 @@
       },
       "group": "cats"
     }
+  },
+  {
+    "id": "2026-11-28-factual-infographic-factual-infographic-gephyrophobia",
+    "title": "Factual infographic: Gephyrophobia",
+    "tests": "factual_subtype: phobia-infographic; factual_subtype: phobia-infographic; phobia: Gephyrophobia; pronunciation checked against English Wiktionary /dʒəˌfaɪɹəˈfoʊbiə/, search-retrieved; NBC report also supplies an English pronunciation; fictional photographic depiction.; archive_slot=2026-11-28T00:08; concept=gephyrophobia-pedestrian-steel-bridge-crossing; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto",
+    "prompt": "Create the finished portrait educational infographic directly, a flowing unboxed photographic composition, not a poster mockup. Lifelike very scary photorealistic photography, with natural anatomy, lens geometry, realistic perspective and finely resolved galvanized steel, rivet heads, water and fabric. No painting, cartoons, monsters, gore, fabricated damage or sensational claims. Dominant fear-specific hero photograph fills most of the canvas: viewer at shoulder level immediately behind a pedestrian midway across a high steel bridge, close enough to see his sleeve texture and fingers on the intact handrail. A near vertical view past the rail plunges toward water far below while the narrow pedestrian path and repeating overhead steel members converge far ahead. Strong realistic depth contrast, huge empty drop immediately beside the viewer, close looming steel diagonals, compressed apparent escape route extending ahead and behind. Keep the safety barrier intact and plausible, with mesh and continuous railing; do not depict someone leaning over it, standing in traffic, climbing or removing protection. This is an imagined fear-trigger scene, not a collapsing bridge, scenic travel panorama or an exposure exercise. Cool overcast daylight, hard precise depth cues, weathered but sound metal, subtle shoe-level perspective detail, no generic horror darkness. Hero photography dominates; typography lives in the natural dark steel and soft sky negative spaces, with ivory and muted amber accents, delicate curved leader lines and asymmetric flowing information, never a grid of boxes.\nCASTING: Fictional 58-year-old man with medium-brown skin, broad nose, close-cropped silver curls, stocky build, charcoal rain jacket and tan trousers; seen from behind and at shoulder level, shoulders held tense, one hand lightly gripping an intact pedestrian handrail.\nAt upper left, set the following three exact lines in order, vertically stacked. The first is large bold typography (no literal asterisks); the second directly underneath; the third smaller but clearly readable below the meaning:\nGephyrophobia\nFear of crossing bridges\nPronunciation: juh-fy-ruh-FOH-bee-uh\nOpen callout near the receding path: \"Anticipatory anxiety\" with \"The thought of crossing can trigger fear.\" A subtle photographic hand close-up fading organically into the hero, with concise labels \"Sweating\", \"Rapid heartbeat\", \"Dizziness or dread\" and qualification \"Symptoms vary\". Small open conceptual pathway near the lower margin, not an anatomical claim: \"Bridge encounter or anticipation → anxiety → avoidance\" and \"Avoidance can limit travel and commuting.\" Place a clear subordinate explanation, not a substitute headline: \"A situational specific phobia involves fear out of proportion to actual danger and context.\" Distinguish apparent danger explicitly: \"Intense fear does not measure a bridge’s structural danger.\" Bottom readable help statement: \"Help: Cognitive behavioral therapy (CBT) can help manage symptoms. Clinical assessment matters when fear affects life.\" Small note \"Fictional photographic depiction • General education, not diagnosis\". No statistics, diagnostic codes, universal symptoms, unverified neural pathways, drug advice, DIY crossing challenges or bibliography on the canvas. Preserve rich realistic bridge and water texture without crowding out readable facts; the immediate drop and confined route, not a frightened face, carry the fear.",
+    "image": "images/2026-11-28-factual-infographic-factual-infographic-gephyrophobia.jpg",
+    "thumb": "thumbs/2026-11-28-factual-infographic-factual-infographic-gephyrophobia.webp",
+    "color": "#595a57",
+    "date": "2026-11-28",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "gephyrophobia-pedestrian-steel-bridge-crossing",
+      "imageSha256": "7e68f7684c4ef87b0eba3a23dbeee8019308f724f6f22d16901ed09998aed5c0",
+      "imageDHash": "53968d83979b1914"
+    },
+    "factualInfographic": {
+      "topic": "Gephyrophobia: excessive fear of crossing bridges, anticipatory anxiety, bodily alarm, travel avoidance and evidence-based help",
+      "description": "Gephyrophobia, bridge-crossing triggers, possible symptoms, anticipatory anxiety, travel avoidance, perceived versus actual danger and CBT.",
+      "sourceNote": "NCBI MedGen https://www.ncbi.nlm.nih.gov/medgen/1864615 ; APA https://dictionary.apa.org/specific-phobia ; NHS https://www.nhs.uk/mental-health/conditions/phobias/ . Verified bridge fear, symptoms, context and CBT.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-28T05:09:46.116120+00:00",
+        "sources": [
+          {
+            "id": "mg",
+            "publisher": "NCBI MedGen",
+            "title": "Gephyrophobia",
+            "sourceType": "government-agency",
+            "url": "https://www.ncbi.nlm.nih.gov/medgen/1864615"
+          },
+          {
+            "id": "apa",
+            "publisher": "American Psychological Association",
+            "title": "Specific phobia",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://dictionary.apa.org/specific-phobia"
+          },
+          {
+            "id": "nhs",
+            "publisher": "NHS",
+            "title": "Phobias",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/mental-health/conditions/phobias/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Gephyrophobia is excessive fear of crossing bridges; driving or walking over a bridge may provoke intense anxiety, panic attacks or avoidance.",
+            "sourceIds": [
+              "mg"
+            ]
+          },
+          {
+            "claim": "Symptoms may include sweating, rapid heartbeat, dizziness and a sense of dread.",
+            "sourceIds": [
+              "mg"
+            ]
+          },
+          {
+            "claim": "Bridge-related avoidance can limit travel and commuting.",
+            "sourceIds": [
+              "mg"
+            ]
+          },
+          {
+            "claim": "Specific phobia can involve fear triggered by presence or anticipation of a situation, avoided or endured with marked anxiety. Bridges are included among situational fears.",
+            "sourceIds": [
+              "apa"
+            ]
+          },
+          {
+            "claim": "Specific phobia involves fear out of proportion to actual danger and context; fear intensity is not a measure of structural bridge danger.",
+            "sourceIds": [
+              "apa"
+            ]
+          },
+          {
+            "claim": "Phobias differ between people. Talking therapies such as cognitive behavioral therapy (CBT) can help manage symptoms. Clinical assessment is appropriate when symptoms affect life.",
+            "sourceIds": [
+              "nhs"
+            ]
+          }
+        ]
+      },
+      "group": "phobias"
+    }
   }
 ]

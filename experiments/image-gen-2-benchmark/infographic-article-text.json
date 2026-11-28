@@ -20100,5 +20100,51 @@
     ]
    }
   ]
+ },
+ "2026-11-28-factual-infographic-factual-infographic-gephyrophobia": {
+  "dek": "Gephyrophobia is an excessive fear of crossing bridges. Anticipating or making a crossing may bring intense anxiety, bodily symptoms or avoidance that limits travel.",
+  "glance": [
+   [
+    "Name",
+    "Gephyrophobia"
+   ],
+   [
+    "Trigger",
+    "Driving or walking over a bridge"
+   ],
+   [
+    "Possible symptoms",
+    "Sweating, rapid heartbeat, dizziness and dread"
+   ],
+   [
+    "Help",
+    "Cognitive behavioral therapy (CBT)"
+   ]
+  ],
+  "sections": [
+   {
+    "heading": "Crossing and anticipation",
+    "body": [
+     "Gephyrophobia involves excessive fear of crossing bridges. Driving or walking over a bridge may provoke intense anxiety, panic attacks or avoidance. Avoidance can limit travel and commuting, affecting everyday life.",
+     "Specific phobia can involve fear in the presence of a situation or in anticipation of it. Bridges are included among situational fears. The situation may be avoided or endured with marked anxiety."
+    ],
+    "sources": [
+     "mg",
+     "apa"
+    ]
+   },
+   {
+    "heading": "Bodily alarm and help",
+    "body": [
+     "Possible symptoms include sweating, rapid heartbeat, dizziness and a sense of dread. Phobias differ between people. Fear intensity is not a measure of structural bridge danger: specific phobia involves fear out of proportion to the actual danger and context.",
+     "Talking therapies such as cognitive behavioral therapy (CBT) can help manage phobia symptoms. Clinical assessment is appropriate when symptoms affect life."
+    ],
+    "sources": [
+     "mg",
+     "apa",
+     "nhs"
+    ]
+   }
+  ]
  }
 }
