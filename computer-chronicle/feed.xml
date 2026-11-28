@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Fri, 27 Nov 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Sat, 28 Nov 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of November 25-December 1, 1985 — Atari holiday shelf offers worlds to conquer</title>
+      <link>https://jez237.com/computer-chronicle/?date=1985-11-25</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1985-11-25</guid>
+      <pubDate>Sat, 28 Nov 2026 12:00:00 GMT</pubDate>
+      <description>A home computer can become a council of world powers, an Eastern Front battlefield or an unexplained terminal this holiday season. November’s Antic product notices offer Atari owners a broad choice of disk adventures. These are the month’s listed offerings, not a fresh batch of releases dated to Thanksgiving week. Also this week: Windows faces the holiday buying test · Trackstar offers a second life for Apple disks · MPP lives on under Supra.</description>
+    </item>
     <item>
       <title>Week of November 18-24, 1985 — Windows finally ships for the IBM PC</title>
       <link>https://jez237.com/computer-chronicle/?date=1985-11-18</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1985-07-15</guid>
       <pubDate>Mon, 09 Nov 2026 12:00:00 GMT</pubDate>
       <description>A commercial multiplayer adventure is planned for September, with forty lines to start. British Telecom is preparing to turn the shared computer adventure into a commercial telephone service. Popular Computing Weekly reports on July 18 that MUD 2 is being developed for a planned unveiling at September’s Personal Computer World Show. This is a service in preparation, not a July opening. Also this week: Sinclair puts its name on a floppy drive for the QL · Credit-card software takes aim at tapes and piracy · Amstrad 6128 may reach Britain this autumn.</description>
-    </item>
-    <item>
-      <title>Week of July 8-14, 1985 — Atari 520ST reaches buyers as the 16-bit contest intensifies</title>
-      <link>https://jez237.com/computer-chronicle/?date=1985-07-08</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1985-07-08</guid>
-      <pubDate>Sun, 08 Nov 2026 12:00:00 GMT</pubDate>
-      <description>July shipping news brings a powerful new desktop into the summer contest, with Commodore’s unveiling still ahead. The Atari 520ST is moving from demonstration promise to the buyer’s desk. The New York Times carries a July 10 shipping report, while the machine’s widening July availability marks a new stage in the contest for the personal-computer household. This is not the original unveiling: limited releases have preceded the broader summer arrival. Also this week: Activision puts the Tour de France on home micros · Compact discs promise encyclopedia-sized storage for home micros · Dixons cuts MSX prices to £99 and £149.99 · Acorn’s financial strain stalls new projects.</description>
     </item>
   </channel>
 </rss>

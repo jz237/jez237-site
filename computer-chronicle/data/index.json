@@ -2,6 +2,22 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-11-28",
+      "historicDate": "1985-11-25",
+      "displayDate": "Week of November 25-December 1, 1985",
+      "edition": "Issue 174 - Weekly 1985 Computer & Culture Chronicle",
+      "morningLine": "At the game counter, a whole world fits on a 48K disk.",
+      "leadHeadline": "Atari holiday shelf offers worlds to conquer",
+      "storyHeadlines": [
+        "Windows faces the holiday buying test",
+        "Trackstar offers a second life for Apple disks",
+        "MPP lives on under Supra"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1985-11-25.jpg",
+      "thumb": "media/thumbs/1985-11-25.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-11-27",
       "historicDate": "1985-11-18",
       "displayDate": "Week of November 18-24, 1985",

@@ -1,0 +1,493 @@
+{
+  "currentDate": "2026-11-28",
+  "historicDate": "1985-11-25",
+  "displayDate": "Week of November 25-December 1, 1985",
+  "edition": "Issue 174 - Weekly 1985 Computer & Culture Chronicle",
+  "masthead": {
+    "title": "Computer Chronicle",
+    "subtitle": "Issue 174 - Weekly 1985 Computer & Culture Chronicle",
+    "dateline": "Week of November 25-December 1, 1985",
+    "price": "75 cents"
+  },
+  "sectionChrome": {
+    "primary": "brick red",
+    "secondary": "royal blue",
+    "texture": "aged newsprint, column rules, slight ink bleed"
+  },
+  "visualProfile": {
+    "tone": "Thanksgiving computer-shop newspaper",
+    "motifs": [
+      "Atari game boxes and disks, world-conquest map, IBM PC tiled desktop"
+    ],
+    "layout": "Full-page warm aged newsprint; dense columns, red and blue section headers, boxed modules, halftone photos, paper grain; no dead footer space"
+  },
+  "layoutPlan": {
+    "leadPlacement": "Gaming holiday shelf gets largest headline and photograph; Windows is a substantial follow-up feature, not another launch.",
+    "secondaryRail": "Top 5 Music, Top 5 Movies, Top 5 Computer Games. Feature headlines verbatim; use fixed-page jump lines."
+  },
+  "heroImage": {
+    "src": "media/computer-chronicle-gpt-image-2-week-1985-11-25.jpg",
+    "alt": "Computer Chronicle newspaper artifact for November 25-December 1, 1985",
+    "caption": "Newspaper-style front page generated from structured Chronicle issue data.",
+    "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+  },
+  "editorNote": "Holiday disks offer world conquest, mysterious systems and a voyage among the planets.",
+  "morningLine": "At the game counter, a whole world fits on a 48K disk.",
+  "lead": {
+    "headline": "Atari holiday shelf offers worlds to conquer",
+    "body": [
+      "A home computer can become a council of world powers, an Eastern Front battlefield or an unexplained terminal this holiday season. November’s Antic product notices offer Atari owners a broad choice of disk adventures. These are the month’s listed offerings, not a fresh batch of releases dated to Thanksgiving week.",
+      "SSI lists Colonial Conquest at $39.95 for a 48K Atari disk system. Up to six players represent Germany, France, England, Japan, Russia and the United States in a nineteenth-century contest for world power. For a smaller-scale military problem, Roger Damon’s Panzer Grenadier, also $39.95, moves German and Russian platoons and companies across the Second World War’s Eastern Front.",
+      "Activision takes a different approach with Hacker. The $24.95, 48K disk title casts the player into a mysterious computer-system simulation. It is entertainment built around investigation, not a tool for breaking into a real machine. Mindscape’s $44.95 Halley Project, from Tom Snyder Productions, sends the player through solar-system navigation tests in a real-time simulation.",
+      "There is reading as well as maneuvering on the shelf. Synapse’s Brimstone, distributed by Broderbund, is listed as a $35.95 medieval electronic novel; the notice specifies 48K and two disk drives. The buying lesson is to check the equipment list as carefully as the title. Antic’s manufacturer-supplied notices are introductions to products, not independent tests of their performance."
+    ],
+    "sourceRefs": [
+      2
+    ],
+    "confidence": "same-month"
+  },
+  "stories": [
+    {
+      "headline": "Windows faces the holiday buying test",
+      "body": [
+        "Microsoft’s newly shipped Windows reaches the holiday shopping season with a $99 software price and a visual alternative to the DOS command line. Shipment took place November 20, before this issue’s week, after a wait stretching back to the 1983 announcement. The question now is what PC owners can do with it.",
+        "Windows runs above DOS rather than replacing it. Tiled application windows, menus and a mouse-oriented interface organize the screen, while Write, Paint, Notepad, Calendar, Clock, Cardfile, Terminal and a file manager provide practical work. Reversi supplies a little recreation between tasks.",
+        "Those included programs make the package tangible, but they are not evidence of a mature outside software market. A buyer is choosing an operating environment for an existing PC, with the machine and DOS still part of the bill. The holiday verdict belongs to users, not predictions about the platform’s distant future."
+      ],
+      "sourceRefs": [
+        0,
+        1
+      ],
+      "confidence": "same-month"
+    },
+    {
+      "headline": "Trackstar offers a second life for Apple disks",
+      "body": [
+        "A $499 expansion board offers IBM PC owners an unusual way to keep older software useful. Russ Lockwood’s November Creative Computing review describes Diamond Computer Systems’ Trackstar, with a 6502 for Apple II Plus programs and a Z80A for CP/M software. It can use the PC’s drives and includes a connector for an Apple drive.",
+        "Compatibility is the important qualification. Almost all educational titles tested worked, but only about half the games did; software written specifically for the Apple IIe did not run. The prudent purchase starts with a trial of the actual programs the owner wants to preserve, not a blanket promise that every disk will cross the divide."
+      ],
+      "sourceRefs": [
+        5
+      ],
+      "confidence": "same-month"
+    },
+    {
+      "headline": "MPP lives on under Supra",
+      "body": [
+        "Atari owners looking for Microbits service have a new name to remember. Gigi Bisson’s November Antic report says Alan Ackerman and John Wiley’s Supra bought the Microbits name on July 1, after the bank closed MPP at the end of May. This is current-month reporting of an earlier rescue, not a new acquisition this week.",
+        "Supra honors the 90-day warranty on products sold after July 1; earlier purchases may carry $15 to $35 handling charges. Orders were being accepted for the plug-in MPP 1200A modem and MicroNet, which allows as many as eight Ataris to share drives and printers. The announced $800, 10MB hard disk remains delayed rather than a shipping product."
+      ],
+      "sourceRefs": [
+        3
+      ],
+      "confidence": "same-month"
+    }
+  ],
+  "computerItems": [
+    {
+      "title": "Trackstar",
+      "summary": "Diamond 6502/Z80A compatibility board; $499, with significant game and IIe limitations.",
+      "sourceRefs": [
+        5
+      ],
+      "confidence": "same-month"
+    },
+    {
+      "title": "Computereyes",
+      "summary": "Digital Vision slow-scan black-and-white capture via Atari joystick port; KoalaPad-compatible files; $129.95 interface/software or $399.95 with monochrome camera.",
+      "sourceRefs": [
+        2
+      ],
+      "confidence": "same-month"
+    },
+    {
+      "title": "Manzana MDP3",
+      "summary": "External 3.5-inch PC drive reviewed transferring files to a Kaypro 2000; $625. Formats vary by machine; not universal disk interchange.",
+      "sourceRefs": [
+        5
+      ],
+      "confidence": "same-month"
+    }
+  ],
+  "softwareList": [
+    {
+      "name": "SynCalc Templates",
+      "detail": "22 applications from checking registers to buy-versus-rent analysis; 48K disk; $19.95",
+      "confidence": "same-month",
+      "sourceRefs": [
+        2
+      ]
+    },
+    {
+      "name": "Typesetter",
+      "detail": "XLent page graphics; separate 130XE and other 8-bit Atari versions; $34.95",
+      "confidence": "same-month",
+      "sourceRefs": [
+        2
+      ]
+    },
+    {
+      "name": "Print Shop Graphics Library II",
+      "detail": "Broderbund; jobs, hobbies, people, places, travel and health graphics; 48K disk and printer; $24.95",
+      "confidence": "same-month",
+      "sourceRefs": [
+        2
+      ]
+    },
+    {
+      "name": "Designer’s Pencil",
+      "detail": "Activision joystick-driven graphics; 16K cartridge; $24.95",
+      "confidence": "same-month",
+      "sourceRefs": [
+        2
+      ]
+    }
+  ],
+  "storeShelves": [
+    {
+      "label": "Top 5 Computer Games — November editorial selection, not sales ranking",
+      "items": [
+        "Colonial Conquest",
+        "Panzer Grenadier",
+        "Hacker",
+        "The Halley Project",
+        "Brimstone"
+      ],
+      "sourceRefs": [
+        2
+      ],
+      "confidence": "same-month"
+    },
+    {
+      "label": "Top 5 Movies — November 29-December 1 US weekend box office",
+      "items": [
+        "Rocky IV",
+        "Santa Claus",
+        "One Magic Christmas",
+        "King Solomon’s Mines",
+        "Back to the Future"
+      ],
+      "sourceRefs": [
+        8
+      ],
+      "confidence": "same-week"
+    }
+  ],
+  "priceWatch": [
+    {
+      "item": "Windows 1.0",
+      "price": "$99",
+      "note": "US launch price, November 20",
+      "confidence": "same-month",
+      "sourceRefs": [
+        1
+      ]
+    },
+    {
+      "item": "Trackstar",
+      "price": "$499",
+      "note": "reviewed price",
+      "confidence": "same-month",
+      "sourceRefs": [
+        5
+      ]
+    },
+    {
+      "item": "RAM 7 256K",
+      "price": "$195",
+      "note": "reviewed price",
+      "confidence": "same-month",
+      "sourceRefs": [
+        5
+      ]
+    },
+    {
+      "item": "RAM 7 384K",
+      "price": "$225",
+      "note": "reviewed price",
+      "confidence": "same-month",
+      "sourceRefs": [
+        5
+      ]
+    },
+    {
+      "item": "MFJ-1224 RTTY/CW interface",
+      "price": "$99.95",
+      "note": "reviewed ham-radio interface, not telephone modem",
+      "confidence": "same-month",
+      "sourceRefs": [
+        4
+      ]
+    },
+    {
+      "item": "Hamsoft cartridge",
+      "price": "$49.95",
+      "note": "Kantronics Atari radio software",
+      "confidence": "same-month",
+      "sourceRefs": [
+        4
+      ]
+    },
+    {
+      "item": "Hamtext cartridge",
+      "price": "$99.95",
+      "note": "Kantronics disk-capable radio software",
+      "confidence": "same-month",
+      "sourceRefs": [
+        4
+      ]
+    }
+  ],
+  "musicChart": [
+    {
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-11-30",
+      "rank": 1,
+      "title": "Tonight She Comes",
+      "song": "Tonight She Comes",
+      "artist": "The Cars",
+      "basis": "Album-oriented rock radio airplay, not Hot 100",
+      "confidence": "same-week",
+      "sourceRefs": [
+        6
+      ]
+    },
+    {
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-11-30",
+      "rank": 2,
+      "title": "Sleeping Bag",
+      "song": "Sleeping Bag",
+      "artist": "ZZ Top",
+      "basis": "Album-oriented rock radio airplay, not Hot 100",
+      "confidence": "same-week",
+      "sourceRefs": [
+        6
+      ]
+    },
+    {
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-11-30",
+      "rank": 3,
+      "title": "Alive & Kicking",
+      "song": "Alive & Kicking",
+      "artist": "Simple Minds",
+      "basis": "Album-oriented rock radio airplay, not Hot 100",
+      "confidence": "same-week",
+      "sourceRefs": [
+        6
+      ]
+    },
+    {
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-11-30",
+      "rank": 4,
+      "title": "Small Town",
+      "song": "Small Town",
+      "artist": "John Cougar Mellencamp",
+      "basis": "Album-oriented rock radio airplay, not Hot 100",
+      "confidence": "same-week",
+      "sourceRefs": [
+        6
+      ]
+    },
+    {
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-11-30",
+      "rank": 5,
+      "title": "Face the Face",
+      "song": "Face the Face",
+      "artist": "Pete Townshend",
+      "basis": "Album-oriented rock radio airplay, not Hot 100",
+      "confidence": "same-week",
+      "sourceRefs": [
+        6
+      ]
+    }
+  ],
+  "briefs": [
+    {
+      "headline": "The Source steps up to 2400 baud",
+      "summary": "November Antic lists access at 46 cents per minute during weekday prime time and 20 cents off-peak. Faster access does not make the clock stop charging.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        2
+      ]
+    },
+    {
+      "headline": "Rocky IV tops the Thanksgiving screen",
+      "summary": "The November 29-December 1 US weekend brings Rocky IV $19,991,537 and first place. Its November 27 opening falls within this issue week.",
+      "confidence": "same-week",
+      "sourceRefs": [
+        8,
+        9
+      ]
+    }
+  ],
+  "periodAd": {
+    "headline": "A picture through the joystick port",
+    "summary": "Digital Vision lists Computereyes at $129.95 for the interface and software, or $399.95 with a monochrome camera. Slow-scan black-and-white images can be saved in KoalaPad-compatible files.",
+    "tagline": "Editorial reconstruction of manufacturer notice, not a tested endorsement.",
+    "sourceRefs": [
+      2
+    ]
+  },
+  "market": {
+    "headline": "Expansion versus replacement",
+    "summary": "Trackstar asks $499 to carry selected Apple II Plus and CP/M software into a PC. RAM 7 lists 256K at $195 or 384K at $225. Compatibility limits and the software already owned matter as much as the sticker.",
+    "sourceRefs": [
+      5
+    ],
+    "confidence": "same-month"
+  },
+  "worldAnchor": {
+    "headline": "Atlantis launches with three communications satellites",
+    "summary": "Atlantis launched November 26 at 7:29 p.m. EST on STS-61B with seven crew members, including Mexico’s Rodolfo Neri Vela. Its payloads include MORELOS-B, AUSSAT-2 and SATCOM KU-2, alongside EASE/ACCESS construction experiments.",
+    "confidence": "exact-date",
+    "sourceRefs": [
+      10
+    ]
+  },
+  "bbsNote": {
+    "headline": "Faster paid services, and Atari conversations without a phone bill",
+    "summary": "November Antic supplies real service rates and a ham-radio alternative. These are period editorial desk notes, not actual recovered BBS posts.",
+    "posts": [
+      {
+        "topic": "2400 baud on The Source",
+        "platform": "The Source / Antic product notice",
+        "text": "Service advertised online at 2400 baud; 46 cents per minute prime time and 20 cents off-peak."
+      },
+      {
+        "topic": "Radio teletype on an Atari",
+        "platform": "Antic, Bill Marquardt (N6CBT)",
+        "text": "Marquardt reports regular Atari 800 RTTY exchanges with Larry Johnson (WB6SVS) and a direct range beyond 100 miles, without telephone charges. MFJ-1224 costs $99.95; Hamtext $99.95 adds disk-buffer facilities."
+      },
+      {
+        "topic": "Supra continuity",
+        "platform": "Antic / Supra",
+        "text": "MPP 1200A orders were being accepted; do not invent a price or shipment date."
+      }
+    ],
+    "sourceRefs": [
+      2,
+      4,
+      3
+    ]
+  },
+  "curiosity": {
+    "headline": "Your Atari can guard the windows",
+    "summary": "Two November product notices turn the joystick port into a home-security interface.",
+    "detail": "C.E.A. Home Control is listed at $89.95 with four-device control, a power module and temperature control; Hard Byte Security is $99.95 and includes three window sensors, 30 feet of glass foil and a door sensor. These are manufacturer notices, not tested security guarantees.",
+    "sourceRefs": [
+      2
+    ]
+  },
+  "undergroundDesk": {
+    "headline": "Phrack travels from board to board",
+    "dek": "A November electronic newsletter introduces a publishing circle at Metal Shop.",
+    "body": [
+      "The first Phrack issue, dated November 17, introduces a newsletter-like collection of eight files. Taran King identifies Metal Shop as its home board and invites writers to contribute and other boards to redistribute the files. Its appearance precedes this issue week; the story is its same-month arrival in bulletin-board culture.",
+      "The introduction names contributors including Knight Lightning and Cheap Shades. Its self-described interests span hacking, phone phreaking and cracking, but the publishing network is the news here: a collection can travel without a press or a paper subscription. No technical procedures or dial-in details are reproduced."
+    ],
+    "groups": [
+      {
+        "name": "Metal Shop",
+        "note": "Named in the first issue introduction"
+      },
+      {
+        "name": "Taran King",
+        "note": "Named in the first issue introduction"
+      },
+      {
+        "name": "Knight Lightning",
+        "note": "Named in the first issue introduction"
+      },
+      {
+        "name": "Cheap Shades",
+        "note": "Named in the first issue introduction"
+      }
+    ],
+    "sourceRefs": [
+      7
+    ],
+    "confidence": "same-month"
+  },
+  "accuracyLedger": {
+    "items": [
+      "No milestone: Windows shipped before the covered week; it must not create a second launch or extra edition here.",
+      "Gadget check found a November Sony D50 review, but the player launched in 1984; no verified breaking gadget event in this week, so gadgetCandidates omitted.",
+      "Antic Online carries October promotional copy inside its November issue. Do not call its October features new November developments.",
+      "No verified BBS messages are impersonated; modem posts are source-attributed desk summaries.",
+      "Lead dating uses the permitted same-month fallback; no sufficiently substantiated gaming launch within November 25–December 1 was found.",
+      "Gaming leads as a November holiday buyer story; Windows is explicitly follow-up, not a repeat milestone.",
+      "Full film Top 5 spot-checked against The Numbers November 29 weekend table."
+    ]
+  },
+  "sources": [
+    {
+      "title": "Microsoft releases Windows 1.0 — Centre for Computing History",
+      "url": "https://www.computinghistory.org.uk/det/5406/Microsoft-releases-Windows-1.0/",
+      "date": "1985-11-20 (event; retrospective)"
+    },
+    {
+      "title": "Revisiting Windows 1.0 — The Verge",
+      "url": "https://www.theverge.com/2012/11/20/3671922/windows-1-0-microsoft-history-desktop-gracefully-failed",
+      "date": "2012-11-20"
+    },
+    {
+      "title": "Antic new products, vol.4 no.7, p.81 onward",
+      "url": "https://www.atarimagazines.com/v4n7/newproducts.php",
+      "date": "1985-11"
+    },
+    {
+      "title": "Antic Online / MPP Lives On as Supra, Gigi Bisson",
+      "url": "https://www.atarimagazines.com/v4n7/anticonline.php",
+      "date": "1985-11"
+    },
+    {
+      "title": "Radio Modems and Software, Bill Marquardt",
+      "url": "https://www.atarimagazines.com/v4n7/radiomodemsoftware.php",
+      "date": "1985-11"
+    },
+    {
+      "title": "Build a Better Computer, Russ Lockwood, Creative Computing p.67",
+      "url": "https://www.atarimagazines.com/creative/v11n11/67_Build_a_better_computer_.php",
+      "date": "1985-11"
+    },
+    {
+      "title": "Billboard, Top Rock Tracks",
+      "url": "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1985/BB-1985-11-30.pdf",
+      "date": "1985-11-30"
+    },
+    {
+      "title": "Phrack vol.1 issue 1 introduction, Taran King",
+      "url": "https://phrack.org/issues/1/introduction.html",
+      "date": "1985-11-17"
+    },
+    {
+      "title": "The Numbers, domestic weekend chart",
+      "url": "https://www.the-numbers.com/box-office-chart/weekend/1985/11/29",
+      "date": "1985-11-29–1985-12-01"
+    },
+    {
+      "title": "Rocky IV release record",
+      "url": "https://www.boxofficemojo.com/release/rl3043788289/weekend/",
+      "date": "1985-11-27 (release)"
+    },
+    {
+      "title": "NASA STS-61B mission record",
+      "url": "https://www.nasa.gov/mission/sts-61b/",
+      "date": "1985-11-26 (launch; retrospective)"
+    },
+    {
+      "title": "InfoWorld vol.7 no.47, bibliographic record",
+      "url": "https://books.google.ca/books?id=MC8EAAAAMBAJ&lr=",
+      "date": "1985-11-25"
+    },
+    {
+      "title": "Sony D50 Compact Disc Player, Paul White, Home & Studio Recording",
+      "url": "https://www.muzines.co.uk/articles/sony-d50-compact-disc-player/8392",
+      "date": "1985-11"
+    }
+  ]
+}
